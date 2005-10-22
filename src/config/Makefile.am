@@ -1,0 +1,17 @@
+INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
+	-I$(top_srcdir)/src/core -I$(top_srcdir)/src/history -I$(top_srcdir)/src/installed \
+	-I$(top_srcdir)/src/intro -I$(top_srcdir)/src/logs -I$(top_srcdir)/src/portage \
+	-I$(top_srcdir)/src/queue -I$(top_srcdir)/src/results -I$(top_srcdir)/src/updates \
+	-I$(top_builddir)/src/core $(all_includes)
+
+METASOURCES = AUTO
+
+noinst_LTLIBRARIES = libconfig.la
+
+libconfig_la_SOURCES = settings.kcfgc watchersettings.kcfgc configdialog.cpp \
+		options1.ui options2.ui options3.ui options6.ui watchersettingswidget.ui \
+		watchersettingswidget2.ui options4.ui options5.ui options7.ui
+
+noinst_HEADERS = configdialog.h
+
+kde_kcfg_DATA = kurooconfig.kcfg kuroo_watcher.kcfg

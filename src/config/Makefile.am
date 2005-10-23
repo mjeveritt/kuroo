@@ -8,10 +8,10 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libconfig.la
 
-libconfig_la_SOURCES = settings.kcfgc watchersettings.kcfgc configdialog.cpp \
-		options1.ui options2.ui options3.ui options6.ui watchersettingswidget.ui \
-		watchersettingswidget2.ui options4.ui options5.ui options7.ui
+libconfig_la_SOURCES = settings.kcfgc configdialog.cpp \
+		options1.ui options2.ui options3.ui options6.ui \
+		options4.ui options5.ui options7.ui
 
 noinst_HEADERS = configdialog.h
 
-kde_kcfg_DATA = kurooconfig.kcfg kuroo_watcher.kcfg
+kde_kcfg_DATA = kurooconfig.kcfg

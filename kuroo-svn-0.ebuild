@@ -1,7 +1,7 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit kde cvs subversion
+inherit kde subversion
 
 ESVN_PROJECT="${PN/-svn}"
 ESVN_REPO_URI="svn://tux.myftp.org"
@@ -17,6 +17,8 @@ KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 RDEPEND="app-portage/gentoolkit
-!app-portage/guitoo
-!app-portage/kuroo
-|| (kde-base/dcoprss kde-base/kdenetwork)"
+	!app-portage/guitoo
+	!app-portage/kuroo
+	|| (kde-base/dcoprss kde-base/kdenetwork)"
+
+need-kde 3.2

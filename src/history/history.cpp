@@ -199,6 +199,9 @@ void History::slotParse()
 			QString emergeLine = line.section(rx, 1, 1);
 			emergeLine = emergeLine.section(QRegExp("(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )"), 1, 1);
 			
+			emergeLine.replace(" to ", i18n("_to_"));
+			emergeLine.replace(" of ", i18n("_of_"));
+			
 			// Parse out nice statusbar text
 			if ( line.contains( QRegExp("(\\) )(Cleaning)|(Compiling/Merging)|(Post-Build Cleaning)") ) ) {
 				QString logLine = "(" + emergeLine.section("::", 0, 0).remove("(");
@@ -206,8 +209,6 @@ void History::slotParse()
 				logLine.replace("Compiling/Merging", i18n("Compiling/Merging"));
 				logLine.replace("Post-Build Cleaning", i18n("Post-Build Cleaning"));
 				logLine.replace("Cleaning", i18n("Cleaning"));
-				logLine.replace(" to ", i18n("_to_"));
-				logLine.replace(" of ", i18n("_of_"));
 				
 				KurooStatusBar::instance()->setProgressStatus( logLine );
 				LogSingleton::Instance()->writeLog( logLine, EMERGELOG );

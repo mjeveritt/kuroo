@@ -411,19 +411,19 @@ void Emerge::readFromStdout( KProcIO *proc )
 				emergePackage.version = parsedPackage.section((emergePackage.name + "-"), 1, 1);
 				emergePackage.updateFlags = line.left(14).section(QRegExp("^\\[ebuild"), 1, 1);
 				
-				QString temp = line.section( emergePackage.package, 1, 1 );
+				QString temp = line.section(emergePackage.package, 1, 1);
 				temp = temp.section( " kB", 0, 0 );
-				emergePackage.installedVersion = temp.section( "[", 1, 1 ).section( "]", 0, 0 );
+				emergePackage.installedVersion = temp.section("[", 1, 1).section("]", 0, 0);
 
 				// Parse out USE flags
-				const QStringList field = QStringList::split( " ", temp );
+				const QStringList field = QStringList::split(" ", temp);
 				QStringList useList;
 				foreach ( field ) {
 					if ( (*it).startsWith("+") || (*it).startsWith("-") )
 						useList += *it;
 				}
 				emergePackage.useFlags = useList.join(" ");
-				emergePackageList.append( emergePackage );
+				emergePackageList.append(emergePackage);
 			}
 		}
 		
@@ -473,8 +473,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 					logDone++;
 				}
 				else
-					if ( lineLower.contains( "no ebuilds to satisfy" ) ) {
-						QString missingPackage = line.section( "no ebuilds to satisfy ", 1, 1 );
+					if ( lineLower.contains("no ebuilds to satisfy") ) {
+						QString missingPackage = line.section("no ebuilds to satisfy ", 1, 1);
 						LogSingleton::Instance()->writeLog( i18n("There is no ebuilds to satisfy %1").arg(missingPackage), ERROR );
 						logDone++;
 					}

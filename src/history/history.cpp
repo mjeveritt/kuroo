@@ -196,12 +196,12 @@ void History::slotParse()
 		if ( !line.isEmpty() ) {
 			QRegExp rx("\\d+:\\s");
 			QString package;
-			QString emergeLine = line.section( rx, 1, 1 );
+			QString emergeLine = line.section(rx, 1, 1);
 			emergeLine = emergeLine.section(QRegExp("(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )"), 1, 1);
 			
 			// Parse out nice statusbar text
 			if ( line.contains( QRegExp("(\\) )(Cleaning)|(Compiling/Merging)|(Post-Build Cleaning)") ) ) {
-				QString logLine = "(" + emergeLine.section( "::", 0, 0 ).remove("(");
+				QString logLine = "(" + emergeLine.section("::", 0, 0).remove("(");
 				
 				logLine.replace("Compiling/Merging", i18n("Compiling/Merging"));
 				logLine.replace("Post-Build Cleaning", i18n("Post-Build Cleaning"));
@@ -221,7 +221,7 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains("emerge --nospinner") ) {
-				package = emergeLine.section( "emerge --nospinner =", 1, 1 );
+				package = emergeLine.section("emerge --nospinner =", 1, 1);
 			}
 			else
 			if ( emergeLine.contains("completed emerge ") ) {
@@ -277,8 +277,8 @@ void History::slotParse()
 			else {
 				emergeLine.replace("AUTOCLEAN", i18n("AUTOCLEAN"));
 				emergeLine.replace("Unmerging", i18n("Unmerging"));
-				emergeLine.replace(" to ", i18n(" to "));
-				emergeLine.replace(" of ", i18n(" of "));
+				emergeLine.replace(" to ", i18n("_to_"));
+				emergeLine.replace(" of ", i18n("_of_"));
 				emergeLine.replace("Finished. Cleaning up", i18n("Finished. Cleaning up"));
 				emergeLine.replace("exiting successfully", i18n("exiting successfully"));
 				emergeLine.replace("terminating", i18n("terminating"));

@@ -4,7 +4,7 @@
 	Checking that kuroo is launched with kdesu first time for secure setup. 
 	Emerge output: more information when dealing with masked packages. 
 	Added fix to better collect emerge messages from ewarn and einfo. 
-	All installed packages are exported to world on exit to keep it uptodate, since "emerge =pkg-x.y.z" is not doing that.
+	Emerged packages are added to world not their dependencies, since "emerge =pkg-x.y.z" is not doing that.
 	Added German and Slovak translation po-files.
 	Emerge output can be translated now. 
 	Remade intro layout to make it more compact.

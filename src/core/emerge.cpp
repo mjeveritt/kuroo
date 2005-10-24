@@ -511,7 +511,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 			}
 			
 			if ( !cleanLine.isEmpty() ) {
-				if ( importantMessage.isEmpty() ) {
+				if ( !importantMessagePackage.isEmpty() ) {
 					importantMessage = importantMessagePackage + cleanLine;
 					importantMessagePackage = "";
 				}

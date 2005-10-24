@@ -206,6 +206,8 @@ void History::slotParse()
 				logLine.replace("Compiling/Merging", i18n("Compiling/Merging"));
 				logLine.replace("Post-Build Cleaning", i18n("Post-Build Cleaning"));
 				logLine.replace("Cleaning", i18n("Cleaning"));
+				logLine.replace(" to ", i18n("_to_"));
+				logLine.replace(" of ", i18n("_of_"));
 				
 				KurooStatusBar::instance()->setProgressStatus( logLine );
 				LogSingleton::Instance()->writeLog( logLine, EMERGELOG );
@@ -277,8 +279,6 @@ void History::slotParse()
 			else {
 				emergeLine.replace("AUTOCLEAN", i18n("AUTOCLEAN"));
 				emergeLine.replace("Unmerging", i18n("Unmerging"));
-				emergeLine.replace(" to ", i18n("_to_"));
-				emergeLine.replace(" of ", i18n("_of_"));
 				emergeLine.replace("Finished. Cleaning up", i18n("Finished. Cleaning up"));
 				emergeLine.replace("exiting successfully", i18n("exiting successfully"));
 				emergeLine.replace("terminating", i18n("terminating"));

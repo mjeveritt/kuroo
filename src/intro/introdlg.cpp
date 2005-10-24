@@ -39,7 +39,7 @@
 for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 
 /**
- * Kuroo introductory wizard.
+ * Kuroo introduction wizard.
  */
 IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	: Intro( parent, name, modal, fl )
@@ -48,7 +48,6 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	
 	QWizard::showPage(page1);
 	QWizard::setHelpEnabled(page1, false);
-	QWizard::setHelpEnabled(page2, false);
 	QWizard::setHelpEnabled(page3, false);
 	QWizard::setHelpEnabled(page4, false);
 	QWizard::setHelpEnabled(page5, false);

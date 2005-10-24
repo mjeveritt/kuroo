@@ -199,8 +199,8 @@ void History::slotParse()
 			QString emergeLine = line.section(rx, 1, 1);
 			emergeLine = emergeLine.section(QRegExp("(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )"), 1, 1);
 			
-			emergeLine.replace(" to ", i18n("_to_"));
-			emergeLine.replace(" of ", i18n("_of_"));
+			emergeLine.replace(" to ", i18n(" to "));
+			emergeLine.replace(" of ", i18n(" of "));
 			
 			// Parse out nice statusbar text
 			if ( line.contains( QRegExp("(\\) )(Cleaning)|(Compiling/Merging)|(Post-Build Cleaning)") ) ) {

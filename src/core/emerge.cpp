@@ -687,13 +687,13 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 bool Emerge::countEtcUpdates( const QString& line )
 {
 	// count etc-files to merge
-	if ( line.contains( " need updating" ) ) {
+	if ( line.contains(" need updating") ) {
 		
-		QString tmp = line.section( "config files", 0, 0 );
-		QRegExp rx( "(\\d+)" );
-		int pos = rx.search( tmp );
+		QString tmp = line.section("config files", 0, 0);
+		QRegExp rx("(\\d+)");
+		int pos = rx.search(tmp);
 		if ( pos > -1 ) {
-			etcUpdateCount += (rx.cap( 1 )).toInt();
+			etcUpdateCount += (rx.cap(1)).toInt();
 		}
 		
 		return true;

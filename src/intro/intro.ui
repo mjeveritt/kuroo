@@ -1950,7 +1950,10 @@ Press "Finish" to launch kuroo and load the views with your systems packages.&lt
 &lt;p&gt;3. Kuroo will proceed by scanning for installed packages on your system. &lt;/p&gt;
 &lt;p&gt;4. As last step Kuroo will launch the emerge tool as "emerge -uDpv world" to collect the list of all upgradable packages.&lt;/p&gt;
 &lt;p&gt;Pressing "Finish" resets all dialogs and views settings to default.&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Upgrading to a new version of kuroo will clear the package database.&lt;/b&gt;&lt;/p&gt;</string>
+&lt;p&gt;&lt;b&gt;Upgrading to a new version of kuroo will clear the package database.&lt;/b&gt;&lt;/p&gt;
+&lt;br&gt;
+&lt;font color="red"&gt;&lt;b&gt;&lt;p&gt;Important!&lt;br&gt;
+As of version 0.71.0 only emerged packages and not their dependencies are added to world file. Run "regenworld" from console as root to update the list of installed packages.&lt;/b&gt;&lt;/p&gt;&lt;/font&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">

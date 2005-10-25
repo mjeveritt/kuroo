@@ -566,8 +566,6 @@ void Emerge::cleanup()
 	
 	if ( etcUpdateCount != 0 && !SignalistSingleton::Instance()->isKurooBusy() )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
-	
-	EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
 }
 
 /**

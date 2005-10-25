@@ -579,28 +579,6 @@ Go to Kuroo settings to edit the list of "protected" etc-files.&lt;/p&gt;</strin
                             <property name="spacing">
                                 <number>5</number>
                             </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>cFlags_3</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>0</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>100</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>Kuroo home directory</string>
-                                </property>
-                            </widget>
                             <widget class="QLabel" row="1" column="0">
                                 <property name="name">
                                     <cstring>makeOpts_5_2_3_3_2</cstring>
@@ -663,11 +641,6 @@ Go to Kuroo settings to edit the list of "protected" etc-files.&lt;/p&gt;</strin
                             <widget class="KURLRequester" row="1" column="1">
                                 <property name="name">
                                     <cstring>path_dirPortage</cstring>
-                                </property>
-                            </widget>
-                            <widget class="KURLRequester" row="0" column="1">
-                                <property name="name">
-                                    <cstring>path_home</cstring>
                                 </property>
                             </widget>
                             <widget class="QComboBox" row="3" column="1">
@@ -1891,9 +1864,6 @@ As of version 0.71.0 only emerged packages and not their dependencies are added 
 <includehints>
     <includehint>kactivelabel.h</includehint>
     <includehint>kactivelabel.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

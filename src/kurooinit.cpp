@@ -79,14 +79,14 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 			d.setCurrent(KurooConfig::dirHome());
 		}
 	}
-	chmod(KurooConfig::dirHome(), 0774);
+	chmod(KurooConfig::dirHome(), 0770);
 	chown(KurooConfig::dirHome(), portageGid->gr_gid, portageUid->pw_uid);
 	
 	// Check that backup directory exists.
 	QString backupDir = KurooConfig::dirHome() + "/backup";
 	if ( !d.cd(backupDir) )
 		d.mkdir(backupDir);
-	chmod(backupDir, 0774);
+	chmod(backupDir, 0770);
 	chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
 	
 	// If new release delete old db files
@@ -102,12 +102,12 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	// Initialize singletons objects
 	QString logFile = LogSingleton::Instance()->init(this);
 	if ( !logFile.isEmpty() ) {
-		chmod(logFile, 0664);
+		chmod(logFile, 0660);
 		chown(logFile, portageGid->gr_gid, portageUid->pw_uid);
 	}
 	
 	QString databaseFile = KurooDBSingleton::Instance()->init(this);
-	chmod(databaseFile, 0664);
+	chmod(databaseFile, 0660);
 	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
 	
 	EtcUpdateSingleton::Instance()->init(this);

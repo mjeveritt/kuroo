@@ -27,7 +27,7 @@
 		<entry name="hardVersion" type="String">
 		</entry>
 		<entry name="DirHome" type="String">
-		<default>/var/tmp/kuroo</default>
+		<default>/var/kuroo</default>
 		</entry>
 		<entry name="databas" type="String">
 		<default>portage.db</default>

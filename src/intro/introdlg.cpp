@@ -71,7 +71,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	path_dirPortage->setURL(KurooConfig::dirPortage());
 	
 // 	path_home->setMode(KFile::Directory | KFile::LocalOnly);
-// 	path_home->setURL(KurooConfig::dirHome());
+// 	path_home->setURL(KUROODIR);
 	
 	path_portageOverlay->setMode(KFile::Directory | KFile::LocalOnly);
 	path_portageOverlay->setURL(KurooConfig::dirPortageOverlay());

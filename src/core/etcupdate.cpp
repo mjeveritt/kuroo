@@ -100,7 +100,7 @@ void  EtcUpdate::readFromStdout( KProcIO* proc )
 {
 	QString line;
 	
-	while ( proc->readln( line, true ) != -1) {
+	while ( proc->readln(line, true) != -1) {
 		etcUpdateLines += line;
 		
 		LogSingleton::Instance()->writeLog(line, EMERGE);
@@ -120,6 +120,8 @@ void EtcUpdate::cleanup( KProcess* )
 {
 	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( readFromStdout( KProcIO* ) ) );
 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( cleanup( KProcess* ) ) );
+	
+	kdDebug() << "etcUpdateLines=" << etcUpdateLines << endl;
 	
 	runDiff();
 }
@@ -147,7 +149,7 @@ void EtcUpdate::runDiff()
 	
 	// Count etc updates first time
 	if ( totalEtcCount == 0 )
-		totalEtcCount = etcUpdateLines.size() / 2 - 2;
+		totalEtcCount = etcUpdateLines.size()/2 - 2;
 	
 	if ( etcUpdateLines.size() > 0 && rx.search( etcUpdateLines.first() ) != -1 ) {
 		QString destination = etcUpdateLines.first().section( rx, 1, 1 );
@@ -163,8 +165,8 @@ void EtcUpdate::runDiff()
 		}
 		
 		// Backup the original etc files with timestamp added
-		KIO::file_copy( source, KurooConfig::dirHome() + "/backup/" + source.section("/", -1, -1) + "_" + dt.toString("yyyyMMdd_hhmm"));
-		KIO::file_copy( destination, KurooConfig::dirHome() + "/backup/" + destination.section("/", -1, -1) + "_" + dt.toString("yyyyMMdd_hhmm"));
+		KIO::file_copy( source, KUROODIR + "backup/" + source.section("/", -1, -1) + "_" + dt.toString("yyyyMMdd_hhmm"));
+		KIO::file_copy( destination, KUROODIR + "backup/" + destination.section("/", -1, -1) + "_" + dt.toString("yyyyMMdd_hhmm"));
 		
 		switch ( KMessageBox::questionYesNo( 0, i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), i18n("etc-update (%1 of %2)").arg(count++).arg(totalEtcCount) ) ) {
 			case KMessageBox::Yes : {
@@ -209,7 +211,7 @@ void EtcUpdate::cleanupDiff( KProcess* proc )
 {
 	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanupDiff( KProcess* ) ) );
 	KIO::file_delete( diffSource );
-	LogSingleton::Instance()->writeLog( i18n("Deleting \'%1\'. Backup saved in %2.").arg(diffSource).arg(KurooConfig::dirHome() + "/backup"), KUROO );
+	LogSingleton::Instance()->writeLog( i18n("Deleting \'%1\'. Backup saved in %2.").arg(diffSource).arg(KUROODIR + "backup"), KUROO );
 	diffSource = "";
 	
 	// Move to next etc-file

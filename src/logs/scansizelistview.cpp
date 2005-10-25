@@ -75,9 +75,9 @@ void ScanSizeListView::scanPortageSize()
 	SignalistSingleton::Instance()->scanDiskUsage( true );
 	
 	// Get size of /tmp/kuroo 
-	QString directory = DiskUsageSingleton::Instance()->scanSize( KurooConfig::dirHome() );
+	QString directory = DiskUsageSingleton::Instance()->scanSize( KUROODIR );
 	KurooConfig::setDiskUsagehome(directory);
-	item = new KListViewItem(element, KurooConfig::dirHome(), directory);
+	item = new KListViewItem(element, KUROODIR, directory);
 	item->setPixmap(0, pxCategory);
 	
 	// Get size of /var/tmp/portage
@@ -143,7 +143,7 @@ void ScanSizeListView::loadPortageSize()
 	element->setOpen(true);
 	
 	// Get size of /tmp/kuroo
-	KListViewItem *item = new KListViewItem(element, KurooConfig::dirHome(), KurooConfig::diskUsagehome());
+	KListViewItem *item = new KListViewItem(element, KUROODIR, KurooConfig::diskUsagehome());
 	item->setPixmap(0, pxCategory);
 	
 	// Get size of /var/tmp/portage

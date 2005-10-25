@@ -55,6 +55,7 @@ enum LogActions { EMERGE, KUROO, ERROR, TOLOG, EMERGELOG };
 
 enum packageStatus { NONE, CATEGORY, INSTALLED, PACKAGE, EBUILD_INSTALLED, EBUILD, MASKED, UNMASKED, QUEUED, NOTQUEUED };
 
+static const QString KUROODIR = "/var/kuroo/";
 static const int ROWLIMIT = 1000;
 
 /**

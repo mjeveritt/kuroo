@@ -44,7 +44,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog(0)
 {
 	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( KurooConfig::dirHome() );
+	QDir d( KUROODIR );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		
 		if ( !KUser().isSuperUser() ) {
@@ -75,22 +75,22 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		// Create DirHome dir and set permissions so common user can run Kuroo.
 		if ( !d.exists() ) {
-			d.mkdir(KurooConfig::dirHome());
-			d.setCurrent(KurooConfig::dirHome());
+			d.mkdir(KUROODIR);
+			d.setCurrent(KUROODIR);
 		}
 	}
-	chmod(KurooConfig::dirHome(), 0770);
-	chown(KurooConfig::dirHome(), portageGid->gr_gid, portageUid->pw_uid);
+	chmod(KUROODIR, 0770);
+	chown(KUROODIR, portageGid->gr_gid, portageUid->pw_uid);
 	
 	// Check that backup directory exists.
-	QString backupDir = KurooConfig::dirHome() + "/backup";
+	QString backupDir = KUROODIR + "backup";
 	if ( !d.cd(backupDir) )
 		d.mkdir(backupDir);
 	chmod(backupDir, 0770);
 	chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
 	
 	// If new release delete old db files
-	QString database = KurooConfig::dirHome() + "/" + KurooConfig::databas();
+	QString database = KUROODIR + KurooConfig::databas();
 	if ( KurooConfig::version() != KurooConfig::hardVersion() ) {
 		remove( database );
 		kdDebug() << i18n("Deleting old version of database %1").arg(database) << endl;

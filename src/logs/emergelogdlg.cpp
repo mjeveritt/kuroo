@@ -19,13 +19,11 @@
 ***************************************************************************/
 
 #include "emergelogdlg.h"
-#include "settings.h"
+#include "common.h"
 
 #include <qfile.h>
 
-#include <klocale.h>
 #include <ktextbrowser.h>
-#include <kdebug.h>
 
 /**
  * Widget to show emerge log.
@@ -42,7 +40,7 @@ EmergeLogDlg::~EmergeLogDlg()
 
 void EmergeLogDlg::loadLog()
 {
-	QFile file(KurooConfig::dirHome() + "/kuroo.log");
+	QFile file(KUROODIR + "kuroo.log");
 	
 	if (file.open(IO_ReadOnly)) {
 		QTextStream stream(&file);
@@ -51,7 +49,7 @@ void EmergeLogDlg::loadLog()
 		file.close();
 	}
 	else
-		kdDebug() << i18n("Error reading ") << KurooConfig::dirHome() << "/kuroo.log" << endl;
+		kdDebug() << i18n("Error reading ") << KUROODIR << "kuroo.log" << endl;
 }
 
 #include "emergelogdlg.moc"

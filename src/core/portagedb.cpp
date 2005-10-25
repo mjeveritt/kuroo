@@ -49,7 +49,6 @@
 KurooDB::KurooDB( QObject *parent )
 	: QObject( parent )
 {
-// 	initialize();
 }
 
 KurooDB::~KurooDB()
@@ -60,6 +59,7 @@ KurooDB::~KurooDB()
 /**
  * Check db integrity and create new db if necessary.
  * Set write permission for regular user.
+ * @return database file
  */
 QString KurooDB::init( QObject *myParent )
 {
@@ -74,7 +74,7 @@ QString KurooDB::init( QObject *myParent )
 	
 	m_dbConnPool->createDbConnections();
 	
-	return KurooConfig::dirHome() + "/" + KurooConfig::databas();
+	return KUROODIR + KurooConfig::databas();
 }
 
 DbConnection *KurooDB::getStaticDbConnection()
@@ -512,7 +512,7 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection( SqliteConfig* config )
 	: DbConnection(config)
 {
-	const QCString path = QString( KurooConfig::dirHome() + "/" + KurooConfig::databas() ).local8Bit();
+	const QCString path = QString( KUROODIR + KurooConfig::databas() ).local8Bit();
 	
     // Open database file and check for correctness
 	m_initialized = false;

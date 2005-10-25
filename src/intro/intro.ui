@@ -1726,7 +1726,8 @@ Press "Finish" to launch kuroo and load the views with your systems packages.&lt
 &lt;p&gt;&lt;b&gt;Upgrading to a new version of kuroo will clear the package database.&lt;/b&gt;&lt;/p&gt;
 &lt;br&gt;
 &lt;font color="red"&gt;&lt;b&gt;&lt;p&gt;Important!&lt;br&gt;
-As of version 0.71.0 only emerged packages and not their dependencies are added to world file. Run "regenworld" from console as root to update the list of installed packages.&lt;/b&gt;&lt;/p&gt;&lt;/font&gt;</string>
+1. Run "regenworld" from console as root to update the list of installed packages. As of version 0.71.0 only emerged packages and not their dependencies are added to world file.&lt;br&gt;
+2. Kuroo cache is moved to "/var/kuroo".&lt;/b&gt;&lt;/p&gt;&lt;/font&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">

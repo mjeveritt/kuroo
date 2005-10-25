@@ -32,95 +32,16 @@
             <property name="orientation">
                 <enum>Vertical</enum>
             </property>
-            <widget class="QSplitter">
+            <widget class="HistoryListView">
                 <property name="name">
-                    <cstring>splitterH</cstring>
+                    <cstring>historyView</cstring>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>0</height>
+                    </size>
                 </property>
-                <widget class="QGroupBox">
-                    <property name="name">
-                        <cstring>groupBox9</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="title">
-                        <string>Disk usage</string>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>5</number>
-                        </property>
-                        <property name="spacing">
-                            <number>5</number>
-                        </property>
-                        <widget class="ScanSizeListView" row="0" column="0">
-                            <property name="name">
-                                <cstring>diskUsage</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>200</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QGroupBox">
-                    <property name="name">
-                        <cstring>groupBox9_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>4</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>300</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="title">
-                        <string>History</string>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>5</number>
-                        </property>
-                        <property name="spacing">
-                            <number>5</number>
-                        </property>
-                        <widget class="HistoryListView" row="0" column="0">
-                            <property name="name">
-                                <cstring>historyView</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
             </widget>
             <widget class="QButtonGroup">
                 <property name="name">
@@ -231,23 +152,6 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>ScanSizeListView</class>
-        <header location="local">scansizelistview.h</header>
-        <sizehint>
-            <width>100</width>
-            <height>100</height>
-        </sizehint>
-        <container>1</container>
-        <sizepolicy>
-            <hordata>3</hordata>
-            <verdata>3</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
-        <property type="String">name</property>
-    </customwidget>
-    <customwidget>
         <class>HistoryListView</class>
         <header location="local">historylistview.h</header>
         <sizehint>
@@ -272,7 +176,6 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>scansizelistview.h</includehint>
     <includehint>historylistview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
 </includehints>

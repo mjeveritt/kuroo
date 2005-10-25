@@ -83,22 +83,19 @@ bool History::slotRefresh()
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
 		
-// 	if ( log.open( IO_ReadOnly ) ) {
-		stream.setDevice( &log );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.contains(QRegExp("(Started emerge on)|(::: completed emerge)|(>>> unmerge success)")) ) {
-				QRegExp rx("\\d+");
-				if ( rx.search(line) > -1 ) {
-					if ( rx.cap(0) > lastDate ) {
-						emergeLines += line;
-					}
+	stream.setDevice( &log );
+	while ( !stream.atEnd() ) {
+		QString line = stream.readLine();
+		if ( line.contains(QRegExp("(Started emerge on)|(::: completed emerge)|(>>> unmerge success)")) ) {
+			QRegExp rx("\\d+");
+			if ( rx.search(line) > -1 ) {
+				if ( rx.cap(0) > lastDate ) {
+					emergeLines += line;
 				}
 			}
 		}
-// 	}
-// 	else
-// 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
+	}
+
 	
 	// If user has used emerge outside kuroo, update the history
 	if ( !emergeLines.isEmpty() )

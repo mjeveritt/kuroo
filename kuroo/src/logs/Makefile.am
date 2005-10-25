@@ -8,10 +8,9 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = liblogs.la
 
-liblogs_la_SOURCES = log.cpp logsbase.ui logstab.cpp scansizelistview.cpp \
-	emergelog.ui emergelogdlg.cpp diskusage.cpp
+liblogs_la_SOURCES = log.cpp logsbase.ui logstab.cpp emergelog.ui \
+	emergelogdlg.cpp
 
-noinst_HEADERS = log.h logstab.h scansizelistview.h emergelogdlg.h \
-	packageemergetime.h diskusage.h
+noinst_HEADERS = log.h logstab.h emergelogdlg.h packageemergetime.h
 
 liblogs_la_LIBADD = $(top_builddir)/src/history/libhistory.la

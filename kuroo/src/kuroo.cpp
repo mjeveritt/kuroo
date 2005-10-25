@@ -161,7 +161,6 @@ void Kuroo::activateToolbar( QWidget *page )
 			
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabLogs, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
 			connect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
 			
@@ -197,7 +196,6 @@ void Kuroo::activateToolbar( QWidget *page )
 			
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabLogs, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
 			connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
 			
@@ -219,7 +217,6 @@ void Kuroo::activateToolbar( QWidget *page )
 			
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabLogs, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
 			connect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
 			
@@ -251,23 +248,17 @@ void Kuroo::activateToolbar( QWidget *page )
 		}
 		
 		case LOGS: {
-			if ( SignalistSingleton::Instance()->isKurooDiskUsageBusy() )
-				actionRefresh->setEnabled(false);
-			else
-				actionRefresh->setEnabled(true);
-			
+			actionRefresh->setEnabled(false);
 			actionFind->setEnabled(false);
 			actionSync->setEnabled(false);
 			
-			actionRefresh->setToolTip( i18n("Refresh Portage directories usage") );
+			actionRefresh->setToolTip( i18n("na") );
 			actionFind->setToolTip( i18n("na") );
 			actionSync->setToolTip( i18n("na") );
 			
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabLogs, SLOT( slotRefresh() ) );
-			connect( actionRefresh, SIGNAL( activated() ), m_view->tabLogs, SLOT( slotRefresh() ) );
 		}
 	}
 }

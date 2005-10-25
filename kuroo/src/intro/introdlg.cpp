@@ -70,9 +70,6 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	path_dirPortage->setMode(KFile::Directory | KFile::LocalOnly);
 	path_dirPortage->setURL(KurooConfig::dirPortage());
 	
-// 	path_home->setMode(KFile::Directory | KFile::LocalOnly);
-// 	path_home->setURL(KUROODIR);
-	
 	path_portageOverlay->setMode(KFile::Directory | KFile::LocalOnly);
 	path_portageOverlay->setURL(KurooConfig::dirPortageOverlay());
 	
@@ -111,15 +108,7 @@ void IntroDlg::next()
 			error = i18n("Path to Portage directory not valid...");
 			error += i18n(" Please correct!");
 		}
-		
-// 		d.setPath(path_home->url());
-// 		if ( d.exists() )
-// 			KurooConfig::setDirHome(path_home->url());
-// 		else {
-// 			error += i18n("Path to Kuroo home directory not valid...");
-// 			error += i18n(" %1 will be created.").arg(path_home->url());
-// 		}
-		
+
 		// Check all portage directories
 		const QStringList categoryUrl = QStringList::split(" ", path_portageOverlay->url());
 		QStringList categoryUrlValid;

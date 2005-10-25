@@ -38,12 +38,6 @@ public:
 	 */
     ~LogsTab();
 
-public slots:
-	
-	/**
-	 * Calculate portade directories sizes.
-	 */
-	void	slotRefresh();
 	
 private slots:
 	

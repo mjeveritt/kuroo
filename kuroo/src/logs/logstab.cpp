@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "common.h"
-#include "scansizelistview.h"
 #include "historylistview.h"
 #include "logstab.h"
 
@@ -52,13 +51,10 @@ LogsTab::~LogsTab()
 	KConfig* config = KurooConfig::self()->config();
 	config->setGroup("Kuroo Geometry");
 	
-	QValueList<int> list = splitterH->sizes();
-	config->writeEntry("splitterLogsH", list);
-	list = splitterV->sizes();
+	QValueList<int> list = splitterV->sizes();
 	config->writeEntry("splitterLogsV", list);
 	
 	historyView->saveLayout( KurooConfig::self()->config(), "logsViewLayout" );
-	diskUsage->saveLayout( KurooConfig::self()->config(), "diskUsageLayout" );
 	
 	// Save checkboxes state
 	if ( saveLog->isChecked() )
@@ -83,13 +79,10 @@ void LogsTab::slotInit()
 	KConfig* config = KurooConfig::self()->config();
 	config->setGroup("Kuroo Geometry");
 	
-	QValueList<int> sizes = config->readIntListEntry("splitterLogsH");
-	splitterH->setSizes(sizes);
-	sizes = config->readIntListEntry("splitterLogsV");
+	QValueList<int> sizes = config->readIntListEntry("splitterLogsV");
 	splitterV->setSizes(sizes);
 	
 	historyView->restoreLayout( KurooConfig::self()->config(), "logsViewLayout" );
-	diskUsage->restoreLayout(KurooConfig::self()->config(), "diskUsageLayout");
 	
 	// Restore checkboxes state
 	if ( KurooConfig::saveLog() )
@@ -101,22 +94,6 @@ void LogsTab::slotInit()
 		verboseLog->setChecked(true);
 	else
 		verboseLog->setChecked(false);
-	
-	diskUsage->loadPortageSize();
-}
-
-/**
- * Calculate portade directories sizes.
- */
-void LogsTab::slotRefresh()
-{
-	switch( KMessageBox::questionYesNo( this, 
-		i18n("<qt>Do you want to refresh Portage disk usage overview?<br>"
-		     "This will take a couple of minutes...</qt>"), i18n("Portage Disk Usage"), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshDiskUsage" ) ) {
-		case KMessageBox::Yes: {
-			diskUsage->scanPortageSize();
-		}
-	}
 }
 
 /**

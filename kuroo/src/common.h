@@ -36,7 +36,6 @@
 #include "portagedb.h"
 #include "history.h"
 #include "singleton.h"
-#include "diskusage.h"
 
 typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
@@ -49,7 +48,6 @@ typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<Updates> UpdatesSingleton;
-typedef Singleton<DiskUsage> DiskUsageSingleton;
 
 enum LogActions { EMERGE, KUROO, ERROR, TOLOG, EMERGELOG };
 

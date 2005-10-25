@@ -1,8 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="10" >
- </DocsAndViews>
+ <DocsAndViews NumberOfDocuments="0" />
  <pluginList>
   <kdevdebugger>
    <breakpointList/>

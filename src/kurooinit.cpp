@@ -46,9 +46,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( KUROODIR );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
-		
 		if ( !KUser().isSuperUser() ) {
-			KMessageBox::error( 0, i18n("You must start Kuroo with kdesu first time for secure initialization.\nPlease try again!"), i18n("Initialization") );
+			KMessageBox::error( 0, i18n("You must start Kuroo with kdesu first time for a secure initialization.\nPlease try again!"), i18n("Initialization") );
 			exit(0);
 		}
 		

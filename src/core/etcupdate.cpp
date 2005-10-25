@@ -100,10 +100,10 @@ void  EtcUpdate::readFromStdout( KProcIO* proc )
 {
 	QString line;
 	
-	while ( proc->readln(line, true) != -1) {
+	while ( proc->readln(line, true) != -1 ) {
 		etcUpdateLines += line;
-		
-		LogSingleton::Instance()->writeLog(line, EMERGE);
+		LogSingleton::Instance()->writeLog( line, EMERGE );
+		kdDebug() << "EtcUpdate::readFromStdout etcUpdateLines=" << etcUpdateLines << endl;
 		
 		if ( line.contains("Please select a file") ) {
 			proc->writeStdin( (QString)"-1", true );
@@ -120,9 +120,6 @@ void EtcUpdate::cleanup( KProcess* )
 {
 	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( readFromStdout( KProcIO* ) ) );
 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( cleanup( KProcess* ) ) );
-	
-	kdDebug() << "etcUpdateLines=" << etcUpdateLines << endl;
-	
 	runDiff();
 }
 

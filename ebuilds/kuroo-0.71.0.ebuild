@@ -13,6 +13,7 @@ KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE=""
 DEPEND="!app-portage/guitoo 
 	app-portage/gentoolkit
+	kde-misc/kdiff3
 	|| (kde-base/dcoprss kde-base/kdenetwork)"
 
 need-kde 3.2

@@ -5,12 +5,14 @@ inherit kde
 
 DESCRIPTION="A KDE Portage frontend"
 HOMEPAGE="http://guitoo.sourceforge.net"
-SRC_URI="mirror://sourceforge/guitoo/${P}.tar.gz"
+SRC_URI="mirror://sourceforge/guitoo/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE=""
-DEPEND="!app-admin/guitoo app-portage/gentoolkit || (kde-base/dcoprss kde-base/kdenetwork)"
+DEPEND="!app-portage/guitoo 
+	app-portage/gentoolkit
+	|| (kde-base/dcoprss kde-base/kdenetwork)"
 
 need-kde 3.2

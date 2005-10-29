@@ -13,7 +13,7 @@ HOMEPAGE="http://tux.myftp.org/kuroo"
 LICENSE="GPL-2"
 
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE=""
 
 RDEPEND="app-portage/gentoolkit

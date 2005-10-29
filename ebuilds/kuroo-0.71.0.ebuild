@@ -11,7 +11,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE=""
-DEPEND="!app-portage/guitoo 
+RDEPEND="!app-portage/guitoo
 	app-portage/gentoolkit
 	kde-misc/kdiff3
 	|| (kde-base/dcoprss kde-base/kdenetwork)"

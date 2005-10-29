@@ -371,8 +371,8 @@ QStringList KurooDB::installedPackageInfo( const QString& id )
 QStringList KurooDB::updatesCategories()
 {
 	return query( " SELECT DISTINCT category.name " 
-	              " FROM package, category "
-	              " WHERE package.updateVersion != '' "
+	              " FROM updates, package, category "
+	              " WHERE updates.idPackage = package.id "
 	              " AND package.idCategory = category.id "
 	              " ;");
 }

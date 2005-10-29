@@ -42,7 +42,7 @@ class ScanHistoryJob : public ThreadWeaver::DependentJob
 {
 Q_OBJECT
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = NULL );
+	ScanHistoryJob( QObject *parent = 0, const QStringList& logLinesIn = NULL );
 	~ScanHistoryJob();
 
 private:
@@ -57,7 +57,7 @@ private:
 private:
 	bool						aborted;
 	DbConnection* const			m_db;
-	QStringList 				m_logLines;
+	QStringList 				logLines;
 };
 
 #endif

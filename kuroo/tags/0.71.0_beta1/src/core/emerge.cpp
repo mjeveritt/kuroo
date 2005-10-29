@@ -490,7 +490,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 						}
 						else
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
-								importantMessage += line.section("# ", 1, 1) + "<br>";
+								importantMessage += line.section("# ", 1, 1) + "\n";
 	
 		////////////////////////////////////
 		// Collect einfo and ewarn messages
@@ -642,12 +642,12 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString keyword = (packageKeyword.section("%", 1, 1)).section(" keyword", 0, 0);
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
-		importantMessage += i18n("<br><b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
+		importantMessage += i18n("\n<b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
 		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 	}
 	else
 		if ( keyword.contains( "-*" ) ) {
-			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture. If you believe the package does work file a bug at Gentoo bugzilla website.");
+			importantMessage += i18n("\n<b>-* keyword</b> means that the application does not work on your architecture. If you believe the package does work file a bug at Gentoo bugzilla website.");
 			Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 		}
 		else {

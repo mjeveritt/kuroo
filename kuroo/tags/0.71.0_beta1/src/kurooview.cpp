@@ -127,21 +127,7 @@ void KurooView::slotInit()
 		}
 	else {
 		connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
-		
-		// Check if kuroo database needs updating.
-		if ( !HistorySingleton::Instance()->slotRefresh() ) {
-			disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
-			
-			switch( KMessageBox::warningContinueCancel( this, 
-				i18n("<qt>Kuroo database needs refreshing!<br>"
-					"Emerge log shows that your system has changed.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0) ) {
-				case KMessageBox::Continue: {
-					InstalledSingleton::Instance()->slotReset();
-					UpdatesSingleton::Instance()->slotReset();
-					slotCheckPortage();
-				}
-			}
-		}
+		HistorySingleton::Instance()->slotRefresh();
 	}
 }
 
@@ -155,7 +141,7 @@ void KurooView::slotReset()
 	InstalledSingleton::Instance()->slotReset();
 	UpdatesSingleton::Instance()->slotReset();
 	QueueSingleton::Instance()->reset();
-	ResultsSingleton::Instance()->reset();
+	ResultsSingleton::Instance()->reset();	
 	slotInit();
 }
 

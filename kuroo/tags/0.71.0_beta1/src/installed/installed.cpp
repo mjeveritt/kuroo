@@ -137,7 +137,7 @@ void Installed::slotChanged()
  */
 void Installed::slotReset()
 {
-	KurooDBSingleton::Instance()->query("UPDATE package set installed = 0;");
+	KurooDBSingleton::Instance()->query("DELETE FROM package WHERE installed = '1';");
 	emit signalInstalledReset();
 }
 

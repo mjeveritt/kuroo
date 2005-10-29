@@ -49,12 +49,9 @@ History::~History()
 
 void History::init( QObject *myParent )
 {
-	kdDebug() << "History::init" << endl;
 	parent = myParent;
-	if ( !log.open(IO_ReadOnly) )
+	if ( !log.open( IO_ReadOnly ) )
 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
-	else
-		stream.setDevice( &log );
 }
 
 /**
@@ -63,47 +60,49 @@ void History::init( QObject *myParent )
  */
 void History::slotInit()
 {
-	kdDebug() << "History::slotInit" << endl;
 	log.setName( "/var/log/emerge.log" );
 	loadTimeStatistics();
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotChanged() ) );
 	
 	fileWatcher = new KDirWatch(this);
-	fileWatcher->addFile("/var/log/emerge.log");
+	fileWatcher->addFile( "/var/log/emerge.log" );
 	connect( fileWatcher, SIGNAL( dirty(const QString&) ), this, SLOT( slotParse() ) );
 }
 
 /**
  * Check for new entries in emerge.log similar to a "tail".
- * @return false if emerge log shows changes.
+ * @return success
  */
 bool History::slotRefresh()
 {
 	kdDebug() << "History::slotRefresh" << endl;
+	emergeLines.clear();
 	
 	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry().first();
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
 		
-	QStringList emergeLines;
+	stream.setDevice( &log );
 	while ( !stream.atEnd() ) {
 		QString line = stream.readLine();
 		if ( line.contains(QRegExp("(Started emerge on)|(::: completed emerge)|(>>> unmerge success)")) ) {
 			QRegExp rx("\\d+");
-			if ( rx.search(line) > -1 )
-				if ( rx.cap(0) > lastDate )
+			if ( rx.search(line) > -1 ) {
+				if ( rx.cap(0) > lastDate ) {
 					emergeLines += line;
+				}
+			}
 		}
 	}
 
+	
 	// If user has used emerge outside kuroo, update the history
-	if ( !emergeLines.isEmpty() ) {
+	if ( !emergeLines.isEmpty() )
 		slotScanHistory( emergeLines );
-		return false;
-	}
-
-	slotChanged();
+	else
+		slotChanged();
+	
 	return true;
 }
 
@@ -154,8 +153,9 @@ void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
 QString History::packageTime( const QString& packageNoversion )
 {
 	EmergeTimeMap::iterator itMap = m_statisticsMap.find( packageNoversion );
-	if ( itMap != m_statisticsMap.end() )
+	if ( itMap != m_statisticsMap.end() ) {
 		return QString::number( itMap.data().emergeTime() / itMap.data().count() );
+	}
 	else
 		return i18n("na");
 }
@@ -164,10 +164,10 @@ QString History::packageTime( const QString& packageNoversion )
  * Launch scan to load into db.
  * @param emergeLines
  */
-void History::slotScanHistory( const QStringList& lines )
+void History::slotScanHistory( const QStringList& emergeLines )
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanHistoryJob(this, lines) );
+	ThreadWeaver::instance()->queueJob( new ScanHistoryJob(this, emergeLines) );
 }
 
 /**
@@ -185,22 +185,11 @@ QStringList History::allHistory()
  */
 void History::slotParse()
 {
-	kdDebug() << "History::slotParse" << endl;
-	
 	static QString emergeDate("");
 	static bool syncDone(false);
-	QStringList emergeLines;
 	
-	while ( !stream.atEnd() )
-		emergeLines += stream.readLine();
-
-	// Update history
-	if ( !emergeLines.isEmpty() )
-		slotScanHistory( emergeLines );
-	
-	foreach ( emergeLines ) {
-		QString line = *it;
-		
+	while ( !stream.atEnd() ) {
+		QString line = stream.readLine();
 		if ( !line.isEmpty() ) {
 			QRegExp rx("\\d+:\\s");
 			QString package;
@@ -223,6 +212,10 @@ void History::slotParse()
 			}
 			else
 			if ( line.contains("Started emerge on") ) {
+				emergeLines.clear();
+				emergeLines += line;
+				slotScanHistory(emergeLines);
+				
 				line.replace("Started emerge on", i18n("Started emerge on"));
 				LogSingleton::Instance()->writeLog( line.section(rx, 1, 1), EMERGELOG );
 			}
@@ -232,6 +225,10 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains("completed emerge ") ) {
+				emergeLines.clear();
+				emergeLines += line;
+				slotScanHistory(emergeLines);
+				
 				rx.setPattern("\\s\\S+/\\S+\\s");
 				if ( rx.search(line) > -1 ) {
 					package = rx.cap(0).stripWhiteSpace();
@@ -246,6 +243,10 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains("unmerge success") ) {
+				emergeLines.clear();
+				emergeLines += line;
+				slotScanHistory(emergeLines);
+				
 				package = emergeLine.section("unmerge success: ", 1, 1);
 				InstalledSingleton::Instance()->removePackage(package);
 				

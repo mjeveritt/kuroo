@@ -87,7 +87,6 @@ void UpdatePackagesListView::addCategoryPackages( const QString& category )
 	
 	// Get list of packages in this category from database
 	const QStringList packageList = UpdatesSingleton::Instance()->packagesInCategory(category);
-	kdDebug() << "packageList=" << packageList << endl;
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString name = *it++;

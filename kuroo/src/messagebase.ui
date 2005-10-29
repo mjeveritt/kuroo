@@ -40,6 +40,9 @@
             <property name="name">
                 <cstring>messageText</cstring>
             </property>
+            <property name="textFormat">
+                <enum>RichText</enum>
+            </property>
         </widget>
     </grid>
 </widget>

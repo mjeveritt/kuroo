@@ -87,7 +87,7 @@ private slots:
 	/**
 	 * Launch scan to load into db.
 	 */
-	void			slotScanHistory( const QStringList& emergeLines );
+	void			slotScanHistory( const QStringList& lines );
 	
 	/**
 	 * Parse emerge.log when it has been changed, eg after, emerge, unmerge, sync...
@@ -97,7 +97,6 @@ private slots:
 private:
 	QObject			*parent;
 	KDirWatch		*fileWatcher;
-	QStringList		emergeLines;
 	EmergeTimeMap	m_statisticsMap;
 	QFile 			log;
 	QTextStream 	stream;

@@ -33,9 +33,9 @@
 /**
  * Thread for parsing emerge/unmerge entries found in emerge.log.
  */
-ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLinesIn )
+ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), logLines( logLinesIn ), aborted(true)
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines ), aborted(true)
 {
 }
 
@@ -51,6 +51,7 @@ ScanHistoryJob::~ScanHistoryJob()
  */
 void ScanHistoryJob::completeJob()
 {
+	kdDebug() << "ScanHistoryJob::completeJob" << endl;
 	SignalistSingleton::Instance()->scanHistoryComplete();
 	aborted = false;
 }
@@ -62,6 +63,8 @@ void ScanHistoryJob::completeJob()
  */
 bool ScanHistoryJob::doJob()
 {
+	kdDebug() << "ScanHistoryJob::doJob" << endl;
+	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Can not connect to database") << endl;
 		return false;
@@ -75,7 +78,7 @@ bool ScanHistoryJob::doJob()
 	static QString emergeDate("");
 	QString timeStamp;
 	
-	foreach ( logLines ) {
+	foreach ( m_logLines ) {
 		
 		// Abort the scan
 		if ( isAborted() ) {

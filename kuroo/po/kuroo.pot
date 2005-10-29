@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-28 21:57+0200\n"
+"POT-Creation-Date: 2005-10-29 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: core/scanhistoryjob.cpp:66 core/scanportagejob.cpp:75
+#: core/scanhistoryjob.cpp:69 core/scanportagejob.cpp:75
 #: core/scanupdatesjob.cpp:68 core/scaninstalledjob.cpp:98
 #: core/cacheportagejob.cpp:90
 msgid "Can not connect to database"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:82 core/scanhistoryjob.cpp:143
+#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:146
 msgid "History scan aborted"
 msgstr ""
 
@@ -49,7 +49,7 @@ msgstr ""
 
 #: core/scanportagejob.cpp:260 core/emerge.cpp:553 core/emerge.cpp:625
 #: core/scanupdatesjob.cpp:151 core/scaninstalledjob.cpp:207
-#: queue/queuetab.cpp:350 history/history.cpp:269 history/history.cpp:270
+#: queue/queuetab.cpp:350 history/history.cpp:268 history/history.cpp:269
 msgid "Done."
 msgstr ""
 
@@ -157,8 +157,7 @@ msgstr ""
 
 #: core/emerge.cpp:645
 msgid ""
-"\n"
-"<b>missing keyword</b> means that the application has not been tested on "
+"<br><b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet. Ask the architecture porting team to test the package "
 "or test it for them and report your findings on Gentoo bugzilla website."
 msgstr ""
@@ -169,8 +168,7 @@ msgstr ""
 
 #: core/emerge.cpp:650
 msgid ""
-"\n"
-"<b>-* keyword</b> means that the application does not work on your "
+"<br><b>-* keyword</b> means that the application does not work on your "
 "architecture. If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
@@ -698,68 +696,68 @@ msgstr ""
 msgid "Error reading: /etc/portage/package.use"
 msgstr ""
 
-#: history/history.cpp:54
+#: history/history.cpp:55
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:199
+#: history/history.cpp:210
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:200
+#: history/history.cpp:211
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:206
+#: history/history.cpp:217
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:207
+#: history/history.cpp:218
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:208
+#: history/history.cpp:219
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:219
+#: history/history.cpp:226
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:241
+#: history/history.cpp:244
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:253
+#: history/history.cpp:252
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:258 history/history.cpp:259
+#: history/history.cpp:257 history/history.cpp:258
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:264 history/history.cpp:265
+#: history/history.cpp:263 history/history.cpp:264
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:278 rc.cpp:629
+#: history/history.cpp:277 rc.cpp:629
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:279
+#: history/history.cpp:278
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:280
+#: history/history.cpp:279
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:281
+#: history/history.cpp:280
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:282
+#: history/history.cpp:281
 msgid "terminating"
 msgstr ""
 
@@ -1065,31 +1063,37 @@ msgid ""
 "</qt>"
 msgstr ""
 
-#: kurooview.cpp:122
+#: kurooview.cpp:122 kurooview.cpp:137
 msgid "Initialize Kuroo"
 msgstr ""
 
-#: kurooview.cpp:222
+#: kurooview.cpp:136
+msgid ""
+"<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
+"has changed.</qt>"
+msgstr ""
+
+#: kurooview.cpp:236
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
-#: kurooview.cpp:273
+#: kurooview.cpp:287
 msgid "&Portage (%1)"
 msgstr ""
 
-#: kurooview.cpp:289
+#: kurooview.cpp:303
 msgid "&Installed (%1)"
 msgstr ""
 
-#: kurooview.cpp:305
+#: kurooview.cpp:319
 msgid "&Updates (%1)"
 msgstr ""
 
-#: kurooview.cpp:321
+#: kurooview.cpp:335
 msgid "&Queue (%1)"
 msgstr ""
 
-#: kurooview.cpp:337
+#: kurooview.cpp:351
 msgid "&Results (%1)"
 msgstr ""
 

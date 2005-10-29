@@ -4,7 +4,7 @@
 inherit kde subversion
 
 ESVN_PROJECT="${PN/-svn}"
-ESVN_REPO_URI="svn://tux.myftp.org/repos/kuroo"
+ESVN_REPO_URI="svn://tux.myftp.org/repos/kuroo/trunc"
 ESVN_STORE_DIR="${DISTDIR}/svn-src"
 ESVN_BOOTSTRAP="make -f Makefile.cvs"
 

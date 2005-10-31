@@ -465,7 +465,7 @@ QString Portage::packageSummary( const QString& packageId )
 	QString category(Portage::category( packageId ));
 	Info info( packageInfo( packageId ) );
 
-	QString textLines = "<font size=\"+2\">" + category + "/" + package + "</font><br>";
+	QString textLines = "<font size=\"+2\">" + category + "/" + package.section(pv, 0, 0) + "</font><br>";
 			textLines += info.description + "<br>";
 			textLines += "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
 			textLines += i18n("<b>Licenses:</b> ") + info.licenses + "<br>";

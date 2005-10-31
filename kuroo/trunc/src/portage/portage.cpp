@@ -191,7 +191,7 @@ void Portage::findPackage( const QString& text, const bool& isName )
 	if ( !packageIdList.isEmpty() )
 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
 	else
-		LogSingleton::Instance()->writeLog( i18n("\nNo packages found matching: %1").arg(text), KUROO );
+		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
 }
 
 /**
@@ -515,26 +515,28 @@ QString Portage::versionSummary( const QString& packageId )
  */
 QString Portage::ebuild( const QString& packageId )
 {
+	kdDebug() << "Portage::ebuild" << endl;
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	
-	QString filename = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
-	QFile file( filename );
+	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
+	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		filename = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
+		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
+		file.setName( fileName );
 	}
 	
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		QString textLines;
 		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "\n";
+			textLines += stream.readLine() + "<br>";
 		file.close();
 		return textLines;
 	}
 	else {
-		kdDebug() << i18n("Error reading: ") << filename << endl;
+		kdDebug() << i18n("Error reading: ") << fileName << endl;
 		return i18n("na");
 	}
 }
@@ -549,23 +551,24 @@ QString Portage::changelog( const QString& packageId )
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	
-	QString filename = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
-	QFile file( filename );
+	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
+	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		filename = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
+		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
+		file.setName( fileName );
 	}
 	
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		QString textLines;
 		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "\n";
+			textLines += stream.readLine() + "<br>";
 		file.close();
 		return textLines;
 	}
 	else {
-		kdDebug() << i18n("Error reading: ") << filename << endl;
+		kdDebug() << i18n("Error reading: ") << fileName << endl;
 		return i18n("na");
 	}
 }
@@ -580,11 +583,12 @@ QString Portage::dependencies( const QString& packageId )
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	
-	QString filename = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
-	QFile file( filename );
+	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
+	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		filename = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package;
+		fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package;
+		file.setName( fileName );
 	}
 	
 	if ( file.open( IO_ReadOnly ) ) {
@@ -599,13 +603,13 @@ QString Portage::dependencies( const QString& packageId )
 			if ( lineCount++ > 1 || line == "0" )
 				break;
 			else
-				textLines += line + "\n";
+				textLines += line + "<br>";
 		}
 		file.close();
 		return textLines;
 	}
 	else {
-		kdDebug() << i18n("Error reading: ") << filename << endl;
+		kdDebug() << i18n("Error reading: ") << fileName << endl;
 		return i18n("na");
 	}
 }

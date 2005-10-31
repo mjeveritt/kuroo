@@ -1,0 +1,61 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>Options6</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Options6</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>408</width>
+            <height>340</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KTextEdit" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>kcfg_worldFile</cstring>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>pbExportToWorld</cstring>
+            </property>
+            <property name="text">
+                <string>E&amp;xport to world file</string>
+            </property>
+            <property name="accel">
+                <string>Alt+X</string>
+            </property>
+        </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>241</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>

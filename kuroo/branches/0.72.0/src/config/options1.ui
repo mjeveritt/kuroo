@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>460</width>
+            <width>459</width>
             <height>576</height>
         </rect>
     </property>
@@ -19,79 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>paths</cstring>
-            </property>
-            <property name="title">
-                <string>Paths</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirDbPkg</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>cFlags_3</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Installed repository</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirEdbDep</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>300</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>cFlags_2_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Portage cache</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
         <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>portage</cstring>
@@ -247,10 +174,10 @@
                         <cstring>kcfg_viewUnmerges</cstring>
                     </property>
                     <property name="text">
-                        <string>View unmer&amp;ges</string>
+                        <string>View &amp;unmerges</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+G</string>
+                        <string>Alt+U</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -551,6 +478,73 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>paths</cstring>
+            </property>
+            <property name="title">
+                <string>Paths</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>cFlags_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Installed repository</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>cFlags_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Portage cache</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="1" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirEdbDep</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="0" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirDbPkg</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -559,5 +553,11 @@
 <includehints>
     <includehint>kcolorbutton.h</includehint>
     <includehint>kcolorbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

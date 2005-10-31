@@ -1,0 +1,23 @@
+<!DOCTYPE DCOP-IDL><DCOP-IDL>
+<SOURCE>gentoowatcher.h</SOURCE>
+<INCLUDE>dcopref.h</INCLUDE>
+<INCLUDE>dcopobject.h</INCLUDE>
+<INCLUDE>kurl.h</INCLUDE>
+<INCLUDE>qtimer.h</INCLUDE>
+<INCLUDE>qmap.h</INCLUDE>
+<CLASS>
+    <NAME>GentooWatcher</NAME>
+    <SUPER>KSystemTray</SUPER>
+    <SUPER>DCOPObject</SUPER>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>documentUpdated</NAME>
+        <ARG><TYPE>DCOPRef</TYPE><NAME>feedRef</NAME></ARG>
+     </FUNC>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>documentAdded</NAME>
+        <ARG><TYPE>QString</TYPE></ARG>
+     </FUNC>
+</CLASS>
+</DCOP-IDL>

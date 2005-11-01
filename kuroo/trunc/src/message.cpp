@@ -49,9 +49,10 @@ Message::~Message()
 
 bool Message::prompt( const QString& caption, const QString& label, const QStringList& text )
 {
-	setCaption( caption );
-	setLabel( label );
-	setText( text );
+	kdDebug() << "Message::prompt text=" << text << endl;
+	setCaption(caption);
+	setLabel(label);
+	setText(text);
 	setInitialSize( QSize(600, 300) );
 	show();
 }

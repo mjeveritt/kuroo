@@ -393,9 +393,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 		if ( line.isEmpty() )
 			continue;
 		
-		/////////////////////////
+		//////////////////////////////////////////////////////
 		// Parse out packages and info
-		/////////////////////////
+		//////////////////////////////////////////////////////
 		if ( line.contains(QRegExp("^\\[ebuild")) ) {
 			
 			EmergePackage emergePackage;
@@ -524,9 +524,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 		LogSingleton::Instance()->writeLog( line, TOLOG );
 		
 		// Collect blocking lines
-		if ( line.contains("is blocking") ) {
-			blocks += line.section("[blocks B     ]", 1, 1);
-		}
+		if ( line.contains("is blocking") )
+			blocks += line.section("[blocks B     ]", 1, 1).replace('>', "&gt;").replace('<', "&lt;");
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
@@ -554,10 +553,9 @@ void Emerge::cleanup()
 	SignalistSingleton::Instance()->setKurooBusy(false);
 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
-	if ( !blocks.isEmpty() ) {
+	if ( !blocks.isEmpty() )
 		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks );
-	}
-	
+
 	if ( !unmasked.isEmpty() )
 		askUnmaskPackage( unmasked );
 	else

@@ -65,14 +65,8 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
  * Set the message text and encode it for correct html presentation.
  * @param text	the message
  */
-void Message::setText( const QStringList& text )
+void Message::setText( const QStringList& lines )
 {
-	QString line;
-	QStringList lines;
-	foreach ( text ) {
-		line = *it;
-		lines += line.replace('>', "&gt;").replace('<', "&lt;");
-	}
 	base->messageText->setText( lines.join("\n") );
 }
 

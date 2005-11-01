@@ -496,7 +496,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		// Collect einfo and ewarn messages
 		////////////////////////////////////
 		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp())) || lastLineFlag || line.contains("**** ") ) ) {
-			QString cleanLine = line + "<br>";
+			QString cleanLine = line.replace('>', "&gt;").replace('<', "&lt;") + "<br>";
 			cleanLine.remove("!!!");
 			
 			kdDebug() << "cleanLine=" << cleanLine << endl;
@@ -525,7 +525,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		
 		// Collect blocking lines
 		if ( line.contains("is blocking") )
-			blocks += line.section("[blocks B     ]", 1, 1);
+			blocks += line.section("[blocks B     ]", 1, 1).replace('>', "&gt;").replace('<', "&lt;");
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )

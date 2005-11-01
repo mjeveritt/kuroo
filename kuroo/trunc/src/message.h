@@ -39,7 +39,7 @@ public:
 	static Message* instance() { return s_instance; }
 	
 public slots:
-	bool			prompt( const QString& caption, const QString& label, const QStringList& text );
+	void			prompt( const QString& caption, const QString& label, const QStringList& text );
 	void			setLabel( const QString& label );
 	void			setText( const QStringList& text );
 	

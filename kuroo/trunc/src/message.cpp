@@ -18,14 +18,13 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include "common.h"
 #include "message.h"
 #include "messagebase.h"
 
 #include <qlabel.h>
 
 #include <ktextbrowser.h>
-#include <klocale.h>
-#include <kdebug.h>
 
 Message* Message::s_instance = 0;
 
@@ -47,9 +46,14 @@ Message::~Message()
 {
 }
 
-bool Message::prompt( const QString& caption, const QString& label, const QStringList& text )
+/**
+ * Show dialog with message content.
+ * @param caption
+ * @param label
+ * @param text	the message
+ */
+void Message::prompt( const QString& caption, const QString& label, const QStringList& text )
 {
-	kdDebug() << "Message::prompt text=" << text << endl;
 	setCaption(caption);
 	setLabel(label);
 	setText(text);
@@ -57,9 +61,19 @@ bool Message::prompt( const QString& caption, const QString& label, const QStrin
 	show();
 }
 
+/**
+ * Set the message text and encode it for correct html presentation.
+ * @param text	the message
+ */
 void Message::setText( const QStringList& text )
 {
-	base->messageText->setText( text.join("\n") );
+	QString line;
+	QStringList lines;
+	foreach ( text ) {
+		line = *it;
+		lines += line.replace('>', "&gt;").replace('<', "&lt;");
+	}
+	base->messageText->setText( lines.join("\n") );
 }
 
 void Message::setLabel( const QString& label )

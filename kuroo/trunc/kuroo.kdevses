@@ -18,5 +18,9 @@
    <kcachegrind path="/usr/kde/3.5/bin/kcachegrind" />
   </kdevvalgrind>
  </pluginList>
- <DocsAndViews NumberOfDocuments="0" />
+ <DocsAndViews NumberOfDocuments="1" >
+  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/trunc/src/core/packageitem.cpp" >
+   <View0 line="0" Type="Source" />
+  </Doc0>
+ </DocsAndViews>
 </KDevPrjSession>

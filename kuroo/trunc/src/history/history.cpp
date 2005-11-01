@@ -80,11 +80,7 @@ void History::slotInit()
  */
 bool History::slotRefresh()
 {
-	kdDebug() << "History::slotRefresh" << endl;
-	
-	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry().first();
-	if ( lastDate.isEmpty() )
-		lastDate = "0";
+	kdDebug() << "History::slotRefresh KurooConfig::scanHistoryDate()=" << KurooConfig::scanHistoryDate() << endl;
 		
 	QStringList emergeLines;
 	while ( !stream.atEnd() ) {
@@ -92,7 +88,7 @@ bool History::slotRefresh()
 		if ( line.contains(QRegExp("(>>> emerge)|(::: completed emerge)|(>>> unmerge success)")) ) {
 			QRegExp rx("\\d+");
 			if ( rx.search(line) > -1 )
-				if ( rx.cap(0) > lastDate )
+				if ( rx.cap(0) > KurooConfig::scanHistoryDate() )
 					emergeLines += line;
 		}
 	}

@@ -257,7 +257,7 @@ bool Emerge::unmerge( const QString& category, const QStringList& packageList )
 	emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "-C";
+	*eProc << "emerge" << "--unmerge";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {

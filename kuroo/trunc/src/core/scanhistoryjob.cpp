@@ -89,48 +89,44 @@ bool ScanHistoryJob::doJob()
 		
 		QRegExp rx("\\d+:\\s");
 		QString package;
-		QString emergeLine = QString(*it).section( rx, 1, 1 );
-		timeStamp = QString(*it).section( ": " + emergeLine, 0, 0 );
-		
-// 		QDateTime t;
-// 		t.setTime_t( timeStamp.toUInt() );
+		QString emergeLine = QString(*it).section(rx, 1, 1);
+		timeStamp = QString(*it).section(": " + emergeLine, 0, 0);
+		QDateTime t;
+		t.setTime_t(timeStamp.toUInt());
 // 		kdDebug() << "timeStamp=" << timeStamp << ". " << t.toString("yyyy MM dd hh:mm") << endl;
+		emergeDate = t.toString("MMM dd yyyy");
 		
-		if ( emergeLine.contains( "Started emerge on" ) ) {
-			emergeDate = emergeLine.section("Started emerge on: ", 1, 1).remove(',');
-			emergeDate = emergeDate.section(" ", 0, 2);
+		if ( emergeLine.contains(">>> emerge") ) {
 			emergeStart = timeStamp.toUInt();
 		}
 		else
-			if ( emergeLine.contains( "::: completed emerge " ) ) {
+			if ( emergeLine.contains("::: completed emerge ") ) {
 				rx.setPattern("\\s\\S+/\\S+\\s");
 				if (rx.search(emergeLine) > -1) {
 					package = rx.cap(0).stripWhiteSpace();
 				}
 				
-				QString packageNoVersion = package.section( pv, 0, 0 );
+				QString packageNoVersion = package.section(pv, 0, 0);
 				int secTime = timeStamp.toUInt() - emergeStart;
 				QTime duration(0, 0, 0);
-				duration = duration.addSecs( secTime );
+				duration = duration.addSecs(secTime);
 				
 				// Update emerge time and increment count for packageNoVersion
-				EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
+				EmergeTimeMap::iterator itMap = emergeTimeMap.find(packageNoVersion);
 				if ( itMap == emergeTimeMap.end() ) {
 					PackageEmergeTime pItem( secTime, 1 );
-					emergeTimeMap.insert( packageNoVersion, pItem );
+					emergeTimeMap.insert(packageNoVersion, pItem);
 				}
 				else {
-					itMap.data().add( secTime );
+					itMap.data().add(secTime);
 					itMap.data().inc();
 				}
 				
 				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, date, timestamp, time, emerge) VALUES ('%1', '%2', '%3', '%4', 'true');" ).arg( package ).arg( emergeDate ).arg( timeStamp ).arg( duration.toString(Qt::TextDate) ), m_db );
-				
-				emergeStart = timeStamp.toUInt();
 			}
 			else
-				if ( emergeLine.contains( ">>> unmerge success" ) ) {
-					package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
+				if ( emergeLine.contains(">>> unmerge success") ) {
+					package = emergeLine.section(">>> unmerge success: ", 1, 1);
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, date, timestamp, emerge) VALUES ('%1', '%2', '%3', 'false');" ).arg( package ).arg( emergeDate ).arg( timeStamp ), m_db );
 				}
 	}

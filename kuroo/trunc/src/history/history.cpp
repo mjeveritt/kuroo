@@ -89,7 +89,7 @@ bool History::slotRefresh()
 	QStringList emergeLines;
 	while ( !stream.atEnd() ) {
 		QString line = stream.readLine();
-		if ( line.contains(QRegExp("(Started emerge on)|(::: completed emerge)|(>>> unmerge success)")) ) {
+		if ( line.contains(QRegExp("(>>> emerge)|(::: completed emerge)|(>>> unmerge success)")) ) {
 			QRegExp rx("\\d+");
 			if ( rx.search(line) > -1 )
 				if ( rx.cap(0) > lastDate )

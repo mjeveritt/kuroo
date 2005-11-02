@@ -80,21 +80,24 @@ void History::slotInit()
  */
 bool History::slotRefresh()
 {
-	kdDebug() << "History::slotRefresh KurooConfig::scanHistoryDate()=" << KurooConfig::scanHistoryDate() << endl;
-		
+	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry().first();
+	if ( lastDate.isEmpty() )
+		lastDate = "0";
+	
+	// Collect all recent entries in emerge log
 	QStringList emergeLines;
 	while ( !stream.atEnd() ) {
 		QString line = stream.readLine();
 		if ( line.contains(QRegExp("(>>> emerge)|(::: completed emerge)|(>>> unmerge success)")) ) {
 			QRegExp rx("\\d+");
 			if ( rx.search(line) > -1 )
-				if ( rx.cap(0) > KurooConfig::scanHistoryDate() )
+				if ( rx.cap(0) > lastDate )
 					emergeLines += line;
 		}
 	}
 
-	// If user has used emerge outside kuroo, update the history
-	if ( !emergeLines.isEmpty() ) {
+	// Check only for successfull emerge/unmerges outside kuroo, and update the history
+	if ( !emergeLines.grep(QRegExp("(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
 		slotScanHistory( emergeLines );
 		return false;
 	}

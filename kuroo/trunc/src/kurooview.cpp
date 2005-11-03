@@ -136,9 +136,17 @@ void KurooView::slotInit()
 				i18n("<qt>Kuroo database needs refreshing!<br>"
 				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialize Kuroo"), i18n("Refresh"), i18n("Skip"), "dontAskAgainInitKuroo", 0) ) {
 				case KMessageBox::Yes: {
-					InstalledSingleton::Instance()->slotReset();
-					UpdatesSingleton::Instance()->slotReset();
-					slotCheckPortage();
+					
+					// If user has synced portage refresh everything, else only Installed and Updates
+					if ( HistorySingleton::Instance()->hasSyncPortage() ) {
+						connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
+						PortageSingleton::Instance()->slotRefresh();
+					}
+					else {
+						InstalledSingleton::Instance()->slotReset();
+						UpdatesSingleton::Instance()->slotReset();
+						slotCheckPortage();
+					}
 					break;
 				}
 				default: {
@@ -170,7 +178,6 @@ void KurooView::slotReset()
 void KurooView::slotCheckPortage()
 {
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
-	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
 	if ( PortageSingleton::Instance()->count() == "0" ) {
@@ -189,7 +196,6 @@ void KurooView::slotCheckPortage()
 void KurooView::slotCheckInstalled()
 {
 	kdDebug() << "KurooView::slotCheckInstalled" << endl;
-	
 	disconnect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
 	
 	if ( InstalledSingleton::Instance()->count() == "0" ) {
@@ -208,7 +214,6 @@ void KurooView::slotCheckInstalled()
 void KurooView::slotCheckUpdates()
 {
 	kdDebug() << "KurooView::slotCheckUpdates" << endl;
-	
 	disconnect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotCheckUpdates() ) );
 	
 	if ( UpdatesSingleton::Instance()->count() == "0" ) {

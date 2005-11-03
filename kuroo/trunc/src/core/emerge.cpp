@@ -562,7 +562,7 @@ void Emerge::cleanup()
 		if ( !importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
 	
-	if ( etcUpdateCount != 0 && !SignalistSingleton::Instance()->isKurooBusy() )
+	if ( etcUpdateCount != 0 /*&& !SignalistSingleton::Instance()->isKurooBusy()*/ )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
 }
 
@@ -686,13 +686,11 @@ bool Emerge::countEtcUpdates( const QString& line )
 {
 	// count etc-files to merge
 	if ( line.contains(" need updating") ) {
-		
 		QString tmp = line.section("config files", 0, 0);
 		QRegExp rx("(\\d+)");
 		int pos = rx.search(tmp);
-		if ( pos > -1 ) {
+		if ( pos > -1 )
 			etcUpdateCount += (rx.cap(1)).toInt();
-		}
 		
 		return true;
 	}

@@ -36,8 +36,8 @@
 /**
  * Specialized listview for emerge history.
  */
-HistoryListView::HistoryListView(QWidget *parent, const char *name)
-	: KListView(parent, name)
+HistoryListView::HistoryListView( QWidget *parent, const char *name )
+	: KListView( parent, name )
 {
 	// Load icons for category, package ...
 	KIconLoader *ldr = KGlobal::iconLoader();
@@ -67,6 +67,9 @@ HistoryListView::~HistoryListView()
 {
 }
 
+/**
+ * @return current entry.
+ */
 QString HistoryListView::current()
 {
 	QListViewItem *item = currentItem();
@@ -77,6 +80,9 @@ QString HistoryListView::current()
 		return i18n("na");
 }
 
+/**
+ * @return list of selected packages.
+ */
 QStringList HistoryListView::selected()
 {
 	QStringList packageList;

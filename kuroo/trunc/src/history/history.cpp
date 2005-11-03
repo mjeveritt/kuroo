@@ -84,6 +84,8 @@ bool History::slotRefresh()
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
 	
+	kdDebug() << "lastDate=" << lastDate << endl;
+	
 	// Collect all recent entries in emerge log
 	QStringList emergeLines;
 	while ( !stream.atEnd() ) {
@@ -91,16 +93,18 @@ bool History::slotRefresh()
 		QRegExp rx("\\d+");
 		if ( rx.search(line) > -1 )
 			if ( rx.cap(0) > lastDate )
-				if ( line.contains(QRegExp("(*** emerge)|(::: completed emerge)|(>>> unmerge success)")) )
+				if ( line.contains(QRegExp("(\\*\\*\\* emerge)|(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")) )
 					emergeLines += line;
 	}
 
+	kdDebug() << "emergeLines=" << emergeLines << endl;
+	
 	// Check if user has run emerge sync, if so save flag
 	if ( !emergeLines.grep("Sync completed").isEmpty() )
 		userSync = true;
 	
 	// Check only for successfull emerge/unmerges outside kuroo, and update the history
-	if ( !emergeLines.grep(QRegExp("(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
+	if ( !emergeLines.grep(QRegExp("(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
 		slotScanHistory( emergeLines );
 		return false;
 	}

@@ -104,19 +104,18 @@ void HistoryListView::loadFromDB()
 		QString package = *it++;
 		QString time = *it;
 		
-		if (!time.isEmpty() || KurooConfig::viewUnmerges()) {
-			if (!package.isEmpty()) {
+		if ( !time.isEmpty() || KurooConfig::viewUnmerges() ) {
+			if ( !package.isEmpty() ) {
 				
 				ItemMap::iterator itMap =  itemMap.find(date) ;
-				if (itMap == itemMap.end()) {
+				if ( itMap == itemMap.end() ) {
 					KListViewItem *itemDate = new KListViewItem(this, date);
 					itemDate->setOpen(true);
 					KListViewItem *itemPackage = new KListViewItem(itemDate, package);
 					itemMap.insert(date, itemDate);
 					
-					if (time.isEmpty()) {
+					if ( time.isEmpty() )
 						itemPackage->setPixmap(0, pxUnmerged);
-					}
 					else {
 						itemPackage->setPixmap(0, pxNew);
 						itemPackage->setText(1, time);
@@ -126,9 +125,8 @@ void HistoryListView::loadFromDB()
 				{
 					KListViewItem *itemPackage = new KListViewItem(itMap.data(), package);
 					
-					if (time.isEmpty()) {
+					if (time.isEmpty())
 						itemPackage->setPixmap(0, pxUnmerged);
-					}
 					else {
 						itemPackage->setPixmap(0, pxNew);
 						itemPackage->setText(1, time);
@@ -140,8 +138,8 @@ void HistoryListView::loadFromDB()
 	
 	// Count emerge/unmerge events
 	QListViewItem * myChild = firstChild();
-	if (myChild) {
-		while(myChild) {
+	if ( myChild ) {
+		while ( myChild ) {
 			QString events = myChild->text(0) + " (" + QString::number(myChild->childCount()) + ")";
 			myChild->setText(0, events);
 			myChild = myChild->nextSibling();

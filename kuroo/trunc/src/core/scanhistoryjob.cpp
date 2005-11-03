@@ -129,6 +129,9 @@ bool ScanHistoryJob::doJob()
 					package = emergeLine.section(">>> unmerge success: ", 1, 1);
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, date, timestamp, emerge) VALUES ('%1', '%2', '%3', 'false');" ).arg( package ).arg( emergeDate ).arg( timeStamp ), m_db );
 				}
+				else
+					if ( emergeLine.contains("=== Sync completed") )
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');" ).arg( emergeDate ).arg( timeStamp ), m_db );
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 

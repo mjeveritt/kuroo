@@ -2,7 +2,7 @@
 Comment=KDE frontend to Gentoo portage
 Comment[en_US]=KDE frontend to Gentoo portage
 Encoding=UTF-8
-Exec=kdesu --nonewdcop -u root -c kuroo -caption "%c" %i %m
+Exec=kdesu -t -d --nonewdcop -u root -c kuroo -caption "%c" %i %m
 GenericName=
 GenericName[en_US]=
 Icon=kuroo

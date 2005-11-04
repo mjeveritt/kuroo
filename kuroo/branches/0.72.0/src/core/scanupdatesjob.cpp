@@ -105,8 +105,8 @@ bool ScanUpdatesJob::doJob()
 	                                    " useFlags VARCHAR(32)"
 	                                    " );", m_db);
 	
-	KurooDBSingleton::Instance()->insert("INSERT INTO package_temp SELECT * FROM package;", m_db);
-	KurooDBSingleton::Instance()->query("UPDATE package_temp SET updateVersion = '';", m_db);
+	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
+	KurooDBSingleton::Instance()->query( "UPDATE package_temp SET updateVersion = '';", m_db );
 	
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	

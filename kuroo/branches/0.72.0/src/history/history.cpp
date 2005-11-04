@@ -34,7 +34,7 @@
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *parent )
-	: QObject( parent )
+	: QObject( parent ), userSync( false )
 {
 	slotInit();
 }
@@ -64,7 +64,7 @@ void History::init( QObject *myParent )
 void History::slotInit()
 {
 	kdDebug() << "History::slotInit" << endl;
-	log.setName( "/var/log/emerge.log" );
+	log.setName("/var/log/emerge.log");
 	loadTimeStatistics();
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotChanged() ) );
@@ -80,25 +80,25 @@ void History::slotInit()
  */
 bool History::slotRefresh()
 {
-	kdDebug() << "History::slotRefresh" << endl;
-	
 	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry().first();
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
-		
+	
+	// Collect all recent entries in emerge log
 	QStringList emergeLines;
 	while ( !stream.atEnd() ) {
 		QString line = stream.readLine();
-		if ( line.contains(QRegExp("(Started emerge on)|(::: completed emerge)|(>>> unmerge success)")) ) {
-			QRegExp rx("\\d+");
-			if ( rx.search(line) > -1 )
-				if ( rx.cap(0) > lastDate )
+		QRegExp rx("\\d+");
+		if ( rx.search(line) > -1 )
+			if ( rx.cap(0) > lastDate )
+				if ( line.contains(QRegExp("(\\*\\*\\* emerge)|(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")) )
 					emergeLines += line;
-		}
 	}
 
-	// If user has used emerge outside kuroo, update the history
-	if ( !emergeLines.isEmpty() ) {
+	kdDebug() << "emergeLines=" << emergeLines << endl;
+	
+	// Check only for successfull emerge/unmerges or sync outside kuroo
+	if ( !emergeLines.grep(QRegExp("(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
 		slotScanHistory( emergeLines );
 		return false;
 	}
@@ -270,7 +270,6 @@ void History::slotParse()
 				if ( syncDone ) {
 					syncDone = false;
 					SignalistSingleton::Instance()->syncDone();
-					KurooConfig::setScanTimeStamp( QDateTime::currentDateTime().toString("yyyy MM dd hh:mm") );
 				}
 			}
 			else {

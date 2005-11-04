@@ -484,6 +484,13 @@ QStringList KurooDB::lastHistoryEntry()
 	             " WHERE id = (SELECT MAX(id) FROM history);");
 }
 
+QStringList KurooDB::getLastSync()
+{
+	return query(" SELECT timestamp "
+	             " FROM history "
+	             " WHERE id = (SELECT MAX(id) FROM history where package = '');");
+}
+
 QStringList KurooDB::cache()
 {
 	return query(" SELECT package, size "

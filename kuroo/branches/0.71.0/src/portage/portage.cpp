@@ -58,6 +58,7 @@ void Portage::init( QObject *myParent )
 void Portage::slotChanged()
 {
 	emit signalPortageChanged();
+	setRefreshTime();
 }
 
 /**
@@ -111,6 +112,16 @@ bool Portage::slotSync()
 {
 	EmergeSingleton::Instance()->sync();
 	return true;
+}
+
+/**
+ * Add timestamp in history for when kuroo database is refreshed.
+ */
+void Portage::setRefreshTime()
+{
+	QDateTime t(QDateTime::currentDateTime());
+	QString timeStamp = QString::number(t.toTime_t());
+	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("yyyy MM dd hh:mm")).arg(timeStamp) );
 }
 
 /**
@@ -181,12 +192,10 @@ void Portage::findPackage( const QString& text, const bool& isName )
 {
 	QStringList packageIdList;
 	
-	if ( isName ) {
+	if ( isName )
 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
-	}
-	else {
+	else
 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
-	}
 	
 	if ( !packageIdList.isEmpty() )
 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );

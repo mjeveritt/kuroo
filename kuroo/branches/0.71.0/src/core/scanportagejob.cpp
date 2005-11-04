@@ -35,6 +35,10 @@
 
 /**
  * Thread for scanning local portage tree for available packages.
+ * The packages are counted first, this to get a correct refresh progress in the gui.
+ * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
+ * first the portage overlay cache the official portage cache.
+ * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
@@ -164,9 +168,8 @@ bool ScanPortageJob::doJob()
 					KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, name, version, date, installed) VALUES ('%1', '%2', '%3', '%4', 0);").arg(QString::number(idCategory)).arg(package).arg(version).arg(date), m_db);
 				
 				// Post scan count progress
-				if ( (++count % 100) == 0 ) {
+				if ( (++count % 100) == 0 )
 					setProgress( count );
-				}
 			}
 		}
 		else
@@ -367,11 +370,11 @@ QString ScanPortageJob::kBSize( const QString& size )
 	else {
 		QString eString = QString::number(num / 1024);
 		
-		while (!eString.isEmpty()) {
+		while ( !eString.isEmpty() ) {
 			QString part = eString.right(3);
 			eString = eString.left(eString.length() - part.length());
 			
-			if (!total.isEmpty())
+			if ( !total.isEmpty() )
 				total = part + "," + total;
 			else
 				total = part;

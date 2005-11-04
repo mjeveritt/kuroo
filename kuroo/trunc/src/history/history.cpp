@@ -84,8 +84,6 @@ bool History::slotRefresh()
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
 	
-	kdDebug() << "lastDate=" << lastDate << endl;
-	
 	// Collect all recent entries in emerge log
 	QStringList emergeLines;
 	while ( !stream.atEnd() ) {
@@ -99,11 +97,7 @@ bool History::slotRefresh()
 
 	kdDebug() << "emergeLines=" << emergeLines << endl;
 	
-	// Check if user has run emerge sync, if so save flag
-	if ( !emergeLines.grep("Sync completed").isEmpty() )
-		userSync = true;
-	
-	// Check only for successfull emerge/unmerges outside kuroo, and update the history
+	// Check only for successfull emerge/unmerges or sync outside kuroo
 	if ( !emergeLines.grep(QRegExp("(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
 		slotScanHistory( emergeLines );
 		return false;
@@ -111,15 +105,6 @@ bool History::slotRefresh()
 
 	slotChanged();
 	return true;
-}
-
-/**
- * Convenience method.
- * @return true		if user has synced portage outside kuroo.
- */
-bool History::hasSyncPortage()
-{
-	return userSync;
 }
 
 void History::slotChanged()
@@ -285,7 +270,6 @@ void History::slotParse()
 				if ( syncDone ) {
 					syncDone = false;
 					SignalistSingleton::Instance()->syncDone();
-					KurooConfig::setScanTimeStamp( QDateTime::currentDateTime().toString("yyyy MM dd hh:mm") );
 				}
 			}
 			else {

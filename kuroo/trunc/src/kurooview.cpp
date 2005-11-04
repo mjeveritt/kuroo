@@ -134,19 +134,10 @@ void KurooView::slotInit()
 			
 			switch( KMessageBox::warningYesNo( this, 
 				i18n("<qt>Kuroo database needs refreshing!<br>"
-				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialize Kuroo"), i18n("Refresh"), i18n("Skip"), "dontAskAgainInitKuroo", 0) ) {
+				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialize Kuroo"), i18n("Refresh"), i18n("Skip"), 0) ) {
 				case KMessageBox::Yes: {
-					
-					// If user has synced portage refresh everything, else only Installed and Updates
-					if ( HistorySingleton::Instance()->hasSyncPortage() ) {
-						connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
-						PortageSingleton::Instance()->slotRefresh();
-					}
-					else {
-						InstalledSingleton::Instance()->slotReset();
-						UpdatesSingleton::Instance()->slotReset();
-						slotCheckPortage();
-					}
+					connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
+					PortageSingleton::Instance()->slotRefresh();
 					break;
 				}
 				default: {

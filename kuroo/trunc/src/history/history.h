@@ -57,13 +57,6 @@ public slots:
 	 */
 	bool			slotRefresh();
 	
-	
-	/**
-	 * Convenience method.
-	 * @return true		if user has synced portage outside kuroo.
-	 */
-	bool			hasSyncPortage();
-	
 	/**
 	 * Load all emerge times statistics.
 	 */

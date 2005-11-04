@@ -605,8 +605,8 @@ void Emerge::cleanupUnmerge( KProcess* proc )
  */
 void Emerge::cleanupSync( KProcess* proc )
 {
-	disconnect( proc, SIGNAL(readReady(KProcIO*)), this, SLOT(readFromStdout(KProcIO*)) );
-	disconnect( proc, SIGNAL(processExited(KProcess*)), this, SLOT(cleanupSync(KProcess*)) );
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupSync(KProcess*) ) );
 	cleanup();
 }
 
@@ -616,8 +616,8 @@ void Emerge::cleanupSync( KProcess* proc )
  */
 void Emerge::cleanupCheckUpdates( KProcess* proc )
 {
-	disconnect( proc, SIGNAL(readReady(KProcIO*)), this, SLOT(readFromStdout(KProcIO*)) );
-	disconnect( proc, SIGNAL(processExited(KProcess*)), this, SLOT(cleanupCheckUpdates(KProcess*)) );
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupCheckUpdates(KProcess*) ) );
 	
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );

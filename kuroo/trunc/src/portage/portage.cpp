@@ -115,13 +115,12 @@ bool Portage::slotSync()
 }
 
 /**
- * Add timestamp in history.
+ * Add timestamp in history for when kuroo database is refreshed.
  */
 void Portage::setRefreshTime()
 {
 	QDateTime t(QDateTime::currentDateTime());
 	QString timeStamp = QString::number(t.toTime_t());
-	kdDebug() << "timeStamp=" << timeStamp << endl;
 	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("yyyy MM dd hh:mm")).arg(timeStamp) );
 }
 

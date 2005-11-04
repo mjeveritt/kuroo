@@ -28,11 +28,6 @@
 class DbConnection;
 
 /**
- * Thread to cache package information from the Portage directory to speed up portage refreshing.
- * In order to get progress in gui progressbar, packages are counted first.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for package sizes, and stored in portage cache map,
- * and in the table "cache" in the database.
- * 
  * @class CachePortageJob
  * @short Thread to cache package information from the Portage directory to speed up portage view refreshing.
  */

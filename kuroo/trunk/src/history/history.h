@@ -100,7 +100,6 @@ private:
 	EmergeTimeMap	m_statisticsMap;
 	QFile 			log;
 	QTextStream 	stream;
-	bool			userSync;
 	
 signals:
 	void			signalHistoryChanged();

@@ -29,11 +29,6 @@
 #include <kglobal.h>
 
 /**
- * Thread to collect installed packages by scanning KurooConfig::dirDbPkg().
- * The packages are counted first, this to get a correct refresh progress in the gui.
- * Found packages are updated as installed in portage database by changing the "installed" flag to "1".
- * If the installed package is not found in the database it is inserted and flaged as "2".
- * 
  * @class ScanInstalledJob
  * @short Thread for scanning installed packages.
  */
@@ -81,7 +76,6 @@ int ScanInstalledJob::countPackages()
 	foreach ( categoryList ) {
 		if ( *it == "." || *it == ".." )
 			continue;
-		
 		if ( dCategory.cd( KurooConfig::dirDbPkg() + "/" + *it ) )
 			count += dCategory.entryList().count() - 2;
 	}
@@ -185,16 +179,19 @@ bool ScanInstalledJob::doJob()
 				QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package_temp WHERE name = '%1' AND idCategory = '%2' AND version = '%3';").arg(package).arg(idCategory).arg(version), m_db).first();
 				
 				// Mark package as installed in table package or add old package (=2) @todo
-				// Installed packages present in Portage are flagged 1
-				// Installed packages not present in Portage anymore are flagged 2
-				if ( idPackage.isEmpty() )
+				// Installed packages present in Portage are flaged 1
+				// Installed packages not present in Portage anymore are flaged 2
+				if ( idPackage.isEmpty() ) {
 					KurooDBSingleton::Instance()->insert(QString("INSERT INTO package_temp (idCategory, name, version, installed) VALUES ('%1', '%2', '%3', 2);").arg(idCategory).arg(package).arg(version), m_db);
-				else
+				}
+				else {
 					KurooDBSingleton::Instance()->query(QString("UPDATE package_temp SET installed = '1' WHERE id = '%1';").arg(idPackage), m_db).first();
-
+				}
+				
 				// Post scan count progress
-				if ( (++count % 10) == 0 )
+				if ( (++count % 10) == 0 ) {
 					setProgress( count );
+				}
 			}
 		}
 		else

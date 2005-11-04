@@ -68,7 +68,6 @@ public slots:
 	 * @return bool
 	 */
 	bool						slotSync();
-	void						setRefreshTime();
 	
 	/**
 	 * Launch emerge pretend of packages.

@@ -31,12 +31,6 @@ class QRegExp;
 extern QRegExp pv;
 
 /**
- * Thread for scanning local portage tree for available packages.
- * The packages are counted first, this to get a correct refresh progress in the gui.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
- * first the portage overlay cache the official portage cache.
- * All packages are stored in table "package" in the database.
- * 
  * @class ScanPortageJob
  * @short Thread for scanning local portage tree.
  */

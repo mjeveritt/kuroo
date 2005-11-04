@@ -275,17 +275,12 @@ void Kuroo::slotNull()
  */
 void Kuroo::slotSync()
 {
-	QString lastSyncDate( KurooDBSingleton::Instance()->getLastSync().first() );
-	
-	if ( lastSyncDate.isEmpty() )
-		lastSyncDate = i18n("na");
-	
 	actionSync->setEnabled(false);
 	switch( KMessageBox::questionYesNo( this, 
 		i18n("<qt>Do you want to synchronize portage?<br><br>"
 		     "Portage, Installed and Updates view will be refreshed automatically afterwards. "
 		     "Queue and Results view will be cleared.<br>"
-		     "This will take a couple of minutes...</qt>"), i18n("Last sync: %1").arg(lastSyncDate) ) ) {
+		     "This will take a couple of minutes...</qt>"), i18n("Last sync: %1").arg(KurooConfig::scanTimeStamp()) ) ) {
 		case KMessageBox::Yes: {
 			PortageSingleton::Instance()->slotSync();
 			break;

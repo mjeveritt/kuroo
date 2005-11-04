@@ -95,6 +95,7 @@ PortageTab::~PortageTab()
  */
 void PortageTab::saveCurrentView()
 {
+	kdDebug() << "PortageTab::saveCurrentView" << endl;
 	QListViewItem *item = categoriesView->currentItem();
 	if ( item && item->parent() )
 		KurooConfig::setLatestPortageCategory( item->parent()->text(0) + "-" + item->text(0) );
@@ -133,6 +134,7 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotReload()
 {
+	kdDebug() << "PortageTab::slotReload" << endl;
 	saveCurrentView();
 	packagesView->reset();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories() );
@@ -305,6 +307,7 @@ void PortageTab::slotFind()
  */
 void PortageTab::slotSummary()
 {
+	kdDebug() << "PortageTab::slotSummary" << endl;
 	summaryBrowser->clear();
 	
 	if ( !packagesView->currentItem() )

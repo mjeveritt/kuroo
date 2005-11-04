@@ -26,13 +26,6 @@ class DbConnection;
 
 /**
  * Thread for scanning installed packages.
- * Thread to collect installed packages by scanning KurooConfig::dirDbPkg().
- * The packages are counted first, this to get a correct refresh progress in the gui.
- * Found packages are updated as installed in portage database by changing the "installed" flag to "1".
- * If the installed package is not found in the database it is inserted and flaged as "2".
- * 
- * @class ScanInstalledJob
- * @short Thread for scanning installed packages.
  */
 class ScanInstalledJob : public ThreadWeaver::DependentJob
 {

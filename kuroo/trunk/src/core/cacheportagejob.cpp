@@ -28,10 +28,7 @@
 #include <qfileinfo.h>
 
 /**
- * Thread to cache package information from the Portage directory to speed up portage refreshing.
- * In order to get progress in gui progressbar, packages are counted first.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for package sizes, and stored in portage cache map,
- * and in the table "cache" in the database.
+ * Thread to cache package information from the Portage directory so as to speed up portage refreshing.
  */
 CachePortageJob::CachePortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
@@ -153,8 +150,9 @@ bool CachePortageJob::doJob()
 					kdDebug() << i18n("Error reading: ") << path << endl;
 				
 				// Post scan count progress
-				if ( (++count % 100) == 0 )
+				if ( (++count % 100) == 0 ) {
 					setProgress( count );
+				}
 			}
 		}
 		else
@@ -212,8 +210,9 @@ bool CachePortageJob::doJob()
 					kdDebug() << i18n("Error reading: ") << path << endl;
 				
 				// Post scan count progress
-				if ( (++count % 100) == 0 )
+				if ( (++count % 100) == 0 ) {
 					setProgress( count );
+				}
 			}
 		}
 		else
@@ -225,9 +224,9 @@ bool CachePortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DELETE FROM cache;", m_db);
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	QMap< QString, QString >::iterator itMapEnd = cacheMap.end();
-	for ( QMap< QString, QString >::iterator itMap = cacheMap.begin(); itMap != itMapEnd; ++itMap )
+	for ( QMap< QString, QString >::iterator itMap = cacheMap.begin(); itMap != itMapEnd; ++itMap ) {
 		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(itMap.key()).arg(itMap.data()), m_db);
-
+	}
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	
 	return true;

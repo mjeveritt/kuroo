@@ -1,0 +1,216 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>UpdatesBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>UpdatesBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>602</width>
+            <height>490</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout13_2_2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer4_3_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>MinimumExpanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>100</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pbEmergeQueue</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>I&amp;nstall all updates!</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QSplitter" row="0" column="0">
+            <property name="name">
+                <cstring>splitterV</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <widget class="QSplitter">
+                <property name="name">
+                    <cstring>splitterH</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>7</hsizetype>
+                        <vsizetype>3</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <widget class="CategoriesListView">
+                    <property name="name">
+                        <cstring>categoriesView</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>150</width>
+                            <height>150</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="UpdatePackagesListView">
+                    <property name="name">
+                        <cstring>packagesView</cstring>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="UpdateListView">
+                <property name="name">
+                    <cstring>updatesList</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>7</hsizetype>
+                        <vsizetype>7</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>600</width>
+                        <height>300</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>CategoriesListView</class>
+        <header location="local">categorieslistview.h</header>
+        <sizehint>
+            <width>0</width>
+            <height>0</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>3</hordata>
+            <verdata>3</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image1</pixmap>
+        <property type="String">name</property>
+    </customwidget>
+    <customwidget>
+        <class>UpdatePackagesListView</class>
+        <header location="local">updatepackageslistview.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>3</hordata>
+            <verdata>3</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image2</pixmap>
+        <property type="String">name</property>
+    </customwidget>
+    <customwidget>
+        <class>UpdateListView</class>
+        <header location="local">updatelistview.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>3</hordata>
+            <verdata>3</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image2</pixmap>
+        <property type="String">name</property>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="778">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000002d149444154388d95914f4893711cc69f6def5eb7b9b5391359ba59ada56c467a104b44271d8c0ced329b051d33a99362414205fd39141189149eb2d2830506610a1e84cc34297b47fa4e9d0e369d3a745b3237f7bedbeb7e1d324a3d84dffbf3e1f33c5f09f67856ab95d2683486bcbc3ccee3f108d45e826a85f2f2adfa86c75420281b1ae88fac98cdc5ff0d5a2c16654949496dc79dbb3e2e1a230961932c86a224fce429319bcdcf7719d86c363a2b2b4b211289522727274f375455b415dbafca567a5f429c42636d2301653281a9aed7e079de4d592c16da6432ddb45aadcd19191932954a2556a954f8e170e05a9515b163d5f83cfa0d45fa8308aef390d312886f34a12512f9eaf57a3f5252a9f44c6666e615bd5eafa0691a8410b02c8b623a81d5dc6a789d5e1c5d674097d621b8e4817fd6856743438ee18585464110e6455be66a93c974bea0a0e0ba4ea7331e774ee0d4d877ccb6bd4256b602b4291f81a579e4e418c0b22cec767b5920109801b022d902f0a15068dce974b60783c191aa928a0baa9a73a203672b4165e8d0dbd30da3f13028eaf7640cc30c7abdde2f0020deb121df3c373730b3b8b0a1a9bb08559a06efde748165590c0e0e82e779c8643268d46a23801400d8f5857cb9e4436ef5a7d417b7ed3822316292e741d1345c2e170a0b0b61301820a1a8ec2d00b7cda05f844727bab495e99796d158e340a8a77376b4afaf25994c1242081886812008d06ab5877619b403fb8a4eaa9bc455419091748cd5fe1c17629b45538812323c2c2a2f2fbfe7f3f9200802944ae51f83bf1b4881324d0d2d829860f941726322b6595e0f1000989e9ebecf30cc7b8ee3100e872197cb337701f4804d920a804d836360ada31e88fe5b2f1a8dda5c2ed7acdfef87dbed5e04406fab1007029807927312f812a473e7b82ccbc6398e2b6d6d6d9d6059f62180f036800f78cb75471aa5691a8881fd3b0100e076bb57e2f178e1eaeaaa12801f007e0145462f54cb13e9030000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="899">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000034a49444154388d8dd5cd4b2b5718c0e1dfc99919833ad110904055a848a9d45cd116baf40fd08d08ad50dc58da8d74eb46224a15eeae85d4edf542ddb404d445884537a28864a1a2a99510d1dea654c12a09a6896326d3c59d19cc1d3fee0b2f739833e739ef9c331f92a7e3b34824b26d9ae68b52a9f406387fe6faf78a2f4747478d542a656d6d6d59535353565f5fdfefc0d740c37383c543e71a1a1abe9f9898981c1818f0741e1f1fb3b4b4545e5b5bfbb95028fc041cbc0f5cdfdadafacbececec607777f79315158b4592c9248944e2e0f0f0f0076011a83c04b7f6f6f6aecdcdcd7ddcd2d2f2242a8470339fcf138d46d9dcdcfc103873ae51ece3e7434343bf4d4e4e3649296b060a213c9893994c86e5e5655455f54caef87cbeafc6c7c75f8f8d8d298661208420180c629ae6839833c9eaea2abbbbbb84422172b99c171e1919591c1c1c44d77577e67c3e8f10025dd7d1340dcbb26ad0f9f979aeafafdd7e9fcfe7858bc522866190c96428954a747676120e871142502c1629140aa8aa4a3018a4542a313d3d8da669f8fd7e344d435555a4945ed86998a6495d5d1d171717e47239745da7abab8be6e6662a950ae9749a8d8d0d545545d334177d1676e2f6f616806ab5cafefe3e9665717777473c1ea7adadcd833e067b17c78e70384c7f7f3f4d4d4dacacac505f5f8fa22835e03b70cda3e1a9d889939313cae53242082a950a7ebf1f45513cd5aaaaea6c5e276fdf8b4be0fa51b85aad92cbe5905222a544d3b4472bb6c302743bdb1e8485102e28a5742b9552d6809aa60160188603bb2be181154571419fcf5783396d670301b6b7b7ad6432f9d25e02802af0a772bf4221440d7c3f1d5c0881aaaa5896453c1ebf5d5f5fff0ed8b5d13be004282a373737288a826217efdcf2fdaa9da55014052104e572998585858b8383836f81bf6df43f1b3500e4e9e9697a6767e703d334db3b3a3a686c6c74277236ebe8e8085dd7f1fbfd9c9f9f138bc576b3d9ec37c0bf367a6da3ee6753027f5c5d5dbd4aa5528b8944a2727676f6492814aa6b6f6f77f1743a4d2010209bcd128bc57ebdbcbc9c046e6de31fe0cd3b9bf76068c017914864271a8d5a7b7b7bd6cccc8c353c3c5c0566804fedec0582cf618fc5478140e0c79e9e9ebf78fbaf73d01740fd5303ff0746d52747caac08220000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="1125">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000042c49444154388db5954f6c14551cc73fefcd7476b65bdaae4bb78bb5502a14d404e4801c88182d1c4c2c693da847400f9c24c68b878684238660e2b1e01f12c19493012ef2478c814412d354a46017a8a564bb6da5bbedccee767776e63d0ffb073751d483bfe49799974c3eeffb7ebf37df9fd05a530b2184040cc0042420aaf9a4d0d554800f045a6b256ae0e1e1e1d6bebebe838ee31c48a7d39b5cd7fd075e251cc7617272f2ded8d8d819cff33e0316819259537aead4a9839d5dd6d1784f91f55b0a94830242088404d304292bef68a89f520802a598fecddaa04f1a876f5c250c7c0a64cdeac686e33807e23d45e6b297c8b877f1831542614550b6599835c83c2a81b6786a75134faf2f1169f12997350881d9021d0903e06de0745d3160a6d3e94dbd5b0a64dcbb94b5831d0e3375ab892b1772dcf9790528543f8dd0d367b36768153b5e31503a0f1aecb004580b44ffac58baae8b1714f0833c7638cc8dab303a320f4822ab4c7a37c69196203de3319d5ce1c4d13c733331dedc67a129a154fd128401ab0616d55a130ac3d42d93d1913940d13fd0c9ee0183685c60da01c5421bd72f7a8c8efccef9afd374267ad93d642365be0636a0d28ec7600941d9e6f23917f0e97f23ce5bef35d19ec863da0ed9059b2be70bec196c66dfa10ec0e49b338f7017258651bf95021035c595429bb0903248fe52a2b5b595dd7b4d945cc2340cdca536be389ee3f67886c5798f773fe8e0dac508c989659277a2180da4ca4ff07821058b8b251445d63d6b13ed1098a6417e39cac85197dbe31962ab9bd9f1f22a226d45366f6d0620fdb08c900d281af6110284b20085b414861d905d88f2e52739ee8cbb8022143259d3dd84691730aa2d52da441a8de0c6958068870022a41e9629ad3473fd3b8fdbe319dadb9b4924da994d2d716c7896fbe35152f78b48245d6b2da4507faf582be8eaf159b721cc837b05ae7debb1f79d08cb8b515edad942a22bc4b1c33eb3d34b1c797f06af90a72d16e2f96d9a74aa11dca8586b222d01af0fb60070f6c402d72f15d97f28c6f6d7027a5f5ce6c3233dc4e2ede496b278be4fff608cee8d3e1add806aeca51094cbb06397c1ecc328e746537c7e3ccdb5cb1136bf60635882d4d41c6ec6836ab37efa214f72208ed9f4d7cdd38ee310280542e38b1c43fb6de26b3672e1ec3cc99bcb246f66a938a3241ab3e91f7c861fbf77710b1e5e49915bae974203ba0e9e9c9cbc373d6d6d305a040a89c2a77f50b27d5782bbbf7acccf28349235dd16cf6dd374f7295e1de8a45c02d37499182b01cc0201a085d61a2144d8b2ac8fb6ed340e77240c4261890e04c250185262546d534a032154b59e0ad394e41c98182bf268ce6721ed9f064e0253356f6da2e24c1f030f783c15fe6da680af8021602bd051532ca9b8521488559f61aa86c29343578fbf0264a94c906c7d3409214c20043457a116ff6de6795578012889ff6b98fe016ea0ce1c6a2573410000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>categorieslistview.h</includehint>
+    <includehint>updatepackageslistview.h</includehint>
+    <includehint>updatelistview.h</includehint>
+</includehints>
+</UI>

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kuroo" version="1">
+<kpartgui name="kuroo8" version="1">
 <MenuBar>
   <Menu name="custom1"><text>&amp;View</text>
     <Action name="wizard" />

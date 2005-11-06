@@ -18,36 +18,5 @@
    <kcachegrind path="/usr/kde/3.5/bin/kcachegrind" />
   </kdevvalgrind>
  </pluginList>
- <DocsAndViews NumberOfDocuments="10" >
-  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/core/categorieslistview.cpp" >
-   <View0 line="102" Type="Source" />
-  </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/portage/portagetab.cpp" >
-   <View0 line="376" Type="Source" />
-  </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/portage/portage.cpp" >
-   <View0 line="537" Type="Source" />
-  </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/core/scanportagejob.cpp" >
-   <View0 line="170" Type="Source" />
-  </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/portage/portage.h" >
-   <View0 line="91" Type="Source" />
-  </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/core/subcategorieslistview.cpp" >
-   <View0 line="31" Type="Source" />
-  </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/portage/portagetab.h" >
-   <View0 line="97" Type="Source" />
-  </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/portage/portagelistview.cpp" >
-   <View0 line="177" Type="Source" />
-  </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/core/portagedb.cpp" >
-   <View0 line="333" Type="Source" />
-  </Doc8>
-  <Doc9 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/core/packagelistview.cpp" >
-   <View0 line="0" Type="Source" />
-  </Doc9>
- </DocsAndViews>
+ <DocsAndViews NumberOfDocuments="0" />
 </KDevPrjSession>

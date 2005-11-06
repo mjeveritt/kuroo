@@ -104,14 +104,20 @@ bool ScanPortageJob::doJob()
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
 	                                    " licenses VARCHAR(32), "
-	                                    " size VARCHAR(32), "
-	                                    " keywords VARCHAR(32),"
 	                                    " useFlags VARCHAR(32),"
 	                                    " packageSlots VARCHAR(32),"
-	                                    " version VARCHAR(32), "
 	                                    " date VARCHAR(32), "
 	                                    " installed INTEGER, "
-	                                    " updateVersion VARCHAR(32)); "
+	                                    " updateVersion VARCHAR(32) "
+	                                    " );", m_db);
+	
+	// Temporary table for all versions
+	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE version_temp ("
+	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    " idPackage INTEGER, "
+	                                    " name VARCHAR(32),"
+	                                    " size VARCHAR(32), "
+	                                    " branch VARCHAR(32)"
 	                                    " );", m_db);
 	
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
@@ -136,7 +142,10 @@ bool ScanPortageJob::doJob()
 		dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
 		dPackage.setSorting(QDir::Name);
 		if ( dPackage.cd( path + *itCategory) ) {
+			
 			QStringList packageList = dPackage.entryList();
+			QString lastPackage;
+			int idPackage(0);
 			for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 				
 				if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )
@@ -156,16 +165,21 @@ bool ScanPortageJob::doJob()
 				QDateTime syncDate = fi1.created();
 				QString date = syncDate.toString("yyyy MM dd");
 
-				if ( scanInfo( path, *itCategory, *itPackage ) ) {
+				if ( package != lastPackage ) {
+				
+					if ( scanInfo( path, *itCategory, *itPackage ) ) {
+						QString sql = QString("INSERT INTO package_temp (idCategory, name, description, date, homepage, licenses, useFlags, packageSlots) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7','%8')").arg(QString::number(idCategory)).arg(package).arg(info.description).arg(date).arg(info.homepage).arg(info.licenses).arg(info.useFlags).arg(info.packageSlots);
+						idPackage = KurooDBSingleton::Instance()->insert( sql, m_db );
+					}
+					else
+						idPackage = KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, name, date) VALUES ('%1', '%2', '%3');").arg(QString::number(idCategory)).arg(package).arg(date), m_db);
 					
-					QString sqlParam = QString("INSERT INTO package_temp (idCategory, name, version, description, keywords, date, size, homepage, licenses, useFlags, packageSlots, installed) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9'").arg(QString::number(idCategory)).arg(package).arg(version).arg(info.description).arg(info.keywords).arg(date).arg(info.size).arg(info.homepage).arg(info.licenses);
-					
-					sqlParam += QString(",'%1', '%2', 0);").arg(info.useFlags).arg(info.packageSlots);
-
-					KurooDBSingleton::Instance()->insert( sqlParam, m_db );
+					KurooDBSingleton::Instance()->insert( QString("INSERT INTO version_temp (idPackage, name, size, branch) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idPackage)).arg(version).arg(info.size).arg(info.keywords), m_db);
 				}
-				else
-					KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, name, version, date, installed) VALUES ('%1', '%2', '%3', '%4', 0);").arg(QString::number(idCategory)).arg(package).arg(version).arg(date), m_db);
+				else {
+					KurooDBSingleton::Instance()->insert( QString("INSERT INTO version_temp (idPackage, name, size, branch) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idPackage)).arg(version).arg(info.size).arg(info.keywords), m_db);
+				}
+				lastPackage = package;
 				
 				// Post scan count progress
 				if ( (++count % 100) == 0 )
@@ -178,87 +192,90 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	
 	// list of categories in Portage Overlay = local
-	path = KurooConfig::dirEdbDep() + "/usr/local/portage/";
-	if ( dCategory.cd( path ) ) {
+// 	path = KurooConfig::dirEdbDep() + "/usr/local/portage/";
+// 	if ( dCategory.cd( path ) ) {
+// 		
+// 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
+// 		
+// 		// Get list of categories in Portage
+// 		categoryList = dCategory.entryList();
+// 		for ( QStringList::Iterator itCategory = categoryList.begin(), itCategoryEnd = categoryList.end(); itCategory != itCategoryEnd; ++itCategory ) {
+// 			
+// 			if ( *itCategory == "." || *itCategory == ".." )
+// 				continue;
+// 			
+// 			// Abort the scan
+// 			if ( isAborted() ) {
+// 				kdDebug() << i18n("Portage Overlay scan aborted") << endl;
+// 				return false;
+// 			}
+// 			
+// 			// Is this category already present in Portage
+// 			QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category_temp WHERE name = '%1';").arg(*itCategory), m_db).first();
+// 			
+// 			if ( idCategory.isEmpty() )
+// 				idCategory = QString::number( KurooDBSingleton::Instance()->insert(QString("INSERT INTO category_temp (name) VALUES ('%1');").arg(*itCategory), m_db) );
+// 			
+// 			// Get list of packages in this category
+// 			dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
+// 			dPackage.setSorting(QDir::Name);
+// 			if ( dPackage.cd( path + *itCategory) ) {
+// 				QStringList packageList = dPackage.entryList();
+// 				for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
+// 					
+// 					if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )
+// 						continue;
+// 					
+// 					// Abort the scan
+// 					if ( isAborted() ) {
+// 						kdDebug() << i18n("Portage Overlay scan aborted") << endl;
+// 						return false;
+// 					}
+// 					
+// 					QString package = (*itPackage).section(pv, 0, 0);
+// 					QString version = (*itPackage).section(package + "-", 1, 1);
+// 					
+// 					QFileInfo fi1(*itPackage);
+// 					QDateTime syncDate = fi1.created();
+// 					QString date = syncDate.toString("yyyy MM dd");
+// 					
+// 					if ( scanInfo( path, *itCategory, *itPackage ) ) {
+// 						
+// 						QString sqlParam = QString("INSERT INTO package_temp (idCategory, name, version, description, keywords, date, size, homepage, licenses, useFlags, packageSlots, installed) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9'").arg(idCategory).arg(package).arg(version).arg(info.description).arg(info.keywords).arg(date).arg(info.size).arg(info.homepage).arg(info.licenses);
+// 						
+// 						sqlParam += QString(",'%1', '%2', 0);").arg(info.useFlags).arg(info.packageSlots);
+// 						
+// 						KurooDBSingleton::Instance()->insert( sqlParam, m_db );
+// 					}
+// 					else
+// 						KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, name, version, date, installed) VALUES ('%1', '%2', '%3', '%4', 0);").arg(idCategory).arg(package).arg(version).arg(date), m_db);
+// 					
+// 					// Post scan count progress
+// 					if ( (++count % 100) == 0 ) {
+// 						setProgress( count );
+// 					}
+// 				}
+// 			}
+// 			else
+// 				kdDebug() << i18n("Can not access ") << path << *itCategory << endl;
+// 		}
+// 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
+// 	}
+// 	else
+// 		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/local/portage" << endl;
 		
-		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
-		
-		// Get list of categories in Portage
-		categoryList = dCategory.entryList();
-		for ( QStringList::Iterator itCategory = categoryList.begin(), itCategoryEnd = categoryList.end(); itCategory != itCategoryEnd; ++itCategory ) {
-			
-			if ( *itCategory == "." || *itCategory == ".." )
-				continue;
-			
-			// Abort the scan
-			if ( isAborted() ) {
-				kdDebug() << i18n("Portage Overlay scan aborted") << endl;
-				return false;
-			}
-			
-			// Is this category already present in Portage
-			QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category_temp WHERE name = '%1';").arg(*itCategory), m_db).first();
-			
-			if ( idCategory.isEmpty() )
-				idCategory = QString::number( KurooDBSingleton::Instance()->insert(QString("INSERT INTO category_temp (name) VALUES ('%1');").arg(*itCategory), m_db) );
-			
-			// Get list of packages in this category
-			dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
-			dPackage.setSorting(QDir::Name);
-			if ( dPackage.cd( path + *itCategory) ) {
-				QStringList packageList = dPackage.entryList();
-				for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
-					
-					if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )
-						continue;
-					
-					// Abort the scan
-					if ( isAborted() ) {
-						kdDebug() << i18n("Portage Overlay scan aborted") << endl;
-						return false;
-					}
-					
-					QString package = (*itPackage).section(pv, 0, 0);
-					QString version = (*itPackage).section(package + "-", 1, 1);
-					
-					QFileInfo fi1(*itPackage);
-					QDateTime syncDate = fi1.created();
-					QString date = syncDate.toString("yyyy MM dd");
-					
-					if ( scanInfo( path, *itCategory, *itPackage ) ) {
-						
-						QString sqlParam = QString("INSERT INTO package_temp (idCategory, name, version, description, keywords, date, size, homepage, licenses, useFlags, packageSlots, installed) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9'").arg(idCategory).arg(package).arg(version).arg(info.description).arg(info.keywords).arg(date).arg(info.size).arg(info.homepage).arg(info.licenses);
-						
-						sqlParam += QString(",'%1', '%2', 0);").arg(info.useFlags).arg(info.packageSlots);
-						
-						KurooDBSingleton::Instance()->insert( sqlParam, m_db );
-					}
-					else
-						KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, name, version, date, installed) VALUES ('%1', '%2', '%3', '%4', 0);").arg(idCategory).arg(package).arg(version).arg(date), m_db);
-					
-					// Post scan count progress
-					if ( (++count % 100) == 0 ) {
-						setProgress( count );
-					}
-				}
-			}
-			else
-				kdDebug() << i18n("Can not access ") << path << *itCategory << endl;
-		}
-		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
-	}
-	else
-		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/local/portage" << endl;
-		
-	// Move content from temporary table to allPackages
+	// Move content from temporary table 
 	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db);
+	KurooDBSingleton::Instance()->query("DELETE FROM version;", m_db);
 	
 	KurooDBSingleton::Instance()->insert("INSERT INTO category SELECT * FROM category_temp;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db);
+	KurooDBSingleton::Instance()->insert("INSERT INTO version SELECT * FROM version_temp;", m_db);
 	
 	KurooDBSingleton::Instance()->query("DROP TABLE category_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
+	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
 	setStatus( i18n("Done.") );
 	setProgress(0);

@@ -88,10 +88,13 @@ private slots:
 	*/
 	void 				slotInit();
 	
+	void				slotListSubCategories();
+	
 	/**
 	* List packages when clicking on category in installed.
 	*/
 	void				slotListPackages();
+	void				slotListCategoryPackages();
 	
 	/**
 	* Popup menu for actions like emerge.
@@ -118,7 +121,7 @@ private slots:
 	void				useFlags();
 	
 private:
-	PortageListView 		*packagesView;
+	PortageListView 	*packagesView;
 	KPopupMenu 			*menu;
 	UseDialog 			*useDialog;
 	

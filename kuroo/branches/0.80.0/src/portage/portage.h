@@ -89,6 +89,7 @@ public slots:
 	* @return QStringList
 	*/
 	QStringList					categories();
+	QStringList					subcategories( const QString& category );
 	
 	/**
 	* Get list of packages in this category from database.

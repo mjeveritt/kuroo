@@ -52,10 +52,10 @@ QString Log::init( QObject *myParent )
 {
 	parent = myParent;
 	
-	QString logName = KUROODIR + "/kuroo.log";
+	QString logName = KUROODIR + "kuroo.log";
 	logFile.setName(logName);
 	if( !logFile.open(IO_WriteOnly ) ) {
-		kdDebug() << i18n("Error writing: ") << KUROODIR << "/kuroo.log" << endl;
+		kdDebug() << i18n("Error writing: ") << KUROODIR << "kuroo.log" << endl;
 		KMessageBox::error(0, i18n("Error writing %1/kuroo.log.").arg(KUROODIR), i18n("Saving"));
 		return "";
 	}
@@ -71,9 +71,7 @@ KIO::Job* Log::backupLog()
 {
 	if ( saveLog && saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
-		
-		KIO::Job *cpjob = KIO::file_copy( KUROODIR + "/kuroo.log", KUROODIR + "/kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
-		
+		KIO::Job *cpjob = KIO::file_copy( KUROODIR + "kuroo.log", KUROODIR + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
 		return cpjob;
 	}
 	else

@@ -2,7 +2,7 @@
 
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
-bin_PROGRAMS = kuroo
+bin_PROGRAMS = kuroo8
 
 # set the include path for X, qt, KDE and subdirs
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
@@ -36,7 +36,7 @@ kdelnkdir = $(kde_appsdir)/System
 kdelnk_DATA = kuroo.desktop
 
 # this is where the XML-GUI resource file goes
-rcdir = $(kde_datadir)/kuroo
+rcdir = $(kde_datadir)/kuroo8
 rc_DATA = kurooui.rc
 
 # this is to set set autostart of kuroo_watcher
@@ -48,7 +48,7 @@ noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 	systemtray.h message.h common.h
 
 # source for kuroo
-kuroo_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
+kuroo8_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
 			statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui
 
 # source for kuroo_watcher
@@ -56,10 +56,10 @@ kuroo_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
-kuroo_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+kuroo8_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
-kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
+kuroo8_LDADD = $(top_builddir)/src/history/libhistory.la \
 	$(top_builddir)/src/updates/libupdates.la $(top_builddir)/src/config/libconfig.la \
 	$(top_builddir)/src/results/libresults.la $(top_builddir)/src/queue/libqueue.la \
 	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
@@ -67,5 +67,4 @@ kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
 	$(top_builddir)/src/installed/libinstalled.la $(LIB_KDEPRINT) $(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE) \
 	$(LIB_SQLITE_LOCAL)
 
-# kuroo_watcher links
 

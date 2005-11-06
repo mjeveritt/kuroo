@@ -159,7 +159,33 @@ bool Portage::isInstalled( const QString& package )
  */
 QStringList Portage::categories()
 {
-	return KurooDBSingleton::Instance()->portageCategories();
+	QStringList categories;
+	QString lastCategory;
+
+	QStringList categoriesList = KurooDBSingleton::Instance()->portageCategories();
+	foreach ( categoriesList ) {
+		QString category = (*it).section("-",0,0);
+		if ( category != lastCategory )
+			categories += category;
+		lastCategory = category;
+	}
+	return categories;
+}
+
+/**
+ * Get list of all subcategories for portage packages.
+ * @return QStringList
+ */
+QStringList Portage::subcategories( const QString& category )
+{
+	QStringList subcategories;
+	
+	QStringList categoriesList = KurooDBSingleton::Instance()->portageCategories();
+	foreach ( categoriesList ) {
+		if ( (*it).section("-",0,0) == category )
+			subcategories += (*it).section("-",1,1);
+	}
+	return subcategories;
 }
 
 /**
@@ -209,7 +235,7 @@ void Portage::findPackage( const QString& text, const bool& isName )
  */
 QString Portage::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package WHERE installed != '2' LIMIT 1;");
+	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package LIMIT 1;");
 	return total.first();
 }
 
@@ -225,8 +251,8 @@ Info Portage::packageInfo( const QString& packageId )
 	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo(packageId);
 	QStringList::Iterator it = packageList.begin();
 	info.description = *it++;
-	info.size = *it++;
-	info.keywords = *it++;
+// 	info.size = *it++;
+// 	info.keywords = *it++;
 	info.homepage = *it++;
 	info.licenses = *it++;
 	info.useFlags = *it++;
@@ -456,11 +482,11 @@ QString Portage::category( const QString& id )
  */
 QString Portage::package( const QString& id )
 {
-	QStringList packageList = KurooDBSingleton::Instance()->query(QString("SELECT name, version FROM package WHERE id = '%1';").arg(id));
+	QStringList packageList = KurooDBSingleton::Instance()->query(QString("SELECT name FROM package WHERE id = '%1';").arg(id));
 	QStringList::Iterator it = packageList.begin();
-	QString name = *it++;
-	QString version = *it;
-	return name + "-" + version;
+	QString name = *it;
+// 	QString version = *it;
+	return name;
 }
 
 /**

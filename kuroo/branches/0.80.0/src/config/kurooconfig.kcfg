@@ -27,7 +27,7 @@
 		<entry name="hardVersion" type="String">
 		</entry>
 		<entry name="databas" type="String">
-		<default>portage.db</default>
+		<default>portage8.db</default>
 		</entry>
 		<entry name="DirDbPkg" type="String">
 		<default>/var/db/pkg</default>

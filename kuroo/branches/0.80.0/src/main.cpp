@@ -34,7 +34,7 @@
 QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.71.0_rc1";
+static const char version[] = "0.80.0_051105";
 
 static KCmdLineOptions options[] =
 {
@@ -43,7 +43,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char **argv)
 {
-	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
+	KAboutData about("kuroo8", I18N_NOOP("Kuroo8"), version, description,
 	KAboutData::License_GPL, "(C) 2005 karye", 0, 0, "karye@users.sourceforge.net");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "karye@users.sourceforge.net");
 	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 	KApplication app;
 	
     // register ourselves as a dcop client
-	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
+	if ( app.dcopClient()->isApplicationRegistered("kuroo8") )  {
 		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
 		exit(0);
 	}

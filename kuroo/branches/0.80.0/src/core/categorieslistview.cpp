@@ -49,7 +49,7 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	addColumn(i18n("Category"));
 	header()->setLabel(header()->count() - 1, i18n("Category"));
 	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()));
-	setMinimumSize(QSize(150, 0));
+	setMinimumSize(QSize(100, 0));
 	setShowSortIndicator(true);
 	setRootIsDecorated(true);
 	setFullWidth(true);
@@ -67,10 +67,10 @@ QString CategoriesListView::currentCategory()
 {
 	QListViewItem *item = this->currentItem();
 	
-	if ( !item || !item->parent() )
+	if ( !item )
 		return i18n("na");
 	
-	return item->parent()->text(0) + "-" + item->text(0);
+	return item->text(0);
 }
 
 /**
@@ -79,48 +79,33 @@ QString CategoriesListView::currentCategory()
  */
 void CategoriesListView::setCurrentCategory( const QString& category )
 {
-	QString categoryName = category.section("-", 0, 0);
-	QString subcategoryName = category.section("-", 1, 1);
-	
-	if( categories.contains(categoryName) ) {
-		if ( categories[categoryName].subcategories.contains(subcategoryName) ) {
-			QListViewItem *item = categories[categoryName].subcategories[subcategoryName];
-			ensureItemVisible(item);
-			setCurrentItem(item);
-			item->setSelected(true);
-		}
-	}
+// 	QString categoryName = category.section("-", 0, 0);
+// 	QString subcategoryName = category.section("-", 1, 1);
+// 	
+// 	if( categories.contains(categoryName) ) {
+// 		if ( categories[categoryName].subcategories.contains(subcategoryName) ) {
+// 			QListViewItem *item = categories[categoryName].subcategories[subcategoryName];
+// 			ensureItemVisible(item);
+// 			setCurrentItem(item);
+// 			item->setSelected(true);
+// 		}
+// 	}
 }
 
 /**
  * Load categories.
- * From Jakob Petsovits solution for inserting items fast.
  * @param categoriesList 
  */
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	QListViewItem *catItem, *subcatItem;
+	QListViewItem *catItem;
 	
-	categories.clear();
-	clear();
-	setRootIsDecorated(true);
+// 	categories.clear();
+// 	clear();
+// 	setRootIsDecorated(true);
 
 	foreach ( categoriesList ) {
-		QString categoryName = (*it).section("-", 0, 0);
-		QString subcategoryName = (*it).section("-", 1, 1);
-		
-		if( !categories.contains(categoryName) ) {
-			catItem = new KListViewItem( this, categoryName );
-			catItem->setExpandable(true);
-			catItem->setPixmap(0, pxCategory);
-			categories[categoryName].item = catItem;
-		}
-		
-		if( !categories[categoryName].subcategories.contains(subcategoryName) ) {
-			subcatItem = new KListViewItem(categories[categoryName].item, subcategoryName);
-			subcatItem->setPixmap(0, pxCategory);
-			categories[categoryName].subcategories[subcategoryName] = subcatItem;
-		}
+		catItem = new KListViewItem( this, *it );
 	}
 }
 

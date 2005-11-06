@@ -174,7 +174,7 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32)); "
-	      " CREATE INDEX index_name ON category (name)" 
+	      " CREATE INDEX index_name ON category (name)"
 	      " ;", conn);
 	
 	query(" CREATE TABLE package ("
@@ -185,16 +185,21 @@ void KurooDB::createTables( DbConnection *conn )
 	      " description VARCHAR(255), "
 	      " homepage VARCHAR(32), "
 	      " licenses VARCHAR(32), "
-	      " size VARCHAR(32), "
-	      " keywords VARCHAR(32),"
 	      " useFlags VARCHAR(32),"
 	      " packageSlots VARCHAR(32),"
-	      " version VARCHAR(32), "
 	      " date VARCHAR(32), "
 	      " installed INTEGER, "
 	      " updateVersion VARCHAR(32)); "
 	      " CREATE INDEX index_name ON package (name)"
 	      " ;", conn);
+	
+	query(" CREATE TABLE version ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " idPackage INTEGER, "
+	      " name VARCHAR(32),"
+	      " size VARCHAR(32), "
+	      " branch VARCHAR(32)"
+	      " );", conn);
 	
 	query(" CREATE TABLE updates ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -262,11 +267,12 @@ QStringList KurooDB::installedPackages()
 
 QStringList KurooDB::packageVersions( const QString& name )
 {
-	return query( " SELECT version, installed "
-	              " FROM package "
-	              " WHERE name = '" + name + "'"
-	              " AND installed != '2' "
-	              " ORDER BY version;");
+	return query( " SELECT version.name, package.installed "
+	              " FROM package, version "
+	              " WHERE package.name = '" + name + "'"
+	              " AND package.installed != '2' "
+	              " AND version.idPackage = package.id "
+	              " ORDER BY version.name;");
 }
 
 QStringList KurooDB::history()
@@ -317,7 +323,7 @@ QStringList KurooDB::portageCategoryId( const QString& category )
 
 QStringList KurooDB::portagePackagesByCategory( const QString& idCategory )
 {
-	return query( " SELECT id, name, description, keywords, size, latest, version, installed "
+	return query( " SELECT id, name, description, latest, installed "
 	              " FROM package "
 	              " WHERE idCategory = '" + idCategory + "'"
 	              " ORDER BY name;");
@@ -325,8 +331,7 @@ QStringList KurooDB::portagePackagesByCategory( const QString& idCategory )
 
 QStringList KurooDB::portagePackageInfo( const QString& id )
 {
-	return query(" SELECT description, size, keywords, "
-	             " homepage, licenses, useFlags, packageSlots "
+	return query(" SELECT description, homepage, licenses, useFlags, packageSlots "
 	             " FROM package "
 	             " WHERE id = '" + id + "'"
 	             " ORDER BY lower(name) LIMIT 1;");

@@ -125,25 +125,25 @@ void InstalledPackagesListView::addCategoryPackages( const QString& category )
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString name = *it++;
-		QString version = *it++;
-		QString package = name + "-" + version;
+// 		QString version = *it++;
+		QString package = name;
 		QString description = *it++;
-		QString size = *it++;
-		QString keywords = *it++;
+// 		QString size = *it++;
+// 		QString keywords = *it++;
 		QString updateVersion = *it;
 		
 		Meta packageMeta;
 		packageMeta.insert(i18n("3Description"), description);
-		packageMeta.insert(i18n("4Size"), size);
+// 		packageMeta.insert(i18n("4Size"), size);
 		packageMeta.insert(i18n("5Update"), updateVersion);
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, INSTALLED );
 		
-		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
+/*		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 			packageItem->setStatus(MASKED);
 		else {
 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
 				packageItem->setStatus(UNMASKED);
-		}
+		}*/
 		
 		insertPackage( idDB, packageItem );
 	}

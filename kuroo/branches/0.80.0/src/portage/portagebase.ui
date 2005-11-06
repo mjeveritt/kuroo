@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>470</width>
-            <height>382</height>
+            <width>689</width>
+            <height>508</height>
         </rect>
     </property>
     <property name="caption">
@@ -36,29 +36,34 @@
                 <property name="name">
                     <cstring>splitterH</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>7</hsizetype>
-                        <vsizetype>3</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
                 <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
-                <widget class="CategoriesListView">
+                <widget class="QSplitter">
                     <property name="name">
-                        <cstring>categoriesView</cstring>
+                        <cstring>splitter4</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
+                    <widget class="CategoriesListView">
+                        <property name="name">
+                            <cstring>categoriesView</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>3</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                    </widget>
+                    <widget class="SubCategoriesListView">
+                        <property name="name">
+                            <cstring>subcategoriesView</cstring>
+                        </property>
+                    </widget>
                 </widget>
                 <widget class="PortagePackagesView">
                     <property name="name">
@@ -211,6 +216,23 @@
         <pixmap>image0</pixmap>
         <property type="String">name</property>
     </customwidget>
+	<customwidget>
+		<class>SubCategoriesListView</class>
+		<header location="local">subcategorieslistview.h</header>
+		<sizehint>
+			<width>0</width>
+			<height>0</height>
+		</sizehint>
+		<container>1</container>
+		<sizepolicy>
+			<hordata>3</hordata>
+			<verdata>3</verdata>
+			<horstretch>0</horstretch>
+			<verstretch>0</verstretch>
+		</sizepolicy>
+		<pixmap>image0</pixmap>
+		<property type="String">name</property>
+    </customwidget>
     <customwidget>
         <class>PortagePackagesView</class>
         <header location="local">portagepackagesview.h</header>
@@ -240,6 +262,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>categorieslistview.h</includehint>
+    <includehint>subcategorieslistview.h</includehint>
     <includehint>portagepackagesview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
     <includehint>ktextbrowser.h</includehint>

@@ -90,14 +90,14 @@ QStringList PackageListView::selectedId()
 {
 	QStringList idDBList;
 	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->parent() ) {
+// 		if ( it.current()->parent() ) {
+// 			if ( it.current()->isSelected() && it.current()->isVisible() )
+// 				idDBList += it.currentKey();
+// 		}
+// 		else {
 			if ( it.current()->isSelected() && it.current()->isVisible() )
 				idDBList += it.currentKey();
-		}
-		else {
-			if ( it.current()->isSelected() && it.current()->isVisible() )
-				idDBList += it.currentKey();
-		}
+		
 	}
 	return idDBList;
 }

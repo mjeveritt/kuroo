@@ -58,7 +58,7 @@ PortageTab::PortageTab( QWidget* parent )
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	
 	// Rmb actions.
-	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
+	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Package info actions.
@@ -140,7 +140,9 @@ void PortageTab::slotReload()
 	kdDebug() << "PortageTab::slotReload" << endl;
 	saveCurrentView();
 	packagesView->reset();
+	categoriesView->clear();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories() );
+	
 // 	slotViewPackage( KurooConfig::latestPortageCategory() + "/" + KurooConfig::latestPortagePackage() );
 	emit signalChanged();
 }

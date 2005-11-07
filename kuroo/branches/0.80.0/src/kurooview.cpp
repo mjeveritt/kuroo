@@ -171,14 +171,14 @@ void KurooView::slotCheckPortage()
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
-// 	if ( PortageSingleton::Instance()->count() == "0" ) {
+	if ( PortageSingleton::Instance()->count() == "0" ) {
 // 		connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
-// 		PortageSingleton::Instance()->slotRefresh();
-// 	}
-// 	else {
+		PortageSingleton::Instance()->slotRefresh();
+	}
+	else {
 		tabPortage->slotReload();
 // 		slotCheckInstalled();
-// 	}
+	}
 }
 
 /**

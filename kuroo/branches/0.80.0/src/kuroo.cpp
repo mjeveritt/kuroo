@@ -86,6 +86,30 @@ Kuroo::Kuroo()
 	// when the last window is closed, the application should quit
 	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );
 	
+	actionRefresh->setToolTip( i18n("Refresh Portage view") );
+	actionFind->setToolTip( i18n("Find packages in Portage") );
+	actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
+	connect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
+	connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
+	
+	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
+		actionRefresh->setEnabled(false);
+	}
+	else {
+		actionRefresh->setEnabled(true);
+	}
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+		actionSync->setEnabled(false);
+	}
+	else
+		actionSync->setEnabled(true);
+	
+	if ( SignalistSingleton::Instance()->isKurooBusy() )
+		actionFind->setEnabled(false);
+	else
+		actionFind->setEnabled(true);
+	
 	// Zack Rusin's delayed initialization technique
 	QTimer::singleShot( 0, m_view, SLOT(slotInit()) );
 }
@@ -125,7 +149,8 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy( bool b )
 {
-	activateToolbar( m_view->mainTabs->currentPage() );
+	kdDebug() << "Kuroo::slotBusy" << endl;
+// 	activateToolbar( m_view->mainTabs->currentPage() );
 }
 
 /**
@@ -134,133 +159,133 @@ void Kuroo::slotBusy( bool b )
  */
 void Kuroo::activateToolbar( QWidget *page )
 {
-	enum Actions { INSTALLED = 0, PORTAGE, UPDATES, QUEUE, RESULTS, LOGS };
-	
-	switch ( m_view->mainTabs->indexOf(page) ) {
-		
-		case INSTALLED: {
-			if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ||  KurooDBSingleton::Instance()->isPortageEmpty() )
-				actionRefresh->setEnabled(false);
-			else
-				actionRefresh->setEnabled(true);
-			
-			if ( SignalistSingleton::Instance()->isKurooBusy() )
-				actionFind->setEnabled(false);
-			else
-				actionFind->setEnabled(true);
-			
-			actionSync->setEnabled(false);
-			
-			actionRefresh->setToolTip( i18n("Refresh Installed view") );
-			actionFind->setToolTip( i18n("Find packages in Installed") );
-			actionSync->setToolTip( i18n("na") );
-			
-			disconnect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
-			disconnect( actionFind, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotFind() ) );
-			connect( actionFind, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotFind() ) );
-			
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
-			connect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
-			
-			break;
-		}
-			
-		case PORTAGE: {
-			if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
-				actionRefresh->setEnabled(false);
-			}
-			else {
-				actionRefresh->setEnabled(true);
-			}
-			
-			if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
-				actionSync->setEnabled(false);
-			}
-			else
-				actionSync->setEnabled(true);
-			
-			if ( SignalistSingleton::Instance()->isKurooBusy() )
-				actionFind->setEnabled(false);
-			else
-				actionFind->setEnabled(true);
-			
-			actionRefresh->setToolTip( i18n("Refresh Portage view") );
-			actionFind->setToolTip( i18n("Find packages in Portage") );
-			actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
-			
-			disconnect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
-			disconnect( actionFind, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotFind() ) );
-			connect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
-			
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-			connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-			
-			break;
-		}
-		
-		case UPDATES: {
-			if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ||  KurooDBSingleton::Instance()->isPortageEmpty() )
-				actionRefresh->setEnabled(false);
-			else
-				actionRefresh->setEnabled(true);
-			
-			actionFind->setEnabled(false);
-			actionSync->setEnabled(false);
-		
-			actionRefresh->setToolTip( i18n("Refresh Updates view") );
-			actionFind->setToolTip( i18n("na") );
-			actionSync->setToolTip( i18n("na") );
-			
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			connect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-			
-			break;
-		}
-		
-		case QUEUE: {
-			actionRefresh->setEnabled(false);
-			actionFind->setEnabled(false);
-			actionSync->setEnabled(false);
-			
-			actionRefresh->setToolTip( i18n("na") );
-			actionFind->setToolTip( i18n("na") );
-			actionSync->setToolTip( i18n("na") );
-			
-			break;
-		}
-			
-		case RESULTS: {
-			actionRefresh->setEnabled(false);
-			actionFind->setEnabled(false);
-			actionSync->setEnabled(false);
-			
-			actionRefresh->setToolTip( i18n("na") );
-			actionFind->setToolTip( i18n("na") );
-			actionSync->setToolTip( i18n("na") );
-			
-			break;
-		}
-		
-		case LOGS: {
-			actionRefresh->setEnabled(false);
-			actionFind->setEnabled(false);
-			actionSync->setEnabled(false);
-			
-			actionRefresh->setToolTip( i18n("na") );
-			actionFind->setToolTip( i18n("na") );
-			actionSync->setToolTip( i18n("na") );
-			
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
-		}
-	}
+// 	enum Actions { INSTALLED = 0, PORTAGE, UPDATES, QUEUE, RESULTS, LOGS };
+// 	
+// 	switch ( m_view->mainTabs->indexOf(page) ) {
+// 		
+// 		case INSTALLED: {
+// 			if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ||  KurooDBSingleton::Instance()->isPortageEmpty() )
+// 				actionRefresh->setEnabled(false);
+// 			else
+// 				actionRefresh->setEnabled(true);
+// 			
+// 			if ( SignalistSingleton::Instance()->isKurooBusy() )
+// 				actionFind->setEnabled(false);
+// 			else
+// 				actionFind->setEnabled(true);
+// 			
+// 			actionSync->setEnabled(false);
+// 			
+// 			actionRefresh->setToolTip( i18n("Refresh Installed view") );
+// 			actionFind->setToolTip( i18n("Find packages in Installed") );
+// 			actionSync->setToolTip( i18n("na") );
+// 			
+// 			disconnect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
+// 			disconnect( actionFind, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotFind() ) );
+// 			connect( actionFind, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotFind() ) );
+// 			
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
+// 			connect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
+// 			
+// 			break;
+// 		}
+// 			
+// 		case PORTAGE: {
+// 			if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
+// 				actionRefresh->setEnabled(false);
+// 			}
+// 			else {
+// 				actionRefresh->setEnabled(true);
+// 			}
+// 			
+// 			if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+// 				actionSync->setEnabled(false);
+// 			}
+// 			else
+// 				actionSync->setEnabled(true);
+// 			
+// 			if ( SignalistSingleton::Instance()->isKurooBusy() )
+// 				actionFind->setEnabled(false);
+// 			else
+// 				actionFind->setEnabled(true);
+// 			
+// 			actionRefresh->setToolTip( i18n("Refresh Portage view") );
+// 			actionFind->setToolTip( i18n("Find packages in Portage") );
+// 			actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
+// 			
+// 			disconnect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
+// 			disconnect( actionFind, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotFind() ) );
+// 			connect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
+// 			
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
+// 			connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
+// 			
+// 			break;
+// 		}
+// 		
+// 		case UPDATES: {
+// 			if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ||  KurooDBSingleton::Instance()->isPortageEmpty() )
+// 				actionRefresh->setEnabled(false);
+// 			else
+// 				actionRefresh->setEnabled(true);
+// 			
+// 			actionFind->setEnabled(false);
+// 			actionSync->setEnabled(false);
+// 		
+// 			actionRefresh->setToolTip( i18n("Refresh Updates view") );
+// 			actionFind->setToolTip( i18n("na") );
+// 			actionSync->setToolTip( i18n("na") );
+// 			
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
+// 			connect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
+// 			
+// 			break;
+// 		}
+// 		
+// 		case QUEUE: {
+// 			actionRefresh->setEnabled(false);
+// 			actionFind->setEnabled(false);
+// 			actionSync->setEnabled(false);
+// 			
+// 			actionRefresh->setToolTip( i18n("na") );
+// 			actionFind->setToolTip( i18n("na") );
+// 			actionSync->setToolTip( i18n("na") );
+// 			
+// 			break;
+// 		}
+// 			
+// 		case RESULTS: {
+// 			actionRefresh->setEnabled(false);
+// 			actionFind->setEnabled(false);
+// 			actionSync->setEnabled(false);
+// 			
+// 			actionRefresh->setToolTip( i18n("na") );
+// 			actionFind->setToolTip( i18n("na") );
+// 			actionSync->setToolTip( i18n("na") );
+// 			
+// 			break;
+// 		}
+// 		
+// 		case LOGS: {
+// 			actionRefresh->setEnabled(false);
+// 			actionFind->setEnabled(false);
+// 			actionSync->setEnabled(false);
+// 			
+// 			actionRefresh->setToolTip( i18n("na") );
+// 			actionFind->setToolTip( i18n("na") );
+// 			actionSync->setToolTip( i18n("na") );
+// 			
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabInstalled, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
+// 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
+// 		}
+// 	}
 }
 
 /**

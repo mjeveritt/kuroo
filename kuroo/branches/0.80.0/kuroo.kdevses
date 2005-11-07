@@ -18,15 +18,9 @@
    <kcachegrind path="/usr/kde/3.5/bin/kcachegrind" />
   </kdevvalgrind>
  </pluginList>
- <DocsAndViews NumberOfDocuments="3" >
-  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/portage/portagetab.cpp" >
-   <View0 line="55" Type="Source" />
+ <DocsAndViews NumberOfDocuments="1" >
+  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/config/Makefile.am" >
+   <View0 line="16" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/kurooview.cpp" >
-   <View0 line="122" Type="Source" />
-  </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/kuroo.cpp" >
-   <View0 line="275" Type="Source" />
-  </Doc2>
  </DocsAndViews>
 </KDevPrjSession>

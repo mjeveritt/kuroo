@@ -14,4 +14,4 @@ libconfig_la_SOURCES = settings.kcfgc configdialog.cpp \
 
 noinst_HEADERS = configdialog.h
 
-kde_kcfg_DATA = kurooconfig.kcfg
+kde_kcfg_DATA = kuroo8config.kcfg

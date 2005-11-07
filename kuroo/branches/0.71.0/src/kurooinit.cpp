@@ -70,8 +70,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		// Create DirHome dir and set permissions so common user can run Kuroo.
 		if ( !d.exists() ) {
 			if ( !d.mkdir(KUROODIR) ) {
-				KMessageBox::error( 0, i18n("Could not create kuroo home directory.\n"
-				                            "You must start Kuroo with kdesu first time for a secure initialization.\n"
+				KMessageBox::error( 0, i18n("Could not create kuroo home directory."
+				                            "You must start Kuroo with kdesu first time for a secure initialization."
 				                            "Please try again!"), i18n("Initialization") );
 				exit(0);
 			}
@@ -85,8 +85,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	QString backupDir = KUROODIR + "backup";
 	if ( !d.cd(backupDir) )
 		if ( !d.mkdir(backupDir) ) {
-			KMessageBox::error( 0, i18n("Could not create kuroo backup directory.\n"
-			                            "You must start Kuroo with kdesu first time for a secure initialization.\n"
+			KMessageBox::error( 0, i18n("Could not create kuroo backup directory."
+			                            "You must start Kuroo with kdesu first time for a secure initialization."
 			                            "Please try again!"), i18n("Initialization") );
 			exit(0);
 		}

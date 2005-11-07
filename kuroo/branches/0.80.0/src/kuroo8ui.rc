@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="kuroo8" version="1">
+<MenuBar>
+  <Menu name="custom1"><text>&amp;View</text>
+    <Action name="wizard" />
+	<Action name="emergeLog" />
+  </Menu>
+</MenuBar>
+<ToolBar fullWidth="true" name="mainToolBar">
+	<Action name="refresh" />
+	<Action name="sync" />
+	<Action name="find" />
+</ToolBar>
+</kpartgui>

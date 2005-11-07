@@ -1,0 +1,563 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>Options1</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>Options1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>460</width>
+            <height>576</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>paths</cstring>
+            </property>
+            <property name="title">
+                <string>Paths</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirDbPkg</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>cFlags_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Installed repository</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirEdbDep</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>cFlags_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Portage cache</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>portage</cstring>
+            </property>
+            <property name="title">
+                <string>Portage</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>cFlags_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Architecture</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1">
+                    <item>
+                        <property name="text">
+                            <string>alpha</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>amd64</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>arm</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>hppa</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>ia64</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>m68k</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>mips</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>ppc</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>ppc64</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>ppc-macos</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>ppc-od</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>s390</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>sh</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>sparc</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>x86</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>x86-fbsd</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>x86-obsd</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>x86-od</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>kcfg_Arch</cstring>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>200</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="3" column="0">
+            <property name="name">
+                <cstring>portage_2_2</cstring>
+            </property>
+            <property name="title">
+                <string>History</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>kcfg_viewUnmerges</cstring>
+                    </property>
+                    <property name="text">
+                        <string>View unmer&amp;ges</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="4" column="0">
+            <property name="name">
+                <cstring>portage_2_2_2</cstring>
+            </property>
+            <property name="title">
+                <string>Emerge check update option</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>kcfg_updateDeep</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Deep</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>kcfg_updateDependency</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Dependenc&amp;y</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+Y</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>portage_2</cstring>
+            </property>
+            <property name="title">
+                <string>etc-update merging frontend</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>kcfg_etcUpdateTool</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>cFlags_2_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>External tool</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="5" column="0">
+            <property name="name">
+                <cstring>portage_2_3</cstring>
+            </property>
+            <property name="title">
+                <string>Important notice filter for emerge output</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>kcfg_noticeRegExp</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>cFlags_2_3_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Pattern (regexp)</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="7" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QGroupBox" row="6" column="0">
+            <property name="name">
+                <cstring>groupBox9</cstring>
+            </property>
+            <property name="title">
+                <string>Package status color</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QGroupBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>colorsBox</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <property name="flat">
+                        <bool>false</bool>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel2_2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>1</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="text">
+                                <string>Unmasked package</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The color of the OSD background.</string>
+                            </property>
+                        </widget>
+                        <widget class="KColorButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>kcfg_maskedColor</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>2</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>100</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="color">
+                                <color>
+                                    <red>170</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Click to select the color of the OSD text.</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The color of the OSD text.</string>
+                            </property>
+                        </widget>
+                        <widget class="KColorButton" row="1" column="1">
+                            <property name="name">
+                                <cstring>kcfg_unmaskedColor</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>2</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="color">
+                                <color>
+                                    <red>85</red>
+                                    <green>85</green>
+                                    <blue>255</blue>
+                                </color>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Click to select the background color of the OSD.</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The color of the OSD background.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>1</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Masked package</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The color of the OSD text.</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+</includehints>
+</UI>

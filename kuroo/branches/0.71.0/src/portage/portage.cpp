@@ -524,7 +524,6 @@ QString Portage::versionSummary( const QString& packageId )
  */
 QString Portage::ebuild( const QString& packageId )
 {
-	kdDebug() << "Portage::ebuild" << endl;
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	

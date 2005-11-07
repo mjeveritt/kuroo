@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-04 20:30+0100\n"
+"POT-Creation-Date: 2005-11-07 14:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: core/scanportagejob.cpp:263 core/emerge.cpp:552 core/emerge.cpp:623
 #: core/scanupdatesjob.cpp:151 core/scaninstalledjob.cpp:210
-#: queue/queuetab.cpp:350 history/history.cpp:268 history/history.cpp:269
+#: queue/queuetab.cpp:350 history/history.cpp:266 history/history.cpp:267
 msgid "Done."
 msgstr ""
 
@@ -57,8 +57,8 @@ msgstr ""
 #: core/cacheportagejob.cpp:153 core/cacheportagejob.cpp:212
 #: installed/installed.cpp:96 installed/installed.cpp:292
 #: installed/installed.cpp:360 queue/queue.cpp:67 intro/introdlg.cpp:68
-#: portage/portage.cpp:353 portage/portage.cpp:548 portage/portage.cpp:580
-#: portage/portage.cpp:621 portage/usedialog.cpp:69
+#: portage/portage.cpp:353 portage/portage.cpp:547 portage/portage.cpp:579
+#: portage/portage.cpp:620 portage/usedialog.cpp:69
 #: config/configdialog.cpp:109 config/configdialog.cpp:129
 #: config/configdialog.cpp:150 config/configdialog.cpp:171
 msgid "Error reading: "
@@ -199,10 +199,10 @@ msgstr ""
 #: installed/installed.cpp:361 installed/installed.cpp:378
 #: installed/installedtab.cpp:291 installed/installedtab.cpp:309
 #: queue/queuelistview.cpp:116 queue/queuelistview.cpp:206
-#: portage/portage.cpp:549 portage/portage.cpp:581 portage/portage.cpp:622
+#: portage/portage.cpp:548 portage/portage.cpp:580 portage/portage.cpp:621
 #: portage/portagelistview.cpp:104 portage/portagetab.cpp:162
 #: portage/portagetab.cpp:343 portage/portagetab.cpp:355
-#: portage/portagetab.cpp:367 history/history.cpp:160
+#: portage/portagetab.cpp:367 history/history.cpp:158
 #: history/historylistview.cpp:80 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
 #: kuroo.cpp:231 kuroo.cpp:232 kuroo.cpp:233 kuroo.cpp:243 kuroo.cpp:244
 #: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257 kuroo.cpp:281
@@ -448,7 +448,7 @@ msgid "Error writing: "
 msgstr ""
 
 #: logs/log.cpp:59
-msgid "Error writing %1/kuroo.log."
+msgid "Error writing %1kuroo.log."
 msgstr ""
 
 #: logs/log.cpp:59 portage/portage.cpp:377 portage/portage.cpp:423
@@ -475,6 +475,10 @@ msgstr ""
 msgid ""
 "\n"
 "No packages found matching: %1"
+msgstr ""
+
+#: installed/installed.cpp:313
+msgid " <font color=red>(Version not available in Portage)</font>"
 msgstr ""
 
 #: installed/installed.cpp:340
@@ -704,64 +708,64 @@ msgstr ""
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:210
+#: history/history.cpp:208
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:211
+#: history/history.cpp:209
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:217
+#: history/history.cpp:215
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:218
+#: history/history.cpp:216
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:219
+#: history/history.cpp:217
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:226
+#: history/history.cpp:224
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:244
+#: history/history.cpp:242
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:252
+#: history/history.cpp:250
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:257 history/history.cpp:258
+#: history/history.cpp:255 history/history.cpp:256
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:263 history/history.cpp:264
+#: history/history.cpp:261 history/history.cpp:262
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:276 rc.cpp:629
+#: history/history.cpp:274 rc.cpp:629
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:277
+#: history/history.cpp:275
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:278
+#: history/history.cpp:276
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:279
+#: history/history.cpp:277
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:280
+#: history/history.cpp:278
 msgid "terminating"
 msgstr ""
 
@@ -865,7 +869,7 @@ msgstr ""
 msgid "Edit your etc-update warning file list"
 msgstr ""
 
-#: config/configdialog.cpp:321 config/configdialog.cpp:479 kurooinit.cpp:168
+#: config/configdialog.cpp:321 config/configdialog.cpp:479 kurooinit.cpp:180
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
@@ -905,35 +909,43 @@ msgstr ""
 msgid "Please run kuroo as root for exporting to %1."
 msgstr ""
 
-#: kurooinit.cpp:50
-msgid ""
-"You must start Kuroo with kdesu first time for a secure initialization.\n"
-"Please try again!"
-msgstr ""
-
-#: kurooinit.cpp:50
-msgid "Initialization"
-msgstr ""
-
 #: kurooinit.cpp:69 kurooinit.cpp:70
 msgid "No scan"
 msgstr ""
 
+#: kurooinit.cpp:79
+msgid ""
+"Could not create kuroo home directory.\n"
+"You must start Kuroo with kdesu first time for a secure initialization.\n"
+"Please try again!"
+msgstr ""
+
+#: kurooinit.cpp:81 kurooinit.cpp:97
+msgid "Initialization"
+msgstr ""
+
 #: kurooinit.cpp:95
+msgid ""
+"Could not create kuroo backup directory.\n"
+"You must start Kuroo with kdesu first time for a secure initialization.\n"
+"Please try again!"
+msgstr ""
+
+#: kurooinit.cpp:107
 msgid "Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:187
+#: kurooinit.cpp:199
 msgid "Error reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:221
+#: kurooinit.cpp:233
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:221
+#: kurooinit.cpp:233
 msgid "User permissions"
 msgstr ""
 

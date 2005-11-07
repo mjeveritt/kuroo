@@ -95,8 +95,6 @@ bool History::slotRefresh()
 					emergeLines += line;
 	}
 
-	kdDebug() << "emergeLines=" << emergeLines << endl;
-	
 	// Check only for successfull emerge/unmerges or sync outside kuroo
 	if ( !emergeLines.grep(QRegExp("(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
 		slotScanHistory( emergeLines );

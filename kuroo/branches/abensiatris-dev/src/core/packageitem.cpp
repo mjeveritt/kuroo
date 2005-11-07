@@ -58,6 +58,7 @@ void PackageItem::init()
 	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
+	pxInstalledWorld = ldr->loadIcon( "kuroo_world", KIcon::Small );
 	pxEbuild = ldr->loadIcon( "kuroo_ebuild", KIcon::Small );
 	pxEbuildInstalled = ldr->loadIcon( "kuroo_ebuild_emerged", KIcon::Small );
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
@@ -113,6 +114,12 @@ void PackageItem::setStatus( int status )
 			m_status = INSTALLED;
 			setPixmap(0, pxInstalled);
 			m_meta.insert( i18n("2Status"), i18n("Installed") );
+			break;
+		
+		case INSTALLED_WORLD :
+			m_status = INSTALLED_WORLD;
+			setPixmap(0, pxInstalledWorld);
+			m_meta.insert( i18n("2Status"), i18n("Installed end-user package") );
 			break;
 			
 		case PACKAGE :

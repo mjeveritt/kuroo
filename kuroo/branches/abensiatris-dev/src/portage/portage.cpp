@@ -50,6 +50,7 @@ void Portage::init( QObject *myParent )
 	parent = myParent;
 	loadUnmaskedList();
 	loadCache();
+	loadWorldList();
 }
 
 /**
@@ -622,5 +623,49 @@ QString Portage::dependencies( const QString& packageId )
 		return i18n("na");
 	}
 }
+
+
+
+
+
+/**
+ * Load world packages list = packages in world file (/var/lib/portage/world)
+ */
+void Portage::loadWorldList()
+{
+	worldMap.clear();
+	
+	// Load world
+	QFile file( KurooConfig::dirWorldFile() );
+	if ( file.open( IO_ReadOnly ) ) {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() ) {
+			QString line(stream.readLine());
+			worldMap.insert( line.section(" ", 0, 0), line.section(" ", 1, 1) );
+		}
+	}
+	else
+		kdDebug() << i18n("Error reading: world.") << endl;
+	
+	file.close();
+
+}
+
+/**
+ * Check if package is in world
+ * @param package
+ * @return success
+ */
+bool Portage::isWorld( const QString& package )
+{
+	QMap<QString, QString>::iterator itMap = worldMap.find( package ) ;
+	if ( itMap != worldMap.end() )
+		return true;
+	else
+		return false;
+}
+
+
+
 
 #include "portage.moc"

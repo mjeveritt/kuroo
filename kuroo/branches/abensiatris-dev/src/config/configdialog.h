@@ -41,11 +41,6 @@ public:
 	ConfigDialog( QWidget *parent, const char *name, KConfigSkeleton *config );
 	~ConfigDialog();
 	
-	/**
- 	 * Slot to save all installed packages into the world file.
- 	 */
-	bool exportToWorld();
-	
 private slots:
 	
 	/**
@@ -55,7 +50,6 @@ private slots:
 	void readPackageUnmask();
 	void readPackageMask();
 	void readPackageKeywords();
-	void readWorldFile();
 	
 	/**
  	 * And save back...
@@ -64,10 +58,8 @@ private slots:
 	bool savePackageUnmask();
 	bool savePackageMask();
 	bool savePackageKeywords();
-	bool saveWorldFile();
 	void saveAll();
 
-	void exportWorld();
 	void slotDefault();
 
 private:

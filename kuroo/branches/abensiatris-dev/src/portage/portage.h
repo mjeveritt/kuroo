@@ -179,6 +179,18 @@ public slots:
 	void						clearUnmaskPackageList( const QString& category, const QStringList& packageList );
 	
 	/**
+	 * Load world packages list = packages in world file (/var/lib/portage/world)
+	 */
+	void						loadWorldList();
+	
+	/**
+	* Check if package is in world
+	* @param package
+	* @return success
+	*/
+	bool						isWorld( const QString& package );
+	
+	/**
 	 * Methods for parsing info files.
 	 */
 	QString						packageSummary( const QString& packageId );
@@ -192,7 +204,7 @@ signals:
 	
 private:
 	QObject						*parent;
-	QMap< QString, QString > 	cacheMap, unmaskedMap;
+	QMap< QString, QString > 	cacheMap, unmaskedMap, worldMap;
 
 };
 

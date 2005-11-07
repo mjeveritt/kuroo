@@ -86,7 +86,7 @@ private:
 	QString			m_packageTip;
 	QListView		*m_parent;
 	Meta			m_meta;
-	QPixmap 		pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;
+	QPixmap 		pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxInstalledWorld, pxStable, pxTesting, pxStableUnmasked;
 	QPixmap			pxPackageUnmasked, pxInstalledUnmasked, pxEbuild, pxEbuildMasked, pxEbuildInstalled, pxQueued;
 	int				m_status;
 	bool			queued;

@@ -139,10 +139,16 @@ void InstalledPackagesListView::addCategoryPackages( const QString& category )
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, INSTALLED );
 		
 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
+		{
 			packageItem->setStatus(MASKED);
+		}
 		else {
+			// Found as Unmasked
 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
 				packageItem->setStatus(UNMASKED);
+			// Found in world file
+			if ( PortageSingleton::Instance()->isWorld( category + "/" + name ) )
+				packageItem->setStatus(INSTALLED_WORLD);
 		}
 		
 		insertPackage( idDB, packageItem );

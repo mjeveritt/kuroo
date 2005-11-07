@@ -196,6 +196,12 @@ void PortageListView::addCategoryPackages( const QString& category )
 					
 					// We have an installed version
 					packageItem->setStatus(INSTALLED);
+					
+					// Found in world file
+					if ( PortageSingleton::Instance()->isWorld( category + "/" + name ) )
+						packageItem->setStatus(INSTALLED_WORLD);
+				
+				
 				}
 				else {
 					if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))

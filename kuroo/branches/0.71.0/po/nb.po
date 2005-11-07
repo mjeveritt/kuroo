@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-03 17:07+0100\n"
-"PO-Revision-Date: 2005-11-03 22:38+0000\n"
+"POT-Creation-Date: 2005-11-07 14:19+0100\n"
+"PO-Revision-Date: 2005-11-07 15:59+0000\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Can not connect to database"
 msgstr "Klarte ikke koble til databasen"
 
-#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:142
+#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:141
 msgid "History scan aborted"
 msgstr "Lesing av historikken ble avbrutt"
 
@@ -51,7 +51,7 @@ msgstr "Lesing av overstyringen til Portage ble avbrutt"
 
 #: core/scanportagejob.cpp:263 core/emerge.cpp:552 core/emerge.cpp:623
 #: core/scanupdatesjob.cpp:151 core/scaninstalledjob.cpp:210
-#: queue/queuetab.cpp:350 history/history.cpp:267 history/history.cpp:268
+#: queue/queuetab.cpp:350 history/history.cpp:266 history/history.cpp:267
 msgid "Done."
 msgstr "Ferdig"
 
@@ -59,8 +59,8 @@ msgstr "Ferdig"
 #: core/cacheportagejob.cpp:153 core/cacheportagejob.cpp:212
 #: installed/installed.cpp:96 installed/installed.cpp:292
 #: installed/installed.cpp:360 queue/queue.cpp:67 intro/introdlg.cpp:68
-#: portage/portage.cpp:344 portage/portage.cpp:539 portage/portage.cpp:571
-#: portage/portage.cpp:612 portage/usedialog.cpp:69
+#: portage/portage.cpp:353 portage/portage.cpp:547 portage/portage.cpp:579
+#: portage/portage.cpp:620 portage/usedialog.cpp:69
 #: config/configdialog.cpp:109 config/configdialog.cpp:129
 #: config/configdialog.cpp:150 config/configdialog.cpp:171
 msgid "Error reading: "
@@ -219,13 +219,13 @@ msgstr "Kategori"
 #: installed/installed.cpp:361 installed/installed.cpp:378
 #: installed/installedtab.cpp:291 installed/installedtab.cpp:309
 #: queue/queuelistview.cpp:116 queue/queuelistview.cpp:206
-#: portage/portage.cpp:540 portage/portage.cpp:572 portage/portage.cpp:613
+#: portage/portage.cpp:548 portage/portage.cpp:580 portage/portage.cpp:621
 #: portage/portagelistview.cpp:104 portage/portagetab.cpp:162
 #: portage/portagetab.cpp:343 portage/portagetab.cpp:355
-#: portage/portagetab.cpp:367 history/history.cpp:159
-#: history/historylistview.cpp:77 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
+#: portage/portagetab.cpp:367 history/history.cpp:158
+#: history/historylistview.cpp:80 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
 #: kuroo.cpp:231 kuroo.cpp:232 kuroo.cpp:233 kuroo.cpp:243 kuroo.cpp:244
-#: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257
+#: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257 kuroo.cpp:281
 msgid "na"
 msgstr "I/T"
 
@@ -469,17 +469,17 @@ msgid "View Info"
 msgstr "Vis informasjon"
 
 #: logs/log.cpp:58 installed/installed.cpp:93 queue/queue.cpp:64
-#: portage/portage.cpp:367 portage/portage.cpp:413 config/configdialog.cpp:391
+#: portage/portage.cpp:376 portage/portage.cpp:422 config/configdialog.cpp:391
 #: config/configdialog.cpp:410 config/configdialog.cpp:429
 #: config/configdialog.cpp:448 config/configdialog.cpp:564
 msgid "Error writing: "
 msgstr "Feil ved skriving til: "
 
 #: logs/log.cpp:59
-msgid "Error writing %1/kuroo.log."
-msgstr "Feil ved skriving til «%1/kuroo.log»."
+msgid "Error writing %1kuroo.log."
+msgstr "Klarte ikke skrive til «%1kuroo.log»."
 
-#: logs/log.cpp:59 portage/portage.cpp:368 portage/portage.cpp:414
+#: logs/log.cpp:59 portage/portage.cpp:377 portage/portage.cpp:423
 #: portage/usedialog.cpp:174 config/configdialog.cpp:336
 #: config/configdialog.cpp:344 config/configdialog.cpp:352
 #: config/configdialog.cpp:360 config/configdialog.cpp:370
@@ -507,23 +507,27 @@ msgstr ""
 "\n"
 "Fant ingen pakker som passer til «%1»"
 
+#: installed/installed.cpp:313
+msgid " <font color=red>(Version not available in Portage)</font>"
+msgstr "<font color=red>(Versjonen er ikke tilgjengelig i Portage)</font>"
+
 #: installed/installed.cpp:340
 msgid "<b>License:</b> "
 msgstr "<b>Lisens:</b> "
 
-#: installed/installed.cpp:344 portage/portage.cpp:503
+#: installed/installed.cpp:344 portage/portage.cpp:512
 msgid "<b>Slot:</b> "
 msgstr "<b>Plass:</b> "
 
-#: installed/installed.cpp:348 portage/portage.cpp:504
+#: installed/installed.cpp:348 portage/portage.cpp:513
 msgid "<b>Branches:</b> "
 msgstr "<b>Arkitekturer:</b> "
 
-#: installed/installed.cpp:351 portage/portage.cpp:505
+#: installed/installed.cpp:351 portage/portage.cpp:514
 msgid "<b>Use flags:</b> "
 msgstr "<b>Bruk-flagg:</b> "
 
-#: installed/installed.cpp:352 portage/portage.cpp:506
+#: installed/installed.cpp:352 portage/portage.cpp:515
 msgid "<b>Size:</b> "
 msgstr "<b>Størrelse:</b> "
 
@@ -656,27 +660,27 @@ msgstr "Stien til Portages påleggkatalog «%1» er ugyldig."
 msgid "Error checking paths..."
 msgstr "Feil ved sjekking av stier."
 
-#: portage/portage.cpp:97
+#: portage/portage.cpp:98
 msgid "Wait-counter has reached maximum. Attempting to scan Portage."
 msgstr "Ventetelleren har nådd høyeste verdi. Prøver å undersøke Portage."
 
-#: portage/portage.cpp:194
+#: portage/portage.cpp:203
 msgid "<br>No packages found matching: %1"
 msgstr "<br>Fant ingen pakker som passer til «%1»"
 
-#: portage/portage.cpp:293
+#: portage/portage.cpp:302
 msgid "Error reading: package.keyword."
 msgstr "Feil ved lesing av «package.keywords»."
 
-#: portage/portage.cpp:368 portage/portage.cpp:414 portage/usedialog.cpp:174
+#: portage/portage.cpp:377 portage/portage.cpp:423 portage/usedialog.cpp:174
 msgid "Failed to save. Please run as root."
 msgstr "Klarte ikke lagre; kjør som superbruker."
 
-#: portage/portage.cpp:471 portage/portage.cpp:502
+#: portage/portage.cpp:480 portage/portage.cpp:511
 msgid "<b>Licenses:</b> "
 msgstr "<b>Lisenser:</b> "
 
-#: portage/portage.cpp:472
+#: portage/portage.cpp:481
 msgid "<b>Available versions:</b> "
 msgstr "<b>Tilgjengelige versjoner:</b> "
 
@@ -739,64 +743,64 @@ msgstr "Feil ved lesing av «/etc/portage/package.use»"
 msgid "Error reading /var/log/emerge.log"
 msgstr "Feil ved lesing av «/var/log/emerge.log»"
 
-#: history/history.cpp:209
+#: history/history.cpp:208
 msgid " to "
 msgstr " til "
 
-#: history/history.cpp:210
+#: history/history.cpp:209
 msgid " of "
 msgstr " av "
 
-#: history/history.cpp:216
+#: history/history.cpp:215
 msgid "Compiling/Merging"
 msgstr "Bygger/Installerer"
 
-#: history/history.cpp:217
+#: history/history.cpp:216
 msgid "Post-Build Cleaning"
 msgstr "Rydder opp etter bygging"
 
-#: history/history.cpp:218
+#: history/history.cpp:217
 msgid "Cleaning"
 msgstr "Rydder"
 
-#: history/history.cpp:225
+#: history/history.cpp:224
 msgid "Started emerge on"
 msgstr "Startet installasjon"
 
-#: history/history.cpp:243
+#: history/history.cpp:242
 msgid "completed emerge"
 msgstr "Installasjon fullført"
 
-#: history/history.cpp:251
+#: history/history.cpp:250
 msgid "unmerge success"
 msgstr "Vellykket avinstallering"
 
-#: history/history.cpp:256 history/history.cpp:257
+#: history/history.cpp:255 history/history.cpp:256
 msgid "Synchronizing Portage..."
 msgstr "Synkroniserer Portage . . ."
 
-#: history/history.cpp:262 history/history.cpp:263
+#: history/history.cpp:261 history/history.cpp:262
 msgid "Sync completed."
 msgstr "Synkronisering fullført."
 
-#: history/history.cpp:276 rc.cpp:629
+#: history/history.cpp:274 rc.cpp:629
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr "AUTOCLEAN"
 
-#: history/history.cpp:277
+#: history/history.cpp:275
 msgid "Unmerging"
 msgstr "Avinstallerer"
 
-#: history/history.cpp:278
+#: history/history.cpp:276
 msgid "Finished. Cleaning up"
 msgstr "Ferdig, rydder opp"
 
-#: history/history.cpp:279
+#: history/history.cpp:277
 msgid "exiting successfully"
 msgstr "Avslutter vellykket"
 
-#: history/history.cpp:280
+#: history/history.cpp:278
 msgid "terminating"
 msgstr "Stopper"
 
@@ -900,7 +904,7 @@ msgstr "Rediger «world»-filen"
 msgid "Edit your etc-update warning file list"
 msgstr "Rediger advarselsfillisten for konfigurasjonsoppdatereren"
 
-#: config/configdialog.cpp:321 config/configdialog.cpp:479 kurooinit.cpp:168
+#: config/configdialog.cpp:321 config/configdialog.cpp:479 kurooinit.cpp:180
 msgid "Error reading: /etc/make.conf"
 msgstr "Feil ved lesing av «/etc/make.conf»"
 
@@ -940,29 +944,41 @@ msgstr "Eksportering til «world»-fil fullført."
 msgid "Please run kuroo as root for exporting to %1."
 msgstr "Kjør Kuroo som superbruker for å eksportere til %1."
 
-#: kurooinit.cpp:50
-msgid ""
-"You must start Kuroo with kdesu first time for a secure initialization.\n"
-"Please try again!"
-msgstr "Du må starte Kuroo med «kdesu» første gang for sikker initalisering."
-
-#: kurooinit.cpp:50
-msgid "Initialization"
-msgstr "Initalisering"
-
 #: kurooinit.cpp:69 kurooinit.cpp:70
 msgid "No scan"
 msgstr "Ingen søking"
 
+#: kurooinit.cpp:79
+msgid ""
+"Could not create kuroo home directory.\n"
+"You must start Kuroo with kdesu first time for a secure initialization.\n"
+"Please try again!"
+msgstr ""
+"Klarte ikke opprette Kuroos hjemmekatalog.\n"
+"Du må starte Kuroo med «kdesu» første gang for sikker initalisering."
+
+#: kurooinit.cpp:81 kurooinit.cpp:97
+msgid "Initialization"
+msgstr "Initalisering"
+
 #: kurooinit.cpp:95
+msgid ""
+"Could not create kuroo backup directory.\n"
+"You must start Kuroo with kdesu first time for a secure initialization.\n"
+"Please try again!"
+msgstr ""
+"Klarte ikke opprette Kuroos katalog for sikkerhetskopier.\n"
+"Du må starte Kuroo med «kdesu» første gang for sikker initalisering."
+
+#: kurooinit.cpp:107
 msgid "Deleting old version of database %1"
 msgstr "Sletter gammel versjon av databasen «%1»"
 
-#: kurooinit.cpp:187
+#: kurooinit.cpp:199
 msgid "Error reading: /etc/make.profile"
 msgstr "Feil ved lesing av «/etc/make.profile»"
 
-#: kurooinit.cpp:221
+#: kurooinit.cpp:233
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
@@ -970,7 +986,7 @@ msgstr ""
 "Du har ikke tilstrekkelige rettigheter for å kjøre Kuroo.\n"
 "Legg deg selv til i gruppen «portage»."
 
-#: kurooinit.cpp:221
+#: kurooinit.cpp:233
 msgid "User permissions"
 msgstr "Bruker-tillatelser"
 
@@ -1054,7 +1070,7 @@ msgstr "Synkroniser Portage med Gentoo-tjenere"
 msgid "Refresh Updates view"
 msgstr "Oppdater listen over oppdateringer"
 
-#: kuroo.cpp:280
+#: kuroo.cpp:285
 msgid ""
 "<qt>Do you want to synchronize portage?<br><br>Portage, Installed and "
 "Updates view will be refreshed automatically afterwards. Queue and Results "
@@ -1064,15 +1080,15 @@ msgstr ""
 "og oppdateringer oppdateres automatisk etterpå, og køen og resultater tømmes."
 "<br>Dette tar et par minutter</qt>"
 
-#: kuroo.cpp:283
+#: kuroo.cpp:288
 msgid "Last sync: %1"
 msgstr "Siste synkronisering: %1"
 
-#: kuroo.cpp:299 kuroo.cpp:301
+#: kuroo.cpp:304 kuroo.cpp:306
 msgid "settings"
 msgstr "Innstillinger"
 
-#: kuroo.cpp:372
+#: kuroo.cpp:377
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1133,27 +1149,27 @@ msgstr "Oppdater"
 msgid "Skip"
 msgstr "Hopp over"
 
-#: kurooview.cpp:240
+#: kurooview.cpp:236
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr "Kuroo må kjøres med superbrukerrettigheter for å installere pakker."
 
-#: kurooview.cpp:291
+#: kurooview.cpp:287
 msgid "&Portage (%1)"
 msgstr "&Portage (%1)"
 
-#: kurooview.cpp:307
+#: kurooview.cpp:303
 msgid "&Installed (%1)"
 msgstr "&Installert (%1)"
 
-#: kurooview.cpp:323
+#: kurooview.cpp:319
 msgid "&Updates (%1)"
 msgstr "&Oppdateringer (%1)"
 
-#: kurooview.cpp:339
+#: kurooview.cpp:335
 msgid "&Queue (%1)"
 msgstr "&Kø (%1)"
 
-#: kurooview.cpp:355
+#: kurooview.cpp:351
 msgid "&Results (%1)"
 msgstr "&Resultater (%1)"
 

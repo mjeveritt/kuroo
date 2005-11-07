@@ -33,11 +33,11 @@ messages: rc.cpp
 
 # this is where the kdelnk file will go 
 kdelnkdir = $(kde_appsdir)/System
-kdelnk_DATA = kuroo.desktop
+kdelnk_DATA = kuroo8.desktop
 
 # this is where the XML-GUI resource file goes
 rcdir = $(kde_datadir)/kuroo8
-rc_DATA = kurooui.rc
+rc_DATA = kuroo8ui.rc
 
 # this is to set set autostart of kuroo_watcher
 autostartdir = $(datadir)/autostart

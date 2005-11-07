@@ -1,4 +1,4 @@
-2005-10-10 Karye <karye@users.sourceforge.net>
+2005-11-07 Karye <karye@users.sourceforge.net>
 	Removing Disk Usage widget.
 	Splitting Kuroo: Gentoo watcher moves to separate package.
 	Directories and files will be owned by portage:portage. Kuroo require user to be in portage group. 

@@ -19,8 +19,8 @@
   </kdevvalgrind>
  </pluginList>
  <DocsAndViews NumberOfDocuments="1" >
-  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/logs/log.cpp" >
-   <View0 line="58" Type="Source" />
+  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/kurooinit.cpp" >
+   <View0 line="93" Type="Source" />
   </Doc0>
  </DocsAndViews>
 </KDevPrjSession>

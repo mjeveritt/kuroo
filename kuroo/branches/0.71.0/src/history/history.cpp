@@ -91,7 +91,7 @@ bool History::slotRefresh()
 		QRegExp rx("\\d+");
 		if ( rx.search(line) > -1 )
 			if ( rx.cap(0) > lastDate )
-				if ( line.contains(QRegExp("(\\*\\*\\* emerge)|(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")) )
+				if ( line.contains(QRegExp("(>>> emerge)|(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")) )
 					emergeLines += line;
 	}
 

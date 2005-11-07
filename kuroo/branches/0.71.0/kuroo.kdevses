@@ -18,12 +18,9 @@
    <kcachegrind path="/usr/kde/3.5/bin/kcachegrind" />
   </kdevvalgrind>
  </pluginList>
- <DocsAndViews NumberOfDocuments="2" >
-  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/history/history.cpp" >
-   <View0 line="97" Type="Source" />
+ <DocsAndViews NumberOfDocuments="1" >
+  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/kurooinit.cpp" >
+   <View0 line="72" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/core/scanhistoryjob.cpp" >
-   <View0 line="0" Type="Source" />
-  </Doc1>
  </DocsAndViews>
 </KDevPrjSession>

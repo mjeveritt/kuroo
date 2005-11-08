@@ -56,7 +56,10 @@
 			<default>/etc/portage/package.keywords</default>
 		</entry>
 		<entry name="FilePackageMask" type="String">
-		<default>/etc/portage/package.mask</default>
+			<default>/etc/portage/package.mask</default>
+		</entry>
+		<entry name="FileEmergeLog" type="String">
+			<default>/var/log/emerge.log</default>
 		</entry>
 		<entry name="latestInstalledCategory" type="String">
 		</entry>

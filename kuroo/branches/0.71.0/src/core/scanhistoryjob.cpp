@@ -101,9 +101,8 @@ bool ScanHistoryJob::doJob()
 		else
 			if ( emergeLine.contains("::: completed emerge ") ) {
 				rx.setPattern("\\s\\S+/\\S+\\s");
-				if ( rx.search(emergeLine) > -1 ) {
+				if ( rx.search(emergeLine) > -1 )
 					package = rx.cap(0).stripWhiteSpace();
-				}
 				
 				QString packageNoVersion = package.section(pv, 0, 0);
 				int secTime = timeStamp.toUInt() - emergeStart;

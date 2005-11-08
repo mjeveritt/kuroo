@@ -34,14 +34,14 @@
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *parent )
-	: QObject( parent ), userSync( false )
+	: QObject( parent )
 {
 	slotInit();
 }
 
 History::~History()
 {
-	log.close();
+	emergeLog.close();
 	
 	delete fileWatcher;
 	fileWatcher = 0;
@@ -50,11 +50,12 @@ History::~History()
 void History::init( QObject *myParent )
 {
 	kdDebug() << "History::init" << endl;
+	
 	parent = myParent;
-	if ( !log.open(IO_ReadOnly) )
-		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
+	if ( !emergeLog.open(IO_ReadOnly) )
+		kdDebug() << i18n("Error reading %1").arg(KurooConfig::fileEmergeLog()) << endl;
 	else
-		stream.setDevice( &log );
+		stream.setDevice( &emergeLog );
 }
 
 /**
@@ -64,13 +65,14 @@ void History::init( QObject *myParent )
 void History::slotInit()
 {
 	kdDebug() << "History::slotInit" << endl;
-	log.setName("/var/log/emerge.log");
+	
+	emergeLog.setName(KurooConfig::fileEmergeLog());
 	loadTimeStatistics();
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotChanged() ) );
 	
 	fileWatcher = new KDirWatch(this);
-	fileWatcher->addFile("/var/log/emerge.log");
+	fileWatcher->addFile(KurooConfig::fileEmergeLog());
 	connect( fileWatcher, SIGNAL( dirty(const QString&) ), this, SLOT( slotParse() ) );
 }
 

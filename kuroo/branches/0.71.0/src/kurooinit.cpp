@@ -43,19 +43,21 @@
 KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog(0)
 {
-	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( KUROODIR );
-	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
-		getEnvironment();
-		firstTimeWizard();
-	}
-	else
-		if ( !KUser().isSuperUser() )
-			checkUser();
+	QDir d(KUROODIR);
 	
 	// Get portage groupid to set directories and files owned by portage
 	struct group* portageGid = getgrnam(QFile::encodeName("portage"));
 	struct passwd* portageUid = getpwnam(QFile::encodeName("portage"));
+	
+	// Run intro if new version is installed or no DirHome directory is detected
+	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
+		getEnvironment();
+		firstTimeWizard();
+	}
+	
+	// Control that user is in portage group
+	if ( !KUser().isSuperUser() )
+		checkUser();
 	
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -67,31 +69,35 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		if ( !KurooConfig::wizard() )
 			getEnvironment();
 		
-		// Create DirHome dir and set permissions so common user can run Kuroo.
+		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
 			if ( !d.mkdir(KUROODIR) ) {
-				KMessageBox::error( 0, i18n("Could not create kuroo home directory."
-				                            "You must start Kuroo with kdesu first time for a secure initialization."
-				                            "Please try again!"), i18n("Initialization") );
+				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
+				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
+			} else {
+				chown(KUROODIR, portageGid->gr_gid, portageUid->pw_uid);
+				chmod(KUROODIR, 0770);
 			}
 			d.setCurrent(KUROODIR);
 		}
 	}
-	chmod(KUROODIR, 0770);
-	chown(KUROODIR, portageGid->gr_gid, portageUid->pw_uid);
 	
-	// Check that backup directory exists.
+	// Check that backup directory exists and set correct permissions
 	QString backupDir = KUROODIR + "backup";
-	if ( !d.cd(backupDir) )
+	if ( !d.cd(backupDir) ) {
 		if ( !d.mkdir(backupDir) ) {
-			KMessageBox::error( 0, i18n("Could not create kuroo backup directory."
-			                            "You must start Kuroo with kdesu first time for a secure initialization."
-			                            "Please try again!"), i18n("Initialization") );
+			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
+			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+			                            "Please try again!</qt>"), i18n("Initialization") );
 			exit(0);
 		}
-	chmod(backupDir, 0770);
-	chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
+		else {
+			chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
+			chmod(backupDir, 0770);
+		}
+	}
 	
 	// If new release delete old db files
 	QString database = KUROODIR + KurooConfig::databas();
@@ -103,16 +109,26 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
 	KurooConfig::writeConfig();
 	
+	
+	//////////////////////////////////////////////////////////////////////////////////
 	// Initialize singletons objects
-	QString logFile = LogSingleton::Instance()->init(this);
-	if ( !logFile.isEmpty() ) {
-		chmod(logFile, 0660);
-		chown(logFile, portageGid->gr_gid, portageUid->pw_uid);
-	}
+	/////////////////////////////////////////////////////////////////////////////////
 	
 	QString databaseFile = KurooDBSingleton::Instance()->init(this);
+	if ( chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid) < 0 ) {
+		KMessageBox::error( 0, i18n("<qt>Could not setup kuroo portage database.<br>"
+		                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+		                            "Please try again!</qt>"), i18n("Initialization") );
+		remove(database);
+		exit(0);
+	}
 	chmod(databaseFile, 0660);
-	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
+	
+	QString logFile = LogSingleton::Instance()->init(this);
+	if ( !logFile.isEmpty() ) {
+		chown(logFile, portageGid->gr_gid, portageUid->pw_uid);
+		chmod(logFile, 0660);
+	}
 	
 	EtcUpdateSingleton::Instance()->init(this);
 	SignalistSingleton::Instance()->init(this);
@@ -223,7 +239,8 @@ void KurooInit::checkUser()
 		if ( *it == "portage" )
 			return;
 	}
-	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), i18n("User permissions") );
+	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo."
+	                            "Please add yourself into portage group!"), i18n("User permissions") );
 	exit(0);
 }
 

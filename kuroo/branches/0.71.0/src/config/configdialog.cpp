@@ -51,13 +51,13 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 {
 	setWFlags( WDestructiveClose );
 	
-	Options1* opt1 = new Options1( this, i18n("General") );
-	Options2* opt2 = new Options2( this, i18n("make.conf") );
-	Options5* opt5 = new Options5( this, i18n("package.keywords") );
-	Options4* opt4 = new Options4( this, i18n("package.unmask") );
-	Options3* opt3 = new Options3( this, i18n("package.mask") );
-	Options6* opt6 = new Options6( this, i18n("world") );
-	Options7* opt7 = new Options7( this, i18n("etc warnings") );
+	Options1* opt1 = new Options1( this );
+	Options2* opt2 = new Options2( this );
+	Options5* opt5 = new Options5( this );
+	Options4* opt4 = new Options4( this );
+	Options3* opt3 = new Options3( this );
+	Options6* opt6 = new Options6( this );
+	Options7* opt7 = new Options7( this );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
 	addPage( opt2, i18n("Portage make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );

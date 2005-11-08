@@ -289,7 +289,7 @@ void Portage::loadUnmaskedList()
 	unmaskedMap.clear();
 	
 	// Load package.keyword
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
@@ -329,7 +329,7 @@ void Portage::unmaskPackageList( const QString& category, const QStringList& pac
 		QString name = (*it).section(pv, 0, 0);
 		QString package = category + "/" + name;
 	
-		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::dirPackageKeywords() ) )
+		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::filePackageKeywords() ) )
 			break;
 		else
 			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
@@ -396,7 +396,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  */
 void Portage::clearUnmaskPackageList( const QString& category, const QStringList& packageList )
 {
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	
 	// Store back list of unmasked packages
 	if ( file.open( IO_WriteOnly ) ) {
@@ -419,8 +419,8 @@ void Portage::clearUnmaskPackageList( const QString& category, const QStringList
 		file.close();
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
-		KMessageBox::error( 0, i18n("Failed to saveto %1. Please run as root.").arg(KurooConfig::dirPackageKeywords()), i18n("Saving"));
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
+		KMessageBox::error( 0, i18n("Failed to saveto %1. Please run as root.").arg(KurooConfig::filePackageKeywords()), i18n("Saving"));
 	}
 }
 

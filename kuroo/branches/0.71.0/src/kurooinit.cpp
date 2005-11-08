@@ -45,9 +45,11 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 {
 	QDir d(KUROODIR);
 	
-	// Get portage groupid to set directories and files owned by portage
-	struct group* portageGid = getgrnam(QFile::encodeName("portage"));
-	struct passwd* portageUid = getpwnam(QFile::encodeName("portage"));
+	// Get portage uid and groupid to set directories and files owned by portage
+	struct group* gid = getgrnam(QFile::encodeName("portage"));
+	struct passwd* uid = getpwnam(QFile::encodeName("portage"));
+	int portageUid = uid->pw_uid;
+	int portageGid = gid->gr_gid;
 	
 	// Run intro if new version is installed or no DirHome directory is detected
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
@@ -77,8 +79,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
-				chown(KUROODIR, portageGid->gr_gid, portageUid->pw_uid);
 				chmod(KUROODIR, 0770);
+				chown(KUROODIR, portageUid, portageGid);
 			}
 			d.setCurrent(KUROODIR);
 		}
@@ -94,40 +96,46 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 			exit(0);
 		}
 		else {
-			chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
 			chmod(backupDir, 0770);
+			chown(backupDir, portageUid, portageGid);
 		}
 	}
 	
 	// If new release delete old db files
-	QString database = KUROODIR + KurooConfig::databas();
+	QString databaseFile = KUROODIR + KurooConfig::databas();
 	if ( KurooConfig::version() != KurooConfig::hardVersion() ) {
-		remove(database);
-		kdDebug() << i18n("Deleting old version of database %1").arg(database) << endl;
+		remove(databaseFile);
+		kdDebug() << i18n("Deleting old version of database %1").arg(databaseFile) << endl;
 	}
-	
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
 	KurooConfig::writeConfig();
+	
+	// Check if existing database is owned by portage, if not remove it
+	struct stat st;
+	stat(QFile::encodeName(databaseFile), &st);
+	if ( st.st_gid != portageGid && !KUser().isSuperUser() ) {
+		KMessageBox::error( 0, i18n("<qt>Could not setup kuroo portage database.<br>"
+		                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+		                            "Please try again!</qt>"), i18n("Initialization") );
+		remove(databaseFile);
+		exit(0);
+	}
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////
 	// Initialize singletons objects
 	/////////////////////////////////////////////////////////////////////////////////
 	
-	QString databaseFile = KurooDBSingleton::Instance()->init(this);
-	if ( chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid) < 0 ) {
-		KMessageBox::error( 0, i18n("<qt>Could not setup kuroo portage database.<br>"
-		                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
-		                            "Please try again!</qt>"), i18n("Initialization") );
-		remove(database);
-		exit(0);
+	databaseFile = KurooDBSingleton::Instance()->init(this);
+	if ( KUser().isSuperUser() ) {
+		chmod(databaseFile, 0660);
+		chown(databaseFile, portageUid, portageGid);
 	}
-	chmod(databaseFile, 0660);
 	
 	QString logFile = LogSingleton::Instance()->init(this);
-	if ( !logFile.isEmpty() ) {
-		chown(logFile, portageGid->gr_gid, portageUid->pw_uid);
+	if ( KUser().isSuperUser() ) {
 		chmod(logFile, 0660);
+		chown(logFile, portageUid, portageGid);
 	}
 	
 	EtcUpdateSingleton::Instance()->init(this);

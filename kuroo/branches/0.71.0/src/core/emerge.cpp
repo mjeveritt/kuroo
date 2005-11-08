@@ -653,7 +653,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 		}
 		else {
-			QStringList keywordList = QStringList::split(",", keyword.stripWhiteSpace(), false);
+			QStringList keywordList = QStringList::split(",", keyword, false);
 			kdDebug() << "keywordList=" << keywordList << endl;
 			
 			if ( !keywordList.isEmpty() ) {
@@ -661,22 +661,20 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing/unstable package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(pv, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes : {
-						
 						foreach ( keywordList ) {
 							if ( !(*it).contains("package.mask") ) {
-								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0) + " " + keyword, KurooConfig::filePackageKeywords() ) ) {
+								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0) + " " + (*it).stripWhiteSpace(), KurooConfig::filePackageKeywords() ) ) {
 									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.keyword\"."), KUROO );
 									PortageSingleton::Instance()->loadUnmaskedList();
-									pretend( lastEmergeList );
 								}
 							}
 							else {
 								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0), KurooConfig::filePackageUnmask() ) ) {
 									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.unmask\"."), KUROO );
-									pretend( lastEmergeList );
 								}
 							}
 						}
+						pretend( lastEmergeList );
 					}
 				}
 			}

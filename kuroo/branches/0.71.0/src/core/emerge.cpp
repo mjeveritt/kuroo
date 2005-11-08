@@ -663,16 +663,16 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 					case KMessageBox::Yes : {
 						
 						foreach ( keywordList ) {
-							if ( (*it).contains("package.mask") ) {
+							if ( !(*it).contains("package.mask") ) {
 								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0) + " " + keyword, KurooConfig::filePackageKeywords() ) ) {
-									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.unmask\"."), KUROO );
+									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.keyword\"."), KUROO );
 									PortageSingleton::Instance()->loadUnmaskedList();
 									pretend( lastEmergeList );
 								}
 							}
 							else {
 								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0), KurooConfig::filePackageUnmask() ) ) {
-									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.keyword\"."), KUROO );
+									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.unmask\"."), KUROO );
 									pretend( lastEmergeList );
 								}
 							}

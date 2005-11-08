@@ -18,12 +18,5 @@
    <kcachegrind path="/usr/kde/3.5/bin/kcachegrind" />
   </kdevvalgrind>
  </pluginList>
- <DocsAndViews NumberOfDocuments="2" >
-  <Doc0 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/kurooinit.cpp" >
-   <View0 line="72" Type="Source" />
-  </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/karye/repository/kuroo-svn/kuroo/branches/0.71.0/src/core/emerge.cpp" >
-   <View0 line="57" Type="Source" />
-  </Doc1>
- </DocsAndViews>
+ <DocsAndViews NumberOfDocuments="0" />
 </KDevPrjSession>

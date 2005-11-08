@@ -161,7 +161,7 @@ bool CachePortageJob::doJob()
 	}
 	
 	// Get list of categories in Portage
-	if ( !dCategory.cd(KurooConfig::dirEdbDep() + "usr/portage") ) {
+	if ( !dCategory.cd(KurooConfig::dirEdbDep() + "/usr/portage") ) {
 		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage" << endl;
 		return false;
 	}

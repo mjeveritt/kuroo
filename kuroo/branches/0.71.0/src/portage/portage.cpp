@@ -374,7 +374,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 		}
 		else {
 			kdDebug() << i18n("Error writing: ") << maskFile << endl;
-			KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
+			KMessageBox::error( 0, i18n("Failed to save to %1. Please run as root.").arg(maskFile), i18n("Saving"));
 			return false;
 		}
 		
@@ -420,7 +420,7 @@ void Portage::clearUnmaskPackageList( const QString& category, const QStringList
 	}
 	else {
 		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
-		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
+		KMessageBox::error( 0, i18n("Failed to saveto %1. Please run as root.").arg(KurooConfig::dirPackageKeywords()), i18n("Saving"));
 	}
 }
 
@@ -470,8 +470,8 @@ QString Portage::package( const QString& id )
  */
 QString Portage::packageSummary( const QString& packageId )
 {
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
+	QString package( Portage::package( packageId ) );
+	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );
 
 	QString textLines = "<font size=\"+2\">" + category + "/" + package.section(pv, 0, 0) + "</font><br>";
@@ -588,8 +588,8 @@ QString Portage::changelog( const QString& packageId )
  */
 QString Portage::dependencies( const QString& packageId )
 {
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
+	QString package( Portage::package( packageId ) );
+	QString category( Portage::category( packageId ) );
 	
 	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
 	QFile file( fileName );

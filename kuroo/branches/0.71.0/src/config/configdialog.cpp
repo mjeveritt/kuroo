@@ -60,14 +60,14 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	Options7* opt7 = new Options7( this, i18n("etc warnings") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
-	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt5, i18n("package.keywords"), "kuroo_portagefiles", i18n("Edit your package.keywords file") );
-	addPage( opt4, i18n("package.unmask"), "kuroo_portagefiles", i18n("Edit your package.unmask file") );
-	addPage( opt3, i18n("package.mask"), "kuroo_portagefiles", i18n("Edit your package.mask file") );
-	addPage( opt6, i18n("world"), "kuroo_portagefiles", i18n("Edit your world file") );
-	addPage( opt7, i18n("etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
+	addPage( opt2, i18n("Portage make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
+	addPage( opt5, i18n("Testing packages"), "kuroo_portagefiles", i18n("Edit your package.keywords file") );
+	addPage( opt4, i18n("Unstable packages"), "kuroo_portagefiles", i18n("Edit your package.unmask file") );
+	addPage( opt3, i18n("Protected packages"), "kuroo_portagefiles", i18n("Edit your package.mask file") );
+	addPage( opt6, i18n("World"), "kuroo_portagefiles", i18n("Edit your world file") );
+	addPage( opt7, i18n("Etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
-	connect( this, SIGNAL(settingsChanged()), this, SLOT(saveAll()));
+	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
 	connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
 	
 	readMakeConf();
@@ -100,9 +100,9 @@ void ConfigDialog::readPackageUnmask()
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
+		while ( !stream.atEnd() )
 			lines += stream.readLine();
-		}
+		lines.sort();
 		KurooConfig::setPackageUnmask( lines.join("\n") );
 	}
 	else
@@ -120,9 +120,9 @@ void ConfigDialog::readPackageMask()
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
+		while ( !stream.atEnd() )
 			lines += stream.readLine();
-		}
+		lines.sort();
 		KurooConfig::setPackageMask( lines.join("\n") );
 	}
 	else
@@ -140,9 +140,8 @@ void ConfigDialog::readPackageKeywords()
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
+		while ( !stream.atEnd() )
 			lines += stream.readLine();
-		}
 		lines.sort();
 		KurooConfig::setPackageKeywords( lines.join("\n") );
 	}
@@ -161,9 +160,8 @@ void ConfigDialog::readWorldFile()
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
+		while ( !stream.atEnd() )
 			lines += stream.readLine();
-		}
 		lines.sort();
 		KurooConfig::setWorldFile( lines.join("\n") );
 	}
@@ -544,10 +542,6 @@ void ConfigDialog::exportWorld()
 		case KMessageBox::Yes : {
 			if ( exportToWorld() )
 				KMessageBox::information( this, i18n("Export to world file completed."), i18n("Kuroo") );
-			break;
-		}
-		case KMessageBox::No : {
-			break;
 		}
 	}
 }

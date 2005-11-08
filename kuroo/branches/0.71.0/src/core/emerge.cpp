@@ -374,9 +374,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 			break;
 		}
 		
-		/////////////////////////////////
+		///////////////////////////////////////////////////////
 		// Catch ewarn and einfo messages
-		/////////////////////////////////
+		///////////////////////////////////////////////////////
 		line.replace(QRegExp("\\x001b\\[33;01m*"), "****");
 		line.replace(QRegExp("\\x001b\\[32;01m*"), "****");
 		
@@ -427,9 +427,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 			}
 		}
 		
-		/////////////////////////////////////////////
+		///////////////////////////////////////////////////
 		// Parse emerge output for correct log output
-		/////////////////////////////////////////////
+		//////////////////////////////////////////////////
 		QString lineLower = line.lower();
 		if ( lineLower.contains(QRegExp("^>>>|^!!!")) ) {
 			
@@ -492,9 +492,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
 								importantMessage += line.section("# ", 1, 1) + "<br>";
 	
-		////////////////////////////////////
+		//////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
-		////////////////////////////////////
+		//////////////////////////////////////////////////////
 		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp())) || lastLineFlag || line.contains("**** ") ) ) {
 			QString cleanLine = line.replace('>', "&gt;").replace('<', "&lt;") + "<br>";
 			cleanLine.remove("!!!");
@@ -536,7 +536,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 	proc->ackRead();
 }
 
-
+//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Post emerge stuff
 //////////////////////////////////////////////////////////////////////////////
@@ -639,38 +639,41 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString package = packageKeyword.section("%", 0, 0);
 	QString keyword = (packageKeyword.section("%", 1, 1)).section(" keyword", 0, 0);
 	
-	if ( packageKeyword.contains( "missing keyword" ) ) {
+	kdDebug() << "package=" << package << endl;
+	kdDebug() << "keyword=" << keyword << endl;
+	
+	if ( packageKeyword.contains("missing keyword") ) {
 		importantMessage += i18n("<br><b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
 		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 	}
 	else
-		if ( keyword.contains( "-*" ) ) {
+		if ( keyword.contains("-*") ) {
 			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture. If you believe the package does work file a bug at Gentoo bugzilla website.");
 			Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 		}
 		else {
-			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
-				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
+			QStringList keywordList = QStringList::split(",", keyword.stripWhiteSpace(), false);
+			kdDebug() << "keywordList=" << keywordList << endl;
+			
+			if ( !keywordList.isEmpty() ) {
+				LogSingleton::Instance()->writeLog( i18n("Cannot emerge testing/unstable package %1!.").arg(package.section(pv, 0, 0)), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(pv, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing/unstable package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(pv, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0), KurooConfig::dirPackageUnmask() ) ) {
-							pretend( lastEmergeList );
+						
+						foreach ( keywordList ) {
+							if ( (*it).contains("package.mask") )
+								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0) + " " + keyword, KurooConfig::dirPackageKeywords() ) ) {
+									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.unmask\"."), KUROO );
+									PortageSingleton::Instance()->loadUnmaskedList();
+									pretend( lastEmergeList );
+								}
+							else
+								if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0), KurooConfig::dirPackageUnmask() ) ) {
+									LogSingleton::Instance()->writeLog( i18n("Package added to \"package.keyword\"."), KUROO );
+									pretend( lastEmergeList );
+								}
 						}
-						break;
-					}
-				}
-			}
-			else {
-				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
-				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(pv, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
-					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0) + " " + keyword, KurooConfig::dirPackageKeywords() ) ) {
-							PortageSingleton::Instance()->loadUnmaskedList();
-							pretend( lastEmergeList );
-						}
-						break;
 					}
 				}
 			}

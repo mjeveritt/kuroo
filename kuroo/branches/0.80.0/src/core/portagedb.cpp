@@ -217,7 +217,8 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE results ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
-	      " flags VARCHAR(32))"" ;", conn);
+	      " flags VARCHAR(32))"
+	      " ;", conn);
 	
 	query(" CREATE TABLE history ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "

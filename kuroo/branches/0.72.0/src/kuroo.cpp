@@ -373,10 +373,9 @@ void Kuroo::slotQuit()
 void Kuroo::slotWait()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
-		switch( KMessageBox::questionYesNo( this, 
-			i18n("<qt>Kuroo is busy<br><br>"
-			     "Do you want to quit?<br>"
-			     "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
+		switch( KMessageBox::questionYesNo( this, i18n("<qt>Kuroo is busy<br><br>"
+		                                               "Do you want to quit?<br>"
+		                                               "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 			case KMessageBox::Yes: {
 				ThreadWeaver::instance()->abortAllJobsNamed( "DBJob" );
 				ThreadWeaver::instance()->abortAllJobsNamed( "CachePortageJob" );

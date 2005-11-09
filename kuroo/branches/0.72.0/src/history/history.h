@@ -98,9 +98,8 @@ private:
 	QObject			*parent;
 	KDirWatch		*fileWatcher;
 	EmergeTimeMap	m_statisticsMap;
-	QFile 			log;
+	QFile 			emergeLog;
 	QTextStream 	stream;
-	bool			userSync;
 	
 signals:
 	void			signalHistoryChanged();

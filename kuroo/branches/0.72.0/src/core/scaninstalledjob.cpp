@@ -38,8 +38,7 @@
  * @short Thread for scanning installed packages.
  */
 ScanInstalledJob::ScanInstalledJob( QObject* parent )
-	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted(true)
+	: ThreadWeaver::DependentJob( parent, "DBJob" ), m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted(true)
 {
 }
 

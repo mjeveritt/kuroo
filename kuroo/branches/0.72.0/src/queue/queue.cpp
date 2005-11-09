@@ -40,7 +40,7 @@ public:
 		
 		// Add this package to the world file if not dependency.
 		if ( rowId == 0 ) {
-			QFile file( KurooConfig::dirWorldFile() );
+			QFile file( KurooConfig::fileWorld() );
 			QStringList lines;
 			if ( file.open( IO_ReadOnly ) ) {
 				QTextStream stream( &file );
@@ -61,10 +61,10 @@ public:
 					file.close();
 				}
 				else
-					kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+					kdDebug() << i18n("Error writing: ") << KurooConfig::fileWorld() << endl;
 			}
 			else
-				kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+				kdDebug() << i18n("Error reading: ") << KurooConfig::fileWorld() << endl;
 		}
 		
 		return true;

@@ -289,7 +289,7 @@ void Portage::loadUnmaskedList()
 	unmaskedMap.clear();
 	
 	// Load package.keyword
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
@@ -329,7 +329,7 @@ void Portage::unmaskPackageList( const QString& category, const QStringList& pac
 		QString name = (*it).section(pv, 0, 0);
 		QString package = category + "/" + name;
 	
-		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::dirPackageKeywords() ) )
+		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::filePackageKeywords() ) )
 			break;
 		else
 			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
@@ -374,7 +374,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 		}
 		else {
 			kdDebug() << i18n("Error writing: ") << maskFile << endl;
-			KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
+			KMessageBox::error( 0, i18n("Failed to save to %1. Please run as root.").arg(maskFile), i18n("Saving"));
 			return false;
 		}
 		
@@ -396,7 +396,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  */
 void Portage::clearUnmaskPackageList( const QString& category, const QStringList& packageList )
 {
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	
 	// Store back list of unmasked packages
 	if ( file.open( IO_WriteOnly ) ) {
@@ -419,8 +419,8 @@ void Portage::clearUnmaskPackageList( const QString& category, const QStringList
 		file.close();
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
-		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
+		KMessageBox::error( 0, i18n("Failed to saveto %1. Please run as root.").arg(KurooConfig::filePackageKeywords()), i18n("Saving"));
 	}
 }
 
@@ -470,8 +470,8 @@ QString Portage::package( const QString& id )
  */
 QString Portage::packageSummary( const QString& packageId )
 {
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
+	QString package( Portage::package( packageId ) );
+	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );
 
 	QString textLines = "<font size=\"+2\">" + category + "/" + package.section(pv, 0, 0) + "</font><br>";
@@ -524,7 +524,6 @@ QString Portage::versionSummary( const QString& packageId )
  */
 QString Portage::ebuild( const QString& packageId )
 {
-	kdDebug() << "Portage::ebuild" << endl;
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	
@@ -589,8 +588,8 @@ QString Portage::changelog( const QString& packageId )
  */
 QString Portage::dependencies( const QString& packageId )
 {
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
+	QString package( Portage::package( packageId ) );
+	QString category( Portage::category( packageId ) );
 	
 	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
 	QFile file( fileName );

@@ -41,8 +41,7 @@
  * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
-	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted(true)
+	: ThreadWeaver::DependentJob( parent, "DBJob" ), m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted(true)
 {
 }
 
@@ -226,7 +225,6 @@ bool ScanPortageJob::doJob()
 					QString date = syncDate.toString("yyyy MM dd");
 					
 					if ( scanInfo( path, *itCategory, *itPackage ) ) {
-						
 						QString sqlParam = QString("INSERT INTO package_temp (idCategory, name, version, description, keywords, date, size, homepage, licenses, useFlags, packageSlots, installed) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9'").arg(idCategory).arg(package).arg(version).arg(info.description).arg(info.keywords).arg(date).arg(info.size).arg(info.homepage).arg(info.licenses);
 						
 						sqlParam += QString(",'%1', '%2', 0);").arg(info.useFlags).arg(info.packageSlots);

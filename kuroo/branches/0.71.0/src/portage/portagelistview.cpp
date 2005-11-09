@@ -51,7 +51,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	
 	// Setup geometry
 	addColumn(i18n("Package"));
-	addColumn( " " );
+	addColumn(" ");
 	header()->setLabel( 1, pxQueuedColumn, " " );
 	addColumn(i18n("Size"));
 	addColumn(i18n("Description"));
@@ -91,17 +91,15 @@ QString PortageListView::currentId()
 {
 	if ( !packages.isEmpty() ) {
 		for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-			if ( it.current()->text(0) == this->currentItem()->text(0) ) {
+			if ( it.current()->text(0) == this->currentItem()->text(0) )
 				return it.currentKey();
-			}
-			else {
+			else
 				if ( it.current()->text(0).section(pv, 0, 0) == this->currentItem()->text(0) )
 					return it.currentKey();
-			}
 		}
 	}
-	else
-		return i18n("na");
+
+	return i18n("na");
 }
 
 /**
@@ -131,9 +129,8 @@ QStringList PortageListView::selectedPackages()
 	QStringList packageList;
 	QListViewItemIterator it(this);
 	for ( ; it.current(); ++it )
-		if ( it.current()->isSelected() ) {
+		if ( it.current()->isSelected() )
 			packageList += it.current()->text(0);
-		}
 		
 	return packageList;
 }
@@ -146,7 +143,6 @@ QStringList PortageListView::selectedPackages()
 void PortageListView::addCategoryPackages( const QString& category )
 {
 	PackageItem *packageItem, *versionItem;
-	static bool packageInstalled(false);
 	
 	reset();
 	packageItems.clear();
@@ -168,19 +164,16 @@ void PortageListView::addCategoryPackages( const QString& category )
 		packageMeta.insert(i18n("4Size"), size);
 		
 		// A version of a package may be installed but not actual in Portage anymore.
-		if ( installed == "2" )
-			packageInstalled = true;
+		// Mark package as installed even when the version is not available in Portage.
+		if ( installed == "2" ) {
+			if ( packageItems.contains(name) )
+				(packageItems[name].item)->setStatus(INSTALLED);
+		}
 		else {
 			if ( !packageItems.contains(name) ) {
 				packageItem = new PackageItem( this, name, packageMeta, PACKAGE );
 				packageItem->setExpandable(true);
 				packageItems[name].item = packageItem;
-				
-				// Mark package as installed even when the version is not available in Portage.
-				if ( packageInstalled ) {
-					packageItem->setStatus(INSTALLED);
-					packageInstalled = false;
-				}
 			}
 			
 			if ( !packageItems[name].versionItems.contains(version) ) {

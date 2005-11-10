@@ -163,7 +163,7 @@ void ConfigDialog::readWorldFile()
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
 		lines.sort();
-		KurooConfig::setWorldFile( lines.join("\n") );
+		KurooConfig::setWorld( lines.join("\n") );
 	}
 	else
 		kdDebug() << i18n("Error reading: ") << KurooConfig::fileWorld() << endl;
@@ -438,7 +438,7 @@ bool ConfigDialog::saveWorldFile()
 	QFile file( KurooConfig::fileWorld() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
-		stream << KurooConfig::worldFile();
+		stream << KurooConfig::world();
 		file.close();
 		return true;
 	}

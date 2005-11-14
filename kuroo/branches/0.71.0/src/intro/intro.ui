@@ -1727,7 +1727,7 @@ Press "Finish" to launch kuroo and load the views with your systems packages.&lt
 &lt;font color="red"&gt;&lt;b&gt;&lt;p&gt;&lt;font size="+1"&gt;Important as of version 0.71.0&lt;/font&gt;&lt;br&gt;
 1. Run "regenworld" from console as root to update the list of installed packages. You may want to clear "/var/lib/portage/world" first.&lt;br&gt;
 Only packages in Queue when emerge starts are added to world file, and not their dependencies.&lt;br&gt;
-2. Kuroo cache is moved to "/var/kuroo".&lt;/b&gt;&lt;/p&gt;&lt;/font&gt;</string>
+2. Kuroo home is moved to "/var/cache/kuroo".&lt;/b&gt;&lt;/p&gt;&lt;/font&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">

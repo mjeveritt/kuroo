@@ -486,7 +486,7 @@ QStringList KurooDB::lastHistoryEntry()
 
 QStringList KurooDB::getLastSync()
 {
-	return query(" SELECT timestamp "
+	return query(" SELECT date "
 	             " FROM history "
 	             " WHERE id = (SELECT MAX(id) FROM history where package = '');");
 }

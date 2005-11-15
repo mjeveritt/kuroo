@@ -1,3 +1,4 @@
+# translation of de.po to German
 # translation of kuroo.po to German
 # Translation of kuroo.po to German
 # This file is distributed under the same license as the Kuroo package.
@@ -7,11 +8,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: kuroo\n"
+"Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-02 15:28+0200\n"
-"PO-Revision-Date: 2005-10-23 08:38+0200\n"
-"Last-Translator: German Language-Pack <eagle@eagle-cage.de>\n"
+"PO-Revision-Date: 2005-11-15 16:17+0100\n"
+"Last-Translator: Eagle <eagle@eagle-cage.de>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -1031,7 +1032,7 @@ msgstr ""
 "<p><b>Gentoo Linux Security Advisories<br>(Gentoo Linux Sicherheitsratgeber)</b><br>\n"
 "GLSA und die neuesten Pakete dank \"Gentoo Watcher\" in der Systemleiste."
 "<br>\n"
-"Suche nach Paketen mit \"GLSA-Check\" (experimentell).</p>\n"
+"Suche nach Paketen mit \"glsa-check\" (experimentell).</p>\n"
 "\n"
 "<p><b>etc-Änderungen durch Emerge</b><br>\n"
 "Aktualisierung der etc-Dateien mit externem \"diff\"-Programm (etc-update) inkl. Warnungen.</p>"
@@ -1056,17 +1057,15 @@ msgid ""
 "disabled by default.<br>\n"
 "Launch Gentoo Watcher from KMenu->System."
 msgstr ""
-"<p><font size=\"+2\">Live package and Glsa checks</font></p>\n"
-"<p>Gentoo Watcher is a small system tray application watching rss feeds from "
-"<a href=\"www.gentoo.org\">gentoo.org</a> for latest packages.\n"
-"The watcher also checks latest Gentoo Linux Security Advisories.</p>\n"
-"<p>Right-click on a package to send it to Kuroo for emerging.\n"
-"Right-clicking on a Glsa opens the concerning page at <a href=\"http://www."
-"gentoo.org\">gentoo.org</a> in your browser.</p>\n"
-"Gentoo Watcher now supports the new \"glsa-check\" (experimental).\n"
-"Gentoo Watcher (kuroo_watcher) is placed in autostart for all user and "
-"disabled by default.<br>\n"
-"Launch Gentoo Watcher from KMenu->System."
+"<p><font size=\"+2\">Suche nach Live package und GLSA- checks</font></p>\n"
+"<p>Gentoo Watcher ist eine kleine Anwendung in der Systemleiste, die die RSS-Feeds von <a href=\"www.gentoo.org\">Gentoo.org</a> auf neueste Pakete hin überwacht.\n"
+"Außerdem werden die aktuellsten Meldungen des Gentoo Linux Sicherheitsratgebers (GLSA) angezeigt.</p>\n"
+"<p>Per Rechtsklick auf ein Paket wird Kuroo gestartet und das Paket installiert.\n"
+"Ein Rechtsklick auf eine GLSA-Meldung öffnet die entsprechende Website auf <a href=\"http://www."
+"gentoo.org\">Gentoo.org</a> im Webbrowser.</p>\n"
+"Gentoo Watcher unterstützt nun den neuen \"glsa-check\" (experimentell).\n"
+"Gentoo Watcher (Kuroo_Watcher) ist im Autostart-Ordner von jedem Benutzer und standardmäßig deaktiviert.<br>\n"
+"Gentoo Watcher kann via KMenu->System gestartet werden."
 
 #: rc.cpp:103
 #, no-c-format
@@ -1470,72 +1469,72 @@ msgstr "Architektur"
 #: rc.cpp:339
 #, no-c-format
 msgid "alpha"
-msgstr "Alpha"
+msgstr "alpha"
 
 #: rc.cpp:342
 #, no-c-format
 msgid "amd64"
-msgstr "AMD64"
+msgstr "amd64"
 
 #: rc.cpp:345
 #, no-c-format
 msgid "arm"
-msgstr "ARM"
+msgstr "arm"
 
 #: rc.cpp:348
 #, no-c-format
 msgid "hppa"
-msgstr "HPPA"
+msgstr "hppa"
 
 #: rc.cpp:351
 #, no-c-format
 msgid "ia64"
-msgstr "IA64"
+msgstr "ia64"
 
 #: rc.cpp:354
 #, no-c-format
 msgid "m68k"
-msgstr "M68K"
+msgstr "m68k"
 
 #: rc.cpp:357
 #, no-c-format
 msgid "mips"
-msgstr "MIPS"
+msgstr "mips"
 
 #: rc.cpp:360
 #, no-c-format
 msgid "ppc"
-msgstr "PPC"
+msgstr "ppc"
 
 #: rc.cpp:363
 #, no-c-format
 msgid "ppc64"
-msgstr "PPC64"
+msgstr "ppc64"
 
 #: rc.cpp:366
 #, no-c-format
 msgid "ppc-macos"
-msgstr "PPC-MacOS"
+msgstr "ppc-macos"
 
 #: rc.cpp:369
 #, no-c-format
 msgid "ppc-od"
-msgstr "PPC-OD"
+msgstr "ppc-od"
 
 #: rc.cpp:372
 #, no-c-format
 msgid "s390"
-msgstr "S390"
+msgstr "s390"
 
 #: rc.cpp:375
 #, no-c-format
 msgid "sh"
-msgstr "SH"
+msgstr "sh"
 
 #: rc.cpp:378
 #, no-c-format
 msgid "sparc"
-msgstr "SPARC"
+msgstr "sparc"
 
 #: rc.cpp:381
 #, no-c-format
@@ -1545,17 +1544,17 @@ msgstr "x86"
 #: rc.cpp:384
 #, no-c-format
 msgid "x86-fbsd"
-msgstr "x86-FBSD"
+msgstr "x86-fbsd"
 
 #: rc.cpp:387
 #, no-c-format
 msgid "x86-obsd"
-msgstr "x86-OBSD"
+msgstr "x86-obsd"
 
 #: rc.cpp:390
 #, no-c-format
 msgid "x86-od"
-msgstr "x86-OD"
+msgstr "x86-od"
 
 #: rc.cpp:396
 #, no-c-format

@@ -371,7 +371,6 @@ void ConfigDialog::saveAll()
 				show();
 				KMessageBox::error( this, i18n("Failed to save world file. Please run as root."), i18n("Saving"));
 			}
-			break;
 		}
 	}
 }

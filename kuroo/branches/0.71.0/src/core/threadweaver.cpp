@@ -139,7 +139,8 @@ bool ThreadWeaver::event( QEvent *e )
 			kdDebug() << "Job completed" << ": " << name << endl;
 			job->completeJob();
 		}
-		else kdDebug() << "Job aborted" << ": " << name << endl;
+		else
+			kdDebug() << "Job aborted" << ": " << name << endl;
 
 		m_jobs.remove( job );
 		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;

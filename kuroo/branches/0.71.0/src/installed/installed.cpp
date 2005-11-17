@@ -147,8 +147,6 @@ void Installed::slotReset()
  */
 bool Installed::slotRefresh()
 {
-	kdDebug() << "Installed::slotRefresh" << endl;
-	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanInstalledJob( this ) );
 	return true;

@@ -119,8 +119,6 @@ void UpdatesTab::slotInit()
  */
 void UpdatesTab::slotReload()
 {
-	kdDebug() << "UpdatesTab::slotReload" << endl;
-	
 	saveCurrentView();
 	packagesView->reset();
 	updatesList->reset();
@@ -161,7 +159,7 @@ void UpdatesTab::slotBusy( bool b )
 }
 
 /**
- * Fill the right listView with all upgradable packages.
+ * Fill the package listView with all upgradable packages.
  * Restore updates packages view.
  */
 void UpdatesTab::slotListPackages()
@@ -271,7 +269,6 @@ void UpdatesTab::contextMenu( KListView *listView, QListViewItem *item, const QP
 		
 		case GOTOLIST: {
 			SignalistSingleton::Instance()->viewPackage( updatesList->currentPackage() );
-			break;
 		}
 	}
 }

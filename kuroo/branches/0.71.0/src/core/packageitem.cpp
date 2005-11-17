@@ -49,7 +49,7 @@ PackageItem::~PackageItem()
 {}
 
 /**
- * Insert package meta text into the right column.
+ * Insert package meta text into corresponding column.
  */
 void PackageItem::init()
 {
@@ -169,7 +169,6 @@ void PackageItem::setStatus( int status )
 			}
 			setPixmap(1, NULL);
 			repaint();
-			break;
 	}
 }
 
@@ -190,10 +189,10 @@ int PackageItem::compare( QListViewItem* i, int col, bool ascending ) const
 		a = a.section(" kB", 0, 0).rightJustify( b.length(), '0' );
 		b = b.section(" kB", 0, 0).rightJustify( a.length(), '0' );
 
-		if (a == b)
+		if ( a == b )
 			return 0;
 		
-		if (ascending)
+		if ( ascending )
 			return a > b ? 1 : -1;
 		else
 			return a < b ? -1 : 1;
@@ -233,7 +232,6 @@ void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int
 				font.setBold(true);
 				p->setFont(font);
 				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
-				break;
 		}
 	}
 	KListViewItem::paintCell( p, _cg, column, width, alignment );

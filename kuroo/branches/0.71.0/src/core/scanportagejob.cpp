@@ -41,7 +41,7 @@
  * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
-	: ThreadWeaver::DependentJob( parent, "DBJob" ), m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted(true)
+	: ThreadWeaver::DependentJob( parent, "DBJob" ), m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted( true )
 {
 }
 

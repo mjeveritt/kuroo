@@ -47,7 +47,6 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	pxRepository = ldr->loadIcon("kuroo_repository", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true);
 		
 	addColumn(i18n("Category"));
-	header()->setLabel(header()->count() - 1, i18n("Category"));
 	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()));
 	setMinimumSize(QSize(150, 0));
 	setShowSortIndicator(true);

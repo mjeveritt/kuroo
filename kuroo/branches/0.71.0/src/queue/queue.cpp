@@ -38,8 +38,6 @@ public:
 		packageId = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version)).first();
 		int rowId = KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue (idPackage) VALUES ('%1');").arg(packageId));
 		
-		kdDebug() << "AddQueuePackageJob rowId=" << rowId << endl;
-		
 		// Add this package to the world file if not dependency.
 		// If package already present in queue insert will return rowId = 0.
 		if ( rowId == 0 ) {

@@ -133,7 +133,6 @@ void IntroDlg::next()
 			switch (KMessageBox::warningYesNoList(this, i18n("Error checking paths..."), error, i18n("Kuroo"), KGuiItem::KGuiItem(i18n("Continue")), KGuiItem::KGuiItem(i18n("Cancel")))) {
 				case KMessageBox::Yes : {
 					QWizard::next();
-					break;
 				}
 			}
 		}

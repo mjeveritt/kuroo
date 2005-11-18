@@ -201,13 +201,14 @@ void InstalledTab::contextMenu( KListView*, QListViewItem* item, const QPoint& p
 	if ( !item )
 		return;
 		
-	enum Actions { UPGRADE_PRETEND, APPEND, UPGRADE, EMERGE, UNMERGE,  DEPEND };
+	enum Actions { UPGRADE_PRETEND, APPEND, UPGRADE, EMERGE, UNMERGE,  DEPEND, UNMARK };
 	
 	KPopupMenu menu(this);
 	int menuItem1 = menu.insertItem(i18n("&Upgrade pretend"), UPGRADE_PRETEND);
 	int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
 	int menuItem4 = menu.insertItem(i18n("&Install now"), EMERGE);
 	int menuItem5 = menu.insertItem(i18n("Unin&stall"), UNMERGE);
+	int menuItem6 = menu.insertItem(i18n("Unmark as end-user"), UNMARK);
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
@@ -217,6 +218,15 @@ void InstalledTab::contextMenu( KListView*, QListViewItem* item, const QPoint& p
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
 		menu.setItemEnabled( menuItem4, false );
 		menu.setItemEnabled( menuItem5, false );
+	}
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+		menu.setItemEnabled( menuItem4, false );
+		menu.setItemEnabled( menuItem5, false );
+	}
+	
+	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+		menu.setItemEnabled( menuItem6, false );
 	}
 	
 	switch( menu.exec(point) ) {
@@ -238,6 +248,11 @@ void InstalledTab::contextMenu( KListView*, QListViewItem* item, const QPoint& p
 		
 		case UNMERGE: {
 			slotUnmerge();
+			break;
+		}
+		
+		case UNMARK: {
+			PortageSingleton::Instance()->removeWorldList( categoriesView->currentCategory(), packagesView->selectedPackages() );
 			break;
 		}
 		

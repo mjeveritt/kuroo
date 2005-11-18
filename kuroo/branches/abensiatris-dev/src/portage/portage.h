@@ -191,6 +191,13 @@ public slots:
 	bool						isWorld( const QString& package );
 	
 	/**
+	* Remove packages from world.
+	* @param category
+	* @param packageList
+	*/
+	void						removeWorldList( const QString& category, const QStringList& packageList );
+	
+	/**
 	 * Methods for parsing info files.
 	 */
 	QString						packageSummary( const QString& packageId );

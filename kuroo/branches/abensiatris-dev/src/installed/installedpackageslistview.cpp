@@ -146,10 +146,11 @@ void InstalledPackagesListView::addCategoryPackages( const QString& category )
 			// Found as Unmasked
 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
 				packageItem->setStatus(UNMASKED);
-			// Found in world file
-			if ( PortageSingleton::Instance()->isWorld( category + "/" + name ) )
-				packageItem->setStatus(INSTALLED_WORLD);
 		}
+		
+		// Found in world file
+		if ( PortageSingleton::Instance()->isWorld( category + "/" + name ) )
+			packageItem->setStatus(INSTALLED_WORLD);
 		
 		insertPackage( idDB, packageItem );
 	}

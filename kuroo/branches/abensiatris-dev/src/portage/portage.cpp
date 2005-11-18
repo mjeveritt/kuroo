@@ -666,6 +666,50 @@ bool Portage::isWorld( const QString& package )
 }
 
 
+/**
+ * Remove packages from world.
+ * @param category
+ * @param packageList
+ */
+void Portage::removeWorldList( const QString& category, const QStringList& packageList )
+{
+	QFile file( KurooConfig::dirWorldFile() );
+	
+	if ( file.open( IO_WriteOnly ) )
+	{
+		QTextStream stream( &file );
+		
+		foreach ( packageList )
+		{
+			QString package = category + "/" + (*it).section(pv, 0, 0);
+			worldMap.remove( package );
+			
+			// Signal to gui to mark package as not in world
+			QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
+			QString name( temp.section(pv, 0, 0) );
+			// i can't create the right singal :(
+			// SignalistSingleton::Instance()->setUnmasked(name, false);
+			
+		}
+		
+		QMap< QString, QString >::iterator itMapEnd = worldMap.end();
+		
+		for ( QMap< QString, QString >::iterator itMap = worldMap.begin(); itMap != itMapEnd; ++itMap )
+		{
+			stream << itMap.key() + " " + itMap.data() + "\n";
+		}
+		
+		file.close();
+	}
+	else
+	{
+		kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
+	}
+	
+
+}
+
 
 
 #include "portage.moc"

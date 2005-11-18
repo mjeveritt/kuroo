@@ -5,13 +5,14 @@
 # Roman Fordinal (Aben) <fordinal@webcom.sk>, 2005.
 # Roman Fordinal (Aben) <fordinal@webcom.sk>, 2005.
 # Roman Fordinal (Aben) <fordinal@webcom.sk>, 2005.
+# Roman Fordinal (Aben) <fordinal@webcom.sk>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: sk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-07 20:09+0200\n"
-"PO-Revision-Date: 2005-11-04 20:59+0100\n"
+"PO-Revision-Date: 2005-11-07 21:50+0100\n"
 "Last-Translator: Roman Fordinal (Aben) <fordinal@webcom.sk>\n"
 "Language-Team: Slovak\n"
 "MIME-Version: 1.0\n"
@@ -80,7 +81,7 @@ msgstr "%1 sa nemôže spustiť."
 
 #: core/etcupdate.cpp:181
 msgid "%1 could not start!"
-msgstr ""
+msgstr "%1 sa nemôže spustiť."
 
 #: core/etcupdate.cpp:185
 msgid "Merging changes in '%1'."
@@ -147,7 +148,7 @@ msgstr ""
 
 #: core/emerge.cpp:282
 msgid "Unmerging packages..."
-msgstr ""
+msgstr "Odinštalovávanie balíčkov..."
 
 #: core/emerge.cpp:313
 msgid ""
@@ -157,7 +158,7 @@ msgstr ""
 
 #: core/emerge.cpp:314
 msgid "Synchronizing portage tree..."
-msgstr ""
+msgstr "Synchronizácia stromu balíčkovacieho systému"
 
 #: core/emerge.cpp:352
 msgid ""
@@ -181,7 +182,7 @@ msgstr ""
 #: core/scanupdatesjob.cpp:153 core/scaninstalledjob.cpp:206
 #: queue/queuetab.cpp:350 history/history.cpp:258
 msgid "Done."
-msgstr ""
+msgstr "Hotovo."
 
 #: core/emerge.cpp:541 core/emerge.cpp:617
 msgid "Blocks"
@@ -226,7 +227,7 @@ msgstr ""
 
 #: core/cacheportagejob.cpp:69 core/scaninstalledjob.cpp:71
 msgid "Counting packages..."
-msgstr ""
+msgstr "Počítanie balíčkov..."
 
 #: core/cacheportagejob.cpp:99
 msgid "Collecting package information..."
@@ -246,7 +247,7 @@ msgstr ""
 #: portage/portagetab.cpp:411 portage/portagetab.cpp:456
 #: portage/usedialog.cpp:68 portage/portage.cpp:350
 msgid "Error reading: "
-msgstr ""
+msgstr "Chyba čítania:"
 
 #: core/packageitem.cpp:35 core/packageitem.cpp:43
 msgid "1Package"
@@ -267,11 +268,11 @@ msgstr ""
 
 #: core/packageitem.cpp:136
 msgid "Masked"
-msgstr ""
+msgstr "Zablokované"
 
 #: core/packageitem.cpp:142
 msgid "Unmasked"
-msgstr ""
+msgstr "Oblokované"
 
 #: core/packageitem.cpp:148 core/packageitem.cpp:157
 msgid "9In Queue"
@@ -282,7 +283,7 @@ msgstr ""
 #: updates/updatelistview.cpp:55 updates/updatepackageslistview.cpp:52
 #: installed/installedpackageslistview.cpp:54 portage/portagelistview.cpp:56
 msgid "Size"
-msgstr ""
+msgstr "Veľkosť"
 
 #: core/packageitem.cpp:189 results/resultlistview.cpp:52
 #: updates/updatelistview.cpp:56
@@ -295,7 +296,7 @@ msgstr ""
 
 #: core/scanportagejob.cpp:124 core/scanportagejob.cpp:143
 msgid "Portage scan aborted"
-msgstr ""
+msgstr "Skenovanie stromu balíčkov prerušené"
 
 #: core/scanportagejob.cpp:192 core/scanportagejob.cpp:214
 msgid "Portage Overlay scan aborted"
@@ -303,7 +304,7 @@ msgstr ""
 
 #: core/scanupdatesjob.cpp:75
 msgid "No update package found"
-msgstr ""
+msgstr "Neboli nájdene žiadne nové balíčky na reinštaláciu"
 
 #: core/scanupdatesjob.cpp:79
 msgid "Refreshing updates view..."
@@ -333,7 +334,7 @@ msgstr ""
 
 #: core/categorieslistview.cpp:49 core/categorieslistview.cpp:50
 msgid "Category"
-msgstr ""
+msgstr "Kategória"
 
 #: core/tooltip.cpp:76 results/resultlistview.cpp:53
 #: updates/updatelistview.cpp:54
@@ -342,7 +343,7 @@ msgstr ""
 
 #: core/tooltip.cpp:79
 msgid "New, (not yet installed)<br>"
-msgstr ""
+msgstr "Nový, (ešte nenainštalovaný)"
 
 #: core/tooltip.cpp:82
 msgid "New slot installation (side-by-side versions)<br>"
@@ -350,7 +351,7 @@ msgstr ""
 
 #: core/tooltip.cpp:85
 msgid "Update, (changing versions)<br>"
-msgstr ""
+msgstr "Reinštalácia, (zmena verzií)"
 
 #: core/tooltip.cpp:88
 msgid "Downgrade, (Best version seems lower)<br>"

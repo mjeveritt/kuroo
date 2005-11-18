@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 20:42+0100\n"
-"PO-Revision-Date: 2005-11-16 20:50+0000\n"
+"POT-Creation-Date: 2005-11-17 17:17+0100\n"
+"PO-Revision-Date: 2005-11-18 20:16+0000\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1200,15 +1200,15 @@ msgstr "&Resultater (%1)"
 msgid "Form2"
 msgstr "Skjema2"
 
-#: rc.cpp:7
+#: rc.cpp:7 rc.cpp:93
 #, no-c-format
-msgid "&Clear"
-msgstr "Tøm"
+msgid "Cle&ar"
+msgstr "&Tøm"
 
-#: rc.cpp:10
+#: rc.cpp:10 rc.cpp:96 rc.cpp:420
 #, no-c-format
-msgid "Alt+C"
-msgstr "Alt+C"
+msgid "Alt+A"
+msgstr "Alt+A"
 
 #: rc.cpp:13
 #, no-c-format
@@ -1217,10 +1217,10 @@ msgstr "Tøm resultatkøen"
 
 #: rc.cpp:16
 #, no-c-format
-msgid "Appe&nd all"
-msgstr "&Legg til alle"
+msgid "Appe&nd all packages to Queue!"
+msgstr "Legg alle pakke&ne til i køen."
 
-#: rc.cpp:19 rc.cpp:105 rc.cpp:420
+#: rc.cpp:19 rc.cpp:105
 #, no-c-format
 msgid "Alt+N"
 msgstr "Alt+N"
@@ -1321,16 +1321,6 @@ msgstr "Alt+G"
 #, no-c-format
 msgid "Emerge packages in installation queue"
 msgstr "Installer pakker i installasjonskøen"
-
-#: rc.cpp:93
-#, no-c-format
-msgid "Cle&ar"
-msgstr "&Tøm"
-
-#: rc.cpp:96
-#, no-c-format
-msgid "Alt+A"
-msgstr "Alt+A"
 
 #: rc.cpp:99
 #, no-c-format
@@ -1837,9 +1827,13 @@ msgstr ""
 "visningsinnstillinger til standardverdiene.</p>\n"
 "<p><b>En oppgradering av Kuroo tømmer pakkedatabasen.</b></p>\n"
 "<br>\n"
-"<font color=\"red\"><b><p><fot size=\"+1\">Viktig fra og med 0.71.0</font><br>\n"
-"1 Kjør «regenworld» fra konsollet som «root» for å oppdatere listen over installerte pakker. Det er mulig du også ønsker å tømme «/var/lib/portage/world» først.<br>\n"
-"Kun pakkene i køen når installasjonen starter legges til i verdensfilen, ikke deres avhengigheter.<br>\n"
+"<font color=\"red\"><b><p><fot size=\"+1\">Viktig fra og med 0.71.0</"
+"font><br>\n"
+"1 Kjør «regenworld» fra konsollet som «root» for å oppdatere listen over "
+"installerte pakker. Det er mulig du også ønsker å tømme «/var/lib/portage/"
+"world» først.<br>\n"
+"Kun pakkene i køen når installasjonen starter legges til i verdensfilen, "
+"ikke deres avhengigheter.<br>\n"
 "2 Kuroos hjemmekatalog er flyttet til «/var/cache/kuroo».</b></p></font>"
 
 #: rc.cpp:393
@@ -1864,8 +1858,8 @@ msgstr "Avhe&ngigheter"
 
 #: rc.cpp:417
 #, no-c-format
-msgid "I&nstall all updates!"
-msgstr "I&nstaller alle oppdateringer."
+msgid "&Append all updates to Queue!"
+msgstr "Legg til &alle oppdateringene i køen."
 
 #: rc.cpp:426
 #, no-c-format

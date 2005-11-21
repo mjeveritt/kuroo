@@ -44,7 +44,7 @@
 		<entry name="noticeRegExp" type="String">
 			<default>^!!!</default>
 		</entry>
-		<entry name="worldFile" type="String">
+		<entry name="World" type="String">
 		</entry>
 		<entry name="FileWorld" type="String">
 			<default>/var/lib/portage/world</default>

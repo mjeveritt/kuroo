@@ -132,8 +132,6 @@ void UseDialog::edit( const QString& newPackage )
  */
 void UseDialog::slotApply()
 {
-	kdDebug() << "PortageTab::slotApply" << endl;
-	
 	QString useFlags;
 	QStringList lines;
 

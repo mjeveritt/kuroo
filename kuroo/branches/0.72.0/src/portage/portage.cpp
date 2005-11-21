@@ -121,7 +121,7 @@ void Portage::setRefreshTime()
 {
 	QDateTime t(QDateTime::currentDateTime());
 	QString timeStamp = QString::number(t.toTime_t());
-	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("yyyy MM dd hh:mm")).arg(timeStamp) );
+	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("MMM dd yyyy hh:mm")).arg(timeStamp) );
 }
 
 /**

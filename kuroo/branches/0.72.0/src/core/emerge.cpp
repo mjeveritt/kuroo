@@ -500,8 +500,6 @@ void Emerge::readFromStdout( KProcIO *proc )
 			QString cleanLine = line.replace('>', "&gt;").replace('<', "&lt;") + "<br>";
 			cleanLine.remove("!!!");
 			
-			kdDebug() << "cleanLine=" << cleanLine << endl;
-			
 			if ( line.endsWith(":") )
 				lastLineFlag = true;
 				else
@@ -640,9 +638,6 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString package = packageKeyword.section("%", 0, 0);
 	QString keyword = (packageKeyword.section("%", 1, 1)).section(" keyword", 0, 0);
 	
-	kdDebug() << "package=" << package << endl;
-	kdDebug() << "keyword=" << keyword << endl;
-	
 	if ( packageKeyword.contains("missing keyword") ) {
 		importantMessage += i18n("<br><b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
 		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
@@ -654,7 +649,6 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 		}
 		else {
 			QStringList keywordList = QStringList::split(",", keyword, false);
-			kdDebug() << "keywordList=" << keywordList << endl;
 			
 			if ( !keywordList.isEmpty() ) {
 				LogSingleton::Instance()->writeLog( i18n("Cannot emerge testing/unstable package %1!.").arg(package.section(pv, 0, 0)), ERROR );

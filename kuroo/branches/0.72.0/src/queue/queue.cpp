@@ -39,23 +39,31 @@ public:
 		int rowId = KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue (idPackage) VALUES ('%1');").arg(packageId));
 		
 		// Add this package to the world file if not dependency.
+		// If package already present in queue insert will return rowId = 0.
 		if ( rowId == 0 ) {
 			QFile file( KurooConfig::fileWorld() );
 			QStringList lines;
 			if ( file.open( IO_ReadOnly ) ) {
+				
+				// Collect all lines
 				QTextStream stream( &file );
 				while ( !stream.atEnd() )
 					lines += stream.readLine();
 				file.close();
 				
+				// Check to see if already present
 				if ( file.open( IO_WriteOnly ) ) {
 					bool found;
 					QTextStream stream( &file );
 					foreach ( lines ) {
 						stream << *it << endl;
-						if ( *it == ( category + "/" + name ) )
+						if ( (*it).contains( category + "/" + name ) ) {
 							found = true;
+							break;
+						}
 					}
+					
+					// If not present, append it
 					if ( !found )
 						stream << category + "/" + name << endl;
 					file.close();

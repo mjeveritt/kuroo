@@ -47,10 +47,11 @@ History::~History()
 	fileWatcher = 0;
 }
 
+/**
+ * Open the emerge log file.
+ */
 void History::init( QObject *myParent )
 {
-	kdDebug() << "History::init" << endl;
-	
 	parent = myParent;
 	if ( !emergeLog.open(IO_ReadOnly) )
 		kdDebug() << i18n("Error reading %1").arg(KurooConfig::fileEmergeLog()) << endl;
@@ -64,8 +65,6 @@ void History::init( QObject *myParent )
  */
 void History::slotInit()
 {
-	kdDebug() << "History::slotInit" << endl;
-	
 	emergeLog.setName(KurooConfig::fileEmergeLog());
 	loadTimeStatistics();
 	
@@ -185,10 +184,8 @@ QStringList History::allHistory()
  */
 void History::slotParse()
 {
-	kdDebug() << "History::slotParse" << endl;
-	
 	static QString emergeDate("");
-	static bool syncDone(false);
+	static bool syncDone( false );
 	QStringList emergeLines;
 	
 	while ( !stream.atEnd() )

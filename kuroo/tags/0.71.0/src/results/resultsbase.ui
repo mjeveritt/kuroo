@@ -1,0 +1,169 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ResultsBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ResultsBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>478</width>
+            <height>363</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox8_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>250</height>
+                </size>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>0</number>
+                </property>
+                <widget class="QLayoutWidget" row="1" column="0">
+                    <property name="name">
+                        <cstring>layout39</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>3</number>
+                        </property>
+                        <property name="spacing">
+                            <number>5</number>
+                        </property>
+                        <spacer row="0" column="0">
+                            <property name="name">
+                                <cstring>spacer11</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>MinimumExpanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>0</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>pbClear</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Cle&amp;ar</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image0</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Empty results queue</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="2">
+                            <property name="name">
+                                <cstring>pbAppendAll</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Appe&amp;nd all packages to Queue!</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+N</string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image1</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Add all packages in result queue to the installation queue</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="ResultListView" row="0" column="0">
+                    <property name="name">
+                        <cstring>resultView</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>ResultListView</class>
+        <header location="local">resultlistview.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>3</hordata>
+            <verdata>3</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image2</pixmap>
+        <property type="String">name</property>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="586">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000021149444154388d9d924f4893711cc63fafdb5eb77773b6573237515bf192636d0b6141b4084f1da4a0439d0a24bad4611d233a46878a0a3a7818b14e1ddc2103a5c24b100829c38a6ae62465229bd25aee30e7f4b7f7d7c54349daea397d79e0f3f0fd078deb0af064bbd9f40f01de5feaa340fbff06dc3f75ac6bd2f0bb17b7821ad618f029e4759a9343bdf2d1eda004ae5bff0285011d9802bc5645095e3deea36ec2e3a7391378b91b7cf1a0bbc53c1bf24b8f535d024aa7bd1d72f4f26179ed9c4f027700941de0368fcdb670af2fdce2deb789e27330f271999395562cbd1bc447e616d66af52050dd69899d7ebfdfd91c0802a099152ec55a51f5265ee45659abd5a700eb8e1da8aa3a9c4ea7cf97cb650aefdfd23c378adb53c4e93571faec8c7f58e7d6c3af855269b3cfb2c59c0102c001e0463299bc108d46d1759dd6ce1e7eb80daa1b265a538e66578dd0913a1d3d9e9657e3a5552bd06eb7db9fc7e37125128960180686612084400881a66904c311be797d2cce0511b53134b2acac0880650b501142bc9e9898d0bbbbbb0ff5f7f72b369b8d6ab58aa22898a68910025555d1f776a1b84f30fc2ccddd07ef964c93c1ede31bc0d0c0c0c0faf4f4b42c140a727e7e5e66b35999c96464b15894894442026f80fdbbfd401b703310087c4fa55272767656e6f379393333235d2e570ed8b31bfcdb41804187c3f139168b494dd3be00d146e1edeaf893f913067fbc1d09327ff90000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="502">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000001bd49444154388dcd90bf6b136118c73f7789f1304d7a38c9f30f38081268a690214621a408b545b2ba54441c1487105028011552750962a40e1504872eb1bba62088e06250070525387550ec95dcbdf7dec9119724b6268293f8c003cff7f9f1791e1ef8afac56abd16eb749a7d353ebe572996c36fb67402e97a3d7ebd16ab5109137223218fa7aa3d1a0d96c924c26ffee1a1119dc7dd11cdc7c7e6720225b9d4e877abd3ed117df2bd637df114511cb4b190054a8f1c3008062b108c0d16373cce51778f96c832f9fdfef075cbb586a03b68800e069850a35404644b600fa3bdb4e227564318aa2c90b8033971e5f45ff08f0c380be5678814ffec6bced06aae06ac5a7dbaf492412188639158017f8f8a146851a15f87881c2d523f70048cda4304c632ae0e9a3e5963d8c0bd99593b85af1a1f1ca01bac3bc934ecd6018530017aaf7160156ae2c21220347f5717d0fa05b387dfec4f16c81f88138a6618e01e65e80198b9138688db5e3edb2e3ed02f064adce83d5cb7cffba8d6559c4cc5f3f5800360166edc358d6a1d17cf7dbfd8f99116b63152ad5b7dcaa56c89f3a8befbbe345e77e7f2440a954daa7ed143cbc0e95fc64efec34c03fb39f5a86a3ed14a583f60000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="1125">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000042c49444154388db5954f6c14551cc73fefcd7476b65bdaae4bb78bb5502a14d404e4801c88182d1c4c2c693da847400f9c24c68b878684238660e2b1e01f12c19493012ef2478c814412d354a46017a8a564bb6da5bbedccee767776e63d0ffb073751d483bfe49799974c3eeffb7ebf37df9fd05a530b2184040cc0042420aaf9a4d0d554800f045a6b256ae0e1e1e1d6bebebe838ee31c48a7d39b5cd7fd075e251cc7617272f2ded8d8d819cff33e0316819259537aead4a9839d5dd6d1784f91f55b0a94830242088404d304292bef68a89f520802a598fecddaa04f1a876f5c250c7c0a64cdeac686e33807e23d45e6b297c8b877f1831542614550b6599835c83c2a81b6786a75134faf2f1169f12997350881d9021d0903e06de0745d3160a6d3e94dbd5b0a64dcbb94b5831d0e3375ab892b1772dcf9790528543f8dd0d367b36768153b5e31503a0f1aecb004580b44ffac58baae8b1714f0833c7638cc8dab303a320f4822ab4c7a37c69196203de3319d5ce1c4d13c733331dedc67a129a154fd128401ab0616d55a130ac3d42d93d1913940d13fd0c9ee0183685c60da01c5421bd72f7a8c8efccef9afd374267ad93d642365be0636a0d28ec7600941d9e6f23917f0e97f23ce5bef35d19ec863da0ed9059b2be70bec196c66dfa10ec0e49b338f7017258651bf95021035c595429bb0903248fe52a2b5b595dd7b4d945cc2340cdca536be389ee3f67886c5798f773fe8e0dac508c989659277a2180da4ca4ff07821058b8b251445d63d6b13ed1098a6417e39cac85197dbe31962ab9bd9f1f22a226d45366f6d0620fdb08c900d281af6110284b20085b414861d905d88f2e52739ee8cbb8022143259d3dd84691730aa2d52da441a8de0c6958068870022a41e9629ad3473fd3b8fdbe319dadb9b4924da994d2d716c7896fbe35152f78b48245d6b2da4507faf582be8eaf159b721cc837b05ae7debb1f79d08cb8b515edad942a22bc4b1c33eb3d34b1c797f06af90a72d16e2f96d9a74aa11dca8586b222d01af0fb60070f6c402d72f15d97f28c6f6d7027a5f5ce6c3233dc4e2ede496b278be4fff608cee8d3e1add806aeca51094cbb06397c1ecc328e746537c7e3ccdb5cb1136bf60635882d4d41c6ec6836ab37efa214f72208ed9f4d7cdd38ee310280542e38b1c43fb6de26b3672e1ec3cc99bcb246f66a938a3241ab3e91f7c861fbf77710b1e5e49915bae974203ba0e9e9c9cbc373d6d6d305a040a89c2a77f50b27d5782bbbf7acccf28349235dd16cf6dd374f7295e1de8a45c02d37499182b01cc0201a085d61a2144d8b2ac8fb6ed340e77240c4261890e04c250185262546d534a032154b59e0ad394e41c98182bf268ce6721ed9f064e0253356f6da2e24c1f030f783c15fe6da680af8021602bd051532ca9b8521488559f61aa86c29343578fbf0264a94c906c7d3409214c20043457a116ff6de6795578012889ff6b98fe016ea0ce1c6a2573410000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>resultlistview.h</includehint>
+</includehints>
+</UI>

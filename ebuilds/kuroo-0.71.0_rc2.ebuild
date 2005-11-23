@@ -1,6 +1,6 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-portage/kuroo/kuroo-0.71.0_rc1.ebuild,v 1.1 2005/10/31 22:49:37 cryos Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-portage/kuroo/kuroo-0.71.0_rc2.ebuild,v 1.1 2005/11/13 12:33:25 cryos Exp $
 
 inherit kde
 
@@ -15,7 +15,6 @@ IUSE=""
 
 RDEPEND="app-portage/gentoolkit
 	!app-portage/guitoo
-	|| (kde-base/kdesdk kde-misc/kdiff3)
-	|| (kde-base/dcoprss kde-base/kdenetwork)"
+	kde-misc/kdiff3"
 
 need-kde 3.2

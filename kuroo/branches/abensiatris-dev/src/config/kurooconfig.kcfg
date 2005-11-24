@@ -44,9 +44,7 @@
 		<entry name="noticeRegExp" type="String">
 		<default>^!!!</default>
 		</entry>
-		<entry name="worldFile" type="String">
-		</entry>
-		<entry name="DirWorldFile" type="String">
+		<entry name="fileWorld" type="String">
 		<default>/var/lib/portage/world</default>
 		</entry>
 		<entry name="DirPackageUnmask" type="String">

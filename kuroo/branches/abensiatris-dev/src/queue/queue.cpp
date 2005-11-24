@@ -39,32 +39,10 @@ public:
 		int rowId = KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue (idPackage) VALUES ('%1');").arg(packageId));
 		
 		// Add this package to the world file if not dependency.
-		if ( rowId == 0 ) {
-			QFile file( KurooConfig::dirWorldFile() );
-			QStringList lines;
-			if ( file.open( IO_ReadOnly ) ) {
-				QTextStream stream( &file );
-				while ( !stream.atEnd() )
-					lines += stream.readLine();
-				file.close();
-				
-				if ( file.open( IO_WriteOnly ) ) {
-					bool found;
-					QTextStream stream( &file );
-					foreach ( lines ) {
-						stream << *it << endl;
-						if ( *it == ( category + "/" + name ) )
-							found = true;
-					}
-					if ( !found )
-						stream << category + "/" + name << endl;
-					file.close();
-				}
-				else
-					kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
-			}
-			else
-				kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+		// If package already present in queue insert will return rowId = 0.
+		if ( rowId == 0 )
+		{
+			PortageSingleton::Instance()->addWorldList(category,name);
 		}
 		
 		return true;

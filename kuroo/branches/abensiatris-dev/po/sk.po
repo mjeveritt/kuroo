@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: sk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-07 20:09+0200\n"
-"PO-Revision-Date: 2005-11-07 21:50+0100\n"
-"Last-Translator: Roman Fordinal (Aben) <fordinal@webcom.sk>\n"
+"PO-Revision-Date: 2005-11-18 21:24+0100\n"
+"Last-Translator: Roman Fordinal <fordinal@webcom.sk>\n"
 "Language-Team: Slovak\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: core/scanportagejob.cpp:75 core/scanupdatesjob.cpp:70
 #: core/scaninstalledjob.cpp:97
 msgid "Can not connect to database"
-msgstr "Nemôžem sa pripojit k databáze"
+msgstr "Nemôžem sa pripojiť k databáze"
 
 #: core/scanhistoryjob.cpp:81 core/scanhistoryjob.cpp:142
 msgid "History scan aborted"
@@ -762,19 +762,19 @@ msgstr ""
 
 #: config/configdialog.cpp:55 config/configdialog.cpp:63
 msgid "package.keywords"
-msgstr ""
+msgstr "package.keyword"
 
 #: config/configdialog.cpp:56 config/configdialog.cpp:64
 msgid "package.unmask"
-msgstr ""
+msgstr "package.unmask"
 
 #: config/configdialog.cpp:57 config/configdialog.cpp:65
 msgid "package.mask"
-msgstr ""
+msgstr "package.mask"
 
 #: config/configdialog.cpp:58 config/configdialog.cpp:66
 msgid "world"
-msgstr ""
+msgstr "world "
 
 #: config/configdialog.cpp:59 config/configdialog.cpp:67
 msgid "etc warnings"

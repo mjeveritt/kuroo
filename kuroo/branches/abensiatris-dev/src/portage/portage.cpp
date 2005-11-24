@@ -636,7 +636,7 @@ void Portage::loadWorldList()
 	worldMap.clear();
 	
 	// Load world
-	QFile file( KurooConfig::dirWorldFile() );
+	QFile file( KurooConfig::fileWorld() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
@@ -673,24 +673,63 @@ bool Portage::isWorld( const QString& package )
  */
 void Portage::removeWorldList( const QString& category, const QStringList& packageList )
 {
-	QFile file( KurooConfig::dirWorldFile() );
+	QFile file( KurooConfig::fileWorld() );
+	
+	foreach ( packageList )
+	{
+		QString package = category + "/" + (*it).section(pv, 0, 0);
+		worldMap.remove( package );
+		
+		// Signal to gui to mark package as not in world
+		QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
+		QString name( temp.section(pv, 0, 0) );
+		// i can't create the right singal :(
+		// SignalistSingleton::Instance()->setUnmasked(name, false);
+		
+	}
+	
+	saveWorldList();
+	
+}
+
+/**
+ * Add packages to world.
+ * @param category
+ * @param packageList
+ */
+void Portage::addWorldList( const QString& category, const QStringList& packageList )
+{
+	QFile file( KurooConfig::fileWorld() );
+	
+	foreach ( packageList )
+	{
+		QString package = category + "/" + (*it).section(pv, 0, 0);
+//		worldMap.insert( package );
+		worldMap.insert( package , "");
+		
+		// Signal to gui to mark package as not in world
+		QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
+		QString name( temp.section(pv, 0, 0) );
+		// i can't create the right singal :(
+		// SignalistSingleton::Instance()->setUnmasked(name, false);
+		
+	}
+	
+	saveWorldList();
+	
+}
+
+
+/**
+ * Save packages from world.
+ */
+void Portage::saveWorldList()
+{
+	QFile file( KurooConfig::fileWorld() );
 	
 	if ( file.open( IO_WriteOnly ) )
 	{
 		QTextStream stream( &file );
-		
-		foreach ( packageList )
-		{
-			QString package = category + "/" + (*it).section(pv, 0, 0);
-			worldMap.remove( package );
-			
-			// Signal to gui to mark package as not in world
-			QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-			QString name( temp.section(pv, 0, 0) );
-			// i can't create the right singal :(
-			// SignalistSingleton::Instance()->setUnmasked(name, false);
-			
-		}
 		
 		QMap< QString, QString >::iterator itMapEnd = worldMap.end();
 		
@@ -703,13 +742,11 @@ void Portage::removeWorldList( const QString& category, const QStringList& packa
 	}
 	else
 	{
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::fileWorld() << endl;
 		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
 	}
 	
-
 }
-
 
 
 #include "portage.moc"

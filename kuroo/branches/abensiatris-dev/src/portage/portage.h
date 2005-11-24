@@ -191,11 +191,23 @@ public slots:
 	bool						isWorld( const QString& package );
 	
 	/**
+	 * Add packages to world.
+	 * @param category
+	 * @param packageList
+	 */
+	void						addWorldList( const QString& category, const QStringList& packageList );
+
+	/**
 	* Remove packages from world.
 	* @param category
 	* @param packageList
 	*/
 	void						removeWorldList( const QString& category, const QStringList& packageList );
+	
+	/**
+	 * Save packages from world.
+	 */
+	void						saveWorldList();
 	
 	/**
 	 * Methods for parsing info files.

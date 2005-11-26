@@ -39,7 +39,7 @@
 QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 static const char description[] = I18N_NOOP("A KDE KPart Application");
-static const char version[] = "0.40.0";
+static const char version[] = "0.20.0";
 
 static KCmdLineOptions options[] =
 {

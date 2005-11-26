@@ -1,5 +1,0 @@
-File=kuroo_watcher.kcfg
-ClassName=watcherSettings
-Singleton=true
-Mutators=true
-MemberVariables=private

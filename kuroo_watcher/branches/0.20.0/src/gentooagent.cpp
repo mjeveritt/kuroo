@@ -81,8 +81,8 @@ void GentooAgent::closeEvent( QCloseEvent *ce )
 void GentooAgent::addPackageKuroo( QListViewItem *item )
 {
 	if ( item ) {
-		QString eString = item->text(0);
-		package = eString.section( " ", 0, 0 ) + "-" + eString.section( " ", 1, 1 );
+		QString package = item->text(0);
+// 		package = eString.section( " ", 0, 0 ) + "-" + eString.section( " ", 1, 1 );
 		
 		if ( client->isApplicationRegistered("kuroo") ){
 			sendToKuroo();

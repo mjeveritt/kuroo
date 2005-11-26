@@ -142,6 +142,31 @@ bool KurooWatcherDB::isInstalledEmpty()
 	return values.isEmpty() ? true : values.first() == "0";
 }
 
+/////////////////////////////////////////////////////////////////
+
+
+bool KurooWatcherDB::isInstalled( const QString& package )
+{
+	QString category = package.section("/", 0, 0);
+	QString name = package.section("/", 1, 1);
+	
+	kdDebug() << "category=" << category << endl;
+	kdDebug() << "name=" << name << endl;
+	
+	QStringList list = query( "SELECT name FROM package "
+	                          " WHERE installed != '0' "
+	                          " AND name == '" + name + "'"
+	                          " AND idCategory == ( SELECT id from category WHERE name == '" + category + "')"
+	                          " ;" );
+	
+	kdDebug() << "list=" << list << endl;
+	
+	if ( list.isEmpty() )
+		return false;
+	else
+		return true;
+}
+
 QStringList KurooWatcherDB::installedPackages()
 {
 	return query( "SELECT name FROM package "
@@ -155,6 +180,8 @@ QStringList KurooWatcherDB::updatePackages()
 	              " WHERE updateVersion != '' "
 	              " ORDER BY lower( name );" );
 }
+
+///////////////////////////////////////////////////////////////////
 
 void
 KurooWatcherDB::initialize()

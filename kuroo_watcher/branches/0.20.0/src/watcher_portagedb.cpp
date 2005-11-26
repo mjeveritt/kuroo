@@ -144,22 +144,16 @@ bool KurooWatcherDB::isInstalledEmpty()
 
 /////////////////////////////////////////////////////////////////
 
-
 bool KurooWatcherDB::isInstalled( const QString& package )
 {
 	QString category = package.section("/", 0, 0);
 	QString name = package.section("/", 1, 1);
-	
-	kdDebug() << "category=" << category << endl;
-	kdDebug() << "name=" << name << endl;
 	
 	QStringList list = query( "SELECT name FROM package "
 	                          " WHERE installed != '0' "
 	                          " AND name == '" + name + "'"
 	                          " AND idCategory == ( SELECT id from category WHERE name == '" + category + "')"
 	                          " ;" );
-	
-	kdDebug() << "list=" << list << endl;
 	
 	if ( list.isEmpty() )
 		return false;

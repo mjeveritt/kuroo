@@ -39,7 +39,7 @@
 QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 static const char description[] = I18N_NOOP("A KDE KPart Application");
-static const char version[] = "0.20.0";
+static const char version[] = "0.40.0";
 
 static KCmdLineOptions options[] =
 {
@@ -59,6 +59,13 @@ int main(int argc, char **argv)
 	if ( !KUniqueApplication::start() ) {
 		kdDebug() << "kuroo_watcher is already running!" << endl;
 		exit(0);
+	}
+	
+	kdDebug() << "watcherSettings::autoStart()=" << watcherSettings::autoStart() << endl;
+	
+	if ( (myOption != "start") && (myOption != "init") ) {
+		if ( !watcherSettings::autoStart() )
+			exit(0);
 	}
 	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -94,7 +101,8 @@ int main(int argc, char **argv)
 			watcherSettings::setAutoStart( true );
 		}
 	}
-	
+	watcherSettings::writeConfig();
+		
 	// arch is found in /etc/make.profile/make.defaults
 	f.setName( "/etc/make.profile/make.defaults" );
 	if ( f.open( IO_ReadOnly ) ) {

@@ -13,7 +13,6 @@
     </entry>
     <entry name="autoStart" type="Bool">
       <label>Start Gentoo Watcher automatically at login?</label>
-      <default>false</default>
     </entry>
     <entry name="rowsGlsa" type="Int">
       <label>Number of Glsa rows to view</label>
@@ -21,22 +20,18 @@
 	 </entry>
 	 <entry name="DirHome" type="String">
 	<label>Home directory</label>
-	<default>/var/tmp/kuroo</default>
     </entry>
 	<entry name="databas" type="String">
 	<default>portage.db</default>
 	</entry>
      <entry name="urlGlsa" type="String">
       <label>Url to Glsa rss</label>
-      <default>http://www.gentoo.org/rdf/en/glsa-index.rdf</default>
     </entry>
      <entry name="urlStable" type="String">
       <label>Url to stable packages rss</label>
-      <default>http://packages.gentoo.org/archs/x86/stable/gentoo_simple.rss</default>
     </entry>
 	<entry name="urlTesting" type="String">
       <label>Url to testing packages rss</label>
-      <default>http://packages.gentoo.org/archs/x86/testing/gentoo_simple.rss</default>
     </entry>
 	<entry name="urlSF" type="String">
 	<label>Url to SourceForge Kuroo</label>

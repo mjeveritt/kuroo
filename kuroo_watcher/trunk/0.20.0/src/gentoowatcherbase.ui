@@ -1,0 +1,329 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>GentooWatcherBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GentooWatcherBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>822</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Latest Gentoo ebuilds and security advisories</string>
+    </property>
+    <property name="icon">
+        <pixmap>image0</pixmap>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string>Click package you want to emerge in kuroo</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QTabWidget" row="0" column="0">
+            <property name="name">
+                <cstring>packages</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Sta&amp;ble</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="KListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Package</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Description</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Order</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>packagesStable</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Testi&amp;ng</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="KListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Package</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Description</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Order</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>packagesTesting</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Gentoo Linux Security &amp;Advisories</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="KListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Package and Severity</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Description</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Order</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Address</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>packagesGlsa</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>K&amp;uroo releases (SourceForge)</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="KListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>New release</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Description</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Order</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Address</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>sfKurooNews</cstring>
+                        </property>
+                        <property name="dragEnabled">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="1987">89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000078a494441545885c597516c255519c77f2de72edfd47b9733d05deed9b472876d716fdd0ddc0ac6ae1ba39bf000484830a21b4c34f2487832bea1c1c4c4276230313121fa60b29aa8ac890818345d75b57da8f642583a955d989a56e69aed3287ed0df3d1ceb63ecc6dd9ee1658d184f3727267ee99ef7ffedffffb9feff46d6c6cf0618efe0f353a603ec8a23ccf99fcc324d333d38811b4505a875a1c3e72145b15825a70d5dfeabbda1464594e7c3aae3c7b6af2faa4e36f9a3a35b947bb7aad166c006f5b6bcf45a3cd453718bc71f7a726565b778c33361241e57f0590c3337f990a4efcfad98fb7e3e4a8881c919a8cba7a78bd88ec1264c3ab5ff35ecf67e7d233aa4c819e74ae3e77f767c7bb5f3ff61041ed0302481753befbe4f1467ba6fd6511f9a21b76079a8d28681d6af645438ed05a005495a49312c7c9c6ece9384f96d2799f759e1223bf6cb59aaf3efac8c3ebce85ff1d80d9f65cdfb7beffc3f17c45bfe19cbbc7d5ddee56b3c1e1dbc7b1567ab907316ccdbeabc46713264f4d932ca56f268be97314fa44eb50f3ef8f3ef2f09a1bbe12c4358f3df6d8150f9324e59bdf7bfc13b9f29d68fff0e787f7ee1918de6769dd3a4ed05fa0abd0bda0e8aa72ee82e7e26a41f78252ac17c84005738d4155c5d6e4169f773fbab4d879f5cc52f2faf82da31bb5eb6aef0d205f81277efcd346b274eedbcd91e8ded17dc3bb6497b0e746476d40288a02df558a42f15d851d7eeb6ac1c555c5ec0aae09abd59bceade8754bff5c7ab1abc5f9cf4c8c6f8b774519fee4e7c707a66666bfd21c8dee89865c05030182e619999777fe5800460005400b454cf95eb57c1656054cb8ab39c25ded388ea7ff36fbc4e474cb1fbd04c43600d9b98ca917e25b9d730f448da8165405613388e0bb19428088e0065d09a000ef158a1cdfed80c9d15c11b180e2441064b776f50bc962f2e7c9df4ffe69e260737dd32bb63961fb742ca9cfee8a1ad12d6155b081400012f4769e8388108d448475c10d0a52056b2d81848889d095a0c78e96eb8c100e5a5c3d1c0d02b9b33d9fd492a5cece0c4cb563e76c78c40dda6b6d582a769374312046183bd0442ec94420250bd60a208869e15712200503564a40d1505d92a574225dcef6b5e7e7de1c6b469731b006dad59bdda0dd5f0f4330e56e370303b8a108917740655d989b4f89cf26a506aa1008d830828a2b9900a42a484d70757733e8fef8a585fe3ccf2f03500184bab5a195aa10562d811182aaed4514547b42eb810b0055489218ed662538110203aeda44705b3cdb6a88b56203917da9cffa2982cb52b00662e45a1131416fe71841514223a4a4c471867673a28643ac620785f1db1c5123ecb124a85144ca032a341159b74d00204258b5152010034a4e4070190386beb02a7d228248880858094b21598718254962a6a6dba40b0a05d40785a86109adf472de9bab42bd0e2296bcd84a679f95b0ef526d6dd380201b0a1b62821ecdc19690ac15dcb02b056872a40a223d1bde14a4d9a41bc482f79e4e9ab075381b59d742d731f4e9155550012d340f91550c03a10839101ac851427a55612caeeea80f8550e48804a8e6880950931356cb39eb78e23373a52eaad2ab065dc590031bc2e53eb006142ca5debfb1092d90dedc733c21246abc131c139420085072ac94c1d3850eed9766113c6e4f88b5214a8eaa66aaf9eb81841bb04315845612f5fa8a6adecb996ccd79210455c10d863dba7b864350faa40478cd48e613e233b388515c1411359a04d5d22bd265ff9a9860a139d2d8d9095badd6bf93e5f48fd9b27fabf4f65e920c68571109c9ba8042a6405196210ac9d994d9176292a48dad411439a246547a0042d2e9bc952e67d318fe3571686cab07d8e684ad03d19a1b74cfb7e3f8fea8e13e69c5620df8a2547ce67342dbdb31d0297232afa49d04cd3c5aa4d4871dae5ec7d5dd9667a49d0e4992fec37b3fd91c89baae51674700412de07313ad974f3c3d79bc3d3fb73fbcddde40b5f40425235dc8f0b62c4bed2ab966f895b4d44705a2e1085b77386bc194eb3ade139f4dde88e7e3a7c4c88b1377b48af092a6f58ae3f89e3b0faf76d2f4175333f1c7ac0dbf76f8606b408c10d51dda8dc9bc2f050868aed84008aca35e778456b055dbfb7280ef66a44b693e3d33fbb42abf6a1e8cfcd12387b7c5dbb1238af6b9eef40bedb30baf2dee351fa98c8436ac600cb58180a250fafafb287655d8734388dbeb18ae3b82aa41c452ac83e9077f6199f8b5c5fcf993d3bf5bec2cffc0ee9697bffaa5fb2eeebb717b5bf6ae3d619a663cfee4cf4673cd1f397c47f381d681b1bd81481f28b996369a9397d570c981851132ef379285f4fcc999f6d36927fd91b5f2e2c3c71e7c7bec5074459cf7ee8ad38c13cf4dde38371fdfe786dcb1d668746b3868afb322fd9b42dcec84b4000ad693e5ce4a92a473c942724295df4895e4a163f7af8d1f1adb31c6fbdf0bd6e0f86f9fa94c9e6cdf8cd14fbb4177c45adb0cad0c0a54a8089aeb9aaa9e4fbd3f9bf97cc677fd5fc5c82bcd91a8fbe0bd47d7ddb07bd7cf5fddcd680d664fcf912c75fadbedb89674d23ab01b83e99df917b5d01531725e442e8c1f6cbedd6c461b13b7350982f7bea65df5d56c73e42b102fcc912e79e224d97aee9c231aaae30643a221f7be57b20f0ce0ff3dfe03aa476faea20ee8710000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>packagesStable</sender>
+        <signal>contextMenu(KListView*,QListViewItem*,const QPoint&amp;)</signal>
+        <receiver>GentooWatcherBase</receiver>
+        <slot>contextMenu(KListView*,QListViewItem*,const QPoint&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>packagesTesting</sender>
+        <signal>contextMenu(KListView*,QListViewItem*,const QPoint&amp;)</signal>
+        <receiver>GentooWatcherBase</receiver>
+        <slot>contextMenu(KListView*,QListViewItem*,const QPoint&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>packagesGlsa</sender>
+        <signal>contextMenu(KListView*,QListViewItem*,const QPoint&amp;)</signal>
+        <receiver>GentooWatcherBase</receiver>
+        <slot>contextMenu(KListView*,QListViewItem*,const QPoint&amp;)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>contextMenu( KListView * listView, QListViewItem * item, const QPoint &amp; point )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+</includehints>
+</UI>

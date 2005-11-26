@@ -61,11 +61,11 @@ int main(int argc, char **argv)
 		exit(0);
 	}
 	
-	kdDebug() << "watcherSettings::autoStart()=" << watcherSettings::autoStart() << endl;
-	
 	if ( (myOption != "start") && (myOption != "init") ) {
-		if ( !watcherSettings::autoStart() )
+		if ( !watcherSettings::autoStart() ) {
+			kdDebug() << "Terminating: kuroo_watcher is set to autostart off." << endl;
 			exit(0);
+		}
 	}
 	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

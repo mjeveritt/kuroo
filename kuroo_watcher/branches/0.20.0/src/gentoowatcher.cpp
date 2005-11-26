@@ -59,8 +59,6 @@ for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 GentooWatcher::GentooWatcher()
 	: KSystemTray( 0, "gentoo_watcher" )
 {
-	kdDebug() << "GentooWatcher::GentooWatcher" << endl;
-	
 	internalTimer = new QTimer( this );
 	checkGlsaTimer = new QTimer( this );
 	

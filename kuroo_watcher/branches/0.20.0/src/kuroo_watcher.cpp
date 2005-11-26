@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		exit(0);
 	}
 	
-	if ( (myOption != "start") && (myOption != "init") ) {
+	if ( myOption != "start" && myOption != "init" && !watcherSettings::setupDone() ) {
 		if ( !watcherSettings::autoStart() ) {
 			kdDebug() << "Terminating: kuroo_watcher is set to autostart off." << endl;
 			exit(0);
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	myOption = args->getOption("option");
 	
-	QString arch, line;
+	QString arch;
 	
 	//arch is found in /etc/make.profile/make.defaults
 	QDir d1( "/etc/make.profile" );
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 	if ( f.open( IO_ReadOnly ) ) {
 		QTextStream stream( &f );
 		while ( !stream.atEnd() ) {
-			line = stream.readLine();
+			QString line = stream.readLine();
 			if ( line.contains("ARCH=\"")>0 ) {
 				line = line.section("ARCH=\"", 1, 1);
 				arch = line.section("\"", 0, 0);
@@ -91,42 +91,43 @@ int main(int argc, char **argv)
 	
 	// Write initial settings
 	if ( !watcherSettings::setupDone() or (myOption == "init") ) {
-	switch( KMessageBox::questionYesNo( 0, 
-			i18n("Start Gentoo Watcher automatically at login?"), "Gentoo Watcher autostart" ) ) {
-		case KMessageBox::No: {
-			watcherSettings::setAutoStart( false );
-			break;
-		}
-		case KMessageBox::Yes: {
-			watcherSettings::setAutoStart( true );
-		}
-	}
-	watcherSettings::writeConfig();
-		
-	// arch is found in /etc/make.profile/make.defaults
-	f.setName( "/etc/make.profile/make.defaults" );
-	if ( f.open( IO_ReadOnly ) ) {
-		QTextStream stream( &f );
-		
-		while ( !stream.atEnd() ) {
-			line = stream.readLine();
-			if ( line.contains("ARCH=\"")>0 ) {
-				line = line.section("ARCH=\"", 1, 1);
-				arch = line.section("\"", 0, 0);
+		switch( KMessageBox::questionYesNo( 0, 
+				i18n("Start Gentoo Watcher automatically at login?"), "Gentoo Watcher autostart" ) ) {
+			case KMessageBox::No: {
+				watcherSettings::setAutoStart( false );
+				break;
+			}
+			case KMessageBox::Yes: {
+				watcherSettings::setAutoStart( true );
 			}
 		}
-		f.close();
+			
+		// arch is found in /etc/make.profile/make.defaults
+		f.setName( "/etc/make.profile/make.defaults" );
+		if ( f.open( IO_ReadOnly ) ) {
+			QTextStream stream( &f );
+			
+			while ( !stream.atEnd() ) {
+				QString line = stream.readLine();
+				if ( line.contains("ARCH=\"")>0 ) {
+					line = line.section("ARCH=\"", 1, 1);
+					arch = line.section("\"", 0, 0);
+				}
+			}
+			f.close();
+		}
+		
+		watcherSettings::setSetupDone( true );
+		watcherSettings::setRssInterval( 1 );
+		watcherSettings::setDirHome( "/var/cache/kuroo" );
+		watcherSettings::setRowsGlsa( 20 );
+		watcherSettings::setUrlGlsa( "http://www.gentoo.org/rdf/en/glsa-index.rdf" );
+		watcherSettings::setUrlTesting( "http://packages.gentoo.org/archs/" + arch + "/testing/gentoo_simple.rss" );
+		watcherSettings::setUrlStable( "http://packages.gentoo.org/archs/" + arch + "/stable/gentoo_simple.rss" );
+		watcherSettings::writeConfig();
 	}
 	
-	watcherSettings::setSetupDone( true );
-	watcherSettings::setRssInterval( 1 );
-	watcherSettings::setDirHome( "/var/cache/kuroo" );
-	watcherSettings::setRowsGlsa( 20 );
-	watcherSettings::setUrlGlsa( "http://www.gentoo.org/rdf/en/glsa-index.rdf" );
-	watcherSettings::setUrlTesting( "http://packages.gentoo.org/archs/" + arch + "/testing/gentoo_simple.rss" );
-	watcherSettings::setUrlStable( "http://packages.gentoo.org/archs/" + arch + "/stable/gentoo_simple.rss" );
 	watcherSettings::writeConfig();
-	}
 	
 	GentooWatcher *mainWin = 0;
 	mainWin = new GentooWatcher();

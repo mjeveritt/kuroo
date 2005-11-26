@@ -5,7 +5,6 @@
   <group name="Preferences">
   	<entry name="setupDone" type="Bool">
       <label>Is it first time running?</label>
-      <default></default>
     </entry>
     <entry name="rssInterval" type="Int">
       <label>The interval rss checks</label>

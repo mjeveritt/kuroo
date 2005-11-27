@@ -92,10 +92,10 @@
                                 <cstring>pbClear</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Clear</string>
+                                <string>Cle&amp;ar</string>
                             </property>
                             <property name="accel">
-                                <string>Alt+C</string>
+                                <string>Alt+A</string>
                             </property>
                             <property name="iconSet">
                                 <iconset>image0</iconset>
@@ -109,7 +109,7 @@
                                 <cstring>pbAppendAll</cstring>
                             </property>
                             <property name="text">
-                                <string>Appe&amp;nd all</string>
+                                <string>Appe&amp;nd all packages to Queue!</string>
                             </property>
                             <property name="accel">
                                 <string>Alt+N</string>

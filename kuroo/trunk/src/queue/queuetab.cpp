@@ -141,7 +141,7 @@ void QueueTab::slotOptions()
 	optionsDialog->show();
 
 	// Get options
-	QString options(emergeOptionsText->text());
+	QString options( emergeOptionsText->text() );
 	
 	if ( !options.isEmpty() ) {
 		const QStringList optionsList = QStringList::split(" ", options);
@@ -369,9 +369,8 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	int menuItem2 = menu.insertItem(i18n("Remove"), REMOVE );
 	menu.insertItem(i18n("View Info"), GOTO );
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
-	}
 	
 	switch( menu.exec(point) ) {
 		
@@ -387,7 +386,6 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		
 		case GOTO: {
 			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
-			break;
 		}
 	}
 }

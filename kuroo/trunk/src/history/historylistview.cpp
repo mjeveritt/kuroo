@@ -88,10 +88,10 @@ QStringList HistoryListView::selected()
 	QStringList packageList;
 	QListViewItemIterator it(this);
 	
-	for ( ; it.current(); ++it )
-		if ( it.current()->parent() && it.current()->isSelected() ) {
+	for ( ; it.current(); ++it ) {
+		if ( it.current()->parent() && it.current()->isSelected() )
 			packageList += it.current()->text(0);
-		}
+	}
 		
 	return packageList;
 }
@@ -127,8 +127,7 @@ void HistoryListView::loadFromDB()
 						itemPackage->setText(1, time);
 					}
 				}
-				else
-				{
+				else {
 					KListViewItem *itemPackage = new KListViewItem(itMap.data(), package);
 					
 					if (time.isEmpty())

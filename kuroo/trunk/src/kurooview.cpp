@@ -54,7 +54,7 @@
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: QWidget( parent, name ),
-	DCOPObject( "kurooIface" ),
+	DCOPObject( "KurooIface" ),
 	mainTabs(0), tabInstalled(0), tabPortage(0), tabUpdates(0), tabQueue(0), tabResults(0), tabLogs(0)
 {
     // setup our layout manager to automatically add our widgets
@@ -110,10 +110,13 @@ KurooView::~KurooView()
 {
 }
 
+/**
+ * When gui drawing is completed on screen, start checking that database is uptodate.
+ * First check if database is completely empty, then do a full portage scan.
+ * Else check if emerge log shows emerge activity outside kuroo, then we need to update database.
+ */
 void KurooView::slotInit()
 {
-	kdDebug() << "KurooView::slotInit" << endl;
-	
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() )
 		switch( KMessageBox::warningContinueCancel( this, 
 			i18n("<qt>Kuroo database is empty!<br><br>"
@@ -128,7 +131,7 @@ void KurooView::slotInit()
 	else {
 		connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 		
-		// Check if kuroo database needs updating.
+		// Check if emerge log shows emerge activity outside kuroo, then we need to update database
 		if ( !HistorySingleton::Instance()->slotRefresh() ) {
 			disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 			
@@ -149,12 +152,10 @@ void KurooView::slotInit()
 }
 
 /**
- * Reset everything when a portage scan is started.
+ * Reset all views when a portage scan is started.
  */
 void KurooView::slotReset()
 {
-	kdDebug() << "KurooView::slotReset" << endl;
-	
 	InstalledSingleton::Instance()->slotReset();
 	UpdatesSingleton::Instance()->slotReset();
 	QueueSingleton::Instance()->reset();
@@ -163,12 +164,10 @@ void KurooView::slotReset()
 }
 
 /**
- * When starting kuroo, check if portage need to be scanned.
- * Installed, and Updates must be scanned afterwards.
+ * Is Portage view empty?
  */
 void KurooView::slotCheckPortage()
 {
-	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
 	if ( PortageSingleton::Instance()->count() == "0" ) {
@@ -182,11 +181,10 @@ void KurooView::slotCheckPortage()
 }
 
 /**
- * Check if Installed is empty, if so scan for installed packages.
+ * Is Installed view empty?
  */
 void KurooView::slotCheckInstalled()
 {
-	kdDebug() << "KurooView::slotCheckInstalled" << endl;
 	disconnect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
 	
 	if ( InstalledSingleton::Instance()->count() == "0" ) {
@@ -200,11 +198,10 @@ void KurooView::slotCheckInstalled()
 }
 
 /**
- * Check if Updates empty, if so scan for updates packages.
+ * Is Updates view empty?
  */
 void KurooView::slotCheckUpdates()
 {
-	kdDebug() << "KurooView::slotCheckUpdates" << endl;
 	disconnect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotCheckUpdates() ) );
 	
 	if ( UpdatesSingleton::Instance()->count() == "0" ) {
@@ -212,18 +209,15 @@ void KurooView::slotCheckUpdates()
 		UpdatesSingleton::Instance()->slotRefresh();
 	}
 	else {
-// 		tabUpdates->slotReload();
 		slotReloadQueueResults();
 	}
 }
 
 /**
- * End by loading the queue and the results packages list.
+ * Finish kuroo startup by loading the queue and the results packages list.
  */
 void KurooView::slotReloadQueueResults()
 {
-	kdDebug() << "KurooView::slotReloadQueueResults" << endl;
-	
 	disconnect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReloadQueueResults() ) );
 	
 	tabInstalled->slotReload();
@@ -252,7 +246,7 @@ void KurooView::slotCurrentChanged( QWidget* newPage )
 }
 
 /**
- * Activate this package to view its info.
+ * When user choose "View package", go to corresponding tab and select the package for info.
  */
 void KurooView::slotViewPackage( const QString& package )
 {
@@ -267,17 +261,20 @@ void KurooView::slotViewPackage( const QString& package )
 }
 
 /**
- * Dcop interface to emerge pretend process 
+ * Dcop interface to emerge pretend process.
  * @param packageList	list of packages to emerge
  */
-void KurooView::slotEmergePretend( QString package )
+bool KurooView::slotEmergePretend( QString package )
 {
-	EmergeSingleton::Instance()->pretend( package );
+	kdDebug() << "KurooView::slotEmergePretend package=" << package << endl;
+	if ( EmergeSingleton::Instance()->pretend( package ) )
+		return true;
+	else
+		return false;
 }
 
 /**
- * Count the total packages in Portage (@fixme: including installed packages not in Portage anymore)
- * @return total
+ * Count the total packages in Portage.
  */
 void KurooView::slotPortageUpdated()
 {
@@ -293,7 +290,7 @@ void KurooView::slotPortageUpdated()
 }
 
 /**
- * Installed tabpage count.
+ * Installed view package count.
  */
 void KurooView::slotInstalledUpdated()
 {
@@ -309,7 +306,7 @@ void KurooView::slotInstalledUpdated()
 }
 
 /**
- * Update tabpage count.
+ * Update view package count.
  */
 void KurooView::slotUpdatesUpdated()
 {
@@ -325,7 +322,7 @@ void KurooView::slotUpdatesUpdated()
 }
 
 /**
- * Queue tabpage count.
+ * Queue view package count.
  */
 void KurooView::slotQueueUpdated()
 {
@@ -341,7 +338,7 @@ void KurooView::slotQueueUpdated()
 }
 
 /**
- * Results tabpage count.
+ * Results view package count.
  */
 void KurooView::slotResultsUpdated()
 {

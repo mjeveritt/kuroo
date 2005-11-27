@@ -70,11 +70,11 @@ void Signalist::setKurooBusy( bool b )
 	
 	if ( busySession == 0 ) {
 		busy = false;
-		emit signalKurooBusy(false);
+		emit signalKurooBusy( false );
 	}
 	else {
 		busy = true;
-		emit signalKurooBusy(true);
+		emit signalKurooBusy( true );
 	}
 }
 
@@ -83,7 +83,7 @@ void Signalist::setKurooBusy( bool b )
  */
 void Signalist::scanAborted()
 {
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -99,7 +99,7 @@ void Signalist::syncDone()
  */
 void Signalist::scanStarted()
 {
-	setKurooBusy(true);
+	setKurooBusy( true );
 }
 
 /**
@@ -108,7 +108,7 @@ void Signalist::scanStarted()
 void Signalist::cachePortageComplete()
 {
 	emit signalCachePortageComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -117,7 +117,7 @@ void Signalist::cachePortageComplete()
 void Signalist::scanPortageComplete()
 {
 	emit signalScanPortageComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -126,7 +126,7 @@ void Signalist::scanPortageComplete()
 void Signalist::scanInstalledComplete()
 {
 	emit signalScanInstalledComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -135,7 +135,7 @@ void Signalist::scanInstalledComplete()
 void Signalist::scanUpdatesComplete()
 {
 	emit signalScanUpdatesComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -144,7 +144,7 @@ void Signalist::scanUpdatesComplete()
 void Signalist::loadUpdatesComplete()
 {
 	emit signalLoadUpdatesComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -153,7 +153,7 @@ void Signalist::loadUpdatesComplete()
 void Signalist::scanHistoryComplete()
 {
 	emit signalScanHistoryComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -164,11 +164,11 @@ void Signalist::scanDiskUsage( bool b )
 {
 	if ( b ) {
 		busyDiskUsage = true;
-		emit signalKurooBusy(true);
+		emit signalKurooBusy( true );
 	}
 	else {
 		busyDiskUsage = false;
-		emit signalKurooBusy(false);
+		emit signalKurooBusy( false );
 	}
 }
 

@@ -105,7 +105,6 @@ void  EtcUpdate::readFromStdout( KProcIO* proc )
 	while ( proc->readln(line, true) != -1 ) {
 		etcUpdateLines += line;
 		LogSingleton::Instance()->writeLog( line, EMERGE );
-		kdDebug() << "EtcUpdate::readFromStdout etcUpdateLines=" << etcUpdateLines << endl;
 		
 		if ( line.contains("Please select a file") ) {
 			proc->writeStdin( (QString)"-1", true );

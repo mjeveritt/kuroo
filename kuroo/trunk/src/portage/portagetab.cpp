@@ -190,7 +190,7 @@ void PortageTab::slotRefresh()
 }
 
 /**
- * Popup menu for actions like emerge.
+ * Popup menu for package actions like Pretend, Install, Unmask...
  * @param item
  * @param point
  */
@@ -209,7 +209,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem5 = menu.insertItem(i18n("&Clear Unmasking"), CLEARUNMASK);
 	int menuItem6 = menu.insertItem(i18n("&Edit Use Flags"), USEFLAGS);
 	
-	// No access when kuroo is busy.
+	// Disable when kuroo is busy.
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
 		menu.setItemEnabled( menuItem2, false );
@@ -263,7 +263,6 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		
 		case USEFLAGS: {
 			useFlags();
-			break;
 		}
 	}
 }
@@ -301,7 +300,7 @@ void PortageTab::slotFind()
 }
 
 /**
- * View summary for selected package.
+ * View package summary for selected package.
  */
 void PortageTab::slotSummary()
 {

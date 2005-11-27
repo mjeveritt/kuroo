@@ -486,7 +486,7 @@ QStringList KurooDB::lastHistoryEntry()
 
 QStringList KurooDB::getLastSync()
 {
-	return query(" SELECT timestamp "
+	return query(" SELECT date "
 	             " FROM history "
 	             " WHERE id = (SELECT MAX(id) FROM history where package = '');");
 }
@@ -540,6 +540,7 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 	}
 	
 	if ( !m_initialized ) {
+		
         // Remove old db file; create new
 		QFile::remove(path);
 		if ( sqlite3_open(path, &m_db) == SQLITE_OK ) {
@@ -596,6 +597,7 @@ QStringList SqliteConnection::query( const QString& statement )
 			}
 			if ( error == SQLITE_MISUSE )
 				kdDebug() << "sqlite3_step: MISUSE" << endl;
+			
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 			
@@ -636,8 +638,7 @@ int SqliteConnection::insert( const QString& statement )
 		int busyCnt = 0;
 		
         //execute virtual machine by iterating over rows
-		while (true)
-		{
+		while (true) {
 			error = sqlite3_step(stmt);
 			
 			if ( error == SQLITE_BUSY ) {
@@ -650,6 +651,7 @@ int SqliteConnection::insert( const QString& statement )
 			}
 			if ( error == SQLITE_MISUSE )
 				kdDebug() << "sqlite3_step: MISUSE" << endl;
+			
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 		}
@@ -704,7 +706,7 @@ DbConnectionPool::DbConnectionPool() : m_semaphore(POOL_SIZE)
 
 	enqueue(dbConn);
 	m_semaphore--;
-	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
+// 	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnectionPool::~DbConnectionPool()
@@ -713,12 +715,10 @@ DbConnectionPool::~DbConnectionPool()
 	DbConnection *conn;
 	bool vacuum = true;
 	
-	while ( (conn = dequeue()) != 0 )
-	{
-		if (/*m_dbConnType == DbConnection::sqlite && */vacuum)
-		{
+	while ( (conn = dequeue()) != 0 ) {
+		if (/*m_dbConnType == DbConnection::sqlite && */vacuum) {
 			vacuum = false;
-			kdDebug() << "Running VACUUM" << endl;
+			kdDebug() << "Running db VACUUM" << endl;
 			conn->query("VACUUM; ");
 		}
 		
@@ -730,14 +730,13 @@ DbConnectionPool::~DbConnectionPool()
 
 void DbConnectionPool::createDbConnections()
 {
-	for ( int i = 0; i < POOL_SIZE - 1; i++ )
-	{
+	for ( int i = 0; i < POOL_SIZE - 1; i++ ) {
 		DbConnection *dbConn;
 		dbConn = new SqliteConnection(static_cast<SqliteConfig*> (m_dbConfig));
 		enqueue(dbConn);
 		m_semaphore--;
 	}
-	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
+// 	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnection *DbConnectionPool::getDbConnection()

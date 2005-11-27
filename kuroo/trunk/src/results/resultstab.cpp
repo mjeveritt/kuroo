@@ -134,7 +134,6 @@ void ResultsTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		
 		case GOTO: {
 			SignalistSingleton::Instance()->viewPackage( resultView->currentPackage() );
-			break;
 		}
 	}
 }

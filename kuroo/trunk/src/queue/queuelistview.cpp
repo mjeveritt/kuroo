@@ -196,7 +196,7 @@ void QueueListView::loadFromDB()
  */
 QString QueueListView::timeFormat( const QString& time )
 {
-	if ( !time.isEmpty() && time != "na" ) {
+	if ( !time.isEmpty() && time != i18n("na") ) {
 		QTime emergeTime(0, 0, 0);
 		emergeTime = emergeTime.addSecs(time.toInt());
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );

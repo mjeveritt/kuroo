@@ -68,8 +68,12 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	addPage( opt7, i18n("Etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
-	connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
 	
+	if ( KUser().isSuperUser() )
+		connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
+	else
+		opt6->pbExportToWorld->setEnabled(false);
+		
 	readMakeConf();
 	readPackageUnmask();
 	readPackageMask();
@@ -163,7 +167,7 @@ void ConfigDialog::readWorldFile()
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
 		lines.sort();
-		KurooConfig::setWorldFile( lines.join("\n") );
+		KurooConfig::setWorld( lines.join("\n") );
 	}
 	else
 		kdDebug() << i18n("Error reading: ") << KurooConfig::fileWorld() << endl;
@@ -367,7 +371,6 @@ void ConfigDialog::saveAll()
 				show();
 				KMessageBox::error( this, i18n("Failed to save world file. Please run as root."), i18n("Saving"));
 			}
-			break;
 		}
 	}
 }
@@ -438,7 +441,7 @@ bool ConfigDialog::saveWorldFile()
 	QFile file( KurooConfig::fileWorld() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
-		stream << KurooConfig::worldFile();
+		stream << KurooConfig::world();
 		file.close();
 		return true;
 	}
@@ -538,7 +541,7 @@ bool ConfigDialog::saveMakeConf()
  */
 void ConfigDialog::exportWorld()
 {
-	switch ( KMessageBox::questionYesNo( this, i18n("Do you want export all Installed packages to the world file?"), i18n("Kuroo")) ) {
+	switch ( KMessageBox::warningYesNo( this, i18n("Do you want export all Installed packages to the world file?"), i18n("Kuroo")) ) {
 		case KMessageBox::Yes : {
 			if ( exportToWorld() )
 				KMessageBox::information( this, i18n("Export to world file completed."), i18n("Kuroo") );

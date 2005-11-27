@@ -704,7 +704,7 @@ void Portage::addWorldList( const QString& category, const QStringList& packageL
 	foreach ( packageList )
 	{
 		QString package = category + "/" + (*it).section(pv, 0, 0);
-//		worldMap.insert( package );
+//		is this the right way? package, "" ??
 		worldMap.insert( package , "");
 		
 		// Signal to gui to mark package as not in world

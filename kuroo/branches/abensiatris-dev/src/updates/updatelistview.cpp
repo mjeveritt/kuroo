@@ -125,6 +125,10 @@ void UpdateListView::loadFromDB()
 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 			packageItem->setStatus(MASKED);
 		
+		// Found in world file
+		if ( PortageSingleton::Instance()->isWorld( category + "/" + name ) )
+			packageItem->setStatus(INSTALLED_WORLD);
+		
 		insertPackage( idDB, packageItem );
 	}
 	

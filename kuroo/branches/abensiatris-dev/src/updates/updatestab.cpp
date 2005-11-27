@@ -197,7 +197,7 @@ void UpdatesTab::contextMenu( KListView *listView, QListViewItem *item, const QP
 	
 	enum Actions {
 		PRETEND, APPEND, EMERGE,
-		PRETEND_LIST, APPEND_LIST, EMERGE_LIST, GOTO, GOTOLIST };
+		PRETEND_LIST, APPEND_LIST, EMERGE_LIST, GOTO, GOTOLIST, UNMARK };
 	
 	KPopupMenu menu(this);
 	
@@ -205,6 +205,7 @@ void UpdatesTab::contextMenu( KListView *listView, QListViewItem *item, const QP
 		int menuItem1 = menu.insertItem( i18n("&Pretend"), PRETEND );
 		int menuItem2 = menu.insertItem( i18n("&Append to queue"), APPEND );
 		int menuItem3 = menu.insertItem( i18n("&Install now"), EMERGE );
+		int menuItem4 = menu.insertItem( i18n("Unmark as end-user"), UNMARK);
 		menu.insertItem( i18n("View Info"), GOTO );
 		
 		if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
@@ -220,6 +221,7 @@ void UpdatesTab::contextMenu( KListView *listView, QListViewItem *item, const QP
 		int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND_LIST);
 		int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND_LIST);
 		int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE_LIST);
+//		int menuItem4 = menu.insertItem( i18n("Unmark as end-user"), UNMARK);
 		menu.insertItem(i18n("View Info"), GOTOLIST );
 		
 		if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
@@ -273,6 +275,12 @@ void UpdatesTab::contextMenu( KListView *listView, QListViewItem *item, const QP
 			SignalistSingleton::Instance()->viewPackage( updatesList->currentPackage() );
 			break;
 		}
+		
+		case UNMARK: {
+			PortageSingleton::Instance()->removeWorldList( categoriesView->currentCategory(), packagesView->selectedPackages() );
+			break;
+		}
+
 	}
 }
 

@@ -54,7 +54,7 @@
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: QWidget( parent, name ),
-	DCOPObject( "kurooIface" ),
+	DCOPObject( "KurooIface" ),
 	mainTabs(0), tabInstalled(0), tabPortage(0), tabUpdates(0), tabQueue(0), tabResults(0), tabLogs(0)
 {
     // setup our layout manager to automatically add our widgets
@@ -264,9 +264,13 @@ void KurooView::slotViewPackage( const QString& package )
  * Dcop interface to emerge pretend process.
  * @param packageList	list of packages to emerge
  */
-void KurooView::slotEmergePretend( QString package )
+bool KurooView::slotEmergePretend( QString package )
 {
-	EmergeSingleton::Instance()->pretend( package );
+	kdDebug() << "KurooView::slotEmergePretend package=" << package << endl;
+	if ( EmergeSingleton::Instance()->pretend( package ) )
+		return true;
+	else
+		return false;
 }
 
 /**

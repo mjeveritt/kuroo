@@ -59,7 +59,7 @@ public:
 	/**
 	 * DCOP slot accessible by kuroo_watcher.
 	 */
-	void 			slotEmergePretend( QString package );
+	bool 			slotEmergePretend( QString package );
 	
 public slots:
 	/**

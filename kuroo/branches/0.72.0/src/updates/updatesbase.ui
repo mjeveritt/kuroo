@@ -63,7 +63,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>&amp;Append all updates to Queue!</string>
+                        <string>Install &amp;all updates to Queue!</string>
                     </property>
                     <property name="accel">
                         <string>Alt+A</string>

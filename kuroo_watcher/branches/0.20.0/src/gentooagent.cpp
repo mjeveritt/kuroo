@@ -113,7 +113,7 @@ void GentooAgent::stopTimer()
  */
 void GentooAgent::sendToKuroo()
 {
-	DCOPRef emerge("kuroo", "KurooIface");
+	DCOPRef emerge("kuroo", "kurooIface");
 	
 	if ( !emerge.isNull() ) {
 		DCOPReply reply = emerge.call( "slotEmergePretend", package );

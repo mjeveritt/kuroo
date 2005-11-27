@@ -196,11 +196,13 @@ void QueueListView::loadFromDB()
  */
 QString QueueListView::timeFormat( const QString& time )
 {
+	KLocale *loc = KGlobal::locale();
+	
 	if ( !time.isEmpty() && time != i18n("na") ) {
 		QTime emergeTime(0, 0, 0);
 		emergeTime = emergeTime.addSecs(time.toInt());
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
-		return emergeTime.toString(Qt::TextDate);
+		return loc->formatTime(totalDuration, true, true);
 	}
 	else
 		return i18n("na");
@@ -212,7 +214,8 @@ QString QueueListView::timeFormat( const QString& time )
  */
 QString QueueListView::totalTime()
 {
-	return totalDuration.toString(Qt::TextDate);
+	KLocale *loc = KGlobal::locale();
+	return loc->formatTime(totalDuration, true, true);
 }
 
 /**
@@ -230,9 +233,8 @@ int QueueListView::sumTime()
  */
 void QueueListView::addSize( const QString& size )
 {
-	QString packageSize;
-	packageSize = size.section(" ", 0, 0);
-	packageSize = packageSize.remove(',');
+	QString packageSize(size);
+	packageSize = packageSize.remove(QRegExp("\\D"));
 	sumSize += packageSize.toInt() * 1024;
 }
 
@@ -242,38 +244,27 @@ void QueueListView::addSize( const QString& size )
  */
 QString QueueListView::totalSize()
 {
-	return kBSize(sumSize);
+	return kBSize( sumSize );
 }
 
 /**
  * Format package size nicely 
- * @fixme: Check out KIO_EXPORT QString KIO::convertSize
  * @param size 
  * @return total		as "xxx kB"
  */
 QString QueueListView::kBSize( const int& size )
 {
-	QString total("");
+	KLocale *loc = KGlobal::locale();
+	QString total;
+	
 	if ( size == 0 )
 		total = "0 kB ";
-	else
-		if ( size < 1024 ) {
+	else {
+		if ( size < 1024 )
 			total = "1 kB ";
-		}
-		else {
-			QString eString = QString::number(size / 1024);
-			
-			while ( !eString.isEmpty() ) {
-				QString part = eString.right(3);
-				eString = eString.left(eString.length() - part.length());
-				
-				if (!total.isEmpty())
-					total = part + "," + total;
-				else
-					total = part;
-			}
-			total += " kB ";
-		}
+		else
+			total = loc->formatNumber(QString::number(size / 1024), true, 0) + " kB ";
+	}
 	
 	return total;
 }

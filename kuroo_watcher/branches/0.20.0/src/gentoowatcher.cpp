@@ -420,7 +420,7 @@ void GentooWatcher::readFromStdout(KProcIO *proc)
 {
 	QString eString;
 	
-	while ( proc->readln( eString, true ) != -1) {
+	while ( proc->readln( eString, true ) != -1 ) {
 		if ( eString.startsWith("200") )
 			glsaList += eString;
 	}
@@ -433,9 +433,11 @@ void GentooWatcher::checkUpdates()
 {
 	QString allTooltip(""), tooltip("");
 
+	KLocale *loc = KGlobal::locale();
 	QDateTime dt = QDateTime::currentDateTime();
 	allTooltip = "<b>Gentoo Watcher</b> ";
-	allTooltip += dt.toString("hh:mm:ss"); 
+// 	allTooltip += dt.toString("hh:mm:ss");
+	allTooltip += loc->formatDateTime(dt);
 	
 	m_window->setCaption( i18n("Latest Gentoo packages and Security Advisories %1").arg(dt.toString("hh:mm:ss")) );
 	QListViewItemIterator it = m_window->packagesGlsa;

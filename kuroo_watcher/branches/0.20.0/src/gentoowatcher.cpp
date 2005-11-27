@@ -431,15 +431,14 @@ void GentooWatcher::readFromStdout(KProcIO *proc)
  */
 void GentooWatcher::checkUpdates()
 {
-	QString allTooltip(""), tooltip("");
-
 	KLocale *loc = KGlobal::locale();
-	QDateTime dt = QDateTime::currentDateTime();
-	allTooltip = "<b>Gentoo Watcher</b> ";
-// 	allTooltip += dt.toString("hh:mm:ss");
-	allTooltip += loc->formatDateTime(dt);
+	QString tooltip;
+	QString allTooltip("<b>Gentoo Watcher</b> ");
+	QString checkTime = loc->formatTime(QTime::currentTime());
 	
-	m_window->setCaption( i18n("Latest Gentoo packages and Security Advisories %1").arg(dt.toString("hh:mm:ss")) );
+	allTooltip += checkTime;
+	
+	m_window->setCaption( i18n("Latest Gentoo packages and Security Advisories %1").arg(checkTime) );
 	QListViewItemIterator it = m_window->packagesGlsa;
 	bool found = false;
 	

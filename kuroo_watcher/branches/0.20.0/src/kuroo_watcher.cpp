@@ -54,22 +54,14 @@ int main(int argc, char **argv)
 	KCmdLineArgs::init(argc, argv, &about);
 	KCmdLineArgs::addCmdLineOptions( options );
 	KUniqueApplication app;
-	QString myOption;
 	
 	if ( !KUniqueApplication::start() ) {
 		kdDebug() << "kuroo_watcher is already running!" << endl;
 		exit(0);
 	}
 	
-	if ( myOption != "start" && myOption != "init" && !watcherSettings::setupDone() ) {
-		if ( !watcherSettings::autoStart() ) {
-			kdDebug() << "Terminating: kuroo_watcher is set to autostart off." << endl;
-			exit(0);
-		}
-	}
-	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	myOption = args->getOption("option");
+	QString myOption = args->getOption("option");
 	
 	QString arch;
 	
@@ -90,7 +82,7 @@ int main(int argc, char **argv)
 	}
 	
 	// Write initial settings
-	if ( !watcherSettings::setupDone() or (myOption == "init") ) {
+	if ( !watcherSettings::setupDone() || myOption == "init" ) {
 		switch( KMessageBox::questionYesNo( 0, 
 				i18n("Start Gentoo Watcher automatically at login?"), "Gentoo Watcher autostart" ) ) {
 			case KMessageBox::No: {
@@ -126,15 +118,18 @@ int main(int argc, char **argv)
 		watcherSettings::setUrlStable( "http://packages.gentoo.org/archs/" + arch + "/stable/gentoo_simple.rss" );
 		watcherSettings::writeConfig();
 	}
-	
 	watcherSettings::writeConfig();
+	
+	if ( myOption != "start" && watcherSettings::setupDone() && !watcherSettings::autoStart() ) {
+		kdDebug() << "Terminating: autostart is off." << endl;
+		exit(0);
+	}
 	
 	GentooWatcher *mainWin = 0;
 	mainWin = new GentooWatcher();
 	app.setMainWidget( mainWin );
 	mainWin->show();
 	
-	// mainWin has WDestructiveClose flag by default, so it will delete itself.
 	return app.exec();
 }
 

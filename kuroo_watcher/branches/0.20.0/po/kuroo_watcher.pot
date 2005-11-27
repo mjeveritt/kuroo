@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 13:02+0100\n"
+"POT-Creation-Date: 2005-11-27 11:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,95 +16,99 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gentoowatcher.cpp:76 kuroo_watcher.cpp:51
+#: gentoowatcher.cpp:74 kuroo_watcher.cpp:51
 msgid "Gentoo Watcher"
 msgstr ""
 
-#: gentoowatcher.cpp:79
+#: gentoowatcher.cpp:77
 msgid "&Configure Watcher..."
 msgstr ""
 
-#: gentoowatcher.cpp:80
+#: gentoowatcher.cpp:78
 msgid "&Check updates"
 msgstr ""
 
-#: gentoowatcher.cpp:85
+#: gentoowatcher.cpp:83
 msgid "Latest Gentoo packages and Security Advisories"
 msgstr ""
 
-#: gentoowatcher.cpp:364 gentoowatcher.cpp:366
+#: gentoowatcher.cpp:360 gentoowatcher.cpp:362
 msgid "settings"
 msgstr ""
 
-#: gentoowatcher.cpp:367 gentoowatcher.cpp:368
+#: gentoowatcher.cpp:363 gentoowatcher.cpp:364
 msgid "Connection"
 msgstr ""
 
-#: gentoowatcher.cpp:369
+#: gentoowatcher.cpp:365
 msgid "General"
 msgstr ""
 
-#: gentoowatcher.cpp:369
+#: gentoowatcher.cpp:365
 msgid "General settings"
 msgstr ""
 
-#: gentoowatcher.cpp:370
+#: gentoowatcher.cpp:366
 msgid "Advanced"
 msgstr ""
 
-#: gentoowatcher.cpp:370
+#: gentoowatcher.cpp:366
 msgid "Glsa and alert settings"
 msgstr ""
 
-#: gentoowatcher.cpp:490
+#: gentoowatcher.cpp:440
+msgid "Latest Gentoo packages and Security Advisories %1"
+msgstr ""
+
+#: gentoowatcher.cpp:479
 msgid "<br><br><b>Latest GLSA</b>"
 msgstr ""
 
-#: gentoowatcher.cpp:513
+#: gentoowatcher.cpp:500
 msgid "<br><br><b>Latest stable packages</b>"
 msgstr ""
 
-#: gentoowatcher.cpp:536
+#: gentoowatcher.cpp:521
 msgid "<br><br><b>Latest testing packages</b>"
 msgstr ""
 
-#: gentooagent.cpp:99 gentooagent.cpp:213
+#: gentooagent.cpp:98 gentooagent.cpp:214
 msgid "Starting Kuroo..."
 msgstr ""
 
-#: gentooagent.cpp:122
+#: gentooagent.cpp:123
 msgid " sent to Kuroo..."
 msgstr ""
 
-#: gentooagent.cpp:125
-msgid "Gentoo Watcher: Kuroo is busy"
+#: gentooagent.cpp:126
+msgid "Gentoo Watcher: Kuroo is not responding!"
 msgstr ""
 
-#: gentooagent.cpp:168
+#: gentooagent.cpp:169
 msgid "glsa-check -d "
 msgstr ""
 
-#: gentooagent.cpp:176
+#: gentooagent.cpp:177
 msgid "Experimental glsa-check!"
 msgstr ""
 
-#: gentooagent.cpp:232 gentooagent.cpp:233
+#: gentooagent.cpp:233 gentooagent.cpp:234
 msgid "&Emerge package now"
 msgstr ""
 
-#: gentooagent.cpp:234
+#: gentooagent.cpp:235
 msgid "&Open Glsa in browser"
 msgstr ""
 
-#: gentooagent.cpp:235
+#: gentooagent.cpp:236
 msgid "&Sort by pubdate"
 msgstr ""
 
-#: gentooagent.cpp:236
+#: gentooagent.cpp:237
 msgid "Open in &Kuroo"
 msgstr ""
 
-#: gentooagent.cpp:239
+#: gentooagent.cpp:240
 msgid "&Glsa-check now"
 msgstr ""
 
@@ -116,7 +120,7 @@ msgstr ""
 msgid "start or init"
 msgstr ""
 
-#: kuroo_watcher.cpp:95 rc.cpp:105
+#: kuroo_watcher.cpp:87 rc.cpp:105
 #, no-c-format
 msgid "Start Gentoo Watcher automatically at login?"
 msgstr ""
@@ -181,7 +185,7 @@ msgstr ""
 msgid "New release"
 msgstr ""
 
-#: rc.cpp:63 rc.cpp:131 rc.cpp:192
+#: rc.cpp:63 rc.cpp:131 rc.cpp:186
 #, no-c-format
 msgid "Form1"
 msgstr ""
@@ -191,17 +195,17 @@ msgstr ""
 msgid "View in alert popup"
 msgstr ""
 
-#: rc.cpp:69 rc.cpp:78 rc.cpp:180
+#: rc.cpp:69 rc.cpp:78 rc.cpp:174
 #, no-c-format
 msgid "Glsa"
 msgstr ""
 
-#: rc.cpp:72 rc.cpp:167
+#: rc.cpp:72 rc.cpp:161
 #, no-c-format
 msgid "Stable"
 msgstr ""
 
-#: rc.cpp:75 rc.cpp:170
+#: rc.cpp:75 rc.cpp:164
 #, no-c-format
 msgid "Testing"
 msgstr ""
@@ -319,30 +323,20 @@ msgstr ""
 
 #: rc.cpp:158
 #, no-c-format
-msgid "Directory"
-msgstr ""
-
-#: rc.cpp:161
-#, no-c-format
-msgid "Kuroo DirHome"
-msgstr ""
-
-#: rc.cpp:164
-#, no-c-format
 msgid "Rss feeds"
 msgstr ""
 
-#: rc.cpp:173
+#: rc.cpp:167
 #, no-c-format
 msgid "Here you enter the username for the internet connection"
 msgstr ""
 
-#: rc.cpp:177 rc.cpp:183 rc.cpp:189
+#: rc.cpp:171 rc.cpp:177 rc.cpp:183
 #, no-c-format
 msgid "Here you enter the password for the internet connection"
 msgstr ""
 
-#: rc.cpp:186
+#: rc.cpp:180
 #, no-c-format
 msgid "News"
 msgstr ""

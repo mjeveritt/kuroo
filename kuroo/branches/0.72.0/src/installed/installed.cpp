@@ -301,6 +301,8 @@ QString Installed::installedFiles( const QString& packageId )
  */
 QString Installed::installedSummary( const QString& packageId )
 {
+	KLocale *loc = KGlobal::locale();
+	
 	QString package(PortageSingleton::Instance()->package( packageId ));
 	QString category(PortageSingleton::Instance()->category( packageId ));
 	Info info( packageInfo( packageId ) );
@@ -321,7 +323,7 @@ QString Installed::installedSummary( const QString& packageId )
 		QFileInfo fil( ebuild );
 		
 		// Get installation date
-		QDateTime Date = fil.created();
+		QDateTime installDate = fil.created();
 		
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
@@ -349,7 +351,7 @@ QString Installed::installedSummary( const QString& packageId )
 		}
 		textLines += i18n("<b>Use flags:</b> ") + info.useFlags + "<br>";
 		textLines += i18n("<b>Size:</b> ") + info.size + "<br>";
-		textLines += i18n("<b>Emerge date: </b>") + Date.toString("MMM dd yyyy hh:mm") + "<br>";
+		textLines += i18n("<b>Emerge date: </b>") + loc->formatDateTime(installDate) + "<br>";
 		textLines += i18n("<b>Emerge time (average): </b>") + timeFormat( time );
 		
 		file.close();

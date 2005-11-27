@@ -217,7 +217,6 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE history ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " package VARCHAR(32), "
-	      " date VARCHAR(10), "
 	      " timestamp VARCHAR(10), "
 	      " time INTEGER, "
 	      " emerge BOOL)"
@@ -267,13 +266,6 @@ QStringList KurooDB::packageVersions( const QString& name )
 	              " WHERE name = '" + name + "'"
 	              " AND installed != '2' "
 	              " ORDER BY version;");
-}
-
-QStringList KurooDB::history()
-{
-	return query( " SELECT date, package, time "
-	              " FROM history "
-	              " ORDER BY id ASC;");
 }
 
 QStringList KurooDB::statistic()
@@ -477,6 +469,13 @@ QStringList KurooDB::findPortagePackagesDescription( const QString& description 
 	                      	+ limit );
 }
 
+QStringList KurooDB::history()
+{
+	return query( " SELECT timeStamp, package, time "
+	              " FROM history "
+	              " ORDER BY id ASC;");
+}
+
 QStringList KurooDB::lastHistoryEntry()
 {
 	return query(" SELECT timestamp "
@@ -486,9 +485,9 @@ QStringList KurooDB::lastHistoryEntry()
 
 QStringList KurooDB::getLastSync()
 {
-	return query(" SELECT date "
+	return query(" SELECT timestamp "
 	             " FROM history "
-	             " WHERE id = (SELECT MAX(id) FROM history where package = '');");
+	             " WHERE id = (SELECT MAX(id) FROM history where package = '' AND emerge = 'true');");
 }
 
 QStringList KurooDB::cache()

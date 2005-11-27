@@ -266,7 +266,6 @@ void KurooView::slotViewPackage( const QString& package )
  */
 bool KurooView::slotEmergePretend( QString package )
 {
-	kdDebug() << "KurooView::slotEmergePretend package=" << package << endl;
 	if ( EmergeSingleton::Instance()->pretend( package ) )
 		return true;
 	else

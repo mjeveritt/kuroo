@@ -119,9 +119,8 @@ bool Portage::slotSync()
  */
 void Portage::setRefreshTime()
 {
-	QDateTime t(QDateTime::currentDateTime());
-	QString timeStamp = QString::number(t.toTime_t());
-	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("MMM dd yyyy hh:mm")).arg(timeStamp) );
+	QDateTime currentTime( QDateTime::currentDateTime() );
+	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, timestamp, emerge) VALUES ('', '%1', 'false');").arg( QString::number( currentTime.toTime_t() ) ) );
 }
 
 /**

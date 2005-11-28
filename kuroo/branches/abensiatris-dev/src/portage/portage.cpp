@@ -675,16 +675,17 @@ void Portage::removeWorldList( const QString& category, const QStringList& packa
 {
 	QFile file( KurooConfig::fileWorld() );
 	
-	foreach ( packageList )
-	{
+	foreach ( packageList ) {
+		
 		QString package = category + "/" + (*it).section(pv, 0, 0);
 		worldMap.remove( package );
 		
-		// Signal to gui to mark package as not in world
+		kdDebug() << "Portage::removeWorldList package=" << package << endl;
+		
+		// Signal to gui to mark package as unmasked
 		QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
 		QString name( temp.section(pv, 0, 0) );
 		SignalistSingleton::Instance()->setInWorld(name, false);
-		
 	}
 	
 	saveWorldList();
@@ -706,7 +707,9 @@ void Portage::addWorldList( const QString& category, const QStringList& packageL
 //		is this the right way? package, "" ??
 		worldMap.insert( package , "");
 		
-		// Signal to gui to mark package as not in world
+		kdDebug() << "Portage::removeWorldList package=" << package << endl;
+		
+		// Signal to gui to mark package as unmasked
 		QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
 		QString name( temp.section(pv, 0, 0) );
 		SignalistSingleton::Instance()->setInWorld(name, true);

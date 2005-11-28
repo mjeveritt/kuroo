@@ -220,6 +220,8 @@ void Signalist::clearQueued()
  */
 void Signalist::setUnmasked( const QString& name, bool b )
 {
+	kdDebug() << "Signalist::setUnmasked name=" << name << endl;
+	
 	emit signalUnmasked( name, b );
 }
 

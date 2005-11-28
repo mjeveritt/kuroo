@@ -199,7 +199,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	if ( !item )
 		return;
 	
-	enum Actions { PRETEND, APPEND, EMERGE, DEPEND, UNMASK, CLEARUNMASK, USEFLAGS };
+	enum Actions { PRETEND, APPEND, EMERGE, DEPEND, UNMASK, CLEARUNMASK, USEFLAGS, UNMARK };
 	
 	KPopupMenu menu(this);
 	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
@@ -208,6 +208,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem4 = menu.insertItem(i18n("&Unmask"), UNMASK);
 	int menuItem5 = menu.insertItem(i18n("&Clear Unmasking"), CLEARUNMASK);
 	int menuItem6 = menu.insertItem(i18n("&Edit Use Flags"), USEFLAGS);
+	int menuItem7 = menu.insertItem(i18n("Unmark as end-user"), UNMARK);
 	
 	// No access when kuroo is busy.
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
@@ -265,6 +266,12 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			useFlags();
 			break;
 		}
+		
+		case UNMARK: {
+			PortageSingleton::Instance()->removeWorldList( categoriesView->currentCategory(), packagesView->selectedPackages() );
+			break;
+		}
+		
 	}
 }
 

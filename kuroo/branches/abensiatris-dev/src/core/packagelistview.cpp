@@ -200,6 +200,8 @@ void PackageListView::insertPackage( const QString& idDB, PackageItem *item )
  */
 void PackageListView::setUnmasked( const QString& name, bool b )
 {
+	kdDebug() << "PackageListView::setUnmasked name=" << name << endl;
+	
 	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
 	while ( myChild ) {
 		if ( myChild->text(0) == name ) {
@@ -220,11 +222,11 @@ void PackageListView::setUnmasked( const QString& name, bool b )
  */
 void PackageListView::setInWorld( const QString& name, bool b )
 {
-	kdDebug() << "PackageListView::setInWorld name=" << name << endl;
+	kdDebug() << "PackageListView::setInWorld name=" << name << " b=" << b << endl;
 	
 	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
 	while ( myChild ) {
-		if ( myChild->text(0) == name ) {
+		if ( myChild->text(0).section(pv, 0, 0) == name ) {
 			if ( b )
 				myChild->setStatus(INSTALLED_WORLD);
 			else

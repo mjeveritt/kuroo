@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-03 17:07+0100\n"
-"PO-Revision-Date: 2005-11-03 22:38+0000\n"
+"POT-Creation-Date: 2005-11-08 13:41+0100\n"
+"PO-Revision-Date: 2005-11-08 19:52+0000\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,51 +18,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10.1\n"
 
-#: core/scanhistoryjob.cpp:69 core/scanportagejob.cpp:79
-#: core/scanupdatesjob.cpp:68 core/scaninstalledjob.cpp:104
-#: core/cacheportagejob.cpp:93
+#: core/scanhistoryjob.cpp:69 core/scanportagejob.cpp:78
+#: core/scanupdatesjob.cpp:68 core/scaninstalledjob.cpp:103
+#: core/cacheportagejob.cpp:92
 msgid "Can not connect to database"
 msgstr "Klarte ikke koble til databasen"
 
-#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:142
+#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:140
 msgid "History scan aborted"
 msgstr "Lesing av historikken ble avbrutt"
 
-#: core/scanportagejob.cpp:85 core/scanportagejob.cpp:176
-#: core/scanportagejob.cpp:246 core/scanportagejob.cpp:251
-#: core/scaninstalledjob.cpp:73 core/scaninstalledjob.cpp:109
-#: core/scaninstalledjob.cpp:201 core/cacheportagejob.cpp:69
-#: core/cacheportagejob.cpp:108 core/cacheportagejob.cpp:161
-#: core/cacheportagejob.cpp:166 core/cacheportagejob.cpp:220
+#: core/scanportagejob.cpp:84 core/scanportagejob.cpp:175
+#: core/scanportagejob.cpp:244 core/scanportagejob.cpp:249
+#: core/scaninstalledjob.cpp:72 core/scaninstalledjob.cpp:108
+#: core/scaninstalledjob.cpp:200 core/cacheportagejob.cpp:68
+#: core/cacheportagejob.cpp:107 core/cacheportagejob.cpp:160
+#: core/cacheportagejob.cpp:165 core/cacheportagejob.cpp:220
 msgid "Can not access "
 msgstr "Fikk ikke tilgang til "
 
-#: core/scanportagejob.cpp:90
+#: core/scanportagejob.cpp:89
 msgid "Refreshing Portage view..."
 msgstr "Oppdaterer Portage-visningen . . ."
 
-#: core/scanportagejob.cpp:128 core/scanportagejob.cpp:147
+#: core/scanportagejob.cpp:127 core/scanportagejob.cpp:146
 msgid "Portage scan aborted"
 msgstr "Lesingen av Portage ble avbrutt"
 
-#: core/scanportagejob.cpp:195 core/scanportagejob.cpp:217
+#: core/scanportagejob.cpp:194 core/scanportagejob.cpp:216
 msgid "Portage Overlay scan aborted"
 msgstr "Lesing av overstyringen til Portage ble avbrutt"
 
-#: core/scanportagejob.cpp:263 core/emerge.cpp:552 core/emerge.cpp:623
-#: core/scanupdatesjob.cpp:151 core/scaninstalledjob.cpp:210
-#: queue/queuetab.cpp:350 history/history.cpp:267 history/history.cpp:268
+#: core/scanportagejob.cpp:261 core/emerge.cpp:553 core/emerge.cpp:624
+#: core/scanupdatesjob.cpp:151 core/scaninstalledjob.cpp:209
+#: queue/queuetab.cpp:350 history/history.cpp:268 history/history.cpp:269
 msgid "Done."
 msgstr "Ferdig"
 
-#: core/scanportagejob.cpp:279 core/scanportagejob.cpp:350
-#: core/cacheportagejob.cpp:153 core/cacheportagejob.cpp:212
-#: installed/installed.cpp:96 installed/installed.cpp:292
-#: installed/installed.cpp:360 queue/queue.cpp:67 intro/introdlg.cpp:68
-#: portage/portage.cpp:344 portage/portage.cpp:539 portage/portage.cpp:571
-#: portage/portage.cpp:612 portage/usedialog.cpp:69
+#: core/scanportagejob.cpp:277 core/scanportagejob.cpp:348
+#: core/cacheportagejob.cpp:152 core/cacheportagejob.cpp:212
+#: installed/installed.cpp:96 installed/installed.cpp:293
+#: installed/installed.cpp:361 queue/queue.cpp:67 intro/introdlg.cpp:68
+#: portage/portage.cpp:353 portage/portage.cpp:547 portage/portage.cpp:579
+#: portage/portage.cpp:620 portage/usedialog.cpp:69
 #: config/configdialog.cpp:109 config/configdialog.cpp:129
-#: config/configdialog.cpp:150 config/configdialog.cpp:171
+#: config/configdialog.cpp:149 config/configdialog.cpp:169
 msgid "Error reading: "
 msgstr "Feil ved lesing av: "
 
@@ -70,8 +70,16 @@ msgstr "Feil ved lesing av: "
 msgid "Emerge process killed!"
 msgstr "Installasjonsprosessen ble drept."
 
-#: core/emerge.cpp:114 core/emerge.cpp:158 core/emerge.cpp:194
-#: core/emerge.cpp:231
+#: core/emerge.cpp:58
+msgid ""
+"\n"
+"Emerge queue aborted!"
+msgstr ""
+"\n"
+"Installasjonskøen ble avbrutt."
+
+#: core/emerge.cpp:115 core/emerge.cpp:159 core/emerge.cpp:195
+#: core/emerge.cpp:232
 msgid ""
 "\n"
 "Error: Emerge didn't start. "
@@ -79,7 +87,7 @@ msgstr ""
 "\n"
 "Feil: installasjonen staret ikke. "
 
-#: core/emerge.cpp:119 core/emerge.cpp:163
+#: core/emerge.cpp:120 core/emerge.cpp:164
 msgid ""
 "\n"
 "Emerge %1 started..."
@@ -87,11 +95,11 @@ msgstr ""
 "\n"
 "Installasjon av %1 har startet . . ."
 
-#: core/emerge.cpp:120 core/emerge.cpp:164
+#: core/emerge.cpp:121 core/emerge.cpp:165
 msgid "Emerging packages in queue..."
 msgstr "Installerer pakkene i køen . . ."
 
-#: core/emerge.cpp:201 core/emerge.cpp:238
+#: core/emerge.cpp:202 core/emerge.cpp:239
 msgid ""
 "\n"
 "Emerge pretend %1 started..."
@@ -99,11 +107,11 @@ msgstr ""
 "\n"
 "Kartlegging av %1 har startet . . ."
 
-#: core/emerge.cpp:202 core/emerge.cpp:239
+#: core/emerge.cpp:203 core/emerge.cpp:240
 msgid "Running emerge pretend..."
 msgstr "Lager installasjonsoversikt . . ."
 
-#: core/emerge.cpp:268 core/emerge.cpp:297 core/emerge.cpp:336
+#: core/emerge.cpp:269 core/emerge.cpp:298 core/emerge.cpp:337
 msgid ""
 "\n"
 "Error: Emerge didn't start."
@@ -111,7 +119,7 @@ msgstr ""
 "\n"
 "Feil: installasjonen startet ikke."
 
-#: core/emerge.cpp:275
+#: core/emerge.cpp:276
 msgid ""
 "\n"
 "Unmerge %1 started..."
@@ -119,11 +127,11 @@ msgstr ""
 "\n"
 "Avinstallering av %1 startet . . ."
 
-#: core/emerge.cpp:276
+#: core/emerge.cpp:277
 msgid "Unmerging packages..."
 msgstr "Avinstaller pakker . . ."
 
-#: core/emerge.cpp:304
+#: core/emerge.cpp:305
 msgid ""
 "\n"
 "Emerge synchronize Portage Tree started..."
@@ -131,11 +139,11 @@ msgstr ""
 "\n"
 "Synkronisering av Portage-treet startet . . ."
 
-#: core/emerge.cpp:305
+#: core/emerge.cpp:306
 msgid "Synchronizing portage tree..."
 msgstr "Synkroniserer Portage-treet . . ."
 
-#: core/emerge.cpp:343
+#: core/emerge.cpp:344
 msgid ""
 "\n"
 "Emerge check package updates started..."
@@ -143,35 +151,35 @@ msgstr ""
 "\n"
 "Ser etter nye versjoner av installerte pakker . . ."
 
-#: core/emerge.cpp:344
+#: core/emerge.cpp:345
 msgid "Checking updates..."
 msgstr "Ser etter oppdateringer . . ."
 
-#: core/emerge.cpp:472
+#: core/emerge.cpp:473
 msgid "Root access required!"
 msgstr "Superbrukerprivilegier er nødvendig."
 
-#: core/emerge.cpp:478
+#: core/emerge.cpp:479
 msgid "There is no ebuilds to satisfy %1"
 msgstr "Ingen pakker tilfredstiller «%1»"
 
-#: core/emerge.cpp:557 core/emerge.cpp:627
+#: core/emerge.cpp:558 core/emerge.cpp:628
 msgid "Blocks"
 msgstr "Blokkerer"
 
-#: core/emerge.cpp:557 core/emerge.cpp:627
+#: core/emerge.cpp:558 core/emerge.cpp:628
 msgid "Packages are blocking emerge, please correct!"
 msgstr "Pakker blokkerer installasjonen."
 
-#: core/emerge.cpp:563 core/emerge.cpp:630
+#: core/emerge.cpp:564 core/emerge.cpp:631
 msgid "Important"
 msgstr "Viktig"
 
-#: core/emerge.cpp:563 core/emerge.cpp:630
+#: core/emerge.cpp:564 core/emerge.cpp:631
 msgid "Please check log for more information!"
 msgstr "Se i loggen for mer informasjon."
 
-#: core/emerge.cpp:643
+#: core/emerge.cpp:647
 msgid ""
 "<br><b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet. Ask the architecture porting team to test the package "
@@ -181,11 +189,11 @@ msgstr ""
 "arkitektur ennå. Be laget for arkitektur-tilrettelegging om å teste pakken "
 "eller test den for dem og skriv resultatene i Gentoos feilsøkingsside."
 
-#: core/emerge.cpp:644 core/emerge.cpp:649
+#: core/emerge.cpp:648 core/emerge.cpp:653
 msgid "<b>%1</b> is not available on your architecture %2!"
 msgstr "<b>%1</b> er ikke tilgjengelig for din arkitektur, «%2»."
 
-#: core/emerge.cpp:648
+#: core/emerge.cpp:652
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture. If you believe the package does work file a bug at Gentoo "
@@ -194,38 +202,44 @@ msgstr ""
 "<br><b>-* nøkkelord</b> betyr at programmet ikke virker på din arkitektur. "
 "Skriv en feilrapport på Gentoos feilsøkingsside hvis du tror det virker."
 
-#: core/emerge.cpp:653
-msgid "Please add package to \"package.unmask\"."
-msgstr "Pakken må legges til i «package.unmask»."
+#: core/emerge.cpp:660
+msgid "Cannot emerge testing/unstable package %1!."
+msgstr "Klarte ikke installere pakken «%1», som er markert ustabil eller testpakke."
 
-#: core/emerge.cpp:655 core/emerge.cpp:667
-msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr "<qt>Kan ikke installere testpakke.<br>Vil du avmaskere «%1»?</qt>"
+#: core/emerge.cpp:662
+msgid ""
+"<qt>Cannot emerge testing/unstable package!<br>Do you want to unmask <b>%1</"
+"b>?</qt>"
+msgstr "<qt>Klarte ikke installere en pakke som er markert ustabil eller for testing.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
 
-#: core/emerge.cpp:655 core/emerge.cpp:667
+#: core/emerge.cpp:662
 msgid "Unmask"
 msgstr "Avmasker"
 
-#: core/emerge.cpp:665
-msgid "Please add package to \"package.keywords\"."
-msgstr "Legg pakken til i «package.keywords»."
+#: core/emerge.cpp:668
+msgid "Package added to \"package.unmask\"."
+msgstr "Pakken ble lagt til i «package.unmask»."
+
+#: core/emerge.cpp:674
+msgid "Package added to \"package.keyword\"."
+msgstr "Pakke ble lagt til i «package.keywords»."
 
 #: core/categorieslistview.cpp:49 core/categorieslistview.cpp:50
 msgid "Category"
 msgstr "Kategori"
 
 #: core/categorieslistview.cpp:71 core/packagelistview.cpp:68
-#: core/packagelistview.cpp:82 installed/installed.cpp:293
-#: installed/installed.cpp:361 installed/installed.cpp:378
+#: core/packagelistview.cpp:82 installed/installed.cpp:294
+#: installed/installed.cpp:362 installed/installed.cpp:379
 #: installed/installedtab.cpp:291 installed/installedtab.cpp:309
 #: queue/queuelistview.cpp:116 queue/queuelistview.cpp:206
-#: portage/portage.cpp:540 portage/portage.cpp:572 portage/portage.cpp:613
+#: portage/portage.cpp:548 portage/portage.cpp:580 portage/portage.cpp:621
 #: portage/portagelistview.cpp:104 portage/portagetab.cpp:162
 #: portage/portagetab.cpp:343 portage/portagetab.cpp:355
-#: portage/portagetab.cpp:367 history/history.cpp:159
-#: history/historylistview.cpp:77 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
+#: portage/portagetab.cpp:367 history/history.cpp:160
+#: history/historylistview.cpp:80 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
 #: kuroo.cpp:231 kuroo.cpp:232 kuroo.cpp:233 kuroo.cpp:243 kuroo.cpp:244
-#: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257
+#: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257 kuroo.cpp:281
 msgid "na"
 msgstr "I/T"
 
@@ -272,9 +286,9 @@ msgid "9In Queue"
 msgstr "9l Kø"
 
 #: core/packageitem.cpp:189 results/resultlistview.cpp:54
-#: logs/scansizelistview.cpp:46 installed/installedpackageslistview.cpp:54
-#: queue/queuelistview.cpp:53 portage/portagelistview.cpp:56
-#: updates/updatelistview.cpp:55 updates/updatepackageslistview.cpp:52
+#: installed/installedpackageslistview.cpp:54 queue/queuelistview.cpp:53
+#: portage/portagelistview.cpp:56 updates/updatelistview.cpp:55
+#: updates/updatepackageslistview.cpp:52
 msgid "Size"
 msgstr "Størrelse"
 
@@ -283,15 +297,15 @@ msgstr "Størrelse"
 msgid "Nr"
 msgstr "Nr."
 
-#: core/scaninstalledjob.cpp:77 core/cacheportagejob.cpp:73
+#: core/scaninstalledjob.cpp:76 core/cacheportagejob.cpp:72
 msgid "Counting packages..."
 msgstr "Teller pakker . . ."
 
-#: core/scaninstalledjob.cpp:116
+#: core/scaninstalledjob.cpp:115
 msgid "Refreshing Installed view..."
 msgstr "Oppdaterer listen over installerte pakker . . ."
 
-#: core/scaninstalledjob.cpp:151 core/scaninstalledjob.cpp:173
+#: core/scaninstalledjob.cpp:150 core/scaninstalledjob.cpp:172
 msgid "Installed scan aborted"
 msgstr "Lesingen av installerte pakker ble avbrutt"
 
@@ -303,9 +317,9 @@ msgstr ""
 "<qt>VIKTIG: %1 konfigurasjonsfiler i «/etc» må oppdateres.<br>Slå sammen "
 "endringer?</qt>"
 
-#: core/etcupdate.cpp:58 core/etcupdate.cpp:73 core/etcupdate.cpp:180
-#: intro/introdlg.cpp:133 config/configdialog.cpp:543
-#: config/configdialog.cpp:546 main.cpp:46 rc.cpp:184
+#: core/etcupdate.cpp:58 core/etcupdate.cpp:73 core/etcupdate.cpp:182
+#: intro/introdlg.cpp:133 config/configdialog.cpp:541
+#: config/configdialog.cpp:544 main.cpp:46 rc.cpp:184
 #, no-c-format
 msgid "Kuroo"
 msgstr "Kuroo"
@@ -314,7 +328,7 @@ msgstr "Kuroo"
 msgid "Please specify merge tool in settings!"
 msgstr "Spesifiser sammenslåingsverktøyet i oppsettsvinduet."
 
-#: core/etcupdate.cpp:82
+#: core/etcupdate.cpp:84
 msgid ""
 "\n"
 "etc-update didn't start. "
@@ -322,7 +336,7 @@ msgstr ""
 "\n"
 "Konfigurasjonsoppdatereren («etc-update») startet ikke. "
 
-#: core/etcupdate.cpp:88
+#: core/etcupdate.cpp:90
 msgid ""
 "\n"
 "Running etc-update..."
@@ -330,49 +344,49 @@ msgstr ""
 "\n"
 "Kjører konfigurasjonsoppdaterer («etc-update») . . ."
 
-#: core/etcupdate.cpp:161
+#: core/etcupdate.cpp:163
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr "<font color=red>Advarsel!<br>Du har redigert «%1».</font><br>"
 
-#: core/etcupdate.cpp:168
+#: core/etcupdate.cpp:170
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
 msgstr "<qt>%1Slå sammen endringer i «%2»?</qt>"
 
-#: core/etcupdate.cpp:168
+#: core/etcupdate.cpp:170
 msgid "etc-update (%1 of %2)"
 msgstr "Konfigurasjonsoppdaterer («etc-update») (%1 av %2)"
 
-#: core/etcupdate.cpp:179
+#: core/etcupdate.cpp:181
 msgid "%1 didn't start."
 msgstr "«%1» startet ikke."
 
-#: core/etcupdate.cpp:180
+#: core/etcupdate.cpp:182
 msgid "%1 could not start!"
 msgstr "«%1» klarte ikke starte."
 
-#: core/etcupdate.cpp:184
+#: core/etcupdate.cpp:186
 msgid "Merging changes in '%1'."
 msgstr "Slår sammen endringer i «%1»."
 
-#: core/etcupdate.cpp:191
+#: core/etcupdate.cpp:193
 msgid "Skipping '%1'. etc-update will ask again next time."
 msgstr ""
 "Hopper over «%1»; konfigurasjonsoppdatereren («etc-update») spør på nytt "
 "igjen neste gang."
 
-#: core/etcupdate.cpp:198
+#: core/etcupdate.cpp:200
 msgid "etc-update completed."
 msgstr "Konfigurasjonsoppdatereren («etc-update») fullførte."
 
-#: core/etcupdate.cpp:211
+#: core/etcupdate.cpp:213
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr "Sletter «%1«, sikkerhetskopi lagret i «%2»."
 
-#: core/cacheportagejob.cpp:104
+#: core/cacheportagejob.cpp:103
 msgid "Collecting package information..."
 msgstr "Samler pakkeinformasjon . . ."
 
-#: core/cacheportagejob.cpp:119 core/cacheportagejob.cpp:136
+#: core/cacheportagejob.cpp:118 core/cacheportagejob.cpp:135
 #: core/cacheportagejob.cpp:178 core/cacheportagejob.cpp:195
 msgid "Caching aborted"
 msgstr "Lagring i hurtigminne ble avbrutt"
@@ -469,37 +483,29 @@ msgid "View Info"
 msgstr "Vis informasjon"
 
 #: logs/log.cpp:58 installed/installed.cpp:93 queue/queue.cpp:64
-#: portage/portage.cpp:367 portage/portage.cpp:413 config/configdialog.cpp:391
-#: config/configdialog.cpp:410 config/configdialog.cpp:429
-#: config/configdialog.cpp:448 config/configdialog.cpp:564
+#: portage/portage.cpp:376 portage/portage.cpp:422 config/configdialog.cpp:389
+#: config/configdialog.cpp:408 config/configdialog.cpp:427
+#: config/configdialog.cpp:446 config/configdialog.cpp:558
 msgid "Error writing: "
 msgstr "Feil ved skriving til: "
 
 #: logs/log.cpp:59
-msgid "Error writing %1/kuroo.log."
-msgstr "Feil ved skriving til «%1/kuroo.log»."
+msgid "Error writing %1kuroo.log."
+msgstr "Klarte ikke skrive til «%1kuroo.log»."
 
-#: logs/log.cpp:59 portage/portage.cpp:368 portage/portage.cpp:414
-#: portage/usedialog.cpp:174 config/configdialog.cpp:336
-#: config/configdialog.cpp:344 config/configdialog.cpp:352
-#: config/configdialog.cpp:360 config/configdialog.cpp:370
-#: config/configdialog.cpp:566
+#: logs/log.cpp:59 portage/portage.cpp:377 portage/portage.cpp:423
+#: portage/usedialog.cpp:174 config/configdialog.cpp:334
+#: config/configdialog.cpp:342 config/configdialog.cpp:350
+#: config/configdialog.cpp:358 config/configdialog.cpp:368
+#: config/configdialog.cpp:560
 msgid "Saving"
 msgstr "Lagrer"
-
-#: logs/scansizelistview.cpp:45
-msgid "Directory"
-msgstr "Katalog"
-
-#: logs/scansizelistview.cpp:70
-msgid "Refreshed "
-msgstr "Oppdaterte "
 
 #: logs/emergelogdlg.cpp:52
 msgid "Error reading "
 msgstr "Feil ved lesing av "
 
-#: installed/installed.cpp:233
+#: installed/installed.cpp:234
 msgid ""
 "\n"
 "No packages found matching: %1"
@@ -507,31 +513,35 @@ msgstr ""
 "\n"
 "Fant ingen pakker som passer til «%1»"
 
-#: installed/installed.cpp:340
+#: installed/installed.cpp:314
+msgid " <font color=red>(Version not available in Portage)</font>"
+msgstr "<font color=red>(Versjonen er ikke tilgjengelig i Portage)</font>"
+
+#: installed/installed.cpp:341
 msgid "<b>License:</b> "
 msgstr "<b>Lisens:</b> "
 
-#: installed/installed.cpp:344 portage/portage.cpp:503
+#: installed/installed.cpp:345 portage/portage.cpp:512
 msgid "<b>Slot:</b> "
 msgstr "<b>Plass:</b> "
 
-#: installed/installed.cpp:348 portage/portage.cpp:504
+#: installed/installed.cpp:349 portage/portage.cpp:513
 msgid "<b>Branches:</b> "
 msgstr "<b>Arkitekturer:</b> "
 
-#: installed/installed.cpp:351 portage/portage.cpp:505
+#: installed/installed.cpp:352 portage/portage.cpp:514
 msgid "<b>Use flags:</b> "
 msgstr "<b>Bruk-flagg:</b> "
 
-#: installed/installed.cpp:352 portage/portage.cpp:506
+#: installed/installed.cpp:353 portage/portage.cpp:515
 msgid "<b>Size:</b> "
 msgstr "<b>Størrelse:</b> "
 
-#: installed/installed.cpp:353
+#: installed/installed.cpp:354
 msgid "<b>Emerge date: </b>"
 msgstr "<b>Installasjonsdato: </b>"
 
-#: installed/installed.cpp:354
+#: installed/installed.cpp:355
 msgid "<b>Emerge time (average): </b>"
 msgstr "<b>Installasjonstid (gjennomsnittlig): </b>"
 
@@ -656,27 +666,31 @@ msgstr "Stien til Portages påleggkatalog «%1» er ugyldig."
 msgid "Error checking paths..."
 msgstr "Feil ved sjekking av stier."
 
-#: portage/portage.cpp:97
+#: portage/portage.cpp:98
 msgid "Wait-counter has reached maximum. Attempting to scan Portage."
 msgstr "Ventetelleren har nådd høyeste verdi. Prøver å undersøke Portage."
 
-#: portage/portage.cpp:194
+#: portage/portage.cpp:203
 msgid "<br>No packages found matching: %1"
 msgstr "<br>Fant ingen pakker som passer til «%1»"
 
-#: portage/portage.cpp:293
+#: portage/portage.cpp:302
 msgid "Error reading: package.keyword."
 msgstr "Feil ved lesing av «package.keywords»."
 
-#: portage/portage.cpp:368 portage/portage.cpp:414 portage/usedialog.cpp:174
-msgid "Failed to save. Please run as root."
-msgstr "Klarte ikke lagre; kjør som superbruker."
+#: portage/portage.cpp:377
+msgid "Failed to save to %1. Please run as root."
+msgstr "Klarte ikke lagre til «%1»; kjør som superbruker."
 
-#: portage/portage.cpp:471 portage/portage.cpp:502
+#: portage/portage.cpp:423
+msgid "Failed to saveto %1. Please run as root."
+msgstr "Klarte ikke lagre til «%1»; kjør som superbruker."
+
+#: portage/portage.cpp:480 portage/portage.cpp:511
 msgid "<b>Licenses:</b> "
 msgstr "<b>Lisenser:</b> "
 
-#: portage/portage.cpp:472
+#: portage/portage.cpp:481
 msgid "<b>Available versions:</b> "
 msgstr "<b>Tilgjengelige versjoner:</b> "
 
@@ -735,47 +749,51 @@ msgstr "Rediger pakkens bruk-flagg"
 msgid "Error reading: /etc/portage/package.use"
 msgstr "Feil ved lesing av «/etc/portage/package.use»"
 
-#: history/history.cpp:55
-msgid "Error reading /var/log/emerge.log"
-msgstr "Feil ved lesing av «/var/log/emerge.log»"
+#: portage/usedialog.cpp:174
+msgid "Failed to save. Please run as root."
+msgstr "Klarte ikke lagre; kjør som superbruker."
 
-#: history/history.cpp:209
+#: history/history.cpp:56
+msgid "Error reading %1"
+msgstr "Klarte ikke lese «%1»"
+
+#: history/history.cpp:210
 msgid " to "
 msgstr " til "
 
-#: history/history.cpp:210
+#: history/history.cpp:211
 msgid " of "
 msgstr " av "
 
-#: history/history.cpp:216
+#: history/history.cpp:217
 msgid "Compiling/Merging"
 msgstr "Bygger/Installerer"
 
-#: history/history.cpp:217
+#: history/history.cpp:218
 msgid "Post-Build Cleaning"
 msgstr "Rydder opp etter bygging"
 
-#: history/history.cpp:218
+#: history/history.cpp:219
 msgid "Cleaning"
 msgstr "Rydder"
 
-#: history/history.cpp:225
+#: history/history.cpp:226
 msgid "Started emerge on"
 msgstr "Startet installasjon"
 
-#: history/history.cpp:243
+#: history/history.cpp:244
 msgid "completed emerge"
 msgstr "Installasjon fullført"
 
-#: history/history.cpp:251
+#: history/history.cpp:252
 msgid "unmerge success"
 msgstr "Vellykket avinstallering"
 
-#: history/history.cpp:256 history/history.cpp:257
+#: history/history.cpp:257 history/history.cpp:258
 msgid "Synchronizing Portage..."
 msgstr "Synkroniserer Portage . . ."
 
-#: history/history.cpp:262 history/history.cpp:263
+#: history/history.cpp:263 history/history.cpp:264
 msgid "Sync completed."
 msgstr "Synkronisering fullført."
 
@@ -844,133 +862,143 @@ msgstr "<qt>Oppdatere oppdateringsoversikten?</qt>"
 msgid "Refreshing Updates"
 msgstr "Oppdaterer listen over oppdateringer"
 
-#: config/configdialog.cpp:54 config/configdialog.cpp:62
+#: config/configdialog.cpp:62
 msgid "General"
 msgstr "Generelt"
-
-#: config/configdialog.cpp:55 config/configdialog.cpp:63
-msgid "make.conf"
-msgstr "make.conf"
-
-#: config/configdialog.cpp:56 config/configdialog.cpp:64
-msgid "package.keywords"
-msgstr "package.keywords"
-
-#: config/configdialog.cpp:57 config/configdialog.cpp:65
-msgid "package.unmask"
-msgstr "package.unmask"
-
-#: config/configdialog.cpp:58 config/configdialog.cpp:66
-msgid "package.mask"
-msgstr "package.mask"
-
-#: config/configdialog.cpp:59 config/configdialog.cpp:67
-msgid "world"
-msgstr "world"
-
-#: config/configdialog.cpp:60 config/configdialog.cpp:68
-msgid "etc warnings"
-msgstr "«etc»-advarsler"
 
 #: config/configdialog.cpp:62
 msgid "General preferences"
 msgstr "Generelle innstillinger"
 
 #: config/configdialog.cpp:63
+msgid "Portage make.conf"
+msgstr "Portage make.conf"
+
+#: config/configdialog.cpp:63
 msgid "Edit your make.conf file"
 msgstr "Rediger «make.conf»-filen"
+
+#: config/configdialog.cpp:64
+msgid "Testing packages"
+msgstr "Testpakker"
 
 #: config/configdialog.cpp:64
 msgid "Edit your package.keywords file"
 msgstr "Rediger «package.keywords»-filen"
 
 #: config/configdialog.cpp:65
+msgid "Unstable packages"
+msgstr "Ustabile pakker"
+
+#: config/configdialog.cpp:65
 msgid "Edit your package.unmask file"
 msgstr "Rediger «package.unmask»-filen"
+
+#: config/configdialog.cpp:66
+msgid "Protected packages"
+msgstr "Beskyttede pakker"
 
 #: config/configdialog.cpp:66
 msgid "Edit your package.mask file"
 msgstr "Rediger «package.mask»-filen"
 
 #: config/configdialog.cpp:67
+msgid "World"
+msgstr "Verden"
+
+#: config/configdialog.cpp:67
 msgid "Edit your world file"
 msgstr "Rediger «world»-filen"
+
+#: config/configdialog.cpp:68
+msgid "Etc warnings"
+msgstr "Konfigurasjonsfiladvarsler"
 
 #: config/configdialog.cpp:68
 msgid "Edit your etc-update warning file list"
 msgstr "Rediger advarselsfillisten for konfigurasjonsoppdatereren"
 
-#: config/configdialog.cpp:321 config/configdialog.cpp:479 kurooinit.cpp:168
+#: config/configdialog.cpp:319 config/configdialog.cpp:477 kurooinit.cpp:189
 msgid "Error reading: /etc/make.conf"
 msgstr "Feil ved lesing av «/etc/make.conf»"
 
-#: config/configdialog.cpp:336
+#: config/configdialog.cpp:334
 msgid "Failed to save makeconf. Please run as root."
 msgstr "Klarte ikke lagre «make.conf»; kjør programmet som superbruker."
 
-#: config/configdialog.cpp:344
+#: config/configdialog.cpp:342
 msgid "Failed to save package.unmask. Please run as root."
 msgstr "Klarte ikke lagre «package.unmask»; kjør programmet som superbruker."
 
-#: config/configdialog.cpp:352
+#: config/configdialog.cpp:350
 msgid "Failed to save package.mask. Please run as root."
 msgstr "Klarte ikke lagre «package.mask»; kjør programmet som superbruker."
 
-#: config/configdialog.cpp:360
+#: config/configdialog.cpp:358
 msgid "Failed to save package.keywords. Please run as root."
 msgstr "Klarte ikke lagre «package.keywords»; kjør programmet som superbruker."
 
-#: config/configdialog.cpp:370
+#: config/configdialog.cpp:368
 msgid "Failed to save world file. Please run as root."
 msgstr "Klarte ikke lagre «world»-filen; kjør programmet som superbruker."
 
-#: config/configdialog.cpp:533
+#: config/configdialog.cpp:531
 msgid "Error writing: /etc/make.conf"
 msgstr "Feil ved skriving til «/etc/make.conf»"
 
-#: config/configdialog.cpp:543
+#: config/configdialog.cpp:541
 msgid "Do you want export all Installed packages to the world file?"
 msgstr "Eksportere alle installerte pakker til «world»-filen?"
 
-#: config/configdialog.cpp:546
+#: config/configdialog.cpp:544
 msgid "Export to world file completed."
 msgstr "Eksportering til «world»-fil fullført."
 
-#: config/configdialog.cpp:566
+#: config/configdialog.cpp:560
 msgid "Please run kuroo as root for exporting to %1."
 msgstr "Kjør Kuroo som superbruker for å eksportere til %1."
 
-#: kurooinit.cpp:50
-msgid ""
-"You must start Kuroo with kdesu first time for a secure initialization.\n"
-"Please try again!"
-msgstr "Du må starte Kuroo med «kdesu» første gang for sikker initalisering."
-
-#: kurooinit.cpp:50
-msgid "Initialization"
-msgstr "Initalisering"
-
-#: kurooinit.cpp:69 kurooinit.cpp:70
+#: kurooinit.cpp:66 kurooinit.cpp:67
 msgid "No scan"
 msgstr "Ingen søking"
 
-#: kurooinit.cpp:95
+#: kurooinit.cpp:75
+msgid ""
+"<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
+"kdesu first time for a secure initialization.<br>Please try again!</qt>"
+msgstr "<qt>Klarte ikke opprette Kuroos hjemmekatalog.<br>Du må starte Kuroo med «kdesu» første gang for sikker initalisering.</qt>"
+
+#: kurooinit.cpp:77 kurooinit.cpp:93 kurooinit.cpp:121
+msgid "Initialization"
+msgstr "Initalisering"
+
+#: kurooinit.cpp:91
+msgid ""
+"<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
+"kdesu first time for a secure initialization.<br>Please try again!</qt>"
+msgstr "<qt>Klarte ikke opprette Kuroos katalog for sikkerhetskopier.<br>Du må starte Kuroo med «kdesu» første gang for sikker initalisering.</qt>"
+
+#: kurooinit.cpp:106
 msgid "Deleting old version of database %1"
 msgstr "Sletter gammel versjon av databasen «%1»"
 
-#: kurooinit.cpp:187
+#: kurooinit.cpp:119
+msgid ""
+"<qt>Could not setup kuroo portage database.<br>You must start Kuroo with "
+"kdesu first time for a secure initialization.<br>Please try again!</qt>"
+msgstr "<qt>Klarte ikke sette opp Kuroos Portage-database.<br>Du må starte Kuroo med «kdesu» første gang for sikker initalisering.</qt>"
+
+#: kurooinit.cpp:208
 msgid "Error reading: /etc/make.profile"
 msgstr "Feil ved lesing av «/etc/make.profile»"
 
-#: kurooinit.cpp:221
+#: kurooinit.cpp:242
 msgid ""
-"You don't have enough permissions to run kuroo.\n"
-"Please add yourself into portage group!"
-msgstr ""
-"Du har ikke tilstrekkelige rettigheter for å kjøre Kuroo.\n"
-"Legg deg selv til i gruppen «portage»."
+"You don't have enough permissions to run kuroo.Please add yourself into "
+"portage group!"
+msgstr "Du har ikke tilstrekkelige rettigheter for å kjøre Kuroo; legg deg selv til i gruppen «portage»."
 
-#: kurooinit.cpp:221
+#: kurooinit.cpp:243
 msgid "User permissions"
 msgstr "Bruker-tillatelser"
 
@@ -1054,7 +1082,7 @@ msgstr "Synkroniser Portage med Gentoo-tjenere"
 msgid "Refresh Updates view"
 msgstr "Oppdater listen over oppdateringer"
 
-#: kuroo.cpp:280
+#: kuroo.cpp:285
 msgid ""
 "<qt>Do you want to synchronize portage?<br><br>Portage, Installed and "
 "Updates view will be refreshed automatically afterwards. Queue and Results "
@@ -1064,15 +1092,15 @@ msgstr ""
 "og oppdateringer oppdateres automatisk etterpå, og køen og resultater tømmes."
 "<br>Dette tar et par minutter</qt>"
 
-#: kuroo.cpp:283
+#: kuroo.cpp:288
 msgid "Last sync: %1"
 msgstr "Siste synkronisering: %1"
 
-#: kuroo.cpp:299 kuroo.cpp:301
+#: kuroo.cpp:304 kuroo.cpp:306
 msgid "settings"
 msgstr "Innstillinger"
 
-#: kuroo.cpp:372
+#: kuroo.cpp:376
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1133,27 +1161,27 @@ msgstr "Oppdater"
 msgid "Skip"
 msgstr "Hopp over"
 
-#: kurooview.cpp:240
+#: kurooview.cpp:236
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr "Kuroo må kjøres med superbrukerrettigheter for å installere pakker."
 
-#: kurooview.cpp:291
+#: kurooview.cpp:287
 msgid "&Portage (%1)"
 msgstr "&Portage (%1)"
 
-#: kurooview.cpp:307
+#: kurooview.cpp:303
 msgid "&Installed (%1)"
 msgstr "&Installert (%1)"
 
-#: kurooview.cpp:323
+#: kurooview.cpp:319
 msgid "&Updates (%1)"
 msgstr "&Oppdateringer (%1)"
 
-#: kurooview.cpp:339
+#: kurooview.cpp:335
 msgid "&Queue (%1)"
 msgstr "&Kø (%1)"
 
-#: kurooview.cpp:355
+#: kurooview.cpp:351
 msgid "&Results (%1)"
 msgstr "&Resultater (%1)"
 

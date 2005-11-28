@@ -231,7 +231,6 @@ void PackageListView::setInWorld( const QString& name, bool b )
 				myChild->setStatus(INSTALLED_WORLD);
 			else
 				myChild->setStatus(INSTALLED);
-			break;
 		}
 		myChild = dynamic_cast<PackageItem*>( myChild->nextSibling() );
 	}

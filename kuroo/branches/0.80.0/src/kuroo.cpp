@@ -78,7 +78,7 @@ Kuroo::Kuroo()
 	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
 	
 	// Change toolbar buttons meaning
-	connect( m_view->mainTabs, SIGNAL( currentChanged(QWidget*) ), this, SLOT( activateToolbar(QWidget*) ) );
+// 	connect( m_view->mainTabs, SIGNAL( currentChanged(QWidget*) ), this, SLOT( activateToolbar(QWidget*) ) );
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
@@ -92,16 +92,13 @@ Kuroo::Kuroo()
 	connect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
 	connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
 	
-	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
+	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
 		actionRefresh->setEnabled(false);
-	}
-	else {
+	else
 		actionRefresh->setEnabled(true);
-	}
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() )
 		actionSync->setEnabled(false);
-	}
 	else
 		actionSync->setEnabled(true);
 	

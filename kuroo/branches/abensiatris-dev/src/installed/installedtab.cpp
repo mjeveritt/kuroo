@@ -225,7 +225,7 @@ void InstalledTab::contextMenu( KListView*, QListViewItem* item, const QPoint& p
 		menu.setItemEnabled( menuItem5, false );
 	}
 	
-	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+	if ( SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
 		menu.setItemEnabled( menuItem6, false );
 	}
 	

@@ -114,6 +114,9 @@
                                     <height>50</height>
                                 </size>
                             </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
                         </widget>
                     </grid>
                 </widget>

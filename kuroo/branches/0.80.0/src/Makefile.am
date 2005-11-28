@@ -5,7 +5,7 @@
 bin_PROGRAMS = kuroo8
 
 # set the include path for X, qt, KDE and subdirs
-INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
+INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config -I$(top_builddir)/src/ \
 	-I$(top_srcdir)/src/core -I$(top_srcdir)/src/history -I$(top_srcdir)/src/installed \
 	-I$(top_srcdir)/src/intro -I$(top_srcdir)/src/logs -I$(top_srcdir)/src/portage \
 	-I$(top_srcdir)/src/queue -I$(top_srcdir)/src/results -I$(top_srcdir)/src/updates \
@@ -48,8 +48,9 @@ noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 	systemtray.h message.h common.h
 
 # source for kuroo
-kuroo8_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
-			statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui
+kuroo8_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp \
+	mainwindow.cpp statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
+	kurooviewbase.ui
 
 # source for kuroo_watcher
 

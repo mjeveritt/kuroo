@@ -86,6 +86,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	}
 	
 	QString databaseFile = KurooDBSingleton::Instance()->init(this);
+	kdDebug() << "databaseFile=" << databaseFile << endl;
 	chmod(databaseFile, 0660);
 	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
 	

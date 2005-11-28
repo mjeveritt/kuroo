@@ -113,6 +113,14 @@ protected slots:
 	*/
 	virtual void 			setUnmasked( const QString& name, bool b );
 	
+	/**
+	* Fast method for marking packages in world.
+	* @param idDB
+	* @param true/false
+	*/
+	virtual void			setInWorld( const QString& name, bool b );
+	
+	
 protected:
 	
 	/**

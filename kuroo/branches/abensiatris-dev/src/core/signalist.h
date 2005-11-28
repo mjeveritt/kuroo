@@ -90,6 +90,11 @@ public slots:
 	 */
 	void		setUnmasked( const QString& name, bool b );
 	
+	/**
+	 * Methods for inserting packages to world
+	 */
+	void		setInWorld( const QString& name, bool b );
+	
 signals:
 	void		signalKurooBusy( bool b );
 	void		signalCachePortageComplete();
@@ -105,6 +110,7 @@ signals:
 	void		signalSetQueued( const QString& idDB, bool b );
 	void		signalClearQueued();
 	void		signalUnmasked( const QString& name, bool b );
+	void		signalInWorld ( const QString& name, bool b );
 	
 private:
 	QObject	*parent;

@@ -223,4 +223,14 @@ void Signalist::setUnmasked( const QString& name, bool b )
 	emit signalUnmasked( name, b );
 }
 
+/**
+ * Propagate signal that a package is in world
+ * @param id	package db id
+ * @param true/false
+ */
+void Signalist::setInWorld( const QString& name, bool b )
+{
+	emit signalInWorld( name, b );
+}
+
 #include "signalist.moc"

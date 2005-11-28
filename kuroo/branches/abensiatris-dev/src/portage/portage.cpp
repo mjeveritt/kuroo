@@ -683,8 +683,7 @@ void Portage::removeWorldList( const QString& category, const QStringList& packa
 		// Signal to gui to mark package as not in world
 		QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
 		QString name( temp.section(pv, 0, 0) );
-		// i can't create the right singal :(
-		// SignalistSingleton::Instance()->setUnmasked(name, false);
+		SignalistSingleton::Instance()->setInWorld(name, false);
 		
 	}
 	
@@ -710,8 +709,7 @@ void Portage::addWorldList( const QString& category, const QStringList& packageL
 		// Signal to gui to mark package as not in world
 		QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
 		QString name( temp.section(pv, 0, 0) );
-		// i can't create the right singal :(
-		// SignalistSingleton::Instance()->setUnmasked(name, false);
+		SignalistSingleton::Instance()->setInWorld(name, true);
 		
 	}
 	

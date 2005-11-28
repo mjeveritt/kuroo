@@ -34,6 +34,8 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
 	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalInWorld(const QString&, bool) ), this, SLOT( setInWorld(const QString&, bool) ) );
+	
 	setSelectionModeExt(FileManager);
 	
 	new ToolTip(this);
@@ -206,6 +208,26 @@ void PackageListView::setUnmasked( const QString& name, bool b )
 				myChild->setStatus(UNMASKED);
 			else
 				myChild->setStatus(NONE);
+			break;
+		}
+		myChild = dynamic_cast<PackageItem*>( myChild->nextSibling() );
+	}
+}
+
+/**
+ * Fast method for marking packages in world.
+ * @param idDB
+ * @param true/false
+ */
+void PackageListView::setInWorld( const QString& name, bool b )
+{
+	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
+	while ( myChild ) {
+		if ( myChild->text(0) == name ) {
+			if ( b )
+				myChild->setStatus(INSTALLED_WORLD);
+			else
+				myChild->setStatus(INSTALLED);
 			break;
 		}
 		myChild = dynamic_cast<PackageItem*>( myChild->nextSibling() );

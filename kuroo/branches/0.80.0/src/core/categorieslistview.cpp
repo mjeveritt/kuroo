@@ -41,6 +41,8 @@
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
+	setFrameShape(QFrame::NoFrame);
+	
 	// Load icons for category, package ...
 	KIconLoader *ldr = KGlobal::iconLoader();
 	pxCategory = ldr->loadIcon("kuroo_category", KIcon::Small);
@@ -51,7 +53,7 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()));
 	setMinimumSize(QSize(100, 0));
 	setShowSortIndicator(true);
-	setRootIsDecorated(true);
+// 	setRootIsDecorated(true);
 	setFullWidth(true);
 }
 

@@ -432,9 +432,9 @@ void GentooWatcher::readFromStdout(KProcIO *proc)
 void GentooWatcher::checkUpdates()
 {
 	KLocale *loc = KGlobal::locale();
+	QString checkTime = loc->formatTime(QTime::currentTime());
 	QString tooltip;
 	QString allTooltip("<b>Gentoo Watcher</b> ");
-	QString checkTime = loc->formatTime(QTime::currentTime());
 	
 	allTooltip += checkTime;
 	

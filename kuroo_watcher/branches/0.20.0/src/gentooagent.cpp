@@ -233,7 +233,7 @@ void GentooAgent::contextMenu( KListView* listView, QListViewItem* item, const Q
 		if ( lv.contains( "packagesStable" ) ) menu->insertItem( i18n("&Emerge package now"), SEND );
 		if ( lv.contains( "packagesTesting" ) ) menu->insertItem( i18n("&Emerge package now"), SEND );
 		if ( lv.contains( "packagesGlsa" ) ) menu->insertItem( i18n("&Open Glsa in browser"), VIEW );
-		if ( lv.contains( "packages" ) ) menu->insertItem( i18n("&Sort by pubdate"), SORT );
+		if ( lv.contains( "packages" ) ) menu->insertItem( i18n("&Sort by published date"), SORT );
 		if ( lv.contains( "packagesGlsa" ) ) menu->insertItem( i18n("Open in &Kuroo"), OPEN );
 		
 		if (watcherSettings::glsaCheck())

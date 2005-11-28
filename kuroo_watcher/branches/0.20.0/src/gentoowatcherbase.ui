@@ -18,9 +18,6 @@
     <property name="icon">
         <pixmap>image0</pixmap>
     </property>
-    <property name="toolTip" stdset="0">
-        <string>Click package you want to emerge in kuroo</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -92,6 +89,9 @@
                         <property name="frameShape">
                             <enum>NoFrame</enum>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Right-click package you want to emerge in kuroo</string>
+                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -151,6 +151,9 @@
                         </property>
                         <property name="frameShape">
                             <enum>NoFrame</enum>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Right-click package you want to emerge in kuroo</string>
                         </property>
                     </widget>
                 </grid>
@@ -231,7 +234,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>K&amp;uroo releases (SourceForge)</string>
+                    <string>&amp;Kuroo releases (SourceForge)</string>
                 </attribute>
                 <grid>
                     <property name="name">

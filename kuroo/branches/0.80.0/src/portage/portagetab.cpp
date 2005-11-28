@@ -186,11 +186,11 @@ void PortageTab::slotListCategoryPackages()
 		return;
 	
 	packagesView->clear();
-	QStringList categoriesList = PortageSingleton::Instance()->subcategories( category );
-	foreach ( categoriesList ) {
-		QString SubCat = category + "-" + *it;
-		packagesView->addCategoryPackages( SubCat );
-	}
+// 	QStringList categoriesList = PortageSingleton::Instance()->subcategories( category );
+// 	foreach ( categoriesList ) {
+// 		QString SubCat = category + "-" + *it;
+		packagesView->addCategoryPackages( category );
+// 	}
 }
 
 /**
@@ -205,7 +205,7 @@ void PortageTab::slotListPackages()
 		return;
 	
 	packagesView->reset();
-	packagesView->addCategoryPackages( category + "-" + subcategory  );
+	packagesView->addSubCategoryPackages( category, subcategory );
 	
 	// View summary info
 // 	QString textLines = "<font size=\"+2\">" + category + "</font><br>";
@@ -360,7 +360,7 @@ void PortageTab::slotSummary()
 		summaryBrowser->setText(summary);
 	}
 	
-	slotPackageInfo( portageSummaryTabs->currentPage() );
+// 	slotPackageInfo( portageSummaryTabs->currentPage() );
 }
 
 /**
@@ -378,43 +378,43 @@ void PortageTab::slotPackageInfo( QWidget *page )
 	kdDebug() << "package=" << package << endl;
 	kdDebug() << "category=" << category << endl;
 	
-	switch ( portageSummaryTabs->indexOf(page) ) {
-		case EBUILD: {
-			ebuildBrowser->clear();
-			QString ebuild( PortageSingleton::Instance()->ebuild( packagesView->currentId() ) );
-			
-			if ( ebuild != i18n("na") )
-				ebuildBrowser->setText( ebuild );
-			else 
-				ebuildBrowser->setText( i18n("<font color=darkGrey><b>Ebuild not found.</b></font>") );
-			
-			break;
-		}
-		
-		case CHANGELOG: {
-			changelogBrowser->clear();
-			QString changelog( PortageSingleton::Instance()->changelog( packagesView->currentId() ) );
-			
-			if ( changelog != i18n("na") )
-				changelogBrowser->setText( changelog );
-			else 
-				changelogBrowser->setText( i18n("<font color=darkGrey><b>Changelog not found.</b></font>") );
-
-			break;
-		}
-		
-		case DEPENDENCIES: {
-			dependencyBrowser->clear();
-			QString dependencies( PortageSingleton::Instance()->dependencies( packagesView->currentId() ) );
-			
-			if ( dependencies != i18n("na") )
-				dependencyBrowser->setText( dependencies );
-			else 
-				dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
-
-			break;
-		}
-	}
+// 	switch ( portageSummaryTabs->indexOf(page) ) {
+// 		case EBUILD: {
+// 			ebuildBrowser->clear();
+// 			QString ebuild( PortageSingleton::Instance()->ebuild( packagesView->currentId() ) );
+// 			
+// 			if ( ebuild != i18n("na") )
+// 				ebuildBrowser->setText( ebuild );
+// 			else 
+// 				ebuildBrowser->setText( i18n("<font color=darkGrey><b>Ebuild not found.</b></font>") );
+// 			
+// 			break;
+// 		}
+// 		
+// 		case CHANGELOG: {
+// 			changelogBrowser->clear();
+// 			QString changelog( PortageSingleton::Instance()->changelog( packagesView->currentId() ) );
+// 			
+// 			if ( changelog != i18n("na") )
+// 				changelogBrowser->setText( changelog );
+// 			else 
+// 				changelogBrowser->setText( i18n("<font color=darkGrey><b>Changelog not found.</b></font>") );
+// 
+// 			break;
+// 		}
+// 		
+// 		case DEPENDENCIES: {
+// 			dependencyBrowser->clear();
+// 			QString dependencies( PortageSingleton::Instance()->dependencies( packagesView->currentId() ) );
+// 			
+// 			if ( dependencies != i18n("na") )
+// 				dependencyBrowser->setText( dependencies );
+// 			else 
+// 				dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
+// 
+// 			break;
+// 		}
+// 	}
 }
 
 /**

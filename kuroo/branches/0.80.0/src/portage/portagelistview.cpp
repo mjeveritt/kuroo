@@ -56,25 +56,26 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
 	
 	setProperty( "selectionMode", "Extended" );
-	setShowSortIndicator(true);
+	setShowSortIndicator( true );
+	setMargin( 2 );
 	
-	setItemMargin(1);
-	setRootIsDecorated(true);
-	setFullWidth(true);
+	setItemMargin( 1 );
+	setRootIsDecorated( true );
+	setFullWidth( true );
 	
-	setColumnWidthMode(0, QListView::Manual);
-	setColumnWidthMode(1, QListView::Manual);
-	setColumnWidthMode(2, QListView::Manual);
+	setColumnWidthMode( 0, QListView::Manual );
+	setColumnWidthMode( 1, QListView::Manual );
+	setColumnWidthMode( 2, QListView::Manual );
 // 	setColumnWidthMode(3, QListView::Manual);
-	setColumnAlignment(2, Qt::AlignRight);
-	setResizeMode(QListView::LastColumn);
+	setColumnAlignment( 2, Qt::AlignRight );
+	setResizeMode( QListView::LastColumn );
 	
-	setColumnWidth(0, 200);
-	setColumnWidth(1, 20);
-	setColumnWidth(2, 80);
+	setColumnWidth( 0, 200 );
+	setColumnWidth( 1, 20 );
+	setColumnWidth( 2, 80 );
 // 	setColumnWidth(3, 80);
 	
-	setTooltipColumn(4);
+	setTooltipColumn( 4 );
 }
 
 PortageListView::~PortageListView()
@@ -111,6 +112,42 @@ QStringList PortageListView::selectedNoVersion()
 		returnList += (*it).section(pv, 0, 0);
 	}
 	return returnList;
+}
+
+/**
+ * Populate listview with content of this category.
+ * @param package
+ */
+void PortageListView::addSubCategoryPackages( const QString& category, const QString& subCategory )
+{
+// 	reset();
+	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( category, subCategory );
+	foreach ( packageList ) {
+		QString idDB = *it++;
+		QString name = *it++;
+// 		QString version = *it++;
+		QString package = name;
+		QString description = *it++;
+// 		QString size = *it++;
+// 		QString keywords = *it++;
+		QString latest = *it++;
+		QString installed = *it;
+		
+		Meta packageMeta;
+		packageMeta.insert(i18n("3Description"), description);
+// 		packageMeta.insert(i18n("4Size"), size);
+		packageMeta.insert(i18n("5Latest"), latest);
+		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+		
+// 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
+// 			packageItem->setStatus(MASKED);
+// 		else {
+// 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
+// 				packageItem->setStatus(UNMASKED);
+// 		}
+		
+		insertPackage( idDB, packageItem );
+	}
 }
 
 /**

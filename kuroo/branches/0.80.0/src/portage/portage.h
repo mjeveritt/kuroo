@@ -97,6 +97,7 @@ public slots:
 	* @return QStringList
 	*/
 	QStringList					packagesInCategory( const QString& category );
+	QStringList					packagesInSubCategory( const QString& category, const QString& subCategory );
 	
 	/**
 	* Get list of versions available of this package.

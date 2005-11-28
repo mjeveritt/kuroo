@@ -60,6 +60,7 @@ public slots:
 	 * @param package
 	 */
 	void 			addCategoryPackages( const QString& category );
+	void 			addSubCategoryPackages( const QString& category, const QString& subCategory );
 	
 private:
 	QStringList		unmaskedList;

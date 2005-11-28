@@ -180,8 +180,7 @@ void GentooWatcher::initDocuments()
 		feedRef.call( "link()" ).get( feed.url );
 		mFeeds.append( feed );
 		
-		connectDCOPSignal( "rssservice", feedRef.obj(), "documentUpdated(DCOPRef)",
-					"documentUpdated(DCOPRef)", false );
+		connectDCOPSignal( "rssservice", feedRef.obj(), "documentUpdated(DCOPRef)", "documentUpdated(DCOPRef)", false );
 		
 		qApp->processEvents( QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers );
 	}
@@ -225,8 +224,7 @@ void GentooWatcher::documentUpdated( DCOPRef feedRef )
 		DCOPRef artRef = feedRef.call( "article(int)", i );
 		QString title, url, description;
 		
-		qApp->processEvents( QEventLoop::ExcludeUserInput | 
-					QEventLoop::ExcludeSocketNotifiers );
+		qApp->processEvents( QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers );
 		
 		artRef.call( "title()" ).get( title );
 		artRef.call( "link()" ).get( url );
@@ -422,7 +420,7 @@ void GentooWatcher::readFromStdout(KProcIO *proc)
 {
 	QString eString;
 	
-	while ( proc->readln( eString, true ) != -1) {
+	while ( proc->readln( eString, true ) != -1 ) {
 		if ( eString.startsWith("200") )
 			glsaList += eString;
 	}
@@ -433,20 +431,14 @@ void GentooWatcher::readFromStdout(KProcIO *proc)
  */
 void GentooWatcher::checkUpdates()
 {
-	// Collect installed packages into QMap dbMap installedPackage
-	const QStringList installedPackageList = KurooWatcherDB::instance()->installedPackages();
-	dbMap installedMap;
-	foreach ( installedPackageList ) {
-		QString name = *it;
-		installedMap.insert( name, "" );
-	}
+	KLocale *loc = KGlobal::locale();
+	QString checkTime = loc->formatTime(QTime::currentTime());
+	QString tooltip;
+	QString allTooltip("<b>Gentoo Watcher</b> ");
 	
-	QString allTooltip(""), tooltip("");
-
-	QDateTime dt = QDateTime::currentDateTime();
-	allTooltip = "<b>Gentoo Watcher</b> ";
-	allTooltip += dt.toString("hh:mm:ss"); 
+	allTooltip += checkTime;
 	
+	m_window->setCaption( i18n("Latest Gentoo packages and Security Advisories %1").arg(checkTime) );
 	QListViewItemIterator it = m_window->packagesGlsa;
 	bool found = false;
 	
@@ -479,7 +471,7 @@ void GentooWatcher::checkUpdates()
 	int count = 0;
 	it = m_window->packagesGlsa;
 	for ( ; it.current(); ++it ) {
-		if (it.current()->isVisible())
+		if ( it.current()->isVisible() )
 			if ( count++ > watcherSettings::rowsGlsa() )
 				it.current()->setVisible(false);
 	}
@@ -494,12 +486,10 @@ void GentooWatcher::checkUpdates()
 	// Mark updates for installed packages
 	for ( ; it.current(); ++it ) {
 		QString package = it.current()->text(0);
-		
-		dbMap::iterator itMap =  installedMap.find( package.section(pv, 0, 0) );
-		if ( itMap != installedMap.end() ) {
+		if ( KurooWatcherDB::instance()->isInstalled( package.section(pv, 0, 0) ) ) {
 			it.current()->setPixmap( 0, pxInstalled );
-				if (watcherSettings::alertStable())
-					tooltip += "<br>" + package;
+			if ( watcherSettings::alertStable() )
+				tooltip += "<br>" + package;
 			found = true;
 			continue;
 		}
@@ -507,8 +497,8 @@ void GentooWatcher::checkUpdates()
 			it.current()->setPixmap( 0, pxPackage );
 	}
 	
-	if (watcherSettings::alertStable() && found)
-	allTooltip += i18n("<br><br><b>Latest stable packages</b>") + tooltip;
+	if ( watcherSettings::alertStable() && found )
+		allTooltip += i18n("<br><br><b>Latest stable packages</b>") + tooltip;
 	
 	it = m_window->packagesTesting;
 	found = false;
@@ -517,20 +507,18 @@ void GentooWatcher::checkUpdates()
 	// Mark updates for testing packages
 	for ( ; it.current(); ++it ) {
 		QString package = it.current()->text(0);
-		
-		dbMap::iterator itMap =  installedMap.find( package.section(pv, 0, 0) );
-		if ( itMap != installedMap.end() ) {
+		if ( KurooWatcherDB::instance()->isInstalled( package.section(pv, 0, 0) ) ) {
 			it.current()->setPixmap( 0, pxTesting );
-			if (watcherSettings::alertTesting())
+			if ( watcherSettings::alertTesting() )
 				tooltip += "<br>" + package;
 			found = true;
 			continue;
 		}
-		else 
+		else
 			it.current()->setPixmap( 0, pxPackage );
 	}
 	
-	if (watcherSettings::alertTesting() && found)
+	if ( watcherSettings::alertTesting() && found )
 		allTooltip += i18n("<br><br><b>Latest testing packages</b>") + tooltip;
 	
 	if ( watcherSettings::alertTesting() || watcherSettings::alertStable() || watcherSettings::alertGlsa())

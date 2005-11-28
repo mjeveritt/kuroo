@@ -81,8 +81,7 @@ void GentooAgent::closeEvent( QCloseEvent *ce )
 void GentooAgent::addPackageKuroo( QListViewItem *item )
 {
 	if ( item ) {
-		QString eString = item->text(0);
-		package = eString.section( " ", 0, 0 ) + "-" + eString.section( " ", 1, 1 );
+		package = item->text(0);
 		
 		if ( client->isApplicationRegistered("kuroo") ){
 			sendToKuroo();
@@ -114,15 +113,17 @@ void GentooAgent::stopTimer()
  */
 void GentooAgent::sendToKuroo()
 {
-	DCOPRef emergeKuroo("kuroo", "KurooIface");
+	DCOPRef emerge("kuroo", "kurooIface");
 	
-	if ( !emergeKuroo.isNull() ) {
-		if ( emergeKuroo.call("slotEmergePretend(QString)", package) ){
+	if ( !emerge.isNull() ) {
+		DCOPReply reply = emerge.call( "slotEmergePretend", package );
+		
+		if ( reply.isValid() ){
 			internalTimer->stop();
 			KPassivePopup::message( "Gentoo Watcher: " + package + i18n(" sent to Kuroo..."), this );
 		}
-		else 
-			QToolTip::add(this, i18n("Gentoo Watcher: Kuroo is busy"));
+		else
+			KPassivePopup::message( i18n("Gentoo Watcher: Kuroo is not responding!"), this );
 	}
 }
 
@@ -232,7 +233,7 @@ void GentooAgent::contextMenu( KListView* listView, QListViewItem* item, const Q
 		if ( lv.contains( "packagesStable" ) ) menu->insertItem( i18n("&Emerge package now"), SEND );
 		if ( lv.contains( "packagesTesting" ) ) menu->insertItem( i18n("&Emerge package now"), SEND );
 		if ( lv.contains( "packagesGlsa" ) ) menu->insertItem( i18n("&Open Glsa in browser"), VIEW );
-		if ( lv.contains( "packages" ) ) menu->insertItem( i18n("&Sort by pubdate"), SORT );
+		if ( lv.contains( "packages" ) ) menu->insertItem( i18n("&Sort by published date"), SORT );
 		if ( lv.contains( "packagesGlsa" ) ) menu->insertItem( i18n("Open in &Kuroo"), OPEN );
 		
 		if (watcherSettings::glsaCheck())

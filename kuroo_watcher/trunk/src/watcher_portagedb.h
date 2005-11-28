@@ -140,6 +140,7 @@ public:
 	//table management methods
 	bool isInstalledEmpty();
 	
+	bool isInstalled( const QString& package );
 	QStringList installedPackages();
 	QStringList updatePackages();
 	

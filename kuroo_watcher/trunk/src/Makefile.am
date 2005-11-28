@@ -5,9 +5,12 @@
 bin_PROGRAMS = kuroo_watcher
 
 # set the include path for X, qt, KDE and subdirs
-INCLUDES = -I$(top_srcdir)/src/config $(top_builddir)/src/config $(all_includes)
+INCLUDES = $(all_includes)
 
-SUBDIRS = config 
+# embedded sqlite as library
+SQLITE_SUBDIR = sqlite
+LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
+sqlite_includes = -I$(top_srcdir)/sqlite
 
 # makes pot translation files
 messages: rc.cpp
@@ -25,12 +28,15 @@ kdelnk_DATA = kuroo_watcher.desktop
 autostartdir = $(datadir)/autostart
 autostart_DATA = kuroo_watcher_autostart.desktop
 
+kde_kcfg_DATA = kuroo_watcher.kcfg
+
 # headers for kuroo_watcher
 noinst_HEADERS = gentoowatcher.h gentooagent.h watcher_portagedb.h
 
 # source for kuroo_watcher
 kuroo_watcher_SOURCES = gentooagent.cpp gentoowatcher.cpp gentoowatcherbase.ui \
-	kuroo_watcher.cpp glsacheckbase.ui gentoowatcher.skel watcher_portagedb.cpp
+	kuroo_watcher.cpp glsacheckbase.ui gentoowatcher.skel watcher_portagedb.cpp \
+	watchersettings.kcfgc watchersettingswidget.ui watchersettingswidget2.ui
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
@@ -38,6 +44,5 @@ METASOURCES = AUTO
 kuroo_watcher_LDFLAGS = $(KDE_RPATH) $(LIB_KFILE) $(all_libraries)
 
 # kuroo_watcher links
-kuroo_watcher_LDADD = $(top_builddir)/src/config/libconfig.la $(LIB_KFILE) \
-	$(LIB_KDECORE)
+kuroo_watcher_LDADD = $(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE_LOCAL)
 

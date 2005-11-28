@@ -230,6 +230,8 @@ void Signalist::setUnmasked( const QString& name, bool b )
  */
 void Signalist::setInWorld( const QString& name, bool b )
 {
+	kdDebug() << "Signalist::setInWorld name=" << name << endl;
+	
 	emit signalInWorld( name, b );
 }
 

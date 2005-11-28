@@ -117,6 +117,9 @@ void PackageItem::setStatus( int status )
 			break;
 		
 		case INSTALLED_WORLD :
+		
+			kdDebug() << "INSTALLED_WORLD" << endl;
+		
 			m_status = INSTALLED_WORLD;
 			setPixmap(0, pxInstalledWorld);
 			m_meta.insert( i18n("2Status"), i18n("Installed end-user package") );

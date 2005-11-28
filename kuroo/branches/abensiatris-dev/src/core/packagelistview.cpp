@@ -33,7 +33,6 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
-	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalInWorld(const QString&, bool) ), this, SLOT( setInWorld(const QString&, bool) ) );
 	
 	setSelectionModeExt(FileManager);
@@ -221,6 +220,8 @@ void PackageListView::setUnmasked( const QString& name, bool b )
  */
 void PackageListView::setInWorld( const QString& name, bool b )
 {
+	kdDebug() << "PackageListView::setInWorld name=" << name << endl;
+	
 	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
 	while ( myChild ) {
 		if ( myChild->text(0) == name ) {

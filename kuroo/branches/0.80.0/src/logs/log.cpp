@@ -71,7 +71,9 @@ KIO::Job* Log::backupLog()
 {
 	if ( saveLog && saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
+		
 		KIO::Job *cpjob = KIO::file_copy( KUROODIR + "kuroo.log", KUROODIR + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
+		
 		return cpjob;
 	}
 	else

@@ -50,7 +50,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	// Setup geometry
 	addColumn(i18n("Package"));
 	addColumn(i18n("Time"));
-	addColumn(i18n("Size"));
+// 	addColumn(i18n("Size"));
 	addColumn(i18n("Description"));
 	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
 
@@ -61,13 +61,13 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 
 	setColumnWidthMode(0, QListView::Manual);
 	setResizeMode(QListView::LastColumn);
-	setColumnAlignment(2, Qt::AlignRight);
+// 	setColumnAlignment(2, Qt::AlignRight);
 	
 	setColumnWidth(0, 200);
 	setColumnWidth(1, 80);
-	setColumnWidth(2, 80);
+// 	setColumnWidth(2, 80);
 	
-	setTooltipColumn(3);
+	setTooltipColumn(2);
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), 
 	            this, SLOT( setQueued(const QString&, bool) ) );
@@ -146,6 +146,7 @@ void QueueListView::loadFromDB()
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString category = *it++;
+		category = category + "-" + *it++;
 		QString name = *it++;
 		QString description = *it++;
 // 		QString size = *it++;

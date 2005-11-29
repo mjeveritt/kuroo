@@ -20,15 +20,14 @@
 
 #include "common.h"
 #include "kurooview.h"
-#include "installedtab.h"
 #include "portagetab.h"
-#include "updatestab.h"
 #include "updatelistview.h"
 #include "queuetab.h"
 #include "queuelistview.h"
 #include "resultstab.h"
 #include "resultlistview.h"
 #include "logstab.h"
+#include "historytab.h"
 #include "packagelistview.h"
 #include "kurooviewbase.h"
 
@@ -79,19 +78,25 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	DCOPObject( "kurooIface" ),
 	tabPortage(0), tabLogs(0)
 {
-	viewMenu->setCursor(KCursor::handCursor());
+	viewMenu->setCursor( KCursor::handCursor() );
 	
-	tabPortage = new PortageTab(this);
+	tabPortage = new PortageTab( this );
 	viewStack->addWidget( tabPortage, 1 );
 	
-	tabLogs = new LogsTab(this);
-	viewStack->addWidget( tabLogs, 2 );
+	tabQueue = new QueueTab( this );
+	viewStack->addWidget( tabQueue, 2 );
+	
+	tabHistory = new HistoryTab( this );
+	viewStack->addWidget( tabHistory, 3 );
+	
+	tabLogs = new LogsTab( this );
+	viewStack->addWidget( tabLogs, 4 );
 	
 	KIconLoader *ldr = KGlobal::iconLoader();
-	new IconListItem( viewMenu, ldr->loadIcon( "deb", KIcon::Panel ), "Packages" );
-// 	new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Emerge Queue" );
-// 	new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "Emerge History" );
-	new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "Emerge Logs" );
+	new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), "Packages" );
+	new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Emerge Queue" );
+	new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "Emerge History" );
+	new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Emerge Logs" );
 	
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
 	viewMenu->setSelected( 0, true );
@@ -115,22 +120,7 @@ KurooView::~KurooView()
 
 void KurooView::slotShowView()
 {
-	int index( viewMenu->currentItem() + 1 );
-	
-	kdDebug() << "KurooView::slotShowView index=" << index << endl;
-	
-	switch (index) {
-		case 1: {
-			viewStack->raiseWidget(index);
-			break;
-		}
-			
-		case 2: {
-			viewStack->raiseWidget(index);
-			break;
-		}
-	
-	}
+	viewStack->raiseWidget( viewMenu->currentItem() + 1 );
 }
 
 KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )

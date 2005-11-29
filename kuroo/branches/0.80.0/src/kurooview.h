@@ -28,13 +28,9 @@
 #include <kparts/part.h>
 #include <kurooiface.h>
 
-// class KTabWidget;
-// class KurooViewBase;
-// class InstalledTab;
 class PortageTab;
-// class UpdatesTab;
-// class QueueTab;
-// class ResultsTab;
+class QueueTab;
+class HistoryTab;
 class LogsTab;
 
 /**
@@ -51,11 +47,10 @@ public:
 	/**
 	 * The tabwidget and the tabs accessible by Kuroo.
 	 */
-// 	KTabWidget		*mainTabs;
-// 	InstalledTab 	*tabInstalled;
-	PortageTab 		*tabPortage;
-// 	UpdatesTab 		*tabUpdates;
-	LogsTab 		*tabLogs;
+	PortageTab*		tabPortage;
+	HistoryTab*		tabHistory;
+	QueueTab*		tabQueue;
+	LogsTab* 		tabLogs;
 	
 	void 			quit();
 	

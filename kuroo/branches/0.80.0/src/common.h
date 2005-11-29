@@ -49,6 +49,8 @@ typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<Updates> UpdatesSingleton;
 
+enum packageFilters { FILTER_ALL, FILTER_INSTALLED, FILTER_UPDATES };
+
 enum LogActions { EMERGE, KUROO, ERROR, TOLOG, EMERGELOG };
 
 enum packageStatus { NONE, CATEGORY, INSTALLED, PACKAGE, EBUILD_INSTALLED, EBUILD, MASKED, UNMASKED, QUEUED, NOTQUEUED };

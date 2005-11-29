@@ -203,7 +203,7 @@
                         <cstring>unnamed</cstring>
                     </property>
                     <property name="margin">
-                        <number>2</number>
+                        <number>1</number>
                     </property>
                     <property name="spacing">
                         <number>5</number>
@@ -248,68 +248,105 @@
                     </widget>
                 </grid>
             </widget>
-            <widget class="QSplitter">
+            <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>splitterV</cstring>
+                    <cstring>layout2</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>3</hsizetype>
-                        <vsizetype>7</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="margin">
-                    <number>2</number>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <widget class="PortagePackagesView">
+                <grid>
                     <property name="name">
-                        <cstring>packagesSearchView</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>500</width>
-                            <height>300</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="KTextBrowser">
-                    <property name="name">
-                        <cstring>summaryBrowser</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>200</width>
-                            <height>50</height>
-                        </size>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
+                        <cstring>unnamed</cstring>
                     </property>
                     <property name="margin">
-                        <number>2</number>
+                        <number>0</number>
                     </property>
-                </widget>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="Line" row="0" column="0">
+                        <property name="name">
+                            <cstring>line2</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>VLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                    </widget>
+                    <widget class="QSplitter" row="0" column="1">
+                        <property name="name">
+                            <cstring>splitterV</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="margin">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <widget class="PortagePackagesView">
+                            <property name="name">
+                                <cstring>packagesSearchView</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>3</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>500</width>
+                                    <height>300</height>
+                                </size>
+                            </property>
+                        </widget>
+                        <widget class="KTextBrowser">
+                            <property name="name">
+                                <cstring>summaryBrowser</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>300</width>
+                                    <height>100</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="margin">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                    </widget>
+                </grid>
             </widget>
         </widget>
     </grid>
@@ -378,6 +415,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>categorieslistview.h</includehint>
+    <includehint>subcategorieslistview.h</includehint>
     <includehint>portagepackagesview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
 </includehints>

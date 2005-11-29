@@ -76,18 +76,18 @@ PortageTab::PortageTab( QWidget* parent )
  */
 PortageTab::~PortageTab()
 {
-	KConfig *config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	
-	QValueList<int> list = splitterH->sizes();
-	config->writeEntry("splitterPortageH", list);
-	list = splitterV->sizes();
-	config->writeEntry("splitterPortageV", list);
+// 	KConfig *config = KurooConfig::self()->config();
+// 	config->setGroup("Kuroo Geometry");
+// 	
+// 	QValueList<int> list = splitterH->sizes();
+// 	config->writeEntry("splitterPortageH", list);
+// 	list = splitterV->sizes();
+// 	config->writeEntry("splitterPortageV", list);
 	
 	packagesView->saveLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
 	// Save latest selected packages in tabs All packages, Installed packages and Updates categories
-	saveCurrentView();
+// 	saveCurrentView();
 }
 
 /**
@@ -113,17 +113,17 @@ void PortageTab::saveCurrentView()
 void PortageTab::slotInit()
 {
 	kdDebug() << "PortageTab::slotInit" << endl;
-	KConfig *config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
+// 	KConfig *config = KurooConfig::self()->config();
+// 	config->setGroup("Kuroo Geometry");
+// 	
+// 	// @fixme: portage splitters are bugging! using installed splitters instead
+// 	QValueList<int> sizes = config->readIntListEntry("splitterInstalledH");
+// 	splitterH->setSizes(sizes);
+// 	sizes = config->readIntListEntry("splitterInstalledV");
+// 	splitterV->setSizes(sizes);
 	
-	// @fixme: portage splitters are bugging! using installed splitters instead
-	QValueList<int> sizes = config->readIntListEntry("splitterInstalledH");
-	splitterH->setSizes(sizes);
-	sizes = config->readIntListEntry("splitterInstalledV");
-	splitterV->setSizes(sizes);
-	
-// 	if ( !KurooConfig::init() )
-// 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
+	if ( !KurooConfig::init() )
+		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
 	useDialog = new UseDialog( this );
 }

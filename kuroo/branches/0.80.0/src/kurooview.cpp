@@ -105,7 +105,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	// Check emerge.log for new entries. (Due to cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( tabLogs->logBrowser, tabLogs->verboseLog, tabLogs->saveLog );
 	
-	connect( tabPortage, SIGNAL( signalChanged() ), this, SLOT( slotPortageUpdated() ) );
+// 	connect( tabPortage, SIGNAL( signalChanged() ), this, SLOT( slotPortageUpdated() ) );
 	
 	// Reset everything when a portage scan is started
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
@@ -179,8 +179,14 @@ void KurooView::slotCheckPortage()
 	
 	if ( PortageSingleton::Instance()->count() == "0" )
 		PortageSingleton::Instance()->slotRefresh();
-	else
+	else {
 		tabPortage->slotReload();
+		tabQueue->slotReload();
+		
+		// Warn user that emerge need root permissions - many rmb actions are disabled
+		if ( !KUser().isSuperUser() )
+			KMessageBox::information( 0, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
+	}
 }
 
 /**
@@ -188,8 +194,6 @@ void KurooView::slotCheckPortage()
  */
 void KurooView::slotCheckInstalled()
 {
-// 	kdDebug() << "KurooView::slotCheckInstalled" << endl;
-// 	disconnect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotCheckInstalled() ) );
 }
 
 /**
@@ -206,17 +210,6 @@ void KurooView::slotCheckUpdates()
 void KurooView::slotReloadQueueResults()
 {
 	kdDebug() << "KurooView::slotReloadQueueResults" << endl;
-	
-// 	disconnect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReloadQueueResults() ) );
-// 	
-// 	tabInstalled->slotReload();
-// 	tabUpdates->slotReload();
-// 	tabQueue->slotReload();
-// 	tabResults->slotReload();
-	
-	// Warn user that emerge need root permissions - many rmb actions are disabled
-	if ( !KUser().isSuperUser() )
-		KMessageBox::information( 0, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
 }
 
 /**
@@ -257,15 +250,15 @@ void KurooView::slotEmergePretend( QString package )
 void KurooView::slotPortageUpdated()
 {
 	kdDebug() << "KurooView::slotPortageUpdated" << endl;
-	static bool tabSetup(false);
-	QString total = PortageSingleton::Instance()->count();
+// 	static bool tabSetup(false);
+// 	QString total = PortageSingleton::Instance()->count();
 
 // 	mainTabs->setTabLabel( tabPortage, i18n("&Portage (%1)").arg(total) );
 // 	
 // 	if ( mainTabs->currentPageIndex() != 1 && tabSetup )
 // 		mainTabs->setTabColor( tabPortage, blue );
 	
-	tabSetup = true;
+// 	tabSetup = true;
 }
 
 /**

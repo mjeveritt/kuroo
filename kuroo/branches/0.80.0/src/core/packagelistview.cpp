@@ -29,15 +29,14 @@
 PackageListView::PackageListView( QWidget* parent, const char* name )
 	: KListView( parent, name )
 {
-	setFrameShape(QFrame::NoFrame);
+	setFrameShape( QFrame::NoFrame );
+	setSelectionModeExt( FileManager );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( setQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
-	
-	setSelectionModeExt(FileManager);
-	
+		
 	new ToolTip(this);
 }
 

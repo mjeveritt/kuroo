@@ -319,15 +319,14 @@ QStringList KurooDB::categoryByPackageId( const QString& id )
 
 QStringList KurooDB::portageCategories()
 {
-	return query(" SELECT DISTINCT name FROM category "
+	return query(" SELECT name, id FROM category "
 	             " ORDER BY lower(name);");
 }
 
-QStringList KurooDB::portageSubCategories( const QString& category )
+QStringList KurooDB::portageSubCategories( const QString& categoryId )
 {
-	return query(" SELECT DISTINCT name FROM subCategory "
-	             " WHERE idCategory = ( SELECT id FROM category "
-	             " WHERE name = '" + category + "' )"
+	return query(" SELECT name, id FROM subCategory "
+	             " WHERE idCategory = '" + categoryId + "'"
 	             " ORDER BY lower(subCategory.name);");
 }
 
@@ -338,20 +337,50 @@ QStringList KurooDB::portageCategoryId( const QString& category )
 	             " ;");
 }
 
-QStringList KurooDB::portagePackagesByCategory( const QString& category )
+QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int filter )
 {
+	QString filterQuery;
+	switch (filter) {
+		case FILTER_ALL:
+			filterQuery = "";
+			break;
+			
+		case FILTER_INSTALLED:
+			filterQuery = " AND installed != '0'";
+			break;
+		
+		case FILTER_UPDATES:
+			filterQuery = "";
+	}
+	
 	return query( " SELECT id, name, description, latest, installed "
 	              " FROM package "
-	              " WHERE idCategory = ( SELECT id FROM category WHERE name = '" + category + "')"
+	              " WHERE idCategory = '" + categoryId + "'"
+	              + filterQuery +
 	              " ORDER BY name;");
 }
 
-QStringList KurooDB::portagePackagesBySubCategory( const QString& category, const QString& subCategory )
+QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
 {
+	QString filterQuery;
+	switch (filter) {
+		case FILTER_ALL:
+			filterQuery = "";
+			break;
+			
+		case FILTER_INSTALLED:
+			filterQuery = " AND installed != '0'";
+			break;
+			
+		case FILTER_UPDATES:
+			filterQuery = "";
+	}
+	
 	return query( " SELECT id, name, description, latest, installed "
 	              " FROM package "
-	              " WHERE idCategory = ( SELECT id FROM category WHERE name = '" + category + "')"
-	              " AND idSubCategory = ( SELECT id FROM subCategory WHERE name = '" + subCategory + "')"
+	              " WHERE idCategory = '" + categoryId + "'"
+	              " AND idSubCategory = '" + subCategoryId + "'"
+	              + filterQuery +
 	              " ORDER BY name;");
 }
 

@@ -38,26 +38,15 @@
  * @class CategoriesListView
  * @short Creates category listview.
  */
-CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
+CategoriesView::CategoriesView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
-	setFrameShape(QFrame::NoFrame);
-	
-	// Load icons for category, package ...
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxCategory = ldr->loadIcon("kuroo_category", KIcon::Small);
-	pxRepository = ldr->loadIcon("kuroo_repository", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true);
-		
-	addColumn(i18n("Category"));
-	header()->setLabel(header()->count() - 1, i18n("Category"));
 	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()));
-	setMinimumSize(QSize(100, 0));
-	setShowSortIndicator(true);
-// 	setRootIsDecorated(true);
 	setFullWidth(true);
+	setFrameShape(QFrame::NoFrame);
 }
 
-CategoriesListView::~CategoriesListView()
+CategoriesView::~CategoriesView()
 {
 }
 
@@ -65,10 +54,9 @@ CategoriesListView::~CategoriesListView()
  * Get current category.
  * @return category
  */
-QString CategoriesListView::currentCategory()
+QString CategoriesView::currentCategory()
 {
 	QListViewItem *item = this->currentItem();
-	
 	if ( !item )
 		return i18n("na");
 	
@@ -76,10 +64,25 @@ QString CategoriesListView::currentCategory()
 }
 
 /**
+ * Get current category idDB.
+ * @return category
+ */
+QString CategoriesView::currentCategoryId()
+{
+	QListViewItem *item = this->currentItem();
+	
+	QMap<QString, QString>::iterator itMap = categories.find( item->text( 0 ) ) ;
+	if ( itMap != categories.end() )
+		return itMap.data();
+	else
+		return i18n( "na" );
+}
+
+/**
  * Set category current.
  * @param category
  */
-void CategoriesListView::setCurrentCategory( const QString& category )
+void CategoriesView::setCurrentCategory( const QString& category )
 {
 // 	QString categoryName = category.section("-", 0, 0);
 // 	QString subcategoryName = category.section("-", 1, 1);
@@ -98,17 +101,49 @@ void CategoriesListView::setCurrentCategory( const QString& category )
  * Load categories.
  * @param categoriesList 
  */
-void CategoriesListView::loadCategories( const QStringList& categoriesList )
+void CategoriesView::loadCategories( const QStringList& categoriesList )
 {
 	QListViewItem *catItem;
 	
-// 	categories.clear();
-// 	clear();
-// 	setRootIsDecorated(true);
-
+	categories.clear();
 	foreach ( categoriesList ) {
-		catItem = new KListViewItem( this, *it );
+		QString name = *it++;
+		QString idDB = *it;
+		catItem = new KListViewItem( this, name );
+		categories.insert( name, idDB );
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @class CategoriesListView
+ * @short Creates category listview.
+ */
+CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
+	: CategoriesView( parent, name )
+{
+	addColumn(i18n("Category"));
+	header()->setLabel(header()->count() - 1, i18n("Category"));
+}
+
+CategoriesListView::~CategoriesListView()
+{
+}
+
+/**
+ * @class SubCategoriesListView
+ * @short Creates category listview.
+ */
+SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
+	: CategoriesView( parent, name )
+{
+	addColumn(i18n("Subcategory"));
+	header()->setLabel( header()->count() - 1, i18n( "Subcategory" ) );
+}
+
+SubCategoriesListView::~SubCategoriesListView()
+{
 }
 
 #include "categorieslistview.moc"

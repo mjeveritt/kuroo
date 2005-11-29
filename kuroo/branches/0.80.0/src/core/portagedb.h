@@ -170,10 +170,10 @@ public:
 	// Queries for Portage
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	portageCategories();
-	QStringList 	portageSubCategories( const QString& category );
-	QStringList 	portageCategoryId( const QString& category );
-	QStringList 	portagePackagesByCategory( const QString& category );
-	QStringList 	portagePackagesBySubCategory( const QString& category, const QString& subCategory );
+	QStringList 	portageSubCategories( const QString& categoryId );
+	QStringList 	portageCategoryId( const QString& categoryId );
+	QStringList 	portagePackagesByCategory( const QString& categoryId, int filter );
+	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter );
 	QStringList 	portagePackageInfo( const QString& id );
 	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
 	QStringList 	findPortagePackagesName( const QString& name );

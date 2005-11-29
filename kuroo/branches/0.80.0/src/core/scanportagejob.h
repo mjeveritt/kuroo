@@ -30,6 +30,8 @@ class QRegExp;
 
 extern QRegExp pv;
 
+typedef QMap<QString, int> InstalledMap;
+
 /**
  * Thread for scanning local portage tree for available packages.
  * The packages are counted first, this to get a correct refresh progress in the gui.
@@ -47,6 +49,9 @@ public:
 	ScanPortageJob( QObject *parent = 0 );
 	~ScanPortageJob();
 
+private:
+	void						getInstalled();
+	
 private slots:
 	
 	/**
@@ -74,6 +79,7 @@ private slots:
 	QString						kBSize( const QString& size );
 	
 private:
+	InstalledMap				installedMap;
 	int							totalPackages;
 	bool						aborted;
 	DbConnection* const 		m_db;

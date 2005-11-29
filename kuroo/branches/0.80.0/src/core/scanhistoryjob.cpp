@@ -111,13 +111,13 @@ bool ScanHistoryJob::doJob()
 				duration = duration.addSecs(secTime);
 				
 				// Update emerge time and increment count for packageNoVersion
-				EmergeTimeMap::iterator itMap = emergeTimeMap.find(packageNoVersion);
+				EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
 				if ( itMap == emergeTimeMap.end() ) {
-					PackageEmergeTime pItem(secTime, 1);
-					emergeTimeMap.insert(packageNoVersion, pItem);
+					PackageEmergeTime pItem( secTime, 1 );
+					emergeTimeMap.insert( packageNoVersion, pItem );
 				}
 				else {
-					itMap.data().add(secTime);
+					itMap.data().add( secTime );
 					itMap.data().inc();
 				}
 				

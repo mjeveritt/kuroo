@@ -21,7 +21,6 @@
 #include "common.h"
 #include "search.h"
 #include "categorieslistview.h"
-#include "subcategorieslistview.h"
 #include "portagelistview.h"
 #include "portagepackagesview.h"
 #include "portagetab.h"
@@ -35,6 +34,7 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qregexp.h>
+#include <qbuttongroup.h>
 
 #include <ktextbrowser.h>
 #include <ktabwidget.h>
@@ -45,31 +45,28 @@
 #include <kuser.h>
 #include <klineedit.h>
 
+static bool categorySelected( true );
+
 /**
- * Tab page for portage packages.
+ * Page for portage packages.
  */
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent )
 {
 	packagesView = packagesSearchView->packagesView;
 	
+	connect( filterGroup, SIGNAL( released(int) ), this, SLOT( slotFilters(int) ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListCategoryPackages() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
-	// Package info actions.
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
-	
-	// Update file list only if this tab is open
-// 	connect( portageSummaryTabs, SIGNAL( currentChanged(QWidget *) ), this, SLOT( slotPackageInfo(QWidget *) ) );
-	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
-// 	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
 	
 	slotInit();
 }
@@ -125,10 +122,10 @@ void PortageTab::slotInit()
 	sizes = config->readIntListEntry("splitterInstalledV");
 	splitterV->setSizes(sizes);
 	
-	if ( !KurooConfig::init() )
-		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
+// 	if ( !KurooConfig::init() )
+// 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
-	useDialog = new UseDialog(this);
+	useDialog = new UseDialog( this );
 }
 
 /**
@@ -166,13 +163,21 @@ void PortageTab::slotViewPackage( const QString& package )
  */
 void PortageTab::slotListSubCategories()
 {
-	kdDebug() << "portageTab::slotListSubCategories" << endl;
-	QString category = categoriesView->currentCategory();
-	if ( category == i18n("na") )
+	QString categoryId = categoriesView->currentCategoryId();
+	if ( categoryId == i18n("na") )
 		return;
 	
 	subcategoriesView->clear();
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subcategories( category ) );
+	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId ) );
+}
+
+void PortageTab::slotFilters( int radioFilter )
+{
+	filter = radioFilter;
+	if ( categorySelected )
+		slotListCategoryPackages();
+	else
+		slotListPackages();
 }
 
 /**
@@ -180,17 +185,12 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListCategoryPackages()
 {
-	kdDebug() << "PortageTab::slotListCategoryPackages" << endl;
-	QString category = categoriesView->currentCategory();
-	if ( category == i18n("na") )
+	QString categoryId = categoriesView->currentCategoryId();
+	if ( categoryId == i18n("na") )
 		return;
 	
-	packagesView->clear();
-// 	QStringList categoriesList = PortageSingleton::Instance()->subcategories( category );
-// 	foreach ( categoriesList ) {
-// 		QString SubCat = category + "-" + *it;
-		packagesView->addCategoryPackages( category );
-// 	}
+	packagesView->addCategoryPackages( categoryId, filter );
+	categorySelected = true;
 }
 
 /**
@@ -198,21 +198,13 @@ void PortageTab::slotListCategoryPackages()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
-	QString category = categoriesView->currentCategory();
-	QString subcategory = subcategoriesView->currentCategory();
-	if ( category == i18n("na") || subcategory == i18n("na") )
+	QString categoryId = categoriesView->currentCategoryId();
+	QString subCategoryId = subcategoriesView->currentCategoryId();
+	if ( categoryId == i18n("na") || subCategoryId == i18n("na") )
 		return;
 	
-	packagesView->reset();
-	packagesView->addSubCategoryPackages( category, subcategory );
-	
-	// View summary info
-// 	QString textLines = "<font size=\"+2\">" + category + "</font><br>";
-// 	summaryBrowser->clear();
-// 	textLines += i18n("Total available packages: ");
-// 	textLines += packagesView->count();
-// 	summaryBrowser->append( textLines );
+	packagesView->addSubCategoryPackages( categoryId, subCategoryId, filter );
+	categorySelected = false;
 }
 
 /**
@@ -232,113 +224,6 @@ void PortageTab::slotRefresh()
 	}
 }
 
-/**
- * Popup menu for actions like emerge.
- * @param item
- * @param point
- */
-void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
-{
-	if ( !item )
-		return;
-	
-	enum Actions { PRETEND, APPEND, EMERGE, DEPEND, UNMASK, CLEARUNMASK, USEFLAGS };
-	
-	KPopupMenu menu(this);
-	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
-// 	int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
-	int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE);
-	int menuItem4 = menu.insertItem(i18n("&Unmask"), UNMASK);
-	int menuItem5 = menu.insertItem(i18n("&Clear Unmasking"), CLEARUNMASK);
-	int menuItem6 = menu.insertItem(i18n("&Edit Use Flags"), USEFLAGS);
-	
-	// No access when kuroo is busy.
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
-		menu.setItemEnabled( menuItem1, false );
-// 		menu.setItemEnabled( menuItem2, false );
-		menu.setItemEnabled( menuItem3, false );
-	}
-	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem3, false );
-
-	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		menu.setItemEnabled( menuItem4, false );
-		menu.setItemEnabled( menuItem5, false );
-	}
-	
-	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		menu.setItemEnabled( menuItem6, false );
-	}
-	
-	QString category = categoriesView->currentCategory();
-	QString subcategory = subcategoriesView->currentCategory();
-	
-	switch( menu.exec(point) ) {
-		
-		case PRETEND: {
-			PortageSingleton::Instance()->pretendPackage( category + "-" + subcategory, packagesView->selectedPackages() );
-			break;
-		}
-			
-		case APPEND: {
-			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
-			break;
-		}
-			
-		case EMERGE: {
-			QueueSingleton::Instance()->installQueue( packagesView->selectedId() );
-			break;
-		}
-		
-		case UNMASK: {
-			PortageSingleton::Instance()->unmaskPackageList( category + "-" + subcategory, packagesView->selectedPackages() );
-			break;
-		}
-		
-		case CLEARUNMASK: {
-			PortageSingleton::Instance()->clearUnmaskPackageList( category + "-" + subcategory, packagesView->selectedPackages() );
-			break;
-		}
-		
-		case USEFLAGS: {
-			useFlags();
-			break;
-		}
-	}
-}
-
-/**
- * Find package by name or description among portage packages.
- */
-void PortageTab::slotFind()
-{
-	static QString searchLine = "";
-	
-	KDialogBase *dial = new KDialogBase(KDialogBase::Swallow, i18n("Find packages"), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, this, i18n("Search"), true);
-	SearchBase *searchDialog = new SearchBase(this);
-	dial->setButtonText(KDialogBase::Ok, i18n("Search"));
-	dial->setMainWidget(searchDialog);
-	
-	searchDialog->show();
-	searchDialog->lineSearch->setFocus();
-	searchDialog->lineSearch->setText(searchLine);
-	
-	if ( dial->exec() == QDialog::Accepted ) {
-		
-		// What are we searching for?
-		searchLine = searchDialog->lineSearch->text();
-		searchLine = searchLine.simplifyWhiteSpace();
-		
-		if ( searchDialog->comboSearch->currentItem() == 1 )
-			PortageSingleton::Instance()->findPackage( searchLine.lower(), true );
-		else
-			PortageSingleton::Instance()->findPackage( searchLine.lower(), false );
-	}
-	
-	delete dial;
-	dial = 0;
-}
 
 /**
  * View summary for selected package.
@@ -349,16 +234,8 @@ void PortageTab::slotSummary()
 	
 	if ( !packagesView->currentItem() )
 		return;
-	
-	// Is it a package or ebuild?
-	if ( !packagesView->currentItem()->parent() ) {
-		QString summary( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );
-		summaryBrowser->setText(summary);
-	}
-	else {
-		QString summary( PortageSingleton::Instance()->versionSummary( packagesView->currentId() ) );
-		summaryBrowser->setText(summary);
-	}
+
+	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );
 	
 // 	slotPackageInfo( portageSummaryTabs->currentPage() );
 }
@@ -369,14 +246,14 @@ void PortageTab::slotSummary()
  */
 void PortageTab::slotPackageInfo( QWidget *page )
 {
-	enum summaryTab { EBUILD = 1, CHANGELOG, DEPENDENCIES };
-	
-	// Get selected item
-	QString package = packagesView->currentPackage();
-	QString category = PortageSingleton::Instance()->category( packagesView->currentId() );
-
-	kdDebug() << "package=" << package << endl;
-	kdDebug() << "category=" << category << endl;
+// 	enum summaryTab { EBUILD = 1, CHANGELOG, DEPENDENCIES };
+// 	
+// 	// Get selected item
+// 	QString package = packagesView->currentPackage();
+// 	QString category = PortageSingleton::Instance()->category( packagesView->currentId() );
+// 
+// 	kdDebug() << "package=" << package << endl;
+// 	kdDebug() << "category=" << category << endl;
 	
 // 	switch ( portageSummaryTabs->indexOf(page) ) {
 // 		case EBUILD: {
@@ -423,6 +300,75 @@ void PortageTab::slotPackageInfo( QWidget *page )
 void PortageTab::useFlags()
 {
 	useDialog->edit( PortageSingleton::Instance()->category( packagesView->currentId() ) + "/" + packagesView->currentPackage() );
+}
+
+/**
+ * Popup menu for actions like emerge.
+ * @param item
+ * @param point
+ */
+void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
+{
+	if ( !item )
+		return;
+	
+	enum Actions { PRETEND, APPEND, EMERGE, DEPEND, UNMASK, CLEARUNMASK, USEFLAGS };
+	
+	KPopupMenu menu(this);
+	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
+	int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
+	int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE);
+	int menuItem4 = menu.insertItem(i18n("&Unmask"), UNMASK);
+	int menuItem5 = menu.insertItem(i18n("&Clear Unmasking"), CLEARUNMASK);
+	int menuItem6 = menu.insertItem(i18n("&Edit Use Flags"), USEFLAGS);
+	
+	// No access when kuroo is busy.
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+		menu.setItemEnabled( menuItem3, false );
+	}
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() )
+		menu.setItemEnabled( menuItem3, false );
+	
+	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+		menu.setItemEnabled( menuItem4, false );
+		menu.setItemEnabled( menuItem5, false );
+	}
+	
+	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+		menu.setItemEnabled( menuItem6, false );
+	}
+	
+	QString category = categoriesView->currentCategory();
+	QString subCategory = subcategoriesView->currentCategory();
+	
+	switch( menu.exec(point) ) {
+		
+		case PRETEND:
+			PortageSingleton::Instance()->pretendPackage( category + "-" + subCategory, packagesView->selectedPackages() );
+			break;
+			
+		case APPEND:
+			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
+			break;
+			
+		case EMERGE:
+			QueueSingleton::Instance()->installQueue( packagesView->selectedId() );
+			break;
+			
+		case UNMASK:
+			PortageSingleton::Instance()->unmaskPackageList( category + "-" + subCategory, packagesView->selectedPackages() );
+			break;
+			
+		case CLEARUNMASK:
+			PortageSingleton::Instance()->clearUnmaskPackageList( category + "-" + subCategory, packagesView->selectedPackages() );
+			break;
+			
+		case USEFLAGS:
+			useFlags();
+	}
 }
 
 #include "portagetab.moc"

@@ -59,8 +59,8 @@ public slots:
 	 * Populate listview with content of this category..
 	 * @param package
 	 */
-	void 			addCategoryPackages( const QString& category );
-	void 			addSubCategoryPackages( const QString& category, const QString& subCategory );
+	void 			addCategoryPackages( const QString& category, int filter );
+	void 			addSubCategoryPackages( const QString& category, const QString& subCategory, int filter );
 	
 private:
 	QStringList		unmaskedList;

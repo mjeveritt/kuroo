@@ -159,33 +159,16 @@ bool Portage::isInstalled( const QString& package )
  */
 QStringList Portage::categories()
 {
-// 	QStringList categories;
-// 	QString lastCategory;
-
-	QStringList categoriesList = KurooDBSingleton::Instance()->portageCategories();
-// 	foreach ( categoriesList ) {
-// 		QString category = (*it).section("-",0,0);
-// 		if ( category != lastCategory )
-// 			categories += category;
-// 		lastCategory = category;
-// 	}
-	return categoriesList;
+	return KurooDBSingleton::Instance()->portageCategories();
 }
 
 /**
  * Get list of all subcategories for portage packages.
  * @return QStringList
  */
-QStringList Portage::subcategories( const QString& category )
+QStringList Portage::subCategories( const QString& categoryId )
 {
-// 	QStringList subcategories;
-	
-	QStringList subcategoriesList = KurooDBSingleton::Instance()->portageSubCategories(category);
-// 	foreach ( categoriesList ) {
-// 		if ( (*it).section("-",0,0) == category )
-// 			subcategories += (*it).section("-",1,1);
-// 	}
-	return subcategoriesList;
+	return KurooDBSingleton::Instance()->portageSubCategories( categoryId );
 }
 
 /**
@@ -193,18 +176,14 @@ QStringList Portage::subcategories( const QString& category )
  * @param category
  * @return QStringList
  */
-QStringList Portage::packagesInCategory( const QString& category )
+QStringList Portage::packagesInCategory( const QString& categoryId, int filter )
 {
-// 	QString idCategory = KurooDBSingleton::Instance()->portageCategoryId(category).first();
-	return KurooDBSingleton::Instance()->portagePackagesByCategory(category);
+	return KurooDBSingleton::Instance()->portagePackagesByCategory( categoryId, filter );
 }
 
-QStringList Portage::packagesInSubCategory( const QString& category, const QString& subCategory )
+QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
 {
-// 	QString idCategory = KurooDBSingleton::Instance()->portageCategoryId(category).first();
-	kdDebug() << "category=" << category << endl;
-	kdDebug() << "subCategory=" << subCategory << endl;
-	return KurooDBSingleton::Instance()->portagePackagesBySubCategory(category, subCategory);
+	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter );
 }
 
 /**
@@ -504,6 +483,8 @@ QString Portage::package( const QString& id )
  */
 QString Portage::packageSummary( const QString& packageId )
 {
+	kdDebug() << "packageId=" << packageId << endl;
+	
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	Info info( packageInfo( packageId ) );

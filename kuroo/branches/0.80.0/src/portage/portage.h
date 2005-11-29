@@ -89,15 +89,15 @@ public slots:
 	* @return QStringList
 	*/
 	QStringList					categories();
-	QStringList					subcategories( const QString& category );
+	QStringList					subCategories( const QString& category );
 	
 	/**
 	* Get list of packages in this category from database.
 	* @param category
 	* @return QStringList
 	*/
-	QStringList					packagesInCategory( const QString& category );
-	QStringList					packagesInSubCategory( const QString& category, const QString& subCategory );
+	QStringList					packagesInCategory( const QString& category, int filter );
+	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter );
 	
 	/**
 	* Get list of versions available of this package.

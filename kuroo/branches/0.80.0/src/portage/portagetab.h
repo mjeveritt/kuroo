@@ -65,11 +65,6 @@ public slots:
 	void				slotRefresh();
 	
 	/**
-	* Find package by name or description among portage packages.
-	*/
-	void				slotFind();
-	
-	/**
 	* Activate this package to view its info.
 	* @param package
 	*/
@@ -93,6 +88,7 @@ private slots:
 	/**
 	* List packages when clicking on category in installed.
 	*/
+	void				slotFilters( int radioFilter );
 	void				slotListPackages();
 	void				slotListCategoryPackages();
 	
@@ -121,6 +117,7 @@ private slots:
 	void				useFlags();
 	
 private:
+	int					filter;
 	PortageListView 	*packagesView;
 	KPopupMenu 			*menu;
 	UseDialog 			*useDialog;

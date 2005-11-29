@@ -57,7 +57,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator( true );
-	setMargin( 2 );
+// 	setMargin( 2 );
 	
 	setItemMargin( 1 );
 	setRootIsDecorated( true );
@@ -66,14 +66,12 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
-// 	setColumnWidthMode(3, QListView::Manual);
 	setColumnAlignment( 2, Qt::AlignRight );
 	setResizeMode( QListView::LastColumn );
 	
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 20 );
 	setColumnWidth( 2, 80 );
-// 	setColumnWidth(3, 80);
 	
 	setTooltipColumn( 4 );
 }
@@ -118,14 +116,13 @@ QStringList PortageListView::selectedNoVersion()
  * Populate listview with content of this category.
  * @param package
  */
-void PortageListView::addSubCategoryPackages( const QString& category, const QString& subCategory )
+void PortageListView::addSubCategoryPackages( const QString& category, const QString& subCategoryId, int filter )
 {
-// 	reset();
-	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( category, subCategory );
+	reset();
+	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( category, subCategoryId, filter );
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString name = *it++;
-// 		QString version = *it++;
 		QString package = name;
 		QString description = *it++;
 // 		QString size = *it++;
@@ -138,6 +135,9 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
 // 		packageMeta.insert(i18n("4Size"), size);
 		packageMeta.insert(i18n("5Latest"), latest);
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+		
+		if ( installed != "0" )
+			packageItem->setStatus(INSTALLED);
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 // 			packageItem->setStatus(MASKED);
@@ -154,14 +154,13 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
  * Populate listview with content of this category.
  * @param package
  */
-void PortageListView::addCategoryPackages( const QString& category )
+void PortageListView::addCategoryPackages( const QString& category, int filter  )
 {
-// 	reset();
-	const QStringList packageList = PortageSingleton::Instance()->packagesInCategory( category );
+	reset();
+	const QStringList packageList = PortageSingleton::Instance()->packagesInCategory( category, filter );
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString name = *it++;
-// 		QString version = *it++;
 		QString package = name;
 		QString description = *it++;
 // 		QString size = *it++;
@@ -174,6 +173,9 @@ void PortageListView::addCategoryPackages( const QString& category )
 // 		packageMeta.insert(i18n("4Size"), size);
 		packageMeta.insert(i18n("5Latest"), latest);
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+		
+		if ( installed != "0" )
+			packageItem->setStatus(INSTALLED);
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 // 			packageItem->setStatus(MASKED);

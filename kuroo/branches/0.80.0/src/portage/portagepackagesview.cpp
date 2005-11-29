@@ -30,7 +30,8 @@ PortagePackagesView::PortagePackagesView( QWidget *parent, const char *name )
 	: QVBox( parent, name )
 {
 	packagesView = new PortageListView( this, name );
-	new KListViewSearchLineWidget( packagesView, this, name );
+	KListViewSearchLineWidget* filterWidget = new KListViewSearchLineWidget( packagesView, this, name );
+	filterWidget->setMargin( 2 );
 }
 
 PortagePackagesView::~PortagePackagesView()

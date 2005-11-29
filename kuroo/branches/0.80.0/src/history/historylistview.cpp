@@ -50,7 +50,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	addColumn(i18n("Time"));
 	setMinimumSize(QSize(50, 0));
 	setProperty("selectionMode", "Extended");
-	
+	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated(true);
 	setFullWidth(true);
 

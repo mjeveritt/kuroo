@@ -464,8 +464,8 @@ QStringList KurooDB::updatesPackagesByCategory( const QString& idCategory )
 
 QStringList KurooDB::queuePackages()
 {
-	return query( QString(" SELECT package.id, category.name, package.name, package.version, "
-	                      " package.description, package.size, package.keywords, package.installed "
+	return query( QString(" SELECT package.id, category.name, package.name, "
+	                      " package.description, package.installed "
 	                      " FROM queue, category, package "
 	                      " WHERE queue.idPackage = package.id "
 	                      " AND category.id = package.idCategory "

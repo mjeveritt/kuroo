@@ -103,13 +103,11 @@ void CategoriesView::setCurrentCategory( const QString& category )
  */
 void CategoriesView::loadCategories( const QStringList& categoriesList )
 {
-	QListViewItem *catItem;
-	
 	categories.clear();
 	foreach ( categoriesList ) {
 		QString name = *it++;
 		QString idDB = *it;
-		catItem = new KListViewItem( this, name );
+		new QListViewItem( this, name );
 		categories.insert( name, idDB );
 	}
 }

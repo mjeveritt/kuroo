@@ -334,7 +334,7 @@
     </customwidget>
     <customwidget>
         <class>SubCategoriesListView</class>
-        <header location="local">subcategorieslistview.h</header>
+        <header location="local">categorieslistview.h</header>
         <sizehint>
             <width>0</width>
             <height>0</height>
@@ -378,7 +378,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>categorieslistview.h</includehint>
-    <includehint>subcategorieslistview.h</includehint>
     <includehint>portagepackagesview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
 </includehints>

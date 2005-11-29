@@ -147,11 +147,9 @@ void QueueListView::loadFromDB()
 		QString idDB = *it++;
 		QString category = *it++;
 		QString name = *it++;
-		QString version = *it++;
-		QString package = name + "-" + version;
 		QString description = *it++;
-		QString size = *it++;
-		QString keywords = *it++;
+// 		QString size = *it++;
+// 		QString keywords = *it++;
 		QString installed = *it;
 		
 		QString time = HistorySingleton::Instance()->packageTime( category + "/" + name );
@@ -164,22 +162,22 @@ void QueueListView::loadFromDB()
 			categoryItems[category].item = categoryItem;
 		}
 		
-		if ( !categoryItems[category].packageItems.contains(package) ) {
+		if ( !categoryItems[category].packageItems.contains(name) ) {
 			packageMeta.insert(i18n("3Description"), description);
-			packageMeta.insert(i18n("4Size"), size);
+// 			packageMeta.insert(i18n("4Size"), size);
 			packageMeta.insert(i18n("5Time"), timeFormat(time));
-			packageItem = new PackageItem( categoryItems[category].item, package, packageMeta, PACKAGE );
-			categoryItems[category].packageItems[package] = packageItem;
+			packageItem = new PackageItem( categoryItems[category].item, name, packageMeta, PACKAGE );
+			categoryItems[category].packageItems[name] = packageItem;
 			
 			if ( installed != "0" )
 				packageItem->setStatus(INSTALLED);
 			
-			if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-				packageItem->setStatus(MASKED);
+// 			if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
+// 				packageItem->setStatus(MASKED);
 			
 		}
 		
-		addSize(size);
+// 		addSize(size);
 		packages.insert( idDB, packageItem );
 		
 		// Inform all other listviews that this package is in queue

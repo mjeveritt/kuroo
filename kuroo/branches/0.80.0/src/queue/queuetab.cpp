@@ -93,7 +93,7 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload()
 {
-	queueView->loadFromDB();
+	queueView->loadPackages();
 	totalSizeText->setText(queueView->totalSize());
 	totalTimeText->setText(queueView->totalTime());
 }

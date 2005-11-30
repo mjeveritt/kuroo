@@ -24,7 +24,6 @@
 #include "settings.h"
 #include "message.h"
 #include "signalist.h"
-#include "results.h"
 #include "emerge.h"
 #include "etcupdate.h"
 #include "statusbar.h"
@@ -41,7 +40,6 @@ typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
 typedef Singleton<Queue> QueueSingleton;
-typedef Singleton<Results> ResultsSingleton;
 typedef Singleton<Installed> InstalledSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KurooDB> KurooDBSingleton;

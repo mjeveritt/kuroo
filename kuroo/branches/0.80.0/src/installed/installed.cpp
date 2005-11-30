@@ -228,10 +228,10 @@ void Installed::findPackage( const QString& text, const bool& isName )
 	else
 		packageIdList = KurooDBSingleton::Instance()->findInstalledPackagesName( text );
 	
-	if ( !packageIdList.isEmpty() )
-		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-	else
-		LogSingleton::Instance()->writeLog( i18n("\nNo packages found matching: %1").arg(text), KUROO );
+// 	if ( !packageIdList.isEmpty() )
+// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
+// 	else
+// 		LogSingleton::Instance()->writeLog( i18n("\nNo packages found matching: %1").arg(text), KUROO );
 }
 
 /**

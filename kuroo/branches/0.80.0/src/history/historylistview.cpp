@@ -41,15 +41,15 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 {
 	// Load icons for category, package ...
 	KIconLoader *ldr = KGlobal::iconLoader();
-	pxPackageHeader = ldr->loadIcon("kuroo_history", KIcon::Toolbar);
-	pxCategory = ldr->loadIcon("kuroo_category", KIcon::Small);
-	pxNew = ldr->loadIcon("kuroo_new", KIcon::Small);
-	pxUnmerged = ldr->loadIcon("kuroo_unmerged", KIcon::Small);
+	pxPackageHeader = ldr->loadIcon( "kuroo_history", KIcon::Toolbar );
+	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
+	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
+	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
 	
-	addColumn(i18n("Date"));
-	addColumn(i18n("Time"));
-	setMinimumSize(QSize(50, 0));
-	setProperty("selectionMode", "Extended");
+	addColumn( i18n("Date") );
+	addColumn( i18n("Time") );
+	setMinimumSize( QSize(50, 0) );
+	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated(true);
 	setFullWidth(true);

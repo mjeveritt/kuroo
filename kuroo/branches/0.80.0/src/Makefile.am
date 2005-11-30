@@ -14,8 +14,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config -I$(top_builddir)/src/
 	-I$(top_builddir)/src/updates -I$(top_builddir)/src/queue -I$(top_builddir)/src/results \
 	-I$(top_builddir)/src/logs $(all_includes)
 
-SUBDIRS = config intro core history logs queue results updates installed \
-	portage
+SUBDIRS = config intro core history logs queue updates installed portage
 
 # embedded sqlite as library
 SQLITE_SUBDIR = sqlite
@@ -62,10 +61,9 @@ kuroo8_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 # kuroo links
 kuroo8_LDADD = $(top_builddir)/src/history/libhistory.la \
 	$(top_builddir)/src/updates/libupdates.la $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/results/libresults.la $(top_builddir)/src/queue/libqueue.la \
-	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
-	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la \
-	$(top_builddir)/src/installed/libinstalled.la $(LIB_KDEPRINT) $(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE) \
-	$(LIB_SQLITE_LOCAL)
+	$(top_builddir)/src/queue/libqueue.la $(top_builddir)/src/portage/libportage.la \
+	$(top_builddir)/src/logs/liblogs.la $(top_builddir)/src/intro/libintro.la \
+	$(top_builddir)/src/core/libcore.la $(top_builddir)/src/installed/libinstalled.la $(LIB_KDEPRINT) \
+	$(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
 
 

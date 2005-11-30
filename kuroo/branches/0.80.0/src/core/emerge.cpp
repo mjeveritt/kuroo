@@ -551,7 +551,7 @@ void Emerge::cleanup()
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy(false);
-	ResultsSingleton::Instance()->addPackageList( emergePackageList );
+// 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
 		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks );

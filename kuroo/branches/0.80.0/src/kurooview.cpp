@@ -24,8 +24,6 @@
 #include "updatelistview.h"
 #include "queuetab.h"
 #include "queuelistview.h"
-#include "resultstab.h"
-#include "resultlistview.h"
 #include "logstab.h"
 #include "historytab.h"
 #include "packagelistview.h"

@@ -34,7 +34,7 @@
 QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_071105";
+static const char version[] = "0.80.0_301105";
 
 static KCmdLineOptions options[] =
 {
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	
     // register ourselves as a dcop client
 	if ( app.dcopClient()->isApplicationRegistered("kuroo8") )  {
-		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
+		kdDebug() << I18N_NOOP("Kuroo8 is already running!") << endl;
 		exit(0);
 	}
 	app.dcopClient()->registerAs(app.name(), false);

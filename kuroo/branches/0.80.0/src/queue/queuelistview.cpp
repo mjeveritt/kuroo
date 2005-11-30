@@ -48,26 +48,24 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
 {
 	// Setup geometry
-	addColumn(i18n("Package"));
-	addColumn(i18n("Time"));
-// 	addColumn(i18n("Size"));
-	addColumn(i18n("Description"));
-	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
+	addColumn( i18n("Package") );
+	addColumn( i18n("Time") );
+	addColumn( i18n("Description") );
+	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
 
-	setProperty("selectionMode", "Extended");
-	setShowSortIndicator(true);
-	setRootIsDecorated(true);
-	setFullWidth(true);
-
-	setColumnWidthMode(0, QListView::Manual);
-	setResizeMode(QListView::LastColumn);
-// 	setColumnAlignment(2, Qt::AlignRight);
+	setProperty( "selectionMode", "Extended" );
+	setShowSortIndicator( false );
+	setRootIsDecorated( true );
+	setFullWidth( true );
 	
-	setColumnWidth(0, 200);
-	setColumnWidth(1, 80);
-// 	setColumnWidth(2, 80);
+	setColumnWidthMode( 0, QListView::Manual );
+	setResizeMode( QListView::LastColumn );
 	
-	setTooltipColumn(2);
+	setColumnWidth( 0, 200 );
+	setColumnWidth( 1, 80 );
+	
+	setTooltipColumn( 2 );
+	setSorting( -1 );
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), 
 	            this, SLOT( setQueued(const QString&, bool) ) );
@@ -109,9 +107,8 @@ QStringList QueueListView::allPackages()
 QString QueueListView::currentPackage()
 {
 	QListViewItem *item = currentItem();
-	if ( item && item->parent() ) {
+	if ( item && item->parent() )
 		return (item->parent()->text(0) + "/" +  item->text(0));
-	}
 	else
 		return i18n("na");
 }
@@ -128,6 +125,37 @@ QStringList QueueListView::selectedPackages()
 			packageList += it.current()->parent()->text(0) + "/" + it.current()->text(0);
 	}
 	return packageList;
+}
+
+/**
+ * Populate queue with packages from db
+ */
+void QueueListView::loadPackages()
+{
+	reset();
+	totalDuration = QTime(0, 0, 0);
+	sumSize = 0;
+	
+	const QStringList packageList = QueueSingleton::Instance()->allPackages();
+	foreach ( packageList ) {
+		QString idDB = *it++;
+		QString category = *it++;
+		category = category + "-" + *it++;
+		QString name = *it++;
+		QString description = *it++;
+		QString installed = *it;
+		
+		QString time = HistorySingleton::Instance()->packageTime( category + "/" + name );
+		Meta packageMeta;
+		
+		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE );
+		
+		if ( installed != "0" )
+			packageItem->setStatus(INSTALLED);
+		
+		// Inform all other listviews that this package is in queue
+		QueueSingleton::Instance()->insertInCache( idDB );
+	}
 }
 
 /**
@@ -165,7 +193,6 @@ void QueueListView::loadFromDB()
 		
 		if ( !categoryItems[category].packageItems.contains(name) ) {
 			packageMeta.insert(i18n("3Description"), description);
-// 			packageMeta.insert(i18n("4Size"), size);
 			packageMeta.insert(i18n("5Time"), timeFormat(time));
 			packageItem = new PackageItem( categoryItems[category].item, name, packageMeta, PACKAGE );
 			categoryItems[category].packageItems[name] = packageItem;

@@ -210,10 +210,10 @@ void Portage::findPackage( const QString& text, const bool& isName )
 	else
 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
 	
-	if ( !packageIdList.isEmpty() )
-		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-	else
-		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
+// 	if ( !packageIdList.isEmpty() )
+// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
+// 	else
+// 		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
 }
 
 /**

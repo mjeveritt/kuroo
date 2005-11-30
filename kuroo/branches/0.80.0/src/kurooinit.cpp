@@ -98,7 +98,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	PortageSingleton::Instance()->init(this);
 	UpdatesSingleton::Instance()->init(this);
 	QueueSingleton::Instance()->init(this);
-	ResultsSingleton::Instance()->init(this);
 }
 
 KurooInit::~KurooInit()

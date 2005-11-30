@@ -57,12 +57,6 @@ public:
 private slots:
 	
 	/**
-	 * Method for enable right slot depending on which tab is activated.
-	 * @param page
-	 */
-	void				activateToolbar( QWidget *page );
-	
-	/**
 	 * Dialogs:
 	 * Show the wizard.
 	 * Show the full emerge log 

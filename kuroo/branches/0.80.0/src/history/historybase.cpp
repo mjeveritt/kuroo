@@ -1,19 +1,12 @@
 #include <kdialog.h>
 #include <klocale.h>
-/****************************************************************************
-** Form implementation generated from reading ui file '/home/karye/repository/kuroo-svn/kuroo/branches/0.80.0/src/history/historybase.ui'
-**
-** Created: Tue Nov 29 17:00:03 2005
-**      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.4   edited Nov 24 2003 $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
 
 #include "historybase.h"
 
 #include <qvariant.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+#include <qframe.h>
 #include <klistviewsearchline.h>
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -28,12 +21,11 @@ HistoryBase::HistoryBase( QWidget* parent, const char* name, WFlags fl )
     : QWidget( parent, name, fl )
 {
     if ( !name )
-	setName( "HistoryBase" );
+		setName( "HistoryBase" );
     HistoryBaseLayout = new QGridLayout( this, 1, 1, 0, 0, "HistoryBaseLayout"); 
 
     historyView = new HistoryListView( this, "historyView" );
     historyView->setMinimumSize( QSize( 0, 0 ) );
-
     HistoryBaseLayout->addWidget( historyView, 1, 0 );
 
     layout3 = new QGridLayout( 0, 1, 1, 2, 6, "layout3"); 
@@ -42,13 +34,19 @@ HistoryBase::HistoryBase( QWidget* parent, const char* name, WFlags fl )
 
     kcfg_viewUnmerges = new QCheckBox( this, "kcfg_viewUnmerges" );
     kcfg_viewUnmerges->setChecked( TRUE );
-
     layout3->addWidget( kcfg_viewUnmerges, 0, 0 );
 
 	searchLineHistory = new KListViewSearchLineWidget( historyView, this, "searchLineHistory" );
-
     layout3->addWidget( searchLineHistory, 0, 2 );
 
+	QFrame* line1 = new QFrame( this, "line1" );
+	line1->setPaletteForegroundColor( QColor( 185, 185, 185 ) );
+	line1->setFrameShape( QFrame::HLine );
+	line1->setFrameShadow( QFrame::Plain );
+	line1->setLineWidth( 1 );
+	line1->setFrameShape( QFrame::HLine );
+	layout3->addWidget( line1, 1, 0 );
+	
     HistoryBaseLayout->addLayout( layout3, 0, 0 );
     languageChange();
     resize( QSize(591, 448).expandedTo(minimumSizeHint()) );

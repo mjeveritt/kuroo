@@ -68,6 +68,7 @@ public slots:
 	/**
 	* Populate queue with packages from db
 	*/
+	void								loadPackages();
 	void 								loadFromDB();
 	
 	/**

@@ -40,22 +40,22 @@
 UpdatesTab::UpdatesTab( QWidget *parent )
 	: UpdatesBase( parent )
 {
-	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+// 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	
 	// Rmb actions.
-	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
-	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
-	connect( updatesList, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
-	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+// 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
+// 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+// 	connect( updatesList, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
+// 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( pbEmergeQueue, SIGNAL( clicked() ), this, SLOT( slotEmergeQueue() ) );
+// 	connect( pbEmergeQueue, SIGNAL( clicked() ), this, SLOT( slotEmergeQueue() ) );
 	
 	// Lock/unlock if kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 	
 	// Reload views after changes.
-	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReload() ) );
+// 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReload() ) );
 	
 	slotInit();
 }

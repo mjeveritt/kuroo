@@ -47,18 +47,15 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	pxQueuedColumn = ldr->loadIcon( "kuroo_queued_column", KIcon::Small );
 	
 	// Setup geometry
-	addColumn( i18n("Package") );
+	addColumn( i18n( "Package" ) );
 	addColumn( " " );
 	header()->setLabel( 1, pxQueuedColumn, " " );
-/*	addColumn( i18n("Update") );*/
-	addColumn( i18n("Latest") );
-	addColumn( i18n("Description") );
-	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
+	addColumn( i18n( "Update" ) );
+	addColumn( i18n( "Description" ) );
+	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 	
 	setProperty( "selectionMode", "Extended" );
-	setShowSortIndicator( true );
-// 	setMargin( 2 );
-	
+	setShowSortIndicator( true );	
 	setItemMargin( 1 );
 	setRootIsDecorated( true );
 	setFullWidth( true );
@@ -87,13 +84,13 @@ PortageListView::~PortageListView()
 void PortageListView::setCurrentPackage( const QString& package )
 {
 	clearSelection();
-	QListViewItemIterator it(this);
+	QListViewItemIterator it( this );
 	for ( ; it.current(); ++it )
 		if ( package == it.current()->text(0) ) {
-			ensureItemVisible(it.current());
-			setCurrentItem(it.current());
-			it.current()->setSelected(true);
-			it.current()->setOpen(true);
+			ensureItemVisible( it.current() );
+			setCurrentItem( it.current() );
+			it.current()->setSelected( true );
+			it.current()->setOpen( true );
 			break;
 		}
 }
@@ -107,7 +104,7 @@ QStringList PortageListView::selectedNoVersion()
 	QStringList returnList;
 	const QStringList packageList = selectedPackages();
 	foreach ( packageList ) {
-		returnList += (*it).section(pv, 0, 0);
+		returnList += (*it).section( pv, 0, 0 );
 	}
 	return returnList;
 }
@@ -128,16 +125,16 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
 // 		QString size = *it++;
 // 		QString keywords = *it++;
 		QString latest = *it++;
-		QString installed = *it;
+		QString installed = *it++;
+		QString updateVersion = *it;
 		
 		Meta packageMeta;
-		packageMeta.insert(i18n("3Description"), description);
-// 		packageMeta.insert(i18n("4Size"), size);
-		packageMeta.insert(i18n("5Latest"), latest);
+		packageMeta.insert( i18n( "3Description" ), description );
+		packageMeta.insert( i18n( "5Update" ), updateVersion );
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
 		
 		if ( installed != "0" )
-			packageItem->setStatus(INSTALLED);
+			packageItem->setStatus( INSTALLED );
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 // 			packageItem->setStatus(MASKED);
@@ -166,16 +163,16 @@ void PortageListView::addCategoryPackages( const QString& category, int filter  
 // 		QString size = *it++;
 // 		QString keywords = *it++;
 		QString latest = *it++;
-		QString installed = *it;
+		QString installed = *it++;
+		QString updateVersion = *it;
 		
 		Meta packageMeta;
-		packageMeta.insert(i18n("3Description"), description);
-// 		packageMeta.insert(i18n("4Size"), size);
-		packageMeta.insert(i18n("5Latest"), latest);
+		packageMeta.insert( i18n( "3Description" ), description );
+		packageMeta.insert( i18n( "5Update" ), updateVersion );
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
 		
 		if ( installed != "0" )
-			packageItem->setStatus(INSTALLED);
+			packageItem->setStatus( INSTALLED );
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 // 			packageItem->setStatus(MASKED);

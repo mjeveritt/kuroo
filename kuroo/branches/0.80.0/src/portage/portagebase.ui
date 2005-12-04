@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>729</width>
-            <height>510</height>
+            <height>550</height>
         </rect>
     </property>
     <property name="caption">
@@ -158,7 +158,7 @@
         </widget>
         <widget class="QSplitter" row="1" column="0">
             <property name="name">
-                <cstring>splitterH</cstring>
+                <cstring>splitter7</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -250,7 +250,7 @@
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout2</cstring>
+                    <cstring>layout8</cstring>
                 </property>
                 <grid>
                     <property name="name">
@@ -285,18 +285,7 @@
                     </widget>
                     <widget class="QSplitter" row="0" column="1">
                         <property name="name">
-                            <cstring>splitterV</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>3</hsizetype>
-                                <vsizetype>7</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="margin">
-                            <number>1</number>
+                            <cstring>splitter6</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -320,30 +309,119 @@
                                 </size>
                             </property>
                         </widget>
-                        <widget class="KTextBrowser">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>summaryBrowser</cstring>
+                                <cstring>layout7</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>300</width>
-                                    <height>100</height>
-                                </size>
-                            </property>
-                            <property name="frameShape">
-                                <enum>NoFrame</enum>
-                            </property>
-                            <property name="margin">
-                                <number>2</number>
-                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <widget class="KTextBrowser" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>summaryBrowser</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>3</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>300</width>
+                                            <height>100</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>NoFrame</enum>
+                                    </property>
+                                    <property name="margin">
+                                        <number>2</number>
+                                    </property>
+                                </widget>
+                                <widget class="QFrame" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>frame4</cstring>
+                                    </property>
+                                    <property name="paletteBackgroundColor">
+                                        <color>
+                                            <red>255</red>
+                                            <green>255</green>
+                                            <blue>255</blue>
+                                        </color>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>NoFrame</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                        <enum>Plain</enum>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QPushButton" row="2" column="0">
+                                            <property name="name">
+                                                <cstring>pbUninstall</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Uninstall Pac&amp;kage</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+K</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton" row="3" column="0">
+                                            <property name="name">
+                                                <cstring>pbAdvanced</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Show Advanced Options...</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string></string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton" row="1" column="0">
+                                            <property name="name">
+                                                <cstring>pbAddQueue</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Add to Install &amp;Queue</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+Q</string>
+                                            </property>
+                                        </widget>
+                                        <spacer row="0" column="0">
+                                            <property name="name">
+                                                <cstring>spacer2_2</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Vertical</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>21</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </grid>
+                                </widget>
+                            </grid>
                         </widget>
                     </widget>
                 </grid>

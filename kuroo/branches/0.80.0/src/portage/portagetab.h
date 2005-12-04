@@ -64,6 +64,8 @@ public slots:
 	*/
 	void				slotRefresh();
 	
+	void				slotBusy( bool b );
+	
 	/**
 	* Activate this package to view its info.
 	* @param package
@@ -99,6 +101,10 @@ private slots:
 	* @param point
 	*/
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
+	
+	void				slotAddQueue();
+	void				slotUninstall();
+	void				slotAdvanced();
 	
 	/**
 	* View summary for selected package.

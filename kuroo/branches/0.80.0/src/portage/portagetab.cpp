@@ -65,8 +65,16 @@ PortageTab::PortageTab( QWidget* parent )
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
+	// Button actions.
+	connect( pbAddQueue, SIGNAL( clicked() ), this, SLOT( slotAddQueue() ) );
+	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
+	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
+	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
+	
+	// Lock/unlock if kuroo is busy.
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 	
 	slotInit();
 }
@@ -125,7 +133,8 @@ void PortageTab::slotInit()
 	if ( !KurooConfig::init() )
 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
-	useDialog = new UseDialog( this );
+// 	useDialog = new UseDialog( this );
+	slotBusy(false);
 }
 
 /**
@@ -224,6 +233,21 @@ void PortageTab::slotRefresh()
 	}
 }
 
+/**
+ * Disable/enable buttons when kuroo is busy.
+ * @param b
+ */
+void PortageTab::slotBusy( bool b )
+{
+	if ( b )
+		pbUninstall->setDisabled(true);
+	else {
+		if ( !KUser().isSuperUser() )
+			pbUninstall->setDisabled(true);
+		else
+			pbUninstall->setDisabled(false);
+	}
+}
 
 /**
  * View summary for selected package.
@@ -369,6 +393,41 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		case USEFLAGS:
 			useFlags();
 	}
+}
+
+/**
+ * Append package to the queue.
+ */
+void PortageTab::slotAddQueue()
+{
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
+		QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
+}
+
+/**
+ * Uninstall selected package.
+ */
+void PortageTab::slotUninstall()
+{
+	kdDebug() << "@todo: Create method Portage::uninstallPackage..." << endl;
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+		QStringList packageList(packagesView->selectedPackages());
+		switch( KMessageBox::questionYesNoList( this, 
+				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
+				      "Do you want to unmerge following packages?</qt>" ), packageList, i18n( "Unmerge packages" ) ) ) {
+// 				case KMessageBox::Yes:
+// 					InstalledSingleton::Instance()->uninstallPackage( categoriesView->currentCategory(), packageList );
+			}
+	}
+}
+
+/**
+ * Open advanced dialog with: ebuild, versions, use flags...
+ */
+void PortageTab::slotAdvanced()
+{
+	kdDebug() << "@todo: Create dialog for advanced package handling..." << endl;
 }
 
 #include "portagetab.moc"

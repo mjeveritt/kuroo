@@ -210,10 +210,10 @@ void Portage::findPackage( const QString& text, const bool& isName )
 	else
 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
 	
-// 	if ( !packageIdList.isEmpty() )
-// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-// 	else
-// 		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
+	if ( !packageIdList.isEmpty() )
+		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
+	else
+		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
 }
 
 /**
@@ -483,10 +483,8 @@ QString Portage::package( const QString& id )
  */
 QString Portage::packageSummary( const QString& packageId )
 {
-	kdDebug() << "packageId=" << packageId << endl;
-	
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
+	QString package( Portage::package( packageId ) );
+	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );
 
 	QString textLines = "<font size=\"+2\">" + category + "/" + package.section(pv, 0, 0) + "</font><br>";
@@ -539,7 +537,6 @@ QString Portage::versionSummary( const QString& packageId )
  */
 QString Portage::ebuild( const QString& packageId )
 {
-	kdDebug() << "Portage::ebuild" << endl;
 	QString package(Portage::package( packageId ));
 	QString category(Portage::category( packageId ));
 	

@@ -36,7 +36,9 @@ public:
 
 protected:
     QGridLayout* HistoryBaseLayout;
-    QGridLayout* layout3;
+	QFrame* 	 line1;
+	QGridLayout* layout1;
+	QGridLayout* layout3;
     QSpacerItem* spacer3;
 
 protected slots:

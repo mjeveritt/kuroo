@@ -60,7 +60,7 @@ public:
 	void 			slotEmergePretend( QString package );
 
 public:
-	class IconListItem;
+	class 			IconListItem;
 	
 public slots:
 	/**
@@ -97,7 +97,7 @@ private slots:
 	 */
 	void			slotViewPackage( const QString& package );
 	
-	void slotShowView();
+	void 			slotShowView();
 	
 private:
 // 	QueueTab 		*tabQueue;

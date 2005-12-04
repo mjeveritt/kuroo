@@ -46,23 +46,23 @@
 InstalledTab::InstalledTab( QWidget *parent )
 	: InstalledBase( parent )
 {
-	packagesView = packagesSearchView->packagesView;
+// 	packagesView = packagesSearchView->packagesView;
 	
-	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+// 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	
 	// Rmb actions.
-	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
-	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+// 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
+// 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Package info actions.
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
+// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 	
 	// Update file list only if this tab is open.
-	connect( installedSummaryTabs, SIGNAL( currentChanged(QWidget *) ), this, SLOT( slotInstalledFiles(QWidget *) ) );
+// 	connect( installedSummaryTabs, SIGNAL( currentChanged(QWidget *) ), this, SLOT( slotInstalledFiles(QWidget *) ) );
 	
 	// Reload view after changes.
-	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
-	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledReset() ), this, SLOT( slotReload() ) );
+// 	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
+// 	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledReset() ), this, SLOT( slotReload() ) );
 	
 	slotInit();
 }

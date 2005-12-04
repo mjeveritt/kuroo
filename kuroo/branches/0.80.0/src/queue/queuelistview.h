@@ -45,6 +45,9 @@ public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
 	
+// public:
+// 	class 								QueueItem;
+
 public slots:
 	
 	/**
@@ -65,11 +68,13 @@ public slots:
 	*/
 	QString		 						currentPackage();
 	
+	void								movePackageUp();
+	void								movePackageDown();
+	
 	/**
 	* Populate queue with packages from db
 	*/
-	void								loadPackages();
-	void 								loadFromDB();
+	void 								insertPackageList();
 	
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.

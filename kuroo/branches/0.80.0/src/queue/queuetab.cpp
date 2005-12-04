@@ -28,6 +28,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 
+#include <ktextbrowser.h>
 #include <kdialogbase.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -46,10 +47,13 @@ QueueTab::QueueTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
+	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( movePackageUp() ) );
+	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( movePackageDown() ) );
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
 	connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-	connect( pbStop, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+// 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+// 	connect( pbStop, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
@@ -93,9 +97,17 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload()
 {
-	queueView->loadPackages();
-	totalSizeText->setText(queueView->totalSize());
-	totalTimeText->setText(queueView->totalTime());
+	queueView->insertPackageList();
+	
+	QString queueBrowserLines( i18n( "<font size=\"+2\">Packages in Emerge Queue</font><br>" ) );
+			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( QueueSingleton::Instance()->count() );
+			queueBrowserLines += i18n( "Estimated time for emerge: %1<br>" ).arg( queueView->totalTime() );
+			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
+	
+	queueBrowser->clear();
+	queueBrowser->setText( queueBrowserLines );
+	
+// 	totalSizeText->setText( queueView->totalSize() );
 }
 
 /**
@@ -109,18 +121,22 @@ void QueueTab::slotBusy( bool b )
 		pbOptions->setDisabled(true);
 		pbClear->setDisabled(true);
 		
-		if ( EmergeSingleton::Instance()->isRunning() )
-			pbStop->setDisabled(false);
-		else
-			pbStop->setDisabled(true);
+// 		if ( EmergeSingleton::Instance()->isRunning() )
+// 			pbStop->setDisabled(false);
+// 		else
+// 			pbStop->setDisabled(true);
 	}
 	else {
-		if ( !KUser().isSuperUser() )
+		if ( !KUser().isSuperUser() ) {
 			pbGo->setDisabled(true);
-		else
+			pbUninstall->setDisabled(true);
+		}
+		else {
 			pbGo->setDisabled(false);
+			pbUninstall->setDisabled(false);
+		}
 		
-		pbStop->setDisabled(true);
+// 		pbStop->setDisabled(true);
 		pbOptions->setDisabled(false);
 		pbClear->setDisabled(false);
 	}
@@ -131,186 +147,186 @@ void QueueTab::slotBusy( bool b )
  */
 void QueueTab::slotOptions()
 {
-	dial = new KDialogBase( KDialogBase::Swallow, i18n("Advanced emerge options"), KDialogBase::User1 |KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, this, i18n("Options"), true);
-	
-	dial->setButtonText( KDialogBase::User1, i18n("Reset") );
-	connect (dial, SIGNAL(user1Clicked()), this, SLOT(slotClearOptions()));
-	
-	optionsDialog = new EmergeOptionsBase();
-	dial->setMainWidget(optionsDialog);
-	optionsDialog->show();
-
-	// Get options
-	QString options(emergeOptionsText->text());
-	
-	if ( !options.isEmpty() ) {
-		const QStringList optionsList = QStringList::split(" ", options);
-		foreach ( optionsList ) {
-			options = (*it).stripWhiteSpace();
-			
-			if ( options == "--buildpkg" )
-				optionsDialog->radioBuildpkg->toggle();
-			
-			if ( options == "--buildpkgonly" )
-				optionsDialog->radioBuildpkgonly->toggle();
-			
-			if ( options == "--usepkg" )
-				optionsDialog->radioUsepkg->toggle();
-			
-			if ( options == "--usepkgonly" )
-				optionsDialog->radioUsepkgonly->toggle();
-			
-			if ( options == "--nodeps" )
-				optionsDialog->radioNodeps->toggle();
-			
-			if ( options == "--onlydeps" )
-				optionsDialog->radioOnlydeps->toggle();
-			
-			if ( options == "--verbose" )
-				optionsDialog->radioVerbose->toggle();
-			
-			if ( options == "--quiet" )
-				optionsDialog->radioQuiet->toggle();
-			
-			if ( options == "--pretend" )
-				optionsDialog->checkPretend->toggle();
-			
-			if ( options == "--deep" )
-				optionsDialog->checkDeep->toggle();
-			
-			if ( options == "--update" )
-				optionsDialog->checkUpdate->toggle();
-			
-			if ( options == "--upgradeonly" )
-				optionsDialog->checkUpgradeonly->toggle();
-			
-			if ( options == "--fetchonly" )
-				optionsDialog->checkFetchonly->toggle();
-			
-			if ( options == "--emptytree" )
-				optionsDialog->checkEmptytree->toggle();
-			
-			if ( options == "--debug" )
-				optionsDialog->checkDebug->toggle();
-			
-			if ( options == "--noconfmem" )
-				optionsDialog->checkNoconfmem->toggle();
-			
-			if ( options == "--oneshot" )
-				optionsDialog->checkOneshot->toggle();
-			
-			if ( options == "--noreplace" )
-				optionsDialog->checkNoreplace->toggle();
-			
-			if ( options == "--newuse" )
-				optionsDialog->checkNewUse->toggle();
-		}
-	}
-
-	// Write options back to lineedit
-	if ( dial->exec() == QDialog::Accepted ) {
-		QStringList optionsList;
-		
-		if ( optionsDialog->radioBuildpkg->isOn() ) 
-			optionsList += "--buildpkg";
-		else
-			if ( optionsDialog->radioBuildpkgonly->isOn() ) 
-				optionsList += "--buildpkgonly";
-		
-		if ( optionsDialog->radioUsepkg->isOn() ) 
-			optionsList += "--usepkg";
-		else
-			if ( optionsDialog->radioUsepkgonly->isOn() ) 
-				optionsList += "--usepkgonly";
-		
-		if ( optionsDialog->radioNodeps->isOn() ) 
-			optionsList += "--nodeps";
-		else
-			if ( optionsDialog->radioOnlydeps->isOn() ) 
-				optionsList += "--onlydeps";
-		
-		if ( optionsDialog->radioVerbose->isOn() ) 
-			optionsList += "--verbose";
-		else
-			if ( optionsDialog->radioQuiet->isOn() ) 
-				optionsList += "--quiet";
-		
-		if ( optionsDialog->checkPretend->isChecked() ) 
-			optionsList += "--pretend";
-		
-		if ( optionsDialog->checkDeep->isChecked() ) 
-			optionsList += "--deep";
-		
-		if ( optionsDialog->checkUpdate->isChecked() ) 
-			optionsList += "--update";
-		
-		if ( optionsDialog->checkUpgradeonly->isChecked() ) 
-			optionsList += "--upgradeonly";
-		
-		if ( optionsDialog->checkFetchonly->isChecked() ) 
-			optionsList += "--fetchonly";
-		
-		if ( optionsDialog->checkEmptytree->isChecked() ) 
-			optionsList += "--emptytree";
-		
-		if ( optionsDialog->checkDebug->isChecked() ) 
-			optionsList += "--debug";
-		
-		if ( optionsDialog->checkNoconfmem->isChecked() ) 
-			optionsList += "--noconfmem";
-		
-		if ( optionsDialog->checkOneshot->isChecked() ) 
-			optionsList += "--oneshot";
-		
-		if ( optionsDialog->checkNoreplace->isChecked() ) 
-			optionsList += "--noreplace";
-		
-		if ( optionsDialog->checkNewUse->isChecked() ) 
-			optionsList += "--newuse";
-		
-		emergeOptionsText->setText( optionsList.join(" ") );
-	}
+// 	dial = new KDialogBase( KDialogBase::Swallow, i18n("Advanced emerge options"), KDialogBase::User1 |KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, this, i18n("Options"), true);
+// 	
+// 	dial->setButtonText( KDialogBase::User1, i18n("Reset") );
+// 	connect (dial, SIGNAL(user1Clicked()), this, SLOT(slotClearOptions()));
+// 	
+// 	optionsDialog = new EmergeOptionsBase();
+// 	dial->setMainWidget(optionsDialog);
+// 	optionsDialog->show();
+// 
+// 	// Get options
+// 	QString options(emergeOptionsText->text());
+// 	
+// 	if ( !options.isEmpty() ) {
+// 		const QStringList optionsList = QStringList::split(" ", options);
+// 		foreach ( optionsList ) {
+// 			options = (*it).stripWhiteSpace();
+// 			
+// 			if ( options == "--buildpkg" )
+// 				optionsDialog->radioBuildpkg->toggle();
+// 			
+// 			if ( options == "--buildpkgonly" )
+// 				optionsDialog->radioBuildpkgonly->toggle();
+// 			
+// 			if ( options == "--usepkg" )
+// 				optionsDialog->radioUsepkg->toggle();
+// 			
+// 			if ( options == "--usepkgonly" )
+// 				optionsDialog->radioUsepkgonly->toggle();
+// 			
+// 			if ( options == "--nodeps" )
+// 				optionsDialog->radioNodeps->toggle();
+// 			
+// 			if ( options == "--onlydeps" )
+// 				optionsDialog->radioOnlydeps->toggle();
+// 			
+// 			if ( options == "--verbose" )
+// 				optionsDialog->radioVerbose->toggle();
+// 			
+// 			if ( options == "--quiet" )
+// 				optionsDialog->radioQuiet->toggle();
+// 			
+// 			if ( options == "--pretend" )
+// 				optionsDialog->checkPretend->toggle();
+// 			
+// 			if ( options == "--deep" )
+// 				optionsDialog->checkDeep->toggle();
+// 			
+// 			if ( options == "--update" )
+// 				optionsDialog->checkUpdate->toggle();
+// 			
+// 			if ( options == "--upgradeonly" )
+// 				optionsDialog->checkUpgradeonly->toggle();
+// 			
+// 			if ( options == "--fetchonly" )
+// 				optionsDialog->checkFetchonly->toggle();
+// 			
+// 			if ( options == "--emptytree" )
+// 				optionsDialog->checkEmptytree->toggle();
+// 			
+// 			if ( options == "--debug" )
+// 				optionsDialog->checkDebug->toggle();
+// 			
+// 			if ( options == "--noconfmem" )
+// 				optionsDialog->checkNoconfmem->toggle();
+// 			
+// 			if ( options == "--oneshot" )
+// 				optionsDialog->checkOneshot->toggle();
+// 			
+// 			if ( options == "--noreplace" )
+// 				optionsDialog->checkNoreplace->toggle();
+// 			
+// 			if ( options == "--newuse" )
+// 				optionsDialog->checkNewUse->toggle();
+// 		}
+// 	}
+// 
+// 	// Write options back to lineedit
+// 	if ( dial->exec() == QDialog::Accepted ) {
+// 		QStringList optionsList;
+// 		
+// 		if ( optionsDialog->radioBuildpkg->isOn() ) 
+// 			optionsList += "--buildpkg";
+// 		else
+// 			if ( optionsDialog->radioBuildpkgonly->isOn() ) 
+// 				optionsList += "--buildpkgonly";
+// 		
+// 		if ( optionsDialog->radioUsepkg->isOn() ) 
+// 			optionsList += "--usepkg";
+// 		else
+// 			if ( optionsDialog->radioUsepkgonly->isOn() ) 
+// 				optionsList += "--usepkgonly";
+// 		
+// 		if ( optionsDialog->radioNodeps->isOn() ) 
+// 			optionsList += "--nodeps";
+// 		else
+// 			if ( optionsDialog->radioOnlydeps->isOn() ) 
+// 				optionsList += "--onlydeps";
+// 		
+// 		if ( optionsDialog->radioVerbose->isOn() ) 
+// 			optionsList += "--verbose";
+// 		else
+// 			if ( optionsDialog->radioQuiet->isOn() ) 
+// 				optionsList += "--quiet";
+// 		
+// 		if ( optionsDialog->checkPretend->isChecked() ) 
+// 			optionsList += "--pretend";
+// 		
+// 		if ( optionsDialog->checkDeep->isChecked() ) 
+// 			optionsList += "--deep";
+// 		
+// 		if ( optionsDialog->checkUpdate->isChecked() ) 
+// 			optionsList += "--update";
+// 		
+// 		if ( optionsDialog->checkUpgradeonly->isChecked() ) 
+// 			optionsList += "--upgradeonly";
+// 		
+// 		if ( optionsDialog->checkFetchonly->isChecked() ) 
+// 			optionsList += "--fetchonly";
+// 		
+// 		if ( optionsDialog->checkEmptytree->isChecked() ) 
+// 			optionsList += "--emptytree";
+// 		
+// 		if ( optionsDialog->checkDebug->isChecked() ) 
+// 			optionsList += "--debug";
+// 		
+// 		if ( optionsDialog->checkNoconfmem->isChecked() ) 
+// 			optionsList += "--noconfmem";
+// 		
+// 		if ( optionsDialog->checkOneshot->isChecked() ) 
+// 			optionsList += "--oneshot";
+// 		
+// 		if ( optionsDialog->checkNoreplace->isChecked() ) 
+// 			optionsList += "--noreplace";
+// 		
+// 		if ( optionsDialog->checkNewUse->isChecked() ) 
+// 			optionsList += "--newuse";
+// 		
+// 		emergeOptionsText->setText( optionsList.join(" ") );
+// 	}
 }
 
 void QueueTab::slotClearOptions()
 {
-	if ( optionsDialog->radioBuildpkg->isOn() )
-		optionsDialog->radioBuildpkg->toggle();
-	
-	if ( optionsDialog->radioBuildpkgonly->isOn() ) 
-		optionsDialog->radioBuildpkgonly->toggle();
-	
-	if ( optionsDialog->radioUsepkg->isOn() ) 
-		optionsDialog->radioUsepkg->toggle();
-	
-	if ( optionsDialog->radioUsepkgonly->isOn() ) 
-		optionsDialog->radioUsepkgonly->toggle();
-	
-	if ( optionsDialog->radioNodeps->isOn() ) 
-		optionsDialog->radioNodeps->toggle();
-	
-	if ( optionsDialog->radioOnlydeps->isOn() ) 
-		optionsDialog->radioOnlydeps->toggle();
-	
-	if ( optionsDialog->radioVerbose->isOn() ) 
-		optionsDialog->radioVerbose->toggle();
-	
-	if ( optionsDialog->radioQuiet->isOn() ) 
-		optionsDialog->radioQuiet->toggle();
-	
-	optionsDialog->checkPretend->setChecked(false);
-	optionsDialog->checkDeep->setChecked(false);
-	optionsDialog->checkUpdate->setChecked(false);
-	optionsDialog->checkUpgradeonly->setChecked(false);
-	optionsDialog->checkFetchonly->setChecked(false);
-	optionsDialog->checkEmptytree->setChecked(false);
-	optionsDialog->checkDebug->setChecked(false);
-	optionsDialog->checkNoconfmem->setChecked(false);
-	optionsDialog->checkOneshot->setChecked(false);
-	optionsDialog->checkNoreplace->setChecked(false);
-	optionsDialog->checkNewUse->setChecked(false);
-	
-	emergeOptionsText->clear();
+// 	if ( optionsDialog->radioBuildpkg->isOn() )
+// 		optionsDialog->radioBuildpkg->toggle();
+// 	
+// 	if ( optionsDialog->radioBuildpkgonly->isOn() ) 
+// 		optionsDialog->radioBuildpkgonly->toggle();
+// 	
+// 	if ( optionsDialog->radioUsepkg->isOn() ) 
+// 		optionsDialog->radioUsepkg->toggle();
+// 	
+// 	if ( optionsDialog->radioUsepkgonly->isOn() ) 
+// 		optionsDialog->radioUsepkgonly->toggle();
+// 	
+// 	if ( optionsDialog->radioNodeps->isOn() ) 
+// 		optionsDialog->radioNodeps->toggle();
+// 	
+// 	if ( optionsDialog->radioOnlydeps->isOn() ) 
+// 		optionsDialog->radioOnlydeps->toggle();
+// 	
+// 	if ( optionsDialog->radioVerbose->isOn() ) 
+// 		optionsDialog->radioVerbose->toggle();
+// 	
+// 	if ( optionsDialog->radioQuiet->isOn() ) 
+// 		optionsDialog->radioQuiet->toggle();
+// 	
+// 	optionsDialog->checkPretend->setChecked(false);
+// 	optionsDialog->checkDeep->setChecked(false);
+// 	optionsDialog->checkUpdate->setChecked(false);
+// 	optionsDialog->checkUpgradeonly->setChecked(false);
+// 	optionsDialog->checkFetchonly->setChecked(false);
+// 	optionsDialog->checkEmptytree->setChecked(false);
+// 	optionsDialog->checkDebug->setChecked(false);
+// 	optionsDialog->checkNoconfmem->setChecked(false);
+// 	optionsDialog->checkOneshot->setChecked(false);
+// 	optionsDialog->checkNoreplace->setChecked(false);
+// 	optionsDialog->checkNewUse->setChecked(false);
+// 	
+// 	emergeOptionsText->clear();
 }
 
 /**
@@ -320,14 +336,14 @@ void QueueTab::slotGo()
 {
 	// Prepend emerge options
 	QStringList packageList;
-	QString options(emergeOptionsText->text());
+// 	QString options(emergeOptionsText->text());
 	
-	if ( options.isEmpty() )
+// 	if ( options.isEmpty() )
 		packageList = queueView->allPackages();
-	else {
-		packageList = QStringList::split(" ", options);
-		packageList += queueView->allPackages();
-	}
+// 	else {
+// 		packageList = QStringList::split(" ", options);
+// 		packageList += queueView->allPackages();
+// 	}
 		
 	switch( KMessageBox::questionYesNoList( this, 
 		i18n("Do you want to emerge following packages?"), packageList, i18n("Emerge queue") ) ) {
@@ -343,8 +359,8 @@ void QueueTab::slotGo()
  */
 void QueueTab::slotStop()
 {
-	switch ( KMessageBox::warningYesNo(this,
-		i18n("Do you want to abort the running emerge process?"))) {
+	switch ( KMessageBox::warningYesNo( this,
+		i18n( "Do you want to abort the running emerge process?" ) ) ) {
 			case KMessageBox::Yes : {
 				EmergeSingleton::Instance()->stop();
 				KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
@@ -375,20 +391,17 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	switch( menu.exec(point) ) {
 		
-		case PRETEND: {
+		case PRETEND:
 			QueueSingleton::Instance()->pretendPackageList( queueView->selectedPackages() );
 			break;
-		}
 
-		case REMOVE: {
+		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 			break;
-		}
 		
-		case GOTO: {
+		case GOTO:
 			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
-			break;
-		}
+	
 	}
 }
 

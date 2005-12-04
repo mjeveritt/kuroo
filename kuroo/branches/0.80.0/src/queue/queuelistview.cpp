@@ -38,8 +38,27 @@
 
 static QTime totalDuration;
 
-// Tweak for time unpacking and installing each package.
-const int diffTime(10);
+// Tweak for time take unpacking and installing each package.
+const int diffTime( 10 );
+
+// class QueueListView::QueueItem : public PackageItem
+// {
+// public:
+// 	QueueItem::QueueItem( QListView* parent, const char* name, Meta meta, int status );
+// 	
+// protected:
+// 	virtual int compare( QListViewItem* i, int col, bool ascending ) const;
+// };
+// 
+// QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, Meta meta, int status )
+// 	: PackageItem( parent, name, meta, status )
+// {
+// }
+// 
+// int QueueListView::QueueItem::compare( QListViewItem* i, int col, bool ascending ) const
+// {
+// 	return 0;
+// }
 
 /**
  * Specialized listview for packages in the installation queue.
@@ -48,24 +67,22 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
 {
 	// Setup geometry
-	addColumn( i18n("Package") );
-	addColumn( i18n("Time") );
-	addColumn( i18n("Description") );
-	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
+	addColumn( i18n( "Package" ) );
+	addColumn( i18n( "Time" ) );
+	addColumn( i18n( "Description" ) );
+	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 
 	setProperty( "selectionMode", "Extended" );
-	setShowSortIndicator( false );
 	setRootIsDecorated( true );
 	setFullWidth( true );
-	
 	setColumnWidthMode( 0, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
-	
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 80 );
-	
 	setTooltipColumn( 2 );
-	setSorting( -1 );
+	
+	// kuroorc may conflict and enable sorting. Make sure it is deleted first.
+	setSorting( -1, false );
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), 
 	            this, SLOT( setQueued(const QString&, bool) ) );
@@ -128,45 +145,33 @@ QStringList QueueListView::selectedPackages()
 }
 
 /**
- * Populate queue with packages from db
+ * Move the package up in the list.
  */
-void QueueListView::loadPackages()
+void QueueListView::movePackageUp()
 {
-	reset();
-	totalDuration = QTime(0, 0, 0);
-	sumSize = 0;
-	
-	const QStringList packageList = QueueSingleton::Instance()->allPackages();
-	foreach ( packageList ) {
-		QString idDB = *it++;
-		QString category = *it++;
-		category = category + "-" + *it++;
-		QString name = *it++;
-		QString description = *it++;
-		QString installed = *it;
-		
-		QString time = HistorySingleton::Instance()->packageTime( category + "/" + name );
-		Meta packageMeta;
-		
-		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE );
-		
-		if ( installed != "0" )
-			packageItem->setStatus(INSTALLED);
-		
-		// Inform all other listviews that this package is in queue
-		QueueSingleton::Instance()->insertInCache( idDB );
+	QListViewItem* packageItem = currentItem();
+	if ( packageItem->itemAbove() )
+		packageItem->itemAbove()->moveItem( packageItem );
+}
+
+/**
+ * Move the package down in the list.
+ */
+void QueueListView::movePackageDown()
+{
+	QListViewItem* packageItem = currentItem();
+	if ( packageItem->itemBelow() ) {
+		packageItem->itemBelow()->moveItem( packageItem );
 	}
 }
 
 /**
  * Populate queue with packages from db
  */
-void QueueListView::loadFromDB()
+void QueueListView::insertPackageList()
 {
-	PackageItem *categoryItem, *packageItem;
-	
 	reset();
-	totalDuration = QTime(0, 0, 0);
+	totalDuration = QTime( 0, 0, 0 );
 	sumSize = 0;
 		
 	// Get list of update packages with info
@@ -177,34 +182,16 @@ void QueueListView::loadFromDB()
 		category = category + "-" + *it++;
 		QString name = *it++;
 		QString description = *it++;
-// 		QString size = *it++;
-// 		QString keywords = *it++;
 		QString installed = *it;
 		
-		QString time = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		Meta packageMeta;
+		packageMeta.insert( i18n( "2Time" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
+		packageMeta.insert( i18n( "3Description" ), description );
 		
-		if ( !categoryItems.contains(category) ) {
-			categoryItem = new PackageItem( this, category, packageMeta, CATEGORY );
-			categoryItem->setExpandable(true);
-			categoryItem->setOpen(true);
-			categoryItems[category].item = categoryItem;
-		}
-		
-		if ( !categoryItems[category].packageItems.contains(name) ) {
-			packageMeta.insert(i18n("3Description"), description);
-			packageMeta.insert(i18n("5Time"), timeFormat(time));
-			packageItem = new PackageItem( categoryItems[category].item, name, packageMeta, PACKAGE );
-			categoryItems[category].packageItems[name] = packageItem;
-			
-			if ( installed != "0" )
-				packageItem->setStatus(INSTALLED);
-			
-// 			if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-// 				packageItem->setStatus(MASKED);
-			
-		}
-		
+		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE );
+		if ( installed != "0" )
+			packageItem->setStatus( INSTALLED );
+
 // 		addSize(size);
 		packages.insert( idDB, packageItem );
 		
@@ -223,10 +210,10 @@ void QueueListView::loadFromDB()
 QString QueueListView::timeFormat( const QString& time )
 {
 	if ( !time.isEmpty() && time != "na" ) {
-		QTime emergeTime(0, 0, 0);
-		emergeTime = emergeTime.addSecs(time.toInt());
+		QTime emergeTime( 0, 0, 0 );
+		emergeTime = emergeTime.addSecs( time.toInt() );
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
-		return emergeTime.toString(Qt::TextDate);
+		return emergeTime.toString( Qt::TextDate );
 	}
 	else
 		return i18n("na");
@@ -238,7 +225,7 @@ QString QueueListView::timeFormat( const QString& time )
  */
 QString QueueListView::totalTime()
 {
-	return totalDuration.toString(Qt::TextDate);
+	return totalDuration.toString( Qt::TextDate );
 }
 
 /**
@@ -247,7 +234,7 @@ QString QueueListView::totalTime()
  */
 int QueueListView::sumTime()
 {
-	return abs(totalDuration.secsTo(QTime(0, 0, 0)));
+	return abs( totalDuration.secsTo( QTime( 0, 0, 0 ) ) );
 }
 
 /**

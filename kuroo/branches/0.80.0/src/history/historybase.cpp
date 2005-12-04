@@ -1,17 +1,16 @@
-#include <kdialog.h>
-#include <klocale.h>
-
+#include "historylistview.h"
 #include "historybase.h"
 
 #include <qvariant.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-#include <qframe.h>
-#include <klistviewsearchline.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include "historylistview.h"
+
+#include <kdialog.h>
+#include <klocale.h>
+#include <klistviewsearchline.h>
 
 /*
  *  Constructs a HistoryBase as a child of 'parent', with the
@@ -23,31 +22,31 @@ HistoryBase::HistoryBase( QWidget* parent, const char* name, WFlags fl )
     if ( !name )
 		setName( "HistoryBase" );
     HistoryBaseLayout = new QGridLayout( this, 1, 1, 0, 0, "HistoryBaseLayout"); 
-
-    historyView = new HistoryListView( this, "historyView" );
-    historyView->setMinimumSize( QSize( 0, 0 ) );
-    HistoryBaseLayout->addWidget( historyView, 1, 0 );
-
-    layout3 = new QGridLayout( 0, 1, 1, 2, 6, "layout3"); 
-    spacer3 = new QSpacerItem( 80, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    layout3->addItem( spacer3, 0, 1 );
-
-    kcfg_viewUnmerges = new QCheckBox( this, "kcfg_viewUnmerges" );
-    kcfg_viewUnmerges->setChecked( TRUE );
-    layout3->addWidget( kcfg_viewUnmerges, 0, 0 );
-
-	searchLineHistory = new KListViewSearchLineWidget( historyView, this, "searchLineHistory" );
-    layout3->addWidget( searchLineHistory, 0, 2 );
-
-	QFrame* line1 = new QFrame( this, "line1" );
+	
+	layout1 = new QGridLayout( 0, 1, 1, 0, 6, "layout1"); 
+	line1 = new QFrame( this, "line1" );
 	line1->setPaletteForegroundColor( QColor( 185, 185, 185 ) );
 	line1->setFrameShape( QFrame::HLine );
 	line1->setFrameShadow( QFrame::Plain );
 	line1->setLineWidth( 1 );
 	line1->setFrameShape( QFrame::HLine );
-	layout3->addWidget( line1, 1, 0 );
+	line1->setMargin( 1 );
+	layout1->addWidget( line1, 0, 0 );
+    historyView = new HistoryListView( this, "historyView" );
+    historyView->setMinimumSize( QSize( 0, 0 ) );
+    layout1->addWidget( historyView, 1, 0 );
+	HistoryBaseLayout->addLayout( layout1, 1, 0 );
 	
+    layout3 = new QGridLayout( 0, 1, 1, 2, 0, "layout3"); 
+    spacer3 = new QSpacerItem( 80, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout3->addItem( spacer3, 0, 1 );
+    kcfg_viewUnmerges = new QCheckBox( this, "kcfg_viewUnmerges" );
+    kcfg_viewUnmerges->setChecked( TRUE );
+    layout3->addWidget( kcfg_viewUnmerges, 0, 0 );
+	searchLineHistory = new KListViewSearchLineWidget( historyView, this, "searchLineHistory" );
+    layout3->addWidget( searchLineHistory, 0, 2 );
     HistoryBaseLayout->addLayout( layout3, 0, 0 );
+	
     languageChange();
     resize( QSize(591, 448).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );

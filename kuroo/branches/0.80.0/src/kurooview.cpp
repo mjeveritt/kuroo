@@ -180,6 +180,8 @@ void KurooView::slotCheckPortage()
 	else {
 		tabPortage->slotReload();
 		tabQueue->slotReload();
+		if ( UpdatesSingleton::Instance()->count() == "0" )
+			UpdatesSingleton::Instance()->slotRefresh();
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled
 		if ( !KUser().isSuperUser() )
@@ -342,7 +344,7 @@ void KurooView::slotShowView()
 }
 
 KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
-: QListBoxItem( listbox )
+	: QListBoxItem( listbox )
 {
 	mPixmap = pixmap;
 	if( mPixmap.isNull() )

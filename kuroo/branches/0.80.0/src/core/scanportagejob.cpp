@@ -103,11 +103,19 @@ bool ScanPortageJob::doJob()
 	                                    " idCategory INTEGER "
 	                                    " );", m_db);
 	
+	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE catSubCategory_temp ("
+	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+	                                    " name VARCHAR(32), "
+	                                    " idCategory INTEGER, "
+	                                    " idSubCategory INTEGER "
+	                                    " );", m_db);
+	
 	// Temporary table for all packages
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE package_temp ("
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	                                    " idCategory INTEGER, "
 	                                    " idSubCategory INTEGER, "
+	                                    " idCatSubCategory INTEGER, "
 	                                    " name VARCHAR(32), "
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
@@ -155,6 +163,8 @@ bool ScanPortageJob::doJob()
 		
 		int idSubCategory = KurooDBSingleton::Instance()->insert(QString("INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');").arg(subCategory).arg(QString::number(idCategory)), m_db);
 		
+		int idCatSubCategory = KurooDBSingleton::Instance()->insert(QString("INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');").arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
+		
 		// Get list of packages in this category
 		dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
 		dPackage.setSorting( QDir::Name );
@@ -190,11 +200,12 @@ bool ScanPortageJob::doJob()
 				if ( package != lastPackage ) {
 				
 					if ( scanInfo( path, *itCategory, *itPackage ) ) {
-						QString sql = QString("INSERT INTO package_temp (idCategory, idSubCategory, name, description, installed, homepage, licenses, useFlags, packageSlots) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7','%8', '%9')").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(package).arg(info.description).arg(installed).arg(info.homepage).arg(info.licenses).arg(info.useFlags).arg(info.packageSlots);
+						QString sql = QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, installed, homepage, licenses, useFlags, packageSlots) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', ").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(info.description).arg(installed).arg(info.homepage).arg(info.licenses).arg(info.useFlags);
+						sql += QString("'%1');").arg(info.packageSlots);
 						idPackage = KurooDBSingleton::Instance()->insert( sql, m_db );
 					}
 					else
-						idPackage = KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, idSubCategory, name, installed) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(package).arg(installed), m_db);
+						idPackage = KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, installed) VALUES ('%1', '%2', '%3', '%4', '%5');").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(installed), m_db);
 					
 					KurooDBSingleton::Instance()->insert( QString("INSERT INTO version_temp (idPackage, name, size, branch) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idPackage)).arg(version).arg(info.size).arg(info.keywords), m_db);
 				}
@@ -218,16 +229,19 @@ bool ScanPortageJob::doJob()
 	// Move content from temporary table 
 	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM subCategory;", m_db);
+	KurooDBSingleton::Instance()->query("DELETE FROM catSubCategory;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM version;", m_db);
 	
 	KurooDBSingleton::Instance()->insert("INSERT INTO category SELECT * FROM category_temp;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db);
+	KurooDBSingleton::Instance()->insert("INSERT INTO catSubCategory SELECT * FROM catSubCategory_temp;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO version SELECT * FROM version_temp;", m_db);
 	
 	KurooDBSingleton::Instance()->query("DROP TABLE category_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE subCategory_temp;", m_db);
+	KurooDBSingleton::Instance()->query("DROP TABLE catSubCategory_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	

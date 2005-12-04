@@ -184,10 +184,18 @@ void KurooDB::createTables( DbConnection *conn )
 	      " CREATE INDEX index_name ON subCategory (name)"
 	      " ;", conn);
 	
+	query(" CREATE TABLE catSubCategory ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+	      " name VARCHAR(32), "
+	      " idCategory INTEGER, "
+	      " idSubCategory INTEGER) "
+	      " ;", conn);
+	
 	query(" CREATE TABLE package ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " idCategory INTEGER, "
 	      " idSubCategory INTEGER, "
+	      " idCatSubCategory INTEGER, "
 	      " name VARCHAR(32), "
 	      " latest VARCHAR(32), "
 	      " description VARCHAR(255), "
@@ -350,10 +358,10 @@ QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int f
 			break;
 		
 		case FILTER_UPDATES:
-			filterQuery = "";
+			filterQuery = " AND updateVersion != '' ";
 	}
 	
-	return query( " SELECT id, name, description, latest, installed "
+	return query( " SELECT id, name, description, latest, installed, updateVersion "
 	              " FROM package "
 	              " WHERE idCategory = '" + categoryId + "'"
 	              + filterQuery +
@@ -373,10 +381,10 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			break;
 			
 		case FILTER_UPDATES:
-			filterQuery = "";
+			filterQuery = " AND updateVersion != '' ";
 	}
 	
-	return query( " SELECT id, name, description, latest, installed "
+	return query( " SELECT id, name, description, latest, installed, updateVersion "
 	              " FROM package "
 	              " WHERE idCategory = '" + categoryId + "'"
 	              " AND idSubCategory = '" + subCategoryId + "'"
@@ -470,7 +478,7 @@ QStringList KurooDB::queuePackages()
 	                      " WHERE queue.idPackage = package.id "
 	                      " AND category.id = package.idCategory "
 	                      " AND subCategory.id = package.idSubCategory "
-	                      " ORDER BY category.name LIMIT %1;").arg(ROWLIMIT) );
+	                      " ORDER BY queue.id DESC LIMIT %1;").arg(ROWLIMIT) );
 }
 
 

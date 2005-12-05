@@ -152,8 +152,8 @@ void Kuroo::slotBusy( bool b )
  * Connect toolbar buttons to the right slot for each tab.
  * @param page
  */
-void Kuroo::activateToolbar( QWidget *page )
-{
+// void Kuroo::activateToolbar( QWidget *page )
+// {
 // 	enum Actions { INSTALLED = 0, PORTAGE, UPDATES, QUEUE, RESULTS, LOGS };
 // 	
 // 	switch ( m_view->mainTabs->indexOf(page) ) {
@@ -281,7 +281,7 @@ void Kuroo::activateToolbar( QWidget *page )
 // 			disconnect( actionRefresh, SIGNAL( activated() ), m_view->tabUpdates, SLOT( slotRefresh() ) );
 // 		}
 // 	}
-}
+// }
 
 /**
  * Needed to initialize setupActions.

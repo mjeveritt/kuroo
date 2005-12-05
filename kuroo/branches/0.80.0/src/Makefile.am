@@ -60,10 +60,9 @@ kuroo8_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
 kuroo8_LDADD = $(top_builddir)/src/history/libhistory.la \
-	$(top_builddir)/src/updates/libupdates.la $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/queue/libqueue.la $(top_builddir)/src/portage/libportage.la \
-	$(top_builddir)/src/logs/liblogs.la $(top_builddir)/src/intro/libintro.la \
-	$(top_builddir)/src/core/libcore.la $(top_builddir)/src/installed/libinstalled.la $(LIB_KDEPRINT) \
-	$(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
+	$(top_builddir)/src/config/libconfig.la $(top_builddir)/src/queue/libqueue.la \
+	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
+	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KDEPRINT) $(LIB_KFILE) \
+	$(LIB_KDECORE) $(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
 
 

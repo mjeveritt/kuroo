@@ -21,7 +21,6 @@
 #include "common.h"
 #include "kurooview.h"
 #include "portagetab.h"
-#include "updatelistview.h"
 #include "queuetab.h"
 #include "queuelistview.h"
 #include "logstab.h"

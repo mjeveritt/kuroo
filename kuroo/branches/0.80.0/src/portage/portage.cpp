@@ -208,17 +208,17 @@ QStringList Portage::packageVersions( const QString& name )
  */
 void Portage::findPackage( const QString& text, const bool& isName )
 {
-	QStringList packageIdList;
-	
-	if ( isName )
-		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
-	else
-		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
-	
-	if ( !packageIdList.isEmpty() )
-		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-	else
-		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
+// 	QStringList packageIdList;
+// 	
+// 	if ( isName )
+// 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
+// 	else
+// 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
+// 	
+// 	if ( !packageIdList.isEmpty() )
+// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
+// 	else
+// 		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
 }
 
 /**

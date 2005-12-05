@@ -82,8 +82,8 @@ QString CategoriesView::currentCategoryId()
  * Set category current.
  * @param category
  */
-void CategoriesView::setCurrentCategory( const QString& category )
-{
+// void CategoriesView::setCurrentCategory( const QString& category )
+// {
 // 	QString categoryName = category.section("-", 0, 0);
 // 	QString subcategoryName = category.section("-", 1, 1);
 // 	
@@ -95,7 +95,7 @@ void CategoriesView::setCurrentCategory( const QString& category )
 // 			item->setSelected(true);
 // 		}
 // 	}
-}
+// }
 
 /**
  * Load categories.
@@ -127,6 +127,12 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 
 CategoriesListView::~CategoriesListView()
 {
+}
+
+void CategoriesListView::loadCategories( const QStringList& categoriesList )
+{
+	CategoriesView::loadCategories( categoriesList );
+	setSelected( firstChild(), true );
 }
 
 /**

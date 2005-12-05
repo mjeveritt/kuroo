@@ -248,7 +248,7 @@ bool Emerge::pretend( const QStringList& packageList )
  * @param packageList	
  * @return success
  */
-bool Emerge::unmerge( const QString& category, const QStringList& packageList )
+bool Emerge::unmerge( const QStringList& packageList )
 {
 	blocks.clear();
 	importantMessage = "";
@@ -261,7 +261,7 @@ bool Emerge::unmerge( const QString& category, const QStringList& packageList )
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
-		*eProc << "=" + category + "/" + *it;
+		*eProc << *it;
 	}
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {
@@ -551,7 +551,7 @@ void Emerge::cleanup()
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy(false);
-// 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
+	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
 		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks );

@@ -23,7 +23,7 @@ HistoryBase::HistoryBase( QWidget* parent, const char* name, WFlags fl )
 		setName( "HistoryBase" );
     HistoryBaseLayout = new QGridLayout( this, 1, 1, 0, 0, "HistoryBaseLayout"); 
 	
-	layout1 = new QGridLayout( 0, 1, 1, 0, 6, "layout1"); 
+	layout1 = new QGridLayout( 0, 1, 1, 0, 0, "layout1"); 
 	line1 = new QFrame( this, "line1" );
 	line1->setPaletteForegroundColor( QColor( 185, 185, 185 ) );
 	line1->setFrameShape( QFrame::HLine );

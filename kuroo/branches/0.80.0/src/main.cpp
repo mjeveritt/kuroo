@@ -34,7 +34,7 @@
 QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_401105";
+static const char version[] = "0.80.0_501105";
 
 static KCmdLineOptions options[] =
 {

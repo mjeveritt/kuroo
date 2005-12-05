@@ -68,7 +68,7 @@ public slots:
  	 * @param packageList	
  	 * @return true 		if emerge process started.
  	 */
-	bool 				unmerge( const QString& category, const QStringList& packageList );
+	bool 				unmerge( const QStringList& packageList );
 	
 	/**
  	 * Launch synchronize Portage tree.

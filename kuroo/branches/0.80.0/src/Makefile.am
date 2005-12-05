@@ -14,7 +14,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config -I$(top_builddir)/src/
 	-I$(top_builddir)/src/queue -I$(top_builddir)/src/results \
 	-I$(top_builddir)/src/logs $(all_includes)
 
-SUBDIRS = config intro core history logs queue updates installed portage
+SUBDIRS = config intro core history logs queue portage
 
 # embedded sqlite as library
 SQLITE_SUBDIR = sqlite

@@ -47,13 +47,15 @@ QueueTab::QueueTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( movePackageUp() ) );
-	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( movePackageDown() ) );
+	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( slotPackageUp() ) );
+	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( slotPackageDown() ) );
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
+	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
+	
 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
 	connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-// 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-// 	connect( pbStop, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
+	connect( pbPretend, SIGNAL( clicked() ), this, SLOT( slotPretend() ) );
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
@@ -127,14 +129,14 @@ void QueueTab::slotBusy( bool b )
 // 			pbStop->setDisabled(true);
 	}
 	else {
-		if ( !KUser().isSuperUser() ) {
-			pbGo->setDisabled(true);
-			pbUninstall->setDisabled(true);
-		}
-		else {
+// 		if ( !KUser().isSuperUser() ) {
+// 			pbGo->setDisabled(true);
+// 			pbUninstall->setDisabled(true);
+// 		}
+// 		else {
 			pbGo->setDisabled(false);
 			pbUninstall->setDisabled(false);
-		}
+// 		}
 		
 // 		pbStop->setDisabled(true);
 		pbOptions->setDisabled(false);
@@ -334,6 +336,8 @@ void QueueTab::slotClearOptions()
  */
 void QueueTab::slotGo()
 {
+	kdDebug() << "QueueTab::slotGo" << endl;
+	
 	// Prepend emerge options
 	QStringList packageList;
 // 	QString options(emergeOptionsText->text());
@@ -369,6 +373,35 @@ void QueueTab::slotStop()
 }
 
 /**
+ * Launch emerge pretend of packages in queue.
+ */
+void QueueTab::slotPretend()
+{
+	PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
+}
+
+void QueueTab::slotRemove()
+{
+	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+}
+
+/**
+ * Launch unmerge of packages in queue.
+ */
+void QueueTab::slotUninstall()
+{
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
+		QStringList packageList( queueView->allPackages() );
+		switch( KMessageBox::questionYesNoList( this, 
+			i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
+			"Do you want to unmerge following packages?</qt>" ), packageList, i18n( "Unmerge packages" ) ) ) {
+				case KMessageBox::Yes:
+					InstalledSingleton::Instance()->uninstallPackageList( queueView->allId() );
+			}
+	}
+}
+
+/**
  * Popup menu for actions like emerge.
  * @param item
  * @param point
@@ -380,27 +413,26 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	enum Actions { PRETEND, EMERGE, REMOVE, GOTO };
 	
-	KPopupMenu menu(this);
-	int menuItem1 = menu.insertItem(i18n("Emerge pretend"), PRETEND);
-	int menuItem2 = menu.insertItem(i18n("Remove"), REMOVE );
-	menu.insertItem(i18n("View Info"), GOTO );
+	KPopupMenu menu( this );
+	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
+	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
+// 	menu.insertItem( i18n( "View Info" ), GOTO );
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
-	}
 	
-	switch( menu.exec(point) ) {
+	switch( menu.exec( point ) ) {
 		
 		case PRETEND:
-			QueueSingleton::Instance()->pretendPackageList( queueView->selectedPackages() );
+			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
 			break;
 
 		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 			break;
 		
-		case GOTO:
-			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
+// 		case GOTO:
+// 			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
 	
 	}
 }

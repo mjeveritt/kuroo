@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>694</width>
-            <height>664</height>
+            <width>732</width>
+            <height>457</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -33,321 +33,321 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QSplitter" row="0" column="0">
             <property name="name">
-                <cstring>line1</cstring>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>185</red>
-                    <green>185</green>
-                    <blue>185</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
+                <cstring>splitter1</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Vertical</enum>
             </property>
-        </widget>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout8</cstring>
-            </property>
-            <grid>
+            <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>layout4</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>0</number>
-                </property>
-                <widget class="Line" row="0" column="1">
+                <grid>
                     <property name="name">
-                        <cstring>line5</cstring>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>185</red>
-                            <green>185</green>
-                            <blue>185</blue>
-                        </color>
-                    </property>
-                    <property name="frameShape">
-                        <enum>VLine</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Plain</enum>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                </widget>
-                <widget class="QueueListView" row="0" column="0">
-                    <property name="name">
-                        <cstring>queueView</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QLayoutWidget" row="0" column="1">
-            <property name="name">
-                <cstring>layout9</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>2</number>
-                </property>
-                <property name="spacing">
-                    <number>5</number>
-                </property>
-                <widget class="QPushButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>pbClear</cstring>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Clear &amp;all</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Abort running emerge process</string>
-                    </property>
-                </widget>
-                <spacer row="4" column="0">
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>21</width>
-                            <height>320</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton" row="3" column="0">
-                    <property name="name">
-                        <cstring>pbDown</cstring>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Dow&amp;n</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Abort running emerge process</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>pbUp</cstring>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Up</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Abort running emerge process</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>pbRemove</cstring>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Remove</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Abort running emerge process</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>layout7_2</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>0</number>
-                </property>
-                <widget class="KTextBrowser" row="0" column="0">
-                    <property name="name">
-                        <cstring>queueBrowser</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>300</width>
-                            <height>100</height>
-                        </size>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
+                        <cstring>unnamed</cstring>
                     </property>
                     <property name="margin">
-                        <number>2</number>
+                        <number>0</number>
                     </property>
-                </widget>
-                <widget class="QFrame" row="0" column="1">
-                    <property name="name">
-                        <cstring>frame4</cstring>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                    <property name="paletteBackgroundColor">
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Plain</enum>
-                    </property>
-                    <grid>
+                    <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>layout8</cstring>
                         </property>
-                        <widget class="QPushButton" row="2" column="0">
+                        <grid>
                             <property name="name">
-                                <cstring>pbAddQueue_2</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Emer&amp;ge pretend Packages</string>
+                            <property name="margin">
+                                <number>0</number>
                             </property>
-                            <property name="accel">
-                                <string>Alt+G</string>
+                            <property name="spacing">
+                                <number>0</number>
                             </property>
-                        </widget>
-                        <widget class="QPushButton" row="4" column="0">
+                            <widget class="Line" row="0" column="1">
+                                <property name="name">
+                                    <cstring>line5</cstring>
+                                </property>
+                                <property name="paletteForegroundColor">
+                                    <color>
+                                        <red>185</red>
+                                        <green>185</green>
+                                        <blue>185</blue>
+                                    </color>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>VLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Plain</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                            </widget>
+                            <widget class="QueueListView" row="0" column="0">
+                                <property name="name">
+                                    <cstring>queueView</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="1">
+                        <property name="name">
+                            <cstring>layout9</cstring>
+                        </property>
+                        <grid>
                             <property name="name">
-                                <cstring>pbOptions</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Show Advanced Options...</string>
+                            <property name="margin">
+                                <number>4</number>
                             </property>
-                            <property name="accel">
-                                <string></string>
+                            <property name="spacing">
+                                <number>5</number>
                             </property>
-                        </widget>
-                        <widget class="QPushButton" row="1" column="0">
+                            <widget class="QPushButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pbClear</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Clear &amp;all</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Abort running emerge process</string>
+                                </property>
+                            </widget>
+                            <spacer row="4" column="0">
+                                <property name="name">
+                                    <cstring>spacer4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>21</width>
+                                        <height>320</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton" row="3" column="0">
+                                <property name="name">
+                                    <cstring>pbDown</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Dow&amp;n</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Abort running emerge process</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pbUp</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Up</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Abort running emerge process</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>pbRemove</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Remove</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Abort running emerge process</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout7_2</cstring>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="KTextBrowser" row="0" column="0">
+                        <property name="name">
+                            <cstring>queueBrowser</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>300</width>
+                                <height>100</height>
+                            </size>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="margin">
+                            <number>2</number>
+                        </property>
+                    </widget>
+                    <widget class="QFrame" row="0" column="1">
+                        <property name="name">
+                            <cstring>frame4</cstring>
+                        </property>
+                        <property name="paletteBackgroundColor">
+                            <color>
+                                <red>255</red>
+                                <green>255</green>
+                                <blue>255</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <grid>
                             <property name="name">
-                                <cstring>pbGo</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Start Installation</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="3" column="0">
-                            <property name="name">
-                                <cstring>pbUninstall</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Uninstall Pac&amp;kages</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+K</string>
-                            </property>
-                        </widget>
-                        <spacer row="0" column="0">
-                            <property name="name">
-                                <cstring>spacer2_2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>21</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </grid>
-                </widget>
-            </grid>
+                            <widget class="QPushButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pbPretend</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Emer&amp;ge pretend Packages</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="4" column="0">
+                                <property name="name">
+                                    <cstring>pbOptions</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show Advanced Options...</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pbGo</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Start Installation</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="3" column="0">
+                                <property name="name">
+                                    <cstring>pbUninstall</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Uninstall Pac&amp;kages</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
+                            <spacer row="0" column="0">
+                                <property name="name">
+                                    <cstring>spacer2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>21</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
         </widget>
     </grid>
 </widget>

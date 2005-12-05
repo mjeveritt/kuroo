@@ -63,16 +63,15 @@ private slots:
 	void		slotBusy( bool b );
 	
 	/**
-	 * Open dialog for advanced emerge options.
+	 * Slots for button actions.
 	 */
 	void		slotOptions();
 	void		slotClearOptions();
 	void		slotGo();
-	
-	/**
-	 * Kill the running emerge process.
-	 */
+	void		slotPretend();
+	void		slotUninstall();
 	void		slotStop();
+	void		slotRemove();
 	
 	/**
 	 * Popup menu for actions like emerge.

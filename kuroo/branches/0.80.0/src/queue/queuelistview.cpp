@@ -95,59 +95,9 @@ QueueListView::~QueueListView()
 }
 
 /**
- * Clear this listView and packages.
- */
-void QueueListView::reset()
-{
-	clear();
-	packages.clear();
-	categoryItems.clear();
-}
-
-/**
- * Get all packages in the queue
- * @return packageList
- */
-QStringList QueueListView::allPackages()
-{
-	QStringList packageList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		packageList += it.current()->parent()->text(0) + "/" +  it.current()->text(0);
-	
-	return packageList;
-}
-
-/**
- * Get current package in queue (clicked on).
- * @return package
- */
-QString QueueListView::currentPackage()
-{
-	QListViewItem *item = currentItem();
-	if ( item && item->parent() )
-		return (item->parent()->text(0) + "/" +  item->text(0));
-	else
-		return i18n("na");
-}
-
-/**
- * Return selected packages in queue
- * @return packageList		
- */
-QStringList QueueListView::selectedPackages()
-{
-	QStringList packageList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->parent() && it.current()->isSelected() )
-			packageList += it.current()->parent()->text(0) + "/" + it.current()->text(0);
-	}
-	return packageList;
-}
-
-/**
  * Move the package up in the list.
  */
-void QueueListView::movePackageUp()
+void QueueListView::slotPackageUp()
 {
 	QListViewItem* packageItem = currentItem();
 	if ( packageItem->itemAbove() )
@@ -157,12 +107,11 @@ void QueueListView::movePackageUp()
 /**
  * Move the package down in the list.
  */
-void QueueListView::movePackageDown()
+void QueueListView::slotPackageDown()
 {
 	QListViewItem* packageItem = currentItem();
-	if ( packageItem->itemBelow() ) {
+	if ( packageItem->itemBelow() )
 		packageItem->itemBelow()->moveItem( packageItem );
-	}
 }
 
 /**
@@ -193,7 +142,8 @@ void QueueListView::insertPackageList()
 			packageItem->setStatus( INSTALLED );
 
 // 		addSize(size);
-		packages.insert( idDB, packageItem );
+// 		packages.insert( idDB, packageItem );
+		insertPackage( idDB, packageItem );
 		
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( idDB );

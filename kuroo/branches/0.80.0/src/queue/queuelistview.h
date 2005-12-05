@@ -50,26 +50,8 @@ public:
 
 public slots:
 	
-	/**
-	* Get all packages in the queue
-	* @return packageList
-	*/
-	QStringList 						allPackages();
-	
-	/**
-	* Return selected packages in queue
-	* @return packageList		
-	*/
-	QStringList 						selectedPackages();
-	
-	/**
-	* Get current package in queue (clicked on).
-	* @return package
-	*/
-	QString		 						currentPackage();
-	
-	void								movePackageUp();
-	void								movePackageDown();
+	void								slotPackageUp();
+	void								slotPackageDown();
 	
 	/**
 	* Populate queue with packages from db
@@ -93,7 +75,7 @@ private slots:
 	/**
 	* Clear this listView and packages.
 	*/
-	void								reset();
+// 	void								reset();
 	
 	/**
 	* Format package size nicely 
@@ -123,11 +105,11 @@ signals:
 private:
 	int 								sumSize;
 	QPixmap 							pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting;
-	struct TreeViewCategory {
-		PackageItem* item;
-		QMap< QString, PackageItem* > 	packageItems;
-	};
-	QMap< QString, TreeViewCategory > 	categoryItems;
+// 	struct TreeViewCategory {
+// 		PackageItem* item;
+// 		QMap< QString, PackageItem* > 	packageItems;
+// 	};
+// 	QMap< QString, TreeViewCategory > 	categoryItems;
 	
 };
 

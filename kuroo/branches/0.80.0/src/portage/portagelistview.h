@@ -47,13 +47,7 @@ public slots:
 	 * Mark package as current.
 	 * @param package
 	 */
-	void 			setCurrentPackage( const QString& package );
-	
-	/** 
-	 * Get selected packages in list without versions.
-	 * @return packageList
-	 */
-	QStringList 	selectedNoVersion();
+// 	void 			setCurrentPackage( const QString& package );
 	
 	/**
 	 * Populate listview with content of this category..

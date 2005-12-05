@@ -58,7 +58,7 @@ public slots:
 	* Then load the emerge history.
 	*/
 	void				slotReload();
-	
+
 	/**
 	* Refresh installed packages list.
 	*/

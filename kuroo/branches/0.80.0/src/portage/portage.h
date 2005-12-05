@@ -75,7 +75,7 @@ public slots:
 	 * @param category
 	 * @param packageList
 	 */
-	void						pretendPackage( const QString& category, const QStringList& packageList );
+	void						pretendPackageList( /*const QString& category, */const QStringList& packageIdList );
 	
 	/**
 	* Check if package is installed.
@@ -163,7 +163,7 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						unmaskPackageList( const QString& category, const QStringList& packageList );
+	void						unmaskPackageList( const QStringList& packageIdList );
 	
 	/**
 	* Unmask package by adding to "maskFile".
@@ -178,7 +178,7 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						clearUnmaskPackageList( const QString& category, const QStringList& packageList );
+	void						clearUnmaskPackageList( const QStringList& packageIdList );
 	
 	/**
 	 * Methods for parsing info files.

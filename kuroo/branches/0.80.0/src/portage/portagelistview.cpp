@@ -63,7 +63,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
-	setColumnAlignment( 2, Qt::AlignRight );
 	setResizeMode( QListView::LastColumn );
 	
 	setColumnWidth( 0, 200 );
@@ -81,33 +80,19 @@ PortageListView::~PortageListView()
  * Mark package as current.
  * @param package
  */
-void PortageListView::setCurrentPackage( const QString& package )
-{
-	clearSelection();
-	QListViewItemIterator it( this );
-	for ( ; it.current(); ++it )
-		if ( package == it.current()->text(0) ) {
-			ensureItemVisible( it.current() );
-			setCurrentItem( it.current() );
-			it.current()->setSelected( true );
-			it.current()->setOpen( true );
-			break;
-		}
-}
-
-/** 
- * Get selected packages in list without versions.
- * @return package list
- */
-QStringList PortageListView::selectedNoVersion()
-{
-	QStringList returnList;
-	const QStringList packageList = selectedPackages();
-	foreach ( packageList ) {
-		returnList += (*it).section( pv, 0, 0 );
-	}
-	return returnList;
-}
+// void PortageListView::setCurrentPackage( const QString& package )
+// {
+// 	clearSelection();
+// 	QListViewItemIterator it( this );
+// 	for ( ; it.current(); ++it )
+// 		if ( package == it.current()->text(0) ) {
+// 			ensureItemVisible( it.current() );
+// 			setCurrentItem( it.current() );
+// 			it.current()->setSelected( true );
+// 			it.current()->setOpen( true );
+// 			break;
+// 		}
+// }
 
 /**
  * Populate listview with content of this category.
@@ -145,6 +130,8 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
 		
 		insertPackage( idDB, packageItem );
 	}
+	
+	setSelected( firstChild(), true );
 }
 
 /**
@@ -183,6 +170,8 @@ void PortageListView::addCategoryPackages( const QString& category, int filter  
 		
 		insertPackage( idDB, packageItem );
 	}
+	
+	setSelected( firstChild(), true );
 }
 
 #include "portagelistview.moc"

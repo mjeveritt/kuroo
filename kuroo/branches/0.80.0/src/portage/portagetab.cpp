@@ -45,7 +45,7 @@
 #include <kuser.h>
 #include <klineedit.h>
 
-static bool categorySelected( true );
+static bool isCategoryCurrent( true );
 
 /**
  * Page for portage packages.
@@ -55,12 +55,12 @@ PortageTab::PortageTab( QWidget* parent )
 {
 	packagesView = packagesSearchView->packagesView;
 	
-	connect( filterGroup, SIGNAL( released(int) ), this, SLOT( slotFilters(int) ) );
+	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters( int ) ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListCategoryPackages() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
-	
+
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
@@ -73,8 +73,8 @@ PortageTab::PortageTab( QWidget* parent )
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	
-	// Lock/unlock if kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	// Lock/unlock actions when kuroo is busy.
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
 	slotInit();
 }
@@ -134,7 +134,7 @@ void PortageTab::slotInit()
 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
 // 	useDialog = new UseDialog( this );
-	slotBusy(false);
+	slotBusy( false );
 }
 
 /**
@@ -172,6 +172,8 @@ void PortageTab::slotViewPackage( const QString& package )
  */
 void PortageTab::slotListSubCategories()
 {
+	kdDebug() << "PortageTab::slotListSubCategories" << endl;
+	
 	QString categoryId = categoriesView->currentCategoryId();
 	if ( categoryId == i18n("na") )
 		return;
@@ -180,10 +182,15 @@ void PortageTab::slotListSubCategories()
 	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId ) );
 }
 
+/**
+ * Toggle between package filter: All, Installed or updates
+ */
 void PortageTab::slotFilters( int radioFilter )
 {
+	kdDebug() << "PortageTab::slotFilters" << endl;
+	
 	filter = radioFilter;
-	if ( categorySelected )
+	if ( isCategoryCurrent )
 		slotListCategoryPackages();
 	else
 		slotListPackages();
@@ -194,12 +201,14 @@ void PortageTab::slotFilters( int radioFilter )
  */
 void PortageTab::slotListCategoryPackages()
 {
+	kdDebug() << "PortageTab::slotListCategoryPackages" << endl;
+	
 	QString categoryId = categoriesView->currentCategoryId();
 	if ( categoryId == i18n("na") )
 		return;
 	
 	packagesView->addCategoryPackages( categoryId, filter );
-	categorySelected = true;
+	isCategoryCurrent = true;
 }
 
 /**
@@ -207,13 +216,15 @@ void PortageTab::slotListCategoryPackages()
  */
 void PortageTab::slotListPackages()
 {
+	kdDebug() << "PortageTab::slotListPackages" << endl;
+	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	if ( categoryId == i18n("na") || subCategoryId == i18n("na") )
 		return;
 	
 	packagesView->addSubCategoryPackages( categoryId, subCategoryId, filter );
-	categorySelected = false;
+	isCategoryCurrent = false;
 }
 
 /**
@@ -240,12 +251,12 @@ void PortageTab::slotRefresh()
 void PortageTab::slotBusy( bool b )
 {
 	if ( b )
-		pbUninstall->setDisabled(true);
+		pbUninstall->setDisabled( true );
 	else {
-		if ( !KUser().isSuperUser() )
-			pbUninstall->setDisabled(true);
-		else
-			pbUninstall->setDisabled(false);
+// 		if ( !KUser().isSuperUser() )
+// 			pbUninstall->setDisabled( true );
+// 		else
+			pbUninstall->setDisabled( false );
 	}
 }
 
@@ -361,17 +372,13 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		menu.setItemEnabled( menuItem5, false );
 	}
 	
-	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() )
 		menu.setItemEnabled( menuItem6, false );
-	}
 	
-	QString category = categoriesView->currentCategory();
-	QString subCategory = subcategoriesView->currentCategory();
-	
-	switch( menu.exec(point) ) {
+	switch( menu.exec( point ) ) {
 		
 		case PRETEND:
-			PortageSingleton::Instance()->pretendPackage( category + "-" + subCategory, packagesView->selectedPackages() );
+			PortageSingleton::Instance()->pretendPackageList( packagesView->selectedId() );
 			break;
 			
 		case APPEND:
@@ -383,11 +390,11 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			break;
 			
 		case UNMASK:
-			PortageSingleton::Instance()->unmaskPackageList( category + "-" + subCategory, packagesView->selectedPackages() );
+			PortageSingleton::Instance()->unmaskPackageList( packagesView->selectedId() );
 			break;
 			
 		case CLEARUNMASK:
-			PortageSingleton::Instance()->clearUnmaskPackageList( category + "-" + subCategory, packagesView->selectedPackages() );
+			PortageSingleton::Instance()->clearUnmaskPackageList( packagesView->selectedId() );
 			break;
 			
 		case USEFLAGS:
@@ -400,7 +407,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
  */
 void PortageTab::slotAddQueue()
 {
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() )
 		QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
 }
 
@@ -409,15 +416,13 @@ void PortageTab::slotAddQueue()
  */
 void PortageTab::slotUninstall()
 {
-	kdDebug() << "@todo: Create method Portage::uninstallPackage..." << endl;
-	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		QStringList packageList(packagesView->selectedPackages());
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
+		QStringList packageList( packagesView->selectedPackages() );
 		switch( KMessageBox::questionYesNoList( this, 
 				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
 				      "Do you want to unmerge following packages?</qt>" ), packageList, i18n( "Unmerge packages" ) ) ) {
-// 				case KMessageBox::Yes:
-// 					InstalledSingleton::Instance()->uninstallPackage( categoriesView->currentCategory(), packageList );
+				case KMessageBox::Yes:
+					InstalledSingleton::Instance()->uninstallPackageList( packagesView->selectedId() );
 			}
 	}
 }

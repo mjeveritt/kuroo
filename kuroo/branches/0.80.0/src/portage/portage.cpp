@@ -129,9 +129,14 @@ void Portage::setRefreshTime()
  * @param category
  * @param packageList
  */
-void Portage::pretendPackage( const QString& category, const QStringList& packageList )
+void Portage::pretendPackageList( /*const QString& category, */const QStringList& packageIdList )
 {
-	EmergeSingleton::Instance()->pretend( category, packageList );
+	QStringList packageList;
+	foreach ( packageIdList ) {
+		packageList += Portage::category( *it ) + "/" + Portage::package( *it );
+	}
+	
+	EmergeSingleton::Instance()->pretend( packageList );
 }
 
 /**
@@ -336,11 +341,10 @@ bool Portage::isUnmasked( const QString& package )
  * @param category
  * @param packageList
  */
-void Portage::unmaskPackageList( const QString& category, const QStringList& packageList )
+void Portage::unmaskPackageList( const QStringList& packageIdList )
 {
-	foreach ( packageList ) {
-		QString name = (*it).section(pv, 0, 0);
-		QString package = category + "/" + name;
+	foreach ( packageIdList ) {
+		QString package = Portage::category( *it ) + "/" + Portage::package( *it );
 	
 		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::dirPackageKeywords() ) )
 			break;
@@ -407,7 +411,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  * @param category
  * @param packageList
  */
-void Portage::clearUnmaskPackageList( const QString& category, const QStringList& packageList )
+void Portage::clearUnmaskPackageList( const QStringList& packageIdList )
 {
 	QFile file( KurooConfig::dirPackageKeywords() );
 	
@@ -415,8 +419,8 @@ void Portage::clearUnmaskPackageList( const QString& category, const QStringList
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		
-		foreach ( packageList ) {
-			QString package = category + "/" + (*it).section(pv, 0, 0);
+		foreach ( packageIdList ) {
+			QString package = Portage::category( *it ) + "/" + Portage::package( *it ).section( pv, 0, 0 );
 			unmaskedMap.remove( package );
 			
 			// Signal to gui to mark package as not unmasked anymore
@@ -459,7 +463,7 @@ QString Portage::idDb( const QString& package )
  */
 QString Portage::category( const QString& id )
 {
-	return KurooDBSingleton::Instance()->query(QString("SELECT name FROM category WHERE id = ( SELECT idCategory FROM package WHERE id = '%1' );").arg(id)).first();
+	return KurooDBSingleton::Instance()->query( QString("SELECT name FROM catSubCategory WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id )).first();
 }
 
 /**
@@ -469,11 +473,7 @@ QString Portage::category( const QString& id )
  */
 QString Portage::package( const QString& id )
 {
-	QStringList packageList = KurooDBSingleton::Instance()->query(QString("SELECT name FROM package WHERE id = '%1';").arg(id));
-	QStringList::Iterator it = packageList.begin();
-	QString name = *it;
-// 	QString version = *it;
-	return name;
+	return KurooDBSingleton::Instance()->query( QString("SELECT name FROM package WHERE id = '%1';").arg( id ) ).first();
 }
 
 /**

@@ -102,7 +102,7 @@ bool Emerge::queue( const QString& category, const QStringList& packageList )
 		if ( (*it).startsWith("-") )
 			*eProc << *it;
 		else
-			*eProc << "=" + category + "/" + *it;
+			*eProc << category + "/" + *it;
 	}
 	
 	eProc->start( KProcess::OwnGroup, true );
@@ -146,7 +146,7 @@ bool Emerge::queue( const QStringList& packageList )
 		if ( (*it).startsWith("-") )
 			*eProc << *it;
 		else
-			*eProc << "=" + *it;
+			*eProc << *it;
 	}
 	
 	eProc->start( KProcess::OwnGroup, true );
@@ -187,7 +187,7 @@ bool Emerge::pretend( const QString& category, const QStringList& packageList )
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
-		*eProc << "=" + category + "/" + *it;
+		*eProc << category + "/" + *it;
 	}
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {
@@ -224,7 +224,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
-		*eProc << "=" + *it;
+		*eProc << *it;
 	}
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {

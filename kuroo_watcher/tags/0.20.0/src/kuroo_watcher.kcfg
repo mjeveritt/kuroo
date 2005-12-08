@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kuroo_watcherrc"/>
+  <group name="Preferences">
+  	<entry name="setupDone" type="Bool">
+      <label>Is it first time running?</label>
+    </entry>
+    <entry name="rssInterval" type="Int">
+      <label>The interval rss checks</label>
+      <default>1</default>
+    </entry>
+    <entry name="autoStart" type="Bool">
+      <label>Start Gentoo Watcher automatically at login?</label>
+    </entry>
+    <entry name="rowsGlsa" type="Int">
+      <label>Number of Glsa rows to view</label>
+      <default>20</default>
+	 </entry>
+	 <entry name="DirHome" type="String">
+	<label>Home directory</label>
+    </entry>
+	<entry name="databas" type="String">
+	<default>portage.db</default>
+	</entry>
+     <entry name="urlGlsa" type="String">
+      <label>Url to Glsa rss</label>
+    </entry>
+     <entry name="urlStable" type="String">
+      <label>Url to stable packages rss</label>
+    </entry>
+	<entry name="urlTesting" type="String">
+      <label>Url to testing packages rss</label>
+    </entry>
+	<entry name="urlSF" type="String">
+	<label>Url to SourceForge Kuroo</label>
+	<default>http://sourceforge.net/export/rss2_projfiles.php?group_id=110914</default>
+	</entry>
+	<entry name="glsaAll" type="Bool">
+      <label></label>
+      <default>true</default>
+    </entry>
+	<entry name="glsaCheck" type="Bool">
+      <label></label>
+      <default>false</default>
+    </entry>
+	<entry name="alertStable" type="Bool">
+      <label></label>
+      <default>true</default>
+    </entry>
+	<entry name="alertTesting" type="Bool">
+      <label></label>
+      <default>true</default>
+    </entry>
+	<entry name="alertGlsa" type="Bool">
+      <label></label>
+      <default>true</default>
+    </entry>
+  </group>
+</kcfg>

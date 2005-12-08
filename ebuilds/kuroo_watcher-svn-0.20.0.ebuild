@@ -18,8 +18,6 @@ IUSE=""
 
 RDEPEND="app-portage/gentoolkit
 	!app-portage/guitoo
-	>app-portage/kuroo-0.70.1
-	|| (kde-misc/kdiff3 kde-base/kompare)
-	|| (kde-base/dcoprss kde-base/kdenetwork)"
+	>app-portage/kuroo-0.70.1"
 
 need-kde 3.2

@@ -29,6 +29,7 @@
 #include "statusbar.h"
 #include "log.h"
 #include "queue.h"
+#include "results.h"
 #include "updates.h"
 #include "installed.h"
 #include "portage.h"
@@ -40,6 +41,7 @@ typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
 typedef Singleton<Queue> QueueSingleton;
+typedef Singleton<Results> ResultsSingleton;
 typedef Singleton<Installed> InstalledSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KurooDB> KurooDBSingleton;

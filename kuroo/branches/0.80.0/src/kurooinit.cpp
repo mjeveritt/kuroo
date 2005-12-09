@@ -90,14 +90,15 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	chmod(databaseFile, 0660);
 	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
 	
-	EtcUpdateSingleton::Instance()->init(this);
-	SignalistSingleton::Instance()->init(this);
-	EmergeSingleton::Instance()->init(this);
-	HistorySingleton::Instance()->init(this);
-	InstalledSingleton::Instance()->init(this);
-	PortageSingleton::Instance()->init(this);
-	UpdatesSingleton::Instance()->init(this);
-	QueueSingleton::Instance()->init(this);
+	EtcUpdateSingleton::Instance()->init( this );
+	SignalistSingleton::Instance()->init( this );
+	EmergeSingleton::Instance()->init( this );
+	HistorySingleton::Instance()->init( this );
+	InstalledSingleton::Instance()->init( this );
+	PortageSingleton::Instance()->init( this );
+	UpdatesSingleton::Instance()->init( this );
+	QueueSingleton::Instance()->init( this );
+	ResultsSingleton::Instance()->init( this );
 }
 
 KurooInit::~KurooInit()

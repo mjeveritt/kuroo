@@ -34,7 +34,7 @@ class KActionSelector;
 class QPushButton;
 class PortageListView;
 class KPopupMenu;
-class UseDialog;
+class PackageInspector;
 
 /**
  * @class PortageTab
@@ -120,13 +120,13 @@ private slots:
 	/**
 	* For editing use flags per package.
 	*/
-	void				useFlags();
+// 	void				useFlags();
 	
 private:
 	int					filter;
 	PortageListView 	*packagesView;
 	KPopupMenu 			*menu;
-	UseDialog 			*useDialog;
+	PackageInspector	*packageInspector;
 	
 signals:
 	void				signalChanged();

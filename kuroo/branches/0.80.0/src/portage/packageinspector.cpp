@@ -18,7 +18,7 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "inspectorbase.h"
+#include "packageinspector.h"
 #include "common.h"
 
 #include <qregexp.h>
@@ -32,7 +32,7 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent, const char *name )
-	: KDialogBase( KDialogBase::Swallow, i18n( "Edit package Use Flags" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), true ), package( "" )
+	: KDialogBase( KDialogBase::Swallow, i18n( "Edit package" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), true ), package( "" )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
@@ -122,7 +122,7 @@ void PackageInspector::edit( const QString& newPackage )
 // 		}
 // 		file.close();
 // 	}
-// 	show();
+	show();
 // 	
 // 	dialog->allUseFlags->availableListBox()->setCurrentItem( dialog->allUseFlags->availableListBox()->topItem() );
 }
@@ -131,7 +131,7 @@ void PackageInspector::edit( const QString& newPackage )
  * Save the new use flags created with ActionSelector
  */
 void PackageInspector::slotApply()
-{	
+{
 // 	QString useFlags;
 // 	QStringList lines;
 // 
@@ -174,4 +174,4 @@ void PackageInspector::slotApply()
 	accept();
 }
 
-#include "usedialog.moc"
+#include "packageinspector.moc"

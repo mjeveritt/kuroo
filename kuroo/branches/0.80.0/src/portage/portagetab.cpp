@@ -24,7 +24,7 @@
 #include "portagelistview.h"
 #include "portagepackagesview.h"
 #include "portagetab.h"
-#include "usedialog.h"
+#include "packageinspector.h"
 
 #include <qregexp.h>
 #include <qlayout.h>
@@ -133,7 +133,7 @@ void PortageTab::slotInit()
 	if ( !KurooConfig::init() )
 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
-// 	useDialog = new UseDialog( this );
+	packageInspector = new PackageInspector( this );
 	slotBusy( false );
 }
 
@@ -332,10 +332,10 @@ void PortageTab::slotPackageInfo( QWidget *page )
 /**
  * Open use flags dialog.
  */
-void PortageTab::useFlags()
-{
-	useDialog->edit( PortageSingleton::Instance()->category( packagesView->currentId() ) + "/" + packagesView->currentPackage() );
-}
+// void PortageTab::useFlags()
+// {
+// 	useDialog->edit( PortageSingleton::Instance()->category( packagesView->currentId() ) + "/" + packagesView->currentPackage() );
+// }
 
 /**
  * Popup menu for actions like emerge.
@@ -397,8 +397,8 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			PortageSingleton::Instance()->clearUnmaskPackageList( packagesView->selectedId() );
 			break;
 			
-		case USEFLAGS:
-			useFlags();
+// 		case USEFLAGS:
+// 			useFlags();
 	}
 }
 
@@ -433,6 +433,8 @@ void PortageTab::slotUninstall()
 void PortageTab::slotAdvanced()
 {
 	kdDebug() << "@todo: Create dialog for advanced package handling..." << endl;
+	
+	packageInspector->edit( packagesView->selectedId().first() );
 }
 
 #include "portagetab.moc"

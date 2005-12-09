@@ -447,13 +447,13 @@ QStringList KurooDB::updatesCategories()
 
 QStringList KurooDB::updatesPackages()
 {
-	return query( QString(" SELECT package.id, category.name, package.name, package.version, "
-	                      " package.description, package.size, package.keywords, updates.installedVersion, "
-	                      " updates.updateFlags, updates.useFlags "
-	                      " FROM package, updates, category "
-	                      " WHERE category.id = package.idCategory "
-	                      " AND package.id = updates.idPackage "
-	                      " ORDER BY updates.id LIMIT %1;").arg(ROWLIMIT) );
+	return query( QString( " SELECT package.id, category.name, package.name, package.version, "
+	                       " package.description, package.size, package.keywords, updates.installedVersion, "
+	                       " updates.updateFlags, updates.useFlags "
+	                       " FROM package, updates, category "
+	                       " WHERE category.id = package.idCategory "
+	                       " AND package.id = updates.idPackage "
+	                       " ORDER BY updates.id LIMIT %1;" ).arg(ROWLIMIT) );
 }
 
 QStringList KurooDB::updatesPackagesByCategory( const QString& idCategory )
@@ -472,27 +472,27 @@ QStringList KurooDB::updatesPackagesByCategory( const QString& idCategory )
 
 QStringList KurooDB::queuePackages()
 {
-	return query( QString(" SELECT package.id, category.name, subCategory.name, package.name, "
-	                      " package.description, package.installed "
-	                      " FROM queue, category, subCategory, package "
-	                      " WHERE queue.idPackage = package.id "
-	                      " AND category.id = package.idCategory "
-	                      " AND subCategory.id = package.idSubCategory "
-	                      " ORDER BY queue.id DESC LIMIT %1;").arg(ROWLIMIT) );
+	return query( QString( " SELECT package.id, category.name, subCategory.name, package.name, "
+	                       " package.description, package.installed "
+	                       " FROM queue, category, subCategory, package "
+	                       " WHERE queue.idPackage = package.id "
+	                       " AND category.id = package.idCategory "
+	                       " AND subCategory.id = package.idSubCategory "
+	                       " ORDER BY queue.id DESC LIMIT %1;" ).arg(ROWLIMIT) );
 }
 
 
 //////////////////////////////////////////////////////////////////////////////
-// Query for results 
+// Query for results
 //////////////////////////////////////////////////////////////////////////////
 
 QStringList KurooDB::resultPackages()
 {
-	return query( QString(" SELECT package.id, category.name, package.name, package.version, "
-	                      " package.description, package.size, package.keywords, results.flags, package.installed "
-	                      " FROM results, category, package "
+	return query( QString(" SELECT package.id, catSubCategory.name, package.name, "
+	                      " package.description, results.flags, package.installed "
+	                      " FROM results, catSubCategory, package "
 	                      " WHERE results.idPackage = package.id "
-	                      " AND category.id = package.idCategory "
+	                      " AND catSubCategory.id = package.idCatSubCategory "
 	                      " ORDER BY results.id LIMIT %1;").arg(ROWLIMIT) );
 }
 

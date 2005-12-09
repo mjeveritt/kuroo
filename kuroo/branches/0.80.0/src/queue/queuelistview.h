@@ -18,8 +18,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef INSTALLATIONLISTVIEW_H
-#define INSTALLATIONLISTVIEW_H
+#ifndef QUEUELISTVIEW_H
+#define QUEUELISTVIEW_H
 
 #include "packagelistview.h"
 
@@ -40,30 +40,27 @@ extern QRegExp pv;
 class QueueListView : public PackageListView
 {
 Q_OBJECT
-	
+
 public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
-	
-// public:
-// 	class 								QueueItem;
 
 public slots:
-	
+
 	void								slotPackageUp();
 	void								slotPackageDown();
-	
+
 	/**
 	* Populate queue with packages from db
 	*/
 	void 								insertPackageList();
-	
+
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.
 	*/
 	QString		 						totalTime();
 	int									sumTime();
-	
+
 	/**
 	* Get sum of packages sizes.
 	* @return sumSize 

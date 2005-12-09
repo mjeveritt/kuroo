@@ -41,25 +41,6 @@ static QTime totalDuration;
 // Tweak for time take unpacking and installing each package.
 const int diffTime( 10 );
 
-// class QueueListView::QueueItem : public PackageItem
-// {
-// public:
-// 	QueueItem::QueueItem( QListView* parent, const char* name, Meta meta, int status );
-// 	
-// protected:
-// 	virtual int compare( QListViewItem* i, int col, bool ascending ) const;
-// };
-// 
-// QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, Meta meta, int status )
-// 	: PackageItem( parent, name, meta, status )
-// {
-// }
-// 
-// int QueueListView::QueueItem::compare( QListViewItem* i, int col, bool ascending ) const
-// {
-// 	return 0;
-// }
-
 /**
  * Specialized listview for packages in the installation queue.
  */
@@ -81,7 +62,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidth( 1, 80 );
 	setTooltipColumn( 2 );
 	
-	// kuroorc may conflict and enable sorting. Make sure it is deleted first.
+	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), 
@@ -111,7 +92,7 @@ void QueueListView::slotPackageDown()
 {
 	QListViewItem* packageItem = currentItem();
 	if ( packageItem->itemBelow() )
-		packageItem->itemBelow()->moveItem( packageItem );
+		packageItem->moveItem( packageItem->itemBelow() );
 }
 
 /**

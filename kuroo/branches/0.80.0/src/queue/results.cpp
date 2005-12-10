@@ -74,6 +74,9 @@ public:
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE results_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
+		                                    " package VARCHAR(64), "
+		                                    " size VARCHAR(32), "
+		                                    " use VARCHAR(255), "
 		                                    " flags VARCHAR(32))"
 		                                    " ;", m_db);
 		
@@ -87,10 +90,8 @@ public:
 				" AND package.name = '%2'"
 				" LIMIT 1;" ).arg( ( *it ).category ).arg( ( *it ).name ), m_db ).first();
 			
-			kdDebug() << "id=" << id << endl;
-			
 			if ( !id.isEmpty() )
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO results_temp (idPackage, flags) VALUES ('%1', '%2');" ).arg( id ).arg( ( *it ).updateFlags ), m_db );
+				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO results_temp (idPackage, package, size, use, flags) VALUES ('%1', '%2', '%3', '%4', '%5');" ).arg( id ).arg( ( *it ).package ).arg( ( *it ).size ).arg( ( *it ).useFlags ).arg( ( *it ).updateFlags ), m_db );
 			else
 				kdDebug() << i18n( "Can not find %1/%2-%3 in kuroo repository." ).arg( ( *it ).category ).arg( ( *it ).name ).arg( ( *it ).version ) << endl;
 		}

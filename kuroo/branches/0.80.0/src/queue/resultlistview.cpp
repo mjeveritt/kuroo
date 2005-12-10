@@ -49,36 +49,38 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	addColumn( i18n( "Package" ) );
 	addColumn( " " );
 	header()->setLabel( 1, pxQueuedColumn, " " );
-	addColumn( i18n( "Nr" ));
-	addColumn(i18n("Action"));
-	addColumn(i18n("Size"));
-	addColumn(i18n("Description"));
-	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
-	setMinimumSize(QSize(500, 150));
-	setProperty("selectionMode", "Extended");
+	addColumn( i18n( "Nr" ) );
+	addColumn( i18n( "Action" ) );
+	addColumn( i18n( "Size" ) );
+	addColumn( i18n( "USE" ) );
+	addColumn( i18n( "Description" ) );
+	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
+	setMinimumSize( QSize( 800, 200 ) );
+	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator(true);
-	setRootIsDecorated(true);
 	setFullWidth(true);
 	
-	setColumnWidthMode(0, QListView::Manual);
-	setColumnWidthMode(1, QListView::Manual);
-	setColumnWidthMode(2, QListView::Manual);
-	setColumnWidthMode(3, QListView::Manual);
-	setColumnWidthMode(4, QListView::Manual);
+	setColumnWidthMode( 0, QListView::Manual );
+	setColumnWidthMode( 1, QListView::Manual );
+	setColumnWidthMode( 2, QListView::Manual );
+	setColumnWidthMode( 3, QListView::Manual );
+	setColumnWidthMode( 4, QListView::Manual );
+	setColumnWidthMode( 5, QListView::Manual );
 	
-	setColumnWidth(0, 150);
-	setColumnWidth(1, 20);
-	setColumnWidth(2, 20);
-	setColumnWidth(3, 50);
-	setColumnWidth(4, 80);
+	setColumnWidth( 0, 200 );
+	setColumnWidth( 1, 20 );
+	setColumnWidth( 2, 20 );
+	setColumnWidth( 3, 50 );
+	setColumnWidth( 4, 80 );
+	setColumnWidth( 5, 80 );
 		
-	setSorting(2, true);
-	setColumnAlignment(2, Qt::AlignHCenter);
-	setResizeMode(QListView::LastColumn);
-	setColumnAlignment(4, Qt::AlignRight);
+	setSorting( 2, true );
+	setColumnAlignment( 2, Qt::AlignHCenter );
+	setResizeMode( QListView::LastColumn );
+	setColumnAlignment( 4, Qt::AlignRight );
 	
-	setTooltipColumn(5);
-	header()->moveSection(2, 0);
+	setTooltipColumn( 6 );
+	header()->moveSection( 2, 0 );
 }
 
 ResultListView::~ResultListView()
@@ -99,24 +101,19 @@ bool ResultListView::loadFromDB()
 	const QStringList packageList = ResultsSingleton::Instance()->allPackages();
 	foreach ( packageList ) {
 		QString idDB = *it++;
-		QString category = *it++;
-		QString name = *it++;
-// 		QString version = *it++;
-		QString package = category + "/" + name;
+		QString package = *it++;
 		QString description = *it++;
-// 		QString size = *it++;
-// 		QString keywords = *it++;
+		QString size = *it++ + " kB";
+		QString use = *it++;
 		QString flags = *it++;
 		QString installed = *it;
-		
-		kdDebug() << "ResultListView::loadFromDB package=" << package << endl;
 		
 		Meta packageMeta;
 		packageMeta.insert(i18n("3Nr"), QString::number(order++));
 		packageMeta.insert(i18n("4Action"), flags);
 		packageMeta.insert(i18n("5Description"), description);
-// 		packageMeta.insert(i18n("6Size"), size);
-		packageMeta.insert(i18n("7USE"), flags);
+		packageMeta.insert(i18n("6Size"), size);
+		packageMeta.insert(i18n("7USE"), use);
 		
 		packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
 		
@@ -133,8 +130,6 @@ bool ResultListView::loadFromDB()
 		return false;
 	else
 		return true;
-	
-// 	emit( signalResultsLoaded() );
 }
 
 #include "resultlistview.moc"

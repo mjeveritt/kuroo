@@ -127,13 +127,13 @@ void Kuroo::setupActions()
 	(void) new KAction( i18n("&Emerge Log"), 0, KShortcut( CTRL + Key_L ),
 	                    this, SLOT(emergeLog()), actionCollection(), "emergeLog" );
 	
-	actionRefresh = new KAction( i18n("&Refresh"), "kuroo_refresh_view", KShortcut( CTRL + Key_R ),
+	actionRefresh = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
 	                             this, SLOT(slotNull()), actionCollection(), "refresh" );
 	
-	actionSync = new KAction( i18n("&Sync"), "kuroo_sync_portage", KShortcut( CTRL + Key_S ),
+	actionSync = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
 	                          this, SLOT(slotSync()), actionCollection(), "sync" );
 	
-	actionFind = new KAction( i18n("&Find"), "kuroo_find_packages", KShortcut( CTRL + Key_F ),
+	actionFind = new KAction( i18n("&Find"), 0, KShortcut( CTRL + Key_F ),
 	                          this, SLOT(slotNull()), actionCollection(), "find" );
 	
 	createGUI();

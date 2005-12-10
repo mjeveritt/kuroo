@@ -1,12 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="kuroo8" version="1">
 <MenuBar>
-	<Menu name="custom1"><text>&amp;Portage</text>
+	<Menu name="custom1">
+		<text>&amp;Portage</text>
 		<Action name="sync" />
 		<Action name="updates" />
 		<Action name="refresh" />
 	</Menu>
-	<Menu name="custom2"><text>&amp;View</text>
+	<Menu name="custom2">
+		<text>&amp;View</text>
 		<Action name="wizard" />
 		<Action name="emergeLog" />
 	</Menu>

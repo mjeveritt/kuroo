@@ -233,6 +233,9 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE results ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
+	      " package VARCHAR(64), "
+	      " size VARCHAR(32), "
+	      " use VARCHAR(255), "
 	      " flags VARCHAR(32))"
 	      " ;", conn);
 	
@@ -488,8 +491,8 @@ QStringList KurooDB::queuePackages()
 
 QStringList KurooDB::resultPackages()
 {
-	return query( QString(" SELECT package.id, catSubCategory.name, package.name, "
-	                      " package.description, results.flags, package.installed "
+	return query( QString(" SELECT package.id, results.package, package.description,"
+	                      " results.size, results.use, results.flags, package.installed "
 	                      " FROM results, catSubCategory, package "
 	                      " WHERE results.idPackage = package.id "
 	                      " AND catSubCategory.id = package.idCatSubCategory "

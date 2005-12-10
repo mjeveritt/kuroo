@@ -399,31 +399,39 @@ void Emerge::readFromStdout( KProcIO *proc )
 		if ( line.contains(QRegExp("^\\[ebuild")) ) {
 			
 			EmergePackage emergePackage;
-			rx.setPattern("\\s\\S+/\\S+\\s");
-			int pos = rx.search(line);
+			rx.setPattern( "\\s\\S+/\\S+\\s" );
+			int pos = rx.search( line );
 			
 			if ( pos > -1 ) {
-				QString parsedPackage = rx.cap(0).stripWhiteSpace();
+				QString parsedPackage = rx.cap( 0 ).stripWhiteSpace();
 				
-				emergePackage.category = parsedPackage.section("/", 0, 0);
-				emergePackage.package = parsedPackage.section("/", 1, 1);
-				emergePackage.name = emergePackage.package.section(pv, 0, 0);
-				emergePackage.version = parsedPackage.section((emergePackage.name + "-"), 1, 1);
-				emergePackage.updateFlags = line.left(14).section(QRegExp("^\\[ebuild"), 1, 1);
+				emergePackage.package = parsedPackage;
+				emergePackage.category = parsedPackage.section( "/", 0, 0 );
+				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( pv, 0, 0 );
+				emergePackage.version = parsedPackage.section( ( emergePackage.name + "-" ), 1, 1 );
+				emergePackage.updateFlags = line.left( 14 ).section( QRegExp( "^\\[ebuild" ), 1, 1 );
 				
 				QString temp = line.section(emergePackage.package, 1, 1);
+				
+				if ( temp.contains( " kB" ) )
+					emergePackage.size = temp.section( " kB", 0, 0 ).section( " ", -1 , -1 );
+				else
+					emergePackage.size = i18n( "na" );
+				
 				temp = temp.section( " kB", 0, 0 );
-				emergePackage.installedVersion = temp.section("[", 1, 1).section("]", 0, 0);
+				emergePackage.installedVersion = temp.section( "[", 1, 1 ).section( "]", 0, 0 );
 
+				kdDebug() << "temp=" << temp << endl;
+				
 				// Parse out USE flags
-				const QStringList field = QStringList::split(" ", temp);
+				const QStringList field = QStringList::split( " ", temp );
 				QStringList useList;
 				foreach ( field ) {
-					if ( (*it).startsWith("+") || (*it).startsWith("-") )
+					if ( ( *it ).startsWith( "+" ) || ( *it ).startsWith( "-" ) )
 						useList += *it;
 				}
-				emergePackage.useFlags = useList.join(" ");
-				emergePackageList.append(emergePackage);
+				emergePackage.useFlags = useList.join( " " );
+				emergePackageList.append( emergePackage );
 			}
 		}
 		

@@ -104,7 +104,7 @@ void QueueTab::slotReload()
 {
 	queueView->insertPackageList();
 	
-	QString queueBrowserLines( i18n( "<font size=\"+2\">Packages in Emerge Queue</font><br>" ) );
+	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( QueueSingleton::Instance()->count() );
 			queueBrowserLines += i18n( "Estimated time for emerge: %1<br>" ).arg( queueView->totalTime() );
 			queueBrowserLines += i18n( "Estimated time remaining: <br>" );

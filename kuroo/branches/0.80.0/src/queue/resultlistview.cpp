@@ -59,6 +59,7 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator(true);
 	setFullWidth(true);
+	setSorting( -1 );
 	
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );

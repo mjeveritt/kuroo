@@ -33,7 +33,7 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PretendInspector::PretendInspector( QWidget *parent, const char *name )
-	: KDialogBase( KDialogBase::Swallow, i18n( "Emerge pretend result" ), KDialogBase::User1 | KDialogBase::Ok , KDialogBase::Ok, parent, i18n( "Save" ), true )
+	: KDialogBase( KDialogBase::Swallow, i18n( "Emerge pretend result" ), KDialogBase::User1 | KDialogBase::Ok , KDialogBase::Ok, parent, i18n( "Save" ), false )
 {
 	setButtonText( KDialogBase::User1, i18n( "Append all to Install Queue" ) );
 	dialog = new EmergePretendBase( this );

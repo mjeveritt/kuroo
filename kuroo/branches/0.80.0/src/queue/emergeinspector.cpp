@@ -8,7 +8,7 @@
 #include <klineedit.h>
 
 EmergeInspector::EmergeInspector( QWidget *parent, const char *name )
-	: KDialogBase( KDialogBase::Swallow, i18n( "Emerge Options" ), KDialogBase::User1 | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, parent, i18n( "Save" ), true )
+	: KDialogBase( KDialogBase::Swallow, i18n( "Emerge Options" ), KDialogBase::User1 | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, parent, i18n( "Save" ), false )
 {
 	setButtonText( KDialogBase::User1, i18n( "Clear" ) );
 	dialog = new EmergeOptionsBase( this );

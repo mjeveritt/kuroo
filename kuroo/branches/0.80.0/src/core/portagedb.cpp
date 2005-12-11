@@ -204,7 +204,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " useFlags VARCHAR(32),"
 	      " packageSlots VARCHAR(32),"
 	      " date VARCHAR(32), "
-	      " installed INTEGER, "
+	      " meta INTEGER, "
 	      " updateVersion VARCHAR(32)); "
 	      " CREATE INDEX index_name ON package (name)"
 	      " ;", conn);
@@ -245,6 +245,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " date VARCHAR(10), "
 	      " timestamp VARCHAR(10), "
 	      " time INTEGER, "
+	      " einfo BLOB, "
 	      " emerge BOOL)"
 	      " ;", conn);
 	
@@ -281,7 +282,7 @@ QStringList KurooDB::installedPackages()
 	return query( " SELECT DISTINCT category.name, package.name "
 	              " FROM package, category "
 	              " WHERE package.idCategory = category.id "
-	              " AND package.installed != '0' "
+	              " AND package.meta != '0' "
 	              " ;");
 }
 
@@ -290,14 +291,14 @@ QStringList KurooDB::packageVersions( const QString& name )
 	return query( " SELECT version.name, package.installed "
 	              " FROM package, version "
 	              " WHERE package.name = '" + name + "'"
-	              " AND package.installed != '2' "
+	              " AND package.meta != '2' "
 	              " AND version.idPackage = package.id "
 	              " ORDER BY version.name;");
 }
 
 QStringList KurooDB::history()
 {
-	return query( " SELECT date, package, time "
+	return query( " SELECT date, package, time, einfo "
 	              " FROM history "
 	              " ORDER BY id ASC;");
 }
@@ -357,7 +358,7 @@ QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int f
 			break;
 			
 		case FILTER_INSTALLED:
-			filterQuery = " AND installed != '0'";
+			filterQuery = " AND meta != '0'";
 			break;
 		
 		case FILTER_UPDATES:
@@ -380,7 +381,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			break;
 			
 		case FILTER_INSTALLED:
-			filterQuery = " AND installed != '0'";
+			filterQuery = " AND meta != '0'";
 			break;
 			
 		case FILTER_UPDATES:
@@ -421,7 +422,7 @@ QStringList KurooDB::installedPackagesByCategory( const QString& idCategory )
 	return query( " SELECT id, name, version, description, size, keywords, updateVersion "
 	              " FROM package "
 	              " WHERE idCategory = '" + idCategory + "'"
-	              " AND installed != '0' "
+	              " AND meta != '0' "
 	              " ORDER BY lower(name);");
 }
 
@@ -431,7 +432,7 @@ QStringList KurooDB::installedPackageInfo( const QString& id )
 	             " homepage, licenses, useFlags, packageSlots "
 	             " FROM package "
 	             " WHERE id = '" + id + "'"
-	             " AND installed != '0' "
+	             " AND meta != '0' "
 	             " ORDER BY lower(name) LIMIT 1;");
 }
 
@@ -517,7 +518,7 @@ QStringList KurooDB::findInstalledPackagesName( const QString& name )
 {
 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
 	return query( QString(" SELECT id FROM package "
-	                      " WHERE installed != '0' "
+	                      " WHERE meta != '0' "
 	                      " AND name LIKE '%" + escapeString(name) + "%'" )
 	             	 		+ limit );
 }
@@ -526,7 +527,7 @@ QStringList KurooDB::findInstalledPackagesDescription( const QString& descriptio
 {
 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
 	return query( QString(" SELECT id FROM package "
-	                      " WHERE installed != '0' "
+	                      " WHERE meta != '0' "
 	                      " AND description LIKE '%" + escapeString(description) + "%'" )
 	              			+ limit);
 }
@@ -535,7 +536,7 @@ QStringList KurooDB::findPortagePackagesName( const QString& name )
 {
 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
 	return query( QString(" SELECT id FROM package "
-	                      " WHERE installed != '2' "
+	                      " WHERE meta != '2' "
 	                      " AND name LIKE '%" + escapeString(name) + "%'" )
 	              			+ limit );
 }
@@ -544,7 +545,7 @@ QStringList KurooDB::findPortagePackagesDescription( const QString& description 
 {
 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
 	return query( QString(" SELECT id FROM package "
-	                      " WHERE installed != '2' "
+	                      " WHERE meta != '2' "
 	                      " AND description LIKE '%" + escapeString(description) + "%'" )
 	                      	+ limit );
 }

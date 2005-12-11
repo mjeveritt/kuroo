@@ -92,7 +92,7 @@ bool ScanUpdatesJob::doJob()
 	                                    " useFlags VARCHAR(32),"
 	                                    " packageSlots VARCHAR(32),"
 	                                    " date VARCHAR(32), "
-	                                    " installed INTEGER, "
+	                                    " meta INTEGER, "
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	

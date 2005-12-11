@@ -396,7 +396,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		//////////////////////////////////////////////////////
 		// Parse out packages and info
 		//////////////////////////////////////////////////////
-		if ( line.contains(QRegExp("^\\[ebuild")) ) {
+		if ( line.contains( QRegExp("^\\[ebuild") ) ) {
 			
 			EmergePackage emergePackage;
 			rx.setPattern( "\\s\\S+/\\S+\\s" );
@@ -504,19 +504,16 @@ void Emerge::readFromStdout( KProcIO *proc )
 		// Collect einfo and ewarn messages
 		////////////////////////////////////
 		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp())) || lastLineFlag || line.contains("**** ") ) ) {
-			QString cleanLine = line.replace('>', "&gt;").replace('<', "&lt;") + "<br>";
-			cleanLine.remove("!!!");
+			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ) + "<br>";
+			cleanLine.remove( "!!!" );
 			
-			kdDebug() << "cleanLine=" << cleanLine << endl;
-			
-			if ( line.endsWith(":") )
+			if ( line.endsWith( ":" ) )
 				lastLineFlag = true;
 				else
 					lastLineFlag = false;
 			
-			if ( line.contains("**** ") ) {
-				cleanLine = cleanLine.section("**** ", 1, 1);
-			}
+			if ( line.contains( "**** " ) )
+				cleanLine = cleanLine.section( "**** ", 1, 1 );
 			
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
@@ -532,8 +529,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 		LogSingleton::Instance()->writeLog( line, TOLOG );
 		
 		// Collect blocking lines
-		if ( line.contains("is blocking") )
-			blocks += line.section("[blocks B     ]", 1, 1).replace('>', "&gt;").replace('<', "&lt;");
+		if ( line.contains( "is blocking" ) )
+			blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
@@ -558,7 +555,7 @@ void Emerge::cleanup()
 {
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
-	SignalistSingleton::Instance()->setKurooBusy(false);
+	SignalistSingleton::Instance()->setKurooBusy( false );
 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
@@ -567,8 +564,10 @@ void Emerge::cleanup()
 	if ( !unmasked.isEmpty() )
 		askUnmaskPackage( unmasked );
 	else
-		if ( !importantMessage.isEmpty() )
+		if ( !importantMessage.isEmpty() ) {
+			HistorySingleton::Instance()->appendEmergeInfo( importantMessage );
 			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
+		}
 	
 	if ( etcUpdateCount != 0 /*&& !SignalistSingleton::Instance()->isKurooBusy()*/ )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );

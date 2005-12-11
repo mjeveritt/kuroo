@@ -124,7 +124,7 @@ bool ScanPortageJob::doJob()
 	                                    " useFlags VARCHAR(32),"
 	                                    " packageSlots VARCHAR(32),"
 	                                    " date VARCHAR(32), "
-	                                    " installed INTEGER, "
+	                                    " meta INTEGER, "
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	
@@ -141,7 +141,7 @@ bool ScanPortageJob::doJob()
 	
 	// Get list of categories in Portage
 	int idCategory;
-	QString installed, lastCategory;
+	QString lastCategory;
 	QStringList categoryList = dCategory.entryList();
 	for ( QStringList::Iterator itCategory = categoryList.begin(), itCategoryEnd = categoryList.end(); itCategory != itCategoryEnd; ++itCategory ) {
 		
@@ -171,7 +171,7 @@ bool ScanPortageJob::doJob()
 		if ( dPackage.cd( path + *itCategory) ) {
 			
 			QStringList packageList = dPackage.entryList();
-			QString lastPackage;
+			QString meta, lastPackage;
 			int idPackage( 0 );
 			for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 				
@@ -191,21 +191,21 @@ bool ScanPortageJob::doJob()
 				// Check if package is installed
 				InstalledMap::iterator itMap = installedMap.find( package );
 				if ( itMap != installedMap.end() ) {
-					installed = QString::number( FILTER_INSTALLED );
+					meta = QString::number( FILTER_INSTALLED );
 					installedMap.erase( itMap );
 				}
 				else
-					installed = QString::number( FILTER_ALL );
+					meta = QString::number( FILTER_ALL );
 				
 				if ( package != lastPackage ) {
 				
 					if ( scanInfo( path, *itCategory, *itPackage ) ) {
-						QString sql = QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, installed, homepage, licenses, useFlags, packageSlots) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', ").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(info.description).arg(installed).arg(info.homepage).arg(info.licenses).arg(info.useFlags);
+						QString sql = QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, meta, homepage, licenses, useFlags, packageSlots) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', ").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(info.description).arg(meta).arg(info.homepage).arg(info.licenses).arg(info.useFlags);
 						sql += QString("'%1');").arg(info.packageSlots);
 						idPackage = KurooDBSingleton::Instance()->insert( sql, m_db );
 					}
 					else
-						idPackage = KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, installed) VALUES ('%1', '%2', '%3', '%4', '%5');").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(installed), m_db);
+						idPackage = KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, meta) VALUES ('%1', '%2', '%3', '%4', '%5');").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(meta), m_db);
 					
 					KurooDBSingleton::Instance()->insert( QString("INSERT INTO version_temp (idPackage, name, size, branch) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idPackage)).arg(version).arg(info.size).arg(info.keywords), m_db);
 				}
@@ -246,7 +246,7 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
 	setStatus( i18n("Done.") );
-	setProgress(0);
+	setProgress( 0 );
 	return true;
 }
 
@@ -256,19 +256,13 @@ bool ScanPortageJob::doJob()
 void ScanPortageJob::getInstalled()
 {
 	installedMap.clear();
-	int count( 0 );
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
 	
-	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n( "Can not connect to database" ) << endl;
-	}
-	
-	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) ) {
+	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) )
 		kdDebug() << i18n( "Can not access " ) << KurooConfig::dirDbPkg() << endl;
-	}
-	
+
 	// Get list of categories for installed packages
 	QStringList categoryList = dCategory.entryList();
 	QStringList::Iterator itCategoryEnd = categoryList.end();
@@ -289,7 +283,7 @@ void ScanPortageJob::getInstalled()
 				if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )
 					continue;
 				
-				installedMap.insert( (*itPackage).section(pv, 0, 0), 0 );
+				installedMap.insert( ( *itPackage ).section( pv, 0, 0 ), 0 );
 			}
 		}
 		else

@@ -6,14 +6,12 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 
 METASOURCES = AUTO
 
-noinst_HEADERS = scanhistoryjob.h scanupdatesjob.h scaninstalledjob.h \
-	scanportagejob.h signalist.h threadweaver.h portagedb.h emerge.h package.h \
-	cacheportagejob.h etcupdate.h packageitem.h tooltip.h packagelistview.h \
-	categorieslistview.h
+noinst_HEADERS = scanhistoryjob.h scanupdatesjob.h scanportagejob.h signalist.h \
+	threadweaver.h portagedb.h emerge.h package.h cacheportagejob.h etcupdate.h \
+	packageitem.h tooltip.h packagelistview.h categorieslistview.h
 
 libcore_la_SOURCES = scanupdatesjob.cpp scanhistoryjob.cpp emerge.cpp \
-	scaninstalledjob.cpp scanportagejob.cpp signalist.cpp threadweaver.cpp portagedb.cpp \
-	cacheportagejob.cpp etcupdate.cpp packageitem.cpp tooltip.cpp packagelistview.cpp \
-	categorieslistview.cpp
+	scanportagejob.cpp signalist.cpp threadweaver.cpp portagedb.cpp cacheportagejob.cpp \
+	etcupdate.cpp packageitem.cpp tooltip.cpp packagelistview.cpp categorieslistview.cpp
 
 noinst_LTLIBRARIES = libcore.la

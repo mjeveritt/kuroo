@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>532</width>
-            <height>423</height>
+            <width>617</width>
+            <height>476</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,6 +25,28 @@
         <property name="spacing">
             <number>0</number>
         </property>
+        <widget class="KTextBrowser" row="2" column="0">
+            <property name="name">
+                <cstring>logBrowser</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="margin">
+                <number>2</number>
+            </property>
+            <property name="wrapPolicy">
+                <enum>AtWordOrDocumentBoundary</enum>
+            </property>
+        </widget>
         <widget class="Line" row="1" column="0">
             <property name="name">
                 <cstring>line1</cstring>
@@ -49,40 +71,21 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="KTextBrowser" row="2" column="0">
-            <property name="name">
-                <cstring>logBrowser</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="margin">
-                <number>2</number>
-            </property>
-            <property name="wrapPolicy">
-                <enum>AtWordOrDocumentBoundary</enum>
-            </property>
-        </widget>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>layout16</cstring>
+                <cstring>layout32</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>4</number>
+                    <number>3</number>
                 </property>
-                <spacer row="0" column="2">
+                <property name="spacing">
+                    <number>0</number>
+                </property>
+                <spacer row="1" column="2">
                     <property name="name">
                         <cstring>spacer14_2</cstring>
                     </property>
@@ -94,12 +97,23 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>385</width>
+                            <width>314</width>
                             <height>21</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QCheckBox" row="0" column="0">
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="text">
+                        <string>&lt;b&gt;Emerge Log&lt;/b&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
                         <cstring>saveLog</cstring>
                     </property>
@@ -113,7 +127,7 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-                <widget class="QCheckBox" row="0" column="1">
+                <widget class="QCheckBox" row="1" column="1">
                     <property name="name">
                         <cstring>verboseLog</cstring>
                     </property>

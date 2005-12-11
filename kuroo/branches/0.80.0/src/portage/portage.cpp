@@ -198,7 +198,7 @@ QStringList Portage::packagesInSubCategory( const QString& categoryId, const QSt
  */
 QStringList Portage::packageVersions( const QString& name )
 {
-	return KurooDBSingleton::Instance()->packageVersions(name);
+	return KurooDBSingleton::Instance()->packageVersions( name );
 }
 
 /**
@@ -496,9 +496,9 @@ QString Portage::packageSummary( const QString& packageId )
 	const QStringList versionList = packageVersions( package.section(pv, 0, 0) );
 	foreach ( versionList ) {
 		QString version = *it++;
-		QString installed = *it;
+		QString meta = *it;
 		
-		if ( installed == "1" )
+		if ( meta == "1" )
 			textLines += "<font color=darkGreen><b>" + version + "</b></font>, ";
 		else
 			textLines += version + ", ";

@@ -19,7 +19,7 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "scaninstalledjob.h"
+#include "threadweaver.h"
 
 /**
  * Thread for adding packages into installed in db.
@@ -36,7 +36,7 @@ public:
 		
 		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg(category)).first();
 		QString packageId = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version)).first();
-		KurooDBSingleton::Instance()->query(QString("UPDATE package SET installed = '1' WHERE id = '%1';").arg(packageId));
+		KurooDBSingleton::Instance()->query(QString("UPDATE package SET meta = '1' WHERE id = '%1';").arg(packageId));
 	
 		return true;
 	}
@@ -64,13 +64,10 @@ public:
 
 		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg(category)).first();
 
-		QString installedFlag = KurooDBSingleton::Instance()->query(QString("SELECT installed FROM package WHERE name = '%1' AND idCategory = '%2' AND version = '%3';").arg(name).arg(idCategory).arg(version)).first();
-
 		// Mark package as uninstalled or remove it if old
-		if ( installedFlag == "1" )
-			KurooDBSingleton::Instance()->query(QString("UPDATE package SET installed = '0' WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
-		else
-			KurooDBSingleton::Instance()->query(QString("DELETE FROM package WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
+		KurooDBSingleton::Instance()->query(QString("UPDATE package SET meta = '0' WHERE meta = '1' AND idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
+
+		KurooDBSingleton::Instance()->query(QString("DELETE FROM package WHERE meta = '2' AND idCategory = '%1' AND name = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
 
 		// Remove package from world file
 		QFile file( KurooConfig::dirWorldFile() );
@@ -139,19 +136,6 @@ void Installed::slotReset()
 {
 	KurooDBSingleton::Instance()->query("UPDATE package set installed = 0;");
 	emit signalInstalledReset();
-}
-
-/**
- * Start scan of installed packages.
- * @return bool
- */
-bool Installed::slotRefresh()
-{
-	kdDebug() << "Installed::slotRefresh" << endl;
-	
-	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanInstalledJob( this ) );
-	return true;
 }
 
 /**
@@ -256,7 +240,7 @@ Info Installed::packageInfo( const QString& packageId )
  */
 QString Installed::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package WHERE installed != 0 LIMIT 1;");
+	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package WHERE meta != 0 LIMIT 1;");
 	return total.first();
 }
 

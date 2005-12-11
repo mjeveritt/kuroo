@@ -61,12 +61,6 @@ public slots:
 	void			slotReset();
 	
 	/**
-	 * Start scan of installed packages.
-	 * @return bool
-	 */
-	bool			slotRefresh();
-	
-	/**
 	 * Launch unmerge of packages
 	 * @param category
 	 * @param packageList

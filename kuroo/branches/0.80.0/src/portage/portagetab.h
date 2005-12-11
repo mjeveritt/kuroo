@@ -27,12 +27,6 @@
 #include "scanportagejob.h"
 
 class CategoriesListView;
-class PortageListView;
-class KTabWidget;
-class KTextBrowser;
-class KActionSelector;
-class QPushButton;
-class PortageListView;
 class KPopupMenu;
 class PackageInspector;
 
@@ -105,26 +99,15 @@ private slots:
 	void				slotAddQueue();
 	void				slotUninstall();
 	void				slotAdvanced();
+	void				slotClearFilter();
 	
 	/**
 	* View summary for selected package.
 	*/
 	void				slotSummary();
 	
-	/**
-	* View ebuild, changelog and dependencies.
-	* @param page
-	*/
-	void				slotPackageInfo( QWidget* page );
-	
-	/**
-	* For editing use flags per package.
-	*/
-// 	void				useFlags();
-	
 private:
 	int					filter;
-	PortageListView 	*packagesView;
 	KPopupMenu 			*menu;
 	PackageInspector	*packageInspector;
 	

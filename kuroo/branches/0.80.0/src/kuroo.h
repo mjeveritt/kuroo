@@ -36,7 +36,7 @@ class KAction;
 class KConfigDialog;
 class KURL;
 class IntroDlg;
-class EmergeLogDlg;
+// class EmergeLogDlg;
 class KCmdLineArgs;
 class KurooInit;
 class Message;
@@ -63,7 +63,6 @@ private slots:
 	 * Kuroo preferences window.
 	 */
 	void 				introWizard();
-	void 				emergeLog();
 	void 				slotPreferences();
 	
 	/**
@@ -102,7 +101,6 @@ private:
 	KurooView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
-	EmergeLogDlg 		*emergeLogDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefresh, *actionSync, *actionFind;
 };

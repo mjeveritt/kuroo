@@ -102,8 +102,6 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	// Check emerge.log for new entries. (Due to cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( tabLogs->logBrowser, tabLogs->verboseLog, tabLogs->saveLog );
 	
-// 	connect( tabPortage, SIGNAL( signalChanged() ), this, SLOT( slotPortageUpdated() ) );
-	
 	// Reset everything when a portage scan is started
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
 }
@@ -120,7 +118,6 @@ void KurooView::slotInit()
 		switch( KMessageBox::warningContinueCancel( this,
 			i18n("<qt>Kuroo database is empty!<br><br>"
 			     "Kuroo will now first scan your emerge log to create the emerge history. "
-			     "Next Kuroo will refresh Portage, Installed and Updates packages view.<br>"
 			     "Package information in Portage will be cached.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0) ) {
 			case KMessageBox::Continue: {
 				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );

@@ -47,20 +47,24 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
 	
 	addColumn( i18n("Date") );
-	addColumn( i18n("Time") );
+	addColumn( i18n("Duration") );
+	addColumn( i18n("Emerge info") );
+	
 	setMinimumSize( QSize(50, 0) );
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated(true);
 	setFullWidth(true);
 
-	setColumnWidthMode(0, QListView::Manual);
-	setColumnWidthMode(1, QListView::Manual);
+	setColumnWidthMode( 0, QListView::Manual );
+	setColumnWidthMode( 1, QListView::Manual );
+	setColumnWidthMode( 2, QListView::Manual );
 	
-	setColumnWidth(0, 300);
-	setColumnWidth(1, 80);
+	setColumnWidth( 0, 400 );
+	setColumnWidth( 1, 80 );
+	setResizeMode( QListView::LastColumn );
 	
-	setSorting(-1);
+	setSorting( -1 );
 }
 
 HistoryListView::~HistoryListView()
@@ -108,34 +112,37 @@ void HistoryListView::loadFromDB()
 	foreach ( historyList ) {
 		QString date = *it++;
 		QString package = *it++;
-		QString time = *it;
+		QString time = *it++;
+		QString einfo = *it;
 		
 		if ( !time.isEmpty() || KurooConfig::viewUnmerges() ) {
 			if ( !package.isEmpty() ) {
 				
 				ItemMap::iterator itMap =  itemMap.find(date) ;
 				if ( itMap == itemMap.end() ) {
-					KListViewItem *itemDate = new KListViewItem(this, date);
-					itemDate->setOpen(true);
-					KListViewItem *itemPackage = new KListViewItem(itemDate, package);
-					itemMap.insert(date, itemDate);
+					KListViewItem *itemDate = new KListViewItem( this, date );
+					itemDate->setOpen( true );
+					KListViewItem *itemPackage = new KListViewItem( itemDate, package );
+					itemMap.insert( date, itemDate );
 					
 					if ( time.isEmpty() )
-						itemPackage->setPixmap(0, pxUnmerged);
+						itemPackage->setPixmap( 0, pxUnmerged );
 					else {
-						itemPackage->setPixmap(0, pxNew);
-						itemPackage->setText(1, time);
+						itemPackage->setPixmap( 0, pxNew );
+						itemPackage->setText( 1, time );
+						itemPackage->setText( 2, einfo );
 					}
 				}
 				else
 				{
-					KListViewItem *itemPackage = new KListViewItem(itMap.data(), package);
+					KListViewItem *itemPackage = new KListViewItem( itMap.data(), package );
 					
-					if (time.isEmpty())
-						itemPackage->setPixmap(0, pxUnmerged);
+					if ( time.isEmpty() )
+						itemPackage->setPixmap( 0, pxUnmerged );
 					else {
-						itemPackage->setPixmap(0, pxNew);
-						itemPackage->setText(1, time);
+						itemPackage->setPixmap( 0, pxNew );
+						itemPackage->setText( 1, time );
+						itemPackage->setText( 2, einfo );
 					}
 				}
 			}
@@ -146,8 +153,8 @@ void HistoryListView::loadFromDB()
 	QListViewItem * myChild = firstChild();
 	if ( myChild ) {
 		while ( myChild ) {
-			QString events = myChild->text(0) + " (" + QString::number(myChild->childCount()) + ")";
-			myChild->setText(0, events);
+			QString events = myChild->text(0) + " (" + QString::number( myChild->childCount() ) + ")";
+			myChild->setText( 0, events );
 			myChild = myChild->nextSibling();
 		}
 	}

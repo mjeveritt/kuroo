@@ -28,6 +28,7 @@
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
+#include <klistviewsearchline.h>
 
 /**
  * Tabpage for emerge log browser, emerge history and portage directories sizes.
@@ -35,6 +36,10 @@
 HistoryTab::HistoryTab( QWidget* parent )
 	: HistoryBase( parent )
 {
+	historyFilter->setListView( historyView );
+	
+	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
+	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
 	
@@ -63,5 +68,11 @@ void HistoryTab::slotReload()
 {
 	historyView->loadFromDB();
 }
+
+void HistoryTab::slotClearFilter()
+{
+	historyFilter->clear();
+}
+
 
 #include "historytab.moc"

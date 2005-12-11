@@ -52,6 +52,7 @@ private slots:
 	 */
 	void		slotReload();
 	
+	void		slotClearFilter();
 };
 
 #endif

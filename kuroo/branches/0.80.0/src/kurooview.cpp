@@ -156,7 +156,7 @@ void KurooView::slotReset()
 	kdDebug() << "KurooView::slotReset" << endl;
 	
 // 	InstalledSingleton::Instance()->slotReset();
-// 	UpdatesSingleton::Instance()->slotReset();
+	UpdatesSingleton::Instance()->slotReset();
 // 	QueueSingleton::Instance()->reset();
 // 	ResultsSingleton::Instance()->reset();
 	slotInit();
@@ -171,7 +171,7 @@ void KurooView::slotCheckPortage()
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
-	if ( PortageSingleton::Instance()->count() == "0" )
+	if ( PortageSingleton::Instance()->count() == "0" ) 
 		PortageSingleton::Instance()->slotRefresh();
 	else {
 		tabPortage->slotReload();

@@ -82,29 +82,15 @@ public slots:
 	void			removePackage( const QString& package );
 	
 	/**
-	 * Return info for package as description, homepage ...
-	 * @return info
-	 */
-	Info			packageInfo( const QString& packageId );
-	
-	/**
 	 * Methods for parsing info files.
 	 */
 	QString			installedFiles( const QString& packageId );
-	QString			installedSummary( const QString& packageId );
 	
 	/**
 	 * Count total installed packages.
 	 * @return total
 	 */
 	QString			count();
-	
-	/**
-	 * Convert emerge duration from seconds to format hh:mm:ss.
-	 * @param time 			
-	 * @return emergeTime  
-	 */
-	QString			timeFormat( const QString& time );
 	
 signals:
 	void			signalInstalledChanged();

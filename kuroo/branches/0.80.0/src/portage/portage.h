@@ -68,7 +68,6 @@ public slots:
 	 * @return bool
 	 */
 	bool						slotSync();
-	void						setRefreshTime();
 	
 	/**
 	 * Launch emerge pretend of packages.
@@ -103,7 +102,8 @@ public slots:
 	* Get list of versions available of this package.
 	* @param name
 	*/
-	QStringList					packageVersions( const QString& id);
+	QStringList					packageVersions( const QString& id );
+	QStringList					packageVersionsInfo( const QString& id );
 	
 	/**
 	* Find packages by name or description.

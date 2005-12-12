@@ -32,15 +32,15 @@ public:
 	RemoveUpdatesPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section("/", 0, 0);
-		QString name = (m_package.section("/", 1, 1)).section(pv, 0, 0);
-		QString version = m_package.section(name + "-", 1, 1);
+		QString category = m_package.section( "/", 0, 0 );
+		QString name = ( m_package.section( "/", 1, 1 ) ).section( pv, 0, 0 );
+		QString version = m_package.section( name + "-", 1, 1 );
 		
-		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg(category)).first();
-		QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package WHERE name = '%1' AND idCategory = '%2' AND version = '%3';").arg(name).arg(idCategory).arg(version)).first();
+		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM category WHERE name = '%1';" ).arg( category ) ).first();
+		QString idPackage = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE name = '%1' AND idCategory = '%2' AND version = '%3';" ).arg( name ).arg( idCategory ).arg( version ) ).first();
 		
-		KurooDBSingleton::Instance()->query(QString("UPDATE package SET updateVersion = '' WHERE name = '%1' AND updateVersion = '%2';").arg(name).arg(version));
-		KurooDBSingleton::Instance()->query(QString("DELETE FROM updates WHERE idPackage = '%1';").arg(idPackage));
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ) );
+		KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( idPackage ) );
 		return true;
 	}
 	
@@ -84,8 +84,8 @@ void Updates::slotChanged()
  */
 void Updates::slotReset()
 {
-	KurooDBSingleton::Instance()->query("UPDATE package SET updateVersion = '' WHERE updateVersion != '';");
-	KurooDBSingleton::Instance()->query("DELETE FROM updates;");
+	KurooDBSingleton::Instance()->query( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
+	KurooDBSingleton::Instance()->query( "DELETE FROM updates;" );
 	slotChanged();
 }
 
@@ -106,7 +106,7 @@ bool Updates::slotRefresh()
 bool Updates::slotLoadUpdates()
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob(this, EmergeSingleton::Instance()->packageList()) );
+	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
 	return true;
 }
 
@@ -117,7 +117,7 @@ bool Updates::slotLoadUpdates()
  */
 void Updates::removePackage( const QString& package )
 {
-	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob(this, package) );
+	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
 }
 
 /**
@@ -126,8 +126,7 @@ void Updates::removePackage( const QString& package )
  */
 QString Updates::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM updates LIMIT 1;");
-	return total.first();
+	return KurooDBSingleton::Instance()->updatesTotal().first();
 }
 
 #include "updates.moc"

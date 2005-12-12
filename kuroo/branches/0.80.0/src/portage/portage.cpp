@@ -58,7 +58,7 @@ void Portage::init( QObject *myParent )
 void Portage::slotChanged()
 {
 	emit signalPortageChanged();
-	setRefreshTime();
+	KurooDBSingleton::Instance()->addRefreshTime();
 }
 
 /**
@@ -112,16 +112,6 @@ bool Portage::slotSync()
 {
 	EmergeSingleton::Instance()->sync();
 	return true;
-}
-
-/**
- * Add timestamp in history for when kuroo database is refreshed.
- */
-void Portage::setRefreshTime()
-{
-	QDateTime t(QDateTime::currentDateTime());
-	QString timeStamp = QString::number(t.toTime_t());
-	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("yyyy MM dd hh:mm")).arg(timeStamp) );
 }
 
 /**
@@ -201,6 +191,11 @@ QStringList Portage::packageVersions( const QString& id )
 	return KurooDBSingleton::Instance()->packageVersions( id );
 }
 
+QStringList Portage::packageVersionsInfo( const QString& id )
+{
+	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
+}
+
 /**
  * Find packages by name or description.
  * @param text		string
@@ -227,8 +222,7 @@ void Portage::findPackage( const QString& text, const bool& isName )
  */
 QString Portage::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package LIMIT 1;");
-	return total.first();
+	return KurooDBSingleton::Instance()->packageTotal().first();
 }
 
 /**
@@ -240,7 +234,7 @@ Info Portage::packageInfo( const QString& packageId )
 {
 	Info info;
 	
-	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo(packageId);
+	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo( packageId );
 	QStringList::Iterator it = packageList.begin();
 	info.description = *it++;
 	info.homepage = *it;
@@ -458,7 +452,7 @@ QString Portage::idDb( const QString& package )
  */
 QString Portage::category( const QString& id )
 {
-	return KurooDBSingleton::Instance()->query( QString("SELECT name FROM catSubCategory WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id )).first();
+	return KurooDBSingleton::Instance()->category( id ).first();
 }
 
 /**
@@ -468,7 +462,7 @@ QString Portage::category( const QString& id )
  */
 QString Portage::package( const QString& id )
 {
-	return KurooDBSingleton::Instance()->query( QString("SELECT name FROM package WHERE id = '%1';").arg( id ) ).first();
+	return KurooDBSingleton::Instance()->package( id ).first();
 }
 
 /**

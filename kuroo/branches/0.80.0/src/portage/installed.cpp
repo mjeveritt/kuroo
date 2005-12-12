@@ -30,13 +30,13 @@ public:
 	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section("/", 0, 0);
-		QString name = (m_package.section("/", 1, 1)).section(pv, 0, 0);
-		QString version = m_package.section(name + "-", 1, 1);
+		QString category = m_package.section( "/", 0, 0);
+		QString name = ( m_package.section( "/", 1, 1) ).section( pv, 0, 0 );
+		QString version = m_package.section( name + "-", 1, 1 );
 		
-		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg(category)).first();
-		QString packageId = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version)).first();
-		KurooDBSingleton::Instance()->query(QString("UPDATE package SET meta = '1' WHERE id = '%1';").arg(packageId));
+		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM category WHERE name = '%1';" ).arg( category ) ).first();
+		QString packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCategory = '%1' AND name = '%2' AND version = '%3';").arg( idCategory ).arg( name ).arg( version ) ).first();
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2';" ).arg( FILTERINSTALLED ).arg( packageId ) );
 	
 		return true;
 	}
@@ -58,16 +58,16 @@ public:
 	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section("/", 0, 0);
-		QString name = (m_package.section("/", 1, 1)).section(pv, 0, 0);
-		QString version = m_package.section(name + "-", 1, 1);
+		QString category = m_package.section( "/", 0, 0 );
+		QString name = ( m_package.section( "/", 1, 1 ) ).section( pv, 0, 0 );
+		QString version = m_package.section( name + "-", 1, 1 );
 
-		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg(category)).first();
+		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM category WHERE name = '%1';" ).arg( category ) ).first();
 
 		// Mark package as uninstalled or remove it if old
-		KurooDBSingleton::Instance()->query(QString("UPDATE package SET meta = '0' WHERE meta = '1' AND idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND idCategory = '%3' AND name  = '%4' AND version = '%5';").arg( FILTERALL ).arg( FILTERINSTALLED ).arg( idCategory ).arg( name ).arg( version ) );
 
-		KurooDBSingleton::Instance()->query(QString("DELETE FROM package WHERE meta = '2' AND idCategory = '%1' AND name = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
+		KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND idCategory = '%2' AND name = '%3' AND version = '%4';" ).arg( FILTEROLD ).arg( idCategory ).arg( name ).arg( version ) );
 
 		// Remove package from world file
 		QFile file( KurooConfig::dirWorldFile() );
@@ -134,7 +134,7 @@ void Installed::slotChanged()
  */
 void Installed::slotReset()
 {
-	KurooDBSingleton::Instance()->query("UPDATE package set installed = 0;");
+	KurooDBSingleton::Instance()->query( QString( "UPDATE package set installed = '%1';" ).arg( FILTERALL ) );
 	emit signalInstalledReset();
 }
 
@@ -174,74 +174,12 @@ void Installed::removePackage( const QString& package )
 }
 
 /**
- * Get list of all categories for installed packages.
- * @return category list
- */
-// QStringList Installed::categories()
-// {
-// 	return KurooDBSingleton::Instance()->installedCategories();
-// }
-
-/**
- * Get list of packages in this category from database.
- * @param category
- * @return category list
- */
-// QStringList Installed::packagesInCategory( const QString& category )
-// {
-// 	QString idCategory = KurooDBSingleton::Instance()->portageCategoryId( category ).first();
-// 	return KurooDBSingleton::Instance()->installedPackagesByCategory( idCategory );
-// }
-
-/**
- * Find packages by name or description.
- * @param text		string
- * @param isName	find in name or description
- */
-// void Installed::findPackage( const QString& text, const bool& isName )
-// {
-// 	QStringList packageIdList;
-// 	
-// 	if ( isName )
-// 		packageIdList = KurooDBSingleton::Instance()->findInstalledPackagesDescription( text );
-// 	else
-// 		packageIdList = KurooDBSingleton::Instance()->findInstalledPackagesName( text );
-// 	
-// 	if ( !packageIdList.isEmpty() )
-// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-// 	else
-// 		LogSingleton::Instance()->writeLog( i18n("\nNo packages found matching: %1").arg(text), KUROO );
-// }
-
-/**
- * Return info for package as description, homepage ...
- * @param package id
- * @return info
- */
-Info Installed::packageInfo( const QString& packageId )
-{
-	Info info;
-	
-// 	QStringList packageList = KurooDBSingleton::Instance()->installedPackageInfo( packageId );
-// 	QStringList::Iterator it = packageList.begin();
-// 	info.description = *it++;
-// 	info.size = *it++;
-// 	info.keywords = *it++;
-// 	info.homepage = *it++;
-// 	info.licenses = *it++;
-// 	info.useFlags = *it++;
-// 	info.slot = *it;
-	return info;
-}
-
-/**
  * Count installed packages.
  * @return count
  */
 QString Installed::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package WHERE meta != 0 LIMIT 1;");
-	return total.first();
+	return KurooDBSingleton::Instance()->installedTotal().first();
 }
 
 /**
@@ -255,107 +193,23 @@ QString Installed::installedFiles( const QString& packageId )
 	QString package( PortageSingleton::Instance()->package( packageId ) );
 	QString category( PortageSingleton::Instance()->category( packageId ) );
 	
-	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package.section("*", 0, 0) + "/CONTENTS";
+	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package.section( "*", 0, 0 ) + "/CONTENTS";
 	QFile file( filename );
 	QString textLines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
-			if ( line.startsWith("obj") )
-				textLines += line.section("obj ", 1, 1).section(" ", 0, 0) + "\n";
+			if ( line.startsWith( "obj" ) )
+				textLines += line.section( "obj ", 1, 1 ).section( " ", 0, 0 ) + "\n";
 		}
 		file.close();
 		return textLines;
 	}
 	else {
-		kdDebug() << i18n("Error reading: ") << filename << endl;
+		kdDebug() << i18n( "Error reading: " ) << filename << endl;
 		return i18n("na");
 	}
-}
-
-/**
- * Get info for selected package.
- * @param category 
- * @param package
- * @return Summary text 
- */
-QString Installed::installedSummary( const QString& packageId )
-{
-	QString package( PortageSingleton::Instance()->package( packageId ) );
-	QString category( PortageSingleton::Instance()->category( packageId ) );
-	Info info( packageInfo( packageId ) );
-	
-	QString textLines = "<font size=\"+2\">" + category + "/" + package + "</font>";
-	QString time = HistorySingleton::Instance()->packageTime( category + "/" + package.section(pv, 0, 0) );
-	
-	if ( info.size.isEmpty() )
-		textLines += i18n(" <font color=red>(Version not available in Portage)</font>");
-	
-	textLines += "<br>";
-	
-	QString ebuild = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "/" + package + ".ebuild";
-	QFile file( ebuild );
-	
-	if ( file.open(IO_ReadOnly) ) {
-		QTextStream stream( &file );
-		QFileInfo fil( ebuild );
-		
-		// Get installation date
-		QDateTime Date = fil.created();
-		
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			
-			if ( line.startsWith("DESCRIPTION=" )) {
-				line = line.section("\"", 1, 1);
-				textLines += line + "<br>";
-			}
-			if ( line.startsWith( "HOMEPAGE=" )) {
-				line = line.section("\"", 1, 1);
-				textLines += "<a href=\"" + line + "\">" + line + "</a><br>";
-			}
-			if ( line.startsWith( "LICENSE=" )) {
-				line = line.section("\"", 1, 1);
-				textLines += i18n("<b>License:</b> ") + line + "<br>";
-			}
-			if ( line.startsWith( "SLOT=" )) {
-				line = line.section("\"", 1, 1);
-				textLines += i18n("<b>Slot:</b> ") + line + "<br>";
-			}
-			if ( line.startsWith( "KEYWORDS=" )) {
-				line = line.section("\"", 1, 1);
-				textLines += i18n("<b>Branches:</b> ") + line + "<br>";
-			}
-		}
-		textLines += i18n("<b>Use flags:</b> ") + info.useFlags + "<br>";
-		textLines += i18n("<b>Size:</b> ") + info.size + "<br>";
-		textLines += i18n("<b>Emerge date: </b>") + Date.toString("MMM dd yyyy hh:mm") + "<br>";
-		textLines += i18n("<b>Emerge time (average): </b>") + timeFormat( time );
-		
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << ebuild << endl;
-		return i18n("na");
-	}
-}
-
-/**
- * Convert emerge duration from seconds to format hh:mm:ss.
- * @param time
- * @return formated time
- */
-QString Installed::timeFormat( const QString& time )
-{
-	if ( !time.isEmpty() ) {
-		QTime emergeTime(0, 0, 0);
-		emergeTime = emergeTime.addSecs(time.toInt());
-		return emergeTime.toString(Qt::TextDate);
-	}
-	else
-		return i18n("na");
 }
 
 #include "installed.moc"

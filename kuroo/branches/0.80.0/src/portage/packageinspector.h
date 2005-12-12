@@ -43,15 +43,16 @@ public:
 	void			edit( const QString& packageId );
 	
 private slots:
-	void			loadEbuild( const QString& packageId );
-	void			changelog( const QString& packageId );
-	void			dependencies( const QString& packageId );
-	void			loadVersions( const QString& packageId );
-	void			loadUseFlags( const QString& packageId );
+	void			loadEbuild();
+	void			loadChangeLog();
+	void			loadDependencies();
+	void			loadVersions();
+	void			loadUseFlags();
 	void			slotUseDescription( QListBoxItem* item );
 	void			slotApply();
 
 private:
+	QString			category, package, packageId;
 	QStringList		useList;
 	InspectorBase	*dialog;
 	

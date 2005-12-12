@@ -51,7 +51,7 @@ static bool isCategoryCurrent( true );
  * Page for portage packages.
  */
 PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent )
+	: PortageBase( parent ), filter( FILTER_ALL )
 {
 	packageFilter->setListView( packagesView );
 	
@@ -252,9 +252,9 @@ void PortageTab::slotBusy( bool b )
 	if ( b )
 		pbUninstall->setDisabled( true );
 	else {
-// 		if ( !KUser().isSuperUser() )
-// 			pbUninstall->setDisabled( true );
-// 		else
+		if ( !KUser().isSuperUser() )
+			pbUninstall->setDisabled( true );
+		else
 			pbUninstall->setDisabled( false );
 	}
 }

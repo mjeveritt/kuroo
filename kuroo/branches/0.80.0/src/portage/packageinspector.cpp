@@ -33,7 +33,7 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent, const char *name )
-	: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false )
+	: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), category( NULL ), package( NULL ), packageId( NULL )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
@@ -62,19 +62,26 @@ void PackageInspector::slotUseDescription( QListBoxItem* item )
  * Open use flags dialog.
  * @param newPackage	selected package
  */
-void PackageInspector::edit( const QString& packageId )
+void PackageInspector::edit( const QString& id )
 {
 	if ( !KUser().isSuperUser() )
 		enableButtonApply( false );
 	
-	loadVersions( packageId );
-	loadUseFlags( packageId );
-	loadEbuild( packageId );
+	packageId = id;
+	package = PortageSingleton::Instance()->package( packageId );
+	category = PortageSingleton::Instance()->category( packageId );
+	dialog->package->setText( "Package: " + category + "/" + package );
+	
+	loadVersions();
+	loadUseFlags();
+	loadEbuild();
+	loadDependencies();
+	loadChangeLog();
 	
 	show();
 }
 
-void PackageInspector::loadUseFlags( const QString& packageId )
+void PackageInspector::loadUseFlags()
 {
 	QString useFile( KurooConfig::dirPortage() + "/profiles/use.desc" );
 	QFile f( useFile );
@@ -103,13 +110,9 @@ void PackageInspector::loadUseFlags( const QString& packageId )
 	}
 	else
 		kdDebug() << i18n( "Error reading: " ) << useFile << endl;
-	
-	QString package( PortageSingleton::Instance()->package( packageId ) );
-	QString category( PortageSingleton::Instance()->category( packageId ) );
-	
+
 	QFile file( "/etc/portage/package.use" );
 	dialog->allUseFlags->selectedListBox()->clear();
-	dialog->package->setText( "Package: " + category + "/" + package );
 	
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -141,45 +144,45 @@ void PackageInspector::loadUseFlags( const QString& packageId )
  */
 void PackageInspector::slotApply()
 {
-// 	QString useFlags;
-// 	QStringList lines;
-// 
-// 	for ( unsigned int i = 0; i < dialog->allUseFlags->selectedListBox()->count(); i++ ) {
-// 		QListBoxItem *item = dialog->allUseFlags->selectedListBox()->item(i);
-// 		useFlags += item->text() + " ";
-// 	}
-// 	
-// 	// Get all lines and remove package
-// 	QFile file( "/etc/portage/package.use" );
-// 	if ( file.open( IO_ReadOnly ) ) {
-// 		QTextStream stream( &file );
-// 		while ( !stream.atEnd() ) {
-// 			QString tmp = stream.readLine();
-// 			QString eString = tmp.stripWhiteSpace();
-// 			
-// 			if ( !tmp.startsWith( package ) && !eString.isEmpty() )
-// 				lines += tmp;
-// 		}
-// 		file.close();
-// 		
-// 		// Add package with updated use flags
-// 		if ( !useFlags.isEmpty() )
-// 			lines += package + " " + useFlags;
-// 	}
-// 	else
-// 		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
-// 	
-// 	// Now write back
-// 	if ( file.open( IO_WriteOnly ) ) {
-// 		QTextStream stream( &file );
-// 		for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-// 			stream << *it + "\n";
-// 		}
-// 		file.close();
-// 	}
-// 	else
-// 		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
-// 	
+	QString useFlags;
+	QStringList lines;
+
+	for ( unsigned int i = 0; i < dialog->allUseFlags->selectedListBox()->count(); i++ ) {
+		QListBoxItem *item = dialog->allUseFlags->selectedListBox()->item(i);
+		useFlags += item->text() + " ";
+	}
+	
+	// Get all lines and remove package
+	QFile file( "/etc/portage/package.use" );
+	if ( file.open( IO_ReadOnly ) ) {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() ) {
+			QString tmp = stream.readLine();
+			QString eString = tmp.stripWhiteSpace();
+			
+			if ( !tmp.startsWith( package ) && !eString.isEmpty() )
+				lines += tmp;
+		}
+		file.close();
+		
+		// Add package with updated use flags
+		if ( !useFlags.isEmpty() )
+			lines += package + " " + useFlags;
+	}
+	else
+		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
+	
+	// Now write back
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream( &file );
+		for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
+			stream << *it + "\n";
+		}
+		file.close();
+	}
+	else
+		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
+	
 	accept();
 }
 
@@ -187,11 +190,8 @@ void PackageInspector::slotApply()
  * Get this version ebuild.
  * @param id
  */
-void PackageInspector::loadEbuild( const QString& packageId )
+void PackageInspector::loadEbuild()
 {
-	QString package( PortageSingleton::Instance()->package( packageId ) );
-	QString category( PortageSingleton::Instance()->category( packageId ) );
-	
 	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section( pv, 0, 0 ) + "/" + package + ".ebuild";
 	QFile file( fileName );
 	
@@ -218,11 +218,8 @@ void PackageInspector::loadEbuild( const QString& packageId )
  * Get this package changelog.
  * @param id
  */
-void PackageInspector::changelog( const QString& packageId )
+void PackageInspector::loadChangeLog()
 {
-	QString package( PortageSingleton::Instance()->package( packageId ) );
-	QString category( PortageSingleton::Instance()->category( packageId ) );
-	
 	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
 	QFile file( fileName );
 	
@@ -237,11 +234,11 @@ void PackageInspector::changelog( const QString& packageId )
 		while ( !stream.atEnd() )
 			textLines += stream.readLine() + "<br>";
 		file.close();
-		dialog->ebuildBrowser->setText( textLines );
+		dialog->changelogBrowser->setText( textLines );
 	}
 	else {
 		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
+		dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
 	}
 }
 
@@ -249,11 +246,8 @@ void PackageInspector::changelog( const QString& packageId )
  * Get this package dependencies.
  * @param id
  */
-void PackageInspector::dependencies( const QString& packageId )
+void PackageInspector::loadDependencies()
 {
-	QString package( PortageSingleton::Instance()->package( packageId ) );
-	QString category( PortageSingleton::Instance()->category( packageId ) );
-	
 	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
 	QFile file( fileName );
 	
@@ -265,7 +259,7 @@ void PackageInspector::dependencies( const QString& packageId )
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		QString textLines;
-		int lineCount(0);
+		int lineCount( 0 );
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
 			if ( line.isEmpty() )
@@ -277,27 +271,32 @@ void PackageInspector::dependencies( const QString& packageId )
 				textLines += line + "<br>";
 		}
 		file.close();
-		dialog->ebuildBrowser->setText( textLines );
+		dialog->dependencyBrowser->setText( textLines );
 	}
 	else {
 		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
+		dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
 	}
 }
 
-void PackageInspector::loadVersions( const QString& packageId )
+void PackageInspector::loadVersions()
 {
 	dialog->versionsView->clear();
 	
-	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packageId );
+	const QStringList versionList = PortageSingleton::Instance()->packageVersionsInfo( packageId );
 	foreach ( versionList ) {
 		QString version = *it++;
-		QString meta = *it;
+		QString meta = *it++;
+		QString licenses = *it++;
+		QString useFlags = *it++;
+		QString slot = *it++;
+		QString branches = *it++;
+		QString size = *it;
 		
 		if ( meta == FILTERINSTALLED )
-			new KListViewItem( dialog->versionsView, version );
+			new KListViewItem( dialog->versionsView, version, branches, size );
 		else
-			new KListViewItem( dialog->versionsView, version );
+			new KListViewItem( dialog->versionsView, version, branches, size );
 	}
 }
 

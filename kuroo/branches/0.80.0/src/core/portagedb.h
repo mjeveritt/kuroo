@@ -160,8 +160,14 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	isInstalled( const QString& name, const QString& version );
 	QStringList 	packageVersions( const QString& id );
+	QStringList 	packageVersionsInfo( const QString& id );
 	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
-	QStringList 	categoryByPackageId( const QString& id );
+	QStringList 	packageTotal();
+	QStringList 	installedTotal();
+	QStringList 	updatesTotal();
+	QStringList 	package( const QString& id );
+	QStringList 	category( const QString& id );
+	
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
@@ -193,6 +199,7 @@ public:
 	QStringList 	history();
 	QStringList 	lastHistoryEntry();
 	QStringList		getLastSync();
+	void			addRefreshTime();
 	QStringList 	statistic();
 	
 	//////////////////////////////////////////////////////////////////////////////

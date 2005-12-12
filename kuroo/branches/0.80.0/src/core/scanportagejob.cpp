@@ -456,25 +456,38 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
  */
 QString ScanPortageJob::kBSize( const QString& size )
 {
-	QString total = "";
+// 	QString total = "";
+// 	
+// 	int num = ("0" + size).toInt();
+// 	if (num < 1024) {
+// 		total = "1 kB ";
+// 	}
+// 	else {
+// 		QString eString = QString::number(num / 1024);
+// 		
+// 		while ( !eString.isEmpty() ) {
+// 			QString part = eString.right(3);
+// 			eString = eString.left(eString.length() - part.length());
+// 			
+// 			if ( !total.isEmpty() )
+// 				total = part + "," + total;
+// 			else
+// 				total = part;
+// 		}
+// 		total += " kB ";
+// 	}
+// 	
+// 	return total;
 	
-	int num = ("0" + size).toInt();
-	if (num < 1024) {
+	KLocale *loc = KGlobal::locale();
+	QString total;
+	
+	uint num = ("0" + size).toInt();
+	if ( num < 1024 ) {
 		total = "1 kB ";
 	}
 	else {
-		QString eString = QString::number(num / 1024);
-		
-		while ( !eString.isEmpty() ) {
-			QString part = eString.right(3);
-			eString = eString.left(eString.length() - part.length());
-			
-			if ( !total.isEmpty() )
-				total = part + "," + total;
-			else
-				total = part;
-		}
-		total += " kB ";
+		total = loc->formatNumber(QString::number(num / 1024), true, 0) + " kB ";
 	}
 	
 	return total;

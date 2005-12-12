@@ -243,7 +243,6 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE history ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " package VARCHAR(32), "
-	      " date VARCHAR(10), "
 	      " timestamp VARCHAR(10), "
 	      " time INTEGER, "
 	      " einfo BLOB, "
@@ -278,26 +277,9 @@ QStringList KurooDB::isInstalled( const QString& name, const QString& version )
 	              " LIMIT 1;");
 }
 
-// QStringList KurooDB::installedPackages()
-// {
-// 	return query( " SELECT DISTINCT category.name, package.name "
-// 	              " FROM package, category "
-// 	              " WHERE package.idCategory = category.id "
-// 	              " AND package.meta != '0' "
-// 	              " ;");
-// }
-
-QStringList KurooDB::packageVersions( const QString& id )
-{
-	return query( " SELECT name, meta "
-	              " FROM version "
-	              " WHERE idPackage = '" + id + "'"
-	              " ORDER BY version.name;");
-}
-
 QStringList KurooDB::history()
 {
-	return query( " SELECT date, package, time, einfo "
+	return query( " SELECT timestamp, package, time, einfo "
 	              " FROM history "
 	              " ORDER BY id ASC;");
 }
@@ -316,12 +298,29 @@ QStringList KurooDB::packageKeywords( const QString& idCategory, const QString& 
 	              " ORDER BY id ASC;");
 }
 
-QStringList KurooDB::categoryByPackageId( const QString& id )
+QStringList KurooDB::packageTotal()
 {
-	return query( 	" SELECT name FROM category WHERE "
-					" id = ( SELECT idCategory FROM package" 
-					" WHERE id = '" + id + "' LIMIT 1)"
-					" ;" );
+	return query( " SELECT COUNT(id) FROM package LIMIT 1;" );
+}
+
+QStringList KurooDB::installedTotal()
+{
+	return query( QString( "SELECT COUNT(id) FROM package WHERE meta != '%1' LIMIT 1;").arg( FILTERINSTALLED ) );
+}
+
+QStringList KurooDB::updatesTotal()
+{
+	return query( "SELECT COUNT(id) FROM updates LIMIT 1;" );
+}
+
+QStringList KurooDB::package( const QString& id )
+{
+	return query( QString("SELECT name FROM package WHERE id = '%1';").arg( id ) );
+}
+
+QStringList KurooDB::category( const QString& id )
+{
+	return query( QString("SELECT name FROM catSubCategory WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -375,8 +374,6 @@ QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int f
 
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
 {
-	kdDebug() << "filter=" << filter << endl;
-	
 	QString filterQuery;
 	switch ( filter ) {
 		case FILTER_ALL:
@@ -406,6 +403,28 @@ QStringList KurooDB::portagePackageInfo( const QString& id )
 	             " WHERE id = '" + id + "'"
 	             " ORDER BY lower(name) LIMIT 1;");
 }
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Query for packages
+//////////////////////////////////////////////////////////////////////////////
+
+QStringList KurooDB::packageVersions( const QString& id )
+{
+	return query( " SELECT name, meta "
+	              " FROM version "
+	              " WHERE idPackage = '" + id + "'"
+	              " ORDER BY version.name;");
+}
+
+QStringList KurooDB::packageVersionsInfo( const QString& id )
+{
+	return query( " SELECT name, meta, licenses, useFlags, slot, branch, size "
+	              " FROM version "
+	              " WHERE idPackage = '" + id + "'"
+	              " ORDER BY version.name;");
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Query for installation queue
@@ -446,47 +465,6 @@ QStringList KurooDB::portageIdByCategoryNameVersion( const QString& category, co
 	              " LIMIT 1;");
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// Query for package search function
-//////////////////////////////////////////////////////////////////////////////
-
-// QStringList KurooDB::findInstalledPackagesName( const QString& name )
-// {
-// 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
-// 	return query( QString(" SELECT id FROM package "
-// 	                      " WHERE meta != '0' "
-// 	                      " AND name LIKE '%" + escapeString(name) + "%'" )
-// 	             	 		+ limit );
-// }
-
-// QStringList KurooDB::findInstalledPackagesDescription( const QString& description )
-// {
-// 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
-// 	return query( QString(" SELECT id FROM package "
-// 	                      " WHERE meta != '0' "
-// 	                      " AND description LIKE '%" + escapeString(description) + "%'" )
-// 	              			+ limit);
-// }
-
-// QStringList KurooDB::findPortagePackagesName( const QString& name )
-// {
-// 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
-// 	return query( QString(" SELECT id FROM package "
-// 	                      " WHERE meta != '2' "
-// 	                      " AND name LIKE '%" + escapeString(name) + "%'" )
-// 	              			+ limit );
-// }
-// 
-// QStringList KurooDB::findPortagePackagesDescription( const QString& description )
-// {
-// 	QString limit = QString( " LIMIT %1;").arg(ROWLIMIT);
-// 	return query( QString(" SELECT id FROM package "
-// 	                      " WHERE meta != '2' "
-// 	                      " AND description LIKE '%" + escapeString(description) + "%'" )
-// 	                      	+ limit );
-// }
-
 QStringList KurooDB::lastHistoryEntry()
 {
 	return query(" SELECT timestamp "
@@ -499,6 +477,13 @@ QStringList KurooDB::getLastSync()
 	return query(" SELECT timestamp "
 	             " FROM history "
 	             " WHERE id = (SELECT MAX(id) FROM history where package = '');");
+}
+
+void KurooDB::addRefreshTime()
+{
+	QDateTime currentTime( QDateTime::currentDateTime() );
+	insert( QString( "INSERT INTO history ( package, timestamp, emerge ) "
+	                 " VALUES ('', '%1', 'false');").arg( QString::number( currentTime.toTime_t() ) ) );
 }
 
 QStringList KurooDB::cache()

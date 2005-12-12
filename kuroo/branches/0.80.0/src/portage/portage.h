@@ -103,7 +103,7 @@ public slots:
 	* Get list of versions available of this package.
 	* @param name
 	*/
-	QStringList					packageVersions( const QString& name);
+	QStringList					packageVersions( const QString& id);
 	
 	/**
 	* Find packages by name or description.
@@ -185,9 +185,6 @@ public slots:
 	 */
 	QString						packageSummary( const QString& packageId );
 	QString						versionSummary( const QString& packageId );
-	QString						dependencies( const QString& packageId );
-	QString						changelog( const QString& packageId );
-	QString						ebuild( const QString& packageId );
 
 signals:
 	void						signalPortageChanged();

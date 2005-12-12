@@ -270,6 +270,9 @@ void PortageTab::slotSummary()
 		return;
 
 	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );
+	
+	if ( packageInspector->isVisible() )
+		slotAdvanced();
 }
 
 /**

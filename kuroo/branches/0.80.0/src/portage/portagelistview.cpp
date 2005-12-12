@@ -107,10 +107,8 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
 		QString name = *it++;
 		QString package = name;
 		QString description = *it++;
-// 		QString size = *it++;
-// 		QString keywords = *it++;
 		QString latest = *it++;
-		QString installed = *it++;
+		QString meta = *it++;
 		QString updateVersion = *it;
 		
 		Meta packageMeta;
@@ -118,7 +116,7 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
 		packageMeta.insert( i18n( "5Update" ), updateVersion );
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
 		
-		if ( installed != "0" )
+		if ( meta != FILTERALL )
 			packageItem->setStatus( INSTALLED );
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
@@ -147,10 +145,8 @@ void PortageListView::addCategoryPackages( const QString& category, int filter  
 		QString name = *it++;
 		QString package = name;
 		QString description = *it++;
-// 		QString size = *it++;
-// 		QString keywords = *it++;
 		QString latest = *it++;
-		QString installed = *it++;
+		QString meta = *it++;
 		QString updateVersion = *it;
 		
 		Meta packageMeta;
@@ -158,7 +154,7 @@ void PortageListView::addCategoryPackages( const QString& category, int filter  
 		packageMeta.insert( i18n( "5Update" ), updateVersion );
 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
 		
-		if ( installed != "0" )
+		if ( meta != FILTERALL )
 			packageItem->setStatus( INSTALLED );
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))

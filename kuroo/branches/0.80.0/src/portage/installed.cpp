@@ -222,15 +222,15 @@ Info Installed::packageInfo( const QString& packageId )
 {
 	Info info;
 	
-	QStringList packageList = KurooDBSingleton::Instance()->installedPackageInfo( packageId );
-	QStringList::Iterator it = packageList.begin();
-	info.description = *it++;
-	info.size = *it++;
-	info.keywords = *it++;
-	info.homepage = *it++;
-	info.licenses = *it++;
-	info.useFlags = *it++;
-	info.packageSlots = *it;
+// 	QStringList packageList = KurooDBSingleton::Instance()->installedPackageInfo( packageId );
+// 	QStringList::Iterator it = packageList.begin();
+// 	info.description = *it++;
+// 	info.size = *it++;
+// 	info.keywords = *it++;
+// 	info.homepage = *it++;
+// 	info.licenses = *it++;
+// 	info.useFlags = *it++;
+// 	info.slot = *it;
 	return info;
 }
 
@@ -282,8 +282,8 @@ QString Installed::installedFiles( const QString& packageId )
  */
 QString Installed::installedSummary( const QString& packageId )
 {
-	QString package(PortageSingleton::Instance()->package( packageId ));
-	QString category(PortageSingleton::Instance()->category( packageId ));
+	QString package( PortageSingleton::Instance()->package( packageId ) );
+	QString category( PortageSingleton::Instance()->category( packageId ) );
 	Info info( packageInfo( packageId ) );
 	
 	QString textLines = "<font size=\"+2\">" + category + "/" + package + "</font>";

@@ -27,7 +27,7 @@ class QRegExp;
 extern QRegExp pv;
 
 typedef struct Info {
-	QString packageSlots;
+	QString slot;
 	QString homepage;
 	QString licenses;
 	QString description;

@@ -12,6 +12,12 @@
             <height>529</height>
         </rect>
     </property>
+    <property name="minimumSize">
+        <size>
+            <width>500</width>
+            <height>0</height>
+        </size>
+    </property>
     <property name="caption">
         <string>Form1</string>
     </property>
@@ -22,6 +28,14 @@
         <widget class="QTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>kTabWidget1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -45,21 +59,10 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QListView" row="0" column="0">
+                            <widget class="KListView" row="0" column="0">
                                 <column>
                                     <property name="text">
                                         <string>Version</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <column>
-                                    <property name="text">
-                                        <string>x86</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -80,14 +83,14 @@
                                     </property>
                                 </column>
                                 <property name="name">
-                                    <cstring>listView21_2_2</cstring>
+                                    <cstring>versionsView</cstring>
                                 </property>
                             </widget>
                         </grid>
                     </widget>
                     <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
-                            <cstring>buttonGroup1_2</cstring>
+                            <cstring>installGroup</cstring>
                         </property>
                         <property name="title">
                             <string>For this package always install:</string>
@@ -109,6 +112,9 @@
                                 <property name="text">
                                     <string>St&amp;able Version</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
                             </widget>
                             <widget class="QRadioButton" row="0" column="1">
                                 <property name="name">
@@ -116,6 +122,9 @@
                                 </property>
                                 <property name="text">
                                     <string>Testi&amp;ng Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <widget class="QRadioButton" row="0" column="2">
@@ -125,7 +134,27 @@
                                 <property name="text">
                                     <string>Mas&amp;ked Version</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
                             </widget>
+                            <spacer row="0" column="3">
+                                <property name="name">
+                                    <cstring>spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>31</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
                         </grid>
                     </widget>
                 </grid>
@@ -135,7 +164,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Use Fl&amp;ags</string>
+                    <string>&amp;Use Flags</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -257,7 +286,7 @@
                     </property>
                     <widget class="KTextBrowser" row="0" column="0">
                         <property name="name">
-                            <cstring>kTextBrowser1</cstring>
+                            <cstring>ebuildBrowser</cstring>
                         </property>
                     </widget>
                 </grid>
@@ -275,7 +304,7 @@
                     </property>
                     <widget class="KTextBrowser" row="0" column="0">
                         <property name="name">
-                            <cstring>kTextBrowser2</cstring>
+                            <cstring>dependencyBrowser</cstring>
                         </property>
                     </widget>
                 </grid>
@@ -293,7 +322,7 @@
                     </property>
                     <widget class="KTextBrowser" row="0" column="0">
                         <property name="name">
-                            <cstring>kTextBrowser3</cstring>
+                            <cstring>changelogBrowser</cstring>
                         </property>
                     </widget>
                 </grid>
@@ -305,6 +334,7 @@
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klistview.h</includehint>
     <includehint>kactionselector.h</includehint>
     <includehint>ktextbrowser.h</includehint>
     <includehint>ktextbrowser.h</includehint>

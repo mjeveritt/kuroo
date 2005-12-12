@@ -27,7 +27,7 @@
 
 /**
  * @class PackageInspector
- * @short Specialized dialog for editing Use Flags per package.
+ * @short Specialized dialog 
  */
 class PackageInspector : public KDialogBase
 {
@@ -40,16 +40,20 @@ public:
 	 * Open use flags dialog.
 	 * @param newPackage	selected package
 	 */
-	void			edit( const QString& package );
+	void			edit( const QString& packageId );
 	
 private slots:
+	void			loadEbuild( const QString& packageId );
+	void			changelog( const QString& packageId );
+	void			dependencies( const QString& packageId );
+	void			loadVersions( const QString& packageId );
+	void			loadUseFlags( const QString& packageId );
 	void			slotUseDescription( QListBoxItem* item );
 	void			slotApply();
 
 private:
 	QStringList		useList;
 	InspectorBase	*dialog;
-	QString			package;
 	
 };
 

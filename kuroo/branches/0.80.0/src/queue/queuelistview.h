@@ -100,14 +100,9 @@ signals:
 	void								signalPackageEmerged();
 	
 private:
+	KLocale 							*loc;
 	int 								sumSize;
-	QPixmap 							pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting;
-// 	struct TreeViewCategory {
-// 		PackageItem* item;
-// 		QMap< QString, PackageItem* > 	packageItems;
-// 	};
-// 	QMap< QString, TreeViewCategory > 	categoryItems;
-	
+	QPixmap 							pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting;	
 };
 
 #endif

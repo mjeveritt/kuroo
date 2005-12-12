@@ -122,28 +122,27 @@ void QueueTab::slotReload()
 void QueueTab::slotBusy( bool b )
 {
 	if ( b ) {
-		pbGo->setDisabled(true);
-		pbOptions->setDisabled(true);
-		pbClear->setDisabled(true);
+// 		pbGo->setDisabled( true );
+		pbOptions->setDisabled( true );
+		pbClear->setDisabled( true );
 		
-// 		if ( EmergeSingleton::Instance()->isRunning() )
-// 			pbStop->setDisabled(false);
-// 		else
-// 			pbStop->setDisabled(true);
+		if ( EmergeSingleton::Instance()->isRunning() )
+			pbGo->setText( i18n( "Stop Installation!" ) );
+		else
+			pbGo->setText( i18n( "Start Installation!" ) );
 	}
 	else {
-// 		if ( !KUser().isSuperUser() ) {
-// 			pbGo->setDisabled(true);
-// 			pbUninstall->setDisabled(true);
-// 		}
-// 		else {
-			pbGo->setDisabled(false);
-			pbUninstall->setDisabled(false);
-// 		}
+		if ( !KUser().isSuperUser() ) {
+			pbGo->setDisabled(true);
+			pbUninstall->setDisabled(true);
+		}
+		else {
+			pbGo->setDisabled( false );
+			pbUninstall->setDisabled( false );
+		}
 		
-// 		pbStop->setDisabled(true);
-		pbOptions->setDisabled(false);
-		pbClear->setDisabled(false);
+		pbOptions->setDisabled( false );
+		pbClear->setDisabled( false );
 	}
 }
 
@@ -190,6 +189,9 @@ void QueueTab::slotGo()
 {
 	kdDebug() << "QueueTab::slotGo" << endl;
 	
+	if ( EmergeSingleton::Instance()->isRunning() )
+		slotStop();
+	
 	// Prepend emerge options
 	QStringList packageList;
 	QString options( emergeInspector->getOptions() );
@@ -206,6 +208,7 @@ void QueueTab::slotGo()
 		case KMessageBox::Yes: {
 			QueueSingleton::Instance()->installPackageList( packageList );
 			KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+			pbGo->setText( i18n( "Stop Installation!" ) );
 		}
 	}
 }

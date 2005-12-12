@@ -45,11 +45,11 @@ const int diffTime( 10 );
  * Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name )
+	: PackageListView( parent, name ), loc( KGlobal::locale() )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ) );
-	addColumn( i18n( "Time" ) );
+	addColumn( i18n( "Duration" ) );
 	addColumn( i18n( "Description" ) );
 	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 
@@ -115,7 +115,7 @@ void QueueListView::insertPackageList()
 		QString installed = *it;
 		
 		Meta packageMeta;
-		packageMeta.insert( i18n( "2Time" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
+		packageMeta.insert( i18n( "2Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
 		packageMeta.insert( i18n( "3Description" ), description );
 		
 		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE );
@@ -140,11 +140,11 @@ void QueueListView::insertPackageList()
  */
 QString QueueListView::timeFormat( const QString& time )
 {
-	if ( !time.isEmpty() && time != "na" ) {
+	if ( !time.isEmpty() && time != i18n("na") ) {
 		QTime emergeTime( 0, 0, 0 );
 		emergeTime = emergeTime.addSecs( time.toInt() );
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
-		return emergeTime.toString( Qt::TextDate );
+		return loc->formatTime( emergeTime, true, true );
 	}
 	else
 		return i18n("na");
@@ -156,7 +156,7 @@ QString QueueListView::timeFormat( const QString& time )
  */
 QString QueueListView::totalTime()
 {
-	return totalDuration.toString( Qt::TextDate );
+	return loc->formatTime(totalDuration, true, true);
 }
 
 /**
@@ -174,9 +174,8 @@ int QueueListView::sumTime()
  */
 void QueueListView::addSize( const QString& size )
 {
-	QString packageSize;
-	packageSize = size.section(" ", 0, 0);
-	packageSize = packageSize.remove(',');
+	QString packageSize(size);
+	packageSize = packageSize.remove(QRegExp("\\D"));
 	sumSize += packageSize.toInt() * 1024;
 }
 
@@ -197,27 +196,16 @@ QString QueueListView::totalSize()
  */
 QString QueueListView::kBSize( const int& size )
 {
-	QString total("");
+	QString total;
+	
 	if ( size == 0 )
 		total = "0 kB ";
-	else
-		if ( size < 1024 ) {
+	else {
+		if ( size < 1024 )
 			total = "1 kB ";
-		}
-		else {
-			QString eString = QString::number(size / 1024);
-			
-			while ( !eString.isEmpty() ) {
-				QString part = eString.right(3);
-				eString = eString.left(eString.length() - part.length());
-				
-				if (!total.isEmpty())
-					total = part + "," + total;
-				else
-					total = part;
-			}
-			total += " kB ";
-		}
+		else
+			total = loc->formatNumber(QString::number(size / 1024), true, 0) + " kB ";
+	}
 	
 	return total;
 }

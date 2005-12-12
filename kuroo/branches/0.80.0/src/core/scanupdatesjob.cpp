@@ -76,8 +76,8 @@ bool ScanUpdatesJob::doJob()
 	
 	setStatus( i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );
-	int count(0);
-		
+	int count( 0 );
+
 	// Temporary tables to avoid locking main table
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE package_temp ("
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -88,9 +88,6 @@ bool ScanUpdatesJob::doJob()
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
-	                                    " licenses VARCHAR(32), "
-	                                    " useFlags VARCHAR(32),"
-	                                    " packageSlots VARCHAR(32),"
 	                                    " date VARCHAR(32), "
 	                                    " meta INTEGER, "
 	                                    " updateVersion VARCHAR(32) "
@@ -146,8 +143,8 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert("INSERT INTO updates SELECT * FROM updates_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE updates_temp;", m_db);
 	
-	setStatus(i18n("Done."));
-	setProgress(0);
+	setStatus( i18n( "Done." ) );
+	setProgress( 0 );
 	return true;
 }
 

@@ -89,8 +89,6 @@ bool ScanPortageJob::doJob()
 	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
 	setStatus( i18n("Refreshing Portage view...") );
 	
-	getInstalled();
-	
 	// Temporary table for all categories
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE category_temp ("
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -120,9 +118,6 @@ bool ScanPortageJob::doJob()
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
-	                                    " licenses VARCHAR(32), "
-	                                    " useFlags VARCHAR(32),"
-	                                    " packageSlots VARCHAR(32),"
 	                                    " date VARCHAR(32), "
 	                                    " meta INTEGER, "
 	                                    " updateVersion VARCHAR(32) "
@@ -133,7 +128,11 @@ bool ScanPortageJob::doJob()
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                    " idPackage INTEGER, "
 	                                    " name VARCHAR(32),"
+	                                    " licenses VARCHAR(32), "
+	                                    " useFlags VARCHAR(32),"
+	                                    " slot VARCHAR(32),"
 	                                    " size VARCHAR(32), "
+	                                    " meta INTEGER, "
 	                                    " branch VARCHAR(32)"
 	                                    " );", m_db);
 	
@@ -155,11 +154,11 @@ bool ScanPortageJob::doJob()
 			return false;
 		}
 		
-		QString category = (*itCategory).section("-", 0, 0);
-		QString subCategory = (*itCategory).section("-", 1, 1);
+		QString category = ( *itCategory ) .section( "-", 0, 0 );
+		QString subCategory = ( *itCategory ).section( "-", 1, 1 );
 		
 		if ( lastCategory != category )
-			idCategory = KurooDBSingleton::Instance()->insert(QString("INSERT INTO category_temp (name) VALUES ('%1');").arg(category), m_db);
+			idCategory = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 		
 		int idSubCategory = KurooDBSingleton::Instance()->insert(QString("INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');").arg(subCategory).arg(QString::number(idCategory)), m_db);
 		
@@ -185,45 +184,88 @@ bool ScanPortageJob::doJob()
 					return false;
 				}
 				
-				QString package = (*itPackage).section( pv, 0, 0 );
-				QString version = (*itPackage).section( package + "-", 1, 1 );
-
-				// Check if package is installed
-				InstalledMap::iterator itMap = installedMap.find( package );
-				if ( itMap != installedMap.end() ) {
-					meta = QString::number( FILTER_INSTALLED );
-					installedMap.erase( itMap );
-				}
-				else
-					meta = QString::number( FILTER_ALL );
+				QString name = ( *itPackage ).section( pv, 0, 0 );
+				QString version = ( *itPackage ).section( name + "-", 1, 1 );
 				
-				if ( package != lastPackage ) {
+				Info info( scanInfo( path, *itCategory, *itPackage ) );
 				
-					if ( scanInfo( path, *itCategory, *itPackage ) ) {
-						QString sql = QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, meta, homepage, licenses, useFlags, packageSlots) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', ").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(info.description).arg(meta).arg(info.homepage).arg(info.licenses).arg(info.useFlags);
-						sql += QString("'%1');").arg(info.packageSlots);
-						idPackage = KurooDBSingleton::Instance()->insert( sql, m_db );
-					}
-					else
-						idPackage = KurooDBSingleton::Instance()->insert( QString("INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, meta) VALUES ('%1', '%2', '%3', '%4', '%5');").arg(QString::number(idCategory)).arg(QString::number(idSubCategory)).arg(QString::number(idCatSubCategory)).arg(package).arg(meta), m_db);
-					
-					KurooDBSingleton::Instance()->insert( QString("INSERT INTO version_temp (idPackage, name, size, branch) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idPackage)).arg(version).arg(info.size).arg(info.keywords), m_db);
+				// Insert category and db id's in portage
+				if ( !categories.contains( *itCategory ) ) {
+					categories[ *itCategory ].idCategory = QString::number( idCategory );
+					categories[ *itCategory ].idSubCategory = QString::number( idSubCategory );
+					categories[ *itCategory ].idCatSubCategory = QString::number( idCatSubCategory );
 				}
-				else {
-					KurooDBSingleton::Instance()->insert( QString("INSERT INTO version_temp (idPackage, name, size, branch) VALUES ('%1', '%2', '%3', '%4');").arg(QString::number(idPackage)).arg(version).arg(info.size).arg(info.keywords), m_db);
+				
+				// Insert package in portage
+				if ( !categories[ *itCategory ].packages.contains( name ) ) {
+					categories[ *itCategory ].packages[ name ];
+					categories[ *itCategory ].packages[ name ].meta = FILTERALL;
+					categories[ *itCategory ].packages[ name ].description = info.description;
+					categories[ *itCategory ].packages[ name ].homepage = info.homepage;
 				}
-				lastPackage = package;
+				
+				// Insert version in portage
+				if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
+					categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERALL;
+					categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
+					categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
+					categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
+					categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
+					categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
+				}
 				
 				// Post scan count progress
-				if ( (++count % 100) == 0 )
+				if ( ( ++count % 100 ) == 0 )
 					setProgress( count );
 			}
 		}
 		else
-			kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage/" << *itCategory << endl;
+			kdDebug() << i18n( "Can not access " ) << KurooConfig::dirEdbDep() << "/usr/portage/" << *itCategory << endl;
 		
 		lastCategory = category;
 	}
+
+	scanInstalledPackages();
+	
+	// Iterate through portage map and insert everything in db
+	PortageCategories::iterator itCategoryEnd = categories.end();
+	for ( PortageCategories::iterator itCategory = categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+	
+		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
+		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
+			
+			QString idPackage;
+			QString idCategory = itCategory.data().idCategory;
+			QString idSubCategory = itCategory.data().idSubCategory;
+			QString idCatSubCategory = itCategory.data().idCatSubCategory;
+				
+			QString category = itCategory.key();
+			QString package = itPackage.key();
+			QString meta = itPackage.data().meta;
+			QString description = itPackage.data().description;
+			QString homepage = itPackage.data().homepage;
+			
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " ).arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
+			sql += QString( ");" );
+			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
+			
+			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
+			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
+				
+				QString version = itVersion.key();
+				QString meta = itVersion.data().meta;
+				QString licenses = itVersion.data().licenses;
+				QString useFlags = itVersion.data().useFlags;
+				QString slot = itVersion.data().slot;
+				QString size = itVersion.data().size;
+				QString keywords = itVersion.data().keywords;
+				
+				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');" ).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ), m_db );
+				
+			}
+		}
+	}
+	categories.clear();
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 		
 	// Move content from temporary table 
@@ -253,7 +295,7 @@ bool ScanPortageJob::doJob()
 /**
  * Collect list of installed packages.
  */
-void ScanPortageJob::getInstalled()
+void ScanPortageJob::scanInstalledPackages()
 {
 	installedMap.clear();
 	QDir dCategory, dPackage;
@@ -280,10 +322,30 @@ void ScanPortageJob::getInstalled()
 			QStringList::Iterator itPackageEnd = packageList.end();
 			for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
 				
-				if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )
+				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
 					continue;
 				
-				installedMap.insert( ( *itPackage ).section( pv, 0, 0 ), 0 );
+				QString name = ( *itPackage ).section( pv, 0, 0 );
+				QString version = ( *itPackage ).section( name + "-", 1, 1 );
+				
+				// Insert category if not found in portage
+				if ( !categories.contains( *itCategory ) )
+					categories[ *itCategory ];
+				
+				// Insert and/or mark package as installed (old is package not in portage anymore)
+				if ( !categories[ *itCategory ].packages.contains( name ) ) {
+					categories[ *itCategory ].packages[ name ];
+					categories[ *itCategory ].packages[ name ].meta = FILTEROLD;
+				}
+				else
+					categories[ *itCategory ].packages[ name ].meta = FILTERINSTALLED;
+				
+				// Insert old version in portage
+				if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) )
+					categories[ *itCategory ].packages[ name ].versions[ version ];
+				
+				// Mark version as installed
+				categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERINSTALLED;
 			}
 		}
 		else
@@ -297,13 +359,22 @@ void ScanPortageJob::getInstalled()
  * @param package  	
  * @return  false if the file can't be opened, true otherwise.
  */
-bool ScanPortageJob::scanInfo( const QString& path, const QString& category, const QString& package )
+Info ScanPortageJob::scanInfo( const QString& path, const QString& category, const QString& package )
 {
+	Info info;
 	QFile file( path + category + "/" + package);
 	
-	if( !file.open(IO_ReadOnly) ) {
+	if( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << i18n("Error reading: ") << path << category << "/" << package << endl;
-		return false;
+		
+		info.slot = "0";
+		info.homepage = "0";
+		info.licenses = "0";
+		info.description = "0";
+		info.keywords = "0";
+		info.useFlags = "0";
+		info.size = "0";
+		return info;
 	}
 	
 	QString line;
@@ -311,45 +382,43 @@ bool ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	int lineNumber = 0;
 	
 	// Read out the package info strings
-	while ( !stream.atEnd() )
-	{
+	while ( !stream.atEnd() ) {
 		line = stream.readLine();
 		lineNumber++;
 		
 		// each line has a fixed meaning, as it seems.
 		// so iterate through the lines.
-		switch( lineNumber )
-		{
-		case 1: // some dependency stuff
-			break;
-		case 2: // some other dependency stuff
-			break;
-		case 3: // the package slot
-			info.packageSlots = line;
-			break;
-		case 4: // file location, starting with mirror://
-			break;
-		case 5: // empty?
-			break;
-		case 6: // DirHome page
-			info.homepage = line.replace('\'', "''");
-			break;
-		case 7: // licenses
-			info.licenses = line.replace('\'', "''");
-			break;
-		case 8: // description
-			info.description = line.replace('\'', "''");
-			break;
-		case 9: // keywords
-			info.keywords = line;
-			break;
-		case 10: // inherited eclasses?
-			break;
-		case 11: // useFlags
-			info.useFlags = line;
-			break;
-		default:
-			break;
+		switch( lineNumber ) {
+			case 1: // some dependency stuff
+				break;
+			case 2: // some other dependency stuff
+				break;
+			case 3: // the package slot
+				info.slot = line;
+				break;
+			case 4: // file location, starting with mirror://
+				break;
+			case 5: // empty?
+				break;
+			case 6: // DirHome page
+				info.homepage = line.replace('\'', "''").replace('%', "&#37;");
+				break;
+			case 7: // licenses
+				info.licenses = line.replace('\'', "''").replace('%', "&#37;");
+				break;
+			case 8: // description
+				info.description = line.replace('\'', "''").replace('%', "&#37;");
+				break;
+			case 9: // keywords
+				info.keywords = line;
+				break;
+			case 10: // inherited eclasses?
+				break;
+			case 11: // useFlags
+				info.useFlags = line;
+				break;
+			default:
+				break;
 		}
 	}
 	file.close();
@@ -358,7 +427,7 @@ bool ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QString packageNoVersion = category + "/" + package.section(pv, 0, 0);
 	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + package ) ;
 	if ( size != NULL )
-		info.size = kBSize(size);
+		info.size = kBSize( size );
 	else {
 		QString path = KurooConfig::dirPortage() + "/" + packageNoVersion + "/files/digest-" + package;
 		file.setName( path );
@@ -367,7 +436,7 @@ bool ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			std::string word;
 			while ( in >> word );
 			file.close();
-			info.size = kBSize(word);
+			info.size = kBSize( word );
 			
 			// Add new value into cache.
 			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(package).arg(word), m_db);
@@ -376,7 +445,7 @@ bool ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			kdDebug() << i18n("Error reading: ") << path << endl;
 	}
 	
-	return true;
+	return info;
 }
 
 /**

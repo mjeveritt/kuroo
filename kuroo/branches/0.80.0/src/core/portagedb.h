@@ -118,8 +118,6 @@ private:
 class KurooDB : public QObject
 {
 Q_OBJECT
-		
-signals:
 
 public:
 	KurooDB( QObject *parent = 0 );
@@ -129,7 +127,6 @@ public:
 	 * Check db integrity and create new db if necessary.
 	 */
 	QString 		init( QObject *myParent = 0 );
-	
 	QString 		escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
 	
 	/**
@@ -162,7 +159,7 @@ public:
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	isInstalled( const QString& name, const QString& version );
-	QStringList 	packageVersions( const QString& name );
+	QStringList 	packageVersions( const QString& id );
 	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
 	QStringList 	categoryByPackageId( const QString& id );
 	
@@ -178,23 +175,7 @@ public:
 	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
 	QStringList 	findPortagePackagesName( const QString& name );
 	QStringList 	findPortagePackagesDescription( const QString& description );
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for installed
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	installedPackages();
-	QStringList 	installedCategories();
-	QStringList 	installedPackagesByCategory( const QString& idCategory );
-	QStringList 	installedPackageInfo( const QString& id );
-	QStringList 	findInstalledPackagesName( const QString& name );
-	QStringList 	findInstalledPackagesDescription( const QString& description );
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for updates 
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	updatesCategories();
-	QStringList 	updatesPackages();
-	QStringList 	updatesPackagesByCategory( const QString& idCategory );
+
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 

@@ -53,6 +53,8 @@ private slots:
 	void		slotReload();
 	
 	void		slotClearFilter();
+	void		slotViewUnmerges( bool on );
+	
 };
 
 #endif

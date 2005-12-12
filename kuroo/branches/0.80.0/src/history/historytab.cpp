@@ -38,12 +38,13 @@ HistoryTab::HistoryTab( QWidget* parent )
 {
 	historyFilter->setListView( historyView );
 	
+	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
 	
-// 	slotInit();
+	slotInit();
 }
 
 /**
@@ -51,6 +52,11 @@ HistoryTab::HistoryTab( QWidget* parent )
  */
 HistoryTab::~HistoryTab()
 {
+	// Save checkboxes state
+	if ( viewUnmerges->isChecked() )
+		KurooConfig::setViewUnmerges( true );
+	else
+		KurooConfig::setViewUnmerges( false );
 }
 
 /**
@@ -59,6 +65,11 @@ HistoryTab::~HistoryTab()
  */
 void HistoryTab::slotInit()
 {
+	// Restore checkboxes state
+	if ( KurooConfig::viewUnmerges() )
+		viewUnmerges->setChecked( true );
+	else
+		viewUnmerges->setChecked( false );
 }
 
 /**
@@ -74,5 +85,11 @@ void HistoryTab::slotClearFilter()
 	historyFilter->clear();
 }
 
+void HistoryTab::slotViewUnmerges( bool on )
+{
+	kdDebug() << "HistoryTab::slotViewUnmerges" << endl;
+	KurooConfig::setViewUnmerges( on );
+	slotReload();
+}
 
 #include "historytab.moc"

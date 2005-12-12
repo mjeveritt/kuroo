@@ -142,7 +142,7 @@
                 </widget>
                 <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
-                        <cstring>kcfg_viewUnmerges</cstring>
+                        <cstring>viewUnmerges</cstring>
                     </property>
                     <property name="text">
                         <string>View &amp;unmerges</string>

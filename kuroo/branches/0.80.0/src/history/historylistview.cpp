@@ -37,7 +37,7 @@
  * Specialized listview for emerge history.
  */
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
-	: KListView( parent, name )
+	: KListView( parent, name ), loc( KGlobal::locale() )
 {
 	// Load icons for category, package ...
 	KIconLoader *ldr = KGlobal::iconLoader();
@@ -110,26 +110,36 @@ void HistoryListView::loadFromDB()
 	
 	const QStringList historyList = HistorySingleton::Instance()->allHistory();
 	foreach ( historyList ) {
-		QString date = *it++;
+		QString timeStamp = *it++;
 		QString package = *it++;
-		QString time = *it++;
+		QString duration = *it++;
 		QString einfo = *it;
 		
-		if ( !time.isEmpty() || KurooConfig::viewUnmerges() ) {
+		// Convert emerge date to local date format
+		QDateTime dt;
+		dt.setTime_t( timeStamp.toUInt() );
+		QString emergeDate = loc->formatDate( dt.date() );
+		
+		// Convert emerge duration (in seconds) to local time format
+		QTime t( 0, 0, 0 );
+		t = t.addSecs( duration.toUInt() );
+		QString emergeDuration = loc->formatTime( t, true, true );
+		
+		if ( !duration.isEmpty() || KurooConfig::viewUnmerges() ) {
 			if ( !package.isEmpty() ) {
 				
-				ItemMap::iterator itMap =  itemMap.find(date) ;
+				ItemMap::iterator itMap =  itemMap.find( emergeDate ) ;
 				if ( itMap == itemMap.end() ) {
-					KListViewItem *itemDate = new KListViewItem( this, date );
+					KListViewItem *itemDate = new KListViewItem( this, emergeDate );
 					itemDate->setOpen( true );
 					KListViewItem *itemPackage = new KListViewItem( itemDate, package );
-					itemMap.insert( date, itemDate );
+					itemMap.insert( emergeDate, itemDate );
 					
-					if ( time.isEmpty() )
+					if ( duration.isEmpty() )
 						itemPackage->setPixmap( 0, pxUnmerged );
 					else {
 						itemPackage->setPixmap( 0, pxNew );
-						itemPackage->setText( 1, time );
+						itemPackage->setText( 1, emergeDuration );
 						itemPackage->setText( 2, einfo );
 					}
 				}
@@ -137,11 +147,11 @@ void HistoryListView::loadFromDB()
 				{
 					KListViewItem *itemPackage = new KListViewItem( itMap.data(), package );
 					
-					if ( time.isEmpty() )
+					if ( duration.isEmpty() )
 						itemPackage->setPixmap( 0, pxUnmerged );
 					else {
 						itemPackage->setPixmap( 0, pxNew );
-						itemPackage->setText( 1, time );
+						itemPackage->setText( 1, emergeDuration );
 						itemPackage->setText( 2, einfo );
 					}
 				}

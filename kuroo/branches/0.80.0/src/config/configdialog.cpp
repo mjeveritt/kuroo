@@ -570,13 +570,13 @@ bool ConfigDialog::exportToWorld()
 		QTextStream stream( &file );
 		
 		// Collect installed package version
-		const QStringList installedPackageList = KurooDBSingleton::Instance()->installedPackages();
-		foreach ( installedPackageList ) {
-			QString category = *it++;
-			QString name = *it;
-			stream << category + "/" + name << endl;
-		}
-		file.close();
+// 		const QStringList installedPackageList = KurooDBSingleton::Instance()->installedPackages();
+// 		foreach ( installedPackageList ) {
+// 			QString category = *it++;
+// 			QString name = *it;
+// 			stream << category + "/" + name << endl;
+// 		}
+// 		file.close();
 		return true;
 	}
 }

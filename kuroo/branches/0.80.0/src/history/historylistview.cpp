@@ -53,8 +53,8 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	setMinimumSize( QSize(50, 0) );
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
-	setRootIsDecorated(true);
-	setFullWidth(true);
+	setRootIsDecorated( true );
+	setFullWidth( true );
 
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );

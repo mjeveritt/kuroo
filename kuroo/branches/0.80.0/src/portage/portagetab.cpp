@@ -57,7 +57,7 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters( int ) ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListCategoryPackages() ) );
+// 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListCategoryPackages() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 
@@ -148,7 +148,7 @@ void PortageTab::slotReload()
 	saveCurrentView();
 	packagesView->reset();
 	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories() );
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter ) );
 	
 // 	slotViewPackage( KurooConfig::latestPortageCategory() + "/" + KurooConfig::latestPortagePackage() );
 	emit signalChanged();
@@ -180,7 +180,7 @@ void PortageTab::slotListSubCategories()
 		return;
 	
 	subcategoriesView->clear();
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId ) );
+	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filter ) );
 }
 
 /**
@@ -191,10 +191,14 @@ void PortageTab::slotFilters( int radioFilter )
 	kdDebug() << "PortageTab::slotFilters" << endl;
 	
 	filter = radioFilter;
-	if ( isCategoryCurrent )
-		slotListCategoryPackages();
-	else
-		slotListPackages();
+// 	if ( isCategoryCurrent )
+// 		slotListCategoryPackages();
+// 	else
+// 		slotListPackages();
+	
+	packagesView->reset();
+	categoriesView->clear();
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter ) );
 }
 
 /**

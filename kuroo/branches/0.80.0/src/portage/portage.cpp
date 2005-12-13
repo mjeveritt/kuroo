@@ -87,7 +87,7 @@ bool Portage::slotScan()
 	int maxLoops(99);
 	
 	// Wait for cache job to finish before launching the scan.
-	while (true)
+	while ( true )
 	{
 		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
 			::usleep(100000); // Sleep 100 msec
@@ -152,18 +152,18 @@ bool Portage::isInstalled( const QString& package )
  * Get list of all categories for portage packages.
  * @return QStringList
  */
-QStringList Portage::categories()
+QStringList Portage::categories( int filter )
 {
-	return KurooDBSingleton::Instance()->portageCategories();
+	return KurooDBSingleton::Instance()->portageCategories( filter );
 }
 
 /**
  * Get list of all subcategories for portage packages.
  * @return QStringList
  */
-QStringList Portage::subCategories( const QString& categoryId )
+QStringList Portage::subCategories( const QString& categoryId, int filter )
 {
-	return KurooDBSingleton::Instance()->portageSubCategories( categoryId );
+	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter );
 }
 
 /**

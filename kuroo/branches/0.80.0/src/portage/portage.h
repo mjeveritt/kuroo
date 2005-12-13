@@ -87,8 +87,8 @@ public slots:
 	* Get list of all categories for portage packages.
 	* @return QStringList
 	*/
-	QStringList					categories();
-	QStringList					subCategories( const QString& category );
+	QStringList					categories( int filter );
+	QStringList					subCategories( const QString& category, int filter );
 	
 	/**
 	* Get list of packages in this category from database.

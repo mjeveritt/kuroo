@@ -18,53 +18,23 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include "portagelistview.h"
+#include "portagepackagesview.h"
 
-#ifndef CATEGORIESLISTVIEW_H
-#define CATEGORIESLISTVIEW_H
-
-#include <klistview.h>
-#include <qpixmap.h>
-
-class QPixmap;
+#include <klistviewsearchline.h>
 
 /**
- * Creates category listview.
+ * Connect portage package listview to searchline.
  */
-class CategoriesListView : public KListView
+PortagePackagesView::PortagePackagesView( QWidget *parent, const char *name )
+	: QVBox( parent, name )
 {
-Q_OBJECT
-	public:
-	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
-	~CategoriesListView();
+	packagesView = new PortageListView( this, name );
+	new KListViewSearchLineWidget( packagesView, this, name );
+}
 
-public slots:
-	
-	/**
-	 * Current category as "category-subcategory", for example "app-admin".
-	 * @param package
-	 */
-	QString									currentCategory();
-	
-	/**
-	 * Set category current.
-	 * @param category
-	 */
-	void									setCurrentCategory( const QString& category );
-	
-	/**
- 	 * Load categories.
- 	 * With Jakob Petsovits technique for inserting items fast.
- 	 * @param categoriesList 
-	 */
-	void									loadCategories( const QStringList& categoriesList );
-	
-private:
-	QPixmap 								pxRepository, pxCategory;
-	struct TreeViewCategory {
-		QListViewItem * item;
-		QMap<QString, QListViewItem*> 		subcategories;
-	};
-	QMap<QString, TreeViewCategory> 		categories;
-};
+PortagePackagesView::~PortagePackagesView()
+{
+}
 
-#endif
+#include "portagepackagesview.moc"

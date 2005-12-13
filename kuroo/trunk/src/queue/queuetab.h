@@ -24,8 +24,7 @@
 
 class KListView;
 class QListViewItem;
-class EmergeInspector;
-class PretendInspector;
+class EmergeOptionsBase;
 class KDialogBase;
 
 /**
@@ -48,42 +47,44 @@ public slots:
 	/**
 	 * Load Queue packages.
 	 */
-	void				slotReload();
+	void		slotReload();
 	
 private slots:
 	
 	/**
 	 * Initialize Queue view.
 	 */
-	void				slotInit();
+	void		slotInit();
 	
 	/**
 	 * Disable/enable buttons when kuroo is busy.
 	 * @param b
 	 */
-	void				slotBusy( bool b );
+	void		slotBusy( bool b );
 	
 	/**
-	 * Slots for button actions.
+	 * Open dialog for advanced emerge options.
 	 */
-	void				slotGo();
-	void				slotPretend();
-	void				slotUninstall();
-	void				slotStop();
-	void				slotRemove();
-	void				slotOptions();
-	void				slotShowResults();
+	void		slotOptions();
+	void		slotClearOptions();
+	void		slotGo();
+	
+	/**
+	 * Kill the running emerge process.
+	 */
+	void		slotStop();
+	
 	/**
 	 * Popup menu for actions like emerge.
 	 * @param listView
 	 * @param item
 	 * @param point
 	 */
-	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
+	void		contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
 	
 private:
-	EmergeInspector*	emergeInspector;
-	PretendInspector*	pretendInspector;
+	EmergeOptionsBase *optionsDialog;
+	KDialogBase *dial;
 };
 
 #endif

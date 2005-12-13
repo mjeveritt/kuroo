@@ -238,6 +238,7 @@ void InstalledTab::contextMenu( KListView*, QListViewItem* item, const QPoint& p
 		
 		case UNMERGE: {
 			slotUnmerge();
+			break;
 		}
 		
 	}

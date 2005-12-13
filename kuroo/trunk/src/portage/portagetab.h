@@ -27,8 +27,14 @@
 #include "scanportagejob.h"
 
 class CategoriesListView;
+class PortageListView;
+class KTabWidget;
+class KTextBrowser;
+class KActionSelector;
+class QPushButton;
+class PortageListView;
 class KPopupMenu;
-class PackageInspector;
+class UseDialog;
 
 /**
  * @class PortageTab
@@ -52,13 +58,16 @@ public slots:
 	* Then load the emerge history.
 	*/
 	void				slotReload();
-
+	
 	/**
 	* Refresh installed packages list.
 	*/
 	void				slotRefresh();
 	
-	void				slotBusy( bool b );
+	/**
+	* Find package by name or description among portage packages.
+	*/
+	void				slotFind();
 	
 	/**
 	* Activate this package to view its info.
@@ -79,14 +88,10 @@ private slots:
 	*/
 	void 				slotInit();
 	
-	void				slotListSubCategories();
-	
 	/**
 	* List packages when clicking on category in installed.
 	*/
-	void				slotFilters( int radioFilter );
 	void				slotListPackages();
-	void				slotListCategoryPackages();
 	
 	/**
 	* Popup menu for actions like emerge.
@@ -96,20 +101,26 @@ private slots:
 	*/
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
-	void				slotAddQueue();
-	void				slotUninstall();
-	void				slotAdvanced();
-	void				slotClearFilter();
-	
 	/**
 	* View summary for selected package.
 	*/
 	void				slotSummary();
 	
+	/**
+	* View ebuild, changelog and dependencies.
+	* @param page
+	*/
+	void				slotPackageInfo( QWidget* page );
+	
+	/**
+	* For editing use flags per package.
+	*/
+	void				useFlags();
+	
 private:
-	int					filter;
+	PortageListView 		*packagesView;
 	KPopupMenu 			*menu;
-	PackageInspector	*packageInspector;
+	UseDialog 			*useDialog;
 	
 signals:
 	void				signalChanged();

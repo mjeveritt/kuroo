@@ -65,7 +65,7 @@ void PackageItem::init()
 	for ( int i = 0; i != m_parent->columns(); ++i ) {
 		for ( Meta::Iterator itMeta = m_meta.begin(); itMeta != m_meta.end(); ++itMeta ) {
 			if ( itMeta.key().contains( m_parent->columnText(i) ) ) {
-				setText( i, itMeta.data() );
+				setText(i, itMeta.data());
 				break;
 			}
 		}
@@ -146,8 +146,9 @@ void PackageItem::setStatus( int status )
 		case QUEUED :
 			queued = true;
 			m_meta.insert( i18n("9In Queue"), i18n("Yes") );
-			if ( parent() )
+			if ( parent() ) {
 				dynamic_cast<PackageItem*>(parent())->setStatus(QUEUED);
+			}
 			setPixmap(1, pxQueued);
 			break;
 		
@@ -189,10 +190,10 @@ int PackageItem::compare( QListViewItem* i, int col, bool ascending ) const
 		a = a.section(" kB", 0, 0).rightJustify( b.length(), '0' );
 		b = b.section(" kB", 0, 0).rightJustify( a.length(), '0' );
 
-		if ( a == b )
+		if (a == b)
 			return 0;
 		
-		if ( ascending )
+		if (ascending)
 			return a > b ? 1 : -1;
 		else
 			return a < b ? -1 : 1;

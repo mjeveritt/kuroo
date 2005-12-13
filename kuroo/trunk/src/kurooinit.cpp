@@ -46,6 +46,11 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( KUROODIR );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
+		if ( !KUser().isSuperUser() ) {
+			KMessageBox::error( 0, i18n("You must start Kuroo with kdesu first time for a secure initialization.\nPlease try again!"), i18n("Initialization") );
+			exit(0);
+		}
+		
 		getEnvironment();
 		firstTimeWizard();
 	}
@@ -66,12 +71,27 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		if ( !KurooConfig::wizard() )
 			getEnvironment();
+		
+		// Create DirHome dir and set permissions so common user can run Kuroo.
+		if ( !d.exists() ) {
+			d.mkdir(KUROODIR);
+			d.setCurrent(KUROODIR);
+		}
 	}
-
+	chmod(KUROODIR, 0770);
+	chown(KUROODIR, portageGid->gr_gid, portageUid->pw_uid);
+	
+	// Check that backup directory exists.
+	QString backupDir = KUROODIR + "backup";
+	if ( !d.cd(backupDir) )
+		d.mkdir(backupDir);
+	chmod(backupDir, 0770);
+	chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
+	
 	// If new release delete old db files
 	QString database = KUROODIR + KurooConfig::databas();
 	if ( KurooConfig::version() != KurooConfig::hardVersion() ) {
-		remove(database);
+		remove( database );
 		kdDebug() << i18n("Deleting old version of database %1").arg(database) << endl;
 	}
 	
@@ -86,19 +106,18 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	}
 	
 	QString databaseFile = KurooDBSingleton::Instance()->init(this);
-	kdDebug() << "databaseFile=" << databaseFile << endl;
 	chmod(databaseFile, 0660);
 	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
 	
-	EtcUpdateSingleton::Instance()->init( this );
-	SignalistSingleton::Instance()->init( this );
-	EmergeSingleton::Instance()->init( this );
-	HistorySingleton::Instance()->init( this );
-	InstalledSingleton::Instance()->init( this );
-	PortageSingleton::Instance()->init( this );
-	UpdatesSingleton::Instance()->init( this );
-	QueueSingleton::Instance()->init( this );
-	ResultsSingleton::Instance()->init( this );
+	EtcUpdateSingleton::Instance()->init(this);
+	SignalistSingleton::Instance()->init(this);
+	EmergeSingleton::Instance()->init(this);
+	HistorySingleton::Instance()->init(this);
+	InstalledSingleton::Instance()->init(this);
+	PortageSingleton::Instance()->init(this);
+	UpdatesSingleton::Instance()->init(this);
+	QueueSingleton::Instance()->init(this);
+	ResultsSingleton::Instance()->init(this);
 }
 
 KurooInit::~KurooInit()

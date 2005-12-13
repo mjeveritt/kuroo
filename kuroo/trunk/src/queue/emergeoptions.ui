@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>455</width>
-            <height>269</height>
+            <width>438</width>
+            <height>220</height>
         </rect>
     </property>
     <property name="caption">
@@ -54,7 +54,7 @@
                         <cstring>checkDebug</cstring>
                     </property>
                     <property name="text">
-                        <string>debu&amp;g</string>
+                        <string>debug</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="4" column="1">
@@ -94,7 +94,7 @@
                         <cstring>checkUpgradeonly</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;upgradeonly</string>
+                        <string>upgradeonly</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="3" column="0">
@@ -195,7 +195,7 @@
                                 <cstring>radioQuiet</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;quiet</string>
+                                <string>quiet</string>
                             </property>
                         </widget>
                     </grid>
@@ -239,47 +239,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>groupBox2</cstring>
-            </property>
-            <property name="title">
-                <string>Actions</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KLineEdit" row="0" column="0">
-                    <property name="name">
-                        <cstring>emergeOptionsText</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>31</height>
-                </size>
-            </property>
-        </spacer>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klineedit.h</includehint>
-</includehints>
 </UI>

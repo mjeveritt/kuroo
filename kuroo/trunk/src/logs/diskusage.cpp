@@ -18,88 +18,46 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef INSTALLED_H
-#define INSTALLED_H
+#include "diskusage.h"
+#include "common.h"
 
-#include <qobject.h>
-
-class QRegExp;
-extern QRegExp pv;
-
-typedef struct Info {
-	QString slot;
-	QString homepage;
-	QString licenses;
-	QString description;
-	QString keywords;
-	QString useFlags;
-	QString size;
-};
+#include <kdirsize.h>
 
 /**
- * @class Installed
- * @short Object for installed packages.
+ * Scan size of Portage directories with KIO::KDirSize synchronously.
  */
-class Installed : public QObject
+DiskUsage::DiskUsage( QObject *parent )
+	: QObject( parent )
 {
-Q_OBJECT
-public:
-	Installed( QObject *parent = 0 );
-    ~Installed();
-	
-public slots:
-	void			init( QObject *myParent = 0 );
-	
-	/**
-	 * Forward signal after a new scan.
-	 */
-	void			slotChanged();
-	
-	/**
-	 * Clear packages.
-	 */
-	void			slotReset();
-	
-	/**
-	 * Launch unmerge of packages
-	 * @param category
-	 * @param packageList
-	 */
-	void			uninstallPackageList( const QStringList& packageIdList );
-	
-	/**
-	 * @fixme: Check for failure.
-	 * Add package as installed in db.
-	 * @param package
-	 */
-	void			addPackage( const QString& package );
-	
-	/**
-	 * @fixme: Check for failure.
-	 * Remove packages from db.
-	 * @param packageIdList
- 	*/
-	void			removePackage( const QString& package );
-	
-	/**
-	 * Methods for parsing info files.
-	 */
-	QString			installedFiles( const QString& packageId );
-	
-	/**
-	 * Count total installed packages.
-	 * @return total
-	 */
-	QString			count();
-	
-signals:
-	void			signalInstalledChanged();
-	void			signalInstalledReset();
-	
-private:
-	QObject			*parent;
-	QString			package;
-	
-};
+}
 
-#endif
+DiskUsage::~DiskUsage()
+{
+}
+
+void DiskUsage::init( QObject *myParent )
+{
+	parent = myParent;
+}
+
+/**
+ * Get portage directory size scan @fixme: how to abort!
+ * @param path	directory to scan
+ * @return size in MB
+ */
+QString DiskUsage::scanSize( const QString& path )
+{
+	return QString::number((long)( KDirSize::dirSize(KURL::KURL( path ))/1048576)) + " MB";
+}
+
+/**
+ * Get portage directory size scan @fixme: how to abort!
+ * @param path	directory to scan
+ * @return size in MB
+ */
+long DiskUsage::scanSizeLong( const QString& path )
+{
+	return (long)( KDirSize::dirSize(KURL::KURL( path ))/1048576);
+}
+
+#include "diskusage.moc"

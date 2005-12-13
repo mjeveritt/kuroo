@@ -18,43 +18,38 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef PACKAGEINSPECTOR_H
-#define PACKAGEINSPECTOR_H
+#ifndef USEDIALOG_H
+#define USEDIALOG_H
 
-#include "inspectorbase.h"
+#include "usebase.h"
 
 #include <kdialogbase.h>
 
 /**
- * @class PackageInspector
- * @short Specialized dialog 
+ * @class UseDialog
+ * @short Specialized dialog for editing Use Flags per package.
  */
-class PackageInspector : public KDialogBase
+class UseDialog : public KDialogBase
 {
 Q_OBJECT
 public:
-    PackageInspector( QWidget *parent = 0, const char *name = 0 );
-    ~PackageInspector();
+    UseDialog(QWidget *parent = 0, const char *name = 0);
+    ~UseDialog();
 	
 	/**
 	 * Open use flags dialog.
 	 * @param newPackage	selected package
 	 */
-	void			edit( const QString& packageId );
+	void			edit( const QString& package );
 	
 private slots:
-	void			loadEbuild();
-	void			loadChangeLog();
-	void			loadDependencies();
-	void			loadVersions();
-	void			loadUseFlags();
 	void			slotUseDescription( QListBoxItem* item );
 	void			slotApply();
 
 private:
-	QString			category, package, packageId;
 	QStringList		useList;
-	InspectorBase	*dialog;
+	UseBase		*dialog;
+	QString		package;
 	
 };
 

@@ -231,6 +231,33 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QGroupBox" row="3" column="0">
+            <property name="name">
+                <cstring>portage_2_2</cstring>
+            </property>
+            <property name="title">
+                <string>History</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>kcfg_viewUnmerges</cstring>
+                    </property>
+                    <property name="text">
+                        <string>View unmer&amp;ges</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
         <widget class="QGroupBox" row="4" column="0">
             <property name="name">
                 <cstring>portage_2_2_2</cstring>

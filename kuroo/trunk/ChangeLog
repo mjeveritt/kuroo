@@ -1,5 +1,4 @@
-2005-11-09 Karye <karye@users.sourceforge.net>
-	Portage view: Mark package as installed even when the version is not available in Portage. 
+2005-10-10 Karye <karye@users.sourceforge.net>
 	Removing Disk Usage widget.
 	Splitting Kuroo: Gentoo watcher moves to separate package.
 	Directories and files will be owned by portage:portage. Kuroo require user to be in portage group. 

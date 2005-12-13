@@ -21,23 +21,24 @@
 #ifndef _KUROOVIEW_H_
 #define _KUROOVIEW_H_
 
-#include "kurooviewbase.h"
-
 #include <qwidget.h>
 
 #include <kparts/part.h>
 #include <kurooiface.h>
 
+class KTabWidget;
+class InstalledTab;
 class PortageTab;
+class UpdatesTab;
 class QueueTab;
-class HistoryTab;
+class ResultsTab;
 class LogsTab;
 
 /**
  * @class KurooView
  * @short Create the gui with tabs for "Installed", "Portage"...
  */
-class KurooView : public KurooViewBase, public kurooIface
+class KurooView : public QWidget, public kurooIface
 {
 Q_OBJECT
 public:
@@ -47,10 +48,11 @@ public:
 	/**
 	 * The tabwidget and the tabs accessible by Kuroo.
 	 */
-	PortageTab*		tabPortage;
-	HistoryTab*		tabHistory;
-	QueueTab*		tabQueue;
-	LogsTab* 		tabLogs;
+	KTabWidget		*mainTabs;
+	InstalledTab 	*tabInstalled;
+	PortageTab 		*tabPortage;
+	UpdatesTab 		*tabUpdates;
+	LogsTab 		*tabLogs;
 	
 	void 			quit();
 	
@@ -58,9 +60,6 @@ public:
 	 * DCOP slot accessible by kuroo_watcher.
 	 */
 	void 			slotEmergePretend( QString package );
-
-public:
-	class 			IconListItem;
 	
 public slots:
 	/**
@@ -97,11 +96,9 @@ private slots:
 	 */
 	void			slotViewPackage( const QString& package );
 	
-	void 			slotShowView();
-	
 private:
-// 	QueueTab 		*tabQueue;
-// 	ResultsTab 		*tabResults;
+	QueueTab 		*tabQueue;
+	ResultsTab 		*tabResults;
 };
 
 #endif // _KUROOVIEW_H_

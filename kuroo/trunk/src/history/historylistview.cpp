@@ -37,34 +37,30 @@
  * Specialized listview for emerge history.
  */
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
-	: KListView( parent, name ), loc( KGlobal::locale() )
+	: KListView( parent, name )
 {
 	// Load icons for category, package ...
 	KIconLoader *ldr = KGlobal::iconLoader();
-	pxPackageHeader = ldr->loadIcon( "kuroo_history", KIcon::Toolbar );
-	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
-	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
-	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
+	pxPackageHeader = ldr->loadIcon("kuroo_history", KIcon::Toolbar);
+	pxCategory = ldr->loadIcon("kuroo_category", KIcon::Small);
+	pxNew = ldr->loadIcon("kuroo_new", KIcon::Small);
+	pxUnmerged = ldr->loadIcon("kuroo_unmerged", KIcon::Small);
 	
-	addColumn( i18n("Date") );
-	addColumn( i18n("Duration") );
-	addColumn( i18n("Emerge info") );
+	addColumn(i18n("Date"));
+	addColumn(i18n("Time"));
+	setMinimumSize(QSize(50, 0));
+	setProperty("selectionMode", "Extended");
 	
-	setMinimumSize( QSize(50, 0) );
-	setProperty( "selectionMode", "Extended" );
-	setFrameShape( QFrame::NoFrame );
-	setRootIsDecorated( true );
-	setFullWidth( true );
+	setRootIsDecorated(true);
+	setFullWidth(true);
 
-	setColumnWidthMode( 0, QListView::Manual );
-	setColumnWidthMode( 1, QListView::Manual );
-	setColumnWidthMode( 2, QListView::Manual );
+	setColumnWidthMode(0, QListView::Manual);
+	setColumnWidthMode(1, QListView::Manual);
 	
-	setColumnWidth( 0, 400 );
-	setColumnWidth( 1, 80 );
-	setResizeMode( QListView::LastColumn );
+	setColumnWidth(0, 300);
+	setColumnWidth(1, 80);
 	
-	setSorting( -1 );
+	setSorting(-1);
 }
 
 HistoryListView::~HistoryListView()
@@ -110,49 +106,36 @@ void HistoryListView::loadFromDB()
 	
 	const QStringList historyList = HistorySingleton::Instance()->allHistory();
 	foreach ( historyList ) {
-		QString timeStamp = *it++;
+		QString date = *it++;
 		QString package = *it++;
-		QString duration = *it++;
-		QString einfo = *it;
+		QString time = *it;
 		
-		// Convert emerge date to local date format
-		QDateTime dt;
-		dt.setTime_t( timeStamp.toUInt() );
-		QString emergeDate = loc->formatDate( dt.date() );
-		
-		// Convert emerge duration (in seconds) to local time format
-		QTime t( 0, 0, 0 );
-		t = t.addSecs( duration.toUInt() );
-		QString emergeDuration = loc->formatTime( t, true, true );
-		
-		if ( !duration.isEmpty() || KurooConfig::viewUnmerges() ) {
+		if ( !time.isEmpty() || KurooConfig::viewUnmerges() ) {
 			if ( !package.isEmpty() ) {
 				
-				ItemMap::iterator itMap =  itemMap.find( emergeDate ) ;
+				ItemMap::iterator itMap =  itemMap.find(date) ;
 				if ( itMap == itemMap.end() ) {
-					KListViewItem *itemDate = new KListViewItem( this, emergeDate );
-					itemDate->setOpen( true );
-					KListViewItem *itemPackage = new KListViewItem( itemDate, package );
-					itemMap.insert( emergeDate, itemDate );
+					KListViewItem *itemDate = new KListViewItem(this, date);
+					itemDate->setOpen(true);
+					KListViewItem *itemPackage = new KListViewItem(itemDate, package);
+					itemMap.insert(date, itemDate);
 					
-					if ( duration.isEmpty() )
-						itemPackage->setPixmap( 0, pxUnmerged );
+					if ( time.isEmpty() )
+						itemPackage->setPixmap(0, pxUnmerged);
 					else {
-						itemPackage->setPixmap( 0, pxNew );
-						itemPackage->setText( 1, emergeDuration );
-						itemPackage->setText( 2, einfo );
+						itemPackage->setPixmap(0, pxNew);
+						itemPackage->setText(1, time);
 					}
 				}
 				else
 				{
-					KListViewItem *itemPackage = new KListViewItem( itMap.data(), package );
+					KListViewItem *itemPackage = new KListViewItem(itMap.data(), package);
 					
-					if ( duration.isEmpty() )
-						itemPackage->setPixmap( 0, pxUnmerged );
+					if (time.isEmpty())
+						itemPackage->setPixmap(0, pxUnmerged);
 					else {
-						itemPackage->setPixmap( 0, pxNew );
-						itemPackage->setText( 1, emergeDuration );
-						itemPackage->setText( 2, einfo );
+						itemPackage->setPixmap(0, pxNew);
+						itemPackage->setText(1, time);
 					}
 				}
 			}
@@ -163,8 +146,8 @@ void HistoryListView::loadFromDB()
 	QListViewItem * myChild = firstChild();
 	if ( myChild ) {
 		while ( myChild ) {
-			QString events = myChild->text(0) + " (" + QString::number( myChild->childCount() ) + ")";
-			myChild->setText( 0, events );
+			QString events = myChild->text(0) + " (" + QString::number(myChild->childCount()) + ")";
+			myChild->setText(0, events);
 			myChild = myChild->nextSibling();
 		}
 	}

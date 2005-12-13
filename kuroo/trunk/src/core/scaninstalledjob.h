@@ -17,44 +17,48 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef SCANINSTALLEDJOB_H
+#define SCANINSTALLEDJOB_H
 
-#ifndef HISTORYTAB_H
-#define HISTORYTAB_H
+#include "threadweaver.h"
 
-#include "historybase.h"
+class DbConnection;
 
 /**
- * @class HistoryTab
- * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * Thread for scanning installed packages.
+ * Thread to collect installed packages by scanning KurooConfig::dirDbPkg().
+ * The packages are counted first, this to get a correct refresh progress in the gui.
+ * Found packages are updated as installed in portage database by changing the "installed" flag to "1".
+ * If the installed package is not found in the database it is inserted and flaged as "2".
+ * 
+ * @class ScanInstalledJob
+ * @short Thread for scanning installed packages.
  */
-class HistoryTab : public HistoryBase
+class ScanInstalledJob : public ThreadWeaver::DependentJob
 {
 Q_OBJECT
 public:
-    HistoryTab( QWidget *parent = 0 );
-	
-	/**
-	 * Save splitters and listview geometry.
-	 */
-    ~HistoryTab();
+    ScanInstalledJob( QObject *parent = 0 );
+    ~ScanInstalledJob();
 
-	
-private slots:
-	
-	/**
-	 * Initialize geometry and content.
-	 * Restore geometry: splitter positions, listViews width and columns width.
-	 */
-	void 		slotInit();
+private:
 	
 	/**
-	 * Reload history view.
+	 * Count portage packages for correct progress timing.
 	 */
-	void		slotReload();
+	int			countPackages();
 	
-	void		slotClearFilter();
-	void		slotViewUnmerges( bool on );
+	/**
+	 * Scan KurooConfig::dirDbPkg() for installed packages.
+	 * Update packages with the installed flag.
+	 * @return bool 		true if successful.
+	 */
+	bool 						doJob();
+	void 						completeJob();
 	
+private:
+	DbConnection* const 		m_db;
+	bool						aborted;
 };
 
 #endif

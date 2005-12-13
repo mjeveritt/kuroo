@@ -29,7 +29,6 @@ typedef struct EmergePackage {
 	QString	updateFlags;
 	QString installedVersion;
 	QString useFlags;
-	QString size;
 };
 
 typedef QValueList<EmergePackage> EmergePackageList;

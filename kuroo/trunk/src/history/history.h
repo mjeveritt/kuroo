@@ -82,8 +82,6 @@ public slots:
 	
 	void			slotChanged();
 
-	void			appendEmergeInfo( const QString& einfo );
-	
 private slots:
 	
 	/**

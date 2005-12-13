@@ -36,7 +36,7 @@ class KAction;
 class KConfigDialog;
 class KURL;
 class IntroDlg;
-// class EmergeLogDlg;
+class EmergeLogDlg;
 class KCmdLineArgs;
 class KurooInit;
 class Message;
@@ -57,12 +57,19 @@ public:
 private slots:
 	
 	/**
+	 * Method for enable right slot depending on which tab is activated.
+	 * @param page
+	 */
+	void				activateToolbar( QWidget *page );
+	
+	/**
 	 * Dialogs:
 	 * Show the wizard.
 	 * Show the full emerge log 
 	 * Kuroo preferences window.
 	 */
 	void 				introWizard();
+	void 				emergeLog();
 	void 				slotPreferences();
 	
 	/**
@@ -101,6 +108,7 @@ private:
 	KurooView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
+	EmergeLogDlg 		*emergeLogDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefresh, *actionSync, *actionFind;
 };

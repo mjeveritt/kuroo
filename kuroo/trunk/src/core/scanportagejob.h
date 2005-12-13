@@ -30,8 +30,6 @@ class QRegExp;
 
 extern QRegExp pv;
 
-typedef QMap<QString, QString> InstalledMap;
-
 /**
  * Thread for scanning local portage tree for available packages.
  * The packages are counted first, this to get a correct refresh progress in the gui.
@@ -49,9 +47,6 @@ public:
 	ScanPortageJob( QObject *parent = 0 );
 	~ScanPortageJob();
 
-private:
-	void								scanInstalledPackages();
-	
 private slots:
 	
 	/**
@@ -59,8 +54,8 @@ private slots:
 	 * Inserting found packages in db.
 	 * @return bool 		true if successful.
 	 */
-	bool 								doJob();
-	void 								completeJob();
+	bool 						doJob();
+	void 						completeJob();
 	
 	/**
 	 * Collect info about this ebuild.
@@ -68,7 +63,7 @@ private slots:
 	 * @param package  	
 	 * @return  false if the file can't be opened, true otherwise.
 	 */
-	Info								scanInfo( const QString& path, const QString& category, const QString& package );
+	bool						scanInfo( const QString& path, const QString& category, const QString& package );
 	
 	/**
 	 * Format package size nicely 
@@ -76,38 +71,22 @@ private slots:
 	 * @param size 
 	 * @return total		as "xxx kB"
 	 */
-	QString								kBSize( const QString& size );
+	QString						kBSize( const QString& size );
 	
 private:
-	InstalledMap						installedMap;
-	int									totalPackages;
-	bool								aborted;
-	DbConnection* const 				m_db;
-	
-	struct Data {
-		QString							meta;
-		QString							licenses;
-		QString							useFlags;
-		QString							slot;
-		QString							size;
-		QString							keywords;
+	int							totalPackages;
+	bool						aborted;
+	DbConnection* const 		m_db;
+	struct Info {
+		QString packageSlots;
+		QString homepage;
+		QString licenses;
+		QString description;
+		QString keywords;
+		QString useFlags;
+		QString size;
 	};
-	typedef QMap<QString, Data>		PortageVersions;
-	struct Versions {
-		QString							meta;
-		QString							description;
-		QString							homepage;
-		PortageVersions					versions;
-	};
-	typedef QMap<QString, Versions>		PortagePackages;
-	struct Categories {
-		QString							idCategory;
-		QString							idSubCategory;
-		QString							idCatSubCategory;
-		PortagePackages					packages;
-	};
-	typedef QMap<QString, Categories>	PortageCategories;
-	PortageCategories					categories;
+	Info 						info;
 };
 
 #endif

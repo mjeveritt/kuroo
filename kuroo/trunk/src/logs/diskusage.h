@@ -18,51 +18,29 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef RESULTLISTVIEW_H
-#define RESULTLISTVIEW_H
+#ifndef DISKUSAGE_H
+#define DISKUSAGE_H
 
-#include "packagelistview.h"
-
-#include <klistview.h>
-
-#include <qpixmap.h>
-
-class QPixmap;
-class Package;
-class QRegExp;
-class PackageItem;
-
-extern QRegExp pv;
+#include <qobject.h>
 
 /**
- * @class ResultListView
- * @short Specialized listview for results packages.
+ * @class DiskUsage
+ * @short Scan size of Portage directories with KIO::KDirSize synchronously.
  */
-class ResultListView : public PackageListView
+class DiskUsage : public QObject
 {
 Q_OBJECT
 public:
-	ResultListView( QWidget *parent = 0, const char *name = 0 );
-	~ResultListView();
+    DiskUsage( QObject *parent = 0 );
+    ~DiskUsage();
 	
 public slots:
-	
-	/** 
-	 * Populate listview with content of table resultPackages 
-	 */
-	bool 									loadFromDB();
-	
-signals:
-	void									signalResultsLoaded();
+	void			init( QObject *myParent = 0 );
+	QString			scanSize( const QString& path );
+	long			scanSizeLong( const QString& path );
 	
 private:
-	QPixmap 								pxQueuedColumn;
-	struct TreeViewCategory {
-		QListViewItem * item;
-		QMap<QString, QListViewItem *> 		packages;
-	};
-	QMap<QString, TreeViewCategory> 		categories;
-	
+	QObject			*parent;
 };
 
 #endif

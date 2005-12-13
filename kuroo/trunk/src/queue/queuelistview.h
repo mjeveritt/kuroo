@@ -18,8 +18,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef QUEUELISTVIEW_H
-#define QUEUELISTVIEW_H
+#ifndef INSTALLATIONLISTVIEW_H
+#define INSTALLATIONLISTVIEW_H
 
 #include "packagelistview.h"
 
@@ -40,27 +40,42 @@ extern QRegExp pv;
 class QueueListView : public PackageListView
 {
 Q_OBJECT
-
+	
 public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
-
+	
 public slots:
-
-	void								slotPackageUp();
-	void								slotPackageDown();
-
+	
+	/**
+	* Get all packages in the queue
+	* @return packageList
+	*/
+	QStringList 						allPackages();
+	
+	/**
+	* Return selected packages in queue
+	* @return packageList		
+	*/
+	QStringList 						selectedPackages();
+	
+	/**
+	* Get current package in queue (clicked on).
+	* @return package
+	*/
+	QString		 						currentPackage();
+	
 	/**
 	* Populate queue with packages from db
 	*/
-	void 								insertPackageList();
-
+	void 								loadFromDB();
+	
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.
 	*/
 	QString		 						totalTime();
 	int									sumTime();
-
+	
 	/**
 	* Get sum of packages sizes.
 	* @return sumSize 
@@ -72,7 +87,7 @@ private slots:
 	/**
 	* Clear this listView and packages.
 	*/
-// 	void								reset();
+	void								reset();
 	
 	/**
 	* Format package size nicely 
@@ -100,9 +115,14 @@ signals:
 	void								signalPackageEmerged();
 	
 private:
-	KLocale 							*loc;
 	int 								sumSize;
-	QPixmap 							pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting;	
+	QPixmap 							pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting;
+	struct TreeViewCategory {
+		PackageItem* item;
+		QMap< QString, PackageItem* > 	packageItems;
+	};
+	QMap< QString, TreeViewCategory > 	categoryItems;
+	
 };
 
 #endif

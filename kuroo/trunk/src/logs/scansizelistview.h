@@ -18,59 +18,45 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef RESULTS_H
-#define RESULTS_H
+#ifndef SCANSIZELISTVIEW_H
+#define SCANSIZELISTVIEW_H
 
-#include "package.h"
+#include <qpixmap.h>
 
-#include <qobject.h>
+#include <klistview.h>
+
+class QPixmap;
 
 /**
- * @class Results
- * @short Object for the resulting list of packages from emerge actions.
+ * @class ScanSizeListView
+ * @short Specialized listview for viewing portage directorie sizes.
  */
-class Results : public QObject
+class ScanSizeListView : public KListView
 {
-Q_OBJECT	
+Q_OBJECT
 public:
-	Results( QObject *parent = 0 );
-    ~Results();
+	ScanSizeListView( QWidget *parent = 0, const char *name = 0 );
+	~ScanSizeListView();
 	
 public slots:
-	void			init( QObject *myParent = 0 );
-	void			refresh();
-	void			reset();
 	
 	/**
-	 * Add packages by id to the results table in the db
-	 * @param packageIdList
+	 * Get portage directory size scan
+	 * @fixme: how to abort!
 	 */
-	void 			addPackageIdList( const QStringList& packageIdList );
+	void 		scanPortageSize();
 	
 	/**
- 	 * Add packages to the results table in the db
- 	 * @param packageList
- 	 */
-	void 			addPackageList( const EmergePackageList &packageList );
-	
-	/**
-	 * Launch emerge pretend of packages.
-	 * @param packageList
+	 * Restore last Portage directories size
 	 */
-	void			pretendPackageList( const QStringList& packageList );
+	void 		loadPortageSize();
 	
-	/**
- 	 * Get list of all packages.
- 	 * @return QStringList
-	 */
-	QStringList		allPackages();
-	QString			count();
-	
-signals:
-	void			signalResultsChanged();
+private slots:
 	
 private:
-	QObject			*parent;
+	QPixmap 	pxPackageHeader, pxCategory;
+	
+signals:
 };
 
 #endif

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-04 20:30+0100\n"
+"POT-Creation-Date: 2005-11-03 17:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Can not connect to database"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:141
+#: core/scanhistoryjob.cpp:85 core/scanhistoryjob.cpp:142
 msgid "History scan aborted"
 msgstr ""
 
@@ -49,7 +49,7 @@ msgstr ""
 
 #: core/scanportagejob.cpp:263 core/emerge.cpp:552 core/emerge.cpp:623
 #: core/scanupdatesjob.cpp:151 core/scaninstalledjob.cpp:210
-#: queue/queuetab.cpp:350 history/history.cpp:268 history/history.cpp:269
+#: queue/queuetab.cpp:350 history/history.cpp:267 history/history.cpp:268
 msgid "Done."
 msgstr ""
 
@@ -57,8 +57,8 @@ msgstr ""
 #: core/cacheportagejob.cpp:153 core/cacheportagejob.cpp:212
 #: installed/installed.cpp:96 installed/installed.cpp:292
 #: installed/installed.cpp:360 queue/queue.cpp:67 intro/introdlg.cpp:68
-#: portage/portage.cpp:353 portage/portage.cpp:548 portage/portage.cpp:580
-#: portage/portage.cpp:621 portage/usedialog.cpp:69
+#: portage/portage.cpp:344 portage/portage.cpp:539 portage/portage.cpp:571
+#: portage/portage.cpp:612 portage/usedialog.cpp:69
 #: config/configdialog.cpp:109 config/configdialog.cpp:129
 #: config/configdialog.cpp:150 config/configdialog.cpp:171
 msgid "Error reading: "
@@ -199,13 +199,13 @@ msgstr ""
 #: installed/installed.cpp:361 installed/installed.cpp:378
 #: installed/installedtab.cpp:291 installed/installedtab.cpp:309
 #: queue/queuelistview.cpp:116 queue/queuelistview.cpp:206
-#: portage/portage.cpp:549 portage/portage.cpp:581 portage/portage.cpp:622
+#: portage/portage.cpp:540 portage/portage.cpp:572 portage/portage.cpp:613
 #: portage/portagelistview.cpp:104 portage/portagetab.cpp:162
 #: portage/portagetab.cpp:343 portage/portagetab.cpp:355
-#: portage/portagetab.cpp:367 history/history.cpp:160
-#: history/historylistview.cpp:80 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
+#: portage/portagetab.cpp:367 history/history.cpp:159
+#: history/historylistview.cpp:77 kuroo.cpp:156 kuroo.cpp:215 kuroo.cpp:216
 #: kuroo.cpp:231 kuroo.cpp:232 kuroo.cpp:233 kuroo.cpp:243 kuroo.cpp:244
-#: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257 kuroo.cpp:281
+#: kuroo.cpp:245 kuroo.cpp:255 kuroo.cpp:256 kuroo.cpp:257
 msgid "na"
 msgstr ""
 
@@ -441,7 +441,7 @@ msgid "View Info"
 msgstr ""
 
 #: logs/log.cpp:58 installed/installed.cpp:93 queue/queue.cpp:64
-#: portage/portage.cpp:376 portage/portage.cpp:422 config/configdialog.cpp:391
+#: portage/portage.cpp:367 portage/portage.cpp:413 config/configdialog.cpp:391
 #: config/configdialog.cpp:410 config/configdialog.cpp:429
 #: config/configdialog.cpp:448 config/configdialog.cpp:564
 msgid "Error writing: "
@@ -451,7 +451,7 @@ msgstr ""
 msgid "Error writing %1/kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:59 portage/portage.cpp:377 portage/portage.cpp:423
+#: logs/log.cpp:59 portage/portage.cpp:368 portage/portage.cpp:414
 #: portage/usedialog.cpp:174 config/configdialog.cpp:336
 #: config/configdialog.cpp:344 config/configdialog.cpp:352
 #: config/configdialog.cpp:360 config/configdialog.cpp:370
@@ -481,19 +481,19 @@ msgstr ""
 msgid "<b>License:</b> "
 msgstr ""
 
-#: installed/installed.cpp:344 portage/portage.cpp:512
+#: installed/installed.cpp:344 portage/portage.cpp:503
 msgid "<b>Slot:</b> "
 msgstr ""
 
-#: installed/installed.cpp:348 portage/portage.cpp:513
+#: installed/installed.cpp:348 portage/portage.cpp:504
 msgid "<b>Branches:</b> "
 msgstr ""
 
-#: installed/installed.cpp:351 portage/portage.cpp:514
+#: installed/installed.cpp:351 portage/portage.cpp:505
 msgid "<b>Use flags:</b> "
 msgstr ""
 
-#: installed/installed.cpp:352 portage/portage.cpp:515
+#: installed/installed.cpp:352 portage/portage.cpp:506
 msgid "<b>Size:</b> "
 msgstr ""
 
@@ -624,27 +624,27 @@ msgstr ""
 msgid "Error checking paths..."
 msgstr ""
 
-#: portage/portage.cpp:98
+#: portage/portage.cpp:97
 msgid "Wait-counter has reached maximum. Attempting to scan Portage."
 msgstr ""
 
-#: portage/portage.cpp:203
+#: portage/portage.cpp:194
 msgid "<br>No packages found matching: %1"
 msgstr ""
 
-#: portage/portage.cpp:302
+#: portage/portage.cpp:293
 msgid "Error reading: package.keyword."
 msgstr ""
 
-#: portage/portage.cpp:377 portage/portage.cpp:423 portage/usedialog.cpp:174
+#: portage/portage.cpp:368 portage/portage.cpp:414 portage/usedialog.cpp:174
 msgid "Failed to save. Please run as root."
 msgstr ""
 
-#: portage/portage.cpp:480 portage/portage.cpp:511
+#: portage/portage.cpp:471 portage/portage.cpp:502
 msgid "<b>Licenses:</b> "
 msgstr ""
 
-#: portage/portage.cpp:481
+#: portage/portage.cpp:472
 msgid "<b>Available versions:</b> "
 msgstr ""
 
@@ -704,43 +704,43 @@ msgstr ""
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:210
+#: history/history.cpp:209
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:211
+#: history/history.cpp:210
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:217
+#: history/history.cpp:216
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:218
+#: history/history.cpp:217
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:219
+#: history/history.cpp:218
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:226
+#: history/history.cpp:225
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:244
+#: history/history.cpp:243
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:252
+#: history/history.cpp:251
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:257 history/history.cpp:258
+#: history/history.cpp:256 history/history.cpp:257
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:263 history/history.cpp:264
+#: history/history.cpp:262 history/history.cpp:263
 msgid "Sync completed."
 msgstr ""
 
@@ -1017,22 +1017,22 @@ msgstr ""
 msgid "Refresh Updates view"
 msgstr ""
 
-#: kuroo.cpp:285
+#: kuroo.cpp:280
 msgid ""
 "<qt>Do you want to synchronize portage?<br><br>Portage, Installed and "
 "Updates view will be refreshed automatically afterwards. Queue and Results "
 "view will be cleared.<br>This will take a couple of minutes...</qt>"
 msgstr ""
 
-#: kuroo.cpp:288
+#: kuroo.cpp:283
 msgid "Last sync: %1"
 msgstr ""
 
-#: kuroo.cpp:304 kuroo.cpp:306
+#: kuroo.cpp:299 kuroo.cpp:301
 msgid "settings"
 msgstr ""
 
-#: kuroo.cpp:377
+#: kuroo.cpp:372
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1085,27 +1085,27 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:236
+#: kurooview.cpp:240
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
-#: kurooview.cpp:287
+#: kurooview.cpp:291
 msgid "&Portage (%1)"
 msgstr ""
 
-#: kurooview.cpp:303
+#: kurooview.cpp:307
 msgid "&Installed (%1)"
 msgstr ""
 
-#: kurooview.cpp:319
+#: kurooview.cpp:323
 msgid "&Updates (%1)"
 msgstr ""
 
-#: kurooview.cpp:335
+#: kurooview.cpp:339
 msgid "&Queue (%1)"
 msgstr ""
 
-#: kurooview.cpp:351
+#: kurooview.cpp:355
 msgid "&Results (%1)"
 msgstr ""
 

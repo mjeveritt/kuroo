@@ -102,7 +102,7 @@ bool Emerge::queue( const QString& category, const QStringList& packageList )
 		if ( (*it).startsWith("-") )
 			*eProc << *it;
 		else
-			*eProc << category + "/" + *it;
+			*eProc << "=" + category + "/" + *it;
 	}
 	
 	eProc->start( KProcess::OwnGroup, true );
@@ -146,7 +146,7 @@ bool Emerge::queue( const QStringList& packageList )
 		if ( (*it).startsWith("-") )
 			*eProc << *it;
 		else
-			*eProc << *it;
+			*eProc << "=" + *it;
 	}
 	
 	eProc->start( KProcess::OwnGroup, true );
@@ -187,7 +187,7 @@ bool Emerge::pretend( const QString& category, const QStringList& packageList )
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
-		*eProc << category + "/" + *it;
+		*eProc << "=" + category + "/" + *it;
 	}
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {
@@ -224,7 +224,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
-		*eProc << *it;
+		*eProc << "=" + *it;
 	}
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {
@@ -248,7 +248,7 @@ bool Emerge::pretend( const QStringList& packageList )
  * @param packageList	
  * @return success
  */
-bool Emerge::unmerge( const QStringList& packageList )
+bool Emerge::unmerge( const QString& category, const QStringList& packageList )
 {
 	blocks.clear();
 	importantMessage = "";
@@ -261,7 +261,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
-		*eProc << *it;
+		*eProc << "=" + category + "/" + *it;
 	}
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {
@@ -396,42 +396,34 @@ void Emerge::readFromStdout( KProcIO *proc )
 		//////////////////////////////////////////////////////
 		// Parse out packages and info
 		//////////////////////////////////////////////////////
-		if ( line.contains( QRegExp("^\\[ebuild") ) ) {
+		if ( line.contains(QRegExp("^\\[ebuild")) ) {
 			
 			EmergePackage emergePackage;
-			rx.setPattern( "\\s\\S+/\\S+\\s" );
-			int pos = rx.search( line );
+			rx.setPattern("\\s\\S+/\\S+\\s");
+			int pos = rx.search(line);
 			
 			if ( pos > -1 ) {
-				QString parsedPackage = rx.cap( 0 ).stripWhiteSpace();
+				QString parsedPackage = rx.cap(0).stripWhiteSpace();
 				
-				emergePackage.package = parsedPackage;
-				emergePackage.category = parsedPackage.section( "/", 0, 0 );
-				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( pv, 0, 0 );
-				emergePackage.version = parsedPackage.section( ( emergePackage.name + "-" ), 1, 1 );
-				emergePackage.updateFlags = line.left( 14 ).section( QRegExp( "^\\[ebuild" ), 1, 1 );
+				emergePackage.category = parsedPackage.section("/", 0, 0);
+				emergePackage.package = parsedPackage.section("/", 1, 1);
+				emergePackage.name = emergePackage.package.section(pv, 0, 0);
+				emergePackage.version = parsedPackage.section((emergePackage.name + "-"), 1, 1);
+				emergePackage.updateFlags = line.left(14).section(QRegExp("^\\[ebuild"), 1, 1);
 				
 				QString temp = line.section(emergePackage.package, 1, 1);
-				
-				if ( temp.contains( " kB" ) )
-					emergePackage.size = temp.section( " kB", 0, 0 ).section( " ", -1 , -1 );
-				else
-					emergePackage.size = i18n( "na" );
-				
 				temp = temp.section( " kB", 0, 0 );
-				emergePackage.installedVersion = temp.section( "[", 1, 1 ).section( "]", 0, 0 );
+				emergePackage.installedVersion = temp.section("[", 1, 1).section("]", 0, 0);
 
-				kdDebug() << "temp=" << temp << endl;
-				
 				// Parse out USE flags
-				const QStringList field = QStringList::split( " ", temp );
+				const QStringList field = QStringList::split(" ", temp);
 				QStringList useList;
 				foreach ( field ) {
-					if ( ( *it ).startsWith( "+" ) || ( *it ).startsWith( "-" ) )
+					if ( (*it).startsWith("+") || (*it).startsWith("-") )
 						useList += *it;
 				}
-				emergePackage.useFlags = useList.join( " " );
-				emergePackageList.append( emergePackage );
+				emergePackage.useFlags = useList.join(" ");
+				emergePackageList.append(emergePackage);
 			}
 		}
 		
@@ -504,16 +496,19 @@ void Emerge::readFromStdout( KProcIO *proc )
 		// Collect einfo and ewarn messages
 		////////////////////////////////////
 		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp())) || lastLineFlag || line.contains("**** ") ) ) {
-			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ) + "<br>";
-			cleanLine.remove( "!!!" );
+			QString cleanLine = line.replace('>', "&gt;").replace('<', "&lt;") + "<br>";
+			cleanLine.remove("!!!");
 			
-			if ( line.endsWith( ":" ) )
+			kdDebug() << "cleanLine=" << cleanLine << endl;
+			
+			if ( line.endsWith(":") )
 				lastLineFlag = true;
 				else
 					lastLineFlag = false;
 			
-			if ( line.contains( "**** " ) )
-				cleanLine = cleanLine.section( "**** ", 1, 1 );
+			if ( line.contains("**** ") ) {
+				cleanLine = cleanLine.section("**** ", 1, 1);
+			}
 			
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
@@ -529,8 +524,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 		LogSingleton::Instance()->writeLog( line, TOLOG );
 		
 		// Collect blocking lines
-		if ( line.contains( "is blocking" ) )
-			blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
+		if ( line.contains("is blocking") )
+			blocks += line.section("[blocks B     ]", 1, 1).replace('>', "&gt;").replace('<', "&lt;");
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
@@ -555,7 +550,7 @@ void Emerge::cleanup()
 {
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
-	SignalistSingleton::Instance()->setKurooBusy( false );
+	SignalistSingleton::Instance()->setKurooBusy(false);
 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
@@ -564,10 +559,8 @@ void Emerge::cleanup()
 	if ( !unmasked.isEmpty() )
 		askUnmaskPackage( unmasked );
 	else
-		if ( !importantMessage.isEmpty() ) {
-			HistorySingleton::Instance()->appendEmergeInfo( importantMessage );
+		if ( !importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
-		}
 	
 	if ( etcUpdateCount != 0 /*&& !SignalistSingleton::Instance()->isKurooBusy()*/ )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );

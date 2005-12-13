@@ -54,7 +54,6 @@ public:
 	void 			loadFromDB();
 	
 private:
-	KLocale 		*loc;
 	QPixmap 		pxPackageHeader, pxCategory, pxNew, pxUnmerged;
 	ItemMap			itemMap;
 	

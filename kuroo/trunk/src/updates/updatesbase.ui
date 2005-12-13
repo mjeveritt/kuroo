@@ -63,10 +63,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Install &amp;all updates to Queue!</string>
+                        <string>I&amp;nstall all updates!</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+A</string>
+                        <string>Alt+N</string>
                     </property>
                     <property name="iconSet">
                         <iconset>image0</iconset>

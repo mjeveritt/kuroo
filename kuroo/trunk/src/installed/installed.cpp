@@ -73,7 +73,7 @@ public:
 			KurooDBSingleton::Instance()->query(QString("DELETE FROM package WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version));
 
 		// Remove package from world file
-		QFile file( KurooConfig::fileWorld() );
+		QFile file( KurooConfig::dirWorldFile() );
 		QStringList lines;
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
@@ -90,10 +90,10 @@ public:
 				file.close();
 			}
 			else
-				kdDebug() << i18n("Error writing: ") << KurooConfig::fileWorld() << endl;
+				kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
 		}
 		else
-			kdDebug() << i18n("Error reading: ") << KurooConfig::fileWorld() << endl;
+			kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
 		
 		return true;
 	}
@@ -147,6 +147,7 @@ void Installed::slotReset()
  */
 bool Installed::slotRefresh()
 {
+	kdDebug() << "Installed::slotRefresh" << endl;
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanInstalledJob( this ) );
 	return true;
@@ -309,7 +310,7 @@ QString Installed::installedSummary( const QString& packageId )
 	QString time = HistorySingleton::Instance()->packageTime( category + "/" + package.section(pv, 0, 0) );
 	
 	if ( info.size.isEmpty() )
-		textLines += i18n(" <font color=red>(Version not available in Portage)</font>");
+		textLines += " <font color=red>(Version not available in Portage)</font>";
 	
 	textLines += "<br>";
 	

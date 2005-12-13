@@ -48,8 +48,8 @@ QueueTab::QueueTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( slotPackageUp() ) );
-	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( slotPackageDown() ) );
+// 	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( slotPackageUp() ) );
+// 	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( slotPackageDown() ) );
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	

@@ -41,9 +41,9 @@
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
-	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()));
-	setFullWidth(true);
-	setFrameShape(QFrame::NoFrame);
+	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()) );
+	setFullWidth( true );
+	setFrameShape( QFrame::NoFrame );
 }
 
 CategoriesView::~CategoriesView()
@@ -79,38 +79,26 @@ QString CategoriesView::currentCategoryId()
 }
 
 /**
- * Set category current.
- * @param category
- */
-// void CategoriesView::setCurrentCategory( const QString& category )
-// {
-// 	QString categoryName = category.section("-", 0, 0);
-// 	QString subcategoryName = category.section("-", 1, 1);
-// 	
-// 	if( categories.contains(categoryName) ) {
-// 		if ( categories[categoryName].subcategories.contains(subcategoryName) ) {
-// 			QListViewItem *item = categories[categoryName].subcategories[subcategoryName];
-// 			ensureItemVisible(item);
-// 			setCurrentItem(item);
-// 			item->setSelected(true);
-// 		}
-// 	}
-// }
-
-/**
  * Load categories.
- * @param categoriesList 
+ * @param categoriesList
  */
-void CategoriesView::loadCategories( const QStringList& categoriesList )
+void CategoriesView::loadCategories( const QStringList& categoriesList, const QStringList& allCategoriesList )
 {
+	QValueVector<QString> allCategories( 200 );
+	int i( 1 );
+	foreach ( allCategoriesList ) {
+		allCategories[ i++ ] = *it;
+	}
+	
 	categories.clear();
 	foreach ( categoriesList ) {
-		QString name = *it++;
-		QString idDB = *it;
+		QString idDB( *it );
+		QString name( allCategories[ idDB.toInt() ] );
 		new QListViewItem( this, name );
 		categories.insert( name, idDB );
 	}
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -121,8 +109,8 @@ void CategoriesView::loadCategories( const QStringList& categoriesList )
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
-	addColumn(i18n("Category"));
-	header()->setLabel(header()->count() - 1, i18n("Category"));
+	addColumn( i18n( "Category" ) );
+	header()->setLabel( header()->count() - 1, i18n("Category") );
 }
 
 CategoriesListView::~CategoriesListView()
@@ -131,9 +119,10 @@ CategoriesListView::~CategoriesListView()
 
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	CategoriesView::loadCategories( categoriesList );
+	CategoriesView::loadCategories( categoriesList, KurooDBSingleton::Instance()->allCategories() );
 	setSelected( firstChild(), true );
 }
+
 
 /**
  * @class SubCategoriesListView
@@ -142,12 +131,18 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
-	addColumn(i18n("Subcategory"));
+	addColumn( i18n( "Subcategory" ) );
 	header()->setLabel( header()->count() - 1, i18n( "Subcategory" ) );
 }
 
 SubCategoriesListView::~SubCategoriesListView()
 {
+}
+
+void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
+{
+	CategoriesView::loadCategories( categoriesList, KurooDBSingleton::Instance()->allSubCategories() );
+	setSelected( firstChild(), true );
 }
 
 #include "categorieslistview.moc"

@@ -47,16 +47,10 @@ public slots:
 	QString									currentCategoryId();
 	
 	/**
-	 * Set category current.
-	 * @param category
-	 */
-// 	void									setCurrentCategory( const QString& category );
-	
-	/**
  	 * Load categories.
  	 * @param categoriesList 
 	 */
-	void									loadCategories( const QStringList& categoriesList );
+	void									loadCategories( const QStringList& categoriesList, const QStringList& allCategoriesList );
 
 private:
 	QPixmap 								pxRepository, pxCategory;
@@ -87,6 +81,8 @@ Q_OBJECT
 public:
 	SubCategoriesListView( QWidget *parent = 0, const char *name = 0 );
 	~SubCategoriesListView();
+	
+	void 									loadCategories( const QStringList& categoriesList );
 };
 
 #endif

@@ -30,12 +30,12 @@ class QPixmap;
 /**
  * Creates category listview.
  */
-class CategoriesListView : public KListView
+class CategoriesView : public KListView
 {
 Q_OBJECT
-	public:
-	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
-	~CategoriesListView();
+public:
+	CategoriesView( QWidget *parent = 0, const char *name = 0 );
+	~CategoriesView();
 
 public slots:
 	
@@ -44,27 +44,45 @@ public slots:
 	 * @param package
 	 */
 	QString									currentCategory();
-	
-	/**
-	 * Set category current.
-	 * @param category
-	 */
-	void									setCurrentCategory( const QString& category );
+	QString									currentCategoryId();
 	
 	/**
  	 * Load categories.
- 	 * With Jakob Petsovits technique for inserting items fast.
  	 * @param categoriesList 
 	 */
-	void									loadCategories( const QStringList& categoriesList );
-	
+	void									loadCategories( const QStringList& categoriesList, const QStringList& allCategoriesList );
+
 private:
 	QPixmap 								pxRepository, pxCategory;
-	struct TreeViewCategory {
-		QListViewItem * item;
-		QMap<QString, QListViewItem*> 		subcategories;
-	};
-	QMap<QString, TreeViewCategory> 		categories;
+	QMap<QString, QString> 					categories;
+};
+
+
+
+/**
+ * Creates category listview.
+ */
+class CategoriesListView : public CategoriesView
+{
+Q_OBJECT
+public:
+	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
+	~CategoriesListView();
+	
+	void 									loadCategories( const QStringList& categoriesList );
+};
+
+/**
+ * Creates subcategory listview.
+ */
+class SubCategoriesListView : public CategoriesView
+{
+Q_OBJECT
+public:
+	SubCategoriesListView( QWidget *parent = 0, const char *name = 0 );
+	~SubCategoriesListView();
+	
+	void 									loadCategories( const QStringList& categoriesList );
 };
 
 #endif

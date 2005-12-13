@@ -29,13 +29,14 @@
 PackageListView::PackageListView( QWidget* parent, const char* name )
 	: KListView( parent, name )
 {
+	setFrameShape( QFrame::NoFrame );
+	setSelectionModeExt( FileManager );
+	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( setQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
-	
-	setSelectionModeExt(FileManager);
-	
+		
 	new ToolTip(this);
 }
 
@@ -90,14 +91,14 @@ QStringList PackageListView::selectedId()
 {
 	QStringList idDBList;
 	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->parent() ) {
+// 		if ( it.current()->parent() ) {
+// 			if ( it.current()->isSelected() && it.current()->isVisible() )
+// 				idDBList += it.currentKey();
+// 		}
+// 		else {
 			if ( it.current()->isSelected() && it.current()->isVisible() )
 				idDBList += it.currentKey();
-		}
-		else {
-			if ( it.current()->isSelected() && it.current()->isVisible() )
-				idDBList += it.currentKey();
-		}
+		
 	}
 	return idDBList;
 }

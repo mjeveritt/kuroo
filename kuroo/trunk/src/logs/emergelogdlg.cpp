@@ -28,8 +28,8 @@
 /**
  * Widget to show emerge log.
  */
-EmergeLogDlg::EmergeLogDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
-	: EmergeLogBase( parent, name, modal, fl )
+EmergeLogDlg::EmergeLogDlg(QWidget* parent, const char* name, bool modal, WFlags fl)
+	: EmergeLogBase(parent, name, modal, fl)
 {
 	loadLog();
 }

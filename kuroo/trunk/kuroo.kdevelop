@@ -111,7 +111,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>src/kuroo</mainprogram>
+      <mainprogram>src/kuroo8</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
@@ -122,7 +122,7 @@
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
-      <activetarget>src/logs/liblogs.la</activetarget>
+      <activetarget>src/history/libhistory.la</activetarget>
     </general>
     <configurations>
       <default>

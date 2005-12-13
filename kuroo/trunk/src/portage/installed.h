@@ -18,38 +18,87 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef USEDIALOG_H
-#define USEDIALOG_H
+#ifndef INSTALLED_H
+#define INSTALLED_H
 
-#include "usebase.h"
+#include <qobject.h>
 
-#include <kdialogbase.h>
+class QRegExp;
+extern QRegExp pv;
+
+typedef struct Info {
+	QString slot;
+	QString homepage;
+	QString licenses;
+	QString description;
+	QString keywords;
+	QString useFlags;
+	QString size;
+};
 
 /**
- * @class UseDialog
- * @short Specialized dialog for editing Use Flags per package.
+ * @class Installed
+ * @short Object for installed packages.
  */
-class UseDialog : public KDialogBase
+class Installed : public QObject
 {
 Q_OBJECT
 public:
-    UseDialog(QWidget *parent = 0, const char *name = 0);
-    ~UseDialog();
+	Installed( QObject *parent = 0 );
+    ~Installed();
+	
+public slots:
+	void			init( QObject *myParent = 0 );
 	
 	/**
-	 * Open use flags dialog.
-	 * @param newPackage	selected package
+	 * Forward signal after a new scan.
 	 */
-	void			edit( const QString& package );
+	void			slotChanged();
 	
-private slots:
-	void			slotUseDescription( QListBoxItem* item );
-	void			slotApply();
-
+	/**
+	 * Clear packages.
+	 */
+	void			slotReset();
+	
+	/**
+	 * Launch unmerge of packages
+	 * @param category
+	 * @param packageList
+	 */
+	void			uninstallPackageList( const QStringList& packageIdList );
+	
+	/**
+	 * @fixme: Check for failure.
+	 * Add package as installed in db.
+	 * @param package
+	 */
+	void			addPackage( const QString& package );
+	
+	/**
+	 * @fixme: Check for failure.
+	 * Remove packages from db.
+	 * @param packageIdList
+ 	*/
+	void			removePackage( const QString& package );
+	
+	/**
+	 * Methods for parsing info files.
+	 */
+	QString			installedFiles( const QString& packageId );
+	
+	/**
+	 * Count total installed packages.
+	 * @return total
+	 */
+	QString			count();
+	
+signals:
+	void			signalInstalledChanged();
+	void			signalInstalledReset();
+	
 private:
-	QStringList		useList;
-	UseBase		*dialog;
-	QString		package;
+	QObject			*parent;
+	QString			package;
 	
 };
 

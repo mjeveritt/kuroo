@@ -58,7 +58,7 @@ void Portage::init( QObject *myParent )
 void Portage::slotChanged()
 {
 	emit signalPortageChanged();
-	setRefreshTime();
+	KurooDBSingleton::Instance()->addRefreshTime();
 }
 
 /**
@@ -87,7 +87,7 @@ bool Portage::slotScan()
 	int maxLoops(99);
 	
 	// Wait for cache job to finish before launching the scan.
-	while (true)
+	while ( true )
 	{
 		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
 			::usleep(100000); // Sleep 100 msec
@@ -115,23 +115,18 @@ bool Portage::slotSync()
 }
 
 /**
- * Add timestamp in history for when kuroo database is refreshed.
- */
-void Portage::setRefreshTime()
-{
-	QDateTime t(QDateTime::currentDateTime());
-	QString timeStamp = QString::number(t.toTime_t());
-	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("MMM dd yyyy hh:mm")).arg(timeStamp) );
-}
-
-/**
  * Launch emerge pretend of packages.
  * @param category
  * @param packageList
  */
-void Portage::pretendPackage( const QString& category, const QStringList& packageList )
+void Portage::pretendPackageList( /*const QString& category, */const QStringList& packageIdList )
 {
-	EmergeSingleton::Instance()->pretend( category, packageList );
+	QStringList packageList;
+	foreach ( packageIdList ) {
+		packageList += Portage::category( *it ) + "/" + Portage::package( *it );
+	}
+	
+	EmergeSingleton::Instance()->pretend( packageList );
 }
 
 /**
@@ -141,25 +136,35 @@ void Portage::pretendPackage( const QString& category, const QStringList& packag
  */
 bool Portage::isInstalled( const QString& package )
 {
-	QString tmp = package.section("/", 1, 1);
-	QString name = tmp.section(pv, 0, 0);
-	QString version = tmp.section(name + "-", 1, 1);
-	
-	QString installedFlag = KurooDBSingleton::Instance()->isInstalled( name, version ).first();
-	
-	if ( installedFlag == "1" )
-		return true;
-	else
-		return false;
+// 	QString tmp = package.section( "/", 1, 1 );
+// 	QString name = tmp.section( pv, 0, 0 );
+// 	QString version = tmp.section( name + "-", 1, 1 );
+// 	
+// 	QString installedFlag = KurooDBSingleton::Instance()->isInstalled( name, version ).first();
+// 	
+// 	if ( installedFlag == "1" )
+// 		return true;
+// 	else
+// 		return false;
 }
 
 /**
  * Get list of all categories for portage packages.
  * @return QStringList
  */
-QStringList Portage::categories()
+QStringList Portage::categories( int filter )
 {
-	return KurooDBSingleton::Instance()->portageCategories();
+	return KurooDBSingleton::Instance()->portageCategories( filter );
+}
+
+/**
+ * Get list of all subcategories for portage packages.
+ * @return QStringList
+ */
+QStringList Portage::subCategories( const QString& categoryId, int filter )
+{
+	kdDebug() << "Portage::subCategories categoryId=" << categoryId << endl;
+	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter );
 }
 
 /**
@@ -167,10 +172,14 @@ QStringList Portage::categories()
  * @param category
  * @return QStringList
  */
-QStringList Portage::packagesInCategory( const QString& category )
+QStringList Portage::packagesInCategory( const QString& categoryId, int filter )
 {
-	QString idCategory = KurooDBSingleton::Instance()->portageCategoryId(category).first();	
-	return KurooDBSingleton::Instance()->portagePackagesByCategory(idCategory);
+	return KurooDBSingleton::Instance()->portagePackagesByCategory( categoryId, filter );
+}
+
+QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
+{
+	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter );
 }
 
 /**
@@ -178,9 +187,14 @@ QStringList Portage::packagesInCategory( const QString& category )
  * @param package name
  * @return list of versions
  */
-QStringList Portage::packageVersions( const QString& name )
+QStringList Portage::packageVersions( const QString& id )
 {
-	return KurooDBSingleton::Instance()->packageVersions(name);
+	return KurooDBSingleton::Instance()->packageVersions( id );
+}
+
+QStringList Portage::packageVersionsInfo( const QString& id )
+{
+	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
 }
 
 /**
@@ -190,17 +204,17 @@ QStringList Portage::packageVersions( const QString& name )
  */
 void Portage::findPackage( const QString& text, const bool& isName )
 {
-	QStringList packageIdList;
-	
-	if ( isName )
-		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
-	else
-		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
-	
-	if ( !packageIdList.isEmpty() )
-		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-	else
-		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
+// 	QStringList packageIdList;
+// 	
+// 	if ( isName )
+// 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
+// 	else
+// 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
+// 	
+// 	if ( !packageIdList.isEmpty() )
+// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
+// 	else
+// 		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
 }
 
 /**
@@ -209,8 +223,7 @@ void Portage::findPackage( const QString& text, const bool& isName )
  */
 QString Portage::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package WHERE installed != '2' LIMIT 1;");
-	return total.first();
+	return KurooDBSingleton::Instance()->packageTotal().first();
 }
 
 /**
@@ -222,15 +235,10 @@ Info Portage::packageInfo( const QString& packageId )
 {
 	Info info;
 	
-	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo(packageId);
+	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo( packageId );
 	QStringList::Iterator it = packageList.begin();
 	info.description = *it++;
-	info.size = *it++;
-	info.keywords = *it++;
-	info.homepage = *it++;
-	info.licenses = *it++;
-	info.useFlags = *it++;
-	info.packageSlots = *it;
+	info.homepage = *it;
 	
 	return info;
 }
@@ -289,7 +297,7 @@ void Portage::loadUnmaskedList()
 	unmaskedMap.clear();
 	
 	// Load package.keyword
-	QFile file( KurooConfig::filePackageKeywords() );
+	QFile file( KurooConfig::dirPackageKeywords() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
@@ -323,13 +331,12 @@ bool Portage::isUnmasked( const QString& package )
  * @param category
  * @param packageList
  */
-void Portage::unmaskPackageList( const QString& category, const QStringList& packageList )
+void Portage::unmaskPackageList( const QStringList& packageIdList )
 {
-	foreach ( packageList ) {
-		QString name = (*it).section(pv, 0, 0);
-		QString package = category + "/" + name;
+	foreach ( packageIdList ) {
+		QString package = Portage::category( *it ) + "/" + Portage::package( *it );
 	
-		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::filePackageKeywords() ) )
+		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::dirPackageKeywords() ) )
 			break;
 		else
 			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
@@ -374,7 +381,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 		}
 		else {
 			kdDebug() << i18n("Error writing: ") << maskFile << endl;
-			KMessageBox::error( 0, i18n("Failed to save to %1. Please run as root.").arg(maskFile), i18n("Saving"));
+			KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
 			return false;
 		}
 		
@@ -394,21 +401,21 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  * @param category
  * @param packageList
  */
-void Portage::clearUnmaskPackageList( const QString& category, const QStringList& packageList )
+void Portage::clearUnmaskPackageList( const QStringList& packageIdList )
 {
-	QFile file( KurooConfig::filePackageKeywords() );
+	QFile file( KurooConfig::dirPackageKeywords() );
 	
 	// Store back list of unmasked packages
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		
-		foreach ( packageList ) {
-			QString package = category + "/" + (*it).section(pv, 0, 0);
+		foreach ( packageIdList ) {
+			QString package = Portage::category( *it ) + "/" + Portage::package( *it ).section( pv, 0, 0 );
 			unmaskedMap.remove( package );
 			
 			// Signal to gui to mark package as not unmasked anymore
-			QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-			QString name( temp.section(pv, 0, 0) );
+			QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
+			QString name( temp.section( pv, 0, 0 ) );
 			SignalistSingleton::Instance()->setUnmasked( name, false );
 		}
 		
@@ -419,8 +426,8 @@ void Portage::clearUnmaskPackageList( const QString& category, const QStringList
 		file.close();
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
-		KMessageBox::error( 0, i18n("Failed to saveto %1. Please run as root.").arg(KurooConfig::filePackageKeywords()), i18n("Saving"));
+		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
+		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
 	}
 }
 
@@ -431,10 +438,10 @@ void Portage::clearUnmaskPackageList( const QString& category, const QStringList
  */
 QString Portage::idDb( const QString& package )
 {
-	QString category = package.section("/", 0, 0);
-	QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-	QString name( temp.section(pv, 0, 0) );
-	QString version( temp.section(name + "-", 1, 1) );
+	QString category = package.section( "/", 0, 0 );
+	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
+	QString name( temp.section( pv, 0, 0 ) );
+	QString version( temp.section( name + "-", 1, 1 ) );
 	
 	return KurooDBSingleton::Instance()->portageIdByCategoryNameVersion( category, name, version ).first();
 }
@@ -446,7 +453,7 @@ QString Portage::idDb( const QString& package )
  */
 QString Portage::category( const QString& id )
 {
-	return KurooDBSingleton::Instance()->query(QString("SELECT name FROM category WHERE id = ( SELECT idCategory FROM package WHERE id = '%1' );").arg(id)).first();
+	return KurooDBSingleton::Instance()->category( id ).first();
 }
 
 /**
@@ -456,11 +463,7 @@ QString Portage::category( const QString& id )
  */
 QString Portage::package( const QString& id )
 {
-	QStringList packageList = KurooDBSingleton::Instance()->query(QString("SELECT name, version FROM package WHERE id = '%1';").arg(id));
-	QStringList::Iterator it = packageList.begin();
-	QString name = *it++;
-	QString version = *it;
-	return name + "-" + version;
+	return KurooDBSingleton::Instance()->package( id ).first();
 }
 
 /**
@@ -474,18 +477,17 @@ QString Portage::packageSummary( const QString& packageId )
 	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );
 
-	QString textLines = "<font size=\"+2\">" + category + "/" + package.section(pv, 0, 0) + "</font><br>";
+	QString textLines = "<font size=\"+2\">" + category + "/" + package.section( pv, 0, 0 ) + "</font><br>";
 			textLines += info.description + "<br>";
 			textLines += "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
-			textLines += i18n("<b>Licenses:</b> ") + info.licenses + "<br>";
 			textLines += i18n("<b>Available versions:</b> ");
 	
-	const QStringList versionList = packageVersions( package.section(pv, 0, 0) );
+	const QStringList versionList = packageVersions( packageId );
 	foreach ( versionList ) {
 		QString version = *it++;
-		QString installed = *it;
+		QString meta = *it;
 		
-		if ( installed == "1" )
+		if ( meta == FILTERINSTALLED )
 			textLines += "<font color=darkGreen><b>" + version + "</b></font>, ";
 		else
 			textLines += version + ", ";
@@ -501,125 +503,20 @@ QString Portage::packageSummary( const QString& packageId )
  */
 QString Portage::versionSummary( const QString& packageId )
 {
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
+	QString package( Portage::package( packageId ) );
+	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );
 	
 	QString textLines = "<font size=\"+2\">" + category + "/" + package + "</font><br>";
 			textLines += info.description + "<br>";
 			textLines += "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
 			textLines += i18n("<b>Licenses:</b> ") + info.licenses + "<br>";
-			textLines += i18n("<b>Slot:</b> ") + info.packageSlots + "<br>";
+			textLines += i18n("<b>Slot:</b> ") + info.slot + "<br>";
 			textLines += i18n("<b>Branches:</b> ") + info.keywords + "<br>";
 			textLines += i18n("<b>Use flags:</b> ") + info.useFlags + "<br>";
 			textLines += i18n("<b>Size:</b> ") + info.size;
 
 	return textLines;
-}
-
-/**
- * Get this version ebuild.
- * @param id
- * @return ebuild text
- */
-QString Portage::ebuild( const QString& packageId )
-{
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "<br>";
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		return i18n("na");
-	}
-}
-
-/**
- * Get this package changelog.
- * @param id
- * @return changelog text
- */
-QString Portage::changelog( const QString& packageId )
-{
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "<br>";
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		return i18n("na");
-	}
-}
-
-/**
- * Get this package dependencies.
- * @param id
- * @return summary
- */
-QString Portage::dependencies( const QString& packageId )
-{
-	QString package( Portage::package( packageId ) );
-	QString category( Portage::category( packageId ) );
-	
-	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package;
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		int lineCount(0);
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.isEmpty() )
-				continue;
-			
-			if ( lineCount++ > 1 || line == "0" )
-				break;
-			else
-				textLines += line + "<br>";
-		}
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		return i18n("na");
-	}
 }
 
 #include "portage.moc"

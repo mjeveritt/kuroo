@@ -2,20 +2,18 @@
 
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
-bin_PROGRAMS = kuroo
+bin_PROGRAMS = kuroo8
 
 # set the include path for X, qt, KDE and subdirs
-INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
-	-I$(top_srcdir)/src/core -I$(top_srcdir)/src/history -I$(top_srcdir)/src/installed \
+INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config -I$(top_builddir)/src/ \
+	-I$(top_srcdir)/src/core -I$(top_srcdir)/src/history  \
 	-I$(top_srcdir)/src/intro -I$(top_srcdir)/src/logs -I$(top_srcdir)/src/portage \
-	-I$(top_srcdir)/src/queue -I$(top_srcdir)/src/results -I$(top_srcdir)/src/updates \
+	-I$(top_srcdir)/src/queue -I$(top_builddir)/src/queue \
 	-I$(top_builddir)/src/intro -I$(top_builddir)/src/history -I$(top_builddir)/src/core \
-	-I$(top_builddir)/src/config -I$(top_builddir)/src/installed -I$(top_builddir)/src/portage \
-	-I$(top_builddir)/src/updates -I$(top_builddir)/src/queue -I$(top_builddir)/src/results \
+	-I$(top_builddir)/src/config -I$(top_builddir)/src/portage \
 	-I$(top_builddir)/src/logs $(all_includes)
 
-SUBDIRS = config intro core history logs queue results updates installed \
-	portage
+SUBDIRS = config intro core history logs queue portage
 
 # embedded sqlite as library
 SQLITE_SUBDIR = sqlite
@@ -33,11 +31,11 @@ messages: rc.cpp
 
 # this is where the kdelnk file will go 
 kdelnkdir = $(kde_appsdir)/System
-kdelnk_DATA = kuroo.desktop
+kdelnk_DATA = kuroo8.desktop
 
 # this is where the XML-GUI resource file goes
-rcdir = $(kde_datadir)/kuroo
-rc_DATA = kurooui.rc
+rcdir = $(kde_datadir)/kuroo8
+rc_DATA = kuroo8ui.rc
 
 # this is to set set autostart of kuroo_watcher
 autostartdir = $(datadir)/autostart
@@ -48,24 +46,22 @@ noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 	systemtray.h message.h common.h
 
 # source for kuroo
-kuroo_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
-			statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui
+kuroo8_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp \
+	mainwindow.cpp statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
+	kurooviewbase.ui
 
 # source for kuroo_watcher
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
-kuroo_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+kuroo8_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
-kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
-	$(top_builddir)/src/updates/libupdates.la $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/results/libresults.la $(top_builddir)/src/queue/libqueue.la \
+kuroo8_LDADD = $(top_builddir)/src/history/libhistory.la \
+	$(top_builddir)/src/config/libconfig.la $(top_builddir)/src/queue/libqueue.la \
 	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
-	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la \
-	$(top_builddir)/src/installed/libinstalled.la $(LIB_KDEPRINT) $(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE) \
-	$(LIB_SQLITE_LOCAL)
+	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KDEPRINT) $(LIB_KFILE) \
+	$(LIB_KDECORE) $(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
 
-# kuroo_watcher links
 

@@ -38,36 +38,32 @@
 
 static QTime totalDuration;
 
-// Tweak for time unpacking and installing each package.
-const int diffTime(10);
+// Tweak for time take unpacking and installing each package.
+const int diffTime( 10 );
 
 /**
  * Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name )
+	: PackageListView( parent, name ), loc( KGlobal::locale() )
 {
 	// Setup geometry
-	addColumn(i18n("Package"));
-	addColumn(i18n("Time"));
-	addColumn(i18n("Size"));
-	addColumn(i18n("Description"));
-	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
+	addColumn( i18n( "Package" ) );
+	addColumn( i18n( "Duration" ) );
+	addColumn( i18n( "Description" ) );
+	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 
-	setProperty("selectionMode", "Extended");
-	setShowSortIndicator(true);
-	setRootIsDecorated(true);
-	setFullWidth(true);
-
-	setColumnWidthMode(0, QListView::Manual);
-	setResizeMode(QListView::LastColumn);
-	setColumnAlignment(2, Qt::AlignRight);
+	setProperty( "selectionMode", "Extended" );
+	setRootIsDecorated( true );
+	setFullWidth( true );
+	setColumnWidthMode( 0, QListView::Manual );
+	setResizeMode( QListView::LastColumn );
+	setColumnWidth( 0, 200 );
+	setColumnWidth( 1, 80 );
+	setTooltipColumn( 2 );
 	
-	setColumnWidth(0, 200);
-	setColumnWidth(1, 80);
-	setColumnWidth(2, 80);
-	
-	setTooltipColumn(3);
+	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
+	setSorting( -1, false );
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), 
 	            this, SLOT( setQueued(const QString&, bool) ) );
@@ -80,65 +76,32 @@ QueueListView::~QueueListView()
 }
 
 /**
- * Clear this listView and packages.
+ * Move the package up in the list.
  */
-void QueueListView::reset()
+void QueueListView::slotPackageUp()
 {
-	clear();
-	packages.clear();
-	categoryItems.clear();
+	QListViewItem* packageItem = currentItem();
+	if ( packageItem->itemAbove() )
+		packageItem->itemAbove()->moveItem( packageItem );
 }
 
 /**
- * Get all packages in the queue
- * @return packageList
+ * Move the package down in the list.
  */
-QStringList QueueListView::allPackages()
+void QueueListView::slotPackageDown()
 {
-	QStringList packageList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		packageList += it.current()->parent()->text(0) + "/" +  it.current()->text(0);
-	
-	return packageList;
-}
-
-/**
- * Get current package in queue (clicked on).
- * @return package
- */
-QString QueueListView::currentPackage()
-{
-	QListViewItem *item = currentItem();
-	if ( item && item->parent() ) {
-		return (item->parent()->text(0) + "/" +  item->text(0));
-	}
-	else
-		return i18n("na");
-}
-
-/**
- * Return selected packages in queue
- * @return packageList		
- */
-QStringList QueueListView::selectedPackages()
-{
-	QStringList packageList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->parent() && it.current()->isSelected() )
-			packageList += it.current()->parent()->text(0) + "/" + it.current()->text(0);
-	}
-	return packageList;
+	QListViewItem* packageItem = currentItem();
+	if ( packageItem->itemBelow() )
+		packageItem->moveItem( packageItem->itemBelow() );
 }
 
 /**
  * Populate queue with packages from db
  */
-void QueueListView::loadFromDB()
+void QueueListView::insertPackageList()
 {
-	PackageItem *categoryItem, *packageItem;
-	
 	reset();
-	totalDuration = QTime(0, 0, 0);
+	totalDuration = QTime( 0, 0, 0 );
 	sumSize = 0;
 		
 	// Get list of update packages with info
@@ -146,41 +109,22 @@ void QueueListView::loadFromDB()
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString category = *it++;
+		category = category + "-" + *it++;
 		QString name = *it++;
-		QString version = *it++;
-		QString package = name + "-" + version;
 		QString description = *it++;
-		QString size = *it++;
-		QString keywords = *it++;
 		QString installed = *it;
 		
-		QString time = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		Meta packageMeta;
+		packageMeta.insert( i18n( "2Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
+		packageMeta.insert( i18n( "3Description" ), description );
 		
-		if ( !categoryItems.contains(category) ) {
-			categoryItem = new PackageItem( this, category, packageMeta, CATEGORY );
-			categoryItem->setExpandable(true);
-			categoryItem->setOpen(true);
-			categoryItems[category].item = categoryItem;
-		}
-		
-		if ( !categoryItems[category].packageItems.contains(package) ) {
-			packageMeta.insert(i18n("3Description"), description);
-			packageMeta.insert(i18n("4Size"), size);
-			packageMeta.insert(i18n("5Time"), timeFormat(time));
-			packageItem = new PackageItem( categoryItems[category].item, package, packageMeta, PACKAGE );
-			categoryItems[category].packageItems[package] = packageItem;
-			
-			if ( installed != "0" )
-				packageItem->setStatus(INSTALLED);
-			
-			if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-				packageItem->setStatus(MASKED);
-			
-		}
-		
-		addSize(size);
-		packages.insert( idDB, packageItem );
+		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE );
+		if ( installed != "0" )
+			packageItem->setStatus( INSTALLED );
+
+// 		addSize(size);
+// 		packages.insert( idDB, packageItem );
+		insertPackage( idDB, packageItem );
 		
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( idDB );
@@ -197,10 +141,10 @@ void QueueListView::loadFromDB()
 QString QueueListView::timeFormat( const QString& time )
 {
 	if ( !time.isEmpty() && time != i18n("na") ) {
-		QTime emergeTime(0, 0, 0);
-		emergeTime = emergeTime.addSecs(time.toInt());
+		QTime emergeTime( 0, 0, 0 );
+		emergeTime = emergeTime.addSecs( time.toInt() );
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
-		return emergeTime.toString(Qt::TextDate);
+		return loc->formatTime( emergeTime, true, true );
 	}
 	else
 		return i18n("na");
@@ -212,7 +156,7 @@ QString QueueListView::timeFormat( const QString& time )
  */
 QString QueueListView::totalTime()
 {
-	return totalDuration.toString(Qt::TextDate);
+	return loc->formatTime(totalDuration, true, true);
 }
 
 /**
@@ -221,7 +165,7 @@ QString QueueListView::totalTime()
  */
 int QueueListView::sumTime()
 {
-	return abs(totalDuration.secsTo(QTime(0, 0, 0)));
+	return abs( totalDuration.secsTo( QTime( 0, 0, 0 ) ) );
 }
 
 /**
@@ -230,9 +174,8 @@ int QueueListView::sumTime()
  */
 void QueueListView::addSize( const QString& size )
 {
-	QString packageSize;
-	packageSize = size.section(" ", 0, 0);
-	packageSize = packageSize.remove(',');
+	QString packageSize(size);
+	packageSize = packageSize.remove(QRegExp("\\D"));
 	sumSize += packageSize.toInt() * 1024;
 }
 
@@ -253,27 +196,16 @@ QString QueueListView::totalSize()
  */
 QString QueueListView::kBSize( const int& size )
 {
-	QString total("");
+	QString total;
+	
 	if ( size == 0 )
 		total = "0 kB ";
-	else
-		if ( size < 1024 ) {
+	else {
+		if ( size < 1024 )
 			total = "1 kB ";
-		}
-		else {
-			QString eString = QString::number(size / 1024);
-			
-			while ( !eString.isEmpty() ) {
-				QString part = eString.right(3);
-				eString = eString.left(eString.length() - part.length());
-				
-				if (!total.isEmpty())
-					total = part + "," + total;
-				else
-					total = part;
-			}
-			total += " kB ";
-		}
+		else
+			total = loc->formatNumber(QString::number(size / 1024), true, 0) + " kB ";
+	}
 	
 	return total;
 }

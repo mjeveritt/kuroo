@@ -1,7 +1,6 @@
-/**************************************************************************
+/***************************************************************************
 *   Copyright (C) 2004 by karye                                           *
 *   karye@users.sourceforge.net                                           *
-*   Copyright (C) 2005 by Jakob Petsovits                                 *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -22,20 +21,18 @@
 #ifndef PORTAGELISTVIEW_H
 #define PORTAGELISTVIEW_H
 
-#include "packagelistview.h"
-
 #include <qpixmap.h>
 
-class QPixmap;
+#include "packagelistview.h"
+
 class Package;
 class QRegExp;
-class PackageItem;
 
 extern QRegExp pv;
 
 /**
  * @class PortageListView
- * @short Specialized listview for viewing all portage packages in selected category.
+ * @short Installed packages listview.
  */
 class PortageListView : public PackageListView
 {
@@ -47,38 +44,21 @@ public:
 public slots:
 	
 	/**
-	* Current package id.
-	* If Package is selected return ebuild id.
-	* @param id
-	*/
-	QString 							currentId();
+	 * Mark package as current.
+	 * @param package
+	 */
+// 	void 			setCurrentPackage( const QString& package );
 	
 	/**
-	* Mark package as selected in view
-	* @param package	
-	*/
-	QStringList 						selectedPackages();
-	
-	/**
-	* Get selected packages.
-	* @param packageList
-	*/
-	void 								setCurrentPackage( const QString& package );
-	
-	/**
-	* Populate listview with packages from selected category.
-	* Jakob Petsovits technique for fast item loading.
-	* @param category package clicked on in categories listview.
-	*/
-	void 								addCategoryPackages( const QString& category );
+	 * Populate listview with content of this category..
+	 * @param package
+	 */
+	void 			addCategoryPackages( const QString& category, int filter );
+	void 			addSubCategoryPackages( const QString& category, const QString& subCategory, int filter );
 	
 private:
-	QPixmap 							pxQueuedColumn;
-	struct TreeViewPackage {
-		PackageItem* item;
-		QMap< QString, PackageItem* > 	versionItems;
-	};
-	QMap< QString, TreeViewPackage > 	packageItems;
+	QStringList		unmaskedList;
+	QPixmap 		pxQueuedColumn;
 };
 
 #endif

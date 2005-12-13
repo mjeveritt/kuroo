@@ -34,7 +34,8 @@
  * and in the table "cache" in the database.
  */
 CachePortageJob::CachePortageJob( QObject* parent )
-	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ), m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
+	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
 	KurooConfig::setPortageCount( QString::number(countPackages()) );
 	KurooConfig::writeConfig();
@@ -165,7 +166,6 @@ bool CachePortageJob::doJob()
 		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage" << endl;
 		return false;
 	}
-	
 	categoryList = dCategory.entryList();
 	itCategoryEnd = categoryList.end();
 	for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {

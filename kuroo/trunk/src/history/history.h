@@ -82,6 +82,8 @@ public slots:
 	
 	void			slotChanged();
 
+	void			appendEmergeInfo( const QString& einfo );
+	
 private slots:
 	
 	/**
@@ -98,8 +100,9 @@ private:
 	QObject			*parent;
 	KDirWatch		*fileWatcher;
 	EmergeTimeMap	m_statisticsMap;
-	QFile 			emergeLog;
+	QFile 			log;
 	QTextStream 	stream;
+	bool			userSync;
 	
 signals:
 	void			signalHistoryChanged();

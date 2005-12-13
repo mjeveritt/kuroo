@@ -49,7 +49,7 @@ PackageItem::~PackageItem()
 {}
 
 /**
- * Insert package meta text into corresponding column.
+ * Insert package meta text into the right column.
  */
 void PackageItem::init()
 {
@@ -65,7 +65,7 @@ void PackageItem::init()
 	for ( int i = 0; i != m_parent->columns(); ++i ) {
 		for ( Meta::Iterator itMeta = m_meta.begin(); itMeta != m_meta.end(); ++itMeta ) {
 			if ( itMeta.key().contains( m_parent->columnText(i) ) ) {
-				setText(i, itMeta.data());
+				setText( i, itMeta.data() );
 				break;
 			}
 		}
@@ -146,9 +146,8 @@ void PackageItem::setStatus( int status )
 		case QUEUED :
 			queued = true;
 			m_meta.insert( i18n("9In Queue"), i18n("Yes") );
-			if ( parent() ) {
+			if ( parent() )
 				dynamic_cast<PackageItem*>(parent())->setStatus(QUEUED);
-			}
 			setPixmap(1, pxQueued);
 			break;
 		
@@ -169,6 +168,7 @@ void PackageItem::setStatus( int status )
 			}
 			setPixmap(1, NULL);
 			repaint();
+			break;
 	}
 }
 
@@ -232,6 +232,7 @@ void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int
 				font.setBold(true);
 				p->setFont(font);
 				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
+				break;
 		}
 	}
 	KListViewItem::paintCell( p, _cg, column, width, alignment );

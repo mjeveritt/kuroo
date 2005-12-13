@@ -118,8 +118,6 @@ private:
 class KurooDB : public QObject
 {
 Q_OBJECT
-		
-signals:
 
 public:
 	KurooDB( QObject *parent = 0 );
@@ -129,7 +127,6 @@ public:
 	 * Check db integrity and create new db if necessary.
 	 */
 	QString 		init( QObject *myParent = 0 );
-	
 	QString 		escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
 	
 	/**
@@ -162,37 +159,31 @@ public:
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	isInstalled( const QString& name, const QString& version );
-	QStringList 	packageVersions( const QString& name );
+	QStringList 	packageVersions( const QString& id );
+	QStringList 	packageVersionsInfo( const QString& id );
 	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
-	QStringList 	categoryByPackageId( const QString& id );
+	QStringList 	packageTotal();
+	QStringList 	installedTotal();
+	QStringList 	updatesTotal();
+	QStringList 	package( const QString& id );
+	QStringList 	category( const QString& id );
+	
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	portageCategories();
-	QStringList 	portageCategoryId( const QString& category );
-	QStringList 	portagePackagesByCategory( const QString& idCategory );
+	QStringList		allCategories();
+	QStringList		allSubCategories();
+	QStringList 	portageCategories( int filter );
+	QStringList 	portageSubCategories( const QString& categoryId, int filter );
+	QStringList 	portageCategoryId( const QString& categoryId );
+	QStringList 	portagePackagesByCategory( const QString& categoryId, int filter );
+	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter );
 	QStringList 	portagePackageInfo( const QString& id );
 	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
 	QStringList 	findPortagePackagesName( const QString& name );
 	QStringList 	findPortagePackagesDescription( const QString& description );
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for installed
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	installedPackages();
-	QStringList 	installedCategories();
-	QStringList 	installedPackagesByCategory( const QString& idCategory );
-	QStringList 	installedPackageInfo( const QString& id );
-	QStringList 	findInstalledPackagesName( const QString& name );
-	QStringList 	findInstalledPackagesDescription( const QString& description );
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for updates 
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	updatesCategories();
-	QStringList 	updatesPackages();
-	QStringList 	updatesPackagesByCategory( const QString& idCategory );
+
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 
@@ -210,6 +201,7 @@ public:
 	QStringList 	history();
 	QStringList 	lastHistoryEntry();
 	QStringList		getLastSync();
+	void			addRefreshTime();
 	QStringList 	statistic();
 	
 	//////////////////////////////////////////////////////////////////////////////

@@ -36,10 +36,7 @@ LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
 	logBrowser->setTextFormat( Qt::LogText );
-	
-	// Reload view after changes.
-	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
-	
+
 	slotInit();
 }
 
@@ -48,24 +45,24 @@ LogsTab::LogsTab( QWidget* parent )
  */
 LogsTab::~LogsTab()
 {
-	KConfig* config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	
-	QValueList<int> list = splitterV->sizes();
-	config->writeEntry("splitterLogsV", list);
-	
-	historyView->saveLayout( KurooConfig::self()->config(), "logsViewLayout" );
+// 	KConfig* config = KurooConfig::self()->config();
+// 	config->setGroup("Kuroo Geometry");
+// 	
+// 	QValueList<int> list = splitterV->sizes();
+// 	config->writeEntry("splitterLogsV", list);
+// 	
+// 	historyView->saveLayout( KurooConfig::self()->config(), "logsViewLayout" );
 	
 	// Save checkboxes state
 	if ( saveLog->isChecked() )
-		KurooConfig::setSaveLog(true);
+		KurooConfig::setSaveLog( true );
 	else
-		KurooConfig::setSaveLog(false);
+		KurooConfig::setSaveLog( false );
 	
 	if ( verboseLog->isChecked() )
-		KurooConfig::setVerboseLog(true);
+		KurooConfig::setVerboseLog( true );
 	else
-		KurooConfig::setVerboseLog(false);
+		KurooConfig::setVerboseLog( false );
 	
 	KurooConfig::writeConfig();
 }
@@ -76,24 +73,24 @@ LogsTab::~LogsTab()
  */
 void LogsTab::slotInit()
 {
-	KConfig* config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	
-	QValueList<int> sizes = config->readIntListEntry("splitterLogsV");
-	splitterV->setSizes(sizes);
-	
-	historyView->restoreLayout( KurooConfig::self()->config(), "logsViewLayout" );
+// 	KConfig* config = KurooConfig::self()->config();
+// 	config->setGroup("Kuroo Geometry");
+// 	
+// 	QValueList<int> sizes = config->readIntListEntry("splitterLogsV");
+// 	splitterV->setSizes(sizes);
+// 	
+// 	historyView->restoreLayout( KurooConfig::self()->config(), "logsViewLayout" );
 	
 	// Restore checkboxes state
 	if ( KurooConfig::saveLog() )
-		saveLog->setChecked(true);
+		saveLog->setChecked( true );
 	else
-		saveLog->setChecked(false);
+		saveLog->setChecked( false );
 	
 	if ( KurooConfig::verboseLog() )
-		verboseLog->setChecked(true);
+		verboseLog->setChecked( true );
 	else
-		verboseLog->setChecked(false);
+		verboseLog->setChecked( false );
 }
 
 /**
@@ -101,7 +98,7 @@ void LogsTab::slotInit()
  */
 void LogsTab::slotReload()
 {
-	historyView->loadFromDB();
+// 	historyView->loadFromDB();
 }
 
 #include "logstab.moc"

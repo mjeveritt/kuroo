@@ -29,7 +29,7 @@
  * Just connect to this instance.
  */
 Signalist::Signalist( QObject* parent )
-	: QObject( parent ), busy(false), busyScanning(false), busyDiskUsage(false)
+	: QObject( parent ), busy( false ), busyScanning( false ), busyDiskUsage( false )
 {
 }
 
@@ -221,6 +221,24 @@ void Signalist::clearQueued()
 void Signalist::setUnmasked( const QString& name, bool b )
 {
 	emit signalUnmasked( name, b );
+}
+
+/**
+ * Propagate signal that emerge of package started.
+ * @param package
+ */
+void Signalist::emergePackageStart( const QString& package )
+{
+	emit signalEmergePackageStart( package );
+}
+
+/**
+ * Propagate signal that emerge of package completed.
+ * @param package
+ */
+void Signalist::emergePackageComplete( const QString& package )
+{
+	emit signalEmergePackageComplete( package );
 }
 
 #include "signalist.moc"

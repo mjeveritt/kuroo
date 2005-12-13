@@ -1,0 +1,354 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>InspectorBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>InspectorBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>612</width>
+            <height>529</height>
+        </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>500</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTabWidget" row="1" column="0">
+            <property name="name">
+                <cstring>kTabWidget1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Versions</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBox6_2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Available Versions of this package:</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KListView" row="0" column="0">
+                                <column>
+                                    <property name="text">
+                                        <string>Version</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Branches</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Size</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>versionsView</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="0">
+                        <property name="name">
+                            <cstring>installGroup</cstring>
+                        </property>
+                        <property name="title">
+                            <string>For this package always install:</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>3</number>
+                            </property>
+                            <property name="spacing">
+                                <number>1</number>
+                            </property>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>radioButton7_5</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>St&amp;able Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="1">
+                                <property name="name">
+                                    <cstring>radioButton7_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Testi&amp;ng Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="2">
+                                <property name="name">
+                                    <cstring>radioButton7_3_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Mas&amp;ked Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
+                            <spacer row="0" column="3">
+                                <property name="name">
+                                    <cstring>spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>31</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Use Flags</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout5</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>t1_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>3</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>100</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Use Flag description:</string>
+                                </property>
+                            </widget>
+                            <widget class="QTextBrowser" row="2" column="0">
+                                <property name="name">
+                                    <cstring>description</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>1</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>50</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>70</height>
+                                    </size>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="KActionSelector" row="1" column="0">
+                        <property name="name">
+                            <cstring>allUseFlags</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>3</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>0</width>
+                                <height>300</height>
+                            </size>
+                        </property>
+                        <property name="availableInsertionPolicy">
+                            <enum>Sorted</enum>
+                        </property>
+                        <property name="selectedInsertionPolicy">
+                            <enum>Sorted</enum>
+                        </property>
+                        <property name="showUpDownButtons">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>E&amp;build</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="KTextBrowser" row="0" column="0">
+                        <property name="name">
+                            <cstring>ebuildBrowser</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Dependencies</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="KTextBrowser" row="0" column="0">
+                        <property name="name">
+                            <cstring>dependencyBrowser</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Cha&amp;ngeLog</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="KTextBrowser" row="0" column="0">
+                        <property name="name">
+                            <cstring>changelogBrowser</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>package</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>100</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Package</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+    <includehint>kactionselector.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+</includehints>
+</UI>

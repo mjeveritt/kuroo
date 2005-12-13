@@ -48,32 +48,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	
 	QWizard::showPage(page1);
 	QWizard::setHelpEnabled(page1, false);
-	QWizard::setHelpEnabled(page3, false);
-	QWizard::setHelpEnabled(page4, false);
-	QWizard::setHelpEnabled(page5, false);
-	QWizard::setHelpEnabled(page6, false);
-	QWizard::setHelpEnabled(page7, false);
-	QWizard::setHelpEnabled(page8, false);
-	setFinishEnabled(page8, true);
-	
-	QString Changelog("/usr/share/doc/HTML/en/kuroo/ChangeLog");
-	QFile file(Changelog);
-	
-	if ( file.open(IO_ReadOnly) ) {
-		QTextStream stream(&file);
-		LogBrowser->setText(stream.read());
-		file.close();
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << Changelog << endl;
-	
-	path_dirPortage->setMode(KFile::Directory | KFile::LocalOnly);
-	path_dirPortage->setURL(KurooConfig::dirPortage());
-	
-	path_portageOverlay->setMode(KFile::Directory | KFile::LocalOnly);
-	path_portageOverlay->setURL(KurooConfig::dirPortageOverlay());
-	
-	kcfg_Arch->setCurrentText(KurooConfig::arch());
+	setFinishEnabled(page1, true);
 }
 
 IntroDlg::~IntroDlg()
@@ -96,52 +71,7 @@ void IntroDlg::back()
  */
 void IntroDlg::next()
 {
-	QStringList error;
-	QDir d;
-	
-	if ( QWizard::indexOf(this->currentPage()) == 3 ) {
-		
-		d.setPath(path_dirPortage->url());
-		if ( d.exists() )
-			KurooConfig::setDirPortage(path_dirPortage->url());
-		else {
-			error = i18n("Path to Portage directory not valid...");
-			error += i18n(" Please correct!");
-		}
-
-		// Check all portage directories
-		const QStringList categoryUrl = QStringList::split(" ", path_portageOverlay->url());
-		QStringList categoryUrlValid;
-		foreach ( categoryUrl ) {
-			d.setPath(*it);
-			if ( d.exists() )
-				categoryUrlValid += *it;
-			else {
-				error += i18n("Path to Portage overlay directory %1 not valid...").arg(*it);
-				error += i18n(" Please correct!");
-			}
-			KurooConfig::setDirPortageOverlay(categoryUrlValid.join(" "));
-		}
-		
-		KurooConfig::setArch(kcfg_Arch->currentText());
-		
-		if ( error.isEmpty() ) {
-			KurooConfig::writeConfig();
-			QWizard::next();
-		}
-		else {
-			switch (KMessageBox::warningYesNoList(this, i18n("Error checking paths..."), error, i18n("Kuroo"), KGuiItem::KGuiItem(i18n("Continue")), KGuiItem::KGuiItem(i18n("Cancel")))) {
-				case KMessageBox::Yes : {
-					QWizard::next();
-				}
-			}
-		}
-
-	}
-	else
-		QWizard::next();
-
-	if ( QWizard::indexOf(this->currentPage()) == 7 ) {
+	if ( QWizard::indexOf(this->currentPage()) == 0 ) {
 		KMessageBox::enableAllMessages();
 		
 		// Add default etc warning files

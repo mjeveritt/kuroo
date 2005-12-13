@@ -27,9 +27,11 @@
 class kurooIface : virtual public DCOPObject
 {
 K_DCOP
-
-k_dcop:
-	virtual bool	slotEmergePretend( QString package ) = 0;
+	public:
+	
+	k_dcop:
+// 	virtual void openURL( QString url ) = 0;
+	virtual void	slotEmergePretend( QString package ) = 0;
 };
 
 #endif // _KUROOIFACE_H_

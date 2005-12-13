@@ -38,7 +38,7 @@
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), aborted(true)
 {
 }
 
@@ -76,26 +76,22 @@ bool ScanUpdatesJob::doJob()
 	
 	setStatus( i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );
-	int count(0);
-		
+	int count( 0 );
+
 	// Temporary tables to avoid locking main table
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE package_temp ("
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	                                    " idCategory INTEGER, "
+	                                    " idSubCategory INTEGER, "
+	                                    " idCatSubCategory INTEGER, "
 	                                    " name VARCHAR(32), "
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
-	                                    " licenses VARCHAR(32), "
-	                                    " size VARCHAR(32), "
-	                                    " keywords VARCHAR(32),"
-	                                    " useFlags VARCHAR(32),"
-	                                    " packageSlots VARCHAR(32),"
-	                                    " version VARCHAR(32), "
 	                                    " date VARCHAR(32), "
-	                                    " installed INTEGER, "
-	                                    " updateVersion VARCHAR(32)); "
-	                                    ");", m_db);
+	                                    " meta INTEGER, "
+	                                    " updateVersion VARCHAR(32) "
+	                                    " );", m_db);
 	
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE updates_temp ("
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -107,7 +103,6 @@ bool ScanUpdatesJob::doJob()
 	
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
 	KurooDBSingleton::Instance()->query( "UPDATE package_temp SET updateVersion = '';", m_db );
-	
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	
 	EmergePackageList::ConstIterator itEnd = m_packageList.end();
@@ -124,22 +119,22 @@ bool ScanUpdatesJob::doJob()
 		setProgress( count++ );
 		
 		// Find id for this category in db
-		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg((*it).category), m_db).first();
+		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM catSubCategory WHERE name = '%1';").arg((*it).category), m_db).first();
 		
 		// Mark as update in portage
 		if ( !(*it).updateFlags.contains("N") ) {
-			QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package_temp WHERE name = '%1' AND idCategory = '%2' AND version = '%3';").arg((*it).name).arg(idCategory).arg((*it).installedVersion), m_db).first();
+			QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package_temp WHERE name = '%1' AND idCatSubCategory = '%2';").arg((*it).name).arg(idCategory), m_db).first();
 			
 			KurooDBSingleton::Instance()->query(QString("UPDATE package_temp SET updateVersion = '%1' WHERE id = '%2';").arg((*it).version).arg(idPackage), m_db);
 		}
 		
-		QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package_temp WHERE name = '%1' AND idCategory = '%2' AND version = '%3';").arg((*it).name).arg(idCategory).arg((*it).version), m_db).first();
+		QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package_temp WHERE name = '%1' AND idCatSubCategory = '%2';").arg((*it).name).arg(idCategory), m_db).first();
 		
 		KurooDBSingleton::Instance()->insert(QString("INSERT INTO updates_temp (idPackage, installedVersion, updateFlags, useFlags ) VALUES ('%1', '%2', '%3', '%4');").arg(idPackage).arg((*it).installedVersion).arg((*it).updateFlags).arg((*it).useFlags), m_db);
 	}
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	
-	// Move content from temporary table 
+	// Move content from temporary table
 	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
@@ -148,8 +143,8 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert("INSERT INTO updates SELECT * FROM updates_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE updates_temp;", m_db);
 	
-	setStatus(i18n("Done."));
-	setProgress(0);
+	setStatus( i18n( "Done." ) );
+	setProgress( 0 );
 	return true;
 }
 

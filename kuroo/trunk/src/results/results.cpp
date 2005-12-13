@@ -85,8 +85,7 @@ public:
 			QString id = KurooDBSingleton::Instance()->query(QString("SELECT package.id FROM category, package WHERE "
 				" category.name = '%1'"
 				" AND package.name = '%2'"
-				" AND package.version = '%3'"
-				" LIMIT 1;").arg((*it).category).arg((*it).name).arg((*it).version), m_db).first();
+				" LIMIT 1;").arg((*it).category).arg((*it).name), m_db).first();
 			
 			if ( !id.isEmpty() )
 				KurooDBSingleton::Instance()->insert(QString("INSERT INTO results_temp (idPackage, flags) VALUES ('%1', '%2');").arg(id).arg((*it).updateFlags), m_db);

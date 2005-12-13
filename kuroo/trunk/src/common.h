@@ -24,12 +24,12 @@
 #include "settings.h"
 #include "message.h"
 #include "signalist.h"
-#include "results.h"
 #include "emerge.h"
 #include "etcupdate.h"
 #include "statusbar.h"
 #include "log.h"
 #include "queue.h"
+#include "results.h"
 #include "updates.h"
 #include "installed.h"
 #include "portage.h"
@@ -37,6 +37,7 @@
 #include "history.h"
 #include "singleton.h"
 
+// Define all singleton objects
 typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
@@ -49,11 +50,22 @@ typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<Updates> UpdatesSingleton;
 
+// The package states used by the filters
+enum packageFilters { FILTER_ALL, FILTER_INSTALLED, FILTER_UPDATES, FILTER_OLD };
+static const QString FILTERALL( QString::number( FILTER_ALL ) );
+static const QString FILTERINSTALLED( QString::number( FILTER_INSTALLED ) );
+static const QString FILTEROLD( QString::number( FILTER_OLD ) );
+
+// Log output states
 enum LogActions { EMERGE, KUROO, ERROR, TOLOG, EMERGELOG };
 
+// Individual package item state
 enum packageStatus { NONE, CATEGORY, INSTALLED, PACKAGE, EBUILD_INSTALLED, EBUILD, MASKED, UNMASKED, QUEUED, NOTQUEUED };
 
-static const QString KUROODIR = "/var/cache/kuroo/";
+// Kuroo home directory
+static const QString KUROODIR = "/var/kuroo8/";
+
+// Max rows in queries
 static const int ROWLIMIT = 1000;
 
 /**

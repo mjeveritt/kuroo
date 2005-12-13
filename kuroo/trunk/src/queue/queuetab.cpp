@@ -20,7 +20,8 @@
 
 #include "common.h"
 #include "statusbar.h"
-#include "emergeoptions.h"
+#include "emergeinspector.h"
+#include "pretendinspector.h"
 #include "queuetab.h"
 #include "queuelistview.h"
 
@@ -28,6 +29,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 
+#include <ktextbrowser.h>
 #include <kdialogbase.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -46,10 +48,15 @@ QueueTab::QueueTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
+// 	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( slotPackageUp() ) );
+// 	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( slotPackageDown() ) );
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
+	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
+	
 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
 	connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-	connect( pbStop, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
+	connect( pbPretend, SIGNAL( clicked() ), this, SLOT( slotPretend() ) );
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
@@ -58,7 +65,7 @@ QueueTab::QueueTab( QWidget* parent )
 	
 	// Reload view after changes.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged() ), this, SLOT( slotReload() ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
+	connect( ResultsSingleton::Instance(), SIGNAL( signalResultsChanged() ), this, SLOT( slotShowResults() ) );
 	
 	slotInit();
 }
@@ -85,7 +92,9 @@ void QueueTab::slotInit()
 	if ( !KurooConfig::init() )
 		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
 	
-	slotBusy(false);
+	emergeInspector = new EmergeInspector( this );
+	pretendInspector = new PretendInspector( this );
+	slotBusy( false );
 }
 
 /**
@@ -93,9 +102,17 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload()
 {
-	queueView->loadFromDB();
-	totalSizeText->setText(queueView->totalSize());
-	totalTimeText->setText(queueView->totalTime());
+	queueView->insertPackageList();
+	
+	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
+			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( QueueSingleton::Instance()->count() );
+			queueBrowserLines += i18n( "Estimated time for emerge: %1<br>" ).arg( queueView->totalTime() );
+			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
+	
+	queueBrowser->clear();
+	queueBrowser->setText( queueBrowserLines );
+	
+// 	totalSizeText->setText( queueView->totalSize() );
 }
 
 /**
@@ -105,251 +122,28 @@ void QueueTab::slotReload()
 void QueueTab::slotBusy( bool b )
 {
 	if ( b ) {
-		pbGo->setDisabled(true);
-		pbOptions->setDisabled(true);
-		pbClear->setDisabled(true);
+// 		pbGo->setDisabled( true );
+		pbOptions->setDisabled( true );
+		pbClear->setDisabled( true );
 		
 		if ( EmergeSingleton::Instance()->isRunning() )
-			pbStop->setDisabled(false);
+			pbGo->setText( i18n( "Stop Installation!" ) );
 		else
-			pbStop->setDisabled(true);
+			pbGo->setText( i18n( "Start Installation!" ) );
 	}
 	else {
-		if ( !KUser().isSuperUser() )
+		if ( !KUser().isSuperUser() ) {
 			pbGo->setDisabled(true);
-		else
-			pbGo->setDisabled(false);
-		
-		pbStop->setDisabled(true);
-		pbOptions->setDisabled(false);
-		pbClear->setDisabled(false);
-	}
-}
-
-/**
- * Open dialog for advanced emerge options.
- */
-void QueueTab::slotOptions()
-{
-	dial = new KDialogBase( KDialogBase::Swallow, i18n("Advanced emerge options"), KDialogBase::User1 |KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, this, i18n("Options"), true);
-	
-	dial->setButtonText( KDialogBase::User1, i18n("Reset") );
-	connect (dial, SIGNAL(user1Clicked()), this, SLOT(slotClearOptions()));
-	
-	optionsDialog = new EmergeOptionsBase();
-	dial->setMainWidget(optionsDialog);
-	optionsDialog->show();
-
-	// Get options
-	QString options( emergeOptionsText->text() );
-	
-	if ( !options.isEmpty() ) {
-		const QStringList optionsList = QStringList::split(" ", options);
-		foreach ( optionsList ) {
-			options = (*it).stripWhiteSpace();
-			
-			if ( options == "--buildpkg" )
-				optionsDialog->radioBuildpkg->toggle();
-			
-			if ( options == "--buildpkgonly" )
-				optionsDialog->radioBuildpkgonly->toggle();
-			
-			if ( options == "--usepkg" )
-				optionsDialog->radioUsepkg->toggle();
-			
-			if ( options == "--usepkgonly" )
-				optionsDialog->radioUsepkgonly->toggle();
-			
-			if ( options == "--nodeps" )
-				optionsDialog->radioNodeps->toggle();
-			
-			if ( options == "--onlydeps" )
-				optionsDialog->radioOnlydeps->toggle();
-			
-			if ( options == "--verbose" )
-				optionsDialog->radioVerbose->toggle();
-			
-			if ( options == "--quiet" )
-				optionsDialog->radioQuiet->toggle();
-			
-			if ( options == "--pretend" )
-				optionsDialog->checkPretend->toggle();
-			
-			if ( options == "--deep" )
-				optionsDialog->checkDeep->toggle();
-			
-			if ( options == "--update" )
-				optionsDialog->checkUpdate->toggle();
-			
-			if ( options == "--upgradeonly" )
-				optionsDialog->checkUpgradeonly->toggle();
-			
-			if ( options == "--fetchonly" )
-				optionsDialog->checkFetchonly->toggle();
-			
-			if ( options == "--emptytree" )
-				optionsDialog->checkEmptytree->toggle();
-			
-			if ( options == "--debug" )
-				optionsDialog->checkDebug->toggle();
-			
-			if ( options == "--noconfmem" )
-				optionsDialog->checkNoconfmem->toggle();
-			
-			if ( options == "--oneshot" )
-				optionsDialog->checkOneshot->toggle();
-			
-			if ( options == "--noreplace" )
-				optionsDialog->checkNoreplace->toggle();
-			
-			if ( options == "--newuse" )
-				optionsDialog->checkNewUse->toggle();
+			pbUninstall->setDisabled(true);
 		}
-	}
-
-	// Write options back to lineedit
-	if ( dial->exec() == QDialog::Accepted ) {
-		QStringList optionsList;
-		
-		if ( optionsDialog->radioBuildpkg->isOn() ) 
-			optionsList += "--buildpkg";
-		else
-			if ( optionsDialog->radioBuildpkgonly->isOn() ) 
-				optionsList += "--buildpkgonly";
-		
-		if ( optionsDialog->radioUsepkg->isOn() ) 
-			optionsList += "--usepkg";
-		else
-			if ( optionsDialog->radioUsepkgonly->isOn() ) 
-				optionsList += "--usepkgonly";
-		
-		if ( optionsDialog->radioNodeps->isOn() ) 
-			optionsList += "--nodeps";
-		else
-			if ( optionsDialog->radioOnlydeps->isOn() ) 
-				optionsList += "--onlydeps";
-		
-		if ( optionsDialog->radioVerbose->isOn() ) 
-			optionsList += "--verbose";
-		else
-			if ( optionsDialog->radioQuiet->isOn() ) 
-				optionsList += "--quiet";
-		
-		if ( optionsDialog->checkPretend->isChecked() ) 
-			optionsList += "--pretend";
-		
-		if ( optionsDialog->checkDeep->isChecked() ) 
-			optionsList += "--deep";
-		
-		if ( optionsDialog->checkUpdate->isChecked() ) 
-			optionsList += "--update";
-		
-		if ( optionsDialog->checkUpgradeonly->isChecked() ) 
-			optionsList += "--upgradeonly";
-		
-		if ( optionsDialog->checkFetchonly->isChecked() ) 
-			optionsList += "--fetchonly";
-		
-		if ( optionsDialog->checkEmptytree->isChecked() ) 
-			optionsList += "--emptytree";
-		
-		if ( optionsDialog->checkDebug->isChecked() ) 
-			optionsList += "--debug";
-		
-		if ( optionsDialog->checkNoconfmem->isChecked() ) 
-			optionsList += "--noconfmem";
-		
-		if ( optionsDialog->checkOneshot->isChecked() ) 
-			optionsList += "--oneshot";
-		
-		if ( optionsDialog->checkNoreplace->isChecked() ) 
-			optionsList += "--noreplace";
-		
-		if ( optionsDialog->checkNewUse->isChecked() ) 
-			optionsList += "--newuse";
-		
-		emergeOptionsText->setText( optionsList.join(" ") );
-	}
-}
-
-void QueueTab::slotClearOptions()
-{
-	if ( optionsDialog->radioBuildpkg->isOn() )
-		optionsDialog->radioBuildpkg->toggle();
-	
-	if ( optionsDialog->radioBuildpkgonly->isOn() ) 
-		optionsDialog->radioBuildpkgonly->toggle();
-	
-	if ( optionsDialog->radioUsepkg->isOn() ) 
-		optionsDialog->radioUsepkg->toggle();
-	
-	if ( optionsDialog->radioUsepkgonly->isOn() ) 
-		optionsDialog->radioUsepkgonly->toggle();
-	
-	if ( optionsDialog->radioNodeps->isOn() ) 
-		optionsDialog->radioNodeps->toggle();
-	
-	if ( optionsDialog->radioOnlydeps->isOn() ) 
-		optionsDialog->radioOnlydeps->toggle();
-	
-	if ( optionsDialog->radioVerbose->isOn() ) 
-		optionsDialog->radioVerbose->toggle();
-	
-	if ( optionsDialog->radioQuiet->isOn() ) 
-		optionsDialog->radioQuiet->toggle();
-	
-	optionsDialog->checkPretend->setChecked(false);
-	optionsDialog->checkDeep->setChecked(false);
-	optionsDialog->checkUpdate->setChecked(false);
-	optionsDialog->checkUpgradeonly->setChecked(false);
-	optionsDialog->checkFetchonly->setChecked(false);
-	optionsDialog->checkEmptytree->setChecked(false);
-	optionsDialog->checkDebug->setChecked(false);
-	optionsDialog->checkNoconfmem->setChecked(false);
-	optionsDialog->checkOneshot->setChecked(false);
-	optionsDialog->checkNoreplace->setChecked(false);
-	optionsDialog->checkNewUse->setChecked(false);
-	
-	emergeOptionsText->clear();
-}
-
-/**
- * Emerge all packages in the installation queue.
- */
-void QueueTab::slotGo()
-{
-	// Prepend emerge options
-	QStringList packageList;
-	QString options(emergeOptionsText->text());
-	
-	if ( options.isEmpty() )
-		packageList = queueView->allPackages();
-	else {
-		packageList = QStringList::split(" ", options);
-		packageList += queueView->allPackages();
-	}
-		
-	switch( KMessageBox::questionYesNoList( this, 
-		i18n("Do you want to emerge following packages?"), packageList, i18n("Emerge queue") ) ) {
-			case KMessageBox::Yes: {
-				QueueSingleton::Instance()->installPackageList( packageList );
-				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-			}
-	}
-}
-
-/**
- * Kill the running emerge process.
- */
-void QueueTab::slotStop()
-{
-	switch ( KMessageBox::warningYesNo(this,
-		i18n("Do you want to abort the running emerge process?"))) {
-			case KMessageBox::Yes : {
-				EmergeSingleton::Instance()->stop();
-				KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
-			}
+		else {
+			pbGo->setDisabled( false );
+			pbUninstall->setDisabled( false );
 		}
+		
+		pbOptions->setDisabled( false );
+		pbClear->setDisabled( false );
+	}
 }
 
 /**
@@ -364,30 +158,113 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	enum Actions { PRETEND, EMERGE, REMOVE, GOTO };
 	
-	KPopupMenu menu(this);
-	int menuItem1 = menu.insertItem(i18n("Emerge pretend"), PRETEND);
-	int menuItem2 = menu.insertItem(i18n("Remove"), REMOVE );
-	menu.insertItem(i18n("View Info"), GOTO );
+	KPopupMenu menu( this );
+	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
+	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
+// 	menu.insertItem( i18n( "View Info" ), GOTO );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
 	
-	switch( menu.exec(point) ) {
+	switch( menu.exec( point ) ) {
 		
-		case PRETEND: {
-			QueueSingleton::Instance()->pretendPackageList( queueView->selectedPackages() );
+		case PRETEND:
+			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
 			break;
-		}
 
-		case REMOVE: {
+		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 			break;
-		}
 		
-		case GOTO: {
-			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
+// 		case GOTO:
+// 			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
+	
+	}
+}
+
+/**
+ * Emerge all packages in the installation queue.
+ */
+void QueueTab::slotGo()
+{
+	kdDebug() << "QueueTab::slotGo" << endl;
+	
+	if ( EmergeSingleton::Instance()->isRunning() )
+		slotStop();
+	
+	// Prepend emerge options
+	QStringList packageList;
+	QString options( emergeInspector->getOptions() );
+	
+	if ( options.isEmpty() )
+		packageList = queueView->allPackages();
+	else {
+		packageList = QStringList::split( " ", options );
+		packageList += queueView->allPackages();
+	}
+	
+	switch( KMessageBox::questionYesNoList( this, 
+		i18n("Do you want to emerge following packages?"), packageList, i18n("Emerge queue") ) ) {
+		case KMessageBox::Yes: {
+			QueueSingleton::Instance()->installPackageList( packageList );
+			KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+			pbGo->setText( i18n( "Stop Installation!" ) );
 		}
 	}
+}
+
+/**
+ * Kill the running emerge process.
+ */
+void QueueTab::slotStop()
+{
+	switch ( KMessageBox::warningYesNo( this,
+		i18n( "Do you want to abort the running emerge process?" ) ) ) {
+		case KMessageBox::Yes : {
+			EmergeSingleton::Instance()->stop();
+			KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
+		}
+	}
+}
+
+
+/**
+ * Launch unmerge of packages in queue.
+ */
+void QueueTab::slotUninstall()
+{
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
+		QStringList packageList( queueView->allPackages() );
+		switch( KMessageBox::questionYesNoList( this, 
+			i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
+					"Do you want to unmerge following packages?</qt>" ), packageList, i18n( "Unmerge packages" ) ) ) {
+				case KMessageBox::Yes:
+					InstalledSingleton::Instance()->uninstallPackageList( queueView->allId() );
+			}
+	}
+}
+
+/**
+ * Launch emerge pretend of packages in queue.
+ */
+void QueueTab::slotPretend()
+{
+	PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
+}
+
+void QueueTab::slotShowResults()
+{
+	pretendInspector->showResults();
+}
+
+void QueueTab::slotRemove()
+{
+	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+}
+
+void QueueTab::slotOptions()
+{
+	emergeInspector->edit();
 }
 
 #include "queuetab.moc"

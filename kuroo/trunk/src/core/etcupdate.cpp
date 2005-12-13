@@ -69,10 +69,8 @@ void EtcUpdate::askUpdate( const int& count )
  */
 bool EtcUpdate::etcUpdate()
 {
-	if ( KurooConfig::etcUpdateTool().isEmpty() ) {
+	if ( KurooConfig::etcUpdateTool().isEmpty() )
 		KMessageBox::information( 0, i18n("Please specify merge tool in settings!"), i18n("Kuroo") );
-		return false;
-	}
 	else {
 		etcUpdateLines.clear();
 		diffSource = "";
@@ -105,6 +103,7 @@ void  EtcUpdate::readFromStdout( KProcIO* proc )
 	while ( proc->readln(line, true) != -1 ) {
 		etcUpdateLines += line;
 		LogSingleton::Instance()->writeLog( line, EMERGE );
+		kdDebug() << "EtcUpdate::readFromStdout etcUpdateLines=" << etcUpdateLines << endl;
 		
 		if ( line.contains("Please select a file") ) {
 			proc->writeStdin( (QString)"-1", true );

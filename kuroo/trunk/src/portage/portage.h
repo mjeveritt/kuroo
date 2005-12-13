@@ -68,14 +68,13 @@ public slots:
 	 * @return bool
 	 */
 	bool						slotSync();
-	void						setRefreshTime();
 	
 	/**
 	 * Launch emerge pretend of packages.
 	 * @param category
 	 * @param packageList
 	 */
-	void						pretendPackage( const QString& category, const QStringList& packageList );
+	void						pretendPackageList( /*const QString& category, */const QStringList& packageIdList );
 	
 	/**
 	* Check if package is installed.
@@ -88,20 +87,23 @@ public slots:
 	* Get list of all categories for portage packages.
 	* @return QStringList
 	*/
-	QStringList					categories();
+	QStringList					categories( int filter );
+	QStringList					subCategories( const QString& category, int filter );
 	
 	/**
 	* Get list of packages in this category from database.
 	* @param category
 	* @return QStringList
 	*/
-	QStringList					packagesInCategory( const QString& category );
+	QStringList					packagesInCategory( const QString& category, int filter );
+	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter );
 	
 	/**
 	* Get list of versions available of this package.
 	* @param name
 	*/
-	QStringList					packageVersions( const QString& name);
+	QStringList					packageVersions( const QString& id );
+	QStringList					packageVersionsInfo( const QString& id );
 	
 	/**
 	* Find packages by name or description.
@@ -161,7 +163,7 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						unmaskPackageList( const QString& category, const QStringList& packageList );
+	void						unmaskPackageList( const QStringList& packageIdList );
 	
 	/**
 	* Unmask package by adding to "maskFile".
@@ -176,16 +178,13 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						clearUnmaskPackageList( const QString& category, const QStringList& packageList );
+	void						clearUnmaskPackageList( const QStringList& packageIdList );
 	
 	/**
 	 * Methods for parsing info files.
 	 */
 	QString						packageSummary( const QString& packageId );
 	QString						versionSummary( const QString& packageId );
-	QString						dependencies( const QString& packageId );
-	QString						changelog( const QString& packageId );
-	QString						ebuild( const QString& packageId );
 
 signals:
 	void						signalPortageChanged();

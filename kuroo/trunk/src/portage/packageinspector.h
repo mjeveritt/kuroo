@@ -18,23 +18,44 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "portagelistview.h"
-#include "portagepackagesview.h"
+#ifndef PACKAGEINSPECTOR_H
+#define PACKAGEINSPECTOR_H
 
-#include <klistviewsearchline.h>
+#include "inspectorbase.h"
+
+#include <kdialogbase.h>
 
 /**
- * Connect portage package listview to searchline.
+ * @class PackageInspector
+ * @short Specialized dialog 
  */
-PortagePackagesView::PortagePackagesView( QWidget *parent, const char *name )
-	: QVBox( parent, name )
+class PackageInspector : public KDialogBase
 {
-	packagesView = new PortageListView( this, name );
-	new KListViewSearchLineWidget( packagesView, this, name );
-}
+Q_OBJECT
+public:
+    PackageInspector( QWidget *parent = 0, const char *name = 0 );
+    ~PackageInspector();
+	
+	/**
+	 * Open use flags dialog.
+	 * @param newPackage	selected package
+	 */
+	void			edit( const QString& packageId );
+	
+private slots:
+	void			loadEbuild();
+	void			loadChangeLog();
+	void			loadDependencies();
+	void			loadVersions();
+	void			loadUseFlags();
+	void			slotUseDescription( QListBoxItem* item );
+	void			slotApply();
 
-PortagePackagesView::~PortagePackagesView()
-{
-}
+private:
+	QString			category, package, packageId;
+	QStringList		useList;
+	InspectorBase	*dialog;
+	
+};
 
-#include "portagepackagesview.moc"
+#endif

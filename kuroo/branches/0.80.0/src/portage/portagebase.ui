@@ -254,7 +254,7 @@
                                                 <cstring>pbAdvanced</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Show Advanced Options...</string>
+                                                <string>Advanced Options...</string>
                                             </property>
                                             <property name="accel">
                                                 <string></string>
@@ -265,7 +265,7 @@
                                                 <cstring>pbAddQueue</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Add to Install &amp;Queue</string>
+                                                <string>Add to Emerge &amp;Queue</string>
                                             </property>
                                             <property name="accel">
                                                 <string>Alt+Q</string>

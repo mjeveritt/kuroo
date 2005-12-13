@@ -136,16 +136,16 @@ void Portage::pretendPackageList( /*const QString& category, */const QStringList
  */
 bool Portage::isInstalled( const QString& package )
 {
-	QString tmp = package.section("/", 1, 1);
-	QString name = tmp.section(pv, 0, 0);
-	QString version = tmp.section(name + "-", 1, 1);
-	
-	QString installedFlag = KurooDBSingleton::Instance()->isInstalled( name, version ).first();
-	
-	if ( installedFlag == "1" )
-		return true;
-	else
-		return false;
+// 	QString tmp = package.section( "/", 1, 1 );
+// 	QString name = tmp.section( pv, 0, 0 );
+// 	QString version = tmp.section( name + "-", 1, 1 );
+// 	
+// 	QString installedFlag = KurooDBSingleton::Instance()->isInstalled( name, version ).first();
+// 	
+// 	if ( installedFlag == "1" )
+// 		return true;
+// 	else
+// 		return false;
 }
 
 /**
@@ -163,6 +163,7 @@ QStringList Portage::categories( int filter )
  */
 QStringList Portage::subCategories( const QString& categoryId, int filter )
 {
+	kdDebug() << "Portage::subCategories categoryId=" << categoryId << endl;
 	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter );
 }
 

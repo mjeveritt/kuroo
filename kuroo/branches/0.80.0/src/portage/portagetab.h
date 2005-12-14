@@ -64,7 +64,7 @@ public slots:
 	* Activate this package to view its info.
 	* @param package
 	*/
-	void				slotViewPackage( const QString& package );
+// 	void				slotViewPackage( const QString& package );
 	
 private slots:
 	

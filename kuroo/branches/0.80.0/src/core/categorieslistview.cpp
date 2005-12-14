@@ -39,15 +39,28 @@
  * @short Creates category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
-	: KListView( parent, name )
+	: KListView( parent, name ), allCategories( 0 )
 {
 	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()) );
 	setFullWidth( true );
 	setFrameShape( QFrame::NoFrame );
+	setSorting( -1 );
 }
 
 CategoriesView::~CategoriesView()
 {
+}
+
+/**
+ * Load index of categories name from db
+ */
+void CategoriesView::init( const QStringList& allCategoriesList )
+{
+	allCategories.resize( 200 );
+	int i( 1 );
+	foreach ( allCategoriesList ) {
+		allCategories[ i++ ] = *it;
+	}
 }
 
 /**
@@ -82,21 +95,22 @@ QString CategoriesView::currentCategoryId()
  * Load categories.
  * @param categoriesList
  */
-void CategoriesView::loadCategories( const QStringList& categoriesList, const QStringList& allCategoriesList )
+void CategoriesView::loadCategories( const QStringList& categoriesList )
 {
-	QValueVector<QString> allCategories( 200 );
-	int i( 1 );
-	foreach ( allCategoriesList ) {
-		allCategories[ i++ ] = *it;
-	}
+// 	QListViewItem* root = new QListViewItem( this, "All" );
+// 	root->setOpen( true );
+// 	categories.insert( "All", "0" );
 	
 	categories.clear();
 	foreach ( categoriesList ) {
 		QString idDB( *it );
-		QString name( allCategories[ idDB.toInt() ] );
+		QString name( "    " + allCategories[ idDB.toInt() ] );
 		new QListViewItem( this, name );
 		categories.insert( name, idDB );
 	}
+	
+	new QListViewItem( this, "All" );
+	categories.insert( "All", "0" );
 }
 
 
@@ -111,16 +125,22 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 {
 	addColumn( i18n( "Category" ) );
 	header()->setLabel( header()->count() - 1, i18n("Category") );
+	allCategories.resize( 100 );
 }
 
 CategoriesListView::~CategoriesListView()
 {
 }
 
+void CategoriesListView::init()
+{
+	CategoriesView::init( KurooDBSingleton::Instance()->allCategories() );
+}
+
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	CategoriesView::loadCategories( categoriesList, KurooDBSingleton::Instance()->allCategories() );
-	setSelected( firstChild(), true );
+	CategoriesView::loadCategories( categoriesList );
+	setSelected( firstChild()->itemBelow(), true );
 }
 
 
@@ -133,16 +153,27 @@ SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name 
 {
 	addColumn( i18n( "Subcategory" ) );
 	header()->setLabel( header()->count() - 1, i18n( "Subcategory" ) );
+	
+	allCategories.resize( 200 );
 }
 
 SubCategoriesListView::~SubCategoriesListView()
 {
 }
 
+void SubCategoriesListView::init()
+{
+	CategoriesView::init( KurooDBSingleton::Instance()->allSubCategories() );
+}
+
+
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	CategoriesView::loadCategories( categoriesList, KurooDBSingleton::Instance()->allSubCategories() );
-	setSelected( firstChild(), true );
+	CategoriesView::loadCategories( categoriesList );
+	if ( firstChild()->itemBelow() )
+		setSelected( firstChild()->itemBelow(), true );
+	else
+		setSelected( firstChild(), true );
 }
 
 #include "categorieslistview.moc"

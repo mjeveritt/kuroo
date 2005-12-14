@@ -54,6 +54,8 @@ PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), filter( FILTER_ALL )
 {
 	packageFilter->setListView( packagesView );
+	categoriesView->init();
+	subcategoriesView->init();
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters( int ) ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
@@ -158,15 +160,15 @@ void PortageTab::slotReload()
  * Activate this package to view its info.
  * @param package
  */
-void PortageTab::slotViewPackage( const QString& package )
-{
-	kdDebug() << "PortageTab::slotViewPackage" << endl;
+// void PortageTab::slotViewPackage( const QString& package )
+// {
+// 	kdDebug() << "PortageTab::slotViewPackage" << endl;
 // 	QString category = package.section("/", 0, 0);
 // 	QString name = package.section("/", 1, 1);
 // 	categoriesView->setCurrentCategory( category );
 // 	packagesView->setCurrentPackage( name );
 // 	slotSummary();
-}
+// }
 
 /**
  * List packages when clicking on category in installed.

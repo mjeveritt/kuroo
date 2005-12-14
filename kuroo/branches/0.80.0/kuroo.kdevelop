@@ -122,7 +122,7 @@
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
-      <activetarget>src/history/libhistory.la</activetarget>
+      <activetarget>src/portage/libportage.la</activetarget>
     </general>
     <configurations>
       <default>

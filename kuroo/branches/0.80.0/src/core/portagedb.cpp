@@ -320,7 +320,8 @@ QStringList KurooDB::package( const QString& id )
 
 QStringList KurooDB::category( const QString& id )
 {
-	return query( QString( "SELECT name FROM catSubCategory WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id ) );
+	return query( QString( "SELECT name FROM catSubCategory "
+	                       "WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -353,26 +354,52 @@ QStringList KurooDB::portageCategories( int filter )
 			filterQuery = " WHERE package.updateVersion != '' ";
 	}
 	
-	return query( " SELECT DISTINCT idCategory FROM package " + filterQuery + " ; ");
+	return query( " SELECT DISTINCT idCategory FROM package "
+	              + filterQuery + " ORDER BY idCategory DESC; ");
 }
 
 QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter )
 {
 	QString filterQuery;
-	switch ( filter ) {
-		case FILTER_ALL:
-			filterQuery = "";
-			break;
-			
-		case FILTER_INSTALLED:
-			filterQuery = " AND package.meta != " + FILTERALL;
-			break;
-			
-		case FILTER_UPDATES:
-			filterQuery = " AND package.updateVersion != '' ";
-	}
 	
-	return query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '" + categoryId + "'" + filterQuery + " ; ");
+	if ( categoryId == "0" ) {
+		
+		return ( "0" );
+/*		
+		switch ( filter ) {
+			case FILTER_ALL:
+				filterQuery = "";
+				break;
+				
+			case FILTER_INSTALLED:
+				filterQuery = " WHERE package.meta != " + FILTERALL;
+				break;
+				
+			case FILTER_UPDATES:
+				filterQuery = " WHERE package.updateVersion != '' ";
+		}
+		
+		return query( " SELECT DISTINCT idSubCategory FROM package " 
+		              + filterQuery + " ORDER BY idSubCategory DESC; ");*/
+	}
+	else {
+		
+		switch ( filter ) {
+			case FILTER_ALL:
+				filterQuery = "";
+				break;
+				
+			case FILTER_INSTALLED:
+				filterQuery = " AND package.meta != " + FILTERALL;
+				break;
+				
+			case FILTER_UPDATES:
+				filterQuery = " AND package.updateVersion != '' ";
+		}
+		
+		return query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '" 
+		              + categoryId + "'" + filterQuery + " ORDER BY idSubCategory DESC; ");
+	}
 }
 
 QStringList KurooDB::portageCategoryId( const QString& category )
@@ -385,48 +412,132 @@ QStringList KurooDB::portageCategoryId( const QString& category )
 QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int filter )
 {
 	QString filterQuery;
-	switch ( filter ) {
-		case FILTER_ALL:
-			filterQuery = "";
-			break;
-			
-		case FILTER_INSTALLED:
-			filterQuery = " AND meta != " + FILTERALL;
-			break;
-		
-		case FILTER_UPDATES:
-			filterQuery = " AND updateVersion != '' ";
-	}
 	
-	return query( " SELECT id, name, description, latest, meta, updateVersion "
-	              " FROM package "
-	              " WHERE idCategory = '" + categoryId + "'"
-	              + filterQuery +
-	              " ORDER BY name;");
+	if ( categoryId == "0" ) {
+		
+		switch ( filter ) {
+			case FILTER_ALL:
+				filterQuery = "";
+				break;
+				
+			case FILTER_INSTALLED:
+				filterQuery = " WHERE meta != " + FILTERALL;
+				break;
+				
+			case FILTER_UPDATES:
+				filterQuery = " WHERE updateVersion != '' ";
+		}
+		
+		return query( " SELECT id, name, description, latest, meta, updateVersion "
+	              " FROM package " + filterQuery + " ORDER BY name;");
+	}
+	else {
+		
+		switch ( filter ) {
+			case FILTER_ALL:
+				filterQuery = "";
+				break;
+				
+			case FILTER_INSTALLED:
+				filterQuery = " AND meta != " + FILTERALL;
+				break;
+				
+			case FILTER_UPDATES:
+				filterQuery = " AND updateVersion != '' ";
+		}
+		
+		return query( " SELECT id, name, description, latest, meta, updateVersion "
+		              " FROM package WHERE idCategory = '" + categoryId + "' " + filterQuery +  " ORDER BY name;");
+	}
 }
 
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
 {
 	QString filterQuery;
-	switch ( filter ) {
-		case FILTER_ALL:
-			filterQuery = "";
-			break;
+	if ( categoryId == "0" ) {
+		
+		if ( subCategoryId == "0" ) {
+			switch ( filter ) {
+				case FILTER_ALL:
+					filterQuery = "";
+					break;
+					
+				case FILTER_INSTALLED:
+					filterQuery = " WHERE meta != " + FILTERALL;
+					break;
+					
+				case FILTER_UPDATES:
+					filterQuery = " WHERE updateVersion != '' ";
+			}
 			
-		case FILTER_INSTALLED:
-			filterQuery = " AND meta != " + FILTERALL;
-			break;
+			return query( " SELECT id, name, description, latest, meta, updateVersion "
+						" FROM package "
+						+ filterQuery + " ORDER BY name;");
+		}
+		else {
 			
-		case FILTER_UPDATES:
-			filterQuery = " AND updateVersion != '' ";
+			switch ( filter ) {
+				case FILTER_ALL:
+					filterQuery = "";
+					break;
+					
+				case FILTER_INSTALLED:
+					filterQuery = " AND meta != " + FILTERALL;
+					break;
+					
+				case FILTER_UPDATES:
+					filterQuery = " AND updateVersion != '' ";
+			}
+			
+			return query( " SELECT id, name, description, latest, meta, updateVersion "
+			              " FROM package "
+			              " WHERE idSubCategory = '" + subCategoryId + "'"
+			              + filterQuery + " ORDER BY name;");
+		}
 	}
-	
-	return query( " SELECT id, name, description, latest, meta, updateVersion "
-	              " FROM package "
-	              " WHERE idCategory = '" + categoryId + "'"
-	              " AND idSubCategory = '" + subCategoryId + "'"
-	              + filterQuery +
-	              " ORDER BY name;");
+	else {
+		if ( subCategoryId == "0" ) {
+			
+			switch ( filter ) {
+				case FILTER_ALL:
+					filterQuery = "";
+					break;
+					
+				case FILTER_INSTALLED:
+					filterQuery = " AND meta != " + FILTERALL;
+					break;
+					
+				case FILTER_UPDATES:
+					filterQuery = " AND updateVersion != '' ";
+			}
+			
+			return query( " SELECT id, name, description, latest, meta, updateVersion "
+						" FROM package "
+						" WHERE idCategory = '" + categoryId + "'"
+						+ filterQuery + " ORDER BY name;");
+		}
+		else {
+		
+			switch ( filter ) {
+				case FILTER_ALL:
+					filterQuery = "";
+					break;
+					
+				case FILTER_INSTALLED:
+					filterQuery = " AND meta != " + FILTERALL;
+					break;
+					
+				case FILTER_UPDATES:
+					filterQuery = " AND updateVersion != '' ";
+			}
+			
+			return query( " SELECT id, name, description, latest, meta, updateVersion "
+						" FROM package "
+						" WHERE idCategory = '" + categoryId + "'"
+						" AND idSubCategory = '" + subCategoryId + "'"
+						+ filterQuery + " ORDER BY name;");
+		}
+	}
 }
 
 QStringList KurooDB::portagePackageInfo( const QString& id )

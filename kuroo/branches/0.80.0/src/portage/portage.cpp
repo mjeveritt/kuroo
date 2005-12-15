@@ -163,7 +163,6 @@ QStringList Portage::categories( int filter )
  */
 QStringList Portage::subCategories( const QString& categoryId, int filter )
 {
-	kdDebug() << "Portage::subCategories categoryId=" << categoryId << endl;
 	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter );
 }
 
@@ -172,10 +171,10 @@ QStringList Portage::subCategories( const QString& categoryId, int filter )
  * @param category
  * @return QStringList
  */
-QStringList Portage::packagesInCategory( const QString& categoryId, int filter )
-{
-	return KurooDBSingleton::Instance()->portagePackagesByCategory( categoryId, filter );
-}
+// QStringList Portage::packagesInCategory( const QString& categoryId, int filter )
+// {
+// 	return KurooDBSingleton::Instance()->portagePackagesByCategory( categoryId, filter );
+// }
 
 QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
 {

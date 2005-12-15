@@ -122,7 +122,7 @@ private:
 	QObject					*parent;
 	QString					package;
 	QStringList				packageIdList;
-	QValueVector<int>	packagesCache;
+	QValueVector<int>		packagesCache;
 };
 
 #endif

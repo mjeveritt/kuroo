@@ -30,7 +30,7 @@
  * KListViewItem subclass to implement sorting, tooltip, color...
  */
 PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int status )
-	: KListViewItem( parent, name ), m_parent( parent ), m_status(0), m_meta( meta ), queued( false )
+	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0), m_meta( meta ), queued( false )
 {
 	m_meta.insert( i18n("1Package"), name );
 	init();
@@ -38,7 +38,7 @@ PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int st
 }
 
 PackageItem::PackageItem( QListViewItem *parent, const char *name, Meta meta, int status )
-	: KListViewItem( parent, name ), m_parent( parent->listView() ), m_status(0), m_meta( meta ), queued( false )
+	: KListViewItem( parent, name ), m_parent( parent->listView() ), m_status( 0 ), m_meta( meta ), queued( false )
 {
 	m_meta.insert( i18n("1Package"), name );
 	init();
@@ -111,24 +111,24 @@ void PackageItem::setStatus( int status )
 		
 		case INSTALLED :
 			m_status = INSTALLED;
-			setPixmap(0, pxInstalled);
+			setPixmap( 0, pxInstalled );
 			m_meta.insert( i18n("2Status"), i18n("Installed") );
 			break;
 			
 		case PACKAGE :
 			m_status = PACKAGE;
-			setPixmap(0, pxPackage);
+			setPixmap( 0, pxPackage );
 			break;
 		
 		case EBUILD_INSTALLED :
 			m_status = EBUILD_INSTALLED;
-			setPixmap(0, pxEbuildInstalled);
+			setPixmap( 0, pxEbuildInstalled );
 			m_meta.insert( i18n("2Status"), i18n("Installed") );
 			break;
 			
 		case EBUILD :
 			m_status = EBUILD;
-			setPixmap(0, pxEbuild);
+			setPixmap( 0, pxEbuild );
 			break;
 		
 		case MASKED :
@@ -147,8 +147,8 @@ void PackageItem::setStatus( int status )
 			queued = true;
 			m_meta.insert( i18n("9In Queue"), i18n("Yes") );
 			if ( parent() )
-				dynamic_cast<PackageItem*>(parent())->setStatus(QUEUED);
-			setPixmap(1, pxQueued);
+				dynamic_cast<PackageItem*>( parent() )->setStatus( QUEUED );
+			setPixmap( 1, pxQueued );
 			break;
 		
 		case NOTQUEUED :
@@ -161,12 +161,12 @@ void PackageItem::setStatus( int status )
 				while( sibling ) {
 					if ( sibling->isQueued() )
 						notQueued = false;
-					sibling = dynamic_cast<PackageItem*>(sibling->nextSibling());
+					sibling = dynamic_cast<PackageItem*>( sibling->nextSibling() );
 				}
 				if ( notQueued )
-					dynamic_cast<PackageItem*>(parent())->setStatus(NOTQUEUED);
+					dynamic_cast<PackageItem*>( parent() )->setStatus( NOTQUEUED );
 			}
-			setPixmap(1, NULL);
+			setPixmap( 1, NULL );
 			repaint();
 			break;
 	}
@@ -179,27 +179,27 @@ void PackageItem::setStatus( int status )
  * @param ascending
  * @return -1 or 0 or 1
  */
-int PackageItem::compare( QListViewItem* i, int col, bool ascending ) const
-{
-	QString a =    text(col);
-	QString b = i->text(col);
-	QString column = m_parent->columnText(col);
+// int PackageItem::compare( QListViewItem* i, int col, bool ascending ) const
+// {
+// 	QString a =    text( col );
+// 	QString b = i->text( col );
+// 	QString column = m_parent->columnText( col );
 	
-	if ( column == i18n("Size") || column == i18n("Nr") ) {
-		a = a.section(" kB", 0, 0).rightJustify( b.length(), '0' );
-		b = b.section(" kB", 0, 0).rightJustify( a.length(), '0' );
-
-		if ( a == b )
-			return 0;
-		
-		if ( ascending )
-			return a > b ? 1 : -1;
-		else
-			return a < b ? -1 : 1;
-	}
-	else
-		return QString::localeAwareCompare( a, b );
-}
+// 	if ( column == i18n( "Size" ) || column == i18n( "Nr" ) ) {
+// 		a = a.section( " kB", 0, 0 ).rightJustify( b.length(), '0' );
+// 		b = b.section( " kB", 0, 0 ).rightJustify( a.length(), '0' );
+// 
+// 		if ( a == b )
+// 			return 0;
+// 		
+// 		if ( ascending )
+// 			return a > b ? 1 : -1;
+// 		else
+// 			return a < b ? -1 : 1;
+// 	}
+// 	else
+// 		return QString::localeAwareCompare( a, b );
+// }
 
 /**
  * Change package/ebuild text color.
@@ -212,7 +212,7 @@ int PackageItem::compare( QListViewItem* i, int col, bool ascending ) const
 void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
 {
 	QColorGroup _cg( cg );
-	QFont font(p->font());
+	QFont font( p->font() );
 	
 	if ( column == 0 ) {
 		switch ( m_status ) {

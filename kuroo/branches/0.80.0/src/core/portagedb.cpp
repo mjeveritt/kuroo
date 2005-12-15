@@ -42,6 +42,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
+#include <kcursor.h>
 
 /**
  * All Sqlite related as connections, queries...
@@ -105,7 +106,7 @@ QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 // 	clock_t start = clock();
 	
 	DbConnection *dbConn;
-	if (conn != NULL)
+	if ( conn != NULL )
 		dbConn = conn;
 	else
 		dbConn = m_dbConnPool->getDbConnection();
@@ -116,7 +117,7 @@ QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 		m_dbConnPool->putDbConnection(dbConn);
 	
 // 	clock_t finish = clock();
-// 	const double duration = (double) (finish - start) / CLOCKS_PER_SEC;
+// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
 // 	kdDebug() << "SQL-query (" << duration << "s): " << statement << endl;
 
 	return values;
@@ -363,24 +364,7 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 	QString filterQuery;
 	
 	if ( categoryId == "0" ) {
-		
 		return ( "0" );
-/*		
-		switch ( filter ) {
-			case FILTER_ALL:
-				filterQuery = "";
-				break;
-				
-			case FILTER_INSTALLED:
-				filterQuery = " WHERE package.meta != " + FILTERALL;
-				break;
-				
-			case FILTER_UPDATES:
-				filterQuery = " WHERE package.updateVersion != '' ";
-		}
-		
-		return query( " SELECT DISTINCT idSubCategory FROM package " 
-		              + filterQuery + " ORDER BY idSubCategory DESC; ");*/
 	}
 	else {
 		
@@ -409,47 +393,46 @@ QStringList KurooDB::portageCategoryId( const QString& category )
 	             " ;");
 }
 
-QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int filter )
-{
-	QString filterQuery;
-	
-	if ( categoryId == "0" ) {
-		
-		switch ( filter ) {
-			case FILTER_ALL:
-				filterQuery = "";
-				break;
-				
-			case FILTER_INSTALLED:
-				filterQuery = " WHERE meta != " + FILTERALL;
-				break;
-				
-			case FILTER_UPDATES:
-				filterQuery = " WHERE updateVersion != '' ";
-		}
-		
-		return query( " SELECT id, name, description, latest, meta, updateVersion "
-	              " FROM package " + filterQuery + " ORDER BY name;");
-	}
-	else {
-		
-		switch ( filter ) {
-			case FILTER_ALL:
-				filterQuery = "";
-				break;
-				
-			case FILTER_INSTALLED:
-				filterQuery = " AND meta != " + FILTERALL;
-				break;
-				
-			case FILTER_UPDATES:
-				filterQuery = " AND updateVersion != '' ";
-		}
-		
-		return query( " SELECT id, name, description, latest, meta, updateVersion "
-		              " FROM package WHERE idCategory = '" + categoryId + "' " + filterQuery +  " ORDER BY name;");
-	}
-}
+// QStringList KurooDB::portagePackagesByCategory( const QString& categoryId, int filter )
+// {
+// 	QString filterQuery;
+// 	
+// 	if ( categoryId == "0" ) {
+// 		switch ( filter ) {
+// 			case FILTER_ALL:
+// 				filterQuery = "";
+// 				break;
+// 				
+// 			case FILTER_INSTALLED:
+// 				filterQuery = " WHERE meta != " + FILTERALL;
+// 				break;
+// 				
+// 			case FILTER_UPDATES:
+// 				filterQuery = " WHERE updateVersion != '' ";
+// 		}
+// 		
+// 		return query( " SELECT id, name, description, latest, meta, updateVersion "
+// 	              " FROM package " + filterQuery + " ORDER BY name;");
+// 	}
+// 	else {
+// 		
+// 		switch ( filter ) {
+// 			case FILTER_ALL:
+// 				filterQuery = "";
+// 				break;
+// 				
+// 			case FILTER_INSTALLED:
+// 				filterQuery = " AND meta != " + FILTERALL;
+// 				break;
+// 				
+// 			case FILTER_UPDATES:
+// 				filterQuery = " AND updateVersion != '' ";
+// 		}
+// 		
+// 		return query( " SELECT id, name, description, latest, meta, updateVersion "
+// 		              " FROM package WHERE idCategory = '" + categoryId + "' " + filterQuery +  " ORDER BY name;");
+// 	}
+// }
 
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
 {
@@ -471,8 +454,8 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			}
 			
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
-						" FROM package "
-						+ filterQuery + " ORDER BY name;");
+						  " FROM package "
+			              + filterQuery + " ORDER BY name DESC;");
 		}
 		else {
 			
@@ -492,7 +475,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
 			              " FROM package "
 			              " WHERE idSubCategory = '" + subCategoryId + "'"
-			              + filterQuery + " ORDER BY name;");
+			              + filterQuery + " ORDER BY name DESC;");
 		}
 	}
 	else {
@@ -512,9 +495,9 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			}
 			
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
-						" FROM package "
-						" WHERE idCategory = '" + categoryId + "'"
-						+ filterQuery + " ORDER BY name;");
+						  " FROM package "
+						  " WHERE idCategory = '" + categoryId + "'"
+			              + filterQuery + " ORDER BY name DESC;");
 		}
 		else {
 		
@@ -532,10 +515,10 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			}
 			
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
-						" FROM package "
-						" WHERE idCategory = '" + categoryId + "'"
-						" AND idSubCategory = '" + subCategoryId + "'"
-						+ filterQuery + " ORDER BY name;");
+					      " FROM package "
+						  " WHERE idCategory = '" + categoryId + "'"
+						  " AND idSubCategory = '" + subCategoryId + "'"
+			              + filterQuery + " ORDER BY name DESC;");
 		}
 	}
 }

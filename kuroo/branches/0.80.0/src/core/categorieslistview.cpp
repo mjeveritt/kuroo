@@ -97,14 +97,10 @@ QString CategoriesView::currentCategoryId()
  */
 void CategoriesView::loadCategories( const QStringList& categoriesList )
 {
-// 	QListViewItem* root = new QListViewItem( this, "All" );
-// 	root->setOpen( true );
-// 	categories.insert( "All", "0" );
-	
 	categories.clear();
 	foreach ( categoriesList ) {
 		QString idDB( *it );
-		QString name( "    " + allCategories[ idDB.toInt() ] );
+		QString name( "   " + allCategories[ idDB.toInt() ] );
 		new QListViewItem( this, name );
 		categories.insert( name, idDB );
 	}
@@ -140,7 +136,8 @@ void CategoriesListView::init()
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
 	CategoriesView::loadCategories( categoriesList );
-	setSelected( firstChild()->itemBelow(), true );
+	setSelected( firstChild(), true );
+// 	setSelected( firstChild()->itemBelow(), true );
 }
 
 
@@ -170,10 +167,7 @@ void SubCategoriesListView::init()
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
 	CategoriesView::loadCategories( categoriesList );
-	if ( firstChild()->itemBelow() )
-		setSelected( firstChild()->itemBelow(), true );
-	else
-		setSelected( firstChild(), true );
+	setSelected( firstChild(), true );
 }
 
 #include "categorieslistview.moc"

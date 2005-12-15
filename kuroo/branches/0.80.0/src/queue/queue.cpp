@@ -185,6 +185,7 @@ private:
 
 /**
  * Object for packages to be emerged = installation queue.
+ * @fixme: manage the cache.
  */
 Queue::Queue( QObject* parent )
 	: QObject( parent )

@@ -100,6 +100,10 @@ PortageListView::~PortageListView()
  */
 void PortageListView::addSubCategoryPackages( const QString& category, const QString& subCategoryId, int filter )
 {
+	kdDebug() << "PortageListView::addSubCategoryPackages Query-start: " << endl;
+	clock_t start = clock();
+	
+	setSorting( -1 );
 	reset();
 	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( category, subCategoryId, filter );
 	foreach ( packageList ) {
@@ -130,44 +134,49 @@ void PortageListView::addSubCategoryPackages( const QString& category, const QSt
 	}
 	
 	setSelected( firstChild(), true );
+	setSorting( 0 );
+	
+	clock_t finish = clock();
+	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
+	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
 }
 
 /**
  * Populate listview with content of this category.
  * @param package
  */
-void PortageListView::addCategoryPackages( const QString& category, int filter  )
-{
-	reset();
-	const QStringList packageList = PortageSingleton::Instance()->packagesInCategory( category, filter );
-	foreach ( packageList ) {
-		QString idDB = *it++;
-		QString name = *it++;
-		QString package = name;
-		QString description = *it++;
-		QString latest = *it++;
-		QString meta = *it++;
-		QString updateVersion = *it;
-		
-		Meta packageMeta;
-		packageMeta.insert( i18n( "3Description" ), description );
-		packageMeta.insert( i18n( "5Update" ), updateVersion );
-		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
-		
-		if ( meta != FILTERALL )
-			packageItem->setStatus( INSTALLED );
-		
-// 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-// 			packageItem->setStatus(MASKED);
-// 		else {
-// 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
-// 				packageItem->setStatus(UNMASKED);
-// 		}
-		
-		insertPackage( idDB, packageItem );
-	}
-	
-	setSelected( firstChild(), true );
-}
+// void PortageListView::addCategoryPackages( const QString& category, int filter  )
+// {
+// 	reset();
+// 	const QStringList packageList = PortageSingleton::Instance()->packagesInCategory( category, filter );
+// 	foreach ( packageList ) {
+// 		QString idDB = *it++;
+// 		QString name = *it++;
+// 		QString package = name;
+// 		QString description = *it++;
+// 		QString latest = *it++;
+// 		QString meta = *it++;
+// 		QString updateVersion = *it;
+// 		
+// 		Meta packageMeta;
+// 		packageMeta.insert( i18n( "3Description" ), description );
+// 		packageMeta.insert( i18n( "5Update" ), updateVersion );
+// 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+// 		
+// 		if ( meta != FILTERALL )
+// 			packageItem->setStatus( INSTALLED );
+// 		
+// // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
+// // 			packageItem->setStatus(MASKED);
+// // 		else {
+// // 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
+// // 				packageItem->setStatus(UNMASKED);
+// // 		}
+// 		
+// 		insertPackage( idDB, packageItem );
+// 	}
+// 	
+// 	setSelected( firstChild(), true );
+// }
 
 #include "portagelistview.moc"

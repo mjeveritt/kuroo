@@ -86,7 +86,7 @@ private slots:
 	*/
 	void				slotFilters( int radioFilter );
 	void				slotListPackages();
-	void				slotListCategoryPackages();
+// 	void				slotListCategoryPackages();
 	
 	/**
 	* Popup menu for actions like emerge.

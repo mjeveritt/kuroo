@@ -95,7 +95,7 @@ public slots:
 	* @param category
 	* @return QStringList
 	*/
-	QStringList					packagesInCategory( const QString& category, int filter );
+// 	QStringList					packagesInCategory( const QString& category, int filter );
 	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter );
 	
 	/**

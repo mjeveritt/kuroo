@@ -175,8 +175,6 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotListSubCategories()
 {
-	kdDebug() << "PortageTab::slotListSubCategories" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	if ( categoryId == i18n("na") )
 		return;
@@ -190,8 +188,6 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotFilters( int radioFilter )
 {
-	kdDebug() << "PortageTab::slotFilters" << endl;
-	
 	filter = radioFilter;
 // 	if ( isCategoryCurrent )
 // 		slotListCategoryPackages();
@@ -206,25 +202,21 @@ void PortageTab::slotFilters( int radioFilter )
 /**
  * List packages when clicking on category in installed.
  */
-void PortageTab::slotListCategoryPackages()
-{
-	kdDebug() << "PortageTab::slotListCategoryPackages" << endl;
-	
-	QString categoryId = categoriesView->currentCategoryId();
-	if ( categoryId == i18n("na") )
-		return;
-	
-	packagesView->addCategoryPackages( categoryId, filter );
-	isCategoryCurrent = true;
-}
+// void PortageTab::slotListCategoryPackages()
+// {
+// 	QString categoryId = categoriesView->currentCategoryId();
+// 	if ( categoryId == i18n("na") )
+// 		return;
+// 	
+// 	packagesView->addCategoryPackages( categoryId, filter );
+// 	isCategoryCurrent = true;
+// }
 
 /**
  * List packages when clicking on category in installed.
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	if ( categoryId == i18n("na") || subCategoryId == i18n("na") )

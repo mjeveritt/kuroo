@@ -70,7 +70,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 
 	// If new release delete old db files
 	QString database = KUROODIR + KurooConfig::databas();
-	if ( KurooConfig::version() != KurooConfig::hardVersion() ) {
+// 	if ( KurooConfig::version() != KurooConfig::hardVersion() ) {
+	if ( KurooConfig::hardVersion().contains( "db" ) ) {
 		remove(database);
 		kdDebug() << i18n("Deleting old version of database %1").arg(database) << endl;
 	}

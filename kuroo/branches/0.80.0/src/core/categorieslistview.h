@@ -24,6 +24,7 @@
 
 #include <klistview.h>
 #include <qpixmap.h>
+#include <qvaluevector.h>
 
 class QPixmap;
 

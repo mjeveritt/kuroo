@@ -174,7 +174,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList		allCategories();
 	QStringList		allSubCategories();
-	QStringList 	portageCategories( int filter );
+	QStringList 	portageCategories( int filter, const QString& text );
 	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
 	QStringList 	portageCategoryId( const QString& categoryId );
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );

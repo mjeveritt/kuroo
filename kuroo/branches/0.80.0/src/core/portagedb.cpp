@@ -339,12 +339,18 @@ QStringList KurooDB::allSubCategories()
 	return query( " SELECT name FROM subCategory; " );
 }
 
-QStringList KurooDB::portageCategories( int filter )
+QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
-	QString filterQuery;
+	QString filterQuery, textQuery;
+	
+	if ( !text.isEmpty() )
+		textQuery = " AND name LIKE '%" + escapeString( text ) + "%' ";
+	
 	switch ( filter ) {
 		case FILTER_ALL:
 			filterQuery = "";
+			if ( !text.isEmpty() )
+				textQuery = " WHERE name LIKE '%" + escapeString( text ) + "%' ";
 			break;
 			
 		case FILTER_INSTALLED:
@@ -356,7 +362,7 @@ QStringList KurooDB::portageCategories( int filter )
 	}
 	
 	return query( " SELECT DISTINCT idCategory FROM package "
-	              + filterQuery + " ORDER BY idCategory DESC; ");
+	              + filterQuery + textQuery + " ORDER BY idCategory DESC; ");
 }
 
 QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )

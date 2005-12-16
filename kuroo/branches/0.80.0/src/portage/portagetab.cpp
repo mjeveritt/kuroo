@@ -34,6 +34,7 @@
 #include <qcombobox.h>
 #include <qregexp.h>
 #include <qbuttongroup.h>
+#include <qtimer.h>
 
 #include <ktextbrowser.h>
 #include <ktabwidget.h>
@@ -62,12 +63,14 @@ PortageTab::PortageTab( QWidget* parent )
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 
+	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
+	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( pbSearch, SIGNAL( clicked() ), this, SLOT( slotFilters() ));
+// 	connect( pbSearch, SIGNAL( clicked() ), this, SLOT( slotFilters() ));
 	connect( pbAddQueue, SIGNAL( clicked() ), this, SLOT( slotAddQueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
@@ -150,7 +153,7 @@ void PortageTab::slotReload()
 	saveCurrentView();
 	packagesView->reset();
 	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter ) );
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter, searchFilter->text() ) );
 	
 // 	slotViewPackage( KurooConfig::latestPortageCategory() + "/" + KurooConfig::latestPortagePackage() );
 	emit signalChanged();
@@ -184,8 +187,9 @@ void PortageTab::slotFilters()
 	
 	packagesView->reset();
 	categoriesView->clear();
-// 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter ) );
-	categoriesView->loadCategories( PortageSingleton::Instance()->searchPackages( searchFilter->text(), true ) );
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter, searchFilter->text() ) );
+	
+// 	categoriesView->loadCategories( PortageSingleton::Instance()->searchPackages( searchFilter->text(), true ) );
 }
 
 /**
@@ -208,9 +212,7 @@ void PortageTab::slotListPackages()
  */
 void PortageTab::slotSearchPackage()
 {
-	packagesView->reset();
-	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->searchPackages( searchFilter->text(), true ) );
+	QTimer::singleShot( 200, this, SLOT( slotFilters() ) );
 }
 
 /**

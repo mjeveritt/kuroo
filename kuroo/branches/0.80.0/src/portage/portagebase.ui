@@ -187,17 +187,6 @@
                                 </size>
                             </property>
                         </widget>
-                        <widget class="QPushButton" row="0" column="3">
-                            <property name="name">
-                                <cstring>pbSearch</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Search</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
                     </grid>
                 </widget>
             </grid>

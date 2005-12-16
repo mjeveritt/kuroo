@@ -152,9 +152,9 @@ bool Portage::isInstalled( const QString& package )
  * Get list of all categories for portage packages.
  * @return QStringList
  */
-QStringList Portage::categories( int filter )
+QStringList Portage::categories( int filter, const QString& text )
 {
-	return KurooDBSingleton::Instance()->portageCategories( filter );
+	return KurooDBSingleton::Instance()->portageCategories( filter, text );
 }
 
 /**

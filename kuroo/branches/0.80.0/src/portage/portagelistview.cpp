@@ -98,14 +98,14 @@ PortageListView::~PortageListView()
  * Populate listview with content of this category.
  * @param package
  */
-void PortageListView::addSubCategoryPackages( const QString& category, const QString& subCategoryId, int filter )
+void PortageListView::addSubCategoryPackages( const QString& category, const QString& subCategoryId, int filter, const QString& text )
 {
 	kdDebug() << "PortageListView::addSubCategoryPackages Query-start: " << endl;
 	clock_t start = clock();
 	
 	setSorting( -1 );
 	reset();
-	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( category, subCategoryId, filter );
+	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( category, subCategoryId, filter, text );
 	foreach ( packageList ) {
 		QString idDB = *it++;
 		QString name = *it++;

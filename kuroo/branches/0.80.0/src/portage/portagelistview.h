@@ -54,7 +54,7 @@ public slots:
 	 * @param package
 	 */
 // 	void 			addCategoryPackages( const QString& category, int filter );
-	void 			addSubCategoryPackages( const QString& category, const QString& subCategory, int filter );
+	void 			addSubCategoryPackages( const QString& category, const QString& subCategory, int filter, const QString& text );
 	
 private:
 	QStringList		unmaskedList;

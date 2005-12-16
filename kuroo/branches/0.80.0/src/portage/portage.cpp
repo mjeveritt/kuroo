@@ -161,24 +161,20 @@ QStringList Portage::categories( int filter )
  * Get list of all subcategories for portage packages.
  * @return QStringList
  */
-QStringList Portage::subCategories( const QString& categoryId, int filter )
+QStringList Portage::subCategories( const QString& categoryId, int filter, const QString& text )
 {
-	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter );
+	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter, text );
 }
 
 /**
- * Get list of packages in this category from database.
+ * Get list of packages in this subcategory from database.
  * @param category
  * @return QStringList
  */
-// QStringList Portage::packagesInCategory( const QString& categoryId, int filter )
-// {
-// 	return KurooDBSingleton::Instance()->portagePackagesByCategory( categoryId, filter );
-// }
 
-QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter )
+QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
-	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter );
+	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter, text );
 }
 
 /**
@@ -201,19 +197,23 @@ QStringList Portage::packageVersionsInfo( const QString& id )
  * @param text		string
  * @param isName	find in name or description
  */
-void Portage::findPackage( const QString& text, const bool& isName )
+QStringList Portage::searchPackages( const QString& text, const bool& isName )
 {
-// 	QStringList packageIdList;
-// 	
-// 	if ( isName )
-// 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
+	kdDebug() << "Portage::searchPackages text=" << text << endl;
+	
+	QStringList packageIdList;
+	
+	if ( isName )
+		packageIdList = KurooDBSingleton::Instance()->searchPortagePackagesName( text );
 // 	else
-// 		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
-// 	
-// 	if ( !packageIdList.isEmpty() )
-// 		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-// 	else
-// 		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
+// 		packageIdList = KurooDBSingleton::Instance()->searchPortagePackagesDescription( text );
+	
+	kdDebug() << "packageIdList=" << packageIdList << endl;
+	
+	if ( packageIdList.isEmpty() )
+		LogSingleton::Instance()->writeLog( i18n( "<br>No packages found matching: %1" ).arg( text ), KUROO );
+
+	return packageIdList;
 }
 
 /**

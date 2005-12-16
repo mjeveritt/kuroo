@@ -57,9 +57,8 @@ PortageTab::PortageTab( QWidget* parent )
 	categoriesView->init();
 	subcategoriesView->init();
 	
-	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters( int ) ) );
+	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-// 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListCategoryPackages() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 
@@ -68,6 +67,7 @@ PortageTab::PortageTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
+	connect( pbSearch, SIGNAL( clicked() ), this, SLOT( slotFilters() ));
 	connect( pbAddQueue, SIGNAL( clicked() ), this, SLOT( slotAddQueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
@@ -157,20 +157,6 @@ void PortageTab::slotReload()
 }
 
 /**
- * Activate this package to view its info.
- * @param package
- */
-// void PortageTab::slotViewPackage( const QString& package )
-// {
-// 	kdDebug() << "PortageTab::slotViewPackage" << endl;
-// 	QString category = package.section("/", 0, 0);
-// 	QString name = package.section("/", 1, 1);
-// 	categoriesView->setCurrentCategory( category );
-// 	packagesView->setCurrentPackage( name );
-// 	slotSummary();
-// }
-
-/**
  * List packages when clicking on category in installed.
  */
 void PortageTab::slotListSubCategories()
@@ -180,15 +166,17 @@ void PortageTab::slotListSubCategories()
 		return;
 	
 	subcategoriesView->clear();
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filter ) );
+	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filter, searchFilter->text() ) );
 }
 
 /**
  * Toggle between package filter: All, Installed or updates
  */
-void PortageTab::slotFilters( int radioFilter )
+void PortageTab::slotFilters()
 {
-	filter = radioFilter;
+	kdDebug() << "PortageTab::slotFilters" << endl;
+	
+	filter = filterGroup->selectedId();
 // 	if ( isCategoryCurrent )
 // 		slotListCategoryPackages();
 // 	else
@@ -196,21 +184,9 @@ void PortageTab::slotFilters( int radioFilter )
 	
 	packagesView->reset();
 	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter ) );
+// 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter ) );
+	categoriesView->loadCategories( PortageSingleton::Instance()->searchPackages( searchFilter->text(), true ) );
 }
-
-/**
- * List packages when clicking on category in installed.
- */
-// void PortageTab::slotListCategoryPackages()
-// {
-// 	QString categoryId = categoriesView->currentCategoryId();
-// 	if ( categoryId == i18n("na") )
-// 		return;
-// 	
-// 	packagesView->addCategoryPackages( categoryId, filter );
-// 	isCategoryCurrent = true;
-// }
 
 /**
  * List packages when clicking on category in installed.
@@ -222,8 +198,19 @@ void PortageTab::slotListPackages()
 	if ( categoryId == i18n("na") || subCategoryId == i18n("na") )
 		return;
 	
-	packagesView->addSubCategoryPackages( categoryId, subCategoryId, filter );
+	packagesView->addSubCategoryPackages( categoryId, subCategoryId, filter, searchFilter->text() );
 	isCategoryCurrent = false;
+}
+
+/**
+ * Search for package by name.
+ * @param name
+ */
+void PortageTab::slotSearchPackage()
+{
+	packagesView->reset();
+	categoriesView->clear();
+	categoriesView->loadCategories( PortageSingleton::Instance()->searchPackages( searchFilter->text(), true ) );
 }
 
 /**
@@ -231,7 +218,7 @@ void PortageTab::slotListPackages()
  */
 void PortageTab::slotRefresh()
 {
-	switch( KMessageBox::questionYesNo( this, 
+	switch( KMessageBox::questionYesNo( this,
 		i18n("<qt>Do you want to refresh the Packages view?<br>"
 		     "This will take a couple of minutes...</qt>"), i18n("Refreshing Packages"), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage") ) {
 		case KMessageBox::Yes: {

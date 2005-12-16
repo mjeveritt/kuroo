@@ -88,15 +88,14 @@ public slots:
 	* @return QStringList
 	*/
 	QStringList					categories( int filter );
-	QStringList					subCategories( const QString& category, int filter );
+	QStringList					subCategories( const QString& category, int filter, const QString& text );
 	
 	/**
 	* Get list of packages in this category from database.
 	* @param category
 	* @return QStringList
 	*/
-// 	QStringList					packagesInCategory( const QString& category, int filter );
-	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter );
+	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter, const QString& text );
 	
 	/**
 	* Get list of versions available of this package.
@@ -110,7 +109,7 @@ public slots:
 	* @param text		string
 	* @param isName	find in name or description
 	*/
-	void						findPackage( const QString& text, const bool& isName );
+	QStringList					searchPackages( const QString& text, const bool& isName );
 	
 	/**
 	* Count packages.

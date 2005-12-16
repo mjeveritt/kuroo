@@ -60,12 +60,6 @@ public slots:
 	
 	void				slotBusy( bool b );
 	
-	/**
-	* Activate this package to view its info.
-	* @param package
-	*/
-// 	void				slotViewPackage( const QString& package );
-	
 private slots:
 	
 	/**
@@ -84,9 +78,9 @@ private slots:
 	/**
 	* List packages when clicking on category in installed.
 	*/
-	void				slotFilters( int radioFilter );
+	void				slotFilters();
 	void				slotListPackages();
-// 	void				slotListCategoryPackages();
+	void				slotSearchPackage();
 	
 	/**
 	* Popup menu for actions like emerge.

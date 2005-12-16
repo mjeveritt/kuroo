@@ -175,14 +175,13 @@ public:
 	QStringList		allCategories();
 	QStringList		allSubCategories();
 	QStringList 	portageCategories( int filter );
-	QStringList 	portageSubCategories( const QString& categoryId, int filter );
+	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
 	QStringList 	portageCategoryId( const QString& categoryId );
-// 	QStringList 	portagePackagesByCategory( const QString& categoryId, int filter );
-	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter );
+	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
 	QStringList 	portagePackageInfo( const QString& id );
 	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
-	QStringList 	findPortagePackagesName( const QString& name );
-	QStringList 	findPortagePackagesDescription( const QString& description );
+	QStringList 	searchPortagePackagesName( const QString& name );
+	QStringList 	searchPortagePackagesDescription( const QString& description );
 
 	
 	//////////////////////////////////////////////////////////////////////////////

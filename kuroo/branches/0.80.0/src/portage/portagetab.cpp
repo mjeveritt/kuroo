@@ -54,7 +54,7 @@ static bool isCategoryCurrent( true );
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), filter( FILTER_ALL )
 {
-	packageFilter->setListView( packagesView );
+// 	packageFilter->setListView( packagesView );
 	categoriesView->init();
 	subcategoriesView->init();
 	
@@ -354,7 +354,7 @@ void PortageTab::slotAdvanced()
 
 void PortageTab::slotClearFilter()
 {
-	packageFilter->clear();
+	searchFilter->clear();
 }
 
 #include "portagetab.moc"

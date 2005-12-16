@@ -127,14 +127,6 @@
                                 </widget>
                             </grid>
                         </widget>
-                        <widget class="QLabel" row="0" column="5">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Filter:</string>
-                            </property>
-                        </widget>
                         <widget class="QLineEdit" row="0" column="2">
                             <property name="name">
                                 <cstring>searchFilter</cstring>
@@ -166,25 +158,6 @@
                             </property>
                             <property name="iconSet">
                                 <iconset>image0</iconset>
-                            </property>
-                        </widget>
-                        <widget class="KListViewSearchLine" row="0" column="6">
-                            <property name="name">
-                                <cstring>packageFilter</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>150</width>
-                                    <height>0</height>
-                                </size>
                             </property>
                         </widget>
                     </grid>
@@ -554,7 +527,6 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistviewsearchline.h</includehint>
     <includehint>categorieslistview.h</includehint>
     <includehint>subcategorieslistview.h</includehint>
     <includehint>portagelistview.h</includehint>

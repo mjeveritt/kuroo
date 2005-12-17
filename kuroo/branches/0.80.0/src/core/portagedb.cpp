@@ -429,7 +429,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
 						  " FROM package "
-			              + filterQuery + textQuery + " ORDER BY name DESC LIMIT 1000;");
+			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
 		else {
 			
@@ -449,7 +449,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
 			              " FROM package "
 			              " WHERE idSubCategory = '" + subCategoryId + "'"
-			              + filterQuery + textQuery + " ORDER BY name DESC LIMIT 1000;");
+			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
 	}
 	else {
@@ -471,7 +471,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			return query( " SELECT id, name, description, latest, meta, updateVersion "
 						  " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
-			              + filterQuery + textQuery + " ORDER BY name DESC LIMIT 1000;");
+			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
 		else {
 		
@@ -492,7 +492,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					      " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 						  " AND idSubCategory = '" + subCategoryId + "'"
-			              + filterQuery + textQuery + " ORDER BY name DESC LIMIT 1000;");
+			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
 	}
 }

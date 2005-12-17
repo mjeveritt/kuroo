@@ -52,13 +52,16 @@ static bool isCategoryCurrent( true );
  * Page for portage packages.
  */
 PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent ), filter( FILTER_ALL )
+	: PortageBase( parent )
 {
-// 	packageFilter->setListView( packagesView );
 	categoriesView->init();
 	subcategoriesView->init();
 	
-	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
+	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotReload() ) );
+// 	connect( categoriesView, SIGNAL( currentChanged() ), this, SLOT( slotListSubCategories() ) );
+// 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotSearchPackage() ) );
+	
+// 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotSearchPackage() ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
@@ -70,7 +73,6 @@ PortageTab::PortageTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-// 	connect( pbSearch, SIGNAL( clicked() ), this, SLOT( slotFilters() ));
 	connect( pbAddQueue, SIGNAL( clicked() ), this, SLOT( slotAddQueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
@@ -150,13 +152,13 @@ void PortageTab::slotInit()
 void PortageTab::slotReload()
 {
 	kdDebug() << "PortageTab::slotReload" << endl;
+	
 	saveCurrentView();
 	packagesView->reset();
 	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter, searchFilter->text() ) );
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
 	
-// 	slotViewPackage( KurooConfig::latestPortageCategory() + "/" + KurooConfig::latestPortagePackage() );
-	emit signalChanged();
+// 	emit signalChanged();
 }
 
 /**
@@ -167,9 +169,28 @@ void PortageTab::slotListSubCategories()
 	QString categoryId = categoriesView->currentCategoryId();
 	if ( categoryId == i18n("na") )
 		return;
-	
+		
 	subcategoriesView->clear();
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filter, searchFilter->text() ) );
+	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
+}
+
+/**
+ * List packages when clicking on category in installed.
+ */
+void PortageTab::slotListPackages()
+{
+	kdDebug() << "PortageTab::slotListPackages" << endl;
+	
+	QString categoryId = categoriesView->currentCategoryId();
+	QString subCategoryId = subcategoriesView->currentCategoryId();
+	
+	if ( categoryId == i18n( "na" ) || subCategoryId == i18n( "na" ) )
+		return;
+	
+	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() );
+	packagesView->addSubCategoryPackages( packageList );
+		
+	isCategoryCurrent = false;
 }
 
 /**
@@ -179,31 +200,17 @@ void PortageTab::slotFilters()
 {
 	kdDebug() << "PortageTab::slotFilters" << endl;
 	
-	filter = filterGroup->selectedId();
-// 	if ( isCategoryCurrent )
-// 		slotListCategoryPackages();
-// 	else
-// 		slotListPackages();
-	
 	packagesView->reset();
 	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filter, searchFilter->text() ) );
-	
-// 	categoriesView->loadCategories( PortageSingleton::Instance()->searchPackages( searchFilter->text(), true ) );
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
 }
 
-/**
- * List packages when clicking on category in installed.
- */
-void PortageTab::slotListPackages()
+void PortageTab::slotClearFilter()
 {
-	QString categoryId = categoriesView->currentCategoryId();
-	QString subCategoryId = subcategoriesView->currentCategoryId();
-	if ( categoryId == i18n("na") || subCategoryId == i18n("na") )
-		return;
-	
-	packagesView->addSubCategoryPackages( categoryId, subCategoryId, filter, searchFilter->text() );
-	isCategoryCurrent = false;
+	disconnect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
+	searchFilter->clear();
+	slotFilters();
+	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
 }
 
 /**
@@ -212,7 +219,15 @@ void PortageTab::slotListPackages()
  */
 void PortageTab::slotSearchPackage()
 {
-	QTimer::singleShot( 200, this, SLOT( slotFilters() ) );
+	kdDebug() << "PortageTab::slotSearchPackage" << endl;
+	
+	QString category = categoriesView->currentCategory();
+	
+	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
+	slotFilters();
+	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
+	
+	categoriesView->setCurrentCategory( category );
 }
 
 /**
@@ -221,8 +236,8 @@ void PortageTab::slotSearchPackage()
 void PortageTab::slotRefresh()
 {
 	switch( KMessageBox::questionYesNo( this,
-		i18n("<qt>Do you want to refresh the Packages view?<br>"
-		     "This will take a couple of minutes...</qt>"), i18n("Refreshing Packages"), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage") ) {
+		i18n( "<qt>Do you want to refresh the Packages view?<br>"
+		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
 		case KMessageBox::Yes: {
 			saveCurrentView();
 			PortageSingleton::Instance()->slotRefresh();
@@ -251,6 +266,8 @@ void PortageTab::slotBusy( bool b )
  */
 void PortageTab::slotSummary()
 {
+	kdDebug() << "PortageTab::slotSummary" << endl;
+	
 	summaryBrowser->clear();
 	
 	if ( !packagesView->currentItem() )
@@ -350,11 +367,6 @@ void PortageTab::slotUninstall()
 void PortageTab::slotAdvanced()
 {
 	packageInspector->edit( packagesView->selectedId().first() );
-}
-
-void PortageTab::slotClearFilter()
-{
-	searchFilter->clear();
 }
 
 #include "portagetab.moc"

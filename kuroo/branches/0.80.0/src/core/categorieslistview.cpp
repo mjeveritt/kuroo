@@ -26,6 +26,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qregexp.h>
+#include <qpainter.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -33,6 +34,35 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+
+/**
+ * @class CategoriesView::CategoryItem
+ * @short Highlight category header with bold darkGray
+ */
+class CategoriesView::CategoryItem : public QListViewItem
+{
+public:
+	CategoryItem::CategoryItem( QListView* parent, const char* name );
+	
+protected:
+	void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+};
+
+CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name )
+	: QListViewItem( parent, name )
+{
+}
+
+void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+{
+	QColorGroup _cg( cg );
+	QFont font( p->font() );
+	
+	font.setItalic( true );
+	p->setFont( font );
+	_cg.setColor( QColorGroup::Text, Qt::gray );
+	QListViewItem::paintCell( p, _cg, column, width, alignment );
+}
 
 /**
  * @class CategoriesListView
@@ -56,10 +86,9 @@ CategoriesView::~CategoriesView()
  */
 void CategoriesView::init( const QStringList& allCategoriesList )
 {
-	allCategories.resize( 200 );
-	int i( 1 );
+	allCategories.push_back( "All" );
 	foreach ( allCategoriesList ) {
-		allCategories[ i++ ] = *it;
+		allCategories.push_back( *it );
 	}
 }
 
@@ -71,13 +100,13 @@ QString CategoriesView::currentCategory()
 {
 	QListViewItem *item = this->currentItem();
 	if ( !item )
-		return i18n("na");
+		return i18n( "na" );
 	
-	return item->text(0);
+	return item->text( 0 );
 }
 
 /**
- * Get current category idDB.
+ * Get current category idDB. @fixme: use listview key
  * @return category
  */
 QString CategoriesView::currentCategoryId()
@@ -92,22 +121,41 @@ QString CategoriesView::currentCategoryId()
 }
 
 /**
+ * Mark package as current. @fixme: optimze with QMap
+ * @param package
+ */
+void CategoriesView::setCurrentCategory( const QString& package )
+{
+	clearSelection();
+	QListViewItemIterator it( this );
+	for ( ; it.current(); ++it )
+		if ( package == it.current()->text(0) ) {
+			ensureItemVisible( it.current() );
+			setCurrentItem( it.current() );
+			it.current()->setSelected( true );
+			break;
+		}
+}
+
+/**
  * Load categories.
  * @param categoriesList
  */
-void CategoriesView::loadCategories( const QStringList& categoriesList )
-{
-	categories.clear();
-	foreach ( categoriesList ) {
-		QString idDB( *it );
-		QString name( "   " + allCategories[ idDB.toInt() ] );
-		new QListViewItem( this, name );
-		categories.insert( name, idDB );
-	}
-	
-	new QListViewItem( this, "All" );
-	categories.insert( "All", "0" );
-}
+// void CategoriesView::loadCategories( const QStringList& categoriesList )
+// {
+// 	kdDebug() << "CategoriesView::loadCategories categoriesList=" << categoriesList << endl;
+// 	
+// 	categories.clear();
+// 	foreach ( categoriesList ) {
+// 		QString idDB( *it );
+// 		QString name( allCategories[ idDB.toInt() ] );
+// 		new QListViewItem( this, name );
+// 		categories.insert( name, idDB );
+// 	}
+// 	
+// 	new CategoryItem( this, "All" );
+// 	categories.insert( "All", "0" );
+// }
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +169,6 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 {
 	addColumn( i18n( "Category" ) );
 	header()->setLabel( header()->count() - 1, i18n("Category") );
-	allCategories.resize( 100 );
 }
 
 CategoriesListView::~CategoriesListView()
@@ -135,9 +182,23 @@ void CategoriesListView::init()
 
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	CategoriesView::loadCategories( categoriesList );
+	categories.clear();
+	for( int it = allCategories.size(); it != 0; --it ) {
+		QString idDB( QString::number(it) );
+		QString name( allCategories[ it ] );
+		
+		// Mark not available packages in gray and bold @fixme: optimize this
+		if ( !categoriesList.grep( QRegExp( "\\b" + idDB + "\\b") ).isEmpty() )
+			new QListViewItem( this, name );
+		else
+			new CategoryItem( this, name );
+		
+		categories.insert( name, idDB );
+	}
+	
+	new QListViewItem( this, "All" );
+	categories.insert( "All", "0" );
 	setSelected( firstChild(), true );
-// 	setSelected( firstChild()->itemBelow(), true );
 }
 
 
@@ -150,8 +211,6 @@ SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name 
 {
 	addColumn( i18n( "Subcategory" ) );
 	header()->setLabel( header()->count() - 1, i18n( "Subcategory" ) );
-	
-	allCategories.resize( 200 );
 }
 
 SubCategoriesListView::~SubCategoriesListView()
@@ -166,7 +225,19 @@ void SubCategoriesListView::init()
 
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	CategoriesView::loadCategories( categoriesList );
+	categories.clear();
+	foreach ( categoriesList ) {
+		QString idDB( *it );
+		QString name( allCategories[ idDB.toInt() ] );
+		
+		if ( *it != "0" ) {
+			new QListViewItem( this, name );
+			categories.insert( name, idDB );
+		}
+	}
+	
+	new QListViewItem( this, "All" );
+	categories.insert( "All", "0" );
 	setSelected( firstChild(), true );
 }
 

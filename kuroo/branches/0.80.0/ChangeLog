@@ -84,7 +84,7 @@
 	- Kuroo home directory moved to "/var/tmp/kuroo".
 	- Using SQLite db to store "Portage", "Installed", "Updates", "Queue", "Results", History"... 
 	- SearchLine added for "Installed" and "Portage" views to filter packages by name.
-	- Added Toolbox à la konqueror with buttons for "Refresh", "Sync" and "Advanced search.
+	- Added Toolbox ï¿½la konqueror with buttons for "Refresh", "Sync" and "Advanced search.
 	- Moved from "live" threaded scanning of directories to scan once then retrieving packages listing.
 	- Highlighting (blue) of tabs "header" to indicate changes in tab content.
 
@@ -100,7 +100,7 @@
 	Emerge history log is only parsed for most recent entries. Checked against db. 
 	Added sqlite db support in kuroo watcher. 
 	Two new threads: ScanHistory and ScanUpdates for better gui responsiveness. 
-	Emerge log parsed ínto database: new thread.
+	Emerge log parsed ï¿½to database: new thread.
 	New icons for listview headers, moved from inline in code.
 	Fixed: Search for packages in database. Log is saved database too.
 	Change in database model: all package info stored in allPackages, other tables have foreign key idAll.

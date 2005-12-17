@@ -34,7 +34,7 @@
 QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_161205";
+static const char version[] = "0.80.0_171205";
 
 static KCmdLineOptions options[] =
 {
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	KAboutData about("kuroo8", I18N_NOOP("Kuroo8"), version, description,
 	KAboutData::License_GPL, "(C) 2005 karye", 0, 0, "karye@users.sourceforge.net");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "karye@users.sourceforge.net");
-	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
+	about.addCredit("Alexander N. SÃ¸rnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
 	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
 	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");
 	

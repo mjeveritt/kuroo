@@ -101,7 +101,6 @@ private slots:
 	void				slotSummary();
 	
 private:
-	int					filter;
 	KPopupMenu 			*menu;
 	PackageInspector	*packageInspector;
 	

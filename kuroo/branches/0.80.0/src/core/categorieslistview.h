@@ -39,7 +39,9 @@ public:
 	~CategoriesView();
 
 	void									init( const QStringList& allCategoriesList );
-	
+
+	class	CategoryItem;
+
 public slots:
 	
 	/**
@@ -48,18 +50,13 @@ public slots:
 	 */
 	QString									currentCategory();
 	QString									currentCategoryId();
-	
-	/**
- 	 * Load categories.
- 	 * @param categoriesList 
-	 */
-	void									loadCategories( const QStringList& categoriesList );
+	void									setCurrentCategory( const QString& package );
 
 private:
 	QPixmap 								pxRepository, pxCategory;
-	QMap<QString, QString> 					categories;
 	
 protected:
+	QMap<QString, QString> 					categories;
 	QValueVector<QString> 					allCategories;
 };
 
@@ -76,6 +73,11 @@ public:
 	~CategoriesListView();
 	
 	void									init();
+	
+	/**
+ 	 * Load categories.
+ 	 * @param categoriesList 
+	 */
 	void 									loadCategories( const QStringList& categoriesList );
 };
 
@@ -90,6 +92,11 @@ public:
 	~SubCategoriesListView();
 	
 	void									init();
+	
+	/**
+ 	 * Load categories.
+ 	 * @param categoriesList 
+	 */
 	void 									loadCategories( const QStringList& categoriesList );
 };
 

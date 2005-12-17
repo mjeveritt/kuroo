@@ -177,10 +177,6 @@ bool ScanInstalledJob::doJob()
 				QString package = (*itPackage).section(pv, 0, 0);
 				QString version = (*itPackage).section(package + "-", 1, 1);
 				
-				QFileInfo fi1(*itPackage);
-				QDateTime syncDate = fi1.created();
-				QString date = syncDate.toString("yyyy MM dd");
-				
 				QString idPackage = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package_temp WHERE name = '%1' AND idCategory = '%2' AND version = '%3';").arg(package).arg(idCategory).arg(version), m_db).first();
 				
 				// Mark package as installed in table package or add old package (=2) @todo

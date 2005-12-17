@@ -44,34 +44,35 @@ public:
 	/**
  	 * Slot to save all installed packages into the world file.
  	 */
-	bool exportToWorld();
+	bool 		exportToWorld();
 	
 private slots:
 	
 	/**
  	 * Load the contents of the these inte KTextBoxes.
  	 */
-	void readMakeConf();
-	void readPackageUnmask();
-	void readPackageMask();
-	void readPackageKeywords();
-	void readWorldFile();
+	void 		readMakeConf();
+	void 		readPackageUnmask();
+	void 		readPackageMask();
+	void 		readPackageKeywords();
+	void 		readWorldFile();
 	
 	/**
  	 * And save back...
  	 */
-	bool saveMakeConf();
-	bool savePackageUnmask();
-	bool savePackageMask();
-	bool savePackageKeywords();
-	bool saveWorldFile();
-	void saveAll();
+	bool 		saveMakeConf();
+	bool 		savePackageUnmask();
+	bool 		savePackageMask();
+	bool 		savePackageKeywords();
+	bool 		saveWorldFile();
+	void 		saveAll();
 
-	void exportWorld();
-	void slotDefault();
+	void 		exportWorld();
+	void 		slotDefault();
 
 private:
-	QString m_chost, m_cflags, m_makeopts, m_useFlags, m_overlay, m_rsyncMirror, m_language;
+	QString 	m_chost, m_cflags, m_makeopts, m_useFlags, m_overlay, m_rsyncMirror, m_language;
+
 };
 
 #endif

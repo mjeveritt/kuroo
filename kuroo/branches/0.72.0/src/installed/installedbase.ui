@@ -114,6 +114,12 @@
                                     <height>50</height>
                                 </size>
                             </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="margin">
+                                <number>2</number>
+                            </property>
                         </widget>
                     </grid>
                 </widget>
@@ -137,6 +143,12 @@
                         <widget class="KTextBrowser" row="0" column="0">
                             <property name="name">
                                 <cstring>installedFilesBrowser</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="margin">
+                                <number>2</number>
                             </property>
                         </widget>
                     </grid>

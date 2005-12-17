@@ -29,6 +29,8 @@
 PackageListView::PackageListView( QWidget* parent, const char* name )
 	: KListView( parent, name )
 {
+	setFrameShape(QFrame::NoFrame);
+	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( setQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 	

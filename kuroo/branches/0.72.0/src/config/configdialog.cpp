@@ -42,6 +42,7 @@
 #include <ktextedit.h>
 #include <kuser.h>
 #include <kstringhandler.h>
+#include <kurlrequester.h>
 
 /**
  * Kuroo preferences widget.
@@ -60,25 +61,28 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	Options7* opt7 = new Options7( this );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
-	addPage( opt2, i18n("Portage make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt5, i18n("Testing packages"), "kuroo_portagefiles", i18n("Edit your package.keywords file") );
-	addPage( opt4, i18n("Unstable packages"), "kuroo_portagefiles", i18n("Edit your package.unmask file") );
-	addPage( opt3, i18n("Protected packages"), "kuroo_portagefiles", i18n("Edit your package.mask file") );
+	addPage( opt2, i18n("Portage Settings"), "kuroo_makeconf", i18n("Edit your make.conf file") );
+	addPage( opt5, i18n("Testing Packages"), "kuroo_portagefiles", i18n("Edit your package.keywords file") );
+	addPage( opt4, i18n("Unstable Packages"), "kuroo_portagefiles", i18n("Edit your package.unmask file") );
+	addPage( opt3, i18n("Protected Packages"), "kuroo_portagefiles", i18n("Edit your package.mask file") );
 	addPage( opt6, i18n("World"), "kuroo_portagefiles", i18n("Edit your world file") );
-	addPage( opt7, i18n("Etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
+	addPage( opt7, i18n("Etc Warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
 	
 	if ( KUser().isSuperUser() )
 		connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
 	else
-		opt6->pbExportToWorld->setEnabled(false);
+		opt6->pbExportToWorld->setEnabled( false );
 		
 	readMakeConf();
 	readPackageUnmask();
 	readPackageMask();
 	readPackageKeywords();
 	readWorldFile();
+	
+	opt1->kcfg_DirDbPkg->setMode( KFile::Directory | KFile::LocalOnly );
+	opt1->kcfg_DirEdbDep->setMode( KFile::Directory | KFile::LocalOnly );
 }
 
 ConfigDialog::~ConfigDialog()

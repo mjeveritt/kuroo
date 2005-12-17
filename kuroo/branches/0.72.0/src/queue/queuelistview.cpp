@@ -202,7 +202,7 @@ QString QueueListView::timeFormat( const QString& time )
 		QTime emergeTime(0, 0, 0);
 		emergeTime = emergeTime.addSecs(time.toInt());
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
-		return loc->formatTime(totalDuration, true, true);
+		return loc->formatTime(emergeTime, true, true);
 	}
 	else
 		return i18n("na");

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>460</width>
+            <width>450</width>
             <height>576</height>
         </rect>
     </property>
@@ -24,25 +24,64 @@
                 <cstring>paths</cstring>
             </property>
             <property name="title">
-                <string>Paths</string>
+                <string>Portage location</string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLineEdit" row="1" column="1">
+                <widget class="KURLRequester" row="1" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirEdbDep</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="0" column="1">
                     <property name="name">
                         <cstring>kcfg_DirDbPkg</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
+                    </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>cFlags_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Cache</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>cFlags_3</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>3</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
@@ -57,39 +96,6 @@
                         <string>Installed repository</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirEdbDep</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>300</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>cFlags_2_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Portage cache</string>
-                    </property>
-                </widget>
             </grid>
         </widget>
         <widget class="QGroupBox" row="1" column="0">
@@ -97,7 +103,7 @@
                 <cstring>portage</cstring>
             </property>
             <property name="title">
-                <string>Portage</string>
+                <string>System</string>
             </property>
             <grid>
                 <property name="name">
@@ -247,10 +253,10 @@
                         <cstring>kcfg_viewUnmerges</cstring>
                     </property>
                     <property name="text">
-                        <string>View unmer&amp;ges</string>
+                        <string>View &amp;unmerges</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+G</string>
+                        <string>Alt+U</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -557,6 +563,12 @@
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kcolorbutton.h</includehint>
     <includehint>kcolorbutton.h</includehint>
 </includehints>

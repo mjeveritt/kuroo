@@ -52,6 +52,7 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	setShowSortIndicator(true);
 	setRootIsDecorated(true);
 	setFullWidth(true);
+	setFrameShape(QFrame::NoFrame);
 }
 
 CategoriesListView::~CategoriesListView()

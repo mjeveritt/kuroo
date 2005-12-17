@@ -61,6 +61,9 @@
                         <height>200</height>
                     </size>
                 </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
                 <property name="title">
                     <string>Kuroo log</string>
                 </property>

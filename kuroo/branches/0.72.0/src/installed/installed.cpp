@@ -276,15 +276,19 @@ QString Installed::installedFiles( const QString& packageId )
 	
 	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package.section("*", 0, 0) + "/CONTENTS";
 	QFile file( filename );
-	QString textLines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
+		QString textLines;
+		int count(0);
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
-			if ( line.startsWith("obj") )
-				textLines += line.section("obj ", 1, 1).section(" ", 0, 0) + "\n";
+			if ( line.startsWith("obj") ) {
+				textLines += line.section("obj ", 1, 1).section(" ", 0, 0) + "<br>";
+				count++;
+			}
 		}
 		file.close();
+		textLines = i18n("<b>%1 files:</b><br>").arg(count) + textLines;
 		return textLines;
 	}
 	else {

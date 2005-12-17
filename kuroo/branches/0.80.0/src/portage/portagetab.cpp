@@ -151,8 +151,6 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << "PortageTab::slotReload" << endl;
-	
 	saveCurrentView();
 	packagesView->reset();
 	categoriesView->clear();
@@ -179,8 +177,6 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	
@@ -198,8 +194,6 @@ void PortageTab::slotListPackages()
  */
 void PortageTab::slotFilters()
 {
-	kdDebug() << "PortageTab::slotFilters" << endl;
-	
 	packagesView->reset();
 	categoriesView->clear();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
@@ -207,10 +201,10 @@ void PortageTab::slotFilters()
 
 void PortageTab::slotClearFilter()
 {
-	disconnect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
+// 	disconnect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
 	searchFilter->clear();
-	slotFilters();
-	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
+// 	slotFilters();
+// 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
 }
 
 /**
@@ -219,8 +213,6 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotSearchPackage()
 {
-	kdDebug() << "PortageTab::slotSearchPackage" << endl;
-	
 	QString category = categoriesView->currentCategory();
 	
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
@@ -266,8 +258,6 @@ void PortageTab::slotBusy( bool b )
  */
 void PortageTab::slotSummary()
 {
-	kdDebug() << "PortageTab::slotSummary" << endl;
-	
 	summaryBrowser->clear();
 	
 	if ( !packagesView->currentItem() )

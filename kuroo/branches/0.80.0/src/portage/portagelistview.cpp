@@ -163,7 +163,8 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	reset();
 		
 	// Don't load all packages, only first ROWLIMIT
-	int max( packageList.size() - ROWLIMIT * 6 );
+// 	int max( packageList.size() - ROWLIMIT * 6 );
+	int max( packageList.size() - 300 * 6 );
 	
 	foreach ( packageList ) {
 		

@@ -137,26 +137,6 @@ void CategoriesView::setCurrentCategory( const QString& package )
 		}
 }
 
-/**
- * Load categories.
- * @param categoriesList
- */
-// void CategoriesView::loadCategories( const QStringList& categoriesList )
-// {
-// 	kdDebug() << "CategoriesView::loadCategories categoriesList=" << categoriesList << endl;
-// 	
-// 	categories.clear();
-// 	foreach ( categoriesList ) {
-// 		QString idDB( *it );
-// 		QString name( allCategories[ idDB.toInt() ] );
-// 		new QListViewItem( this, name );
-// 		categories.insert( name, idDB );
-// 	}
-// 	
-// 	new CategoryItem( this, "All" );
-// 	categories.insert( "All", "0" );
-// }
-
 
 /////////////////////////////////////////////////////////////////////////////////
 

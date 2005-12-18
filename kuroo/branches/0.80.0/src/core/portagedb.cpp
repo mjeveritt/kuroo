@@ -381,6 +381,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text, int com
 QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text, int combo )
 {
 	QString filterQuery, textQuery;
+	QStringList resultList;
 	
 	// Name or description choice from comboBox
 	if ( !text.isEmpty() ) {
@@ -398,11 +399,8 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 		}
 	}
 	
-	if ( categoryId == "0" ) {
-		return ( "0" );
-	}
-	else {
-		
+	if ( categoryId != "0" ) {
+
 		switch ( filter ) {
 			case FILTER_ALL:
 				filterQuery = "";
@@ -416,17 +414,13 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 				filterQuery = " AND package.updateVersion != '' ";
 		}
 		
-		return query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '" 
-		              + categoryId + "'" + filterQuery + textQuery + " ORDER BY idSubCategory DESC; ");
+		resultList = query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '" 
+		               		+ categoryId + "'" + filterQuery + textQuery + " ORDER BY idSubCategory DESC; ");
 	}
+		
+	resultList += "0";
+	return resultList;
 }
-
-// QStringList KurooDB::portageCategoryId( const QString& category )
-// {
-// 	return query(" SELECT id FROM category "
-// 	             " WHERE name = '" + category + "'"
-// 	             " ;");
-// }
 
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text, int combo )
 {

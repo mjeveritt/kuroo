@@ -173,35 +173,6 @@ void PackageItem::setStatus( int status )
 }
 
 /**
- * Compare size and order numerically.
- * @param i
- * @param col
- * @param ascending
- * @return -1 or 0 or 1
- */
-// int PackageItem::compare( QListViewItem* i, int col, bool ascending ) const
-// {
-// 	QString a =    text( col );
-// 	QString b = i->text( col );
-// 	QString column = m_parent->columnText( col );
-	
-// 	if ( column == i18n( "Size" ) || column == i18n( "Nr" ) ) {
-// 		a = a.section( " kB", 0, 0 ).rightJustify( b.length(), '0' );
-// 		b = b.section( " kB", 0, 0 ).rightJustify( a.length(), '0' );
-// 
-// 		if ( a == b )
-// 			return 0;
-// 		
-// 		if ( ascending )
-// 			return a > b ? 1 : -1;
-// 		else
-// 			return a < b ? -1 : 1;
-// 	}
-// 	else
-// 		return QString::localeAwareCompare( a, b );
-// }
-
-/**
  * Change package/ebuild text color.
  * @param p
  * @param cq

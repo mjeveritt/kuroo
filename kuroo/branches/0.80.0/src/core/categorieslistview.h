@@ -38,8 +38,6 @@ public:
 	CategoriesView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesView();
 
-	void									init( const QStringList& allCategoriesList );
-
 	class	CategoryItem;
 
 public slots:
@@ -56,8 +54,10 @@ private:
 	QPixmap 								pxRepository, pxCategory;
 	
 protected:
-	QMap<QString, QString> 					categories;
-	QValueVector<QString> 					allCategories;
+	int 									m_currentId;
+	
+	typedef QValueVector<CategoryItem*>		Categories;
+	Categories			 					categories;
 };
 
 
@@ -98,6 +98,10 @@ public:
  	 * @param categoriesList 
 	 */
 	void 									loadCategories( const QStringList& categoriesList );
+	
+private:
+	typedef QValueVector<QString>			SubCategories;
+	SubCategories			 				allSubCategories;
 };
 
 #endif

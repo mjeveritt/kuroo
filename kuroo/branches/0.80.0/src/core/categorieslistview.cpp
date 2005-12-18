@@ -42,26 +42,49 @@
 class CategoriesView::CategoryItem : public QListViewItem
 {
 public:
-	CategoryItem::CategoryItem( QListView* parent, const char* name );
+	CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id );
+	
+	void 	setOn( bool on );
+	QString id();
 	
 protected:
-	void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+	QString	m_id;
+	bool 	m_on;
+	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 };
 
-CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name )
-	: QListViewItem( parent, name )
+CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
+	: QListViewItem( parent, name ), m_on( true ), m_id( id )
 {
 }
 
 void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
 {
-	QColorGroup _cg( cg );
+	QColorGroup m_cg( cg );
 	QFont font( p->font() );
 	
-	font.setItalic( true );
-	p->setFont( font );
-	_cg.setColor( QColorGroup::Text, Qt::gray );
-	QListViewItem::paintCell( p, _cg, column, width, alignment );
+	if ( !m_on ) {
+		font.setItalic( true );
+		p->setFont( font );
+		m_cg.setColor( QColorGroup::Text, Qt::gray );
+	}
+	else {
+		font.setItalic( false );
+		p->setFont( font );
+		m_cg.setColor( QColorGroup::Text, Qt::black );
+	}
+	QListViewItem::paintCell( p, m_cg, column, width, alignment );
+}
+
+void CategoriesView::CategoryItem::setOn( bool on )
+{
+	m_on = on;
+	repaint();
+}
+
+QString CategoriesView::CategoryItem::id()
+{
+	return m_id;
 }
 
 /**
@@ -69,7 +92,7 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg
  * @short Creates category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
-	: KListView( parent, name ), allCategories( 0 )
+	: KListView( parent, name ), categories( 0 )
 {
 	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()) );
 	setFullWidth( true );
@@ -79,17 +102,6 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 
 CategoriesView::~CategoriesView()
 {
-}
-
-/**
- * Load index of categories name from db
- */
-void CategoriesView::init( const QStringList& allCategoriesList )
-{
-	allCategories.push_back( "All" );
-	foreach ( allCategoriesList ) {
-		allCategories.push_back( *it );
-	}
 }
 
 /**
@@ -111,13 +123,7 @@ QString CategoriesView::currentCategory()
  */
 QString CategoriesView::currentCategoryId()
 {
-	QListViewItem *item = this->currentItem();
-	
-	QMap<QString, QString>::iterator itMap = categories.find( item->text( 0 ) ) ;
-	if ( itMap != categories.end() )
-		return itMap.data();
-	else
-		return i18n( "na" );
+	return dynamic_cast<CategoryItem*>( this->currentItem() )->id();
 }
 
 /**
@@ -157,27 +163,33 @@ CategoriesListView::~CategoriesListView()
 
 void CategoriesListView::init()
 {
-	CategoriesView::init( KurooDBSingleton::Instance()->allCategories() );
+	kdDebug() << "CategoriesListView::init" << endl;
+	
+	CategoryItem* item( new CategoryItem( this, "All", "0" ) );
+	categories.push_back( item );
+	
+	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
+	int i( 1 );
+	foreach ( allCategoriesList ) {
+		item = new CategoryItem( this, *it, QString::number( i++ ) );
+		categories.push_back( item );
+	}
+	setSorting( 0 );
 }
 
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	categories.clear();
-	for( int it = allCategories.size(); it != 0; --it ) {
-		QString idDB( QString::number(it) );
-		QString name( allCategories[ it ] );
-		
-		// Mark not available packages in gray and bold @fixme: optimize this
-		if ( !categoriesList.grep( QRegExp( "\\b" + idDB + "\\b") ).isEmpty() )
-			new QListViewItem( this, name );
-		else
-			new CategoryItem( this, name );
-		
-		categories.insert( name, idDB );
+	// Set all categories off = empty
+	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
+		(*it)->setOn( false );
 	}
 	
-	new QListViewItem( this, "All" );
-	categories.insert( "All", "0" );
+	// Enable categories from query
+	foreach ( categoriesList ) {
+		int id = (*it).toInt();
+		categories[id]->setOn( true );
+	}
+
 	setSelected( firstChild(), true );
 }
 
@@ -199,25 +211,27 @@ SubCategoriesListView::~SubCategoriesListView()
 
 void SubCategoriesListView::init()
 {
-	CategoriesView::init( KurooDBSingleton::Instance()->allSubCategories() );
+	allSubCategories.push_back( "All" );
+	
+	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allSubCategories();
+	foreach ( allCategoriesList ) {
+		allSubCategories.push_back( *it );
+	}
 }
-
 
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
 	categories.clear();
+	clear();
+	CategoryItem* item;
+	
 	foreach ( categoriesList ) {
 		QString idDB( *it );
-		QString name( allCategories[ idDB.toInt() ] );
-		
-		if ( *it != "0" ) {
-			new QListViewItem( this, name );
-			categories.insert( name, idDB );
-		}
+		QString name( allSubCategories[ idDB.toInt() ] );
+		item = new CategoryItem( this, name, idDB );
+		categories.push_back( item );
 	}
 	
-	new QListViewItem( this, "All" );
-	categories.insert( "All", "0" );
 	setSelected( firstChild(), true );
 }
 

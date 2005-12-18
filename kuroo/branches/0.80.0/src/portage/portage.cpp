@@ -119,7 +119,7 @@ bool Portage::slotSync()
  * @param category
  * @param packageList
  */
-void Portage::pretendPackageList( /*const QString& category, */const QStringList& packageIdList )
+void Portage::pretendPackageList( const QStringList& packageIdList )
 {
 	QStringList packageList;
 	foreach ( packageIdList ) {
@@ -130,40 +130,21 @@ void Portage::pretendPackageList( /*const QString& category, */const QStringList
 }
 
 /**
- * Check if package is installed.
- * @param package
- * @return success
- */
-bool Portage::isInstalled( const QString& package )
-{
-// 	QString tmp = package.section( "/", 1, 1 );
-// 	QString name = tmp.section( pv, 0, 0 );
-// 	QString version = tmp.section( name + "-", 1, 1 );
-// 	
-// 	QString installedFlag = KurooDBSingleton::Instance()->isInstalled( name, version ).first();
-// 	
-// 	if ( installedFlag == "1" )
-// 		return true;
-// 	else
-// 		return false;
-}
-
-/**
  * Get list of all categories for portage packages.
  * @return QStringList
  */
-QStringList Portage::categories( int filter, const QString& text )
+QStringList Portage::categories( int filter, const QString& text, int combo )
 {
-	return KurooDBSingleton::Instance()->portageCategories( filter, text );
+	return KurooDBSingleton::Instance()->portageCategories( filter, text, combo );
 }
 
 /**
  * Get list of all subcategories for portage packages.
  * @return QStringList
  */
-QStringList Portage::subCategories( const QString& categoryId, int filter, const QString& text )
+QStringList Portage::subCategories( const QString& categoryId, int filter, const QString& text, int combo )
 {
-	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter, text );
+	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter, text, combo );
 }
 
 /**
@@ -172,9 +153,9 @@ QStringList Portage::subCategories( const QString& categoryId, int filter, const
  * @return QStringList
  */
 
-QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
+QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text, int combo )
 {
-	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter, text );
+	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter, text, combo );
 }
 
 /**

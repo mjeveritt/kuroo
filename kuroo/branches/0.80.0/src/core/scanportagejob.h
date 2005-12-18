@@ -92,7 +92,7 @@ private:
 		QString							size;
 		QString							keywords;
 	};
-	typedef QMap<QString, Data>		PortageVersions;
+	typedef QMap<QString, Data>			PortageVersions;
 	struct Versions {
 		QString							meta;
 		QString							description;

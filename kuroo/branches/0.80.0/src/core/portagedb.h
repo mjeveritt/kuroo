@@ -174,10 +174,10 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList		allCategories();
 	QStringList		allSubCategories();
-	QStringList 	portageCategories( int filter, const QString& text );
-	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
-	QStringList 	portageCategoryId( const QString& categoryId );
-	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
+	QStringList 	portageCategories( int filter, const QString& text, int combo );
+	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text, int combo );
+	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text, int combo );
+// 	QStringList 	portageCategoryId( const QString& categoryId );
 	QStringList 	portagePackageInfo( const QString& id );
 	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
 	QStringList 	searchPortagePackagesName( const QString& name );

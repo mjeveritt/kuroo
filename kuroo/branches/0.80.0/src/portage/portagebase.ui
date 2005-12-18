@@ -25,6 +25,17 @@
         <property name="spacing">
             <number>0</number>
         </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="margin">
+                <number>2</number>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Show Packages matching&lt;/b&gt;</string>
+            </property>
+        </widget>
         <widget class="Line" row="2" column="0">
             <property name="name">
                 <cstring>line1</cstring>
@@ -47,17 +58,6 @@
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="margin">
-                <number>2</number>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Show following packages&lt;/b&gt;</string>
             </property>
         </widget>
         <widget class="QSplitter" row="3" column="0">
@@ -273,7 +273,35 @@
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QPushButton" row="2" column="0">
+                                        <spacer row="2" column="0">
+                                            <property name="name">
+                                                <cstring>spacer2_2</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Vertical</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Minimum</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>21</width>
+                                                    <height>30</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <widget class="QPushButton" row="0" column="0">
+                                            <property name="name">
+                                                <cstring>pbAddQueue</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Add to Emerge &amp;Queue</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+Q</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton" row="1" column="0">
                                             <property name="name">
                                                 <cstring>pbUninstall</cstring>
                                             </property>
@@ -295,34 +323,6 @@
                                                 <string></string>
                                             </property>
                                         </widget>
-                                        <widget class="QPushButton" row="1" column="0">
-                                            <property name="name">
-                                                <cstring>pbAddQueue</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Add to Emerge &amp;Queue</string>
-                                            </property>
-                                            <property name="accel">
-                                                <string>Alt+Q</string>
-                                            </property>
-                                        </widget>
-                                        <spacer row="0" column="0">
-                                            <property name="name">
-                                                <cstring>spacer2_2</cstring>
-                                            </property>
-                                            <property name="orientation">
-                                                <enum>Vertical</enum>
-                                            </property>
-                                            <property name="sizeType">
-                                                <enum>Minimum</enum>
-                                            </property>
-                                            <property name="sizeHint">
-                                                <size>
-                                                    <width>21</width>
-                                                    <height>20</height>
-                                                </size>
-                                            </property>
-                                        </spacer>
                                     </grid>
                                 </widget>
                             </grid>
@@ -333,12 +333,60 @@
         </widget>
         <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout19</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <widget class="QComboBox" row="0" column="4">
+                    <item>
+                        <property name="text">
+                            <string>Name</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Description</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Name and Description</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>comboFilter</cstring>
+                    </property>
+                </widget>
+                <spacer row="0" column="1">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>123</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton" row="0" column="2">
+                    <property name="name">
+                        <cstring>pbClearFilter</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                </widget>
                 <widget class="QButtonGroup" row="0" column="0">
                     <property name="name">
                         <cstring>filterGroup</cstring>
@@ -414,37 +462,9 @@
                         </widget>
                     </grid>
                 </widget>
-                <spacer row="0" column="1">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>170</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QLineEdit" row="0" column="3">
                     <property name="name">
                         <cstring>searchFilter</cstring>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>pbClearFilter</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image0</iconset>
                     </property>
                 </widget>
             </grid>

@@ -43,18 +43,14 @@ public:
 	
 public slots:
 	
-	/**
-	 * Mark package as current.
-	 * @param package
-	 */
-// 	void 			setCurrentPackage( const QString& package );
+	void			setHeader( const QString& text );
 	
 	/**
 	 * Populate listview with content of this category..
 	 * @param package
 	 */
-	void 			addSubCategoryPackages( const QString& categoryId, const QString& subCategory, int filter, const QString& text );
-	void 			addSubCategoryPackages( const QStringList& packageList );
+// 	void 			addSubCategoryPackages( const QString& categoryId, const QString& subCategory, int filter, const QString& text );
+	int 			addSubCategoryPackages( const QStringList& packageList );
 	
 private:
 	QStringList		unmaskedList;

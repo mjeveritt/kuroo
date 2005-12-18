@@ -46,7 +46,7 @@
 #include <klineedit.h>
 #include <klistviewsearchline.h>
 
-static bool isCategoryCurrent( true );
+// static bool isCategoryCurrent( true );
 
 /**
  * Page for portage packages.
@@ -58,15 +58,12 @@ PortageTab::PortageTab( QWidget* parent )
 	subcategoriesView->init();
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotReload() ) );
-// 	connect( categoriesView, SIGNAL( currentChanged() ), this, SLOT( slotListSubCategories() ) );
-// 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotSearchPackage() ) );
-	
-// 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotSearchPackage() ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
+	connect( comboFilter, SIGNAL( activated( int ) ), this, SLOT( slotSearchPackage() ));
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -152,11 +149,7 @@ void PortageTab::slotInit()
 void PortageTab::slotReload()
 {
 	saveCurrentView();
-	packagesView->reset();
-	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
-	
-// 	emit signalChanged();
+	slotFilters();
 }
 
 /**
@@ -169,7 +162,7 @@ void PortageTab::slotListSubCategories()
 		return;
 		
 	subcategoriesView->clear();
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
+	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
 }
 
 /**
@@ -183,10 +176,9 @@ void PortageTab::slotListPackages()
 	if ( categoryId == i18n( "na" ) || subCategoryId == i18n( "na" ) )
 		return;
 	
-	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() );
-	packagesView->addSubCategoryPackages( packageList );
-		
-	isCategoryCurrent = false;
+	int count = packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
+	
+	packagesView->setHeader( QString::number( count ) );
 }
 
 /**
@@ -196,15 +188,15 @@ void PortageTab::slotFilters()
 {
 	packagesView->reset();
 	categoriesView->clear();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
 }
 
+/**
+ * Reset text filter.
+ */
 void PortageTab::slotClearFilter()
 {
-// 	disconnect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
 	searchFilter->clear();
-// 	slotFilters();
-// 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
 }
 
 /**

@@ -74,28 +74,15 @@ public slots:
 	 * @param category
 	 * @param packageList
 	 */
-	void						pretendPackageList( /*const QString& category, */const QStringList& packageIdList );
+	void						pretendPackageList( const QStringList& packageIdList );
 	
 	/**
-	* Check if package is installed.
-	* @param package
-	* @return true/false
-	*/
-	bool						isInstalled( const QString& package );
-	
-	/**
-	* Get list of all categories for portage packages.
+	* Get list of all categories, subcategories or packages.
 	* @return QStringList
 	*/
-	QStringList					categories( int filter, const QString& text );
-	QStringList					subCategories( const QString& category, int filter, const QString& text );
-	
-	/**
-	* Get list of packages in this category from database.
-	* @param category
-	* @return QStringList
-	*/
-	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter, const QString& text );
+	QStringList					categories( int filter, const QString& text, int combo );
+	QStringList					subCategories( const QString& category, int filter, const QString& text, int combo );
+	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter, const QString& text, int combo );
 	
 	/**
 	* Get list of versions available of this package.

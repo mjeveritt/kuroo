@@ -76,95 +76,83 @@ PortageListView::~PortageListView()
 {
 }
 
-/**
- * Mark package as current.
- * @param package
- */
-// void PortageListView::setCurrentPackage( const QString& package )
-// {
-// 	clearSelection();
-// 	QListViewItemIterator it( this );
-// 	for ( ; it.current(); ++it )
-// 		if ( package == it.current()->text(0) ) {
-// 			ensureItemVisible( it.current() );
-// 			setCurrentItem( it.current() );
-// 			it.current()->setSelected( true );
-// 			it.current()->setOpen( true );
-// 			break;
-// 		}
-// }
-
-/**
- * Populate listview with content of this category.
- * @param package
- */
-void PortageListView::addSubCategoryPackages( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
+void PortageListView::setHeader( const QString& text )
 {
-// 	kdDebug() << "PortageListView::addSubCategoryPackages Query-start: " << endl;
-// 	clock_t start = clock();
-	
-	setSorting( -1 );
-	reset();
-	
-	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filter, text );
-	
-	// Don't load all packages, only first ROWLIMIT
-	int max( packageList.size() - ROWLIMIT * 6 );
-
-	foreach ( packageList ) {
-		
-		// Since packages are loaded in inverse alfabetical order, skip all except last ROWLIMIT
-		if ( max-- > 0 )
-			continue;
-		
-		QString idDB = *it++;
-		QString name = *it++;
-		QString package = name;
-		QString description = *it++;
-		QString latest = *it++;
-		QString meta = *it++;
-		QString updateVersion = *it;
-		
-		Meta packageMeta;
-		packageMeta.insert( i18n( "3Description" ), description );
-		packageMeta.insert( i18n( "5Update" ), updateVersion );
-		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
-		
-		if ( meta != FILTERALL )
-			packageItem->setStatus( INSTALLED );
-		
-// 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-// 			packageItem->setStatus(MASKED);
-// 		else {
-// 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
-// 				packageItem->setStatus(UNMASKED);
-// 		}
-		
-		insertPackage( idDB, packageItem );
-	}
-	
-	setSelected( firstChild(), true );
-	setSorting( 0 );
-	
-// 	clock_t finish = clock();
-// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
+	header()->setLabel( 0, i18n("Package") + " (" + text + ")" );
 }
 
 /**
  * Populate listview with content of this category.
  * @param package
  */
-void PortageListView::addSubCategoryPackages( const QStringList& packageList )
+// void PortageListView::addSubCategoryPackages( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
+// {
+// 	kdDebug() << "PortageListView::addSubCategoryPackages Query-start: " << endl;
+// 	clock_t start = clock();
+	
+// 	setSorting( -1 );
+// 	reset();
+// 	
+// 	const QStringList packageList = PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filter, text );
+// 	
+	// Don't load all packages, only first ROWLIMIT
+// 	int max( packageList.size() - ROWLIMIT * 6 );
+// 
+// 	foreach ( packageList ) {
+		
+		// Since packages are loaded in inverse alfabetical order, skip all except last ROWLIMIT
+// 		if ( max-- > 0 )
+// 			continue;
+// 		
+// 		QString idDB = *it++;
+// 		QString name = *it++;
+// 		QString package = name;
+// 		QString description = *it++;
+// 		QString latest = *it++;
+// 		QString meta = *it++;
+// 		QString updateVersion = *it;
+// 		
+// 		Meta packageMeta;
+// 		packageMeta.insert( i18n( "3Description" ), description );
+// 		packageMeta.insert( i18n( "5Update" ), updateVersion );
+// 		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+// 		
+// 		if ( meta != FILTERALL )
+// 			packageItem->setStatus( INSTALLED );
+		
+// 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
+// 			packageItem->setStatus(MASKED);
+// 		else {
+// 			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
+// 				packageItem->setStatus(UNMASKED);
+// 		}
+		
+// 		insertPackage( idDB, packageItem );
+// 	}
+// 	
+// 	setSelected( firstChild(), true );
+// 	setSorting( 0 );
+	
+// 	clock_t finish = clock();
+// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
+// 	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
+// }
+
+/**
+ * Populate listview with content of this category.
+ * @param package
+ */
+int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
 // 	clock_t start = clock();
 	
+	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
 	reset();
 		
 	// Don't load all packages, only first ROWLIMIT
-// 	int max( packageList.size() - ROWLIMIT * 6 );
-	int max( packageList.size() - 300 * 6 );
+	int count( packageList.size() / 6 );
+	int max( ( count - ROWLIMIT ) * 6 ) ;
 	
 	foreach ( packageList ) {
 		
@@ -200,6 +188,7 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	
 	setSelected( firstChild(), true );
 	setSorting( 0 );
+	return count;
 	
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;

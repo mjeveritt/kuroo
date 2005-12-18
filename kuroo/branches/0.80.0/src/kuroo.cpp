@@ -58,10 +58,10 @@
  */
 Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
-	kurooInit( new KurooInit(this, "KurooInit") ),
-	kurooMessage( new Message(this, "Message") ),
-	m_view( new KurooView(this, "KurooView") ),
-	prefDialog(0), wizardDialog(0), m_shuttingDown(false)
+	kurooInit( new KurooInit( this, "KurooInit" ) ),
+	kurooMessage( new Message( this, "Message" ) ),
+	m_view( new KurooView( this, "KurooView" ) ),
+	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	setCentralWidget(m_view);
 	setupActions();
@@ -76,7 +76,7 @@ Kuroo::Kuroo()
 	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
 	
 	// Lock/unlock if kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
 	// when the last window is closed, the application should quit
 	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );

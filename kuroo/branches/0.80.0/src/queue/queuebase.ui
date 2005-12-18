@@ -312,17 +312,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QPushButton" row="2" column="0">
-                                <property name="name">
-                                    <cstring>pbPretend</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Emer&amp;ge pretend Packages</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
-                                </property>
-                            </widget>
                             <widget class="QPushButton" row="4" column="0">
                                 <property name="name">
                                     <cstring>pbOptions</cstring>
@@ -334,29 +323,7 @@
                                     <string>Alt+A</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>pbGo</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Start Installation</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="3" column="0">
-                                <property name="name">
-                                    <cstring>pbUninstall</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Uninstall Pac&amp;kages</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                            </widget>
-                            <spacer row="0" column="0">
+                            <spacer row="3" column="0">
                                 <property name="name">
                                     <cstring>spacer2_2</cstring>
                                 </property>
@@ -369,10 +336,43 @@
                                 <property name="sizeHint">
                                     <size>
                                         <width>21</width>
-                                        <height>20</height>
+                                        <height>16</height>
                                     </size>
                                 </property>
                             </spacer>
+                            <widget class="QPushButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>pbGo</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Start I&amp;nstallation</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pbUninstall</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Uninstall Pac&amp;kages</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pbPretend</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Emer&amp;ge pretend Packages</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                            </widget>
                         </grid>
                     </widget>
                 </grid>

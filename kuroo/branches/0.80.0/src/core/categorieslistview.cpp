@@ -54,7 +54,7 @@ protected:
 };
 
 CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
-	: QListViewItem( parent, name ), m_on( true ), m_id( id )
+	: QListViewItem( parent, name ), m_on( false ), m_id( id )
 {
 }
 
@@ -118,7 +118,7 @@ QString CategoriesView::currentCategory()
 }
 
 /**
- * Get current category idDB. @fixme: use listview key
+ * Get current category idDB.
  * @return category
  */
 QString CategoriesView::currentCategoryId()
@@ -127,7 +127,7 @@ QString CategoriesView::currentCategoryId()
 }
 
 /**
- * Mark package as current. @fixme: optimze with QMap
+ * Mark package as current. @fixme: optimze with id
  * @param package
  */
 void CategoriesView::setCurrentCategory( const QString& package )
@@ -161,33 +161,51 @@ CategoriesListView::~CategoriesListView()
 {
 }
 
+/**
+ * Create index of all categories name by db id.
+ * Insert them in listview.
+ */
 void CategoriesListView::init()
 {
 	kdDebug() << "CategoriesListView::init" << endl;
 	
-	CategoryItem* item( new CategoryItem( this, "All", "0" ) );
-	categories.push_back( item );
+	categories.clear();
 	
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
-	int i( 1 );
-	foreach ( allCategoriesList ) {
-		item = new CategoryItem( this, *it, QString::number( i++ ) );
-		categories.push_back( item );
+	int size = allCategoriesList.size() + 1;
+	categories.reserve( size );
+	
+	CategoryItem* item;
+	for( QStringList::ConstIterator it = allCategoriesList.end(), end = allCategoriesList.begin(); it != end; --it ) {
+		item = new CategoryItem( this, *it, QString::number( size ) );
+		categories[size] = item;
+		size--;
+		
+		kdDebug() << "size=" << size << " *it=" << *it << endl;
 	}
-	setSorting( 0 );
+	
+	// Insert the meta-category All at id = 0
+	item = new CategoryItem( this, "All", "0" );
+	item->setOn( true );
+	categories[0] = item;
 }
 
+/**
+ * View available categories.
+ * @param categoriesList list category id
+ */
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
+	kdDebug() << "CategoriesListView::loadCategories" << endl;
+	
 	// Set all categories off = empty
-	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
+	for ( Categories::iterator it = categories.begin(); it != categories.end(); ++it ) {
 		(*it)->setOn( false );
 	}
 	
 	// Enable categories from query
 	foreach ( categoriesList ) {
-		int id = (*it).toInt();
-		categories[id]->setOn( true );
+		categories[(*it).toInt()]->setOn( true );
 	}
 
 	setSelected( firstChild(), true );
@@ -209,29 +227,70 @@ SubCategoriesListView::~SubCategoriesListView()
 {
 }
 
+/**
+ * Create index of all subcategories name by db id.
+ */
 void SubCategoriesListView::init()
 {
-	allSubCategories.push_back( "All" );
+	allSubCategories.clear();
 	
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allSubCategories();
+	int size = allCategoriesList.size() / 3 + 1;
+	
+	// Prepend the meta-category All at id = 0
+	allSubCategories.reserve( size );
+	categories.reserve( size );
+	allSubCategories[0].insert( 0, "All" );
+	
+	// Insert all in matrix
 	foreach ( allCategoriesList ) {
-		allSubCategories.push_back( *it );
+		int idCategory = (*it++).toInt();
+		int idSubCategory = (*it++).toInt();
+		QString name = *it;
+		allSubCategories[idCategory].insert( idSubCategory, name );
 	}
 }
 
+/**
+ * View available subcategories.
+ * @param categoriesList list category id
+ */
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	categories.clear();
-	clear();
+	// Get the category id
+	int idCategory = categoriesList.first().toInt();
+	clear(); // @warning: categoryItem cannot be used anymore
 	CategoryItem* item;
 	
-	foreach ( categoriesList ) {
-		QString idDB( *it );
-		QString name( allSubCategories[ idDB.toInt() ] );
-		item = new CategoryItem( this, name, idDB );
-		categories.push_back( item );
+	if ( idCategory != 0 ) {
+	
+		// Insert all subcategories and set them off = empty
+		SubCategory::iterator itEnd = allSubCategories[ idCategory ].begin();
+		for ( SubCategory::iterator it = --( allSubCategories[ idCategory ].end() ); it != itEnd; --it ) {
+			QString id = QString::number( it.key() );
+			QString name = it.data();
+			
+			// Skip empty subcategory
+			if ( !name.isEmpty() ) {
+				item = new CategoryItem( this, name, id );
+				categories[it.key()] = item;
+			}
+		}
+		
+		// Insert first item which the iteration misses!
+		item = new CategoryItem( this, allSubCategories[ idCategory ].begin().data(), QString::number( allSubCategories[ idCategory ].begin().key() ) );
+		categories[allSubCategories[ idCategory ].begin().key()] = item;
+		
+		// Enable subcategories from query. Skip first which is the category.
+		for( QStringList::ConstIterator it = ++( categoriesList.begin() ), end = categoriesList.end(); it != end; ++it ) {
+			if ( categories[(*it).toInt()] )
+				categories[(*it).toInt()]->setOn( true );
+		}
 	}
 	
+	// Insert meta-subcategory
+	item = new CategoryItem( this, "All", "0" );
+	item->setOn( true );
 	setSelected( firstChild(), true );
 }
 

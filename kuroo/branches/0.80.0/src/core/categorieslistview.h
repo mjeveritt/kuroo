@@ -100,8 +100,9 @@ public:
 	void 									loadCategories( const QStringList& categoriesList );
 	
 private:
-	typedef QValueVector<QString>			SubCategories;
-	SubCategories			 				allSubCategories;
+	typedef QMap<int, QString>			SubCategory;
+	typedef QValueVector<SubCategory>		AllSubCategories;
+	AllSubCategories			 			allSubCategories;
 };
 
 #endif

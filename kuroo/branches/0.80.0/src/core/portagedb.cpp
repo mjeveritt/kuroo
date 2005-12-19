@@ -331,12 +331,14 @@ QStringList KurooDB::category( const QString& id )
 
 QStringList KurooDB::allCategories()
 {
-	return query( " SELECT name FROM category; " );
+	QStringList resultList( "0" );
+	resultList += query( " SELECT name FROM category; " );
+	return resultList;
 }
 
 QStringList KurooDB::allSubCategories()
 {
-	return query( " SELECT name FROM subCategory; " );
+	return query( " SELECT idCategory, id, name FROM subCategory ORDER BY name; " );
 }
 
 QStringList KurooDB::portageCategories( int filter, const QString& text, int combo )
@@ -381,7 +383,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text, int com
 QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text, int combo )
 {
 	QString filterQuery, textQuery;
-	QStringList resultList;
+	QStringList resultList( categoryId );
 	
 	// Name or description choice from comboBox
 	if ( !text.isEmpty() ) {
@@ -414,11 +416,11 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 				filterQuery = " AND package.updateVersion != '' ";
 		}
 		
-		resultList = query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '" 
-		               		+ categoryId + "'" + filterQuery + textQuery + " ORDER BY idSubCategory DESC; ");
+		resultList += query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '"
+		               		+ categoryId + "'" + filterQuery + textQuery + " ; " );
 	}
 		
-	resultList += "0";
+// 	resultList += "0";
 	return resultList;
 }
 

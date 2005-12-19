@@ -52,9 +52,6 @@
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent )
 {
-	categoriesView->init();
-	subcategoriesView->init();
-	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotSearchPackage() ) );
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
@@ -146,7 +143,9 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << "PortageTab::slotReload" << endl;
+	// Prepare categories by loading index
+	categoriesView->init();
+	subcategoriesView->init();
 	
 	saveCurrentView();
 	slotFilters();
@@ -157,8 +156,6 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotListSubCategories()
 {
-	kdDebug() << "PortageTab::slotListSubCategories" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	
 	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
@@ -169,8 +166,6 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 
@@ -184,8 +179,6 @@ void PortageTab::slotListPackages()
  */
 void PortageTab::slotFilters()
 {
-	kdDebug() << "PortageTab::slotFilters" << endl;
-	
 	packagesView->reset();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
 }
@@ -205,8 +198,6 @@ void PortageTab::slotClearFilter()
 void PortageTab::slotSearchPackage()
 {
 	QString category = categoriesView->currentCategory();
-	
-	kdDebug() << "PortageTab::slotSearchPackage category=" << category << endl;
 	
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	slotFilters();

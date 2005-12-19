@@ -204,9 +204,6 @@ void PortageTab::slotClearFilter()
 void PortageTab::slotSearchPackage()
 {
 	QString categoryId = categoriesView->currentCategoryId();
-	
-	kdDebug() << "categoryId=" << categoryId << endl;
-	
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	slotFilters();
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );

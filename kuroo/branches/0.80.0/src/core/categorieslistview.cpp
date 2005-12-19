@@ -165,7 +165,7 @@ void CategoriesListView::init()
 	
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
 	int i = allCategoriesList.size() - 1;
-	categories.resize( i );
+	categories.resize( i + 1 );
 	
 	// Insert categories in reverse order to get them in alfabetical order
 	CategoryItem* item;
@@ -196,7 +196,7 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 	foreach ( categoriesList ) {
 		categories[(*it).toInt()]->setOn( true );
 	}
-
+	
 	setSelected( firstChild(), true );
 }
 

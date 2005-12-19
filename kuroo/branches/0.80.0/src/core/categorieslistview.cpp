@@ -123,7 +123,11 @@ QString CategoriesView::currentCategory()
  */
 QString CategoriesView::currentCategoryId()
 {
-	return dynamic_cast<CategoryItem*>( this->currentItem() )->id();
+	CategoryItem* item = dynamic_cast<CategoryItem*>( this->currentItem() );
+	if ( item )
+		return item->id();
+	else
+		return "0";
 }
 
 /**
@@ -132,7 +136,6 @@ QString CategoriesView::currentCategoryId()
  */
 void CategoriesView::setCurrentCategoryId( const QString& id )
 {
-	clearSelection();
 	setCurrentItem( categories[id.toInt()] );
 	categories[id.toInt()]->setSelected( true );
 }
@@ -162,6 +165,7 @@ CategoriesListView::~CategoriesListView()
 void CategoriesListView::init()
 {
 	categories.clear();
+	clear();
 	
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
 	int i = allCategoriesList.size() - 1;
@@ -179,6 +183,7 @@ void CategoriesListView::init()
 	item = new CategoryItem( this, "All", "0" );
 	item->setOn( true );
 	categories[0] = item;
+	setSelected( firstChild(), true );
 }
 
 /**
@@ -187,6 +192,8 @@ void CategoriesListView::init()
  */
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
+	kdDebug() << "CategoriesListView::loadCategories" << endl;
+	
 	// Set all categories off = empty
 	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
 		(*it)->setOn( false );
@@ -197,7 +204,7 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 		categories[(*it).toInt()]->setOn( true );
 	}
 	
-	setSelected( firstChild(), true );
+	emit selectionChanged();
 }
 
 
@@ -246,8 +253,20 @@ void SubCategoriesListView::init()
  */
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
+	kdDebug() << "SubCategoriesListView::loadCategories" << endl;
+	
+	QString selectedId = currentCategoryId();
+	bool isSameCategory( false );
+	
 	// Get the category id
-	int idCategory = categoriesList.first().toInt();
+	static int idCategory( -1 );
+	if ( idCategory != categoriesList.first().toInt() ) {
+		idCategory = categoriesList.first().toInt();
+		isSameCategory = false;
+	}
+	else
+		isSameCategory = true;
+	
 	clear(); // @warning: categoryItem cannot be used anymore
 	CategoryItem* item;
 	
@@ -280,7 +299,12 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	// Insert meta-subcategory
 	item = new CategoryItem( this, "All", "0" );
 	item->setOn( true );
-	setSelected( firstChild(), true );
+	
+	// Restore focus
+	if ( isSameCategory && selectedId != "0" )
+		setCurrentCategoryId( selectedId );
+	else
+		setSelected( firstChild(), true );
 }
 
 #include "categorieslistview.moc"

@@ -53,8 +53,8 @@ PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent )
 {
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotSearchPackage() ) );
-	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+// 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
+// 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
 
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
@@ -145,9 +145,13 @@ void PortageTab::slotReload()
 {
 	kdDebug() << "PortageTab::slotReload" << endl;
 	
-	// Prepare categories by loading index
+	// Prepare categories by loading index @fixme: what if category-subcategory is changed in db?
+	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
+	disconnect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	categoriesView->init();
 	subcategoriesView->init();
+	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
+	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	
 	saveCurrentView();
 	slotFilters();
@@ -161,6 +165,7 @@ void PortageTab::slotListSubCategories()
 	kdDebug() << "PortageTab::slotListSubCategories" << endl;
 	
 	QString categoryId = categoriesView->currentCategoryId();
+	
 	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
 }
 
@@ -173,6 +178,7 @@ void PortageTab::slotListPackages()
 	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
+
 	int count = packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
 	
 	packagesView->setHeader( QString::number( count ) );
@@ -190,24 +196,20 @@ void PortageTab::slotFilters()
 }
 
 /**
- * Reset text filter.
- */
-void PortageTab::slotClearFilter()
-{
-	searchFilter->clear();
-}
-
-/**
  * Search for package by name.
  * @param name
  */
 void PortageTab::slotSearchPackage()
 {
-	QString categoryId = categoriesView->currentCategoryId();
-	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	slotFilters();
-	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-	categoriesView->setCurrentCategoryId( categoryId );
+}
+
+/**
+ * Reset text filter.
+ */
+void PortageTab::slotClearFilter()
+{
+	searchFilter->clear();
 }
 
 /**

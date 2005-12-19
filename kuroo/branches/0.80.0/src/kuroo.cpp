@@ -82,9 +82,7 @@ Kuroo::Kuroo()
 	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );
 	
 	actionRefresh->setToolTip( i18n("Refresh Portage view") );
-	actionFind->setToolTip( i18n("Find packages in Portage") );
 	actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
-	connect( actionFind, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotFind() ) );
 	connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
 	
 	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
@@ -96,11 +94,6 @@ Kuroo::Kuroo()
 		actionSync->setEnabled(false);
 	else
 		actionSync->setEnabled(true);
-	
-	if ( SignalistSingleton::Instance()->isKurooBusy() )
-		actionFind->setEnabled(false);
-	else
-		actionFind->setEnabled(true);
 	
 	// Zack Rusin's delayed initialization technique
 	QTimer::singleShot( 0, m_view, SLOT(slotInit()) );
@@ -121,17 +114,11 @@ void Kuroo::setupActions()
 	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
 	                    this, SLOT(introWizard()), actionCollection(), "wizard" );
 	
-// 	(void) new KAction( i18n("&Emerge Log"), 0, KShortcut( CTRL + Key_L ),
-// 	                    this, SLOT(emergeLog()), actionCollection(), "emergeLog" );
-	
 	actionRefresh = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
 	                             this, SLOT(slotNull()), actionCollection(), "refresh" );
 	
 	actionSync = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
 	                          this, SLOT(slotSync()), actionCollection(), "sync" );
-	
-	actionFind = new KAction( i18n("&Find"), 0, KShortcut( CTRL + Key_F ),
-	                          this, SLOT(slotNull()), actionCollection(), "find" );
 	
 	createGUI();
 }

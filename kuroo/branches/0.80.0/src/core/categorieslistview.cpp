@@ -167,21 +167,18 @@ CategoriesListView::~CategoriesListView()
  */
 void CategoriesListView::init()
 {
-	kdDebug() << "CategoriesListView::init" << endl;
-	
 	categories.clear();
 	
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
-	int size = allCategoriesList.size() + 1;
-	categories.reserve( size );
+	int i = allCategoriesList.size() - 1;
+	categories.resize( i );
 	
+	// Insert categories in reverse alfabetical order
 	CategoryItem* item;
-	for( QStringList::ConstIterator it = allCategoriesList.end(), end = allCategoriesList.begin(); it != end; --it ) {
-		item = new CategoryItem( this, *it, QString::number( size ) );
-		categories[size] = item;
-		size--;
-		
-		kdDebug() << "size=" << size << " *it=" << *it << endl;
+	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
+		item = new CategoryItem( this, *it, QString::number( i ) );
+		categories[i] = item;
+		i--;
 	}
 	
 	// Insert the meta-category All at id = 0
@@ -196,10 +193,8 @@ void CategoriesListView::init()
  */
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	kdDebug() << "CategoriesListView::loadCategories" << endl;
-	
 	// Set all categories off = empty
-	for ( Categories::iterator it = categories.begin(); it != categories.end(); ++it ) {
+	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
 		(*it)->setOn( false );
 	}
 	

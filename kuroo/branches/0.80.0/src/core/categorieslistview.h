@@ -48,7 +48,7 @@ public slots:
 	 */
 	QString									currentCategory();
 	QString									currentCategoryId();
-	void									setCurrentCategory( const QString& package );
+	void									setCurrentCategoryId( const QString& package );
 
 private:
 	QPixmap 								pxRepository, pxCategory;

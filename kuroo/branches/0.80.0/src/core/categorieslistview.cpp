@@ -127,20 +127,14 @@ QString CategoriesView::currentCategoryId()
 }
 
 /**
- * Mark package as current. @fixme: optimze with id
+ * Mark package as current.
  * @param package
  */
-void CategoriesView::setCurrentCategory( const QString& package )
+void CategoriesView::setCurrentCategoryId( const QString& id )
 {
 	clearSelection();
-	QListViewItemIterator it( this );
-	for ( ; it.current(); ++it )
-		if ( package == it.current()->text(0) ) {
-			ensureItemVisible( it.current() );
-			setCurrentItem( it.current() );
-			it.current()->setSelected( true );
-			break;
-		}
+	setCurrentItem( categories[id.toInt()] );
+	categories[id.toInt()]->setSelected( true );
 }
 
 
@@ -173,7 +167,7 @@ void CategoriesListView::init()
 	int i = allCategoriesList.size() - 1;
 	categories.resize( i );
 	
-	// Insert categories in reverse alfabetical order
+	// Insert categories in reverse order to get them in alfabetical order
 	CategoryItem* item;
 	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
 		item = new CategoryItem( this, *it, QString::number( i ) );
@@ -181,7 +175,7 @@ void CategoriesListView::init()
 		i--;
 	}
 	
-	// Insert the meta-category All at id = 0
+	// Insert the meta-category All on top as id = 0
 	item = new CategoryItem( this, "All", "0" );
 	item->setOn( true );
 	categories[0] = item;
@@ -198,7 +192,7 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 		(*it)->setOn( false );
 	}
 	
-	// Enable categories from query
+	// Enable found categories from query
 	foreach ( categoriesList ) {
 		categories[(*it).toInt()]->setOn( true );
 	}
@@ -272,7 +266,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 			}
 		}
 		
-		// Insert first item which the iteration misses!
+		// Insert first item the iteration misses!
 		item = new CategoryItem( this, allSubCategories[ idCategory ].begin().data(), QString::number( allSubCategories[ idCategory ].begin().key() ) );
 		categories[allSubCategories[ idCategory ].begin().key()] = item;
 		

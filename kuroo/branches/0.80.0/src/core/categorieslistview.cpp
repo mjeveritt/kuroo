@@ -137,7 +137,6 @@ QString CategoriesView::currentCategoryId()
 void CategoriesView::setCurrentCategoryId( const QString& id )
 {
 	setCurrentItem( categories[id.toInt()] );
-	categories[id.toInt()]->setSelected( true );
 }
 
 
@@ -192,7 +191,7 @@ void CategoriesListView::init()
  */
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	kdDebug() << "CategoriesListView::loadCategories" << endl;
+// 	kdDebug() << "CategoriesListView::loadCategories categoriesList=" << categoriesList << endl;
 	
 	// Set all categories off = empty
 	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
@@ -228,22 +227,25 @@ SubCategoriesListView::~SubCategoriesListView()
  */
 void SubCategoriesListView::init()
 {
+	kdDebug() << "SubCategoriesListView::init" << endl;
+	
+	categories.clear();
 	allSubCategories.clear();
 	
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allSubCategories();
 	int size = allCategoriesList.size() / 3 + 1;
-	
+
 	// Prepend the meta-category All at id = 0
-	allSubCategories.reserve( size );
-	categories.reserve( size );
-	allSubCategories[0].insert( 0, "All" );
+	allSubCategories.resize( size );
+	categories.resize( size );
+	allSubCategories[0].insert( std::pair<int, QString>(0, "All") );
 	
 	// Insert all in matrix
 	foreach ( allCategoriesList ) {
 		int idCategory = (*it++).toInt();
 		int idSubCategory = (*it++).toInt();
 		QString name = *it;
-		allSubCategories[idCategory].insert( idSubCategory, name );
+		allSubCategories[idCategory].insert( std::pair<int, QString>(idSubCategory, name) );
 	}
 }
 
@@ -253,10 +255,11 @@ void SubCategoriesListView::init()
  */
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	kdDebug() << "SubCategoriesListView::loadCategories" << endl;
-	
-	QString selectedId = currentCategoryId();
+	// Retreive focus
+	QString currentId = currentCategoryId();
 	bool isSameCategory( false );
+	
+// 	kdDebug() << "SubCategoriesListView::loadCategories categoriesList=" << categoriesList << endl;
 	
 	// Get the category id
 	static int idCategory( -1 );
@@ -269,42 +272,45 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	
 	clear(); // @warning: categoryItem cannot be used anymore
 	CategoryItem* item;
+	item = new CategoryItem( this, "", "0" ); // Insert empty item to get focus to work on last before last item
 	
+	// When meta-category is selected skip to show only meta-subcategory
 	if ( idCategory != 0 ) {
 	
-		// Insert all subcategories and set them off = empty
-		SubCategory::iterator itEnd = allSubCategories[ idCategory ].begin();
-		for ( SubCategory::iterator it = --( allSubCategories[ idCategory ].end() ); it != itEnd; --it ) {
-			QString id = QString::number( it.key() );
-			QString name = it.data();
-			
+		// Insert all subcategories in reverse order to get them alfabetically listed, and set them off = empty
+		for ( SubCategory::reverse_iterator it = allSubCategories[idCategory].rbegin(); it != allSubCategories[idCategory].rend(); ++it ) {
+			QString id = QString::number( (*it).first );
+			QString name = (*it).second;
+
 			// Skip empty subcategory
 			if ( !name.isEmpty() ) {
 				item = new CategoryItem( this, name, id );
-				categories[it.key()] = item;
+				categories[(*it).first] = item;
 			}
 		}
 		
-		// Insert first item the iteration misses!
-		item = new CategoryItem( this, allSubCategories[ idCategory ].begin().data(), QString::number( allSubCategories[ idCategory ].begin().key() ) );
-		categories[allSubCategories[ idCategory ].begin().key()] = item;
+		// Insert meta-subcategory
+		item = new CategoryItem( this, "All", "0" );
+		categories[0] = item;
 		
-		// Enable subcategories from query. Skip first which is the category.
+		// Enable subcategories from query. Skip first which is the category
 		for( QStringList::ConstIterator it = ++( categoriesList.begin() ), end = categoriesList.end(); it != end; ++it ) {
 			if ( categories[(*it).toInt()] )
 				categories[(*it).toInt()]->setOn( true );
 		}
 	}
+	else {
 	
-	// Insert meta-subcategory
-	item = new CategoryItem( this, "All", "0" );
-	item->setOn( true );
+		// Insert meta-subcategory
+		item = new CategoryItem( this, "All", "0" );
+		item->setOn( true );
+	}
 	
 	// Restore focus
-	if ( isSameCategory && selectedId != "0" )
-		setCurrentCategoryId( selectedId );
+	if ( isSameCategory && currentId != "0" )
+		setCurrentCategoryId( currentId );
 	else
-		setSelected( firstChild(), true );
+		setCurrentItem( firstChild() );
 }
 
 #include "categorieslistview.moc"

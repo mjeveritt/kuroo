@@ -80,7 +80,6 @@ private slots:
 	*/
 	void				slotFilters();
 	void				slotListPackages();
-	void				slotSearchPackage();
 	
 	/**
 	* Popup menu for actions like emerge.
@@ -98,7 +97,7 @@ private slots:
 	/**
 	* View summary for selected package.
 	*/
-	void				slotSummary();
+	void				slotPackage();
 	
 private:
 	KPopupMenu 			*menu;

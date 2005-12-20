@@ -133,18 +133,18 @@ void Portage::pretendPackageList( const QStringList& packageIdList )
  * Get list of all categories for portage packages.
  * @return QStringList
  */
-QStringList Portage::categories( int filter, const QString& text, int combo )
+QStringList Portage::categories( int filter, const QString& text )
 {
-	return KurooDBSingleton::Instance()->portageCategories( filter, text, combo );
+	return KurooDBSingleton::Instance()->portageCategories( filter, text );
 }
 
 /**
  * Get list of all subcategories for portage packages.
  * @return QStringList
  */
-QStringList Portage::subCategories( const QString& categoryId, int filter, const QString& text, int combo )
+QStringList Portage::subCategories( const QString& categoryId, int filter, const QString& text )
 {
-	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter, text, combo );
+	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter, text );
 }
 
 /**
@@ -153,9 +153,9 @@ QStringList Portage::subCategories( const QString& categoryId, int filter, const
  * @return QStringList
  */
 
-QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text, int combo )
+QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
-	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter, text, combo );
+	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter, text );
 }
 
 /**
@@ -171,30 +171,6 @@ QStringList Portage::packageVersions( const QString& id )
 QStringList Portage::packageVersionsInfo( const QString& id )
 {
 	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
-}
-
-/**
- * Find packages by name or description.
- * @param text		string
- * @param isName	find in name or description
- */
-QStringList Portage::searchPackages( const QString& text, const bool& isName )
-{
-	kdDebug() << "Portage::searchPackages text=" << text << endl;
-	
-	QStringList packageIdList;
-	
-	if ( isName )
-		packageIdList = KurooDBSingleton::Instance()->searchPortagePackagesName( text );
-// 	else
-// 		packageIdList = KurooDBSingleton::Instance()->searchPortagePackagesDescription( text );
-	
-	kdDebug() << "packageIdList=" << packageIdList << endl;
-	
-	if ( packageIdList.isEmpty() )
-		LogSingleton::Instance()->writeLog( i18n( "<br>No packages found matching: %1" ).arg( text ), KUROO );
-
-	return packageIdList;
 }
 
 /**
@@ -457,10 +433,11 @@ QString Portage::packageSummary( const QString& packageId )
 	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );
 
-	QString textLines = "<font size=\"+2\">" + category + "/" + package.section( pv, 0, 0 ) + "</font><br>";
+	QString textLines = "<font size=\"+2\">" + package + "</font> ";
+			textLines += "(" + category.section("-", 0, 0) + " / " + category.section("-", 1, 1) + ") <br>";
 			textLines += info.description + "<br>";
-			textLines += "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
-			textLines += i18n("<b>Available versions:</b> ");
+			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
+			textLines += i18n("<b>Versions available:</b> ");
 	
 	const QStringList versionList = packageVersions( packageId );
 	foreach ( versionList ) {

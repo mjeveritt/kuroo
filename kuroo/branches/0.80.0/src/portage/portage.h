@@ -80,9 +80,9 @@ public slots:
 	* Get list of all categories, subcategories or packages.
 	* @return QStringList
 	*/
-	QStringList					categories( int filter, const QString& text, int combo );
-	QStringList					subCategories( const QString& category, int filter, const QString& text, int combo );
-	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter, const QString& text, int combo );
+	QStringList					categories( int filter, const QString& text );
+	QStringList					subCategories( const QString& category, int filter, const QString& text );
+	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter, const QString& text );
 	
 	/**
 	* Get list of versions available of this package.
@@ -90,13 +90,6 @@ public slots:
 	*/
 	QStringList					packageVersions( const QString& id );
 	QStringList					packageVersionsInfo( const QString& id );
-	
-	/**
-	* Find packages by name or description.
-	* @param text		string
-	* @param isName	find in name or description
-	*/
-	QStringList					searchPackages( const QString& text, const bool& isName );
 	
 	/**
 	* Count packages.

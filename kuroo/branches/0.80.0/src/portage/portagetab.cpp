@@ -44,7 +44,6 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <klineedit.h>
-#include <klistviewsearchline.h>
 
 /**
  * Page for portage packages.
@@ -52,13 +51,9 @@
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent )
 {
-	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotSearchPackage() ) );
-// 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-// 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotSummary() ) );
-
-	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSearchPackage() ));
-	connect( comboFilter, SIGNAL( activated( int ) ), this, SLOT( slotSearchPackage() ));
+	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
+	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -158,6 +153,17 @@ void PortageTab::slotReload()
 }
 
 /**
+ * Toggle between package filter: All, Installed or updates
+ */
+void PortageTab::slotFilters()
+{
+	kdDebug() << "PortageTab::slotFilters" << endl;
+	
+	packagesView->reset();
+	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
+}
+
+/**
  * List packages when clicking on category in installed.
  */
 void PortageTab::slotListSubCategories()
@@ -165,8 +171,7 @@ void PortageTab::slotListSubCategories()
 	kdDebug() << "PortageTab::slotListSubCategories" << endl;
 	
 	QString categoryId = categoriesView->currentCategoryId();
-	
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
+	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
 }
 
 /**
@@ -178,30 +183,9 @@ void PortageTab::slotListPackages()
 	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
-
-	int count = packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
+	int count = packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) );
 	
 	packagesView->setHeader( QString::number( count ) );
-}
-
-/**
- * Toggle between package filter: All, Installed or updates
- */
-void PortageTab::slotFilters()
-{
-	kdDebug() << "PortageTab::slotFilters" << endl;
-	
-	packagesView->reset();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text(), comboFilter->currentItem() ) );
-}
-
-/**
- * Search for package by name.
- * @param name
- */
-void PortageTab::slotSearchPackage()
-{
-	slotFilters();
 }
 
 /**
@@ -246,14 +230,15 @@ void PortageTab::slotBusy( bool b )
 /**
  * View summary for selected package.
  */
-void PortageTab::slotSummary()
+void PortageTab::slotPackage()
 {
-	summaryBrowser->clear();
-	
 	if ( !packagesView->currentItem() )
 		return;
-
-	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );
+	
+	QString packageId = packagesView->currentId();
+	
+	summaryBrowser->clear();
+	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packageId ) );
 	
 	if ( packageInspector->isVisible() )
 		slotAdvanced();

@@ -341,31 +341,19 @@ QStringList KurooDB::allSubCategories()
 	return query( " SELECT idCategory, id, name FROM subCategory ORDER BY name; " );
 }
 
-QStringList KurooDB::portageCategories( int filter, const QString& text, int combo )
+QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	
 	// Name or description choice from comboBox
-	if ( !text.isEmpty() ) {
-		switch ( combo ) {
-			case 0:
-				textQuery = " AND name LIKE '%" + escapeString( text ) + "%' ";
-				break;
-			
-			case 1:
-				textQuery = " AND description LIKE '%" + escapeString( text ) + "%' ";
-				break;
-			
-			case 2:
-				textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
-		}
-	}
+	if ( !text.isEmpty() )
+		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
 	
 	switch ( filter ) {
 		case FILTER_ALL:
 			filterQuery = "";
 			if ( !text.isEmpty() )
-				textQuery = " WHERE name LIKE '%" + escapeString( text ) + "%' ";
+				textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%')";
 			break;
 			
 		case FILTER_INSTALLED:
@@ -377,30 +365,18 @@ QStringList KurooDB::portageCategories( int filter, const QString& text, int com
 	}
 	
 	return query( " SELECT DISTINCT idCategory FROM package "
-	              + filterQuery + textQuery + " ORDER BY idCategory DESC; ");
+	              + filterQuery + textQuery + " ; ");
 }
 
-QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text, int combo )
+QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	QStringList resultList( categoryId );
 	
 	// Name or description choice from comboBox
-	if ( !text.isEmpty() ) {
-		switch ( combo ) {
-			case 0:
-				textQuery = " AND name LIKE '%" + escapeString( text ) + "%' ";
-				break;
-				
-			case 1:
-				textQuery = " AND description LIKE '%" + escapeString( text ) + "%' ";
-				break;
-				
-			case 2:
-				textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
-		}
-	}
-	
+	if ( !text.isEmpty() )
+		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
+
 	if ( categoryId != "0" ) {
 
 		switch ( filter ) {
@@ -419,30 +395,21 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 		resultList += query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '"
 		               		+ categoryId + "'" + filterQuery + textQuery + " ; " );
 	}
-		
-// 	resultList += "0";
+	
+	// Add meta-subcategory when query is successful
+	if ( resultList.size() > 1 )
+		resultList += "0";
+	
 	return resultList;
 }
 
-QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text, int combo )
+QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	
 	// Name or description choice from comboBox
-	if ( !text.isEmpty() ) {
-		switch ( combo ) {
-			case 0:
-				textQuery = " AND name LIKE '%" + escapeString( text ) + "%' ";
-				break;
-				
-			case 1:
-				textQuery = " AND description LIKE '%" + escapeString( text ) + "%' ";
-				break;
-				
-			case 2:
-				textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
-		}
-	}
+	if ( !text.isEmpty() )
+		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
 	
 	if ( categoryId == "0" ) {
 		
@@ -450,20 +417,8 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			switch ( filter ) {
 				case FILTER_ALL:
 					filterQuery = "";
-					if ( !text.isEmpty() ) {
-						switch ( combo ) {
-							case 0:
-								textQuery = " WHERE name LIKE '%" + escapeString( text ) + "%' ";
-								break;
-								
-							case 1:
-								textQuery = " WHERE description LIKE '%" + escapeString( text ) + "%' ";
-								break;
-								
-							case 2:
-							textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
-						}
-					}
+					if ( !text.isEmpty() )
+						textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
 					break;
 					
 				case FILTER_INSTALLED:

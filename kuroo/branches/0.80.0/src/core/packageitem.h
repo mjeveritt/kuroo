@@ -38,6 +38,8 @@ public:
 	PackageItem( QListViewItem *parent, const char *name, Meta meta, int status );
 	~PackageItem();
 
+	int				status();
+	
 	/**
 	 * @return meta inf on package
 	 */

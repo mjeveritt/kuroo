@@ -179,8 +179,6 @@ public:
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
 	QStringList 	portagePackageInfo( const QString& id );
 	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
-	QStringList 	searchPortagePackagesName( const QString& name );
-	QStringList 	searchPortagePackagesDescription( const QString& description );
 
 	
 	//////////////////////////////////////////////////////////////////////////////

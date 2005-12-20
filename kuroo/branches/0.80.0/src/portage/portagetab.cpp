@@ -24,6 +24,7 @@
 #include "portagelistview.h"
 #include "portagetab.h"
 #include "packageinspector.h"
+#include "packageitem.h"
 
 #include <qregexp.h>
 #include <qlayout.h>
@@ -232,13 +233,14 @@ void PortageTab::slotBusy( bool b )
  */
 void PortageTab::slotPackage()
 {
-	if ( !packagesView->currentItem() )
-		return;
-	
-	QString packageId = packagesView->currentId();
+	kdDebug() << "PortageTab::slotPackage" << endl;
+		
+	pbUninstall->setDisabled( true );
+	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
+			pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
-	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packageId ) );
+	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );
 	
 	if ( packageInspector->isVisible() )
 		slotAdvanced();

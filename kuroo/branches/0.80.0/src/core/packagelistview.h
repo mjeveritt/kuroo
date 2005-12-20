@@ -47,6 +47,8 @@ public:
  	 */
 	virtual QString			currentId();
 	
+	int						currentItemStatus();
+	
 	/**
  	 * Get current package.
   	 * @return package name

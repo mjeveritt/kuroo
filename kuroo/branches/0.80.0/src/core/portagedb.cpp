@@ -507,20 +507,6 @@ QStringList KurooDB::portagePackageInfo( const QString& id )
 	             " ORDER BY lower(name) LIMIT 1;");
 }
 
-QStringList KurooDB::searchPortagePackagesName( const QString& name )
-{
-	QString limit = QString( " LIMIT %1;").arg( ROWLIMIT );
-	
-	return query( QString( " SELECT DISTINCT idCategory FROM package "
-	                       " WHERE name LIKE '%" + escapeString( name ) + "%'" )
-	                       + limit );
-}
-
-QStringList KurooDB::searchPortagePackagesDescription( const QString& description )
-{
-
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Query for packages

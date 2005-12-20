@@ -30,7 +30,7 @@
  * KListViewItem subclass to implement sorting, tooltip, color...
  */
 PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int status )
-	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0), m_meta( meta ), queued( false )
+	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0 ), m_meta( meta ), queued( false )
 {
 	m_meta.insert( i18n("1Package"), name );
 	init();
@@ -70,6 +70,15 @@ void PackageItem::init()
 			}
 		}
 	}
+}
+
+/**
+ * Convenience method.
+ * @return status
+ */
+int PackageItem::status()
+{
+	return m_status;
 }
 
 /**

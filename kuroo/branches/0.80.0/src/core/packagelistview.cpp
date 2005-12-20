@@ -53,6 +53,11 @@ void PackageListView::reset()
 	packages.clear();
 }
 
+int PackageListView::currentItemStatus()
+{
+	return dynamic_cast<PackageItem*>( this->currentItem() )->status();
+}
+
 /**
  * Current package idDB.
  * @return idDB
@@ -91,14 +96,8 @@ QStringList PackageListView::selectedId()
 {
 	QStringList idDBList;
 	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-// 		if ( it.current()->parent() ) {
-// 			if ( it.current()->isSelected() && it.current()->isVisible() )
-// 				idDBList += it.currentKey();
-// 		}
-// 		else {
-			if ( it.current()->isSelected() && it.current()->isVisible() )
-				idDBList += it.currentKey();
-		
+		if ( it.current()->isSelected() && it.current()->isVisible() )
+			idDBList += it.currentKey();
 	}
 	return idDBList;
 }

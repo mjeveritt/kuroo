@@ -230,7 +230,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		menu.setItemEnabled( menuItem5, false );
 	}
 	
-	if ( item->parent() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+	if ( item->parent() || SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
 		menu.setItemEnabled( menuItem6, false );
 	}
 	

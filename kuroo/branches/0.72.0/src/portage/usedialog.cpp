@@ -79,6 +79,9 @@ UseDialog::~UseDialog()
  */
 void UseDialog::slotUseDescription( QListBoxItem* item )
 {
+	if ( !item )
+		return;
+	
 	foreach ( useList ) {
 		QString use = item->text();
 		if ( use.startsWith("-") )

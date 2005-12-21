@@ -116,7 +116,7 @@ bool ResultListView::loadFromDB()
 		packageMeta.insert(i18n("6Size"), size);
 		packageMeta.insert(i18n("7USE"), use);
 		
-		packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+		packageItem = new PackageItem( this, package, packageMeta, PACKAGE, idDB );
 		
 		if ( installed != "0" )
 			packageItem->setStatus(INSTALLED);

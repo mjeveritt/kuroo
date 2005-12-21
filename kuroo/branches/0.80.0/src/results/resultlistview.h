@@ -29,10 +29,10 @@
 
 class QPixmap;
 class Package;
-class QRegExp;
+// class QRegExp;
 class PackageItem;
 
-extern QRegExp pv;
+// extern QRegExp pv;
 
 /**
  * @class ResultListView

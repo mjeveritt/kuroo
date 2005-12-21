@@ -120,12 +120,11 @@ bool Portage::slotSync()
  * @param packageList
  */
 void Portage::pretendPackageList( const QStringList& packageIdList )
-{
+{	
 	QStringList packageList;
 	foreach ( packageIdList ) {
 		packageList += Portage::category( *it ) + "/" + Portage::package( *it );
 	}
-	
 	EmergeSingleton::Instance()->pretend( packageList );
 }
 
@@ -346,7 +345,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 	
 	// Signal to gui to mark package as unmasked
 	QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-	QString name( temp.section(pv, 0, 0) );
+	QString name( temp.section(rxPortageVersion, 0, 0) );
 	SignalistSingleton::Instance()->setUnmasked( name, true );
 	
 	return true;
@@ -366,12 +365,12 @@ void Portage::clearUnmaskPackageList( const QStringList& packageIdList )
 		QTextStream stream( &file );
 		
 		foreach ( packageIdList ) {
-			QString package = Portage::category( *it ) + "/" + Portage::package( *it ).section( pv, 0, 0 );
+			QString package = Portage::category( *it ) + "/" + Portage::package( *it ).section( rxPortageVersion, 0, 0 );
 			unmaskedMap.remove( package );
 			
 			// Signal to gui to mark package as not unmasked anymore
 			QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
-			QString name( temp.section( pv, 0, 0 ) );
+			QString name( temp.section( rxPortageVersion, 0, 0 ) );
 			SignalistSingleton::Instance()->setUnmasked( name, false );
 		}
 		
@@ -396,7 +395,7 @@ QString Portage::idDb( const QString& package )
 {
 	QString category = package.section( "/", 0, 0 );
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
-	QString name( temp.section( pv, 0, 0 ) );
+	QString name( temp.section( rxPortageVersion, 0, 0 ) );
 	QString version( temp.section( name + "-", 1, 1 ) );
 	
 	return KurooDBSingleton::Instance()->portageIdByCategoryNameVersion( category, name, version ).first();
@@ -429,6 +428,8 @@ QString Portage::package( const QString& id )
  */
 QString Portage::packageSummary( const QString& packageId )
 {
+	kdDebug() << "Portage::packageSummary packageId=" << packageId << endl;
+	
 	QString package( Portage::package( packageId ) );
 	QString category( Portage::category( packageId ) );
 	Info info( packageInfo( packageId ) );

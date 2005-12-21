@@ -77,7 +77,7 @@ public slots:
 	bool				sync();
 	
 	/**
- 	 * Launch process to check for updates of world and system = "emerge -u(D)pv world".
+ 	 * Launch process to check for updates of world and system = "emerge -u(D)rxPortageVersion world".
  	 * @return true 		if emerge process started.
  	 */
 	bool				checkUpdates();

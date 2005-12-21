@@ -184,7 +184,7 @@ bool ScanPortageJob::doJob()
 					return false;
 				}
 				
-				QString name = ( *itPackage ).section( pv, 0, 0 );
+				QString name = ( *itPackage ).section( rxPortageVersion, 0, 0 );
 				QString version = ( *itPackage ).section( name + "-", 1, 1 );
 				
 				Info info( scanInfo( path, *itCategory, *itPackage ) );
@@ -325,7 +325,7 @@ void ScanPortageJob::scanInstalledPackages()
 				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
 					continue;
 				
-				QString name = ( *itPackage ).section( pv, 0, 0 );
+				QString name = ( *itPackage ).section( rxPortageVersion, 0, 0 );
 				QString version = ( *itPackage ).section( name + "-", 1, 1 );
 				
 				// Insert category if not found in portage
@@ -424,7 +424,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	file.close();
 	
 	// Get package size. Try in cache first.
-	QString packageNoVersion = category + "/" + package.section(pv, 0, 0);
+	QString packageNoVersion = category + "/" + package.section(rxPortageVersion, 0, 0);
 	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + package ) ;
 	if ( size != NULL )
 		info.size = kBSize( size );

@@ -23,8 +23,8 @@
 
 #include <qobject.h>
 
-class QRegExp;
-extern QRegExp pv;
+// class QRegExp;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class Updates

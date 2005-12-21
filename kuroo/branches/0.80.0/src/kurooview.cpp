@@ -92,8 +92,8 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	KIconLoader *ldr = KGlobal::iconLoader();
 	new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), "Packages" );
 	new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Emerge Queue" );
-	new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "Emerge History" );
-	new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Emerge Logs" );
+	new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "History" );
+	new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Log" );
 	
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
 	viewMenu->setSelected( 0, true );
@@ -171,7 +171,7 @@ void KurooView::slotCheckPortage()
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
-	if ( PortageSingleton::Instance()->count() == "0" ) 
+	if ( PortageSingleton::Instance()->count() == "0" )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
 		tabPortage->slotReload();

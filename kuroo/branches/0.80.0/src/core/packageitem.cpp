@@ -29,16 +29,16 @@
 /**
  * KListViewItem subclass to implement sorting, tooltip, color...
  */
-PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int status )
-	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0 ), m_meta( meta ), queued( false )
+PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int status, QString id )
+	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
 {
 	m_meta.insert( i18n("1Package"), name );
 	init();
 	setStatus(status);
 }
 
-PackageItem::PackageItem( QListViewItem *parent, const char *name, Meta meta, int status )
-	: KListViewItem( parent, name ), m_parent( parent->listView() ), m_status( 0 ), m_meta( meta ), queued( false )
+PackageItem::PackageItem( QListViewItem *parent, const char *name, Meta meta, int status, QString id )
+	: KListViewItem( parent, name ), m_parent( parent->listView() ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
 {
 	m_meta.insert( i18n("1Package"), name );
 	init();
@@ -70,6 +70,14 @@ void PackageItem::init()
 			}
 		}
 	}
+}
+
+/**
+ * Return package db id.
+ */
+QString PackageItem::id()
+{
+	return m_id;
 }
 
 /**

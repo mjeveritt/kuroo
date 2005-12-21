@@ -34,12 +34,12 @@ typedef QMap<QString, QString> Meta;
 class PackageItem : public KListViewItem
 {
 public:
-	PackageItem( QListView *parent, const char *name, Meta meta, int status );
-	PackageItem( QListViewItem *parent, const char *name, Meta meta, int status );
+	PackageItem( QListView *parent, const char *name, Meta meta, int status, QString id );
+	PackageItem( QListViewItem *parent, const char *name, Meta meta, int status, QString id );
 	~PackageItem();
 
 	int				status();
-	
+	QString 		id();
 	/**
 	 * @return meta inf on package
 	 */
@@ -85,7 +85,7 @@ protected:
 	virtual void 	paintCell( QPainter *p, const QColorGroup &cg,int column, int width, int alignment );
 	
 private:
-	QString			m_packageTip;
+	QString			m_id, m_packageTip;
 	QListView		*m_parent;
 	Meta			m_meta;
 	QPixmap 		pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;

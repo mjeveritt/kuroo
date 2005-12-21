@@ -118,7 +118,7 @@ void QueueListView::insertPackageList()
 		packageMeta.insert( i18n( "2Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
 		packageMeta.insert( i18n( "3Description" ), description );
 		
-		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE );
+		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE, idDB );
 		if ( installed != "0" )
 			packageItem->setStatus( INSTALLED );
 

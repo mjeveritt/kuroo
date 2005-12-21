@@ -192,11 +192,11 @@ void PackageInspector::slotApply()
  */
 void PackageInspector::loadEbuild()
 {
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section( pv, 0, 0 ) + "/" + package + ".ebuild";
+	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section( rxPortageVersion, 0, 0 ) + "/" + package + ".ebuild";
 	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section( pv, 0, 0 ) + "/" + package + ".ebuild";
+		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section( rxPortageVersion, 0, 0 ) + "/" + package + ".ebuild";
 		file.setName( fileName );
 	}
 	
@@ -220,11 +220,11 @@ void PackageInspector::loadEbuild()
  */
 void PackageInspector::loadChangeLog()
 {
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
+	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(rxPortageVersion, 0, 0) + "/ChangeLog";
 	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
+		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(rxPortageVersion, 0, 0) + "/ChangeLog";
 		file.setName( fileName );
 	}
 	

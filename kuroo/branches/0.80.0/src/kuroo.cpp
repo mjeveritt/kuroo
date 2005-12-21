@@ -81,22 +81,10 @@ Kuroo::Kuroo()
 	// when the last window is closed, the application should quit
 	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );
 	
-	actionRefresh->setToolTip( i18n("Refresh Portage view") );
-	actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
-	connect( actionRefresh, SIGNAL( activated() ), m_view->tabPortage, SLOT( slotRefresh() ) );
-	
-	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
-		actionRefresh->setEnabled(false);
-	else
-		actionRefresh->setEnabled(true);
-	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() )
-		actionSync->setEnabled(false);
-	else
-		actionSync->setEnabled(true);
+	slotBusy( true );
 	
 	// Zack Rusin's delayed initialization technique
-	QTimer::singleShot( 0, m_view, SLOT(slotInit()) );
+	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
 }
 
 Kuroo::~Kuroo()
@@ -120,6 +108,9 @@ void Kuroo::setupActions()
 	actionSync = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
 	                          this, SLOT(slotSync()), actionCollection(), "sync" );
 	
+	actionRefresh->setToolTip( i18n("Refresh Portage view") );
+	actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
+	
 	createGUI();
 }
 
@@ -129,6 +120,16 @@ void Kuroo::setupActions()
 void Kuroo::slotBusy( bool b )
 {
 	kdDebug() << "Kuroo::slotBusy" << endl;
+	
+	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
+		actionRefresh->setEnabled( false );
+	else
+		actionRefresh->setEnabled( true );
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() )
+		actionSync->setEnabled( false );
+	else
+		actionSync->setEnabled( true );
 }
 
 /**
@@ -143,11 +144,6 @@ void Kuroo::slotNull()
  */
 void Kuroo::slotSync()
 {
-// 	QString lastSyncDate( KurooDBSingleton::Instance()->getLastSync().first() );
-// 	
-// 	if ( lastSyncDate.isEmpty() )
-// 		lastSyncDate = i18n("na");
-	
 	KLocale *loc = KGlobal::locale();
 	QDateTime t;
 	QString timeStamp( KurooDBSingleton::Instance()->getLastSync().first() );

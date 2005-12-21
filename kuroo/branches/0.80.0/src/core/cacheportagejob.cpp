@@ -140,7 +140,7 @@ bool CachePortageJob::doJob()
 				QString package = *itCategory + "/" + *itPackage;
 				
 				// Get package size
-				QString path = KurooConfig::dirPortageOverlay() + "/" + *itCategory + "/" + (*itPackage).section(pv, 0, 0) + "/files/digest-" + *itPackage;
+				QString path = KurooConfig::dirPortageOverlay() + "/" + *itCategory + "/" + (*itPackage).section(rxPortageVersion, 0, 0) + "/files/digest-" + *itPackage;
 				QFile file( path );
 				if ( file.open( IO_ReadOnly ) ) {
 					std::ifstream in( path );
@@ -199,7 +199,7 @@ bool CachePortageJob::doJob()
 				QString package = *itCategory + "/" + *itPackage;
 				
 				// Get package size
-				QString path = KurooConfig::dirPortage() + "/" + *itCategory + "/" + (*itPackage).section(pv, 0, 0) + "/files/digest-" + *itPackage;
+				QString path = KurooConfig::dirPortage() + "/" + *itCategory + "/" + (*itPackage).section(rxPortageVersion, 0, 0) + "/files/digest-" + *itPackage;
 				QFile file( path );
 				if ( file.open( IO_ReadOnly ) ) {
 					std::ifstream in( path );

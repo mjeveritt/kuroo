@@ -30,7 +30,7 @@ class QStringList;
 class QRegExp;
 class PackageEmergeTime;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
 

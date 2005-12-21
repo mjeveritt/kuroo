@@ -130,7 +130,7 @@ void Signalist::scanInstalledComplete()
 }
 
 /**
- * "emerge -upv world" completed.
+ * "emerge -urxPortageVersion world" completed.
  */
 void Signalist::scanUpdatesComplete()
 {

@@ -30,13 +30,13 @@ public:
 	AddQueuePackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section("/", 0, 0);
-		QString name = (m_package.section("/", 1, 1)).section(pv, 0, 0);
-		QString version = m_package.section(name + "-", 1, 1);
+		QString category = m_package.section( "/", 0, 0 );
+		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
+// 		QString version = m_package.section( name + "-", 1, 1 );
 		
-		QString idCategory = KurooDBSingleton::Instance()->query(QString("SELECT id FROM category WHERE name = '%1';").arg(category)).first();
-		packageId = KurooDBSingleton::Instance()->query(QString("SELECT id FROM package WHERE idCategory = '%1' AND name  = '%2' AND version = '%3';").arg(idCategory).arg(name).arg(version)).first();
-		int rowId = KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue (idPackage) VALUES ('%1');").arg(packageId));
+		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
+		packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name  = '%2';" ).arg( idCategory ).arg( name ) ).first();
+		int rowId = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage) VALUES ('%1');" ).arg( packageId ) );
 		
 		// Add this package to the world file if not dependency.
 		if ( rowId == 0 ) {

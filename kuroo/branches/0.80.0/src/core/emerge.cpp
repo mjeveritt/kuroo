@@ -407,7 +407,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 				
 				emergePackage.package = parsedPackage;
 				emergePackage.category = parsedPackage.section( "/", 0, 0 );
-				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( pv, 0, 0 );
+				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 				emergePackage.version = parsedPackage.section( ( emergePackage.name + "-" ), 1, 1 );
 				emergePackage.updateFlags = line.left( 14 ).section( QRegExp( "^\\[ebuild" ), 1, 1 );
 				
@@ -648,20 +648,20 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
 		importantMessage += i18n("<br><b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
-		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
+		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(rxPortageVersion, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 	}
 	else
 		if ( keyword.contains( "-*" ) ) {
 			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture. If you believe the package does work file a bug at Gentoo bugzilla website.");
-			Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(pv, 0, 0)).arg(KurooConfig::arch()), importantMessage );
+			Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(rxPortageVersion, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 		}
 		else {
 			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(pv, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0), KurooConfig::dirPackageUnmask() ) ) {
+						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::dirPackageUnmask() ) ) {
 							pretend( lastEmergeList );
 						}
 						break;
@@ -671,9 +671,9 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			else {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(pv, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(pv, 0, 0) + " " + keyword, KurooConfig::dirPackageKeywords() ) ) {
+						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0) + " " + keyword, KurooConfig::dirPackageKeywords() ) ) {
 							PortageSingleton::Instance()->loadUnmaskedList();
 							pretend( lastEmergeList );
 						}

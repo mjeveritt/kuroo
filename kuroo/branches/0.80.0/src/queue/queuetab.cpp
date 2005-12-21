@@ -48,8 +48,6 @@ QueueTab::QueueTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-// 	connect( pbUp, SIGNAL( clicked() ), queueView, SLOT( slotPackageUp() ) );
-// 	connect( pbDown, SIGNAL( clicked() ), queueView, SLOT( slotPackageDown() ) );
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	
@@ -121,19 +119,18 @@ void QueueTab::slotReload()
  */
 void QueueTab::slotBusy( bool b )
 {
+	if ( EmergeSingleton::Instance()->isRunning() )
+		pbGo->setText( i18n( "Stop Installation!" ) );
+	else
+		pbGo->setText( i18n( "Start Installation!" ) );
+	
 	if ( b ) {
-// 		pbGo->setDisabled( true );
 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
-		
-		if ( EmergeSingleton::Instance()->isRunning() )
-			pbGo->setText( i18n( "Stop Installation!" ) );
-		else
-			pbGo->setText( i18n( "Start Installation!" ) );
 	}
 	else {
 		if ( !KUser().isSuperUser() ) {
-			pbGo->setDisabled(true);
+			pbGo->setDisabled( true );
 			pbUninstall->setDisabled(true);
 		}
 		else {
@@ -161,7 +158,6 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	KPopupMenu menu( this );
 	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
 	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
-// 	menu.insertItem( i18n( "View Info" ), GOTO );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
@@ -174,11 +170,6 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 
 		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
-			break;
-		
-// 		case GOTO:
-// 			SignalistSingleton::Instance()->viewPackage( queueView->currentPackage() );
-	
 	}
 }
 

@@ -36,7 +36,6 @@ class KAction;
 class KConfigDialog;
 class KURL;
 class IntroDlg;
-// class EmergeLogDlg;
 class KCmdLineArgs;
 class KurooInit;
 class Message;

@@ -89,6 +89,8 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
 // 	clock_t start = clock();
 	
+// 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
+	
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
 	reset();
@@ -99,7 +101,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	
 	foreach ( packageList ) {
 		
-		// Since packages are loaded in inverse alfabetical order, skip all except last ROWLIMIT
+		// Since packages are loaded in reverse alfabetical order, skip all except last ROWLIMIT
 		if ( max-- > 0 )
 			continue;
 		
@@ -114,7 +116,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		Meta packageMeta;
 		packageMeta.insert( i18n( "3Description" ), description );
 		packageMeta.insert( i18n( "5Update" ), updateVersion );
-		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE );
+		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE, idDB );
 		
 		if ( meta != FILTERALL )
 			packageItem->setStatus( INSTALLED );

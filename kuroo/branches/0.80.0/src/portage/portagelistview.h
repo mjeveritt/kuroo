@@ -26,9 +26,9 @@
 #include "packagelistview.h"
 
 class Package;
-class QRegExp;
+// class QRegExp;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class PortageListView

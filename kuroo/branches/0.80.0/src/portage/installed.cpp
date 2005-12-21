@@ -31,11 +31,11 @@ public:
 	
 	virtual bool doJob() {
 		QString category = m_package.section( "/", 0, 0);
-		QString name = ( m_package.section( "/", 1, 1) ).section( pv, 0, 0 );
-		QString version = m_package.section( name + "-", 1, 1 );
+		QString name = ( m_package.section( "/", 1, 1) ).section( rxPortageVersion, 0, 0 );
+// 		QString version = m_package.section( name + "-", 1, 1 );
 		
-		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM category WHERE name = '%1';" ).arg( category ) ).first();
-		QString packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCategory = '%1' AND name = '%2' AND version = '%3';").arg( idCategory ).arg( name ).arg( version ) ).first();
+		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
+		QString packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2';").arg( idCategory ).arg( name ) ).first();
 		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2';" ).arg( FILTERINSTALLED ).arg( packageId ) );
 	
 		return true;
@@ -59,15 +59,15 @@ public:
 	
 	virtual bool doJob() {
 		QString category = m_package.section( "/", 0, 0 );
-		QString name = ( m_package.section( "/", 1, 1 ) ).section( pv, 0, 0 );
+		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 		QString version = m_package.section( name + "-", 1, 1 );
 
-		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM category WHERE name = '%1';" ).arg( category ) ).first();
+		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
 
 		// Mark package as uninstalled or remove it if old
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND idCategory = '%3' AND name  = '%4' AND version = '%5';").arg( FILTERALL ).arg( FILTERINSTALLED ).arg( idCategory ).arg( name ).arg( version ) );
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND idCatSubCategory = '%3' AND name  = '%4';").arg( FILTERALL ).arg( FILTERINSTALLED ).arg( idCategory ).arg( name ) );
 
-		KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND idCategory = '%2' AND name = '%3' AND version = '%4';" ).arg( FILTEROLD ).arg( idCategory ).arg( name ).arg( version ) );
+		KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND idCatSubCategory = '%2' AND name = '%3';" ).arg( FILTEROLD ).arg( idCategory ).arg( name ) );
 
 		// Remove package from world file
 		QFile file( KurooConfig::dirWorldFile() );

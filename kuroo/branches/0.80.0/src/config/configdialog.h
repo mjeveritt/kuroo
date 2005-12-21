@@ -27,7 +27,7 @@ class QComboBox;
 class QGroupBox;
 class QVBox;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class ConfigDialog

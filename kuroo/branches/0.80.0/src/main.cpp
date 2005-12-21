@@ -30,11 +30,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// Regexp from Portage
-QRegExp pv("(-(?:\\d+\\.)*\\d+[a-z]?)");
-
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_201205";
+static const char version[] = "0.80.0_211205";
 
 static KCmdLineOptions options[] =
 {

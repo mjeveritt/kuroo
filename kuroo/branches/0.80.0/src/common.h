@@ -18,6 +18,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <qregexp.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -79,3 +81,6 @@ static const int ROWLIMIT = 1000;
 #define foreach( x ) \
 for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 
+
+// Regexp from Portage
+static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");

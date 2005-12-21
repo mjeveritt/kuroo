@@ -23,9 +23,9 @@
 
 #include <qobject.h>
 
-class QRegExp;
+// class QRegExp;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class Portage

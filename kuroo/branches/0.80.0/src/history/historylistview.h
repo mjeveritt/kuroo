@@ -36,7 +36,7 @@ typedef QMap< QString, QListViewItem * > ItemMap;
 typedef QMap< QString, Package > PackageMap;
 typedef QMap< QString, PackageEmergeTime > EmergeTimeMap;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class HistoryListView

@@ -96,7 +96,7 @@ bool ScanHistoryJob::doJob()
 				if ( rx2.search(emergeLine) > -1 )
 					package = rx2.cap(0).stripWhiteSpace();
 				
-				QString packageNoVersion = package.section(pv, 0, 0);
+				QString packageNoVersion = package.section(rxPortageVersion, 0, 0);
 				int secTime = timeStamp.toUInt() - emergeStart;
 				
 				// Update emerge time and increment count for packageNoVersion

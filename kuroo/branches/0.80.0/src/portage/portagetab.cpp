@@ -68,6 +68,7 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
+	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
 	
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
@@ -237,7 +238,7 @@ void PortageTab::slotPackage()
 		
 	pbUninstall->setDisabled( true );
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
-			pbUninstall->setDisabled( false );
+		pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
 	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );

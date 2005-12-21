@@ -34,7 +34,7 @@
 #include <kglobal.h>
 
 /**
- * Thread for loading emerge -uDpv World output into db.
+ * Thread for loading emerge -uDrxPortageVersion World output into db.
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),

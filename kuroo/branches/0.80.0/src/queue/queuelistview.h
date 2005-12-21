@@ -28,10 +28,10 @@
 class QTime;
 class QPixmap;
 class Package;
-class QRegExp;
+// class QRegExp;
 class PackageItem;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class QueueListView

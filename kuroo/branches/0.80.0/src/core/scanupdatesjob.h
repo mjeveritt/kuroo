@@ -26,13 +26,13 @@
 #include <qobject.h>
 
 class DbConnection;
-class QRegExp;
+// class QRegExp;
 
-extern QRegExp pv;
+// extern QRegExp rxPortageVersion;
 
 /**
  * @class ScanUpdatesJob
- * @short Thread for loading emerge -uDpv World output into db.
+ * @short Thread for loading emerge -uDrxPortageVersion World output into db.
  */
 class ScanUpdatesJob : public ThreadWeaver::DependentJob
 {

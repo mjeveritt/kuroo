@@ -52,7 +52,6 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	
 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
-// 	connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbPretend, SIGNAL( clicked() ), this, SLOT( slotPretend() ) );
 	
@@ -122,11 +121,13 @@ void QueueTab::slotBusy( bool b )
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Stop Installation!" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		pbPretend->setDisabled( true );
 	}
 	else {
 		pbGo->setText( i18n( "Start Installation!" ) );
+		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		pbPretend->setDisabled( false );
@@ -135,6 +136,7 @@ void QueueTab::slotBusy( bool b )
 	if ( b ) {
 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
+		pbRemove->setDisabled( true );
 	}
 	else {
 		if ( !KUser().isSuperUser() ) {
@@ -148,6 +150,7 @@ void QueueTab::slotBusy( bool b )
 		
 		pbOptions->setDisabled( false );
 		pbClear->setDisabled( false );
+		pbRemove->setDisabled( false );
 	}
 }
 

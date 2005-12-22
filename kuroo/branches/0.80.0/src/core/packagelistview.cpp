@@ -18,6 +18,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <qlistview.h>
+
 #include "common.h"
 #include "packagelistview.h"
 #include "packageitem.h"
@@ -86,16 +88,22 @@ QString PackageListView::currentPackage()
 }
 
 /**
- * Get selected packages DB id.
+ * Get selected packages DB id. @fixme: use QListViewItemIterator instead.
  * @return idList
  */
 QStringList PackageListView::selectedId()
 {
 	QStringList idDBList;
+// 	QListViewItemIterator it( this, QListViewIterator::Selected );
+// 	while ( it.current() ) {
+// 		idDBList += dynamic_cast<PackageItem*>( it.current() )->id();
+// 	}
+	
 	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
 		if ( it.current()->isSelected() && it.current()->isVisible() )
 			idDBList += it.currentKey();
 	}
+	
 	return idDBList;
 }
 

@@ -32,7 +32,6 @@ public:
 	virtual bool doJob() {
 		QString category = m_package.section( "/", 0, 0 );
 		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
-// 		QString version = m_package.section( name + "-", 1, 1 );
 		
 		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
 		packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name  = '%2';" ).arg( idCategory ).arg( name ) ).first();

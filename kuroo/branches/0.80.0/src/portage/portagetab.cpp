@@ -52,6 +52,9 @@
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent )
 {
+	categoriesView->init();
+	subcategoriesView->init();
+	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
@@ -219,13 +222,17 @@ void PortageTab::slotRefresh()
  */
 void PortageTab::slotBusy( bool b )
 {
-	if ( b )
+	if ( b ) {
 		pbUninstall->setDisabled( true );
+		pbAddQueue->setDisabled( true );
+	}
 	else {
 		if ( !KUser().isSuperUser() )
 			pbUninstall->setDisabled( true );
 		else
 			pbUninstall->setDisabled( false );
+		
+		pbAddQueue->setDisabled( false );
 	}
 }
 

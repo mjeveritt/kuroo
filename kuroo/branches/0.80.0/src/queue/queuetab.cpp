@@ -52,7 +52,7 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	
 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
-	connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+// 	connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbPretend, SIGNAL( clicked() ), this, SLOT( slotPretend() ) );
 	
@@ -119,10 +119,18 @@ void QueueTab::slotReload()
  */
 void QueueTab::slotBusy( bool b )
 {
-	if ( EmergeSingleton::Instance()->isRunning() )
+	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Stop Installation!" ) );
-	else
+		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+		pbPretend->setDisabled( true );
+	}
+	else {
 		pbGo->setText( i18n( "Start Installation!" ) );
+		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+		pbPretend->setDisabled( false );
+	}
 	
 	if ( b ) {
 		pbOptions->setDisabled( true );
@@ -150,7 +158,7 @@ void QueueTab::slotBusy( bool b )
  */
 void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point )
 {
-	if ( !item || !item->parent() )
+	if ( !item )
 		return;
 	
 	enum Actions { PRETEND, EMERGE, REMOVE, GOTO };

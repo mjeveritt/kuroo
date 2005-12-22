@@ -65,10 +65,6 @@ private:
 
 /**
  * Gui content.
- * First create a tabwidget then fill it with 6 tabs for Installed, Portage, Updates...
- * Then connect signal that content of a tab is changed so the tabheader text color is activated = blue.
- * Also connect signals from all objects like Installed, Portage... to each of their corresponding tab.
- * Finally connect signal from when Portage is changed (reseted after sync) to clear all other objects.
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
@@ -119,6 +115,7 @@ void KurooView::slotInit()
 			i18n("<qt>Kuroo database is empty!<br><br>"
 			     "Kuroo will now first scan your emerge log to create the emerge history. "
 			     "Package information in Portage will be cached.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0) ) {
+				     
 			case KMessageBox::Continue: {
 				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 				HistorySingleton::Instance()->slotRefresh();
@@ -142,7 +139,6 @@ void KurooView::slotInit()
 
 				default:
 					slotCheckPortage();
-
 			}
 		}
 	}
@@ -155,10 +151,7 @@ void KurooView::slotReset()
 {
 	kdDebug() << "KurooView::slotReset" << endl;
 	
-// 	InstalledSingleton::Instance()->slotReset();
 	UpdatesSingleton::Instance()->slotReset();
-// 	QueueSingleton::Instance()->reset();
-// 	ResultsSingleton::Instance()->reset();
 	slotInit();
 }
 

@@ -100,13 +100,13 @@ void Kuroo::setupActions()
 	KStdAction::preferences( this, SLOT(slotPreferences()), actionCollection() );
 	
 	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
-	                    this, SLOT(introWizard()), actionCollection(), "wizard" );
+	                    this, SLOT( introWizard() ), actionCollection(), "wizard" );
 	
 	actionRefresh = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
-	                             this, SLOT(slotNull()), actionCollection(), "refresh" );
+	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh" );
 	
 	actionSync = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
-	                          this, SLOT(slotSync()), actionCollection(), "sync" );
+	                          this, SLOT( slotSync() ), actionCollection(), "sync" );
 	
 	actionRefresh->setToolTip( i18n("Refresh Portage view") );
 	actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
@@ -158,6 +158,7 @@ void Kuroo::slotSync()
 	switch( KMessageBox::questionYesNo( this, 
 		i18n( "<qt>Do you want to synchronize portage?<br>"
 		     "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
+			     
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
 			break;
@@ -237,10 +238,12 @@ void Kuroo::slotWait()
 			i18n("<qt>Kuroo is busy<br><br>"
 			     "Do you want to quit?<br>"
 			     "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
+				     
 			case KMessageBox::Yes: {
 				ThreadWeaver::instance()->abortAllJobsNamed( "DBJob" );
 				ThreadWeaver::instance()->abortAllJobsNamed( "CachePortageJob" );
 				QTimer::singleShot( 500, this, SLOT( slotTerminate()) );
+				
 			}
 		}
 	}

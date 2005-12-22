@@ -157,31 +157,6 @@ void Signalist::scanHistoryComplete()
 }
 
 /**
- * Kuroo is scanning disk usage.
- * @param true/false
- */
-void Signalist::scanDiskUsage( bool b )
-{
-	if ( b ) {
-		busyDiskUsage = true;
-		emit signalKurooBusy( true );
-	}
-	else {
-		busyDiskUsage = false;
-		emit signalKurooBusy( false );
-	}
-}
-
-/**
- * Convenience flag.
- * @return busy 
- */
-bool Signalist::isKurooDiskUsageBusy()
-{
-	return busyDiskUsage;
-}
-
-/**
  * Tell queue to start emerging.
  */
 void Signalist::startInstallQueue()

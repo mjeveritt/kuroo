@@ -54,12 +54,10 @@ public slots:
 	 * Return true when kuroo is emerging or scanning.
 	 */
 	bool		isKurooBusy();
-	bool		isKurooDiskUsageBusy();
 	
 	/**
 	 * For forwarding kuroo threads status.
 	 */
-	void		scanDiskUsage( bool b );
 	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();

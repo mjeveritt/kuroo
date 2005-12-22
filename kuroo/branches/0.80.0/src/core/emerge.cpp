@@ -108,7 +108,7 @@ bool Emerge::queue( const QString& category, const QStringList& packageList )
 	eProc->start( KProcess::OwnGroup, true );
 	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupQueue(KProcess*) ) );
-	SignalistSingleton::Instance()->setKurooBusy(true);
+	SignalistSingleton::Instance()->setKurooBusy( true );
 	
 	if ( !eProc->isRunning() ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
@@ -152,7 +152,7 @@ bool Emerge::queue( const QStringList& packageList )
 	eProc->start( KProcess::OwnGroup, true );
 	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupQueue(KProcess*) ) );
-	SignalistSingleton::Instance()->setKurooBusy(true);
+	SignalistSingleton::Instance()->setKurooBusy( true );
 	
 	if ( !eProc->isRunning() ) {
 		LogSingleton::Instance()->writeLog(i18n("\nError: Emerge didn't start. "), ERROR);

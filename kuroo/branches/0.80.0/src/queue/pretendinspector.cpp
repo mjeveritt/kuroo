@@ -35,40 +35,9 @@
 PretendInspector::PretendInspector( QWidget *parent, const char *name )
 	: KDialogBase( KDialogBase::Swallow, i18n( "Emerge pretend result" ), KDialogBase::User1 | KDialogBase::Ok , KDialogBase::Ok, parent, i18n( "Save" ), false )
 {
-	setButtonText( KDialogBase::User1, i18n( "Append all to Install Queue" ) );
+	setButtonText( KDialogBase::User1, i18n( "Add selected to Install Queue" ) );
 	dialog = new EmergePretendBase( this );
 	setMainWidget( dialog );
-	
-// 	if ( !KUser().isSuperUser() )
-// 		enableButtonApply( false );
-// 	
-// 	QString useFile( KurooConfig::dirPortage() + "/profiles/use.desc" );
-// 	QFile f( useFile );
-// 	
-// 	if ( f.open( IO_ReadOnly ) ) {
-// 		QTextStream stream( &f );
-// 		
-// 		while ( !stream.atEnd() ) {
-// 			QString line = stream.readLine();
-// 			if ( !line.startsWith( "#" ) && !line.isEmpty() ) {
-// 				if ( !line.contains( QRegExp( "^alpha|^amd64|^arm|^hppa|^ia64|^mips|^ppc|^ppc64|^ppc-macos|^s390|^sh|^sparc|^x86" ) ) )
-// 					useList += line;
-// 			}
-// 		}
-// 		f.close();
-// 		
-// 		foreach ( useList ) {
-// 			dialog->allUseFlags->availableListBox()->insertItem( "-" + ( *it ).section( " -", 0, 0 ) );
-// 		}
-// 		foreach ( useList ) {
-// 			dialog->allUseFlags->availableListBox()->insertItem( ( *it ).section( " -", 0, 0 ) );
-// 		}
-// 		
-// 		connect( dialog->allUseFlags->availableListBox(), SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotUseDescription( QListBoxItem* ) ) );
-// 		connect( dialog->allUseFlags->selectedListBox(), SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotUseDescription( QListBoxItem* ) ) );
-// 	}
-// 	else
-// 		kdDebug() << i18n( "Error reading: " ) << useFile << endl;
 }
 
 PretendInspector::~PretendInspector()
@@ -82,50 +51,11 @@ void PretendInspector::showResults()
 }
 
 /**
- * Save the new use flags created with ActionSelector
+ * Append packages to Queue.
  */
-void PretendInspector::slotOk()
+void PretendInspector::slotUser1()
 {
-// 	QString useFlags;
-// 	QStringList lines;
-// 
-// 	for ( unsigned int i = 0; i < dialog->allUseFlags->selectedListBox()->count(); i++ ) {
-// 		QListBoxItem *item = dialog->allUseFlags->selectedListBox()->item(i);
-// 		useFlags += item->text() + " ";
-// 	}
-// 	
-// 	// Get all lines and remove package
-// 	QFile file( "/etc/portage/package.use" );
-// 	if ( file.open( IO_ReadOnly ) ) {
-// 		QTextStream stream( &file );
-// 		while ( !stream.atEnd() ) {
-// 			QString tmp = stream.readLine();
-// 			QString eString = tmp.stripWhiteSpace();
-// 			
-// 			if ( !tmp.startsWith( package ) && !eString.isEmpty() )
-// 				lines += tmp;
-// 		}
-// 		file.close();
-// 		
-// 		// Add package with updated use flags
-// 		if ( !useFlags.isEmpty() )
-// 			lines += package + " " + useFlags;
-// 	}
-// 	else
-// 		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
-// 	
-// 	// Now write back
-// 	if ( file.open( IO_WriteOnly ) ) {
-// 		QTextStream stream( &file );
-// 		for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-// 			stream << *it + "\n";
-// 		}
-// 		file.close();
-// 	}
-// 	else
-// 		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
-// 	
-	accept();
+	QueueSingleton::Instance()->addPackageIdList( dialog->resultView->selectedId() );
 }
 
 #include "pretendinspector.moc"

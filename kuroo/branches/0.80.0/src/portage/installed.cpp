@@ -113,7 +113,6 @@ private:
 Installed::Installed( QObject *parent )
 	: QObject( parent )
 {
-	connect( SignalistSingleton::Instance(), SIGNAL( signalScanInstalledComplete() ), this, SLOT( slotChanged() ) );
 }
 
 Installed::~Installed()
@@ -130,6 +129,7 @@ void Installed::init( QObject *myParent )
  */
 void Installed::slotChanged()
 {
+	kdDebug() << "Installed::slotChanged" << endl;
 	emit signalInstalledChanged();
 }
 
@@ -181,10 +181,10 @@ void Installed::removePackage( const QString& package )
  * Count installed packages.
  * @return count
  */
-QString Installed::count()
-{
-	return KurooDBSingleton::Instance()->installedTotal().first();
-}
+// QString Installed::count()
+// {
+// 	return KurooDBSingleton::Instance()->installedTotal().first();
+// }
 
 /**
  * Get installed files list for this package by parsing CONTENTS in dirDbPkg().

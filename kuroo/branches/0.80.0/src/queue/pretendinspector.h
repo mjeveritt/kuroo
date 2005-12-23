@@ -17,7 +17,7 @@ public slots:
 	void				showResults();
 	
 private slots:
-	void				slotOk();
+	void				slotUser1();
 	
 private:
 	EmergePretendBase*	dialog;

@@ -421,8 +421,6 @@ void Emerge::readFromStdout( KProcIO *proc )
 				temp = temp.section( " kB", 0, 0 );
 				emergePackage.installedVersion = temp.section( "[", 1, 1 ).section( "]", 0, 0 );
 
-				kdDebug() << "temp=" << temp << endl;
-				
 				// Parse out USE flags
 				const QStringList field = QStringList::split( " ", temp );
 				QStringList useList;

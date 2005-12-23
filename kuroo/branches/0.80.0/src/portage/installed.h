@@ -90,7 +90,7 @@ public slots:
 	 * Count total installed packages.
 	 * @return total
 	 */
-	QString			count();
+// 	QString			count();
 	
 signals:
 	void			signalInstalledChanged();

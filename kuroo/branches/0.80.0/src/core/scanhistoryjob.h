@@ -27,10 +27,7 @@
 
 class DbConnection;
 class QStringList;
-class QRegExp;
 class PackageEmergeTime;
-
-// extern QRegExp rxPortageVersion;
 
 typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
 

@@ -251,38 +251,6 @@ void KurooView::slotPortageUpdated()
 }
 
 /**
- * Installed tabpage count.
- */
-void KurooView::slotInstalledUpdated()
-{
-// 	static bool tabSetup(false);
-// 	QString total = InstalledSingleton::Instance()->count();
-// 
-// 	mainTabs->setTabLabel( tabInstalled, i18n("&Installed (%1)").arg( total ) );
-// 	
-// 	if ( mainTabs->currentPageIndex() != 0 && tabSetup )
-// 		mainTabs->setTabColor( tabInstalled, blue );
-// 	
-// 	tabSetup = true;
-}
-
-/**
- * Update tabpage count.
- */
-void KurooView::slotUpdatesUpdated()
-{
-// 	static bool tabSetup(false);
-// 	QString total = UpdatesSingleton::Instance()->count();
-// 		
-// 	mainTabs->setTabLabel( tabUpdates, i18n("&Updates (%1)").arg( total ) );
-// 	
-// 	if ( mainTabs->currentPageIndex() != 2 && tabSetup )
-// 		mainTabs->setTabColor( tabUpdates, blue );
-// 	
-// 	tabSetup = true;
-}
-
-/**
  * Queue tabpage count.
  */
 void KurooView::slotQueueUpdated()
@@ -294,22 +262,6 @@ void KurooView::slotQueueUpdated()
 // 	
 // 	if ( mainTabs->currentPageIndex() != 3 && tabSetup )
 // 		mainTabs->setTabColor( tabQueue, blue );
-// 	
-// 	tabSetup = true;
-}
-
-/**
- * Results tabpage count.
- */
-void KurooView::slotResultsUpdated()
-{
-// 	static bool tabSetup(false);
-// 	QString total = ResultsSingleton::Instance()->count();
-// 	
-// 	mainTabs->setTabLabel( tabResults, i18n("&Results (%1)").arg( total ) );
-// 	
-// 	if ( mainTabs->currentPageIndex() != 4 && tabSetup )
-// 		mainTabs->setTabColor( tabResults, blue );
 // 	
 // 	tabSetup = true;
 }

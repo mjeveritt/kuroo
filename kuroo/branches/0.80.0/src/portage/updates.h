@@ -23,9 +23,6 @@
 
 #include <qobject.h>
 
-// class QRegExp;
-// extern QRegExp rxPortageVersion;
-
 /**
  * @class Updates
  * @short Thread for removing single package from updates. 

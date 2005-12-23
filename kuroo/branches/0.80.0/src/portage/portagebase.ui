@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>785</width>
-            <height>566</height>
+            <width>789</width>
+            <height>615</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -350,7 +350,7 @@
                             <property name="minimumSize">
                                 <size>
                                     <width>500</width>
-                                    <height>350</height>
+                                    <height>400</height>
                                 </size>
                             </property>
                         </widget>
@@ -361,7 +361,7 @@
                             <property name="sizePolicy">
                                 <sizepolicy>
                                     <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
+                                    <vsizetype>3</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>

@@ -26,9 +26,6 @@
 #include <qobject.h>
 
 class DbConnection;
-// class QRegExp;
-
-// extern QRegExp rxPortageVersion;
 
 typedef QMap<QString, QString> InstalledMap;
 

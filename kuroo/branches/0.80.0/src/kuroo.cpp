@@ -34,7 +34,6 @@
 #include <qdragobject.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
-#include <qregexp.h>
 #include <qtimer.h>
 
 #include <kglobal.h>

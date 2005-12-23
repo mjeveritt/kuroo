@@ -27,8 +27,6 @@ class QComboBox;
 class QGroupBox;
 class QVBox;
 
-// extern QRegExp rxPortageVersion;
-
 /**
  * @class ConfigDialog
  * @short Kuroo preferences widget.

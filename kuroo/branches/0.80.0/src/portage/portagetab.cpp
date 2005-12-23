@@ -26,14 +26,12 @@
 #include "packageinspector.h"
 #include "packageitem.h"
 
-#include <qregexp.h>
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <qregexp.h>
 #include <qbuttongroup.h>
 #include <qtimer.h>
 
@@ -247,7 +245,37 @@ void PortageTab::slotPackage()
 		pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
-	summaryBrowser->setText( PortageSingleton::Instance()->packageSummary( packagesView->currentId() ) );
+	QString package( PortageSingleton::Instance()->package( packagesView->currentId() ) );
+	QString category( PortageSingleton::Instance()->category( packagesView->currentId() ) );
+	Info info( PortageSingleton::Instance()->packageInfo( packagesView->currentId() ) );
+	
+	QString textLines = "<font size=\"+2\">" + package + "</font> ";
+			textLines += "(" + category.section( "-", 0, 0 ) + " / " + category.section( "-", 1, 1 ) + ") <br>";
+			textLines += info.description + "<br>";
+			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
+	
+	
+	QString textLinesAvailable = i18n("<b>Versions available:</b> ");
+	QString textLinesInstalled;
+	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packagesView->currentId() );
+	foreach ( versionList ) {
+		QString version = *it++;
+		QString meta = *it;
+		
+		if ( meta == FILTERINSTALLED )
+			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, " + textLinesInstalled;
+		
+		textLinesAvailable += version + ", ";
+	}
+	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
+	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
+	
+	if ( !textLinesInstalled.isEmpty() )
+		textLinesInstalled = i18n("<b>Versions installed:</b> ") + textLinesInstalled + "<br>";
+	else
+		textLinesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
+	
+	summaryBrowser->setText( textLines + textLinesInstalled + textLinesAvailable );
 	
 	if ( packageInspector->isVisible() )
 		slotAdvanced();

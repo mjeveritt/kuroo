@@ -32,11 +32,9 @@ class PackageEmergeTime;
 class KProcIO;
 class KListViewItem;
 
-typedef QMap< QString, QListViewItem * > ItemMap;
+typedef QMap< QString, QListViewItem* > ItemMap;
 typedef QMap< QString, Package > PackageMap;
 typedef QMap< QString, PackageEmergeTime > EmergeTimeMap;
-
-// extern QRegExp rxPortageVersion;
 
 /**
  * @class HistoryListView

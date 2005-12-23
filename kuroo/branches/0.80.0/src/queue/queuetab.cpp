@@ -123,17 +123,16 @@ void QueueTab::slotBusy( bool b )
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		pbPretend->setDisabled( true );
 	}
 	else {
 		pbGo->setText( i18n( "Start Installation!" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		pbPretend->setDisabled( false );
 	}
 	
 	if ( b ) {
+		pbPretend->setDisabled( true );
 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
@@ -148,6 +147,7 @@ void QueueTab::slotBusy( bool b )
 			pbUninstall->setDisabled( false );
 		}
 		
+		pbPretend->setDisabled( false );
 		pbOptions->setDisabled( false );
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );

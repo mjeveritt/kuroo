@@ -23,10 +23,6 @@
 
 #include <qobject.h>
 
-// class QRegExp;
-
-// extern QRegExp rxPortageVersion;
-
 /**
  * @class Portage
  * @short Object for the Portage tree.
@@ -158,12 +154,6 @@ public slots:
 	* @param packageList
 	*/
 	void						clearUnmaskPackageList( const QStringList& packageIdList );
-	
-	/**
-	 * Methods for parsing info files.
-	 */
-	QString						packageSummary( const QString& packageId );
-	QString						versionSummary( const QString& packageId );
 
 signals:
 	void						signalPortageChanged();

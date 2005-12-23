@@ -85,11 +85,8 @@ private slots:
 	 * Update tab text color and package counts.
 	 */
 	void 			slotCurrentChanged( QWidget* newPage );
-	void 			slotInstalledUpdated();
 	void 			slotPortageUpdated();
 	void 			slotQueueUpdated();
-	void 			slotUpdatesUpdated();
-	void 			slotResultsUpdated();
 	void 			slotLogsTabUpdated();
 	
 	/**
@@ -100,8 +97,6 @@ private slots:
 	void 			slotShowView();
 	
 private:
-// 	QueueTab 		*tabQueue;
-// 	ResultsTab 		*tabResults;
 };
 
 #endif // _KUROOVIEW_H_

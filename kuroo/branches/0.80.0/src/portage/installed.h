@@ -23,9 +23,6 @@
 
 #include <qobject.h>
 
-// class QRegExp;
-// extern QRegExp rxPortageVersion;
-
 typedef struct Info {
 	QString slot;
 	QString homepage;
@@ -85,12 +82,6 @@ public slots:
 	 * Methods for parsing info files.
 	 */
 	QString			installedFiles( const QString& packageId );
-	
-	/**
-	 * Count total installed packages.
-	 * @return total
-	 */
-// 	QString			count();
 	
 signals:
 	void			signalInstalledChanged();

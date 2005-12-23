@@ -130,10 +130,9 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		
 		insertPackage( idDB, packageItem );
 	}
-	
+	setSorting( 0 );
 	setCurrentItem( firstChild() );
 	setSelected( firstChild(), true );
-	setSorting( 0 );
 	return count;
 	
 // 	clock_t finish = clock();

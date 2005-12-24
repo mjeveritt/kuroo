@@ -204,7 +204,7 @@ QString QueueListView::kBSize( const int& size )
 		if ( size < 1024 )
 			total = "1 kB ";
 		else
-			total = loc->formatNumber(QString::number(size / 1024), true, 0) + " kB ";
+			total = loc->formatNumber((double)(size / 1024), /*true, */0) + " kB ";
 	}
 	
 	return total;

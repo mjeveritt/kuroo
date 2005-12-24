@@ -128,7 +128,6 @@ void Log::writeLog( const QString& output, int i )
 		}
 		case EMERGELOG: {
 			line = "<font color=BlueViolet>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
-			
 			logBrowser->append(line);
 		}
 	}

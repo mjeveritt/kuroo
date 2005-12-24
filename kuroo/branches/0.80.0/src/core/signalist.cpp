@@ -165,15 +165,6 @@ void Signalist::startInstallQueue()
 }
 
 /**
- * Jump to the package and view it's summary info.
- * @param package
- */
-void Signalist::viewPackage( const QString& package )
-{
-	emit signalViewPackage( package );
-}
-
-/**
  * Propagate signal that a package is added to the queue.
  * @param id	package db id
  * @param true/false

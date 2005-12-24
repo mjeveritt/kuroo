@@ -56,8 +56,8 @@ void ScanHistoryJob::completeJob()
 }
 
 /** 
- * If new entries are found in emerge.log insert them into history and 
- * add emerge time and increment how many time package have been installed
+ * If new entries are found in emerge.log insert them into history and,
+ * add emerge duration and increment emerge counts.
  * @return success
  */
 bool ScanHistoryJob::doJob()
@@ -75,6 +75,7 @@ bool ScanHistoryJob::doJob()
 	QString timeStamp;
 	QRegExp rx1("\\d+:\\s");
 	QRegExp rx2("\\s\\S+/\\S+\\s");
+	QMap<QString, uint> logMap;
 	foreach ( m_logLines ) {
 		
 		// Abort the scan
@@ -85,36 +86,48 @@ bool ScanHistoryJob::doJob()
 		}
 		
 		QString package;
-		QString emergeLine = QString(*it).section(rx1, 1, 1);
-		timeStamp = QString(*it).section(": " + emergeLine, 0, 0);
+		QString emergeLine = QString(*it).section( rx1, 1, 1 );
+		timeStamp = QString(*it).section( ": " + emergeLine, 0, 0 );
 		
-		if ( emergeLine.contains(">>> emerge") ) {
+		if ( emergeLine.contains( ">>> emerge" ) ) {
 			emergeStart = timeStamp.toUInt();
+			
+			// Collect package and timestamp in map to match for completion
+			if ( rx2.search(emergeLine) > -1 )
+				package = rx2.cap(0).stripWhiteSpace();
+			if ( !package.isEmpty() )
+				logMap[ package ] = emergeStart;
 		}
 		else
-			if ( emergeLine.contains("::: completed emerge ") ) {
+			if ( emergeLine.contains( "::: completed emerge " ) ) {
 				if ( rx2.search(emergeLine) > -1 )
 					package = rx2.cap(0).stripWhiteSpace();
 				
-				QString packageNoVersion = package.section(rxPortageVersion, 0, 0);
-				int secTime = timeStamp.toUInt() - emergeStart;
-				
-				// Update emerge time and increment count for packageNoVersion
-				EmergeTimeMap::iterator itMap = emergeTimeMap.find(packageNoVersion);
-				if ( itMap == emergeTimeMap.end() ) {
-					PackageEmergeTime pItem(secTime, 1);
-					emergeTimeMap.insert(packageNoVersion, pItem);
+				// Find matching package emerge start entry in map and calculate the emerge duration
+				QMap<QString, uint>::iterator itLogMap = logMap.find( package );
+				if ( itLogMap != logMap.end() ) {
+					int secTime = timeStamp.toUInt() - itLogMap.data();
+					logMap.erase( itLogMap );
+					
+					QString packageNoVersion = package.section( rxPortageVersion, 0, 0 );
+	
+					// Update emerge time and increment count for packageNoVersion
+					EmergeTimeMap::iterator itMap = emergeTimeMap.find(packageNoVersion);
+					if ( itMap == emergeTimeMap.end() ) {
+						PackageEmergeTime pItem( secTime, 1 );
+						emergeTimeMap.insert( packageNoVersion, pItem );
+					}
+					else {
+						itMap.data().add(secTime);
+						itMap.data().inc();
+					}
+					
+					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('%1', '%2', '%3', 'true');" ).arg(package).arg(timeStamp).arg(QString::number(secTime)), m_db );
 				}
-				else {
-					itMap.data().add(secTime);
-					itMap.data().inc();
-				}
-				
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('%1', '%2', '%3', 'true');" ).arg(package).arg(timeStamp).arg(QString::number(secTime)), m_db );
 			}
 			else {
-				if ( emergeLine.contains(">>> unmerge success") ) {
-					package = emergeLine.section(">>> unmerge success: ", 1, 1);
+				if ( emergeLine.contains( ">>> unmerge success" ) ) {
+					package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" ).arg(package).arg(timeStamp), m_db );
 				}
 				else

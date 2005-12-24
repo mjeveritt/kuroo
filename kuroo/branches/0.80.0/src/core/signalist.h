@@ -71,11 +71,6 @@ public slots:
 	 * Tell queue to start emerging.
 	 */
 	void		startInstallQueue();
-		
-	/**
-	 * Jump to the package and view it's summary info.
-	 */
-	void		viewPackage( const QString& package );
 	
 	/**
 	 * Methods for marking packages as present in the queue.

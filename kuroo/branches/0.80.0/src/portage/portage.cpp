@@ -70,7 +70,7 @@ bool Portage::slotRefresh()
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob(this) );
+		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
 	}
 	else
 		slotScan();
@@ -100,7 +100,7 @@ bool Portage::slotScan()
 		}
 	}
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanPortageJob(this) );
+	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
 	return true;
 }
 
@@ -256,9 +256,9 @@ void Portage::loadUnmaskedList()
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
-			QString line(stream.readLine());
-			if ( !line.startsWith("#") )
-				unmaskedMap.insert( line.section(" ", 0, 0), line.section(" ", 1, 1) );
+			QString line( stream.readLine() );
+			if ( !line.startsWith( "#" ) )
+				unmaskedMap.insert( line.section( " ", 0, 0 ), line.section( " ", 1, 1 ) );
 		}
 	}
 	else
@@ -291,7 +291,7 @@ void Portage::unmaskPackageList( const QStringList& packageIdList )
 	foreach ( packageIdList ) {
 		QString package = Portage::category( *it ) + "/" + Portage::package( *it );
 	
-		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::dirPackageKeywords() ) )
+		if ( !unmaskPackage( package /*+ " ~" + KurooConfig::arch()*/, KurooConfig::dirPackageKeywords() ) )
 			break;
 		else
 			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
@@ -330,8 +330,8 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 		
 		if ( file.open( IO_WriteOnly ) ) {
 			QTextStream stream( &file );
-			for ( QStringList::Iterator it0 = packageList.begin(); it0 != packageList.end(); ++it0 ) {
-				stream << *it0 + "\n";
+			foreach ( packageList ) {
+				stream << *it + "\n";
 			}
 		}
 		else {
@@ -344,8 +344,8 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 	}
 	
 	// Signal to gui to mark package as unmasked
-	QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-	QString name( temp.section(rxPortageVersion, 0, 0) );
+	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
+	QString name( temp.section ( rxPortageVersion, 0, 0 ) );
 	SignalistSingleton::Instance()->setUnmasked( name, true );
 	
 	return true;

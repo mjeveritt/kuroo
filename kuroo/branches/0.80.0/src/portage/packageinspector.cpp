@@ -119,15 +119,15 @@ void PackageInspector::loadUseFlags()
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
 			if ( !line.isEmpty() ) {
-				if ( package.stripWhiteSpace() == line.section(" ", 0, 0) ) {
-					QString eString = line.section(" ", 1, 1);
+				if ( line.section( " ", 0, 0 ) == ( category + "/" + package ) ) {
+					QString eString = line.section( " ", 1, 1 );
 					
 					int i = 2;
 					while ( !eString.isEmpty() ) {
 						dialog->allUseFlags->selectedListBox()->insertItem( eString );
 						QListBoxItem *selectedUseFlag = dialog->allUseFlags->availableListBox()->findItem( eString, Qt::ExactMatch );
 						dialog->allUseFlags->availableListBox()->takeItem( selectedUseFlag );
-						eString = line.section(" ", i, i);
+						eString = line.section( " ", i, i );
 						eString = eString.stripWhiteSpace();
 						i++;
 					};
@@ -160,14 +160,14 @@ void PackageInspector::slotApply()
 			QString tmp = stream.readLine();
 			QString eString = tmp.stripWhiteSpace();
 			
-			if ( !tmp.startsWith( package ) && !eString.isEmpty() )
+			if ( !tmp.startsWith( category + "/" + package ) && !eString.isEmpty() )
 				lines += tmp;
 		}
 		file.close();
 		
 		// Add package with updated use flags
 		if ( !useFlags.isEmpty() )
-			lines += package + " " + useFlags;
+			lines += category + "/" + package + " " + useFlags;
 	}
 	else
 		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
@@ -175,7 +175,7 @@ void PackageInspector::slotApply()
 	// Now write back
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
-		for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
+		foreach ( lines ) {
 			stream << *it + "\n";
 		}
 		file.close();

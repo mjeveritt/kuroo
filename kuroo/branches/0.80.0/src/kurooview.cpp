@@ -53,12 +53,15 @@ public:
 	virtual int height( const QListBox *lb ) const;
 	virtual int width( const QListBox *lb ) const;
 	int expandMinimumWidth( int width );
+	void setChanged( bool modified );
+	bool isChanged();
 	
 protected:
 	const QPixmap &defaultPixmap();
 	void paint( QPainter *painter );
 	
 private:
+	bool m_modified;
 	QPixmap mPixmap;
 	int mMinimumWidth;
 };
@@ -69,7 +72,7 @@ private:
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
-	tabPortage(0), tabLogs(0)
+	tabPortage( 0 ), tabLogs( 0 )
 {
 	viewMenu->setCursor( KCursor::handCursor() );
 	
@@ -86,20 +89,28 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	viewStack->addWidget( tabLogs, 4 );
 	
 	KIconLoader *ldr = KGlobal::iconLoader();
-	new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), "Packages" );
-	new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Emerge Queue" );
-	new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "History" );
-	new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Log" );
+	iconPackages = new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), "Packages" );
+	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Emerge Queue" );
+	iconHistory = new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "History" );
+	iconLog = new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Log" );
 	
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
 	viewMenu->setSelected( 0, true );
 	
 	// Give log access to logBrowser and checkboxes
-	// Check emerge.log for new entries. (Due to cli activities outside kuroo)
+	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( tabLogs->logBrowser, tabLogs->verboseLog, tabLogs->saveLog );
 	
 	// Reset everything when a portage scan is started
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
+	
+	// Confirm changes in views with bleue text menu
+	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotPortageUpdated() ) );
+	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged() ), this, SLOT( slotQueueUpdated() ) );
+	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
+	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
+	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
 
 KurooView::~KurooView()
@@ -150,14 +161,14 @@ void KurooView::slotInit()
 void KurooView::slotReset()
 {
 	kdDebug() << "KurooView::slotReset" << endl;
-	
+	slotPortageUpdated();
 	UpdatesSingleton::Instance()->slotReset();
 	slotInit();
 }
 
 /**
- * When starting kuroo, check if portage need to be scanned.
- * Installed, and Updates must be scanned afterwards.
+ * When starting kuroo, check if portage need to be rescanned.
+ * Updates must be scanned afterwards.
  */
 void KurooView::slotCheckPortage()
 {
@@ -179,47 +190,9 @@ void KurooView::slotCheckPortage()
 }
 
 /**
- * Check if Installed is empty, if so scan for installed packages.
- */
-void KurooView::slotCheckInstalled()
-{
-}
-
-/**
- * Check if Updates empty, if so scan for updates packages.
- */
-void KurooView::slotCheckUpdates()
-{
-	kdDebug() << "KurooView::slotCheckUpdates" << endl;
-}
-
-/**
- * End by loading the queue and the results packages list.
- */
-void KurooView::slotReloadQueueResults()
-{
-	kdDebug() << "KurooView::slotReloadQueueResults" << endl;
-}
-
-/**
  * Action when user click in close button
  */
 void KurooView::quit()
-{
-}
-
-/**
- * Change tab color back to normal.
- */
-void KurooView::slotCurrentChanged( QWidget* newPage )
-{
-// 	mainTabs->setTabColor( newPage, black );
-}
-
-/**
- * Activate this package to view its info.
- */
-void KurooView::slotViewPackage( const QString& package )
 {
 }
 
@@ -233,59 +206,66 @@ void KurooView::slotEmergePretend( QString package )
 }
 
 /**
- * Count the total packages in Portage (@fixme: including installed packages not in Portage anymore)
- * @return total
+ * Highlight menutext in bleue.
  */
 void KurooView::slotPortageUpdated()
 {
-	kdDebug() << "KurooView::slotPortageUpdated" << endl;
-// 	static bool tabSetup(false);
-// 	QString total = PortageSingleton::Instance()->count();
-
-// 	mainTabs->setTabLabel( tabPortage, i18n("&Portage (%1)").arg(total) );
-// 	
-// 	if ( mainTabs->currentPageIndex() != 1 && tabSetup )
-// 		mainTabs->setTabColor( tabPortage, blue );
-	
-// 	tabSetup = true;
+	if ( !iconPackages->isChanged() ) {
+		iconPackages->setChanged( true );
+		viewMenu->triggerUpdate( true );
+	}
 }
 
 /**
- * Queue tabpage count.
+ * Highlight menutext in bleue.
  */
 void KurooView::slotQueueUpdated()
 {
-// 	static bool tabSetup(false);
-// 	QString total = QueueSingleton::Instance()->count();
-// 	
-// 	mainTabs->setTabLabel( tabQueue, i18n("&Queue (%1)").arg( total ) );
-// 	
-// 	if ( mainTabs->currentPageIndex() != 3 && tabSetup )
-// 		mainTabs->setTabColor( tabQueue, blue );
-// 	
-// 	tabSetup = true;
+	if ( !iconQueue->isChanged() ) {
+		iconQueue->setChanged( true );
+		viewMenu->triggerUpdate( true );
+	}
 }
 
 /**
- * Catch when log tab is updated.
+ * Highlight menutext in bleue.
  */
-void KurooView::slotLogsTabUpdated()
+void KurooView::slotHistoryUpdated()
 {
-// 	static bool tabSetup(false);
-// 	
-// 	if ( mainTabs->currentPageIndex() != 5 && tabSetup )
-// 		mainTabs->setTabColor( tabLogs, blue );
-// 	
-// 	tabSetup = true;
+	if ( !iconHistory->isChanged() ) {
+		iconHistory->setChanged( true );
+		viewMenu->triggerUpdate( true );
+	}
 }
 
+/**
+ * Highlight menutext in bleue.
+ */
+void KurooView::slotLogUpdated()
+{
+	if ( !iconLog->isChanged() ) {
+		iconLog->setChanged( true );
+		viewMenu->triggerUpdate( true );
+	}
+}
+
+void KurooView::slotResetMenu( QListBoxItem* menuItem )
+{
+	dynamic_cast<IconListItem*>(menuItem)->setChanged( false );
+	viewMenu->triggerUpdate( true );
+}
+
+
+/**
+ * Activate corresponding view when clicking on icon in menu.
+ */
 void KurooView::slotShowView()
 {
 	viewStack->raiseWidget( viewMenu->currentItem() + 1 );
 }
 
 KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
-	: QListBoxItem( listbox )
+	: QListBoxItem( listbox ), m_modified( false )
 {
 	mPixmap = pixmap;
 	if( mPixmap.isNull() )
@@ -297,6 +277,11 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 
 void KurooView::IconListItem::paint( QPainter *painter )
 {
+	if ( m_modified )
+		painter->setPen( Qt::blue );
+	else
+		painter->setPen( Qt::black );
+	
 	QFontMetrics fm = painter->fontMetrics();
 	int ht = fm.boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).height();
 	int wp = mPixmap.width();
@@ -347,6 +332,16 @@ const QPixmap &KurooView::IconListItem::defaultPixmap()
 	}
 	
 	return *pix;
+}
+
+void KurooView::IconListItem::setChanged( bool modified )
+{
+	m_modified = modified;
+}
+
+bool KurooView::IconListItem::isChanged()
+{
+	return m_modified;
 }
 
 #include "kurooview.moc"

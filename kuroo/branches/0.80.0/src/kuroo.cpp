@@ -62,7 +62,7 @@ Kuroo::Kuroo()
 	m_view( new KurooView( this, "KurooView" ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-	setCentralWidget(m_view);
+	setCentralWidget( m_view );
 	setupActions();
 	statusBar();
 	setupGUI();

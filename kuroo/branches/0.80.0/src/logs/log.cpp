@@ -35,7 +35,7 @@
  * Log output from all actions as emerge, scanning... to log window and to file.
  */
 Log::Log( QObject* parent )
-	: QObject( parent ), logBrowser(0), verboseLog(0), saveLog(0)
+	: QObject( parent ), logBrowser( 0 ), verboseLog( 0 ), saveLog( 0 )
 {
 }
 
@@ -102,11 +102,12 @@ void Log::writeLog( const QString& output, int i )
 	QString line(output);
 	line.replace('\'', "''");
 	
-	switch(i) {
+	switch ( i ) {
 		case EMERGE: {
 			if ( verboseLog && verboseLog->isChecked() ) {
 				line = "<font color=blue>" + line.replace('>', "&gt;").replace('<', "&lt;")+ "</font>";
 				logBrowser->append(line);
+				emit signalLogChanged();
 			}
 			break;
 		}
@@ -116,7 +117,6 @@ void Log::writeLog( const QString& output, int i )
 		}
 		case ERROR: {
 			line = "<font color=red>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
-			
 			logBrowser->append(line);
 			break;
 		}
@@ -131,8 +131,6 @@ void Log::writeLog( const QString& output, int i )
 			logBrowser->append(line);
 		}
 	}
-	
-	emit signalLogUpdated();
 }
 
 #include "log.moc"

@@ -263,7 +263,7 @@ void PortageTab::slotPackage()
 		QString meta = *it;
 		
 		if ( meta == FILTERINSTALLED )
-			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, " + textLinesInstalled;
+			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, ";
 		
 		textLinesAvailable += version + ", ";
 	}

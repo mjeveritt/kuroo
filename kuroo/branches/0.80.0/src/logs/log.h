@@ -68,7 +68,7 @@ private:
 	QFile 			logFile;
 	
 signals:
-	void			signalLogUpdated();
+	void			signalLogChanged();
 };
 
 #endif

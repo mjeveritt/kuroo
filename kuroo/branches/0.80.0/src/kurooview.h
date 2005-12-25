@@ -77,26 +77,20 @@ private slots:
 	 * slotCheckPortage -> slotCheckInstalled -> slotCheckUpdates
 	 */
 	void 			slotCheckPortage();
-	void 			slotCheckInstalled();
-	void 			slotCheckUpdates();
-	void 			slotReloadQueueResults();
 	
 	/**
 	 * Update tab text color and package counts.
 	 */
-	void 			slotCurrentChanged( QWidget* newPage );
 	void 			slotPortageUpdated();
 	void 			slotQueueUpdated();
-	void 			slotLogsTabUpdated();
-	
-	/**
-	 * Show package summary info by making it current.
-	 */
-	void			slotViewPackage( const QString& package );
+	void			slotHistoryUpdated();
+	void 			slotLogUpdated();
+	void			slotResetMenu( QListBoxItem* menuItem );
 	
 	void 			slotShowView();
 	
 private:
+	IconListItem	*iconPackages, *iconQueue, *iconHistory, *iconLog;
 };
 
 #endif // _KUROOVIEW_H_

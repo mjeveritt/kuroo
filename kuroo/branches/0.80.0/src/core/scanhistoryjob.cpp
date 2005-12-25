@@ -70,12 +70,11 @@ bool ScanHistoryJob::doJob()
 	EmergeTimeMap emergeTimeMap(HistorySingleton::Instance()->getStatisticsMap());
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	
-	// Parse the output from genlog for new emerges, and unmerges
-	static uint emergeStart(0);
+	// Parse emerge.log lines
 	QString timeStamp;
 	QRegExp rx1("\\d+:\\s");
 	QRegExp rx2("\\s\\S+/\\S+\\s");
-	QMap<QString, uint> logMap;
+	static QMap<QString, uint> logMap;
 	foreach ( m_logLines ) {
 		
 		// Abort the scan
@@ -85,14 +84,14 @@ bool ScanHistoryJob::doJob()
 			return false;
 		}
 		
-		QString package;
 		QString emergeLine = QString(*it).section( rx1, 1, 1 );
 		timeStamp = QString(*it).section( ": " + emergeLine, 0, 0 );
 		
 		if ( emergeLine.contains( ">>> emerge" ) ) {
-			emergeStart = timeStamp.toUInt();
+			uint emergeStart = timeStamp.toUInt();
 			
 			// Collect package and timestamp in map to match for completion
+			QString package;
 			if ( rx2.search(emergeLine) > -1 )
 				package = rx2.cap(0).stripWhiteSpace();
 			if ( !package.isEmpty() )
@@ -100,6 +99,7 @@ bool ScanHistoryJob::doJob()
 		}
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
+				QString package;
 				if ( rx2.search(emergeLine) > -1 )
 					package = rx2.cap(0).stripWhiteSpace();
 				
@@ -122,17 +122,17 @@ bool ScanHistoryJob::doJob()
 						itMap.data().inc();
 					}
 					
-					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('%1', '%2', '%3', 'true');" ).arg(package).arg(timeStamp).arg(QString::number(secTime)), m_db );
+					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('%1', '%2', '%3', 'true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ), m_db );
 				}
 			}
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {
-					package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
-					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" ).arg(package).arg(timeStamp), m_db );
+					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
+					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
 				}
 				else
 					if ( emergeLine.contains("=== Sync completed") ) {
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('', '%1', 'true');" ).arg(timeStamp), m_db );
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('', '%1', 'true');" ).arg( timeStamp ), m_db );
 					}
 			}
 	}

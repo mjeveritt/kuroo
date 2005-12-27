@@ -55,11 +55,11 @@ bool Signalist::isKurooBusy()
  * Toggle busy flag for kuroo.
  * @param busy
  */
-void Signalist::setKurooBusy( bool b )
+void Signalist::setKurooBusy( bool busy )
 {
 	static int busySession(0);
 	
-	if ( !b ) {
+	if ( !busy ) {
 		busySession--;
 		QApplication::restoreOverrideCursor();
 	}
@@ -117,15 +117,6 @@ void Signalist::cachePortageComplete()
 void Signalist::scanPortageComplete()
 {
 	emit signalScanPortageComplete();
-	setKurooBusy( false );
-}
-
-/**
- * Installed scan thread completed.
- */
-void Signalist::scanInstalledComplete()
-{
-	emit signalScanInstalledComplete();
 	setKurooBusy( false );
 }
 

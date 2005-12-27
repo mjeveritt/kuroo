@@ -25,7 +25,6 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qregexp.h>
 #include <qpainter.h>
 
 #include <klistview.h>
@@ -191,8 +190,6 @@ void CategoriesListView::init()
  */
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-// 	kdDebug() << "CategoriesListView::loadCategories categoriesList=" << categoriesList << endl;
-	
 	// Set all categories off = empty
 	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
 		(*it)->setOn( false );
@@ -227,8 +224,6 @@ SubCategoriesListView::~SubCategoriesListView()
  */
 void SubCategoriesListView::init()
 {
-	kdDebug() << "SubCategoriesListView::init" << endl;
-	
 	categories.clear();
 	allSubCategories.clear();
 	
@@ -258,8 +253,6 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	// Retreive focus
 	QString currentId = currentCategoryId();
 	bool isSameCategory( false );
-	
-// 	kdDebug() << "SubCategoriesListView::loadCategories categoriesList=" << categoriesList << endl;
 	
 	// Get the category id
 	static int idCategory( -1 );

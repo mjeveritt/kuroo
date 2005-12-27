@@ -32,17 +32,17 @@
 PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int status, QString id )
 	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
 {
-	m_meta.insert( i18n("1Package"), name );
+	m_meta.insert( i18n("Package"), name );
 	init();
-	setStatus(status);
+	setStatus( status );
 }
 
 PackageItem::PackageItem( QListViewItem *parent, const char *name, Meta meta, int status, QString id )
 	: KListViewItem( parent, name ), m_parent( parent->listView() ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
 {
-	m_meta.insert( i18n("1Package"), name );
+	m_meta.insert( i18n("Package"), name );
 	init();
-	setStatus(status);
+	setStatus( status );
 }
 
 PackageItem::~PackageItem()
@@ -63,13 +63,17 @@ void PackageItem::init()
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	
 	for ( int i = 0; i != m_parent->columns(); ++i ) {
-		for ( Meta::Iterator itMeta = m_meta.begin(); itMeta != m_meta.end(); ++itMeta ) {
-			if ( itMeta.key().contains( m_parent->columnText(i) ) ) {
-				setText( i, itMeta.data() );
-				break;
-			}
-		}
+		setText( i, m_meta[ m_parent->columnText( i ) ] );
 	}
+	
+// 	for ( int i = 0; i != m_parent->columns(); ++i ) {
+// 		for ( Meta::Iterator itMeta = m_meta.begin(); itMeta != m_meta.end(); ++itMeta ) {
+// 			if ( itMeta.key().contains( m_parent->columnText( i ) ) ) {
+// 				setText( i, itMeta.data() );
+// 				break;
+// 			}
+// 		}
+// 	}
 }
 
 /**
@@ -123,13 +127,13 @@ void PackageItem::setStatus( int status )
 		
 		case CATEGORY :
 			m_status = CATEGORY;
-			setPixmap(0, pxCategory);
+			setPixmap( 0, pxCategory );
 			break;
 		
 		case INSTALLED :
 			m_status = INSTALLED;
 			setPixmap( 0, pxInstalled );
-			m_meta.insert( i18n("2Status"), i18n("Installed") );
+			m_meta.insert( i18n("Status"), i18n("Installed") );
 			break;
 			
 		case PACKAGE :
@@ -140,7 +144,7 @@ void PackageItem::setStatus( int status )
 		case EBUILD_INSTALLED :
 			m_status = EBUILD_INSTALLED;
 			setPixmap( 0, pxEbuildInstalled );
-			m_meta.insert( i18n("2Status"), i18n("Installed") );
+			m_meta.insert( i18n("Status"), i18n("Installed") );
 			break;
 			
 		case EBUILD :
@@ -150,27 +154,27 @@ void PackageItem::setStatus( int status )
 		
 		case MASKED :
 			m_status = MASKED;
-			m_meta.insert( i18n("2Keyword"), i18n("Masked") );
+			m_meta.insert( i18n("Keyword"), i18n("Masked") );
 			repaint();
 			break;
 		
 		case UNMASKED :
 			m_status = UNMASKED;
-			m_meta.insert( i18n("2Keyword"), i18n("Unmasked") );
+			m_meta.insert( i18n("Keyword"), i18n("Unmasked") );
 			repaint();
 			break;
 		
 		case QUEUED :
 			queued = true;
-			m_meta.insert( i18n("9In Queue"), i18n("Yes") );
+			m_meta.insert( i18n("In Queue"), i18n("Yes") );
 			if ( parent() )
 				dynamic_cast<PackageItem*>( parent() )->setStatus( QUEUED );
 			setPixmap( 1, pxQueued );
 			break;
 		
-		case NOTQUEUED :
+		case NOTQUEUED : {
 			queued = false;
-			m_meta.insert( i18n("9In Queue"), i18n("No") );
+			m_meta.insert( i18n("In Queue"), i18n("No") );
 			if ( parent() ) {
 				PackageItem* sibling;
 				sibling = dynamic_cast<PackageItem*>(parent()->firstChild());
@@ -185,7 +189,7 @@ void PackageItem::setStatus( int status )
 			}
 			setPixmap( 1, NULL );
 			repaint();
-			break;
+		}
 	}
 }
 

@@ -72,6 +72,11 @@ private slots:
   	*/
 	void				cleanupDiff( KProcess* );
 	
+	void				backup( const QString& source, const QString& destination );
+
+signals:
+	void				signalEtcFileMerged();
+	
 private:
 	QObject				*parent;
 	KProcIO 			*eProc;

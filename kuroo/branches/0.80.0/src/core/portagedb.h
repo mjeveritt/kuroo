@@ -178,7 +178,7 @@ public:
 	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
 	QStringList 	portagePackageInfo( const QString& id );
-	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
+	QStringList 	packageIdDB( const QString& category, const QString& name );
 
 	
 	//////////////////////////////////////////////////////////////////////////////
@@ -195,9 +195,11 @@ public:
 	// Queries for History 
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	history();
+	QStringList 	mergeHistory();
 	QStringList 	lastHistoryEntry();
 	QStringList		getLastSync();
 	void			addRefreshTime();
+	void			addBackup( const QString& source, const QString& destination );
 	QStringList 	statistic();
 	
 	//////////////////////////////////////////////////////////////////////////////

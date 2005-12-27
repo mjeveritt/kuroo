@@ -22,8 +22,6 @@
 #include "message.h"
 #include "statusbar.h"
 
-#include <qregexp.h>
-
 #include <kprocio.h>
 #include <kmessagebox.h>
 
@@ -95,7 +93,7 @@ bool Emerge::queue( const QString& category, const QStringList& packageList )
 	
 	emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner";
+	*eProc << "emerge" << "--nospinner" << "--nocolor";
 	
 	// Add emerge options and packages
 	foreach( packageList ) {
@@ -139,7 +137,7 @@ bool Emerge::queue( const QStringList& packageList )
 	
 	emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner";
+	*eProc << "emerge" << "--nospinner" << "--nocolor";
 	
 	// Add emerge options and packages
 	foreach( packageList ) {
@@ -183,7 +181,7 @@ bool Emerge::pretend( const QString& category, const QStringList& packageList )
 	
 	emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "-pv";
+	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
@@ -220,7 +218,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	
 	emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "-pv";
+	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
@@ -257,7 +255,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "--unmerge";
+	*eProc << "emerge" << "--unmerge" << "--nocolor";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList ) {
@@ -291,7 +289,7 @@ bool Emerge::sync()
 	emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "--sync" << "--quiet";
+	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor";
 	
 	if ( !eProc->start(KProcess::OwnGroup, true) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
@@ -320,7 +318,7 @@ bool Emerge::checkUpdates()
 	emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "-pvu";
+	*eProc << "emerge" << "-pvu" << "--nocolor";
 	
 	// Add deep if checked in gui
 	if ( KurooConfig::updateDeep() )
@@ -644,6 +642,8 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString package = packageKeyword.section("%", 0, 0);
 	QString keyword = (packageKeyword.section("%", 1, 1)).section(" keyword", 0, 0);
 	
+	kdDebug() << "Emerge::askUnmaskPackage package=" << package << " keyword=" << keyword << endl;
+	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
 		importantMessage += i18n("<br><b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
 		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(rxPortageVersion, 0, 0)).arg(KurooConfig::arch()), importantMessage );
@@ -657,7 +657,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes : {
 						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::dirPackageUnmask() ) ) {
 							pretend( lastEmergeList );
@@ -671,8 +671,8 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0) + " " + keyword, KurooConfig::dirPackageKeywords() ) ) {
-							PortageSingleton::Instance()->loadUnmaskedList();
+						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::dirPackageKeywords() ) ) {
+							PortageSingleton::Instance()->getUntestingList();
 							pretend( lastEmergeList );
 						}
 						break;

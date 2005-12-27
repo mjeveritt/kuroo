@@ -38,7 +38,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
 		
-	new ToolTip(this);
+	new ToolTip( this );
 }
 
 PackageListView::~PackageListView()
@@ -82,7 +82,7 @@ QString PackageListView::currentPackage()
 	QListViewItem *item = this->currentItem();
 	
 	if ( item )
-		return item->text(0);
+		return item->text( 0 );
 	else
 		return i18n("na");
 }
@@ -116,7 +116,7 @@ QStringList PackageListView::selectedPackages()
 	QStringList packageList;
 	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
 		if ( it.current()->isSelected() && it.current()->isVisible() )
-			packageList += it.current()->text(0);
+			packageList += it.current()->text( 0 );
 	}
 	return packageList;
 }
@@ -142,7 +142,7 @@ QStringList PackageListView::allPackages()
 {
 	QStringList idDBList;
 	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		idDBList += it.current()->text(0);
+		idDBList += it.current()->text( 0 );
 	
 	return idDBList;
 }
@@ -206,7 +206,7 @@ void PackageListView::setUnmasked( const QString& name, bool b )
 {
 	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
 	while ( myChild ) {
-		if ( myChild->text(0) == name ) {
+		if ( myChild->text( 0 ) == name ) {
 			if ( b )
 				myChild->setStatus( UNMASKED );
 			else

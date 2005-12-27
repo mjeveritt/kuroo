@@ -20,12 +20,11 @@
 
 #include "tooltip.h"
 #include "packageitem.h"
+#include "common.h"
 
 #include <qheader.h>
 
 #include <klistview.h>
-#include <kdebug.h>
-#include <klocale.h>
 
 /**
  * Creates tooltip for packages in views.
@@ -45,18 +44,21 @@ ToolTip::~ToolTip()
  */
 void ToolTip::maybeTip( const QPoint& pos )
 {
-	PackageItem* packageItem = dynamic_cast<PackageItem*>(m_pParent->itemAt(pos));
+	PackageItem* packageItem = dynamic_cast<PackageItem*>( m_pParent->itemAt( pos ) );
 	
-	if ( packageItem )
-	{
+	QStringList metaCategories;
+	metaCategories << i18n("Package") << i18n("Version") << i18n("In Queue") << i18n( "Description" ) << i18n( "Update" ) << i18n("Action") << i18n("Download Size") << i18n( "Duration" ) << i18n("Use Flags") << i18n("Status") << i18n("Keyword");
+	
+	if ( packageItem ) {
+		
       	// Get the section the mouse is in
-		int section = m_pParent->header()->sectionAt(pos.x());
+		int section = m_pParent->header()->sectionAt( pos.x() );
       	// Get the rect of the whole item (the row for the tip)
-		QRect itemRect = m_pParent->itemRect(packageItem);
+		QRect itemRect = m_pParent->itemRect( packageItem );
       	// Get the rect of the whole section (the column for the tip)
-		QRect headerRect = m_pParent->header()->sectionRect(section);
+		QRect headerRect = m_pParent->header()->sectionRect( section );
       	// "Intersect" row and column to get exact rect for the tip
-		QRect destRect(headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height());
+		QRect destRect( headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height() );
 		
 		if ( section == m_pParent->tooltipColumn() ) {
 			
@@ -65,43 +67,46 @@ void ToolTip::maybeTip( const QPoint& pos )
 			
 			if ( packageMeta.size() > 1 ) {
 				QString tipText("<qt><table>");
-				for ( Meta::Iterator itMeta = packageMeta.begin(); itMeta != packageMeta.end(); ++itMeta ) {
+				foreach ( metaCategories ) {
+					QString key = *it;
+					QString data = packageMeta[ *it ];
 					
-					QString key = itMeta.key();
-					QString data = itMeta.data();
-					tipText += "<tr><td>" + key.right(key.length()-1) + "</td><td>";
+					if ( data.isEmpty() )
+						continue;
+					
+					tipText += "<tr><td>" + key + "</td><td>";
 					
 					// Include explaination for USE flags
 					if ( key.contains(i18n("Action")) ) {
 						
-						if ( data.contains("N"))
+						if ( data.contains("N") )
 							tipText += i18n("New, (not yet installed)<br>");
 						
-						if ( data.contains("S"))
+						if ( data.contains("S") )
 							tipText += i18n("New slot installation (side-by-side versions)<br>");
 						
-						if ( data.contains("U"))
+						if ( data.contains("U") )
 							tipText += i18n("Update, (changing versions)<br>");
 						
-						if ( data.contains("D"))
+						if ( data.contains("D") )
 							tipText += i18n("Downgrade, (Best version seems lower)<br>");
 						
-						if ( data.contains("R"))
+						if ( data.contains("R") )
 							tipText += i18n("Replacing, (Remerging same version)<br>");
 						
-						if ( data.contains("F"))
+						if ( data.contains("F") )
 							tipText += i18n("Fetch restricted, (Manual download)<br>");
 						
-						if ( data.contains("f"))
+						if ( data.contains("f") )
 							tipText += i18n("fetch restricted, (Already downloaded)<br>");
 						
-						if ( data.contains("B"))
+						if ( data.contains("B") )
 							tipText += i18n("Blocked by an already installed package<br>");
 						
 						// Remove ending <br>
 						tipText.truncate( tipText.length() - 4 );
 						tipText += "</td></tr>";
-						}
+					}
 					else
 						tipText += data + "</td></tr>";
 				}

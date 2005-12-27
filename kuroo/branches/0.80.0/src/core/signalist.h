@@ -42,7 +42,7 @@ public slots:
 	 * Toggle busy flag for kuroo.
 	 * @param true/false
 	 */
-	void		setKurooBusy( bool b );
+	void		setKurooBusy( bool busy );
 	
 	/**
 	 * Job wasn't successful.
@@ -62,7 +62,6 @@ public slots:
 	void		syncDone();
 	void		cachePortageComplete();
 	void 		scanPortageComplete();
-	void		scanInstalledComplete();
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();

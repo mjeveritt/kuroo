@@ -27,7 +27,6 @@
 #include <qstringlist.h>
 #include <qheader.h>
 #include <qfileinfo.h>
-#include <qregexp.h>
 #include <qtextstream.h>
 
 /**

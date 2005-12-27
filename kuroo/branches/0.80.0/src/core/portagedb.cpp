@@ -250,6 +250,13 @@ void KurooDB::createTables( DbConnection *conn )
 	      " emerge BOOL)"
 	      " ;", conn);
 	
+	query(" CREATE TABLE mergeHistory ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " timestamp VARCHAR(10), "
+	      " source VARCHAR(255), "
+	      " destination VARCHAR(255))"
+	      " ;", conn);
+	
 	query(" CREATE TABLE statistic ("
 	      " id INTEGER UNIQUE, "
 	      " package VARCHAR(32), "
@@ -282,6 +289,13 @@ QStringList KurooDB::history()
 {
 	return query( " SELECT timestamp, package, time, einfo "
 	              " FROM history "
+	              " ORDER BY id ASC;");
+}
+
+QStringList KurooDB::mergeHistory()
+{
+	return query( " SELECT timestamp, source, destination "
+	              " FROM mergeHistory "
 	              " ORDER BY id ASC;");
 }
 
@@ -514,7 +528,7 @@ QStringList KurooDB::portagePackageInfo( const QString& id )
 
 QStringList KurooDB::packageVersions( const QString& id )
 {
-	return query( " SELECT name, meta "
+	return query( " SELECT name, meta, branch "
 	              " FROM version "
 	              " WHERE idPackage = '" + id + "'"
 	              " ORDER BY version.name;");
@@ -559,12 +573,12 @@ QStringList KurooDB::resultPackages()
 	                      " ORDER BY results.id LIMIT %1;").arg(ROWLIMIT) );
 }
 
-QStringList KurooDB::portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version )
+QStringList KurooDB::packageIdDB( const QString& category, const QString& name )
 {
-	return query( " SELECT package.id FROM category, package "
-	              " WHERE category.name = '" + category + "'"
+	return query( " SELECT package.id FROM catSubCategory, package "
+	              " WHERE catSubCategory.name = '" + category + "'"
 	              " AND package.name = '" + name + "'"
-	              " AND package.version = '" + version + "'"
+	              " AND catSubCategory.id = package.idCatSubCategory "
 	              " LIMIT 1;");
 }
 
@@ -587,6 +601,13 @@ void KurooDB::addRefreshTime()
 	QDateTime currentTime( QDateTime::currentDateTime() );
 	insert( QString( "INSERT INTO history ( package, timestamp, emerge ) "
 	                 " VALUES ('', '%1', 'false');").arg( QString::number( currentTime.toTime_t() ) ) );
+}
+
+void KurooDB::addBackup( const QString& source, const QString& destination )
+{
+	QDateTime currentTime( QDateTime::currentDateTime() );
+	insert( QString( "INSERT INTO mergeHistory ( timestamp, source, destination ) "
+	                 " VALUES ('%1', '%2', '%3');").arg( QString::number( currentTime.toTime_t() ) ).arg( source ).arg( destination ) );
 }
 
 QStringList KurooDB::cache()

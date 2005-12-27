@@ -26,7 +26,6 @@
 #include <qstringlist.h>
 #include <qheader.h>
 #include <qfileinfo.h>
-#include <qregexp.h>
 #include <qtextstream.h>
 
 #include <kapplication.h>
@@ -38,13 +37,13 @@
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), aborted(true)
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), aborted( true )
 {
 }
 
 ScanUpdatesJob::~ScanUpdatesJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 	if ( aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }

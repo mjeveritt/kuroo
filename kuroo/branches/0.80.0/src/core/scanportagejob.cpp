@@ -27,7 +27,6 @@
 
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qregexp.h>
 #include <qevent.h>
 #include <qtextstream.h>
 
@@ -42,13 +41,13 @@
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted(true)
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted( true )
 {
 }
 
 ScanPortageJob::~ScanPortageJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 	if ( aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }
@@ -171,7 +170,6 @@ bool ScanPortageJob::doJob()
 			
 			QStringList packageList = dPackage.entryList();
 			QString meta, lastPackage;
-			int idPackage( 0 );
 			for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 				
 				if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )

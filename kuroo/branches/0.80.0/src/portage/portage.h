@@ -159,6 +159,7 @@ public slots:
 	
 	bool						isAvailable( const QStringList& keywords, const QString& version );
 	bool						isNewerThan( const QString& version1, const QString& version2 );
+	QStringList					sortedVersionList( const QStringList& m_versions );
 	
 signals:
 	void						signalPortageChanged();

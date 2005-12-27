@@ -431,4 +431,35 @@ bool Portage::isNewerThan( const QString& version1, const QString& version2 )
 	return packageVersion->isNewerThan( version2 );
 }
 
+QStringList Portage::sortedVersionList( const QStringList& m_versions )
+{
+	QStringList sortedVersions;
+	QStringList::iterator sortedVersionIterator;
+	QStringList::ConstIterator versionIterator;
+	
+	for ( versionIterator = m_versions.constBegin(); versionIterator != m_versions.constEnd(); versionIterator++ ) {
+		if ( versionIterator == m_versions.constBegin() ) {
+			sortedVersions.append( *versionIterator );
+			continue; // if there is only one version, it can't be compared
+		}
+		
+        // reverse iteration through the sorted version list
+		sortedVersionIterator = sortedVersions.end();
+		while ( true ) {
+			if ( sortedVersionIterator == sortedVersions.begin() ) {
+				sortedVersions.prepend( *versionIterator );
+				break;
+			}
+			
+			sortedVersionIterator--;
+			if ( isNewerThan( *versionIterator, *sortedVersionIterator ) ) {
+				sortedVersionIterator++; // insert after the compared one, not before
+				sortedVersions.insert( sortedVersionIterator, *versionIterator );
+				break;
+			}
+		}
+	}
+	return sortedVersions;
+}
+
 #include "portage.moc"

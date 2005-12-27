@@ -257,21 +257,40 @@ void PortageTab::slotPackage()
 	QString textLinesAvailable = i18n("<b>Versions available:</b> ");
 	QString textLinesInstalled;
 	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packagesView->currentId() );
+	QStringList versionOnlyList;
+	QMap<QString, bool> versionListAvailability;
 	foreach ( versionList ) {
 		QString version = *it++;
 		QString meta = *it++;
 		QStringList keywords = QStringList::split( " ", *it );
-		
-		kdDebug() << "version=" << version << " available=" << PortageSingleton::Instance()->isAvailable( keywords, version ) << endl;
-		kdDebug() << "version=" << version << " newerThan=" << PortageSingleton::Instance()->isNewerThan( "0.70.0", version ) << endl;
+		versionOnlyList += version;
+
+		if ( PortageSingleton::Instance()->isAvailable( keywords, version ) )
+			versionListAvailability[ version ] = true;
+		else
+			versionListAvailability[ version ] = false;
 		
 		if ( meta == FILTERINSTALLED )
 			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, ";
 		
-		textLinesAvailable += version + ", ";
+// 		textLinesAvailable += version + ", ";
 	}
-	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
+	
+	const QStringList sortedVersionList = PortageSingleton::Instance()->sortedVersionList( versionOnlyList );
+	
+	kdDebug() << "sortedVersionList=" << sortedVersionList << endl;
+	
+	versionOnlyList.clear();
+	foreach ( sortedVersionList ) {
+		if ( versionListAvailability[ *it ] )
+			versionOnlyList += *it;
+		else
+			versionOnlyList += "<font color=darkRed><b>" + *it + "</b></font>";
+	}
+	
+// 	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
+	textLinesAvailable += versionOnlyList.join( ", " );
 	
 	if ( !textLinesInstalled.isEmpty() )
 		textLinesInstalled = i18n("<b>Versions installed:</b> ") + textLinesInstalled + "<br>";

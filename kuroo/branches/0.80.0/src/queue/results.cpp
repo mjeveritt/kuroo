@@ -23,45 +23,6 @@
 #include "threadweaver.h"
 
 /**
- * Thread for adding packages into results in db. Used by Find.
- */
-class AddResultsPackageIdListJob : public ThreadWeaver::DependentJob
-{
-public:
-	AddResultsPackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), m_packageIdList( packageIdList ) {}
-	
-	virtual bool doJob() {
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE results_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " flags VARCHAR(32))"
-		                                    " ;", m_db);
-		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
-		foreach ( m_packageIdList ) {
-			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO results_temp (idPackage) VALUES ('%1');" ).arg( *it ), m_db );
-		}
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-		
-		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM results;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO results SELECT * FROM results_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE results_temp;", m_db );
-		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
-	}
-	
-	virtual void completeJob() {
-		ResultsSingleton::Instance()->refresh();
-	}
-	
-private:
-	const QStringList m_packageIdList;
-};
-
-/**
  * Thread for adding packages to results in db. Used by emerge.
  */
 class AddResultsPackageListJob : public ThreadWeaver::DependentJob
@@ -140,40 +101,13 @@ void Results::refresh()
 }
 
 /**
- * Clear results.
- * @param packageIdList
- */
-void Results::reset()
-{
-	KurooDBSingleton::Instance()->query( "DELETE FROM results;" );
-	emit signalResultsChanged();
-}
-
-/**
- * Launch emerge pretend of packages.
- * @param packageList
- */
-void Results::pretendPackageList( const QStringList& packageList )
-{
-	EmergeSingleton::Instance()->pretend( packageList );
-}
-
-/**
- * Add packages by id to the results table in the db
- * @param packageIdList
- */
-void Results::addPackageIdList( const QStringList& packageIdList )
-{
-	ThreadWeaver::instance()->queueJob( new AddResultsPackageIdListJob( this, packageIdList ) );
-}
-
-/**
  * Add packages to the results table in the db
  * @param packageList
  */
 void Results::addPackageList( const EmergePackageList &packageList )
 {
-	ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
+	if ( !packageList.isEmpty() )
+		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
 }
 
 /**
@@ -183,16 +117,6 @@ void Results::addPackageList( const EmergePackageList &packageList )
 QStringList Results::allPackages()
 {
 	return KurooDBSingleton::Instance()->resultPackages();
-}
-
-/**
- * Count packages in results.
- * @return count
- */
-QString Results::count()
-{
-	QStringList total = KurooDBSingleton::Instance()->query( "SELECT COUNT(id) FROM results LIMIT 1;" );
-	return total.first();
 }
 
 #include "results.moc"

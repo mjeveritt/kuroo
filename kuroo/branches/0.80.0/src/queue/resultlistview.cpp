@@ -28,7 +28,6 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qregexp.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
@@ -49,16 +48,15 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	addColumn( i18n( "Package" ) );
 	addColumn( " " );
 	header()->setLabel( 1, pxQueuedColumn, " " );
-	addColumn( i18n( "Nr" ) );
+	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Action" ) );
-	addColumn( i18n( "Size" ) );
-	addColumn( i18n( "USE" ) );
+	addColumn( i18n( "Download Size" ) );
+	addColumn( i18n( "Use Flags" ) );
 	addColumn( i18n( "Description" ) );
 	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
 	setMinimumSize( QSize( 800, 200 ) );
 	setProperty( "selectionMode", "Extended" );
-	setShowSortIndicator(true);
-	setFullWidth(true);
+	setFullWidth( true );
 	setSorting( -1 );
 	
 	setColumnWidthMode( 0, QListView::Manual );
@@ -70,18 +68,15 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 20 );
-	setColumnWidth( 2, 20 );
+	setColumnWidth( 2, 80 );
 	setColumnWidth( 3, 50 );
-	setColumnWidth( 4, 80 );
-	setColumnWidth( 5, 80 );
-		
-	setSorting( 2, true );
-	setColumnAlignment( 2, Qt::AlignHCenter );
+	setColumnWidth( 4, 100 );
+	setColumnWidth( 5, 100 );
+	
 	setResizeMode( QListView::LastColumn );
 	setColumnAlignment( 4, Qt::AlignRight );
 	
 	setTooltipColumn( 6 );
-	header()->moveSection( 2, 0 );
 }
 
 ResultListView::~ResultListView()
@@ -97,26 +92,29 @@ bool ResultListView::loadFromDB()
 	reset();
 	categories.clear();
 	
-	//Get list of update packages with info
-	int order( 1 );
-	const QStringList packageList = ResultsSingleton::Instance()->allPackages();
-	foreach ( packageList ) {
-		QString idDB = *it++;
-		QString package = *it++;
-		QString description = *it++;
-		QString size = *it++ + " kB";
-		QString use = *it++;
-		QString flags = *it++;
-		QString installed = *it;
+	//Get list of update packages with info and insert them in reverse for the correct order
+	QStringList packageList( " " );
+	packageList += ResultsSingleton::Instance()->allPackages();
+	for( QStringList::Iterator it = --( packageList.end() ), end = packageList.begin(); it != end; ) {
+		QString installed = *it--;
+		QString flags = *it--;
+		QString use = *it--;
+		QString size = *it-- + " kB";
+		QString description = *it--;
+		QString package = *it--;
+		QString idDB = *it--;
+		
+		QString name = package.section( rxPortageVersion, 0, 0 );
+		QString version = package.section( name + "-", 1, 1 );
 		
 		Meta packageMeta;
-		packageMeta.insert(i18n("3Nr"), QString::number(order++));
-		packageMeta.insert(i18n("4Action"), flags);
-		packageMeta.insert(i18n("5Description"), description);
-		packageMeta.insert(i18n("6Size"), size);
-		packageMeta.insert(i18n("7USE"), use);
+		packageMeta.insert( i18n("Version"), version );
+		packageMeta.insert( i18n("Action"), flags );
+		packageMeta.insert( i18n("Description"), description );
+		packageMeta.insert( i18n("Download Size"), size );
+		packageMeta.insert( i18n("Use Flags"), use );
 		
-		packageItem = new PackageItem( this, package, packageMeta, PACKAGE, idDB );
+		packageItem = new PackageItem( this, name, packageMeta, PACKAGE, idDB );
 		
 		if ( installed != "0" )
 			packageItem->setStatus(INSTALLED);

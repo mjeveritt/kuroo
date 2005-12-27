@@ -22,8 +22,6 @@
 #include "resultlistview.h"
 #include "common.h"
 
-#include <qregexp.h>
-
 #include <kactionselector.h>
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -32,7 +30,7 @@
 /**
  * Specialized dialog for editing Use Flags per package.
  */
-PretendInspector::PretendInspector( QWidget *parent, const char *name )
+PretendInspector::PretendInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, i18n( "Emerge pretend result" ), KDialogBase::User1 | KDialogBase::Ok , KDialogBase::Ok, parent, i18n( "Save" ), false )
 {
 	setButtonText( KDialogBase::User1, i18n( "Add selected to Install Queue" ) );

@@ -10,7 +10,7 @@ class EmergeInspector : public KDialogBase
 {
 Q_OBJECT
 public:
-    EmergeInspector( QWidget *parent = 0, const char *name = 0 );
+    EmergeInspector( QWidget *parent = 0 );
     ~EmergeInspector();
 
 	void				edit();

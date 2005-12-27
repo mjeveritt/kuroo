@@ -21,7 +21,7 @@
 #ifndef RESULTS_H
 #define RESULTS_H
 
-#include "package.h"
+// #include "package.h"
 
 #include <qobject.h>
 
@@ -39,13 +39,6 @@ public:
 public slots:
 	void			init( QObject *myParent = 0 );
 	void			refresh();
-	void			reset();
-	
-	/**
-	 * Add packages by id to the results table in the db
-	 * @param packageIdList
-	 */
-	void 			addPackageIdList( const QStringList& packageIdList );
 	
 	/**
  	 * Add packages to the results table in the db
@@ -54,17 +47,10 @@ public slots:
 	void 			addPackageList( const EmergePackageList &packageList );
 	
 	/**
-	 * Launch emerge pretend of packages.
-	 * @param packageList
-	 */
-	void			pretendPackageList( const QStringList& packageList );
-	
-	/**
  	 * Get list of all packages.
  	 * @return QStringList
 	 */
 	QStringList		allPackages();
-	QString			count();
 	
 signals:
 	void			signalResultsChanged();

@@ -28,7 +28,6 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qregexp.h>
 
 #include <klistview.h>
 #include <kconfig.h>
@@ -115,8 +114,8 @@ void QueueListView::insertPackageList()
 		QString installed = *it;
 		
 		Meta packageMeta;
-		packageMeta.insert( i18n( "2Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
-		packageMeta.insert( i18n( "3Description" ), description );
+		packageMeta.insert( i18n( "Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
+		packageMeta.insert( i18n( "Description" ), description );
 		
 		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE, idDB );
 		if ( installed != "0" )

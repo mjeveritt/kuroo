@@ -61,7 +61,7 @@ private slots:
 	 * Disable/enable buttons when kuroo is busy.
 	 * @param b
 	 */
-	void				slotBusy( bool b );
+	void				slotBusy( bool busy );
 	
 	/**
 	 * Slots for button actions.

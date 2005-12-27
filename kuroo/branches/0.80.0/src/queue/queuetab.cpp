@@ -116,7 +116,7 @@ void QueueTab::slotReload()
  * Disable/enable buttons when kuroo is busy.
  * @param b
  */
-void QueueTab::slotBusy( bool b )
+void QueueTab::slotBusy( bool busy )
 {
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Stop Installation!" ) );
@@ -131,11 +131,12 @@ void QueueTab::slotBusy( bool b )
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 	}
 	
-	if ( b ) {
+	if ( busy ) {
 		pbPretend->setDisabled( true );
 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
+		pbUninstall->setDisabled( true );
 	}
 	else {
 		if ( !KUser().isSuperUser() ) {
@@ -170,8 +171,10 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
 	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+	}
 	
 	switch( menu.exec( point ) ) {
 		
@@ -235,7 +238,7 @@ void QueueTab::slotStop()
  */
 void QueueTab::slotUninstall()
 {
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
 		QStringList packageList( queueView->allPackages() );
 		switch( KMessageBox::questionYesNoList( this, 
 			i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"

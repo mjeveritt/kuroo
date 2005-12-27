@@ -78,11 +78,6 @@ public slots:
  	*/
 	void			removePackage( const QString& package );
 	
-	/**
-	 * Methods for parsing info files.
-	 */
-	QString			installedFiles( const QString& packageId );
-	
 signals:
 	void			signalInstalledChanged();
 	void			signalInstalledReset();

@@ -164,6 +164,7 @@ void Installed::uninstallPackageList( const QStringList& packageIdList )
  */
 void Installed::addPackage( const QString& package )
 {
+	kdDebug() << "Installed::addPackage package=" << package << endl;
 	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
 }
 
@@ -174,46 +175,8 @@ void Installed::addPackage( const QString& package )
  */
 void Installed::removePackage( const QString& package )
 {
+	kdDebug() << "Installed::removePackage package=" << package << endl;
 	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
-}
-
-/**
- * Count installed packages.
- * @return count
- */
-// QString Installed::count()
-// {
-// 	return KurooDBSingleton::Instance()->installedTotal().first();
-// }
-
-/**
- * Get installed files list for this package by parsing CONTENTS in dirDbPkg().
- * @param category 
- * @param package
- * @return List of files 
- */
-QString Installed::installedFiles( const QString& packageId )
-{
-	QString package( PortageSingleton::Instance()->package( packageId ) );
-	QString category( PortageSingleton::Instance()->category( packageId ) );
-	
-	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package.section( "*", 0, 0 ) + "/CONTENTS";
-	QFile file( filename );
-	QString textLines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.startsWith( "obj" ) )
-				textLines += line.section( "obj ", 1, 1 ).section( " ", 0, 0 ) + "\n";
-		}
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n( "Error reading: " ) << filename << endl;
-		return i18n("na");
-	}
 }
 
 #include "installed.moc"

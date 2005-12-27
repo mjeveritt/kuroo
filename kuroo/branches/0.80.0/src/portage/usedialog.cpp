@@ -21,8 +21,6 @@
 #include "inspectorbase.h"
 #include "common.h"
 
-#include <qregexp.h>
-
 #include <kactionselector.h>
 #include <ktextbrowser.h>
 #include <kmessagebox.h>

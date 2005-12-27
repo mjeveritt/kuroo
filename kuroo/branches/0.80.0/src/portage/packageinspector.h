@@ -33,7 +33,7 @@ class PackageInspector : public KDialogBase
 {
 Q_OBJECT
 public:
-    PackageInspector( QWidget *parent = 0, const char *name = 0 );
+    PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 	
 	/**
@@ -43,11 +43,12 @@ public:
 	void			edit( const QString& packageId );
 	
 private slots:
-	void			loadEbuild();
-	void			loadChangeLog();
-	void			loadDependencies();
-	void			loadVersions();
-	void			loadUseFlags();
+	void			getEbuild();
+	void			getChangeLog();
+	void			getDependencies();
+	void			getVersions();
+	void			getUseFlags();
+	void			getInstalledFiles();
 	void			slotUseDescription( QListBoxItem* item );
 	void			slotApply();
 

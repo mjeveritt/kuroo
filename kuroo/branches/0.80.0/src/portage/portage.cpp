@@ -21,8 +21,7 @@
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
-
-#include <qregexp.h>
+#include "portagepackageversion.h"
 
 #include <kmessagebox.h>
 
@@ -48,8 +47,9 @@ Portage::~Portage()
 void Portage::init( QObject *myParent )
 {
 	parent = myParent;
-	loadUnmaskedList();
+	getUntestingList();
 	loadCache();
+	packageVersion = new PortagePackageVersion( this );
 }
 
 /**
@@ -158,44 +158,12 @@ QStringList Portage::packagesInSubCategory( const QString& categoryId, const QSt
 }
 
 /**
- * Get list of versions available.
- * @param package name
- * @return list of versions
- */
-QStringList Portage::packageVersions( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageVersions( id );
-}
-
-QStringList Portage::packageVersionsInfo( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
-}
-
-/**
  * Count packages.
  * @return total
  */
 QString Portage::count()
 {
 	return KurooDBSingleton::Instance()->packageTotal().first();
-}
-
-/**
- * Return info for package as description, homepage ...
- * @param package id
- * @return info
- */
-Info Portage::packageInfo( const QString& packageId )
-{
-	Info info;
-	
-	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo( packageId );
-	QStringList::Iterator it = packageList.begin();
-	info.description = *it++;
-	info.homepage = *it;
-	
-	return info;
 }
 
 /**
@@ -247,7 +215,7 @@ void Portage::clearCache()
 /**
  * Load unmasked packages list = packages in package.keyword.
  */
-void Portage::loadUnmaskedList()
+void Portage::getUntestingList()
 {
 	unmaskedMap.clear();
 	
@@ -260,11 +228,10 @@ void Portage::loadUnmaskedList()
 			if ( !line.startsWith( "#" ) )
 				unmaskedMap.insert( line.section( " ", 0, 0 ), line.section( " ", 1, 1 ) );
 		}
+		file.close();
 	}
 	else
 		kdDebug() << i18n("Error reading: package.keyword.") << endl;
-	
-	file.close();
 }
 
 /**
@@ -272,7 +239,7 @@ void Portage::loadUnmaskedList()
  * @param package
  * @return success
  */
-bool Portage::isUnmasked( const QString& package )
+bool Portage::isUntesting( const QString& package )
 {
 	QMap<QString, QString>::iterator itMap = unmaskedMap.find( package ) ;
 	if ( itMap != unmaskedMap.end() )
@@ -286,12 +253,12 @@ bool Portage::isUnmasked( const QString& package )
  * @param category
  * @param packageList
  */
-void Portage::unmaskPackageList( const QStringList& packageIdList )
+void Portage::untestingPackageList( const QStringList& packageIdList )
 {
 	foreach ( packageIdList ) {
 		QString package = Portage::category( *it ) + "/" + Portage::package( *it );
 	
-		if ( !unmaskPackage( package /*+ " ~" + KurooConfig::arch()*/, KurooConfig::dirPackageKeywords() ) )
+		if ( !unmaskPackage( package, KurooConfig::dirPackageKeywords() ) )
 			break;
 		else
 			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
@@ -356,7 +323,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  * @param category
  * @param packageList
  */
-void Portage::clearUnmaskPackageList( const QStringList& packageIdList )
+void Portage::clearUntestingPackageList( const QStringList& packageIdList )
 {
 	QFile file( KurooConfig::dirPackageKeywords() );
 	
@@ -396,9 +363,8 @@ QString Portage::idDb( const QString& package )
 	QString category = package.section( "/", 0, 0 );
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
 	QString name( temp.section( rxPortageVersion, 0, 0 ) );
-	QString version( temp.section( name + "-", 1, 1 ) );
 	
-	return KurooDBSingleton::Instance()->portageIdByCategoryNameVersion( category, name, version ).first();
+	return KurooDBSingleton::Instance()->packageIdDB( category, name ).first();
 }
 
 /**
@@ -419,6 +385,50 @@ QString Portage::category( const QString& id )
 QString Portage::package( const QString& id )
 {
 	return KurooDBSingleton::Instance()->package( id ).first();
+}
+
+/**
+ * Get list of versions available.
+ * @param package name
+ * @return list of versions
+ */
+QStringList Portage::packageVersions( const QString& id )
+{
+	return KurooDBSingleton::Instance()->packageVersions( id );
+}
+
+QStringList Portage::packageVersionsInfo( const QString& id )
+{
+	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
+}
+
+/**
+ * Return info for package as description, homepage ...
+ * @param package id
+ * @return info
+ */
+Info Portage::packageInfo( const QString& packageId )
+{
+	Info info;
+	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo( packageId );
+	QStringList::Iterator it = packageList.begin();
+	info.description = *it++;
+	info.homepage = *it;
+	return info;
+}
+
+bool Portage::isAvailable( const QStringList& keywords, const QString& version )
+{
+	packageVersion->setAcceptedKeywords( "x86" );
+	packageVersion->setKeywords( keywords );
+	packageVersion->setVersion( version );
+	return packageVersion->isAvailable();
+}
+
+bool Portage::isNewerThan( const QString& version1, const QString& version2 )
+{
+	packageVersion->setVersion( version1 );
+	return packageVersion->isNewerThan( version2 );
 }
 
 #include "portage.moc"

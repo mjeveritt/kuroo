@@ -69,6 +69,7 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
+	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
 	
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
@@ -142,7 +143,7 @@ void PortageTab::slotReload()
 {
 	kdDebug() << "PortageTab::slotReload" << endl;
 	
-	// Prepare categories by loading index @fixme: what if category-subcategory is changed in db?
+	// Prepare categories by loading index
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	categoriesView->init();
@@ -185,9 +186,7 @@ void PortageTab::slotListPackages()
 	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
-	int count = packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) );
-	
-	packagesView->setHeader( QString::number( count ) );
+	packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) );
 }
 
 /**
@@ -260,7 +259,11 @@ void PortageTab::slotPackage()
 	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packagesView->currentId() );
 	foreach ( versionList ) {
 		QString version = *it++;
-		QString meta = *it;
+		QString meta = *it++;
+		QStringList keywords = QStringList::split( " ", *it );
+		
+		kdDebug() << "version=" << version << " available=" << PortageSingleton::Instance()->isAvailable( keywords, version ) << endl;
+		kdDebug() << "version=" << version << " newerThan=" << PortageSingleton::Instance()->isNewerThan( "0.70.0", version ) << endl;
 		
 		if ( meta == FILTERINSTALLED )
 			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, ";
@@ -293,7 +296,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	enum Actions { PRETEND, APPEND, EMERGE, DEPEND, UNMASK, CLEARUNMASK, USEFLAGS };
 	
-	KPopupMenu menu(this);
+	KPopupMenu menu( this );
 	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
 	int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
 	int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE);
@@ -330,11 +333,11 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			break;
 			
 		case UNMASK:
-			PortageSingleton::Instance()->unmaskPackageList( packagesView->selectedId() );
+			PortageSingleton::Instance()->untestingPackageList( packagesView->selectedId() );
 			break;
 			
 		case CLEARUNMASK:
-			PortageSingleton::Instance()->clearUnmaskPackageList( packagesView->selectedId() );
+			PortageSingleton::Instance()->clearUntestingPackageList( packagesView->selectedId() );
 	}
 }
 

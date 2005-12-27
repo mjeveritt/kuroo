@@ -303,7 +303,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Cha&amp;ngeLog</string>
+                    <string>Ch&amp;angeLog</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -312,6 +312,24 @@
                     <widget class="KTextBrowser" row="0" column="0">
                         <property name="name">
                             <cstring>changelogBrowser</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Installed Files</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="KTextBrowser" row="0" column="0">
+                        <property name="name">
+                            <cstring>installedFilesBrowser</cstring>
                         </property>
                     </widget>
                 </grid>
@@ -341,12 +359,11 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
     <includehint>kactionselector.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
     <includehint>ktextbrowser.h</includehint>
     <includehint>ktextbrowser.h</includehint>
     <includehint>ktextbrowser.h</includehint>

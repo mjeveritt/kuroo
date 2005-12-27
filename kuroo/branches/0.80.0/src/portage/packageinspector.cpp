@@ -21,8 +21,6 @@
 #include "packageinspector.h"
 #include "common.h"
 
-#include <qregexp.h>
-
 #include <kactionselector.h>
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -32,7 +30,7 @@
 /**
  * Specialized dialog for editing Use Flags per package.
  */
-PackageInspector::PackageInspector( QWidget *parent, const char *name )
+PackageInspector::PackageInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), category( NULL ), package( NULL ), packageId( NULL )
 {
 	dialog = new InspectorBase( this );
@@ -72,16 +70,17 @@ void PackageInspector::edit( const QString& id )
 	category = PortageSingleton::Instance()->category( packageId );
 	dialog->package->setText( "Package: " + category + "/" + package );
 	
-	loadVersions();
-	loadUseFlags();
-	loadEbuild();
-	loadDependencies();
-	loadChangeLog();
+	getVersions();
+	getUseFlags();
+	getEbuild();
+	getDependencies();
+	getChangeLog();
+	getInstalledFiles();
 	
 	show();
 }
 
-void PackageInspector::loadUseFlags()
+void PackageInspector::getUseFlags()
 {
 	QString useFile( KurooConfig::dirPortage() + "/profiles/use.desc" );
 	QFile f( useFile );
@@ -190,7 +189,7 @@ void PackageInspector::slotApply()
  * Get this version ebuild.
  * @param id
  */
-void PackageInspector::loadEbuild()
+void PackageInspector::getEbuild()
 {
 	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section( rxPortageVersion, 0, 0 ) + "/" + package + ".ebuild";
 	QFile file( fileName );
@@ -218,7 +217,7 @@ void PackageInspector::loadEbuild()
  * Get this package changelog.
  * @param id
  */
-void PackageInspector::loadChangeLog()
+void PackageInspector::getChangeLog()
 {
 	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(rxPortageVersion, 0, 0) + "/ChangeLog";
 	QFile file( fileName );
@@ -246,7 +245,7 @@ void PackageInspector::loadChangeLog()
  * Get this package dependencies.
  * @param id
  */
-void PackageInspector::loadDependencies()
+void PackageInspector::getDependencies()
 {
 	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
 	QFile file( fileName );
@@ -279,7 +278,7 @@ void PackageInspector::loadDependencies()
 	}
 }
 
-void PackageInspector::loadVersions()
+void PackageInspector::getVersions()
 {
 	dialog->versionsView->clear();
 	
@@ -297,6 +296,27 @@ void PackageInspector::loadVersions()
 			new KListViewItem( dialog->versionsView, version, branches, size );
 		else
 			new KListViewItem( dialog->versionsView, version, branches, size );
+	}
+}
+
+void PackageInspector::getInstalledFiles()
+{
+	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package.section( "*", 0, 0 ) + "/CONTENTS";
+	QFile file( filename );
+	QString textLines;
+	if ( file.open( IO_ReadOnly ) ) {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() ) {
+			QString line = stream.readLine();
+			if ( line.startsWith( "obj" ) )
+				textLines += line.section( "obj ", 1, 1 ).section( " ", 0, 0 ) + "\n";
+		}
+		file.close();
+		dialog->installedFilesBrowser->setText( textLines );
+	}
+	else {
+		kdDebug() << i18n( "Error reading: " ) << filename << endl;
+		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>Installed files list not found.</b></font>") );
 	}
 }
 

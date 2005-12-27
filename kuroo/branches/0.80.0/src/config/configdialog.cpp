@@ -28,7 +28,6 @@
 #include "options6.h"
 #include "options7.h"
 
-#include <qregexp.h>
 #include <qtextstream.h>
 #include <qdir.h>
 #include <qfile.h>
@@ -360,7 +359,7 @@ void ConfigDialog::saveAll()
 				KMessageBox::error( this, i18n("Failed to save package.keywords. Please run as root."), i18n("Saving"));
 			}
 			else
-				PortageSingleton::Instance()->loadUnmaskedList();
+				PortageSingleton::Instance()->getUntestingList();
 			break;
 		}
 		case 5: {

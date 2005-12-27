@@ -23,7 +23,6 @@
 #include "scanhistoryjob.h"
 #include "cacheportagejob.h"
 
-#include <qregexp.h>
 #include <qdatetime.h>
 
 #include <kprocio.h>
@@ -86,17 +85,15 @@ bool History::slotRefresh()
 	
 	// Collect all recent entries in emerge log
 	QStringList emergeLines;
+	QRegExp rx( "\\d+" );
 	while ( !stream.atEnd() ) {
 		QString line = stream.readLine();
-		QRegExp rx("\\d+");
 		if ( rx.search(line) > -1 )
 			if ( rx.cap(0) > lastDate )
 				if ( line.contains( QRegExp("(>>> emerge)|(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)") ) )
 					emergeLines += line;
 	}
 
-	kdDebug() << "emergeLines=" << emergeLines << endl;
-	
 	// Check only for successfull emerge/unmerges or sync outside kuroo
 	if ( !emergeLines.grep(QRegExp("(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)")).isEmpty() ) {
 		slotScanHistory( emergeLines );
@@ -109,6 +106,7 @@ bool History::slotRefresh()
 
 void History::slotChanged()
 {
+	kdDebug() << "History::slotChanged" << endl;
 	emit signalHistoryChanged();
 }
 
@@ -187,8 +185,8 @@ void History::slotParse()
 {
 	kdDebug() << "History::slotParse" << endl;
 	
-	static QString emergeDate("");
-	static bool syncDone(false);
+// 	static QString emergeDate( "" );
+	static bool syncDone( false );
 	QStringList emergeLines;
 	
 	while ( !stream.atEnd() )
@@ -292,9 +290,16 @@ void History::slotParse()
  */
 void History::appendEmergeInfo( const QString& einfo )
 {
-	kdDebug() << "History::appendEmergeInfo einfo=" << einfo << endl;
-	
 	KurooDBSingleton::Instance()->query( QString("UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);").arg( einfo ) );
+}
+
+/**
+ * Return all etc-file merge history.
+ * @return QStringList
+ */
+QStringList History::allMergeHistory()
+{
+	return KurooDBSingleton::Instance()->mergeHistory();
 }
 
 #include "history.moc"

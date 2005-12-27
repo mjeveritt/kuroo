@@ -51,10 +51,12 @@ private slots:
 	 * Reload history view.
 	 */
 	void		slotReload();
+	void		slotMergeReload();
 	
 	void		slotClearFilter();
 	void		slotViewUnmerges( bool on );
 	
+	void 		slotViewFile( QListViewItem* item );
 };
 
 #endif

@@ -20,18 +20,19 @@
 
 #include "common.h"
 #include "historylistview.h"
+#include "mergelistview.h"
 #include "historytab.h"
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qsplitter.h>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
 #include <klistviewsearchline.h>
+#include <krun.h>
 
 /**
- * Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * Tabpage for emerge log browser.
  */
 HistoryTab::HistoryTab( QWidget* parent )
 	: HistoryBase( parent )
@@ -43,6 +44,9 @@ HistoryTab::HistoryTab( QWidget* parent )
 	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
+	
+	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotMergeReload() ) );
+	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
 	
 	slotInit();
 }
@@ -70,6 +74,8 @@ void HistoryTab::slotInit()
 		viewUnmerges->setChecked( true );
 	else
 		viewUnmerges->setChecked( false );
+	
+	slotMergeReload();
 }
 
 /**
@@ -78,6 +84,14 @@ void HistoryTab::slotInit()
 void HistoryTab::slotReload()
 {
 	historyView->loadFromDB();
+}
+
+/**
+ * Reload history view.
+ */
+void HistoryTab::slotMergeReload()
+{
+	mergeView->loadFromDB();
 }
 
 void HistoryTab::slotClearFilter()
@@ -90,6 +104,16 @@ void HistoryTab::slotViewUnmerges( bool on )
 	kdDebug() << "HistoryTab::slotViewUnmerges" << endl;
 	KurooConfig::setViewUnmerges( on );
 	slotReload();
+}
+
+/**
+ * Open in external browser.
+ */
+void HistoryTab::slotViewFile( QListViewItem *item )
+{
+	QString source = item->text( 0 );
+	if ( !source.isEmpty() )
+		new KRun( "file://" + KUROODIR + "backup/" + source );
 }
 
 #include "historytab.moc"

@@ -11,7 +11,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libhistory.la
 
-noinst_HEADERS = history.h historylistview.h historytab.h
+noinst_HEADERS = history.h historylistview.h historytab.h mergelistview.h
 
 libhistory_la_SOURCES = history.cpp historylistview.cpp historytab.cpp \
-	historybase.ui
+		historybase.ui mergelistview.cpp

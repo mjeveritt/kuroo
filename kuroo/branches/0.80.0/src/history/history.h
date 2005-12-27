@@ -84,6 +84,8 @@ public slots:
 
 	void			appendEmergeInfo( const QString& einfo );
 	
+	QStringList		allMergeHistory();
+	
 private slots:
 	
 	/**

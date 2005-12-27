@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>658</width>
-            <height>571</height>
+            <width>517</width>
+            <height>452</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,133 +25,175 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="HistoryListView" row="2" column="0">
+        <widget class="QTabWidget" row="0" column="0">
             <property name="name">
-                <cstring>historyView</cstring>
+                <cstring>tabWidget5</cstring>
             </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>0</height>
-                </size>
-            </property>
-        </widget>
-        <widget class="Line" row="1" column="0">
-            <property name="name">
-                <cstring>line1</cstring>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>185</red>
-                    <green>185</green>
-                    <blue>185</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout77</cstring>
-            </property>
-            <grid>
+            <widget class="QWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>tab</cstring>
                 </property>
-                <property name="margin">
-                    <number>3</number>
-                </property>
-                <property name="spacing">
-                    <number>3</number>
-                </property>
-                <widget class="QLabel" row="1" column="3">
+                <attribute name="title">
+                    <string>Emer&amp;ge History</string>
+                </attribute>
+                <grid>
                     <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Filter:</string>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>200</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="5">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
                     <property name="margin">
                         <number>0</number>
                     </property>
-                    <property name="text">
-                        <string>&lt;b&gt;Emerge History&lt;/b&gt;</string>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="2">
+                    <widget class="Line" row="0" column="0">
+                        <property name="name">
+                            <cstring>line1</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="lineWidth">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget class="HistoryListView" row="1" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>historyView</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>0</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="1">
+                        <property name="name">
+                            <cstring>layout11</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QPushButton" row="1" column="3">
+                                <property name="name">
+                                    <cstring>pbClearFilter</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="iconSet">
+                                    <iconset>image0</iconset>
+                                </property>
+                            </widget>
+                            <widget class="KListViewSearchLine" row="1" column="4">
+                                <property name="name">
+                                    <cstring>historyFilter</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>210</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>viewUnmerges</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>View &amp;unmerges</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="2">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Filter:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0" rowspan="1" colspan="5">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;b&gt;Emerge History&lt;/b&gt;</string>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="1">
+                                <property name="name">
+                                    <cstring>spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>70</width>
+                                        <height>21</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Etc-files merge Histor&amp;y</string>
+                </attribute>
+                <grid>
                     <property name="name">
-                        <cstring>pbClearFilter</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="text">
-                        <string></string>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                    <property name="iconSet">
-                        <iconset>image0</iconset>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                </widget>
-                <widget class="KListViewSearchLine" row="1" column="4">
-                    <property name="name">
-                        <cstring>historyFilter</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>210</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>viewUnmerges</cstring>
-                    </property>
-                    <property name="text">
-                        <string>View &amp;unmerges</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
-                </widget>
-            </grid>
+                    <widget class="MergeListView" row="0" column="0">
+                        <property name="name">
+                            <cstring>mergeView</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
         </widget>
     </grid>
 </widget>
@@ -159,6 +201,23 @@
     <customwidget>
         <class>HistoryListView</class>
         <header location="local">historylistview.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>3</hordata>
+            <verdata>3</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image1</pixmap>
+        <property type="String">name</property>
+    </customwidget>
+    <customwidget>
+        <class>MergeListView</class>
+        <header location="local">mergelistview.h</header>
         <sizehint>
             <width>100</width>
             <height>100</height>
@@ -186,5 +245,6 @@
 <includehints>
     <includehint>historylistview.h</includehint>
     <includehint>klistviewsearchline.h</includehint>
+    <includehint>mergelistview.h</includehint>
 </includehints>
 </UI>

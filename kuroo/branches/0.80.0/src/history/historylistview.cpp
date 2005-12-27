@@ -26,7 +26,6 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qregexp.h>
 
 #include <klistview.h>
 #include <kconfig.h>
@@ -60,7 +59,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
 	
-	setColumnWidth( 0, 400 );
+	setColumnWidth( 0, 300 );
 	setColumnWidth( 1, 80 );
 	setResizeMode( QListView::LastColumn );
 	
@@ -126,36 +125,21 @@ void HistoryListView::loadFromDB()
 		t = t.addSecs( duration.toUInt() );
 		QString emergeDuration = loc->formatTime( t, true, true );
 		
-		if ( !duration.isEmpty() || KurooConfig::viewUnmerges() ) {
-			if ( !package.isEmpty() ) {
-				
-				ItemMap::iterator itMap =  itemMap.find( emergeDate ) ;
-				if ( itMap == itemMap.end() ) {
-					KListViewItem *itemDate = new KListViewItem( this, emergeDate );
-					itemDate->setOpen( true );
-					KListViewItem *itemPackage = new KListViewItem( itemDate, package );
-					itemMap.insert( emergeDate, itemDate );
-					
-					if ( duration.isEmpty() )
-						itemPackage->setPixmap( 0, pxUnmerged );
-					else {
-						itemPackage->setPixmap( 0, pxNew );
-						itemPackage->setText( 1, emergeDuration );
-						itemPackage->setText( 2, einfo );
-					}
-				}
-				else
-				{
-					KListViewItem *itemPackage = new KListViewItem( itMap.data(), package );
-					
-					if ( duration.isEmpty() )
-						itemPackage->setPixmap( 0, pxUnmerged );
-					else {
-						itemPackage->setPixmap( 0, pxNew );
-						itemPackage->setText( 1, emergeDuration );
-						itemPackage->setText( 2, einfo );
-					}
-				}
+		if ( !duration.isEmpty() || KurooConfig::viewUnmerges() && !package.isEmpty() ) {
+			
+			if ( !itemMap.contains( emergeDate ) ) {
+				KListViewItem *item = new KListViewItem( this, emergeDate );
+				item->setOpen( true );
+				itemMap[ emergeDate ] = item;
+			}
+			
+			KListViewItem *item = new KListViewItem( itemMap[ emergeDate ], package );
+			if ( duration.isEmpty() )
+				item->setPixmap( 0, pxUnmerged );
+			else {
+				item->setPixmap( 0, pxNew );
+				item->setText( 1, emergeDuration );
+				item->setText( 2, einfo );
 			}
 		}
 	}

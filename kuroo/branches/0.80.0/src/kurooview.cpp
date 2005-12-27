@@ -32,7 +32,6 @@
 
 #include <qpainter.h>
 #include <qlayout.h>
-#include <qregexp.h>
 #include <qcolor.h>
 #include <qwidgetstack.h>
 #include <qbitmap.h>
@@ -72,7 +71,7 @@ private:
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
-	tabPortage( 0 ), tabLogs( 0 )
+	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 )
 {
 	viewMenu->setCursor( KCursor::handCursor() );
 	
@@ -90,7 +89,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	KIconLoader *ldr = KGlobal::iconLoader();
 	iconPackages = new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), "Packages" );
-	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Emerge Queue" );
+	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Queue" );
 	iconHistory = new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "History" );
 	iconLog = new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Log" );
 	
@@ -117,15 +116,24 @@ KurooView::~KurooView()
 {
 }
 
+/**
+ * Activate corresponding view when clicking on icon in menu.
+ */
+void KurooView::slotShowView()
+{
+	viewStack->raiseWidget( viewMenu->currentItem() + 1 );
+}
+
+/**
+ * Check if database needs to refreshed.
+ */
 void KurooView::slotInit()
 {
-	kdDebug() << "KurooView::slotInit" << endl;
-	
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		switch( KMessageBox::warningContinueCancel( this,
-			i18n("<qt>Kuroo database is empty!<br><br>"
+			i18n( "<qt>Kuroo database is empty!<br><br>"
 			     "Kuroo will now first scan your emerge log to create the emerge history. "
-			     "Package information in Portage will be cached.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0) ) {
+			     "Package information in Portage will be cached.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
 				     
 			case KMessageBox::Continue: {
 				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
@@ -141,8 +149,8 @@ void KurooView::slotInit()
 			disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 			
 			switch( KMessageBox::warningYesNo( this,
-				i18n("<qt>Kuroo database needs refreshing!<br>"
-				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialize Kuroo"), i18n("Refresh"), i18n("Skip"), 0) ) {
+				i18n( "<qt>Kuroo database needs refreshing!<br>"
+				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialize Kuroo"), i18n("Refresh"), i18n("Skip"), 0 ) ) {
 
 				case KMessageBox::Yes:
 					PortageSingleton::Instance()->slotRefresh();
@@ -249,20 +257,17 @@ void KurooView::slotLogUpdated()
 	}
 }
 
+/**
+ * Disable icon menu text, from blue to black.
+ */
 void KurooView::slotResetMenu( QListBoxItem* menuItem )
 {
-	dynamic_cast<IconListItem*>(menuItem)->setChanged( false );
+	dynamic_cast<IconListItem*>( menuItem )->setChanged( false );
 	viewMenu->triggerUpdate( true );
 }
 
 
-/**
- * Activate corresponding view when clicking on icon in menu.
- */
-void KurooView::slotShowView()
-{
-	viewStack->raiseWidget( viewMenu->currentItem() + 1 );
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
 	: QListBoxItem( listbox ), m_modified( false )
@@ -298,7 +303,7 @@ int KurooView::IconListItem::height( const QListBox *lb ) const
 		return mPixmap.height();
 	else {
 		int ht = lb->fontMetrics().boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).height();
-		return (mPixmap.height() + ht + 10);
+		return ( mPixmap.height() + ht + 10 );
 	}
 }
 
@@ -312,7 +317,7 @@ int KurooView::IconListItem::width( const QListBox *lb ) const
 
 const QPixmap &KurooView::IconListItem::defaultPixmap()
 {
-	static QPixmap *pix=0;
+	static QPixmap *pix = 0;
 	if ( !pix ) {
 		pix = new QPixmap( 32, 32 );
 		QPainter p( pix );

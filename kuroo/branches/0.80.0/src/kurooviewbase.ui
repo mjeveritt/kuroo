@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>863</width>
-            <height>607</height>
+            <width>700</width>
+            <height>500</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -68,9 +68,6 @@
             </property>
             <property name="cursor">
                 <cursor>13</cursor>
-            </property>
-            <property name="margin">
-                <number>0</number>
             </property>
             <property name="vScrollBarMode">
                 <enum>AlwaysOff</enum>

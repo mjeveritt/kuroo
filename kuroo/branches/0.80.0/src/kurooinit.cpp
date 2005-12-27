@@ -27,7 +27,6 @@
 #include <pwd.h>
 
 #include <qdir.h>
-#include <qregexp.h>
 
 #include <kcmdlineargs.h>
 #include <kstringhandler.h>

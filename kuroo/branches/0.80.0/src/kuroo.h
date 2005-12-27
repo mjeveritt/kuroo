@@ -84,8 +84,6 @@ private slots:
 	void				slotWait();
 	void 				slotTerminate();
 	
-	void				slotNull();
-	
 	/**
 	* Build mainwindow menus and toolbar.
 	*/

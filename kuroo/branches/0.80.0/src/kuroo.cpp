@@ -116,7 +116,7 @@ void Kuroo::setupActions()
 /**
  * Disable buttons when kuroo is busy.
  */
-void Kuroo::slotBusy( bool b )
+void Kuroo::slotBusy( bool busy )
 {
 	kdDebug() << "Kuroo::slotBusy" << endl;
 	
@@ -129,13 +129,6 @@ void Kuroo::slotBusy( bool b )
 		actionSync->setEnabled( false );
 	else
 		actionSync->setEnabled( true );
-}
-
-/**
- * Needed to initialize setupActions.
- */
-void Kuroo::slotNull()
-{
 }
 
 /**

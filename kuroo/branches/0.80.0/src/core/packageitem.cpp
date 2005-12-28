@@ -30,7 +30,8 @@
  * KListViewItem subclass to implement sorting, tooltip, color...
  */
 PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int status, QString id )
-	: KListViewItem( parent, name ), m_parent( parent ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
+	: KListViewItem( parent, name ), 
+	m_parent( parent ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
 {
 	m_meta.insert( i18n("Package"), name );
 	init();
@@ -38,7 +39,8 @@ PackageItem::PackageItem( QListView* parent, const char* name, Meta meta, int st
 }
 
 PackageItem::PackageItem( QListViewItem *parent, const char *name, Meta meta, int status, QString id )
-	: KListViewItem( parent, name ), m_parent( parent->listView() ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
+	: KListViewItem( parent, name ), 
+	m_parent( parent->listView() ), m_status( 0 ), m_meta( meta ), queued( false ), m_id( id )
 {
 	m_meta.insert( i18n("Package"), name );
 	init();

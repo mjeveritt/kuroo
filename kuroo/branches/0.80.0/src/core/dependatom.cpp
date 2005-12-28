@@ -108,7 +108,7 @@ bool DependAtom::parse( const QString& atom )
  * The searched packages are the ones from the portage tree.
  * If no matching package versions are found, an empty list is returned.
  */
-QStringList DependAtom::matchingVersions( const QString& versionList )
+QStringList DependAtom::matchingVersions( const QStringList& versionList )
 {
 	QStringList matchingVersions;
 

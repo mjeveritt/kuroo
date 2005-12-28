@@ -617,3 +617,5 @@ void PortagePackageVersion::setHasDetailedInfo( bool hasDetailedInfo )
 {
 	m_hasDetailedInfo = hasDetailedInfo;
 }
+
+#include "portagepackageversion.moc"

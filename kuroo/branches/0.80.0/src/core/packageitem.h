@@ -43,7 +43,6 @@ public:
 	QValueList<PackageVersion*> 	sortedVersionList();
 	
 	
-	QStringList		getVersionsList();
 	int				status();
 	QString 		id();
 	QString			name();

@@ -54,9 +54,8 @@ PortagePackageVersion::PortagePackageVersion( PackageItem* parent, const QString
 bool PortagePackageVersion::isAvailable() const
 {
 	//TODO: remove x86 and get arch it from the PortageSettings
-	int state = stability("x86");
-	kdDebug() << "state=" << state << endl;
-	return (state == Stable);
+	int state = stability( KurooConfig::arch() );
+	return ( state == Stable );
 }
 
 /**
@@ -99,10 +98,10 @@ bool PortagePackageVersion::isNewerThan( const QString& otherVersion ) const
 	else if ( revisionPos != -1 )
 		pos = revisionPos;
 	else
-		pos = m_version.length();
+		pos = version().length();
 	
 	// So, now we have a version string stripped of suffix and revision
-	QString thisBaseVersion( m_version.left(pos) );
+	QString thisBaseVersion( version().left(pos) );
 	
 	// Same procedure for the other version string
 	thatRevision = PortagePackageVersion::revisionNumber( otherVersion, &revisionPos );
@@ -110,14 +109,14 @@ bool PortagePackageVersion::isNewerThan( const QString& otherVersion ) const
 	thatTrailingChar = PortagePackageVersion::trailingCharNumber( otherVersion, &trailingCharPos );
 	
 	// determine the first non-base-version character
-	if( trailingCharPos != -1 )
+	if ( trailingCharPos != -1 )
 		pos = trailingCharPos;
-	else if( suffixPos != -1 )
+	else if ( suffixPos != -1 )
 		pos = suffixPos;
-	else if( revisionPos != -1 )
+	else if ( revisionPos != -1 )
 		pos = revisionPos;
 	else
-		pos = m_version.length();
+		pos = version().length();
 	
 	// So, now we have a version string stripped of suffix and revision
 	QString thatBaseVersion( otherVersion.left(pos) );
@@ -130,10 +129,10 @@ bool PortagePackageVersion::isNewerThan( const QString& otherVersion ) const
 	
 	pos = 0; // pos is the start index for number searches
 	do {
-		rxNumber.search( m_version, pos );
-		thisNum = (const_cast<PortagePackageVersion*>(this))->rxNumber.cap(0);
+		rxNumber.search( version(), pos );
+		thisNum = ( const_cast<PortagePackageVersion*>(this) )->rxNumber.cap(0);
 		rxNumber.search( otherVersion, pos );
-		thatNum = (const_cast<PortagePackageVersion*>(this))->rxNumber.cap(0);
+		thatNum = ( const_cast<PortagePackageVersion*>(this) )->rxNumber.cap(0);
 		
 		if ( thisNum.isEmpty() || thatNum.isEmpty() )
 			return false; // should not happen, just to make sure
@@ -151,7 +150,7 @@ bool PortagePackageVersion::isNewerThan( const QString& otherVersion ) const
 			
 			// check if any base-version string ends here
 			// both versions end here
-			if( thisBaseVersion.length() <= pos	&& thatBaseVersion.length() <= pos ) {
+			if ( thisBaseVersion.length() <= pos && thatBaseVersion.length() <= pos ) {
 				// compare trailing characters, if they are the same,
 				// then suffixes, if they are also the same, then revisions
 				if ( thisTrailingChar > thatTrailingChar )
@@ -282,7 +281,7 @@ int PortagePackageVersion::revisionNumber( const QString& versionString, int* fo
 	}
 	else {
  		// has a revision, get its number
-		return (const_cast<PortagePackageVersion*>(this))->rxRevision.cap(1).toInt();
+		return ( const_cast<PortagePackageVersion*>(this) )->rxRevision.cap(1).toInt();
 	}
 } // end of revisionNumber()
 

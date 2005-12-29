@@ -63,6 +63,7 @@ PackageItem* PackageVersion::package()
  */
 bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 {
+	kdDebug() << "PackageVersion::isNewerThan" << endl;
 	if ( QString::compare(m_version, otherVersion) > 0 )
 		return true; // this number is bigger than the other one
 	else
@@ -82,6 +83,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
  */
 bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 {
+	kdDebug() << "PackageVersion::isOlderThan" << endl;
 	if ( m_version == otherVersion || isNewerThan(otherVersion) == true )
 		return false;
 	else

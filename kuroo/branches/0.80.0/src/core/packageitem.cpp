@@ -85,7 +85,8 @@ void PackageItem::initVersions()
 		version->setLicenses( licenses );
 		version->setUseflags( useFlags );
 		version->setSlot( slot );
-		version->setAcceptedKeywords( keywords );
+		version->setKeywords( QStringList::split( " ", keywords ) );
+		version->setAcceptedKeywords( KurooConfig::arch() );
 		version->setSize( size );
 		
 		if ( meta == FILTERINSTALLED )
@@ -129,18 +130,6 @@ QValueList<PackageVersion*> PackageItem::sortedVersionList()
 		}
 	}
 	return sortedVersions;
-}
-
-QStringList PackageItem::getVersionsList()
-{
-	if ( !versionsLoaded )
-		initVersions();
-	
-	QStringList versionList;
-	for ( PackageVersionMap::iterator it = m_versions.begin(), itEnd = m_versions.end(); it != itEnd; ++it ) {
-		versionList += it.key();
-	}
-	return versionList;
 }
 
 /**

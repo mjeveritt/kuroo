@@ -254,51 +254,17 @@ void PortageTab::slotPackage()
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		textLinesAvailable.prepend( (*sortedVersionIterator)->version() + ", " );
-		
-		if ( (*sortedVersionIterator)->isInstalled() )
-			textLinesInstalled.prepend( "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, " );
+		if ( (*sortedVersionIterator)->isInstalled() ) {
+			textLinesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+			textLinesAvailable += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+		}
+		else {
+			if ( (*sortedVersionIterator)->isAvailable() )
+				textLinesAvailable += (*sortedVersionIterator)->version() + ", ";
+			else
+				textLinesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+		}
 	}
-	
-// 	const QStringList versionList = packagesView->currentPackage()->getVersionsList();
-// 	textLinesAvailable += versionList.join( ", " );
-	
-// 	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packagesView->currentId() );
-// 	QStringList versionOnlyList;
-// 	QMap<QString, bool> versionListAvailability;
-// 	foreach ( versionList ) {
-// 		QString version = *it++;
-// 		QString meta = *it++;
-// 		QStringList keywords = QStringList::split( " ", *it );
-// 		versionOnlyList += version;
-
-// 		if ( PortageSingleton::Instance()->isAvailable( keywords, version ) )
-// 			versionListAvailability[ version ] = true;
-// 		else
-// 			versionListAvailability[ version ] = false;
-		
-// 		if ( meta == FILTERINSTALLED )
-// 			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, ";
-		
-// 		textLinesAvailable += version + ", ";
-// 	}
-	
-// 	const QStringList sortedVersionList = PortageSingleton::Instance()->sortedVersionList( versionOnlyList );
-	
-// 	kdDebug() << "sortedVersionList=" << sortedVersionList << endl;
-// 	
-// 	versionOnlyList.clear();
-// 	foreach ( sortedVersionList ) {
-// 		if ( versionListAvailability[ *it ] )
-// 			versionOnlyList += *it;
-// 		else
-// 			versionOnlyList += "<font color=darkRed><b>" + *it + "</b></font>";
-// 	}
-	
-// 	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
-// 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
-// 	textLinesAvailable += versionOnlyList.join( ", " );
-	
 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
 	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
 	

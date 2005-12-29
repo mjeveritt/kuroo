@@ -21,8 +21,14 @@
 #ifndef DEPENDATOM_H
 #define DEPENDATOM_H
 
+// #include "packagelist.h"
+
 #include <qregexp.h>
-#include <qobject.h>
+#include <qvaluelist.h>
+
+// class PortagePackage;
+// class PortageCategory;
+class PackageVersion;
 
 /**
  * This class is the provides capabilities to parse DEPEND atoms and get
@@ -32,43 +38,38 @@
  *
  * @short  A depend atom parser and matching package retriever.
  */
-class DependAtom : public QObject
+class DependAtom
 {
-Q_OBJECT
 public:
-	DependAtom( QObject *parent );
+	DependAtom( /*TemplatedPackageList<PortagePackage>* packages*/ );
 	~DependAtom();
 	
 	bool parse( const QString& atom );
-
-	QStringList matchingVersions( const QStringList& versionList );
-
+	
+	QValueList<PackageVersion*> matchingVersions();
+	
 	bool isBlocking();
-
-protected:
-	//! A pointer to the portage tree from which the packages are retrieved.
-// 	PortageTree* tree;
-
+	
 private:
+	//! A pointer to the portage tree from which the packages are retrieved.
+// 	TemplatedPackageList<PortagePackage>* m_packages;
 	//! The regular expression for the whole atom.
-	QRegExp rxAtom;
+	QRegExp m_rxAtom;
 	//! This is set to the result of parse().
-	bool matches;
-
+	bool m_matches;
+	
 	// These are the extracted parts of the atom.
-
+	
 	//! true if the callsign prefix ("blocked by this package" in ebuild dependencies) is there.
-	bool callsign;
+	bool m_callsign;
 	//! A compare sign (greater than / less than / equal) or the "all revisions" prefix ("~").
-	QString prefix;
+	QString m_prefix;
 	//! The main category of the package.
-	QString category;
-	//! The subcategory of the package.
-	QString subcategory;
+// 	PortageCategory* m_category;
 	//! The package name.
-	QString package;
+	QString m_package;
 	//! The complete version string.
-	QString version;
+	QString m_version;
 };
 
-#endif // DEPENDATOM_H
+#endif

@@ -54,10 +54,6 @@ void PackageItem::init()
 	pxEbuildInstalled = ldr->loadIcon( "kuroo_ebuild_emerged", KIcon::Small );
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	
-// 	for ( int i = 0; i != m_parent->columns(); ++i ) {
-// 		setText( i, m_meta[ m_parent->columnText( i ) ] );
-// 	}
-	
 	setText( 3, m_description );
 	
 	if ( m_status != FILTERALL )
@@ -71,7 +67,7 @@ void PackageItem::initVersions()
 	if ( versionsLoaded )
 		return;
 	
-// 	m_category = PortageSingleton::Instance()->category( packagesView->currentId() );
+	m_category = PortageSingleton::Instance()->category( m_id );
 	
 	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( m_id );
 	foreach ( versionsList ) {

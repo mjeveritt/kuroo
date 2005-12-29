@@ -50,8 +50,8 @@ public slots:
 
 private slots:
 	
-	void			slotLastPackage();
-	void			slotNewItem( int x, int y );
+// 	void			slotLastPackage();
+// 	void			slotNewItem( int x, int y );
 	
 private:
 	QStringList		unmaskedList;

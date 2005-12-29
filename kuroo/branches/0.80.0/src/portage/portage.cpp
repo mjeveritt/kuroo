@@ -21,7 +21,6 @@
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
-#include "portagepackageversion.h"
 
 #include <kmessagebox.h>
 
@@ -49,7 +48,6 @@ void Portage::init( QObject *myParent )
 	parent = myParent;
 	getUntestingList();
 	loadCache();
-// 	packageVersion = new PortagePackageVersion( this );
 }
 
 /**
@@ -387,34 +385,9 @@ QString Portage::package( const QString& id )
 	return KurooDBSingleton::Instance()->package( id ).first();
 }
 
-/**
- * Get list of versions available.
- * @param package name
- * @return list of versions
- */
-QStringList Portage::packageVersions( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageVersions( id );
-}
-
 QStringList Portage::packageVersionsInfo( const QString& id )
 {
 	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
-}
-
-/**
- * Return info for package as description, homepage ...
- * @param package id
- * @return info
- */
-Info Portage::packageInfo( const QString& packageId )
-{
-	Info info;
-	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo( packageId );
-	QStringList::Iterator it = packageList.begin();
-	info.description = *it++;
-	info.homepage = *it;
-	return info;
 }
 
 #include "portage.moc"

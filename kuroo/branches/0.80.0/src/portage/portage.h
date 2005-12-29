@@ -86,7 +86,6 @@ public slots:
 	* Get list of versions available of this package.
 	* @param name
 	*/
-	QStringList					packageVersions( const QString& id );
 	QStringList					packageVersionsInfo( const QString& id );
 	
 	/**
@@ -94,12 +93,6 @@ public slots:
 	* @return total
 	*/
 	QString						count();
-	
-	/**
-	* Return info for package as description, homepage ...
-	* @return info
-	*/
-	Info						packageInfo( const QString& packageId );
 	
 	/**
 	* Find cached size for package.

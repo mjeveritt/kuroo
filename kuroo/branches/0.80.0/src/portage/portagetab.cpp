@@ -26,7 +26,7 @@
 #include "packageinspector.h"
 #include "packageitem.h"
 #include "categoryitem.h"
-#include "portagepackageversion.h"
+#include "packageversion.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>

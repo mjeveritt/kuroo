@@ -19,11 +19,15 @@
  ***************************************************************************/
 
 #include "dependatom.h"
-#include "common.h"
+
+// #include "packagelist.h"
+// #include "portagepackage.h"
+// #include "portagecategory.h"
+#include "packageversion.h"
 
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
-// capture positions inside the regexp. (like rxAtom.cap(POS_CALLSIGN))
+// capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
 #define POS_CALLSIGN    1
 #define POS_PREFIX      2
 #define POS_CATEGORY    3
@@ -34,29 +38,35 @@
 // The complete atom regexp in non-escaped form (for testing, or similar):
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
 
+
 /**
  * Initialize this object.
- * @param portageTree  The portage tree which contains the packages
- *                     that will be filtered out.
+ * @param packages  The package list which contains the packages
+ *                  that will be filtered out.
  */
-DependAtom::DependAtom( QObject* parent )
-	: QObject( parent ),
-	rxAtom("^"    // Start of the string
-         "(!)?" // "Block these packages" flag, only occurring in ebuilds
-         "(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
-         "((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
-         "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-         "("            // start of the version part
-         "(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number,
-                                   // including wildcard version matching (*)
-         "(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
-         "(?:-r\\d+)?"  // revision
-         ")?$"          // end of the (optional) version part and the atom string
-         )
+DependAtom::DependAtom( /*TemplatedPackageList<PortagePackage>* packages*/ )
+	: m_rxAtom("^"    // Start of the string
+	           "(!)?" // "Block these packages" flag, only occurring in ebuilds
+	           "(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
+	           "((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
+	           "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
+	           "("            // start of the version part
+	           "(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number,
+                                    // including wildcard version matching (*)
+	           "(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
+	           "(?:-r\\d+)?"  // revision
+	           ")?$"          // end of the (optional) version part and the atom string
+	          )
 {
-// 	tree = portageTree;
-	matches = false;
-	callsign = false;
+// 	m_packages = packages;
+	m_matches = false;
+	m_callsign = false;
+// 	m_category = new PortageCategory;
+}
+
+DependAtom::~DependAtom()
+{
+// 	delete m_category;
 }
 
 /**
@@ -74,93 +84,93 @@ DependAtom::DependAtom( QObject* parent )
 bool DependAtom::parse( const QString& atom )
 {
 	// Do the regexp match, which also prepares for text capture
-	if( rxAtom.exactMatch(atom) == false ) {
-		matches = false;
+	if ( m_rxAtom.exactMatch(atom) == false ) {
+		m_matches = false;
 		return false;
 	}
-
+	
 	// Get the captured strings
-	callsign    = rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
-	prefix      = rxAtom.cap( POS_PREFIX );
-	category    = rxAtom.cap( POS_CATEGORY );
-	subcategory = rxAtom.cap( POS_SUBCATEGORY );
-	package     = rxAtom.cap( POS_PACKAGE );
-	version     = rxAtom.cap( POS_VERSION );
-
+	m_callsign    = m_rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
+	m_prefix      = m_rxAtom.cap( POS_PREFIX );
+	m_package     = m_rxAtom.cap( POS_PACKAGE );
+	m_version     = m_rxAtom.cap( POS_VERSION );
+// 	m_category->setCategory( m_rxAtom.cap(POS_CATEGORY), m_rxAtom.cap(POS_SUBCATEGORY) );
+	
 	// Additional check: If there is a version, there also must be a prefix
-	if( version.isEmpty() != prefix.isEmpty() ) {
-		matches = false;
+	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
+		m_matches = false;
 		return false;
 	}
-
+	
 	// Strip the hyphen at the start of the version, except when it's a "*"
-	if( !version.isEmpty() && version[0] == '-' )
-		version = version.mid(1);
-
+	if ( !m_version.isEmpty() && m_version[0] == '-' )
+		m_version = m_version.mid(1);
+	
 	// Not yet returned false, so it's a valid atom
-	matches = true;
+	m_matches = true;
 	return true;
 }
 
 
 /**
  * Retrieve the set of package versions that is matching the atom.
- * The searched packages are the ones from the portage tree.
+ * The searched packages are the ones from the package list.
  * If no matching package versions are found, an empty list is returned.
  */
-QStringList DependAtom::matchingVersions( const QStringList& versionList )
+QValueList<PackageVersion*> DependAtom::matchingVersions()
 {
-	QStringList matchingVersions;
-
-// 	if ( tree == NULL || matches == false )
-// 		return matchingVersions;
-
-// 	if ( tree->hasPackage(category, subcategory, package) == false )
-// 		return matchingVersions;
-// 
-// 	Package* pkg = tree->package( category, subcategory, package );
-
+	QValueList<PackageVersion*> matchingVersions;
+	
+// 	if ( m_packages == NULL || m_matches == false )
+// 		return matchingVersions; // return an empty list
+	
+// 	if ( m_packages->contains(m_category, m_package) == false )
+// 		return matchingVersions; // return an empty list
+	
+// 	PortagePackage* pkg = m_packages->package(  new PortageCategory(*m_category), m_package );
+	
 	bool matchAllVersions;
-	if ( version.isEmpty() || version == "*" )
+	if ( m_version.isEmpty() || m_version == "*" )
 		matchAllVersions = true;
 	else
 		matchAllVersions = false;
-
+	
 	bool matchBaseVersion;
-	if ( version.endsWith("*") ) {
+	if ( m_version.endsWith("*") ) {
 		// remove the trailing star
-		version = version.left( version.length() - 1 );
+		m_version = m_version.left( m_version.length() - 1 );
 		matchBaseVersion = true;
 	}
 	else {
 		matchBaseVersion = false;
 	}
-
+	
 	// When this is set true, it will match all versions
 	// with exactly the same version string as the parsed one.
-	bool matchEqual = prefix.endsWith("=");
-
+	bool matchEqual = m_prefix.endsWith("=");
+	
 	// When this is set true, it will match all versions greater than
 	// (but not equalling) the parsed version from the atom.
 	// When false, it will match all versions less than
 	// (but not equalling, too) the parsed version.
-	bool matchGreaterThan = prefix.startsWith(">");
-
-
+	bool matchGreaterThan = m_prefix.startsWith(">");
+	
+	
 	// So, let's iterate through the versions to check if they match or not
-// 	foreach ( versionList ) {
+// 	for ( Package::versioniterator versionIterator = pkg->versionBegin(); versionIterator != pkg->versionBegin(); versionIterator++ ) {
 // 		if ( ( matchAllVersions == true ) ||
-// 		    ( matchBaseVersion == true  && (*it).startsWith(version) ) ||
-// 		    ( matchEqual       == true  && (*it) == version   ) ||
-// 		    ( matchEqual == false && matchGreaterThan == true  && (*it).isNewerThan(version) ) ||
-// 		    ( matchEqual == false && matchGreaterThan == false && (*it).isOlderThan(version) )
-// 		  ) {
-// 			matchingVersions.append( *versionIterator );
+// 		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith(m_version) ) ||
+// 		    ( matchEqual       == true  && (*versionIterator)->version() == m_version   ) ||
+// 		    ( matchEqual == false && matchGreaterThan == true  && (*versionIterator)->isNewerThan(m_version) ) ||
+// 		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan(m_version) )
+// 		  )
+// 		{
+// 			matchingVersions.append( (PackageVersion*) *versionIterator );
 // 			continue;
 // 		}
 // 	}
 	return matchingVersions;
-
+	
 } // end of matchingVersions()
 
 
@@ -172,7 +182,6 @@ QStringList DependAtom::matchingVersions( const QStringList& versionList )
  */
 bool DependAtom::isBlocking()
 {
-	return callsign;
+	return m_callsign;
 }
 
-#include "dependatom.moc"

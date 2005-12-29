@@ -238,7 +238,7 @@ void PortageTab::slotPackage()
 	summaryBrowser->clear();
 	packagesView->currentPackage()->initVersions();
 	QString package( packagesView->currentPackage()->name() );
-	QString category( PortageSingleton::Instance()->category( packagesView->currentId() ) );
+	QString category( packagesView->currentPackage()->category() );
 	
 	QString textLines = "<font size=\"+2\">" + package + "</font> ";
 			textLines += "(" + category.section( "-", 0, 0 ) + " / ";

@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "packageitem.h"
-#include "portagepackageversion.h"
+#include "packageversion.h"
 
 #include <qpainter.h>
 
@@ -32,7 +32,7 @@
  */
 PackageItem::PackageItem( QListView* parent, const QString& id, const char* name, const QString& description, const QString& homepage, const QString& status )
 	: KListViewItem( parent, name ), m_parent( parent ), queued( false ), versionsLoaded( false ),
-	m_id( id ), m_name( name ), m_description( description ), m_homepage( homepage ), m_status( status )
+	m_id( id ), m_name( name ), m_description( description ), m_homepage( homepage ), m_status( status ), m_category( "" )
 {
 	init();
 }
@@ -71,6 +71,8 @@ void PackageItem::initVersions()
 	if ( versionsLoaded )
 		return;
 	
+// 	m_category = PortageSingleton::Instance()->category( packagesView->currentId() );
+	
 	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( m_id );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
@@ -81,7 +83,7 @@ void PackageItem::initVersions()
 		QString keywords = *it++;
 		QString size = *it;
 		
-		PortagePackageVersion* version = new PortagePackageVersion( this, versionString );
+		PackageVersion* version = new PackageVersion( this, versionString );
 		version->setLicenses( licenses );
 		version->setUseflags( useFlags );
 		version->setSlot( slot );
@@ -138,6 +140,11 @@ QValueList<PackageVersion*> PackageItem::sortedVersionList()
 QString PackageItem::id()
 {
 	return m_id;
+}
+
+QString PackageItem::category()
+{
+	return m_category;
 }
 
 QString PackageItem::name()

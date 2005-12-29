@@ -44,6 +44,7 @@ public:
 	
 	int				status();
 	QString 		id();
+	QString			category();
 	QString			name();
 	QString			description();
 	QString			homepage();
@@ -96,7 +97,7 @@ protected:
 // 	virtual PackageVersion* createPackageVersion( const QString& version ) = 0;
 	
 private:
-	QString									m_id, m_name, m_description, m_homepage, m_status, m_packageTip;
+	QString									m_id, m_name, m_description, m_homepage, m_status, m_packageTip, m_category;
 	QListView								*m_parent;
 	Meta									m_meta;
 	QPixmap 								pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;

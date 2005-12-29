@@ -27,7 +27,7 @@
 
 #include <ksharedptr.h>
 
-class Package;
+class PackageItem;
 
 /**
  * PackageVersion is a class for managing package version information,
@@ -36,24 +36,24 @@ class Package;
  *
  * @short  A class for storing package version information.
  */
-class PackageVersion : public KShared
+class PackageVersion
 {
 public:
-	friend class Package; // the only one that may construct this directly
+	friend class PackageItem; // the only one that may construct this directly
 	
 	QString version() const;
-	Package* package();
+	PackageItem* package();
 	
 	/**
 		* Returns true if this version is installed on the system, false if not.
 		*/
-	virtual bool isInstalled() const = 0;
+	virtual bool isInstalled() const/* = 0*/;
 	
 	/**
 		* Returns true if this version is available (as in: can be installed)
 		* and false if not.
 		*/
-	virtual bool isAvailable() const = 0;
+	virtual bool isAvailable() const/* = 0*/;
 	
 	/**
 		* Returns true if this object's version is newer than the one
@@ -67,12 +67,12 @@ public:
 	bool isOlderThan( const QString& otherVersion ) const;
 	
 protected:
-	PackageVersion( Package* parent, const QString& version );
+	PackageVersion( PackageItem* parent, const QString& version );
 	virtual ~PackageVersion();
 	
 private:
 	/** The package containing this version. */
-	Package* m_parent;
+	PackageItem* m_parent;
 	
 	/** The package version string. */
 	QString m_version;

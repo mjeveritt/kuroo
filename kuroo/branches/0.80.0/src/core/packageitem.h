@@ -25,6 +25,8 @@
 
 #include <qpixmap.h>
 
+class PackageVersion;
+
 typedef QMap<QString, QString> Meta;
 
 /**
@@ -34,12 +36,20 @@ typedef QMap<QString, QString> Meta;
 class PackageItem : public KListViewItem
 {
 public:
-	PackageItem( QListView *parent, const char *name, Meta meta, int status, QString id );
-	PackageItem( QListViewItem *parent, const char *name, Meta meta, int status, QString id );
+	PackageItem( QListView *parent, const QString& id, const char* name, const QString& description, const QString& homepage, const QString& status );
 	~PackageItem();
 
+	void							initVersions();
+	QValueList<PackageVersion*> 	sortedVersionList();
+	
+	
+	QStringList		getVersionsList();
 	int				status();
 	QString 		id();
+	QString			name();
+	QString			description();
+	QString			homepage();
+	
 	/**
 	 * @return meta inf on package
 	 */
@@ -82,16 +92,21 @@ protected:
 	 * @param width
 	 * @param alignment
 	 */
-	virtual void 	paintCell( QPainter *p, const QColorGroup &cg,int column, int width, int alignment );
+// 	virtual void 	paintCell( QPainter *p, const QColorGroup &cg,int column, int width, int alignment );
+	
+// protected:
+// 	virtual PackageVersion* createPackageVersion( const QString& version ) = 0;
 	
 private:
-	QString			m_id, m_packageTip;
-	QListView		*m_parent;
-	Meta			m_meta;
-	QPixmap 		pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;
-	QPixmap			pxPackageUnmasked, pxInstalledUnmasked, pxEbuild, pxEbuildMasked, pxEbuildInstalled, pxQueued;
-	int				m_status;
-	bool			queued;
+	QString									m_id, m_name, m_description, m_homepage, m_status, m_packageTip;
+	QListView								*m_parent;
+	Meta									m_meta;
+	QPixmap 								pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;
+	QPixmap									pxPackageUnmasked, pxInstalledUnmasked, pxEbuild, pxEbuildMasked, pxEbuildInstalled, pxQueued;
+	bool									queued, versionsLoaded;
+	
+	typedef QMap<QString, PackageVersion*>	PackageVersionMap;
+	PackageVersionMap						m_versions;
 };
 
 #endif

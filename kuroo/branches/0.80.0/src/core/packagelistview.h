@@ -53,7 +53,7 @@ public:
  	 * Get current package.
   	 * @return package name
  	 */
-	virtual QString 		currentPackage();
+	virtual PackageItem* 	currentPackage();
 	
 	/**
  	 * Get selected packages DB id.

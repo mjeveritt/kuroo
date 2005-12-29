@@ -21,6 +21,8 @@
 #ifndef PORTAGEPACKAGEVERSION_H
 #define PORTAGEPACKAGEVERSION_H
 
+#include "packageversion.h"
+
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qregexp.h>
@@ -31,12 +33,10 @@
 * and can store additional values from Portage that the original
 * PackageVersion does not provide.
 */
-class PortagePackageVersion : public QObject
+class PortagePackageVersion : public PackageVersion
 {
-Q_OBJECT
 public:
-	PortagePackageVersion( QObject *parent );
-	~PortagePackageVersion();
+	friend class PackageItem;
 	
 	//! The "maskedness" of a package version.
 	enum Stability {
@@ -62,7 +62,7 @@ public:
 	QStringList& keywords();
 	QStringList& useflags();
 	QStringList& acceptedKeywords();
-	long size() const;
+	QString size() const;
 	bool isHardMasked() const;
 	bool hasDetailedInfo() const;
 	
@@ -77,9 +77,12 @@ public:
 	void setKeywords( const QStringList& keywords );
 	void setUseflags( const QStringList& useflags );
 	void setAcceptedKeywords( const QStringList& acceptedKeywords );
-	void setSize( long size );
+	void setSize( const QString& size );
 	void setHardMasked( bool isHardMasked );
 	void setHasDetailedInfo( bool hasDetailedInfo );
+	
+protected:
+	PortagePackageVersion( PackageItem* parent, const QString& version );
 	
 private:
 	int revisionNumber( const QString& versionString, int* foundPos = NULL ) const;
@@ -123,7 +126,7 @@ private:
 	// Info that's not in the ebuild:
 	
 	/** Downloaded file size in bytes (retrievable by scanning the digest). */
-	long m_size;
+	QString m_size;
 	/** true if this version is hardmasked, false otherwise.
 	* Retrievable by scanning package.[un]mask and Co. */
 	bool m_isHardMasked;

@@ -20,12 +20,12 @@
 
 #include "common.h"
 #include "categorieslistview.h"
+#include "categoryitem.h"
 
 #include <qheader.h>
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qpainter.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -33,58 +33,6 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-
-/**
- * @class CategoriesView::CategoryItem
- * @short Highlight category header with bold darkGray
- */
-class CategoriesView::CategoryItem : public QListViewItem
-{
-public:
-	CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id );
-	
-	void 	setOn( bool on );
-	QString id();
-	
-protected:
-	QString	m_id;
-	bool 	m_on;
-	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-};
-
-CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
-	: QListViewItem( parent, name ), m_on( false ), m_id( id )
-{
-}
-
-void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
-{
-	QColorGroup m_cg( cg );
-	QFont font( p->font() );
-	
-	if ( !m_on ) {
-		font.setItalic( true );
-		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, Qt::gray );
-	}
-	else {
-		font.setItalic( false );
-		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, Qt::black );
-	}
-	QListViewItem::paintCell( p, m_cg, column, width, alignment );
-}
-
-void CategoriesView::CategoryItem::setOn( bool on )
-{
-	m_on = on;
-	repaint();
-}
-
-QString CategoriesView::CategoryItem::id()
-{
-	return m_id;
-}
 
 /**
  * @class CategoriesListView
@@ -107,14 +55,20 @@ CategoriesView::~CategoriesView()
  * Get current category.
  * @return category
  */
-QString CategoriesView::currentCategory()
+// QString CategoriesView::currentCategory()
+// {
+// 	QListViewItem *item = this->currentItem();
+// 	if ( !item )
+// 		return i18n( "na" );
+// 	
+// 	return item->text( 0 );
+// }
+
+CategoryItem* CategoriesView::currentCategory()
 {
-	QListViewItem *item = this->currentItem();
-	if ( !item )
-		return i18n( "na" );
-	
-	return item->text( 0 );
+	return dynamic_cast<CategoryItem*>( this->currentItem() );
 }
+
 
 /**
  * Get current category idDB.

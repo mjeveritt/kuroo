@@ -41,7 +41,7 @@ public:
 	
 	bool parse( const QString& atom );
 
-	QStringList matchingVersions( const QString& versionList );
+	QStringList matchingVersions( const QStringList& versionList );
 
 	bool isBlocking();
 

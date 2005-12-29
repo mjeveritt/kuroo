@@ -27,6 +27,7 @@
 #include <qvaluevector.h>
 
 class QPixmap;
+class CategoryItem;
 
 /**
  * Creates category listview.
@@ -38,15 +39,13 @@ public:
 	CategoriesView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesView();
 
-	class	CategoryItem;
-
 public slots:
 	
 	/**
 	 * Current category as "category-subcategory", for example "app-admin".
 	 * @param package
 	 */
-	QString									currentCategory();
+	CategoryItem*							currentCategory();
 	QString									currentCategoryId();
 	void									setCurrentCategoryId( const QString& package );
 

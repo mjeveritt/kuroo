@@ -75,16 +75,10 @@ QString PackageListView::currentId()
 
 /**
  * Get current package.
- * @return package name
  */
-QString PackageListView::currentPackage()
+PackageItem* PackageListView::currentPackage()
 {
-	QListViewItem *item = this->currentItem();
-	
-	if ( item )
-		return item->text( 0 );
-	else
-		return i18n("na");
+	return dynamic_cast<PackageItem*>( this->currentItem() );
 }
 
 /**
@@ -93,18 +87,15 @@ QString PackageListView::currentPackage()
  */
 QStringList PackageListView::selectedId()
 {
-	QStringList idDBList;
-// 	QListViewItemIterator it( this, QListViewIterator::Selected );
-// 	while ( it.current() ) {
-// 		idDBList += dynamic_cast<PackageItem*>( it.current() )->id();
-// 	}
-	
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->isSelected() && it.current()->isVisible() )
-			idDBList += it.currentKey();
+	QStringList idList;
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		QListViewItem *item = it.current();
+		if ( item->isSelected() )
+			idList += dynamic_cast<PackageItem*>( item )->id();
+		++it;
 	}
-	
-	return idDBList;
+	return idList;
 }
 
 /**
@@ -114,9 +105,12 @@ QStringList PackageListView::selectedId()
 QStringList PackageListView::selectedPackages()
 {
 	QStringList packageList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->isSelected() && it.current()->isVisible() )
-			packageList += it.current()->text( 0 );
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		QListViewItem *item = it.current();
+		if ( item->isSelected() )
+			packageList += dynamic_cast<PackageItem*>( item )->name();
+		++it;
 	}
 	return packageList;
 }
@@ -127,11 +121,13 @@ QStringList PackageListView::selectedPackages()
  */
 QStringList PackageListView::allId()
 {
-	QStringList idDBList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		idDBList += it.currentKey();
-	
-	return idDBList;
+	QStringList idList;
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		idList += dynamic_cast<PackageItem*>( it.current() )->id();
+		++it;
+	}
+	return idList;
 }
 
 /** 
@@ -140,11 +136,13 @@ QStringList PackageListView::allId()
  */
 QStringList PackageListView::allPackages()
 {
-	QStringList idDBList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		idDBList += it.current()->text( 0 );
-	
-	return idDBList;
+	QStringList packageList;
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		packageList += dynamic_cast<PackageItem*>( it.current() )->id();
+		++it;
+	}
+	return packageList;
 }
 
 /**

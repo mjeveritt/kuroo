@@ -25,6 +25,8 @@
 #include "portagetab.h"
 #include "packageinspector.h"
 #include "packageitem.h"
+#include "categoryitem.h"
+#include "portagepackageversion.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -141,8 +143,6 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << "PortageTab::slotReload" << endl;
-	
 	// Prepare categories by loading index
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
@@ -160,8 +160,6 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
-	kdDebug() << "PortageTab::slotFilters" << endl;
-	
 	packagesView->reset();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
 }
@@ -171,8 +169,6 @@ void PortageTab::slotFilters()
  */
 void PortageTab::slotListSubCategories()
 {
-	kdDebug() << "PortageTab::slotListSubCategories" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
 }
@@ -182,8 +178,6 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
-	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) );
@@ -237,65 +231,83 @@ void PortageTab::slotBusy( bool b )
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << "PortageTab::slotPackage" << endl;
-		
 	pbUninstall->setDisabled( true );
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
-	QString package( PortageSingleton::Instance()->package( packagesView->currentId() ) );
+	packagesView->currentPackage()->initVersions();
+	QString package( packagesView->currentPackage()->name() );
 	QString category( PortageSingleton::Instance()->category( packagesView->currentId() ) );
-	Info info( PortageSingleton::Instance()->packageInfo( packagesView->currentId() ) );
 	
 	QString textLines = "<font size=\"+2\">" + package + "</font> ";
-			textLines += "(" + category.section( "-", 0, 0 ) + " / " + category.section( "-", 1, 1 ) + ") <br>";
-			textLines += info.description + "<br>";
-			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
+			textLines += "(" + category.section( "-", 0, 0 ) + " / ";
+			textLines += category.section( "-", 1, 1 ) + ") <br>";
+			textLines += packagesView->currentPackage()->description() + "<br>";
+			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPackage()->homepage();
+			textLines += "\">" + packagesView->currentPackage()->homepage() + "</a><br>";
 	
-	
-	QString textLinesAvailable = i18n("<b>Versions available:</b> ");
+	QString textLinesAvailable;
 	QString textLinesInstalled;
-	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packagesView->currentId() );
-	QStringList versionOnlyList;
-	QMap<QString, bool> versionListAvailability;
-	foreach ( versionList ) {
-		QString version = *it++;
-		QString meta = *it++;
-		QStringList keywords = QStringList::split( " ", *it );
-		versionOnlyList += version;
-
-		if ( PortageSingleton::Instance()->isAvailable( keywords, version ) )
-			versionListAvailability[ version ] = true;
-		else
-			versionListAvailability[ version ] = false;
+	
+	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
+	QValueList<PackageVersion*>::iterator sortedVersionIterator;
+	
+	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
+		textLinesAvailable.prepend( (*sortedVersionIterator)->version() + ", " );
 		
-		if ( meta == FILTERINSTALLED )
-			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, ";
+		if ( (*sortedVersionIterator)->isInstalled() )
+			textLinesInstalled.prepend( "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, " );
+	}
+	
+// 	const QStringList versionList = packagesView->currentPackage()->getVersionsList();
+// 	textLinesAvailable += versionList.join( ", " );
+	
+// 	const QStringList versionList = PortageSingleton::Instance()->packageVersions( packagesView->currentId() );
+// 	QStringList versionOnlyList;
+// 	QMap<QString, bool> versionListAvailability;
+// 	foreach ( versionList ) {
+// 		QString version = *it++;
+// 		QString meta = *it++;
+// 		QStringList keywords = QStringList::split( " ", *it );
+// 		versionOnlyList += version;
+
+// 		if ( PortageSingleton::Instance()->isAvailable( keywords, version ) )
+// 			versionListAvailability[ version ] = true;
+// 		else
+// 			versionListAvailability[ version ] = false;
+		
+// 		if ( meta == FILTERINSTALLED )
+// 			textLinesInstalled += "<font color=darkGreen><b>" + version + "</b></font>, ";
 		
 // 		textLinesAvailable += version + ", ";
-	}
+// 	}
 	
-	const QStringList sortedVersionList = PortageSingleton::Instance()->sortedVersionList( versionOnlyList );
+// 	const QStringList sortedVersionList = PortageSingleton::Instance()->sortedVersionList( versionOnlyList );
 	
-	kdDebug() << "sortedVersionList=" << sortedVersionList << endl;
-	
-	versionOnlyList.clear();
-	foreach ( sortedVersionList ) {
-		if ( versionListAvailability[ *it ] )
-			versionOnlyList += *it;
-		else
-			versionOnlyList += "<font color=darkRed><b>" + *it + "</b></font>";
-	}
+// 	kdDebug() << "sortedVersionList=" << sortedVersionList << endl;
+// 	
+// 	versionOnlyList.clear();
+// 	foreach ( sortedVersionList ) {
+// 		if ( versionListAvailability[ *it ] )
+// 			versionOnlyList += *it;
+// 		else
+// 			versionOnlyList += "<font color=darkRed><b>" + *it + "</b></font>";
+// 	}
 	
 // 	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
+// 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
+// 	textLinesAvailable += versionOnlyList.join( ", " );
+	
 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
-	textLinesAvailable += versionOnlyList.join( ", " );
+	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
 	
 	if ( !textLinesInstalled.isEmpty() )
 		textLinesInstalled = i18n("<b>Versions installed:</b> ") + textLinesInstalled + "<br>";
 	else
 		textLinesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
+	
+	textLinesAvailable = i18n("<b>Versions available:</b> ") + textLinesAvailable;
 	
 	summaryBrowser->setText( textLines + textLinesInstalled + textLinesAvailable );
 	

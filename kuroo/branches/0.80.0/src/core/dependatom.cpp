@@ -148,17 +148,17 @@ QStringList DependAtom::matchingVersions( const QStringList& versionList )
 
 
 	// So, let's iterate through the versions to check if they match or not
-	foreach ( versionList ) {
-		if ( ( matchAllVersions == true ) ||
-		    ( matchBaseVersion == true  && (*it).startsWith(version) ) ||
-		    ( matchEqual       == true  && (*it) == version   ) ||
-		    ( matchEqual == false && matchGreaterThan == true  && (*it).isNewerThan(version) ) ||
-		    ( matchEqual == false && matchGreaterThan == false && (*it).isOlderThan(version) )
-		  ) {
-			matchingVersions.append( *versionIterator );
-			continue;
-		}
-	}
+// 	foreach ( versionList ) {
+// 		if ( ( matchAllVersions == true ) ||
+// 		    ( matchBaseVersion == true  && (*it).startsWith(version) ) ||
+// 		    ( matchEqual       == true  && (*it) == version   ) ||
+// 		    ( matchEqual == false && matchGreaterThan == true  && (*it).isNewerThan(version) ) ||
+// 		    ( matchEqual == false && matchGreaterThan == false && (*it).isOlderThan(version) )
+// 		  ) {
+// 			matchingVersions.append( *versionIterator );
+// 			continue;
+// 		}
+// 	}
 	return matchingVersions;
 
 } // end of matchingVersions()

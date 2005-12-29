@@ -49,7 +49,7 @@ void Portage::init( QObject *myParent )
 	parent = myParent;
 	getUntestingList();
 	loadCache();
-	packageVersion = new PortagePackageVersion( this );
+// 	packageVersion = new PortagePackageVersion( this );
 }
 
 /**

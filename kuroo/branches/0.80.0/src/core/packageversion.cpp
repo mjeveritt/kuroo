@@ -18,16 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "common.h"
 #include "packageversion.h"
 
 /**
  * Initialize the version with its version string.
- * Protected so that only Package can construct a PackageVersion object.
+ * Protected so that only PackageItem can construct a PackageVersion object.
  */
-PackageVersion::PackageVersion( Package* parent, const QString& version )
+PackageVersion::PackageVersion( PackageItem* parent, const QString& version )
+	: m_parent( parent ), m_version( version )
 {
-	m_parent = parent;
-	m_version = version;
 }
 
 /**
@@ -48,7 +48,7 @@ QString PackageVersion::version() const
 /**
  * Returns the package that this version belongs to.
  */
-Package* PackageVersion::package()
+PackageItem* PackageVersion::package()
 {
 	return m_parent;
 }
@@ -86,4 +86,14 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 		return false;
 	else
 		return true;
+}
+
+bool PackageVersion::isAvailable() const
+{
+	kdDebug() << "PackageVersion::isAvailable" << endl;
+}
+
+bool PackageVersion::isInstalled() const
+{
+	kdDebug() << "PackageVersion::isInstalled" << endl;
 }

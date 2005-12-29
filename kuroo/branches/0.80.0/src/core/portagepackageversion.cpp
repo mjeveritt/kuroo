@@ -26,8 +26,8 @@
 * Protected so that only PortagePackage can construct
 * a PortagePackageVersion object.
 */
-PortagePackageVersion::PortagePackageVersion( QObject* parent )
-	: QObject( parent ),
+PortagePackageVersion::PortagePackageVersion( PackageItem* parent, const QString& version )
+	: PackageVersion( parent, version ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere
@@ -40,12 +40,12 @@ PortagePackageVersion::PortagePackageVersion( QObject* parent )
 	m_installed = false;
 	m_overlay = false;
 	m_hasDetailedInfo = false;
-	m_size = 0;
+	m_size = "";
 	m_isHardMasked = false;
 }
 
-PortagePackageVersion::~PortagePackageVersion()
-{}
+// PortagePackageVersion::~PortagePackageVersion()
+// {}
 
 /**
 * Returns true if this version is available (as in: can be installed)
@@ -87,9 +87,9 @@ bool PortagePackageVersion::isNewerThan( const QString& otherVersion ) const
 	int revisionPos, suffixPos, trailingCharPos;
 	
 	// Retrieve revision, suffix and their positions in the version string
-	thisRevision = PortagePackageVersion::revisionNumber( m_version, &revisionPos );
-	thisSuffix = PortagePackageVersion::suffixNumber( m_version, &suffixPos );
-	thisTrailingChar = PortagePackageVersion::trailingCharNumber( m_version, &trailingCharPos );
+	thisRevision = PortagePackageVersion::revisionNumber( version(), &revisionPos );
+	thisSuffix = PortagePackageVersion::suffixNumber( version(), &suffixPos );
+	thisTrailingChar = PortagePackageVersion::trailingCharNumber( version(), &trailingCharPos );
 	
 	// determine the first non-base-version character
 	if ( trailingCharPos != -1 )
@@ -559,7 +559,6 @@ QStringList& PortagePackageVersion::acceptedKeywords()
 */
 void PortagePackageVersion::setAcceptedKeywords( const QStringList& keywords )
 {
-	kdDebug() << "keywords=" << keywords << endl;
 	m_acceptedKeywords = keywords;
 }
 
@@ -568,7 +567,7 @@ void PortagePackageVersion::setAcceptedKeywords( const QStringList& keywords )
 * For Portage, this is the size of the files that have to be downloaded,
 * the hard disk space of the resulting compilation can not be predicted.
 */
-long PortagePackageVersion::size() const
+QString PortagePackageVersion::size() const
 {
 	return m_size;
 }
@@ -576,7 +575,7 @@ long PortagePackageVersion::size() const
 /**
 * Set the space that this package needs on hard disk.
 */
-void PortagePackageVersion::setSize( long size )
+void PortagePackageVersion::setSize( const QString& size )
 {
 	m_size = size;
 }
@@ -617,5 +616,3 @@ void PortagePackageVersion::setHasDetailedInfo( bool hasDetailedInfo )
 {
 	m_hasDetailedInfo = hasDetailedInfo;
 }
-
-#include "portagepackageversion.moc"

@@ -115,30 +115,16 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		if ( max-- > 0 )
 			continue;
 		
-		QString idDB = *it++;
+		QString id = *it++;
 		QString name = *it++;
-		QString package = name;
 		QString description = *it++;
-		QString latest = *it++;
 		QString meta = *it++;
-		QString updateVersion = *it;
+		QString updateVersion = *it++;
+		QString homepage = *it;
 		
-		Meta packageMeta;
-		packageMeta.insert( i18n( "Description" ), description );
-		packageMeta.insert( i18n( "Update" ), updateVersion );
-		PackageItem *packageItem = new PackageItem( this, package, packageMeta, PACKAGE, idDB );
+		PackageItem *packageItem = new PackageItem( this, id, name, description, homepage, meta );
 		
-		if ( meta != FILTERALL )
-			packageItem->setStatus( INSTALLED );
-		
-// 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-// 			packageItem->setStatus(MASKED);
-// 		else {
-// 			if ( PortageSingleton::Instance()->isUntesting( category + "/" + name ) )
-// 				packageItem->setStatus(UNMASKED);
-// 		}
-		
-		insertPackage( idDB, packageItem );
+// 		insertPackage( idDB, packageItem );
 	}
 	setSorting( 0 );
 	setCurrentItem( firstChild() );

@@ -114,15 +114,15 @@ bool ResultListView::loadFromDB()
 		packageMeta.insert( i18n("Download Size"), size );
 		packageMeta.insert( i18n("Use Flags"), use );
 		
-		packageItem = new PackageItem( this, name, packageMeta, PACKAGE, idDB );
-		
-		if ( installed != "0" )
-			packageItem->setStatus(INSTALLED);
+// 		packageItem = new PackageItem( this, name, packageMeta, PACKAGE, idDB );
+// 		
+// 		if ( installed != "0" )
+// 			packageItem->setStatus(INSTALLED);
 		
 // 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
 // 			packageItem->setStatus(MASKED);
 		
-		insertPackage( idDB, packageItem );
+// 		insertPackage( idDB, packageItem );
 	}
 	
 	if ( packageList.isEmpty() )

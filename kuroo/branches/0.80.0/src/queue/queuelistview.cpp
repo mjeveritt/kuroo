@@ -117,16 +117,16 @@ void QueueListView::insertPackageList()
 		packageMeta.insert( i18n( "Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
 		packageMeta.insert( i18n( "Description" ), description );
 		
-		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE, idDB );
-		if ( installed != "0" )
-			packageItem->setStatus( INSTALLED );
+// 		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE, idDB );
+// 		if ( installed != "0" )
+// 			packageItem->setStatus( INSTALLED );
 
 // 		addSize(size);
 // 		packages.insert( idDB, packageItem );
-		insertPackage( idDB, packageItem );
+// 		insertPackage( idDB, packageItem );
 		
 		// Inform all other listviews that this package is in queue
-		QueueSingleton::Instance()->insertInCache( idDB );
+// 		QueueSingleton::Instance()->insertInCache( idDB );
 	}
 	
 	emit( signalQueueLoaded() );

@@ -42,7 +42,6 @@ public:
 	void							initVersions();
 	QValueList<PackageVersion*> 	sortedVersionList();
 	
-	
 	int				status();
 	QString 		id();
 	QString			name();

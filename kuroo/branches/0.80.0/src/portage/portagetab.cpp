@@ -24,7 +24,6 @@
 #include "portagelistview.h"
 #include "portagetab.h"
 #include "packageinspector.h"
-#include "packageitem.h"
 #include "categoryitem.h"
 #include "packageversion.h"
 
@@ -236,21 +235,21 @@ void PortageTab::slotPackage()
 		pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
-	packagesView->currentPackage()->initVersions();
-	QString package( packagesView->currentPackage()->name() );
-	QString category( packagesView->currentPackage()->category() );
+	packagesView->initCurrentPackageVersion();
+	QString package( packagesView->currentPackageName() );
+	QString category( packagesView->currentPackageCategory() );
 	
 	QString textLines = "<font size=\"+2\">" + package + "</font> ";
 			textLines += "(" + category.section( "-", 0, 0 ) + " / ";
 			textLines += category.section( "-", 1, 1 ) + ") <br>";
-			textLines += packagesView->currentPackage()->description() + "<br>";
-			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPackage()->homepage();
-			textLines += "\">" + packagesView->currentPackage()->homepage() + "</a><br>";
+			textLines += packagesView->currentPackageDescription() + "<br>";
+			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPackageHomepage();
+			textLines += "\">" + packagesView->currentPackageHomepage() + "</a><br>";
 	
 	QString textLinesAvailable;
 	QString textLinesInstalled;
 	
-	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
+	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackageVersionList();
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {

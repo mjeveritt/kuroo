@@ -23,6 +23,7 @@
 #include "packageitem.h"
 #include "tooltip.h"
 #include "packagelistview.h"
+#include "packageversion.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -36,6 +37,111 @@
 #include <kmessagebox.h>
 
 static int packageCount( 0 );
+
+class PortageListView::PortageItem : public PackageItem
+{
+public:
+	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status );
+	
+	QString 								category();
+	QString 								homepage();
+	void 									initVersions();
+	QValueList<PackageVersion*> 			sortedVersionList();
+	
+protected:
+	bool									versionsLoaded;
+	QString									m_homepage, m_category;
+	
+	typedef QMap<QString, PackageVersion*>	PackageVersionMap;
+	PackageVersionMap						m_versions;
+};
+
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status )
+	: PackageItem( parent, name, id, description, status ), 
+	m_homepage( homepage ), m_category( "" ), versionsLoaded( false )
+{
+}
+
+QString PortageListView::PortageItem::category()
+{
+	return m_category;
+}
+
+QString PortageListView::PortageItem::homepage()
+{
+	return m_homepage;
+}
+
+void PortageListView::PortageItem::initVersions()
+{
+	if ( versionsLoaded )
+		return;
+	
+	m_category = PortageSingleton::Instance()->category( id() );
+	
+	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( id() );
+	foreach ( versionsList ) {
+		QString versionString = *it++;
+		QString meta = *it++;
+		QString licenses = *it++;
+		QString useFlags = *it++;
+		QString slot = *it++;
+		QString keywords = *it++;
+		QString size = *it;
+		
+		PackageVersion* version = new PackageVersion( this, versionString );
+		version->setLicenses( licenses );
+		version->setUseflags( useFlags );
+		version->setSlot( slot );
+		version->setKeywords( QStringList::split( " ", keywords ) );
+		version->setAcceptedKeywords( KurooConfig::arch() );
+		version->setSize( size );
+		
+		if ( meta == FILTERINSTALLED )
+			version->setInstalled( true );
+		
+		m_versions[ versionString ] = version;
+	}
+	versionsLoaded = true;
+}
+
+/**
+ * Return a list of PackageVersion objects sorted by their version numbers,
+ * with the oldest version at the beginning and the latest version at the end
+ * of the list.
+ */
+QValueList<PackageVersion*> PortageListView::PortageItem::sortedVersionList()
+{
+	QValueList<PackageVersion*> sortedVersions;
+	QValueList<PackageVersion*>::iterator sortedVersionIterator;
+	
+	for ( PackageVersionMap::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+		if ( versionIterator == m_versions.begin() ) {
+			sortedVersions.append( *versionIterator );
+			continue; // if there is only one version, it can't be compared
+		}
+		
+		// reverse iteration through the sorted version list
+		sortedVersionIterator = sortedVersions.end();
+		while ( true ) {
+			if ( sortedVersionIterator == sortedVersions.begin() ) {
+				sortedVersions.prepend( *versionIterator );
+				break;
+			}
+			
+			sortedVersionIterator--;
+			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
+				sortedVersionIterator++; // insert after the compared one, not before
+				sortedVersions.insert( sortedVersionIterator, *versionIterator );
+				break;
+			}
+		}
+	}
+	return sortedVersions;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Installed packages listview.
@@ -53,7 +159,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setLabel( 1, pxQueuedColumn, " " );
 	addColumn( i18n( "Update" ) );
 	addColumn( i18n( "Description" ) );
-	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
+// 	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 	
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator( true );	
@@ -80,6 +186,36 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 
 PortageListView::~PortageListView()
 {
+}
+
+QString PortageListView::currentPackageName()
+{
+	return currentPackage()->name();
+}
+
+QString PortageListView::currentPackageDescription()
+{
+	return currentPackage()->description();
+}
+
+QString PortageListView::currentPackageCategory()
+{
+	return dynamic_cast<PortageItem*>(currentPackage())->category();
+}
+
+QString PortageListView::currentPackageHomepage()
+{
+	return dynamic_cast<PortageItem*>(currentPackage())->homepage();
+}
+
+void PortageListView::initCurrentPackageVersion()
+{
+	dynamic_cast<PortageItem*>(currentPackage())->initVersions();
+}
+
+QValueList<PackageVersion*> PortageListView::currentPackageVersionList()
+{
+	return dynamic_cast<PortageItem*>(currentPackage())->sortedVersionList();
 }
 
 void PortageListView::setHeader( const QString& text )
@@ -122,7 +258,8 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString updateVersion = *it++;
 		QString homepage = *it;
 		
-		PackageItem *packageItem = new PackageItem( this, id, name, description, homepage, meta );
+		PortageItem* item = new PortageItem( this, id, name, description, homepage, meta );
+		item->setText( 3, description );
 	}
 	setSorting( 0 );
 	setCurrentItem( firstChild() );

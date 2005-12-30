@@ -51,19 +51,6 @@ CategoriesView::~CategoriesView()
 {
 }
 
-/**
- * Get current category.
- * @return category
- */
-// QString CategoriesView::currentCategory()
-// {
-// 	QListViewItem *item = this->currentItem();
-// 	if ( !item )
-// 		return i18n( "na" );
-// 	
-// 	return item->text( 0 );
-// }
-
 CategoryItem* CategoriesView::currentCategory()
 {
 	return dynamic_cast<CategoryItem*>( this->currentItem() );

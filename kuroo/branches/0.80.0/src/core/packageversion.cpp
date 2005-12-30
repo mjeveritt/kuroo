@@ -26,7 +26,7 @@
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
 */
-PackageVersion::PackageVersion( PackageItem* parent, const QString& version )
+PackageVersion::PackageVersion( PortageListView::PortageItem* parent, const QString& version )
 	: m_parent( parent ), m_version( version ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),

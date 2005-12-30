@@ -50,7 +50,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Package" ) );
 	addColumn( i18n( "Duration" ) );
 	addColumn( i18n( "Description" ) );
-	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
+// 	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
@@ -106,24 +106,18 @@ void QueueListView::insertPackageList()
 	// Get list of update packages with info
 	const QStringList packageList = QueueSingleton::Instance()->allPackages();
 	foreach ( packageList ) {
-		QString idDB = *it++;
+		QString id = *it++;
 		QString category = *it++;
 		category = category + "-" + *it++;
 		QString name = *it++;
 		QString description = *it++;
-		QString installed = *it;
+		QString meta = *it;
 		
-		Meta packageMeta;
-		packageMeta.insert( i18n( "Duration" ), timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
-		packageMeta.insert( i18n( "Description" ), description );
-		
-// 		PackageItem* packageItem = new PackageItem( this, category + "/" + name, packageMeta, PACKAGE, idDB );
-// 		if ( installed != "0" )
-// 			packageItem->setStatus( INSTALLED );
+		PackageItem* item = new PackageItem( this, id, category + "/" + name, description, meta );
+		item->setText( 1, timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
+		item->setText( 2, description );
 
-// 		addSize(size);
-// 		packages.insert( idDB, packageItem );
-// 		insertPackage( idDB, packageItem );
+// 		addSize( size );
 		
 		// Inform all other listviews that this package is in queue
 // 		QueueSingleton::Instance()->insertInCache( idDB );

@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "packageitem.h"
-#include "packageversion.h"
 
 #include <qpainter.h>
 
@@ -30,9 +29,9 @@
 /**
  * KListViewItem subclass to implement sorting, tooltip, color...
  */
-PackageItem::PackageItem( QListView* parent, const QString& id, const char* name, const QString& description, const QString& homepage, const QString& status )
-	: KListViewItem( parent, name ), m_parent( parent ), queued( false ), versionsLoaded( false ),
-	m_id( id ), m_name( name ), m_description( description ), m_homepage( homepage ), m_status( status ), m_category( "" )
+PackageItem::PackageItem( QListView* parent, const QString& id, const char* name, const QString& description, const QString& status )
+	: KListViewItem( parent, name ),
+	m_parent( parent ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description )
 {
 	init();
 }
@@ -41,7 +40,7 @@ PackageItem::~PackageItem()
 {}
 
 /**
- * Insert package meta text into the right column.
+ * Set package status.
  */
 void PackageItem::init()
 {
@@ -54,80 +53,10 @@ void PackageItem::init()
 	pxEbuildInstalled = ldr->loadIcon( "kuroo_ebuild_emerged", KIcon::Small );
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	
-	setText( 3, m_description );
-	
 	if ( m_status != FILTERALL )
 		setStatus( INSTALLED );
 	else
 		setStatus( PACKAGE );
-}
-
-void PackageItem::initVersions()
-{
-	if ( versionsLoaded )
-		return;
-	
-	m_category = PortageSingleton::Instance()->category( m_id );
-	
-	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( m_id );
-	foreach ( versionsList ) {
-		QString versionString = *it++;
-		QString meta = *it++;
-		QString licenses = *it++;
-		QString useFlags = *it++;
-		QString slot = *it++;
-		QString keywords = *it++;
-		QString size = *it;
-		
-		PackageVersion* version = new PackageVersion( this, versionString );
-		version->setLicenses( licenses );
-		version->setUseflags( useFlags );
-		version->setSlot( slot );
-		version->setKeywords( QStringList::split( " ", keywords ) );
-		version->setAcceptedKeywords( KurooConfig::arch() );
-		version->setSize( size );
-		
-		if ( meta == FILTERINSTALLED )
-			version->setInstalled( true );
-		
-		m_versions[ versionString ] = version;
-	}
-	versionsLoaded = true;
-}
-
-/**
- * Return a list of PackageVersion objects sorted by their version numbers,
- * with the oldest version at the beginning and the latest version at the end
- * of the list.
- */
-QValueList<PackageVersion*> PackageItem::sortedVersionList()
-{
-	QValueList<PackageVersion*> sortedVersions;
-	QValueList<PackageVersion*>::iterator sortedVersionIterator;
-	
-	for ( PackageVersionMap::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
-		if ( versionIterator == m_versions.begin() ) {
-			sortedVersions.append( *versionIterator );
-			continue; // if there is only one version, it can't be compared
-		}
-		
-		// reverse iteration through the sorted version list
-		sortedVersionIterator = sortedVersions.end();
-		while ( true ) {
-			if ( sortedVersionIterator == sortedVersions.begin() ) {
-				sortedVersions.prepend( *versionIterator );
-				break;
-			}
-			
-			sortedVersionIterator--;
-			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
-				sortedVersionIterator++; // insert after the compared one, not before
-				sortedVersions.insert( sortedVersionIterator, *versionIterator );
-				break;
-			}
-		}
-	}
-	return sortedVersions;
 }
 
 /**
@@ -136,11 +65,6 @@ QValueList<PackageVersion*> PackageItem::sortedVersionList()
 QString PackageItem::id()
 {
 	return m_id;
-}
-
-QString PackageItem::category()
-{
-	return m_category;
 }
 
 QString PackageItem::name()
@@ -153,19 +77,13 @@ QString PackageItem::description()
 	return m_description;
 }
 
-QString PackageItem::homepage()
-{
-	return m_homepage;
-}
-
 /**
  * Convenience method.
  * @return status
  */
-int PackageItem::status()
+QString PackageItem::status()
 {
-// 	return m_status;
-	return 0;
+	return m_status;
 }
 
 /**

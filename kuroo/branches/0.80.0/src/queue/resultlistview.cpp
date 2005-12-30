@@ -53,7 +53,7 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	addColumn( i18n( "Download Size" ) );
 	addColumn( i18n( "Use Flags" ) );
 	addColumn( i18n( "Description" ) );
-	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
+// 	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
 	setMinimumSize( QSize( 800, 200 ) );
 	setProperty( "selectionMode", "Extended" );
 	setFullWidth( true );
@@ -66,7 +66,7 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	setColumnWidthMode( 4, QListView::Manual );
 	setColumnWidthMode( 5, QListView::Manual );
 	
-	setColumnWidth( 0, 200 );
+	setColumnWidth( 0, 150 );
 	setColumnWidth( 1, 20 );
 	setColumnWidth( 2, 80 );
 	setColumnWidth( 3, 50 );
@@ -88,7 +88,6 @@ ResultListView::~ResultListView()
  */
 bool ResultListView::loadFromDB()
 {
-	PackageItem *packageItem;
 	reset();
 	categories.clear();
 	
@@ -96,33 +95,23 @@ bool ResultListView::loadFromDB()
 	QStringList packageList( " " );
 	packageList += ResultsSingleton::Instance()->allPackages();
 	for( QStringList::Iterator it = --( packageList.end() ), end = packageList.begin(); it != end; ) {
-		QString installed = *it--;
-		QString flags = *it--;
+		QString meta = *it--;
+		QString action = *it--;
 		QString use = *it--;
 		QString size = *it-- + " kB";
 		QString description = *it--;
 		QString package = *it--;
-		QString idDB = *it--;
+		QString id = *it--;
 		
 		QString name = package.section( rxPortageVersion, 0, 0 );
 		QString version = package.section( name + "-", 1, 1 );
 		
-		Meta packageMeta;
-		packageMeta.insert( i18n("Version"), version );
-		packageMeta.insert( i18n("Action"), flags );
-		packageMeta.insert( i18n("Description"), description );
-		packageMeta.insert( i18n("Download Size"), size );
-		packageMeta.insert( i18n("Use Flags"), use );
-		
-// 		packageItem = new PackageItem( this, name, packageMeta, PACKAGE, idDB );
-// 		
-// 		if ( installed != "0" )
-// 			packageItem->setStatus(INSTALLED);
-		
-// 		if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-// 			packageItem->setStatus(MASKED);
-		
-// 		insertPackage( idDB, packageItem );
+		PackageItem* item = new PackageItem( this, id, name, description, meta );
+		item->setText( 2, version );
+		item->setText( 3, action );
+		item->setText( 4, size );
+		item->setText( 5, use );
+		item->setText( 6, description );
 	}
 	
 	if ( packageList.isEmpty() )

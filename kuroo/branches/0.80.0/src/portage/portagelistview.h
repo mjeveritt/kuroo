@@ -25,7 +25,7 @@
 
 #include "packagelistview.h"
 
-class Package;
+class PackageVersion;
 
 /**
  * @class PortageListView
@@ -38,15 +38,24 @@ public:
 	PortageListView( QWidget *parent = 0, const char *name = 0 );
 	~PortageListView();
 	
+	class 							PortageItem;
+	
+	QString 						currentPackageName();
+	QString							currentPackageDescription();
+	QString							currentPackageCategory();
+	QString							currentPackageHomepage();
+	void							initCurrentPackageVersion();
+	QValueList<PackageVersion*>		currentPackageVersionList();
+	
 public slots:
 	
-	void			setHeader( const QString& text );
+	void							setHeader( const QString& text );
 	
 	/**
 	 * Populate listview with content of this category..
 	 * @param package
 	 */
-	void 			addSubCategoryPackages( const QStringList& packageList );
+	void 							addSubCategoryPackages( const QStringList& packageList );
 
 private slots:
 	
@@ -54,8 +63,8 @@ private slots:
 // 	void			slotNewItem( int x, int y );
 	
 private:
-	QStringList		unmaskedList;
-	QPixmap 		pxQueuedColumn;
+	QStringList						unmaskedList;
+	QPixmap 						pxQueuedColumn;
 };
 
 #endif

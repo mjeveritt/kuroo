@@ -37,7 +37,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( setQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
-		
+
 	new ToolTip( this );
 }
 
@@ -54,7 +54,7 @@ void PackageListView::reset()
 	packages.clear();
 }
 
-int PackageListView::currentItemStatus()
+QString PackageListView::currentItemStatus()
 {
 	return dynamic_cast<PackageItem*>( this->currentItem() )->status();
 }

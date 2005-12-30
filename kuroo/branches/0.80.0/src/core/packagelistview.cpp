@@ -72,7 +72,6 @@ QString PackageListView::currentId()
 		return i18n("na");
 }
 
-
 /**
  * Get current package.
  */
@@ -152,6 +151,20 @@ QStringList PackageListView::allPackages()
 QString PackageListView::count()
 {
 	return QString::number( packageIndex.count() );
+}
+
+void PackageListView::setPackageFocus( const QString& id )
+{
+	if ( packageIndex[id] ) {
+		PackageItem* item = packageIndex[id];
+		setCurrentItem( item );
+		setSelected( item, true );
+		ensureItemVisible( item );
+	}
+	else {
+		setCurrentItem( firstChild() );
+		setSelected( firstChild(), true );
+	}
 }
 
 /**

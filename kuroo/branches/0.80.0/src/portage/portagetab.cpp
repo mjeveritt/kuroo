@@ -158,7 +158,7 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
-	packagesView->resetListView();
+// 	packagesView->resetListView();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
 }
 

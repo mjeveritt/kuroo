@@ -159,10 +159,9 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setLabel( 1, pxQueuedColumn, " " );
 	addColumn( i18n( "Update" ) );
 	addColumn( i18n( "Description" ) );
-// 	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 	
 	setProperty( "selectionMode", "Extended" );
-	setShowSortIndicator( true );	
+	setShowSortIndicator( true );
 	setItemMargin( 1 );
 	setRootIsDecorated( true );
 	setFullWidth( true );
@@ -236,6 +235,11 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	
 // 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
 	
+	// Store package focus
+	QString currentId = this->currentId();
+	
+	kdDebug() << "PortageListView::addSubCategoryPackages currentId=" << currentId << endl;
+	
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
 	resetListView();
@@ -265,9 +269,8 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		indexPackage( id, item );
 	}
 	setSorting( 0 );
-	setCurrentItem( firstChild() );
-	setSelected( firstChild(), true );
 	setHeader( QString::number( packageCount ) );
+	setPackageFocus( currentId );
 	
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;

@@ -94,6 +94,8 @@ public slots:
 	
 protected slots:
 	
+	void					setPackageFocus( const QString& id );
+	
 	/**
  	 * Fast method for marking packages as queued.
  	 * @param idDB

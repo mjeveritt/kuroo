@@ -214,7 +214,7 @@ private:
 	QObject	*parent;
 	
     //bump DATABASE_VERSION whenever changes to the table structure are made. will remove old db file.
-	static const int DATABASE_VERSION = 18;
+	static const int DATABASE_VERSION = 19;
 	static const int DATABASE_STATS_VERSION = 3;
 	static const int MONITOR_INTERVAL = 60; //sec
 

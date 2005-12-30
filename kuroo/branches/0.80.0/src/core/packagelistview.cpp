@@ -34,9 +34,9 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	setFrameShape( QFrame::NoFrame );
 	setSelectionModeExt( FileManager );
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( setQueued(const QString&, bool) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( slotSetUnmasked(const QString&, bool) ) );
 
 	new ToolTip( this );
 }
@@ -48,10 +48,10 @@ PackageListView::~PackageListView()
 /**
  * Clear this listView and packages.
  */
-void PackageListView::reset()
+void PackageListView::resetListView()
 {
 	clear();
-	packages.clear();
+	packageIndex.clear();
 }
 
 QString PackageListView::currentItemStatus()
@@ -151,7 +151,7 @@ QStringList PackageListView::allPackages()
  */
 QString PackageListView::count()
 {
-	return QString::number( packages.count() );
+	return QString::number( packageIndex.count() );
 }
 
 /**
@@ -159,9 +159,10 @@ QString PackageListView::count()
  */
 void PackageListView::slotClearQueued()
 {
-	QString name = this->name();
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		packages[it.currentKey()]->setStatus( NOTQUEUED );
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		dynamic_cast<PackageItem*>( it.current() )->setStatus( NOTQUEUED );
+		++it;
 	}
 }
 
@@ -170,13 +171,13 @@ void PackageListView::slotClearQueued()
  * @param idDB
  * @param true/false
  */
-void PackageListView::setQueued( const QString& idDB, bool b )
+void PackageListView::slotSetQueued( const QString& id, bool isQueued )
 {
-	if ( packages[idDB] ) {
-		if ( b )
-			packages[idDB]->setStatus( QUEUED );
+	if ( packageIndex[id] ) {
+		if ( isQueued )
+			packageIndex[id]->setStatus( QUEUED );
 		else
-			packages[idDB]->setStatus( NOTQUEUED );
+			packageIndex[id]->setStatus( NOTQUEUED );
 	}
 }
 
@@ -185,14 +186,14 @@ void PackageListView::setQueued( const QString& idDB, bool b )
  * @param item
  * @param idDB
  */
-void PackageListView::insertPackage( const QString& idDB, PackageItem *item )
+void PackageListView::indexPackage( const QString& id, PackageItem *item )
 {
-	packages.insert( idDB, item );
+	packageIndex.insert( id, item );
 	
-	if ( QueueSingleton::Instance()->isQueued( idDB ) )
-		packages[idDB]->setStatus( QUEUED );
+	if ( QueueSingleton::Instance()->isQueued( id ) )
+		packageIndex[id]->setStatus( QUEUED );
 	else
-		packages[idDB]->setStatus( NOTQUEUED );
+		packageIndex[id]->setStatus( NOTQUEUED );
 }
 
 /**
@@ -200,18 +201,13 @@ void PackageListView::insertPackage( const QString& idDB, PackageItem *item )
  * @param idDB
  * @param true/false
  */
-void PackageListView::setUnmasked( const QString& name, bool b )
+void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
 {
-	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
-	while ( myChild ) {
-		if ( myChild->text( 0 ) == name ) {
-			if ( b )
-				myChild->setStatus( UNMASKED );
-			else
-				myChild->setStatus( NONE );
-			break;
-		}
-		myChild = dynamic_cast<PackageItem*>( myChild->nextSibling() );
+	if ( packageIndex[id] ) {
+		if ( isUnmasked )
+			packageIndex[id]->setStatus( UNMASKED );
+		else
+			packageIndex[id]->setStatus( NONE );
 	}
 }
 

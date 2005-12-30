@@ -232,13 +232,13 @@ void PortageListView::setHeader( const QString& text )
  */
 void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
-// 	clock_t start = clock();
+	clock_t start = clock();
 	
 // 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
 	
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
-	reset();
+	resetListView();
 	setHeader( "" );
 	
 	// Don't load all packages, only first ROWLIMIT
@@ -255,11 +255,14 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString name = *it++;
 		QString description = *it++;
 		QString meta = *it++;
-		QString updateVersion = *it++;
+		QString update = *it++;
 		QString homepage = *it;
 		
 		PortageItem* item = new PortageItem( this, id, name, description, homepage, meta );
+		item->setText( 2, update );
 		item->setText( 3, description );
+		
+		indexPackage( id, item );
 	}
 	setSorting( 0 );
 	setCurrentItem( firstChild() );

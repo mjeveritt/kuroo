@@ -25,8 +25,6 @@
 
 #include <qpixmap.h>
 
-typedef QMap<QString, QString> Meta;
-
 /**
  * @class PackageItem
  * @short KListViewItem subclass to implement sorting, tooltip, color...
@@ -41,11 +39,6 @@ public:
 	QString 		id();
 	QString			name();
 	QString			description();
-	
-	/**
-	 * @return meta inf on package
-	 */
-	Meta			getMeta();
 	
 	/**
  	 * Is the listViewItem category, package or ebuild.
@@ -84,18 +77,14 @@ protected:
 	 * @param width
 	 * @param alignment
 	 */
-// 	virtual void 	paintCell( QPainter *p, const QColorGroup &cg,int column, int width, int alignment );
-	
-// protected:
-// 	virtual PackageVersion* createPackageVersion( const QString& version ) = 0;
+	virtual void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 	
 private:
-	QString									m_id, m_name, m_status, m_packageTip, m_description;
-	QListView								*m_parent;
-	Meta									m_meta;
-	QPixmap 								pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;
-	QPixmap									pxPackageUnmasked, pxInstalledUnmasked, pxEbuild, pxEbuildMasked, pxEbuildInstalled, pxQueued;
-	bool									queued;
+	int				meta;
+	QString			m_id, m_name, m_status, m_packageTip, m_description;
+	QListView		*m_parent;
+	QPixmap 		pxPackageHeader, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked, pxQueued;
+	bool			queued;
 
 };
 

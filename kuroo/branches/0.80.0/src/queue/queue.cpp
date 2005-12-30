@@ -189,7 +189,7 @@ private:
 Queue::Queue( QObject* parent )
 	: QObject( parent )
 {
-	packagesCache.reserve( ROWLIMIT );
+// 	packagesCache.reserve( ROWLIMIT );
 }
 
 Queue::~Queue()
@@ -207,7 +207,7 @@ void Queue::init( QObject *myParent )
  */
 void Queue::clearCache()
 {
-	packagesCache.clear();
+	packageCache.clear();
 	SignalistSingleton::Instance()->clearQueued();
 }
 
@@ -215,23 +215,20 @@ void Queue::clearCache()
  * When the package is inserted in the register it in the cache too.
  * @param id
  */
-void Queue::insertInCache( const QString& idDB )
+void Queue::insertInCache( const QString& id )
 {
-	packagesCache.push_back( idDB.toInt() );
-	SignalistSingleton::Instance()->setQueued( idDB, true );
+	packageCache[ id ] = true;
+	SignalistSingleton::Instance()->setQueued( id, true );
 }
 
 /**
  * When the package is inserted in the register it in the cache too.
  * @param id
  */
-void Queue::deleteFromCache( const QString& idDB )
+void Queue::deleteFromCache( const QString& id )
 {
-	QValueVector<int>::iterator it = qFind( packagesCache.begin(), packagesCache.end(), idDB.toInt() );
-	if ( it != packagesCache.end() )
-		packagesCache.erase(it);
-	qHeapSort( packagesCache );
-	SignalistSingleton::Instance()->setQueued( idDB, false );
+	packageCache[ id ] = false;
+	SignalistSingleton::Instance()->setQueued( id, false );
 }
 
 /**
@@ -239,14 +236,13 @@ void Queue::deleteFromCache( const QString& idDB )
  * @param id
  * @return true/false
  */
-bool Queue::isQueued( const QString& idDB )
+bool Queue::isQueued( const QString& id )
 {
-	int id = idDB.toInt();
-	QValueVector<int>::iterator it = qFind( packagesCache.begin(), packagesCache.end(), id );
-	if ( it != packagesCache.end() )
-		return true;
-	else
+	QMap<QString, bool>::iterator itMap = packageCache.find( id );
+	if ( itMap == packageCache.end() )
 		return false;
+	else
+		return true;
 }
 
 /**

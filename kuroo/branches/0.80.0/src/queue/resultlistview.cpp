@@ -88,7 +88,7 @@ ResultListView::~ResultListView()
  */
 bool ResultListView::loadFromDB()
 {
-	reset();
+	resetListView();
 	categories.clear();
 	
 	//Get list of update packages with info and insert them in reverse for the correct order
@@ -112,6 +112,8 @@ bool ResultListView::loadFromDB()
 		item->setText( 4, size );
 		item->setText( 5, use );
 		item->setText( 6, description );
+		
+		indexPackage( id, item );
 	}
 	
 	if ( packageList.isEmpty() )

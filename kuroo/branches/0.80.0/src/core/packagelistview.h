@@ -39,7 +39,7 @@ public:
     ~PackageListView();
 
 public:
-	virtual	void			reset();
+	virtual	void			resetListView();
 	
 	/**
  	 * Current package idDB.
@@ -99,28 +99,28 @@ protected slots:
  	 * @param idDB
  	 * @param true/false
  	 */
-	virtual void 			setQueued( const QString& idDB, bool b );
+	virtual void 			slotSetQueued( const QString& idDB, bool b );
 	
 	/**
  	 * Insert package and check if in the queue.
  	 * @param item
  	 * @param idDB
  	 */
-	virtual void 			insertPackage( const QString& idDB, PackageItem *item );
+	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
 	/**
 	* Fast method for marking packages as unmasked.
 	* @param idDB
 	* @param true/false
 	*/
-	virtual void 			setUnmasked( const QString& name, bool b );
+	virtual void 			slotSetUnmasked( const QString& name, bool b );
 	
 protected:
 	
 	/**
 	 * Internal index of packages in listView.
 	 */
-	QDict<PackageItem>		packages;
+	QDict<PackageItem>		packageIndex;
 	
 };
 

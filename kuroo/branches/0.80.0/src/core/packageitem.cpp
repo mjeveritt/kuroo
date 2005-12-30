@@ -31,7 +31,7 @@
  */
 PackageItem::PackageItem( QListView* parent, const QString& id, const char* name, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description )
+	m_parent( parent ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
 {
 	init();
 }
@@ -46,11 +46,8 @@ void PackageItem::init()
 {
 	// Load icons for category, package ...
 	KIconLoader *ldr = KGlobal::iconLoader();
-	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
-	pxEbuild = ldr->loadIcon( "kuroo_ebuild", KIcon::Small );
-	pxEbuildInstalled = ldr->loadIcon( "kuroo_ebuild_emerged", KIcon::Small );
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	
 	if ( m_status != FILTERALL )
@@ -88,15 +85,6 @@ QString PackageItem::status()
 
 /**
  * Convenience method.
- * @return meta object
- */
-Meta PackageItem::getMeta()
-{
-	return m_meta;
-}
-
-/**
- * Convenience method.
  * @return true if package is in the queue.
  */
 bool PackageItem::isQueued()
@@ -114,56 +102,42 @@ void PackageItem::setStatus( int status )
 	switch ( status ) {
 		
 		case NONE :
-			m_status = NONE;
+			meta = NONE;
 			repaint();
 			break;
 		
 		case INSTALLED :
-			m_status = INSTALLED;
+			meta = INSTALLED;
 			setPixmap( 0, pxInstalled );
-			m_meta.insert( i18n("Status"), i18n("Installed") );
+// 			m_meta.insert( i18n("Status"), i18n("Installed") );
 			break;
 			
 		case PACKAGE :
-			m_status = PACKAGE;
+			meta = PACKAGE;
 			setPixmap( 0, pxPackage );
 			break;
 		
 		case MASKED :
-			m_status = MASKED;
-			m_meta.insert( i18n("Keyword"), i18n("Masked") );
+			meta = MASKED;
+// 			m_meta.insert( i18n("Keyword"), i18n("Masked") );
 			repaint();
 			break;
 		
 		case UNMASKED :
-			m_status = UNMASKED;
-			m_meta.insert( i18n("Keyword"), i18n("Unmasked") );
+			meta = UNMASKED;
+// 			m_meta.insert( i18n("Keyword"), i18n("Unmasked") );
 			repaint();
 			break;
 		
 		case QUEUED :
 			queued = true;
-			m_meta.insert( i18n("In Queue"), i18n("Yes") );
-// 			if ( parent() )
-// 				dynamic_cast<PackageItem*>( parent() )->setStatus( QUEUED );
+// 			m_meta.insert( i18n("In Queue"), i18n("Yes") );
 			setPixmap( 1, pxQueued );
 			break;
 		
 		case NOTQUEUED : {
 			queued = false;
-			m_meta.insert( i18n("In Queue"), i18n("No") );
-// 			if ( parent() ) {
-// 				PackageItem* sibling;
-// 				sibling = dynamic_cast<PackageItem*>(parent()->firstChild());
-// 				bool notQueued(true);
-// 				while( sibling ) {
-// 					if ( sibling->isQueued() )
-// 						notQueued = false;
-// 					sibling = dynamic_cast<PackageItem*>( sibling->nextSibling() );
-// 				}
-// 				if ( notQueued )
-// 					dynamic_cast<PackageItem*>( parent() )->setStatus( NOTQUEUED );
-// 			}
+// 			m_meta.insert( i18n("In Queue"), i18n("No") );
 			setPixmap( 1, NULL );
 			repaint();
 		}
@@ -178,32 +152,32 @@ void PackageItem::setStatus( int status )
  * @param width
  * @param alignment
  */
-// void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
-// {
-// 	QColorGroup _cg( cg );
-// 	QFont font( p->font() );
-// 	
-// 	if ( column == 0 ) {
-// 		switch ( m_status ) {
-// 			case NONE :
-// 				font.setBold(false);
-// 				p->setFont(font);
-// 				_cg.setColor( QColorGroup::Text, Qt::black );
-// 				break;
-// 			
-// 			case MASKED :
-// 				font.setBold(true);
-// 				p->setFont(font);
-// 				_cg.setColor( QColorGroup::Text, KurooConfig::maskedColor() );
-// 				break;
-// 			
-// 			case UNMASKED :
-// 				font.setBold(true);
-// 				p->setFont(font);
-// 				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
-// 				break;
-// 		}
-// 	}
-// 	KListViewItem::paintCell( p, _cg, column, width, alignment );
-// }
+void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+{
+	QColorGroup _cg( cg );
+	QFont font( p->font() );
+	
+	if ( column == 0 ) {
+		switch ( meta ) {
+			case NONE :
+				font.setBold(false);
+				p->setFont(font);
+				_cg.setColor( QColorGroup::Text, Qt::black );
+				break;
+			
+			case MASKED :
+				font.setBold(true);
+				p->setFont(font);
+				_cg.setColor( QColorGroup::Text, KurooConfig::maskedColor() );
+				break;
+			
+			case UNMASKED : {
+				font.setBold(true);
+				p->setFont(font);
+				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
+			}
+		}
+	}
+	KListViewItem::paintCell( p, _cg, column, width, alignment );
+}
 

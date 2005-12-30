@@ -111,7 +111,7 @@ bool ScanHistoryJob::doJob()
 					QString packageNoVersion = package.section( rxPortageVersion, 0, 0 );
 	
 					// Update emerge time and increment count for packageNoVersion
-					EmergeTimeMap::iterator itMap = emergeTimeMap.find(packageNoVersion);
+					EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
 					if ( itMap == emergeTimeMap.end() ) {
 						PackageEmergeTime pItem( secTime, 1 );
 						emergeTimeMap.insert( packageNoVersion, pItem );

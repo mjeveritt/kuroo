@@ -20,12 +20,12 @@
 
 #include "common.h"
 #include "categorieslistview.h"
-#include "categoryitem.h"
 
 #include <qheader.h>
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include <qpainter.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -33,6 +33,65 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+
+/**
+ * @class CategoriesView::CategoryItem
+ * @short Highlight category header with bold darkGray
+ */
+class CategoriesView::CategoryItem : public QListViewItem
+{
+public:
+	CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id );
+	
+	void 	setOn( bool on );
+	QString id();
+	QString name();
+	
+protected:
+	QString	m_id, m_name;
+	bool 	m_on;
+	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+};
+
+
+CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
+: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
+{
+}
+
+void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+{
+	QColorGroup m_cg( cg );
+	QFont font( p->font() );
+	
+	if ( !m_on ) {
+		font.setItalic( true );
+		p->setFont( font );
+		m_cg.setColor( QColorGroup::Text, Qt::gray );
+	}
+	else {
+		font.setItalic( false );
+		p->setFont( font );
+		m_cg.setColor( QColorGroup::Text, Qt::black );
+	}
+	QListViewItem::paintCell( p, m_cg, column, width, alignment );
+}
+
+void CategoriesView::CategoryItem::setOn( bool on )
+{
+	m_on = on;
+	repaint();
+}
+
+QString CategoriesView::CategoryItem::id()
+{
+	return m_id;
+}
+
+QString CategoriesView::CategoryItem::name()
+{
+	return m_name;
+}
 
 /**
  * @class CategoriesListView
@@ -51,7 +110,7 @@ CategoriesView::~CategoriesView()
 {
 }
 
-CategoryItem* CategoriesView::currentCategory()
+CategoriesView::CategoryItem* CategoriesView::currentCategory()
 {
 	return dynamic_cast<CategoryItem*>( this->currentItem() );
 }

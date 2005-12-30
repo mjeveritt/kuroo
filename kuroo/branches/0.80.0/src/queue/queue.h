@@ -49,20 +49,20 @@ public slots:
 	* When the package is inserted in the register it in the cache too.
 	* @param id
 	*/
-	void					insertInCache( const QString& idDB );
+	void					insertInCache( const QString& id );
 	
 	/**
 	* When the package is inserted in the register it in the cache too.
 	* @param id
 	*/
-	void					deleteFromCache( const QString& idDB );
+	void					deleteFromCache( const QString& id );
 	
 	/**
 	* Check if package is the queue.
 	* @param id
 	* @return true/false
 	*/
-	bool					isQueued( const QString& idDB );
+	bool					isQueued( const QString& id );
 	
 	/**
 	* Clear the queue.
@@ -122,7 +122,7 @@ private:
 	QObject					*parent;
 	QString					package;
 	QStringList				packageIdList;
-	QValueVector<int>		packagesCache;
+	QMap<QString, bool>		packageCache;
 };
 
 #endif

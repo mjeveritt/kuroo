@@ -24,7 +24,6 @@
 #include "portagelistview.h"
 #include "portagetab.h"
 #include "packageinspector.h"
-#include "categoryitem.h"
 #include "packageversion.h"
 
 #include <qlayout.h>
@@ -159,7 +158,7 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
-	packagesView->reset();
+	packagesView->resetListView();
 	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
 }
 

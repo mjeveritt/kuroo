@@ -50,7 +50,6 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Package" ) );
 	addColumn( i18n( "Duration" ) );
 	addColumn( i18n( "Description" ) );
-// 	setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth() ) );
 
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
@@ -64,10 +63,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );
 	
-	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), 
-	            this, SLOT( setQueued(const QString&, bool) ) );
-	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), 
-	            this, SLOT( slotClearQueued() ) );
+	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
+	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 }
 
 QueueListView::~QueueListView()
@@ -99,7 +96,7 @@ void QueueListView::slotPackageDown()
  */
 void QueueListView::insertPackageList()
 {
-	reset();
+	resetListView();
 	totalDuration = QTime( 0, 0, 0 );
 	sumSize = 0;
 		
@@ -116,11 +113,9 @@ void QueueListView::insertPackageList()
 		PackageItem* item = new PackageItem( this, id, category + "/" + name, description, meta );
 		item->setText( 1, timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
 		item->setText( 2, description );
-
-// 		addSize( size );
 		
 		// Inform all other listviews that this package is in queue
-// 		QueueSingleton::Instance()->insertInCache( idDB );
+		QueueSingleton::Instance()->insertInCache( id );
 	}
 	
 	emit( signalQueueLoaded() );

@@ -24,6 +24,8 @@
 #include <qobject.h>
 #include <qvaluevector.h>
 
+class QTimer;
+
 /**
  * @class Queue
  * @short Object for packages to be emerged = installation queue.
@@ -38,6 +40,10 @@ public:
 	
 public slots:
 	void					init( QObject *myParent = 0 );
+	
+	void					slotEmergePackageStart( const QString& package );
+	void					slotEmergePackageStop( const QString& package );
+	void					slotOneStep();
 	
 	/**
 	* When the package is inserted in the register it in the cache too.
@@ -117,12 +123,14 @@ public slots:
 	
 signals:
 	void					signalQueueChanged();
+	void					signalPackageAdvance( const QString& id );
 	
 private:
 	QObject					*parent;
-	QString					package;
+	QString					package, m_id;
 	QStringList				packageIdList;
 	QMap<QString, bool>		packageCache;
+	QTimer*					internalTimer;
 };
 
 #endif

@@ -27,7 +27,7 @@
 
 class QTime;
 class QPixmap;
-class Package;
+/*class Package;*/
 class PackageItem;
 
 /**
@@ -42,6 +42,8 @@ public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
 
+	class								QueueItem;
+	
 public slots:
 
 	void								slotPackageUp();
@@ -63,6 +65,8 @@ public slots:
 	* @return sumSize 
 	*/
 	QString		 						totalSize();
+	
+	void								slotPackageProgress( const QString& id );
 	
 private slots:
 	

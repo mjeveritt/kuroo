@@ -34,11 +34,70 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kcursor.h>
+#include <kprogress.h>
 
 static QTime totalDuration;
 
-// Tweak for time take unpacking and installing each package.
+// Tweak for time taken unpacking and installing single package.
 const int diffTime( 10 );
+
+class QueueListView::QueueItem : public PackageItem
+{
+public:
+	QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
+	~QueueItem();
+	
+	void		setTotalSteps( int totalSteps );
+	void		setProgress( int progress );
+	void		advance();
+	
+protected:
+	void 		paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+	
+private:
+	KProgress* 	bar;
+	int			progress;
+};
+
+QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 )
+{
+	bar = new KProgress( duration, parent->viewport() );
+}
+
+QueueListView::QueueItem::~QueueItem()
+{
+	delete bar;
+	bar = 0;
+}
+
+void QueueListView::QueueItem::setTotalSteps( int totalSteps )
+{
+	bar->setTotalSteps( totalSteps );
+	repaint();
+}
+
+void QueueListView::QueueItem::setProgress( int progress )
+{
+	bar->setProgress( progress );
+	repaint();
+}
+
+void QueueListView::QueueItem::advance()
+{
+	bar->setProgress( progress++ );
+}
+
+void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
+{
+	QRect rect = listView()->itemRect( this );
+	QHeader *head = listView()->header();
+	rect.setLeft( head->sectionPos( 3 ) - head->offset() );
+	rect.setWidth( head->sectionSize( 3 ) );
+	bar->setGeometry( rect );
+	bar->show();
+	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
+}
 
 /**
  * Specialized listview for packages in the installation queue.
@@ -50,7 +109,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Package" ) );
 	addColumn( i18n( "Duration" ) );
 	addColumn( i18n( "Description" ) );
-
+	addColumn( i18n( "Progress" ) );
+	
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
 	setFullWidth( true );
@@ -110,9 +170,12 @@ void QueueListView::insertPackageList()
 		QString description = *it++;
 		QString meta = *it;
 		
-		PackageItem* item = new PackageItem( this, id, category + "/" + name, description, meta );
-		item->setText( 1, timeFormat( HistorySingleton::Instance()->packageTime( category + "/" + name ) ) );
+		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
+		
+		QueueItem* item = new QueueItem( this, id, category + "/" + name, description, meta, duration.toInt() );
+		item->setText( 1, timeFormat( duration ) );
 		item->setText( 2, description );
+		indexPackage( id, item );
 		
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( id );
@@ -192,10 +255,20 @@ QString QueueListView::kBSize( const int& size )
 		if ( size < 1024 )
 			total = "1 kB ";
 		else
-			total = loc->formatNumber((double)(size / 1024), /*true, */0) + " kB ";
+			total = loc->formatNumber( (double)(size / 1024), 0 ) + " kB ";
 	}
 	
 	return total;
+}
+
+/**
+ * 
+ */
+void QueueListView::slotPackageProgress( const QString& id )
+{
+	if ( !id.isEmpty() && packageIndex[id] ) {
+		dynamic_cast<QueueItem*>( packageIndex[id] )->advance();
+	}
 }
 
 #include "queuelistview.moc"

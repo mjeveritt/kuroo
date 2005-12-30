@@ -41,15 +41,15 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	addWidget( statusBarLabel, 1, 1 );
 	addWidget( statusBarProgress, 0, true );
 	
-	setTotalSteps(100);
+	setTotalSteps( 100 );
 	
 	// Clock timer for showing progress when emerging packages.
 	internalTimer = new QTimer( this );
-	connect( internalTimer, SIGNAL(timeout()), SLOT(oneStep()) );
+	connect( internalTimer, SIGNAL( timeout() ), SLOT( oneStep() ) );
 	
 	// Progress timer for activities when total duration is not specified.
 	diffTimer = new QTimer( this );
-	connect( diffTimer, SIGNAL(timeout()), SLOT(advance()) );
+	connect( diffTimer, SIGNAL( timeout() ), SLOT( advance() ) );
 }
 
 KurooStatusBar::~KurooStatusBar()
@@ -61,7 +61,7 @@ KurooStatusBar::~KurooStatusBar()
  */
 void KurooStatusBar::setProgressStatus( const QString& text )
 {
-	statusBarLabel->setText(text);
+	statusBarLabel->setText( text );
 }
 
 /**
@@ -69,7 +69,7 @@ void KurooStatusBar::setProgressStatus( const QString& text )
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
-	statusBarProgress->setTotalSteps(total);
+	statusBarProgress->setTotalSteps( total );
 }
 
 /**
@@ -78,7 +78,7 @@ void KurooStatusBar::setTotalSteps( int total )
  */
 void KurooStatusBar::setProgress( int steps )
 {
-	statusBarProgress->setProgress(steps);
+	statusBarProgress->setProgress( steps );
 }
 
 /**
@@ -86,7 +86,7 @@ void KurooStatusBar::setProgress( int steps )
  */
 void KurooStatusBar::startTimer()
 {
-	internalTimer->start(1000);
+	internalTimer->start( 1000 );
 	timerSteps = 0;
 }
 
@@ -97,9 +97,9 @@ void KurooStatusBar::stopTimer()
 {
 	internalTimer->stop();
 	diffTimer->stop();
-	setProgress(0);
-	setTotalSteps(100);
-	statusBarProgress->setTextEnabled(true);
+	setProgress( 0 );
+	setTotalSteps( 100 );
+	statusBarProgress->setTextEnabled( true );
 }
 
 /**
@@ -107,7 +107,7 @@ void KurooStatusBar::stopTimer()
  */
 void KurooStatusBar::oneStep()
 {
-	setProgress(timerSteps++);
+	setProgress( timerSteps++ );
 	
 	if ( timerSteps > statusBarProgress->totalSteps() ) {
 		stopTimer();
@@ -120,9 +120,9 @@ void KurooStatusBar::oneStep()
  */
 void KurooStatusBar::startProgress()
 {
-	setTotalSteps(0);
+	setTotalSteps( 0 );
 	statusBarProgress->setTextEnabled(false);
-	diffTimer->start(1000);
+	diffTimer->start( 1000 );
 }
 
 /**
@@ -130,7 +130,7 @@ void KurooStatusBar::startProgress()
  */
 void KurooStatusBar::advance()
 {
-	statusBarProgress->advance(2);
+	statusBarProgress->advance( 2 );
 }
 
 #include "statusbar.moc"

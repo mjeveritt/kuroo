@@ -91,7 +91,7 @@ bool History::slotRefresh()
 		if ( rx.search(line) > -1 )
 			if ( rx.cap(0) > lastDate )
 				if ( line.contains( QRegExp("(>>> emerge)|(=== Sync completed)|(::: completed emerge)|(>>> unmerge success)") ) )
-					emergeLines += line;
+					emergeLines += line + " ";
 	}
 
 	// Check only for successfull emerge/unmerges or sync outside kuroo
@@ -185,12 +185,11 @@ void History::slotParse()
 {
 	kdDebug() << "History::slotParse" << endl;
 	
-// 	static QString emergeDate( "" );
 	static bool syncDone( false );
 	QStringList emergeLines;
 	
 	while ( !stream.atEnd() )
-		emergeLines += stream.readLine();
+		emergeLines += stream.readLine() + " ";
 
 	// Update history
 	if ( !emergeLines.isEmpty() )
@@ -226,20 +225,26 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains( "emerge --nospinner" ) ) {
-				package = emergeLine.section( "emerge --nospinner =", 1, 1 );
-				SignalistSingleton::Instance()->emergePackageStart( package );
+				
+				kdDebug() << "emergeLine=" << emergeLine << endl;
+				
+				rx.setPattern( "\\s\\S+/\\S+\\s" );
+				if ( rx.search( emergeLine ) > -1 ) {
+					package = rx.cap( 0 ).stripWhiteSpace();
+					SignalistSingleton::Instance()->emergePackageStart( package );
+				}
+				kdDebug() << "emerge package=" << package << endl;
 			}
 			else
 			if ( emergeLine.contains( "completed emerge " ) ) {
 				rx.setPattern( "\\s\\S+/\\S+\\s" );
-				if ( rx.search( line ) > -1 )
+				if ( rx.search( emergeLine ) > -1 ) {
 					package = rx.cap( 0 ).stripWhiteSpace();
-
-				SignalistSingleton::Instance()->emergePackageComplete( package );
-				InstalledSingleton::Instance()->addPackage( package );
-				QueueSingleton::Instance()->addPackage( package );
-				UpdatesSingleton::Instance()->removePackage( package );
-				
+					SignalistSingleton::Instance()->emergePackageStop( package );
+					InstalledSingleton::Instance()->addPackage( package );
+					QueueSingleton::Instance()->addPackage( package );
+					UpdatesSingleton::Instance()->removePackage( package );
+				}
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}

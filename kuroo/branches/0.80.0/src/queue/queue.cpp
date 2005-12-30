@@ -21,6 +21,8 @@
 #include "common.h"
 #include "threadweaver.h"
 
+#include <qtimer.h>
+
 /**
  * Thread for adding a single package to the queue in db. Used by emerge.
  */
@@ -189,11 +191,36 @@ private:
 Queue::Queue( QObject* parent )
 	: QObject( parent )
 {
-// 	packagesCache.reserve( ROWLIMIT );
+	// Clock timer for showing progress when emerging
+	internalTimer = new QTimer( this );
+	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
+	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStart( const QString& ) ), this, SLOT( slotEmergePackageStart( const QString& ) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStop( const QString& ) ), this, SLOT( slotEmergePackageStop( const QString& ) ) );
 }
 
 Queue::~Queue()
 {
+}
+
+void Queue::slotEmergePackageStart( const QString& package )
+{
+	internalTimer->start( 1000 );
+	m_id = PortageSingleton::Instance()->idDb( package );
+	
+	kdDebug() << "Queue::slotEmergePackageStart m_id=" << m_id << endl;
+}
+
+void Queue::slotEmergePackageStop( const QString& package )
+{
+	internalTimer->stop();
+	
+	kdDebug() << "Queue::slotEmergePackageStop package=" << package << endl;
+}
+
+void Queue::slotOneStep()
+{
+	emit signalPackageAdvance( m_id );
 }
 
 void Queue::init( QObject *myParent )

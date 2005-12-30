@@ -193,9 +193,9 @@ void Signalist::emergePackageStart( const QString& package )
  * Propagate signal that emerge of package completed.
  * @param package
  */
-void Signalist::emergePackageComplete( const QString& package )
+void Signalist::emergePackageStop( const QString& package )
 {
-	emit signalEmergePackageComplete( package );
+	emit signalEmergePackageStop( package );
 }
 
 #include "signalist.moc"

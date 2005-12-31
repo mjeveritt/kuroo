@@ -221,8 +221,6 @@ void Queue::slotEmergePackageStart( const QString& package )
 {
 	internalTimer->start( 1000 );
 	m_id = PortageSingleton::Instance()->idDb( package );
-	
-	kdDebug() << "Queue::slotEmergePackageStart m_id=" << m_id << endl;
 }
 
 void Queue::slotEmergePackageComplete( const QString& package )
@@ -230,7 +228,6 @@ void Queue::slotEmergePackageComplete( const QString& package )
 	internalTimer->stop();
 	m_id = PortageSingleton::Instance()->idDb( package );
 	emit signalPackageComplete( m_id );
-	kdDebug() << "Queue::slotEmergePackageComplete package=" << package << endl;
 }
 
 void Queue::slotOneStep()
@@ -376,7 +373,7 @@ void Queue::addPackage( const QString& package )
  */
 QStringList Queue::allPackages()
 {
-	return KurooDBSingleton::Instance()->queuePackages();
+	return KurooDBSingleton::Instance()->allQueuePackages();
 }
 
 /**

@@ -61,15 +61,6 @@ protected:
 	virtual bool	isQueued();
 	
 	/**
- 	 * Compare size and order numerically.
- 	 * @param i
- 	 * @param col
- 	 * @param ascending
-  	 * @return -1 or 0 or 1
-  	 */
-// 	virtual int		compare( QListViewItem*, int, bool ) const;
-	
-	/**
  	 * Mark package as "masked"/"unmasked"/"present in queue" with text formating.
 	 * @param p
 	 * @param cq
@@ -83,7 +74,7 @@ private:
 	int				meta;
 	QString			m_id, m_name, m_status, m_packageTip, m_description;
 	QListView		*m_parent;
-	QPixmap 		pxPackageHeader, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked, pxQueued;
+	QPixmap 		pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked, pxQueued;
 	bool			queued;
 
 };

@@ -116,7 +116,7 @@ void Results::addPackageList( const EmergePackageList &packageList )
  */
 QStringList Results::allPackages()
 {
-	return KurooDBSingleton::Instance()->resultPackages();
+	return KurooDBSingleton::Instance()->allResultPackages();
 }
 
 #include "results.moc"

@@ -25,9 +25,7 @@
 
 #include <qpixmap.h>
 
-class QTime;
 class QPixmap;
-/*class Package;*/
 class PackageItem;
 
 /**

@@ -36,9 +36,9 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( slotSetUnmasked(const QString&, bool) ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( slotSetUnmasked(const QString&, bool) ) ); @fixme
 
-	new ToolTip( this );
+// 	new ToolTip( this ); @fixme
 }
 
 PackageListView::~PackageListView()
@@ -46,7 +46,7 @@ PackageListView::~PackageListView()
 }
 
 /**
- * Clear this listView and packages.
+ * Clear this listView and package index.
  */
 void PackageListView::resetListView()
 {
@@ -54,18 +54,22 @@ void PackageListView::resetListView()
 	packageIndex.clear();
 }
 
+/**
+ * Current package status.
+ * @return status
+ */
 QString PackageListView::currentItemStatus()
 {
-	return dynamic_cast<PackageItem*>( this->currentItem() )->status();
+	return currentPackage()->status();
 }
 
 /**
- * Current package idDB.
- * @return idDB
+ * Current package id.
+ * @return id
  */
 QString PackageListView::currentId()
 {
-	PackageItem* item = dynamic_cast<PackageItem*>( this->currentItem() );
+	PackageItem* item = currentPackage();
 	if ( item )
 		return item->id();
 	else
@@ -73,7 +77,8 @@ QString PackageListView::currentId()
 }
 
 /**
- * Get current package.
+ * The current package.
+ * @return PackageItem*
  */
 PackageItem* PackageListView::currentPackage()
 {
@@ -81,7 +86,7 @@ PackageItem* PackageListView::currentPackage()
 }
 
 /**
- * Get selected packages DB id. @fixme: use QListViewItemIterator instead.
+ * All selected packages by id.
  * @return idList
  */
 QStringList PackageListView::selectedId()
@@ -98,7 +103,7 @@ QStringList PackageListView::selectedId()
 }
 
 /**
- * Get selected packages.
+ * All selected packages by name.
  * @return packageList
  */
 QStringList PackageListView::selectedPackages()
@@ -115,8 +120,8 @@ QStringList PackageListView::selectedPackages()
 }
 
 /** 
- * Return all packages DB id in listview.
- * @return packageList
+ * All packages in listview by id.
+ * @return idList
  */
 QStringList PackageListView::allId()
 {
@@ -130,8 +135,8 @@ QStringList PackageListView::allId()
 }
 
 /** 
- * Return all packages in listview.
- * @return list of packages by name
+ * All packages in listview by name.
+ * @return packageList
  */
 QStringList PackageListView::allPackages()
 {
@@ -145,7 +150,7 @@ QStringList PackageListView::allPackages()
 }
 
 /**
- * Count packages in this category.
+ * Total number of packages in listview.
  * @return QString
  */
 QString PackageListView::count()
@@ -153,6 +158,10 @@ QString PackageListView::count()
 	return QString::number( packageIndex.count() );
 }
 
+/**
+ * Set focus in listview on this package.
+ * @param id
+ */
 void PackageListView::setPackageFocus( const QString& id )
 {
 	if ( !id.isEmpty() && packageIndex[id] ) {
@@ -180,7 +189,7 @@ void PackageListView::slotClearQueued()
 }
 
 /**
- * Fast method for marking packages as queued.
+ * Mark packages as queued.
  * @param idDB
  * @param true/false
  */
@@ -199,9 +208,9 @@ void PackageListView::slotSetQueued( const QString& id, bool isQueued )
 }
 
 /**
- * Register package and check weither it is in the queue.
+ * Register package in index and check weither it is in the queue.
+ * @param id
  * @param item
- * @param idDB
  */
 void PackageListView::indexPackage( const QString& id, PackageItem *item )
 {
@@ -219,8 +228,8 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 }
 
 /**
- * Fast method for marking packages as unmasked.
- * @param idDB
+ * Mark package as unmasked.
+ * @param id
  * @param true/false
  */
 void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )

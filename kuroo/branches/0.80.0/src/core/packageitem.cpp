@@ -57,44 +57,8 @@ void PackageItem::init()
 }
 
 /**
- * Return package db id.
- */
-QString PackageItem::id()
-{
-	return m_id;
-}
-
-QString PackageItem::name()
-{
-	return m_name;
-}
-
-QString PackageItem::description()
-{
-	return m_description;
-}
-
-/**
- * Convenience method.
- * @return status
- */
-QString PackageItem::status()
-{
-	return m_status;
-}
-
-/**
- * Convenience method.
- * @return true if package is in the queue.
- */
-bool PackageItem::isQueued()
-{
-	return queued;
-}
-
-/**
  * Is the listViewItem category, package or ebuild.
- * Set icon and tooltip text.
+ * Set icon and tooltip text. @fixme!
  * @param status
  */
 void PackageItem::setStatus( int status )
@@ -145,7 +109,7 @@ void PackageItem::setStatus( int status )
 }
 
 /**
- * Change package/ebuild text color.
+ * View package masked status by changing name text color.
  * @param p
  * @param cq
  * @param column
@@ -181,3 +145,51 @@ void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int
 	KListViewItem::paintCell( p, _cg, column, width, alignment );
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+// Accessor methods
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Package db id.
+ * @return id
+ */
+QString PackageItem::id()
+{
+	return m_id;
+}
+
+/**
+ * Package name as kuroo in app-portage/kuroo.
+ * @return name
+ */
+QString PackageItem::name()
+{
+	return m_name;
+}
+
+/**
+ * Package description.
+ * @return description
+ */
+QString PackageItem::description()
+{
+	return m_description;
+}
+
+/**
+ * Package status describing if this package is installed or not.
+ * @return status
+ */
+QString PackageItem::status()
+{
+	return m_status;
+}
+
+/**
+ * Wether this package is in the emerge queue.
+ * @return true/false
+ */
+bool PackageItem::isQueued()
+{
+	return queued;
+}

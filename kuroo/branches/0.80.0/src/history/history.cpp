@@ -116,7 +116,7 @@ void History::slotChanged()
 void History::loadTimeStatistics()
 {
 	m_statisticsMap.clear();
-	const QStringList timePackageList = KurooDBSingleton::Instance()->statistic();
+	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
 	foreach ( timePackageList ) {
 		QString package = *it++;
 		QString time = *it++;
@@ -174,7 +174,7 @@ void History::slotScanHistory( const QStringList& lines )
  */
 QStringList History::allHistory()
 {
-	return KurooDBSingleton::Instance()->history();
+	return KurooDBSingleton::Instance()->allHistory();
 }
 
 /**
@@ -304,7 +304,7 @@ void History::appendEmergeInfo( const QString& einfo )
  */
 QStringList History::allMergeHistory()
 {
-	return KurooDBSingleton::Instance()->mergeHistory();
+	return KurooDBSingleton::Instance()->allMergeHistory();
 }
 
 #include "history.moc"

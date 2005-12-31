@@ -100,7 +100,7 @@ public:
 	DbConnection 		*getDbConnection();
 	void 				putDbConnection( const DbConnection* /* conn */ );
 	
-	QString escapeString(QString string) {
+	QString escapeString( QString string ) {
 		return string.replace('\'', "''");
 	}
 	
@@ -158,12 +158,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-// 	QStringList 	isInstalled( const QString& name, const QString& version );
-	QStringList 	packageVersions( const QString& id );
 	QStringList 	packageVersionsInfo( const QString& id );
-// 	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
 	QStringList 	packageTotal();
-// 	QStringList 	installedTotal();
 	QStringList 	updatesTotal();
 	QString		 	package( const QString& id );
 	QString		 	category( const QString& id );
@@ -177,35 +173,34 @@ public:
 	QStringList 	portageCategories( int filter, const QString& text );
 	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
-	QStringList 	portagePackageInfo( const QString& id );
 	QString		 	packageIdDB( const QString& category, const QString& name );
 
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	queuePackages();
+	QStringList 	allQueuePackages();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Results 
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	resultPackages();
+	QStringList 	allResultPackages();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for History 
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	history();
-	QStringList 	mergeHistory();
+	QStringList 	allHistory();
+	QStringList 	allMergeHistory();
 	QStringList 	lastHistoryEntry();
 	QStringList		getLastSync();
 	void			addRefreshTime();
 	void			addBackup( const QString& source, const QString& destination );
-	QStringList 	statistic();
+	QStringList 	allStatistic();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Cache
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	cache();
+	QStringList 	allCache();
 	bool			isCacheEmpty();
 	
 	

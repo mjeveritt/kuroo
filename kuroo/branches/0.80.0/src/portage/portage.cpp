@@ -194,7 +194,7 @@ void Portage::loadCache()
 {
 	cacheMap.clear();
 	
-	const QStringList cacheList = KurooDBSingleton::Instance()->cache();
+	const QStringList cacheList = KurooDBSingleton::Instance()->allCache();
 	foreach ( cacheList ) {
 		QString package = *it++;
 		QString size = *it;

@@ -255,6 +255,11 @@ void Queue::clearCache()
  */
 void Queue::insertInCache( const QString& id )
 {
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
+	
 	packageCache[ id ] = true;
 	SignalistSingleton::Instance()->setQueued( id, true );
 }
@@ -265,6 +270,11 @@ void Queue::insertInCache( const QString& id )
  */
 void Queue::deleteFromCache( const QString& id )
 {
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
+	
 	packageCache[ id ] = false;
 	SignalistSingleton::Instance()->setQueued( id, false );
 }

@@ -182,7 +182,10 @@ void QueueListView::insertPackageList()
 		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		
 		QueueItem* item = new QueueItem( this, id, category + "/" + name, description, meta, duration.toInt() );
-		item->setText( 1, timeFormat( duration ) );
+		if ( duration.isEmpty() )
+			item->setText( 1, i18n("na") );
+		else
+			item->setText( 1, timeFormat( duration ) );
 		item->setText( 2, description );
 		indexPackage( id, item );
 		

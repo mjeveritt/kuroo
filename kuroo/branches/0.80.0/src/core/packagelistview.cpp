@@ -69,7 +69,7 @@ QString PackageListView::currentId()
 	if ( item )
 		return item->id();
 	else
-		return i18n("na");
+		return NULL;
 }
 
 /**
@@ -155,7 +155,7 @@ QString PackageListView::count()
 
 void PackageListView::setPackageFocus( const QString& id )
 {
-	if ( packageIndex[id] ) {
+	if ( !id.isEmpty() && packageIndex[id] ) {
 		PackageItem* item = packageIndex[id];
 		setCurrentItem( item );
 		setSelected( item, true );
@@ -186,6 +186,10 @@ void PackageListView::slotClearQueued()
  */
 void PackageListView::slotSetQueued( const QString& id, bool isQueued )
 {
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
 	if ( packageIndex[id] ) {
 		if ( isQueued )
 			packageIndex[id]->setStatus( QUEUED );
@@ -201,6 +205,11 @@ void PackageListView::slotSetQueued( const QString& id, bool isQueued )
  */
 void PackageListView::indexPackage( const QString& id, PackageItem *item )
 {
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
+	
 	packageIndex.insert( id, item );
 	
 	if ( QueueSingleton::Instance()->isQueued( id ) )
@@ -216,6 +225,11 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  */
 void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
 {
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
+	
 	if ( packageIndex[id] ) {
 		if ( isUnmasked )
 			packageIndex[id]->setStatus( UNMASKED );

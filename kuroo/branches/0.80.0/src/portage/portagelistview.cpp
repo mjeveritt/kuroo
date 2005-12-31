@@ -237,9 +237,7 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	
 	// Store package focus
 	QString currentId = this->currentId();
-	
-	kdDebug() << "PortageListView::addSubCategoryPackages currentId=" << currentId << endl;
-	
+
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
 	resetListView();

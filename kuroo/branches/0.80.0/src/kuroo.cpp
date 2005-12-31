@@ -139,7 +139,7 @@ void Kuroo::slotSync()
 	KLocale *loc = KGlobal::locale();
 	QDateTime t;
 	QString timeStamp( KurooDBSingleton::Instance()->getLastSync().first() );
-	QString lastSyncDate( i18n("na") );
+	QString lastSyncDate( NULL );
 	
 	if ( !timeStamp.isEmpty() ) {
 		t.setTime_t( timeStamp.toUInt() );

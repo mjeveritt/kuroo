@@ -35,11 +35,22 @@ public:
 		QString version = m_package.section( name + "-", 1, 1 );
 		
 		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
-		QString packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2';").arg( idCategory ).arg( name ) ).first();
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2';" ).arg( FILTERINSTALLED ).arg( packageId ) );
-		KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED ).arg( packageId ).arg( version ) );
 		
-		return true;
+		if ( !idCategory.isEmpty() ) {
+			QString idPackage = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2';").arg( idCategory ).arg( name ) ).first();
+			
+			if ( !idPackage.isEmpty() ) {
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2';" ).arg( FILTERINSTALLED ).arg( idPackage ) );
+				KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED ).arg( idPackage ).arg( version ) );
+				return true;
+			}
+			else
+				kdDebug() << i18n("Adding installed: No package found!") << endl;
+		}
+		else
+			kdDebug() << i18n("Adding installed: No category found!") << endl;
+		
+		return false;
 	}
 	
 	virtual void completeJob() {
@@ -64,39 +75,51 @@ public:
 		QString version = m_package.section( name + "-", 1, 1 );
 
 		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
-		QString packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2';").arg( idCategory ).arg( name ) ).first();
 		
-		// Mark package as uninstalled or remove it if old
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND id = '%3'").arg( FILTERALL ).arg( FILTERINSTALLED ).arg( packageId ) );
-
-		KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND id = '%2';" ).arg( FILTEROLD ).arg( packageId ) );
-
-		KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL ).arg( packageId ).arg( version ) );
-		
-		// Remove package from world file
-		QFile file( KurooConfig::dirWorldFile() );
-		QStringList lines;
-		if ( file.open( IO_ReadOnly ) ) {
-			QTextStream stream( &file );
-			while ( !stream.atEnd() )
-				lines += stream.readLine();
-			file.close();
+		if ( !idCategory.isEmpty() ) {
+			QString idPackage = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2';").arg( idCategory ).arg( name ) ).first();
 			
-			if ( file.open( IO_WriteOnly ) ) {
-				QTextStream stream( &file );
-				foreach ( lines ) {
-					if ( *it != ( category + "/" + name ) )
-						stream << *it << endl;
+			if ( !idPackage.isEmpty() ) {
+				
+				// Mark package as uninstalled or remove it if old
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND id = '%3'").arg( FILTERALL ).arg( FILTERINSTALLED ).arg( idPackage ) );
+		
+				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND id = '%2';" ).arg( FILTEROLD ).arg( idPackage ) );
+		
+				KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL ).arg( idPackage ).arg( version ) );
+				
+				// Remove package from world file
+				QFile file( KurooConfig::dirWorldFile() );
+				QStringList lines;
+				if ( file.open( IO_ReadOnly ) ) {
+					QTextStream stream( &file );
+					while ( !stream.atEnd() )
+						lines += stream.readLine();
+					file.close();
+					
+					if ( file.open( IO_WriteOnly ) ) {
+						QTextStream stream( &file );
+						foreach ( lines ) {
+							if ( *it != ( category + "/" + name ) )
+								stream << *it << endl;
+						}
+						file.close();
+					}
+					else
+						kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
 				}
-				file.close();
+				else
+					kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+				
+				return true;
 			}
 			else
-				kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+				kdDebug() << i18n("Removing installed: No package found!") << endl;
 		}
 		else
-			kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+			kdDebug() << i18n("Removing installed: No category found!") << endl;
 		
-		return true;
+		return false;
 	}
 	
 	virtual void completeJob() {

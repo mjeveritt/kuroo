@@ -53,7 +53,6 @@ ResultListView::ResultListView( QWidget *parent, const char *name )
 	addColumn( i18n( "Download Size" ) );
 	addColumn( i18n( "Use Flags" ) );
 	addColumn( i18n( "Description" ) );
-// 	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()) );
 	setMinimumSize( QSize( 800, 200 ) );
 	setProperty( "selectionMode", "Extended" );
 	setFullWidth( true );

@@ -36,39 +36,50 @@ public:
 		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 		
 		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
-		packageId = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name  = '%2';" ).arg( idCategory ).arg( name ) ).first();
-		int rowId = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage) VALUES ('%1');" ).arg( packageId ) );
 		
-		// Add this package to the world file if not dependency.
-		if ( rowId == 0 ) {
-			QFile file( KurooConfig::dirWorldFile() );
-			QStringList lines;
-			if ( file.open( IO_ReadOnly ) ) {
-				QTextStream stream( &file );
-				while ( !stream.atEnd() )
-					lines += stream.readLine();
-				file.close();
+		if ( !idCategory.isEmpty() ) {
+			QString idPackage = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE idCatSubCategory = '%1' AND name  = '%2';" ).arg( idCategory ).arg( name ) ).first();
+			
+			if ( !idPackage.isEmpty() ) {
+				int rowId = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage) VALUES ('%1');" ).arg( idPackage ) );
 				
-				if ( file.open( IO_WriteOnly ) ) {
-					bool found;
-					QTextStream stream( &file );
-					foreach ( lines ) {
-						stream << *it << endl;
-						if ( *it == ( category + "/" + name ) )
-							found = true;
+				// Add this package to the world file if not dependency.
+				if ( rowId == 0 ) {
+					QFile file( KurooConfig::dirWorldFile() );
+					QStringList lines;
+					if ( file.open( IO_ReadOnly ) ) {
+						QTextStream stream( &file );
+						while ( !stream.atEnd() )
+							lines += stream.readLine();
+						file.close();
+						
+						if ( file.open( IO_WriteOnly ) ) {
+							bool found;
+							QTextStream stream( &file );
+							foreach ( lines ) {
+								stream << *it << endl;
+								if ( *it == ( category + "/" + name ) )
+									found = true;
+							}
+							if ( !found )
+								stream << category + "/" + name << endl;
+							file.close();
+						}
+						else
+							kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
 					}
-					if ( !found )
-						stream << category + "/" + name << endl;
-					file.close();
+					else
+						kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
 				}
-				else
-					kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+				return true;
 			}
 			else
-				kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+				kdDebug() << i18n("Adding to Queue: No package found!") << endl;
 		}
-		
-		return true;
+		else
+			kdDebug() << i18n("Adding to Queue: No category found!") << endl;
+
+		return false;
 	}
 	
 	virtual void completeJob() {

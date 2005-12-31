@@ -118,6 +118,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setResizeMode( QListView::LastColumn );
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 80 );
+	setColumnWidth( 3, 80 );
 	setTooltipColumn( 2 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
@@ -191,14 +192,14 @@ void QueueListView::insertPackageList()
  */
 QString QueueListView::timeFormat( const QString& time )
 {
-	if ( !time.isEmpty() && time != i18n("na") ) {
+	if ( !time.isEmpty() && time != NULL ) {
 		QTime emergeTime( 0, 0, 0 );
 		emergeTime = emergeTime.addSecs( time.toInt() );
 		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
 		return loc->formatTime( emergeTime, true, true );
 	}
 	else
-		return i18n("na");
+		return NULL;
 }
 
 /**

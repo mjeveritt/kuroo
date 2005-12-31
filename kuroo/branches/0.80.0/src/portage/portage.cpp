@@ -349,6 +349,7 @@ void Portage::clearUntestingPackageList( const QStringList& packageIdList )
 		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
 		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
 	}
+	
 }
 
 /**
@@ -362,7 +363,7 @@ QString Portage::idDb( const QString& package )
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
 	QString name( temp.section( rxPortageVersion, 0, 0 ) );
 	
-	return KurooDBSingleton::Instance()->packageIdDB( category, name ).first();
+	return KurooDBSingleton::Instance()->packageIdDB( category, name );
 }
 
 /**
@@ -372,7 +373,7 @@ QString Portage::idDb( const QString& package )
  */
 QString Portage::category( const QString& id )
 {
-	return KurooDBSingleton::Instance()->category( id ).first();
+	return KurooDBSingleton::Instance()->category( id );
 }
 
 /**
@@ -382,7 +383,7 @@ QString Portage::category( const QString& id )
  */
 QString Portage::package( const QString& id )
 {
-	return KurooDBSingleton::Instance()->package( id ).first();
+	return KurooDBSingleton::Instance()->package( id );
 }
 
 QStringList Portage::packageVersionsInfo( const QString& id )

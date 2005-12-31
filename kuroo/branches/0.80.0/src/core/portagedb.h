@@ -158,15 +158,15 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	isInstalled( const QString& name, const QString& version );
+// 	QStringList 	isInstalled( const QString& name, const QString& version );
 	QStringList 	packageVersions( const QString& id );
 	QStringList 	packageVersionsInfo( const QString& id );
-	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
+// 	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
 	QStringList 	packageTotal();
-	QStringList 	installedTotal();
+// 	QStringList 	installedTotal();
 	QStringList 	updatesTotal();
-	QStringList 	package( const QString& id );
-	QStringList 	category( const QString& id );
+	QString		 	package( const QString& id );
+	QString		 	category( const QString& id );
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ public:
 	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
 	QStringList 	portagePackageInfo( const QString& id );
-	QStringList 	packageIdDB( const QString& category, const QString& name );
+	QString		 	packageIdDB( const QString& category, const QString& name );
 
 	
 	//////////////////////////////////////////////////////////////////////////////

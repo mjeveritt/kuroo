@@ -37,11 +37,22 @@ public:
 		QString version = m_package.section( name + "-", 1, 1 );
 		
 		QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ) ).first();
-		QString idPackage = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE name = '%1' AND idCatSubCategory = '%2';" ).arg( name ).arg( idCategory ) ).first();
 		
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ) );
-		KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( idPackage ) );
-		return true;
+		if ( !idCategory.isEmpty() ) {
+			QString idPackage = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM package WHERE name = '%1' AND idCatSubCategory = '%2';" ).arg( name ).arg( idCategory ) ).first();
+			
+			if ( !idPackage.isEmpty() ) {
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ) );
+				KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( idPackage ) );
+				return true;
+			}
+			else
+				kdDebug() << i18n("Removing update: No package found!") << endl;
+		}
+		else
+			kdDebug() << i18n("Removing update: No category found!") << endl;
+		
+		return false;
 	}
 	
 	virtual void completeJob() {

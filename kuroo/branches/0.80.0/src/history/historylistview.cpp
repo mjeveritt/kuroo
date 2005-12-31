@@ -80,7 +80,7 @@ QString HistoryListView::current()
 	if ( item && item->parent() )
 		return item->text(0);
 	else
-		return i18n("na");
+		return NULL;
 }
 
 /**

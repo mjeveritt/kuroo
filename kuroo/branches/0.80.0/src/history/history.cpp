@@ -155,7 +155,7 @@ QString History::packageTime( const QString& packageNoversion )
 	if ( itMap != m_statisticsMap.end() )
 		return QString::number( itMap.data().emergeTime() / itMap.data().count() );
 	else
-		return i18n("na");
+		return NULL;
 }
 
 /**
@@ -200,7 +200,6 @@ void History::slotParse()
 		
 		if ( !line.isEmpty() ) {
 			QRegExp rx( "\\d+:\\s" );
-			QString package;
 			QString emergeLine = line.section( rx, 1, 1 );
 			emergeLine = emergeLine.section( QRegExp( "(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )" ), 1, 1 );
 			
@@ -224,33 +223,34 @@ void History::slotParse()
 				LogSingleton::Instance()->writeLog( line.section( rx, 1, 1 ), EMERGELOG );
 			}
 			else
-			if ( emergeLine.contains( "emerge --nospinner" ) ) {
-				
-				kdDebug() << "emergeLine=" << emergeLine << endl;
-				
+			if ( emergeLine.contains( ">>> emerge" ) ) {
 				rx.setPattern( "\\s\\S+/\\S+\\s" );
 				if ( rx.search( emergeLine ) > -1 ) {
-					package = rx.cap( 0 ).stripWhiteSpace();
+					QString package = rx.cap( 0 ).stripWhiteSpace();
 					SignalistSingleton::Instance()->emergePackageStart( package );
 				}
-				kdDebug() << "emerge package=" << package << endl;
+				else
+					kdDebug() << i18n("No package found!") << endl;
 			}
 			else
-			if ( emergeLine.contains( "completed emerge " ) ) {
+			if ( line.contains( "::: completed emerge " ) ) {
 				rx.setPattern( "\\s\\S+/\\S+\\s" );
 				if ( rx.search( emergeLine ) > -1 ) {
-					package = rx.cap( 0 ).stripWhiteSpace();
+					QString package = rx.cap( 0 ).stripWhiteSpace();
 					SignalistSingleton::Instance()->emergePackageStop( package );
 					InstalledSingleton::Instance()->addPackage( package );
 					QueueSingleton::Instance()->addPackage( package );
 					UpdatesSingleton::Instance()->removePackage( package );
 				}
+				else
+					kdDebug() << i18n("No package found!") << endl;
+				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
 			else
 			if ( emergeLine.contains("unmerge success") ) {
-				package = emergeLine.section( "unmerge success: ", 1, 1 );
+				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
 				InstalledSingleton::Instance()->removePackage( package );
 				
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );

@@ -276,14 +276,14 @@ void KurooDB::createTables( DbConnection *conn )
 // Queries for all content in tables
 //////////////////////////////////////////////////////////////////////////////
 
-QStringList KurooDB::isInstalled( const QString& name, const QString& version )
-{
-	return query( " SELECT installed "
-	              " FROM package "
-	              " WHERE name = '" + name + "'"
-	              " AND version = '" + version + "'"
-	              " LIMIT 1;");
-}
+// QStringList KurooDB::isInstalled( const QString& name, const QString& version )
+// {
+// 	return query( " SELECT installed "
+// 	              " FROM package "
+// 	              " WHERE name = '" + name + "'"
+// 	              " AND version = '" + version + "'"
+// 	              " LIMIT 1;");
+// }
 
 QStringList KurooDB::history()
 {
@@ -305,38 +305,52 @@ QStringList KurooDB::statistic()
 	              " ORDER BY id ASC;");
 }
 
-QStringList KurooDB::packageKeywords( const QString& idCategory, const QString& name )
-{
-	return query( " SELECT keywords FROM package "
-	              " WHERE idCategory = '" + idCategory + "'"
-	              " AND name = '" + name + "'"
-	              " ORDER BY id ASC;");
-}
+// QStringList KurooDB::packageKeywords( const QString& idCategory, const QString& name )
+// {
+// 	return query( " SELECT keywords FROM package "
+// 	              " WHERE idCategory = '" + idCategory + "'"
+// 	              " AND name = '" + name + "'"
+// 	              " ORDER BY id ASC;");
+// }
 
 QStringList KurooDB::packageTotal()
 {
 	return query( " SELECT COUNT(id) FROM package LIMIT 1;" );
 }
 
-QStringList KurooDB::installedTotal()
-{
-	return query( QString( "SELECT COUNT(id) FROM package WHERE meta != '%1' LIMIT 1;" ).arg( FILTERINSTALLED ) );
-}
+// QStringList KurooDB::installedTotal()
+// {
+// 	return query( QString( "SELECT COUNT(id) FROM package WHERE meta != '%1' LIMIT 1;" ).arg( FILTERINSTALLED ) );
+// }
 
 QStringList KurooDB::updatesTotal()
 {
 	return query( "SELECT COUNT(id) FROM updates LIMIT 1;" );
 }
 
-QStringList KurooDB::package( const QString& id )
+QString KurooDB::package( const QString& id )
 {
-	return query( QString( "SELECT name FROM package WHERE id = '%1';" ).arg( id ) );
+	QString name = (query( QString( "SELECT name FROM package WHERE id = '%1';" ).arg( id ) )).first();
+	
+	if ( !name.isEmpty() )
+		return name;
+	else
+		kdDebug() << i18n("Can not find package in database for id %1.").arg( id ) << endl;
+	
+	return NULL;
 }
 
-QStringList KurooDB::category( const QString& id )
+QString KurooDB::category( const QString& id )
 {
-	return query( QString( "SELECT name FROM catSubCategory "
-	                       "WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id ) );
+	QString category = (query( QString( "SELECT name FROM catSubCategory "
+	                                    "WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id ) )).first();
+	
+	if ( !category.isEmpty() )
+		return category;
+	else
+		kdDebug() << i18n("Can not find category in database for id %1.").arg( id ) << endl;
+	
+	return NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -573,13 +587,20 @@ QStringList KurooDB::resultPackages()
 	                      " ORDER BY results.id LIMIT %1;").arg(ROWLIMIT) );
 }
 
-QStringList KurooDB::packageIdDB( const QString& category, const QString& name )
+QString KurooDB::packageIdDB( const QString& category, const QString& name )
 {
-	return query( " SELECT package.id FROM catSubCategory, package "
-	              " WHERE catSubCategory.name = '" + category + "'"
-	              " AND package.name = '" + name + "'"
-	              " AND catSubCategory.id = package.idCatSubCategory "
-	              " LIMIT 1;");
+	QString id = (query( " SELECT package.id FROM catSubCategory, package "
+	                    " WHERE catSubCategory.name = '" + category + "'"
+	                    " AND package.name = '" + name + "'"
+	                    " AND catSubCategory.id = package.idCatSubCategory "
+	                     " LIMIT 1;")).first();
+	
+	if ( !id.isEmpty() )
+		return id;
+	else
+		kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+	
+	return NULL;
 }
 
 QStringList KurooDB::lastHistoryEntry()

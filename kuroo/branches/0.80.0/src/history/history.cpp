@@ -295,7 +295,7 @@ void History::slotParse()
  */
 void History::appendEmergeInfo( const QString& einfo )
 {
-	KurooDBSingleton::Instance()->query( QString("UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);").arg( einfo ) );
+	KurooDBSingleton::Instance()->query( QString("UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);").arg( einfo.utf8() ) );
 }
 
 /**

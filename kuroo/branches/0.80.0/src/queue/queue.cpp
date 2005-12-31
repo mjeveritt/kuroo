@@ -228,7 +228,8 @@ void Queue::slotEmergePackageStart( const QString& package )
 void Queue::slotEmergePackageComplete( const QString& package )
 {
 	internalTimer->stop();
-	
+	m_id = PortageSingleton::Instance()->idDb( package );
+	emit signalPackageComplete( m_id );
 	kdDebug() << "Queue::slotEmergePackageComplete package=" << package << endl;
 }
 

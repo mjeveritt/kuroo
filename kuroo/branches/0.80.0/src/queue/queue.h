@@ -124,6 +124,7 @@ public slots:
 signals:
 	void					signalQueueChanged();
 	void					signalPackageAdvance( const QString& id );
+	void					signalPackageComplete( const QString& id );
 	
 private:
 	QObject					*parent;

@@ -2,7 +2,7 @@
 Comment=KDE frontend to Gentoo portage
 Comment[en_US]=KDE frontend to Gentoo portage
 Encoding=UTF-8
-Exec=kdesu %i %m -caption "%c"
+Exec=kdesu -t -d -u root -c kuroo8 -caption "%c" %i %m
 GenericName=
 GenericName[en_US]=
 Icon=kuroo
@@ -12,7 +12,6 @@ Name[en_US]=Kuroo8
 Path=
 StartupNotify=true
 Terminal=true
-TerminalOptions=
 Type=Application
 X-DCOP-ServiceType=Unique
 X-KDE-SubstituteUID=false

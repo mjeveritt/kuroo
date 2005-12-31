@@ -138,7 +138,7 @@ QStringList PackageListView::allPackages()
 	QStringList packageList;
 	QListViewItemIterator it( this );
 	while ( it.current() ) {
-		packageList += dynamic_cast<PackageItem*>( it.current() )->id();
+		packageList += dynamic_cast<PackageItem*>( it.current() )->name();
 		++it;
 	}
 	return packageList;

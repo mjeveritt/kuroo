@@ -42,7 +42,7 @@ public slots:
 	void					init( QObject *myParent = 0 );
 	
 	void					slotEmergePackageStart( const QString& package );
-	void					slotEmergePackageStop( const QString& package );
+	void					slotEmergePackageComplete( const QString& package );
 	void					slotOneStep();
 	
 	/**

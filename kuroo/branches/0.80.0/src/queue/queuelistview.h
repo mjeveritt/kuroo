@@ -67,13 +67,9 @@ public slots:
 	QString		 						totalSize();
 	
 	void								slotPackageProgress( const QString& id );
+	void								slotPackageComplete( const QString& id );
 	
 private slots:
-	
-	/**
-	* Clear this listView and packages.
-	*/
-// 	void								reset();
 	
 	/**
 	* Format package size nicely 

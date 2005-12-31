@@ -50,17 +50,18 @@ public:
 	void		setTotalSteps( int totalSteps );
 	void		setProgress( int progress );
 	void		advance();
+	void		complete();
 	
 protected:
 	void 		paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
 	KProgress* 	bar;
-	int			progress;
+	int			progress, m_duration;
 };
 
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
 {
 	bar = new KProgress( duration, parent->viewport() );
 }
@@ -86,6 +87,11 @@ void QueueListView::QueueItem::setProgress( int progress )
 void QueueListView::QueueItem::advance()
 {
 	bar->setProgress( progress++ );
+}
+
+void QueueListView::QueueItem::complete()
+{
+	bar->setProgress( m_duration );
 }
 
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
@@ -115,10 +121,12 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setRootIsDecorated( true );
 	setFullWidth( true );
 	setColumnWidthMode( 0, QListView::Manual );
+	setColumnWidthMode( 1, QListView::Manual );
+	setColumnWidthMode( 2, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 80 );
-	setColumnWidth( 3, 80 );
+	setColumnWidth( 3, 100 );
 	setTooltipColumn( 2 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
@@ -269,6 +277,13 @@ void QueueListView::slotPackageProgress( const QString& id )
 {
 	if ( !id.isEmpty() && packageIndex[id] ) {
 		dynamic_cast<QueueItem*>( packageIndex[id] )->advance();
+	}
+}
+
+void QueueListView::slotPackageComplete( const QString& id )
+{
+	if ( !id.isEmpty() && packageIndex[id] ) {
+		dynamic_cast<QueueItem*>( packageIndex[id] )->complete();
 	}
 }
 

@@ -70,8 +70,11 @@ public:
 					}
 					else
 						kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+					
+					return false;
 				}
-				return true;
+				else
+					return true;
 			}
 			else
 				kdDebug() << i18n("Adding to Queue: No package found!") << endl;
@@ -207,7 +210,7 @@ Queue::Queue( QObject* parent )
 	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStart( const QString& ) ), this, SLOT( slotEmergePackageStart( const QString& ) ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStop( const QString& ) ), this, SLOT( slotEmergePackageStop( const QString& ) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageComplete( const QString& ) ), this, SLOT( slotEmergePackageComplete( const QString& ) ) );
 }
 
 Queue::~Queue()
@@ -222,11 +225,11 @@ void Queue::slotEmergePackageStart( const QString& package )
 	kdDebug() << "Queue::slotEmergePackageStart m_id=" << m_id << endl;
 }
 
-void Queue::slotEmergePackageStop( const QString& package )
+void Queue::slotEmergePackageComplete( const QString& package )
 {
 	internalTimer->stop();
 	
-	kdDebug() << "Queue::slotEmergePackageStop package=" << package << endl;
+	kdDebug() << "Queue::slotEmergePackageComplete package=" << package << endl;
 }
 
 void Queue::slotOneStep()

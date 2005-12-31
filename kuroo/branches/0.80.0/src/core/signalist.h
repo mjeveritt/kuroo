@@ -102,7 +102,7 @@ signals:
 	void		signalUnmasked( const QString& name, bool b );
 	
 	void		signalEmergePackageStart( const QString& package );
-	void		signalEmergePackageStop( const QString& package );
+	void		signalEmergePackageComplete( const QString& package );
 private:
 	QObject	*parent;
 	bool		busy, busyScanning, busyDiskUsage;

@@ -195,7 +195,7 @@ void Signalist::emergePackageStart( const QString& package )
  */
 void Signalist::emergePackageStop( const QString& package )
 {
-	emit signalEmergePackageStop( package );
+	emit signalEmergePackageComplete( package );
 }
 
 #include "signalist.moc"

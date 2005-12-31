@@ -223,7 +223,7 @@ void History::slotParse()
 				LogSingleton::Instance()->writeLog( line.section( rx, 1, 1 ), EMERGELOG );
 			}
 			else
-			if ( emergeLine.contains( ">>> emerge" ) ) {
+			if ( line.contains( ">>> emerge" ) ) {
 				rx.setPattern( "\\s\\S+/\\S+\\s" );
 				if ( rx.search( emergeLine ) > -1 ) {
 					QString package = rx.cap( 0 ).stripWhiteSpace();

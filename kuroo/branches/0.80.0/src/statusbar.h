@@ -52,8 +52,8 @@ public:
 	void			startProgress();
 	
 public slots:
-	void			oneStep();
-	void			advance();
+	void			slotOneStep();
+	void			slotAdvance();
 
 private:
 	KProgress 		*statusBarProgress;

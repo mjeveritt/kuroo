@@ -45,11 +45,11 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	
 	// Clock timer for showing progress when emerging packages.
 	internalTimer = new QTimer( this );
-	connect( internalTimer, SIGNAL( timeout() ), SLOT( oneStep() ) );
+	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
 	// Progress timer for activities when total duration is not specified.
 	diffTimer = new QTimer( this );
-	connect( diffTimer, SIGNAL( timeout() ), SLOT( advance() ) );
+	connect( diffTimer, SIGNAL( timeout() ), SLOT( slotAdvance() ) );
 }
 
 KurooStatusBar::~KurooStatusBar()
@@ -105,7 +105,7 @@ void KurooStatusBar::stopTimer()
 /**
  * Increase progress by 1 second.
  */
-void KurooStatusBar::oneStep()
+void KurooStatusBar::slotOneStep()
 {
 	setProgress( timerSteps++ );
 	
@@ -128,7 +128,7 @@ void KurooStatusBar::startProgress()
 /**
  * Show relative advance progress.
  */
-void KurooStatusBar::advance()
+void KurooStatusBar::slotAdvance()
 {
 	statusBarProgress->advance( 2 );
 }

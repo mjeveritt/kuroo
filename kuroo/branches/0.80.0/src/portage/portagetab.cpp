@@ -234,23 +234,25 @@ void PortageTab::slotPackage()
 		pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
-	packagesView->initCurrentPackageVersion();
-	QString package( packagesView->currentPackageName() );
-	QString category( packagesView->currentPackageCategory() );
+	packagesView->currentPortagePackage()->initVersions();
+	QString package( packagesView->currentPortagePackage()->name() );
+	QString category( packagesView->currentPortagePackage()->category() );
 	
 	QString textLines = "<font size=\"+2\">" + package + "</font> ";
 			textLines += "(" + category.section( "-", 0, 0 ) + " / ";
 			textLines += category.section( "-", 1, 1 ) + ") <br>";
-			textLines += packagesView->currentPackageDescription() + "<br>";
-			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPackageHomepage();
-			textLines += "\">" + packagesView->currentPackageHomepage() + "</a><br>";
+			textLines += packagesView->currentPortagePackage()->description() + "<br>";
+			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->description();
+			textLines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a><br>";
 	
 	QString textLinesAvailable;
 	QString textLinesInstalled;
 	
-	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackageVersionList();
-	QValueList<PackageVersion*>::iterator sortedVersionIterator;
+	// Sorted list of versions for current package.
+	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
 	
+	// Iterate through the list
+	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			textLinesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";

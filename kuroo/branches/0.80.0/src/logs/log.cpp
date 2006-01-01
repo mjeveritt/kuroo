@@ -57,7 +57,7 @@ QString Log::init( QObject *myParent )
 	if( !logFile.open(IO_WriteOnly ) ) {
 		kdDebug() << i18n("Error writing: ") << KUROODIR << "kuroo.log" << endl;
 		KMessageBox::error(0, i18n("Error writing %1kuroo.log.").arg(KUROODIR), i18n("Saving"));
-		return "";
+		return NULL;
 	}
 	else
 		return logName;

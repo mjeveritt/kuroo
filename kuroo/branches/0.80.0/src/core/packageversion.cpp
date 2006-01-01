@@ -26,8 +26,8 @@
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
 */
-PackageVersion::PackageVersion( PortageListView::PortageItem* parent, const QString& version )
-	: m_parent( parent ), m_version( version ),
+PackageVersion::PackageVersion( PortageListView::PortageItem* package, const QString& version )
+	: m_package( package ), m_version( version ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere
@@ -40,7 +40,7 @@ PackageVersion::PackageVersion( PortageListView::PortageItem* parent, const QStr
 	m_installed = false;
 	m_overlay = false;
 	m_hasDetailedInfo = false;
-	m_size = "";
+	m_size = QString::null;
 	m_isHardMasked = false;
 }
 
@@ -86,9 +86,9 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	int revisionPos, suffixPos, trailingCharPos;
 	
 	// Retrieve revision, suffix and their positions in the version string
-	thisRevision = PackageVersion::revisionNumber( version(), &revisionPos );
-	thisSuffix = PackageVersion::suffixNumber( version(), &suffixPos );
-	thisTrailingChar = PackageVersion::trailingCharNumber( version(), &trailingCharPos );
+	thisRevision = PackageVersion::revisionNumber( m_version, &revisionPos );
+	thisSuffix = PackageVersion::suffixNumber( m_version, &suffixPos );
+	thisTrailingChar = PackageVersion::trailingCharNumber( m_version, &trailingCharPos );
 	
 	// determine the first non-base-version character
 	if ( trailingCharPos != -1 )
@@ -98,10 +98,10 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	else if ( revisionPos != -1 )
 		pos = revisionPos;
 	else
-		pos = version().length();
+		pos = m_version.length();
 	
 	// So, now we have a version string stripped of suffix and revision
-	QString thisBaseVersion( version().left(pos) );
+	QString thisBaseVersion( m_version.left(pos) );
 	
 	// Same procedure for the other version string
 	thatRevision = PackageVersion::revisionNumber( otherVersion, &revisionPos );
@@ -116,7 +116,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	else if ( revisionPos != -1 )
 		pos = revisionPos;
 	else
-		pos = version().length();
+		pos = m_version.length();
 	
 	// So, now we have a version string stripped of suffix and revision
 	QString thatBaseVersion( otherVersion.left(pos) );
@@ -129,7 +129,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	
 	pos = 0; // pos is the start index for number searches
 	do {
-		rxNumber.search( version(), pos );
+		rxNumber.search( m_version, pos );
 		thisNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
 		rxNumber.search( otherVersion, pos );
 		thatNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
@@ -191,6 +191,23 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	
 } // end of isNewerThan()
 
+/**
+ * Find out if this version has a lower version number than another one.
+ * As this function is just using isNewerThan, it doesn't make sense to be
+ * overloaded in derived classes (which is why it's not declared virtual).
+ *
+ * @param otherVersion  Version string of the version that should be compared
+ *                      to this one.
+ * @return  true if this version is older than the one given in the argument.
+ *          false if the other version is older (or if the strings are equal).
+ */
+bool PackageVersion::isOlderThan( const QString& otherVersion ) const
+{
+	if ( m_version == otherVersion || isNewerThan( otherVersion ) == true )
+		return false;
+	else
+		return true;
+}
 
 /**
 * Find out how stable this version is marked (stable, masked and such).
@@ -315,10 +332,8 @@ long PackageVersion::suffixNumber( const QString& versionString, int* foundPos )
 	{
 		// the regexps have to be casted to normal, because the const
 		// method signature makes them const too (which is not wanted)
-		QString suffix = (const_cast<PackageVersion*>(this))->
-			rxSuffix.cap(1);
-		int suffixNumber = (const_cast<PackageVersion*>(this))->
-			rxSuffix.cap(2).toInt(); // X in, say "_betaX"
+		QString suffix = (const_cast<PackageVersion*>(this))->rxSuffix.cap(1);
+		int suffixNumber = (const_cast<PackageVersion*>(this))->rxSuffix.cap(2).toInt(); // X in, say "_betaX"
 		// if it's just "_beta" (which is allowed), toInt("") returns 0.
 		
 		// The big numbers are needed because some people use stuff like

@@ -41,6 +41,10 @@ static QTime totalDuration;
 // Tweak for time taken unpacking and installing single package.
 const int diffTime( 10 );
 
+/**
+ * @class QueueListView::QueueItem
+ * @short Package item with progressbar
+ */
 class QueueListView::QueueItem : public PackageItem
 {
 public:
@@ -48,8 +52,7 @@ public:
 	~QueueItem();
 	
 	void		setTotalSteps( int totalSteps );
-	void		setProgress( int progress );
-	void		advance();
+	void		oneStep();
 	void		complete();
 	
 protected:
@@ -60,6 +63,10 @@ private:
 	int			progress, m_duration;
 };
 
+/**
+ * @class QueueListView::QueueItem
+ * @short Package item with progressbar
+ */
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
 {
@@ -72,28 +79,37 @@ QueueListView::QueueItem::~QueueItem()
 	bar = 0;
 }
 
+/**
+ * Set total steps to the package emerge duration in sec.
+ * @param totalSteps
+ */
 void QueueListView::QueueItem::setTotalSteps( int totalSteps )
 {
 	bar->setTotalSteps( totalSteps );
 	repaint();
 }
 
-void QueueListView::QueueItem::setProgress( int progress )
+/**
+ * Advance progress by 1 sec.
+ */
+void QueueListView::QueueItem::oneStep()
 {
-	bar->setProgress( progress );
+	bar->setProgress( progress++ );
 	repaint();
 }
 
-void QueueListView::QueueItem::advance()
-{
-	bar->setProgress( progress++ );
-}
-
+/**
+ * Set progressbar as 100%.
+ */
 void QueueListView::QueueItem::complete()
 {
 	bar->setProgress( m_duration );
+	repaint();
 }
 
+/**
+ * Reimplemented to paint the progressbar inside section 3 in the listview.
+ */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	QRect rect = listView()->itemRect( this );
@@ -106,7 +122,8 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 }
 
 /**
- * Specialized listview for packages in the installation queue.
+ * @class QueueListView
+ * @short Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), loc( KGlobal::locale() )
@@ -279,7 +296,7 @@ QString QueueListView::kBSize( const int& size )
 void QueueListView::slotPackageProgress( const QString& id )
 {
 	if ( !id.isEmpty() && packageIndex[id] ) {
-		dynamic_cast<QueueItem*>( packageIndex[id] )->advance();
+		dynamic_cast<QueueItem*>( packageIndex[id] )->oneStep();
 	}
 }
 

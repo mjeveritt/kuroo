@@ -24,6 +24,7 @@
 #include <qpixmap.h>
 
 #include "packagelistview.h"
+#include "packageitem.h"
 
 class PackageVersion;
 
@@ -40,19 +41,14 @@ public:
 	
 	class 							PortageItem;
 	
-	QString 						currentPackageName();
-	QString							currentPackageDescription();
-	QString							currentPackageCategory();
-	QString							currentPackageHomepage();
-	void							initCurrentPackageVersion();
-	QValueList<PackageVersion*>		currentPackageVersionList();
+	PortageListView::PortageItem* 	currentPortagePackage();
 	
 public slots:
 	
 	void							setHeader( const QString& text );
 	
 	/**
-	 * Populate listview with content of this category..
+	 * Populate listview with content of this category.
 	 * @param package
 	 */
 	void 							addSubCategoryPackages( const QStringList& packageList );
@@ -65,6 +61,28 @@ private slots:
 private:
 	QStringList						unmaskedList;
 	QPixmap 						pxQueuedColumn;
+};
+
+/**
+ * @class PortageListView::PortageItem
+ * @short Package item with all versions.
+ */
+class PortageListView::PortageItem : public PackageItem
+{
+public:
+	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status );
+	
+	QString 								category();
+	QString 								homepage();
+	void 									initVersions();
+	QValueList<PackageVersion*> 			sortedVersionList();
+	
+protected:
+	bool									versionsLoaded;
+	QString									m_homepage, m_category;
+	
+	typedef QMap<QString, PackageVersion*>	PackageVersionMap;
+	PackageVersionMap						m_versions;
 };
 
 #endif

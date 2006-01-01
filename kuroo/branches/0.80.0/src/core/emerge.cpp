@@ -85,8 +85,8 @@ EmergePackageList Emerge::packageList()
 bool Emerge::queue( const QString& category, const QStringList& packageList )
 {
 	blocks.clear();
-	importantMessage = "";
-	unmasked = "";
+	importantMessage = QString::null;
+	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
@@ -129,8 +129,8 @@ bool Emerge::queue( const QString& category, const QStringList& packageList )
 bool Emerge::queue( const QStringList& packageList )
 {
 	blocks.clear();
-	importantMessage = "";
-	unmasked = "";
+	importantMessage = QString::null;
+	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
@@ -174,8 +174,8 @@ bool Emerge::queue( const QStringList& packageList )
 bool Emerge::pretend( const QString& category, const QStringList& packageList )
 {
 	blocks.clear();
-	importantMessage = "";
-	unmasked = "";
+	importantMessage = QString::null;
+	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	
@@ -211,8 +211,8 @@ bool Emerge::pretend( const QString& category, const QStringList& packageList )
 bool Emerge::pretend( const QStringList& packageList )
 {
 	blocks.clear();
-	importantMessage = "";
-	unmasked = "";
+	importantMessage = QString::null;
+	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	
@@ -249,7 +249,7 @@ bool Emerge::pretend( const QStringList& packageList )
 bool Emerge::unmerge( const QStringList& packageList )
 {
 	blocks.clear();
-	importantMessage = "";
+	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
 	emergePackageList.clear();
@@ -284,7 +284,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 bool Emerge::sync()
 {
 	blocks.clear();
-	importantMessage = "";
+	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
 	
@@ -313,7 +313,7 @@ bool Emerge::sync()
 bool Emerge::checkUpdates()
 {
 	blocks.clear();
-	importantMessage = "";
+	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
 	
@@ -352,7 +352,7 @@ bool Emerge::checkUpdates()
 void Emerge::readFromStdout( KProcIO *proc )
 {
 	QString line;
-	static QString lineOver("");
+	static QString lineOver(NULL);
 	static bool lastLineFlag = false;
 	static bool completedFlag = false;
 	static QString importantMessagePackage;
@@ -365,7 +365,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		if ( !unterm ) {
 			if ( !line.contains(QRegExp("^>>>|^!!!")) )
 				line = lineOver + line;
-			lineOver = "";
+			lineOver = QString::null;
 		}
 		else {
 			lineOver = line;
@@ -385,7 +385,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		int pos = 0;
 		QRegExp rx("(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)");
 		while ( (pos = rx.search(line)) != -1 ) {
-			line.replace(pos, rx.matchedLength(), "");
+			line.replace( pos, rx.matchedLength(), "" );
 		}
 		
 		if ( line.isEmpty() )
@@ -514,7 +514,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
 					importantMessage = importantMessagePackage + cleanLine;
-					importantMessagePackage = "";
+					importantMessagePackage = QString::null;
 				}
 				else
 					importantMessage += cleanLine;

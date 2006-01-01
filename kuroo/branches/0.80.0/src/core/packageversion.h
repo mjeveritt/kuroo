@@ -49,6 +49,7 @@ public:
 	bool isAvailable() const;
 	
 	bool isNewerThan( const QString& otherVersion ) const;
+	bool isOlderThan( const QString& otherVersion ) const;
 	
 	PackageVersion::Stability stability( const QString& arch ) const;
 	
@@ -83,7 +84,7 @@ public:
 	void setHasDetailedInfo( bool hasDetailedInfo );
 	
 protected:
-	PackageVersion( PortageListView::PortageItem* parent, const QString& version );
+	PackageVersion( PortageListView::PortageItem* package, const QString& version );
 	virtual ~PackageVersion();
 	
 private:
@@ -92,7 +93,7 @@ private:
 	int trailingCharNumber( const QString& versionString, int* foundPos = NULL ) const;
 	
 	/** The package containing this version. */
-	PortageListView::PortageItem* m_parent;
+	PortageListView::PortageItem* m_package;
 	
 	// Info retrievable by retrieving QFileInfos for ebuilds
 	// (without parsing their contents):

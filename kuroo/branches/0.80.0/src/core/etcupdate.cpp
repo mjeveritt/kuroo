@@ -70,7 +70,7 @@ bool EtcUpdate::etcUpdate()
 		KMessageBox::information( 0, i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
 		etcUpdateLines.clear();
-		diffSource = "";
+		diffSource = QString::null;
 		
 		eProc->resetAll();
 		*eProc << "etc-update" ;
@@ -204,7 +204,7 @@ void EtcUpdate::cleanupDiff( KProcess* proc )
 	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanupDiff( KProcess* ) ) );
 	KIO::file_delete( diffSource );
 	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( diffSource ).arg( KUROODIR + "backup" ), KUROO );
-	diffSource = "";
+	diffSource = QString::null;
 	
 	// Move to next etc-file
 	runDiff();

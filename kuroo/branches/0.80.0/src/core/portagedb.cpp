@@ -314,7 +314,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 	
 	switch ( filter ) {
 		case FILTER_ALL:
-			filterQuery = "";
+			filterQuery = QString::null;
 			if ( !text.isEmpty() )
 				textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%')";
 			break;
@@ -350,7 +350,7 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 
 		switch ( filter ) {
 			case FILTER_ALL:
-				filterQuery = "";
+				filterQuery = QString::null;
 				break;
 				
 			case FILTER_INSTALLED:
@@ -392,7 +392,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		if ( subCategoryId == "0" ) {
 			switch ( filter ) {
 				case FILTER_ALL:
-					filterQuery = "";
+					filterQuery = QString::null;
 					if ( !text.isEmpty() )
 						textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
 					break;
@@ -413,7 +413,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			
 			switch ( filter ) {
 				case FILTER_ALL:
-					filterQuery = "";
+					filterQuery = QString::null;
 					break;
 					
 				case FILTER_INSTALLED:
@@ -435,7 +435,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			
 			switch ( filter ) {
 				case FILTER_ALL:
-					filterQuery = "";
+					filterQuery = QString::null;
 					break;
 					
 				case FILTER_INSTALLED:
@@ -455,7 +455,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		
 			switch ( filter ) {
 				case FILTER_ALL:
-					filterQuery = "";
+					filterQuery = QString::null;
 					break;
 					
 				case FILTER_INSTALLED:

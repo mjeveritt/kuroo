@@ -18,12 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "common.h"
 #include "dependatom.h"
-
-// #include "packagelist.h"
-// #include "portagepackage.h"
-// #include "portagecategory.h"
 #include "packageversion.h"
+#include "portagelistview.h"
 
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
@@ -38,13 +36,11 @@
 // The complete atom regexp in non-escaped form (for testing, or similar):
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
 
-
 /**
  * Initialize this object.
- * @param packages  The package list which contains the packages
- *                  that will be filtered out.
+ * @param packages  The package that will be filtered out.
  */
-DependAtom::DependAtom( /*TemplatedPackageList<PortagePackage>* packages*/ )
+DependAtom::DependAtom( PortageListView::PortageItem* portagePackage )
 	: m_rxAtom("^"    // Start of the string
 	           "(!)?" // "Block these packages" flag, only occurring in ebuilds
 	           "(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
@@ -56,17 +52,13 @@ DependAtom::DependAtom( /*TemplatedPackageList<PortagePackage>* packages*/ )
 	           "(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
 	           "(?:-r\\d+)?"  // revision
 	           ")?$"          // end of the (optional) version part and the atom string
-	          )
+	          ),
+	m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
-// 	m_packages = packages;
-	m_matches = false;
-	m_callsign = false;
-// 	m_category = new PortageCategory;
 }
 
 DependAtom::~DependAtom()
 {
-// 	delete m_category;
 }
 
 /**
@@ -84,17 +76,17 @@ DependAtom::~DependAtom()
 bool DependAtom::parse( const QString& atom )
 {
 	// Do the regexp match, which also prepares for text capture
-	if ( m_rxAtom.exactMatch(atom) == false ) {
+	if ( m_rxAtom.exactMatch( atom ) == false ) {
 		m_matches = false;
 		return false;
 	}
 	
 	// Get the captured strings
-	m_callsign    = m_rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
-	m_prefix      = m_rxAtom.cap( POS_PREFIX );
-	m_package     = m_rxAtom.cap( POS_PACKAGE );
-	m_version     = m_rxAtom.cap( POS_VERSION );
-// 	m_category->setCategory( m_rxAtom.cap(POS_CATEGORY), m_rxAtom.cap(POS_SUBCATEGORY) );
+	m_callsign	= m_rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
+	m_prefix	= m_rxAtom.cap( POS_PREFIX );
+	m_package	= m_rxAtom.cap( POS_PACKAGE );
+	m_version	= m_rxAtom.cap( POS_VERSION );
+	m_category	= m_rxAtom.cap( POS_CATEGORY ) + "-" + m_rxAtom.cap( POS_SUBCATEGORY );
 	
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
@@ -121,14 +113,12 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 {
 	QValueList<PackageVersion*> matchingVersions;
 	
-// 	if ( m_packages == NULL || m_matches == false )
-// 		return matchingVersions; // return an empty list
+	if ( m_package == NULL || m_matches == false )
+		return matchingVersions; // return an empty list
 	
-// 	if ( m_packages->contains(m_category, m_package) == false )
-// 		return matchingVersions; // return an empty list
-	
-// 	PortagePackage* pkg = m_packages->package(  new PortageCategory(*m_category), m_package );
-	
+	if ( m_portagePackage->category() != m_category || m_portagePackage->name() != m_package )
+		return matchingVersions; // return an empty list
+
 	bool matchAllVersions;
 	if ( m_version.isEmpty() || m_version == "*" )
 		matchAllVersions = true;
@@ -155,20 +145,21 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	// (but not equalling, too) the parsed version.
 	bool matchGreaterThan = m_prefix.startsWith(">");
 	
+	QValueList<PackageVersion*> versions = m_portagePackage->sortedVersionList();
 	
 	// So, let's iterate through the versions to check if they match or not
-// 	for ( Package::versioniterator versionIterator = pkg->versionBegin(); versionIterator != pkg->versionBegin(); versionIterator++ ) {
-// 		if ( ( matchAllVersions == true ) ||
-// 		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith(m_version) ) ||
-// 		    ( matchEqual       == true  && (*versionIterator)->version() == m_version   ) ||
-// 		    ( matchEqual == false && matchGreaterThan == true  && (*versionIterator)->isNewerThan(m_version) ) ||
-// 		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan(m_version) )
-// 		  )
-// 		{
-// 			matchingVersions.append( (PackageVersion*) *versionIterator );
-// 			continue;
-// 		}
-// 	}
+	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+		if ( ( matchAllVersions == true ) ||
+		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith(m_version) ) ||
+		    ( matchEqual       == true  && (*versionIterator)->version() == m_version   ) ||
+		    ( matchEqual == false && matchGreaterThan == true  && (*versionIterator)->isNewerThan(m_version) ) ||
+		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan(m_version) )
+		  )
+		{
+			matchingVersions.append( (PackageVersion*) *versionIterator );
+			continue;
+		}
+	}
 	return matchingVersions;
 	
 } // end of matchingVersions()

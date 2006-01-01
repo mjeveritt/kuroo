@@ -424,7 +424,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	// Get package size. Try in cache first.
 	QString packageNoVersion = category + "/" + package.section(rxPortageVersion, 0, 0);
 	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + package ) ;
-	if ( size != NULL )
+	if ( size != "" )
 		info.size = kBSize( size );
 	else {
 		QString path = KurooConfig::dirPortage() + "/" + packageNoVersion + "/files/digest-" + package;

@@ -38,40 +38,36 @@
 
 static int packageCount( 0 );
 
-class PortageListView::PortageItem : public PackageItem
-{
-public:
-	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status );
-	
-	QString 								category();
-	QString 								homepage();
-	void 									initVersions();
-	QValueList<PackageVersion*> 			sortedVersionList();
-	
-protected:
-	bool									versionsLoaded;
-	QString									m_homepage, m_category;
-	
-	typedef QMap<QString, PackageVersion*>	PackageVersionMap;
-	PackageVersionMap						m_versions;
-};
-
+/**
+ * @class PortageListView::PortageItem
+ * @short Package item with all versions.
+ */
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status )
-	: PackageItem( parent, name, id, description, status ), 
-	m_homepage( homepage ), m_category( "" ), versionsLoaded( false )
+	: PackageItem( parent, name, id, description, status ), m_homepage( homepage ), m_category( NULL ), versionsLoaded( false )
 {
 }
 
+/**
+ * Accessor for category.
+ * @return the package category.
+ */
 QString PortageListView::PortageItem::category()
 {
 	return m_category;
 }
 
+/**
+ * Accessor for homepage.
+ * @return the package homepage.
+ */
 QString PortageListView::PortageItem::homepage()
 {
 	return m_homepage;
 }
 
+/**
+ * Initialize the package with all its versions and info. Executed when PortageItem get focus first time.
+ */
 void PortageListView::PortageItem::initVersions()
 {
 	if ( versionsLoaded )
@@ -109,12 +105,13 @@ void PortageListView::PortageItem::initVersions()
  * Return a list of PackageVersion objects sorted by their version numbers,
  * with the oldest version at the beginning and the latest version at the end
  * of the list.
+ * @return sortedVersions
  */
 QValueList<PackageVersion*> PortageListView::PortageItem::sortedVersionList()
 {
 	QValueList<PackageVersion*> sortedVersions;
-	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	
+	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( PackageVersionMap::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
 		if ( versionIterator == m_versions.begin() ) {
 			sortedVersions.append( *versionIterator );
@@ -144,7 +141,8 @@ QValueList<PackageVersion*> PortageListView::PortageItem::sortedVersionList()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Installed packages listview.
+ * @class PortageListView
+ * @short All packages listview.
  */
 PortageListView::PortageListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
@@ -187,40 +185,23 @@ PortageListView::~PortageListView()
 {
 }
 
-QString PortageListView::currentPackageName()
+/**
+ * Name of current package with focus.
+ * @return name
+ */
+PortageListView::PortageItem* PortageListView::currentPortagePackage()
 {
-	return currentPackage()->name();
+	return dynamic_cast<PortageItem*>( currentPackage() );
 }
 
-QString PortageListView::currentPackageDescription()
+/**
+ * View package total in package name section header.
+ * @param total
+ */
+void PortageListView::setHeader( const QString& total )
 {
-	return currentPackage()->description();
-}
-
-QString PortageListView::currentPackageCategory()
-{
-	return dynamic_cast<PortageItem*>(currentPackage())->category();
-}
-
-QString PortageListView::currentPackageHomepage()
-{
-	return dynamic_cast<PortageItem*>(currentPackage())->homepage();
-}
-
-void PortageListView::initCurrentPackageVersion()
-{
-	dynamic_cast<PortageItem*>(currentPackage())->initVersions();
-}
-
-QValueList<PackageVersion*> PortageListView::currentPackageVersionList()
-{
-	return dynamic_cast<PortageItem*>(currentPackage())->sortedVersionList();
-}
-
-void PortageListView::setHeader( const QString& text )
-{
-	if ( !text.isEmpty() )
-		header()->setLabel( 0, i18n("Package") + " (" + text + ")" );
+	if ( !total.isEmpty() )
+		header()->setLabel( 0, i18n("Package") + " (" + total + ")" );
 	else
 		header()->setLabel( 0, i18n("Package") );
 }
@@ -241,7 +222,7 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
 	resetListView();
-	setHeader( "" );
+	setHeader( NULL );
 	
 	// Don't load all packages, only first ROWLIMIT
 	packageCount = packageList.size() / 6;

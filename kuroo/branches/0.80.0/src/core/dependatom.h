@@ -21,14 +21,11 @@
 #ifndef DEPENDATOM_H
 #define DEPENDATOM_H
 
-// #include "packagelist.h"
+#include "packageversion.h"
 
-#include <qregexp.h>
 #include <qvaluelist.h>
 
-// class PortagePackage;
-// class PortageCategory;
-class PackageVersion;
+class QRegExp;
 
 /**
  * This class is the provides capabilities to parse DEPEND atoms and get
@@ -41,7 +38,7 @@ class PackageVersion;
 class DependAtom
 {
 public:
-	DependAtom( /*TemplatedPackageList<PortagePackage>* packages*/ );
+	DependAtom( PortageListView::PortageItem* portagePackage );
 	~DependAtom();
 	
 	bool parse( const QString& atom );
@@ -52,7 +49,7 @@ public:
 	
 private:
 	//! A pointer to the portage tree from which the packages are retrieved.
-// 	TemplatedPackageList<PortagePackage>* m_packages;
+	PortageListView::PortageItem* m_portagePackage;
 	//! The regular expression for the whole atom.
 	QRegExp m_rxAtom;
 	//! This is set to the result of parse().
@@ -65,7 +62,7 @@ private:
 	//! A compare sign (greater than / less than / equal) or the "all revisions" prefix ("~").
 	QString m_prefix;
 	//! The main category of the package.
-// 	PortageCategory* m_category;
+	QString m_category;
 	//! The package name.
 	QString m_package;
 	//! The complete version string.

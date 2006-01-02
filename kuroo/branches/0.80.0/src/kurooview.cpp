@@ -166,7 +166,7 @@ void KurooView::slotCheckPortage()
 	if ( PortageSingleton::Instance()->count() == "0" )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-		PackageMaskSingleton::Instance()->loadPackageMask();
+		PortageFilesSingleton::Instance()->loadPackageMask();
 		tabPortage->slotReload();
 		tabQueue->slotReload();
 		if ( UpdatesSingleton::Instance()->count() == "0" )

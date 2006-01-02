@@ -21,7 +21,6 @@
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
-#include "packagemask.h"
 
 #include <kmessagebox.h>
 
@@ -232,33 +231,6 @@ void Portage::loadPackageKeywords()
 	else
 		kdDebug() << i18n("Error reading: package.keyword.") << endl;
 }
-
-/**
- * Load masked packages list = packages in package.mask.
- */
-// void Portage::loadPackageMask()
-// {
-// 	mapPackageMask.clear();
-	
-	// Load package.keyword
-// 	QFile file( KurooConfig::filePackageUnmask() );
-// 	if ( file.open( IO_ReadOnly ) ) {
-// 		QTextStream stream( &file );
-// 		while ( !stream.atEnd() ) {
-// 			QString line( stream.readLine() );
-// 			if ( !line.isEmpty() && !line.startsWith( "#" ) )
-// 				mapPackageMask.insert( line );
-// 		}
-// 		file.close();
-// 	}
-// 	else
-// 		kdDebug() << i18n("Error reading: package.mask.") << endl;
-// }
-
-// Map<QString, QString> Portage::getMapPackageMask()
-// {
-// 	return mapPackageMask;
-// }
 
 /**
  * Check if package is unmasked. @fixme not checking if just testing or hardmasked.

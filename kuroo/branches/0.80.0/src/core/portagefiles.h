@@ -18,21 +18,21 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef PACKAGEMASK_H
-#define PACKAGEMASK_H
+#ifndef PORTAGEFILES_H
+#define PORTAGEFILES_H
 
 #include <qobject.h>
 
 /**
- * @class PackageMask
+ * @class PortageFiles
  * @short Object for handling masked packages.
  */
-class PackageMask : public QObject
+class PortageFiles : public QObject
 {
 Q_OBJECT	
 public:
-	PackageMask( QObject *parent = 0 );
-    ~PackageMask();
+	PortageFiles( QObject *parent = 0 );
+    ~PortageFiles();
 	
 public slots:
 	void			init( QObject *myParent = 0 );
@@ -43,13 +43,15 @@ public slots:
  	 * @param packageList
  	 */
 	void 			loadPackageMask();
+	void			loadPackageMaskUser();
 	void 			loadPackageUnmask();
+	void			loadPackageKeywords();
 	QStringList		getHardMaskedAtom( const QString& id );
 
 private slots:
 	
 signals:
-	void			signalPackageMaskChanged();
+	void			signalPortageFilesChanged();
 	
 private:
 	QObject*		parent;

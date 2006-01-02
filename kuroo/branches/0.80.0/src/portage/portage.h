@@ -118,8 +118,6 @@ public slots:
 	* Load unmasked packages list = packages in package.keyword.
 	*/
 	void						loadPackageKeywords();
-// 	void						loadPackageMask();
-// 	QMap<QString, QString>		getMapPackageMask();
 	
 	/**
 	* Check if package is unmasked. @fixme not checking if just testing or hardmasked.
@@ -155,7 +153,7 @@ signals:
 	
 private:
 	QObject	*parent;
-	QMap<QString, QString> 		mapCache, mapPackageKeywords, mapPackageMask;
+	QMap<QString, QString> 		mapCache, mapPackageKeywords;
 };
 
 #endif

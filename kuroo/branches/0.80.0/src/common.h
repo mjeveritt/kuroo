@@ -40,7 +40,7 @@
 #include "portage.h"
 #include "portagedb.h"
 #include "history.h"
-#include "packagemask.h"
+#include "portagefiles.h"
 #include "singleton.h"
 
 // Define all singleton objects
@@ -55,7 +55,7 @@ typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<Updates> UpdatesSingleton;
-typedef Singleton<PackageMask> PackageMaskSingleton;
+typedef Singleton<PortageFiles> PortageFilesSingleton;
 
 // The package states used by the filters
 enum packageFilters { 

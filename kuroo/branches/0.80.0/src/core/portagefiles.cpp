@@ -19,10 +19,8 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "packagemask.h"
+#include "portagefiles.h"
 #include "threadweaver.h"
-
-#include <kdirwatch.h>
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
 #define POS_CALLSIGN    1
@@ -35,10 +33,10 @@
 /**
  * 
  */
-class LoadPackageMaskJob : public ThreadWeaver::DependentJob
+class LoadPortageFilesJob : public ThreadWeaver::DependentJob
 {
 public:
-	LoadPackageMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	LoadPortageFilesJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 	
 	virtual bool doJob() {
 		QRegExp rxAtom(	"^"    // Start of the string
@@ -119,23 +117,23 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PackageMaskSingleton::Instance()->refresh();
+		PortageFilesSingleton::Instance()->refresh();
 	}
 };
 
 /**
  * Object for resulting list of packages from emerge actions.
  */
-PackageMask::PackageMask( QObject *parent )
+PortageFiles::PortageFiles( QObject *parent )
 	: QObject( parent )
 {
 }
 
-PackageMask::~PackageMask()
+PortageFiles::~PortageFiles()
 {
 }
 
-void PackageMask::init( QObject *myParent )
+void PortageFiles::init( QObject *myParent )
 {
 	parent = myParent;
 }
@@ -143,7 +141,7 @@ void PackageMask::init( QObject *myParent )
 /**
  * Forward signal to refresh results.
  */
-void PackageMask::refresh()
+void PortageFiles::refresh()
 {
 	kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageMask() ) << endl;
 }
@@ -152,21 +150,31 @@ void PackageMask::refresh()
 /**
  * 
  */
-void PackageMask::loadPackageMask()
+void PortageFiles::loadPackageMask()
 {
-	kdDebug() << "PackageMask::loadPackageMask" << endl;
-	ThreadWeaver::instance()->queueJob( new LoadPackageMaskJob( this ) );
+	kdDebug() << "PortageFiles::loadPackageMask" << endl;
+	ThreadWeaver::instance()->queueJob( new LoadPortageFilesJob( this ) );
 }
 
-void PackageMask::loadPackageUnmask()
+void PortageFiles::loadPackageMaskUser()
+{
+	kdDebug() << "PortageFiles::loadPackageMask" << endl;
+	ThreadWeaver::instance()->queueJob( new LoadPortageFilesJob( this ) );
+}
+
+void PortageFiles::loadPackageUnmask()
 {
 	kdDebug() << "Not working..." << endl;
-// 	ThreadWeaver::instance()->queueJob( new LoadPackageMaskJob( this ) );
+// 	ThreadWeaver::instance()->queueJob( new LoadPortageFilesJob( this ) );
 }
 
-QStringList PackageMask::getHardMaskedAtom( const QString& id )
+void PortageFiles::loadPackageKeywords()
+{
+}
+
+QStringList PortageFiles::getHardMaskedAtom( const QString& id )
 {
 	return KurooDBSingleton::Instance()->packageHardMaskAtom( id );
 }
 
-#include "packagemask.moc"
+#include "portagefiles.moc"

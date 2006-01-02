@@ -91,7 +91,7 @@ void PortageListView::PortageItem::initVersions()
 		version->setUseflags( useFlags );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
-		version->setAcceptedKeywords( KurooConfig::arch() );
+		version->setAcceptedKeywords( KurooConfig::arch() ); // @fixme: load from package.keywords
 		version->setSize( size );
 		
 		if ( meta == FILTERINSTALLED_STRING )
@@ -100,8 +100,8 @@ void PortageListView::PortageItem::initVersions()
 		m_versions.append( version );
 	}
 	
-	// Check if any of this package versions are hardmasked
-	const QStringList atomList = PackageMaskSingleton::Instance()->getHardMaskedAtom( id() );
+	// Check if any of this package versions are hardmasked @fixme: unmasked from package.unmask
+	const QStringList atomList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
 	foreach ( atomList ) {
 		
 		// Initialize the 'atom' member variable

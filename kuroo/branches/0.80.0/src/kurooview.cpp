@@ -186,6 +186,7 @@ void KurooView::slotCheckPortage()
 	if ( PortageSingleton::Instance()->count() == "0" )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
+		PackageMaskSingleton::Instance()->loadPackageMask();
 		tabPortage->slotReload();
 		tabQueue->slotReload();
 		if ( UpdatesSingleton::Instance()->count() == "0" )
@@ -218,6 +219,7 @@ void KurooView::slotEmergePretend( QString package )
  */
 void KurooView::slotPortageUpdated()
 {
+	kdDebug() << "KurooView::slotPortageUpdated" << endl;
 	if ( !iconPackages->isChanged() ) {
 		iconPackages->setChanged( true );
 		viewMenu->triggerUpdate( true );

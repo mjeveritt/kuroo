@@ -23,8 +23,6 @@
 #include "packageversion.h"
 #include "portagelistview.h"
 
-// For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
-
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
 #define POS_CALLSIGN    1
 #define POS_PREFIX      2
@@ -32,6 +30,8 @@
 #define POS_SUBCATEGORY 4
 #define POS_PACKAGE     5
 #define POS_VERSION     6
+
+// For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
 // The complete atom regexp in non-escaped form (for testing, or similar):
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
@@ -41,19 +41,18 @@
  * @param packages  The package that will be filtered out.
  */
 DependAtom::DependAtom( PortageListView::PortageItem* portagePackage )
-	: m_rxAtom("^"    // Start of the string
-	           "(!)?" // "Block these packages" flag, only occurring in ebuilds
-	           "(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
-	           "((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
-	           "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-	           "("            // start of the version part
-	           "(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number,
-                                    // including wildcard version matching (*)
-	           "(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
-	           "(?:-r\\d+)?"  // revision
-	           ")?$"          // end of the (optional) version part and the atom string
-	          ),
-	m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null )
+	: m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null ),
+	rxAtom(	"^"    // Start of the string
+			"(!)?" // "Block these packages" flag, only occurring in ebuilds
+			"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
+			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
+			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
+			"("            // start of the version part
+			"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
+			"(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
+			"(?:-r\\d+)?"  // revision
+			")?$"          // end of the (optional) version part and the atom string
+		)
 {
 }
 
@@ -76,17 +75,17 @@ DependAtom::~DependAtom()
 bool DependAtom::parse( const QString& atom )
 {
 	// Do the regexp match, which also prepares for text capture
-	if ( m_rxAtom.exactMatch( atom ) == false ) {
+	if ( rxAtom.exactMatch( atom ) == false ) {
 		m_matches = false;
 		return false;
 	}
 	
 	// Get the captured strings
-	m_callsign	= m_rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
-	m_prefix	= m_rxAtom.cap( POS_PREFIX );
-	m_package	= m_rxAtom.cap( POS_PACKAGE );
-	m_version	= m_rxAtom.cap( POS_VERSION );
-	m_category	= m_rxAtom.cap( POS_CATEGORY ) + "-" + m_rxAtom.cap( POS_SUBCATEGORY );
+	m_callsign	= rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
+	m_prefix	= rxAtom.cap( POS_PREFIX );
+	m_package	= rxAtom.cap( POS_PACKAGE );
+	m_version	= rxAtom.cap( POS_VERSION );
+	m_category	= rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 	
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
@@ -150,10 +149,10 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 		if ( ( matchAllVersions == true ) ||
-		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith(m_version) ) ||
-		    ( matchEqual       == true  && (*versionIterator)->version() == m_version   ) ||
-		    ( matchEqual == false && matchGreaterThan == true  && (*versionIterator)->isNewerThan(m_version) ) ||
-		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan(m_version) )
+		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith( m_version ) ) ||
+		    ( matchEqual       == true  && (*versionIterator)->version() == m_version ) ||
+		    ( matchEqual == false && matchGreaterThan == true  && (*versionIterator)->isNewerThan( m_version ) ) ||
+		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan( m_version ) )
 		  )
 		{
 			matchingVersions.append( (PackageVersion*) *versionIterator );

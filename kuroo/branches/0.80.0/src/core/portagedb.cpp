@@ -273,6 +273,14 @@ void KurooDB::createTables( DbConnection *conn )
 	      " package VARCHAR(32), "
 	      " size VARCHAR(10))"
 	      " ;", conn);
+	
+	query(" CREATE TABLE packageMask ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " idPackage INTEGER, "
+	      " dependAtom VARCHAR(255), "
+	      " meta VARCHAR(1), "
+	      " comment BLOB )"
+	      " ;", conn);
 }
 
 
@@ -544,6 +552,15 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
 	              " FROM version "
 	              " WHERE idPackage = '" + id + "'"
 	              " ORDER BY version.name;");
+}
+
+/**
+ * Return package hardmask depend atom.
+ * @param id
+ */
+QStringList KurooDB::packageHardMaskAtom( const QString& id )
+{
+	return query( QString( "SELECT dependAtom FROM packageMask WHERE idPackage = '%1';" ).arg( id ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -49,14 +49,14 @@
 		<entry name="DirWorldFile" type="String">
 		<default>/var/lib/portage/world</default>
 		</entry>
-		<entry name="DirPackageUnmask" type="String">
+		<entry name="FilePackageUnmask" type="String">
 		<default>/etc/portage/package.unmask</default>
 		</entry>
-		<entry name="DirPackageKeywords" type="String">
+		<entry name="FilePackageKeywords" type="String">
 		<default>/etc/portage/package.keywords</default>
 		</entry>
-		<entry name="DirPackageMask" type="String">
-		<default>/etc/portage/package.mask</default>
+		<entry name="FilePackageMask" type="String">
+		<default>/usr/portage/profiles/package.mask</default>
 		</entry>
 		<entry name="latestInstalledCategory" type="String">
 		</entry>

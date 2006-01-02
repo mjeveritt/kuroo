@@ -95,7 +95,7 @@ bool CachePortageJob::doJob()
 	}
 	
 	int count(0);
-	QMap <QString, QString> cacheMap;
+	QMap <QString, QString> mapCache;
 	QDir dCategory, dPackage;
 	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
 	dCategory.setSorting(QDir::Name);
@@ -146,7 +146,7 @@ bool CachePortageJob::doJob()
 					std::ifstream in( path );
 					std::string word;
 					while ( in >> word );
-					cacheMap.insert( package, word );
+					mapCache.insert( package, word );
 					file.close();
 				}
 				else
@@ -205,7 +205,7 @@ bool CachePortageJob::doJob()
 					std::ifstream in( path );
 					std::string word;
 					while ( in >> word );
-					cacheMap.insert( package, word );
+					mapCache.insert( package, word );
 					file.close();
 				}
 				else
@@ -219,13 +219,13 @@ bool CachePortageJob::doJob()
 		else
 			kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage/" << *itCategory << endl;
 	}
-	PortageSingleton::Instance()->setCache( cacheMap );
+	PortageSingleton::Instance()->setCache( mapCache );
 	
 	// Store cache in DB
 	KurooDBSingleton::Instance()->query("DELETE FROM cache;", m_db);
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
-	QMap< QString, QString >::iterator itMapEnd = cacheMap.end();
-	for ( QMap< QString, QString >::iterator itMap = cacheMap.begin(); itMap != itMapEnd; ++itMap )
+	QMap< QString, QString >::iterator itMapEnd = mapCache.end();
+	for ( QMap< QString, QString >::iterator itMap = mapCache.begin(); itMap != itMapEnd; ++itMap )
 		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(itMap.key()).arg(itMap.data()), m_db);
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);

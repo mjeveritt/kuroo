@@ -21,6 +21,7 @@
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
+#include "packagemask.h"
 
 #include <kmessagebox.h>
 
@@ -46,7 +47,8 @@ Portage::~Portage()
 void Portage::init( QObject *myParent )
 {
 	parent = myParent;
-	getUntestingList();
+	loadPackageKeywords();
+// 	loadPackageMask();
 	loadCache();
 }
 
@@ -171,8 +173,8 @@ QString Portage::count()
  */
 QString Portage::cacheFind( const QString& package )
 {
-	QMap<QString, QString>::iterator it = cacheMap.find( package ) ;
-	if ( it != cacheMap.end() )
+	QMap<QString, QString>::iterator it = mapCache.find( package ) ;
+	if ( it != mapCache.end() )
 		return it.data();
 	else
 		return NULL;
@@ -182,23 +184,23 @@ QString Portage::cacheFind( const QString& package )
  * Get cache from threaded scan.
  * @param map of cached packages
  */
-void Portage::setCache( const QMap<QString, QString> &cacheMapIn )
+void Portage::setCache( const QMap<QString, QString> &mapCacheIn )
 {
-	cacheMap = cacheMapIn;
+	mapCache = mapCacheIn;
 }
 
 /**
- * Load cacheMap with items from DB.
+ * Load mapCache with items from DB.
  */
 void Portage::loadCache()
 {
-	cacheMap.clear();
+	mapCache.clear();
 	
 	const QStringList cacheList = KurooDBSingleton::Instance()->allCache();
 	foreach ( cacheList ) {
 		QString package = *it++;
 		QString size = *it;
-		cacheMap.insert( package, size );
+		mapCache.insert( package, size );
 	}
 }
 
@@ -207,24 +209,24 @@ void Portage::loadCache()
  */
 void Portage::clearCache()
 {
-	cacheMap.clear();
+	mapCache.clear();
 }
 
 /**
- * Load unmasked packages list = packages in package.keyword.
+ * Load untesting packages list = packages in package.keyword.
  */
-void Portage::getUntestingList()
+void Portage::loadPackageKeywords()
 {
-	unmaskedMap.clear();
+	mapPackageKeywords.clear();
 	
 	// Load package.keyword
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
 			QString line( stream.readLine() );
-			if ( !line.startsWith( "#" ) )
-				unmaskedMap.insert( line.section( " ", 0, 0 ), line.section( " ", 1, 1 ) );
+			if ( !line.isEmpty() && !line.startsWith( "#" ) )
+				mapPackageKeywords.insert( line.section( " ", 0, 0 ), line.section( " ", 1, 1 ) );
 		}
 		file.close();
 	}
@@ -233,14 +235,41 @@ void Portage::getUntestingList()
 }
 
 /**
+ * Load masked packages list = packages in package.mask.
+ */
+// void Portage::loadPackageMask()
+// {
+// 	mapPackageMask.clear();
+	
+	// Load package.keyword
+// 	QFile file( KurooConfig::filePackageUnmask() );
+// 	if ( file.open( IO_ReadOnly ) ) {
+// 		QTextStream stream( &file );
+// 		while ( !stream.atEnd() ) {
+// 			QString line( stream.readLine() );
+// 			if ( !line.isEmpty() && !line.startsWith( "#" ) )
+// 				mapPackageMask.insert( line );
+// 		}
+// 		file.close();
+// 	}
+// 	else
+// 		kdDebug() << i18n("Error reading: package.mask.") << endl;
+// }
+
+// Map<QString, QString> Portage::getMapPackageMask()
+// {
+// 	return mapPackageMask;
+// }
+
+/**
  * Check if package is unmasked. @fixme not checking if just testing or hardmasked.
  * @param package
  * @return success
  */
 bool Portage::isUntesting( const QString& package )
 {
-	QMap<QString, QString>::iterator itMap = unmaskedMap.find( package ) ;
-	if ( itMap != unmaskedMap.end() )
+	QMap<QString, QString>::iterator itMap = mapPackageKeywords.find( package ) ;
+	if ( itMap != mapPackageKeywords.end() )
 		return true;
 	else
 		return false;
@@ -256,10 +285,10 @@ void Portage::untestingPackageList( const QStringList& packageIdList )
 	foreach ( packageIdList ) {
 		QString package = Portage::category( *it ) + "/" + Portage::package( *it );
 	
-		if ( !unmaskPackage( package, KurooConfig::dirPackageKeywords() ) )
+		if ( !unmaskPackage( package, KurooConfig::filePackageKeywords() ) )
 			break;
 		else
-			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
+			mapPackageKeywords.insert( package, "~" + KurooConfig::arch() );
 	}
 }
 
@@ -323,7 +352,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  */
 void Portage::clearUntestingPackageList( const QStringList& packageIdList )
 {
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	
 	// Store back list of unmasked packages
 	if ( file.open( IO_WriteOnly ) ) {
@@ -331,7 +360,7 @@ void Portage::clearUntestingPackageList( const QStringList& packageIdList )
 		
 		foreach ( packageIdList ) {
 			QString package = Portage::category( *it ) + "/" + Portage::package( *it ).section( rxPortageVersion, 0, 0 );
-			unmaskedMap.remove( package );
+			mapPackageKeywords.remove( package );
 			
 			// Signal to gui to mark package as not unmasked anymore
 			QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
@@ -339,17 +368,16 @@ void Portage::clearUntestingPackageList( const QStringList& packageIdList )
 			SignalistSingleton::Instance()->setUnmasked( name, false );
 		}
 		
-		QMap< QString, QString >::iterator itMapEnd = unmaskedMap.end();
-		for ( QMap< QString, QString >::iterator itMap = unmaskedMap.begin(); itMap != itMapEnd; ++itMap ) {
+		QMap< QString, QString >::iterator itMapEnd = mapPackageKeywords.end();
+		for ( QMap< QString, QString >::iterator itMap = mapPackageKeywords.begin(); itMap != itMapEnd; ++itMap ) {
 			stream << itMap.key() + " " + itMap.data() + "\n";
 		}
 		file.close();
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
 		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
 	}
-	
 }
 
 /**

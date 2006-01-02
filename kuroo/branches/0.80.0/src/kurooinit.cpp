@@ -98,6 +98,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	UpdatesSingleton::Instance()->init( this );
 	QueueSingleton::Instance()->init( this );
 	ResultsSingleton::Instance()->init( this );
+	PackageMaskSingleton::Instance()->init( this );
 }
 
 KurooInit::~KurooInit()

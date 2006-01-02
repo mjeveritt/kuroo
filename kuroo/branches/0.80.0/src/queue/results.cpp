@@ -49,12 +49,12 @@ public:
 			QString id = KurooDBSingleton::Instance()->query( QString( "SELECT package.id FROM catSubCategory, package WHERE "
 				" catSubCategory.name = '%1'"
 				" AND package.name = '%2'"
-				" LIMIT 1;" ).arg( ( *it ).category ).arg( ( *it ).name ), m_db ).first();
+				" LIMIT 1;" ).arg( (*it).category ).arg( (*it).name ), m_db ).first();
 			
 			if ( !id.isEmpty() )
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO results_temp (idPackage, package, size, use, flags) VALUES ('%1', '%2', '%3', '%4', '%5');" ).arg( id ).arg( ( *it ).package ).arg( ( *it ).size ).arg( ( *it ).useFlags ).arg( ( *it ).updateFlags ), m_db );
+				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO results_temp (idPackage, package, size, use, flags) VALUES ('%1', '%2', '%3', '%4', '%5');" ).arg( id ).arg( (*it).package ).arg( (*it).size ).arg( (*it).useFlags ).arg( (*it).updateFlags ), m_db );
 			else
-				kdDebug() << i18n( "Can not find %1/%2-%3 in kuroo repository." ).arg( ( *it ).category ).arg( ( *it ).name ).arg( ( *it ).version ) << endl;
+				kdDebug() << i18n( "Can not find %1/%2-%3 in kuroo repository." ).arg( (*it).category ).arg( (*it).name ).arg( (*it).version ) << endl;
 		}
 		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 		

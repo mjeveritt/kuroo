@@ -51,7 +51,7 @@ private:
 	//! A pointer to the portage tree from which the packages are retrieved.
 	PortageListView::PortageItem* m_portagePackage;
 	//! The regular expression for the whole atom.
-	QRegExp m_rxAtom;
+	QRegExp rxAtom;
 	//! This is set to the result of parse().
 	bool m_matches;
 	

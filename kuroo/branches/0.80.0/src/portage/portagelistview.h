@@ -27,6 +27,7 @@
 #include "packageitem.h"
 
 class PackageVersion;
+class DependAtom;
 
 /**
  * @class PortageListView
@@ -72,17 +73,16 @@ class PortageListView::PortageItem : public PackageItem
 public:
 	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status );
 	
-	QString 								category();
-	QString 								homepage();
-	void 									initVersions();
-	QValueList<PackageVersion*> 			sortedVersionList();
+	QString 						category();
+	QString 						homepage();
+	void 							initVersions();
+	QValueList<PackageVersion*> 	sortedVersionList();
 	
 protected:
-	bool									versionsLoaded;
-	QString									m_homepage, m_category;
-	
-	typedef QMap<QString, PackageVersion*>	PackageVersionMap;
-	PackageVersionMap						m_versions;
+	bool							versionsLoaded;
+	QString							m_homepage, m_category;
+	QValueList<PackageVersion*>		m_versions;
+	DependAtom* 					atom;
 };
 
 #endif

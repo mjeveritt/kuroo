@@ -24,6 +24,7 @@
 #include "tooltip.h"
 #include "packagelistview.h"
 #include "packageversion.h"
+#include "dependatom.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -96,8 +97,29 @@ void PortageListView::PortageItem::initVersions()
 		if ( meta == FILTERINSTALLED )
 			version->setInstalled( true );
 		
-		m_versions[ versionString ] = version;
+		m_versions.append( version );
 	}
+	
+	// Check if any of this package versions are hardmasked
+	const QStringList atomList = PackageMaskSingleton::Instance()->getHardMaskedAtom( id() );
+	foreach ( atomList ) {
+		
+		// Initialize the 'atom' member variable
+		atom = new DependAtom( this );
+		
+		// Test the atom string on validness, and fill the internal variables with the extracted atom parts
+		if ( atom->parse( *it ) ) {
+			
+			// get the matching versions
+			QValueList<PackageVersion*> versions = atom->matchingVersions();
+			QValueList<PackageVersion*>::iterator versionIterator;
+			for( versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+				( *versionIterator )->setHardMasked( true );
+				kdDebug() << "getHardMaskedAtom *it =" << *it  << endl;
+			}
+		}
+	}
+	
 	versionsLoaded = true;
 }
 
@@ -110,9 +132,9 @@ void PortageListView::PortageItem::initVersions()
 QValueList<PackageVersion*> PortageListView::PortageItem::sortedVersionList()
 {
 	QValueList<PackageVersion*> sortedVersions;
-	
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
-	for ( PackageVersionMap::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+	
+	for( QValueList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
 		if ( versionIterator == m_versions.begin() ) {
 			sortedVersions.append( *versionIterator );
 			continue; // if there is only one version, it can't be compared

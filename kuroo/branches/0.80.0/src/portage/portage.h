@@ -23,8 +23,6 @@
 
 #include <qobject.h>
 
-class PortagePackageVersion;
-
 /**
  * @class Portage
  * @short Object for the Portage tree.
@@ -104,10 +102,10 @@ public slots:
 	/**
 	* Get cache from threaded scan.
 	*/
-	void						setCache( const QMap< QString, QString > &cacheMapIn );
+	void						setCache( const QMap< QString, QString > &mapCacheIn );
 	
 	/**
-	* Load cacheMap with items from DB.
+	* Load mapCache with items from DB.
 	*/
 	void						loadCache();
 	
@@ -119,7 +117,9 @@ public slots:
 	/**
 	* Load unmasked packages list = packages in package.keyword.
 	*/
-	void						getUntestingList();
+	void						loadPackageKeywords();
+// 	void						loadPackageMask();
+// 	QMap<QString, QString>		getMapPackageMask();
 	
 	/**
 	* Check if package is unmasked. @fixme not checking if just testing or hardmasked.
@@ -155,8 +155,7 @@ signals:
 	
 private:
 	QObject	*parent;
-	QMap<QString, QString> 		cacheMap, unmaskedMap;
-	PortagePackageVersion		*packageVersion;
+	QMap<QString, QString> 		mapCache, mapPackageKeywords, mapPackageMask;
 };
 
 #endif

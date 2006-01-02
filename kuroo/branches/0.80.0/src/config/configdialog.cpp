@@ -95,7 +95,7 @@ void ConfigDialog::slotDefault()
  */
 void ConfigDialog::readPackageUnmask()
 {
-	QFile file( KurooConfig::dirPackageUnmask() );
+	QFile file( KurooConfig::filePackageUnmask() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -105,7 +105,7 @@ void ConfigDialog::readPackageUnmask()
 		KurooConfig::setPackageUnmask( lines.join("\n") );
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::dirPackageUnmask() << endl;
+		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageUnmask() << endl;
 	
 	file.close();
 }
@@ -115,7 +115,7 @@ void ConfigDialog::readPackageUnmask()
  */
 void ConfigDialog::readPackageMask()
 {
-	QFile file( KurooConfig::dirPackageMask() );
+	QFile file( KurooConfig::filePackageMask() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -125,7 +125,7 @@ void ConfigDialog::readPackageMask()
 		KurooConfig::setPackageMask( lines.join("\n") );
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::dirPackageMask() << endl;
+		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageMask() << endl;
 	
 	file.close();
 }
@@ -135,7 +135,7 @@ void ConfigDialog::readPackageMask()
  */
 void ConfigDialog::readPackageKeywords()
 {
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -146,7 +146,7 @@ void ConfigDialog::readPackageKeywords()
 		KurooConfig::setPackageKeywords( lines.join("\n") );
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::dirPackageKeywords() << endl;
+		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageKeywords() << endl;
 	
 	file.close();
 }
@@ -359,7 +359,7 @@ void ConfigDialog::saveAll()
 				KMessageBox::error( this, i18n("Failed to save package.keywords. Please run as root."), i18n("Saving"));
 			}
 			else
-				PortageSingleton::Instance()->getUntestingList();
+				PortageSingleton::Instance()->loadPackageKeywords();
 			break;
 		}
 		case 5: {
@@ -379,7 +379,7 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::savePackageUnmask()
 {
-	QFile file( KurooConfig::dirPackageUnmask() );
+	QFile file( KurooConfig::filePackageUnmask() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		stream << KurooConfig::packageUnmask();
@@ -387,7 +387,7 @@ bool ConfigDialog::savePackageUnmask()
 		return true;
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageUnmask() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageUnmask() << endl;
 		return false;
 	}
 }
@@ -398,7 +398,7 @@ bool ConfigDialog::savePackageUnmask()
  */
 bool ConfigDialog::savePackageKeywords()
 {
-	QFile file( KurooConfig::dirPackageKeywords() );
+	QFile file( KurooConfig::filePackageKeywords() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		stream << KurooConfig::packageKeywords();
@@ -406,7 +406,7 @@ bool ConfigDialog::savePackageKeywords()
 		return true;
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
 		return false;
 	}
 }
@@ -417,7 +417,7 @@ bool ConfigDialog::savePackageKeywords()
  */
 bool ConfigDialog::savePackageMask()
 {
-	QFile file( KurooConfig::dirPackageMask() );
+	QFile file( KurooConfig::filePackageMask() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		stream << KurooConfig::packageMask();
@@ -425,7 +425,7 @@ bool ConfigDialog::savePackageMask()
 		return true;
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageMask() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageMask() << endl;
 		return false;
 	}
 }

@@ -18,6 +18,9 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#ifndef COMMON_H
+#define COMMON_H
+
 #include <qregexp.h>
 
 #include <klocale.h>
@@ -37,6 +40,7 @@
 #include "portage.h"
 #include "portagedb.h"
 #include "history.h"
+#include "packagemask.h"
 #include "singleton.h"
 
 // Define all singleton objects
@@ -51,6 +55,7 @@ typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<Updates> UpdatesSingleton;
+typedef Singleton<PackageMask> PackageMaskSingleton;
 
 // The package states used by the filters
 enum packageFilters { FILTER_ALL, FILTER_INSTALLED, FILTER_UPDATES, FILTER_OLD };
@@ -81,6 +86,7 @@ static const int ROWLIMIT = 1000;
 #define foreach( x ) \
 for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 
-
 // Regexp from Portage
 static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
+
+#endif

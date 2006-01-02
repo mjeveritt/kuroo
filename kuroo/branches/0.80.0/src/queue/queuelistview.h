@@ -28,6 +28,7 @@
 
 class QPixmap;
 class PackageItem;
+class KProgress;
 
 /**
  * @class QueueListView

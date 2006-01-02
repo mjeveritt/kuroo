@@ -48,7 +48,7 @@
  * Page for portage packages.
  */
 PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent )
+	: PortageBase( parent ), queuedFilters ( 0 )
 {
 	categoriesView->init();
 	subcategoriesView->init();
@@ -154,12 +154,22 @@ void PortageTab::slotReload()
 }
 
 /**
- * Toggle between package filter: All, Installed or updates
+ * Execute query based on filter and text. Added a delay of 200ms.
  */
 void PortageTab::slotFilters()
 {
-// 	packagesView->resetListView();
-	categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
+	queuedFilters++;
+	QTimer::singleShot( 200, this, SLOT( slotActivateFilters() ) );
+}
+
+/**
+ * Execute query based on filter and text.
+ */
+void PortageTab::slotActivateFilters()
+{
+	--queuedFilters;
+	if ( queuedFilters == 0 )
+		categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
 }
 
 /**

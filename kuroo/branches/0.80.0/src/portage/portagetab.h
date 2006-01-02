@@ -79,6 +79,7 @@ private slots:
 	* List packages when clicking on category in installed.
 	*/
 	void				slotFilters();
+	void				slotActivateFilters();
 	void				slotListPackages();
 	
 	/**
@@ -100,6 +101,7 @@ private slots:
 	void				slotPackage();
 	
 private:
+	int					queuedFilters;
 	KPopupMenu 			*menu;
 	PackageInspector	*packageInspector;
 	

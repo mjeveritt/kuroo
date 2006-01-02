@@ -197,14 +197,14 @@ bool ScanPortageJob::doJob()
 				// Insert package in portage
 				if ( !categories[ *itCategory ].packages.contains( name ) ) {
 					categories[ *itCategory ].packages[ name ];
-					categories[ *itCategory ].packages[ name ].meta = FILTERALL;
+					categories[ *itCategory ].packages[ name ].meta = FILTERALL_STRING;
 					categories[ *itCategory ].packages[ name ].description = info.description;
 					categories[ *itCategory ].packages[ name ].homepage = info.homepage;
 				}
 				
 				// Insert version in portage
 				if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
-					categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERALL;
+					categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERALL_STRING;
 					categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
 					categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
 					categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
@@ -333,17 +333,17 @@ void ScanPortageJob::scanInstalledPackages()
 				// Insert and/or mark package as installed (old is package not in portage anymore)
 				if ( !categories[ *itCategory ].packages.contains( name ) ) {
 					categories[ *itCategory ].packages[ name ];
-					categories[ *itCategory ].packages[ name ].meta = FILTEROLD;
+					categories[ *itCategory ].packages[ name ].meta = FILTEROLD_STRING;
 				}
 				else
-					categories[ *itCategory ].packages[ name ].meta = FILTERINSTALLED;
+					categories[ *itCategory ].packages[ name ].meta = FILTERINSTALLED_STRING;
 				
 				// Insert old version in portage
 				if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) )
 					categories[ *itCategory ].packages[ name ].versions[ version ];
 				
 				// Mark version as installed
-				categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERINSTALLED;
+				categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERINSTALLED_STRING;
 			}
 		}
 		else

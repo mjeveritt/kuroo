@@ -44,7 +44,7 @@ static int packageCount( 0 );
  * @short Package item with all versions.
  */
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status )
-	: PackageItem( parent, name, id, description, status ), m_homepage( homepage ), m_category( NULL ), versionsLoaded( false )
+	: PackageItem( parent, name, id, description, status ), m_homepage( homepage ), m_category( NULL ), hasDetailedInfo( false )
 {
 }
 
@@ -71,7 +71,7 @@ QString PortageListView::PortageItem::homepage()
  */
 void PortageListView::PortageItem::initVersions()
 {
-	if ( versionsLoaded )
+	if ( hasDetailedInfo )
 		return;
 	
 	m_category = PortageSingleton::Instance()->category( id() );
@@ -94,7 +94,7 @@ void PortageListView::PortageItem::initVersions()
 		version->setAcceptedKeywords( KurooConfig::arch() );
 		version->setSize( size );
 		
-		if ( meta == FILTERINSTALLED )
+		if ( meta == FILTERINSTALLED_STRING )
 			version->setInstalled( true );
 		
 		m_versions.append( version );
@@ -115,12 +115,11 @@ void PortageListView::PortageItem::initVersions()
 			QValueList<PackageVersion*>::iterator versionIterator;
 			for( versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
 				( *versionIterator )->setHardMasked( true );
-				kdDebug() << "getHardMaskedAtom *it =" << *it  << endl;
 			}
 		}
 	}
 	
-	versionsLoaded = true;
+	hasDetailedInfo = true;
 }
 
 /**

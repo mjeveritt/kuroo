@@ -45,26 +45,6 @@
 #include <kcursor.h>
 #include <kiconloader.h>
 
-class KurooView::IconListItem : public QListBoxItem
-{
-public:
-	IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text );
-	virtual int height( const QListBox *lb ) const;
-	virtual int width( const QListBox *lb ) const;
-	int expandMinimumWidth( int width );
-	void setChanged( bool modified );
-	bool isChanged();
-	
-protected:
-	const QPixmap &defaultPixmap();
-	void paint( QPainter *painter );
-	
-private:
-	bool m_modified;
-	QPixmap mPixmap;
-	int mMinimumWidth;
-};
-
 /**
  * Gui content.
  */
@@ -131,7 +111,7 @@ void KurooView::slotInit()
 {
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		switch( KMessageBox::warningContinueCancel( this,
-			i18n( "<qt>Kuroo database is empty!<br><br>"
+			i18n( "<qt>Kuroo database is empty!<br>"
 			     "Kuroo will now first scan your emerge log to create the emerge history. "
 			     "Package information in Portage will be cached.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
 				     
@@ -219,7 +199,6 @@ void KurooView::slotEmergePretend( QString package )
  */
 void KurooView::slotPortageUpdated()
 {
-	kdDebug() << "KurooView::slotPortageUpdated" << endl;
 	if ( !iconPackages->isChanged() ) {
 		iconPackages->setChanged( true );
 		viewMenu->triggerUpdate( true );

@@ -38,20 +38,12 @@ class PackageVersion
 public:
 	friend class PortageListView::PortageItem;
 	
-	//! The "maskedness" of a package version.
-	enum Stability {
-		Stable,
-		Masked,
-		HardMasked,
-		NotAvailable
-	};
-	
 	bool isAvailable() const;
 	
 	bool isNewerThan( const QString& otherVersion ) const;
 	bool isOlderThan( const QString& otherVersion ) const;
 	
-	PackageVersion::Stability stability( const QString& arch ) const;
+	int stability( const QString& arch ) const;
 	
 	bool isInstalled() const;
 	bool isOverlay() const;
@@ -81,7 +73,6 @@ public:
 	void setAcceptedKeywords( const QStringList& acceptedKeywords );
 	void setSize( const QString& size );
 	void setHardMasked( bool isHardMasked );
-	void setHasDetailedInfo( bool hasDetailedInfo );
 	
 protected:
 	PackageVersion( PortageListView::PortageItem* package, const QString& version );
@@ -123,10 +114,6 @@ private:
 	QStringList m_useflags;
 	/** A list of additionally accepted keywords for this specific package. */
 	QStringList m_acceptedKeywords;
-	
-	/** A flag which is true if the ebuild belonging to this package has been parsed. */
-	bool m_hasDetailedInfo;
-	
 	
 	// Info that's not in the ebuild:
 	

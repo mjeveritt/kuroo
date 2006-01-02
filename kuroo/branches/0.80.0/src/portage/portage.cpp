@@ -48,12 +48,11 @@ void Portage::init( QObject *myParent )
 {
 	parent = myParent;
 	loadPackageKeywords();
-// 	loadPackageMask();
 	loadCache();
 }
 
 /**
- * Forward signal after a new scan.
+ * Forward signal after a new portage scan.
  */
 void Portage::slotChanged()
 {

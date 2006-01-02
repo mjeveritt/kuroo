@@ -45,28 +45,6 @@ const int diffTime( 10 );
  * @class QueueListView::QueueItem
  * @short Package item with progressbar
  */
-class QueueListView::QueueItem : public PackageItem
-{
-public:
-	QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
-	~QueueItem();
-	
-	void		setTotalSteps( int totalSteps );
-	void		oneStep();
-	void		complete();
-	
-protected:
-	void 		paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
-	
-private:
-	KProgress* 	bar;
-	int			progress, m_duration;
-};
-
-/**
- * @class QueueListView::QueueItem
- * @short Package item with progressbar
- */
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
 {

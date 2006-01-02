@@ -292,7 +292,7 @@ void PackageInspector::getVersions()
 		QString branches = *it++;
 		QString size = *it;
 		
-		if ( meta == FILTERINSTALLED )
+		if ( meta == FILTERINSTALLED_STRING )
 			new KListViewItem( dialog->versionsView, version, branches, size );
 		else
 			new KListViewItem( dialog->versionsView, version, branches, size );

@@ -79,7 +79,7 @@ public:
 	QValueList<PackageVersion*> 	sortedVersionList();
 	
 protected:
-	bool							versionsLoaded;
+	bool							hasDetailedInfo;
 	QString							m_homepage, m_category;
 	QValueList<PackageVersion*>		m_versions;
 	DependAtom* 					atom;

@@ -58,16 +58,49 @@ typedef Singleton<Updates> UpdatesSingleton;
 typedef Singleton<PackageMask> PackageMaskSingleton;
 
 // The package states used by the filters
-enum packageFilters { FILTER_ALL, FILTER_INSTALLED, FILTER_UPDATES, FILTER_OLD };
-static const QString FILTERALL( QString::number( FILTER_ALL ) );
-static const QString FILTERINSTALLED( QString::number( FILTER_INSTALLED ) );
-static const QString FILTEROLD( QString::number( FILTER_OLD ) );
+enum packageFilters { 
+		FILTERALL, 
+		FILTERINSTALLED, 
+		FILTERUPDATES, 
+		FILTEROLD 
+};
+
+static const QString FILTERALL_STRING( QString::number( FILTERALL ) );
+static const QString FILTERINSTALLED_STRING( QString::number( FILTERINSTALLED ) );
+static const QString FILTEROLD_STRING( QString::number( FILTEROLD ) );
 
 // Log output states
-enum LogActions { EMERGE, KUROO, ERROR, TOLOG, EMERGELOG };
+enum LogActions { 
+		EMERGE, 
+		KUROO, 
+		ERROR, 
+		TOLOG, 
+		EMERGELOG 
+};
 
 // Individual package item state
-enum packageStatus { NONE, CATEGORY, INSTALLED, PACKAGE, EBUILD_INSTALLED, EBUILD, MASKED, UNMASKED, QUEUED, NOTQUEUED };
+enum packageStatus { 
+		NONE, 
+		CATEGORY, 
+		INSTALLED, 
+		PACKAGE, 
+		UNMASKED, 
+		QUEUED, 
+		NOTQUEUED 
+};
+
+// The "maskedness" of a package version.
+enum Stability { 
+		STABLE,
+		MASKED,
+		HARDMASKED,
+		NOTAVAILABLE
+};
+
+static const QString STABLE_STRING( QString::number( STABLE ) );
+static const QString MASKED_STRING( QString::number( MASKED ) );
+static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
+static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 
 // Kuroo home directory
 static const QString KUROODIR = "/var/kuroo8/";

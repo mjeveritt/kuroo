@@ -27,7 +27,7 @@
 * a PackageVersion object.
 */
 PackageVersion::PackageVersion( PortageListView::PortageItem* package, const QString& version )
-	: m_package( package ), m_version( version ),
+	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_size( QString::null), m_isHardMasked( false ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere
@@ -37,11 +37,6 @@ PackageVersion::PackageVersion( PortageListView::PortageItem* package, const QSt
 	// Regexp for a trailing character, like in util-linux-2.12i
 	rxTrailingChar("\\d([a-z])(?:_(?:alpha|beta|pre|rc|p)\\d?)?(?:-r\\d+)?$")
 {
-	m_installed = false;
-	m_overlay = false;
-	m_hasDetailedInfo = false;
-	m_size = QString::null;
-	m_isHardMasked = false;
 }
 
 PackageVersion::~PackageVersion()
@@ -53,9 +48,8 @@ PackageVersion::~PackageVersion()
 */
 bool PackageVersion::isAvailable() const
 {
-	//TODO: remove x86 and get arch it from the PortageSettings
 	int state = stability( KurooConfig::arch() );
-	return ( state == Stable );
+	return ( state == STABLE );
 }
 
 /**
@@ -217,10 +211,10 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 * @param arch  The architecture that the stability should be checked for
 *              (e.g. "x86" or "~alpha").
 */
-PackageVersion::Stability PackageVersion::stability( const QString& arch ) const
+int PackageVersion::stability( const QString& arch ) const
 {
 	if ( m_isHardMasked == true )
-		return HardMasked;
+		return HARDMASKED;
 	
 	// check for additional keywords
 	if ( !m_acceptedKeywords.empty() ) {
@@ -237,37 +231,40 @@ PackageVersion::Stability PackageVersion::stability( const QString& arch ) const
 				// when the accepted keyword is ~arch or ~*
 				if ( ( *keywordIterator == "~*" || *keywordIterator == "~" + arch )
 					&&	( m_keywords.contains("~" + pureArch) || m_keywords.contains(pureArch) ) ) {
-						return Stable;
+						return STABLE;
 				}
 				// Don't accept packages when the accepted keyword is -arch
-				else if ( *keywordIterator == "-" + arch && m_keywords.contains(arch) ) {
-					return NotAvailable;
-				}
-				// Accept stable packages for an accepted keyword named "*"
-				else if ( *keywordIterator == "*" && m_keywords.contains(pureArch) ) {
-					return Stable;
-				}
-				// Don't accept anything if it's got -* in it
-				else if ( *keywordIterator == "-*" ) {
-					return NotAvailable;
-				}
+				else 
+					if ( *keywordIterator == "-" + arch && m_keywords.contains(arch) ) {
+						return NOTAVAILABLE;
+					}
+					// Accept stable packages for an accepted keyword named "*"
+					else 
+						if ( *keywordIterator == "*" && m_keywords.contains(pureArch) ) {
+							return STABLE;
+						}
+						// Don't accept anything if it's got -* in it
+						else 
+							if ( *keywordIterator == "-*" ) {
+								return NOTAVAILABLE;
+							}
 			}
 	}
 	
 	// check if the architecture is in there "as is"
 	if ( m_keywords.contains(arch) )
-		return Stable;
+		return STABLE;
 	// check if there is a masked version of the architecture in there
 	else 
 		if ( m_keywords.contains( "~" + arch ) )
-			return Masked;
-	// if arch is masked, check if a stable version is in there
-	else 
-		if ( (arch[0] == '~') && (m_keywords.contains( arch.mid(1) )) )
-			return Stable;
-	// well, no such arch in the version info
-	else // which is also "-*"
-		return NotAvailable;
+			return MASKED;
+		// if arch is masked, check if a stable version is in there
+		else 
+			if ( (arch[0] == '~') && (m_keywords.contains( arch.mid(1) )) )
+				return STABLE;
+			// well, no such arch in the version info
+			else // which is also "-*"
+				return NOTAVAILABLE;
 }
 
 
@@ -619,22 +616,3 @@ void PackageVersion::setHardMasked( bool isHardMasked )
 	m_isHardMasked = isHardMasked;
 }
 
-/**
-* Determine if ebuild information for this package has already been loaded.
-* If not, you have to run a PortagePackageLoader on this object if you want
-* to access anything other than the version string or the isInstalled
-* property.
-*/
-bool PackageVersion::hasDetailedInfo() const
-{
-	return m_hasDetailedInfo;
-}
-
-/**
-* To be set by the PortagePackageLoader when ebuild information has been
-* loaded.
-*/
-void PackageVersion::setHasDetailedInfo( bool hasDetailedInfo )
-{
-	m_hasDetailedInfo = hasDetailedInfo;
-}

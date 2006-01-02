@@ -22,3 +22,4 @@ dist-hook:
 	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
 
 include $(top_srcdir)/admin/Doxyfile.am
+

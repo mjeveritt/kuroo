@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>700</width>
-            <height>554</height>
+            <height>421</height>
         </rect>
     </property>
     <property name="caption">
@@ -82,8 +82,12 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>&lt;h2&gt;Kuroo8&lt;/h2&gt;
-Daily build.</string>
+                    <string>&lt;h2&gt;Kuroo8 Daily build&lt;/h2&gt;
+New features:&lt;br&gt;
+Package browsing with filters.&lt;br&gt;
+Parsing hardmasked packages in /usr/portage/profiles/package.mask.&lt;br&gt;
+Etc-files updates are stored in history.&lt;br&gt;
+Emerge info and warning stored in history.&lt;br&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">

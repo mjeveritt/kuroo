@@ -52,7 +52,6 @@ signals:
 	void			signalPackageMaskChanged();
 	
 private:
-	bool			isDirtyPackageMask;
 	QObject*		parent;
 };
 

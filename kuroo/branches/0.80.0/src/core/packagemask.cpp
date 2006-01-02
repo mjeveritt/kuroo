@@ -145,8 +145,7 @@ void PackageMask::init( QObject *myParent )
  */
 void PackageMask::refresh()
 {
-	isDirtyPackageMask = false;
-	LogSingleton::Instance()->writeLog( i18n("\nCompleted scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageMask() ), KUROO );
+	kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageMask() ) << endl;
 }
 
 

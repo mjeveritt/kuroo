@@ -73,7 +73,7 @@ void PortageListView::PortageItem::initVersions()
 {
 	if ( hasDetailedInfo )
 		return;
-	
+// 	clock_t start = clock();
 	m_category = PortageSingleton::Instance()->category( id() );
 	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
 
@@ -134,12 +134,14 @@ void PortageListView::PortageItem::initVersions()
 		if ( atom->parse( *it ) ) {
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 				( *versionIterator )->setHardMasked( false );
 			}
 		}
 	}
-	
+// 	clock_t finish = clock();
+// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
+// 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;
 	hasDetailedInfo = true;
 }
 
@@ -259,7 +261,7 @@ void PortageListView::setHeader( const QString& total )
  */
 void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
-	clock_t start = clock();
+// 	clock_t start = clock();
 	
 // 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
 	

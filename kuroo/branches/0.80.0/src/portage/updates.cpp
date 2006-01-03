@@ -43,9 +43,6 @@ public:
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( id ) );
 			return true;
 		}
-		else
-			kdDebug() << i18n("Removing update: No package found!") << endl;
-		
 		return false;
 	}
 	

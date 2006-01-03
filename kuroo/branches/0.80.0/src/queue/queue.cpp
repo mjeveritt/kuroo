@@ -36,7 +36,6 @@ public:
 		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 		
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
-			
 		if ( !id.isEmpty() ) {
 			int rowId = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (id) VALUES ('%1');" ).arg( id ) );
 			
@@ -73,9 +72,6 @@ public:
 			else
 				return true;
 		}
-		else
-			kdDebug() << i18n("Adding to Queue: No package found!") << endl;
-
 		return false;
 	}
 	

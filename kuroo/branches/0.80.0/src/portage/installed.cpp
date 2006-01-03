@@ -41,9 +41,6 @@ public:
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED_STRING ).arg( id ).arg( version ) );
 			return true;
 		}
-		else
-			kdDebug() << i18n("Adding installed: Package not found!") << endl;
-		
 		return false;
 	}
 	
@@ -103,9 +100,6 @@ public:
 			
 			return true;
 		}
-		else
-			kdDebug() << i18n("Removing installed: No package found!") << endl;
-
 		
 		return false;
 	}

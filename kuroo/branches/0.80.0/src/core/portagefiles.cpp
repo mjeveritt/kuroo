@@ -106,11 +106,8 @@ public:
 				}
 
 				QString id = KurooDBSingleton::Instance()->packageId( category, name );
-				
 				if ( !id.isEmpty() )
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
-				else
-					kdDebug() << i18n( "Parsing package keywords: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
 					
 				
 			}
@@ -189,11 +186,8 @@ public:
 					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 					
 					QString id = KurooDBSingleton::Instance()->packageId( category, name );
-					
-						if ( !id.isEmpty() )
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
-						else
-							kdDebug() << i18n( "Parsing unmasked packages: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
+					if ( !id.isEmpty() )
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 				}
@@ -290,11 +284,8 @@ public:
 					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 					
 					QString id = KurooDBSingleton::Instance()->packageId( category, name );
-						
-						if ( !id.isEmpty() )
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
-						else
-							kdDebug() << i18n( "Parsing hardmasked packages: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
+					if ( !id.isEmpty() )
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 
 					}
 				}

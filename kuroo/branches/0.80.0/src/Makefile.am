@@ -25,7 +25,7 @@ messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui" -o -name "*.kcfg"` > rc.cpp
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
 	if test -n "$$LIST"; then \
-	$(XGETTEXT) $$LIST -o $(podir)/kuroo.pot; \
+	$(XGETTEXT) $$LIST -o $(podir)/kuroo8.pot; \
 	fi
 ##	$(XGETTEXT) *.cpp *.h  -o $(podir)/kuroo.pot
 
@@ -40,8 +40,7 @@ rc_DATA = kuroo8ui.rc
 # this is to set set autostart of kuroo_watcher
 autostartdir = $(datadir)/autostart
 
-
-# headers for kuroo and kuroo_watcher
+# headers for kuroo
 noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 	systemtray.h message.h common.h
 
@@ -49,8 +48,6 @@ noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 kuroo8_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp \
 	mainwindow.cpp statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
 	kurooviewbase.ui
-
-# source for kuroo_watcher
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO

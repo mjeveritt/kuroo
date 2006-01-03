@@ -114,7 +114,8 @@ void PortageListView::PortageItem::initVersions()
 		if ( atom->parse( *it ) ) {
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+// 				kdDebug() << "( *versionIterator )->version()=" << ( *versionIterator )->version() << " setHardMasked( true )" << endl;
 				( *versionIterator )->setHardMasked( true );
 			}
 		}

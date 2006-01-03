@@ -152,9 +152,6 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-// 		kdDebug() << "m_version=" << m_version << endl;
-// 		kdDebug() << "(*versionIterator)->version()=" << (*versionIterator)->version() << endl;
-		
 		if ( ( matchAllVersions == true ) ||
 		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith( m_version ) ) ||
 		    ( matchEqual       == true  && (*versionIterator)->version() == m_version ) ||
@@ -162,9 +159,7 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan( m_version ) )
 		  )
 		{
-// 			kdDebug() << "(*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
-// 			kdDebug() << "(*versionIterator)->isOlderThan( m_version )=" << (*versionIterator)->isOlderThan( m_version ) << endl;
-			
+// 			kdDebug() << "(*versionIterator)->version()=" << (*versionIterator)->version() << " m_isHardMasked == true" << endl;
 			matchingVersions.append( (PackageVersion*) *versionIterator );
 			continue;
 		}

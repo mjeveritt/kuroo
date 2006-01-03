@@ -51,6 +51,7 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
+// 	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
 }
 
@@ -216,6 +217,8 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
+// 	kdDebug() << "PackageVersion::stability m_isHardMasked=" << m_isHardMasked << " m_version=" << m_version << endl;
+	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
 	

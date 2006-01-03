@@ -104,19 +104,15 @@ public:
 				if ( keywords.isEmpty() ) {
 					keywords = "~*"; // in fact, it would be: m_keywords.prepend("~" + arch), but anyways
 				}
+
+				QString id = KurooDBSingleton::Instance()->packageId( category, name );
 				
-				QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ), m_db ).first();
-				if ( !idCategory.isEmpty() ) {
+				if ( !id.isEmpty() )
+					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
+				else
+					kdDebug() << i18n( "Parsing package keywords: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
 					
-					// Find id for this package in db
-					QString id = KurooDBSingleton::Instance()->query( QString( " SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2' LIMIT 1;" ).arg( idCategory ).arg( name ), m_db ).first();
-					
-					if ( !id.isEmpty() )
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
-					else
-						kdDebug() << i18n( "Parsing package keywords: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
-					
-				}
+				
 			}
 		}
 		file.close();
@@ -188,22 +184,17 @@ public:
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
 
-						// Get the captured strings
-						QString name = rxAtom.cap( POS_PACKAGE );
-						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					// Get the captured strings
+					QString name = rxAtom.cap( POS_PACKAGE );
+					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					
+					QString id = KurooDBSingleton::Instance()->packageId( category, name );
+					
+						if ( !id.isEmpty() )
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+						else
+							kdDebug() << i18n( "Parsing unmasked packages: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
 						
-						QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ), m_db ).first();
-						if ( !idCategory.isEmpty() ) {
-							
-							// Find id for this package in db
-							QString id = KurooDBSingleton::Instance()->query( QString( " SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2' LIMIT 1;" ).arg( idCategory ).arg( name ), m_db ).first();
-						
-							if ( !id.isEmpty() )
-								KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
-							else
-								kdDebug() << i18n( "Parsing unmasked packages: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
-							
-						}
 					}
 				}
 			}
@@ -294,22 +285,17 @@ public:
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
 						
-						// Get the captured strings
-						QString name = rxAtom.cap( POS_PACKAGE );
-						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					// Get the captured strings
+					QString name = rxAtom.cap( POS_PACKAGE );
+					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					
+					QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						
-						QString idCategory = KurooDBSingleton::Instance()->query( QString( "SELECT id FROM catSubCategory WHERE name = '%1';" ).arg( category ), m_db ).first();
-						if ( !idCategory.isEmpty() ) {
-							
-							// Find id for this package in db
-							QString id = KurooDBSingleton::Instance()->query( QString( " SELECT id FROM package WHERE idCatSubCategory = '%1' AND name = '%2' LIMIT 1;" ).arg( idCategory ).arg( name ), m_db ).first();
-							
-							if ( !id.isEmpty() )
-								KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
-							else
-								kdDebug() << i18n( "Parsing hardmasked packages: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
-							
-						}
+						if ( !id.isEmpty() )
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+						else
+							kdDebug() << i18n( "Parsing hardmasked packages: Can not find %1/%2 in database." ).arg( category ).arg( name ) << endl;
+
 					}
 				}
 			}

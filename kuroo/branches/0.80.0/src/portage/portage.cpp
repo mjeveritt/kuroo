@@ -363,7 +363,7 @@ QString Portage::idDb( const QString& package )
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
 	QString name( temp.section( rxPortageVersion, 0, 0 ) );
 	
-	return KurooDBSingleton::Instance()->packageIdDB( category, name );
+	return KurooDBSingleton::Instance()->packageId( category, name );
 }
 
 /**

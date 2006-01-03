@@ -163,7 +163,7 @@ public:
 	QStringList 	portageCategories( int filter, const QString& text );
 	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
-	QString		 	packageIdDB( const QString& category, const QString& name );
+	QString		 	packageId( const QString& category, const QString& name );
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages

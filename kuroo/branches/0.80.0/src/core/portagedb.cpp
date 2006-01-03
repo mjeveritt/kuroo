@@ -538,13 +538,12 @@ QString KurooDB::category( const QString& id )
  * @param category 		category-subcategory
  * @param name
  */
-QString KurooDB::packageIdDB( const QString& category, const QString& name )
+QString KurooDB::packageId( const QString& category, const QString& name )
 {
-	QString id = (query( " SELECT package.id FROM catSubCategory, package "
-	                     " WHERE catSubCategory.name = '" + category + "'"
-	                     " AND package.name = '" + name + "'"
-	                     " AND catSubCategory.id = package.idCatSubCategory "
-	                     " LIMIT 1;")).first();
+	QString id = query( QString( " SELECT id FROM package WHERE "
+	                             " idCatSubCategory = ( SELECT id FROM catSubCategory WHERE name = '%1' ) "
+	                             " AND name = '%2';" 
+	                           ).arg( category ).arg( name ) ).first();
 	
 	if ( !id.isEmpty() )
 		return id;

@@ -173,7 +173,9 @@ public:
 	QStringList 	updatesTotal();
 	QString		 	package( const QString& id );
 	QString		 	category( const QString& id );
-	QStringList KurooDB::packageHardMaskAtom( const QString& id );
+	QStringList 	packageHardMaskAtom( const QString& id );
+	QStringList 	packageUnmaskAtom( const QString& id );
+	QStringList		packageKeywordsAtom( const QString& id );
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 

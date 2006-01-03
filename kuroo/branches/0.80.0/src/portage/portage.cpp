@@ -57,6 +57,7 @@ void Portage::slotChanged()
 {
 	emit signalPortageChanged();
 	KurooDBSingleton::Instance()->addRefreshTime();
+	PortageFilesSingleton::Instance()->loadPackageMask();
 }
 
 /**

@@ -36,18 +36,19 @@ public:
 	
 public slots:
 	void			init( QObject *myParent = 0 );
-	void			refresh();
+	void			refresh( int mask );
 	
 	/**
  	 * Add packages to the results table in the db
  	 * @param packageList
  	 */
 	void 			loadPackageMask();
-	void			loadPackageMaskUser();
 	void 			loadPackageUnmask();
 	void			loadPackageKeywords();
 	QStringList		getHardMaskedAtom( const QString& id );
-
+	QStringList		getUnmaskedAtom( const QString& id );
+	QStringList		getKeywordsAtom( const QString& id );
+	
 private slots:
 	
 signals:

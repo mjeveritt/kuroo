@@ -278,8 +278,20 @@ void KurooDB::createTables( DbConnection *conn )
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " dependAtom VARCHAR(255), "
-	      " meta VARCHAR(1), "
 	      " comment BLOB )"
+	      " ;", conn);
+	
+	query(" CREATE TABLE packageUnmask ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " idPackage INTEGER, "
+	      " dependAtom VARCHAR(255), "
+	      " comment BLOB )"
+	      " ;", conn);
+	
+	query(" CREATE TABLE packageKeywords ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " idPackage INTEGER UNIQUE, "
+	      " keywords VARCHAR(255) )"
 	      " ;", conn);
 }
 
@@ -561,6 +573,20 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
 QStringList KurooDB::packageHardMaskAtom( const QString& id )
 {
 	return query( QString( "SELECT dependAtom FROM packageMask WHERE idPackage = '%1';" ).arg( id ) );
+}
+
+/**
+ * Return package unmask depend atom.
+ * @param id
+ */
+QStringList KurooDB::packageUnmaskAtom( const QString& id )
+{
+	return query( QString( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '%1';" ).arg( id ) );
+}
+
+QStringList KurooDB::packageKeywordsAtom( const QString& id )
+{
+	return query( QString( "SELECT keywords FROM packageKeywords WHERE idPackage = '%1';" ).arg( id ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
+ *   Copyright (C) 2005 by Karye                                           *
+ *   karye@users.sourceforge.net                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_020106_db2";
+static const char version[] = "0.80.0_030106_db4";
 
 static KCmdLineOptions options[] =
 {

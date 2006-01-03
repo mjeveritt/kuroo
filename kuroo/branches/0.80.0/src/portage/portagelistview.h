@@ -76,6 +76,7 @@ public:
 	QString 						category();
 	QString 						homepage();
 	void 							initVersions();
+	QValueList<PackageVersion*> 	versionList();
 	QValueList<PackageVersion*> 	sortedVersionList();
 	
 protected:

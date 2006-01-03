@@ -75,7 +75,8 @@ void PortageListView::PortageItem::initVersions()
 		return;
 	
 	m_category = PortageSingleton::Instance()->category( id() );
-	
+	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
+
 	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
@@ -91,7 +92,7 @@ void PortageListView::PortageItem::initVersions()
 		version->setUseflags( useFlags );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
-		version->setAcceptedKeywords( KurooConfig::arch() ); // @fixme: load from package.keywords
+		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
 		
 		if ( meta == FILTERINSTALLED_STRING )
@@ -100,17 +101,17 @@ void PortageListView::PortageItem::initVersions()
 		m_versions.append( version );
 	}
 	
-	// Check if any of this package versions are hardmasked @fixme: unmasked from package.unmask
-	const QStringList atomList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
-	foreach ( atomList ) {
-		
-		// Initialize the 'atom' member variable
-		atom = new DependAtom( this );
-		
-		// Test the atom string on validness, and fill the internal variables with the extracted atom parts
+	// Initialize the 'atom' member variable
+	atom = new DependAtom( this );
+	
+	// Check if any of this package versions are hardmasked
+	const QStringList atomMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
+// 	kdDebug() << "atomMaskedList=" << atomMaskedList << endl;
+	foreach ( atomMaskedList ) {
+
+		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
+		// and get the matching versions
 		if ( atom->parse( *it ) ) {
-			
-			// get the matching versions
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
 			for( versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
@@ -119,7 +120,31 @@ void PortageListView::PortageItem::initVersions()
 		}
 	}
 	
+	// Initialize the 'atom' member variable
+	atom = new DependAtom( this );
+	
+	// Check if any of this package versions are unmasked
+	const QStringList atomUnmaskedList = PortageFilesSingleton::Instance()->getUnmaskedAtom( id() );
+// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
+	foreach ( atomUnmaskedList ) {
+		
+		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
+		// and get the matching versions
+		if ( atom->parse( *it ) ) {
+			QValueList<PackageVersion*> versions = atom->matchingVersions();
+			QValueList<PackageVersion*>::iterator versionIterator;
+			for( versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+				( *versionIterator )->setHardMasked( false );
+			}
+		}
+	}
+	
 	hasDetailedInfo = true;
+}
+
+QValueList<PackageVersion*> PortageListView::PortageItem::versionList()
+{
+	return m_versions;
 }
 
 /**

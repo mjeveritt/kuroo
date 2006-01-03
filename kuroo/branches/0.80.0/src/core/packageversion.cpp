@@ -1,6 +1,8 @@
 /***************************************************************************
 *   Copyright (C) 2005 by Jakob Petsovits                                 *
 *   jpetso@gmx.at                                                         *
+*   Copyright (C) 2005 by Karye                                           *
+*   karye@users.sourceforge.net                                           *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -71,6 +73,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	
 	// Revision number. 0 means the version doesn't have a revision.
 	int thisRevision, thatRevision;
+	
 	// Numerical representation for possible trailing characters.
 	int thisTrailingChar, thatTrailingChar;
 	
@@ -219,28 +222,27 @@ int PackageVersion::stability( const QString& arch ) const
 	// check for additional keywords
 	if ( !m_acceptedKeywords.empty() ) {
 		QString pureArch( arch );
-		pureArch.remove('~');
+		pureArch.remove( '~' );
 		
 		// The following checks are not completely correct, as they only check
 		// against arch instead of all version keywords. Should be sufficient
 		// for normal use though, as people are not supposed to add anything
 		// but ~arch or -~arch to ACCEPT_KEYWORDS/package.keywords.
-		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin();
-		      keywordIterator != m_acceptedKeywords.end(); keywordIterator++ ) {
+		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin(); keywordIterator != m_acceptedKeywords.end(); keywordIterator++ ) {
 				// Accept masked and stable packages
 				// when the accepted keyword is ~arch or ~*
 				if ( ( *keywordIterator == "~*" || *keywordIterator == "~" + arch )
-					&&	( m_keywords.contains("~" + pureArch) || m_keywords.contains(pureArch) ) ) {
+					&&	( m_keywords.contains( "~" + pureArch ) || m_keywords.contains( pureArch ) ) ) {
 						return STABLE;
 				}
 				// Don't accept packages when the accepted keyword is -arch
 				else 
-					if ( *keywordIterator == "-" + arch && m_keywords.contains(arch) ) {
+					if ( *keywordIterator == "-" + arch && m_keywords.contains( arch ) ) {
 						return NOTAVAILABLE;
 					}
 					// Accept stable packages for an accepted keyword named "*"
 					else 
-						if ( *keywordIterator == "*" && m_keywords.contains(pureArch) ) {
+						if ( *keywordIterator == "*" && m_keywords.contains( pureArch ) ) {
 							return STABLE;
 						}
 						// Don't accept anything if it's got -* in it
@@ -252,7 +254,7 @@ int PackageVersion::stability( const QString& arch ) const
 	}
 	
 	// check if the architecture is in there "as is"
-	if ( m_keywords.contains(arch) )
+	if ( m_keywords.contains( arch ) )
 		return STABLE;
 	// check if there is a masked version of the architecture in there
 	else 
@@ -260,7 +262,7 @@ int PackageVersion::stability( const QString& arch ) const
 			return MASKED;
 		// if arch is masked, check if a stable version is in there
 		else 
-			if ( (arch[0] == '~') && (m_keywords.contains( arch.mid(1) )) )
+			if ( ( arch[0] == '~' ) && ( m_keywords.contains( arch.mid(1) ) ) )
 				return STABLE;
 			// well, no such arch in the version info
 			else // which is also "-*"
@@ -373,12 +375,10 @@ int PackageVersion::trailingCharNumber( const QString& versionString, int* found
 	if ( foundPos != NULL ) // return the position inside the string
 		*foundPos = pos;
 	
-	if ( pos == -1 ) {  // no trailing character, so return 0
+	if ( pos == -1 ) // no trailing character, so return 0
 		return 0;
-	}
-	else { // has a trailing character, get its number
+	else // has a trailing character, get its number
 		return (int) versionString.at(pos).latin1();
-	}
 }
 
 

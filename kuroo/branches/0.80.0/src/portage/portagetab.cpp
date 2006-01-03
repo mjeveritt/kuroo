@@ -264,16 +264,13 @@ void PortageTab::slotPackage()
 	// Iterate through the list
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		if ( (*sortedVersionIterator)->isInstalled() ) {
+		if ( (*sortedVersionIterator)->isInstalled() )
 			textLinesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-			textLinesAvailable += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-		}
-		else {
-			if ( (*sortedVersionIterator)->isAvailable() )
-				textLinesAvailable += (*sortedVersionIterator)->version() + ", ";
-			else
-				textLinesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-		}
+
+		if ( (*sortedVersionIterator)->isAvailable() )
+			textLinesAvailable += (*sortedVersionIterator)->version() + ", ";
+		else
+			textLinesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 	}
 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
 	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );

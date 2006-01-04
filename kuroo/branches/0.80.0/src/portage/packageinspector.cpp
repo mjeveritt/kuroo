@@ -36,7 +36,7 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), 	category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
+: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
@@ -65,7 +65,7 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
-	dialog->package->setText( "Package: " + category + "/" + package );
+	dialog->package->setText( "Show detailed information for <font size=\"+2\">" + category + "/" + package + "</font>");
 	
 	slotGetUseFlags( dialog->cbVersionsUse->currentText() );
 	slotGetEbuild( dialog->cbVersionsEbuild->currentText() );

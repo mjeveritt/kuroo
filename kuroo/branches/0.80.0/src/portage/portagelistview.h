@@ -52,7 +52,7 @@ public slots:
 	 * Populate listview with content of this category.
 	 * @param package
 	 */
-	void 							addSubCategoryPackages( const QStringList& packageList );
+	int 							addSubCategoryPackages( const QStringList& packageList );
 
 private slots:
 	

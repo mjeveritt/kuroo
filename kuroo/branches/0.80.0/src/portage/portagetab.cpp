@@ -50,6 +50,9 @@
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), queuedFilters ( 0 )
 {
+	pbAdvanced->setDisabled( true );
+	pbAddQueue->setDisabled( true );
+	
 	categoriesView->init();
 	subcategoriesView->init();
 	
@@ -188,7 +191,15 @@ void PortageTab::slotListPackages()
 {
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
-	packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) );
+	
+	if ( packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
+		pbAdvanced->setDisabled( true );
+		pbAddQueue->setDisabled( true );
+	}
+	else {
+		pbAdvanced->setDisabled( false );
+		pbAddQueue->setDisabled( false );
+	}
 }
 
 /**
@@ -218,9 +229,9 @@ void PortageTab::slotRefresh()
  * Disable/enable buttons when kuroo is busy.
  * @param b
  */
-void PortageTab::slotBusy( bool b )
+void PortageTab::slotBusy( bool busy )
 {
-	if ( b ) {
+	if ( busy ) {
 		pbUninstall->setDisabled( true );
 		pbAddQueue->setDisabled( true );
 	}
@@ -397,7 +408,9 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
-	packageInspector->edit( packagesView->currentPortagePackage() );
+	PortageListView::PortageItem* portagePackage = packagesView->currentPortagePackage();
+	if ( portagePackage )
+		packageInspector->edit( portagePackage );
 }
 
 #include "portagetab.moc"

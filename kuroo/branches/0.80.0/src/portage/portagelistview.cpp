@@ -272,7 +272,7 @@ void PortageListView::setHeader( const QString& total )
  * Populate listview with content of this category.
  * @param package
  */
-void PortageListView::addSubCategoryPackages( const QStringList& packageList )
+int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
 // 	clock_t start = clock();
 	
@@ -312,6 +312,8 @@ void PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	setSorting( 0 );
 	setHeader( QString::number( packageCount ) );
 	setPackageFocus( currentId );
+	
+	return packageCount;
 	
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;

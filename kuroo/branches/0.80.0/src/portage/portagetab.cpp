@@ -244,6 +244,14 @@ void PortageTab::slotPackage()
 		pbUninstall->setDisabled( false );
 	
 	summaryBrowser->clear();
+	packageInspector->dialog->versionsView->clear();
+	packageInspector->dialog->cbVersions->clear();
+	packageInspector->dialog->cbVersionsExact->clear();
+	packageInspector->dialog->cbVersionsEbuild->clear();
+	packageInspector->dialog->cbVersionsDependencies->clear();
+	packageInspector->dialog->cbVersionsInstalled->clear();
+	packageInspector->dialog->cbVersionsUse->clear();
+	
 	packagesView->currentPortagePackage()->initVersions();
 	QString package( packagesView->currentPortagePackage()->name() );
 	QString category( packagesView->currentPortagePackage()->category() );
@@ -264,13 +272,25 @@ void PortageTab::slotPackage()
 	// Iterate through the list
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		if ( (*sortedVersionIterator)->isInstalled() )
+		if ( (*sortedVersionIterator)->isInstalled() ) {
 			textLinesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
+		}
 
-		if ( (*sortedVersionIterator)->isAvailable() )
+		if ( (*sortedVersionIterator)->isAvailable() ) {
 			textLinesAvailable += (*sortedVersionIterator)->version() + ", ";
-		else
+			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Stable"), (*sortedVersionIterator)->size() );
+		}
+		else {
 			textLinesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Masked"), (*sortedVersionIterator)->size() );
+		}
+		
+		packageInspector->dialog->cbVersions->insertItem( (*sortedVersionIterator)->version() );
+		packageInspector->dialog->cbVersionsExact->insertItem( (*sortedVersionIterator)->version() );
+		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
+		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
+		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
 	}
 	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
 	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
@@ -281,7 +301,6 @@ void PortageTab::slotPackage()
 		textLinesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
 	
 	textLinesAvailable = i18n("<b>Versions available:</b> ") + textLinesAvailable;
-	
 	summaryBrowser->setText( textLines + textLinesInstalled + textLinesAvailable );
 	
 	if ( packageInspector->isVisible() )
@@ -375,7 +394,7 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
-	packageInspector->edit( packagesView->selectedId().first() );
+	packageInspector->edit( packagesView->currentPortagePackage() );
 }
 
 #include "portagetab.moc"

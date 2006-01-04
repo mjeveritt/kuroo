@@ -73,7 +73,9 @@ void PortageListView::PortageItem::initVersions()
 {
 	if ( hasDetailedInfo )
 		return;
+	
 // 	clock_t start = clock();
+	
 	m_category = PortageSingleton::Instance()->category( id() );
 	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
 
@@ -88,8 +90,8 @@ void PortageListView::PortageItem::initVersions()
 		QString size = *it;
 		
 		PackageVersion* version = new PackageVersion( this, versionString );
-		version->setLicenses( licenses );
-		version->setUseflags( useFlags );
+		version->setLicenses( QStringList::split( " ", licenses ) );
+		version->setUseflags( QStringList::split( " ", useFlags ) );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
 		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );

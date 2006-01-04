@@ -22,6 +22,7 @@
 #define PACKAGEINSPECTOR_H
 
 #include "inspectorbase.h"
+#include "portagelistview.h"
 
 #include <kdialogbase.h>
 
@@ -40,22 +41,25 @@ public:
 	 * Open use flags dialog.
 	 * @param newPackage	selected package
 	 */
-	void			edit( const QString& packageId );
+	void						edit( PortageListView::PortageItem* portagePackage );
+	
+	InspectorBase				*dialog;
 	
 private slots:
-	void			getEbuild();
-	void			getChangeLog();
-	void			getDependencies();
-	void			getVersions();
-	void			getUseFlags();
-	void			getInstalledFiles();
-	void			slotUseDescription( QListBoxItem* item );
-	void			slotApply();
+	void						slotGetEbuild( const QString& version );
+	void						getChangeLog();
+	void						getDependencies( const QString& version );
+	
+	void						getUseFlagDescription();
+	void						getUseFlags( PortageListView::PortageItem* portagePackage, const QString& version );
+	
+	void						getInstalledFiles( const QString& version );
+	void						slotUseDescription( QListBoxItem* item );
+	void						slotApply();
 
 private:
-	QString			category, package, packageId;
-	QStringList		useList;
-	InspectorBase	*dialog;
+	QString						category, package, packageId;
+	QMap<QString, QString>		useMap;
 	
 };
 

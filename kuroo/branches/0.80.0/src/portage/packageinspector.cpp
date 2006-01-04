@@ -18,8 +18,13 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "packageinspector.h"
 #include "common.h"
+#include "packageinspector.h"
+#include "portagelistview.h"
+#include "packageversion.h"
+
+#include <qcombobox.h>
+#include <qcheckbox.h>
 
 #include <kactionselector.h>
 #include <ktextbrowser.h>
@@ -35,6 +40,13 @@ PackageInspector::PackageInspector( QWidget *parent )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
+	
+	getUseFlagDescription();
+	
+	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
+	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( getDependencies( const QString& ) ) );
+	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( getInstalledFiles( const QString& ) ) );
+// 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( getUseFiles( const QString& ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -47,40 +59,38 @@ PackageInspector::~PackageInspector()
  */
 void PackageInspector::slotUseDescription( QListBoxItem* item )
 {
-	foreach ( useList ) {
-		QString use = item->text();
-		if ( use.startsWith( "-" ) )
-			use = use.section( "-", 1, 1 );
-		if ( ( *it ).startsWith( use ) )
-			dialog->description->setText( *it );
-	}
+// 	foreach ( useList ) {
+// 		QString use = item->text();
+// 		if ( use.startsWith( "-" ) )
+// 			use = use.section( "-", 1, 1 );
+// 		if ( ( *it ).startsWith( use ) )
+// 			dialog->description->setText( *it );
+// 	}
 }
 
 /**
  * Open use flags dialog.
  * @param newPackage	selected package
  */
-void PackageInspector::edit( const QString& id )
+void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
 	if ( !KUser().isSuperUser() )
 		enableButtonApply( false );
 	
-	packageId = id;
-	package = PortageSingleton::Instance()->package( packageId );
-	category = PortageSingleton::Instance()->category( packageId );
+	package = portagePackage->name();
+	category = portagePackage->category();
 	dialog->package->setText( "Package: " + category + "/" + package );
 	
-	getVersions();
-	getUseFlags();
-	getEbuild();
-	getDependencies();
+	getUseFlags( portagePackage, dialog->cbVersionsUse->currentText() );
+	slotGetEbuild( dialog->cbVersionsEbuild->currentText() );
+	getDependencies( dialog->cbVersionsDependencies->currentText() );
 	getChangeLog();
-	getInstalledFiles();
+	getInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	
 	show();
 }
 
-void PackageInspector::getUseFlags()
+void PackageInspector::getUseFlagDescription()
 {
 	QString useFile( KurooConfig::dirPortage() + "/profiles/use.desc" );
 	QFile f( useFile );
@@ -92,95 +102,86 @@ void PackageInspector::getUseFlags()
 			QString line = stream.readLine();
 			if ( !line.startsWith( "#" ) && !line.isEmpty() ) {
 				if ( !line.contains( QRegExp( "^alpha|^amd64|^arm|^hppa|^ia64|^mips|^ppc|^ppc64|^ppc-macos|^s390|^sh|^sparc|^x86" ) ) )
-					useList += line;
+					useMap.insert( line.section( " -", 0, 0 ), line.section( " -", 1, 1 ) );
 			}
 		}
 		f.close();
-		
-		foreach ( useList ) {
-			dialog->allUseFlags->availableListBox()->insertItem( "-" + ( *it ).section( " -", 0, 0 ) );
-		}
-		foreach ( useList ) {
-			dialog->allUseFlags->availableListBox()->insertItem( ( *it ).section( " -", 0, 0 ) );
-		}
-		
-		connect( dialog->allUseFlags->availableListBox(), SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotUseDescription( QListBoxItem* ) ) );
-		connect( dialog->allUseFlags->selectedListBox(), SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotUseDescription( QListBoxItem* ) ) );
 	}
 	else
 		kdDebug() << i18n( "Error reading: " ) << useFile << endl;
-
-	QFile file( "/etc/portage/package.use" );
-	dialog->allUseFlags->selectedListBox()->clear();
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( !line.isEmpty() ) {
-				if ( line.section( " ", 0, 0 ) == ( category + "/" + package ) ) {
-					QString eString = line.section( " ", 1, 1 );
-					
-					int i = 2;
-					while ( !eString.isEmpty() ) {
-						dialog->allUseFlags->selectedListBox()->insertItem( eString );
-						QListBoxItem *selectedUseFlag = dialog->allUseFlags->availableListBox()->findItem( eString, Qt::ExactMatch );
-						dialog->allUseFlags->availableListBox()->takeItem( selectedUseFlag );
-						eString = line.section( " ", i, i );
-						eString = eString.stripWhiteSpace();
-						i++;
-					};
-				}
-			}
-		}
-		file.close();
-	}
-	dialog->allUseFlags->availableListBox()->setCurrentItem( dialog->allUseFlags->availableListBox()->topItem() );
 }
 
+/**
+ * @fixme: use map instead for versionList
+ */
+void PackageInspector::getUseFlags( PortageListView::PortageItem* portagePackage, const QString& version )
+{
+	QStringList useList;
+	
+	QValueList<PackageVersion*> versions = portagePackage->versionList();
+	QValueList<PackageVersion*>::iterator versionIterator;
+	for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+		if ( ( *versionIterator )->version() == version ) {
+			useList = ( *versionIterator )->useflags();
+			break;
+		}
+	}
+
+	dialog->useView->clear();
+	foreach ( useList ) {
+		QString description;
+		
+		QMap<QString, QString>::iterator itMap = useMap.find( *it );
+		if ( itMap != useMap.end() )
+			description = itMap.data();
+		
+		QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
+		useItem->setText( 1, description );
+	}
+}
 /**
  * Save the new use flags created with ActionSelector
  */
 void PackageInspector::slotApply()
 {
-	QString useFlags;
-	QStringList lines;
-
-	for ( unsigned int i = 0; i < dialog->allUseFlags->selectedListBox()->count(); i++ ) {
-		QListBoxItem *item = dialog->allUseFlags->selectedListBox()->item(i);
-		useFlags += item->text() + " ";
-	}
-	
-	// Get all lines and remove package
-	QFile file( "/etc/portage/package.use" );
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString tmp = stream.readLine();
-			QString eString = tmp.stripWhiteSpace();
-			
-			if ( !tmp.startsWith( category + "/" + package ) && !eString.isEmpty() )
-				lines += tmp;
-		}
-		file.close();
-		
-		// Add package with updated use flags
-		if ( !useFlags.isEmpty() )
-			lines += category + "/" + package + " " + useFlags;
-	}
-	else
-		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
-	
-	// Now write back
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		foreach ( lines ) {
-			stream << *it + "\n";
-		}
-		file.close();
-	}
-	else
-		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
+// 	QString useFlags;
+// 	QStringList lines;
+// 
+// 	for ( unsigned int i = 0; i < dialog->allUseFlags->selectedListBox()->count(); i++ ) {
+// 		QListBoxItem *item = dialog->allUseFlags->selectedListBox()->item(i);
+// 		useFlags += item->text() + " ";
+// 	}
+// 	
+// 	// Get all lines and remove package
+// 	QFile file( "/etc/portage/package.use" );
+// 	if ( file.open( IO_ReadOnly ) ) {
+// 		QTextStream stream( &file );
+// 		while ( !stream.atEnd() ) {
+// 			QString tmp = stream.readLine();
+// 			QString eString = tmp.stripWhiteSpace();
+// 			
+// 			if ( !tmp.startsWith( category + "/" + package ) && !eString.isEmpty() )
+// 				lines += tmp;
+// 		}
+// 		file.close();
+// 		
+// 		// Add package with updated use flags
+// 		if ( !useFlags.isEmpty() )
+// 			lines += category + "/" + package + " " + useFlags;
+// 	}
+// 	else
+// 		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
+// 	
+// 	// Now write back
+// 	if ( file.open( IO_WriteOnly ) ) {
+// 		QTextStream stream( &file );
+// 		foreach ( lines ) {
+// 			stream << *it + "\n";
+// 		}
+// 		file.close();
+// 	}
+// 	else
+// 		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
 	
 	accept();
 }
@@ -189,13 +190,13 @@ void PackageInspector::slotApply()
  * Get this version ebuild.
  * @param id
  */
-void PackageInspector::getEbuild()
+void PackageInspector::slotGetEbuild( const QString& version )
 {
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section( rxPortageVersion, 0, 0 ) + "/" + package + ".ebuild";
+	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
 	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section( rxPortageVersion, 0, 0 ) + "/" + package + ".ebuild";
+		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
 		file.setName( fileName );
 	}
 	
@@ -219,11 +220,11 @@ void PackageInspector::getEbuild()
  */
 void PackageInspector::getChangeLog()
 {
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(rxPortageVersion, 0, 0) + "/ChangeLog";
+	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
 	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(rxPortageVersion, 0, 0) + "/ChangeLog";
+		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";
 		file.setName( fileName );
 	}
 	
@@ -245,13 +246,13 @@ void PackageInspector::getChangeLog()
  * Get this package dependencies.
  * @param id
  */
-void PackageInspector::getDependencies()
+void PackageInspector::getDependencies( const QString& version )
 {
-	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
+	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package + "-" + version;
 	QFile file( fileName );
 	
 	if ( !file.exists() ) {
-		fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package;
+		fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package + "-" + version;
 		file.setName( fileName );
 	}
 	
@@ -278,30 +279,9 @@ void PackageInspector::getDependencies()
 	}
 }
 
-void PackageInspector::getVersions()
+void PackageInspector::getInstalledFiles( const QString& version )
 {
-	dialog->versionsView->clear();
-	
-	const QStringList versionList = PortageSingleton::Instance()->packageVersionsInfo( packageId );
-	foreach ( versionList ) {
-		QString version = *it++;
-		QString meta = *it++;
-		QString licenses = *it++;
-		QString useFlags = *it++;
-		QString slot = *it++;
-		QString branches = *it++;
-		QString size = *it;
-		
-		if ( meta == FILTERINSTALLED_STRING )
-			new KListViewItem( dialog->versionsView, version, branches, size );
-		else
-			new KListViewItem( dialog->versionsView, version, branches, size );
-	}
-}
-
-void PackageInspector::getInstalledFiles()
-{
-	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package.section( "*", 0, 0 ) + "/CONTENTS";
+	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "-" + version + "/CONTENTS";
 	QFile file( filename );
 	QString textLines;
 	if ( file.open( IO_ReadOnly ) ) {

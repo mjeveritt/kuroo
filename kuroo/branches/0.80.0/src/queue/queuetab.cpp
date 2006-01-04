@@ -102,6 +102,7 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload()
 {
+	kdDebug() << "QueueTab::slotReload" << endl;
 	queueView->insertPackageList();
 	
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );

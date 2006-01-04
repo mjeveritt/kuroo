@@ -32,47 +32,23 @@ public:
 	AddQueuePackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section( "/", 0, 0 );
-		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 		
-		QString id = KurooDBSingleton::Instance()->packageId( category, name );
+		QString id = PortageSingleton::Instance()->id( m_package );
 		if ( !id.isEmpty() ) {
-			int rowId = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (id) VALUES ('%1');" ).arg( id ) );
 			
-			// Add this package to the world file if not dependency.
-			if ( rowId == 0 ) {
-				QFile file( KurooConfig::dirWorldFile() );
-				QStringList lines;
-				if ( file.open( IO_ReadOnly ) ) {
-					QTextStream stream( &file );
-					while ( !stream.atEnd() )
-						lines += stream.readLine();
-					file.close();
-					
-					if ( file.open( IO_WriteOnly ) ) {
-						bool found;
-						QTextStream stream( &file );
-						foreach ( lines ) {
-							stream << *it << endl;
-							if ( *it == ( category + "/" + name ) )
-								found = true;
-						}
-						if ( !found )
-							stream << category + "/" + name << endl;
-						file.close();
-					}
-					else
-						kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
-				}
-				else
-					kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+			// Add this package to the world file if not dependency = if already present in Queue
+			if ( KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage) VALUES ('%1');" ).arg( id ) ) == 0 ) {
+				PortageSingleton::Instance()->appendWorld( m_package );
 				
+				// Don't reinsert the package
 				return false;
 			}
-			else
-				return true;
+			
+			// Insert the new package in the Queue
+// 			return true;
 		}
-		return false;
+		else
+			return false;
 	}
 	
 	virtual void completeJob() {
@@ -81,7 +57,6 @@ public:
 	
 private:
 	const QString m_package;
-	QString packageId;
 };
 
 /**
@@ -209,14 +184,17 @@ Queue::~Queue()
 
 void Queue::slotEmergePackageStart( const QString& package )
 {
+	kdDebug() << "Queue::slotEmergePackageStart package=" << package << endl;
 	internalTimer->start( 1000 );
-	m_id = PortageSingleton::Instance()->idDb( package );
+	m_id = PortageSingleton::Instance()->id( package );
+	addPackage( package );
 }
 
 void Queue::slotEmergePackageComplete( const QString& package )
 {
+	kdDebug() << "Queue::slotEmergePackageComplete package=" << package << endl;
 	internalTimer->stop();
-	m_id = PortageSingleton::Instance()->idDb( package );
+	m_id = PortageSingleton::Instance()->id( package );
 	emit signalPackageComplete( m_id );
 }
 
@@ -289,6 +267,7 @@ bool Queue::isQueued( const QString& id )
  */
 void Queue::refresh()
 {
+	kdDebug() << "Queue::refresh" << endl;
 	clearCache();
 	emit signalQueueChanged();
 }
@@ -299,8 +278,7 @@ void Queue::refresh()
 void Queue::reset()
 {
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
-	clearCache();
-	emit signalQueueChanged();
+	refresh();
 }
 
 /**
@@ -372,8 +350,7 @@ QStringList Queue::allPackages()
  */
 QString Queue::count()
 {
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM queue LIMIT 1;");
-	return total.first();
+	return KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM queue LIMIT 1;").first();
 }
 
 #include "queue.moc"

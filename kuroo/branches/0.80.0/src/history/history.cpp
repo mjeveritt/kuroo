@@ -48,7 +48,6 @@ History::~History()
 
 void History::init( QObject *myParent )
 {
-	kdDebug() << "History::init" << endl;
 	parent = myParent;
 	if ( !log.open(IO_ReadOnly) )
 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
@@ -62,7 +61,6 @@ void History::init( QObject *myParent )
  */
 void History::slotInit()
 {
-	kdDebug() << "History::slotInit" << endl;
 	log.setName("/var/log/emerge.log");
 	loadTimeStatistics();
 	

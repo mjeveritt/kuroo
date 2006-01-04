@@ -63,8 +63,8 @@ QueueListView::QueueItem::~QueueItem()
  */
 void QueueListView::QueueItem::setTotalSteps( int totalSteps )
 {
+	kdDebug() << "QueueListView::QueueItem::setTotalSteps" << endl;
 	bar->setTotalSteps( totalSteps );
-	repaint();
 }
 
 /**
@@ -72,8 +72,8 @@ void QueueListView::QueueItem::setTotalSteps( int totalSteps )
  */
 void QueueListView::QueueItem::oneStep()
 {
+	kdDebug() << "QueueListView::QueueItem::oneStep" << endl;
 	bar->setProgress( progress++ );
-	repaint();
 }
 
 /**
@@ -81,21 +81,23 @@ void QueueListView::QueueItem::oneStep()
  */
 void QueueListView::QueueItem::complete()
 {
+	kdDebug() << "QueueListView::QueueItem::complete" << endl;
 	bar->setProgress( m_duration );
-	repaint();
 }
 
 /**
- * Reimplemented to paint the progressbar inside section 3 in the listview.
+ * Reimplemented to paint the progressbar inside column 3 in the listview.
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-	QRect rect = listView()->itemRect( this );
-	QHeader *head = listView()->header();
-	rect.setLeft( head->sectionPos( 3 ) - head->offset() );
-	rect.setWidth( head->sectionSize( 3 ) );
-	bar->setGeometry( rect );
-	bar->show();
+	if ( column == 3 ) {
+		QRect rect = listView()->itemRect( this );
+		QHeader *head = listView()->header();
+		rect.setLeft( head->sectionPos( 3 ) - head->offset() );
+		rect.setWidth( head->sectionSize( 3 ) );
+		bar->setGeometry( rect );
+		bar->show();
+	}
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 

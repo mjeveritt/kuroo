@@ -118,8 +118,6 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy( bool busy )
 {
-	kdDebug() << "Kuroo::slotBusy" << endl;
-	
 	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
 		actionRefresh->setEnabled( false );
 	else

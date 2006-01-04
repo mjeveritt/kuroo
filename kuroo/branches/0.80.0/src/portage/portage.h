@@ -45,7 +45,7 @@ public slots:
 	 * Get this packages database id.
 	 * @return idDB
 	 */
-	QString						idDb( const QString& package );
+	QString						id( const QString& package );
 	
 	/**
 	 * Start scan of portage packages.
@@ -147,6 +147,7 @@ public slots:
 	* @param packageList
 	*/
 	void						clearUntestingPackageList( const QStringList& packageIdList );
+	void						appendWorld( const QString& package );
 	
 signals:
 	void						signalPortageChanged();

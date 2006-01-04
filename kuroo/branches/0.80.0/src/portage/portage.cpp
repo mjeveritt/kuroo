@@ -353,11 +353,47 @@ void Portage::clearUntestingPackageList( const QStringList& packageIdList )
 }
 
 /**
+ * Add package to world file.
+ * @param package
+ */
+void Portage::appendWorld( const QString& package )
+{
+	QString category = package.section( "/", 0, 0 );
+	QString name = ( package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
+	
+	QFile file( KurooConfig::dirWorldFile() );
+	QStringList lines;
+	if ( file.open( IO_ReadOnly ) ) {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() )
+			lines += stream.readLine();
+		file.close();
+		
+		if ( file.open( IO_WriteOnly ) ) {
+			bool found;
+			QTextStream stream( &file );
+			foreach ( lines ) {
+				stream << *it << endl;
+				if ( *it == ( category + "/" + name ) )
+					found = true;
+			}
+			if ( !found )
+				stream << category + "/" + name << endl;
+			file.close();
+		}
+		else
+			kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+	}
+	else
+		kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+}
+
+/**
  * Get this packages database id.
  * @param package
  * @return idDB
  */
-QString Portage::idDb( const QString& package )
+QString Portage::id( const QString& package )
 {
 	QString category = package.section( "/", 0, 0 );
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );

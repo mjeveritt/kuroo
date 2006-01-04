@@ -35,7 +35,6 @@ public:
 		QString version = m_package.section( name + "-", 1, 1 );
 		
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
-		
 		if ( !id.isEmpty() ) {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2';" ).arg( FILTERINSTALLED_STRING ).arg( id ) );
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED_STRING ).arg( id ).arg( version ) );
@@ -70,9 +69,7 @@ public:
 			
 			// Mark package as uninstalled or remove it if old
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND id = '%3'").arg( FILTERALL_STRING ).arg( FILTERINSTALLED_STRING ).arg( id ) );
-	
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND id = '%2';" ).arg( FILTEROLD_STRING ).arg( id ) );
-	
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL_STRING ).arg( id ).arg( version ) );
 			
 			// Remove package from world file

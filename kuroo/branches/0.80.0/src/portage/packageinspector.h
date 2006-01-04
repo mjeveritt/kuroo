@@ -41,25 +41,25 @@ public:
 	 * Open use flags dialog.
 	 * @param newPackage	selected package
 	 */
-	void						edit( PortageListView::PortageItem* portagePackage );
+	void							edit( PortageListView::PortageItem* portagePackage );
 	
-	InspectorBase				*dialog;
+	InspectorBase					*dialog;
 	
 private slots:
-	void						slotGetEbuild( const QString& version );
-	void						getChangeLog();
-	void						getDependencies( const QString& version );
+	void							slotGetEbuild( const QString& version );
+	void							getChangeLog();
+	void							slotGetDependencies( const QString& version );
 	
-	void						getUseFlagDescription();
-	void						getUseFlags( PortageListView::PortageItem* portagePackage, const QString& version );
+	void							loadUseFlagDescription();
+	void							slotGetUseFlags( const QString& version );
 	
-	void						getInstalledFiles( const QString& version );
-	void						slotUseDescription( QListBoxItem* item );
-	void						slotApply();
+	void							slotGetInstalledFiles( const QString& version );
+	void							slotApply();
 
 private:
-	QString						category, package, packageId;
-	QMap<QString, QString>		useMap;
+	QString							category, package, packageId;
+	QMap<QString, QString>			useMap;
+	PortageListView::PortageItem* 	m_portagePackage;
 	
 };
 

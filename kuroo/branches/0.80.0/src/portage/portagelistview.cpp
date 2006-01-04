@@ -101,6 +101,7 @@ void PortageListView::PortageItem::initVersions()
 			version->setInstalled( true );
 		
 		m_versions.append( version );
+		m_versionMap.insert( versionString, version );
 	}
 	
 	// Initialize the 'atom' member variable
@@ -108,7 +109,6 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are hardmasked
 	const QStringList atomMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
-// 	kdDebug() << "atomMaskedList=" << atomMaskedList << endl;
 	foreach ( atomMaskedList ) {
 
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -117,7 +117,6 @@ void PortageListView::PortageItem::initVersions()
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
 			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-// 				kdDebug() << "( *versionIterator )->version()=" << ( *versionIterator )->version() << " setHardMasked( true )" << endl;
 				( *versionIterator )->setHardMasked( true );
 			}
 		}
@@ -128,7 +127,6 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are unmasked
 	const QStringList atomUnmaskedList = PortageFilesSingleton::Instance()->getUnmaskedAtom( id() );
-// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -147,9 +145,22 @@ void PortageListView::PortageItem::initVersions()
 	hasDetailedInfo = true;
 }
 
+/**
+ * Return list of versions.
+ * @return QValueList<PackageVersion*>
+ */
 QValueList<PackageVersion*> PortageListView::PortageItem::versionList()
 {
 	return m_versions;
+}
+
+/**
+ * Return list of versions.
+ * @return QMap<QString,PackageVersion*>
+ */
+QMap<QString,PackageVersion*> PortageListView::PortageItem::versionMap()
+{
+	return m_versionMap;
 }
 
 /**

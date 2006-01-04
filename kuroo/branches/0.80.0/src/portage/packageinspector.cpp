@@ -36,17 +36,17 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), category( NULL ), package( NULL ), packageId( NULL )
+: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), 	category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
 	
-	getUseFlagDescription();
+	loadUseFlagDescription();
 	
 	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
-	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( getDependencies( const QString& ) ) );
-	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( getInstalledFiles( const QString& ) ) );
-// 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( getUseFiles( const QString& ) ) );
+	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
+	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
+	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -54,43 +54,32 @@ PackageInspector::~PackageInspector()
 }
 
 /**
- * View Use Flag description.
- * @param item
- */
-void PackageInspector::slotUseDescription( QListBoxItem* item )
-{
-// 	foreach ( useList ) {
-// 		QString use = item->text();
-// 		if ( use.startsWith( "-" ) )
-// 			use = use.section( "-", 1, 1 );
-// 		if ( ( *it ).startsWith( use ) )
-// 			dialog->description->setText( *it );
-// 	}
-}
-
-/**
- * Open use flags dialog.
- * @param newPackage	selected package
+ * Activate Inspector with current package.
+ * @param portagePackage
  */
 void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
 	if ( !KUser().isSuperUser() )
 		enableButtonApply( false );
 	
-	package = portagePackage->name();
-	category = portagePackage->category();
+	m_portagePackage = portagePackage;
+	package = m_portagePackage->name();
+	category = m_portagePackage->category();
 	dialog->package->setText( "Package: " + category + "/" + package );
 	
-	getUseFlags( portagePackage, dialog->cbVersionsUse->currentText() );
+	slotGetUseFlags( dialog->cbVersionsUse->currentText() );
 	slotGetEbuild( dialog->cbVersionsEbuild->currentText() );
-	getDependencies( dialog->cbVersionsDependencies->currentText() );
+	slotGetDependencies( dialog->cbVersionsDependencies->currentText() );
 	getChangeLog();
-	getInstalledFiles( dialog->cbVersionsInstalled->currentText() );
+	slotGetInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	
 	show();
 }
 
-void PackageInspector::getUseFlagDescription()
+/**
+ * Load internal map with use flag description.
+ */
+void PackageInspector::loadUseFlagDescription()
 {
 	QString useFile( KurooConfig::dirPortage() + "/profiles/use.desc" );
 	QFile f( useFile );
@@ -112,20 +101,16 @@ void PackageInspector::getUseFlagDescription()
 }
 
 /**
- * @fixme: use map instead for versionList
+ * View use flags for selected version.
+ * @param version
  */
-void PackageInspector::getUseFlags( PortageListView::PortageItem* portagePackage, const QString& version )
+void PackageInspector::slotGetUseFlags( const QString& version )
 {
 	QStringList useList;
 	
-	QValueList<PackageVersion*> versions = portagePackage->versionList();
-	QValueList<PackageVersion*>::iterator versionIterator;
-	for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-		if ( ( *versionIterator )->version() == version ) {
-			useList = ( *versionIterator )->useflags();
-			break;
-		}
-	}
+	QMap<QString,PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
+	if ( itMap != m_portagePackage->versionMap().end() )
+		useList = itMap.data()->useflags();
 
 	dialog->useView->clear();
 	foreach ( useList ) {
@@ -187,8 +172,8 @@ void PackageInspector::slotApply()
 }
 
 /**
- * Get this version ebuild.
- * @param id
+ * Get ebuild for selected version.
+ * @param version
  */
 void PackageInspector::slotGetEbuild( const QString& version )
 {
@@ -216,7 +201,6 @@ void PackageInspector::slotGetEbuild( const QString& version )
 
 /**
  * Get this package changelog.
- * @param id
  */
 void PackageInspector::getChangeLog()
 {
@@ -243,10 +227,10 @@ void PackageInspector::getChangeLog()
 }
 
 /**
- * Get this package dependencies.
- * @param id
+ * Get dependencies for selected version.
+ * @param version
  */
-void PackageInspector::getDependencies( const QString& version )
+void PackageInspector::slotGetDependencies( const QString& version )
 {
 	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package + "-" + version;
 	QFile file( fileName );
@@ -279,7 +263,11 @@ void PackageInspector::getDependencies( const QString& version )
 	}
 }
 
-void PackageInspector::getInstalledFiles( const QString& version )
+/**
+ * Get list of installed files for selected version.
+ * @param version
+ */
+void PackageInspector::slotGetInstalledFiles( const QString& version )
 {
 	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "-" + version + "/CONTENTS";
 	QFile file( filename );

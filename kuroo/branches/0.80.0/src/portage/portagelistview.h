@@ -77,12 +77,14 @@ public:
 	QString 						homepage();
 	void 							initVersions();
 	QValueList<PackageVersion*> 	versionList();
+	QMap<QString,PackageVersion*> 	versionMap();
 	QValueList<PackageVersion*> 	sortedVersionList();
 	
 protected:
 	bool							hasDetailedInfo;
 	QString							m_homepage, m_category;
 	QValueList<PackageVersion*>		m_versions;
+	QMap<QString,PackageVersion*>	m_versionMap;
 	DependAtom* 					atom;
 };
 

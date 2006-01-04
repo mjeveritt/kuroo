@@ -51,7 +51,6 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
-// 	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
 }
 

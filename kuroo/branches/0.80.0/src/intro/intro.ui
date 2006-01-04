@@ -85,8 +85,10 @@
                     <string>&lt;h2&gt;Kuroo8 Daily build&lt;/h2&gt;
 New features:&lt;br&gt;
 Faster portage scanning.&lt;br&gt;
-Package browsing with filters.&lt;br&gt;
-Parsing hardmasked packages in /usr/portage/profiles/package.mask.&lt;br&gt;
+Flexible package browsing and searching with filters.&lt;br&gt;
+Parsing hardmasked packages in /usr/portage/profiles/package.mask and /etc/portage/package.unmask.&lt;br&gt;
+Parsing unmasked packages in /etc/portage/package.unmask.&lt;br&gt;
+Advanced package Inspector.&lt;br&gt;
 Etc-files updates are stored in history.&lt;br&gt;
 Emerge info and warning stored in history.&lt;br&gt;</string>
                 </property>

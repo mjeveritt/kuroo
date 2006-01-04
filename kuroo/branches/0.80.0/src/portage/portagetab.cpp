@@ -243,6 +243,7 @@ void PortageTab::slotPackage()
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
 	
+	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
 	packageInspector->dialog->versionsView->clear();
 	packageInspector->dialog->cbVersions->clear();
@@ -252,6 +253,7 @@ void PortageTab::slotPackage()
 	packageInspector->dialog->cbVersionsInstalled->clear();
 	packageInspector->dialog->cbVersionsUse->clear();
 	
+	// Initialize the portage package object with package and it's versions data
 	packagesView->currentPortagePackage()->initVersions();
 	QString package( packagesView->currentPortagePackage()->name() );
 	QString category( packagesView->currentPortagePackage()->category() );
@@ -269,7 +271,7 @@ void PortageTab::slotPackage()
 	// Sorted list of versions for current package.
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
 	
-	// Iterate through the list
+	// Create nice summary showing installed packages in green and unavailable as red
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		if ( (*sortedVersionIterator)->isInstalled() ) {
@@ -286,6 +288,7 @@ void PortageTab::slotPackage()
 			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Masked"), (*sortedVersionIterator)->size() );
 		}
 		
+		// Load all dropdown menus with relevant versions
 		packageInspector->dialog->cbVersions->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsExact->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );

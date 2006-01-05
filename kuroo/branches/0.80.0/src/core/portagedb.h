@@ -181,6 +181,7 @@ public:
 	// Queries for Queue 
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	allQueuePackages();
+	QStringList		allQueueId();
 	QStringList 	allResultPackages();
 	QStringList 	allHistory();
 	QStringList 	allMergeHistory();

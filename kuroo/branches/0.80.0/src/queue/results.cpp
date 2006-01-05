@@ -33,24 +33,35 @@ public:
 	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), m_packageList( packageList ) {}
 	
 	virtual bool doJob() {
-		EmergePackageList::ConstIterator itEnd = ( m_packageList ).end();
+		
+		// Collect end-user packages
+		QMap<QString, int> endUserPackageMap;
+		const QStringList endUserPackageList = KurooDBSingleton::Instance()->allQueueId();
+		foreach ( endUserPackageList ) {
+			endUserPackageMap.insert( *it, 0 );
+		}
+		
+		KurooDBSingleton::Instance()->query("DELETE FROM queue;");
+		
+		// Iterate the emerge pretend package list
+		QString idPackage;
+		EmergePackageList::ConstIterator itEnd = m_packageList.end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
-			
 			QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
-			if ( !id.isEmpty() ) {
-				int idPackage = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '0');" ).arg( id ) );
-				if ( idPackage == 0 ) {
-
-					// Insert dependency packages if any
-					while ( !dependencyPackages.isEmpty() ) {
-						KurooDBSingleton::Instance()->insert( QString( 
-							"INSERT INTO queue (idPackage, idDepend) "
-							"VALUES ('%1', '%2');" ).arg( dependencyPackages.pop() ).arg( QString::number(idPackage) ) );
-					}
-				}
-				else { // We have a dependency
-					dependencyPackages.push( id );
-				}
+			
+// 			kdDebug() << "id=" << id << " name=" << (*it).name << endl;
+			
+			// We found a dependency, add it
+			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {
+// 				kdDebug() << "dependency idPackage=" << idPackage << endl;
+				KurooDBSingleton::Instance()->insert( QString( 
+					"INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '%2');" ).arg( id ).arg( idPackage ) );
+			}
+			else {
+// 				kdDebug() << "package idPackage=" << idPackage << endl;
+				idPackage = id;
+				KurooDBSingleton::Instance()->insert( QString( 
+					"INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '0');" ).arg( id ) );
 			}
 		}
 		return true;
@@ -62,7 +73,7 @@ public:
 	
 private:
 	const EmergePackageList m_packageList;
-	QValueStack<QString> dependencyPackages;
+
 };
 
 /**

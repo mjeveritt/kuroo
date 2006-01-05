@@ -109,8 +109,7 @@ public slots:
 	* Add package as installed in db.
 	* @param package
 	*/
-	void					addPackage( const QString& package );
-	void					dependency( const QString& package );
+// 	void					addPackage( const QString& package );
 	
 	/**
 	* Get list of all Queue packages.

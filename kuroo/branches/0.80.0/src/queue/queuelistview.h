@@ -113,6 +113,7 @@ class QueueListView::QueueItem : public PackageItem
 {
 public:
 	QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
+	QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
 	~QueueItem();
 	
 	void			setTotalSteps( int totalSteps );
@@ -120,6 +121,7 @@ public:
 	void			setComplete();
 	
 protected:
+	void			setStatus( int status );
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:

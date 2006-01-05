@@ -26,38 +26,38 @@
 /**
  * Thread for adding a single package to the queue in db. Used when emerge.
  */
-class AddQueuePackageJob : public ThreadWeaver::DependentJob
-{
-public:
-	AddQueuePackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
-	
-	virtual bool doJob() {
-		
-		QString id = PortageSingleton::Instance()->id( m_package );
-		if ( !id.isEmpty() ) {
-			
-			// Add this package to the world file if not dependency = if already present in Queue
-			if ( KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage) VALUES ('%1');" ).arg( id ) ) == 0 ) {
-				PortageSingleton::Instance()->appendWorld( m_package );
-				
-				// Don't reinsert the package
-				return false;
-			}
-			
-			// Store dependency package on stack
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	virtual void completeJob() {
+// class AddQueuePackageJob : public ThreadWeaver::DependentJob
+// {
+// public:
+// 	AddQueuePackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+// 	
+// 	virtual bool doJob() {
+// 		
+// 		QString id = PortageSingleton::Instance()->id( m_package );
+// 		if ( !id.isEmpty() ) {
+// 			
+// 			// Add this package to the world file if not dependency = if already present in Queue
+// 			if ( KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '0');" ).arg( id ) ) == 0 ) {
+// 				PortageSingleton::Instance()->appendWorld( m_package );
+// 				
+// 				// Don't reinsert the package
+// 				return false;
+// 			}
+// 			
+// 			// Store dependency package on stack
+// 			return true;
+// 		}
+// 		else
+// 			return false;
+// 	}
+// 	
+// 	virtual void completeJob() {
 // 		QueueSingleton::Instance()->dependency( m_package );
-	}
-	
-private:
-	const QString m_package;
-};
+// 	}
+// 	
+// private:
+// 	const QString m_package;
+// };
 
 /**
  * Thread for adding packages to the queue in db. Used by other views.
@@ -71,14 +71,14 @@ public:
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE queue_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE, "
+		                                    " idPackage INTEGER, "
 		                                    " idDepend INTEGER ) "
 		                                    " ;", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 		
 		foreach ( m_packageIdList ) {
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage) VALUES ('%1');").arg(*it), m_db);
+			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
 		}
 		
 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
@@ -110,7 +110,7 @@ public:
 	
 	virtual bool doJob() {
 		foreach ( m_packageIdList ) {
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE idPackage = '%1';" ).arg(*it) );
+			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it) );
 		}
 		return true;
 	}
@@ -143,7 +143,7 @@ public:
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 		
 		foreach ( m_packageIdList ) {
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage) VALUES ('%1');").arg(*it), m_db);
+			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
 		}
 		
 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
@@ -175,9 +175,6 @@ Queue::Queue( QObject* m_parent )
 	// Clock timer for showing progress when emerging
 	internalTimer = new QTimer( this );
 	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
-	
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStart( const QString& ) ), this, SLOT( slotEmergePackageStart( const QString& ) ) );
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageComplete( const QString& ) ), this, SLOT( slotEmergePackageComplete( const QString& ) ) );
 }
 
 Queue::~Queue()
@@ -189,7 +186,6 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
 	kdDebug() << "Queue::slotEmergePackageStart package=" << package << endl;
 	internalTimer->start( 1000 );
 	m_id = PortageSingleton::Instance()->id( package );
-// 	addPackage( package );
 }
 
 void Queue::emergePackageComplete( const QString& package, int order, int total )
@@ -332,15 +328,10 @@ void Queue::installQueue( const QStringList& packageIdList )
  * Add package as installed in db.
  * @param package
  */
-void Queue::addPackage( const QString& package )
-{
-	ThreadWeaver::instance()->queueJob( new AddQueuePackageJob( this, package ) );
-}
-
-void Queue::dependency( const QString& package )
-{
-// 	dependencyPackages.push( package );
-}
+// void Queue::addPackage( const QString& package )
+// {
+// 	ThreadWeaver::instance()->queueJob( new AddQueuePackageJob( this, package ) );
+// }
 
 /**
  * Get list of all Queue packages.

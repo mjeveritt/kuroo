@@ -51,10 +51,23 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const 
 	bar = new KProgress( duration, parent->viewport() );
 }
 
+QueueListView::QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
+{
+	bar = new KProgress( duration, parent->listView()->viewport() );
+}
+
 QueueListView::QueueItem::~QueueItem()
 {
 	delete bar;
 	bar = 0;
+}
+
+/**
+ * Subclass to disable the queue checkmark.
+ */
+void QueueListView::QueueItem::setStatus( int status )
+{
 }
 
 /**
@@ -163,10 +176,11 @@ void QueueListView::slotPackageDown()
 void QueueListView::insertPackageList()
 {
 	QueueItem* item;
-	resetListView();
 	totalDuration = QTime( 0, 0, 0 );
 	sumSize = 0;
-		
+	
+	resetListView();
+	
 	// Get list of update packages with info
 	const QStringList packageList = QueueSingleton::Instance()->allPackages();
 	foreach ( packageList ) {
@@ -177,13 +191,18 @@ void QueueListView::insertPackageList()
 		QString description = *it++;
 		QString meta = *it++;
 		QString idDepend = *it;
-		
+
 		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		
-		if ( idDepend == "0" )
+		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, id, category + "/" + name, description, meta, duration.toInt() );
-		else
-			item = dynamic_cast<QueueItem*>( new PackageItem( this->itemId( idDepend ), id, category + "/" + name, description, meta ) );
+			item->setOpen( true );
+		}
+		else {
+			PackageItem* itemDepend = this->itemId( idDepend );
+			if ( itemDepend )
+				item = new QueueItem( itemDepend, id, category + "/" + name, description, meta, duration.toInt() );
+		}
 		
 		// Add package info
 		if ( duration.isEmpty() )

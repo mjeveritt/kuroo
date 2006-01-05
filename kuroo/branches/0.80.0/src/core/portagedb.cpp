@@ -233,7 +233,7 @@ void KurooDB::createTables( DbConnection *conn )
 	
 	query(" CREATE TABLE queue ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER UNIQUE, "
+	      " idPackage INTEGER, "
 	      " idDepend INTEGER ) "
 	      " ;", conn);
 	
@@ -598,13 +598,21 @@ QStringList KurooDB::packageKeywordsAtom( const QString& id )
  */
 QStringList KurooDB::allQueuePackages()
 {
-	return query( QString( " SELECT package.id, category.name, subCategory.name, package.name, "
-	                       " package.description, package.meta, queue.idDepend "
-	                       " FROM queue, category, subCategory, package "
-	                       " WHERE queue.idPackage = package.id "
-	                       " AND category.id = package.idCategory "
-	                       " AND subCategory.id = package.idSubCategory "
-	                       " ORDER BY queue.id DESC LIMIT %1;" ).arg(ROWLIMIT) );
+	return query( " SELECT package.id, category.name, subCategory.name, package.name, "
+	              " package.description, package.meta, queue.idDepend "
+	              " FROM queue, category, subCategory, package "
+	              " WHERE queue.idPackage = package.id "
+	              " AND category.id = package.idCategory "
+	              " AND subCategory.id = package.idSubCategory "
+	              " ORDER BY queue.idDepend;" );
+}
+
+/**
+ * Return all packages in the queue.
+ */
+QStringList KurooDB::allQueueId()
+{
+	return query( " SELECT idPackage FROM queue;" );
 }
 
 /**

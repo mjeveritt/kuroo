@@ -46,7 +46,7 @@ public:
  	 * Set icon and tooltip text.
  	 * @param status
  	 */
-	void			setStatus( int status );
+	virtual void	setStatus( int status );
 	
 protected:
 	

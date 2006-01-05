@@ -427,7 +427,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 						useList += *it;
 				}
 				emergePackage.useFlags = useList.join( " " );
-				emergePackageList.append( emergePackage );
+				emergePackageList.prepend( emergePackage );
 			}
 		}
 		

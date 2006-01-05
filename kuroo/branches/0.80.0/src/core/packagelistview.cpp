@@ -65,7 +65,9 @@ QString PackageListView::currentItemStatus()
 
 PackageItem* PackageListView::itemId( const QString& id )
 {
-	if ( !id.isEmpty() && packageIndex[id] )
+	if ( id.isEmpty() || !packageIndex[id] )
+		return NULL;
+	else
 		return packageIndex[id];
 }
 
@@ -170,15 +172,15 @@ QString PackageListView::count()
  */
 void PackageListView::setPackageFocus( const QString& id )
 {
-	if ( !id.isEmpty() && packageIndex[id] ) {
+	if ( id.isEmpty() || !packageIndex[id] ) {
+		setCurrentItem( firstChild() );
+		setSelected( firstChild(), true );
+	}
+	else {
 		PackageItem* item = packageIndex[id];
 		setCurrentItem( item );
 		setSelected( item, true );
 		ensureItemVisible( item );
-	}
-	else {
-		setCurrentItem( firstChild() );
-		setSelected( firstChild(), true );
 	}
 }
 
@@ -201,16 +203,14 @@ void PackageListView::slotClearQueued()
  */
 void PackageListView::slotSetQueued( const QString& id, bool isQueued )
 {
-	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+	if ( id.isEmpty() || !packageIndex[id] )
 		return;
-	}
-	if ( packageIndex[id] ) {
-		if ( isQueued )
-			packageIndex[id]->setStatus( QUEUED );
-		else
-			packageIndex[id]->setStatus( NOTQUEUED );
-	}
+	
+	if ( isQueued )
+		packageIndex[id]->setStatus( QUEUED );
+	else
+		packageIndex[id]->setStatus( NOTQUEUED );
+
 }
 
 /**
@@ -220,10 +220,8 @@ void PackageListView::slotSetQueued( const QString& id, bool isQueued )
  */
 void PackageListView::indexPackage( const QString& id, PackageItem *item )
 {
-	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+	if ( id.isEmpty() )
 		return;
-	}
 	
 	packageIndex.insert( id, item );
 	
@@ -240,17 +238,14 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  */
 void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
 {
-	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+	if ( id.isEmpty() || !packageIndex[id] )
 		return;
-	}
-	
-	if ( packageIndex[id] ) {
-		if ( isUnmasked )
-			packageIndex[id]->setStatus( UNMASKED );
-		else
-			packageIndex[id]->setStatus( NONE );
-	}
+
+	if ( isUnmasked )
+		packageIndex[id]->setStatus( UNMASKED );
+	else
+		packageIndex[id]->setStatus( NONE );
+
 }
 
 #include "packagelistview.moc"

@@ -68,24 +68,25 @@ QueueListView::QueueItem::~QueueItem()
  */
 void QueueListView::QueueItem::setStatus( int status )
 {
+	if ( status < QUEUED )
+		setStatus( status );
 }
 
 /**
  * Set total steps to the package emerge duration in sec.
  * @param totalSteps
  */
-void QueueListView::QueueItem::setTotalSteps( int totalSteps )
-{
-	kdDebug() << "QueueListView::QueueItem::setTotalSteps" << endl;
-	bar->setTotalSteps( totalSteps );
-}
+// void QueueListView::QueueItem::setTotalSteps( int totalSteps )
+// {
+// 	kdDebug() << "QueueListView::QueueItem::setTotalSteps" << endl;
+// 	bar->setTotalSteps( totalSteps );
+// }
 
 /**
  * Advance progress by 1 sec.
  */
 void QueueListView::QueueItem::oneStep()
 {
-	kdDebug() << "QueueListView::QueueItem::oneStep" << endl;
 	bar->setProgress( progress++ );
 }
 
@@ -95,7 +96,9 @@ void QueueListView::QueueItem::oneStep()
 void QueueListView::QueueItem::setComplete()
 {
 	kdDebug() << "QueueListView::QueueItem::complete" << endl;
-	bar->setProgress( m_duration );
+	bar->setTotalSteps( 100 );
+	bar->setProgress( 100 );
+	setStatus( INSTALLED );
 }
 
 /**

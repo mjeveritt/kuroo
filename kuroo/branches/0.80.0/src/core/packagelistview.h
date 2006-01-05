@@ -41,6 +41,8 @@ public:
 public:
 	virtual	void			resetListView();
 	
+	virtual	PackageItem* 	itemId( const QString& id );
+	
 	/**
  	 * Current package idDB.
  	 * @return idDB

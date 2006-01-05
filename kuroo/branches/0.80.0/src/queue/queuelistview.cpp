@@ -79,7 +79,7 @@ void QueueListView::QueueItem::oneStep()
 /**
  * Set progressbar as 100%.
  */
-void QueueListView::QueueItem::complete()
+void QueueListView::QueueItem::setComplete()
 {
 	kdDebug() << "QueueListView::QueueItem::complete" << endl;
 	bar->setProgress( m_duration );
@@ -162,6 +162,7 @@ void QueueListView::slotPackageDown()
  */
 void QueueListView::insertPackageList()
 {
+	QueueItem* item;
 	resetListView();
 	totalDuration = QTime( 0, 0, 0 );
 	sumSize = 0;
@@ -174,11 +175,17 @@ void QueueListView::insertPackageList()
 		category = category + "-" + *it++;
 		QString name = *it++;
 		QString description = *it++;
-		QString meta = *it;
+		QString meta = *it++;
+		QString idDepend = *it;
 		
 		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		
-		QueueItem* item = new QueueItem( this, id, category + "/" + name, description, meta, duration.toInt() );
+		if ( idDepend == "0" )
+			item = new QueueItem( this, id, category + "/" + name, description, meta, duration.toInt() );
+		else
+			item = dynamic_cast<QueueItem*>( new PackageItem( this->itemId( idDepend ), id, category + "/" + name, description, meta ) );
+		
+		// Add package info
 		if ( duration.isEmpty() )
 			item->setText( 1, i18n("na") );
 		else
@@ -191,6 +198,23 @@ void QueueListView::insertPackageList()
 	}
 	
 	emit( signalQueueLoaded() );
+}
+
+/**
+ * Add dependency package in queue listView.
+ * Set progress to 100%.
+ * @param id
+ */
+void QueueListView::slotAddDependency( const QString& id )
+{
+	QString name = PortageSingleton::Instance()->package( id );
+	QString category = PortageSingleton::Instance()->category( id );
+	
+	QueueItem* item = new QueueItem( this, id, category + "/" + name, "0", "0", 100 );
+	item->setComplete();
+	QueueSingleton::Instance()->insertInCache( id );
+	
+	dependencyPackages.push( id );
 }
 
 /**
@@ -283,7 +307,7 @@ void QueueListView::slotPackageProgress( const QString& id )
 void QueueListView::slotPackageComplete( const QString& id )
 {
 	if ( !id.isEmpty() && packageIndex[id] ) {
-		dynamic_cast<QueueItem*>( packageIndex[id] )->complete();
+		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
 	}
 }
 

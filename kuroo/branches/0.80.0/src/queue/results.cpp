@@ -22,6 +22,8 @@
 #include "results.h"
 #include "threadweaver.h"
 
+#include <qvaluestack.h>
+
 /**
  * Thread for adding packages to results in db. Used by emerge.
  */
@@ -31,40 +33,36 @@ public:
 	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), m_packageList( packageList ) {}
 	
 	virtual bool doJob() {
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE results_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " package VARCHAR(64), "
-		                                    " size VARCHAR(32), "
-		                                    " use VARCHAR(255), "
-		                                    " flags VARCHAR(32))"
-		                                    " ;", m_db);
-		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		EmergePackageList::ConstIterator itEnd = ( m_packageList ).end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
+			
 			QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
-			if ( !id.isEmpty() )
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO results_temp (idPackage, package, size, use, flags) VALUES ('%1', '%2', '%3', '%4', '%5');" ).arg( id ).arg( (*it).package ).arg( (*it).size ).arg( (*it).useFlags ).arg( (*it).updateFlags ), m_db );
+			if ( !id.isEmpty() ) {
+				int idPackage = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '0');" ).arg( id ) );
+				if ( idPackage == 0 ) {
+
+					// Insert dependency packages if any
+					while ( !dependencyPackages.isEmpty() ) {
+						KurooDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO queue (idPackage, idDepend) "
+							"VALUES ('%1', '%2');" ).arg( dependencyPackages.pop() ).arg( QString::number(idPackage) ) );
+					}
+				}
+				else { // We have a dependency
+					dependencyPackages.push( id );
+				}
+			}
 		}
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-		
-		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM results;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO results SELECT * FROM results_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE results_temp;", m_db );
-		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
 	virtual void completeJob() {
-		ResultsSingleton::Instance()->refresh();
+		QueueSingleton::Instance()->refresh();
 	}
 	
 private:
 	const EmergePackageList m_packageList;
+	QValueStack<QString> dependencyPackages;
 };
 
 /**

@@ -67,6 +67,8 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance( const QString& ) ), queueView, SLOT( slotPackageProgress( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
 	
+// 	connect( QueueSingleton::Instance(), SIGNAL( signalAddDependency( const QString& ) ), queueView, SLOT( slotAddDependency( const QString& ) ) );
+	
 	slotInit();
 }
 

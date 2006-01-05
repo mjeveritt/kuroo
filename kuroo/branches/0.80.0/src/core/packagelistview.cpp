@@ -63,6 +63,12 @@ QString PackageListView::currentItemStatus()
 	return currentPackage()->status();
 }
 
+PackageItem* PackageListView::itemId( const QString& id )
+{
+	if ( !id.isEmpty() && packageIndex[id] )
+		return packageIndex[id];
+}
+
 /**
  * Current package id.
  * @return id

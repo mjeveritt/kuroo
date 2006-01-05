@@ -375,15 +375,15 @@ void Emerge::readFromStdout( KProcIO *proc )
 		/////////////////////////////////
 		// Catch ewarn and einfo messages
 		/////////////////////////////////
-		line.replace(QRegExp("\\x001b\\[33;01m*"), "****");
-		line.replace(QRegExp("\\x001b\\[32;01m*"), "****");
+		line.replace( QRegExp("\\x001b\\[33;01m*"), "****" );
+		line.replace( QRegExp("\\x001b\\[32;01m*"), "****" );
 		
 		///////////////////////////////////////////////////////
 		// Cleanup emerge output - remove damn escape sequences
 		///////////////////////////////////////////////////////
 		line.replace(QRegExp("\\x0007"), "\n");
 		int pos = 0;
-		QRegExp rx("(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)");
+		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
 		while ( (pos = rx.search(line)) != -1 ) {
 			line.replace( pos, rx.matchedLength(), "" );
 		}
@@ -397,12 +397,12 @@ void Emerge::readFromStdout( KProcIO *proc )
 		if ( line.contains( QRegExp("^\\[ebuild") ) ) {
 			
 			EmergePackage emergePackage;
-			rx.setPattern( "\\s\\S+/\\S+\\s" );
-			int pos = rx.search( line );
+			QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
+			int pos = rxPackage.search( line );
 			
+			// @fixme: check this!
 			if ( pos > -1 ) {
-				QString parsedPackage = rx.cap( 0 ).stripWhiteSpace();
-				
+				QString parsedPackage = rxPackage.cap(2);
 				emergePackage.package = parsedPackage;
 				emergePackage.category = parsedPackage.section( "/", 0, 0 );
 				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
@@ -435,28 +435,28 @@ void Emerge::readFromStdout( KProcIO *proc )
 		// Parse emerge output for correct log output
 		/////////////////////////////////////////////
 		QString lineLower = line.lower();
-		if ( lineLower.contains(QRegExp("^>>>|^!!!")) ) {
+		if ( lineLower.contains( QRegExp("^>>>|^!!!") ) ) {
 			
-			if ( lineLower.contains(QRegExp("^>>> completed installing")) ) {
+			if ( lineLower.contains( QRegExp("^>>> completed installing") ) ) {
 				completedFlag = true;
-				importantMessagePackage = "<b>" + line.section("Completed installing ", 1, 1).section(" ", 0, 0) + "</b>:<br>";
+				importantMessagePackage = "<b>" + line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + "</b>:<br>";
 			}
 			else
-				if ( lineLower.contains(QRegExp("^>>> regenerating")) ) {
+				if ( lineLower.contains( QRegExp("^>>> regenerating") ) ) {
 					completedFlag = false;
 				}
 			
-			if ( lineLower.contains(QRegExp("^!!! error")) ) {
+			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
 				logDone++;
 			}
 			else
-				if ( lineLower.contains("etc-update") ) {
+				if ( lineLower.contains( "etc-update" ) ) {
 					LogSingleton::Instance()->writeLog( line, ERROR );
 					logDone++;
 				}
 				else
-					if ( lineLower.contains(QRegExp("^!!!")) ) {
+					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
 						logDone++;
 					}

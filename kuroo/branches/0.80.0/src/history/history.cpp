@@ -185,6 +185,8 @@ void History::slotParse()
 	
 	static bool syncDone( false );
 	QStringList emergeLines;
+	QRegExp rxTimeStamp( "\\d+:\\s" );
+	QRegExp rxPackage( "(\\()(\\d+)(\\s+of\\s+)(\\d+)(\\)\\s+)(\\S+/\\S+)" );
 	
 	while ( !stream.atEnd() )
 		emergeLines += stream.readLine() + " ";
@@ -197,8 +199,7 @@ void History::slotParse()
 		QString line = *it;
 		
 		if ( !line.isEmpty() ) {
-			QRegExp rx( "\\d+:\\s" );
-			QString emergeLine = line.section( rx, 1, 1 );
+			QString emergeLine = line.section( rxTimeStamp, 1, 1 );
 			emergeLine = emergeLine.section( QRegExp( "(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )" ), 1, 1 );
 			
 			emergeLine.replace( " to ", i18n(" to ") );
@@ -218,30 +219,31 @@ void History::slotParse()
 			else
 			if ( line.contains( "Started emerge on" ) ) {
 				line.replace( "Started emerge on", i18n( "Started emerge on" ) );
-				LogSingleton::Instance()->writeLog( line.section( rx, 1, 1 ), EMERGELOG );
+				LogSingleton::Instance()->writeLog( line.section( rxTimeStamp, 1, 1 ), EMERGELOG );
 			}
 			else
 			if ( line.contains( ">>> emerge" ) ) {
-				rx.setPattern( "\\s\\S+/\\S+\\s" );
-				if ( rx.search( emergeLine ) > -1 ) {
-					QString package = rx.cap( 0 ).stripWhiteSpace();
-					SignalistSingleton::Instance()->emergePackageStart( package );
+				if ( rxPackage.search( emergeLine ) > -1 ) {
+					int order = rxPackage.cap(2).toInt();
+					int total = rxPackage.cap(4).toInt();
+					QString package = rxPackage.cap(6);
+					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
 				else
-					kdDebug() << i18n("No package found!") << endl;
+					kdDebug() << i18n("Can not parse package in /var/log/emerge.log!") << endl;
 			}
 			else
 			if ( line.contains( "::: completed emerge " ) ) {
-				rx.setPattern( "\\s\\S+/\\S+\\s" );
-				if ( rx.search( emergeLine ) > -1 ) {
-					QString package = rx.cap( 0 ).stripWhiteSpace();
-					SignalistSingleton::Instance()->emergePackageStop( package );
+				if ( rxPackage.search( emergeLine ) > -1 ) {
+					int order = rxPackage.cap(2).toInt();
+					int total = rxPackage.cap(4).toInt();
+					QString package = rxPackage.cap(6);
+					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
 					InstalledSingleton::Instance()->addPackage( package );
-					QueueSingleton::Instance()->addPackage( package );
 					UpdatesSingleton::Instance()->removePackage( package );
 				}
 				else
-					kdDebug() << i18n("No package found!") << endl;
+					kdDebug() << i18n("Can not parse package in /var/log/emerge.log!") << endl;
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );

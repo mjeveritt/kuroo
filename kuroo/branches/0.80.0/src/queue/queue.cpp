@@ -24,7 +24,7 @@
 #include <qtimer.h>
 
 /**
- * Thread for adding a single package to the queue in db. Used by emerge.
+ * Thread for adding a single package to the queue in db. Used when emerge.
  */
 class AddQueuePackageJob : public ThreadWeaver::DependentJob
 {
@@ -44,15 +44,15 @@ public:
 				return false;
 			}
 			
-			// Insert the new package in the Queue
-// 			return true;
+			// Store dependency package on stack
+			return true;
 		}
 		else
 			return false;
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh();
+// 		QueueSingleton::Instance()->dependency( m_package );
 	}
 	
 private:
@@ -71,7 +71,8 @@ public:
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE queue_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE) "
+		                                    " idPackage INTEGER UNIQUE, "
+		                                    " idDepend INTEGER ) "
 		                                    " ;", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
@@ -135,7 +136,8 @@ public:
 		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("CREATE TEMP TABLE queue_temp (	"
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE) "
+		                                    " idPackage INTEGER UNIQUE, "
+		                                    " idDepend INTEGER ) "
 		                                    " ;", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
@@ -167,30 +169,30 @@ private:
  * Object for packages to be emerged = installation queue.
  * @fixme: manage the cache.
  */
-Queue::Queue( QObject* parent )
-	: QObject( parent )
+Queue::Queue( QObject* m_parent )
+	: QObject( m_parent )
 {
 	// Clock timer for showing progress when emerging
 	internalTimer = new QTimer( this );
 	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStart( const QString& ) ), this, SLOT( slotEmergePackageStart( const QString& ) ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageComplete( const QString& ) ), this, SLOT( slotEmergePackageComplete( const QString& ) ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageStart( const QString& ) ), this, SLOT( slotEmergePackageStart( const QString& ) ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergePackageComplete( const QString& ) ), this, SLOT( slotEmergePackageComplete( const QString& ) ) );
 }
 
 Queue::~Queue()
 {
 }
 
-void Queue::slotEmergePackageStart( const QString& package )
+void Queue::emergePackageStart( const QString& package, int order, int total )
 {
 	kdDebug() << "Queue::slotEmergePackageStart package=" << package << endl;
 	internalTimer->start( 1000 );
 	m_id = PortageSingleton::Instance()->id( package );
-	addPackage( package );
+// 	addPackage( package );
 }
 
-void Queue::slotEmergePackageComplete( const QString& package )
+void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
 	kdDebug() << "Queue::slotEmergePackageComplete package=" << package << endl;
 	internalTimer->stop();
@@ -203,9 +205,9 @@ void Queue::slotOneStep()
 	emit signalPackageAdvance( m_id );
 }
 
-void Queue::init( QObject *myParent )
+void Queue::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**
@@ -333,6 +335,11 @@ void Queue::installQueue( const QStringList& packageIdList )
 void Queue::addPackage( const QString& package )
 {
 	ThreadWeaver::instance()->queueJob( new AddQueuePackageJob( this, package ) );
+}
+
+void Queue::dependency( const QString& package )
+{
+// 	dependencyPackages.push( package );
 }
 
 /**

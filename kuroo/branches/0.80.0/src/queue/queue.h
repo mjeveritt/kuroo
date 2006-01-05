@@ -22,7 +22,6 @@
 #define QUEUE_H
 
 #include <qobject.h>
-#include <qvaluevector.h>
 
 class QTimer;
 
@@ -35,14 +34,14 @@ class Queue : public QObject
 Q_OBJECT
 	
 public:
-	Queue( QObject *parent = 0 );
+	Queue( QObject *m_parent = 0 );
 	~Queue();
 	
 public slots:
-	void					init( QObject *myParent = 0 );
+	void					init( QObject *parent = 0 );
 	
-	void					slotEmergePackageStart( const QString& package );
-	void					slotEmergePackageComplete( const QString& package );
+	void					emergePackageStart( const QString& package, int order, int total );
+	void					emergePackageComplete( const QString& package, int order, int total );
 	void					slotOneStep();
 	
 	/**
@@ -111,6 +110,7 @@ public slots:
 	* @param package
 	*/
 	void					addPackage( const QString& package );
+	void					dependency( const QString& package );
 	
 	/**
 	* Get list of all Queue packages.
@@ -127,7 +127,7 @@ signals:
 	void					signalPackageComplete( const QString& id );
 	
 private:
-	QObject					*parent;
+	QObject					*m_parent;
 	QString					package, m_id;
 	QStringList				packageIdList;
 	QMap<QString, bool>		packageCache;

@@ -24,6 +24,7 @@
 #include "packagelistview.h"
 #include "packageitem.h"
 
+#include <qvaluestack.h>
 #include <qpixmap.h>
 
 class QPixmap;
@@ -41,32 +42,34 @@ public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
 
-	class			QueueItem;
+	class					QueueItem;
 	
 public slots:
 
-	void			slotPackageUp();
-	void			slotPackageDown();
+	void					slotPackageUp();
+	void					slotPackageDown();
 
 	/**
 	* Populate queue with packages from db
 	*/
-	void 			insertPackageList();
-
+	void 					insertPackageList();
+	
+	void 					slotAddDependency( const QString& id );
+	
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.
 	*/
-	QString		 	totalTime();
-	int				sumTime();
+	QString		 			totalTime();
+	int						sumTime();
 
 	/**
 	* Get sum of packages sizes.
 	* @return sumSize 
 	*/
-	QString		 	totalSize();
+	QString		 			totalSize();
 	
-	void			slotPackageProgress( const QString& id );
-	void			slotPackageComplete( const QString& id );
+	void					slotPackageProgress( const QString& id );
+	void					slotPackageComplete( const QString& id );
 	
 private slots:
 	
@@ -76,29 +79,30 @@ private slots:
 	* @param size 
 	* @return total		as "xxx kB"
 	*/
-	QString		 	kBSize( const int& size );
+	QString		 			kBSize( const int& size );
 	
 	/**
 	* Add this package size to total.
 	* @param size
 	*/
-	void 			addSize( const QString& size );
+	void 					addSize( const QString& size );
 	
 	/**
 	* Convert emerge duration from seconds to format hh:mm:ss.
 	* @param time 			
 	* @return emergeTime  
 	*/
-	QString 		timeFormat( const QString& time );
+	QString 				timeFormat( const QString& time );
 	
 signals:
-	void			signalQueueLoaded();
-	void			signalPackageEmerged();
+	void					signalQueueLoaded();
+	void					signalPackageEmerged();
 	
 private:
-	KLocale 		*loc;
-	int 			sumSize;
-	QPixmap 		pxPackage, pxInstalled, pxStable, pxTesting;
+	KLocale 				*loc;
+	int 					sumSize;
+	QPixmap 				pxPackage, pxInstalled, pxStable, pxTesting;
+	QValueStack<QString> 	dependencyPackages;
 };
 
 /**
@@ -113,7 +117,7 @@ public:
 	
 	void			setTotalSteps( int totalSteps );
 	void			oneStep();
-	void			complete();
+	void			setComplete();
 	
 protected:
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );

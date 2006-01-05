@@ -82,8 +82,8 @@ public slots:
 	 */
 	void		setUnmasked( const QString& name, bool b );
 	
-	void		emergePackageStart( const QString& package );
-	void		emergePackageStop( const QString& package );
+// 	void		emergePackageStart( const QString& package );
+// 	void		emergePackageStop( const QString& package );
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -101,8 +101,8 @@ signals:
 	void		signalClearQueued();
 	void		signalUnmasked( const QString& name, bool b );
 	
-	void		signalEmergePackageStart( const QString& package );
-	void		signalEmergePackageComplete( const QString& package );
+// 	void		signalEmergePackageStart( const QString& package );
+// 	void		signalEmergePackageComplete( const QString& package );
 private:
 	QObject	*parent;
 	bool		busy, busyScanning, busyDiskUsage;

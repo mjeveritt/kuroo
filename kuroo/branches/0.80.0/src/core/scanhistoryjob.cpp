@@ -71,8 +71,8 @@ bool ScanHistoryJob::doJob()
 	
 	// Parse emerge.log lines
 	QString timeStamp;
-	QRegExp rx1("\\d+:\\s");
-	QRegExp rx2("\\s\\S+/\\S+\\s");
+	QRegExp rxTimeStamp( "\\d+:\\s" );
+	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
 	foreach ( m_logLines ) {
 		
@@ -83,7 +83,7 @@ bool ScanHistoryJob::doJob()
 			return false;
 		}
 		
-		QString emergeLine = QString(*it).section( rx1, 1, 1 );
+		QString emergeLine = QString(*it).section( rxTimeStamp, 1, 1 );
 		timeStamp = QString(*it).section( ": " + emergeLine, 0, 0 );
 		
 		if ( emergeLine.contains( ">>> emerge" ) ) {
@@ -91,8 +91,8 @@ bool ScanHistoryJob::doJob()
 			
 			// Collect package and timestamp in map to match for completion
 			QString package;
-			if ( rx2.search(emergeLine) > -1 ) {
-				package = rx2.cap(0).stripWhiteSpace();
+			if ( rxPackage.search(emergeLine) > -1 ) {
+				package = rxPackage.cap(2);
 				logMap[ package ] = emergeStart;
 			}
 			else
@@ -101,8 +101,8 @@ bool ScanHistoryJob::doJob()
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
 				QString package;
-				if ( rx2.search(emergeLine) > -1 ) {
-					package = rx2.cap(0).stripWhiteSpace();
+				if ( rxPackage.search(emergeLine) > -1 ) {
+					package = rxPackage.cap(2);
 				
 					// Find matching package emerge start entry in map and calculate the emerge duration
 					QMap<QString, uint>::iterator itLogMap = logMap.find( package );

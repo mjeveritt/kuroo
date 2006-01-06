@@ -88,14 +88,14 @@ void PackageItem::setStatus( int status )
 			setPixmap( 0, pxPackage );
 			break;
 		
-		case MASKED :
-			meta = MASKED;
+		case TESTING :
+			meta = TESTING;
 // 			m_meta.insert( i18n("Keyword"), i18n("Masked") );
 			repaint();
 			break;
 		
-		case UNMASKED :
-			meta = UNMASKED;
+		case UNTESTING :
+			meta = UNTESTING;
 // 			m_meta.insert( i18n("Keyword"), i18n("Unmasked") );
 			repaint();
 			break;
@@ -136,13 +136,13 @@ void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int
 				_cg.setColor( QColorGroup::Text, Qt::black );
 				break;
 			
-			case MASKED :
+			case TESTING :
 				font.setBold(true);
 				p->setFont(font);
 				_cg.setColor( QColorGroup::Text, KurooConfig::maskedColor() );
 				break;
 			
-			case UNMASKED : {
+			case UNTESTING : {
 				font.setBold(true);
 				p->setFont(font);
 				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );

@@ -216,7 +216,7 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-// 	kdDebug() << "PackageVersion::stability m_isHardMasked=" << m_isHardMasked << " m_version=" << m_version << endl;
+	kdDebug() << "PackageVersion::stability id=" << m_package->id() << " m_isHardMasked=" << m_isHardMasked << " m_version=" << m_version << endl;
 	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
@@ -261,7 +261,7 @@ int PackageVersion::stability( const QString& arch ) const
 	// check if there is a masked version of the architecture in there
 	else 
 		if ( m_keywords.contains( "~" + arch ) )
-			return MASKED;
+			return TESTING;
 		// if arch is masked, check if a stable version is in there
 		else 
 			if ( ( arch[0] == '~' ) && ( m_keywords.contains( arch.mid(1) ) ) )

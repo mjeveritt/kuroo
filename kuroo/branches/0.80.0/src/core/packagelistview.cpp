@@ -242,7 +242,7 @@ void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
 		return;
 
 	if ( isUnmasked )
-		packageIndex[id]->setStatus( UNMASKED );
+		packageIndex[id]->setStatus( UNTESTING );
 	else
 		packageIndex[id]->setStatus( NONE );
 

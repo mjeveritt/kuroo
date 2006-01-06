@@ -50,7 +50,9 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
 	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
-	connect(dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
+	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
+	
+	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -77,13 +79,18 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	category = m_portagePackage->category();
 	dialog->package->setText( "Show detailed information for <font size=\"+2\">" + category + "/" + package + "</font>");
 	
+	slotActivateTabs();
+	
+	show();
+}
+
+void PackageInspector::slotActivateTabs()
+{
 	slotGetUseFlags( dialog->cbVersionsUse->currentText() );
 	slotGetEbuild( dialog->cbVersionsEbuild->currentText() );
 	slotGetDependencies( dialog->cbVersionsDependencies->currentText() );
-	getChangeLog();
 	slotGetInstalledFiles( dialog->cbVersionsInstalled->currentText() );
-	
-	show();
+	getChangeLog();
 }
 
 /**

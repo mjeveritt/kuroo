@@ -108,9 +108,10 @@ public:
 				QString id = KurooDBSingleton::Instance()->packageId( category, name );
 				if ( !id.isEmpty() )
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
-					
-				
 			}
+			else
+				kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageKeywords() ) << endl;
+			
 		}
 		file.close();
 		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
@@ -181,15 +182,17 @@ public:
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
 
-					// Get the captured strings
-					QString name = rxAtom.cap( POS_PACKAGE );
-					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-					
-					QString id = KurooDBSingleton::Instance()->packageId( category, name );
-					if ( !id.isEmpty() )
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+						// Get the captured strings
+						QString name = rxAtom.cap( POS_PACKAGE );
+						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+						
+						QString id = KurooDBSingleton::Instance()->packageId( category, name );
+						if ( !id.isEmpty() )
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
+					else
+						kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUnmask() ) << endl;
 				}
 			}
 		}
@@ -279,15 +282,17 @@ public:
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
 						
-					// Get the captured strings
-					QString name = rxAtom.cap( POS_PACKAGE );
-					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-					
-					QString id = KurooDBSingleton::Instance()->packageId( category, name );
-					if ( !id.isEmpty() )
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+						// Get the captured strings
+						QString name = rxAtom.cap( POS_PACKAGE );
+						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+						
+						QString id = KurooDBSingleton::Instance()->packageId( category, name );
+						if ( !id.isEmpty() )
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 
 					}
+					else
+						kdDebug() << i18n("Can not match package %1 in %2 or %3.").arg( *it ).arg( KurooConfig::filePackageMask() ).arg( KurooConfig::filePackageMaskUser() ) << endl;
 				}
 			}
 		}

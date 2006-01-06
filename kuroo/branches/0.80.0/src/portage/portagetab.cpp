@@ -283,9 +283,10 @@ void PortageTab::slotPackage()
 	// Sorted list of versions for current package.
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
 	
-	// Create nice summary showing installed packages in green and unavailable as red
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
+		
+		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
@@ -307,6 +308,7 @@ void PortageTab::slotPackage()
 		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
 		
+		// Mark version stability
 		QString stability;
 		switch ( (*sortedVersionIterator)->stability( KurooConfig::arch() ) ) {
 			
@@ -314,12 +316,12 @@ void PortageTab::slotPackage()
 				stability = i18n("Stable");
 				break;
 			
-			case MASKED :
+			case TESTING :
 				stability = i18n("Testing");
 				break;
 			
 			case HARDMASKED :
-				stability = i18n("Masked");
+				stability = i18n("Hadmasked");
 				break;
 			
 			case NOTAVAILABLE :

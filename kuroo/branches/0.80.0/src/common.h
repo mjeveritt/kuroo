@@ -84,7 +84,7 @@ enum packageStatus {
 		CATEGORY, 
 		INSTALLED, 
 		PACKAGE, 
-		UNMASKED, 
+		UNTESTING, 
 		QUEUED, 
 		NOTQUEUED 
 };
@@ -92,13 +92,13 @@ enum packageStatus {
 // The "maskedness" of a package version.
 enum Stability { 
 		STABLE,
-		MASKED,
+		TESTING,
 		HARDMASKED,
 		NOTAVAILABLE
 };
 
 static const QString STABLE_STRING( QString::number( STABLE ) );
-static const QString MASKED_STRING( QString::number( MASKED ) );
+static const QString TESTING_STRING( QString::number( TESTING ) );
 static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 

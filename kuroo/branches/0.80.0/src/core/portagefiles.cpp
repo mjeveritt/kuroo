@@ -351,7 +351,6 @@ void PortageFiles::refresh( int mask )
  */
 void PortageFiles::loadPackageMask()
 {
-	kdDebug() << "PortageFiles::loadPackageMask" << endl;
 	ThreadWeaver::instance()->queueJob( new LoadPackageMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUnmaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
@@ -359,13 +358,11 @@ void PortageFiles::loadPackageMask()
 
 void PortageFiles::loadPackageUnmask()
 {
-	kdDebug() << "PortageFiles::loadPackageUnmask" << endl;
 	ThreadWeaver::instance()->queueJob( new LoadPackageUnmaskJob( this ) );
 }
 
 void PortageFiles::loadPackageKeywords()
 {
-	kdDebug() << "PortageFiles::loadPackageKeywords" << endl;
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
 }
 

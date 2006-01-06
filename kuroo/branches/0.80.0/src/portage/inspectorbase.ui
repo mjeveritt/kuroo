@@ -389,6 +389,9 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                         <property name="accel">
                                             <string>Alt+L</string>
                                         </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
                                     </widget>
                                     <widget class="QRadioButton" row="1" column="0">
                                         <property name="name">

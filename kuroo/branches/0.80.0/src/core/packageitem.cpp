@@ -29,14 +29,14 @@
 /**
  * KListViewItem subclass to implement sorting, tooltip, color...
  */
-PackageItem::PackageItem( QListView* parent, const QString& id, const char* name, const QString& description, const QString& status )
+PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
 {
 	init();
 }
 
-PackageItem::PackageItem( QListViewItem* parent, const QString& id, const char* name, const QString& description, const QString& status )
+PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent->listView() ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
 {

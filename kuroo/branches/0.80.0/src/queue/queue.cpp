@@ -72,8 +72,9 @@ public:
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE queue_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER, "
-		                                    " idDepend INTEGER ) "
-		                                    " ;", m_db);
+		                                    " idDepend INTEGER, "
+		                                    " version VARCHAR(32) "
+		                                    " );", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 		
@@ -137,8 +138,9 @@ public:
 		KurooDBSingleton::Instance()->query("CREATE TEMP TABLE queue_temp (	"
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
-		                                    " idDepend INTEGER ) "
-		                                    " ;", m_db);
+		                                    " idDepend INTEGER, "
+		                                    " version VARCHAR(32) "
+		                                    " );", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 		

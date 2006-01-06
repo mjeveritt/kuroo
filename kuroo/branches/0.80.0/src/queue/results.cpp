@@ -49,19 +49,15 @@ public:
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 			QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
 			
-// 			kdDebug() << "id=" << id << " name=" << (*it).name << endl;
-			
 			// We found a dependency, add it
 			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {
-// 				kdDebug() << "dependency idPackage=" << idPackage << endl;
 				KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '%2');" ).arg( id ).arg( idPackage ) );
+					"INSERT INTO queue (idPackage, idDepend, version) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( idPackage ).arg( (*it).version ) );
 			}
 			else {
-// 				kdDebug() << "package idPackage=" << idPackage << endl;
 				idPackage = id;
 				KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '0');" ).arg( id ) );
+					"INSERT INTO queue (idPackage, idDepend, version) VALUES ('%1', '0', '%2');" ).arg( id ).arg( (*it).version ) );
 			}
 		}
 		return true;

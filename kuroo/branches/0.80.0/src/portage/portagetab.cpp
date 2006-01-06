@@ -269,15 +269,16 @@ void PortageTab::slotPackage()
 	QString package( packagesView->currentPortagePackage()->name() );
 	QString category( packagesView->currentPortagePackage()->category() );
 	
-	QString textLines = "<font size=\"+2\">" + package + "</font> ";
-			textLines += "(" + category.section( "-", 0, 0 ) + " / ";
-			textLines += category.section( "-", 1, 1 ) + ") <br>";
-			textLines += packagesView->currentPortagePackage()->description() + "<br>";
-			textLines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->description();
-			textLines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a><br>";
+	QString lines = "<font size=\"+2\">" + package + "</font> ";
+			lines += "(" + category.section( "-", 0, 0 ) + " / ";
+			lines += category.section( "-", 1, 1 ) + ") <br>";
+			lines += packagesView->currentPortagePackage()->description() + "<br>";
+			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->description();
+			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a><br>";
 	
-	QString textLinesAvailable;
-	QString textLinesInstalled;
+	QString linesAvailable;
+	QString linesInstalled;
+	QString linesEmergeVersion;
 	
 	// Sorted list of versions for current package.
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
@@ -286,36 +287,44 @@ void PortageTab::slotPackage()
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		if ( (*sortedVersionIterator)->isInstalled() ) {
-			textLinesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
+			linesEmergeVersion = (*sortedVersionIterator)->version();
 		}
 
 		if ( (*sortedVersionIterator)->isAvailable() ) {
-			textLinesAvailable += (*sortedVersionIterator)->version() + ", ";
+			linesEmergeVersion = (*sortedVersionIterator)->version();
+			linesAvailable += (*sortedVersionIterator)->version() + ", ";
 			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Stable"), (*sortedVersionIterator)->size() );
 		}
 		else {
-			textLinesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
+			linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Masked"), (*sortedVersionIterator)->size() );
 		}
 		
-		// Load all dropdown menus with relevant versions
+		// Load all dropdown menus in the inspector with relevant versions
 		packageInspector->dialog->cbVersions->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsExact->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
 	}
-	textLinesInstalled.truncate( textLinesInstalled.length() - 2 );
-	textLinesAvailable.truncate( textLinesAvailable.length() - 2 );
+	linesInstalled.truncate( linesInstalled.length() - 2 );
+	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
-	if ( !textLinesInstalled.isEmpty() )
-		textLinesInstalled = i18n("<b>Versions installed:</b> ") + textLinesInstalled + "<br>";
+	if ( !linesInstalled.isEmpty() )
+		linesInstalled = i18n("<b>Versions installed:</b> ") + linesInstalled + "<br>";
 	else
-		textLinesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
+		linesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
 	
-	textLinesAvailable = i18n("<b>Versions available:</b> ") + textLinesAvailable;
-	summaryBrowser->setText( textLines + textLinesInstalled + textLinesAvailable );
+	if ( !linesEmergeVersion.isEmpty() )
+		linesEmergeVersion = i18n("<b>Version used by emerge:</b> ") + linesEmergeVersion;
+	else
+		linesEmergeVersion = i18n("<b>Version used by emerge:</b> No version available");
+	
+	linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
+	
+	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion );
 	
 	if ( packageInspector->isVisible() )
 		slotAdvanced();

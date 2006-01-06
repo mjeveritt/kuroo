@@ -209,7 +209,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " updateVersion VARCHAR(32)); "
 	      " CREATE INDEX index_name ON package (name);"
 	      " CREATE INDEX index_description ON package (description);"
-	      " ", conn);
+	      , conn);
 	
 	query(" CREATE TABLE version ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -234,8 +234,9 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE queue ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
-	      " idDepend INTEGER ) "
-	      " ;", conn);
+	      " idDepend INTEGER, "
+	      " version VARCHAR(32) "
+	      " );", conn);
 	
 	query(" CREATE TABLE results ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -589,6 +590,14 @@ QStringList KurooDB::packageKeywordsAtom( const QString& id )
 	return query( QString( "SELECT keywords FROM packageKeywords WHERE idPackage = '%1';" ).arg( id ) );
 }
 
+QString KurooDB::versionSize( const QString& idPackage, const QString& version )
+{
+	return (query( " SELECT size FROM version "
+	               " WHERE idPackage = '" + idPackage + "'"
+	               " AND name = '" + version + "'"
+	               " ;")).first();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Query for installation queue
 //////////////////////////////////////////////////////////////////////////////
@@ -598,12 +607,11 @@ QStringList KurooDB::packageKeywordsAtom( const QString& id )
  */
 QStringList KurooDB::allQueuePackages()
 {
-	return query( " SELECT package.id, category.name, subCategory.name, package.name, "
-	              " package.description, package.meta, queue.idDepend "
-	              " FROM queue, category, subCategory, package "
+	return query( " SELECT package.id, catSubCategory.name, package.name, "
+	              " package.description, package.meta, queue.idDepend, queue.version "
+	              " FROM queue, catSubCategory, package "
 	              " WHERE queue.idPackage = package.id "
-	              " AND category.id = package.idCategory "
-	              " AND subCategory.id = package.idSubCategory "
+	              " AND catSubCategory.id = package.idCatSubCategory "
 	              " ORDER BY queue.idDepend;" );
 }
 

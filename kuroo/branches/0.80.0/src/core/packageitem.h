@@ -32,8 +32,8 @@
 class PackageItem : public KListViewItem
 {
 public:
-	PackageItem( QListView *parent, const QString& id, const char* name, const QString& description, const QString& status );
-	PackageItem( QListViewItem *parent, const QString& id, const char* name, const QString& description, const QString& status );
+	PackageItem( QListView *parent, const char* name, const QString& id, const QString& description, const QString& status );
+	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& description, const QString& status );
 	~PackageItem();
 	
 	QString			status();

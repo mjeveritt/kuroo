@@ -68,11 +68,9 @@ private slots:
 	 */
 	void				slotGo();
 	void				slotPretend();
-	void				slotUninstall();
 	void				slotStop();
 	void				slotRemove();
 	void				slotOptions();
-	void				slotShowResults();
 	/**
 	 * Popup menu for actions like emerge.
 	 * @param listView
@@ -83,7 +81,6 @@ private slots:
 	
 private:
 	EmergeInspector*	emergeInspector;
-	PretendInspector*	pretendInspector;
 };
 
 #endif

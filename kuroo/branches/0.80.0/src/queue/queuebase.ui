@@ -312,17 +312,6 @@
                             <property name="margin">
                                 <number>5</number>
                             </property>
-                            <widget class="QPushButton" row="0" column="2">
-                                <property name="name">
-                                    <cstring>pbUninstall</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Uninstall Pac&amp;kages</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                            </widget>
                             <widget class="QPushButton" row="0" column="4">
                                 <property name="name">
                                     <cstring>pbOptions</cstring>

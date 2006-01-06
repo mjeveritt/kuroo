@@ -54,8 +54,6 @@ public slots:
 	*/
 	void 					insertPackageList();
 	
-	void 					slotAddDependency( const QString& id );
-	
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.
 	*/
@@ -79,7 +77,7 @@ private slots:
 	* @param size 
 	* @return total		as "xxx kB"
 	*/
-	QString		 			kBSize( const int& size );
+	QString		 			formatSize( const QString& sizeString );
 	
 	/**
 	* Add this package size to total.
@@ -116,7 +114,6 @@ public:
 	QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
 	~QueueItem();
 	
-// 	void			setTotalSteps( int totalSteps );
 	void			oneStep();
 	void			setComplete();
 	

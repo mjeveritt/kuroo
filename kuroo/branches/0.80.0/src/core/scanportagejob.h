@@ -73,7 +73,7 @@ private slots:
 	 * @param size 
 	 * @return total		as "xxx kB"
 	 */
-	QString								kBSize( const QString& size );
+	QString								formatSize( const QString& size );
 	
 private:
 	InstalledMap						installedMap;

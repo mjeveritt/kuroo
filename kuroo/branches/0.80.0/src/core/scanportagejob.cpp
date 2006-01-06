@@ -425,7 +425,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QString packageNoVersion = category + "/" + package.section(rxPortageVersion, 0, 0);
 	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + package ) ;
 	if ( size != "" )
-		info.size = kBSize( size );
+		info.size = formatSize( size );
 	else {
 		QString path = KurooConfig::dirPortage() + "/" + packageNoVersion + "/files/digest-" + package;
 		file.setName( path );
@@ -434,7 +434,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			std::string word;
 			while ( in >> word );
 			file.close();
-			info.size = kBSize( word );
+			info.size = formatSize( word );
 			
 			// Add new value into cache.
 			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(package).arg(word), m_db);
@@ -452,7 +452,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
  * @param size 
  * @return total		as "xxx kB"
  */
-QString ScanPortageJob::kBSize( const QString& size )
+QString ScanPortageJob::formatSize( const QString& size )
 {
 	KLocale *loc = KGlobal::locale();
 	QString total;

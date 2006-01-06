@@ -49,12 +49,14 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const 
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
 {
 	bar = new KProgress( duration, parent->viewport() );
+	bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
 {
 	bar = new KProgress( duration, parent->listView()->viewport() );
+	bar->hide();
 }
 
 QueueListView::QueueItem::~QueueItem()
@@ -73,16 +75,6 @@ void QueueListView::QueueItem::setStatus( int status )
 }
 
 /**
- * Set total steps to the package emerge duration in sec.
- * @param totalSteps
- */
-// void QueueListView::QueueItem::setTotalSteps( int totalSteps )
-// {
-// 	kdDebug() << "QueueListView::QueueItem::setTotalSteps" << endl;
-// 	bar->setTotalSteps( totalSteps );
-// }
-
-/**
  * Advance progress by 1 sec.
  */
 void QueueListView::QueueItem::oneStep()
@@ -95,7 +87,6 @@ void QueueListView::QueueItem::oneStep()
  */
 void QueueListView::QueueItem::setComplete()
 {
-	kdDebug() << "QueueListView::QueueItem::complete" << endl;
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
 	setStatus( INSTALLED );
@@ -106,15 +97,17 @@ void QueueListView::QueueItem::setComplete()
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-	if ( column == 3 ) {
-		QRect rect = listView()->itemRect( this );
-		QHeader *head = listView()->header();
-		rect.setLeft( head->sectionPos( 3 ) - head->offset() );
-		rect.setWidth( head->sectionSize( 3 ) );
-		bar->setGeometry( rect );
-		bar->show();
+	if ( this->isVisible() ) {
+		if ( column == 5 ) {
+			QRect rect = listView()->itemRect( this );
+			QHeader *head = listView()->header();
+			rect.setLeft( head->sectionPos( 5 ) - head->offset() );
+			rect.setWidth( head->sectionSize( 5 ) );
+			bar->setGeometry( rect );
+			bar->show();
+		}
+		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
-	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 
 /**
@@ -126,20 +119,27 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ) );
+	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Duration" ) );
+	addColumn( i18n( "Size" ) );
 	addColumn( i18n( "Description" ) );
 	addColumn( i18n( "Progress" ) );
 	
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
 	setFullWidth( true );
+	setColumnAlignment( 3, Qt::AlignRight );
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
+	setColumnWidthMode( 3, QListView::Manual );
+	setColumnWidthMode( 4, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 80 );
-	setColumnWidth( 3, 100 );
+	setColumnWidth( 2, 80 );
+	setColumnWidth( 3, 80 );
+	setColumnWidth( 5, 100 );
 	setTooltipColumn( 2 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
@@ -179,7 +179,7 @@ void QueueListView::slotPackageDown()
 void QueueListView::insertPackageList()
 {
 	QueueItem* item;
-	totalDuration = QTime( 0, 0, 0 );
+	totalDuration = QTime(0, 0, 0);
 	sumSize = 0;
 	
 	resetListView();
@@ -189,30 +189,50 @@ void QueueListView::insertPackageList()
 	foreach ( packageList ) {
 		QString id = *it++;
 		QString category = *it++;
-		category = category + "-" + *it++;
 		QString name = *it++;
 		QString description = *it++;
 		QString meta = *it++;
-		QString idDepend = *it;
+		QString idDepend = *it++;
+		QString version = *it;
 
+		// Get package emerge duration from statistics
 		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		
+		// If version get size also
+		QString size;
+		if ( !version.isEmpty() )
+			size = KurooDBSingleton::Instance()->versionSize( id, version );
+
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, id, category + "/" + name, description, meta, duration.toInt() );
+			item = new QueueItem( this, category + "/" + name, id, description, meta, duration.toInt() );
 			item->setOpen( true );
 		}
 		else {
 			PackageItem* itemDepend = this->itemId( idDepend );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, id, category + "/" + name, description, meta, duration.toInt() );
+				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration.toInt() );
 		}
 		
 		// Add package info
-		if ( duration.isEmpty() )
+		if ( version.isEmpty() )
 			item->setText( 1, i18n("na") );
 		else
-			item->setText( 1, timeFormat( duration ) );
-		item->setText( 2, description );
+			item->setText( 1, version );
+		
+		if ( duration.isEmpty() )
+			item->setText( 2, i18n("na") );
+		else
+			item->setText( 2, timeFormat( duration ) );
+		
+		if ( size.isEmpty() )
+			item->setText( 3, i18n("na") );
+		else {
+			item->setText( 3, size );
+			addSize( size );
+		}
+		
+		item->setText( 4, description );
+		
 		indexPackage( id, item );
 		
 		// Inform all other listviews that this package is in queue
@@ -220,23 +240,6 @@ void QueueListView::insertPackageList()
 	}
 	
 	emit( signalQueueLoaded() );
-}
-
-/**
- * Add dependency package in queue listView.
- * Set progress to 100%.
- * @param id
- */
-void QueueListView::slotAddDependency( const QString& id )
-{
-	QString name = PortageSingleton::Instance()->package( id );
-	QString category = PortageSingleton::Instance()->category( id );
-	
-	QueueItem* item = new QueueItem( this, id, category + "/" + name, "0", "0", 100 );
-	item->setComplete();
-	QueueSingleton::Instance()->insertInCache( id );
-	
-	dependencyPackages.push( id );
 }
 
 /**
@@ -262,7 +265,7 @@ QString QueueListView::timeFormat( const QString& time )
  */
 QString QueueListView::totalTime()
 {
-	return loc->formatTime(totalDuration, true, true);
+	return loc->formatTime( totalDuration, true, true );
 }
 
 /**
@@ -271,7 +274,7 @@ QString QueueListView::totalTime()
  */
 int QueueListView::sumTime()
 {
-	return abs( totalDuration.secsTo( QTime( 0, 0, 0 ) ) );
+	return abs( totalDuration.secsTo( QTime(0, 0, 0) ) );
 }
 
 /**
@@ -280,8 +283,8 @@ int QueueListView::sumTime()
  */
 void QueueListView::addSize( const QString& size )
 {
-	QString packageSize(size);
-	packageSize = packageSize.remove(QRegExp("\\D"));
+	QString packageSize( size );
+	packageSize = packageSize.remove( QRegExp("\\D") );
 	sumSize += packageSize.toInt() * 1024;
 }
 
@@ -291,7 +294,7 @@ void QueueListView::addSize( const QString& size )
  */
 QString QueueListView::totalSize()
 {
-	return kBSize(sumSize);
+	return formatSize( QString::number( sumSize ) );
 }
 
 /**
@@ -300,9 +303,10 @@ QString QueueListView::totalSize()
  * @param size 
  * @return total		as "xxx kB"
  */
-QString QueueListView::kBSize( const int& size )
+QString QueueListView::formatSize( const QString& sizeString )
 {
 	QString total;
+	int size = sizeString.toInt();
 	
 	if ( size == 0 )
 		total = "0 kB ";
@@ -321,16 +325,18 @@ QString QueueListView::kBSize( const int& size )
  */
 void QueueListView::slotPackageProgress( const QString& id )
 {
-	if ( !id.isEmpty() && packageIndex[id] ) {
+	if ( id.isEmpty() || !packageIndex[id] )
+		return;
+	else
 		dynamic_cast<QueueItem*>( packageIndex[id] )->oneStep();
-	}
 }
 
 void QueueListView::slotPackageComplete( const QString& id )
 {
-	if ( !id.isEmpty() && packageIndex[id] ) {
+	if ( id.isEmpty() || !packageIndex[id] )
+		return;
+	else
 		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
-	}
 }
 
 #include "queuelistview.moc"

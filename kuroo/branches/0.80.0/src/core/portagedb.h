@@ -169,6 +169,7 @@ public:
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	packageVersionsInfo( const QString& id );
+	QString 		versionSize( const QString& idPackage, const QString& version );
 	QStringList 	packageTotal();
 	QStringList 	updatesTotal();
 	QString		 	package( const QString& id );

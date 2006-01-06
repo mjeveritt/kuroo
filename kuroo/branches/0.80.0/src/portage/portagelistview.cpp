@@ -303,7 +303,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString update = *it++;
 		QString homepage = *it;
 		
-		PortageItem* item = new PortageItem( this, id, name, description, homepage, meta );
+		PortageItem* item = new PortageItem( this, name, id, description, homepage, meta );
 		item->setText( 2, update );
 		item->setText( 3, description );
 		

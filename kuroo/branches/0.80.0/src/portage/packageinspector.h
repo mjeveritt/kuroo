@@ -46,6 +46,7 @@ public:
 	InspectorBase					*dialog;
 	
 private slots:
+	void							slotAdvancedToggle( bool on );
 	void							slotGetEbuild( const QString& version );
 	void							getChangeLog();
 	void							slotGetDependencies( const QString& version );

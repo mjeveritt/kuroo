@@ -21,7 +21,6 @@
 #include "common.h"
 #include "statusbar.h"
 #include "emergeinspector.h"
-#include "pretendinspector.h"
 #include "queuetab.h"
 #include "queuelistview.h"
 
@@ -52,7 +51,6 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	
 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
-	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbPretend, SIGNAL( clicked() ), this, SLOT( slotPretend() ) );
 	
 	// Lock/unlock if kuroo is busy.
@@ -62,7 +60,6 @@ QueueTab::QueueTab( QWidget* parent )
 	
 	// Reload view after changes.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged() ), this, SLOT( slotReload() ) );
-	connect( ResultsSingleton::Instance(), SIGNAL( signalResultsChanged() ), this, SLOT( slotShowResults() ) );
 	
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance( const QString& ) ), queueView, SLOT( slotPackageProgress( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
@@ -93,7 +90,6 @@ void QueueTab::slotInit()
 		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
 	
 	emergeInspector = new EmergeInspector( this );
-	pretendInspector = new PretendInspector( this );
 	slotBusy( false );
 }
 
@@ -140,16 +136,13 @@ void QueueTab::slotBusy( bool busy )
 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
-		pbUninstall->setDisabled( true );
 	}
 	else {
 		if ( !KUser().isSuperUser() ) {
 			pbGo->setDisabled( true );
-			pbUninstall->setDisabled(true);
 		}
 		else {
 			pbGo->setDisabled( false );
-			pbUninstall->setDisabled( false );
 		}
 		
 		pbPretend->setDisabled( false );
@@ -236,34 +229,12 @@ void QueueTab::slotStop()
 	}
 }
 
-
-/**
- * Launch unmerge of packages in queue.
- */
-void QueueTab::slotUninstall()
-{
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		QStringList packageList( queueView->allPackages() );
-		switch( KMessageBox::questionYesNoList( this, 
-			i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
-					"Do you want to unmerge following packages?</qt>" ), packageList, i18n( "Unmerge packages" ) ) ) {
-				case KMessageBox::Yes:
-					InstalledSingleton::Instance()->uninstallPackageList( queueView->allId() );
-			}
-	}
-}
-
 /**
  * Launch emerge pretend of packages in queue.
  */
 void QueueTab::slotPretend()
 {
 	PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
-}
-
-void QueueTab::slotShowResults()
-{
-	pretendInspector->showResults();
 }
 
 void QueueTab::slotRemove()

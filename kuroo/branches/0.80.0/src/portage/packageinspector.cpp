@@ -25,6 +25,7 @@
 
 #include <qcombobox.h>
 #include <qcheckbox.h>
+#include <qgroupbox.h>
 
 #include <kactionselector.h>
 #include <ktextbrowser.h>
@@ -36,10 +37,11 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-: KDialogBase( KDialogBase::Swallow, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, parent, i18n( "Save" ), false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
+	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
+	adjustSize();
 	
 	loadUseFlagDescription();
 	
@@ -47,10 +49,17 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
 	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
+	connect(dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 }
 
 PackageInspector::~PackageInspector()
 {
+}
+
+void PackageInspector::slotAdvancedToggle( bool on )
+{
+	dialog->groupArchitecture->setDisabled( !on );
+	dialog->groupDifferentVersion->setDisabled( !on );
 }
 
 /**

@@ -77,10 +77,9 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
-	dialog->package->setText( "Show detailed information for <font size=\"+2\">" + category + "/" + package + "</font>");
+	dialog->package->setText( "Detailed information for <b>" + category + "/" + package + "</b>");
 	
 	slotActivateTabs();
-	
 	show();
 }
 

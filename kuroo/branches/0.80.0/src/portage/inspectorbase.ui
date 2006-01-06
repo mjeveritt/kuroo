@@ -68,7 +68,7 @@
                 </widget>
                 <widget class="QTabWidget" row="1" column="0">
                     <property name="name">
-                        <cstring>kTabWidget1</cstring>
+                        <cstring>inspectorTabs</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -108,7 +108,7 @@
                                             <cstring>textLabel4</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Only use this if really know what you do. We have told you.</string>
+                                            <string>Only use this if you really know what you do. We have told you!</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="1" column="0">
@@ -412,7 +412,7 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                             <string>Alt+K</string>
                                         </property>
                                     </widget>
-                                    <widget class="QLayoutWidget" row="3" column="0">
+                                    <widget class="QLayoutWidget" row="4" column="0">
                                         <property name="name">
                                             <cstring>layout10</cstring>
                                         </property>
@@ -444,6 +444,30 @@ and do not update further</string>
                                                 </property>
                                             </widget>
                                         </grid>
+                                    </widget>
+                                    <widget class="Line" row="3" column="0">
+                                        <property name="name">
+                                            <cstring>line1</cstring>
+                                        </property>
+                                        <property name="paletteForegroundColor">
+                                            <color>
+                                                <red>185</red>
+                                                <green>185</green>
+                                                <blue>185</blue>
+                                            </color>
+                                        </property>
+                                        <property name="frameShape">
+                                            <enum>HLine</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                            <enum>Plain</enum>
+                                        </property>
+                                        <property name="lineWidth">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
                                     </widget>
                                 </grid>
                             </widget>

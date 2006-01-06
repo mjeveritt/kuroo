@@ -27,6 +27,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 
+#include <ktabwidget.h>
 #include <kactionselector.h>
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -115,22 +116,24 @@ void PackageInspector::loadUseFlagDescription()
  */
 void PackageInspector::slotGetUseFlags( const QString& version )
 {
-	QStringList useList;
+	if (  dialog->inspectorTabs->currentPageIndex() == 1 ) {
+		QStringList useList;
+		
+		QMap<QString,PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
+		if ( itMap != m_portagePackage->versionMap().end() )
+			useList = itMap.data()->useflags();
 	
-	QMap<QString,PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
-	if ( itMap != m_portagePackage->versionMap().end() )
-		useList = itMap.data()->useflags();
-
-	dialog->useView->clear();
-	foreach ( useList ) {
-		QString description;
-		
-		QMap<QString, QString>::iterator itMap = useMap.find( *it );
-		if ( itMap != useMap.end() )
-			description = itMap.data();
-		
-		QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
-		useItem->setText( 1, description );
+		dialog->useView->clear();
+		foreach ( useList ) {
+			QString description;
+			
+			QMap<QString, QString>::iterator itMap = useMap.find( *it );
+			if ( itMap != useMap.end() )
+				description = itMap.data();
+			
+			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
+			useItem->setText( 1, description );
+		}
 	}
 }
 /**
@@ -186,52 +189,27 @@ void PackageInspector::slotApply()
  */
 void PackageInspector::slotGetEbuild( const QString& version )
 {
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "<br>";
-		file.close();
-		dialog->ebuildBrowser->setText( textLines );
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>Ebuild not found.</b></font>") );
-	}
-}
-
-/**
- * Get this package changelog.
- */
-void PackageInspector::getChangeLog()
-{
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "<br>";
-		file.close();
-		dialog->changelogBrowser->setText( textLines );
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
+	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
+		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
+		QFile file( fileName );
+		
+		if ( !file.exists() ) {
+			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
+			file.setName( fileName );
+		}
+		
+		if ( file.open( IO_ReadOnly ) ) {
+			QTextStream stream( &file );
+			QString textLines;
+			while ( !stream.atEnd() )
+				textLines += stream.readLine() + "<br>";
+			file.close();
+			dialog->ebuildBrowser->setText( textLines );
+		}
+		else {
+			kdDebug() << i18n("Error reading: ") << fileName << endl;
+			dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>Ebuild not found.</b></font>") );
+		}
 	}
 }
 
@@ -241,34 +219,65 @@ void PackageInspector::getChangeLog()
  */
 void PackageInspector::slotGetDependencies( const QString& version )
 {
-	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package + "-" + version;
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package + "-" + version;
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		int lineCount( 0 );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.isEmpty() )
-				continue;
-			
-			if ( lineCount++ > 1 || line == "0" )
-				break;
-			else
-				textLines += line + "<br>";
+	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
+		QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package + "-" + version;
+		QFile file( fileName );
+		
+		if ( !file.exists() ) {
+			fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package + "-" + version;
+			file.setName( fileName );
 		}
-		file.close();
-		dialog->dependencyBrowser->setText( textLines );
-	}
-	else {
+		
+		if ( file.open( IO_ReadOnly ) ) {
+			QTextStream stream( &file );
+			QString textLines;
+			int lineCount( 0 );
+			while ( !stream.atEnd() ) {
+				QString line = stream.readLine();
+				if ( line.isEmpty() )
+					continue;
+				
+				if ( lineCount++ > 1 || line == "0" )
+					break;
+				else
+					textLines += line + "<br>";
+			}
+			file.close();
+			dialog->dependencyBrowser->setText( textLines );
+		}
+		else {
 		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
+			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
+		}
+	}
+}
+
+/**
+ * Get this package changelog.
+ */
+void PackageInspector::getChangeLog()
+{
+	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
+		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
+		QFile file( fileName );
+		
+		if ( !file.exists() ) {
+			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";
+			file.setName( fileName );
+		}
+		
+		if ( file.open( IO_ReadOnly ) ) {
+			QTextStream stream( &file );
+			QString textLines;
+			while ( !stream.atEnd() )
+				textLines += stream.readLine() + "<br>";
+			file.close();
+			dialog->changelogBrowser->setText( textLines );
+		}
+		else {
+			kdDebug() << i18n("Error reading: ") << fileName << endl;
+			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
+		}
 	}
 }
 
@@ -278,23 +287,25 @@ void PackageInspector::slotGetDependencies( const QString& version )
  */
 void PackageInspector::slotGetInstalledFiles( const QString& version )
 {
-	QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "-" + version + "/CONTENTS";
-	QFile file( filename );
-	QString textLines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.startsWith( "obj" ) )
-				textLines += line.section( "obj ", 1, 1 ).section( " ", 0, 0 ) + "\n";
+	if ( !version.isEmpty() && dialog->inspectorTabs->currentPageIndex() == 5 ) {
+		QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "-" + version + "/CONTENTS";
+		QFile file( filename );
+		QString textLines;
+		if ( file.open( IO_ReadOnly ) ) {
+			QTextStream stream( &file );
+			while ( !stream.atEnd() ) {
+				QString line = stream.readLine();
+				if ( line.startsWith( "obj" ) )
+					textLines += line.section( "obj ", 1, 1 ).section( " ", 0, 0 ) + "\n";
+			}
+			file.close();
+			dialog->installedFilesBrowser->setText( textLines );
 		}
-		file.close();
-		dialog->installedFilesBrowser->setText( textLines );
+		else
+			kdDebug() << i18n( "Error reading: " ) << filename << endl;
 	}
-	else {
-		kdDebug() << i18n( "Error reading: " ) << filename << endl;
+	else
 		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>Installed files list not found.</b></font>") );
-	}
 }
 
 #include "packageinspector.moc"

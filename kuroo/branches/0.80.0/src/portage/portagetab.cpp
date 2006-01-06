@@ -295,11 +295,9 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			linesEmergeVersion = (*sortedVersionIterator)->version();
 			linesAvailable += (*sortedVersionIterator)->version() + ", ";
-			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Stable"), (*sortedVersionIterator)->size() );
 		}
 		else {
 			linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-			new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), i18n("Masked"), (*sortedVersionIterator)->size() );
 		}
 		
 		// Load all dropdown menus in the inspector with relevant versions
@@ -308,6 +306,27 @@ void PortageTab::slotPackage()
 		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
+		
+		QString stability;
+		switch ( (*sortedVersionIterator)->stability( KurooConfig::arch() ) ) {
+			
+			case STABLE :
+				stability = i18n("Stable");
+				break;
+			
+			case MASKED :
+				stability = i18n("Testing");
+				break;
+			
+			case HARDMASKED :
+				stability = i18n("Masked");
+				break;
+			
+			case NOTAVAILABLE :
+				stability = i18n("Not available");
+		}
+		
+		new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size() );
 	}
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );

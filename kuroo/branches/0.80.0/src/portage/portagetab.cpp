@@ -345,7 +345,7 @@ void PortageTab::slotPackage()
 	
 	if ( !linesEmergeVersion.isEmpty() ) {
 		linesEmergeVersion = i18n("<b>Version used by emerge:</b> ") + linesEmergeVersion;
-		emergeVersionItem->setText( 3, "x" );
+		emergeVersionItem->setText( 3, "Used by emerge" );
 	}
 	else
 		linesEmergeVersion = i18n("<b>Version used by emerge:</b> No version available");

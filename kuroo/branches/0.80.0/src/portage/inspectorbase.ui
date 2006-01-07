@@ -139,7 +139,7 @@
                                         </column>
                                         <column>
                                             <property name="text">
-                                                <string>Used by emerge</string>
+                                                <string> </string>
                                             </property>
                                             <property name="clickable">
                                                 <bool>true</bool>

@@ -27,6 +27,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qradiobutton.h>
+#include <qheader.h>
 
 #include <ktabwidget.h>
 #include <kactionselector.h>
@@ -45,14 +46,18 @@ PackageInspector::PackageInspector( QWidget *parent )
 	setMainWidget( dialog );
 	dialog->setMinimumSize( 650, 560 );
 	
+	dialog->versionsView->header()->setLabel( 3 , "" );
 	dialog->versionsView->setSorting( -1 );
+
 	loadUseFlagDescription();
 	
 	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
 	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
 	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
+	
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
+	connect( dialog->rbSpecificVersion, SIGNAL( toggled( bool ) ), this, SLOT( slotSpecificToggle( bool ) ) );
 	
 	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
 }
@@ -65,6 +70,11 @@ void PackageInspector::slotAdvancedToggle( bool on )
 {
 	dialog->groupArchitecture->setDisabled( !on );
 	dialog->groupDifferentVersion->setDisabled( !on );
+}
+
+void PackageInspector::slotSpecificToggle( bool on )
+{
+	dialog->cbVersionsSpecific->setDisabled( !on );
 }
 
 /**

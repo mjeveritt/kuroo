@@ -63,8 +63,9 @@ PackageInspector::PackageInspector( QWidget *parent )
 	// Activate group
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	connect( dialog->rbSpecificVersion, SIGNAL( toggled( bool ) ), this, SLOT( slotSpecificToggle( bool ) ) );
+	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
 	
-	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSelectStability( int ) ) );
+	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -79,6 +80,7 @@ void PackageInspector::slotAdvancedToggle( bool on )
 
 void PackageInspector::slotSpecificToggle( bool on )
 {
+	kdDebug() << "PackageInspector::slotSpecificToggle " << on << endl;
 	dialog->cbVersionsSpecific->setDisabled( !on );
 }
 
@@ -358,46 +360,66 @@ void PackageInspector::slotGetInstalledFiles( const QString& version )
  * Store stability settings from radiobuttons.
  * @param the selected radiobutton
  */
-void PackageInspector::slotSelectStability( int rbStability )
+void PackageInspector::slotSetStability( int rbStability )
 {
-	kdDebug() << "PackageInspector::slotSelectStability id=" << m_portagePackage->id() << " rbStability=" << rbStability << endl;
+	kdDebug() << "PackageInspector::slotSetStability id=" << m_portagePackage->id() << " rbStability=" << rbStability << endl;
 	
 	switch ( rbStability ) {
 	
 		// User wants only stable package
 		case 0 :
 			
-			// Clear package from package.keywords
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
-				KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+			// Clear package from package.keywords, package.unmask and package.mask
+			KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
 		
-			// Clear package from package.unmask
-			if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) )
-				KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+			m_portagePackage->resetDetailedInfo();
+			emit signalPackageChanged();
 			break;
 		
 		// User wants only testing package
 		case 1 :
 		
-			// Clear package from package.unmask
-			if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) )
-				KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+			// Clear package from package.unmask and package.mask
+			KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
 		
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
+		
+			m_portagePackage->resetDetailedInfo();
+			emit signalPackageChanged();
 			break;
 		
 		// User wants only hardmasked package
 		case 2 :
 		
-			// Clear package from package.keywords
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
-				KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+			// Clear package from package.keywords and package.mask
+			KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
 		
 			KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );
+		
+			m_portagePackage->resetDetailedInfo();
+			emit signalPackageChanged();
 	}
+}
+
+/**
+ * User has selected a specific version to unmask and wants no higher version.
+ * @param version
+ */
+void PackageInspector::slotSetVersionSpecific( const QString& version )
+{
+	kdDebug() << "PackageInspector::slotSetVersionSpecific version=" << version << endl;
 	
-	m_portagePackage->resetDetailedInfo();
-	emit signalPackageChanged();
+	// Clear package from package.keywords
+	KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+	
+	// Clear package from package.unmask
+	KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+	
+	KurooDBSingleton::Instance()->setPackageUserMasked( m_portagePackage->id(), version );
 }
 
 #include "packageinspector.moc"

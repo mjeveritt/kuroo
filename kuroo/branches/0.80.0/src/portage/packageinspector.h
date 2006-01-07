@@ -62,7 +62,8 @@ private slots:
 	void							slotGetInstalledFiles( const QString& version );
 	void							slotApply();
 
-	void							slotSelectStability( int rbStability );
+	void							slotSetStability( int rbStability );
+	void							slotSetVersionSpecific( const QString& version );
 	
 private:
 	QString							category, package, packageId;

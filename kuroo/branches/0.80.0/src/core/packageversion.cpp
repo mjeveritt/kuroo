@@ -52,6 +52,7 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
+// 	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
 }
 
@@ -647,4 +648,5 @@ void PackageVersion::setUserMasked( bool isUserMasked )
 void PackageVersion::setUnMasked( bool isUnMasked )
 {
 	m_isHardMasked = !isUnMasked;
+// 	kdDebug() << "PackageVersion::setUnMasked m_isHardMasked=" << m_isHardMasked << endl;
 }

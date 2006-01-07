@@ -118,6 +118,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are hardmasked
 	const QStringList atomHardMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
+// 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
 
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -137,7 +138,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are unmasked
 	const QStringList atomUnmaskedList = PortageFilesSingleton::Instance()->getUnmaskedAtom( id() );
-	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
+// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,

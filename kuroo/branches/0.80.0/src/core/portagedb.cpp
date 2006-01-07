@@ -652,7 +652,17 @@ void KurooDB::setPackageUnTesting( const QString& id )
 void KurooDB::setPackageUnMasked( const QString& id )
 {
 	insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-	        "'" + category( id ) + "/" + package( id ) + "');" );
+	        "'>" + category( id ) + "/" + package( id ) + "');" );
+}
+
+/**
+ * Clear package from package.mask. @fixme: check category and package?
+ * @param id
+ */
+void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
+{
+	insert( "INSERT INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
+	        "'" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**
@@ -671,6 +681,15 @@ void KurooDB::clearPackageUnTesting( const QString& id )
 void KurooDB::clearPackageUnMasked( const QString& id )
 {
 	query( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
+}
+
+/**
+ * Clear package from package.mask.
+ * @param id
+ */
+void KurooDB::clearPackageUserMasked( const QString& id )
+{
+	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 //////////////////////////////////////////////////////////////////////////////

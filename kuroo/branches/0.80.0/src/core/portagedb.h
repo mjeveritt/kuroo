@@ -189,9 +189,11 @@ public:
 	
 	void			setPackageUnTesting( const QString& id );
 	void			setPackageUnMasked( const QString& id );
+	void			setPackageUserMasked( const QString& id, const QString& version );
 	
 	void			clearPackageUnTesting( const QString& id );
 	void			clearPackageUnMasked( const QString& id );
+	void			clearPackageUserMasked( const QString& id );
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 

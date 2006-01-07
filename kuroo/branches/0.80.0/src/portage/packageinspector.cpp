@@ -28,6 +28,7 @@
 #include <qgroupbox.h>
 #include <qradiobutton.h>
 #include <qheader.h>
+#include <qbuttongroup.h>
 
 #include <ktabwidget.h>
 #include <kactionselector.h>
@@ -56,10 +57,14 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
 	
+	// Load files if tabpage is open
+	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
+	
+	// Activate group
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	connect( dialog->rbSpecificVersion, SIGNAL( toggled( bool ) ), this, SLOT( slotSpecificToggle( bool ) ) );
 	
-	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
+	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSelectStability( int ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -101,7 +106,6 @@ void PackageInspector::slotInstallVersion( const QString& specificUnmaskedVersio
 	dialog->cbVersionsSpecific->setDisabled( true );
 	
 	if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) ) {
-		
 		if ( specificUnmaskedVersion.isEmpty() )
 			dialog->rbMasked->setChecked( true );
 		else {
@@ -111,12 +115,10 @@ void PackageInspector::slotInstallVersion( const QString& specificUnmaskedVersio
 		}
 	}
 	else
-		if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) ) {
+		if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
 			dialog->rbTesting->setChecked( true );
-		}
-		else {
+		else
 			dialog->rbStable->setChecked( true );
-		}
 }
 
 void PackageInspector::slotActivateTabs()
@@ -183,6 +185,8 @@ void PackageInspector::slotGetUseFlags( const QString& version )
  */
 void PackageInspector::slotApply()
 {
+
+	
 // 	QString useFlags;
 // 	QStringList lines;
 // 
@@ -348,6 +352,52 @@ void PackageInspector::slotGetInstalledFiles( const QString& version )
 	}
 	else
 		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>Installed files list not found.</b></font>") );
+}
+
+/**
+ * Store stability settings from radiobuttons.
+ * @param the selected radiobutton
+ */
+void PackageInspector::slotSelectStability( int rbStability )
+{
+	kdDebug() << "PackageInspector::slotSelectStability id=" << m_portagePackage->id() << " rbStability=" << rbStability << endl;
+	
+	switch ( rbStability ) {
+	
+		// User wants only stable package
+		case 0 :
+			
+			// Clear package from package.keywords
+			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
+				KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+		
+			// Clear package from package.unmask
+			if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) )
+				KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+			break;
+		
+		// User wants only testing package
+		case 1 :
+		
+			// Clear package from package.unmask
+			if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) )
+				KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
+		
+			KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
+			break;
+		
+		// User wants only hardmasked package
+		case 2 :
+		
+			// Clear package from package.keywords
+			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
+				KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
+		
+			KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );
+	}
+	
+	m_portagePackage->resetDetailedInfo();
+	emit signalPackageChanged();
 }
 
 #include "packageinspector.moc"

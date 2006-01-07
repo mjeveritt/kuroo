@@ -574,6 +574,14 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
 	              " ORDER BY version.name;");
 }
 
+QString KurooDB::versionSize( const QString& idPackage, const QString& version )
+{
+	return (query( " SELECT size FROM version "
+	               " WHERE idPackage = '" + idPackage + "'"
+	               " AND name = '" + version + "'"
+	               " ;")).first();
+}
+
 /**
  * Return package hardmask depend atom.
  * @param id
@@ -596,32 +604,73 @@ QStringList KurooDB::packageUserMaskAtom( const QString& id )
  * Return package unmask depend atom.
  * @param id
  */
-QStringList KurooDB::packageUnmaskAtom( const QString& id )
+QStringList KurooDB::packageUnMaskAtom( const QString& id )
 {
 	return query( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
+/**
+ * Return package keyword atom.
+ * @param id
+ */
 QStringList KurooDB::packageKeywordsAtom( const QString& id )
 {
 	return query( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "';" );
 }
 
-QString KurooDB::versionSize( const QString& idPackage, const QString& version )
-{
-	return (query( " SELECT size FROM version "
-	               " WHERE idPackage = '" + idPackage + "'"
-	               " AND name = '" + version + "'"
-	               " ;")).first();
-}
-
-bool KurooDB::isPackageUnMasked( const QString& id )
-{
-	return !query( " SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
-}
-
+/**
+ * Is the package in package.keywords?
+ * @param id
+ */
 bool KurooDB::isPackageUnTesting( const QString& id )
 {
-	return !query( " SELECT id FROM packageKeywords where idPackage = '" + id + "';" ).isEmpty();
+	return !query( "SELECT id FROM packageKeywords where idPackage = '" + id + "';" ).isEmpty();
+}
+
+/**
+ * Is the package in package.unmask?
+ * @param id
+ */
+bool KurooDB::isPackageUnMasked( const QString& id )
+{
+	return !query( "SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
+}
+
+/**
+ * Clear package from package.keywords.
+ * @param id
+ */
+void KurooDB::setPackageUnTesting( const QString& id )
+{
+	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
+}
+
+/**
+ * Clear package from package.unmask. @fixme: check category and package?
+ * @param id
+ */
+void KurooDB::setPackageUnMasked( const QString& id )
+{
+	insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+	        "'" + category( id ) + "/" + package( id ) + "');" );
+}
+
+/**
+ * Clear package from package.keywords.
+ * @param id
+ */
+void KurooDB::clearPackageUnTesting( const QString& id )
+{
+	query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+}
+
+/**
+ * Clear package from package.unmask.
+ * @param id
+ */
+void KurooDB::clearPackageUnMasked( const QString& id )
+{
+	query( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 //////////////////////////////////////////////////////////////////////////////

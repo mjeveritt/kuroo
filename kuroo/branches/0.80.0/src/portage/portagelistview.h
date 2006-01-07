@@ -79,6 +79,7 @@ public:
 	QValueList<PackageVersion*> 	versionList();
 	QMap<QString,PackageVersion*> 	versionMap();
 	QValueList<PackageVersion*> 	sortedVersionList();
+	void							resetDetailedInfo();
 	
 protected:
 	bool							hasDetailedInfo;

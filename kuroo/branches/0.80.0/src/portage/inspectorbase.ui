@@ -139,7 +139,7 @@
                                         </column>
                                         <column>
                                             <property name="text">
-                                                <string> </string>
+                                                <string></string>
                                             </property>
                                             <property name="clickable">
                                                 <bool>true</bool>
@@ -378,7 +378,7 @@ Here you can add new slots and select, which slot the inspector is working on.</
                             </widget>
                             <widget class="QButtonGroup" row="0" column="0">
                                 <property name="name">
-                                    <cstring>groupAlways</cstring>
+                                    <cstring>groupSelectStability</cstring>
                                 </property>
                                 <property name="title">
                                     <string>For this package always install:</string>

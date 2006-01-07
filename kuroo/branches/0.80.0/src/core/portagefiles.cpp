@@ -131,13 +131,13 @@ public:
 };
 
 /**
- * @class: LoadPackageUnmaskJob
+ * @class: LoadPackageUnMaskJob
  * @short: Thread for loading packages unmasked by user.
  */
-class LoadPackageUnmaskJob : public ThreadWeaver::DependentJob
+class LoadPackageUnMaskJob : public ThreadWeaver::DependentJob
 {
 public:
-	LoadPackageUnmaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	LoadPackageUnMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 	
 	virtual bool doJob() {
 		
@@ -424,13 +424,13 @@ void PortageFiles::loadPackageMask()
 {
 	ThreadWeaver::instance()->queueJob( new LoadPackageHardMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
-	ThreadWeaver::instance()->queueJob( new LoadPackageUnmaskJob( this ) );
+	ThreadWeaver::instance()->queueJob( new LoadPackageUnMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
 }
 
 void PortageFiles::loadPackageUnmask()
 {
-	ThreadWeaver::instance()->queueJob( new LoadPackageUnmaskJob( this ) );
+	ThreadWeaver::instance()->queueJob( new LoadPackageUnMaskJob( this ) );
 }
 
 void PortageFiles::loadPackageKeywords()
@@ -450,7 +450,7 @@ QStringList PortageFiles::getUserMaskedAtom( const QString& id )
 
 QStringList PortageFiles::getUnmaskedAtom( const QString& id )
 {
-	return KurooDBSingleton::Instance()->packageUnmaskAtom( id );
+	return KurooDBSingleton::Instance()->packageUnMaskAtom( id );
 }
 
 QStringList PortageFiles::getKeywordsAtom( const QString& id )

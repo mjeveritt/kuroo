@@ -57,8 +57,8 @@ PortageTab::PortageTab( QWidget* parent )
 	subcategoriesView->init();
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -195,10 +195,15 @@ void PortageTab::slotListPackages()
 	if ( packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
 		pbAddQueue->setDisabled( true );
+		
+		// User has edited package, reload the package
+		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 	else {
 		pbAdvanced->setDisabled( false );
 		pbAddQueue->setDisabled( false );
+		
+		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 }
 

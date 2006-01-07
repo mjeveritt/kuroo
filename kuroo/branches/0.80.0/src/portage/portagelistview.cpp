@@ -66,6 +66,11 @@ QString PortageListView::PortageItem::homepage()
 	return m_homepage;
 }
 
+void PortageListView::PortageItem::resetDetailedInfo()
+{
+	hasDetailedInfo = false;
+}
+
 /**
  * Initialize the package with all its versions and info. Executed when PortageItem get focus first time.
  */
@@ -73,6 +78,9 @@ void PortageListView::PortageItem::initVersions()
 {
 	if ( hasDetailedInfo )
 		return;
+	
+	m_versions.clear();
+	m_versionMap.clear();
 	
 // 	clock_t start = clock();
 	
@@ -129,6 +137,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are unmasked
 	const QStringList atomUnmaskedList = PortageFilesSingleton::Instance()->getUnmaskedAtom( id() );
+	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,

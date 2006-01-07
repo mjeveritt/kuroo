@@ -62,11 +62,15 @@ private slots:
 	void							slotGetInstalledFiles( const QString& version );
 	void							slotApply();
 
+	void							slotSelectStability( int rbStability );
+	
 private:
 	QString							category, package, packageId;
 	QMap<QString, QString>			useMap;
 	PortageListView::PortageItem* 	m_portagePackage;
 	
+signals:
+	void							signalPackageChanged();
 };
 
 #endif

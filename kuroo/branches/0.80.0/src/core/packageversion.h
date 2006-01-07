@@ -57,8 +57,12 @@ public:
 	QStringList& useflags();
 	QStringList& acceptedKeywords();
 	QString size() const;
-	bool isHardMasked() const;
 	bool hasDetailedInfo() const;
+	
+	bool isHardMasked() const;
+	bool isUserMasked() const;
+	bool isOriginalHardMasked() const;
+	bool isOriginalTesting() const;
 	
 	void setVersion( const QString& version );
 	void setInstalled( bool isInstalled );
@@ -72,7 +76,10 @@ public:
 	void setUseflags( const QStringList& useflags );
 	void setAcceptedKeywords( const QStringList& acceptedKeywords );
 	void setSize( const QString& size );
+	
 	void setHardMasked( bool isHardMasked );
+	void setUserMasked( bool isUserMasked );
+	void setUnMasked( bool isUnMasked );
 	
 protected:
 	PackageVersion( PortageListView::PortageItem* package, const QString& version );
@@ -124,6 +131,11 @@ private:
 	bool m_isHardMasked;
 	
 	QRegExp rxNumber, rxRevision, rxSuffix, rxTrailingChar;
+	
+	/** Official Gentoo hardmasked state */
+	bool m_isOriginalHardMasked;
+	
+	bool m_isUserMasked;
 };
 
 #endif

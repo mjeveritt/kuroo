@@ -104,6 +104,7 @@ private:
 	int					queuedFilters;
 	KPopupMenu 			*menu;
 	PackageInspector	*packageInspector;
+	QString				specificUnmaskedVersion;
 	
 signals:
 	void				signalChanged();

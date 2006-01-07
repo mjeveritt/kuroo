@@ -30,6 +30,7 @@
 */
 PackageVersion::PackageVersion( PortageListView::PortageItem* package, const QString& version )
 	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_size( QString::null), m_isHardMasked( false ),
+	m_isOriginalHardMasked( false ), m_isUserMasked( false ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere
@@ -609,12 +610,41 @@ bool PackageVersion::isHardMasked() const
 	return m_isHardMasked;
 }
 
+bool PackageVersion::isUserMasked() const
+{
+	return m_isUserMasked;
+}
+
+bool PackageVersion::isOriginalHardMasked() const
+{
+	return m_isOriginalHardMasked;
+}
+
+bool PackageVersion::isOriginalTesting() const
+{
+	if ( m_keywords.contains( "~" + KurooConfig::arch() ) )
+		return true;
+	else
+		return false;
+}
+
 /**
 * Set this version hard masked or not.
 * By default, versions are not marked as hard masked.
 */
 void PackageVersion::setHardMasked( bool isHardMasked )
 {
+	m_isOriginalHardMasked = isHardMasked;
 	m_isHardMasked = isHardMasked;
 }
 
+void PackageVersion::setUserMasked( bool isUserMasked )
+{
+	m_isUserMasked = isUserMasked;
+	m_isHardMasked = isUserMasked;
+}
+
+void PackageVersion::setUnMasked( bool isUnMasked )
+{
+	m_isHardMasked = !isUnMasked;
+}

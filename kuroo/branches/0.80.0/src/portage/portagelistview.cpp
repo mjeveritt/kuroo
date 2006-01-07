@@ -76,6 +76,7 @@ void PortageListView::PortageItem::initVersions()
 	
 // 	clock_t start = clock();
 	
+	// Get list of accepted keywords, eg if package is "untesting"
 	m_category = PortageSingleton::Instance()->category( id() );
 	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
 
@@ -108,8 +109,8 @@ void PortageListView::PortageItem::initVersions()
 	atom = new DependAtom( this );
 	
 	// Check if any of this package versions are hardmasked
-	const QStringList atomMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
-	foreach ( atomMaskedList ) {
+	const QStringList atomHardMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
+	foreach ( atomHardMaskedList ) {
 
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 		// and get the matching versions
@@ -121,6 +122,7 @@ void PortageListView::PortageItem::initVersions()
 			}
 		}
 	}
+	delete atom;
 	
 	// Initialize the 'atom' member variable
 	atom = new DependAtom( this );
@@ -135,10 +137,31 @@ void PortageListView::PortageItem::initVersions()
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
 			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-				( *versionIterator )->setHardMasked( false );
+				( *versionIterator )->setUnMasked( true );
 			}
 		}
 	}
+	delete atom;
+	
+	// Initialize the 'atom' member variable
+	atom = new DependAtom( this );
+	
+	// Check if any of this package versions are user-masked
+	const QStringList atomUserMaskedList = PortageFilesSingleton::Instance()->getUserMaskedAtom( id() );
+	foreach ( atomUserMaskedList ) {
+		
+		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
+		// and get the matching versions
+		if ( atom->parse( *it ) ) {
+			QValueList<PackageVersion*> versions = atom->matchingVersions();
+			QValueList<PackageVersion*>::iterator versionIterator;
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+				( *versionIterator )->setUserMasked( true );
+			}
+		}
+	}
+	delete atom;
+	
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
 // 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;

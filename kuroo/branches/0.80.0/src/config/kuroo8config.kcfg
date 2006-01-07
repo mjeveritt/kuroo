@@ -55,10 +55,10 @@
 		<entry name="FilePackageKeywords" type="String">
 		<default>/etc/portage/package.keywords</default>
 		</entry>
-		<entry name="FilePackageMaskUser" type="String">
+		<entry name="FilePackageUserMask" type="String">
 		<default>/etc/portage/package.mask</default>
 		</entry>
-		<entry name="FilePackageMask" type="String">
+		<entry name="FilePackageHardMask" type="String">
 		<default>/usr/portage/profiles/package.mask</default>
 		</entry>
 		<entry name="latestInstalledCategory" type="String">

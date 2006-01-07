@@ -175,8 +175,12 @@ public:
 	QString		 	package( const QString& id );
 	QString		 	category( const QString& id );
 	QStringList 	packageHardMaskAtom( const QString& id );
+	QStringList 	packageUserMaskAtom( const QString& id );
 	QStringList 	packageUnmaskAtom( const QString& id );
 	QStringList		packageKeywordsAtom( const QString& id );
+	
+	bool 			isPackageUnMasked( const QString& id );
+	bool 			isPackageUnTesting( const QString& id );
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 

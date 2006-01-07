@@ -276,7 +276,14 @@ void KurooDB::createTables( DbConnection *conn )
 	      " size VARCHAR(10))"
 	      " ;", conn);
 	
-	query(" CREATE TABLE packageMask ("
+	query(" CREATE TABLE packageHardMask ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " idPackage INTEGER, "
+	      " dependAtom VARCHAR(255), "
+	      " comment BLOB )"
+	      " ;", conn);
+	
+	query(" CREATE TABLE packageUserMask ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " dependAtom VARCHAR(255), "
@@ -508,7 +515,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
  */
 QString KurooDB::package( const QString& id )
 {
-	QString name = (query( QString( "SELECT name FROM package WHERE id = '%1';" ).arg( id ) )).first();
+	QString name = (query( "SELECT name FROM package WHERE id = '" + id + "';" ) ).first();
 	
 	if ( !name.isEmpty() )
 		return name;
@@ -524,8 +531,8 @@ QString KurooDB::package( const QString& id )
  */
 QString KurooDB::category( const QString& id )
 {
-	QString category = (query( QString( "SELECT name FROM catSubCategory "
-	                                    "WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '%1' );" ).arg( id ) )).first();
+	QString category = (query( "SELECT name FROM catSubCategory "
+	                           "WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '" + id + "' );" )).first();
 	
 	if ( !category.isEmpty() )
 		return category;
@@ -573,7 +580,16 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
  */
 QStringList KurooDB::packageHardMaskAtom( const QString& id )
 {
-	return query( QString( "SELECT dependAtom FROM packageMask WHERE idPackage = '%1';" ).arg( id ) );
+	return query( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
+}
+
+/**
+ * Return package user-mask depend atom.
+ * @param id
+ */
+QStringList KurooDB::packageUserMaskAtom( const QString& id )
+{
+	return query( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -582,12 +598,12 @@ QStringList KurooDB::packageHardMaskAtom( const QString& id )
  */
 QStringList KurooDB::packageUnmaskAtom( const QString& id )
 {
-	return query( QString( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '%1';" ).arg( id ) );
+	return query( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 QStringList KurooDB::packageKeywordsAtom( const QString& id )
 {
-	return query( QString( "SELECT keywords FROM packageKeywords WHERE idPackage = '%1';" ).arg( id ) );
+	return query( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "';" );
 }
 
 QString KurooDB::versionSize( const QString& idPackage, const QString& version )
@@ -596,6 +612,16 @@ QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 	               " WHERE idPackage = '" + idPackage + "'"
 	               " AND name = '" + version + "'"
 	               " ;")).first();
+}
+
+bool KurooDB::isPackageUnMasked( const QString& id )
+{
+	return !query( " SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
+}
+
+bool KurooDB::isPackageUnTesting( const QString& id )
+{
+	return !query( " SELECT id FROM packageKeywords where idPackage = '" + id + "';" ).isEmpty();
 }
 
 //////////////////////////////////////////////////////////////////////////////

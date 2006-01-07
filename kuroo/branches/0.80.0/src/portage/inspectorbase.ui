@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>787</width>
-            <height>517</height>
+            <width>775</width>
+            <height>544</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -92,6 +92,71 @@
                             <property name="margin">
                                 <number>5</number>
                             </property>
+                            <widget class="QGroupBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>groupBox6_2</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Available Versions of this package:</string>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KListView" row="0" column="0">
+                                        <column>
+                                            <property name="text">
+                                                <string>Version</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <column>
+                                            <property name="text">
+                                                <string>Stability</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <column>
+                                            <property name="text">
+                                                <string>Size</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <column>
+                                            <property name="text">
+                                                <string>Used by emerge</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <property name="name">
+                                            <cstring>versionsView</cstring>
+                                        </property>
+                                        <property name="resizeMode">
+                                            <enum>LastColumn</enum>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
                             <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
                                 <property name="name">
                                     <cstring>groupBox4</cstring>
@@ -311,63 +376,9 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                     </widget>
                                 </grid>
                             </widget>
-                            <widget class="QGroupBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>groupBox6_2</cstring>
-                                </property>
-                                <property name="title">
-                                    <string>Available Versions of this package:</string>
-                                </property>
-                                <grid>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="KListView" row="0" column="0">
-                                        <column>
-                                            <property name="text">
-                                                <string>Version</string>
-                                            </property>
-                                            <property name="clickable">
-                                                <bool>true</bool>
-                                            </property>
-                                            <property name="resizable">
-                                                <bool>true</bool>
-                                            </property>
-                                        </column>
-                                        <column>
-                                            <property name="text">
-                                                <string>Stability</string>
-                                            </property>
-                                            <property name="clickable">
-                                                <bool>true</bool>
-                                            </property>
-                                            <property name="resizable">
-                                                <bool>true</bool>
-                                            </property>
-                                        </column>
-                                        <column>
-                                            <property name="text">
-                                                <string>Size</string>
-                                            </property>
-                                            <property name="clickable">
-                                                <bool>true</bool>
-                                            </property>
-                                            <property name="resizable">
-                                                <bool>true</bool>
-                                            </property>
-                                        </column>
-                                        <property name="name">
-                                            <cstring>versionsView</cstring>
-                                        </property>
-                                        <property name="resizeMode">
-                                            <enum>LastColumn</enum>
-                                        </property>
-                                    </widget>
-                                </grid>
-                            </widget>
                             <widget class="QButtonGroup" row="0" column="0">
                                 <property name="name">
-                                    <cstring>installGroup</cstring>
+                                    <cstring>groupAlways</cstring>
                                 </property>
                                 <property name="title">
                                     <string>For this package always install:</string>
@@ -381,7 +392,7 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                     </property>
                                     <widget class="QRadioButton" row="0" column="0">
                                         <property name="name">
-                                            <cstring>radioButton7_5</cstring>
+                                            <cstring>rbStable</cstring>
                                         </property>
                                         <property name="text">
                                             <string>Stab&amp;le Version</string>
@@ -395,7 +406,7 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                     </widget>
                                     <widget class="QRadioButton" row="1" column="0">
                                         <property name="name">
-                                            <cstring>radioButton7_2_2</cstring>
+                                            <cstring>rbTesting</cstring>
                                         </property>
                                         <property name="text">
                                             <string>Testi&amp;ng Version</string>
@@ -406,7 +417,7 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                     </widget>
                                     <widget class="QRadioButton" row="2" column="0">
                                         <property name="name">
-                                            <cstring>radioButton7_3_2</cstring>
+                                            <cstring>rbMasked</cstring>
                                         </property>
                                         <property name="text">
                                             <string>Mas&amp;ked Version</string>
@@ -415,62 +426,93 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                             <string>Alt+K</string>
                                         </property>
                                     </widget>
-                                    <widget class="QLayoutWidget" row="4" column="0">
+                                    <widget class="QLayoutWidget" row="3" column="0">
                                         <property name="name">
-                                            <cstring>layout10</cstring>
+                                            <cstring>layout26</cstring>
                                         </property>
                                         <grid>
                                             <property name="name">
                                                 <cstring>unnamed</cstring>
                                             </property>
-                                            <property name="margin">
-                                                <number>0</number>
-                                            </property>
-                                            <property name="spacing">
-                                                <number>0</number>
-                                            </property>
-                                            <widget class="QComboBox" row="0" column="1">
+                                            <widget class="QComboBox" row="2" column="1">
                                                 <property name="name">
-                                                    <cstring>cbVersionsExact</cstring>
+                                                    <cstring>cbVersionsSpecific</cstring>
+                                                </property>
+                                                <property name="enabled">
+                                                    <bool>false</bool>
                                                 </property>
                                             </widget>
-                                            <widget class="QRadioButton" row="0" column="0">
+                                            <spacer row="2" column="0">
                                                 <property name="name">
-                                                    <cstring>radioButton5</cstring>
+                                                    <cstring>spacer20</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Fixed</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>13</width>
+                                                        <height>20</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
+                                                <property name="name">
+                                                    <cstring>rbSpecificVersion</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Install onl&amp;y certain version 
+                                                    <string>Install onl&amp;y specific version 
 and do not update further</string>
                                                 </property>
                                                 <property name="accel">
                                                     <string>Alt+Y</string>
                                                 </property>
                                             </widget>
+                                            <widget class="Line" row="0" column="0" rowspan="1" colspan="3">
+                                                <property name="name">
+                                                    <cstring>line1</cstring>
+                                                </property>
+                                                <property name="paletteForegroundColor">
+                                                    <color>
+                                                        <red>185</red>
+                                                        <green>185</green>
+                                                        <blue>185</blue>
+                                                    </color>
+                                                </property>
+                                                <property name="frameShape">
+                                                    <enum>HLine</enum>
+                                                </property>
+                                                <property name="frameShadow">
+                                                    <enum>Plain</enum>
+                                                </property>
+                                                <property name="lineWidth">
+                                                    <number>1</number>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                            </widget>
+                                            <spacer row="2" column="2">
+                                                <property name="name">
+                                                    <cstring>spacer19</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Preferred</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>51</width>
+                                                        <height>20</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
                                         </grid>
-                                    </widget>
-                                    <widget class="Line" row="3" column="0">
-                                        <property name="name">
-                                            <cstring>line1</cstring>
-                                        </property>
-                                        <property name="paletteForegroundColor">
-                                            <color>
-                                                <red>185</red>
-                                                <green>185</green>
-                                                <blue>185</blue>
-                                            </color>
-                                        </property>
-                                        <property name="frameShape">
-                                            <enum>HLine</enum>
-                                        </property>
-                                        <property name="frameShadow">
-                                            <enum>Plain</enum>
-                                        </property>
-                                        <property name="lineWidth">
-                                            <number>1</number>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
                                     </widget>
                                 </grid>
                             </widget>
@@ -486,6 +528,9 @@ and do not update further</string>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>5</number>
                             </property>
                             <widget class="KListView" row="2" column="0">
                                 <column>
@@ -600,6 +645,9 @@ and do not update further</string>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
+                            <property name="margin">
+                                <number>5</number>
+                            </property>
                             <widget class="KTextBrowser" row="1" column="0">
                                 <property name="name">
                                     <cstring>ebuildBrowser</cstring>
@@ -657,6 +705,9 @@ and do not update further</string>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>5</number>
                             </property>
                             <widget class="KTextBrowser" row="1" column="0">
                                 <property name="name">
@@ -716,6 +767,9 @@ and do not update further</string>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
+                            <property name="margin">
+                                <number>5</number>
+                            </property>
                             <widget class="KTextBrowser" row="0" column="0">
                                 <property name="name">
                                     <cstring>changelogBrowser</cstring>
@@ -733,6 +787,9 @@ and do not update further</string>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>5</number>
                             </property>
                             <widget class="KTextBrowser" row="1" column="0">
                                 <property name="name">

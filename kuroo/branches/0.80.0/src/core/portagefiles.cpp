@@ -217,40 +217,23 @@ public:
  * @class: LoadPackageMaskJob
  * @short: Thread for loading masked packages into db.
  */
-class LoadPackageMaskJob : public ThreadWeaver::DependentJob
+class LoadPackageHardMaskJob : public ThreadWeaver::DependentJob
 {
 public:
-	LoadPackageMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	LoadPackageHardMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 	
 	virtual bool doJob() {
 		
 		// Collect all mask dependatoms
-		// First in Gentoo package.mask
-		QFile file( KurooConfig::filePackageMask() );
+		QFile file( KurooConfig::filePackageHardMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) ) {
-			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageMask() ) << endl;
+			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageHardMask() ) << endl;
 		}
 		else {
 			while ( !stream.atEnd() ) {
 				linesDependAtom += stream.readLine();
-			}
-			file.close();
-		}
-		
-		// Append users own from /etc/portage/package.mask
-		file.setName( KurooConfig::filePackageMaskUser() );
-		if ( !file.open( IO_ReadOnly ) ) {
-			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageMaskUser() ) << endl;
-		}
-		else {
-			while ( !stream.atEnd() ) {
-				QString line = stream.readLine();
-				if ( !line.isEmpty() && !line.startsWith( "#" ) ) {
-					linesDependAtom += i18n("\n#Masked by user.");
-					linesDependAtom += line;
-				}
 			}
 			file.close();
 		}
@@ -260,7 +243,7 @@ public:
 			return false;
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageMask_temp ("
+		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageHardMask_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER, "
 		                                    " dependAtom VARCHAR(255), "
@@ -288,11 +271,11 @@ public:
 						
 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						if ( !id.isEmpty() )
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 
 					}
 					else
-						kdDebug() << i18n("Can not match package %1 in %2 or %3.").arg( *it ).arg( KurooConfig::filePackageMask() ).arg( KurooConfig::filePackageMaskUser() ) << endl;
+						kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageHardMask() ) << endl;
 				}
 			}
 		}
@@ -300,9 +283,9 @@ public:
 		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageMask;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageMask SELECT * FROM packageMask_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageMask_temp;", m_db );
+		KurooDBSingleton::Instance()->query( "DELETE FROM packageHardMask;", m_db );
+		KurooDBSingleton::Instance()->insert( "INSERT INTO packageHardMask SELECT * FROM packageHardMask_temp;", m_db );
+		KurooDBSingleton::Instance()->query( "DROP TABLE packageHardMask_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
@@ -310,6 +293,89 @@ public:
 	
 	virtual void completeJob() {
 		PortageFilesSingleton::Instance()->refresh( 2 );
+	}
+};
+
+/**
+ * @class: LoadPackageMaskJob
+ * @short: Thread for loading masked packages into db.
+ */
+class LoadPackageUserMaskJob : public ThreadWeaver::DependentJob
+{
+public:
+LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	
+	virtual bool doJob() {
+		
+		// Collect all mask dependatoms from /etc/portage/package.mask
+		QFile file( KurooConfig::filePackageUserMask() );
+		QTextStream stream( &file );
+		QStringList linesDependAtom;
+		if ( !file.open( IO_ReadOnly ) ) {
+		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUserMask() ) << endl;
+		}
+		else {
+			while ( !stream.atEnd() ) {
+				linesDependAtom += stream.readLine();
+			}
+			file.close();
+		}
+		
+		// Something is wrong, no files found, get outta here
+		if ( linesDependAtom.isEmpty() )
+			return false;
+		
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUserMask_temp ("
+		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+		                                    " idPackage INTEGER, "
+		                                    " dependAtom VARCHAR(255), "
+		                                    " comment BLOB )"
+		                                    " ;", m_db);
+		
+		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		
+		QStringList commentLines;
+		for ( QStringList::Iterator it = linesDependAtom.begin(); it != linesDependAtom.end(); ++it ) {
+			
+			// Collect comment lines above the dependatom
+			if ( (*it).isEmpty() )
+				commentLines.clear();
+			else {
+				if ( (*it).startsWith( "#" ) ) {
+					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").utf8();
+				}
+				else {
+					if ( rxAtom.exactMatch( *it ) ) {
+						
+						// Get the captured strings
+						QString name = rxAtom.cap( POS_PACKAGE );
+						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+						
+						QString id = KurooDBSingleton::Instance()->packageId( category, name );
+						if ( !id.isEmpty() )
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+						
+					}
+					else
+						kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUserMask() ) << endl;
+				}
+			}
+		}
+		file.close();
+		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		
+		// Move content from temporary table to installedPackages
+		KurooDBSingleton::Instance()->query( "DELETE FROM packageUserMask;", m_db );
+		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUserMask SELECT * FROM packageUserMask_temp;", m_db );
+		KurooDBSingleton::Instance()->query( "DROP TABLE packageUserMask_temp;", m_db );
+		
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( 3 );
 	}
 };
 
@@ -338,10 +404,15 @@ void PortageFiles::refresh( int mask )
 	switch ( mask ) {
 		case 0:
 			kdDebug() << i18n("Completed scanning for package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
+			break;
 		case 1:
 			kdDebug() << i18n("Completed scanning for unmasked packages in %1.").arg( KurooConfig::filePackageUnmask() ) << endl;
+			break;
 		case 2:
-			kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageMask() ) << endl;
+			kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageHardMask() ) << endl;
+			break;
+		case 3:
+			kdDebug() << i18n("Completed scanning for user masked packages in %1.").arg( KurooConfig::filePackageUserMask() ) << endl;
 	}
 }
 
@@ -351,7 +422,8 @@ void PortageFiles::refresh( int mask )
  */
 void PortageFiles::loadPackageMask()
 {
-	ThreadWeaver::instance()->queueJob( new LoadPackageMaskJob( this ) );
+	ThreadWeaver::instance()->queueJob( new LoadPackageHardMaskJob( this ) );
+	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUnmaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
 }
@@ -369,6 +441,11 @@ void PortageFiles::loadPackageKeywords()
 QStringList PortageFiles::getHardMaskedAtom( const QString& id )
 {
 	return KurooDBSingleton::Instance()->packageHardMaskAtom( id );
+}
+
+QStringList PortageFiles::getUserMaskedAtom( const QString& id )
+{
+	return KurooDBSingleton::Instance()->packageUserMaskAtom( id );
 }
 
 QStringList PortageFiles::getUnmaskedAtom( const QString& id )

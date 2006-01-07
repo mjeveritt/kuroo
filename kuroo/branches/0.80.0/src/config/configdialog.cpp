@@ -115,7 +115,7 @@ void ConfigDialog::readPackageUnmask()
  */
 void ConfigDialog::readPackageMask()
 {
-	QFile file( KurooConfig::filePackageMask() );
+	QFile file( KurooConfig::filePackageHardMask() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -125,7 +125,7 @@ void ConfigDialog::readPackageMask()
 		KurooConfig::setPackageMask( lines.join("\n") );
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageMask() << endl;
+		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageHardMask() << endl;
 	
 	file.close();
 }
@@ -417,7 +417,7 @@ bool ConfigDialog::savePackageKeywords()
  */
 bool ConfigDialog::savePackageMask()
 {
-	QFile file( KurooConfig::filePackageMask() );
+	QFile file( KurooConfig::filePackageHardMask() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		stream << KurooConfig::packageMask();
@@ -425,7 +425,7 @@ bool ConfigDialog::savePackageMask()
 		return true;
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageMask() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageHardMask() << endl;
 		return false;
 	}
 }

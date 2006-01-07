@@ -26,6 +26,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
+#include <qradiobutton.h>
 
 #include <ktabwidget.h>
 #include <kactionselector.h>
@@ -38,12 +39,13 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
+: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
 	dialog->setMinimumSize( 650, 560 );
 	
+	dialog->versionsView->setSorting( -1 );
 	loadUseFlagDescription();
 	
 	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
@@ -69,7 +71,7 @@ void PackageInspector::slotAdvancedToggle( bool on )
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
+void PackageInspector::edit( PortageListView::PortageItem* portagePackage, const QString& specificUnmaskedVersion )
 {
 	if ( !KUser().isSuperUser() )
 		enableButtonApply( false );
@@ -79,8 +81,32 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	category = m_portagePackage->category();
 	dialog->package->setText( "Detailed information for <b>" + category + "/" + package + "</b>");
 	
+	slotInstallVersion( specificUnmaskedVersion );
 	slotActivateTabs();
 	show();
+}
+
+void PackageInspector::slotInstallVersion( const QString& specificUnmaskedVersion )
+{
+	dialog->cbVersionsSpecific->setDisabled( true );
+	
+	if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) ) {
+		
+		if ( specificUnmaskedVersion.isEmpty() )
+			dialog->rbMasked->setChecked( true );
+		else {
+			dialog->rbSpecificVersion->setChecked( true );
+			dialog->cbVersionsSpecific->setDisabled( false );
+			dialog->cbVersionsSpecific->setCurrentText( specificUnmaskedVersion );
+		}
+	}
+	else
+		if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) ) {
+			dialog->rbTesting->setChecked( true );
+		}
+		else {
+			dialog->rbStable->setChecked( true );
+		}
 }
 
 void PackageInspector::slotActivateTabs()
@@ -93,7 +119,7 @@ void PackageInspector::slotActivateTabs()
 }
 
 /**
- * Load internal map with use flag description.
+ * Load internal map with use flag description. @fixme: not complete yet!
  */
 void PackageInspector::loadUseFlagDescription()
 {

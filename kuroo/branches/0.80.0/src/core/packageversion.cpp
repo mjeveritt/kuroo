@@ -30,7 +30,7 @@
 */
 PackageVersion::PackageVersion( PortageListView::PortageItem* package, const QString& version )
 	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_size( QString::null), m_isHardMasked( false ),
-	m_isOriginalHardMasked( false ), m_isUserMasked( false ),
+	m_isOriginalHardMasked( false ), m_isUserMasked( false ), m_isUnMasked( false ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere
@@ -616,6 +616,11 @@ bool PackageVersion::isUserMasked() const
 	return m_isUserMasked;
 }
 
+bool PackageVersion::isUnMasked() const
+{
+	return m_isUnMasked;
+}
+
 bool PackageVersion::isOriginalHardMasked() const
 {
 	return m_isOriginalHardMasked;
@@ -648,5 +653,6 @@ void PackageVersion::setUserMasked( bool isUserMasked )
 void PackageVersion::setUnMasked( bool isUnMasked )
 {
 	m_isHardMasked = !isUnMasked;
+	m_isUnMasked = isUnMasked;
 // 	kdDebug() << "PackageVersion::setUnMasked m_isHardMasked=" << m_isHardMasked << endl;
 }

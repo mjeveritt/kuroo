@@ -49,7 +49,6 @@ private slots:
 	void							slotInstallVersion( const QString& specificUnmaskedVersion );
 	void							slotActivateTabs();
 	
-	void							slotSpecificToggle( bool on );
 	void							slotAdvancedToggle( bool on );
 	
 	void							slotGetEbuild( const QString& version );

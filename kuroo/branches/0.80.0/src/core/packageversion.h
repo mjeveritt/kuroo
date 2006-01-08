@@ -61,6 +61,7 @@ public:
 	
 	bool isHardMasked() const;
 	bool isUserMasked() const;
+	bool isUnMasked() const;
 	bool isOriginalHardMasked() const;
 	bool isOriginalTesting() const;
 	
@@ -136,6 +137,8 @@ private:
 	bool m_isOriginalHardMasked;
 	
 	bool m_isUserMasked;
+	
+	bool m_isUnMasked;
 };
 
 #endif

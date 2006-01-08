@@ -162,7 +162,7 @@ public:
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUnmask_temp ("
 											" id INTEGER PRIMARY KEY AUTOINCREMENT, "
-											" idPackage INTEGER, "
+											" idPackage INTEGER UNIQUE, "
 											" dependAtom VARCHAR(255), "
 											" comment BLOB )"
 											" ;", m_db);
@@ -328,7 +328,7 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUserMask_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER, "
+		                                    " idPackage INTEGER UNIQUE, "
 		                                    " dependAtom VARCHAR(255), "
 		                                    " comment BLOB )"
 		                                    " ;", m_db);

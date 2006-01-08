@@ -466,7 +466,7 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                             </spacer>
                                             <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
                                                 <property name="name">
-                                                    <cstring>rbSpecificVersion</cstring>
+                                                    <cstring>rbVersionsSpecific</cstring>
                                                 </property>
                                                 <property name="text">
                                                     <string>Install onl&amp;y specific version 

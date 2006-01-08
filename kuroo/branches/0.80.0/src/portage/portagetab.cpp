@@ -269,8 +269,6 @@ void PortageTab::slotPackage()
 	packageInspector->dialog->cbVersionsUse->clear();
 	packageInspector->dialog->cbVersionsSpecific->clear();
 	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );
-		
-	packageInspector->dialog->groupVersionsView->setDisabled( false );
 	
 	// Initialize the portage package object with package and it's versions data
 	packagesView->currentPortagePackage()->initVersions();
@@ -293,6 +291,7 @@ void PortageTab::slotPackage()
 	
 	KListViewItem* emergeVersionItem;
 	specificUnmaskedVersion = QString::null;
+	QString previousVersion;
 	bool versionNotInArchitecture = false;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
@@ -312,11 +311,20 @@ void PortageTab::slotPackage()
 			if ( (*sortedVersionIterator)->isOriginalTesting() )
 				stability = i18n("Testing");
 			else
-				stability = i18n("Stable");
+				if ( (*sortedVersionIterator)->isAvailable() )
+					stability = i18n("Stable");
+				else
+					stability = i18n("Unavailable");
+		
+// 		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->isOriginalHardMasked()=" << (*sortedVersionIterator)->isOriginalHardMasked() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->isUnMasked()=" << (*sortedVersionIterator)->isUnMasked() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
 		
 		// Get user masked version
-		if ( !(*sortedVersionIterator)->isUserMasked() && (*sortedVersionIterator)->isAvailable() )
-			specificUnmaskedVersion = (*sortedVersionIterator)->version();
+		if ( (*sortedVersionIterator)->isUnMasked() && (*sortedVersionIterator)->isUserMasked() )
+			specificUnmaskedVersion = previousVersion;
 		
 		KListViewItem* itemVersion = new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size() );
 		
@@ -324,7 +332,7 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
-			linesEmergeVersion = (*sortedVersionIterator)->version();
+// 			linesEmergeVersion = (*sortedVersionIterator)->version();
 			emergeVersionItem = itemVersion;
 		}
 		
@@ -339,11 +347,9 @@ void PortageTab::slotPackage()
 		
 		if ( (*sortedVersionIterator)->stability( KurooConfig::arch() ) == NOTAVAILABLE )
 			versionNotInArchitecture = true;
+		
+		previousVersion = (*sortedVersionIterator)->version();
 	}
-	
-	// If last version is unmasked then there is no rule
-	if ( specificUnmaskedVersion == sortedVersions.last()->version() )
-		specificUnmaskedVersion = QString::null;
 	
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );
@@ -360,7 +366,6 @@ void PortageTab::slotPackage()
 	else {
 		if ( versionNotInArchitecture ) {
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available in your architecture</font></b>");
-			packageInspector->dialog->groupVersionsView->setDisabled( true );
 		}
 		else
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available</font></b>");

@@ -285,14 +285,14 @@ void KurooDB::createTables( DbConnection *conn )
 	
 	query(" CREATE TABLE packageUserMask ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER, "
+	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB )"
 	      " ;", conn);
 	
 	query(" CREATE TABLE packageUnmask ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER, "
+	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB )"
 	      " ;", conn);
@@ -652,7 +652,7 @@ void KurooDB::setPackageUnTesting( const QString& id )
 void KurooDB::setPackageUnMasked( const QString& id )
 {
 	insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-	        "'>" + category( id ) + "/" + package( id ) + "');" );
+	        "'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
@@ -662,7 +662,7 @@ void KurooDB::setPackageUnMasked( const QString& id )
 void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 {
 	insert( "INSERT INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
-	        "'" + category( id ) + "/" + package( id ) + "-" + version + "');" );
+	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**

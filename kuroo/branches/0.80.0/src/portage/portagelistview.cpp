@@ -158,6 +158,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are user-masked
 	const QStringList atomUserMaskedList = PortageFilesSingleton::Instance()->getUserMaskedAtom( id() );
+// 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,

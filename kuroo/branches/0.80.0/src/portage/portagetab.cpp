@@ -303,7 +303,7 @@ void PortageTab::slotPackage()
 		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
 		
-		// Mark version stability
+		// Mark official version stability
 		QString stability;
 		if ( (*sortedVersionIterator)->isOriginalHardMasked() )
 			stability = i18n("Hardmasked");
@@ -326,13 +326,13 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isUnMasked() && (*sortedVersionIterator)->isUserMasked() )
 			specificUnmaskedVersion = previousVersion;
 		
+		// Insert version in Inspector version view
 		KListViewItem* itemVersion = new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size() );
 		
 		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
-// 			linesEmergeVersion = (*sortedVersionIterator)->version();
 			emergeVersionItem = itemVersion;
 		}
 		
@@ -341,12 +341,11 @@ void PortageTab::slotPackage()
 			linesAvailable += (*sortedVersionIterator)->version() + ", ";
 			emergeVersionItem = itemVersion;
 		}
-		else {
-			linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-		}
-		
-		if ( (*sortedVersionIterator)->stability( KurooConfig::arch() ) == NOTAVAILABLE )
-			versionNotInArchitecture = true;
+		else
+			if ( (*sortedVersionIterator)->stability( KurooConfig::arch() ) == NOTAVAILABLE )
+				versionNotInArchitecture = true;
+			else
+				linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 		
 		previousVersion = (*sortedVersionIterator)->version();
 	}
@@ -364,14 +363,16 @@ void PortageTab::slotPackage()
 		emergeVersionItem->setText( 3, "Used by emerge" );
 	}
 	else {
-		if ( versionNotInArchitecture ) {
+		if ( versionNotInArchitecture )
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available in your architecture</font></b>");
-		}
 		else
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available</font></b>");
-		}
+	}
 	
-	linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
+	if ( !linesAvailable.isEmpty() )
+		linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
+	else
+		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available in your architecture</font><br>");
 	
 	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion );
 	

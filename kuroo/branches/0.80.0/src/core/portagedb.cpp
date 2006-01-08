@@ -637,6 +637,16 @@ bool KurooDB::isPackageUnMasked( const QString& id )
 }
 
 /**
+ * Is the package available in package.keywords?
+ * @param id
+ */
+bool KurooDB::isPackageAvailable( const QString& id )
+{
+	return ( query( "SELECT keywords FROM packageKeywords where idPackage = '"
+	                + id + "';" ).first().contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) > 0 );
+}
+
+/**
  * Add package in package.keywords.
  * @param id
  */
@@ -703,9 +713,11 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 void KurooDB::clearPackageAvailable( const QString& id )
 {
 	QString keywords = packageKeywordsAtom( id ).first();
-	keywords.remove( "-*" ).remove( "-" + KurooConfig::arch() ).simplifyWhiteSpace();
+	keywords.remove( "-*" ).remove( "-" + KurooConfig::arch() );
+	keywords.simplifyWhiteSpace();
 	clearPackageUnTesting( id );
-	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
+	if ( !keywords.isEmpty() )
+		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
 }
 
 //////////////////////////////////////////////////////////////////////////////

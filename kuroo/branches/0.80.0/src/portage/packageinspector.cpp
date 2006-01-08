@@ -64,8 +64,6 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	
 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
-	
-	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -101,7 +99,9 @@ void PackageInspector::slotInstallVersion( const QString& specificUnmaskedVersio
 {
 // 	kdDebug() << "PackageInspector::slotInstallVersion specificUnmaskedVersion=" << specificUnmaskedVersion << endl;
 	
+	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	dialog->cbVersionsSpecific->setDisabled( true );
+	dialog->ckbAvailable->setChecked( false );
 	
 	if ( !specificUnmaskedVersion.isEmpty() ) {
 		dialog->rbVersionsSpecific->setChecked( true );
@@ -113,10 +113,18 @@ void PackageInspector::slotInstallVersion( const QString& specificUnmaskedVersio
 			dialog->rbMasked->setChecked( true );
 		}
 		else
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
-				dialog->rbTesting->setChecked( true );
-			else
-				dialog->rbStable->setChecked( true );
+			if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) ) {
+				dialog->ckbAvailable->setChecked( true );
+				kdDebug() << "Is available!" << endl;
+			}
+			else {
+				kdDebug() << "Not available!" << endl;
+				if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
+					dialog->rbTesting->setChecked( true );
+				else
+					dialog->rbStable->setChecked( true );
+			}
+	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 }
 
 void PackageInspector::slotActivateTabs()
@@ -370,6 +378,8 @@ void PackageInspector::slotSetStability( int rbStability )
 			KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
 			KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
 			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
+		
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
 			break;
@@ -381,6 +391,7 @@ void PackageInspector::slotSetStability( int rbStability )
 			// Clear package from package.unmask and package.mask
 			KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
 			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
 		
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
 			m_portagePackage->resetDetailedInfo();
@@ -393,6 +404,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		
 			// Clear package from package.keywords and package.mask
 			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
 		
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
 			KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );

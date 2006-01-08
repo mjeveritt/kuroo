@@ -297,10 +297,10 @@ void PortageTab::slotPackage()
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		
 		// Load all dropdown menus in the inspector with relevant versions
-		packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
+		packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
 		
 		// Mark official version stability
 		QString stability;

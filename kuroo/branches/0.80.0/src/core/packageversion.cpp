@@ -52,7 +52,7 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
-// 	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
+	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
 }
 
@@ -218,7 +218,7 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-// 	kdDebug() << "PackageVersion::stability id=" << m_package->id() << " m_isHardMasked=" << m_isHardMasked << " m_version=" << m_version << endl;
+	kdDebug() << "PackageVersion::stability id=" << m_package->id() << " m_keywords=" << m_keywords << " m_version=" << m_version << endl;
 	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
@@ -228,18 +228,24 @@ int PackageVersion::stability( const QString& arch ) const
 		QString pureArch( arch );
 		pureArch.remove( '~' );
 		
+		kdDebug() << " pureArch=" << pureArch << " m_acceptedKeywords=" << m_acceptedKeywords << endl;
+		
 		// The following checks are not completely correct, as they only check
 		// against arch instead of all version keywords. Should be sufficient
 		// for normal use though, as people are not supposed to add anything
-		// but ~arch or -~arch to ACCEPT_KEYWORDS/package.keywords.
+		// but ~arch or -arch to ACCEPT_KEYWORDS/package.keywords.
 		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin(); keywordIterator != m_acceptedKeywords.end(); keywordIterator++ ) {
-				// Accept masked and stable packages
-				// when the accepted keyword is ~arch or ~*
-				if ( ( *keywordIterator == "~*" || *keywordIterator == "~" + arch )
-					&&	( m_keywords.contains( "~" + pureArch ) || m_keywords.contains( pureArch ) ) ) {
-						return STABLE;
+			// Accept masked and stable packages
+			// when the accepted keyword is ~arch or ~*
+			if ( ( *keywordIterator == "~*" || *keywordIterator == "~" + arch ) && ( m_keywords.contains( "~" + pureArch ) || m_keywords.contains( pureArch ) ) ) {
+				return STABLE;
+			}
+			// Accept packages when the accepted keyword is -arch and keywords contain -arch!
+			else 
+				if ( (*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ) || ( *keywordIterator == "-*" && m_keywords.contains("-*") )) ) {
+					return STABLE;
 				}
-				// Don't accept packages when the accepted keyword is -arch
+				// Don't accept packages when the accepted keyword is -arch only
 				else 
 					if ( *keywordIterator == "-" + arch && m_keywords.contains( arch ) ) {
 						return NOTAVAILABLE;

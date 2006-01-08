@@ -665,18 +665,11 @@ void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
-/**
- * Set package available in users architecture by adding -arch in package.keywords.
- * @param id
- */
 void KurooDB::setPackageAvailable( const QString& id )
 {
 	QString keywords = packageKeywordsAtom( id ).first();
-	if ( !keywords.isEmpty() )
-		keywords += " -" + KurooConfig::arch();
-	else
-		keywords += "-" + KurooConfig::arch();
 	clearPackageUnTesting( id );
+	keywords += " -* -" + KurooConfig::arch();
 	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
 }
 
@@ -707,13 +700,10 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
-/**
- * Clear package available.
- * @param id
- */
 void KurooDB::clearPackageAvailable( const QString& id )
 {
-	QString keywords = packageKeywordsAtom( id ).first().remove( KurooConfig::arch() ).stripWhiteSpace();
+	QString keywords = packageKeywordsAtom( id ).first();
+	keywords.remove( "-*" ).remove( "-" + KurooConfig::arch() ).simplifyWhiteSpace();
 	clearPackageUnTesting( id );
 	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
 }

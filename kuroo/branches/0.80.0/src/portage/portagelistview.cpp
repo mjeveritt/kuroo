@@ -86,7 +86,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Get list of accepted keywords, eg if package is "untesting"
 	m_category = PortageSingleton::Instance()->category( id() );
-	QStringList acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() );
+	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
 
 	kdDebug() << "acceptedKeywords=" << acceptedKeywords << endl;
 	
@@ -107,7 +107,7 @@ void PortageListView::PortageItem::initVersions()
 		version->setUseflags( QStringList::split( " ", useFlags ) );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
-		version->setAcceptedKeywords( /*QStringList::split( " ", */acceptedKeywords /*)*/ );
+		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
 		
 		if ( meta == FILTERINSTALLED_STRING )

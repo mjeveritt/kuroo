@@ -425,7 +425,7 @@ void PackageInspector::slotSetVersionSpecific( const QString& version )
 
 /**
  * Make this package available on users architecture.
- * @param on
+ * @param isAvailable
  */
 void PackageInspector::slotAvailable( bool isAvailable )
 {
@@ -433,6 +433,9 @@ void PackageInspector::slotAvailable( bool isAvailable )
 		KurooDBSingleton::Instance()->setPackageAvailable( m_portagePackage->id() );
 	else
 		KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
+	
+	m_portagePackage->resetDetailedInfo();
+	emit signalPackageChanged();
 }
 
 #include "packageinspector.moc"

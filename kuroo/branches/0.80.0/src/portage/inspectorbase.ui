@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>775</width>
-            <height>523</height>
+            <height>524</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -311,6 +311,17 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                             <property name="name">
                                                 <cstring>unnamed</cstring>
                                             </property>
+                                            <widget class="QCheckBox" row="1" column="0">
+                                                <property name="name">
+                                                    <cstring>ckbAvailable</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Package is available</string>
+                                                </property>
+                                                <property name="accel">
+                                                    <string></string>
+                                                </property>
+                                            </widget>
                                             <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
                                                 <property name="name">
                                                     <cstring>textLabel3</cstring>
@@ -331,22 +342,11 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                                 </property>
                                                 <property name="sizeHint">
                                                     <size>
-                                                        <width>440</width>
+                                                        <width>480</width>
                                                         <height>21</height>
                                                     </size>
                                                 </property>
                                             </spacer>
-                                            <widget class="QCheckBox" row="1" column="0">
-                                                <property name="name">
-                                                    <cstring>ckbAvailable</cstring>
-                                                </property>
-                                                <property name="text">
-                                                    <string>Package is available</string>
-                                                </property>
-                                                <property name="accel">
-                                                    <string></string>
-                                                </property>
-                                            </widget>
                                         </grid>
                                     </widget>
                                 </grid>

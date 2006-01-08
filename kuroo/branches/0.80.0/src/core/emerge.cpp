@@ -479,7 +479,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 				else
 					if ( lineLower.contains("no ebuilds to satisfy") ) {
 						QString missingPackage = line.section("no ebuilds to satisfy ", 1, 1);
-						LogSingleton::Instance()->writeLog( i18n("There is no ebuilds to satisfy %1").arg(missingPackage), ERROR );
+						LogSingleton::Instance()->writeLog( i18n("There is no ebuilds to satisfy %1").arg( missingPackage ), ERROR );
 						logDone++;
 					}
 					else

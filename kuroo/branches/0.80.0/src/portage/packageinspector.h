@@ -63,6 +63,7 @@ private slots:
 
 	void							slotSetStability( int rbStability );
 	void							slotSetVersionSpecific( const QString& version );
+	void							slotAvailable( bool isAvailable );
 	
 private:
 	QString							category, package, packageId;

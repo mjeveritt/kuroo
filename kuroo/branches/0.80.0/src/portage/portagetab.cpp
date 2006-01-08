@@ -262,12 +262,12 @@ void PortageTab::slotPackage()
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
 	packageInspector->dialog->versionsView->clear();
-	packageInspector->dialog->cbVersions->clear();
 	packageInspector->dialog->cbVersionsEbuild->clear();
 	packageInspector->dialog->cbVersionsDependencies->clear();
 	packageInspector->dialog->cbVersionsInstalled->clear();
 	packageInspector->dialog->cbVersionsUse->clear();
 	packageInspector->dialog->cbVersionsSpecific->clear();
+	
 	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );
 	
 	// Initialize the portage package object with package and it's versions data
@@ -297,7 +297,6 @@ void PortageTab::slotPackage()
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		
 		// Load all dropdown menus in the inspector with relevant versions
-		packageInspector->dialog->cbVersions->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
@@ -316,11 +315,11 @@ void PortageTab::slotPackage()
 				else
 					stability = i18n("Unavailable");
 		
-// 		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
+		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isOriginalHardMasked()=" << (*sortedVersionIterator)->isOriginalHardMasked() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isUnMasked()=" << (*sortedVersionIterator)->isUnMasked() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
-// 		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
+		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
 		
 		// Get user masked version
 		if ( (*sortedVersionIterator)->isUnMasked() && (*sortedVersionIterator)->isUserMasked() )

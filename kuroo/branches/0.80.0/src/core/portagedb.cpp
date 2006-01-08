@@ -637,7 +637,7 @@ bool KurooDB::isPackageUnMasked( const QString& id )
 }
 
 /**
- * Clear package from package.keywords.
+ * Add package in package.keywords.
  * @param id
  */
 void KurooDB::setPackageUnTesting( const QString& id )
@@ -646,7 +646,7 @@ void KurooDB::setPackageUnTesting( const QString& id )
 }
 
 /**
- * Clear package from package.unmask. @fixme: check category and package?
+ * Add package in package.unmask. @fixme: check category and package?
  * @param id
  */
 void KurooDB::setPackageUnMasked( const QString& id )
@@ -656,13 +656,28 @@ void KurooDB::setPackageUnMasked( const QString& id )
 }
 
 /**
- * Clear package from package.mask. @fixme: check category and package?
+ * Add package in package.mask. @fixme: check category and package?
  * @param id
  */
 void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 {
 	insert( "INSERT INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
 	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
+}
+
+/**
+ * Set package available in users architecture by adding -arch in package.keywords.
+ * @param id
+ */
+void KurooDB::setPackageAvailable( const QString& id )
+{
+	QString keywords = packageKeywordsAtom( id ).first();
+	if ( !keywords.isEmpty() )
+		keywords += " -" + KurooConfig::arch();
+	else
+		keywords += "-" + KurooConfig::arch();
+	clearPackageUnTesting( id );
+	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
 }
 
 /**
@@ -690,6 +705,17 @@ void KurooDB::clearPackageUnMasked( const QString& id )
 void KurooDB::clearPackageUserMasked( const QString& id )
 {
 	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
+}
+
+/**
+ * Clear package available.
+ * @param id
+ */
+void KurooDB::clearPackageAvailable( const QString& id )
+{
+	QString keywords = packageKeywordsAtom( id ).first().remove( KurooConfig::arch() ).stripWhiteSpace();
+	clearPackageUnTesting( id );
+	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
 }
 
 //////////////////////////////////////////////////////////////////////////////

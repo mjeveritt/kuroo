@@ -45,7 +45,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
-	dialog->setMinimumSize( 650, 560 );
+// 	dialog->setMinimumSize( 600, 500 );
 	
 	dialog->versionsView->header()->setLabel( 3 , "" );
 	dialog->versionsView->setSorting( -1 );
@@ -64,6 +64,8 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	
 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
+	
+	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -419,6 +421,18 @@ void PackageInspector::slotSetVersionSpecific( const QString& version )
 	disconnect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();
+}
+
+/**
+ * Make this package available on users architecture.
+ * @param on
+ */
+void PackageInspector::slotAvailable( bool isAvailable )
+{
+	if ( isAvailable )
+		KurooDBSingleton::Instance()->setPackageAvailable( m_portagePackage->id() );
+	else
+		KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
 }
 
 #include "packageinspector.moc"

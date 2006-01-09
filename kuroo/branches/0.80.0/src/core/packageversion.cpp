@@ -285,7 +285,7 @@ int PackageVersion::stability( const QString& arch ) const
 			else
 				if ( m_keywords.contains( "-*") || m_keywords.contains( "-" + arch ) ) {
 					// which is also "-*"
-					kdDebug() << "-*" << endl;
+// 					kdDebug() << "-*" << endl;
 					return NOTAVAILABLE;
 				}
 				else

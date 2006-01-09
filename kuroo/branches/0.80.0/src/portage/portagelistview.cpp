@@ -357,6 +357,33 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 }
 
 /**
+ * Move to next package in listview.
+ * @param isUp true is previous, false is next
+ */
+void PortageListView::slotNextPackage( bool isUp )
+{
+	QListViewItem* item = currentItem();
+	if ( isUp ) {
+		if ( item->itemAbove() ) {
+			selectAll( false );
+			item = item->itemAbove();
+			setCurrentItem( item );
+			setSelected( item, true );
+			ensureItemVisible( item );
+		}
+	}
+	else {
+		if ( item->itemBelow() ) {
+			selectAll( false );
+			item = item->itemBelow();
+			setCurrentItem( item );
+			setSelected( item, true );
+			ensureItemVisible( item );
+		}
+	}
+}
+
+/**
  * Check if last package is visible and inform that not all packages are listed.
  */
 // void PortageListView::slotLastPackage()

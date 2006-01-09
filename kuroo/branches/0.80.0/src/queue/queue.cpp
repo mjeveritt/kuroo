@@ -327,15 +327,6 @@ void Queue::installQueue( const QStringList& packageIdList )
 }
 
 /**
- * Add package as installed in db.
- * @param package
- */
-// void Queue::addPackage( const QString& package )
-// {
-// 	ThreadWeaver::instance()->queueJob( new AddQueuePackageJob( this, package ) );
-// }
-
-/**
  * Get list of all Queue packages.
  * @return QStringList
  */

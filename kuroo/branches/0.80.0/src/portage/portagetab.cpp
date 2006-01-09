@@ -51,7 +51,7 @@ PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), queuedFilters ( 0 )
 {
 	pbAdvanced->setDisabled( true );
-	pbAddQueue->setDisabled( true );
+	pbQueue->setDisabled( true );
 	
 	categoriesView->init();
 	subcategoriesView->init();
@@ -65,7 +65,7 @@ PortageTab::PortageTab( QWidget* parent )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( pbAddQueue, SIGNAL( clicked() ), this, SLOT( slotAddQueue() ) );
+	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
@@ -135,7 +135,7 @@ void PortageTab::slotInit()
 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
 	packageInspector = new PackageInspector( this );
-	connect( packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	connect( packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
 }
 
@@ -195,7 +195,7 @@ void PortageTab::slotListPackages()
 	
 	if ( packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
-		pbAddQueue->setDisabled( true );
+		pbQueue->setDisabled( true );
 		packageInspector->setDisabled( true );
 		
 		// User has edited package, reload the package
@@ -203,7 +203,7 @@ void PortageTab::slotListPackages()
 	}
 	else {
 		pbAdvanced->setDisabled( false );
-		pbAddQueue->setDisabled( false );
+		pbQueue->setDisabled( false );
 		packageInspector->setDisabled( false );
 		
 		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -241,7 +241,7 @@ void PortageTab::slotBusy( bool busy )
 {
 	if ( busy ) {
 		pbUninstall->setDisabled( true );
-		pbAddQueue->setDisabled( true );
+		pbQueue->setDisabled( true );
 	}
 	else {
 		if ( !KUser().isSuperUser() )
@@ -249,7 +249,7 @@ void PortageTab::slotBusy( bool busy )
 		else
 			pbUninstall->setDisabled( false );
 		
-		pbAddQueue->setDisabled( false );
+		pbQueue->setDisabled( false );
 	}
 }
 
@@ -261,6 +261,12 @@ void PortageTab::slotPackage()
 	pbUninstall->setDisabled( true );
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
+	
+	// Toggle add/remove package to queue
+	if ( packagesView->currentPortagePackage()->isQueued() )
+		pbQueue->setText( i18n("Remove from Emerge Queue") );
+	else
+		pbQueue->setText( i18n("Add to Emerge Queue") );
 	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -315,7 +321,7 @@ void PortageTab::slotPackage()
 					stability = i18n("Stable");
 				else
 					if ( (*sortedVersionIterator)->isNotArch() )
-						stability = i18n("Not in arch");
+						stability = i18n("Not on %1").arg( KurooConfig::arch() );
 					else
 						stability = i18n("Not available");
 		
@@ -334,6 +340,7 @@ void PortageTab::slotPackage()
 			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
 		}
 		
+		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			linesEmergeVersion = (*sortedVersionIterator)->version();
 			linesAvailable += (*sortedVersionIterator)->version() + ", ";
@@ -361,8 +368,8 @@ void PortageTab::slotPackage()
 		emergeVersionItem->setText( 3, "Used by emerge" );
 	}
 	else {
-		if ( versionNotInArchitecture && !linesAvailable.isEmpty() )
-			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available in your architecture</font></b>");
+		if ( versionNotInArchitecture && linesAvailable.isEmpty() )
+			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available on your architecture</font></b>");
 		else
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available</font></b>");
 	}
@@ -370,7 +377,7 @@ void PortageTab::slotPackage()
 	if ( !linesAvailable.isEmpty() )
 		linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
 	else
-		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available in your architecture</font><br>");
+		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available on your architecture</font><br>");
 	
 	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion );
 	
@@ -420,6 +427,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			
 		case APPEND:
 			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
+			pbQueue->setText( i18n("Remove from Emerge Queue") );
 			break;
 			
 		case EMERGE:
@@ -436,35 +444,20 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 }
 
 /**
- * Move to next package.
- * @param isUp true is previous, false is next
+ * Append or remove package to the queue.
  */
-void PortageTab::slotNextPackage( bool isUp )
+void PortageTab::slotQueue()
 {
-	QListViewItem* packageItem = packagesView->currentItem();
-	if ( isUp ) {
-		if ( packageItem->itemAbove() ) {
-			packagesView->selectAll( false );
-			packagesView->setCurrentItem( (QListViewItem*)packageItem->itemAbove() );
-			packagesView->setSelected( (QListViewItem*)packageItem->itemAbove(), true );
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
+		if ( packagesView->currentPortagePackage()->isQueued() ) {
+			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
+			pbQueue->setText( i18n("Add to Emerge Queue") );
+		}
+		else {
+			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
+			pbQueue->setText( i18n("Remove from Emerge Queue") );
 		}
 	}
-	else {
-		if ( packageItem->itemBelow() ) {
-			packagesView->selectAll( false );
-			packagesView->setCurrentItem( (QListViewItem*)packageItem->itemBelow() );
-			packagesView->setSelected( (QListViewItem*)packageItem->itemBelow(), true );
-		}
-	}
-}
-
-/**
- * Append package to the queue.
- */
-void PortageTab::slotAddQueue()
-{
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() )
-		QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
 }
 
 /**
@@ -472,7 +465,7 @@ void PortageTab::slotAddQueue()
  */
 void PortageTab::slotUninstall()
 {
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() /*|| !KUser().isSuperUser()*/ ) {
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
 		QStringList packageList( packagesView->selectedPackages() );
 		switch( KMessageBox::questionYesNoList( this, 
 				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"

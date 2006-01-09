@@ -90,7 +90,7 @@ private slots:
 	*/
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
-	void				slotAddQueue();
+	void				slotQueue();
 	void				slotUninstall();
 	void				slotAdvanced();
 	void				slotClearFilter();
@@ -99,8 +99,6 @@ private slots:
 	* View summary for selected package.
 	*/
 	void				slotPackage();
-	
-	void				slotNextPackage( bool isUp );
 	
 private:
 	int					queuedFilters;

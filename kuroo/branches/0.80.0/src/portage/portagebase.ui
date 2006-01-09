@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>722</width>
-            <height>512</height>
+            <width>718</width>
+            <height>566</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -433,7 +433,13 @@
                                         </spacer>
                                         <widget class="QPushButton" row="0" column="0">
                                             <property name="name">
-                                                <cstring>pbAddQueue</cstring>
+                                                <cstring>pbQueue</cstring>
+                                            </property>
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>220</width>
+                                                    <height>0</height>
+                                                </size>
                                             </property>
                                             <property name="text">
                                                 <string>Add to Emerge &amp;Queue</string>

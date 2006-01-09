@@ -105,13 +105,6 @@ public slots:
 	void					installPackageList( const QStringList& packageList );
 	
 	/**
-	* @fixme: Check for failure.
-	* Add package as installed in db.
-	* @param package
-	*/
-// 	void					addPackage( const QString& package );
-	
-	/**
 	* Get list of all Queue packages.
 	* @return QStringList
 	*/

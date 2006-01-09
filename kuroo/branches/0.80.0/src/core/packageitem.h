@@ -48,18 +48,18 @@ public:
  	 */
 	virtual void	setStatus( int status );
 	
+	/**
+ 	 * Convenience method.
+ 	 * @return true if package is in the queue.
+ 	 */
+	virtual bool	isQueued();
+	
 protected:
 	
 	/**
  	 * Insert package meta text into the right column.
  	 */
 	void			init();
-	
-	/**
- 	 * Convenience method.
- 	 * @return true if package is in the queue.
- 	 */
-	virtual bool	isQueued();
 	
 	/**
  	 * Mark package as "masked"/"unmasked"/"present in queue" with text formating.
@@ -76,7 +76,7 @@ private:
 	QString			m_id, m_name, m_status, m_packageTip, m_description;
 	QListView		*m_parent;
 	QPixmap 		pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked, pxQueued;
-	bool			queued;
+	bool			m_isQueued;
 
 };
 

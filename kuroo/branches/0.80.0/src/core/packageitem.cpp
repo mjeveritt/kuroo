@@ -31,14 +31,14 @@
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
+	m_parent( parent ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
 {
 	init();
 }
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent->listView() ), queued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
+	m_parent( parent->listView() ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
 {
 	init();
 }
@@ -101,13 +101,13 @@ void PackageItem::setStatus( int status )
 			break;
 		
 		case QUEUED :
-			queued = true;
+			m_isQueued = true;
 // 			m_meta.insert( i18n("In Queue"), i18n("Yes") );
 			setPixmap( 1, pxQueued );
 			break;
 		
 		case NOTQUEUED : {
-			queued = false;
+			m_isQueued = false;
 // 			m_meta.insert( i18n("In Queue"), i18n("No") );
 			setPixmap( 1, NULL );
 			repaint();
@@ -193,10 +193,10 @@ QString PackageItem::status()
 }
 
 /**
- * Wether this package is in the emerge queue.
+ * Is this package is in the emerge queue?
  * @return true/false
  */
 bool PackageItem::isQueued()
 {
-	return queued;
+	return m_isQueued;
 }

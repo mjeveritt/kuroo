@@ -62,11 +62,13 @@ PackageInspector::PackageInspector( QWidget *parent )
 	// Load files if tabpage is open
 	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
 	
-	// Activate group
+	// Activate groupBox "I know What I do"
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	
+	// Toggle between all 4 stability version
 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
 	
+	// Activate specific version menu
 	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
 	
 }
@@ -75,20 +77,30 @@ PackageInspector::~PackageInspector()
 {
 }
 
+/**
+ * Make previous package in package view current - for easier browsing.
+ */
 void PackageInspector::slotUser1()
 {
 	emit signalNextPackage( false );
 }
 
+/**
+ * Make next package in package view current - for easier browsing.
+ */
 void PackageInspector::slotUser2()
 {
 	emit signalNextPackage( true );
 }
 
-void PackageInspector::slotAdvancedToggle( bool on )
+/**
+ * Activate advanced groupBox.
+ * @param isOn
+ */
+void PackageInspector::slotAdvancedToggle( bool isOn )
 {
-	dialog->groupArchitecture->setDisabled( !on );
-	dialog->groupDifferentVersion->setDisabled( !on );
+	dialog->groupArchitecture->setDisabled( !isOn );
+	dialog->groupDifferentVersion->setDisabled( !isOn );
 }
 
 /**
@@ -110,12 +122,16 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	show();
 }
 
+/**
+ * Stability choice for versions - enable the right radiobutton.
+ * Priority is: specific version >> unmask package >> untest package >> stable package.
+ */
 void PackageInspector::slotInstallVersion()
-{	
+{
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	dialog->cbVersionsSpecific->setDisabled( true );
 	dialog->ckbAvailable->setChecked( false );
-// 	dialog->rbStable->setChecked( true );
+	dialog->ckbIKnow->setChecked( false );
 	
 	// Get user mask specific version
 	QString userMaskVersion = PortageFilesSingleton::Instance()->getUserMaskedAtom( m_portagePackage->id() ).first();
@@ -150,6 +166,9 @@ void PackageInspector::slotInstallVersion()
 	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 }
 
+/**
+ * Load the files for this package and this version.
+ */
 void PackageInspector::slotActivateTabs()
 {
 	slotGetUseFlags( dialog->cbVersionsUse->currentText() );
@@ -321,7 +340,7 @@ void PackageInspector::slotGetDependencies( const QString& version )
 			dialog->dependencyBrowser->setText( textLines );
 		}
 		else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
+			kdDebug() << i18n("Error reading: ") << fileName << endl;
 			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
 		}
 	}

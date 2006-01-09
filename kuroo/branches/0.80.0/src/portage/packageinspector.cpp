@@ -66,6 +66,9 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	
 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
+	
+	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
+	
 }
 
 PackageInspector::~PackageInspector()
@@ -92,7 +95,7 @@ void PackageInspector::slotAdvancedToggle( bool on )
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PortageListView::PortageItem* portagePackage, const QString& specificUnmaskedVersion )
+void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
 	if ( !KUser().isSuperUser() )
 		enableButtonApply( false );
@@ -102,25 +105,27 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage, const
 	category = m_portagePackage->category();
 	dialog->package->setText( "Detailed information for <b>" + category + "/" + package + "</b>");
 	
-	slotInstallVersion( specificUnmaskedVersion );
+	slotInstallVersion();
 	slotActivateTabs();
 	show();
 }
 
-void PackageInspector::slotInstallVersion( const QString& specificUnmaskedVersion )
-{
-	kdDebug() << "PackageInspector::slotInstallVersion specificUnmaskedVersion=" << specificUnmaskedVersion << " id=" << m_portagePackage->id() << endl;
-	
+void PackageInspector::slotInstallVersion()
+{	
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	dialog->cbVersionsSpecific->setDisabled( true );
 	dialog->ckbAvailable->setChecked( false );
-	dialog->rbStable->setChecked( true );
+// 	dialog->rbStable->setChecked( true );
 	
-	if ( !specificUnmaskedVersion.isEmpty() ) {
+	// Get user mask specific version
+	QString userMaskVersion = PortageFilesSingleton::Instance()->getUserMaskedAtom( m_portagePackage->id() ).first();
+	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
+	
+	if ( !userMaskVersion.isEmpty() ) {
 		kdDebug() << "Specific version" << endl;
 		dialog->rbVersionsSpecific->setChecked( true );
 		dialog->cbVersionsSpecific->setDisabled( false );
-		dialog->cbVersionsSpecific->setCurrentText( specificUnmaskedVersion );
+		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
 	}
 	else
 		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) ) {
@@ -431,7 +436,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		// User wants only specific version and no further
 		case 3 :
 			dialog->cbVersionsSpecific->setDisabled( false );
-			connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
+/*			connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );*/
 		
 	}
 }
@@ -447,7 +452,7 @@ void PackageInspector::slotSetVersionSpecific( const QString& version )
 	KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
 	KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );
 	KurooDBSingleton::Instance()->setPackageUserMasked( m_portagePackage->id(), version );
-	disconnect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
+// 	disconnect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();
 }

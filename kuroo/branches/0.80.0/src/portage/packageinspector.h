@@ -41,7 +41,7 @@ public:
 	 * Open use flags dialog.
 	 * @param newPackage	selected package
 	 */
-	void							edit( PortageListView::PortageItem* portagePackage, const QString& specificUnmaskedVersion );
+	void							edit( PortageListView::PortageItem* portagePackage );
 	
 	InspectorBase					*dialog;
 	
@@ -49,7 +49,7 @@ private slots:
 	void							slotUser1();
 	void							slotUser2();
 	
-	void							slotInstallVersion( const QString& specificUnmaskedVersion );
+	void							slotInstallVersion();
 	void							slotActivateTabs();
 	
 	void							slotAdvancedToggle( bool on );

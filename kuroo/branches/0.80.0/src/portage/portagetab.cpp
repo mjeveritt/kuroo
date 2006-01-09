@@ -48,7 +48,7 @@
  * Page for portage packages.
  */
 PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent ), queuedFilters ( 0 ), specificUnmaskedVersion( QString::null )
+	: PortageBase( parent ), queuedFilters ( 0 )
 {
 	pbAdvanced->setDisabled( true );
 	pbAddQueue->setDisabled( true );
@@ -293,8 +293,6 @@ void PortageTab::slotPackage()
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
 	
 	KListViewItem* emergeVersionItem;
-	specificUnmaskedVersion = QString::null;
-	QString previousVersion;
 	bool versionNotInArchitecture = false;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
@@ -321,12 +319,8 @@ void PortageTab::slotPackage()
 		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isOriginalHardMasked()=" << (*sortedVersionIterator)->isOriginalHardMasked() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isUnMasked()=" << (*sortedVersionIterator)->isUnMasked() << endl;
-// 		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
+		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
 		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
-		
-		// Get user masked version
-		if ( (*sortedVersionIterator)->isUnMasked() && (*sortedVersionIterator)->isUserMasked() )
-			specificUnmaskedVersion = previousVersion;
 		
 		// Insert version in Inspector version view
 		KListViewItem* itemVersion = new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size() );
@@ -335,7 +329,6 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
-			emergeVersionItem = itemVersion;
 		}
 		
 		if ( (*sortedVersionIterator)->isAvailable() ) {
@@ -349,7 +342,6 @@ void PortageTab::slotPackage()
 			else
 				linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 		
-		previousVersion = (*sortedVersionIterator)->version();
 	}
 	
 	linesInstalled.truncate( linesInstalled.length() - 2 );
@@ -494,7 +486,7 @@ void PortageTab::slotAdvanced()
 {
 	PortageListView::PortageItem* portagePackage = packagesView->currentPortagePackage();
 	if ( portagePackage )
-		packageInspector->edit( portagePackage, specificUnmaskedVersion );
+		packageInspector->edit( portagePackage );
 }
 
 #include "portagetab.moc"

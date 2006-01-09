@@ -52,7 +52,7 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
-// 	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
+	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
 }
 
@@ -276,7 +276,7 @@ int PackageVersion::stability( const QString& arch ) const
 				return STABLE;
 			// well, no such arch in the version info
 			else // which is also "-*"
-				return NOTAVAILABLE;
+				return NOTARCH;
 }
 
 

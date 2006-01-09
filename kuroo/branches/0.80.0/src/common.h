@@ -94,7 +94,8 @@ enum Stability {
 		STABLE,
 		TESTING,
 		HARDMASKED,
-		NOTAVAILABLE
+		NOTAVAILABLE,
+		NOTARCH
 };
 
 static const QString STABLE_STRING( QString::number( STABLE ) );

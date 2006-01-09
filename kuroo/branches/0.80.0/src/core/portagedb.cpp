@@ -659,8 +659,9 @@ bool KurooDB::isPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUnMasked( const QString& id )
 {
-	insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-	        "'" + category( id ) + "/" + package( id ) + "');" );
+	if ( !isPackageUnMasked( id ) )
+		insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+	       		"'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
@@ -669,6 +670,7 @@ void KurooDB::setPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 {
+	clearPackageUserMasked( id );
 	insert( "INSERT INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
 	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }

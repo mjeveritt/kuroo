@@ -88,7 +88,7 @@ void PortageListView::PortageItem::initVersions()
 	m_category = PortageSingleton::Instance()->category( id() );
 	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
 
-	kdDebug() << "acceptedKeywords=" << acceptedKeywords << endl;
+// 	kdDebug() << "acceptedKeywords=" << acceptedKeywords << endl;
 	
 	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
@@ -99,8 +99,6 @@ void PortageListView::PortageItem::initVersions()
 		QString slot = *it++;
 		QString keywords = *it++;
 		QString size = *it;
-		
-		kdDebug() << "keywords=" << keywords << endl;
 		
 		PackageVersion* version = new PackageVersion( this, versionString );
 		version->setLicenses( QStringList::split( " ", licenses ) );
@@ -122,7 +120,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Check if any of this package versions are hardmasked
 	const QStringList atomHardMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
-	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
+// 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
 
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,

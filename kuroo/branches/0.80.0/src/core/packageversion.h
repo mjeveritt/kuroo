@@ -39,6 +39,7 @@ public:
 	friend class PortageListView::PortageItem;
 	
 	bool isAvailable() const;
+	bool isNotArch() const;
 	
 	bool isNewerThan( const QString& otherVersion ) const;
 	bool isOlderThan( const QString& otherVersion ) const;

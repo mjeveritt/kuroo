@@ -52,8 +52,13 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
-	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
+}
+
+bool PackageVersion::isNotArch() const
+{
+	int state = stability( KurooConfig::arch() );
+	return ( state == NOTARCH );
 }
 
 /**
@@ -248,6 +253,7 @@ int PackageVersion::stability( const QString& arch ) const
 				// Don't accept packages when the accepted keyword is -arch only
 				else 
 					if ( *keywordIterator == "-" + arch && m_keywords.contains( arch ) ) {
+// 						kdDebug() << "Don't accept packages when the accepted keyword is -arch only" << endl;
 						return NOTAVAILABLE;
 					}
 					// Accept stable packages for an accepted keyword named "*"
@@ -258,7 +264,8 @@ int PackageVersion::stability( const QString& arch ) const
 						// Don't accept anything if it's got -* in it
 						else 
 							if ( *keywordIterator == "-*" ) {
-								return NOTAVAILABLE;
+// 								kdDebug() << "Don't accept anything if it's got -* in it" << endl;
+								return NOTARCH;
 							}
 			}
 	}
@@ -275,8 +282,14 @@ int PackageVersion::stability( const QString& arch ) const
 			if ( ( arch[0] == '~' ) && ( m_keywords.contains( arch.mid(1) ) ) )
 				return STABLE;
 			// well, no such arch in the version info
-			else // which is also "-*"
-				return NOTARCH;
+			else
+				if ( m_keywords.contains( "-*") || m_keywords.contains( "-" + arch ) ) {
+					// which is also "-*"
+					kdDebug() << "-*" << endl;
+					return NOTAVAILABLE;
+				}
+				else
+					return NOTARCH;
 }
 
 

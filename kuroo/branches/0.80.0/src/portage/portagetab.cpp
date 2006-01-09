@@ -314,13 +314,16 @@ void PortageTab::slotPackage()
 				if ( (*sortedVersionIterator)->isAvailable() )
 					stability = i18n("Stable");
 				else
-					stability = i18n("Unavailable");
+					if ( (*sortedVersionIterator)->isNotArch() )
+						stability = i18n("Not in arch");
+					else
+						stability = i18n("Not available");
 		
-		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isOriginalHardMasked()=" << (*sortedVersionIterator)->isOriginalHardMasked() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isUnMasked()=" << (*sortedVersionIterator)->isUnMasked() << endl;
-		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
-		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
+// 		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
 		
 		// Insert version in Inspector version view
 		KListViewItem* itemVersion = new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size() );
@@ -337,13 +340,14 @@ void PortageTab::slotPackage()
 			emergeVersionItem = itemVersion;
 		}
 		else
-			if ( (*sortedVersionIterator)->stability( KurooConfig::arch() ) == NOTAVAILABLE )
+			if ( (*sortedVersionIterator)->isNotArch() )
 				versionNotInArchitecture = true;
 			else
 				linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
 		
 	}
 	
+	// Remove trailing commas
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
@@ -357,7 +361,7 @@ void PortageTab::slotPackage()
 		emergeVersionItem->setText( 3, "Used by emerge" );
 	}
 	else {
-		if ( versionNotInArchitecture )
+		if ( versionNotInArchitecture && !linesAvailable.isEmpty() )
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available in your architecture</font></b>");
 		else
 			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available</font></b>");

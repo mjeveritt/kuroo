@@ -122,29 +122,29 @@ void PackageInspector::slotInstallVersion()
 	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
 	
 	if ( !userMaskVersion.isEmpty() ) {
-		kdDebug() << "Specific version" << endl;
+// 		kdDebug() << "Specific version" << endl;
 		dialog->rbVersionsSpecific->setChecked( true );
 		dialog->cbVersionsSpecific->setDisabled( false );
 		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
 	}
 	else
 		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) ) {
-			kdDebug() << "Is unmasked!" << endl;
+// 			kdDebug() << "Is unmasked!" << endl;
 			dialog->rbMasked->setChecked( true );
 		}
 		else
 			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) ) {
-				kdDebug() << "Is testing!" << endl;
+// 				kdDebug() << "Is testing!" << endl;
 				dialog->rbTesting->setChecked( true );
 			}
 			else {
-				kdDebug() << "Is stable!" << endl;
+// 				kdDebug() << "Is stable!" << endl;
 				dialog->rbStable->setChecked( true );
 			}
 	
 	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) ) {
 		dialog->ckbAvailable->setChecked( true );
-		kdDebug() << "Is available!" << endl;
+// 		kdDebug() << "Is available!" << endl;
 	}
 	
 	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
@@ -389,7 +389,7 @@ void PackageInspector::slotGetInstalledFiles( const QString& version )
  */
 void PackageInspector::slotSetStability( int rbStability )
 {
-	kdDebug() << "PackageInspector::slotSetStability id=" << m_portagePackage->id() << " rbStability=" << rbStability << endl;
+// 	kdDebug() << "PackageInspector::slotSetStability id=" << m_portagePackage->id() << " rbStability=" << rbStability << endl;
 
 	switch ( rbStability ) {
 	
@@ -447,7 +447,7 @@ void PackageInspector::slotSetStability( int rbStability )
  */
 void PackageInspector::slotSetVersionSpecific( const QString& version )
 {
-	kdDebug() << "PackageInspector::slotSetVersionSpecific version=" << version << endl;
+// 	kdDebug() << "PackageInspector::slotSetVersionSpecific version=" << version << endl;
 	
 	KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
 	KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );

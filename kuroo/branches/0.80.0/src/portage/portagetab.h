@@ -100,6 +100,8 @@ private slots:
 	*/
 	void				slotPackage();
 	
+	void				slotNextPackage( bool isUp );
+	
 private:
 	int					queuedFilters;
 	KPopupMenu 			*menu;

@@ -135,6 +135,7 @@ void PortageTab::slotInit()
 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
 	packageInspector = new PackageInspector( this );
+	connect( packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
 }
 
@@ -195,6 +196,7 @@ void PortageTab::slotListPackages()
 	if ( packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
 		pbAddQueue->setDisabled( true );
+		packageInspector->setDisabled( true );
 		
 		// User has edited package, reload the package
 		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -202,6 +204,7 @@ void PortageTab::slotListPackages()
 	else {
 		pbAdvanced->setDisabled( false );
 		pbAddQueue->setDisabled( false );
+		packageInspector->setDisabled( false );
 		
 		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
@@ -269,7 +272,7 @@ void PortageTab::slotPackage()
 	packageInspector->dialog->cbVersionsSpecific->clear();
 	
 	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );
-	
+		
 	// Initialize the portage package object with package and it's versions data
 	packagesView->currentPortagePackage()->initVersions();
 	QString package( packagesView->currentPortagePackage()->name() );
@@ -433,6 +436,29 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			
 		case CLEARUNMASK:
 			PortageSingleton::Instance()->clearUntestingPackageList( packagesView->selectedId() );
+	}
+}
+
+/**
+ * Move to next package.
+ * @param isUp true is previous, false is next
+ */
+void PortageTab::slotNextPackage( bool isUp )
+{
+	QListViewItem* packageItem = packagesView->currentItem();
+	if ( isUp ) {
+		if ( packageItem->itemAbove() ) {
+			packagesView->selectAll( false );
+			packagesView->setCurrentItem( (QListViewItem*)packageItem->itemAbove() );
+			packagesView->setSelected( (QListViewItem*)packageItem->itemAbove(), true );
+		}
+	}
+	else {
+		if ( packageItem->itemBelow() ) {
+			packagesView->selectAll( false );
+			packagesView->setCurrentItem( (QListViewItem*)packageItem->itemBelow() );
+			packagesView->setSelected( (QListViewItem*)packageItem->itemBelow(), true );
+		}
 	}
 }
 

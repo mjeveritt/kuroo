@@ -624,7 +624,24 @@ QStringList KurooDB::packageKeywordsAtom( const QString& id )
  */
 bool KurooDB::isPackageUnTesting( const QString& id )
 {
-	return !query( "SELECT id FROM packageKeywords where idPackage = '" + id + "';" ).isEmpty();
+	QString keywords = query( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "';" ).first();
+	if ( keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
+		return true;
+	else
+		return false;
+}
+
+/**
+ * Is the package available in package.keywords?
+ * @param id
+ */
+bool KurooDB::isPackageAvailable( const QString& id )
+{
+	QString keywords = query( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "';" ).first();
+	if ( keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
+		return true;
+	else
+		return false;
 }
 
 /**
@@ -634,25 +651,6 @@ bool KurooDB::isPackageUnTesting( const QString& id )
 bool KurooDB::isPackageUnMasked( const QString& id )
 {
 	return !query( "SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
-}
-
-/**
- * Is the package available in package.keywords?
- * @param id
- */
-bool KurooDB::isPackageAvailable( const QString& id )
-{
-	return ( query( "SELECT keywords FROM packageKeywords where idPackage = '"
-	                + id + "';" ).first().contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) > 0 );
-}
-
-/**
- * Add package in package.keywords.
- * @param id
- */
-void KurooDB::setPackageUnTesting( const QString& id )
-{
-	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
 }
 
 /**
@@ -675,21 +673,69 @@ void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
-void KurooDB::setPackageAvailable( const QString& id )
+/**
+ * Set package as testing, eg add keyword ~*.
+ * @param id
+ */
+void KurooDB::setPackageUnTesting( const QString& id )
 {
 	QString keywords = packageKeywordsAtom( id ).first();
-	clearPackageUnTesting( id );
-	keywords += " -* -" + KurooConfig::arch();
-	insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
+	
+	// Aready testing skip!
+	if ( keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
+		return;
+	
+	if ( keywords.isEmpty() )
+		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
+	else
+		query( " UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
 }
 
 /**
- * Clear package from package.keywords.
+ * Set package as available, eg add keywords '-* -arch'
+ */
+void KurooDB::setPackageAvailable( const QString& id )
+{
+	QString keywords = packageKeywordsAtom( id ).first();
+	
+	// Already available skip!
+	if ( keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
+		return;
+	
+	if ( keywords.isEmpty() )
+		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '-* -" + KurooConfig::arch() + "');" );
+	else
+		query( " UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+}
+
+/**
+ * Clear testing keyword from package.
  * @param id
  */
 void KurooDB::clearPackageUnTesting( const QString& id )
 {
-	query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	QString keywords = packageKeywordsAtom( id ).first();
+	
+	// If only testing keywords - remove it, else set only available keywords
+	if ( !keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
+		query( " DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	else
+		query( " UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+}
+
+/**
+ * Removing available keywords for package.
+ * @param id
+ */
+void KurooDB::clearPackageAvailable( const QString& id )
+{
+	QString keywords = packageKeywordsAtom( id ).first();
+	
+	// If only available keywords - remove it, else set only testing keyword
+	if ( !keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
+		query( " DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	else
+		query( " UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
 }
 
 /**
@@ -708,16 +754,6 @@ void KurooDB::clearPackageUnMasked( const QString& id )
 void KurooDB::clearPackageUserMasked( const QString& id )
 {
 	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
-}
-
-void KurooDB::clearPackageAvailable( const QString& id )
-{
-	QString keywords = packageKeywordsAtom( id ).first();
-	keywords.remove( "-*" ).remove( "-" + KurooConfig::arch() );
-	keywords.simplifyWhiteSpace();
-	clearPackageUnTesting( id );
-	if ( !keywords.isEmpty() )
-		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '" + keywords + "');" );
 }
 
 //////////////////////////////////////////////////////////////////////////////

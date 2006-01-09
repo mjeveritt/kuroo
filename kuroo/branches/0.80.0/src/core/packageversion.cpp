@@ -52,7 +52,7 @@ PackageVersion::~PackageVersion()
 bool PackageVersion::isAvailable() const
 {
 	int state = stability( KurooConfig::arch() );
-	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
+// 	kdDebug() << "PackageVersion::isAvailable state=" << state << endl;
 	return ( state == STABLE );
 }
 
@@ -218,7 +218,7 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-	kdDebug() << "PackageVersion::stability id=" << m_package->id() << " m_keywords=" << m_keywords << " m_version=" << m_version << endl;
+// 	kdDebug() << "PackageVersion::stability id=" << m_package->id() << " m_keywords=" << m_keywords << " m_version=" << m_version << endl;
 	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
@@ -228,7 +228,7 @@ int PackageVersion::stability( const QString& arch ) const
 		QString pureArch( arch );
 		pureArch.remove( '~' );
 		
-		kdDebug() << " pureArch=" << pureArch << " m_acceptedKeywords=" << m_acceptedKeywords << endl;
+// 		kdDebug() << " pureArch=" << pureArch << " m_acceptedKeywords=" << m_acceptedKeywords << endl;
 		
 		// The following checks are not completely correct, as they only check
 		// against arch instead of all version keywords. Should be sufficient

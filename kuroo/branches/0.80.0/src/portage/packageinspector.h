@@ -46,6 +46,9 @@ public:
 	InspectorBase					*dialog;
 	
 private slots:
+	void							slotUser1();
+	void							slotUser2();
+	
 	void							slotInstallVersion( const QString& specificUnmaskedVersion );
 	void							slotActivateTabs();
 	
@@ -71,6 +74,7 @@ private:
 	PortageListView::PortageItem* 	m_portagePackage;
 	
 signals:
+	void							signalNextPackage( bool up );
 	void							signalPackageChanged();
 };
 

@@ -170,17 +170,8 @@ void QueueTab::slotGo()
 	
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
-	
-	// Prepend emerge options
-	QStringList packageList;
-// 	QString options( emergeInspector->getOptions() );
-// 	
-// 	if ( options.isEmpty() )
-		packageList = queueView->allPackages();
-// 	else {
-// 		packageList = QStringList::split( " ", options );
-// 		packageList += queueView->allPackages();
-// 	}
+
+	QStringList packageList = queueView->allPackagesNoChildren();
 	
 	if ( !m_hasCheckedQueue ) {
 		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );

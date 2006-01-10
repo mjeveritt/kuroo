@@ -157,6 +157,21 @@ QStringList PackageListView::allPackages()
 	return packageList;
 }
 
+/** 
+ * All packages in listview by name - no children
+ * @return packageList
+ */
+QStringList PackageListView::allPackagesNoChildren()
+{
+	QStringList packageList;
+	QListViewItem * myChild = firstChild();
+	while ( myChild ) {
+		packageList += dynamic_cast<PackageItem*>( myChild )->name();
+		myChild = myChild->nextSibling();
+	}
+	return packageList;
+}
+
 /**
  * Total number of packages in listview.
  * @return QString

@@ -48,12 +48,6 @@ rxAtom(	"^"    // Start of the string
        	")?$"          // end of the (optional) version part and the atom string
       );
 
-// QRegExp rxAtom ( "^!?((~|<|>|=|<=|>=)?)"
-//                  "(([a-z]|[0-9])+-([a-z]|[0-9])+)"
-//                  "(/)"
-//                  "(([a-z]|[A-Z]|[0-9]|-|\\+|_)+)"
-//                  "(-(?:\\d+\\.)*\\d+[a-z]?)?" );
-
 /**
  * @class: LoadPackageKeywordsJob
  * @short: Thread for loading packages unmasked by user.
@@ -118,7 +112,9 @@ public:
 
 				QString id = KurooDBSingleton::Instance()->packageId( category, name );
 				if ( !id.isEmpty() )
-					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
+					KurooDBSingleton::Instance()->insert( QString( 
+						"INSERT INTO packageKeywords_temp (idPackage, keywords) "
+						"VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
 			}
 			else
 				kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageKeywords() ) << endl;
@@ -391,6 +387,52 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 };
 
 /**
+ * @class: LoadPackageKeywordsJob
+ * @short: Thread for loading packages unmasked by user.
+ */
+class SavePackageKeywordsJob : public ThreadWeaver::DependentJob
+{
+public:
+	SavePackageKeywordsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	
+	virtual bool doJob() {
+		
+		const QStringList lines = KurooDBSingleton::Instance()->query( 
+			"SELECT catSubCategory.name, package.name, packageKeywords.keywords FROM package, catSubCategory, packageKeywords "
+			" WHERE catSubCategory.id = package.idCatSubCategory"
+			" AND package.id = packageKeywords.idPackage "
+			";" );
+		if ( lines.isEmpty() ) {
+			kdDebug() << i18n("No package keywords found. Saving to %1 aborted!").arg( KurooConfig::filePackageKeywords() ) << endl;
+			return false;
+		}
+		
+		QFile file( KurooConfig::filePackageKeywords() );
+		QTextStream stream( &file );
+		if ( !file.open( IO_WriteOnly ) ) {
+			kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
+			return false;
+		}
+		
+		foreach ( lines ) {
+			QString category = *it++;
+			QString package = *it++;
+			QString keywords = *it;
+			if ( !package.isEmpty() )
+				stream << category << "/" << package << " " << keywords << "\n";
+		}
+		
+		file.close();
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( 0 );
+	}
+};
+
+
+/**
  * Object for resulting list of packages from emerge actions.
  */
 PortageFiles::PortageFiles( QObject *parent )
@@ -449,24 +491,14 @@ void PortageFiles::loadPackageKeywords()
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
 }
 
-// QStringList PortageFiles::getHardMaskedAtom( const QString& id )
-// {
-// 	return KurooDBSingleton::Instance()->packageHardMaskAtom( id );
-// }
-// 
-// QStringList PortageFiles::getUserMaskedAtom( const QString& id )
-// {
-// 	return KurooDBSingleton::Instance()->packageUserMaskAtom( id );
-// }
-// 
-// QStringList PortageFiles::getUnmaskedAtom( const QString& id )
-// {
-// 	return KurooDBSingleton::Instance()->packageUnMaskAtom( id );
-// }
-// 
-// QStringList PortageFiles::getKeywordsAtom( const QString& id )
-// {
-// 	return KurooDBSingleton::Instance()->packageKeywordsAtom( id );
-// }
+void PortageFiles::loadPackageUserMask()
+{
+	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
+}
+
+void PortageFiles::savePackageKeywords()
+{
+	ThreadWeaver::instance()->queueJob( new SavePackageKeywordsJob( this ) );
+}
 
 #include "portagefiles.moc"

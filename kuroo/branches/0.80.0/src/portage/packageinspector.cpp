@@ -108,8 +108,8 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
  */
 void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
-	if ( !KUser().isSuperUser() )
-		enableButtonApply( false );
+// 	if ( !KUser().isSuperUser() )
+// 		enableButtonApply( false );
 	
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
@@ -232,7 +232,7 @@ void PackageInspector::slotGetUseFlags( const QString& version )
  */
 void PackageInspector::slotApply()
 {
-
+	PortageFilesSingleton::Instance()->savePackageKeywords();
 	
 // 	QString useFlags;
 // 	QStringList lines;

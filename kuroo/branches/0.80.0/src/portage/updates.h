@@ -41,7 +41,6 @@ public slots:
 	bool			slotRefresh();
 	bool			slotLoadUpdates();
 	void			removePackage( const QString& package );
-	QString			count();
 	
 signals:
 	void			signalUpdatesChanged();

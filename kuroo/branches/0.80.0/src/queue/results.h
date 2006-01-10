@@ -46,14 +46,7 @@ public slots:
  	 */
 	void 			addPackageList( const EmergePackageList &packageList );
 	
-	/**
- 	 * Get list of all packages.
- 	 * @return QStringList
-	 */
-	QStringList		allPackages();
-	
 signals:
-	void			signalResultsChanged();
 	
 private:
 	QObject			*parent;

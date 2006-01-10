@@ -86,7 +86,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	// Confirm changes in views with bleue text menu
 	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotPortageUpdated() ) );
 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged() ), this, SLOT( slotQueueUpdated() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
@@ -163,13 +163,13 @@ void KurooView::slotCheckPortage()
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
-	if ( PortageSingleton::Instance()->count() == "0" )
+	if ( KurooDBSingleton::Instance()->packageTotal() == "0" )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
 // 		PortageFilesSingleton::Instance()->loadPackageMask();
 		tabPortage->slotReload();
-		tabQueue->slotReload();
-		if ( UpdatesSingleton::Instance()->count() == "0" )
+		tabQueue->slotReload( false );
+		if ( KurooDBSingleton::Instance()->updatesTotal() == "0" )
 			UpdatesSingleton::Instance()->slotRefresh();
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled

@@ -48,7 +48,7 @@ public slots:
 	/**
 	 * Load Queue packages.
 	 */
-	void				slotReload();
+	void				slotReload( bool hasCheckedQueue );
 	
 private slots:
 	
@@ -71,6 +71,7 @@ private slots:
 	void				slotStop();
 	void				slotRemove();
 	void				slotOptions();
+	
 	/**
 	 * Popup menu for actions like emerge.
 	 * @param listView
@@ -81,6 +82,7 @@ private slots:
 	
 private:
 	EmergeInspector*	emergeInspector;
+	bool				m_hasCheckedQueue;
 };
 
 #endif

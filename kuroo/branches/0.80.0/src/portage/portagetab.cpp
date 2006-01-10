@@ -173,7 +173,7 @@ void PortageTab::slotActivateFilters()
 {
 	--queuedFilters;
 	if ( queuedFilters == 0 )
-		categoriesView->loadCategories( PortageSingleton::Instance()->categories( filterGroup->selectedId(), searchFilter->text() ) );
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(),searchFilter->text()  ) );
 }
 
 /**
@@ -182,7 +182,7 @@ void PortageTab::slotActivateFilters()
 void PortageTab::slotListSubCategories()
 {
 	QString categoryId = categoriesView->currentCategoryId();
-	subcategoriesView->loadCategories( PortageSingleton::Instance()->subCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
+	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
 }
 
 /**
@@ -193,7 +193,7 @@ void PortageTab::slotListPackages()
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	
-	if ( packagesView->addSubCategoryPackages( PortageSingleton::Instance()->packagesInSubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
+	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
 		pbQueue->setDisabled( true );
 		packageInspector->setDisabled( true );
@@ -395,14 +395,12 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	if ( !item )
 		return;
 	
-	enum Actions { PRETEND, APPEND, EMERGE, DEPEND, UNMASK, CLEARUNMASK, USEFLAGS };
+	enum Actions { PRETEND, APPEND, EMERGE };
 	
 	KPopupMenu menu( this );
 	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
 	int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
 	int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE);
-	int menuItem4 = menu.insertItem(i18n("&Unmask"), UNMASK);
-	int menuItem5 = menu.insertItem(i18n("&Clear Unmasking"), CLEARUNMASK);
 	
 	// No access when kuroo is busy.
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
@@ -413,11 +411,6 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() )
 		menu.setItemEnabled( menuItem3, false );
-	
-	if ( SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		menu.setItemEnabled( menuItem4, false );
-		menu.setItemEnabled( menuItem5, false );
-	}
 	
 	switch( menu.exec( point ) ) {
 		
@@ -433,13 +426,6 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		case EMERGE:
 			QueueSingleton::Instance()->installQueue( packagesView->selectedId() );
 			break;
-			
-		case UNMASK:
-			PortageSingleton::Instance()->untestingPackageList( packagesView->selectedId() );
-			break;
-			
-		case CLEARUNMASK:
-			PortageSingleton::Instance()->clearUntestingPackageList( packagesView->selectedId() );
 	}
 }
 

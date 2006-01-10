@@ -24,42 +24,6 @@
 #include <qtimer.h>
 
 /**
- * Thread for adding a single package to the queue in db. Used when emerge.
- */
-// class AddQueuePackageJob : public ThreadWeaver::DependentJob
-// {
-// public:
-// 	AddQueuePackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
-// 	
-// 	virtual bool doJob() {
-// 		
-// 		QString id = PortageSingleton::Instance()->id( m_package );
-// 		if ( !id.isEmpty() ) {
-// 			
-// 			// Add this package to the world file if not dependency = if already present in Queue
-// 			if ( KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue (idPackage, idDepend) VALUES ('%1', '0');" ).arg( id ) ) == 0 ) {
-// 				PortageSingleton::Instance()->appendWorld( m_package );
-// 				
-// 				// Don't reinsert the package
-// 				return false;
-// 			}
-// 			
-// 			// Store dependency package on stack
-// 			return true;
-// 		}
-// 		else
-// 			return false;
-// 	}
-// 	
-// 	virtual void completeJob() {
-// 		QueueSingleton::Instance()->dependency( m_package );
-// 	}
-// 	
-// private:
-// 	const QString m_package;
-// };
-
-/**
  * Thread for adding packages to the queue in db. Used by other views.
  */
 class AddQueuePackageIdListJob : public ThreadWeaver::DependentJob
@@ -94,7 +58,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh();
+		QueueSingleton::Instance()->refresh( false );
 	}
 	
 private:
@@ -117,7 +81,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh();
+		QueueSingleton::Instance()->refresh( false );
 	}
 	
 private:
@@ -159,7 +123,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh();
+		QueueSingleton::Instance()->refresh( false );
 		SignalistSingleton::Instance()->startInstallQueue();
 	}
 	
@@ -265,11 +229,11 @@ bool Queue::isQueued( const QString& id )
 /**
  * Forward signal to refresh queue.
  */
-void Queue::refresh()
+void Queue::refresh( bool hasCheckedQueue )
 {
 	kdDebug() << "Queue::refresh" << endl;
 	clearCache();
-	emit signalQueueChanged();
+	emit signalQueueChanged( hasCheckedQueue );
 }
 
 /**
@@ -278,7 +242,7 @@ void Queue::refresh()
 void Queue::reset()
 {
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
-	refresh();
+	refresh( false );
 }
 
 /**
@@ -324,24 +288,6 @@ void Queue::addPackageIdList( const QStringList& packageIdList )
 void Queue::installQueue( const QStringList& packageIdList )
 {
 	ThreadWeaver::instance()->queueJob( new InstallQueueJob( this, packageIdList ) );
-}
-
-/**
- * Get list of all Queue packages.
- * @return QStringList
- */
-QStringList Queue::allPackages()
-{
-	return KurooDBSingleton::Instance()->allQueuePackages();
-}
-
-/**
- * Count packages in queue.
- * @return count
- */
-QString Queue::count()
-{
-	return KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM queue LIMIT 1;").first();
 }
 
 #include "queue.moc"

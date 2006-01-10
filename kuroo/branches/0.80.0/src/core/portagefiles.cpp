@@ -30,17 +30,29 @@
 #define POS_PACKAGE     5
 #define POS_VERSION     6
 
-QRegExp rxAtom(	"^"    // Start of the string
-               	"(!)?" // "Block these packages" flag, only occurring in ebuilds
-               	"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
-               	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
-               	"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-               	"("            // start of the version part
-               	"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
-               	"(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
-               	"(?:-r\\d+)?"  // revision
-               	")?$"          // end of the (optional) version part and the atom string
-              );
+// For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
+
+// The complete atom regexp in non-escaped form (for testing, or similar):
+// ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
+
+QRegExp
+rxAtom(	"^"    // Start of the string
+       	"(!)?" // "Block these packages" flag, only occurring in ebuilds
+       	"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
+       	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
+       	"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
+       	"("            // start of the version part
+       	"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
+       	"(?:_(?:alpha|beta|pre|rc|p)(\\d+|\\*$))?" // version suffix
+       	"(?:-r(\\d+|\\*$))?"  // revision
+       	")?$"          // end of the (optional) version part and the atom string
+      );
+
+// QRegExp rxAtom ( "^!?((~|<|>|=|<=|>=)?)"
+//                  "(([a-z]|[0-9])+-([a-z]|[0-9])+)"
+//                  "(/)"
+//                  "(([a-z]|[A-Z]|[0-9]|-|\\+|_)+)"
+//                  "(-(?:\\d+\\.)*\\d+[a-z]?)?" );
 
 /**
  * @class: LoadPackageKeywordsJob
@@ -86,12 +98,11 @@ public:
 			QStringList tokens = QStringList::split( ' ', *it );
 			QString package = tokens[0];
 			
-			// Collect comment lines above the dependatom
 			if ( !(*it).isEmpty() && rxAtom.exactMatch( package ) ) {
 					
 				// Get the captured strings
-				QString name = rxAtom.cap( POS_PACKAGE );
 				QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+				QString name = rxAtom.cap( POS_PACKAGE );
 				QString keywords;
 				
 				// extract this line's keywords
@@ -183,8 +194,8 @@ public:
 					if ( rxAtom.exactMatch( *it ) ) {
 
 						// Get the captured strings
-						QString name = rxAtom.cap( POS_PACKAGE );
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						if ( !id.isEmpty() )
@@ -266,8 +277,8 @@ public:
 					if ( rxAtom.exactMatch( *it ) ) {
 						
 						// Get the captured strings
-						QString name = rxAtom.cap( POS_PACKAGE );
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						if ( !id.isEmpty() )
@@ -349,8 +360,8 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 					if ( rxAtom.exactMatch( *it ) ) {
 						
 						// Get the captured strings
-						QString name = rxAtom.cap( POS_PACKAGE );
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						if ( !id.isEmpty() )
@@ -438,24 +449,24 @@ void PortageFiles::loadPackageKeywords()
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
 }
 
-QStringList PortageFiles::getHardMaskedAtom( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageHardMaskAtom( id );
-}
-
-QStringList PortageFiles::getUserMaskedAtom( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageUserMaskAtom( id );
-}
-
-QStringList PortageFiles::getUnmaskedAtom( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageUnMaskAtom( id );
-}
-
-QStringList PortageFiles::getKeywordsAtom( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageKeywordsAtom( id );
-}
+// QStringList PortageFiles::getHardMaskedAtom( const QString& id )
+// {
+// 	return KurooDBSingleton::Instance()->packageHardMaskAtom( id );
+// }
+// 
+// QStringList PortageFiles::getUserMaskedAtom( const QString& id )
+// {
+// 	return KurooDBSingleton::Instance()->packageUserMaskAtom( id );
+// }
+// 
+// QStringList PortageFiles::getUnmaskedAtom( const QString& id )
+// {
+// 	return KurooDBSingleton::Instance()->packageUnMaskAtom( id );
+// }
+// 
+// QStringList PortageFiles::getKeywordsAtom( const QString& id )
+// {
+// 	return KurooDBSingleton::Instance()->packageKeywordsAtom( id );
+// }
 
 #include "portagefiles.moc"

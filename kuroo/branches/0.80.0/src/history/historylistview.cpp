@@ -107,7 +107,7 @@ void HistoryListView::loadFromDB()
 	clear();
 	itemMap.clear();
 	
-	const QStringList historyList = HistorySingleton::Instance()->allHistory();
+	const QStringList historyList = KurooDBSingleton::Instance()->allHistory();
 	foreach ( historyList ) {
 		QString timeStamp = *it++;
 		QString package = *it++;

@@ -838,17 +838,25 @@ QStringList KurooDB::allStatistic()
 /**
  * Return the total number of packages.
  */
-QStringList KurooDB::packageTotal()
+QString KurooDB::packageTotal()
 {
-	return query( " SELECT COUNT(id) FROM package LIMIT 1;" );
+	return query( " SELECT COUNT(id) FROM package LIMIT 1;" ).first();
 }
 
 /**
  * Return the total number of updates.
  */
-QStringList KurooDB::updatesTotal()
+QString KurooDB::updatesTotal()
 {
-	return query( "SELECT COUNT(id) FROM updates LIMIT 1;" );
+	return query( "SELECT COUNT(id) FROM updates LIMIT 1;" ).first();
+}
+
+/**
+ * Return the total number of packages in queue.
+ */
+QString KurooDB::queueTotal()
+{
+	return query( "SELECT COUNT(id) FROM queue LIMIT 1;" ).first();
 }
 
 /**

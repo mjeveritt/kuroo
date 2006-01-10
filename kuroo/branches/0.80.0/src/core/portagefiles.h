@@ -45,10 +45,10 @@ public slots:
 	void 			loadPackageMask();
 	void 			loadPackageUnmask();
 	void			loadPackageKeywords();
-	QStringList		getHardMaskedAtom( const QString& id );
-	QStringList		getUserMaskedAtom( const QString& id );
-	QStringList		getUnmaskedAtom( const QString& id );
-	QStringList		getKeywordsAtom( const QString& id );
+// 	QStringList		getHardMaskedAtom( const QString& id );
+// 	QStringList		getUserMaskedAtom( const QString& id );
+// 	QStringList		getUnmaskedAtom( const QString& id );
+// 	QStringList		getKeywordsAtom( const QString& id );
 	
 private slots:
 	

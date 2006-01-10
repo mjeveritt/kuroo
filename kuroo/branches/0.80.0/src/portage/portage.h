@@ -73,26 +73,6 @@ public slots:
 	void						pretendPackageList( const QStringList& packageIdList );
 	
 	/**
-	* Get list of all categories, subcategories or packages.
-	* @return QStringList
-	*/
-	QStringList					categories( int filter, const QString& text );
-	QStringList					subCategories( const QString& category, int filter, const QString& text );
-	QStringList					packagesInSubCategory( const QString& category, const QString& subCategoryId, int filter, const QString& text );
-	
-	/**
-	* Get list of versions available of this package.
-	* @param name
-	*/
-	QStringList					packageVersionsInfo( const QString& id );
-	
-	/**
-	* Count packages.
-	* @return total
-	*/
-	QString						count();
-	
-	/**
 	* Find cached size for package.
 	* @param packages
 	* @return size or NULL if na
@@ -115,18 +95,6 @@ public slots:
 	void						clearCache();
 	
 	/**
-	* Load unmasked packages list = packages in package.keyword.
-	*/
-	void						loadPackageKeywords();
-	
-	/**
-	* Check if package is unmasked. @fixme not checking if just testing or hardmasked.
-	* @param package
-	* @return true/false
-	*/
-	bool						isUntesting( const QString& package );
-	
-	/**
 	* Unmask list of packages by adding them to package.keyword.
 	* @param category
 	* @param packageList
@@ -146,7 +114,6 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						clearUntestingPackageList( const QStringList& packageIdList );
 	void						appendWorld( const QString& package );
 	
 signals:

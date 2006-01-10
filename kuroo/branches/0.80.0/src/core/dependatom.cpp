@@ -159,7 +159,6 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan( m_version ) )
 		  )
 		{
-// 			kdDebug() << "(*versionIterator)->version()=" << (*versionIterator)->version() << " m_isHardMasked == true" << endl;
 			matchingVersions.append( (PackageVersion*) *versionIterator );
 			continue;
 		}

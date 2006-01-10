@@ -670,7 +670,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes : {
 						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageKeywords() ) ) {
-							PortageSingleton::Instance()->loadPackageKeywords(); // @fixme: why do this every time?
+// 							PortageSingleton::Instance()->loadPackageKeywords(); // @fixme: why do this every time?
 							pretend( lastEmergeList );
 						}
 						break;

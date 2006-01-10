@@ -46,7 +46,6 @@ Portage::~Portage()
 void Portage::init( QObject *myParent )
 {
 	parent = myParent;
-	loadPackageKeywords();
 	loadCache();
 }
 
@@ -128,44 +127,6 @@ void Portage::pretendPackageList( const QStringList& packageIdList )
 }
 
 /**
- * Get list of all categories for portage packages.
- * @return QStringList
- */
-QStringList Portage::categories( int filter, const QString& text )
-{
-	return KurooDBSingleton::Instance()->portageCategories( filter, text );
-}
-
-/**
- * Get list of all subcategories for portage packages.
- * @return QStringList
- */
-QStringList Portage::subCategories( const QString& categoryId, int filter, const QString& text )
-{
-	return KurooDBSingleton::Instance()->portageSubCategories( categoryId, filter, text );
-}
-
-/**
- * Get list of packages in this subcategory from database.
- * @param category
- * @return QStringList
- */
-
-QStringList Portage::packagesInSubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
-{
-	return KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filter, text );
-}
-
-/**
- * Count packages.
- * @return total
- */
-QString Portage::count()
-{
-	return KurooDBSingleton::Instance()->packageTotal().first();
-}
-
-/**
  * Find cached size for package.
  * @param packages
  * @return size or NULL if na
@@ -212,42 +173,6 @@ void Portage::clearCache()
 }
 
 /**
- * Load untesting packages list = packages in package.keyword.
- */
-void Portage::loadPackageKeywords()
-{
-	mapPackageKeywords.clear();
-	
-	// Load package.keyword
-	QFile file( KurooConfig::filePackageKeywords() );
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString line( stream.readLine() );
-			if ( !line.isEmpty() && !line.startsWith( "#" ) )
-				mapPackageKeywords.insert( line.section( " ", 0, 0 ), line.section( " ", 1, 1 ) );
-		}
-		file.close();
-	}
-	else
-		kdDebug() << i18n("Error reading: package.keyword.") << endl;
-}
-
-/**
- * Check if package is unmasked. @fixme not checking if just testing or hardmasked.
- * @param package
- * @return success
- */
-bool Portage::isUntesting( const QString& package )
-{
-	QMap<QString, QString>::iterator itMap = mapPackageKeywords.find( package ) ;
-	if ( itMap != mapPackageKeywords.end() )
-		return true;
-	else
-		return false;
-}
-
-/**
  * Unmask list of packages by adding them to package.keyword.
  * @param category
  * @param packageList
@@ -259,8 +184,6 @@ void Portage::untestingPackageList( const QStringList& packageIdList )
 	
 		if ( !unmaskPackage( package, KurooConfig::filePackageKeywords() ) )
 			break;
-		else
-			mapPackageKeywords.insert( package, "~" + KurooConfig::arch() );
 	}
 }
 
@@ -312,44 +235,9 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 	// Signal to gui to mark package as unmasked
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
 	QString name( temp.section ( rxPortageVersion, 0, 0 ) );
-	SignalistSingleton::Instance()->setUnmasked( name, true );
+// 	SignalistSingleton::Instance()->setUnmasked( name, true );
 	
 	return true;
-}
-
-/**
- * Clear the unmasking of packages by removing from package.keyword.
- * @param category
- * @param packageList
- */
-void Portage::clearUntestingPackageList( const QStringList& packageIdList )
-{
-	QFile file( KurooConfig::filePackageKeywords() );
-	
-	// Store back list of unmasked packages
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		
-		foreach ( packageIdList ) {
-			QString package = Portage::category( *it ) + "/" + Portage::package( *it ).section( rxPortageVersion, 0, 0 );
-			mapPackageKeywords.remove( package );
-			
-			// Signal to gui to mark package as not unmasked anymore
-			QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
-			QString name( temp.section( rxPortageVersion, 0, 0 ) );
-			SignalistSingleton::Instance()->setUnmasked( name, false );
-		}
-		
-		QMap< QString, QString >::iterator itMapEnd = mapPackageKeywords.end();
-		for ( QMap< QString, QString >::iterator itMap = mapPackageKeywords.begin(); itMap != itMapEnd; ++itMap ) {
-			stream << itMap.key() + " " + itMap.data() + "\n";
-		}
-		file.close();
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
-		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
-	}
 }
 
 /**
@@ -420,11 +308,6 @@ QString Portage::category( const QString& id )
 QString Portage::package( const QString& id )
 {
 	return KurooDBSingleton::Instance()->package( id );
-}
-
-QStringList Portage::packageVersionsInfo( const QString& id )
-{
-	return KurooDBSingleton::Instance()->packageVersionsInfo( id );
 }
 
 #include "portage.moc"

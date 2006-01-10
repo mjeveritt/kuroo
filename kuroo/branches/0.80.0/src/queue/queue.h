@@ -78,7 +78,7 @@ public slots:
 	/**
 	* Forward signal to refresh queue.
 	*/
-	void					refresh();
+	void					refresh( bool hasCheckedQueue );
 	
 	/**
 	* Remove packages from queue.
@@ -104,17 +104,10 @@ public slots:
 	*/
 	void					installPackageList( const QStringList& packageList );
 	
-	/**
-	* Get list of all Queue packages.
-	* @return QStringList
-	*/
-	QStringList				allPackages();
-	
 	void					installQueue( const QStringList& packageIdList );
-	QString					count();
 	
 signals:
-	void					signalQueueChanged();
+	void					signalQueueChanged( bool hasCheckedQueue );
 	void					signalPackageAdvance( const QString& id );
 	void					signalPackageComplete( const QString& id );
 	

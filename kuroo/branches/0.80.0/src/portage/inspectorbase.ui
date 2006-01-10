@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>775</width>
-            <height>524</height>
+            <height>422</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -196,107 +196,6 @@
                                             <string>I know what I do and want to continue</string>
                                         </property>
                                     </widget>
-                                    <widget class="QGroupBox" row="3" column="0">
-                                        <property name="name">
-                                            <cstring>groupDifferentVersion</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="title">
-                                            <string>Install different version in parallel:</string>
-                                        </property>
-                                        <grid>
-                                            <property name="name">
-                                                <cstring>unnamed</cstring>
-                                            </property>
-                                            <widget class="QLabel" row="0" column="0">
-                                                <property name="name">
-                                                    <cstring>textLabel6</cstring>
-                                                </property>
-                                                <property name="text">
-                                                    <string>You can install different versions of the same Package in different slots.
-Here you can add new slots and select, which slot the inspector is working on.</string>
-                                                </property>
-                                            </widget>
-                                            <widget class="QLayoutWidget" row="1" column="0">
-                                                <property name="name">
-                                                    <cstring>layout17</cstring>
-                                                </property>
-                                                <grid>
-                                                    <property name="name">
-                                                        <cstring>unnamed</cstring>
-                                                    </property>
-                                                    <widget class="QLineEdit" row="0" column="4">
-                                                        <property name="name">
-                                                            <cstring>lineEdit1</cstring>
-                                                        </property>
-                                                    </widget>
-                                                    <widget class="QLabel" row="0" column="3">
-                                                        <property name="name">
-                                                            <cstring>textLabel8</cstring>
-                                                        </property>
-                                                        <property name="text">
-                                                            <string>Add new slot:</string>
-                                                        </property>
-                                                    </widget>
-                                                    <widget class="QPushButton" row="0" column="5">
-                                                        <property name="name">
-                                                            <cstring>pbAddSlot</cstring>
-                                                        </property>
-                                                        <property name="text">
-                                                            <string>Add</string>
-                                                        </property>
-                                                        <property name="accel">
-                                                            <string></string>
-                                                        </property>
-                                                    </widget>
-                                                    <spacer row="0" column="2">
-                                                        <property name="name">
-                                                            <cstring>spacer4</cstring>
-                                                        </property>
-                                                        <property name="orientation">
-                                                            <enum>Horizontal</enum>
-                                                        </property>
-                                                        <property name="sizeType">
-                                                            <enum>Expanding</enum>
-                                                        </property>
-                                                        <property name="sizeHint">
-                                                            <size>
-                                                                <width>30</width>
-                                                                <height>20</height>
-                                                            </size>
-                                                        </property>
-                                                    </spacer>
-                                                    <widget class="QComboBox" row="0" column="1">
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>Select Slot</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>1</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>2</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>3</string>
-                                                            </property>
-                                                        </item>
-                                                        <property name="name">
-                                                            <cstring>cbSlots</cstring>
-                                                        </property>
-                                                    </widget>
-                                                </grid>
-                                            </widget>
-                                        </grid>
-                                    </widget>
                                     <widget class="QGroupBox" row="2" column="0">
                                         <property name="name">
                                             <cstring>groupArchitecture</cstring>
@@ -316,10 +215,10 @@ Here you can add new slots and select, which slot the inspector is working on.</
                                                     <cstring>ckbAvailable</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Package is available</string>
+                                                    <string>Package is &amp;available</string>
                                                 </property>
                                                 <property name="accel">
-                                                    <string></string>
+                                                    <string>Alt+A</string>
                                                 </property>
                                             </widget>
                                             <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">

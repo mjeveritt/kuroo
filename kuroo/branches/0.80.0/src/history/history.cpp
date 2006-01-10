@@ -167,15 +167,6 @@ void History::slotScanHistory( const QStringList& lines )
 }
 
 /**
- * Return all emerge/unmerge history.
- * @return QStringList
- */
-QStringList History::allHistory()
-{
-	return KurooDBSingleton::Instance()->allHistory();
-}
-
-/**
  * Parse emerge.log when it has been changed, eg after, emerge, unmerge, sync...
  * Allow for translation of the output.
  */

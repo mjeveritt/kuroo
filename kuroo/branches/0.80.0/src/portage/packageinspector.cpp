@@ -100,7 +100,6 @@ void PackageInspector::slotUser2()
 void PackageInspector::slotAdvancedToggle( bool isOn )
 {
 	dialog->groupArchitecture->setDisabled( !isOn );
-	dialog->groupDifferentVersion->setDisabled( !isOn );
 }
 
 /**
@@ -134,7 +133,7 @@ void PackageInspector::slotInstallVersion()
 	dialog->ckbIKnow->setChecked( false );
 	
 	// Get user mask specific version
-	QString userMaskVersion = PortageFilesSingleton::Instance()->getUserMaskedAtom( m_portagePackage->id() ).first();
+	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_portagePackage->id() ).first();
 	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
 	
 	if ( !userMaskVersion.isEmpty() ) {

@@ -121,13 +121,4 @@ void Updates::removePackage( const QString& package )
 	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
 }
 
-/**
- * Count packages.
- * @return total
- */
-QString Updates::count()
-{
-	return KurooDBSingleton::Instance()->updatesTotal().first();
-}
-
 #include "updates.moc"

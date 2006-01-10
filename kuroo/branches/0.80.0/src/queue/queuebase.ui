@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>691</width>
-            <height>515</height>
+            <width>610</width>
+            <height>412</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -312,34 +312,18 @@
                             <property name="margin">
                                 <number>5</number>
                             </property>
-                            <widget class="QPushButton" row="0" column="4">
-                                <property name="name">
-                                    <cstring>pbOptions</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Advanced Options...</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>pbPretend</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Emer&amp;ge pretend Packages</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
-                                </property>
-                            </widget>
                             <widget class="QPushButton" row="0" column="1">
                                 <property name="name">
                                     <cstring>pbGo</cstring>
                                 </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>200</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
                                 <property name="text">
-                                    <string>Start I&amp;nstallation</string>
+                                    <string>Check I&amp;nstallation</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+N</string>

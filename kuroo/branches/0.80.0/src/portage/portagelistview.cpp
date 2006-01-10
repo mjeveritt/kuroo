@@ -85,12 +85,12 @@ void PortageListView::PortageItem::initVersions()
 // 	clock_t start = clock();
 	
 	// Get list of accepted keywords, eg if package is "untesting"
-	m_category = PortageSingleton::Instance()->category( id() );
-	QString acceptedKeywords = PortageFilesSingleton::Instance()->getKeywordsAtom( id() ).first();
+	m_category = KurooDBSingleton::Instance()->category( id() );
+	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() ).first();
 
 // 	kdDebug() << "acceptedKeywords=" << acceptedKeywords << endl;
 	
-	const QStringList versionsList = PortageSingleton::Instance()->packageVersionsInfo( id() );
+	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
 		QString meta = *it++;
@@ -119,7 +119,7 @@ void PortageListView::PortageItem::initVersions()
 	atom = new DependAtom( this );
 	
 	// Check if any of this package versions are hardmasked
-	const QStringList atomHardMaskedList = PortageFilesSingleton::Instance()->getHardMaskedAtom( id() );
+	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 // 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
 
@@ -139,7 +139,7 @@ void PortageListView::PortageItem::initVersions()
 	atom = new DependAtom( this );
 	
 	// Check if any of this package versions are unmasked
-	const QStringList atomUnmaskedList = PortageFilesSingleton::Instance()->getUnmaskedAtom( id() );
+	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
 // 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
 		
@@ -159,7 +159,7 @@ void PortageListView::PortageItem::initVersions()
 	atom = new DependAtom( this );
 	
 	// Check if any of this package versions are user-masked
-	const QStringList atomUserMaskedList = PortageFilesSingleton::Instance()->getUserMaskedAtom( id() );
+	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 // 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
 		

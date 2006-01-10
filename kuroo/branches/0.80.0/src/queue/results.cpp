@@ -64,7 +64,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh();
+		ResultsSingleton::Instance()->refresh();
 	}
 	
 private:
@@ -94,7 +94,8 @@ void Results::init( QObject *myParent )
  */
 void Results::refresh()
 {
-	emit signalResultsChanged();
+	kdDebug() << "Results::refresh" << endl;
+	QueueSingleton::Instance()->refresh( true );
 }
 
 /**
@@ -105,15 +106,6 @@ void Results::addPackageList( const EmergePackageList &packageList )
 {
 	if ( !packageList.isEmpty() )
 		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
-}
-
-/**
- * Get list of all packages.
- * @return package list
- */
-QStringList Results::allPackages()
-{
-	return KurooDBSingleton::Instance()->allResultPackages();
 }
 
 #include "results.moc"

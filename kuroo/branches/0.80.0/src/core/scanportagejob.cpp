@@ -32,6 +32,10 @@
 
 #include <kglobal.h>
 
+// capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
+#define POS_PACKAGE     1
+#define POS_VERSION     2
+
 /**
  * Thread for scanning local portage tree for available packages.
  * The packages are counted first, this to get a correct refresh progress in the gui.
@@ -41,7 +45,14 @@
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted( true ),
+	rxAtom( "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
+			"-("            // start of the version part
+			"(?:\\d+(?:\\.\\d+)*[a-z]?)" // base version number, including wildcard version matching (*)
+			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" // version suffix
+			"(?:-r\\d*)?"  // revision
+			")?$"          // end of the (optional) version part and the atom string
+		)
 {
 }
 
@@ -182,35 +193,45 @@ bool ScanPortageJob::doJob()
 					return false;
 				}
 				
-				QString name = ( *itPackage ).section( rxPortageVersion, 0, 0 );
-				QString version = ( *itPackage ).section( name + "-", 1, 1 );
+				if ( rxAtom.exactMatch( *itPackage ) ) {
+					
+					// Get the captured strings
+					QString name = rxAtom.cap( POS_PACKAGE );
+					QString version = rxAtom.cap( POS_VERSION );
+					
+	// 				QString name = ( *itPackage ).section( rxPortageVersion, 0, 0 );
+	// 				QString version = ( *itPackage ).section( name + "-", 1, 1 );
+					
+					Info info( scanInfo( path, *itCategory, *itPackage ) );
+					
+					// Insert category and db id's in portage
+					if ( !categories.contains( *itCategory ) ) {
+						categories[ *itCategory ].idCategory = QString::number( idCategory );
+						categories[ *itCategory ].idSubCategory = QString::number( idSubCategory );
+						categories[ *itCategory ].idCatSubCategory = QString::number( idCatSubCategory );
+					}
+					
+					// Insert package in portage
+					if ( !categories[ *itCategory ].packages.contains( name ) ) {
+						categories[ *itCategory ].packages[ name ];
+						categories[ *itCategory ].packages[ name ].meta = FILTERALL_STRING;
+						categories[ *itCategory ].packages[ name ].description = info.description;
+						categories[ *itCategory ].packages[ name ].homepage = info.homepage;
+					}
+					
+					// Insert version in portage
+					if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
+						categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERALL_STRING;
+						categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
+						categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
+						categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
+						categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
+						categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
+					}
 				
-				Info info( scanInfo( path, *itCategory, *itPackage ) );
-				
-				// Insert category and db id's in portage
-				if ( !categories.contains( *itCategory ) ) {
-					categories[ *itCategory ].idCategory = QString::number( idCategory );
-					categories[ *itCategory ].idSubCategory = QString::number( idSubCategory );
-					categories[ *itCategory ].idCatSubCategory = QString::number( idCatSubCategory );
 				}
-				
-				// Insert package in portage
-				if ( !categories[ *itCategory ].packages.contains( name ) ) {
-					categories[ *itCategory ].packages[ name ];
-					categories[ *itCategory ].packages[ name ].meta = FILTERALL_STRING;
-					categories[ *itCategory ].packages[ name ].description = info.description;
-					categories[ *itCategory ].packages[ name ].homepage = info.homepage;
-				}
-				
-				// Insert version in portage
-				if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
-					categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERALL_STRING;
-					categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
-					categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
-					categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
-					categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
-					categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
-				}
+				else
+					kdDebug() << i18n("Can not match package %1 in portage cache.").arg( *itPackage ) << endl;
 				
 				// Post scan count progress
 				if ( ( ++count % 100 ) == 0 )

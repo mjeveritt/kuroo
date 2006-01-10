@@ -40,7 +40,7 @@
  * Tab page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent )
-	: QueueBase( parent )
+	: QueueBase( parent ), m_hasCheckedQueue( false )
 {
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
@@ -50,16 +50,15 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	
-	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
-	connect( pbPretend, SIGNAL( clicked() ), this, SLOT( slotPretend() ) );
+// 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
 	
 	// Lock/unlock if kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
 	
 	// Reload view after changes.
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged() ), this, SLOT( slotReload() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
 	
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance( const QString& ) ), queueView, SLOT( slotPackageProgress( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
@@ -89,25 +88,30 @@ void QueueTab::slotInit()
 	if ( !KurooConfig::init() )
 		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
 	
-	emergeInspector = new EmergeInspector( this );
+// 	emergeInspector = new EmergeInspector( this );
 	slotBusy( false );
 }
 
 /**
  * Load Queue packages.
  */
-void QueueTab::slotReload()
+void QueueTab::slotReload( bool hasCheckedQueue )
 {
-	kdDebug() << "QueueTab::slotReload" << endl;
+	m_hasCheckedQueue = hasCheckedQueue;
+	
+	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	queueView->insertPackageList();
 	
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
-			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( QueueSingleton::Instance()->count() );
+			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( KurooDBSingleton::Instance()->queueTotal() );
 			queueBrowserLines += i18n( "Estimated time for emerge: %1<br>" ).arg( queueView->totalTime() );
 			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
 	
 	queueBrowser->clear();
 	queueBrowser->setText( queueBrowserLines );
+	
+// 	if ( m_hasCheckedQueue )
+// 		pbGo->setText( i18n("Start Installation!") );
 	
 // 	totalSizeText->setText( queueView->totalSize() );
 }
@@ -118,6 +122,8 @@ void QueueTab::slotReload()
  */
 void QueueTab::slotBusy( bool busy )
 {
+	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
+	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Stop Installation!" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
@@ -125,62 +131,33 @@ void QueueTab::slotBusy( bool busy )
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 	}
 	else {
-		pbGo->setText( i18n( "Start Installation!" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+		
+		if ( m_hasCheckedQueue )
+			pbGo->setText( i18n( "Start Installation!" ) );
+		else
+			pbGo->setText( i18n("Check Installation!") );
 	}
 	
 	if ( busy ) {
-		pbPretend->setDisabled( true );
-		pbOptions->setDisabled( true );
+// 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
 	}
 	else {
-		if ( !KUser().isSuperUser() ) {
-			pbGo->setDisabled( true );
-		}
-		else {
-			pbGo->setDisabled( false );
-		}
 		
-		pbPretend->setDisabled( false );
-		pbOptions->setDisabled( false );
+// 		if ( m_hasCheckedQueue && !KUser().isSuperUser() ) {
+// 			pbGo->setDisabled( true );
+// 		}
+// 		else {
+// 			pbGo->setDisabled( false );
+// 		}
+		
+// 		pbOptions->setDisabled( false );
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );
-	}
-}
-
-/**
- * Popup menu for actions like emerge.
- * @param item
- * @param point
- */
-void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point )
-{
-	if ( !item )
-		return;
-	
-	enum Actions { PRETEND, EMERGE, REMOVE, GOTO };
-	
-	KPopupMenu menu( this );
-	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
-	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
-	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
-		menu.setItemEnabled( menuItem1, false );
-		menu.setItemEnabled( menuItem2, false );
-	}
-	
-	switch( menu.exec( point ) ) {
-		
-		case PRETEND:
-			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
-			break;
-
-		case REMOVE:
-			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 	}
 }
 
@@ -196,13 +173,19 @@ void QueueTab::slotGo()
 	
 	// Prepend emerge options
 	QStringList packageList;
-	QString options( emergeInspector->getOptions() );
-	
-	if ( options.isEmpty() )
+// 	QString options( emergeInspector->getOptions() );
+// 	
+// 	if ( options.isEmpty() )
 		packageList = queueView->allPackages();
-	else {
-		packageList = QStringList::split( " ", options );
-		packageList += queueView->allPackages();
+// 	else {
+// 		packageList = QStringList::split( " ", options );
+// 		packageList += queueView->allPackages();
+// 	}
+	
+	if ( !m_hasCheckedQueue ) {
+		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
+		m_hasCheckedQueue = true;
+		return;
 	}
 	
 	switch( KMessageBox::questionYesNoList( this, 
@@ -210,7 +193,7 @@ void QueueTab::slotGo()
 		case KMessageBox::Yes: {
 			QueueSingleton::Instance()->installPackageList( packageList );
 			KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-			pbGo->setText( i18n( "Stop Installation!" ) );
+			m_hasCheckedQueue = false;
 		}
 	}
 }
@@ -245,6 +228,38 @@ void QueueTab::slotRemove()
 void QueueTab::slotOptions()
 {
 	emergeInspector->edit();
+}
+
+/**
+ * Popup menu for actions like emerge.
+ * @param item
+ * @param point
+ */
+void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point )
+{
+	if ( !item )
+		return;
+	
+	enum Actions { PRETEND, EMERGE, REMOVE, GOTO };
+	
+	KPopupMenu menu( this );
+	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
+	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+	}
+	
+	switch( menu.exec( point ) ) {
+		
+	case PRETEND:
+		PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
+		break;
+		
+	case REMOVE:
+		QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+	}
 }
 
 #include "queuetab.moc"

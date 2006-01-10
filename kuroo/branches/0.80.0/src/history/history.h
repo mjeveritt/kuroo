@@ -75,11 +75,6 @@ public slots:
 	 */
 	QString 		packageTime( const QString& packageNoversion );
 	
-	/**
-	 * Return all emerge/unmerge history.
- 	 */
-	QStringList		allHistory();
-	
 	void			slotChanged();
 
 	void			appendEmergeInfo( const QString& einfo );

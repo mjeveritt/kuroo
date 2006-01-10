@@ -76,6 +76,7 @@ private slots:
 	QString								formatSize( const QString& size );
 	
 private:
+	QRegExp								rxAtom;
 	InstalledMap						installedMap;
 	int									totalPackages;
 	bool								aborted;

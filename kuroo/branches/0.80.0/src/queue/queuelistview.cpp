@@ -185,7 +185,7 @@ void QueueListView::insertPackageList()
 	resetListView();
 	
 	// Get list of update packages with info
-	const QStringList packageList = QueueSingleton::Instance()->allPackages();
+	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
 	foreach ( packageList ) {
 		QString id = *it++;
 		QString category = *it++;

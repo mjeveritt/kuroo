@@ -232,7 +232,10 @@ void PackageInspector::slotGetUseFlags( const QString& version )
  */
 void PackageInspector::slotApply()
 {
+	
 	PortageFilesSingleton::Instance()->savePackageKeywords();
+	PortageFilesSingleton::Instance()->savePackageUserMask();
+	PortageFilesSingleton::Instance()->savePackageUserUnMask();
 	
 // 	QString useFlags;
 // 	QStringList lines;
@@ -454,7 +457,6 @@ void PackageInspector::slotSetStability( int rbStability )
 		// User wants only specific version and no further
 		case 3 :
 			dialog->cbVersionsSpecific->setDisabled( false );
-/*			connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );*/
 		
 	}
 }
@@ -470,7 +472,7 @@ void PackageInspector::slotSetVersionSpecific( const QString& version )
 	KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
 	KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );
 	KurooDBSingleton::Instance()->setPackageUserMasked( m_portagePackage->id(), version );
-// 	disconnect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetVersionSpecific( const QString& ) ) );
+	
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();
 }

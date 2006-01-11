@@ -49,7 +49,7 @@
 		<entry name="DirWorldFile" type="String">
 		<default>/var/lib/portage/world</default>
 		</entry>
-		<entry name="FilePackageUnmask" type="String">
+		<entry name="FilePackageUserUnMask" type="String">
 		<default>/etc/portage/package.unmask</default>
 		</entry>
 		<entry name="FilePackageKeywords" type="String">

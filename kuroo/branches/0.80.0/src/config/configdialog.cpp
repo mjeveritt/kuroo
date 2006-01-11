@@ -95,7 +95,7 @@ void ConfigDialog::slotDefault()
  */
 void ConfigDialog::readPackageUnmask()
 {
-	QFile file( KurooConfig::filePackageUnmask() );
+	QFile file( KurooConfig::filePackageUserUnMask() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -105,7 +105,7 @@ void ConfigDialog::readPackageUnmask()
 		KurooConfig::setPackageUnmask( lines.join("\n") );
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageUnmask() << endl;
+		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageUserUnMask() << endl;
 	
 	file.close();
 }
@@ -379,7 +379,7 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::savePackageUnmask()
 {
-	QFile file( KurooConfig::filePackageUnmask() );
+	QFile file( KurooConfig::filePackageUserUnMask() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		stream << KurooConfig::packageUnmask();
@@ -387,7 +387,7 @@ bool ConfigDialog::savePackageUnmask()
 		return true;
 	}
 	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageUnmask() << endl;
+		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageUserUnMask() << endl;
 		return false;
 	}
 }

@@ -575,7 +575,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageUnmask() ) ) {
+						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageUserUnMask() ) ) {
 							pretend( lastEmergeList );
 						}
 						break;

@@ -138,22 +138,22 @@ public:
 };
 
 /**
- * @class: LoadPackageUnMaskJob
+ * @class: LoadPackageUserUnMaskJob
  * @short: Thread for loading packages unmasked by user.
  */
-class LoadPackageUnMaskJob : public ThreadWeaver::DependentJob
+class LoadPackageUserUnMaskJob : public ThreadWeaver::DependentJob
 {
 public:
-	LoadPackageUnMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	LoadPackageUserUnMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 	
 	virtual bool doJob() {
 		
 		// Collect all unmask dependatoms
-		QFile file( KurooConfig::filePackageUnmask() );
+		QFile file( KurooConfig::filePackageUserUnMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) ) {
-			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUnmask() ) << endl;
+			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
 		}
 		else {
 			while ( !stream.atEnd() ) {
@@ -199,7 +199,7 @@ public:
 						
 					}
 					else
-						kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUnmask() ) << endl;
+						kdDebug() << i18n("Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUserUnMask() ) << endl;
 				}
 			}
 		}
@@ -387,13 +387,13 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 };
 
 /**
- * @class: LoadPackageKeywordsJob
+ * @class: SavePackageKeywordsJob
  * @short: Thread for loading packages unmasked by user.
  */
 class SavePackageKeywordsJob : public ThreadWeaver::DependentJob
 {
 public:
-	SavePackageKeywordsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	SavePackageKeywordsJob( QObject *dependent ) : DependentJob( dependent, "DBJob1" ) {}
 	
 	virtual bool doJob() {
 		
@@ -427,10 +427,81 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 0 );
+		PortageFilesSingleton::Instance()->refresh( 4 );
 	}
 };
 
+/**
+ * @class: SavePackageUserMaskJob
+ * @short: Thread for loading packages unmasked by user.
+ */
+class SavePackageUserMaskJob : public ThreadWeaver::DependentJob
+{
+public:
+	SavePackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob2" ) {}
+	
+	virtual bool doJob() {
+		
+		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask ;" );
+		if ( lines.isEmpty() ) {
+			kdDebug() << i18n("No user mask depend atom found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserMask() ) << endl;
+			return false;
+		}
+		
+		QFile file( KurooConfig::filePackageUserMask() );
+		QTextStream stream( &file );
+		if ( !file.open( IO_WriteOnly ) ) {
+			kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::filePackageUserMask() ) << endl;
+			return false;
+		}
+		
+		foreach ( lines )
+				stream << *it << "\n";
+		
+		file.close();
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( 5 );
+	}
+};
+
+/**
+ * @class: SavePackageUserMaskJob
+ * @short: Thread for loading packages unmasked by user.
+ */
+class SavePackageUserUnMaskJob : public ThreadWeaver::DependentJob
+{
+public:
+	SavePackageUserUnMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob3" ) {}
+	
+	virtual bool doJob() {
+		
+		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
+		if ( lines.isEmpty() ) {
+			kdDebug() << i18n("No user unmask depend atom found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUnMask() ) << endl;
+			return false;
+		}
+		
+		QFile file( KurooConfig::filePackageUserUnMask() );
+		QTextStream stream( &file );
+		if ( !file.open( IO_WriteOnly ) ) {
+		kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
+			return false;
+		}
+		
+		foreach ( lines )
+			stream << *it << "\n";
+		
+		file.close();
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( 6 );
+	}
+};
 
 /**
  * Object for resulting list of packages from emerge actions.
@@ -459,13 +530,22 @@ void PortageFiles::refresh( int mask )
 			kdDebug() << i18n("Completed scanning for package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
 			break;
 		case 1:
-			kdDebug() << i18n("Completed scanning for unmasked packages in %1.").arg( KurooConfig::filePackageUnmask() ) << endl;
+			kdDebug() << i18n("Completed scanning for unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
 			break;
 		case 2:
 			kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageHardMask() ) << endl;
 			break;
 		case 3:
 			kdDebug() << i18n("Completed scanning for user masked packages in %1.").arg( KurooConfig::filePackageUserMask() ) << endl;
+			break;
+		case 4:
+			kdDebug() << i18n("Completed saving package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
+			break;
+		case 5:
+			kdDebug() << i18n("Completed saving unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
+			break;
+		case 6:
+			kdDebug() << i18n("Completed saving unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
 	}
 }
 
@@ -477,18 +557,18 @@ void PortageFiles::loadPackageMask()
 {
 	ThreadWeaver::instance()->queueJob( new LoadPackageHardMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
-	ThreadWeaver::instance()->queueJob( new LoadPackageUnMaskJob( this ) );
+	ThreadWeaver::instance()->queueJob( new LoadPackageUserUnMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
-}
-
-void PortageFiles::loadPackageUnmask()
-{
-	ThreadWeaver::instance()->queueJob( new LoadPackageUnMaskJob( this ) );
 }
 
 void PortageFiles::loadPackageKeywords()
 {
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
+}
+
+void PortageFiles::loadPackageUnmask()
+{
+	ThreadWeaver::instance()->queueJob( new LoadPackageUserUnMaskJob( this ) );
 }
 
 void PortageFiles::loadPackageUserMask()
@@ -499,6 +579,16 @@ void PortageFiles::loadPackageUserMask()
 void PortageFiles::savePackageKeywords()
 {
 	ThreadWeaver::instance()->queueJob( new SavePackageKeywordsJob( this ) );
+}
+
+void PortageFiles::savePackageUserUnMask()
+{
+	ThreadWeaver::instance()->queueJob( new SavePackageUserUnMaskJob( this ) );
+}
+
+void PortageFiles::savePackageUserMask()
+{
+	ThreadWeaver::instance()->queueJob( new SavePackageUserMaskJob( this ) );
 }
 
 #include "portagefiles.moc"

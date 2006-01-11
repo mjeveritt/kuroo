@@ -85,14 +85,6 @@ PortageTab::PortageTab( QWidget* parent )
  */
 PortageTab::~PortageTab()
 {
-	KConfig *config = KurooConfig::self()->config();
-	config->setGroup("Package View Geometry");
-	QValueList<int> list = splitterH->sizes();
-	config->writeEntry("splitterH", list);
-	list = splitterV->sizes();
-	config->writeEntry("splitterV", list);
-	
-	packagesView->saveLayout( KurooConfig::self()->config(), "portageViewLayout" );
 }
 
 /**
@@ -102,16 +94,6 @@ PortageTab::~PortageTab()
 void PortageTab::slotInit()
 {
 	kdDebug() << "PortageTab::slotInit" << endl;
-	
-	KConfig *config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	QValueList<int> sizes = config->readIntListEntry("splitterH");
-	splitterH->setSizes(sizes);
-	sizes = config->readIntListEntry("splitterV");
-	splitterV->setSizes(sizes);
-	
-	if ( !KurooConfig::init() )
-		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
 	
 	packageInspector = new PackageInspector( this );
 	connect( packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );

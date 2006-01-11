@@ -43,11 +43,13 @@ public slots:
  	 * @param packageList
  	 */
 	void 			loadPackageMask();
-	void 			loadPackageUnmask();
 	void			loadPackageKeywords();
+	void 			loadPackageUnmask();
 	void			loadPackageUserMask();
 	
 	void			savePackageKeywords();
+	void 			savePackageUserUnMask();
+	void			savePackageUserMask();
 	
 private slots:
 	

@@ -216,7 +216,7 @@
         </widget>
         <widget class="QSplitter" row="1" column="0">
             <property name="name">
-                <cstring>splitter15</cstring>
+                <cstring>splitterH</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -322,7 +322,7 @@
                     </property>
                     <widget class="QSplitter" row="0" column="1">
                         <property name="name">
-                            <cstring>splitter14</cstring>
+                            <cstring>splitterV</cstring>
                         </property>
                         <property name="sizePolicy">
                             <sizepolicy>

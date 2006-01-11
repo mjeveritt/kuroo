@@ -9,7 +9,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libqueue.la
 
 libqueue_la_SOURCES = queuebase.ui queuetab.cpp queue.cpp queuelistview.cpp \
-	emergeoptions.ui emergeinspector.cpp results.cpp
+	results.cpp
 
-noinst_HEADERS = queuetab.h queue.h queuelistview.h emergeinspector.h results.h
+noinst_HEADERS = queuetab.h queue.h queuelistview.h results.h
 

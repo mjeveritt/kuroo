@@ -78,51 +78,6 @@ EmergePackageList Emerge::packageList()
 
 /**
  * Emerge packages.
- * @param category
- * @param packageList	
- * @return success
- */
-bool Emerge::queue( const QString& category, const QStringList& packageList )
-{
-	blocks.clear();
-	importantMessage = QString::null;
-	unmasked = QString::null;
-	lastEmergeList = packageList;
-	etcUpdateCount = 0;
-	QString sPack = packageList.join(" ");
-	
-	emergePackageList.clear();
-	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--nocolor";
-	
-	// Add emerge options and packages
-	foreach( packageList ) {
-		if ( (*it).startsWith("-") )
-			*eProc << *it;
-		else
-			*eProc << category + "/" + *it;
-	}
-	
-	eProc->start( KProcess::OwnGroup, true );
-	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupQueue(KProcess*) ) );
-	SignalistSingleton::Instance()->setKurooBusy( true );
-	
-	if ( !eProc->isRunning() ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
-		cleanupQueue(eProc);
-		return false;
-	}
-	else {
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg(sPack), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( i18n("Emerging packages in queue...") );
-		KurooStatusBar::instance()->startTimer();
-		return true;
-	}
-}
-
-/**
- * Emerge packages.
  * @param packageList	
  * @return success
  */
@@ -154,51 +109,13 @@ bool Emerge::queue( const QStringList& packageList )
 	
 	if ( !eProc->isRunning() ) {
 		LogSingleton::Instance()->writeLog(i18n("\nError: Emerge didn't start. "), ERROR);
-		cleanupQueue(eProc);
+		cleanupQueue( eProc );
 		return false;
 	}
 	else {
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg(sPack), KUROO );
+		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( sPack ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( i18n("Emerging packages in queue...") );
 		KurooStatusBar::instance()->startTimer();
-		return true;
-	}
-}
-
-/**
- * Emerge pretend list of packages.
- * @param category
- * @param packageList	
- * @return success
- */
-bool Emerge::pretend( const QString& category, const QStringList& packageList )
-{
-	blocks.clear();
-	importantMessage = QString::null;
-	unmasked = QString::null;
-	lastEmergeList = packageList;
-	etcUpdateCount = 0;
-	
-	emergePackageList.clear();
-	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
-	
-	// Add argument for each of the attached packages
-	foreach( packageList ) {
-		*eProc << category + "/" + *it;
-	}
-	
-	if ( !eProc->start(KProcess::OwnGroup, true) ) {
-		LogSingleton::Instance()->writeLog(i18n("\nError: Emerge didn't start. "), ERROR);
-		return false;
-	}
-	else {
-		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupPretend(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy(true);
-		LogSingleton::Instance()->writeLog(i18n("\nEmerge pretend %1 started...").arg(packageList.join(" ")), KUROO);
-		KurooStatusBar::instance()->setProgressStatus( i18n("Running emerge pretend...") );
-		KurooStatusBar::instance()->startProgress();
 		return true;
 	}
 }
@@ -225,15 +142,15 @@ bool Emerge::pretend( const QStringList& packageList )
 		*eProc << *it;
 	}
 	
-	if ( !eProc->start(KProcess::OwnGroup, true) ) {
-		LogSingleton::Instance()->writeLog(i18n("\nError: Emerge didn't start. "), ERROR);
+	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
+		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupPretend(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy(true);
-		LogSingleton::Instance()->writeLog(i18n("\nEmerge pretend %1 started...").arg(packageList.join(" ")), KUROO);
+		SignalistSingleton::Instance()->setKurooBusy( true );
+		LogSingleton::Instance()->writeLog( i18n("\nEmerge pretend %1 started...").arg( packageList.join(" ") ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( i18n("Running emerge pretend...") );
 		KurooStatusBar::instance()->startProgress();
 		return true;
@@ -262,15 +179,15 @@ bool Emerge::unmerge( const QStringList& packageList )
 		*eProc << *it;
 	}
 	
-	if ( !eProc->start(KProcess::OwnGroup, true) ) {
+	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupUnmerge(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy(true);
-		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg(sPack), KUROO );
+		SignalistSingleton::Instance()->setKurooBusy( true );
+		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( sPack ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( i18n("Unmerging packages...") );
 		KurooStatusBar::instance()->startProgress();
 		return true;
@@ -291,14 +208,14 @@ bool Emerge::sync()
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor";
 	
-	if ( !eProc->start(KProcess::OwnGroup, true) ) {
+	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupSync(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy(true);
+		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( i18n("Synchronizing portage tree...") );
 		KurooStatusBar::instance()->startProgress();
@@ -330,14 +247,14 @@ bool Emerge::checkUpdates()
 	
 	*eProc << "world";
 
-	if ( !eProc->start(KProcess::OwnGroup, true) ) {
+	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupCheckUpdates(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy(true);
+		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( i18n("Checking updates...") );
 		KurooStatusBar::instance()->startProgress();
@@ -549,6 +466,7 @@ void Emerge::readFromStdout( KProcIO *proc )
  */
 void Emerge::cleanup()
 {
+	kdDebug() << "Emerge::cleanup" << endl;
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );

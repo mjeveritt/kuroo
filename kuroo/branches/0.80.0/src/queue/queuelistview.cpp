@@ -66,12 +66,12 @@ QueueListView::QueueItem::~QueueItem()
 }
 
 /**
- * Subclass to disable the queue checkmark.
+ * Disable the queue checkmark.
  */
 void QueueListView::QueueItem::setStatus( int status )
 {
 	if ( status < QUEUED )
-		setStatus( status );
+		PackageItem::setStatus( status );
 }
 
 /**
@@ -89,7 +89,7 @@ void QueueListView::QueueItem::setComplete()
 {
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
-	setStatus( INSTALLED );
+	QueueItem::setStatus( INSTALLED );
 }
 
 /**

@@ -24,7 +24,6 @@
 
 class KListView;
 class QListViewItem;
-class EmergeInspector;
 class PretendInspector;
 class KDialogBase;
 
@@ -70,7 +69,6 @@ private slots:
 	void				slotPretend();
 	void				slotStop();
 	void				slotRemove();
-	void				slotOptions();
 	
 	/**
 	 * Popup menu for actions like emerge.
@@ -81,7 +79,6 @@ private slots:
 	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
 	
 private:
-	EmergeInspector*	emergeInspector;
 	bool				m_hasCheckedQueue;
 };
 

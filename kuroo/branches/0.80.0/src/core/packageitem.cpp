@@ -73,23 +73,23 @@ void PackageItem::setStatus( int status )
 	switch ( status ) {
 		
 		case NONE :
-			meta = NONE;
+// 			meta = NONE;
 			repaint();
 			break;
 		
 		case INSTALLED :
-			meta = INSTALLED;
+// 			meta = INSTALLED;
 			setPixmap( 0, pxInstalled );
 // 			m_meta.insert( i18n("Status"), i18n("Installed") );
 			break;
 			
 		case PACKAGE :
-			meta = PACKAGE;
+// 			meta = PACKAGE;
 			setPixmap( 0, pxPackage );
 			break;
 		
 		case TESTING :
-			meta = TESTING;
+// 			meta = TESTING;
 // 			m_meta.insert( i18n("Keyword"), i18n("Masked") );
 			repaint();
 			break;
@@ -123,34 +123,34 @@ void PackageItem::setStatus( int status )
  * @param width
  * @param alignment
  */
-void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
-{
-	QColorGroup _cg( cg );
-	QFont font( p->font() );
-	
-	if ( column == 0 ) {
-		switch ( meta ) {
-			case NONE :
-				font.setBold(false);
-				p->setFont(font);
-				_cg.setColor( QColorGroup::Text, Qt::black );
-				break;
-			
-			case TESTING :
-				font.setBold(true);
-				p->setFont(font);
-				_cg.setColor( QColorGroup::Text, KurooConfig::maskedColor() );
-				break;
-			
-			case UNTESTING : {
-				font.setBold(true);
-				p->setFont(font);
-				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
-			}
-		}
-	}
-	KListViewItem::paintCell( p, _cg, column, width, alignment );
-}
+// void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+// {
+// 	QColorGroup _cg( cg );
+// 	QFont font( p->font() );
+// 	
+// 	if ( column == 0 ) {
+// 		switch ( meta ) {
+// 			case NONE :
+// 				font.setBold(false);
+// 				p->setFont(font);
+// 				_cg.setColor( QColorGroup::Text, Qt::black );
+// 				break;
+// 			
+// 			case TESTING :
+// 				font.setBold(true);
+// 				p->setFont(font);
+// 				_cg.setColor( QColorGroup::Text, KurooConfig::maskedColor() );
+// 				break;
+// 			
+// 			case UNTESTING : {
+// 				font.setBold(true);
+// 				p->setFont(font);
+// 				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
+// 			}
+// 		}
+// 	}
+// 	KListViewItem::paintCell( p, _cg, column, width, alignment );
+// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Accessor methods

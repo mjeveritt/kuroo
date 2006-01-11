@@ -63,11 +63,6 @@ public slots:
 private slots:
 	
 	/**
-	* Save latest selected packages in tabs All packages, Installed packages and Updates categories.
-	*/
-	void				saveCurrentView();
-	
-	/**
 	* Initialize Portage view.
 	* Restore geometry: splitter positions, listViews width and columns width.
 	*/

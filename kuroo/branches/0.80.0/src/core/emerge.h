@@ -51,7 +51,6 @@ public slots:
  	 * @param packageList	
  	 * @return true 		if emerge process started.
  	 */
-	bool 				pretend( const QString& category, const QStringList& packageList );
 	bool 				pretend( const QStringList& packageList );
 	
 	/**
@@ -60,7 +59,6 @@ public slots:
  	 * @param packageList	
  	 * @return true 		if emerge process started.
  	 */
-	bool 				queue( const QString& category, const QStringList& packageList );
 	bool 				queue( const QStringList& packageList );
 	
 	/**

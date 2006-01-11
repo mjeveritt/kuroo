@@ -85,34 +85,14 @@ PortageTab::PortageTab( QWidget* parent )
  */
 PortageTab::~PortageTab()
 {
-// 	KConfig *config = KurooConfig::self()->config();
-// 	config->setGroup("Kuroo Geometry");
-// 	
-// 	QValueList<int> list = splitterH->sizes();
-// 	config->writeEntry("splitterPortageH", list);
-// 	list = splitterV->sizes();
-// 	config->writeEntry("splitterPortageV", list);
+	KConfig *config = KurooConfig::self()->config();
+	config->setGroup("Package View Geometry");
+	QValueList<int> list = splitterH->sizes();
+	config->writeEntry("splitterH", list);
+	list = splitterV->sizes();
+	config->writeEntry("splitterV", list);
 	
 	packagesView->saveLayout( KurooConfig::self()->config(), "portageViewLayout" );
-	
-	// Save latest selected packages in tabs All packages, Installed packages and Updates categories
-// 	saveCurrentView();
-}
-
-/**
- * Save latest selected packages in tabs All packages, Installed packages and Updates categories.
- */
-void PortageTab::saveCurrentView()
-{
-// 	QListViewItem *item = categoriesView->currentItem();
-// 	if ( item && item->parent() )
-// 		KurooConfig::setLatestPortageCategory( item->parent()->text(0) + "-" + item->text(0) );
-// 	
-// 	item = packagesView->currentItem();
-// 	if ( item )
-// 		KurooConfig::setLatestPortagePackage( item->text(0) );
-// 	
-// 	KurooConfig::writeConfig();
 }
 
 /**
@@ -122,14 +102,13 @@ void PortageTab::saveCurrentView()
 void PortageTab::slotInit()
 {
 	kdDebug() << "PortageTab::slotInit" << endl;
-// 	KConfig *config = KurooConfig::self()->config();
-// 	config->setGroup("Kuroo Geometry");
-// 	
-// 	// @fixme: portage splitters are bugging! using installed splitters instead
-// 	QValueList<int> sizes = config->readIntListEntry("splitterInstalledH");
-// 	splitterH->setSizes(sizes);
-// 	sizes = config->readIntListEntry("splitterInstalledV");
-// 	splitterV->setSizes(sizes);
+	
+	KConfig *config = KurooConfig::self()->config();
+	config->setGroup("Kuroo Geometry");
+	QValueList<int> sizes = config->readIntListEntry("splitterH");
+	splitterH->setSizes(sizes);
+	sizes = config->readIntListEntry("splitterV");
+	splitterV->setSizes(sizes);
 	
 	if ( !KurooConfig::init() )
 		packagesView->restoreLayout( KurooConfig::self()->config(), "portageViewLayout" );
@@ -153,7 +132,6 @@ void PortageTab::slotReload()
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	
-	saveCurrentView();
 	slotFilters();
 }
 
@@ -227,7 +205,6 @@ void PortageTab::slotRefresh()
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
 		case KMessageBox::Yes: {
-			saveCurrentView();
 			PortageSingleton::Instance()->slotRefresh();
 		}
 	}

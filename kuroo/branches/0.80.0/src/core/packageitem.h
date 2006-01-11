@@ -69,7 +69,7 @@ protected:
 	 * @param width
 	 * @param alignment
 	 */
-	virtual void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+// 	virtual void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 	
 private:
 	int				meta;

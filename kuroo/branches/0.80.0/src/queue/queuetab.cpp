@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "statusbar.h"
-#include "emergeinspector.h"
 #include "queuetab.h"
 #include "queuelistview.h"
 
@@ -49,9 +48,7 @@ QueueTab::QueueTab( QWidget* parent )
 	// Button actions.
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
-	
-// 	connect( pbOptions, SIGNAL( clicked() ), this, SLOT( slotOptions() ) );
-	
+		
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
@@ -88,7 +85,6 @@ void QueueTab::slotInit()
 	if ( !KurooConfig::init() )
 		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
 	
-// 	emergeInspector = new EmergeInspector( this );
 	slotBusy( false );
 }
 
@@ -110,14 +106,17 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	queueBrowser->clear();
 	queueBrowser->setText( queueBrowserLines );
 	
-// 	if ( m_hasCheckedQueue )
-// 		pbGo->setText( i18n("Start Installation!") );
+	if ( !m_hasCheckedQueue )
+		pbGo->setText( i18n("Check Installation!") );
+	
+	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
+		m_hasCheckedQueue = false;
 	
 // 	totalSizeText->setText( queueView->totalSize() );
 }
 
 /**
- * Disable/enable buttons when kuroo is busy.
+ * Disable/enable buttons when kuroo busy signal is received.
  * @param b
  */
 void QueueTab::slotBusy( bool busy )
@@ -135,27 +134,17 @@ void QueueTab::slotBusy( bool busy )
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		
-		if ( m_hasCheckedQueue )
+		if ( m_hasCheckedQueue && KUser().isSuperUser() )
 			pbGo->setText( i18n( "Start Installation!" ) );
 		else
 			pbGo->setText( i18n("Check Installation!") );
 	}
 	
 	if ( busy ) {
-// 		pbOptions->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
 	}
 	else {
-		
-// 		if ( m_hasCheckedQueue && !KUser().isSuperUser() ) {
-// 			pbGo->setDisabled( true );
-// 		}
-// 		else {
-// 			pbGo->setDisabled( false );
-// 		}
-		
-// 		pbOptions->setDisabled( false );
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );
 	}
@@ -166,7 +155,7 @@ void QueueTab::slotBusy( bool busy )
  */
 void QueueTab::slotGo()
 {
-	kdDebug() << "QueueTab::slotGo" << endl;
+	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
@@ -214,11 +203,6 @@ void QueueTab::slotPretend()
 void QueueTab::slotRemove()
 {
 	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
-}
-
-void QueueTab::slotOptions()
-{
-	emergeInspector->edit();
 }
 
 /**

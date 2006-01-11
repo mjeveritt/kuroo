@@ -40,7 +40,7 @@ ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 
 ScanHistoryJob::~ScanHistoryJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 	if ( aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }
@@ -91,7 +91,7 @@ bool ScanHistoryJob::doJob()
 			
 			// Collect package and timestamp in map to match for completion
 			QString package;
-			if ( rxPackage.search(emergeLine) > -1 ) {
+			if ( rxPackage.search( emergeLine ) > -1 ) {
 				package = rxPackage.cap(2);
 				logMap[ package ] = emergeStart;
 			}
@@ -101,7 +101,7 @@ bool ScanHistoryJob::doJob()
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
 				QString package;
-				if ( rxPackage.search(emergeLine) > -1 ) {
+				if ( rxPackage.search( emergeLine ) > -1 ) {
 					package = rxPackage.cap(2);
 				
 					// Find matching package emerge start entry in map and calculate the emerge duration

@@ -80,7 +80,7 @@ QString HistoryListView::current()
 	if ( item && item->parent() )
 		return item->text(0);
 	else
-		return NULL;
+		return QString::null;
 }
 
 /**
@@ -92,9 +92,8 @@ QStringList HistoryListView::selected()
 	QListViewItemIterator it(this);
 	
 	for ( ; it.current(); ++it )
-		if ( it.current()->parent() && it.current()->isSelected() ) {
+		if ( it.current()->parent() && it.current()->isSelected() )
 			packageList += it.current()->text(0);
-		}
 		
 	return packageList;
 }

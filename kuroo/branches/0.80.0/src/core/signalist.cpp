@@ -180,22 +180,4 @@ void Signalist::setUnmasked( const QString& name, bool b )
 	emit signalUnmasked( name, b );
 }
 
-/**
- * Propagate signal that emerge of package started.
- * @param package
- */
-// void Signalist::emergePackageStart( const QString& package )
-// {
-// 	emit signalEmergePackageStart( package );
-// }
-
-/**
- * Propagate signal that emerge of package completed.
- * @param package
- */
-// void Signalist::emergePackageStop( const QString& package )
-// {
-// 	emit signalEmergePackageComplete( package );
-// }
-
 #include "signalist.moc"

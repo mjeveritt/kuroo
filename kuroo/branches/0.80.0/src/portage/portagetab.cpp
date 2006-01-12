@@ -122,6 +122,10 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
+	if ( !searchFilter->text().isEmpty() )
+		searchFilter->setPaletteBackgroundColor( Qt::yellow );
+	else
+		searchFilter->setPaletteBackgroundColor( Qt::white );
 	queuedFilters++;
 	QTimer::singleShot( 200, this, SLOT( slotActivateFilters() ) );
 }
@@ -146,7 +150,7 @@ void PortageTab::slotListSubCategories()
 }
 
 /**
- * List packages when clicking on category in installed.
+ * List packages when clicking on subcategory.
  */
 void PortageTab::slotListPackages()
 {
@@ -157,6 +161,7 @@ void PortageTab::slotListPackages()
 		pbAdvanced->setDisabled( true );
 		pbQueue->setDisabled( true );
 		packageInspector->setDisabled( true );
+		searchFilter->setPaletteBackgroundColor( Qt::red );
 		
 		// User has edited package, reload the package
 		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -223,9 +228,9 @@ void PortageTab::slotPackage()
 	
 	// Toggle add/remove package to queue
 	if ( packagesView->currentPortagePackage()->isQueued() )
-		pbQueue->setText( i18n("Remove from Emerge Queue") );
+		pbQueue->setText( i18n("Remove from Install Queue") );
 	else
-		pbQueue->setText( i18n("Add to Emerge Queue") );
+		pbQueue->setText( i18n("Add to Install Queue") );
 	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -323,20 +328,20 @@ void PortageTab::slotPackage()
 		linesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
 	
 	if ( !linesEmergeVersion.isEmpty() ) {
-		linesEmergeVersion = i18n("<b>Version used by emerge:</b> ") + linesEmergeVersion;
+		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
 		emergeVersionItem->setText( 3, "Used by emerge" );
 	}
 	else {
 		if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available on your architecture</font></b>");
+			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available on %1</font></b>").arg( KurooConfig::arch() );
 		else
-			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available</font></b>");
+			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available - please check advanced options</font></b>");
 	}
 	
 	if ( !linesAvailable.isEmpty() )
 		linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
 	else
-		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available on your architecture</font><br>");
+		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available on %1</font><br>").arg( KurooConfig::arch() );
 	
 	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion );
 	
@@ -379,7 +384,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			
 		case APPEND:
 			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
-			pbQueue->setText( i18n("Remove from Emerge Queue") );
+			pbQueue->setText( i18n("Remove from Install Queue") );
 			break;
 			
 		case EMERGE:
@@ -396,11 +401,11 @@ void PortageTab::slotQueue()
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
 		if ( packagesView->currentPortagePackage()->isQueued() ) {
 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
-			pbQueue->setText( i18n("Add to Emerge Queue") );
+			pbQueue->setText( i18n("Add to Install Queue") );
 		}
 		else {
 			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
-			pbQueue->setText( i18n("Remove from Emerge Queue") );
+			pbQueue->setText( i18n("Remove from Install Queue") );
 		}
 	}
 }

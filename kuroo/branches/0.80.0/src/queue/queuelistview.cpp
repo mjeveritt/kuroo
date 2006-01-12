@@ -46,14 +46,14 @@ const int diffTime( 10 );
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
 {
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
 {
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
@@ -98,7 +98,7 @@ void QueueListView::QueueItem::setComplete()
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	if ( this->isVisible() ) {
-		if ( column == 5 ) {
+		if ( column == 5 && m_isChecked ) {
 			QRect rect = listView()->itemRect( this );
 			QHeader *head = listView()->header();
 			rect.setLeft( head->sectionPos( 5 ) - head->offset() );
@@ -108,6 +108,11 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 		}
 		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
+}
+
+void QueueListView::QueueItem::setChecked( bool isChecked )
+{
+	m_isChecked = isChecked;
 }
 
 /**
@@ -206,6 +211,7 @@ void QueueListView::insertPackageList()
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category + "/" + name, id, description, meta, duration.toInt() );
 			item->setOpen( true );
+			item->setChecked( false );
 		}
 		else {
 			PackageItem* itemDepend = this->itemId( idDepend );
@@ -240,6 +246,15 @@ void QueueListView::insertPackageList()
 	}
 	
 	emit( signalQueueLoaded() );
+}
+
+void QueueListView::setPackagesChecked()
+{
+	QListViewItem* myChild = firstChild();
+	while ( myChild ) {
+		dynamic_cast<QueueItem*>( myChild )->setChecked( true );
+		myChild = myChild->nextSibling();
+	}
 }
 
 /**

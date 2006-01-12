@@ -86,7 +86,7 @@ public:
 		
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
-		for ( QStringList::Iterator it = linesPackage.begin(); it != linesPackage.end(); ++it ) {
+		for ( QStringList::Iterator it = linesPackage.begin(), end = linesPackage.end(); it != end; ++it ) {
 			
 			// set the atom string
 			QStringList tokens = QStringList::split( ' ', *it );
@@ -177,7 +177,7 @@ public:
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
-		for ( QStringList::Iterator it = linesDependAtom.begin(); it != linesDependAtom.end(); ++it ) {
+		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
 			
 			// Collect comment lines above the dependatom
 			if ( (*it).isEmpty() )
@@ -260,7 +260,7 @@ public:
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
-		for ( QStringList::Iterator it = linesDependAtom.begin(); it != linesDependAtom.end(); ++it ) {
+		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
 			
 			// Collect comment lines above the dependatom
 			if ( (*it).isEmpty() )
@@ -343,7 +343,7 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
-		for ( QStringList::Iterator it = linesDependAtom.begin(); it != linesDependAtom.end(); ++it ) {
+		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
 			
 			// Collect comment lines above the dependatom
 			if ( (*it).isEmpty() )
@@ -376,6 +376,71 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 		KurooDBSingleton::Instance()->query( "DELETE FROM packageUserMask;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUserMask SELECT * FROM packageUserMask_temp;", m_db );
 		KurooDBSingleton::Instance()->query( "DROP TABLE packageUserMask_temp;", m_db );
+		
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( 3 );
+	}
+};
+
+/**
+ * @class: LoadPackageMaskJob
+ * @short: Thread for loading masked packages into db.
+ */
+class LoadPackageUseJob : public ThreadWeaver::DependentJob
+{
+public:
+	LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	
+	virtual bool doJob() {
+		
+		QFile file( KurooConfig::filePackageUse() );
+		QTextStream stream( &file );
+		QStringList linesUse;
+		if ( !file.open( IO_ReadOnly ) ) {
+		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUse() ) << endl;
+		}
+		else {
+			while ( !stream.atEnd() ) {
+				linesUse += stream.readLine();
+			}
+			file.close();
+		}
+		
+		// Something is wrong, no files found, get outta here
+		if ( linesUse.isEmpty() )
+			return false;
+		
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
+		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+		                                    " idPackage INTEGER UNIQUE, "
+		                                    " use VARCHAR(255) "
+		                                    " );", m_db);
+		
+		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		
+		for ( QStringList::Iterator it = linesUse.begin(), end = linesUse.end(); it != end; ++it ) {
+			QString category = (*it).section( '/', 0, 0 );
+			QString name = ( (*it).section( '/', 1 ) ).section( ' ', 0, 0 );
+			QString use = (*it).section( ' ', 1 );
+			use.simplifyWhiteSpace();
+			
+			QString id = KurooDBSingleton::Instance()->packageId( category, name );
+			if ( !id.isEmpty() )
+				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" ).arg( id ).arg( use ), m_db );
+
+		}
+		file.close();
+		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		
+		// Move content from temporary table to installedPackages
+		KurooDBSingleton::Instance()->query( "DELETE FROM packageUse;", m_db );
+		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUse SELECT * FROM packageUse_temp;", m_db );
+		KurooDBSingleton::Instance()->query( "DROP TABLE packageUse_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
@@ -559,6 +624,7 @@ void PortageFiles::loadPackageMask()
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserUnMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
+	ThreadWeaver::instance()->queueJob( new LoadPackageUseJob( this ) );
 }
 
 void PortageFiles::loadPackageKeywords()
@@ -574,6 +640,11 @@ void PortageFiles::loadPackageUnmask()
 void PortageFiles::loadPackageUserMask()
 {
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
+}
+
+void PortageFiles::loadPackageUse()
+{
+	ThreadWeaver::instance()->queueJob( new LoadPackageUseJob( this ) );
 }
 
 void PortageFiles::savePackageKeywords()

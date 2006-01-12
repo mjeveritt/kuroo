@@ -46,6 +46,7 @@ public slots:
 	void			loadPackageKeywords();
 	void 			loadPackageUnmask();
 	void			loadPackageUserMask();
+	void			loadPackageUse();
 	
 	void			savePackageKeywords();
 	void 			savePackageUserUnMask();

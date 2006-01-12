@@ -302,6 +302,12 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idPackage INTEGER UNIQUE, "
 	      " keywords VARCHAR(255) )"
 	      " ;", conn);
+	
+	query(" CREATE TABLE packageUse ("
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      " idPackage INTEGER UNIQUE, "
+	      " use VARCHAR(255) )"
+	      " ;", conn);
 }
 
 
@@ -651,6 +657,11 @@ bool KurooDB::isPackageAvailable( const QString& id )
 bool KurooDB::isPackageUnMasked( const QString& id )
 {
 	return !query( "SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
+}
+
+bool KurooDB::hasPackageUse( const QString& id, const QString& use )
+{
+	return !query( "SELECT id FROM packageUse where idPackage = '" + id + "' AND use = '" + use + "';" ).isEmpty();
 }
 
 /**

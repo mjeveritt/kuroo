@@ -137,30 +137,21 @@ void PackageInspector::slotInstallVersion()
 	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
 	
 	if ( !userMaskVersion.isEmpty() ) {
-// 		kdDebug() << "Specific version" << endl;
 		dialog->rbVersionsSpecific->setChecked( true );
 		dialog->cbVersionsSpecific->setDisabled( false );
 		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
 	}
 	else
-		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) ) {
-// 			kdDebug() << "Is unmasked!" << endl;
+		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) )
 			dialog->rbMasked->setChecked( true );
-		}
 		else
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) ) {
-// 				kdDebug() << "Is testing!" << endl;
+			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
 				dialog->rbTesting->setChecked( true );
-			}
-			else {
-// 				kdDebug() << "Is stable!" << endl;
+			else
 				dialog->rbStable->setChecked( true );
-			}
 	
-	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) ) {
+	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) )
 		dialog->ckbAvailable->setChecked( true );
-// 		kdDebug() << "Is available!" << endl;
-	}
 	
 	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 }
@@ -191,8 +182,11 @@ void PackageInspector::loadUseFlagDescription()
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
 			if ( !line.startsWith( "#" ) && !line.isEmpty() ) {
-				if ( !line.contains( QRegExp( "^alpha|^amd64|^arm|^hppa|^ia64|^mips|^ppc|^ppc64|^ppc-macos|^s390|^sh|^sparc|^x86" ) ) )
-					useMap.insert( line.section( " -", 0, 0 ), line.section( " -", 1, 1 ) );
+				if ( !line.contains( QRegExp( "^alpha|^amd64|^arm|^hppa|^ia64|^mips|^ppc|^ppc64|^ppc-macos|^s390|^sh|^sparc|^x86" ) ) ) {
+					QString use = line.section( " - ", 0, 0 );
+					QString useDescription = line.section( use + " - ", 1, 1 );
+					useMap.insert( use, useDescription );
+				}
 			}
 		}
 		f.close();
@@ -216,14 +210,33 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 	
 		dialog->useView->clear();
 		foreach ( useList ) {
-			QString description;
+			QString lines;
 			
 			QMap<QString, QString>::iterator itMap = useMap.find( *it );
 			if ( itMap != useMap.end() )
-				description = itMap.data();
+				lines = itMap.data();
+			
+			// Split long description into multiple lines
+			QStringList description;
+			if ( lines.length() <= 90 )
+				description = lines;
+			else {
+				while ( lines.length() > 90 ) {
+					int pos = ( lines.left(90) ).findRev(' ');
+					QString line = lines.left(pos+1);
+					lines = lines.right( lines.length() - line.length() );
+					description += line;
+				}
+				description += lines;
+			}
 			
 			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
-			useItem->setText( 1, description );
+			useItem->setMultiLinesEnabled( true );
+			useItem->setText( 1, description.join("\n") );
+			
+			if ( KurooDBSingleton::Instance()->hasPackageUse( m_portagePackage->id(), *it ) )
+				useItem->setOn( true );
+				
 		}
 	}
 }
@@ -276,7 +289,7 @@ void PackageInspector::slotApply()
 // 	else
 // 		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
 	
-	accept();
+// 	accept();
 }
 
 /**

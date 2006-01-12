@@ -164,7 +164,7 @@ QStringList PackageListView::allPackages()
 QStringList PackageListView::allPackagesNoChildren()
 {
 	QStringList packageList;
-	QListViewItem * myChild = firstChild();
+	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
 		packageList += dynamic_cast<PackageItem*>( myChild )->name();
 		myChild = myChild->nextSibling();

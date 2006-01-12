@@ -61,6 +61,9 @@
 		<entry name="FilePackageHardMask" type="String">
 		<default>/usr/portage/profiles/package.mask</default>
 		</entry>
+		<entry name="FilePackageUse" type="String">
+		<default>/etc/portage/package.use</default>
+		</entry>
 		<entry name="latestInstalledCategory" type="String">
 		</entry>
 		<entry name="latestInstalledPackage" type="String">

@@ -188,6 +188,7 @@ public:
 	bool 			isPackageUnMasked( const QString& id );
 	bool 			isPackageUnTesting( const QString& id );
 	bool 			isPackageAvailable( const QString& id );
+	bool 			hasPackageUse( const QString& id, const QString& use );
 	
 	void			setPackageUnTesting( const QString& id );
 	void			setPackageUnMasked( const QString& id );

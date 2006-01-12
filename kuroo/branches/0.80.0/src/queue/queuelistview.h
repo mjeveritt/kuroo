@@ -53,6 +53,7 @@ public slots:
 	* Populate queue with packages from db
 	*/
 	void 					insertPackageList();
+	void					setPackagesChecked();
 	
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.
@@ -116,6 +117,7 @@ public:
 	
 	void			oneStep();
 	void			setComplete();
+	void			setChecked( bool isChecked );
 	
 protected:
 	void			setStatus( int status );
@@ -124,6 +126,7 @@ protected:
 private:
 	KProgress* 		bar;
 	int				progress, m_duration;
+	bool			m_isChecked;
 };
 
 #endif

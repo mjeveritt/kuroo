@@ -134,8 +134,10 @@ void QueueTab::slotBusy( bool busy )
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		
-		if ( m_hasCheckedQueue && KUser().isSuperUser() )
+		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
 			pbGo->setText( i18n( "Start Installation!" ) );
+			queueView->setPackagesChecked();
+		}
 		else
 			pbGo->setText( i18n("Check Installation!") );
 	}
@@ -228,12 +230,12 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	switch( menu.exec( point ) ) {
 		
-	case PRETEND:
-		PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
-		break;
-		
-	case REMOVE:
-		QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+		case PRETEND:
+			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
+			break;
+			
+		case REMOVE:
+			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 	}
 }
 

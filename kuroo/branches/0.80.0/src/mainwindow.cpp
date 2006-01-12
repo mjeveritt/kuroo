@@ -30,6 +30,7 @@
 MainWindow::MainWindow( QWidget *parent, const char *name )
 	: KMainWindow( parent, name ), sb(0)
 {
+	toolBar()->hide();
 }
 
 MainWindow::~MainWindow()

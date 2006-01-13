@@ -29,7 +29,7 @@
  * Just connect to this instance.
  */
 Signalist::Signalist( QObject* parent )
-	: QObject( parent ), busy( false ), busyScanning( false ), busyDiskUsage( false )
+	: QObject( parent ), busy( false ), busyScanning( false )
 {
 }
 

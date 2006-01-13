@@ -153,6 +153,7 @@ void PackageInspector::slotInstallVersion()
 	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) )
 		dialog->ckbAvailable->setChecked( true );
 	
+	enableButton( KDialogBase::Apply, false );
 	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 }
 
@@ -249,6 +250,8 @@ void PackageInspector::slotApply()
 	PortageFilesSingleton::Instance()->savePackageKeywords();
 	PortageFilesSingleton::Instance()->savePackageUserMask();
 	PortageFilesSingleton::Instance()->savePackageUserUnMask();
+	PortageFilesSingleton::Instance()->savePackageUse();
+	enableButton( KDialogBase::Apply, false );
 	
 // 	QString useFlags;
 // 	QStringList lines;
@@ -472,6 +475,8 @@ void PackageInspector::slotSetStability( int rbStability )
 			dialog->cbVersionsSpecific->setDisabled( false );
 		
 	}
+	
+	enableButton( KDialogBase::Apply, true );
 }
 
 /**

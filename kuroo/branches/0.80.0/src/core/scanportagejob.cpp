@@ -97,7 +97,7 @@ bool ScanPortageJob::doJob()
 	}
 	
 	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
-	setStatus( i18n("Refreshing Portage view...") );
+	setStatus( "ScanPortage", i18n("Refreshing Portage view...") );
 	
 	// Temporary table for all categories
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE category_temp ("
@@ -306,7 +306,7 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
-	setStatus( i18n("Done.") );
+	setStatus( "ScanPortage", i18n("Done.") );
 	setProgress( 0 );
 	return true;
 }

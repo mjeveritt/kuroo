@@ -99,8 +99,8 @@ signals:
 	void		signalUnmasked( const QString& name, bool b );
 
 private:
-	QObject	*parent;
-	bool		busy, busyScanning, busyDiskUsage;
+	QObject		*parent;
+	bool		busy, busyScanning;
 };
 
 #endif

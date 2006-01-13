@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "common.h"
 #include "statusbar.h"
 
 #include <qlabel.h>
 
-#include <kdebug.h>
 #include <qtimer.h>
 
 KurooStatusBar* KurooStatusBar::s_instance = 0;
@@ -32,7 +32,7 @@ KurooStatusBar* KurooStatusBar::s_instance = 0;
  * The one and only instance created from this class can can be accessed from all classes.
  */
 KurooStatusBar::KurooStatusBar( QWidget *parent )
-	: KStatusBar( parent ),	statusBarProgress(0), statusBarLabel(0)
+: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
 {
 	s_instance = this;
 	statusBarProgress = new KProgress( 0, "statusBarProgress" );
@@ -59,9 +59,37 @@ KurooStatusBar::~KurooStatusBar()
 /**
  * Set label text in statusbar.
  */
-void KurooStatusBar::setProgressStatus( const QString& text )
+void KurooStatusBar::setProgressStatus( const QString& id, const QString& message )
 {
-	statusBarLabel->setText( text );
+	if ( id.isEmpty() ) {
+		statusBarLabel->setText( message );
+		QTimer::singleShot( 1000, this, SLOT( slotLastMessage() ) );
+		return;
+	}
+	
+	if ( !messageMap.contains( id ) ) {
+		messageMap.insert( id, message );
+		statusBarLabel->setText( message );
+	}
+	else {
+		messageMap.erase( id );
+		statusBarLabel->setText( message );
+		QTimer::singleShot( 1000, this, SLOT( slotLastMessage() ) );
+	}
+}
+
+/**
+ * View last message.
+ */
+void KurooStatusBar::slotLastMessage()
+{
+	QMap<QString, QString>::Iterator it = messageMap.end();
+	if ( messageMap.size() > 0 ) {
+		it--;
+		statusBarLabel->setText( it.data() );
+	}
+	else
+		statusBarLabel->setText( i18n("Done.") );
 }
 
 /**

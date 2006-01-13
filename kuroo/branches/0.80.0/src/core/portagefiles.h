@@ -51,6 +51,7 @@ public slots:
 	void			savePackageKeywords();
 	void 			savePackageUserUnMask();
 	void			savePackageUserMask();
+	void			savePackageUse();
 	
 private slots:
 	

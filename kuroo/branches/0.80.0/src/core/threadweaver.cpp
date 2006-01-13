@@ -280,8 +280,9 @@ void ThreadWeaver::Job::setProgress( uint steps )
 	}
 }
 
-void ThreadWeaver::Job::setStatus( const QString& status )
+void ThreadWeaver::Job::setStatus( const QString& id, const QString& status )
 {
+	m_id = id;
 	m_status = status;
 
 	QApplication::postEvent( this, new ProgressEvent( -2 ) );
@@ -299,7 +300,7 @@ void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 	switch( progress )
 	{
 	case -2:
-		KurooStatusBar::instance()->setProgressStatus( m_status );
+		KurooStatusBar::instance()->setProgressStatus( m_id, m_status );
 		break;
 
 	case -1:

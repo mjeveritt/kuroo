@@ -108,6 +108,8 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	
 	if ( !m_hasCheckedQueue )
 		pbGo->setText( i18n("Check Installation!") );
+	else
+		queueView->setPackagesChecked();
 	
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;
@@ -136,7 +138,6 @@ void QueueTab::slotBusy( bool busy )
 		
 		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
 			pbGo->setText( i18n( "Start Installation!" ) );
-			queueView->setPackagesChecked();
 		}
 		else
 			pbGo->setText( i18n("Check Installation!") );
@@ -189,7 +190,7 @@ void QueueTab::slotStop()
 		i18n( "Do you want to abort the running emerge process?" ) ) ) {
 		case KMessageBox::Yes : {
 			EmergeSingleton::Instance()->stop();
-			KurooStatusBar::instance()->setProgressStatus( i18n("Done.") );
+			KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
 		}
 	}
 }

@@ -73,7 +73,7 @@ bool ScanUpdatesJob::doJob()
 		return false;
 	}
 	
-	setStatus( i18n("Refreshing updates view...") );
+	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );
 	int count( 0 );
 
@@ -139,7 +139,7 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert("INSERT INTO updates SELECT * FROM updates_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE updates_temp;", m_db);
 	
-	setStatus( i18n( "Done." ) );
+	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgress( 0 );
 	return true;
 }

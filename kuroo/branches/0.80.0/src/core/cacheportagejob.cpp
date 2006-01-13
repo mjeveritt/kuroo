@@ -70,7 +70,7 @@ int CachePortageJob::countPackages()
 		return 0;
 	}
 	
-	setStatus( i18n("Counting packages...") );
+// 	setStatus( i18n("Counting packages...") );
 	
 	int count(0);
 	const QStringList categoryList = dCategory.entryList();
@@ -101,7 +101,7 @@ bool CachePortageJob::doJob()
 	dCategory.setSorting(QDir::Name);
 	
 	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
-	setStatus( i18n("Collecting package information...") );
+	setStatus( "CachePortage", i18n("Collecting package information...") );
 	
 	// Get list of categories in Portage Overlay
 	if ( !dCategory.cd(KurooConfig::dirEdbDep() + "/usr/local/portage") )
@@ -230,6 +230,7 @@ bool CachePortageJob::doJob()
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	
+	setStatus( "CachePortage", i18n("Done.") );
 	return true;
 }
 

@@ -110,6 +110,10 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 	}
 }
 
+/**
+ * Show progressbar after emerge pretend.
+ * @param isChecked
+ */
 void QueueListView::QueueItem::setChecked( bool isChecked )
 {
 	m_isChecked = isChecked;
@@ -250,6 +254,7 @@ void QueueListView::insertPackageList()
 
 void QueueListView::setPackagesChecked()
 {
+	kdDebug() << "QueueListView::setPackagesChecked" << endl;
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
 		dynamic_cast<QueueItem*>( myChild )->setChecked( true );

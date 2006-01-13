@@ -204,7 +204,7 @@ void History::slotParse()
 				logLine.replace( "Post-Build Cleaning", i18n( "Post-Build Cleaning" ) );
 				logLine.replace( "Cleaning", i18n( "Cleaning" ) );
 				
-				KurooStatusBar::instance()->setProgressStatus( logLine );
+				KurooStatusBar::instance()->setProgressStatus( QString::null, logLine );
 				LogSingleton::Instance()->writeLog( logLine, EMERGELOG );
 			}
 			else
@@ -249,18 +249,18 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains( "starting rsync" ) ) {
-				KurooStatusBar::instance()->setProgressStatus( i18n( "Synchronizing Portage..." ) );
+				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Synchronizing Portage..." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Synchronizing Portage..." ), EMERGELOG );
 			}
 			else
 			if ( emergeLine.contains( "Sync completed" ) ) {
 				syncDone = true;
-				KurooStatusBar::instance()->setProgressStatus( i18n( "Sync completed." ) );
+				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Sync completed." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Sync completed." ), EMERGELOG );
 			}
 			else
 			if ( emergeLine.contains( "terminating." ) ) {
-				KurooStatusBar::instance()->setProgressStatus( i18n( "Done." ) );
+				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
 				if ( syncDone ) {
 					syncDone = false;
@@ -274,7 +274,7 @@ void History::slotParse()
 				emergeLine.replace( "exiting successfully", i18n( "exiting successfully" ) );
 				emergeLine.replace( "terminating", i18n( "terminating" ) );
 				
-				KurooStatusBar::instance()->setProgressStatus( emergeLine );
+				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
 		}

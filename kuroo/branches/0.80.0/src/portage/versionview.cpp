@@ -24,8 +24,9 @@
 #include <qpainter.h>
 
 #include <klistview.h>
+#include <kiconloader.h>
 
-class VersionView::VersionItem : public QCheckListItem
+class VersionView::VersionItem : public KListViewItem
 {
 public:
 	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled );
@@ -38,7 +39,7 @@ private:
 };
 
 VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled )
-	: QCheckListItem( parent, version, QCheckListItem::CheckBox ), m_isInstalled( isInstalled )
+	: KListViewItem( parent, version ), m_isInstalled( isInstalled )
 {
 }
 
@@ -57,16 +58,20 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 		p->setFont( font );
 		m_cg.setColor( QColorGroup::Text, Qt::black );
 	}
-	QCheckListItem::paintCell( p, m_cg, column, width, alignment );
+	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
 
 VersionView::VersionView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
-	addColumn( i18n( "Used for Installation" ) );
+	KIconLoader *ldr = KGlobal::iconLoader();
+	pxInstalled= ldr->loadIcon( "kuroo_queued", KIcon::Small );
+	
+	addColumn( i18n( " " ) );
 	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Stability" ) );
 	addColumn( i18n( "Size" ) );
+	setColumnAlignment( 3, Qt::AlignRight );
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );
 }
@@ -80,17 +85,15 @@ void VersionView::insertItem( const char* version, const char* stability, const 
 	VersionItem* item = new VersionItem( this, " ", isInstalled );
 	item->setText( 1, version );
 	item->setText( 2, stability );
-	item->setText( 2, size );
+	item->setText( 3, size );
 }
 
 void VersionView::usedForInstallation( const QString& version )
 {
-	kdDebug() << "VersionView::usedForInstallation version=" << version << endl;
-	
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
-		if ( myChild->text( 1 ) == version )
-			dynamic_cast<VersionItem*>( myChild )->setOn( true );
+		if ( myChild->text(1) == version )
+			myChild->setPixmap( 0, pxInstalled );
 		myChild = myChild->nextSibling();
 	}
 }

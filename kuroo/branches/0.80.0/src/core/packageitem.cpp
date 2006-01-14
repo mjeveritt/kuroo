@@ -74,7 +74,7 @@ void PackageItem::setStatus( int status )
 		
 		case NONE :
 // 			meta = NONE;
-			repaint();
+// 			repaint();
 			break;
 		
 		case INSTALLED :
@@ -91,13 +91,13 @@ void PackageItem::setStatus( int status )
 		case TESTING :
 // 			meta = TESTING;
 // 			m_meta.insert( i18n("Keyword"), i18n("Masked") );
-			repaint();
+// 			repaint();
 			break;
 		
 		case UNTESTING :
-			meta = UNTESTING;
+// 			meta = UNTESTING;
 // 			m_meta.insert( i18n("Keyword"), i18n("Unmasked") );
-			repaint();
+// 			repaint();
 			break;
 		
 		case QUEUED :

@@ -46,8 +46,9 @@ PackageInspector::PackageInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 ), m_hasSettingsChanged( false )
 {
 	dialog = new InspectorBase( this );
+	dialog->setMinimumSize( 600, 450 );
 	setMainWidget( dialog );
-
+	
 	loadUseFlagDescription();
 	
 	connect( dialog->pbPrevious, SIGNAL( clicked() ), this, SLOT( slotPreviousPackage() ) );

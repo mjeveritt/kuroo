@@ -36,7 +36,6 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( slotSetUnmasked(const QString&, bool) ) ); @fixme
 
 // 	new ToolTip( this ); @fixme
 }

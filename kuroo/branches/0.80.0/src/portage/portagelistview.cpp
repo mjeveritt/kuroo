@@ -367,18 +367,18 @@ void PortageListView::slotNextPackage( bool isUp )
 		if ( item->itemAbove() ) {
 			selectAll( false );
 			item = item->itemAbove();
-			setCurrentItem( item );
-			setSelected( item, true );
 			ensureItemVisible( item );
+			setSelected( item, true );
+			setCurrentItem( item );
 		}
 	}
 	else {
 		if ( item->itemBelow() ) {
 			selectAll( false );
 			item = item->itemBelow();
-			setCurrentItem( item );
-			setSelected( item, true );
 			ensureItemVisible( item );
+			setSelected( item, true );
+			setCurrentItem( item );
 		}
 	}
 }

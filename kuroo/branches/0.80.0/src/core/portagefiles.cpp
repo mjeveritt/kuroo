@@ -609,9 +609,10 @@ public:
 		}
 		
 		foreach ( lines ) {
+			QString category = *it++;
 			QString package = *it++;
 			QString use = *it;
-			stream << package << " " << use << "\n";
+			stream << category << "/" << package << " " << use << "\n";
 		}
 		
 		file.close();

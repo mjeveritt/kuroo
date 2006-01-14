@@ -387,7 +387,6 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			
 		case EMERGE:
 			QueueSingleton::Instance()->installQueue( packagesView->selectedId() );
-			break;
 	}
 }
 

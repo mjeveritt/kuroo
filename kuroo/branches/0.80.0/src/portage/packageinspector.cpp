@@ -123,8 +123,12 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
  */
 void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
-// 	if ( !KUser().isSuperUser() )
-// 		enableButtonApply( false );
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->groupAdvanced->setDisabled( true );
+		dialog->useView->setDisabled( true );
+	}
 	
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
@@ -144,8 +148,6 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
  */
 void PackageInspector::slotInstallVersion()
 {
-	kdDebug() << "PackageInspector::slotInstallVersion" << endl;
-	
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	dialog->cbVersionsSpecific->setDisabled( true );
 	dialog->ckbAvailable->setChecked( false );

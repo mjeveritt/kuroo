@@ -91,10 +91,12 @@ void PackageInspector::slotPreviousPackage()
 			i18n( "<qt>Settings are changed!<br>"
 					"Do you want to save them?</qt>"), i18n("Saving settings"), i18n("Yes"), i18n("No"), 0 ) ) {
 						
-					case KMessageBox::Yes:
-						slotApply();
-					}
-	m_hasSettingsChanged = false;
+				case KMessageBox::Yes:
+					slotApply();
+			}
+	
+	if ( m_hasSettingsChanged )
+		m_hasSettingsChanged = false;
 	emit signalNextPackage( true );
 }
 
@@ -110,10 +112,12 @@ void PackageInspector::slotNextPackage()
 			i18n( "<qt>Settings are changed!<br>"
 					"Do you want to save them?</qt>"), i18n("Saving settings"), i18n("Yes"), i18n("No"), 0 ) ) {
 						
-					case KMessageBox::Yes:
-						slotApply();
-					}
-	m_hasSettingsChanged = false;
+				case KMessageBox::Yes:
+					slotApply();
+			}
+	
+	if ( m_hasSettingsChanged )
+		m_hasSettingsChanged = false;
 	emit signalNextPackage( false );
 }
 

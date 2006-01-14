@@ -165,14 +165,14 @@ void PortageTab::slotListPackages()
 		searchFilter->setPaletteBackgroundColor( Qt::red );
 		
 		// User has edited package, reload the package
-// 		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 	else {
 		pbAdvanced->setDisabled( false );
 		pbQueue->setDisabled( false );
 		packageInspector->setDisabled( false );
 		
-// 		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 }
 

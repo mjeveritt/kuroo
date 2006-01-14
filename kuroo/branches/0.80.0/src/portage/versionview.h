@@ -18,65 +18,22 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef PACKAGEINSPECTOR_H
-#define PACKAGEINSPECTOR_H
+#ifndef VERSIONVIEW_H
+#define VERSIONVIEW_H
 
-#include "inspectorbase.h"
-#include "portagelistview.h"
+#include <klistview.h>
 
-#include <kdialogbase.h>
-
-/**
- * @class PackageInspector
- * @short Specialized dialog 
- */
-class PackageInspector : public KDialogBase
+class VersionView : public KListView
 {
 Q_OBJECT
 public:
-    PackageInspector( QWidget *parent = 0 );
-    ~PackageInspector();
-	
-	/**
-	 * Open use flags dialog.
-	 * @param newPackage	selected package
-	 */
-	void							edit( PortageListView::PortageItem* portagePackage );
-	
-	InspectorBase					*dialog;
-	
-private slots:
-	void							slotPreviousPackage();
-	void							slotNextPackage();
-	
-	void							slotInstallVersion();
-	void							slotActivateTabs();
-	
-	void							slotAdvancedToggle( bool isOn );
-	
-	void							slotGetEbuild( const QString& version );
-	void							getChangeLog();
-	void							slotGetDependencies( const QString& version );
-	
-	void							loadUseFlagDescription();
-	void							slotGetUseFlags( const QString& version );
-	
-	void							slotGetInstalledFiles( const QString& version );
-	void							slotApply();
+    VersionView( QWidget *parent = 0, const char *name = 0 );
+    ~VersionView();
 
-	void							slotSetStability( int rbStability );
-	void							slotSetVersionSpecific( const QString& version );
-	void							slotAvailable( bool isAvailable );
+	class 	VersionItem;
 	
-private:
-	bool							m_hasSettingsChanged;
-	QString							category, package, packageId;
-	QMap<QString, QString>			useMap;
-	PortageListView::PortageItem* 	m_portagePackage;
-	
-signals:
-	void							signalNextPackage( bool up );
-	void							signalPackageChanged();
+	void	insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
+	void	usedForInstallation( const QString& version );
 };
 
 #endif

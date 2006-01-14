@@ -28,11 +28,9 @@
 #include <qpainter.h>
 
 #include <klistview.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 
 /**
  * @class CategoriesView::CategoryItem
@@ -55,7 +53,7 @@ protected:
 
 
 CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
-: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
+	: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
 {
 }
 

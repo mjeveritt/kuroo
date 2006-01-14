@@ -22,6 +22,7 @@
 #include "packageinspector.h"
 #include "portagelistview.h"
 #include "packageversion.h"
+#include "versionview.h"
 
 #include <qcombobox.h>
 #include <qcheckbox.h>
@@ -29,6 +30,7 @@
 #include <qradiobutton.h>
 #include <qheader.h>
 #include <qbuttongroup.h>
+#include <qpushbutton.h>
 
 #include <ktabwidget.h>
 #include <kactionselector.h>
@@ -41,18 +43,15 @@
  * Specialized dialog for editing Use Flags per package.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::User1 | KDialogBase::User2 | KDialogBase::Apply | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 )
+	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 ), m_hasSettingsChanged( false )
 {
-	setButtonText( KDialogBase::User1, i18n( "Next Package" ) );
-	setButtonText( KDialogBase::User2, i18n( "Previous Package" ) );
-	
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
-	
-	dialog->versionsView->header()->setLabel( 3 , "" );
-	dialog->versionsView->setSorting( -1 );
 
 	loadUseFlagDescription();
+	
+	connect( dialog->pbPrevious, SIGNAL( clicked() ), this, SLOT( slotPreviousPackage() ) );
+	connect( dialog->pbNext, SIGNAL( clicked() ), this, SLOT( slotNextPackage() ) );
 	
 	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
 	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
@@ -61,9 +60,6 @@ PackageInspector::PackageInspector( QWidget *parent )
 	
 	// Load files if tabpage is open
 	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
-	
-	// Activate groupBox "I know What I do"
-	connect( dialog->ckbIKnow, SIGNAL( toggled( bool ) ), this, SLOT( slotAdvancedToggle( bool ) ) );
 	
 	// Toggle between all 4 stability version
 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
@@ -80,17 +76,35 @@ PackageInspector::~PackageInspector()
 /**
  * Make previous package in package view current - for easier browsing.
  */
-void PackageInspector::slotUser1()
+void PackageInspector::slotPreviousPackage()
 {
-	emit signalNextPackage( false );
+	if ( m_hasSettingsChanged )
+		switch( KMessageBox::warningYesNo( this,
+			i18n( "<qt>Settings are changed!<br>"
+					"Do you want to save them?</qt>"), i18n("Saving settings"), i18n("Yes"), i18n("No"), 0 ) ) {
+						
+					case KMessageBox::Yes:
+						slotApply();
+					}
+	m_hasSettingsChanged = false;
+	emit signalNextPackage( true );
 }
 
 /**
  * Make next package in package view current - for easier browsing.
  */
-void PackageInspector::slotUser2()
+void PackageInspector::slotNextPackage()
 {
-	emit signalNextPackage( true );
+	if ( m_hasSettingsChanged )
+		switch( KMessageBox::warningYesNo( this,
+			i18n( "<qt>Settings are changed!<br>"
+					"Do you want to save them?</qt>"), i18n("Saving settings"), i18n("Yes"), i18n("No"), 0 ) ) {
+						
+					case KMessageBox::Yes:
+						slotApply();
+					}
+	m_hasSettingsChanged = false;
+	emit signalNextPackage( false );
 }
 
 /**
@@ -114,7 +128,9 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
-	dialog->package->setText( "Detailed information for <b>" + category + "/" + package + "</b>");
+	dialog->package->setText( "<font size=\"+2\">" + package + "</font> " +
+	                          "(" + category.section( "-", 0, 0 ) + " / " +
+	                          category.section( "-", 1, 1 ) + ")");
 	
 	slotInstallVersion();
 	slotActivateTabs();
@@ -127,10 +143,11 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
  */
 void PackageInspector::slotInstallVersion()
 {
+	kdDebug() << "PackageInspector::slotInstallVersion" << endl;
+	
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	dialog->cbVersionsSpecific->setDisabled( true );
 	dialog->ckbAvailable->setChecked( false );
-	dialog->ckbIKnow->setChecked( false );
 	
 	// Get user mask specific version
 	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_portagePackage->id() ).first();
@@ -232,6 +249,7 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 			}
 			
 			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
+			useItem->setTristate( true );
 			useItem->setMultiLinesEnabled( true );
 			useItem->setText( 1, description.join("\n") );
 			
@@ -252,47 +270,8 @@ void PackageInspector::slotApply()
 	PortageFilesSingleton::Instance()->savePackageUserUnMask();
 	PortageFilesSingleton::Instance()->savePackageUse();
 	enableButton( KDialogBase::Apply, false );
-	
-// 	QString useFlags;
-// 	QStringList lines;
-// 
-// 	for ( unsigned int i = 0; i < dialog->allUseFlags->selectedListBox()->count(); i++ ) {
-// 		QListBoxItem *item = dialog->allUseFlags->selectedListBox()->item(i);
-// 		useFlags += item->text() + " ";
-// 	}
-// 	
-// 	// Get all lines and remove package
-// 	QFile file( "/etc/portage/package.use" );
-// 	if ( file.open( IO_ReadOnly ) ) {
-// 		QTextStream stream( &file );
-// 		while ( !stream.atEnd() ) {
-// 			QString tmp = stream.readLine();
-// 			QString eString = tmp.stripWhiteSpace();
-// 			
-// 			if ( !tmp.startsWith( category + "/" + package ) && !eString.isEmpty() )
-// 				lines += tmp;
-// 		}
-// 		file.close();
-// 		
-// 		// Add package with updated use flags
-// 		if ( !useFlags.isEmpty() )
-// 			lines += category + "/" + package + " " + useFlags;
-// 	}
-// 	else
-// 		kdDebug() << i18n("Error reading: /etc/portage/package.use") << endl;
-// 	
-// 	// Now write back
-// 	if ( file.open( IO_WriteOnly ) ) {
-// 		QTextStream stream( &file );
-// 		foreach ( lines ) {
-// 			stream << *it + "\n";
-// 		}
-// 		file.close();
-// 	}
-// 	else
-// 		KMessageBox::error( this, i18n("Failed to save. Please run as root." ), i18n("Saving"));
-	
-// 	accept();
+	m_hasSettingsChanged = false;
+
 }
 
 /**
@@ -477,6 +456,7 @@ void PackageInspector::slotSetStability( int rbStability )
 	}
 	
 	enableButton( KDialogBase::Apply, true );
+	m_hasSettingsChanged = true;
 }
 
 /**
@@ -507,6 +487,8 @@ void PackageInspector::slotAvailable( bool isAvailable )
 		KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
 	
 	m_portagePackage->resetDetailedInfo();
+	enableButton( KDialogBase::Apply, true );
+	m_hasSettingsChanged = true;
 	emit signalPackageChanged();
 }
 

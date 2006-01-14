@@ -25,6 +25,7 @@
 #include "portagetab.h"
 #include "packageinspector.h"
 #include "packageversion.h"
+#include "versionview.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -76,7 +77,7 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
-	
+		
 	slotInit();
 }
 
@@ -226,7 +227,6 @@ void PortageTab::slotPackage()
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
 	
-	// Toggle add/remove package to queue
 	if ( packagesView->currentPortagePackage()->isQueued() )
 		pbQueue->setText( i18n("Remove from Install Queue") );
 	else
@@ -262,7 +262,6 @@ void PortageTab::slotPackage()
 	// Sorted list of versions for current package.
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
 	
-	KListViewItem* emergeVersionItem;
 	bool versionNotInArchitecture = false;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
@@ -296,7 +295,7 @@ void PortageTab::slotPackage()
 // 		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
 		
 		// Insert version in Inspector version view
-		KListViewItem* itemVersion = new KListViewItem( packageInspector->dialog->versionsView, (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size() );
+		packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
 		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
@@ -308,7 +307,6 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			linesEmergeVersion = (*sortedVersionIterator)->version();
 			linesAvailable += (*sortedVersionIterator)->version() + ", ";
-			emergeVersionItem = itemVersion;
 		}
 		else
 			if ( (*sortedVersionIterator)->isNotArch() )
@@ -328,8 +326,8 @@ void PortageTab::slotPackage()
 		linesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
 	
 	if ( !linesEmergeVersion.isEmpty() ) {
+		packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
 		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
-		emergeVersionItem->setText( 3, "Used by emerge" );
 	}
 	else {
 		if ( versionNotInArchitecture && linesAvailable.isEmpty() )
@@ -398,6 +396,8 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
  */
 void PortageTab::slotQueue()
 {
+	kdDebug() << "PortageTab::slotQueue" << endl;
+	
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
 		if ( packagesView->currentPortagePackage()->isQueued() ) {
 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );

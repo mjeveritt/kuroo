@@ -9,10 +9,11 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libportage.la
 
 libportage_la_SOURCES = portagebase.ui portagelistview.cpp portagetab.cpp \
-	portage.cpp packageinspector.cpp installed.cpp updates.cpp inspectorbase.ui
+		portage.cpp packageinspector.cpp installed.cpp updates.cpp inspectorbase.ui \
+	versionview.cpp
 
 noinst_HEADERS = portagelistview.h portagetab.h portage.h packageinspector.h \
-	installed.h updates.h
+		installed.h updates.h versionview.h
 
 libportage_la_LIBADD = $(top_builddir)/src/core/libcore.la \
 	$(top_builddir)/src/queue/libqueue.la

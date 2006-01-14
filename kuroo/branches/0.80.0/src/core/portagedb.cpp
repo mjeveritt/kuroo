@@ -588,6 +588,11 @@ QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 	               " ;")).first();
 }
 
+QString KurooDB::packageHardMaskComment( const QString& id )
+{
+	return query( "SELECT comment FROM packageHardMask WHERE idPackage = '" + id + "';" ).first();
+}
+
 /**
  * Return package hardmask depend atom.
  * @param id

@@ -31,6 +31,9 @@
 #include <qheader.h>
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qvbox.h>
+#include <qhbox.h>
 
 #include <ktabwidget.h>
 #include <kactionselector.h>
@@ -38,6 +41,7 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <klistview.h>
+#include <kpassivepopup.h>
 
 /**
  * Specialized dialog for editing Use Flags per package.
@@ -46,8 +50,9 @@ PackageInspector::PackageInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 ), m_hasSettingsChanged( false )
 {
 	dialog = new InspectorBase( this );
-	dialog->setMinimumSize( 600, 450 );
+	dialog->setMinimumSize( 550, 450 );
 	setMainWidget( dialog );
+	adjustSize();
 	
 	loadUseFlagDescription();
 	
@@ -79,6 +84,8 @@ PackageInspector::~PackageInspector()
  */
 void PackageInspector::slotPreviousPackage()
 {
+	kdDebug() << "PackageInspector::slotPreviousPackage" << endl;
+	
 	if ( m_hasSettingsChanged )
 		switch( KMessageBox::warningYesNo( this,
 			i18n( "<qt>Settings are changed!<br>"
@@ -96,6 +103,8 @@ void PackageInspector::slotPreviousPackage()
  */
 void PackageInspector::slotNextPackage()
 {
+	kdDebug() << "PackageInspector::slotNextPackage" << endl;
+	
 	if ( m_hasSettingsChanged )
 		switch( KMessageBox::warningYesNo( this,
 			i18n( "<qt>Settings are changed!<br>"
@@ -106,6 +115,14 @@ void PackageInspector::slotNextPackage()
 					}
 	m_hasSettingsChanged = false;
 	emit signalNextPackage( false );
+}
+
+void PackageInspector::showHardMaskInfo()
+{
+	kdDebug() << "PackageInspector::showHardMaskInfo" << endl;
+	QString comment = KurooDBSingleton::Instance()->packageHardMaskComment( m_portagePackage->id() );
+	if ( !comment.isEmpty() )
+		KPassivePopup::message( comment, dialog->versionsView );
 }
 
 /**
@@ -148,6 +165,8 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
  */
 void PackageInspector::slotInstallVersion()
 {
+	kdDebug() << "\nPackageInspector::slotInstallVersion" << m_portagePackage->id() << endl;
+	
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	dialog->cbVersionsSpecific->setDisabled( true );
 	dialog->ckbAvailable->setChecked( false );
@@ -172,6 +191,8 @@ void PackageInspector::slotInstallVersion()
 	
 	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) )
 		dialog->ckbAvailable->setChecked( true );
+	
+	showHardMaskInfo();
 	
 	enableButton( KDialogBase::Apply, false );
 	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );

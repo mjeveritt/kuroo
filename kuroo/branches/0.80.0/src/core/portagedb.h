@@ -170,6 +170,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	packageVersionsInfo( const QString& id );
 	QString 		versionSize( const QString& idPackage, const QString& version );
+	QString			packageHardMaskComment( const QString& id );
 	QString			packageTotal();
 	QString		 	updatesTotal();
 	QString			queueTotal();

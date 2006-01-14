@@ -42,6 +42,7 @@ public:
 	 * @param newPackage	selected package
 	 */
 	void							edit( PortageListView::PortageItem* portagePackage );
+	void							showHardMaskInfo();
 	
 	InspectorBase					*dialog;
 	

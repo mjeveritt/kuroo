@@ -284,12 +284,12 @@ PortageListView::~PortageListView()
 }
 
 /**
- * Name of current package with focus.
+ * Current package with focus.
  * @return name
  */
 PortageListView::PortageItem* PortageListView::currentPortagePackage()
 {
-	return dynamic_cast<PortageItem*>( currentPackage() );
+	return dynamic_cast<PortageItem*>( PackageListView::currentPackage() );
 }
 
 /**
@@ -312,7 +312,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
 // 	clock_t start = clock();
 	
-	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
+// 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
 	
 	// Store package focus
 	QString currentId = this->currentId();
@@ -348,6 +348,10 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	setSorting( 0 );
 	setHeader( QString::number( packageCount ) );
 	setPackageFocus( currentId );
+	
+	// Cannot have current changed for only one package so let's emit manually
+	if ( packageCount == 1 )
+		emit currentChanged( 0 );
 	
 	return packageCount;
 	

@@ -60,9 +60,7 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
-	
-// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
-// 	connect( packagesView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotPackage() ) );
+
 	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	
 	// Rmb actions.
@@ -85,21 +83,15 @@ PortageTab::PortageTab( QWidget* parent )
 	slotInit();
 }
 
-/**
- * Save splitters and listview geometry.
- */
 PortageTab::~PortageTab()
 {
 }
 
 /**
  * Initialize Portage view.
- * Restore geometry: splitter positions, listViews width and columns width.
  */
 void PortageTab::slotInit()
 {
-	kdDebug() << "PortageTab::slotInit" << endl;
-	
 	packageInspector = new PackageInspector( this );
 	connect( packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
@@ -158,13 +150,15 @@ void PortageTab::slotListPackages()
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	
+	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
 		pbQueue->setDisabled( true );
 		packageInspector->setDisabled( true );
 		
+		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( Qt::red );
+			searchFilter->setPaletteBackgroundColor( QColor(255, 203, 201) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
@@ -176,8 +170,9 @@ void PortageTab::slotListPackages()
 		pbQueue->setDisabled( false );
 		packageInspector->setDisabled( false );
 		
+		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( Qt::yellow );
+			searchFilter->setPaletteBackgroundColor( QColor(218, 255, 202) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
@@ -209,7 +204,7 @@ void PortageTab::slotRefresh()
 
 /**
  * Disable/enable buttons when kuroo is busy.
- * @param b
+ * @param busy
  */
 void PortageTab::slotBusy( bool busy )
 {
@@ -232,7 +227,7 @@ void PortageTab::slotBusy( bool busy )
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << "PortageTab::slotPackage" << endl;
+// 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
 	pbUninstall->setDisabled( true );
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )

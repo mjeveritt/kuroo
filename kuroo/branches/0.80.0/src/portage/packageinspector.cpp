@@ -180,7 +180,7 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
  */
 void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
-	kdDebug() << "PackageInspector::edit" << endl;
+// 	kdDebug() << "PackageInspector::edit" << endl;
 	
 // 	if ( !KUser().isSuperUser() ) {
 // 		enableButtonApply( false );

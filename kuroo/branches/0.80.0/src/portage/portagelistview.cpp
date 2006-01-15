@@ -312,7 +312,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
 // 	clock_t start = clock();
 	
-// 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
+	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
 	
 	// Store package focus
 	QString currentId = this->currentId();
@@ -362,8 +362,6 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
  */
 void PortageListView::slotNextPackage( bool isPrevious )
 {
-	kdDebug() << "PortageListView::slotNextPackage isPrevious=" << isPrevious << endl;
-	
 	QListViewItem* item = currentItem();
 	if ( isPrevious ) {
 		if ( item->itemAbove() ) {

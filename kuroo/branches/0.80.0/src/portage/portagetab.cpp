@@ -46,7 +46,8 @@
 #include <klineedit.h>
 
 /**
- * Page for portage packages.
+ * @class PortageTab
+ * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), queuedFilters ( 0 )
@@ -122,16 +123,12 @@ void PortageTab::slotReload()
 }
 
 /**
- * Execute query based on filter and text. Added a delay of 200ms.
+ * Execute query based on filter and text. Add a delay of 250ms.
  */
 void PortageTab::slotFilters()
 {
-	if ( !searchFilter->text().isEmpty() )
-		searchFilter->setPaletteBackgroundColor( Qt::yellow );
-	else
-		searchFilter->setPaletteBackgroundColor( Qt::white );
 	queuedFilters++;
-	QTimer::singleShot( 200, this, SLOT( slotActivateFilters() ) );
+	QTimer::singleShot( 250, this, SLOT( slotActivateFilters() ) );
 }
 
 /**
@@ -165,7 +162,11 @@ void PortageTab::slotListPackages()
 		pbAdvanced->setDisabled( true );
 		pbQueue->setDisabled( true );
 		packageInspector->setDisabled( true );
-		searchFilter->setPaletteBackgroundColor( Qt::red );
+		
+		if ( !searchFilter->text().isEmpty() )
+			searchFilter->setPaletteBackgroundColor( Qt::red );
+		else
+			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
 		// User has edited package, reload the package
 		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -174,6 +175,11 @@ void PortageTab::slotListPackages()
 		pbAdvanced->setDisabled( false );
 		pbQueue->setDisabled( false );
 		packageInspector->setDisabled( false );
+		
+		if ( !searchFilter->text().isEmpty() )
+			searchFilter->setPaletteBackgroundColor( Qt::yellow );
+		else
+			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
 		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
@@ -245,9 +251,9 @@ void PortageTab::slotPackage()
 	packageInspector->dialog->cbVersionsInstalled->clear();
 	packageInspector->dialog->cbVersionsUse->clear();
 	packageInspector->dialog->cbVersionsSpecific->clear();
-	
 	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );
-		
+	packageInspector->dialog->groupAdvanced->setDisabled( true );
+	
 	// Initialize the portage package object with package and it's versions data
 	packagesView->currentPortagePackage()->initVersions();
 	QString package( packagesView->currentPortagePackage()->name() );
@@ -264,9 +270,8 @@ void PortageTab::slotPackage()
 	QString linesInstalled;
 	QString linesEmergeVersion;
 	
-	// Sorted list of versions for current package.
+	// Now parse sorted list of versions for current package
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
-	
 	bool versionNotInArchitecture = false;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
@@ -277,7 +282,7 @@ void PortageTab::slotPackage()
 		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
 		packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
 		
-		// Mark official version stability
+		// Mark official version stability for version listview
 		QString stability;
 		if ( (*sortedVersionIterator)->isOriginalHardMasked() )
 			stability = i18n("Hardmasked");
@@ -290,8 +295,10 @@ void PortageTab::slotPackage()
 				else
 					if ( (*sortedVersionIterator)->isNotArch() )
 						stability = i18n("Not on %1").arg( KurooConfig::arch() );
-					else
+					else {
 						stability = i18n("Not available");
+						packageInspector->dialog->groupAdvanced->setDisabled( false );
+					}
 		
 // 		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
 // 		kdDebug() << "(*sortedVersionIterator)->isOriginalHardMasked()=" << (*sortedVersionIterator)->isOriginalHardMasked() << endl;
@@ -325,22 +332,25 @@ void PortageTab::slotPackage()
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
+	// Construct installed summary
 	if ( !linesInstalled.isEmpty() )
 		linesInstalled = i18n("<b>Versions installed:</b> ") + linesInstalled + "<br>";
 	else
 		linesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
 	
+	// Construct installation summary
 	if ( !linesEmergeVersion.isEmpty() ) {
 		packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
 		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
 	}
 	else {
 		if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available on %1</font></b>").arg( KurooConfig::arch() );
+			linesEmergeVersion = i18n("<b>Version used for installation: <font color=darkRed>No version available on %1</font></b>").arg( KurooConfig::arch() );
 		else
-			linesEmergeVersion = i18n("<b>Version used by emerge: <font color=darkRed>No version available - please check advanced options</font></b>");
+			linesEmergeVersion = i18n("<b>Version used for installation: <font color=darkRed>No version available - please check advanced options</font></b>");
 	}
 	
+	// Construct available versions summary
 	if ( !linesAvailable.isEmpty() )
 		linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
 	else
@@ -348,6 +358,7 @@ void PortageTab::slotPackage()
 	
 	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion );
 	
+	// Refresh inspector if visible
 	if ( packageInspector->isVisible() )
 		slotAdvanced();
 }
@@ -435,7 +446,6 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
-	kdDebug() << "PortageTab::slotAdvanced" << endl;
 	PortageListView::PortageItem* portagePackage = packagesView->currentPortagePackage();
 	if ( portagePackage )
 		packageInspector->edit( portagePackage );

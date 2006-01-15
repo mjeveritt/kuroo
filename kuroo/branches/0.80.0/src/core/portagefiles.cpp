@@ -275,7 +275,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").utf8();
+					commentLines += (*it).section( "#", 1, 1 ).replace('\'', "''").replace('%', "&#37;").utf8();
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -286,7 +286,7 @@ public:
 						
 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						if ( !id.isEmpty() )
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
 
 					}
 					else

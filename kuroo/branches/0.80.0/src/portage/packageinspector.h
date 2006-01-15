@@ -47,9 +47,12 @@ public:
 	InspectorBase					*dialog;
 	
 private slots:
+	
+	void							slotHardMaskInfo();
+	
 	void							slotPreviousPackage();
 	void							slotNextPackage();
-	void							enableSettings();
+	void							showSettings();
 	void							slotRefreshTabs();
 	void							slotAdvancedToggle( bool isOn );
 	
@@ -70,7 +73,7 @@ private slots:
 	
 private:
 	bool							hasSettingsChanged, isVirginState, isAvailableBefore;
-	QString							m_id, category, package, packageId;
+	QString							m_id, category, package, hardMaskComment;
 	QMap<QString, QString>			useMap;
 	PortageListView::PortageItem* 	m_portagePackage;
 	int								stabilityBefore;

@@ -71,6 +71,7 @@ VersionView::VersionView( QWidget *parent, const char *name )
 	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Stability" ) );
 	addColumn( i18n( "Size" ) );
+	setColumnWidth( 3, 70 );
 	setColumnAlignment( 3, Qt::AlignRight );
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );

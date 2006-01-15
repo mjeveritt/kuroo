@@ -42,32 +42,36 @@
 #include <kuser.h>
 #include <klistview.h>
 #include <kpassivepopup.h>
+#include <kurllabel.h>
 
 /**
- * Specialized dialog for editing Use Flags per package.
+ * @class PackageInspector
+ * @short The package Inspector dialog for editing settings.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 ), 
-	hasSettingsChanged( false ), 
-	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false )
-	
+	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), m_portagePackage( 0 ), 
+	hasSettingsChanged( false ), isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
+	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
 	dialog->setMinimumSize( 550, 450 );
 	setMainWidget( dialog );
 	adjustSize();
 	
+	// Get use flag description
 	loadUseFlagDescription();
 	
+	// Shortcuts for browsing packages
 	connect( dialog->pbPrevious, SIGNAL( clicked() ), this, SLOT( slotPreviousPackage() ) );
 	connect( dialog->pbNext, SIGNAL( clicked() ), this, SLOT( slotNextPackage() ) );
 	
+	// Refresh files when changing version
 	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
 	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
 	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
 	
-	// Load files if tabpage is open
+	// Load files only if tabpage is open
 	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotRefreshTabs() ) );
 	
 	// Toggle between all 4 stability version
@@ -76,6 +80,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 	// Activate specific version menu
 	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetSpecificVersion( const QString& ) ) );
 	
+	connect( dialog->infoHardMasked, SIGNAL( leftClickedURL( const QString& ) ), SLOT( slotHardMaskInfo() ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -130,12 +135,34 @@ void PackageInspector::slotNextPackage()
 	emit signalNextPackage( false );
 }
 
+/**
+ * Create hardmask info link.
+ */
 void PackageInspector::showHardMaskInfo()
 {
-	kdDebug() << "PackageInspector::showHardMaskInfo" << endl;
-	QString comment = KurooDBSingleton::Instance()->packageHardMaskComment( m_id );
-	if ( !comment.isEmpty() )
-		KPassivePopup::message( comment, dialog->versionsView );
+	hardMaskComment = KurooDBSingleton::Instance()->packageHardMaskComment( m_id );
+	if ( !hardMaskComment.isEmpty() ) {
+		QFont font;
+		font.setBold( true );
+		dialog->infoHardMasked->setFont( font );
+		dialog->infoHardMasked->setHighlightedColor( Qt::red );
+		dialog->infoHardMasked->setText( i18n("Click for hardmask info!") );
+	}
+	else
+		dialog->infoHardMasked->setText( QString::null );
+}
+
+/**
+ * Show gentoo devs reason for hardmasking this package/versions.
+ */
+void PackageInspector::slotHardMaskInfo()
+{
+	hardMaskComment = 	"<font size=\"+2\">" + package + "</font> " + 
+						"(" + category.section( "-", 0, 0 ) + " / " + category.section( "-", 1, 1 ) + ")<br><br>" +
+						hardMaskComment;
+	
+	KMessageBox::messageBox( 0, KMessageBox::Information, hardMaskComment, 
+	                         i18n("%1/%2 hardmask info!").arg( category ).arg( package ), i18n("Yes"), i18n("No"), 0 );
 }
 
 /**
@@ -170,6 +197,7 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	else
 		isVirginState = false;
 	
+	// Construct header text
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
@@ -177,7 +205,7 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	                          "(" + category.section( "-", 0, 0 ) + " / " +
 	                          category.section( "-", 1, 1 ) + ")");
 	
-	enableSettings();
+	showSettings();
 	slotRefreshTabs();
 	show();
 }
@@ -186,9 +214,9 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
  * Stability choice for versions - enable the right radiobutton.
  * Priority is: specific version >> unmask package >> untest package >> stable package.
  */
-void PackageInspector::enableSettings()
+void PackageInspector::showSettings()
 {
-	kdDebug() << "\nPackageInspector::enableSettings " << m_id << endl;
+// 	kdDebug() << "PackageInspector::showSettings " << m_id << endl;
 	
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
 	
@@ -196,6 +224,7 @@ void PackageInspector::enableSettings()
 	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
 	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
 	
+	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
 		dialog->rbVersionsSpecific->setChecked( true );
 		dialog->cbVersionsSpecific->setDisabled( false );
@@ -213,6 +242,7 @@ void PackageInspector::enableSettings()
 				dialog->rbStable->setChecked( true );
 	}
 	
+	// Enable available radiobutton
 	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_id ) )
 		dialog->ckbAvailable->setChecked( true );
 	else
@@ -238,6 +268,7 @@ void PackageInspector::enableSettings()
 
 /**
  * Save the stability setting for this package.
+ * @fixme: save only changed tables.
  */
 void PackageInspector::slotApply()
 {
@@ -251,7 +282,7 @@ void PackageInspector::slotApply()
 }
 
 /**
- * Cancel and return to old settings.
+ * Cancel and rollback to old settings.
  */
 void PackageInspector::slotCancel()
 {
@@ -261,7 +292,7 @@ void PackageInspector::slotCancel()
 }
 
 /**
- * Rollback settings to state before change by user.
+ * Rollback settings to state before changed by user.
  */
 void PackageInspector::rollbackSettings()
 {
@@ -277,7 +308,7 @@ void PackageInspector::rollbackSettings()
 }
 
 /**
- * Store stability settings from radiobuttons.
+ * Apply stability settings from radiobuttons.
  * @param the selected radiobutton
  */
 void PackageInspector::slotSetStability( int rbStability )

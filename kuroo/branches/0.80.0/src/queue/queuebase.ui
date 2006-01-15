@@ -142,7 +142,7 @@
                                     <number>3</number>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;b&gt;Packages in emerge queue&lt;/b&gt;</string>
+                                    <string>&lt;b&gt;Packages in Installation Queue&lt;/b&gt;</string>
                                 </property>
                             </widget>
                             <widget class="Line" row="1" column="0">

@@ -141,6 +141,7 @@ void PackageInspector::slotNextPackage()
 void PackageInspector::showHardMaskInfo()
 {
 	hardMaskComment = KurooDBSingleton::Instance()->packageHardMaskComment( m_id );
+	
 	if ( !hardMaskComment.isEmpty() ) {
 		QFont font;
 		font.setBold( true );
@@ -150,6 +151,10 @@ void PackageInspector::showHardMaskInfo()
 	}
 	else
 		dialog->infoHardMasked->setText( QString::null );
+	
+	hardMaskComment = 	"<font size=\"+2\">" + package + "</font> " + 
+						"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
+						hardMaskComment;
 }
 
 /**
@@ -157,10 +162,6 @@ void PackageInspector::showHardMaskInfo()
  */
 void PackageInspector::slotHardMaskInfo()
 {
-	hardMaskComment = 	"<font size=\"+2\">" + package + "</font> " + 
-						"(" + category.section( "-", 0, 0 ) + " / " + category.section( "-", 1, 1 ) + ")<br><br>" +
-						hardMaskComment;
-	
 	KMessageBox::messageBox( 0, KMessageBox::Information, hardMaskComment, 
 	                         i18n("%1/%2 hardmask info!").arg( category ).arg( package ), i18n("Yes"), i18n("No"), 0 );
 }
@@ -202,7 +203,7 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
 	dialog->package->setText( "<font size=\"+2\">" + package + "</font> " +
-	                          "(" + category.section( "-", 0, 0 ) + " / " +
+	                          "(" + category.section( "-", 0, 0 ) + "/" +
 	                          category.section( "-", 1, 1 ) + ")");
 	
 	showSettings();

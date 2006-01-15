@@ -627,8 +627,8 @@ public:
 /**
  * Object for resulting list of packages from emerge actions.
  */
-PortageFiles::PortageFiles( QObject *parent )
-	: QObject( parent )
+PortageFiles::PortageFiles( QObject *m_parent )
+	: QObject( m_parent )
 {
 }
 
@@ -636,9 +636,9 @@ PortageFiles::~PortageFiles()
 {
 }
 
-void PortageFiles::init( QObject *myParent )
+void PortageFiles::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

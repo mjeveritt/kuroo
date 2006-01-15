@@ -36,7 +36,7 @@ class Log : public QObject
 {
 Q_OBJECT
 public:
-	Log( QObject *parent = 0 );
+	Log( QObject *m_parent = 0 );
     ~Log();
 	
 	/**
@@ -54,7 +54,7 @@ public:
 	void 			writeLog( const QString& output, int i );
 
 public slots:
-	QString			init( QObject *myParent = 0 );
+	QString			init( QObject *parent = 0 );
 	
 	/**
 	 * Backup job of "kuroo.log".
@@ -62,7 +62,7 @@ public slots:
 	KIO::Job*		backupLog();
 	
 private:
-	QObject			*parent;
+	QObject*		m_parent;
 	QCheckBox 		*verboseLog, *saveLog;
 	KTextBrowser 	*logBrowser;
 	QFile 			logFile;

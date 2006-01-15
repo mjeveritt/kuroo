@@ -35,11 +35,11 @@ class EtcUpdate : public QObject
 {
 Q_OBJECT
 public:
-    EtcUpdate( QObject *parent = 0, const char *name = 0 );
+    EtcUpdate( QObject *m_parent = 0, const char *name = 0 );
     ~EtcUpdate();
 
 public slots:
-	void				init( QObject *myParent = 0 );
+	void				init( QObject *parent = 0 );
 	
 	/**
  	 * Ask user if to run etc-update.
@@ -78,8 +78,8 @@ signals:
 	void				signalEtcFileMerged();
 	
 private:
-	QObject				*parent;
-	KProcIO 			*eProc;
+	QObject*			m_parent;
+	KProcIO*			eProc;
 	QStringList			etcUpdateLines;
 	QString				diffSource;
 };

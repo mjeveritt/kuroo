@@ -31,11 +31,11 @@ class Portage : public QObject
 {
 Q_OBJECT
 public:
-	Portage( QObject *parent = 0 );
+	Portage( QObject *m_parent = 0 );
     ~Portage();
 	
 public slots:
-	void						init( QObject *myParent = 0 );
+	void						init( QObject *parent = 0 );
 	void						slotChanged();
 	
 	QString						category( const QString& id );
@@ -120,7 +120,7 @@ signals:
 	void						signalPortageChanged();
 	
 private:
-	QObject	*parent;
+	QObject*					m_parent;
 	QMap<QString, QString> 		mapCache, mapPackageKeywords;
 };
 

@@ -30,8 +30,8 @@
  * Object for handling etc-updates.
  * The external diff tool is launched for merging changes in etc config files.
  */
-EtcUpdate::EtcUpdate( QObject* parent, const char* name )
-	: QObject( parent, name )
+EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
+	: QObject( m_parent, name )
 {
 	eProc = new KProcIO();
 }
@@ -42,9 +42,9 @@ EtcUpdate::~EtcUpdate()
 	eProc = 0;
 }
 
-void EtcUpdate::init( QObject *myParent )
+void EtcUpdate::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

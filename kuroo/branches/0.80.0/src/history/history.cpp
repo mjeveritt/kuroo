@@ -32,8 +32,8 @@
  * Object for the emerge history and statistics.
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
-History::History( QObject *parent )
-	: QObject( parent ), userSync( false )
+History::History( QObject *m_parent )
+	: QObject( m_parent ), userSync( false )
 {
 	slotInit();
 }
@@ -46,9 +46,9 @@ History::~History()
 	fileWatcher = 0;
 }
 
-void History::init( QObject *myParent )
+void History::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 	if ( !log.open(IO_ReadOnly) )
 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
 	else

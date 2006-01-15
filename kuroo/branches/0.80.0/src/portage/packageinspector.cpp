@@ -54,7 +54,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
-	dialog->setMinimumSize( 550, 450 );
+	dialog->setMinimumSize( 550, 460 );
 	setMainWidget( dialog );
 	adjustSize();
 	

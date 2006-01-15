@@ -29,8 +29,8 @@
 /**
  * Object handling the Portage tree.
  */
-Portage::Portage( QObject *parent )
-	: QObject( parent )
+Portage::Portage( QObject *m_parent )
+	: QObject( m_parent )
 {
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotChanged() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
@@ -43,9 +43,9 @@ Portage::~Portage()
 {
 }
 
-void Portage::init( QObject *myParent )
+void Portage::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 	loadCache();
 }
 

@@ -30,14 +30,23 @@ public:
 	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section( "/", 0, 0);
-		QString name = ( m_package.section( "/", 1, 1) ).section( rxPortageVersion, 0, 0 );
-		QString version = m_package.section( name + "-", 1, 1 );
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else
+			kdDebug() << i18n("Can not match package %1.").arg( m_package );
 		
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		if ( !id.isEmpty() ) {
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2';" ).arg( FILTERINSTALLED_STRING ).arg( id ) );
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED_STRING ).arg( id ).arg( version ) );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
+			                                              "WHERE id = '%2';" ).arg( FILTERINSTALLED_STRING ).arg( id ) );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
+			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED_STRING ).arg( id ).arg( version ) );
 			return true;
 		}
 		return false;
@@ -60,17 +69,27 @@ public:
 	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section( "/", 0, 0 );
-		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
-		QString version = m_package.section( name + "-", 1, 1 );
-			
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else
+			kdDebug() << i18n("Can not match package %1.").arg( m_package );
+
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		if ( !id.isEmpty() ) {
 			
 			// Mark package as uninstalled or remove it if old
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE meta = '%2' AND id = '%3'").arg( FILTERALL_STRING ).arg( FILTERINSTALLED_STRING ).arg( id ) );
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE meta = '%1' AND id = '%2';" ).arg( FILTEROLD_STRING ).arg( id ) );
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL_STRING ).arg( id ).arg( version ) );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
+			                                              "WHERE meta = '%2' AND id = '%3'").arg( FILTERALL_STRING ).arg( FILTERINSTALLED_STRING ).arg( id ) );
+			KurooDBSingleton::Instance()->query( QString( "DELETE FROM package "
+			                                              "WHERE meta = '%1' AND id = '%2';" ).arg( FILTEROLD_STRING ).arg( id ) );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
+			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL_STRING ).arg( id ).arg( version ) );
 			
 			// Remove package from world file
 			QFile file( KurooConfig::dirWorldFile() );
@@ -112,8 +131,8 @@ private:
 /**
  * Object for installed packages.
  */
-Installed::Installed( QObject *parent )
-	: QObject( parent )
+Installed::Installed( QObject *m_parent )
+	: QObject( m_parent )
 {
 }
 
@@ -121,9 +140,9 @@ Installed::~Installed()
 {
 }
 
-void Installed::init( QObject *myParent )
+void Installed::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

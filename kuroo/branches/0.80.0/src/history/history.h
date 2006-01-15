@@ -40,11 +40,11 @@ class History : public QObject
 {
 Q_OBJECT
 public:
-	History( QObject *parent = 0 );
+	History( QObject *m_parent = 0 );
     ~History();
 
 public slots:
-	void			init( QObject *myParent = 0 );
+	void			init( QObject *parent = 0 );
 	
 	/**
 	 * Load emerge statistics if any.
@@ -94,7 +94,7 @@ private slots:
 	void			slotParse();
 
 private:
-	QObject			*parent;
+	QObject*		m_parent;
 	KDirWatch		*fileWatcher;
 	EmergeTimeMap	m_statisticsMap;
 	QFile 			log;

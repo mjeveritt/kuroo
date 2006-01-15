@@ -32,11 +32,11 @@ class Signalist : public QObject
 {
 Q_OBJECT
 public:
-	Signalist( QObject *parent = 0 );
+	Signalist( QObject *m_parent = 0 );
     ~Signalist();
 
 public slots:
-	void		init( QObject *myParent = 0 );
+	void		init( QObject *parent = 0 );
 	
 	/**
 	 * Toggle busy flag for kuroo.
@@ -99,7 +99,7 @@ signals:
 	void		signalUnmasked( const QString& name, bool b );
 
 private:
-	QObject		*parent;
+	QObject*	m_parent;
 	bool		busy, busyScanning;
 };
 

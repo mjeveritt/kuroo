@@ -34,8 +34,8 @@
 /**
  * Log output from all actions as emerge, scanning... to log window and to file.
  */
-Log::Log( QObject* parent )
-	: QObject( parent ), logBrowser( 0 ), verboseLog( 0 ), saveLog( 0 )
+Log::Log( QObject* m_parent )
+	: QObject( m_parent ), logBrowser( 0 ), verboseLog( 0 ), saveLog( 0 )
 {
 }
 
@@ -48,9 +48,9 @@ Log::~Log()
  * Open persistent log.
  * @return log file name
  */
-QString Log::init( QObject *myParent )
+QString Log::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 	
 	QString logName = KUROODIR + "kuroo.log";
 	logFile.setName(logName);

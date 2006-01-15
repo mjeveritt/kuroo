@@ -32,9 +32,16 @@ public:
 	RemoveUpdatesPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QString category = m_package.section( "/", 0, 0 );
-		QString name = ( m_package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
-		QString version = m_package.section( name + "-", 1, 1 );
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else
+			kdDebug() << i18n("Can not match package %1.").arg( m_package );
 		
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		if ( !id.isEmpty() ) {
@@ -56,8 +63,8 @@ private:
 /**
  * Object for update packages.
  */
-Updates::Updates( QObject *parent )
-	: QObject( parent )
+Updates::Updates( QObject *m_parent )
+	: QObject( m_parent )
 {
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
@@ -67,9 +74,9 @@ Updates::~Updates()
 {
 }
 
-void Updates::init( QObject *myParent )
+void Updates::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

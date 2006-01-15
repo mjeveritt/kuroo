@@ -38,12 +38,12 @@ class Emerge : public QObject
 {
 Q_OBJECT
 public:
-	Emerge( QObject *parent = 0 );
+	Emerge( QObject *m_parent = 0 );
     ~Emerge();
 
 public slots:
 	
-	void				init( QObject *myParent = 0 );
+	void				init( QObject *parent = 0 );
 	bool				stop();
 	
 	/**
@@ -120,8 +120,8 @@ private slots:
 	void				askUnmaskPackage( const QString& packageKeyword );
 	
 private:
-	QObject				*parent;
-	KProcIO 			*eProc;
+	QObject*			m_parent;
+	KProcIO*			eProc;
 	QString 			importantMessage, unmasked;
 	QStringList 		blocks, lastEmergeList;
 	EmergePackageList	emergePackageList;

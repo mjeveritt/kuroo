@@ -41,11 +41,11 @@ class Installed : public QObject
 {
 Q_OBJECT
 public:
-	Installed( QObject *parent = 0 );
+	Installed( QObject *m_parent = 0 );
     ~Installed();
 	
 public slots:
-	void			init( QObject *myParent = 0 );
+	void			init( QObject *parent = 0 );
 	
 	/**
 	 * Forward signal after a new scan.
@@ -83,8 +83,7 @@ signals:
 	void			signalInstalledReset();
 	
 private:
-	QObject			*parent;
-	QString			package;
+	QObject			*m_parent;
 	
 };
 

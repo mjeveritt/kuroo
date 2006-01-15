@@ -33,11 +33,11 @@ class Results : public QObject
 {
 Q_OBJECT	
 public:
-	Results( QObject *parent = 0 );
+	Results( QObject *m_parent = 0 );
     ~Results();
 	
 public slots:
-	void			init( QObject *myParent = 0 );
+	void			init( QObject *parent = 0 );
 	void			refresh();
 	
 	/**
@@ -49,7 +49,7 @@ public slots:
 signals:
 	
 private:
-	QObject			*parent;
+	QObject			*m_parent;
 };
 
 #endif

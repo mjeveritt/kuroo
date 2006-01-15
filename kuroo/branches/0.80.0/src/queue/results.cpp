@@ -75,8 +75,8 @@ private:
 /**
  * Object for resulting list of packages from emerge actions.
  */
-Results::Results( QObject *parent )
-	: QObject( parent )
+Results::Results( QObject *m_parent )
+	: QObject( m_parent )
 {
 }
 
@@ -84,9 +84,9 @@ Results::~Results()
 {
 }
 
-void Results::init( QObject *myParent )
+void Results::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

@@ -31,11 +31,11 @@ class PortageFiles : public QObject
 {
 Q_OBJECT	
 public:
-	PortageFiles( QObject *parent = 0 );
+	PortageFiles( QObject *m_parent = 0 );
     ~PortageFiles();
 	
 public slots:
-	void			init( QObject *myParent = 0 );
+	void			init( QObject *parent = 0 );
 	void			refresh( int mask );
 	
 	/**
@@ -59,7 +59,7 @@ signals:
 	void			signalPortageFilesChanged();
 	
 private:
-	QObject*		parent;
+	QObject*		m_parent;
 };
 
 #endif

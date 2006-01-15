@@ -28,8 +28,8 @@
 /**
  * Object handling the Gentoo emerge command.
  */
-Emerge::Emerge( QObject* parent )
-	: QObject( parent )
+Emerge::Emerge( QObject* m_parent )
+	: QObject( m_parent )
 {
 	eProc = new KProcIO();
 }
@@ -40,9 +40,9 @@ Emerge::~Emerge()
 	eProc = 0;
 }
 
-void Emerge::init( QObject *myParent )
+void Emerge::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

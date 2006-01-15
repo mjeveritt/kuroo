@@ -31,11 +31,11 @@ class Updates : public QObject
 {
 Q_OBJECT
 public:
-	Updates( QObject *parent = 0 );
+	Updates( QObject *m_parent = 0 );
     ~Updates();
 	
 public slots:
-	void			init( QObject *myParent = 0 );
+	void			init( QObject *parent = 0 );
 	void			slotChanged();
 	void			slotReset();
 	bool			slotRefresh();
@@ -46,8 +46,7 @@ signals:
 	void			signalUpdatesChanged();
 	
 private:
-	QObject			*parent;
-	QString			package;
+	QObject			*m_parent;
 };
 
 #endif

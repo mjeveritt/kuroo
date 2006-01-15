@@ -28,8 +28,8 @@
  * Object which forwards signals, so they can picked up system wide.
  * Just connect to this instance.
  */
-Signalist::Signalist( QObject* parent )
-	: QObject( parent ), busy( false ), busyScanning( false )
+Signalist::Signalist( QObject* m_parent )
+	: QObject( m_parent ), busy( false ), busyScanning( false )
 {
 }
 
@@ -37,9 +37,9 @@ Signalist::~Signalist()
 {
 }
 
-void Signalist::init( QObject* myParent )
+void Signalist::init( QObject* parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**

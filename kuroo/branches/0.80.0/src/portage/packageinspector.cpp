@@ -48,7 +48,8 @@
  */
 PackageInspector::PackageInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), packageId( NULL ), m_portagePackage( 0 ), 
-	hasSettingsChanged( false ), stability( 0 ), stabilityBefore ( 0 ), stabilityAfter( 0 ), versionBefore( QString::null )
+	hasSettingsChanged( false ), 
+	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false )
 	
 {
 	dialog = new InspectorBase( this );
@@ -67,7 +68,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
 	
 	// Load files if tabpage is open
-	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotActivateTabs() ) );
+	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotRefreshTabs() ) );
 	
 	// Toggle between all 4 stability version
 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
@@ -88,9 +89,6 @@ PackageInspector::~PackageInspector()
  */
 void PackageInspector::slotPreviousPackage()
 {
-	kdDebug() << "PackageInspector::slotNextPackage stabilityBefore=" << stabilityBefore << endl;
-	kdDebug() << "PackageInspector::slotNextPackage stabilityAfter=" << stabilityAfter << endl;
-	
 	if ( hasSettingsChanged )
 		switch( KMessageBox::warningYesNo( this,
 			i18n( "<qt>Settings are changed!<br>"
@@ -101,7 +99,7 @@ void PackageInspector::slotPreviousPackage()
 				break;
 					
 			case KMessageBox::No:
-				rollbackSetting();
+				rollbackSettings();
 		}
 	
 	hasSettingsChanged = false;
@@ -115,9 +113,6 @@ void PackageInspector::slotPreviousPackage()
  */
 void PackageInspector::slotNextPackage()
 {
-	kdDebug() << "PackageInspector::slotNextPackage stabilityBefore=" << stabilityBefore << endl;
-	kdDebug() << "PackageInspector::slotNextPackage stabilityAfter=" << stabilityAfter << endl;
-	
 	if ( hasSettingsChanged )
 		switch( KMessageBox::warningYesNo( this,
 			i18n( "<qt>Settings are changed!<br>"
@@ -128,7 +123,7 @@ void PackageInspector::slotNextPackage()
 				break;
 				
 			case KMessageBox::No:
-				rollbackSetting();
+				rollbackSettings();
 		}
 	
 	hasSettingsChanged = false;
@@ -138,7 +133,7 @@ void PackageInspector::slotNextPackage()
 void PackageInspector::showHardMaskInfo()
 {
 	kdDebug() << "PackageInspector::showHardMaskInfo" << endl;
-	QString comment = KurooDBSingleton::Instance()->packageHardMaskComment( m_portagePackage->id() );
+	QString comment = KurooDBSingleton::Instance()->packageHardMaskComment( m_id );
 	if ( !comment.isEmpty() )
 		KPassivePopup::message( comment, dialog->versionsView );
 }
@@ -167,6 +162,14 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 // 		dialog->useView->setDisabled( true );
 // 	}
 	
+	// Is it first time we load this package
+	if ( m_id != portagePackage->id() ) {
+		m_id = portagePackage->id();
+		isVirginState = true;
+	}
+	else
+		isVirginState = false;
+	
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
@@ -174,8 +177,8 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	                          "(" + category.section( "-", 0, 0 ) + " / " +
 	                          category.section( "-", 1, 1 ) + ")");
 	
-	slotInstallVersion();
-	slotActivateTabs();
+	enableSettings();
+	slotRefreshTabs();
 	show();
 }
 
@@ -183,43 +186,48 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
  * Stability choice for versions - enable the right radiobutton.
  * Priority is: specific version >> unmask package >> untest package >> stable package.
  */
-void PackageInspector::slotInstallVersion()
+void PackageInspector::enableSettings()
 {
-	kdDebug() << "\nPackageInspector::slotInstallVersion " << m_portagePackage->id() << endl;
+	kdDebug() << "\nPackageInspector::enableSettings " << m_id << endl;
 	
 	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
-	dialog->cbVersionsSpecific->setDisabled( true );
-	dialog->ckbAvailable->setChecked( false );
 	
 	// Get user mask specific version
-	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_portagePackage->id() ).first();
+	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
 	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
 	
 	if ( !userMaskVersion.isEmpty() ) {
 		dialog->rbVersionsSpecific->setChecked( true );
 		dialog->cbVersionsSpecific->setDisabled( false );
 		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
-		versionBefore = userMaskVersion;
 	}
-	else
-		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_portagePackage->id() ) )
+	else {
+		dialog->ckbAvailable->setChecked( false );
+		
+		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
 			dialog->rbMasked->setChecked( true );
 		else
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_portagePackage->id() ) )
+			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_id ) )
 				dialog->rbTesting->setChecked( true );
 			else
 				dialog->rbStable->setChecked( true );
+	}
 	
-	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_portagePackage->id() ) )
+	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_id ) )
 		dialog->ckbAvailable->setChecked( true );
+	else
+		dialog->ckbAvailable->setChecked( false );
 	
-	// Stability setting before user has changed it
-	stability = dialog->groupSelectStability->selectedId();
+	// Stability settings before user has changed it
+	if ( isVirginState ) {
+		stabilityBefore = dialog->groupSelectStability->selectedId();
+		versionBefore = userMaskVersion;
+		isAvailableBefore = dialog->ckbAvailable->isChecked();
+		dialog->groupArchitecture->setChecked( false );
+	}
 	
 	showHardMaskInfo();
-	
-	kdDebug() << "nPackageInspector::slotInstallVersion hasSettingsChanged=" << hasSettingsChanged << endl;
-	
+
 	// Reset the apply button for new package
 	if ( !hasSettingsChanged )
 		enableButtonApply( false );
@@ -233,14 +241,13 @@ void PackageInspector::slotInstallVersion()
  */
 void PackageInspector::slotApply()
 {
-	kdDebug() << "PackageInspector::slotApply" << endl;
-	
 	PortageFilesSingleton::Instance()->savePackageKeywords();
 	PortageFilesSingleton::Instance()->savePackageUserMask();
 	PortageFilesSingleton::Instance()->savePackageUserUnMask();
 	PortageFilesSingleton::Instance()->savePackageUse();
 	enableButtonApply( false );
 	hasSettingsChanged = false;
+	isVirginState = true;
 }
 
 /**
@@ -248,10 +255,7 @@ void PackageInspector::slotApply()
  */
 void PackageInspector::slotCancel()
 {
-	kdDebug() << "PackageInspector::slotCancel stabilityBefore=" << stabilityBefore << endl;
-	kdDebug() << "PackageInspector::slotCancel versionBefore=" << versionBefore << endl;
-	
-	rollbackSetting();
+	rollbackSettings();
 	hasSettingsChanged = false;
 	accept();
 }
@@ -259,14 +263,16 @@ void PackageInspector::slotCancel()
 /**
  * Rollback settings to state before change by user.
  */
-void PackageInspector::rollbackSetting()
+void PackageInspector::rollbackSettings()
 {
-	int stabilityOld = stabilityBefore;
 	if ( hasSettingsChanged ) {
-		slotSetStability( stabilityOld  );
+		slotSetStability( stabilityBefore  );
 		
-		if ( stabilityOld == 3 )
+		if ( stabilityBefore == 3 )
 			slotSetSpecificVersion( versionBefore );
+		
+		if ( isAvailableBefore )
+			slotAvailable( true );
 	}
 }
 
@@ -276,13 +282,7 @@ void PackageInspector::rollbackSetting()
  */
 void PackageInspector::slotSetStability( int rbStability )
 {
-	kdDebug() << "PackageInspector::slotSetStability id=" << m_portagePackage->id() << " rbStability=" << rbStability << endl;
-	kdDebug() << "PackageInspector::slotSetStability stability=" << stability << endl;
-	kdDebug() << "PackageInspector::slotSetStability versionBefore=" << versionBefore << endl;
-	
-	stabilityAfter = rbStability;
-	if ( stability != stabilityAfter )
-		stabilityBefore = stability;
+	kdDebug() << "PackageInspector::slotSetStability id=" << m_id << " rbStability=" << rbStability << endl;
 	
 	switch ( rbStability ) {
 	
@@ -291,10 +291,10 @@ void PackageInspector::slotSetStability( int rbStability )
 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.keywords, package.unmask and package.mask
-			KurooDBSingleton::Instance()->clearPackageUnTesting( m_portagePackage->id() );
-			KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
-			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
-			KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUnTesting( m_id );
+			KurooDBSingleton::Instance()->clearPackageUnMasked( m_id );
+			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
+			KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
 		
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
@@ -305,10 +305,10 @@ void PackageInspector::slotSetStability( int rbStability )
 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.unmask and package.mask
-			KurooDBSingleton::Instance()->clearPackageUnMasked( m_portagePackage->id() );
-			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUnMasked( m_id );
+			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
 		
-			KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
 			break;
@@ -318,10 +318,10 @@ void PackageInspector::slotSetStability( int rbStability )
 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.keywords and package.mask
-			KurooDBSingleton::Instance()->clearPackageUserMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
 		
-			KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
-			KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );
+			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
+			KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
 			break;
@@ -342,11 +342,9 @@ void PackageInspector::slotSetStability( int rbStability )
  */
 void PackageInspector::slotSetSpecificVersion( const QString& version )
 {
-	kdDebug() << "PackageInspector::slotSetSpecificVersion version=" << version << endl;
-	
-	KurooDBSingleton::Instance()->setPackageUnTesting( m_portagePackage->id() );
-	KurooDBSingleton::Instance()->setPackageUnMasked( m_portagePackage->id() );
-	KurooDBSingleton::Instance()->setPackageUserMasked( m_portagePackage->id(), version );
+	KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
+	KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
+	KurooDBSingleton::Instance()->setPackageUserMasked( m_id, version );
 	
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();
@@ -358,12 +356,10 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
  */
 void PackageInspector::slotAvailable( bool isAvailable )
 {
-	kdDebug() << "PackageInspector::slotAvailable isAvailable=" << isAvailable << endl;
-	
 	if ( isAvailable )
-		KurooDBSingleton::Instance()->setPackageAvailable( m_portagePackage->id() );
+		KurooDBSingleton::Instance()->setPackageAvailable( m_id );
 	else
-		KurooDBSingleton::Instance()->clearPackageAvailable( m_portagePackage->id() );
+		KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
 	
 	enableButtonApply( true );
 	hasSettingsChanged = true;
@@ -379,7 +375,7 @@ void PackageInspector::slotAvailable( bool isAvailable )
 /**
  * Load the files for this package and this version.
  */
-void PackageInspector::slotActivateTabs()
+void PackageInspector::slotRefreshTabs()
 {
 	slotGetUseFlags( dialog->cbVersionsUse->currentText() );
 	slotGetEbuild( dialog->cbVersionsEbuild->currentText() );
@@ -455,7 +451,7 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 			useItem->setMultiLinesEnabled( true );
 			useItem->setText( 1, description.join("\n") );
 			
-			if ( KurooDBSingleton::Instance()->hasPackageUse( m_portagePackage->id(), *it ) )
+			if ( KurooDBSingleton::Instance()->hasPackageUse( m_id, *it ) )
 				useItem->setOn( true );
 			
 		}

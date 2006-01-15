@@ -49,14 +49,14 @@ public:
 private slots:
 	void							slotPreviousPackage();
 	void							slotNextPackage();
-	void							slotInstallVersion();
-	void							slotActivateTabs();
+	void							enableSettings();
+	void							slotRefreshTabs();
 	void							slotAdvancedToggle( bool isOn );
 	
 	void							slotGetInstalledFiles( const QString& version );
 	void							slotApply();
 	void							slotCancel();
-	void							rollbackSetting();
+	void							rollbackSettings();
 	
 	void							slotSetStability( int rbStability );
 	void							slotSetSpecificVersion( const QString& version );
@@ -69,11 +69,11 @@ private slots:
 	void							slotGetUseFlags( const QString& version );
 	
 private:
-	bool							hasSettingsChanged;
-	QString							category, package, packageId;
+	bool							hasSettingsChanged, isVirginState, isAvailableBefore;
+	QString							m_id, category, package, packageId;
 	QMap<QString, QString>			useMap;
 	PortageListView::PortageItem* 	m_portagePackage;
-	int								stability, stabilityBefore, stabilityAfter;
+	int								stabilityBefore;
 	QString							versionBefore;
 	
 signals:

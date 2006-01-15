@@ -597,27 +597,27 @@ QString KurooDB::packageHardMaskComment( const QString& id )
  * Return package hardmask depend atom.
  * @param id
  */
-QStringList KurooDB::packageHardMaskAtom( const QString& id )
+QString KurooDB::packageHardMaskAtom( const QString& id )
 {
-	return query( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
+	return query( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" ).first();
 }
 
 /**
  * Return package user-mask depend atom.
  * @param id
  */
-QStringList KurooDB::packageUserMaskAtom( const QString& id )
+QString KurooDB::packageUserMaskAtom( const QString& id )
 {
-	return query( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
+	return query( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" ).first();
 }
 
 /**
  * Return package unmask depend atom.
  * @param id
  */
-QStringList KurooDB::packageUnMaskAtom( const QString& id )
+QString KurooDB::packageUnMaskAtom( const QString& id )
 {
-	return query( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
+	return query( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" ).first();
 }
 
 /**

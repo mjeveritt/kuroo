@@ -360,16 +360,18 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
  * Move to next package in listview.
  * @param isUp true is previous, false is next
  */
-void PortageListView::slotNextPackage( bool isUp )
+void PortageListView::slotNextPackage( bool isPrevious )
 {
+	kdDebug() << "PortageListView::slotNextPackage isPrevious=" << isPrevious << endl;
+	
 	QListViewItem* item = currentItem();
-	if ( isUp ) {
+	if ( isPrevious ) {
 		if ( item->itemAbove() ) {
 			selectAll( false );
 			item = item->itemAbove();
 			ensureItemVisible( item );
-			setSelected( item, true );
 			setCurrentItem( item );
+			setSelected( item, true );
 		}
 	}
 	else {
@@ -377,8 +379,8 @@ void PortageListView::slotNextPackage( bool isUp )
 			selectAll( false );
 			item = item->itemBelow();
 			ensureItemVisible( item );
-			setSelected( item, true );
 			setCurrentItem( item );
+			setSelected( item, true );
 		}
 	}
 }

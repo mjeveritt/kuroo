@@ -59,7 +59,10 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
+	
+// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
+// 	connect( packagesView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotPackage() ) );
+	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -223,6 +226,8 @@ void PortageTab::slotBusy( bool busy )
  */
 void PortageTab::slotPackage()
 {
+	kdDebug() << "PortageTab::slotPackage" << endl;
+	
 	pbUninstall->setDisabled( true );
 	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
@@ -430,6 +435,7 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
+	kdDebug() << "PortageTab::slotAdvanced" << endl;
 	PortageListView::PortageItem* portagePackage = packagesView->currentPortagePackage();
 	if ( portagePackage )
 		packageInspector->edit( portagePackage );

@@ -63,7 +63,7 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 {
 	if ( id.isEmpty() ) {
 		statusBarLabel->setText( message );
-		QTimer::singleShot( 1000, this, SLOT( slotLastMessage() ) );
+		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 		return;
 	}
 	
@@ -74,7 +74,7 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 	else {
 		messageMap.erase( id );
 		statusBarLabel->setText( message );
-		QTimer::singleShot( 1000, this, SLOT( slotLastMessage() ) );
+		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 	}
 }
 

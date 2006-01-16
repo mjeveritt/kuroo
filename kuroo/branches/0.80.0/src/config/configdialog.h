@@ -50,18 +50,12 @@ private slots:
  	 * Load the contents of the these inte KTextBoxes.
  	 */
 	void readMakeConf();
-	void readPackageUnmask();
-	void readPackageMask();
-	void readPackageKeywords();
 	void readWorldFile();
 	
 	/**
  	 * And save back...
  	 */
 	bool saveMakeConf();
-	bool savePackageUnmask();
-	bool savePackageMask();
-	bool savePackageKeywords();
 	bool saveWorldFile();
 	void saveAll();
 

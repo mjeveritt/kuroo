@@ -95,7 +95,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	m_hasCheckedQueue = hasCheckedQueue;
 	
-	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
+// 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	queueView->insertPackageList();
 	
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
@@ -177,11 +177,10 @@ void QueueTab::slotGo()
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {
-		packageList.prepend( "--fetch-all-uri" );
-		
 		switch( KMessageBox::questionYesNoList( this, 
 			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue") ) ) {
 			case KMessageBox::Yes: {
+				packageList.prepend( "--fetch-all-uri" );
 				QueueSingleton::Instance()->installPackageList( packageList );
 				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
 			}

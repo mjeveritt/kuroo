@@ -86,7 +86,7 @@ void PortageListView::PortageItem::initVersions()
 	
 	// Get list of accepted keywords, eg if package is "untesting"
 	m_category = KurooDBSingleton::Instance()->category( id() );
-	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() ).first();
+	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
 
 // 	kdDebug() << "acceptedKeywords=" << acceptedKeywords << endl;
 	

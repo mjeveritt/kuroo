@@ -32,8 +32,6 @@
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qvbox.h>
-#include <qhbox.h>
 
 #include <ktabwidget.h>
 #include <kactionselector.h>
@@ -41,7 +39,6 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <klistview.h>
-#include <kpassivepopup.h>
 #include <kurllabel.h>
 
 /**
@@ -50,11 +47,12 @@
  */
 PackageInspector::PackageInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), m_portagePackage( 0 ), 
-	hasSettingsChanged( false ), isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
+	hasVersionSettingsChanged( false ), hasUseSettingsChanged( false ), 
+	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
 	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
-	dialog->setMinimumSize( 550, 460 );
+	dialog->setMinimumSize( 600, 460 );
 	setMainWidget( dialog );
 	adjustSize();
 	
@@ -81,6 +79,8 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetSpecificVersion( const QString& ) ) );
 	
 	connect( dialog->infoHardMasked, SIGNAL( leftClickedURL( const QString& ) ), SLOT( slotHardMaskInfo() ) );
+	
+	connect( dialog->useView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotSetUseFlags( QListViewItem* ) ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -94,7 +94,7 @@ PackageInspector::~PackageInspector()
  */
 void PackageInspector::slotPreviousPackage()
 {
-	if ( hasSettingsChanged )
+	if ( hasVersionSettingsChanged || hasUseSettingsChanged )
 		switch( KMessageBox::warningYesNo( this,
 			i18n( "<qt>Settings are changed!<br>"
 					"Do you want to save them?</qt>"), i18n("Saving settings"), i18n("Yes"), i18n("No"), 0 ) ) {
@@ -107,7 +107,8 @@ void PackageInspector::slotPreviousPackage()
 				rollbackSettings();
 		}
 	
-	hasSettingsChanged = false;
+	hasVersionSettingsChanged = false;
+	hasUseSettingsChanged = false;
 	emit signalNextPackage( true );
 }
 
@@ -118,7 +119,7 @@ void PackageInspector::slotPreviousPackage()
  */
 void PackageInspector::slotNextPackage()
 {
-	if ( hasSettingsChanged )
+	if ( hasVersionSettingsChanged || hasUseSettingsChanged )
 		switch( KMessageBox::warningYesNo( this,
 			i18n( "<qt>Settings are changed!<br>"
 					"Do you want to save them?</qt>"), i18n("Saving settings"), i18n("Yes"), i18n("No"), 0 ) ) {
@@ -131,7 +132,8 @@ void PackageInspector::slotNextPackage()
 				rollbackSettings();
 		}
 	
-	hasSettingsChanged = false;
+	hasVersionSettingsChanged = false;
+	hasUseSettingsChanged = false;
 	emit signalNextPackage( false );
 }
 
@@ -140,21 +142,23 @@ void PackageInspector::slotNextPackage()
  */
 void PackageInspector::showHardMaskInfo()
 {
-	hardMaskComment = KurooDBSingleton::Instance()->packageHardMaskComment( m_id );
+	const QStringList hardMaskInfo = KurooDBSingleton::Instance()->packageHardMaskInfo( m_id );
 	
-	if ( !hardMaskComment.isEmpty() ) {
+	if ( !hardMaskInfo.isEmpty() ) {
 		QFont font;
 		font.setBold( true );
 		dialog->infoHardMasked->setFont( font );
 		dialog->infoHardMasked->setHighlightedColor( Qt::red );
 		dialog->infoHardMasked->setText( i18n("Click for hardmask info!") );
+		
+		hardMaskComment =
+			"<font size=\"+2\">" + package + "</font> " + 
+			"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
+			hardMaskInfo.last() + "<br><br>" +
+			"Rule <i>" + hardMaskInfo.first() + "</i>";
 	}
 	else
 		dialog->infoHardMasked->setText( QString::null );
-	
-	hardMaskComment = 	"<font size=\"+2\">" + package + "</font> " + 
-						"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
-						hardMaskComment;
 }
 
 /**
@@ -219,7 +223,7 @@ void PackageInspector::showSettings()
 {
 // 	kdDebug() << "PackageInspector::showSettings " << m_id << endl;
 	
-	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
+	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
 	
 	// Get user mask specific version
 	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
@@ -260,10 +264,10 @@ void PackageInspector::showSettings()
 	showHardMaskInfo();
 
 	// Reset the apply button for new package
-	if ( !hasSettingsChanged )
+	if ( !hasVersionSettingsChanged )
 		enableButtonApply( false );
 	
-	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotAvailable( bool ) ) );
+	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
 }
 
 
@@ -273,12 +277,33 @@ void PackageInspector::showSettings()
  */
 void PackageInspector::slotApply()
 {
-	PortageFilesSingleton::Instance()->savePackageKeywords();
-	PortageFilesSingleton::Instance()->savePackageUserMask();
-	PortageFilesSingleton::Instance()->savePackageUserUnMask();
-	PortageFilesSingleton::Instance()->savePackageUse();
+	if ( hasVersionSettingsChanged ) {
+		PortageFilesSingleton::Instance()->savePackageKeywords();
+		PortageFilesSingleton::Instance()->savePackageUserMask();
+		PortageFilesSingleton::Instance()->savePackageUserUnMask();
+	}
+	
+	if ( hasUseSettingsChanged ) {
+		
+		// Get use flags 
+		QStringList useList;
+		QListViewItem* myChild = dialog->useView->firstChild();
+		while ( myChild ) {
+			if ( !myChild->text(0).isEmpty() )
+				useList += myChild->text(0);
+			myChild = myChild->nextSibling();
+		}
+		
+		// Store in db and save to file
+		if ( !useList.isEmpty() ) {
+			KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
+			PortageFilesSingleton::Instance()->savePackageUse();
+		}
+	}
+	
 	enableButtonApply( false );
-	hasSettingsChanged = false;
+	hasVersionSettingsChanged = false;
+	hasUseSettingsChanged = false;
 	isVirginState = true;
 }
 
@@ -288,7 +313,7 @@ void PackageInspector::slotApply()
 void PackageInspector::slotCancel()
 {
 	rollbackSettings();
-	hasSettingsChanged = false;
+	hasVersionSettingsChanged = false;
 	accept();
 }
 
@@ -297,14 +322,14 @@ void PackageInspector::slotCancel()
  */
 void PackageInspector::rollbackSettings()
 {
-	if ( hasSettingsChanged ) {
+	if ( hasVersionSettingsChanged ) {
 		slotSetStability( stabilityBefore  );
 		
 		if ( stabilityBefore == 3 )
 			slotSetSpecificVersion( versionBefore );
 		
 		if ( isAvailableBefore )
-			slotAvailable( true );
+			slotSetAvailable( true );
 	}
 }
 
@@ -314,8 +339,6 @@ void PackageInspector::rollbackSettings()
  */
 void PackageInspector::slotSetStability( int rbStability )
 {
-	kdDebug() << "PackageInspector::slotSetStability id=" << m_id << " rbStability=" << rbStability << endl;
-	
 	switch ( rbStability ) {
 	
 		// User wants only stable package
@@ -365,7 +388,7 @@ void PackageInspector::slotSetStability( int rbStability )
 	}
 	
 	enableButtonApply( true );
-	hasSettingsChanged = true;
+	hasVersionSettingsChanged = true;
 }
 
 /**
@@ -386,7 +409,7 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
  * Make this package available on users arch.
  * @param isAvailable
  */
-void PackageInspector::slotAvailable( bool isAvailable )
+void PackageInspector::slotSetAvailable( bool isAvailable )
 {
 	if ( isAvailable )
 		KurooDBSingleton::Instance()->setPackageAvailable( m_id );
@@ -394,11 +417,38 @@ void PackageInspector::slotAvailable( bool isAvailable )
 		KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
 	
 	enableButtonApply( true );
-	hasSettingsChanged = true;
+	hasVersionSettingsChanged = true;
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();
 }
 
+/**
+ * Toggle use flag state to add or remove.
+ * @param: useItem
+ */
+void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
+{
+	if ( !useItem )
+		return;
+	
+	QString use = useItem->text( 1 ).remove('-');
+	switch ( dynamic_cast<QCheckListItem*>(useItem)->state() ) {
+	
+		case ( QCheckListItem::Off ) :
+			useItem->setText( 0, QString::null );
+			break;
+		
+		case ( QCheckListItem::On ) :
+			useItem->setText( 0, "-" + use );
+			break;
+		
+		case ( QCheckListItem::NoChange ) :
+			useItem->setText( 0, use );
+	}
+	
+	enableButtonApply( true );
+	hasUseSettingsChanged = true;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Load files
@@ -456,6 +506,9 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 		if ( itMap != m_portagePackage->versionMap().end() )
 			useList = itMap.data()->useflags();
 		
+		// Get user set package use flags
+		QStringList packageUseList = QStringList::split( " ", KurooDBSingleton::Instance()->packageUse( m_id ) );
+		
 		dialog->useView->clear();
 		foreach ( useList ) {
 			QString lines;
@@ -471,21 +524,60 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 			else {
 				while ( lines.length() > 90 ) {
 					int pos = ( lines.left(90) ).findRev(' ');
-					QString line = lines.left(pos+1);
+					QString line = lines.left( pos + 1 );
 					lines = lines.right( lines.length() - line.length() );
 					description += line;
 				}
 				description += lines;
 			}
 			
-			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
+			// Add use flag in use view
+			QCheckListItem* useItem = new QCheckListItem( dialog->useView, QString::null, QCheckListItem::CheckBox );
 			useItem->setTristate( true );
 			useItem->setMultiLinesEnabled( true );
-			useItem->setText( 1, description.join("\n") );
+			useItem->setText( 1, *it );
+			useItem->setText( 2, description.join("\n") );
 			
-			if ( KurooDBSingleton::Instance()->hasPackageUse( m_id, *it ) )
-				useItem->setOn( true );
+			// Set CheckBox state
+			for ( QStringList::Iterator itUser = packageUseList.begin(), itUserEnd = packageUseList.end(); itUser != itUserEnd; ++itUser ) {
+				if ( (*itUser).contains(*it) ) {
+					useItem->setText( 0, *itUser );
+					if ( (*itUser).startsWith("-") )
+						useItem->setState( QCheckListItem::On );
+					else
+						useItem->setState( QCheckListItem::NoChange );
+				}
 			
+			}
+		}
+	}
+}
+
+/**
+ * Get this package changelog.
+ */
+void PackageInspector::getChangeLog()
+{
+	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
+		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
+		QFile file( fileName );
+		
+		if ( !file.exists() ) {
+			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";
+			file.setName( fileName );
+		}
+		
+		if ( file.open( IO_ReadOnly ) ) {
+			QTextStream stream( &file );
+			QString textLines;
+			while ( !stream.atEnd() )
+				textLines += stream.readLine() + "<br>";
+			file.close();
+			dialog->changelogBrowser->setText( textLines );
+		}
+		else {
+			kdDebug() << i18n("Error reading: ") << fileName << endl;
+			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
 		}
 	}
 }
@@ -496,7 +588,7 @@ void PackageInspector::slotGetUseFlags( const QString& version )
  */
 void PackageInspector::slotGetEbuild( const QString& version )
 {
-	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
+	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
 		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
 		QFile file( fileName );
 		
@@ -526,7 +618,7 @@ void PackageInspector::slotGetEbuild( const QString& version )
  */
 void PackageInspector::slotGetDependencies( const QString& version )
 {
-	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
+	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package + "-" + version;
 		QFile file( fileName );
 		
@@ -560,35 +652,6 @@ void PackageInspector::slotGetDependencies( const QString& version )
 }
 
 /**
- * Get this package changelog.
- */
-void PackageInspector::getChangeLog()
-{
-	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
-		QFile file( fileName );
-		
-		if ( !file.exists() ) {
-			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";
-			file.setName( fileName );
-		}
-		
-		if ( file.open( IO_ReadOnly ) ) {
-			QTextStream stream( &file );
-			QString textLines;
-			while ( !stream.atEnd() )
-				textLines += stream.readLine() + "<br>";
-			file.close();
-			dialog->changelogBrowser->setText( textLines );
-		}
-		else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
-		}
-	}
-}
-
-/**
  * Get list of installed files for selected version.
  * @param version
  */
@@ -612,7 +675,7 @@ void PackageInspector::slotGetInstalledFiles( const QString& version )
 			kdDebug() << i18n( "Error reading: " ) << filename << endl;
 	}
 	else
-		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>Installed files list not found.</b></font>") );
+		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>No installed files found.</b></font>") );
 }
 
 #include "packageinspector.moc"

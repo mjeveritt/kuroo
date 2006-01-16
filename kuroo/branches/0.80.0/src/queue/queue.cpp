@@ -147,6 +147,11 @@ Queue::~Queue()
 {
 }
 
+void Queue::init( QObject *parent )
+{
+	m_parent = parent;
+}
+
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
 	kdDebug() << "Queue::slotEmergePackageStart package=" << package << endl;
@@ -167,9 +172,9 @@ void Queue::slotOneStep()
 	emit signalPackageAdvance( m_id );
 }
 
-void Queue::init( QObject *parent )
+void Queue::stopTimer()
 {
-	m_parent = parent;
+	internalTimer->stop();
 }
 
 /**
@@ -231,7 +236,7 @@ bool Queue::isQueued( const QString& id )
  */
 void Queue::refresh( bool hasCheckedQueue )
 {
-	kdDebug() << "Queue::refresh" << endl;
+// 	kdDebug() << "Queue::refresh" << endl;
 	clearCache();
 	emit signalQueueChanged( hasCheckedQueue );
 }

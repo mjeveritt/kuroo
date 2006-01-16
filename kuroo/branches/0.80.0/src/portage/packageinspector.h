@@ -63,7 +63,8 @@ private slots:
 	
 	void							slotSetStability( int rbStability );
 	void							slotSetSpecificVersion( const QString& version );
-	void							slotAvailable( bool isAvailable );
+	void							slotSetAvailable( bool isAvailable );
+	void							slotSetUseFlags( QListViewItem* useItem );
 	
 	void							loadUseFlagDescription();
 	void							slotGetEbuild( const QString& version );
@@ -72,7 +73,7 @@ private slots:
 	void							slotGetUseFlags( const QString& version );
 	
 private:
-	bool							hasSettingsChanged, isVirginState, isAvailableBefore;
+	bool							hasVersionSettingsChanged, hasUseSettingsChanged, isVirginState, isAvailableBefore;
 	QString							m_id, category, package, hardMaskComment;
 	QMap<QString, QString>			useMap;
 	PortageListView::PortageItem* 	m_portagePackage;

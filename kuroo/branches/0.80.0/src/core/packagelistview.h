@@ -126,6 +126,9 @@ protected:
 	 */
 	QDict<PackageItem>		packageIndex;
 	
+signals:
+	void					signalStatusChanged( bool isQueued );
+	
 };
 
 #endif

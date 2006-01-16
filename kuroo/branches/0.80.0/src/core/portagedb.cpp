@@ -588,9 +588,9 @@ QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 	               " ;")).first();
 }
 
-QString KurooDB::packageHardMaskComment( const QString& id )
+QStringList KurooDB::packageHardMaskInfo( const QString& id )
 {
-	return query( "SELECT comment FROM packageHardMask WHERE idPackage = '" + id + "';" ).first();
+	return query( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -624,9 +624,14 @@ QString KurooDB::packageUnMaskAtom( const QString& id )
  * Return package keyword atom.
  * @param id
  */
-QStringList KurooDB::packageKeywordsAtom( const QString& id )
+QString KurooDB::packageKeywordsAtom( const QString& id )
 {
-	return query( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	return query( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "';" ).first();
+}
+
+QString KurooDB::packageUse( const QString& id )
+{
+	return query( "SELECT use FROM packageUse where idPackage = '" + id + "';" ).first();
 }
 
 /**
@@ -664,9 +669,14 @@ bool KurooDB::isPackageUnMasked( const QString& id )
 	return !query( "SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
 }
 
-bool KurooDB::hasPackageUse( const QString& id, const QString& use )
+/**
+ * Add use flags for this package.
+ * @param id
+ */
+void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 {
-	return !query( "SELECT id FROM packageUse where idPackage = '" + id + "' AND use = '" + use + "';" ).isEmpty();
+	query( "DELETE FROM packageUse WHERE idPackage = '" + id + "'" );
+	insert( "INSERT INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
 }
 
 /**
@@ -697,7 +707,7 @@ void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
  */
 void KurooDB::setPackageUnTesting( const QString& id )
 {
-	QString keywords = packageKeywordsAtom( id ).first();
+	QString keywords = packageKeywordsAtom( id );
 	
 	// Aready testing skip!
 	if ( keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
@@ -714,7 +724,7 @@ void KurooDB::setPackageUnTesting( const QString& id )
  */
 void KurooDB::setPackageAvailable( const QString& id )
 {
-	QString keywords = packageKeywordsAtom( id ).first();
+	QString keywords = packageKeywordsAtom( id );
 	
 	// Already available skip!
 	if ( keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
@@ -732,7 +742,7 @@ void KurooDB::setPackageAvailable( const QString& id )
  */
 void KurooDB::clearPackageUnTesting( const QString& id )
 {
-	QString keywords = packageKeywordsAtom( id ).first();
+	QString keywords = packageKeywordsAtom( id );
 	
 	// If only testing keywords - remove it, else set only available keywords
 	if ( !keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
@@ -747,7 +757,7 @@ void KurooDB::clearPackageUnTesting( const QString& id )
  */
 void KurooDB::clearPackageAvailable( const QString& id )
 {
-	QString keywords = packageKeywordsAtom( id ).first();
+	QString keywords = packageKeywordsAtom( id );
 	
 	// If only available keywords - remove it, else set only testing keyword
 	if ( !keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )

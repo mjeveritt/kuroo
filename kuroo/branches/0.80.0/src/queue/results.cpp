@@ -94,7 +94,7 @@ void Results::init( QObject *parent )
  */
 void Results::refresh()
 {
-	kdDebug() << "Results::refresh" << endl;
+// 	kdDebug() << "Results::refresh" << endl;
 	QueueSingleton::Instance()->refresh( true );
 }
 

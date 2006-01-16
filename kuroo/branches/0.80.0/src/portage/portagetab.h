@@ -60,6 +60,9 @@ public slots:
 	
 	void				slotBusy( bool b );
 	
+	void				slotInitButtons();
+	void				slotButtons( bool isQueued );
+	
 private slots:
 	
 	/**

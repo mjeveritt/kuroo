@@ -170,7 +170,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	packageVersionsInfo( const QString& id );
 	QString 		versionSize( const QString& idPackage, const QString& version );
-	QString			packageHardMaskComment( const QString& id );
+	QStringList		packageHardMaskInfo( const QString& id );
 	QString			packageTotal();
 	QString		 	updatesTotal();
 	QString			queueTotal();
@@ -184,13 +184,14 @@ public:
 	QString		 	packageHardMaskAtom( const QString& id );
 	QString		 	packageUserMaskAtom( const QString& id );
 	QString		 	packageUnMaskAtom( const QString& id );
-	QStringList		packageKeywordsAtom( const QString& id );
+	QString			packageKeywordsAtom( const QString& id );
+	QString			packageUse( const QString& id );
 	
 	bool 			isPackageUnMasked( const QString& id );
 	bool 			isPackageUnTesting( const QString& id );
 	bool 			isPackageAvailable( const QString& id );
-	bool 			hasPackageUse( const QString& id, const QString& use );
 	
+	void			setPackageUse( const QString& id, const QString& useFlags );
 	void			setPackageUnTesting( const QString& id );
 	void			setPackageUnMasked( const QString& id );
 	void			setPackageUserMasked( const QString& id, const QString& version );

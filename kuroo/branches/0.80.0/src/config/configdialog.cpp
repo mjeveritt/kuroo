@@ -22,9 +22,6 @@
 #include "configdialog.h"
 #include "options1.h"
 #include "options2.h"
-#include "options3.h"
-#include "options4.h"
-#include "options5.h"
 #include "options6.h"
 #include "options7.h"
 
@@ -52,17 +49,11 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	
 	Options1* opt1 = new Options1( this, i18n("General") );
 	Options2* opt2 = new Options2( this, i18n("make.conf") );
-	Options5* opt5 = new Options5( this, i18n("package.keywords") );
-	Options4* opt4 = new Options4( this, i18n("package.unmask") );
-	Options3* opt3 = new Options3( this, i18n("package.mask") );
 	Options6* opt6 = new Options6( this, i18n("world") );
 	Options7* opt7 = new Options7( this, i18n("etc warnings") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt5, i18n("package.keywords"), "kuroo_portagefiles", i18n("Edit your package.keywords file") );
-	addPage( opt4, i18n("package.unmask"), "kuroo_portagefiles", i18n("Edit your package.unmask file") );
-	addPage( opt3, i18n("package.mask"), "kuroo_portagefiles", i18n("Edit your package.mask file") );
 	addPage( opt6, i18n("world"), "kuroo_portagefiles", i18n("Edit your world file") );
 	addPage( opt7, i18n("etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
@@ -70,9 +61,6 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
 	
 	readMakeConf();
-	readPackageUnmask();
-	readPackageMask();
-	readPackageKeywords();
 	readWorldFile();
 }
 
@@ -83,72 +71,8 @@ ConfigDialog::~ConfigDialog()
 void ConfigDialog::slotDefault()
 {
 	readMakeConf();
-	readPackageUnmask();
-	readPackageMask();
-	readPackageKeywords();
 	readWorldFile();
 	show();
-}
-
-/**
- * Load list of user-unmasked hardmasked packages.
- */
-void ConfigDialog::readPackageUnmask()
-{
-	QFile file( KurooConfig::filePackageUserUnMask() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			lines += stream.readLine();
-		}
-		KurooConfig::setPackageUnmask( lines.join("\n") );
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageUserUnMask() << endl;
-	
-	file.close();
-}
-
-/**
- * Load list of user-masked packages.
- */
-void ConfigDialog::readPackageMask()
-{
-	QFile file( KurooConfig::filePackageHardMask() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			lines += stream.readLine();
-		}
-		KurooConfig::setPackageMask( lines.join("\n") );
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageHardMask() << endl;
-	
-	file.close();
-}
-
-/**
- * Load list of user-unmasked testing packages.
- */
-void ConfigDialog::readPackageKeywords()
-{
-	QFile file( KurooConfig::filePackageKeywords() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			lines += stream.readLine();
-		}
-		lines.sort();
-		KurooConfig::setPackageKeywords( lines.join("\n") );
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageKeywords() << endl;
-	
-	file.close();
 }
 
 /**
@@ -336,33 +260,7 @@ void ConfigDialog::saveAll()
 			}
 			break;
 		}
-		case 3: {
-			if ( !savePackageUnmask() ) {
-				readPackageUnmask();
-				show();
-				KMessageBox::error( this, i18n("Failed to save package.unmask. Please run as root."), i18n("Saving"));
-			}
-			break;
-		}
-		case 4: {
-			if ( !savePackageMask() ) {
-				readPackageMask();
-				show();
-				KMessageBox::error( this, i18n("Failed to save package.mask. Please run as root."), i18n("Saving"));
-			}
-			break;
-		}
 		case 2: {
-			if ( !savePackageKeywords() ) {
-				readPackageKeywords();
-				show();
-				KMessageBox::error( this, i18n("Failed to save package.keywords. Please run as root."), i18n("Saving"));
-			}
-// 			else
-// 				PortageSingleton::Instance()->loadPackageKeywords();
-			break;
-		}
-		case 5: {
 			if ( !saveWorldFile() ) {
 				readWorldFile();
 				show();
@@ -370,63 +268,6 @@ void ConfigDialog::saveAll()
 			}
 			break;
 		}
-	}
-}
-
-/**
- * Save to /etc/portage/package.unmask.
- * @return success
- */
-bool ConfigDialog::savePackageUnmask()
-{
-	QFile file( KurooConfig::filePackageUserUnMask() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::packageUnmask();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageUserUnMask() << endl;
-		return false;
-	}
-}
-
-/**
- * Save to /etc/portage/package.keywords.
- * @return success
- */
-bool ConfigDialog::savePackageKeywords()
-{
-	QFile file( KurooConfig::filePackageKeywords() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::packageKeywords();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
-		return false;
-	}
-}
-
-/**
- * Save to /etc/portage/package.mask.
- * @return success
- */
-bool ConfigDialog::savePackageMask()
-{
-	QFile file( KurooConfig::filePackageHardMask() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::packageMask();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageHardMask() << endl;
-		return false;
 	}
 }
 

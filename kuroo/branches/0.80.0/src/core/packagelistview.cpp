@@ -224,6 +224,9 @@ void PackageListView::slotSetQueued( const QString& id, bool isQueued )
 		packageIndex[id]->setStatus( QUEUED );
 	else
 		packageIndex[id]->setStatus( NOTQUEUED );
+	
+	if ( id == currentId() )
+		emit signalStatusChanged( isQueued );
 
 }
 

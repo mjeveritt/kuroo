@@ -50,7 +50,7 @@
  * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent ), queuedFilters ( 0 )
+	: PortageBase( parent ), queuedFilters( 0 )
 {
 	pbAdvanced->setDisabled( true );
 	pbQueue->setDisabled( true );
@@ -80,6 +80,10 @@ PortageTab::PortageTab( QWidget* parent )
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 		
+	// Toggle Queue button
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
+	connect( packagesView, SIGNAL( signalStatusChanged( bool ) ), this, SLOT( slotButtons( bool ) ) );
+	
 	slotInit();
 }
 
@@ -222,6 +226,23 @@ void PortageTab::slotBusy( bool busy )
 	}
 }
 
+void PortageTab::slotInitButtons()
+{
+	pbQueue->setText( i18n("Add to Install Queue") );
+}
+
+/**
+ * Toggle Add/Remove to Queue button.
+ * @param isQueued
+ */
+void PortageTab::slotButtons( bool isQueued )
+{
+	if ( isQueued )
+		pbQueue->setText( i18n("Remove from Install Queue") );
+	else
+		pbQueue->setText( i18n("Add to Install Queue") );
+}
+
 /**
  * View summary for selected package.
  */
@@ -335,6 +356,12 @@ void PortageTab::slotPackage()
 	
 	// Construct installation summary
 	if ( !linesEmergeVersion.isEmpty() ) {
+		
+	// Set active version in Inspector dropdown menus
+	packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
+	packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
+	packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
+		
 		packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
 		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
 	}
@@ -372,7 +399,13 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	KPopupMenu menu( this );
 	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
-	int menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
+	int menuItem2;
+	
+	if ( !packagesView->currentPortagePackage()->isQueued() )
+		menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
+	else
+		menuItem2 = menu.insertItem(i18n("&Remove from queue"), APPEND);
+	
 	int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE);
 	
 	// No access when kuroo is busy.
@@ -392,8 +425,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			break;
 			
 		case APPEND:
-			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
-			pbQueue->setText( i18n("Remove from Install Queue") );
+			slotQueue();
 			break;
 			
 		case EMERGE:
@@ -406,17 +438,11 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
  */
 void PortageTab::slotQueue()
 {
-	kdDebug() << "PortageTab::slotQueue" << endl;
-	
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		if ( packagesView->currentPortagePackage()->isQueued() ) {
+		if ( packagesView->currentPortagePackage()->isQueued() )
 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
-			pbQueue->setText( i18n("Add to Install Queue") );
-		}
-		else {
+		else
 			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
-			pbQueue->setText( i18n("Remove from Install Queue") );
-		}
 	}
 }
 

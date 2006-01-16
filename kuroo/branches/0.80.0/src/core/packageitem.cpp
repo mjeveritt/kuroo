@@ -78,37 +78,26 @@ void PackageItem::setStatus( int status )
 			break;
 		
 		case INSTALLED :
-// 			meta = INSTALLED;
 			setPixmap( 0, pxInstalled );
-// 			m_meta.insert( i18n("Status"), i18n("Installed") );
 			break;
 			
 		case PACKAGE :
-// 			meta = PACKAGE;
 			setPixmap( 0, pxPackage );
 			break;
 		
 		case TESTING :
-// 			meta = TESTING;
-// 			m_meta.insert( i18n("Keyword"), i18n("Masked") );
-// 			repaint();
 			break;
 		
 		case UNTESTING :
-// 			meta = UNTESTING;
-// 			m_meta.insert( i18n("Keyword"), i18n("Unmasked") );
-// 			repaint();
 			break;
 		
 		case QUEUED :
 			m_isQueued = true;
-// 			m_meta.insert( i18n("In Queue"), i18n("Yes") );
 			setPixmap( 1, pxQueued );
 			break;
 		
 		case NOTQUEUED : {
 			m_isQueued = false;
-// 			m_meta.insert( i18n("In Queue"), i18n("No") );
 			setPixmap( 1, NULL );
 			repaint();
 		}

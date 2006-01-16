@@ -43,6 +43,7 @@ public slots:
 	void					emergePackageStart( const QString& package, int order, int total );
 	void					emergePackageComplete( const QString& package, int order, int total );
 	void					slotOneStep();
+	void					stopTimer();
 	
 	/**
 	* When the package is inserted in the register it in the cache too.

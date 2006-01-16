@@ -260,6 +260,7 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains( "terminating." ) ) {
+				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
 				if ( syncDone ) {

@@ -1,15 +1,15 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>HistoryBase</class>
+<class>MergeBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>HistoryBase</cstring>
+        <cstring>MergeBase</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>486</width>
-            <height>281</height>
+            <width>531</width>
+            <height>391</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,92 +25,10 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <widget class="MergeListView" row="2" column="0">
             <property name="name">
-                <cstring>layout11</cstring>
+                <cstring>mergeView</cstring>
             </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>5</number>
-                </property>
-                <widget class="QPushButton" row="1" column="3">
-                    <property name="name">
-                        <cstring>pbClearFilter</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image0</iconset>
-                    </property>
-                </widget>
-                <widget class="KListViewSearchLine" row="1" column="4">
-                    <property name="name">
-                        <cstring>historyFilter</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>210</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>viewUnmerges</cstring>
-                    </property>
-                    <property name="text">
-                        <string>View &amp;unmerges</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="2">
-                    <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Filter:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="5">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;b&gt;Installation History&lt;/b&gt;</string>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>98</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
         </widget>
         <widget class="Line" row="1" column="0">
             <property name="name">
@@ -136,23 +54,108 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="HistoryListView" row="2" column="0">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>historyView</cstring>
+                <cstring>layout17</cstring>
             </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>0</height>
-                </size>
-            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>5</number>
+                </property>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Filter:</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="3">
+                    <property name="name">
+                        <cstring>pbClearFilter</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                </widget>
+                <spacer row="0" column="1">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KListViewSearchLine" row="0" column="4">
+                    <property name="name">
+                        <cstring>mergeFilter</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>210</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="text">
+                        <string>&lt;b&gt;Etc-update History&lt;/b&gt;</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>
 <customwidgets>
     <customwidget>
-        <class>HistoryListView</class>
-        <header location="local">historylistview.h</header>
+        <class>MergeListView</class>
+        <header location="local">mergelistview.h</header>
         <sizehint>
             <width>100</width>
             <height>100</height>
@@ -178,7 +181,7 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>mergelistview.h</includehint>
     <includehint>klistviewsearchline.h</includehint>
-    <includehint>historylistview.h</includehint>
 </includehints>
 </UI>

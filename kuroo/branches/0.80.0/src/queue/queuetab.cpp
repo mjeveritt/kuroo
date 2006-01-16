@@ -100,8 +100,8 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( KurooDBSingleton::Instance()->queueTotal() );
-			queueBrowserLines += i18n( "Estimated time for emerge: %1<br>" ).arg( queueView->totalTime() );
-			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
+			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( queueView->totalTime() );
+// 			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
 	
 	queueBrowser->clear();
 	queueBrowser->setText( queueBrowserLines );
@@ -123,7 +123,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
  */
 void QueueTab::slotBusy( bool busy )
 {
-	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
+// 	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Stop Installation!" ) );
@@ -158,25 +158,43 @@ void QueueTab::slotBusy( bool busy )
  */
 void QueueTab::slotGo()
 {
-	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
+// 	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
+	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
-
-	QStringList packageList = queueView->allPackagesNoChildren();
 	
+	// First we must run emerge pretend
 	if ( !m_hasCheckedQueue ) {
 		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
 		m_hasCheckedQueue = true;
 		return;
 	}
 	
-	switch( KMessageBox::questionYesNoList( this, 
-		i18n("Do you want to emerge following packages?"), packageList, i18n("Emerge queue") ) ) {
-		case KMessageBox::Yes: {
-			QueueSingleton::Instance()->installPackageList( packageList );
-			KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-			m_hasCheckedQueue = false;
+	// Only user-end packages not the dependencies
+	QStringList packageList = queueView->allPackagesNoChildren();
+	
+	// Only download? prepend --fetch-all-uri
+	// Else, let's install the user-end packages
+	if ( cbDownload->isChecked() ) {
+		packageList.prepend( "--fetch-all-uri" );
+		
+		switch( KMessageBox::questionYesNoList( this, 
+			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue") ) ) {
+			case KMessageBox::Yes: {
+				QueueSingleton::Instance()->installPackageList( packageList );
+				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+			}
+		}
+	}
+	else {
+		switch( KMessageBox::questionYesNoList( this, 
+			i18n("Do you want to emerge following packages?"), packageList, i18n("Installation queue") ) ) {
+			case KMessageBox::Yes: {
+				QueueSingleton::Instance()->installPackageList( packageList );
+				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+				m_hasCheckedQueue = false;
+			}
 		}
 	}
 }
@@ -187,7 +205,7 @@ void QueueTab::slotGo()
 void QueueTab::slotStop()
 {
 	switch ( KMessageBox::warningYesNo( this,
-		i18n( "Do you want to abort the running emerge process?" ) ) ) {
+		i18n( "Do you want to abort the running installation?" ) ) ) {
 		case KMessageBox::Yes : {
 			EmergeSingleton::Instance()->stop();
 			KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );

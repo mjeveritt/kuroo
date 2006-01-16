@@ -25,6 +25,7 @@
 #include "queuelistview.h"
 #include "logstab.h"
 #include "historytab.h"
+#include "mergetab.h"
 #include "packagelistview.h"
 #include "kurooviewbase.h"
 
@@ -46,15 +47,17 @@
 #include <kiconloader.h>
 
 /**
- * Gui content.
+ * @class KurooView
+ * @short Gui content
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
-	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 )
+	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 ), tabMerge( 0 )
 {
 	viewMenu->setCursor( KCursor::handCursor() );
 	
+	// Add all pages
 	tabPortage = new PortageTab( this );
 	viewStack->addWidget( tabPortage, 1 );
 	
@@ -64,15 +67,21 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	tabHistory = new HistoryTab( this );
 	viewStack->addWidget( tabHistory, 3 );
 	
+	tabMerge = new MergeTab( this );
+	viewStack->addWidget( tabMerge, 4 );
+	
 	tabLogs = new LogsTab( this );
-	viewStack->addWidget( tabLogs, 4 );
+	viewStack->addWidget( tabLogs, 5 );
 	
+	// Create menu-icons for the pages
 	KIconLoader *ldr = KGlobal::iconLoader();
-	iconPackages = new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), "Packages" );
-	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), "Queue" );
-	iconHistory = new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), "History" );
-	iconLog = new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), "Log" );
+	iconPackages = new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), i18n("Packages") );
+	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "run", KIcon::Panel ), i18n("Queue") );
+	iconHistory = new IconListItem( viewMenu, ldr->loadIcon( "history", KIcon::Panel ), i18n("History") );
+	iconMerge = new IconListItem( viewMenu, ldr->loadIcon( "log", KIcon::Panel ), i18n("Etc-update") );
+	iconLog = new IconListItem( viewMenu, ldr->loadIcon( "document", KIcon::Panel ), i18n("Log") );
 	
+	// Connect menu-icons to the pages
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
 	viewMenu->setSelected( 0, true );
 	
@@ -166,7 +175,6 @@ void KurooView::slotCheckPortage()
 	if ( KurooDBSingleton::Instance()->packageTotal() == "0" )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-// 		PortageFilesSingleton::Instance()->loadPackageMask();
 		tabPortage->slotReload();
 		tabQueue->slotReload( false );
 		if ( KurooDBSingleton::Instance()->updatesTotal() == "0" )

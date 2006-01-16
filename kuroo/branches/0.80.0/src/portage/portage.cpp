@@ -235,7 +235,6 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 	// Signal to gui to mark package as unmasked
 	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
 	QString name( temp.section ( rxPortageVersion, 0, 0 ) );
-// 	SignalistSingleton::Instance()->setUnmasked( name, true );
 	
 	return true;
 }

@@ -25,7 +25,6 @@
 #include "kuroo.h"
 #include "statusbar.h"
 #include "introdlg.h"
-#include "emergelogdlg.h"
 #include "portagetab.h"
 #include "logstab.h"
 

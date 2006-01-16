@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>617</width>
-            <height>476</height>
+            <width>445</width>
+            <height>317</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,28 +25,6 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="KTextBrowser" row="2" column="0">
-            <property name="name">
-                <cstring>logBrowser</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="margin">
-                <number>2</number>
-            </property>
-            <property name="wrapPolicy">
-                <enum>AtWordOrDocumentBoundary</enum>
-            </property>
-        </widget>
         <widget class="Line" row="1" column="0">
             <property name="name">
                 <cstring>line1</cstring>
@@ -71,21 +49,54 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
+        <widget class="KTextBrowser" row="2" column="0">
+            <property name="name">
+                <cstring>logBrowser</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="margin">
+                <number>2</number>
+            </property>
+            <property name="wrapPolicy">
+                <enum>AtWordOrDocumentBoundary</enum>
+            </property>
+        </widget>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>layout32</cstring>
+                <cstring>layout20</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>3</number>
+                    <number>5</number>
                 </property>
-                <property name="spacing">
-                    <number>0</number>
-                </property>
-                <spacer row="1" column="2">
+                <widget class="QCheckBox" row="0" column="2">
+                    <property name="name">
+                        <cstring>verboseLog</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Ver&amp;bose</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+B</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="0" column="1">
                     <property name="name">
                         <cstring>spacer14_2</cstring>
                     </property>
@@ -97,23 +108,12 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>314</width>
+                            <width>60</width>
                             <height>21</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
-                    <property name="text">
-                        <string>&lt;b&gt;Emerge Log&lt;/b&gt;</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
+                <widget class="QCheckBox" row="0" column="3">
                     <property name="name">
                         <cstring>saveLog</cstring>
                     </property>
@@ -127,18 +127,24 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-                <widget class="QCheckBox" row="1" column="1">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>verboseLog</cstring>
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
                     <property name="text">
-                        <string>Ver&amp;bose</string>
+                        <string>&lt;b&gt;Installation Log&lt;/b&gt;</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
                     </property>
                 </widget>
             </grid>

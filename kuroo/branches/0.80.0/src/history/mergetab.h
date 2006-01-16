@@ -18,25 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef HISTORYTAB_H
-#define HISTORYTAB_H
+#ifndef MERGETAB_H
+#define MERGETAB_H
 
-#include "historybase.h"
+#include "mergebase.h"
 
 /**
- * @class HistoryTab
+ * @class MergeTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
  */
-class HistoryTab : public HistoryBase
+class MergeTab : public MergeBase
 {
 Q_OBJECT
 public:
-    HistoryTab( QWidget *parent = 0 );
+    MergeTab( QWidget *parent = 0 );
 	
 	/**
 	 * Save splitters and listview geometry.
 	 */
-    ~HistoryTab();
+    ~MergeTab();
 
 	
 private slots:
@@ -53,7 +53,8 @@ private slots:
 	void		slotReload();
 	
 	void		slotClearFilter();
-	void		slotViewUnmerges( bool on );
+	
+	void 		slotViewFile( QListViewItem* item );
 };
 
 #endif

@@ -176,7 +176,7 @@ void CategoriesListView::init()
 	}
 	
 	// Insert the meta-category All on top as id = 0
-	item = new CategoryItem( this, "All", "0" );
+	item = new CategoryItem( this, i18n("All"), "0" );
 	item->setOn( true );
 	categories[0] = item;
 	setSelected( firstChild(), true );
@@ -209,8 +209,8 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
-	addColumn( i18n( "Subcategory" ) );
-	header()->setLabel( header()->count() - 1, i18n( "Subcategory" ) );
+	addColumn( i18n("Subcategory") );
+	header()->setLabel( header()->count() - 1, i18n("Subcategory") );
 }
 
 SubCategoriesListView::~SubCategoriesListView()
@@ -231,7 +231,7 @@ void SubCategoriesListView::init()
 	// Prepend the meta-category All at id = 0
 	allSubCategories.resize( size );
 	categories.resize( size );
-	allSubCategories[0].insert( std::pair<int, QString>(0, "All") );
+	allSubCategories[0].insert( std::pair<int, QString>(0, i18n("All")) );
 	
 	// Insert all in matrix
 	foreach ( allCategoriesList ) {
@@ -281,7 +281,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 		}
 		
 		// Insert meta-subcategory
-		item = new CategoryItem( this, "All", "0" );
+		item = new CategoryItem( this, i18n("All"), "0" );
 		categories[0] = item;
 		
 		// Enable subcategories from query. Skip first which is the category
@@ -293,7 +293,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	else {
 	
 		// Insert meta-subcategory
-		item = new CategoryItem( this, "All", "0" );
+		item = new CategoryItem( this, i18n("All"), "0" );
 		item->setOn( true );
 	}
 	

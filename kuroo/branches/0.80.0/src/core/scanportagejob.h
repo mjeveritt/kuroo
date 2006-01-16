@@ -65,7 +65,7 @@ private slots:
 	 * @param package  	
 	 * @return  false if the file can't be opened, true otherwise.
 	 */
-	Info								scanInfo( const QString& path, const QString& category, const QString& package );
+	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
 	
 	/**
 	 * Format package size nicely 

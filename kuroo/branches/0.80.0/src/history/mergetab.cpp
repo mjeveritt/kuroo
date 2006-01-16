@@ -21,7 +21,7 @@
 #include "common.h"
 #include "historylistview.h"
 #include "mergelistview.h"
-#include "historytab.h"
+#include "mergetab.h"
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
@@ -34,16 +34,13 @@
 /**
  * Tabpage for emerge log browser.
  */
-HistoryTab::HistoryTab( QWidget* parent )
-	: HistoryBase( parent )
+MergeTab::MergeTab( QWidget* parent )
+	: MergeBase( parent )
 {
-	historyFilter->setListView( historyView );
-	
-	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
-	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
-	
-	// Reload view after changes.
-	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
+	mergeFilter->setListView( mergeView );
+
+	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
+	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
 	
 	slotInit();
 }
@@ -51,46 +48,40 @@ HistoryTab::HistoryTab( QWidget* parent )
 /**
  * Save splitters and listview geometry.
  */
-HistoryTab::~HistoryTab()
+MergeTab::~MergeTab()
 {
-	// Save checkboxes state
-	if ( viewUnmerges->isChecked() )
-		KurooConfig::setViewUnmerges( true );
-	else
-		KurooConfig::setViewUnmerges( false );
 }
 
 /**
  * Initialize geometry and content.
  * Restore geometry: splitter positions, listViews width and columns width.
  */
-void HistoryTab::slotInit()
+void MergeTab::slotInit()
 {
-	// Restore checkboxes state
-	if ( KurooConfig::viewUnmerges() )
-		viewUnmerges->setChecked( true );
-	else
-		viewUnmerges->setChecked( false );
+	slotReload();
 }
 
 /**
  * Reload history view.
  */
-void HistoryTab::slotReload()
+void MergeTab::slotReload()
 {
-	historyView->loadFromDB();
+	mergeView->loadFromDB();
 }
 
-void HistoryTab::slotClearFilter()
+void MergeTab::slotClearFilter()
 {
-	historyFilter->clear();
+	mergeFilter->clear();
 }
 
-void HistoryTab::slotViewUnmerges( bool on )
+/**
+ * Open in external browser.
+ */
+void MergeTab::slotViewFile( QListViewItem *item )
 {
-	kdDebug() << "HistoryTab::slotViewUnmerges" << endl;
-	KurooConfig::setViewUnmerges( on );
-	slotReload();
+	QString source = item->text( 0 );
+	if ( !source.isEmpty() )
+		new KRun( "file://" + KUROODIR + "backup/" + source );
 }
 
-#include "historytab.moc"
+#include "mergetab.moc"

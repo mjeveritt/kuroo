@@ -148,6 +148,14 @@ bool ScanPortageJob::doJob()
 	
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 	QFile fileTest( "/home/karye/test" );
+// 	QTextStream stream( &fileTest );
+// 	if ( !fileTest.open( IO_WriteOnly ) ) {
+// 		kdDebug() << i18n("Error writing: %1.").arg( "/home/karye/test" ) << endl;
+// 	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	// Get list of categories in Portage
 	int idCategory;
 	QString lastCategory;
@@ -160,7 +168,7 @@ bool ScanPortageJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdDebug() << i18n("Portage scan aborted") << endl;
-			KurooDBSingleton::Instance()->query("ROLLBACK TRANSACTION;", m_db);
+			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
 		
@@ -193,16 +201,28 @@ bool ScanPortageJob::doJob()
 					return false;
 				}
 				
+				////////////////////////////////////////////////////////////////////////////////////////
+				// Testing rxPackage
+// 				QString tmpPackage = *itPackage;
+// 				QRegExp rxPackage( "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+// 				QString category, name, version;
+// 				if ( rxPackage.search( tmpPackage ) > -1 ) {
+// 					category = rxPackage.cap(1);
+// 					name = rxPackage.cap(1);
+// 					version = ( tmpPackage ).section( name + "-", 1, 1 ).remove(' ');
+// 					stream << "Testing rxPackage: package=" << tmpPackage <<  "name=" << name << " version=" << version << endl;
+// 				}
+// 				else
+// 					stream << i18n("Testing rxPackage: can not match %1.").arg( tmpPackage ) << endl;
+				///////////////////////////////////////////////////////////////////////////////////////
+				
 				if ( rxAtom.exactMatch( *itPackage ) ) {
 					
 					// Get the captured strings
 					QString name = rxAtom.cap( POS_PACKAGE );
 					QString version = rxAtom.cap( POS_VERSION );
 					
-	// 				QString name = ( *itPackage ).section( rxPortageVersion, 0, 0 );
-	// 				QString version = ( *itPackage ).section( name + "-", 1, 1 );
-					
-					Info info( scanInfo( path, *itCategory, *itPackage ) );
+					Info info( scanInfo( path, *itCategory, name, version ) );
 					
 					// Insert category and db id's in portage
 					if ( !categories.contains( *itCategory ) ) {
@@ -231,7 +251,7 @@ bool ScanPortageJob::doJob()
 				
 				}
 				else
-					kdDebug() << i18n("Can not match package %1 in portage cache.").arg( *itPackage ) << endl;
+					kdDebug() << i18n("Scanning Portage cache: can not match package %1.").arg( *itPackage ) << endl;
 				
 				// Post scan count progress
 				if ( ( ++count % 100 ) == 0 )
@@ -244,6 +264,10 @@ bool ScanPortageJob::doJob()
 		lastCategory = category;
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////
+// 	fileTest.close();
+	///////////////////////////////////////////////////////////////////////////////////////////
+	
 	scanInstalledPackages();
 	
 	// Iterate through portage map and insert everything in db
@@ -324,6 +348,8 @@ void ScanPortageJob::scanInstalledPackages()
 	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) )
 		kdDebug() << i18n( "Can not access " ) << KurooConfig::dirDbPkg() << endl;
 
+	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
+	
 	// Get list of categories for installed packages
 	QStringList categoryList = dCategory.entryList();
 	QStringList::Iterator itCategoryEnd = categoryList.end();
@@ -344,32 +370,41 @@ void ScanPortageJob::scanInstalledPackages()
 				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
 					continue;
 				
-				QString name = ( *itPackage ).section( rxPortageVersion, 0, 0 );
-				QString version = ( *itPackage ).section( name + "-", 1, 1 );
+				if ( rxAtom.exactMatch( *itPackage ) ) {
+					
+					// Get the captured strings
+					QString name = rxAtom.cap( POS_PACKAGE );
+					QString version = rxAtom.cap( POS_VERSION );
 				
-				// Insert category if not found in portage
-				if ( !categories.contains( *itCategory ) )
-					categories[ *itCategory ];
-				
-				// Insert and/or mark package as installed (old is package not in portage anymore)
-				if ( !categories[ *itCategory ].packages.contains( name ) ) {
-					categories[ *itCategory ].packages[ name ];
-					categories[ *itCategory ].packages[ name ].meta = FILTEROLD_STRING;
+					// Insert category if not found in portage
+					if ( !categories.contains( *itCategory ) )
+						categories[ *itCategory ];
+					
+					// Insert and/or mark package as installed (old is package not in portage anymore)
+					if ( !categories[ *itCategory ].packages.contains( name ) ) {
+						categories[ *itCategory ].packages[ name ];
+						categories[ *itCategory ].packages[ name ].meta = FILTEROLD_STRING;
+					}
+					else
+						categories[ *itCategory ].packages[ name ].meta = FILTERINSTALLED_STRING;
+					
+					// Insert old version in portage
+					if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) )
+						categories[ *itCategory ].packages[ name ].versions[ version ];
+					
+					// Mark version as installed
+					categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERINSTALLED_STRING;
+					
 				}
 				else
-					categories[ *itCategory ].packages[ name ].meta = FILTERINSTALLED_STRING;
-				
-				// Insert old version in portage
-				if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) )
-					categories[ *itCategory ].packages[ name ].versions[ version ];
-				
-				// Mark version as installed
-				categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTERINSTALLED_STRING;
+					kdDebug() << i18n("Scanning installed packages: can not match %1.").arg( *itPackage ) << endl;
 			}
 		}
 		else
 			kdDebug() << i18n( "Can not access " ) << KurooConfig::dirDbPkg() << "/" << *itCategory << endl;
 	}
+	
+	setStatus( "ScanInstalled", i18n("Done.") );
 }
 
 /**
@@ -378,13 +413,13 @@ void ScanPortageJob::scanInstalledPackages()
  * @param package  	
  * @return  false if the file can't be opened, true otherwise.
  */
-Info ScanPortageJob::scanInfo( const QString& path, const QString& category, const QString& package )
+Info ScanPortageJob::scanInfo( const QString& path, const QString& category, const QString& name, const QString& version )
 {
 	Info info;
-	QFile file( path + category + "/" + package);
+	QFile file( path + category + "/" + name + "-" + version );
 	
 	if( !file.open( IO_ReadOnly ) ) {
-		kdDebug() << i18n("Error reading: ") << path << category << "/" << package << endl;
+		kdDebug() << i18n("Error reading: ") << path << category << "/" << name << "-" << version << endl;
 		
 		info.slot = "0";
 		info.homepage = "0";
@@ -443,12 +478,11 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	file.close();
 	
 	// Get package size. Try in cache first.
-	QString packageNoVersion = category + "/" + package.section(rxPortageVersion, 0, 0);
-	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + package ) ;
-	if ( size != "" )
+	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + name + "-" + version ) ;
+	if ( !size.isEmpty() )
 		info.size = formatSize( size );
 	else {
-		QString path = KurooConfig::dirPortage() + "/" + packageNoVersion + "/files/digest-" + package;
+		QString path = KurooConfig::dirPortage() + "/" + category + "/" + name + "/files/digest-" + name + "-" + version;
 		file.setName( path );
 		if ( file.open( IO_ReadOnly ) ) {
 			std::ifstream in( path );
@@ -458,7 +492,8 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			info.size = formatSize( word );
 			
 			// Add new value into cache.
-			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(package).arg(word), m_db);
+			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) "
+			                                              "VALUES ('%1', '%2');").arg( name + "-" + version ).arg( word ), m_db);
 		}
 		else
 			kdDebug() << i18n("Error reading: ") << path << endl;

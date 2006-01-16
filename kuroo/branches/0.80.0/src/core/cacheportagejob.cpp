@@ -65,7 +65,7 @@ int CachePortageJob::countPackages()
 	dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
 	dPackage.setSorting(QDir::Name);
 	
-	if ( !dCategory.cd(KurooConfig::dirEdbDep() + "/usr/portage") ) {
+	if ( !dCategory.cd( KurooConfig::dirEdbDep() + "/usr/portage" ) ) {
 		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage" << endl;
 		return 0;
 	}
@@ -97,14 +97,14 @@ bool CachePortageJob::doJob()
 	int count(0);
 	QMap <QString, QString> mapCache;
 	QDir dCategory, dPackage;
-	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
-	dCategory.setSorting(QDir::Name);
+	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
+	dCategory.setSorting( QDir::Name );
 	
 	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
 	setStatus( "CachePortage", i18n("Collecting package information...") );
 	
 	// Get list of categories in Portage Overlay
-	if ( !dCategory.cd(KurooConfig::dirEdbDep() + "/usr/local/portage") )
+	if ( !dCategory.cd( KurooConfig::dirEdbDep() + "/usr/local/portage" ) )
 		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/local/portage" << endl;
 	
 	QStringList categoryList = dCategory.entryList();
@@ -121,9 +121,9 @@ bool CachePortageJob::doJob()
 		}
 		
 		// Get list of packages in this category
-		dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
-		dPackage.setSorting(QDir::Name);
-		if ( dPackage.cd(KurooConfig::dirEdbDep() + "/usr/local/portage/" + *itCategory) ) {
+		dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
+		dPackage.setSorting( QDir::Name );
+		if ( dPackage.cd( KurooConfig::dirEdbDep() + "/usr/local/portage/" + *itCategory ) ) {
 			QStringList packageList = dPackage.entryList();
 			QStringList::Iterator itPackageEnd = packageList.end();
 			for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {

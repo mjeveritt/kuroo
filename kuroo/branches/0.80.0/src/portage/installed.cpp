@@ -39,7 +39,7 @@ public:
 			version = m_package.section( name + "-", 1, 1 ).remove(' ');
 		}
 		else
-			kdDebug() << i18n("Can not match package %1.").arg( m_package );
+			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
 		
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		if ( !id.isEmpty() ) {
@@ -78,7 +78,7 @@ public:
 			version = m_package.section( name + "-", 1, 1 ).remove(' ');
 		}
 		else
-			kdDebug() << i18n("Can not match package %1.").arg( m_package );
+			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
 
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		if ( !id.isEmpty() ) {

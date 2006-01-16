@@ -32,6 +32,7 @@ class PortageTab;
 class QueueTab;
 class HistoryTab;
 class LogsTab;
+class MergeTab;
 
 /**
  * @class KurooView
@@ -51,6 +52,7 @@ public:
 	HistoryTab*		tabHistory;
 	QueueTab*		tabQueue;
 	LogsTab* 		tabLogs;
+	MergeTab*		tabMerge;
 	
 	void 			quit();
 	
@@ -90,7 +92,7 @@ private slots:
 	void 			slotShowView();
 	
 private:
-	IconListItem	*iconPackages, *iconQueue, *iconHistory, *iconLog;
+	IconListItem	*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
 };
 
 class KurooView::IconListItem : public QListBoxItem

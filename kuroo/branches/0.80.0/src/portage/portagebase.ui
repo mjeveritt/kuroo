@@ -39,9 +39,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
                 <property name="spacing">
                     <number>0</number>
                 </property>
@@ -88,7 +85,7 @@
                         </size>
                     </property>
                     <property name="margin">
-                        <number>2</number>
+                        <number>5</number>
                     </property>
                     <property name="text">
                         <string>&lt;b&gt;Show Packages matching&lt;/b&gt;</string>

@@ -75,11 +75,12 @@ void QueueListView::QueueItem::setStatus( int status )
 }
 
 /**
- * Advance progress by 1 sec.
+ * Set progressbar as 100%.
  */
-void QueueListView::QueueItem::oneStep()
+void QueueListView::QueueItem::setStart()
 {
-	bar->setProgress( progress++ );
+	m_isChecked = true;
+	repaint();
 }
 
 /**
@@ -90,6 +91,14 @@ void QueueListView::QueueItem::setComplete()
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
 	QueueItem::setStatus( INSTALLED );
+}
+
+/**
+ * Advance progress by 1 sec.
+ */
+void QueueListView::QueueItem::oneStep()
+{
+	bar->setProgress( progress++ );
 }
 
 /**
@@ -340,6 +349,22 @@ QString QueueListView::formatSize( const QString& sizeString )
 	return total;
 }
 
+void QueueListView::slotPackageStart( const QString& id )
+{
+	if ( id.isEmpty() || !packageIndex[id] )
+		return;
+	else
+		dynamic_cast<QueueItem*>( packageIndex[id] )->setStart();
+}
+
+void QueueListView::slotPackageComplete( const QString& id )
+{
+	if ( id.isEmpty() || !packageIndex[id] )
+		return;
+	else
+		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
+}
+
 /**
  * 
  */
@@ -349,14 +374,6 @@ void QueueListView::slotPackageProgress( const QString& id )
 		return;
 	else
 		dynamic_cast<QueueItem*>( packageIndex[id] )->oneStep();
-}
-
-void QueueListView::slotPackageComplete( const QString& id )
-{
-	if ( id.isEmpty() || !packageIndex[id] )
-		return;
-	else
-		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
 }
 
 #include "queuelistview.moc"

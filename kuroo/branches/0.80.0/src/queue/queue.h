@@ -110,6 +110,7 @@ public slots:
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );
 	void					signalPackageAdvance( const QString& id );
+	void					signalPackageStart( const QString& id );
 	void					signalPackageComplete( const QString& id );
 	
 private:

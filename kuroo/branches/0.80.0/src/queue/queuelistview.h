@@ -67,8 +67,9 @@ public slots:
 	*/
 	QString		 			totalSize();
 	
-	void					slotPackageProgress( const QString& id );
 	void					slotPackageComplete( const QString& id );
+	void					slotPackageStart( const QString& id );
+	void					slotPackageProgress( const QString& id );
 	
 private slots:
 	
@@ -115,8 +116,9 @@ public:
 	QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
 	~QueueItem();
 	
-	void			oneStep();
 	void			setComplete();
+	void			setStart();
+	void			oneStep();
 	void			setChecked( bool isChecked );
 	
 protected:

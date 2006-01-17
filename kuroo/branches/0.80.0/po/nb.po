@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-17 18:44+0100\n"
-"PO-Revision-Date: 2006-01-17 19:25+0100\n"
+"PO-Revision-Date: 2006-01-17 19:45+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -845,7 +845,7 @@ msgstr "Avrbyt installasjonen"
 #: rc.cpp:43
 #, no-c-format
 msgid "Check I&nstallation"
-msgstr "Kontroller i&nnstallasjon"
+msgstr "Kontroller i&nstallasjon"
 
 #: rc.cpp:46 rc.cpp:95 rc.cpp:130
 #, no-c-format
@@ -915,7 +915,7 @@ msgstr "Alt+U"
 #: rc.cpp:92
 #, no-c-format
 msgid "I&nstalled Packages"
-msgstr "I&nnstallerte pakker"
+msgstr "I&nstallerte pakker"
 
 #: rc.cpp:98
 #, no-c-format
@@ -1771,7 +1771,7 @@ msgstr "Oppdate&r pakkeoversikt"
 
 #: kuroo.cpp:109
 msgid "&Refresh Updates"
-msgstr "Oppdate&r oppdateringsoversikten"
+msgstr "Oppdate&r oppdateringsoversikt"
 
 #: kuroo.cpp:112
 msgid "&Sync Portage"
@@ -1809,11 +1809,11 @@ msgstr "Kø"
 
 #: kurooview.cpp:80
 msgid "History"
-msgstr "Historikk"
+msgstr "Installasjonslogg"
 
 #: kurooview.cpp:81
 msgid "Etc-update"
-msgstr "Oppsettsoppdateringer"
+msgstr "Oppsetts-<br>oppdateringer"
 
 #: kurooview.cpp:82
 msgid "Log"

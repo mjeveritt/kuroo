@@ -37,7 +37,8 @@
 #define POS_VERSION     2
 
 /**
- * Thread for scanning local portage tree for available packages.
+ * @class ScanPortageJob
+ * @short Thread for scanning local portage tree for available packages.
  * The packages are counted first, this to get a correct refresh progress in the gui.
  * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
  * first the portage overlay cache the official portage cache.

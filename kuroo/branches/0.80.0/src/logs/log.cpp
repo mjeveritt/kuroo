@@ -32,7 +32,8 @@
 #include <kmessagebox.h>
 
 /**
- * Log output from all actions as emerge, scanning... to log window and to file.
+ * @class Log
+ * @short Log output from all actions as emerge, scanning... to log window and to file.
  */
 Log::Log( QObject* m_parent )
 	: QObject( m_parent ), logBrowser( 0 ), verboseLog( 0 ), saveLog( 0 )

@@ -29,7 +29,8 @@
 SystemTray* SystemTray::s_instance = 0;
 
 /**
- * Singleton object that creates the kuroo systemtray icon and actions.
+ * @class SystemTray
+ * @short Singleton object that creates the kuroo systemtray icon and actions.
  */
 SystemTray::SystemTray( QWidget *parent )
 	: KSystemTray( parent )

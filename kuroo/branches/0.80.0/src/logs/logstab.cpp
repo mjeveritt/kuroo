@@ -30,7 +30,8 @@
 #include <kmessagebox.h>
 
 /**
- * Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * @class LogsTab
+ * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
  */
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
@@ -41,19 +42,10 @@ LogsTab::LogsTab( QWidget* parent )
 }
 
 /**
- * Save splitters and listview geometry.
+ * Save checkboxes state.
  */
 LogsTab::~LogsTab()
 {
-// 	KConfig* config = KurooConfig::self()->config();
-// 	config->setGroup("Kuroo Geometry");
-// 	
-// 	QValueList<int> list = splitterV->sizes();
-// 	config->writeEntry("splitterLogsV", list);
-// 	
-// 	historyView->saveLayout( KurooConfig::self()->config(), "logsViewLayout" );
-	
-	// Save checkboxes state
 	if ( saveLog->isChecked() )
 		KurooConfig::setSaveLog( true );
 	else
@@ -68,20 +60,10 @@ LogsTab::~LogsTab()
 }
 
 /**
- * Initialize geometry and content.
- * Restore geometry: splitter positions, listViews width and columns width.
+ * Restore checkboxes state
  */
 void LogsTab::slotInit()
 {
-// 	KConfig* config = KurooConfig::self()->config();
-// 	config->setGroup("Kuroo Geometry");
-// 	
-// 	QValueList<int> sizes = config->readIntListEntry("splitterLogsV");
-// 	splitterV->setSizes(sizes);
-// 	
-// 	historyView->restoreLayout( KurooConfig::self()->config(), "logsViewLayout" );
-	
-	// Restore checkboxes state
 	if ( KurooConfig::saveLog() )
 		saveLog->setChecked( true );
 	else

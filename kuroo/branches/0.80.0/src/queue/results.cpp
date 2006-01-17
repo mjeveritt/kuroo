@@ -25,7 +25,8 @@
 #include <qvaluestack.h>
 
 /**
- * Thread for adding packages to results in db. Used by emerge.
+ * @class AddResultsPackageListJob
+ * @short Thread for adding packages to results in db. Used by emerge.
  */
 class AddResultsPackageListJob : public ThreadWeaver::DependentJob
 {
@@ -73,7 +74,8 @@ private:
 };
 
 /**
- * Object for resulting list of packages from emerge actions.
+ * @class Results
+ * @short Object for resulting list of packages from emerge actions.
  */
 Results::Results( QObject *m_parent )
 	: QObject( m_parent )

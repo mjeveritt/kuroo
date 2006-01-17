@@ -48,14 +48,14 @@ const int diffTime( 10 );
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
 {
-	bar = new KProgress( duration, parent->viewport() );
+	bar = new KProgress( duration + diffTime, parent->viewport() );
 	bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
 {
-	bar = new KProgress( duration, parent->listView()->viewport() );
+	bar = new KProgress( duration + diffTime, parent->listView()->viewport() );
 	bar->hide();
 }
 

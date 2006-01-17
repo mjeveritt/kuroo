@@ -27,7 +27,8 @@
 #include <klistview.h>
 
 /**
- * Creates tooltip for packages in views.
+ * @class ToolTip
+ * @short Creates tooltip for packages in views.
  */
 ToolTip::ToolTip( KListView* pWidget, QToolTipGroup* group )
 	: QToolTip( pWidget->viewport(), group ), m_pParent( pWidget )

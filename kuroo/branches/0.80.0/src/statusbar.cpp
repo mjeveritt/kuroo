@@ -28,11 +28,12 @@
 KurooStatusBar* KurooStatusBar::s_instance = 0;
 
 /**
- * Singleton object to build statusbar with progressbar in right corner.
+ * @class KurooStatusBar
+ * @short Singleton object to build statusbar with progressbar in right corner.
  * The one and only instance created from this class can can be accessed from all classes.
  */
 KurooStatusBar::KurooStatusBar( QWidget *parent )
-: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
+	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
 {
 	s_instance = this;
 	statusBarProgress = new KProgress( 0, "statusBarProgress" );

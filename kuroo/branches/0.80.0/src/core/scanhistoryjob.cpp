@@ -30,7 +30,8 @@
 #include <qtextstream.h>
 
 /**
- * Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @class ScanHistoryJob
+ * @short Thread for parsing emerge/unmerge entries found in emerge.log.
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),

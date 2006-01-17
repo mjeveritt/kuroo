@@ -39,7 +39,8 @@
 for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 
 /**
- * Kuroo introduction wizard.
+ * @class IntroDlg
+ * @short Kuroo introduction wizard.
  */
 IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	: Intro( parent, name, modal, fl )

@@ -12,9 +12,9 @@ noinst_HEADERS = scanhistoryjob.h scanupdatesjob.h scanportagejob.h signalist.h 
 		portagefiles.h
 
 libcore_la_SOURCES = scanupdatesjob.cpp scanhistoryjob.cpp emerge.cpp \
-		scanportagejob.cpp signalist.cpp threadweaver.cpp portagedb.cpp cacheportagejob.cpp \
-		etcupdate.cpp packageitem.cpp tooltip.cpp packagelistview.cpp categorieslistview.cpp \
-		packageversion.cpp portagesettings.h dependatom.cpp portagefiles.cpp
+	scanportagejob.cpp signalist.cpp threadweaver.cpp portagedb.cpp cacheportagejob.cpp \
+	etcupdate.cpp packageitem.cpp tooltip.cpp packagelistview.cpp categorieslistview.cpp \
+	packageversion.cpp dependatom.cpp portagefiles.cpp
 
 noinst_LTLIBRARIES = libcore.la
 

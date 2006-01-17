@@ -38,6 +38,9 @@ public:
 public slots:
 	void		init( QObject *parent = 0 );
 	
+	void		setKurooReady( bool isReady );
+	bool		isKurooReady();
+	
 	/**
 	 * Toggle busy flag for kuroo.
 	 * @param true/false
@@ -100,7 +103,7 @@ signals:
 
 private:
 	QObject*	m_parent;
-	bool		busy, busyScanning;
+	bool		m_busy, m_isReady;
 };
 
 #endif

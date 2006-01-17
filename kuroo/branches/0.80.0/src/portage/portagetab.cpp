@@ -52,9 +52,7 @@
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), queuedFilters( 0 )
 {
-	pbAdvanced->setDisabled( true );
-	pbQueue->setDisabled( true );
-	
+	// Initialize category and subcategory views with all available data
 	categoriesView->init();
 	subcategoriesView->init();
 	
@@ -162,7 +160,7 @@ void PortageTab::slotListPackages()
 		
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( QColor(255, 203, 201) );
+			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
@@ -176,7 +174,7 @@ void PortageTab::slotListPackages()
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( QColor(218, 255, 202) );
+			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
@@ -223,6 +221,20 @@ void PortageTab::slotBusy( bool busy )
 			pbUninstall->setDisabled( false );
 		
 		pbQueue->setDisabled( false );
+	}
+	
+	// No db no fun!
+	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
+		pbAdvanced->setDisabled( true );
+		pbQueue->setDisabled( true );
+		filterGroup->setDisabled( true );
+		searchFilter->setDisabled( true );
+		pbClearFilter->setDisabled( true );
+	}
+	else {
+		filterGroup->setDisabled( false );
+		searchFilter->setDisabled( false );
+		pbClearFilter->setDisabled( false );
 	}
 }
 

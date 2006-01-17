@@ -34,7 +34,9 @@
 #include <kmessagebox.h>
 
 /**
- * KurooInit checks that kuroo environment is correctly setup.
+ * @class kurooinit
+ * @short KurooInit checks that kuroo environment is correctly setup.
+ * 
  * And launch intro wizard whenever a new version of kuroo is installed.
  * Set ownership for directories and files to portage:portage.
  * Check that user is in portage group.
@@ -53,42 +55,53 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 			checkUser();
 	
 	// Get portage groupid to set directories and files owned by portage
-	struct group* portageGid = getgrnam(QFile::encodeName("portage"));
-	struct passwd* portageUid = getpwnam(QFile::encodeName("portage"));
+	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
+	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
 	
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
 		KurooConfig::setSaveLog(false);
-		KurooConfig::setScanUpdateDate(i18n("No scan"));
-		KurooConfig::setScanSizeDate(i18n("No scan"));
+		KurooConfig::setScanUpdateDate( i18n("No scan") );
+		KurooConfig::setScanSizeDate( i18n("No scan") );
 		
 		if ( !KurooConfig::wizard() )
 			getEnvironment();
-	}
-
-	// If new release delete old db files
-	QString database = KUROODIR + KurooConfig::databas();
-	if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooConfig::hardVersion().section( "_db", 1, 1 ) ) {
-		remove( database );
-		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg(database) << endl;
 	}
 	
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
 	KurooConfig::writeConfig();
 	
-	// Initialize singletons objects
-	QString logFile = LogSingleton::Instance()->init(this);
+	// Initialize the log
+	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
-		chmod(logFile, 0660);
-		chown(logFile, portageGid->gr_gid, portageUid->pw_uid);
+		chmod( logFile, 0660 );
+		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
 	}
 	
-	QString databaseFile = KurooDBSingleton::Instance()->init(this);
+	// Initialize the database
+	QString databaseFile = KurooDBSingleton::Instance()->init( this );
 	kdDebug() << "databaseFile=" << databaseFile << endl;
-	chmod(databaseFile, 0660);
-	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
 	
+	// Check db structure version
+	QString database = KUROODIR + KurooConfig::databas();
+	if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->kurooDbVersion() ) {
+		
+		// Old db structure, must delete old db
+		KurooDBSingleton::Instance()->destroy();
+		remove( database );
+		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		
+		// and recreate with new structure
+		KurooDBSingleton::Instance()->init( this );
+		KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
+		
+		// Give permissions to portage:portage to access the db also
+		chmod( databaseFile, 0660 );
+		chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
+	}
+	
+	// Initialize singletons objects
 	EtcUpdateSingleton::Instance()->init( this );
 	SignalistSingleton::Instance()->init( this );
 	EmergeSingleton::Instance()->init( this );

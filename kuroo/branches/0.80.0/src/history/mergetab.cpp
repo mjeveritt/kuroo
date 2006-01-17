@@ -32,7 +32,8 @@
 #include <krun.h>
 
 /**
- * Tabpage for emerge log browser.
+ * @class MergeTab
+ * @short Tabpage for emerge log browser.
  */
 MergeTab::MergeTab( QWidget* parent )
 	: MergeBase( parent )
@@ -54,7 +55,6 @@ MergeTab::~MergeTab()
 
 /**
  * Initialize geometry and content.
- * Restore geometry: splitter positions, listViews width and columns width.
  */
 void MergeTab::slotInit()
 {
@@ -67,6 +67,7 @@ void MergeTab::slotInit()
 void MergeTab::slotReload()
 {
 	mergeView->loadFromDB();
+	emit signalMergeChanged();
 }
 
 void MergeTab::slotClearFilter()

@@ -25,11 +25,12 @@
 #include <kcursor.h>
 
 /**
- * Object which forwards signals, so they can picked up system wide.
+ * @class Signalist
+ * @short Object which forwards signals, so they can picked up system wide.
  * Just connect to this instance.
  */
 Signalist::Signalist( QObject* m_parent )
-	: QObject( m_parent ), busy( false ), busyScanning( false )
+	: QObject( m_parent ), m_busy( false ), m_isReady( false )
 {
 }
 
@@ -43,12 +44,30 @@ void Signalist::init( QObject* parent )
 }
 
 /**
- * Convenience flag.
+ * Sanity level. No db means not ready.
+ * @param isReady
+ */
+void Signalist::setKurooReady( bool isReady )
+{
+	m_isReady = isReady;
+	emit signalKurooBusy( !isReady );
+}
+
+/**
+ * Return kuroo ready state.
+ */
+bool Signalist::isKurooReady()
+{
+	return m_isReady;
+}
+
+/**
+ * Kuroo is busy while scanning for packages or emerging.
  * @return busy
  */
 bool Signalist::isKurooBusy()
 {
-	return busy;
+	return m_busy;
 }
 
 /**
@@ -60,8 +79,10 @@ void Signalist::setKurooBusy( bool busy )
 	static int busySession(0);
 	
 	if ( !busy ) {
-		busySession--;
-		QApplication::restoreOverrideCursor();
+		if ( busySession > 0 ) {
+			busySession--;
+			QApplication::restoreOverrideCursor();
+		}
 	}
 	else {
 		busySession++;
@@ -69,11 +90,11 @@ void Signalist::setKurooBusy( bool busy )
 	}
 	
 	if ( busySession == 0 ) {
-		busy = false;
+		m_busy = false;
 		emit signalKurooBusy( false );
 	}
 	else {
-		busy = true;
+		m_busy = true;
 		emit signalKurooBusy( true );
 	}
 }

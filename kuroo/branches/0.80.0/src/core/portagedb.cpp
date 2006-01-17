@@ -45,10 +45,11 @@
 #include <kcursor.h>
 
 /**
- * All Sqlite related as connections, queries...
+ * @class KurooDB
+ * @short All Sqlite related as connections, queries...
  */
-KurooDB::KurooDB( QObject *parent )
-	: QObject( parent )
+KurooDB::KurooDB( QObject *m_parent )
+	: QObject( m_parent )
 {
 }
 
@@ -62,9 +63,9 @@ KurooDB::~KurooDB()
  * Set write permission for regular user.
  * @return database file
  */
-QString KurooDB::init( QObject *myParent )
+QString KurooDB::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 	
 	m_dbConnPool = new DbConnectionPool();
 	DbConnection *dbConn = m_dbConnPool->getDbConnection();
@@ -134,14 +135,14 @@ int KurooDB::insert( const QString& statement, DbConnection *conn )
 // 	clock_t start = clock();
 		
 	DbConnection *dbConn;
-	if (conn != NULL)
+	if ( conn != NULL )
 		dbConn = conn;
 	else
 		dbConn = m_dbConnPool->getDbConnection();
 	
 	int id = dbConn->insert( statement );
 	
-	if (conn == NULL)
+	if ( conn == NULL )
 		m_dbConnPool->putDbConnection( dbConn );
 	
 // 	clock_t finish = clock();
@@ -167,7 +168,29 @@ bool KurooDB::isValid()
 {
 	QStringList values1 = query("SELECT COUNT(id) FROM category LIMIT 0, 1;");
 	QStringList values2 = query("SELECT COUNT(id) FROM package LIMIT 0, 1;");
-	return (!values1.isEmpty() || !values2.isEmpty());
+	return ( !values1.isEmpty() || !values2.isEmpty() );
+}
+
+/**
+ * Return database structure version.
+ */
+QString KurooDB::kurooDbVersion()
+{
+	return query( "SELECT version FROM dbInfo ;" ).first();
+}
+
+/**
+ * Set current db structure version.
+ * @param version
+ */
+void KurooDB::setKurooDbVersion( const QString& version )
+{
+	bool hasVersion = query("SELECT COUNT(version) FROM dbInfo LIMIT 0, 1;").first() == "0" ;
+	
+	if ( hasVersion )
+		insert( "INSERT INTO dbInfo (version) VALUES ('" + version + "');" );
+	else
+		query( "UPDATE dbInfo SET version = '" + version + ";" );
 }
 
 /**
@@ -175,6 +198,10 @@ bool KurooDB::isValid()
  */
 void KurooDB::createTables( DbConnection *conn )
 {
+	query(" CREATE TABLE dbInfo ("
+	      " version VARCHAR(32) )"
+	      " ;", conn);
+	
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32)); "
@@ -309,7 +336,6 @@ void KurooDB::createTables( DbConnection *conn )
 	      " use VARCHAR(255) )"
 	      " ;", conn);
 }
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Queries for portage 
@@ -936,6 +962,11 @@ bool KurooDB::isCacheEmpty()
 	return values.isEmpty() ? true : values.first() == "0";
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  */
 DbConnection::DbConnection( DbConfig* config )
@@ -959,6 +990,7 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 	if ( file.open(IO_ReadOnly) ) {
 		QString format;
 		file.readLine(format, 50);
+		
 		if ( !format.startsWith("SQLite format 3") ) {
 			kdDebug() << "Database versions incompatible. Removing and rebuilding database.\n";
 		}
@@ -972,10 +1004,12 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 	}
 	
 	if ( !m_initialized ) {
+		
         // Remove old db file; create new
 		QFile::remove(path);
 		if ( sqlite3_open(path, &m_db) == SQLITE_OK ) {
 			m_initialized = true;
+			
 		}
 	}
 	if ( m_initialized ) {
@@ -1068,8 +1102,7 @@ int SqliteConnection::insert( const QString& statement )
 		int busyCnt = 0;
 		
         //execute virtual machine by iterating over rows
-		while (true)
-		{
+		while (true) {
 			error = sqlite3_step(stmt);
 			
 			if ( error == SQLITE_BUSY ) {
@@ -1080,8 +1113,10 @@ int SqliteConnection::insert( const QString& statement )
 				::usleep(100000); // Sleep 100 msec
 				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << endl;
 			}
+			
 			if ( error == SQLITE_MISUSE )
 				kdDebug() << "sqlite3_step: MISUSE" << endl;
+			
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 		}
@@ -1108,7 +1143,7 @@ void SqliteConnection::sqlite_rand( sqlite3_context *context, int /*argc*/, sqli
 void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3_value **argv )
 {
 	Q_ASSERT(argc==2);
-	if(sqlite3_value_type(argv[0])==SQLITE_NULL || sqlite3_value_type(argv[1])==SQLITE_NULL) {
+	if ( sqlite3_value_type(argv[0])==SQLITE_NULL || sqlite3_value_type(argv[1])==SQLITE_NULL ) {
 		sqlite3_result_null(context);
 		return;
 	}
@@ -1145,10 +1180,8 @@ DbConnectionPool::~DbConnectionPool()
 	DbConnection *conn;
 	bool vacuum = true;
 	
-	while ( (conn = dequeue()) != 0 )
-	{
-		if (/*m_dbConnType == DbConnection::sqlite && */vacuum)
-		{
+	while ( (conn = dequeue()) != 0 ) {
+		if (/*m_dbConnType == DbConnection::sqlite && */vacuum) {
 			vacuum = false;
 			kdDebug() << "Running VACUUM" << endl;
 			conn->query("VACUUM; ");
@@ -1162,8 +1195,7 @@ DbConnectionPool::~DbConnectionPool()
 
 void DbConnectionPool::createDbConnections()
 {
-	for ( int i = 0; i < POOL_SIZE - 1; i++ )
-	{
+	for ( int i = 0; i < POOL_SIZE - 1; i++ ) {
 		DbConnection *dbConn;
 		dbConn = new SqliteConnection(static_cast<SqliteConfig*> (m_dbConfig));
 		enqueue(dbConn);

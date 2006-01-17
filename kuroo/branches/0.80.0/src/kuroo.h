@@ -99,7 +99,7 @@ private:
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-	KAction 			*actionRefresh, *actionSync, *actionFind;
+	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

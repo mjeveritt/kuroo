@@ -120,13 +120,15 @@ class KurooDB : public QObject
 Q_OBJECT
 
 public:
-	KurooDB( QObject *parent = 0 );
+	KurooDB( QObject *m_parent = 0 );
 	~KurooDB();
+	
+	void 			destroy();
 	
 	/**
 	 * Check db integrity and create new db if necessary.
 	 */
-	QString 		init( QObject *myParent = 0 );
+	QString 		init( QObject *parent = 0 );
 	QString 		escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
 	
 	/**
@@ -154,6 +156,8 @@ public:
 	bool 			isHistoryEmpty();
 	bool 			isValid();
 	void 			createTables(DbConnection *conn = NULL);
+	QString		 	kurooDbVersion();
+	void 			setKurooDbVersion( const QString& version );
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
@@ -225,17 +229,15 @@ public:
 	
 	
 private:
-	QObject	*parent;
+	QObject*		m_parent;
 	
     //bump DATABASE_VERSION whenever changes to the table structure are made. will remove old db file.
 	static const int DATABASE_VERSION = 19;
 	static const int DATABASE_STATS_VERSION = 3;
 	static const int MONITOR_INTERVAL = 60; //sec
 
-	void destroy();
-
 	DbConnectionPool *m_dbConnPool;
-	bool m_monitor;
+	bool 			m_monitor;
 };
 
 #endif /* KUROODB_H */

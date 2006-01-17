@@ -55,6 +55,10 @@ private slots:
 	void		slotClearFilter();
 	
 	void 		slotViewFile( QListViewItem* item );
+	
+signals:
+	void		signalMergeChanged();
+	
 };
 
 #endif

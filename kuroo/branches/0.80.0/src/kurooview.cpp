@@ -97,6 +97,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
+	connect( tabMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
@@ -177,12 +178,17 @@ void KurooView::slotCheckPortage()
 	else {
 		tabPortage->slotReload();
 		tabQueue->slotReload( false );
+		
 		if ( KurooDBSingleton::Instance()->updatesTotal() == "0" )
 			UpdatesSingleton::Instance()->slotRefresh();
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled
 		if ( !KUser().isSuperUser() )
 			KMessageBox::information( 0, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
+		
+		// Ready to roll
+		SignalistSingleton::Instance()->setKurooReady( true );
+// 		SignalistSingleton::Instance()->setKurooBusy( false );
 	}
 }
 
@@ -231,6 +237,17 @@ void KurooView::slotHistoryUpdated()
 {
 	if ( !iconHistory->isChanged() ) {
 		iconHistory->setChanged( true );
+		viewMenu->triggerUpdate( true );
+	}
+}
+
+/**
+ * Highlight menutext in bleue.
+ */
+void KurooView::slotMergeUpdated()
+{
+	if ( !iconMerge->isChanged() ) {
+		iconMerge->setChanged( true );
 		viewMenu->triggerUpdate( true );
 	}
 }

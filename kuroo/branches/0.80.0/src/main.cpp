@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_160106_db10";
+static const char version[] = "0.80.0_170106_db12";
 
 static KCmdLineOptions options[] =
 {
@@ -57,12 +57,12 @@ int main(int argc, char **argv)
 		kdDebug() << I18N_NOOP("Kuroo8 is already running!") << endl;
 		exit(0);
 	}
-	app.dcopClient()->registerAs(app.name(), false);
+	app.dcopClient()->registerAs( app.name(), false );
 	
-	KurooConfig::setHardVersion(version);
+	KurooConfig::setHardVersion( version );
 	KurooConfig::writeConfig();
 	
-	app.dcopClient()->setAcceptCalls(true);
+	app.dcopClient()->setAcceptCalls( true );
 	
 	// see if we are starting with session management
 	if ( app.isRestored() ) {

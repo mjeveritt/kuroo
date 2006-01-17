@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>460</width>
-            <height>448</height>
+            <height>502</height>
         </rect>
     </property>
     <property name="caption">
@@ -231,7 +231,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="4" column="0">
+        <widget class="QGroupBox" row="3" column="0">
             <property name="name">
                 <cstring>portage_2_2_2</cstring>
             </property>
@@ -318,7 +318,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="5" column="0">
+        <widget class="QGroupBox" row="4" column="0">
             <property name="name">
                 <cstring>portage_2_3</cstring>
             </property>
@@ -364,7 +364,7 @@
                 </widget>
             </grid>
         </widget>
-        <spacer row="7" column="0">
+        <spacer row="6" column="0">
             <property name="name">
                 <cstring>spacer2</cstring>
             </property>
@@ -381,12 +381,12 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QGroupBox" row="6" column="0">
+        <widget class="QGroupBox" row="5" column="0">
             <property name="name">
                 <cstring>groupBox9</cstring>
             </property>
             <property name="title">
-                <string>Package status color</string>
+                <string>Package text filter</string>
             </property>
             <grid>
                 <property name="name">
@@ -415,31 +415,38 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <widget class="QLabel" row="1" column="0">
+                        <widget class="KColorButton" row="0" column="1">
                             <property name="name">
-                                <cstring>textLabel2_2</cstring>
+                                <cstring>kcfg_matchColor</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
                                     <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>1</horstretch>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>2</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
-                            <property name="frameShape">
-                                <enum>NoFrame</enum>
-                            </property>
                             <property name="text">
-                                <string>Unmasked package</string>
+                                <string></string>
+                            </property>
+                            <property name="color">
+                                <color>
+                                    <red>172</red>
+                                    <green>255</green>
+                                    <blue>169</blue>
+                                </color>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Click to select the background color of the OSD.</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>The color of the OSD background.</string>
                             </property>
                         </widget>
-                        <widget class="KColorButton" row="0" column="1">
+                        <widget class="KColorButton" row="1" column="1">
                             <property name="name">
-                                <cstring>kcfg_maskedColor</cstring>
+                                <cstring>kcfg_noMatchColor</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -460,9 +467,9 @@
                             </property>
                             <property name="color">
                                 <color>
-                                    <red>170</red>
-                                    <green>0</green>
-                                    <blue>0</blue>
+                                    <red>255</red>
+                                    <green>195</green>
+                                    <blue>193</blue>
                                 </color>
                             </property>
                             <property name="toolTip" stdset="0">
@@ -472,36 +479,7 @@
                                 <string>The color of the OSD text.</string>
                             </property>
                         </widget>
-                        <widget class="KColorButton" row="1" column="1">
-                            <property name="name">
-                                <cstring>kcfg_unmaskedColor</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>2</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="color">
-                                <color>
-                                    <red>85</red>
-                                    <green>85</green>
-                                    <blue>255</blue>
-                                </color>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Click to select the background color of the OSD.</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>The color of the OSD background.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="QLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>textLabel2</cstring>
                             </property>
@@ -514,10 +492,32 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Masked package</string>
+                                <string>No matching packages found</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>The color of the OSD text.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel2_2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>1</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="text">
+                                <string>Matching packages found</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The color of the OSD background.</string>
                             </property>
                         </widget>
                     </grid>

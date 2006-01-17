@@ -86,6 +86,7 @@ private slots:
 	void 			slotPortageUpdated();
 	void 			slotQueueUpdated();
 	void			slotHistoryUpdated();
+	void			slotMergeUpdated();
 	void 			slotLogUpdated();
 	void			slotResetMenu( QListBoxItem* menuItem );
 	

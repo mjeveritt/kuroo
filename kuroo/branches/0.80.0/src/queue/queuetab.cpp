@@ -36,7 +36,8 @@
 #include <kuser.h>
 
 /**
- * Tab page for the installation queue.
+ * @class QueueTab
+ * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent )
 	: QueueBase( parent ), m_hasCheckedQueue( false )
@@ -96,11 +97,11 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	m_hasCheckedQueue = hasCheckedQueue;
 	
-// 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
+	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	queueView->insertPackageList();
 	
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
-			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( KurooDBSingleton::Instance()->queueTotal() );
+			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
 			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( queueView->totalTime() );
 // 			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
 	
@@ -115,16 +116,28 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;
 	
-// 	totalSizeText->setText( queueView->totalSize() );
+	// No db no fun!
+	if ( queueView->count() == "0" ) {
+		pbGo->setDisabled( true );
+		pbClear->setDisabled( true );
+		pbRemove->setDisabled( true );
+		cbDownload->setDisabled( true );
+	}
+	else {
+		pbGo->setDisabled( false );
+		pbClear->setDisabled( false );
+		pbRemove->setDisabled( false );
+		cbDownload->setDisabled( false );
+	}
 }
 
 /**
  * Disable/enable buttons when kuroo busy signal is received.
- * @param b
+ * @param busy
  */
 void QueueTab::slotBusy( bool busy )
 {
-// 	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
+	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Stop Installation!" ) );
@@ -144,6 +157,7 @@ void QueueTab::slotBusy( bool busy )
 			pbGo->setText( i18n("Check Installation!") );
 	}
 	
+	// Disbaled add/remove packages when emerging
 	if ( busy ) {
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
@@ -152,6 +166,20 @@ void QueueTab::slotBusy( bool busy )
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );
 	}
+	
+	// No db no fun!
+	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
+		pbGo->setDisabled( true );
+		pbClear->setDisabled( true );
+		pbRemove->setDisabled( true );
+		cbDownload->setDisabled( true );
+	}
+	else {
+		pbGo->setDisabled( false );
+		pbClear->setDisabled( false );
+		pbRemove->setDisabled( false );
+		cbDownload->setDisabled( false );
+	}
 }
 
 /**
@@ -159,7 +187,7 @@ void QueueTab::slotBusy( bool busy )
  */
 void QueueTab::slotGo()
 {
-// 	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
+	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
@@ -221,6 +249,9 @@ void QueueTab::slotPretend()
 	PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
 }
 
+/**
+ * Remove package from Queue.
+ */
 void QueueTab::slotRemove()
 {
 	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );

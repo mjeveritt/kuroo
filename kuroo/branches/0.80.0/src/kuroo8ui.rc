@@ -3,9 +3,9 @@
 <MenuBar>
 	<Menu name="custom1">
 		<text>&amp;Portage</text>
-		<Action name="sync" />
-		<Action name="updates" />
-		<Action name="refresh" />
+		<Action name="sync_portage" />
+		<Action name="refresh_portage" />
+		<Action name="refresh_updates" />
 	</Menu>
 	<Menu name="custom2">
 		<text>&amp;View</text>
@@ -13,9 +13,4 @@
 		<Action name="emergeLog" />
 	</Menu>
 </MenuBar>
-<ToolBar fullWidth="true" name="mainToolBar">
-	<Action name="refresh" />
-	<Action name="sync" />
-	<Action name="find" />
-</ToolBar>
 </kpartgui>

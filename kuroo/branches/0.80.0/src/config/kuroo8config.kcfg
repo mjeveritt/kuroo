@@ -77,11 +77,11 @@
 		<entry name="etcUpdateTool" type="String">
 		<default>kdiff3</default>
 		</entry>
-		<entry name="maskedColor" type="Color">
-		<default>107,0,0</default>
+		<entry name="matchColor" type="Color">
+		<default>218, 255, 202</default>
 		</entry>
-		<entry name="unmaskedColor" type="Color">
-		<default>0,0,107</default>
+		<entry name="noMatchColor" type="Color">
+		<default>255, 203, 201</default>
 		</entry>
 	</group>
 	<group name="make.conf">

@@ -25,12 +25,12 @@
 #include <kdebug.h>
 
 /**
- * Subclassed KMainWindow to accomodate statusBar containing progressbar.
+ * @class MainWindow
+ * @short Subclassed KMainWindow to accomodate statusBar containing progressbar.
  */
 MainWindow::MainWindow( QWidget *parent, const char *name )
 	: KMainWindow( parent, name ), sb(0)
 {
-	toolBar()->hide();
 }
 
 MainWindow::~MainWindow()
@@ -43,7 +43,7 @@ MainWindow::~MainWindow()
  */
 KurooStatusBar* MainWindow::statusBar()
 {
-	sb = new KurooStatusBar(this);
+	sb = new KurooStatusBar( this );
 	return sb;
 }
 

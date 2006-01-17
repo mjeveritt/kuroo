@@ -51,7 +51,9 @@
 #include <kio/job.h>
 
 /**
- * Create main window with menus, system tray icon and statusbar.
+ * @class Kuroo
+ * @short Create main window with menus, system tray icon and statusbar.
+ * 
  * First launch KurooInit to check the integrity of kuroo setup.
  */
 Kuroo::Kuroo()
@@ -66,6 +68,8 @@ Kuroo::Kuroo()
 	statusBar();
 	setupGUI();
 	
+	toolBar()->hide();
+	
 	// Add system tray icon
 	SystemTray *systemTray = new SystemTray( this );
 	systemTray->show();
@@ -79,7 +83,9 @@ Kuroo::Kuroo()
 	// when the last window is closed, the application should quit
 	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );
 	
-	slotBusy( true );
+	// Kuroo must initialize with db first
+	SignalistSingleton::Instance()->setKurooReady( false );
+// 	slotBusy( true );
 	
 	// Zack Rusin's delayed initialization technique
 	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
@@ -100,14 +106,17 @@ void Kuroo::setupActions()
 	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
 	                    this, SLOT( introWizard() ), actionCollection(), "wizard" );
 	
-	actionRefresh = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
-	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh" );
+	actionRefreshPortage = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
+	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	
-	actionSync = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
-	                          this, SLOT( slotSync() ), actionCollection(), "sync" );
+	actionRefreshUpdates = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
+	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh_updates" );
 	
-	actionRefresh->setToolTip( i18n("Refresh Portage view") );
-	actionSync->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
+	actionSyncPortage = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
+	                          this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
+	
+	actionRefreshPortage->setToolTip( i18n("Refresh Portage view") );
+	actionSyncPortage->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
 	
 	createGUI();
 }
@@ -118,14 +127,20 @@ void Kuroo::setupActions()
 void Kuroo::slotBusy( bool busy )
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
-		actionRefresh->setEnabled( false );
+		actionRefreshPortage->setEnabled( false );
 	else
-		actionRefresh->setEnabled( true );
+		actionRefreshPortage->setEnabled( true );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() )
-		actionSync->setEnabled( false );
+		actionSyncPortage->setEnabled( false );
 	else
-		actionSync->setEnabled( true );
+		actionSyncPortage->setEnabled( true );
+	
+	// No db no fun!
+	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
+		actionRefreshPortage->setEnabled( false );
+		actionSyncPortage->setEnabled( false );
+	}
 }
 
 /**
@@ -136,24 +151,24 @@ void Kuroo::slotSync()
 	KLocale *loc = KGlobal::locale();
 	QDateTime t;
 	QString timeStamp( KurooDBSingleton::Instance()->getLastSync().first() );
-	QString lastSyncDate( NULL );
+	QString lastSyncDate( QString::null );
 	
 	if ( !timeStamp.isEmpty() ) {
 		t.setTime_t( timeStamp.toUInt() );
 		lastSyncDate = loc->formatDateTime(t);
 	}
 	
-	actionSync->setEnabled(false);
 	switch( KMessageBox::questionYesNo( this, 
 		i18n( "<qt>Do you want to synchronize portage?<br>"
-		     "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
+		      "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
 			     
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
+			actionSyncPortage->setEnabled( false );
 			break;
 		
-		case KMessageBox::No:
-			actionSync->setEnabled( true );
+// 		case KMessageBox::No:
+// 			actionSync->setEnabled( true );
 		
 	}
 }
@@ -231,7 +246,7 @@ void Kuroo::slotWait()
 			case KMessageBox::Yes: {
 				ThreadWeaver::instance()->abortAllJobsNamed( "DBJob" );
 				ThreadWeaver::instance()->abortAllJobsNamed( "CachePortageJob" );
-				QTimer::singleShot( 500, this, SLOT( slotTerminate()) );
+				QTimer::singleShot( 500, this, SLOT( slotTerminate() ) );
 				
 			}
 		}

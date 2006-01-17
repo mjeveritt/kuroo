@@ -53,12 +53,14 @@ public:
 			// We found a dependency, add it
 			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {
 				KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO queue (idPackage, idDepend, version) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( idPackage ).arg( (*it).version ) );
+					"INSERT INTO queue (idPackage, idDepend, version) "
+					"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( idPackage ).arg( (*it).version ) );
 			}
 			else {
 				idPackage = id;
 				KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO queue (idPackage, idDepend, version) VALUES ('%1', '0', '%2');" ).arg( id ).arg( (*it).version ) );
+					"INSERT INTO queue (idPackage, idDepend, version) "
+					"VALUES ('%1', '0', '%2');" ).arg( id ).arg( (*it).version ) );
 			}
 		}
 		return true;

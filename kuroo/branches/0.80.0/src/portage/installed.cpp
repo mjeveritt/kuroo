@@ -91,29 +91,6 @@ public:
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
 			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL_STRING ).arg( id ).arg( version ) );
 			
-			// Remove package from world file
-			QFile file( KurooConfig::dirWorldFile() );
-			QStringList lines;
-			if ( file.open( IO_ReadOnly ) ) {
-				QTextStream stream( &file );
-				while ( !stream.atEnd() )
-					lines += stream.readLine();
-				file.close();
-				
-				if ( file.open( IO_WriteOnly ) ) {
-					QTextStream stream( &file );
-					foreach ( lines ) {
-						if ( *it != ( category + "/" + name ) )
-							stream << *it << endl;
-					}
-					file.close();
-				}
-				else
-					kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
-			}
-			else
-				kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
-			
 			return true;
 		}
 		

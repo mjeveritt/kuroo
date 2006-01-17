@@ -82,7 +82,7 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>&lt;h2&gt;Kuroo8 Daily build&lt;/h2&gt;
+                    <string>&lt;h2&gt;Kuroo8 daily build&lt;/h2&gt;
 New features:&lt;br&gt;
 Faster portage scanning.&lt;br&gt;
 Flexible package browsing and searching with filters.&lt;br&gt;

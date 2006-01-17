@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 17:34+0100\n"
+"POT-Creation-Date: 2006-01-17 18:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,59 +16,59 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: core/scanhistoryjob.cpp:65 core/scanportagejob.cpp:89
-#: core/scanupdatesjob.cpp:67 core/cacheportagejob.cpp:94
+#: core/scanhistoryjob.cpp:66 core/scanportagejob.cpp:90
+#: core/scanupdatesjob.cpp:68 core/cacheportagejob.cpp:94
 msgid "Can not connect to database"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:81 core/scanhistoryjob.cpp:152
+#: core/scanhistoryjob.cpp:82 core/scanhistoryjob.cpp:153
 msgid "History scan aborted"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:99 core/scanhistoryjob.cpp:130
+#: core/scanhistoryjob.cpp:100 core/scanhistoryjob.cpp:131
 msgid "No package found!"
 msgstr ""
 
-#: core/scanportagejob.cpp:95 core/scanportagejob.cpp:262
-#: core/scanportagejob.cpp:349 core/scanportagejob.cpp:404
+#: core/scanportagejob.cpp:96 core/scanportagejob.cpp:263
+#: core/scanportagejob.cpp:350 core/scanportagejob.cpp:405
 #: core/cacheportagejob.cpp:70 core/cacheportagejob.cpp:109
 #: core/cacheportagejob.cpp:164 core/cacheportagejob.cpp:169
 #: core/cacheportagejob.cpp:225
 msgid "Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:100
+#: core/scanportagejob.cpp:101
 msgid "Refreshing Portage view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:170 core/scanportagejob.cpp:199
+#: core/scanportagejob.cpp:171 core/scanportagejob.cpp:200
 msgid "Portage scan aborted"
 msgstr ""
 
-#: core/scanportagejob.cpp:254
+#: core/scanportagejob.cpp:255
 msgid "Scanning Portage cache: can not match package %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:333 core/scanportagejob.cpp:407 core/emerge.cpp:473
-#: core/emerge.cpp:546 core/scanupdatesjob.cpp:142
+#: core/scanportagejob.cpp:334 core/scanportagejob.cpp:408 core/emerge.cpp:473
+#: core/emerge.cpp:546 core/scanupdatesjob.cpp:143
 #: core/cacheportagejob.cpp:238 core/portagefiles.cpp:134
 #: core/portagefiles.cpp:220 core/portagefiles.cpp:306
 #: core/portagefiles.cpp:392 queue/queuetab.cpp:239 history/history.cpp:264
-#: history/history.cpp:265 statusbar.cpp:92
+#: history/history.cpp:265 statusbar.cpp:93
 msgid "Done."
 msgstr ""
 
-#: core/scanportagejob.cpp:351
+#: core/scanportagejob.cpp:352
 msgid "Collecting installed packages..."
 msgstr ""
 
-#: core/scanportagejob.cpp:400
+#: core/scanportagejob.cpp:401
 msgid "Scanning installed packages: can not match %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:422 core/scanportagejob.cpp:499
+#: core/scanportagejob.cpp:423 core/scanportagejob.cpp:500
 #: core/cacheportagejob.cpp:156 core/cacheportagejob.cpp:217
-#: portage/portage.cpp:205 portage/portage.cpp:276 portage/installed.cpp:115
+#: portage/portage.cpp:205 portage/portage.cpp:276 portage/portage.cpp:308
 #: portage/packageinspector.cpp:493 portage/packageinspector.cpp:579
 #: portage/packageinspector.cpp:609 portage/packageinspector.cpp:648
 #: portage/packageinspector.cpp:675 config/configdialog.cpp:94
@@ -223,15 +223,15 @@ msgstr ""
 msgid "Subcategory"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:72
+#: core/scanupdatesjob.cpp:73
 msgid "No update package found"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:76
+#: core/scanupdatesjob.cpp:77
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:112
+#: core/scanupdatesjob.cpp:113
 msgid "Updates scan aborted"
 msgstr ""
 
@@ -401,17 +401,17 @@ msgstr ""
 msgid "Completed saving user package use in %1."
 msgstr ""
 
-#: logs/log.cpp:58 portage/portage.cpp:228 portage/portage.cpp:273
-#: portage/installed.cpp:112 config/configdialog.cpp:288
+#: logs/log.cpp:59 portage/portage.cpp:228 portage/portage.cpp:273
+#: portage/portage.cpp:305 config/configdialog.cpp:288
 #: config/configdialog.cpp:404
 msgid "Error writing: "
 msgstr ""
 
-#: logs/log.cpp:59
+#: logs/log.cpp:60
 msgid "Error writing %1kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:59 portage/portage.cpp:229 config/configdialog.cpp:259
+#: logs/log.cpp:60 portage/portage.cpp:229 config/configdialog.cpp:259
 #: config/configdialog.cpp:267 config/configdialog.cpp:406
 msgid "Saving"
 msgstr ""
@@ -623,7 +623,7 @@ msgid "Removing unmerged package: can not match %1."
 msgstr ""
 
 #: portage/updates.cpp:44
-msgid "Can not match package %1."
+msgid "Removing update package: can not match package %1."
 msgstr ""
 
 #: portage/versionview.cpp:70
@@ -826,7 +826,7 @@ msgstr ""
 #: rc.cpp:61
 #, no-c-format
 msgid ""
-"<h2>Kuroo8 Daily build</h2>\n"
+"<h2>Kuroo8 daily build</h2>\n"
 "New features:<br>\n"
 "Faster portage scanning.<br>\n"
 "Flexible package browsing and searching with filters.<br>\n"
@@ -1665,11 +1665,11 @@ msgstr ""
 msgid "User permissions"
 msgstr ""
 
-#: systemtray.cpp:46
+#: systemtray.cpp:47
 msgid "Kuroo - Portage frontend"
 msgstr ""
 
-#: systemtray.cpp:47
+#: systemtray.cpp:48
 msgid "&Configure Kuroo..."
 msgstr ""
 
@@ -1731,11 +1731,11 @@ msgstr ""
 msgid "Last sync: %1"
 msgstr ""
 
-#: kuroo.cpp:180 kuroo.cpp:182
+#: kuroo.cpp:175 kuroo.cpp:177
 msgid "settings"
 msgstr ""
 
-#: kuroo.cpp:241
+#: kuroo.cpp:236
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"

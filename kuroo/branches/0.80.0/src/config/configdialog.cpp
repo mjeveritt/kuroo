@@ -22,7 +22,6 @@
 #include "configdialog.h"
 #include "options1.h"
 #include "options2.h"
-#include "options6.h"
 #include "options7.h"
 
 #include <qtextstream.h>
@@ -49,19 +48,15 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	
 	Options1* opt1 = new Options1( this, i18n("General") );
 	Options2* opt2 = new Options2( this, i18n("make.conf") );
-	Options6* opt6 = new Options6( this, i18n("world") );
 	Options7* opt7 = new Options7( this, i18n("etc warnings") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt6, i18n("world"), "kuroo_portagefiles", i18n("Edit your world file") );
 	addPage( opt7, i18n("etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
-	connect( this, SIGNAL(settingsChanged()), this, SLOT(saveAll()));
-	connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
+	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
 	
 	readMakeConf();
-	readWorldFile();
 }
 
 ConfigDialog::~ConfigDialog()
@@ -71,29 +66,7 @@ ConfigDialog::~ConfigDialog()
 void ConfigDialog::slotDefault()
 {
 	readMakeConf();
-	readWorldFile();
 	show();
-}
-
-/**
- * Load list of packages in world file.
- */
-void ConfigDialog::readWorldFile()
-{
-	QFile file( KurooConfig::dirWorldFile() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			lines += stream.readLine();
-		}
-		lines.sort();
-		KurooConfig::setWorldFile( lines.join("\n") );
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
-	
-	file.close();
 }
 
 /**
@@ -250,8 +223,10 @@ void ConfigDialog::readMakeConf()
 void ConfigDialog::saveAll()
 {
 	switch( activePageIndex() ) {
+		
 		case 0:
 			break;
+		
 		case 1: {
 			if ( !saveMakeConf() ) {
 				readMakeConf();
@@ -260,33 +235,7 @@ void ConfigDialog::saveAll()
 			}
 			break;
 		}
-		case 2: {
-			if ( !saveWorldFile() ) {
-				readWorldFile();
-				show();
-				KMessageBox::error( this, i18n("Failed to save world file. Please run as root."), i18n("Saving"));
-			}
-			break;
-		}
-	}
-}
-
-/**
- * Save to /var/lib/portage/world.
- * @return success
- */
-bool ConfigDialog::saveWorldFile()
-{
-	QFile file( KurooConfig::dirWorldFile() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::worldFile();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
-		return false;
+		
 	}
 }
 
@@ -372,52 +321,6 @@ bool ConfigDialog::saveMakeConf()
 	else {
 		kdDebug() << i18n("Error writing: /etc/make.conf") << endl;
 		return false;
-	}
-}
-
-/**
- * Export all installed packages in database into world file.
- */
-void ConfigDialog::exportWorld()
-{
-	switch ( KMessageBox::questionYesNo( this, i18n("Do you want export all Installed packages to the world file?"), i18n("Kuroo")) ) {
-		case KMessageBox::Yes : {
-			if ( exportToWorld() )
-				KMessageBox::information( this, i18n("Export to world file completed."), i18n("Kuroo") );
-			break;
-		}
-		case KMessageBox::No : {
-			break;
-		}
-	}
-}
-
-/**
- * Slot to save all installed packages into the world file.
- * @return success
- */
-bool ConfigDialog::exportToWorld()
-{
-	QFile file( KurooConfig::dirWorldFile() );
-
-	if( !file.open( IO_WriteOnly ) ) {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
-		file.close();
-		KMessageBox::error( this, i18n("Please run kuroo as root for exporting to %1." ).arg(KurooConfig::dirWorldFile()), i18n("Saving"));
-		return false;
-	}
-	else {
-		QTextStream stream( &file );
-		
-		// Collect installed package version
-// 		const QStringList installedPackageList = KurooDBSingleton::Instance()->installedPackages();
-// 		foreach ( installedPackageList ) {
-// 			QString category = *it++;
-// 			QString name = *it;
-// 			stream << category + "/" + name << endl;
-// 		}
-// 		file.close();
-		return true;
 	}
 }
 

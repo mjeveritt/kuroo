@@ -39,27 +39,19 @@ public:
 	ConfigDialog( QWidget *parent, const char *name, KConfigSkeleton *config );
 	~ConfigDialog();
 	
-	/**
- 	 * Slot to save all installed packages into the world file.
- 	 */
-	bool exportToWorld();
-	
 private slots:
 	
 	/**
  	 * Load the contents of the these inte KTextBoxes.
  	 */
 	void readMakeConf();
-	void readWorldFile();
 	
 	/**
  	 * And save back...
  	 */
 	bool saveMakeConf();
-	bool saveWorldFile();
 	void saveAll();
 
-	void exportWorld();
 	void slotDefault();
 
 private:

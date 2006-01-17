@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 18:44+0100\n"
+"POT-Creation-Date: 2006-01-17 20:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgstr ""
 #: portage/portage.cpp:205 portage/portage.cpp:276 portage/portage.cpp:308
 #: portage/packageinspector.cpp:493 portage/packageinspector.cpp:579
 #: portage/packageinspector.cpp:609 portage/packageinspector.cpp:648
-#: portage/packageinspector.cpp:675 config/configdialog.cpp:94
+#: portage/packageinspector.cpp:675
 msgid "Error reading: "
 msgstr ""
 
@@ -254,7 +254,6 @@ msgid ""
 msgstr ""
 
 #: core/etcupdate.cpp:57 core/etcupdate.cpp:71 core/etcupdate.cpp:174
-#: config/configdialog.cpp:383 config/configdialog.cpp:386
 msgid "Kuroo"
 msgstr ""
 
@@ -402,8 +401,7 @@ msgid "Completed saving user package use in %1."
 msgstr ""
 
 #: logs/log.cpp:59 portage/portage.cpp:228 portage/portage.cpp:273
-#: portage/portage.cpp:305 config/configdialog.cpp:288
-#: config/configdialog.cpp:404
+#: portage/portage.cpp:305
 msgid "Error writing: "
 msgstr ""
 
@@ -411,8 +409,7 @@ msgstr ""
 msgid "Error writing %1kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:60 portage/portage.cpp:229 config/configdialog.cpp:259
-#: config/configdialog.cpp:267 config/configdialog.cpp:406
+#: logs/log.cpp:60 portage/portage.cpp:229 config/configdialog.cpp:234
 msgid "Saving"
 msgstr ""
 
@@ -767,7 +764,7 @@ msgstr ""
 msgid "Save log on e&xit"
 msgstr ""
 
-#: rc.cpp:15 rc.cpp:590
+#: rc.cpp:15
 #, no-c-format
 msgid "Alt+X"
 msgstr ""
@@ -777,8 +774,7 @@ msgstr ""
 msgid "<b>Installation Log</b>"
 msgstr ""
 
-#: rc.cpp:21 rc.cpp:112 rc.cpp:257 rc.cpp:386 rc.cpp:584 rc.cpp:593 rc.cpp:596
-#: rc.cpp:608
+#: rc.cpp:21 rc.cpp:112 rc.cpp:257 rc.cpp:386 rc.cpp:584 rc.cpp:587 rc.cpp:599
 #, no-c-format
 msgid "Form1"
 msgstr ""
@@ -1568,79 +1564,50 @@ msgstr ""
 msgid "RSYNC_RATELIMIT"
 msgstr ""
 
-#: rc.cpp:587
-#, no-c-format
-msgid "E&xport to world file"
-msgstr ""
-
-#: rc.cpp:599
+#: rc.cpp:590
 #, no-c-format
 msgid "Warning!"
 msgstr ""
 
-#: rc.cpp:602
+#: rc.cpp:593
 #, no-c-format
 msgid "&Portage"
 msgstr ""
 
-#: config/configdialog.cpp:50 config/configdialog.cpp:55
+#: config/configdialog.cpp:49 config/configdialog.cpp:53
 msgid "General"
 msgstr ""
 
-#: config/configdialog.cpp:51 config/configdialog.cpp:56
+#: config/configdialog.cpp:50 config/configdialog.cpp:54
 msgid "make.conf"
 msgstr ""
 
-#: config/configdialog.cpp:52 config/configdialog.cpp:57
-msgid "world"
-msgstr ""
-
-#: config/configdialog.cpp:53 config/configdialog.cpp:58
+#: config/configdialog.cpp:51 config/configdialog.cpp:55
 msgid "etc warnings"
 msgstr ""
 
-#: config/configdialog.cpp:55
+#: config/configdialog.cpp:53
 msgid "General preferences"
 msgstr ""
 
-#: config/configdialog.cpp:56
+#: config/configdialog.cpp:54
 msgid "Edit your make.conf file"
 msgstr ""
 
-#: config/configdialog.cpp:57
-msgid "Edit your world file"
-msgstr ""
-
-#: config/configdialog.cpp:58
+#: config/configdialog.cpp:55
 msgid "Edit your etc-update warning file list"
 msgstr ""
 
-#: config/configdialog.cpp:244 config/configdialog.cpp:319 kurooinit.cpp:162
+#: config/configdialog.cpp:217 config/configdialog.cpp:268 kurooinit.cpp:162
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
-#: config/configdialog.cpp:259
+#: config/configdialog.cpp:234
 msgid "Failed to save makeconf. Please run as root."
 msgstr ""
 
-#: config/configdialog.cpp:267
-msgid "Failed to save world file. Please run as root."
-msgstr ""
-
-#: config/configdialog.cpp:373
+#: config/configdialog.cpp:322
 msgid "Error writing: /etc/make.conf"
-msgstr ""
-
-#: config/configdialog.cpp:383
-msgid "Do you want export all Installed packages to the world file?"
-msgstr ""
-
-#: config/configdialog.cpp:386
-msgid "Export to world file completed."
-msgstr ""
-
-#: config/configdialog.cpp:406
-msgid "Please run kuroo as root for exporting to %1."
 msgstr ""
 
 #: kurooinit.cpp:65 kurooinit.cpp:66

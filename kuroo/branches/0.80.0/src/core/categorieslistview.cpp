@@ -57,6 +57,9 @@ CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name,
 {
 }
 
+/**
+ * Paint empty categories in italic and grey when empty.
+ */
 void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
 {
 	QColorGroup m_cg( cg );
@@ -263,7 +266,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	
 	clear(); // @warning: categoryItem cannot be used anymore
 	CategoryItem* item;
-	item = new CategoryItem( this, NULL, "0" ); // Insert empty item to get focus to work on last before last item
+	item = new CategoryItem( this, QString::null, "0" ); // Insert empty item to get focus to work on last before last item
 	
 	// When meta-category is selected skip to show only meta-subcategory
 	if ( idCategory != 0 ) {

@@ -26,7 +26,8 @@
 #include <kmessagebox.h>
 
 /**
- * Object handling the Gentoo emerge command.
+ * @class Emerge
+ * @short Object handling the Gentoo emerge command.
  */
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent )
@@ -77,7 +78,7 @@ EmergePackageList Emerge::packageList()
 }
 
 /**
- * Emerge packages.
+ * Emerge list of packages.
  * @param packageList	
  * @return success
  */
@@ -280,7 +281,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 
 		// Concatenate not completed lines
 		if ( !unterm ) {
-			if ( !line.contains(QRegExp("^>>>|^!!!")) )
+			if ( !line.contains( QRegExp("^>>>|^!!!") ) )
 				line = lineOver + line;
 			lineOver = QString::null;
 		}
@@ -467,6 +468,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 void Emerge::cleanup()
 {
 	kdDebug() << "Emerge::cleanup" << endl;
+	
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );
@@ -588,7 +590,6 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes : {
 						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageKeywords() ) ) {
-// 							PortageSingleton::Instance()->loadPackageKeywords(); // @fixme: why do this every time?
 							pretend( lastEmergeList );
 						}
 						break;

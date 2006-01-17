@@ -147,9 +147,7 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	bool matchGreaterThan = m_prefix.startsWith(">");
 	
 	QValueList<PackageVersion*> versions = m_portagePackage->versionList();
-	
-// 	kdDebug() << "1" << endl;
-	
+
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 		if ( ( matchAllVersions == true ) ||
@@ -163,8 +161,6 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 			continue;
 		}
 	}
-	
-// 	kdDebug() << "2" << endl;
 	
 	return matchingVersions;
 	

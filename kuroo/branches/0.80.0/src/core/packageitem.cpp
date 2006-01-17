@@ -27,7 +27,8 @@
 #include <kiconloader.h>
 
 /**
- * KListViewItem subclass to implement sorting, tooltip, color...
+ * @class PackageItem
+ * @short KListViewItem subclass to implement sorting, tooltip, color...
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
@@ -51,7 +52,8 @@ PackageItem::~PackageItem()
  */
 void PackageItem::init()
 {
-	// Load icons for category, package ...
+	// Load icons for category, package ... 
+	// @fixme: Optimize by loading in listview and pass pointer?
 	KIconLoader *ldr = KGlobal::iconLoader();
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
@@ -72,11 +74,6 @@ void PackageItem::setStatus( int status )
 {
 	switch ( status ) {
 		
-		case NONE :
-// 			meta = NONE;
-// 			repaint();
-			break;
-		
 		case INSTALLED :
 			setPixmap( 0, pxInstalled );
 			break;
@@ -85,61 +82,18 @@ void PackageItem::setStatus( int status )
 			setPixmap( 0, pxPackage );
 			break;
 		
-		case TESTING :
-			break;
-		
-		case UNTESTING :
-			break;
-		
 		case QUEUED :
 			m_isQueued = true;
 			setPixmap( 1, pxQueued );
 			break;
 		
-		case NOTQUEUED : {
+		case NOTQUEUED :
 			m_isQueued = false;
-			setPixmap( 1, NULL );
+			setPixmap( 1, 0 );
 			repaint();
-		}
+		
 	}
 }
-
-/**
- * View package masked status by changing name text color.
- * @param p
- * @param cq
- * @param column
- * @param width
- * @param alignment
- */
-// void PackageItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
-// {
-// 	QColorGroup _cg( cg );
-// 	QFont font( p->font() );
-// 	
-// 	if ( column == 0 ) {
-// 		switch ( meta ) {
-// 			case NONE :
-// 				font.setBold(false);
-// 				p->setFont(font);
-// 				_cg.setColor( QColorGroup::Text, Qt::black );
-// 				break;
-// 			
-// 			case TESTING :
-// 				font.setBold(true);
-// 				p->setFont(font);
-// 				_cg.setColor( QColorGroup::Text, KurooConfig::maskedColor() );
-// 				break;
-// 			
-// 			case UNTESTING : {
-// 				font.setBold(true);
-// 				p->setFont(font);
-// 				_cg.setColor( QColorGroup::Text, KurooConfig::unmaskedColor() );
-// 			}
-// 		}
-// 	}
-// 	KListViewItem::paintCell( p, _cg, column, width, alignment );
-// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Accessor methods

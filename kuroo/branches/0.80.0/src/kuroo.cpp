@@ -67,9 +67,7 @@ Kuroo::Kuroo()
 	setupActions();
 	statusBar();
 	setupGUI();
-	
-	toolBar()->hide();
-	
+		
 	// Add system tray icon
 	SystemTray *systemTray = new SystemTray( this );
 	systemTray->show();
@@ -85,7 +83,6 @@ Kuroo::Kuroo()
 	
 	// Kuroo must initialize with db first
 	SignalistSingleton::Instance()->setKurooReady( false );
-// 	slotBusy( true );
 	
 	// Zack Rusin's delayed initialization technique
 	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
@@ -106,17 +103,14 @@ void Kuroo::setupActions()
 	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
 	                    this, SLOT( introWizard() ), actionCollection(), "wizard" );
 	
-	actionRefreshPortage = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
+	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_R ),
 	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	
-	actionRefreshUpdates = new KAction( i18n("&Refresh"), 0, KShortcut( CTRL + Key_R ),
+	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_R ),
 	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh_updates" );
 	
-	actionSyncPortage = new KAction( i18n("&Sync"), 0, KShortcut( CTRL + Key_S ),
+	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
 	                          this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
-	
-	actionRefreshPortage->setToolTip( i18n("Refresh Portage view") );
-	actionSyncPortage->setToolTip( i18n("Synchronize Portage with Gentoo mirrors") );
 	
 	createGUI();
 }
@@ -126,10 +120,14 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy( bool busy )
 {
-	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() )
+	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
 		actionRefreshPortage->setEnabled( false );
-	else
+		actionRefreshUpdates->setEnabled( false );
+	}
+	else {
 		actionRefreshPortage->setEnabled( true );
+		actionRefreshUpdates->setEnabled( true );
+	}
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() )
 		actionSyncPortage->setEnabled( false );
@@ -139,6 +137,7 @@ void Kuroo::slotBusy( bool busy )
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		actionRefreshPortage->setEnabled( false );
+		actionRefreshUpdates->setEnabled( false );
 		actionSyncPortage->setEnabled( false );
 	}
 }

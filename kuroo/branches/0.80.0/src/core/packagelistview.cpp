@@ -26,7 +26,8 @@
 #include "tooltip.h"
 
 /**
- * Base class for listViews containing packages.
+ * @class PackageListView
+ * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
 	: KListView( parent, name )
@@ -253,16 +254,16 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  * @param id
  * @param true/false
  */
-void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
-{
-	if ( id.isEmpty() || !packageIndex[id] )
-		return;
-
-	if ( isUnmasked )
-		packageIndex[id]->setStatus( UNTESTING );
-	else
-		packageIndex[id]->setStatus( NONE );
-
-}
+// void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
+// {
+// 	if ( id.isEmpty() || !packageIndex[id] )
+// 		return;
+// 
+// 	if ( isUnmasked )
+// 		packageIndex[id]->setStatus( UNTESTING );
+// 	else
+// 		packageIndex[id]->setStatus( NONE );
+// 
+// }
 
 #include "packagelistview.moc"

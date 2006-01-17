@@ -62,21 +62,11 @@ protected:
  	 */
 	void			init();
 	
-	/**
- 	 * Mark package as "masked"/"unmasked"/"present in queue" with text formating.
-	 * @param p
-	 * @param cq
-	 * @param column
-	 * @param width
-	 * @param alignment
-	 */
-// 	virtual void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-	
 private:
 	int				meta;
 	QString			m_id, m_name, m_status, m_packageTip, m_description;
 	QListView		*m_parent;
-	QPixmap 		pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked, pxQueued;
+	QPixmap 		pxPackage, pxInstalled, pxQueued;
 	bool			m_isQueued;
 
 };

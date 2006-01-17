@@ -24,7 +24,8 @@
 #include <qtimer.h>
 
 /**
- * Thread for adding packages to the queue in db. Used by other views.
+ * @class AddQueuePackageIdListJob
+ * @short Thread for adding packages to the queue in db. Used by other views.
  */
 class AddQueuePackageIdListJob : public ThreadWeaver::DependentJob
 {
@@ -66,7 +67,8 @@ private:
 };
 
 /**
- * Thread for removing packages from the queue in db.
+ * @class RemoveQueuePackageIdListJob
+ * @short Thread for removing packages from the queue in db.
  */
 class RemoveQueuePackageIdListJob : public ThreadWeaver::DependentJob
 {
@@ -89,7 +91,8 @@ private:
 };
 
 /**
- * Thread for setting queue in db to packages list.
+ * @class InstallQueueJob
+ * @short Thread for setting queue in db to packages list.
  */
 class InstallQueueJob : public ThreadWeaver::DependentJob
 {
@@ -132,8 +135,8 @@ private:
 };
 
 /**
- * Object for packages to be emerged = installation queue.
- * @fixme: manage the cache.
+ * @class Queue
+ * @short Object for packages to be emerged = installation queue.
  */
 Queue::Queue( QObject* m_parent )
 	: QObject( m_parent )

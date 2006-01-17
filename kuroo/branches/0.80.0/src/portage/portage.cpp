@@ -27,7 +27,8 @@
 #include <unistd.h>
 
 /**
- * Object handling the Portage tree.
+ * @class Portage
+ * @short Object handling the Portage tree.
  */
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )

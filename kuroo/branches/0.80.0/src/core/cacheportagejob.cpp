@@ -28,7 +28,8 @@
 #include <qfileinfo.h>
 
 /**
- * Thread to cache package information from the Portage directory to speed up portage refreshing.
+ * @class CachePortageJob
+ * @short Thread to cache package information from the Portage directory to speed up portage refreshing.
  * In order to get progress in gui progressbar, packages are counted first.
  * Next portage cache in KurooConfig::dirEdbDep() is scanned for package sizes, and stored in portage cache map,
  * and in the table "cache" in the database.
@@ -116,7 +117,8 @@ bool CachePortageJob::doJob()
 		
 		// Abort the scan
 		if ( isAborted() ) {
-			kdDebug() << i18n("Caching aborted") << endl;
+			kdDebug() << i18n("Caching aborted.") << endl;
+			setStatus( "CachePortage", i18n("Caching aborted.") );
 			return false;
 		}
 		
@@ -133,7 +135,8 @@ bool CachePortageJob::doJob()
 				
 				// Abort the scan
 				if ( isAborted() ) {
-					kdDebug() << i18n("Caching aborted") << endl;
+					kdDebug() << i18n("Caching aborted.") << endl;
+					setStatus( "CachePortage", i18n("Caching aborted.") );
 					return false;
 				}
 				
@@ -175,7 +178,8 @@ bool CachePortageJob::doJob()
 		
 		// Abort the scan
 		if ( isAborted() ) {
-			kdDebug() << i18n("Caching aborted") << endl;
+			kdDebug() << i18n("Caching aborted.") << endl;
+			setStatus( "CachePortage", i18n("Caching aborted.") );
 			return false;
 		}
 
@@ -192,7 +196,8 @@ bool CachePortageJob::doJob()
 				
 				// Abort the scan
 				if ( isAborted() ) {
-					kdDebug() << i18n("Caching aborted") << endl;
+					kdDebug() << i18n("Caching aborted.") << endl;
+					setStatus( "CachePortage", i18n("Caching aborted.") );
 					return false;
 				}
 				

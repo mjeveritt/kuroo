@@ -27,7 +27,8 @@
 #include <kio/job.h>
 
 /**
- * Object for handling etc-updates.
+ * @class EtcUpdate
+ * @short Object for handling etc-updates.
  * The external diff tool is launched for merging changes in etc config files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )

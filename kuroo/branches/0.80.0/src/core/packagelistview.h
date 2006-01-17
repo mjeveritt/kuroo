@@ -117,7 +117,7 @@ protected slots:
 	* @param idDB
 	* @param true/false
 	*/
-	virtual void 			slotSetUnmasked( const QString& name, bool b );
+// 	virtual void 			slotSetUnmasked( const QString& name, bool b );
 	
 protected:
 	

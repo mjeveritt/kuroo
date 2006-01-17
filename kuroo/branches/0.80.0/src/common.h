@@ -80,11 +80,8 @@ enum LogActions {
 
 // Individual package item state
 enum packageStatus { 
-		NONE, 
-		CATEGORY, 
 		INSTALLED, 
 		PACKAGE, 
-		UNTESTING, 
 		QUEUED, 
 		NOTQUEUED 
 };

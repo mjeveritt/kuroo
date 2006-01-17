@@ -33,7 +33,7 @@ Message* Message::s_instance = 0;
  * @short Convenience singleton dialog for simple messages to user.
  */
 Message::Message( QWidget *parent, const char *name )
-	: KDialogBase( parent, name, false ), base(0)
+	: KDialogBase( parent, name, false ), base( 0 )
 {
 	s_instance = this;
 	base = new MessageBase(this);
@@ -54,9 +54,9 @@ Message::~Message()
  */
 void Message::prompt( const QString& caption, const QString& label, const QStringList& text )
 {
-	setCaption(caption);
-	setLabel(label);
-	setText(text);
+	setCaption( caption );
+	setLabel( label );
+	setText( text );
 	setInitialSize( QSize(600, 300) );
 	show();
 }
@@ -67,7 +67,7 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
  */
 void Message::setText( const QStringList& lines )
 {
-	base->messageText->setText( lines.join("\n") );
+	base->messageText->setText( lines.join("<br>") );
 }
 
 void Message::setLabel( const QString& label )

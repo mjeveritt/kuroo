@@ -51,7 +51,7 @@ public:
 	 * @param output		line of text.
 	 * @param i			type of log = EMERGE, KUROO, WARNING, TOLOG, EMERGELOG.
 	 */
-	void 			writeLog( const QString& output, int i );
+	void 			writeLog( const QString& output, int logType );
 
 public slots:
 	QString			init( QObject *parent = 0 );

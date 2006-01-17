@@ -81,7 +81,7 @@ QString PackageListView::currentId()
 	if ( item )
 		return item->id();
 	else
-		return NULL;
+		return QString::null;
 }
 
 /**

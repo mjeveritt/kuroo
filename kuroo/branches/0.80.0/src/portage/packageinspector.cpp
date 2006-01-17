@@ -46,7 +46,7 @@
  * @short The package Inspector dialog for editing settings.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( NULL ), package( NULL ), m_portagePackage( 0 ), 
+	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( QString::null ), package( QString::null ), m_portagePackage( 0 ), 
 	hasVersionSettingsChanged( false ), hasUseSettingsChanged( false ), 
 	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
 	hardMaskComment( QString::null )
@@ -155,7 +155,7 @@ void PackageInspector::showHardMaskInfo()
 			"<font size=\"+2\">" + package + "</font> " + 
 			"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
 			hardMaskInfo.last() + "<br><br>" +
-			"Rule <i>" + hardMaskInfo.first() + "</i>";
+			"Hardmask rule: <i>" + hardMaskInfo.first() + "</i>";
 	}
 	else
 		dialog->infoHardMasked->setText( QString::null );

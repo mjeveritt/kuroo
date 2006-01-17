@@ -270,7 +270,7 @@ bool Emerge::checkUpdates()
 void Emerge::readFromStdout( KProcIO *proc )
 {
 	QString line;
-	static QString lineOver(NULL);
+	static QString lineOver( QString::null );
 	static bool lastLineFlag = false;
 	static bool completedFlag = false;
 	static QString importantMessagePackage;

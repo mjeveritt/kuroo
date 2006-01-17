@@ -44,7 +44,7 @@ static int packageCount( 0 );
  * @short Package item with all versions.
  */
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status )
-	: PackageItem( parent, name, id, description, status ), m_homepage( homepage ), m_category( NULL ), hasDetailedInfo( false )
+	: PackageItem( parent, name, id, description, status ), m_homepage( homepage ), m_category( QString::null ), hasDetailedInfo( false )
 {
 }
 
@@ -320,7 +320,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
 	setSorting( -1 );
 	resetListView();
-	setHeader( NULL );
+	setHeader( QString::null );
 	
 	// Don't load all packages, only first ROWLIMIT
 	packageCount = packageList.size() / 6;

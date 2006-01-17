@@ -103,11 +103,11 @@ void Kuroo::setupActions()
 	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
 	                    this, SLOT( introWizard() ), actionCollection(), "wizard" );
 	
-	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_R ),
-	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
+	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	
-	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_R ),
-	                             m_view->tabPortage , SLOT( slotRefresh() ), actionCollection(), "refresh_updates" );
+	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
+	                                    UpdatesSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_updates" );
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
 	                          this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
@@ -163,11 +163,6 @@ void Kuroo::slotSync()
 			     
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
-			actionSyncPortage->setEnabled( false );
-			break;
-		
-// 		case KMessageBox::No:
-// 			actionSync->setEnabled( true );
 		
 	}
 }

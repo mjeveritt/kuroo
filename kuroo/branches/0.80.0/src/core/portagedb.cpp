@@ -554,7 +554,7 @@ QString KurooDB::package( const QString& id )
 	else
 		kdDebug() << i18n("Can not find package in database for id %1.").arg( id ) << endl;
 	
-	return NULL;
+	return QString::null;
 }
 
 /**
@@ -571,7 +571,7 @@ QString KurooDB::category( const QString& id )
 	else
 		kdDebug() << i18n("Can not find category in database for id %1.").arg( id ) << endl;
 	
-	return NULL;
+	return QString::null;
 }
 
 /**
@@ -591,7 +591,7 @@ QString KurooDB::packageId( const QString& category, const QString& name )
 	else
 		kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 	
-	return NULL;
+	return QString::null;
 }
 
 /**

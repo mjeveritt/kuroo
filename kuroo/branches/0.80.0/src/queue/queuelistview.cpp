@@ -285,7 +285,7 @@ QString QueueListView::timeFormat( const QString& time )
 		return loc->formatTime( emergeTime, true, true );
 	}
 	else
-		return NULL;
+		return QString::null;
 }
 
 /**

@@ -153,7 +153,7 @@ QString History::packageTime( const QString& packageNoversion )
 	if ( itMap != m_statisticsMap.end() )
 		return QString::number( itMap.data().emergeTime() / itMap.data().count() );
 	else
-		return NULL;
+		return QString::null;
 }
 
 /**

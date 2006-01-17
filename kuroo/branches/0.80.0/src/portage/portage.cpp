@@ -138,7 +138,7 @@ QString Portage::cacheFind( const QString& package )
 	if ( it != mapCache.end() )
 		return it.data();
 	else
-		return NULL;
+		return QString::null;
 }
 
 /**

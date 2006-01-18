@@ -53,7 +53,8 @@
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
-	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 ), tabMerge( 0 )
+	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 ), tabMerge( 0 ),
+	hasHistoryRestored( false )
 {
 	viewMenu->setCursor( KCursor::handCursor() );
 	
@@ -119,7 +120,10 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
+	// After db is recreated because of new version restore data
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
+		hasHistoryRestored = true;
+		
 		switch( KMessageBox::warningContinueCancel( this,
 			i18n( "<qt>Kuroo database is empty!<br>"
 			     "Kuroo will now first scan your emerge log to create the emerge history. "
@@ -170,6 +174,10 @@ void KurooView::slotReset()
  */
 void KurooView::slotCheckPortage()
 {
+	// After db is recreated because of new version restore data
+	if ( hasHistoryRestored )
+		KurooDBSingleton::Instance()->restoreBackup();
+	
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
@@ -188,7 +196,6 @@ void KurooView::slotCheckPortage()
 		
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );
-// 		SignalistSingleton::Instance()->setKurooBusy( false );
 	}
 }
 

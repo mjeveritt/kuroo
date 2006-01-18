@@ -262,17 +262,10 @@ void KurooDB::createTables( DbConnection *conn )
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " idDepend INTEGER, "
+	      " use VARCHAR(255), "
+	      " size VARCHAR(32), "
 	      " version VARCHAR(32) "
 	      " );", conn);
-	
-	query(" CREATE TABLE results ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER UNIQUE, "
-	      " package VARCHAR(64), "
-	      " size VARCHAR(32), "
-	      " use VARCHAR(255), "
-	      " flags VARCHAR(32))"
-	      " ;", conn);
 	
 	query(" CREATE TABLE history ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -335,6 +328,90 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idPackage INTEGER UNIQUE, "
 	      " use VARCHAR(255) )"
 	      " ;", conn);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Database management
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Backup to file data which can not be recreated, fex history.einfo and mergeHistory.source/destination
+ */
+void KurooDB::backupDb()
+{
+	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo NOTNULL; " );
+	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream( &file );
+		foreach ( historyData ) {
+			QString timestamp = *it++;
+			QString einfo = *it;
+			stream << timestamp << "\n" << einfo << "\n";
+		}
+		file.close();
+	}
+	else
+		kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+	
+	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory; " );
+	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream( &file );
+		foreach ( mergeData ) {
+			QString timestamp = *it++;
+			QString source = *it++;
+			QString destination = *it;
+			stream << timestamp << "\n" << source << "\n" << destination << "\n";
+		}
+		file.close();
+	}
+	else
+		kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+}
+
+/**
+ * Restore data to tables history and mergeHistory
+ */
+void KurooDB::restoreBackup()
+{
+	// Restore einfo into table history
+	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
+	QTextStream stream( &file );
+	QStringList lines;
+	if ( !file.open( IO_ReadOnly ) )
+		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+	else {
+		while ( !stream.atEnd() )
+			lines += stream.readLine();
+		file.close();
+	}
+	
+	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
+		QString timestamp = *it++;
+		QString einfo = *it;
+		query( "UPDATE history SET einfo = '" + einfo + "' WHERE timestamp = '" + timestamp + "';" );
+	}
+	
+	// Restore source and destination into table mergeHistory
+	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
+	stream.setDevice( &file );
+	lines.clear();
+	if ( !file.open( IO_ReadOnly ) )
+		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+	else {
+		while ( !stream.atEnd() )
+			lines += stream.readLine();
+		file.close();
+	}
+	
+	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
+		QString timestamp = *it++;
+		QString source = *it++;
+		QString destination = *it;
+		query( "INSERT INTO mergeHistory (timestamp, source, destination) "
+		       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -820,7 +897,7 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 QStringList KurooDB::allQueuePackages()
 {
 	return query( " SELECT package.id, catSubCategory.name, package.name, "
-	              " package.description, package.meta, queue.idDepend, queue.version "
+	              " package.description, package.meta, queue.idDepend, queue.use, queue.size, queue.version "
 	              " FROM queue, catSubCategory, package "
 	              " WHERE queue.idPackage = package.id "
 	              " AND catSubCategory.id = package.idCatSubCategory "
@@ -833,19 +910,6 @@ QStringList KurooDB::allQueuePackages()
 QStringList KurooDB::allQueueId()
 {
 	return query( " SELECT idPackage FROM queue;" );
-}
-
-/**
- * Return all results packages.
- */
-QStringList KurooDB::allResultPackages()
-{
-	return query( QString(" SELECT package.id, results.package, package.description,"
-	                      " results.size, results.use, results.flags, package.meta "
-	                      " FROM results, catSubCategory, package "
-	                      " WHERE results.idPackage = package.id "
-	                      " AND catSubCategory.id = package.idCatSubCategory "
-	                      " ORDER BY results.id LIMIT %1;").arg(ROWLIMIT) );
 }
 
 /**

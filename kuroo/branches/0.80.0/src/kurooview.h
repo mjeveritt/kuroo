@@ -94,6 +94,7 @@ private slots:
 	
 private:
 	IconListItem	*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
+	bool			hasHistoryRestored;
 };
 
 class KurooView::IconListItem : public QListBoxItem

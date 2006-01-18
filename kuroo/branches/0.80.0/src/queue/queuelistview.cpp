@@ -140,7 +140,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Duration" ) );
 	addColumn( i18n( "Size" ) );
-	addColumn( i18n( "Description" ) );
+	addColumn( i18n( "Use Flags" ) );
 	addColumn( i18n( "Progress" ) );
 	
 	setProperty( "selectionMode", "Extended" );
@@ -211,25 +211,27 @@ void QueueListView::insertPackageList()
 		QString description = *it++;
 		QString meta = *it++;
 		QString idDepend = *it++;
+		QString useFlags = *it++;
+		QString size = *it++;
 		QString version = *it;
 
 		// Get package emerge duration from statistics
 		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
 		
 		// If version get size also
-		QString size;
-		if ( !version.isEmpty() )
-			size = KurooDBSingleton::Instance()->versionSize( id, version );
+// 		QString size;
+// 		if ( !version.isEmpty() )
+// 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category + "/" + name, id, description, meta, duration.toInt() );
+			item = new QueueItem( this, category + "/" + name, id, useFlags, meta, duration.toInt() );
 			item->setOpen( true );
 			item->setChecked( false );
 		}
 		else {
 			PackageItem* itemDepend = this->itemId( idDepend );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration.toInt() );
+				item = new QueueItem( itemDepend, category + "/" + name, id, useFlags, meta, duration.toInt() );
 		}
 		
 		// Add package info

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>718</width>
-            <height>566</height>
+            <width>723</width>
+            <height>549</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -88,7 +88,7 @@
                         <number>5</number>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Show Packages matching&lt;/b&gt;</string>
+                        <string>&lt;font size="+1"&gt;Show Packages matching&lt;/font&gt;</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="1" column="0">
@@ -347,7 +347,7 @@
                             <property name="minimumSize">
                                 <size>
                                     <width>500</width>
-                                    <height>350</height>
+                                    <height>300</height>
                                 </size>
                             </property>
                         </widget>
@@ -358,7 +358,7 @@
                             <property name="sizePolicy">
                                 <sizepolicy>
                                     <hsizetype>5</hsizetype>
-                                    <vsizetype>3</vsizetype>
+                                    <vsizetype>1</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>

@@ -41,7 +41,7 @@ public slots:
 	void			refresh();
 	
 	/**
- 	 * Add packages to the results table in the db
+ 	 * Add packages to the queue table in the db
  	 * @param packageList
  	 */
 	void 			addPackageList( const EmergePackageList &packageList );

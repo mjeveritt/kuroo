@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>531</width>
-            <height>391</height>
+            <width>539</width>
+            <height>359</height>
         </rect>
     </property>
     <property name="caption">
@@ -142,7 +142,7 @@
                         <number>0</number>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Etc-update History&lt;/b&gt;</string>
+                        <string>&lt;font size="+1"&gt;Etc-update History&lt;/font&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

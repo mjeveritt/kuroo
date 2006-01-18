@@ -83,23 +83,31 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
 	kdDebug() << "databaseFile=" << databaseFile << endl;
 	
-	// Check db structure version
 	QString database = KUROODIR + KurooConfig::databas();
-	if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->kurooDbVersion() ) {
-		
-		// Old db structure, must delete old db
-		KurooDBSingleton::Instance()->destroy();
-		remove( database );
-		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
-		
-		// and recreate with new structure
-		KurooDBSingleton::Instance()->init( this );
+	if ( KurooDBSingleton::Instance()->kurooDbVersion().isEmpty() ) {
 		KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
 		
 		// Give permissions to portage:portage to access the db also
 		chmod( databaseFile, 0660 );
 		chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
 	}
+	else // Check db structure version
+		if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->kurooDbVersion() ) {
+			
+			// Old db structure, must delete old db and backup history 
+			KurooDBSingleton::Instance()->backupDb();
+			KurooDBSingleton::Instance()->destroy();
+			remove( database );
+			kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+			
+			// and recreate with new structure
+			KurooDBSingleton::Instance()->init( this );
+			KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
+			
+			// Give permissions to portage:portage to access the db also
+			chmod( databaseFile, 0660 );
+			chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
+		}
 	
 	// Initialize singletons objects
 	EtcUpdateSingleton::Instance()->init( this );

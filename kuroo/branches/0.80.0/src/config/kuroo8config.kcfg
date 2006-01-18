@@ -29,6 +29,12 @@
 		<entry name="databas" type="String">
 		<default>portage8.db</default>
 		</entry>
+		<entry name="FileHistoryBackup" type="String">
+		<default>history.bak</default>
+		</entry>
+		<entry name="FileMergeBackup" type="String">
+		<default>merge.bak</default>
+		</entry>
 		<entry name="DirDbPkg" type="String">
 		<default>/var/db/pkg</default>
 		</entry>

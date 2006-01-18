@@ -155,7 +155,7 @@ void PackageInspector::showHardMaskInfo()
 			"<font size=\"+2\">" + package + "</font> " + 
 			"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
 			hardMaskInfo.last() + "<br><br>" +
-			"Hardmask rule: <i>" + hardMaskInfo.first() + "</i>";
+			"Hardmask rule: <i>\"" + hardMaskInfo.first() + "\"</i>";
 	}
 	else
 		dialog->infoHardMasked->setText( QString::null );
@@ -187,12 +187,12 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 {
 // 	kdDebug() << "PackageInspector::edit" << endl;
 	
-// 	if ( !KUser().isSuperUser() ) {
-// 		enableButtonApply( false );
-// 		dialog->groupSelectStability->setDisabled( true );
-// 		dialog->groupAdvanced->setDisabled( true );
-// 		dialog->useView->setDisabled( true );
-// 	}
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->groupAdvanced->setDisabled( true );
+		dialog->useView->setDisabled( true );
+	}
 	
 	// Is it first time we load this package
 	if ( m_id != portagePackage->id() ) {

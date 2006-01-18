@@ -53,14 +53,16 @@ public:
 			// We found a dependency, add it
 			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {
 				KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO queue (idPackage, idDepend, version) "
-					"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( idPackage ).arg( (*it).version ) );
+					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
+					"VALUES ('%1', '%2', '%3', '%4', '%5')"
+					";" ).arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ) );
 			}
 			else {
 				idPackage = id;
 				KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO queue (idPackage, idDepend, version) "
-					"VALUES ('%1', '0', '%2');" ).arg( id ).arg( (*it).version ) );
+					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
+					"VALUES ('%1', '0', '%2', '%3', '%4')"
+					";" ).arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ) );
 			}
 		}
 		return true;
@@ -108,6 +110,8 @@ void Results::refresh()
  */
 void Results::addPackageList( const EmergePackageList &packageList )
 {
+	kdDebug() << "Results::addPackageList " << packageList.isEmpty() << endl;
+	
 	if ( !packageList.isEmpty() )
 		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
 }

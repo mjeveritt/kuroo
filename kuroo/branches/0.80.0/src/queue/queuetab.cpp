@@ -196,7 +196,6 @@ void QueueTab::slotGo()
 	// First we must run emerge pretend
 	if ( !m_hasCheckedQueue ) {
 		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
-		m_hasCheckedQueue = true;
 		return;
 	}
 	

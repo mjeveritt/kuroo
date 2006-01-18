@@ -287,7 +287,7 @@ void PortageTab::slotPackage()
 	QString package( packagesView->currentPortagePackage()->name() );
 	QString category( packagesView->currentPortagePackage()->category() );
 	
-	QString lines = "<font size=\"+2\">" + package + "</font> ";
+	QString lines = "<font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ") <br>";
 			lines += packagesView->currentPortagePackage()->description() + "<br>";

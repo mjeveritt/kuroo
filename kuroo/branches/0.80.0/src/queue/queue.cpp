@@ -38,6 +38,8 @@ public:
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER, "
 		                                    " idDepend INTEGER, "
+		                                    " use VARCHAR(255), "
+		                                    " size VARCHAR(32), "
 		                                    " version VARCHAR(32) "
 		                                    " );", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
@@ -106,6 +108,8 @@ public:
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " idDepend INTEGER, "
+		                                    " use VARCHAR(255), "
+		                                    " size VARCHAR(32), "
 		                                    " version VARCHAR(32) "
 		                                    " );", m_db);
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);

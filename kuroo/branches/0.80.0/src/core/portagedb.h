@@ -158,6 +158,8 @@ public:
 	void 			createTables(DbConnection *conn = NULL);
 	QString		 	kurooDbVersion();
 	void 			setKurooDbVersion( const QString& version );
+	void			backupDb();
+	void			restoreBackup();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
@@ -169,6 +171,7 @@ public:
 	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
 	QString		 	packageId( const QString& category, const QString& name );
 
+	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
@@ -206,12 +209,12 @@ public:
 	void			clearPackageUserMasked( const QString& id );
 	void			clearPackageAvailable( const QString& id );
 	
+	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Queue 
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	allQueuePackages();
 	QStringList		allQueueId();
-	QStringList 	allResultPackages();
 	QStringList 	allHistory();
 	QStringList 	allMergeHistory();
 	QStringList 	lastHistoryEntry();
@@ -219,6 +222,7 @@ public:
 	void			addRefreshTime();
 	void			addBackup( const QString& source, const QString& destination );
 	QStringList 	allStatistic();
+	
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Cache

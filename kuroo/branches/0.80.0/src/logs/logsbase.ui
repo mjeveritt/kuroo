@@ -141,7 +141,7 @@
                         <number>0</number>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Installation Log&lt;/b&gt;</string>
+                        <string>&lt;font size="+1"&gt;Kuroo Log&lt;/font&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

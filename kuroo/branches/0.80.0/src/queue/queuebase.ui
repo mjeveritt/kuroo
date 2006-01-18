@@ -142,7 +142,7 @@
                                     <number>5</number>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;b&gt;Packages in Installation Queue&lt;/b&gt;</string>
+                                    <string>&lt;font size="+1"&gt;Packages in Installation Queue&lt;/font&gt;</string>
                                 </property>
                             </widget>
                             <widget class="Line" row="1" column="0">
@@ -348,10 +348,10 @@
                                     <cstring>cbDownload</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Download all packages &amp;before installing them</string>
+                                    <string>Download all pac&amp;kages before installing them</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+B</string>
+                                    <string>Alt+K</string>
                                 </property>
                             </widget>
                         </grid>

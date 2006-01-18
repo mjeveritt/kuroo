@@ -111,7 +111,7 @@ void HistoryListView::loadFromDB()
 		QString timeStamp = *it++;
 		QString package = *it++;
 		QString duration = *it++;
-		QString einfo = (*it).section( ":<br>", 1, 1 );
+		QString einfo = *it;
 		einfo.replace( "&gt;", ">" ).replace( "&lt;", "<" );
 		
 		// Convert emerge date to local date format

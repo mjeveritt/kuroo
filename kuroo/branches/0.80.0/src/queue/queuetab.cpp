@@ -216,7 +216,7 @@ void QueueTab::slotGo()
 	}
 	else {
 		switch( KMessageBox::questionYesNoList( this, 
-			i18n("Do you want to emerge following packages?"), packageList, i18n("Installation queue") ) ) {
+			i18n("Do you want to install following packages?"), packageList, i18n("Installation queue") ) ) {
 			case KMessageBox::Yes: {
 				QueueSingleton::Instance()->installPackageList( packageList );
 				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );

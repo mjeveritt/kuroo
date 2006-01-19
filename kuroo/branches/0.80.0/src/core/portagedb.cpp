@@ -22,7 +22,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "portagedb.h"
 #include "common.h"
 
 #include <math.h>                 //DbConnection::sqlite_power()
@@ -439,7 +438,7 @@ QStringList KurooDB::allSubCategories()
 
 /**
  * Return all categories which have packages matching the filter and the text.
- * @param filter	packages status as FILTERALL, FILTERINSTALLED or FILTERUPDATES
+ * @param filter	packages status as FILTER_ALL, FILTER_INSTALLED or FILTER_UPDATES
  * @param text		search string
  */
 QStringList KurooDB::portageCategories( int filter, const QString& text )
@@ -451,17 +450,17 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
 	
 	switch ( filter ) {
-		case FILTERALL:
+		case FILTER_ALL:
 			filterQuery = QString::null;
 			if ( !text.isEmpty() )
 				textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%')";
 			break;
 			
-		case FILTERINSTALLED:
-			filterQuery = " WHERE package.meta != " + FILTERALL_STRING;
+		case FILTER_INSTALLED:
+			filterQuery = " WHERE package.meta != " + FILTER_ALL_STRING;
 			break;
 			
-		case FILTERUPDATES:
+		case FILTER_UPDATES:
 			filterQuery = " WHERE package.updateVersion != '' ";
 	}
 	
@@ -472,7 +471,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 /**
  * Return all subcategories which have packages matching the filter and the text in this category.
  * @param categoryId 	category id
- * @param filter		packages status as FILTERALL, FILTERINSTALLED or FILTERUPDATES
+ * @param filter		packages status as FILTER_ALL, FILTER_INSTALLED or FILTER_UPDATES
  * @param text			search string
  */
 QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )
@@ -487,15 +486,15 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 	if ( categoryId != "0" ) {
 
 		switch ( filter ) {
-			case FILTERALL:
+			case FILTER_ALL:
 				filterQuery = QString::null;
 				break;
 				
-			case FILTERINSTALLED:
-				filterQuery = " AND package.meta != " + FILTERALL_STRING;
+			case FILTER_INSTALLED:
+				filterQuery = " AND package.meta != " + FILTER_ALL_STRING;
 				break;
 				
-			case FILTERUPDATES:
+			case FILTER_UPDATES:
 				filterQuery = " AND package.updateVersion != '' ";
 		}
 		
@@ -514,7 +513,7 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
  * Return all packages which are matching the filter and the text in this category-subcategory.
  * @param categoryId 	category id
  * @param subCategoryId subcategory id
- * @param filter		packages status as FILTERALL, FILTERINSTALLED or FILTERUPDATES
+ * @param filter		packages status as FILTER_ALL, FILTER_INSTALLED or FILTER_UPDATES
  * @param text			search string
  */
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
@@ -529,17 +528,17 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		
 		if ( subCategoryId == "0" ) {
 			switch ( filter ) {
-				case FILTERALL:
+				case FILTER_ALL:
 					filterQuery = QString::null;
 					if ( !text.isEmpty() )
 						textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
 					break;
 					
-				case FILTERINSTALLED:
-					filterQuery = " WHERE meta != " + FILTERALL_STRING;
+				case FILTER_INSTALLED:
+					filterQuery = " WHERE meta != " + FILTER_ALL_STRING;
 					break;
 					
-				case FILTERUPDATES:
+				case FILTER_UPDATES:
 					filterQuery = " WHERE updateVersion != '' ";
 			}
 			
@@ -550,15 +549,15 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		else {
 			
 			switch ( filter ) {
-				case FILTERALL:
+				case FILTER_ALL:
 					filterQuery = QString::null;
 					break;
 					
-				case FILTERINSTALLED:
-					filterQuery = " AND meta != " + FILTERALL_STRING;
+				case FILTER_INSTALLED:
+					filterQuery = " AND meta != " + FILTER_ALL_STRING;
 					break;
 					
-				case FILTERUPDATES:
+				case FILTER_UPDATES:
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
@@ -572,15 +571,15 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		if ( subCategoryId == "0" ) {
 			
 			switch ( filter ) {
-				case FILTERALL:
+				case FILTER_ALL:
 					filterQuery = QString::null;
 					break;
 					
-				case FILTERINSTALLED:
-					filterQuery = " AND meta != " + FILTERALL_STRING;
+				case FILTER_INSTALLED:
+					filterQuery = " AND meta != " + FILTER_ALL_STRING;
 					break;
 					
-				case FILTERUPDATES:
+				case FILTER_UPDATES:
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
@@ -592,15 +591,15 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		else {
 		
 			switch ( filter ) {
-				case FILTERALL:
+				case FILTER_ALL:
 					filterQuery = QString::null;
 					break;
 					
-				case FILTERINSTALLED:
-					filterQuery = " AND meta != " + FILTERALL_STRING;
+				case FILTER_INSTALLED:
+					filterQuery = " AND meta != " + FILTER_ALL_STRING;
 					break;
 					
-				case FILTERUPDATES:
+				case FILTER_UPDATES:
 					filterQuery = " AND updateVersion != '' ";
 			}
 			

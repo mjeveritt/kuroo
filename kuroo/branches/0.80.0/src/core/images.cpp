@@ -45,11 +45,17 @@ void Images::init( QObject *parent )
 	m_parent = parent;
 	
 	KIconLoader *ldr = KGlobal::iconLoader();
+	
+	pxKuroo = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
+	pxEmerging = ldr->loadIcon( "kuroo1", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
+	
 	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
 	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
 	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
+	
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
+	
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 }
@@ -61,6 +67,14 @@ void Images::init( QObject *parent )
 QPixmap& Images::icon( int state )
 {
 	switch ( state ) {
+		
+		case KUROO_READY:
+			return pxKuroo;
+			break;
+			
+		case KUROO_EMERGING:
+			return pxEmerging;
+			break;
 	
 		case EMPTY:
 			return pxEmpty;

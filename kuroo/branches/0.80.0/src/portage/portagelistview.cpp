@@ -108,7 +108,7 @@ void PortageListView::PortageItem::initVersions()
 		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
 		
-		if ( meta == FILTERINSTALLED_STRING )
+		if ( meta == FILTER_INSTALLED_STRING )
 			version->setInstalled( true );
 		
 		m_versions.append( version );

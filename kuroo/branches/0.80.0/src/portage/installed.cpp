@@ -44,9 +44,9 @@ public:
 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		if ( !id.isEmpty() ) {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
-			                                              "WHERE id = '%2';" ).arg( FILTERINSTALLED_STRING ).arg( id ) );
+			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
-			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERINSTALLED_STRING ).arg( id ).arg( version ) );
+			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ) );
 			return true;
 		}
 		return false;
@@ -85,11 +85,11 @@ public:
 			
 			// Mark package as uninstalled or remove it if old
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
-			                                              "WHERE meta = '%2' AND id = '%3'").arg( FILTERALL_STRING ).arg( FILTERINSTALLED_STRING ).arg( id ) );
+			                                              "WHERE meta = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM package "
-			                                              "WHERE meta = '%1' AND id = '%2';" ).arg( FILTEROLD_STRING ).arg( id ) );
+			                                              "WHERE meta = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ) );
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
-			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTERALL_STRING ).arg( id ).arg( version ) );
+			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ) );
 			
 			return true;
 		}
@@ -136,7 +136,7 @@ void Installed::slotChanged()
  */
 void Installed::slotReset()
 {
-	KurooDBSingleton::Instance()->query( QString( "UPDATE package set installed = '%1';" ).arg( FILTERALL_STRING ) );
+	KurooDBSingleton::Instance()->query( QString( "UPDATE package set installed = '%1';" ).arg( FILTER_ALL_STRING ) );
 	emit signalInstalledReset();
 }
 

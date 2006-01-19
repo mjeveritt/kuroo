@@ -23,9 +23,6 @@
 
 #include <ksystemtray.h>
 
-#include <qpixmap.h>
-
-class KIconLoader;
 
 /**
  * @class SystemTray
@@ -44,11 +41,7 @@ public:
 	
 private slots:
 	void 				slotPreferences();
-	void				slotBusy( bool b );
-	
-private:
-	KIconLoader 		*ldr;
-	QPixmap 			pxKuroo, pxEmerging;
+	void				slotBusy( bool busy );
 
 signals:
 	void				signalPreferences();

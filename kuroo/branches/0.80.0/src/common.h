@@ -61,15 +61,15 @@ typedef Singleton<PortageFiles> PortageFilesSingleton;
 
 // The package states used by the filters
 enum packageFilters { 
-		FILTERALL, 
-		FILTERINSTALLED, 
-		FILTERUPDATES, 
-		FILTEROLD 
+		FILTER_ALL, 
+		FILTER_INSTALLED, 
+		FILTER_UPDATES, 
+		FILTER_OLD 
 };
 
-static const QString FILTERALL_STRING( QString::number( FILTERALL ) );
-static const QString FILTERINSTALLED_STRING( QString::number( FILTERINSTALLED ) );
-static const QString FILTEROLD_STRING( QString::number( FILTEROLD ) );
+static const QString FILTER_ALL_STRING( QString::number( FILTER_ALL ) );
+static const QString FILTER_INSTALLED_STRING( QString::number( FILTER_INSTALLED ) );
+static const QString FILTER_OLD_STRING( QString::number( FILTER_OLD ) );
 
 // Log output states
 enum LogActions { 
@@ -80,15 +80,17 @@ enum LogActions {
 		EMERGELOG 
 };
 
-// Individual package item state
-enum packageStatus { 
+// Package and icons
+enum status { 
 		INSTALLED, 
 		PACKAGE, 
 		QUEUED, 
 		NOTQUEUED,
 		UNMERGED,
 		NEW,
-		EMPTY
+		EMPTY,
+		KUROO_READY,
+		KUROO_EMERGING
 };
 
 // The "maskedness" of a package version.

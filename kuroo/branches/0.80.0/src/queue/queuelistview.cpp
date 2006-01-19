@@ -154,8 +154,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 4, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
 	setColumnWidth( 0, 200 );
-	setColumnWidth( 1, 80 );
-	setColumnWidth( 2, 80 );
+	setColumnWidth( 1, 60 );
+	setColumnWidth( 2, 60 );
 	setColumnWidth( 3, 80 );
 	setColumnWidth( 5, 100 );
 	setTooltipColumn( 2 );
@@ -224,14 +224,14 @@ void QueueListView::insertPackageList()
 // 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category + "/" + name, id, useFlags, meta, duration.toInt() );
+			item = new QueueItem( this, category + "/" + name, id, description, meta, duration.toInt() );
 			item->setOpen( true );
 			item->setChecked( false );
 		}
 		else {
 			PackageItem* itemDepend = this->itemId( idDepend );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category + "/" + name, id, useFlags, meta, duration.toInt() );
+				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration.toInt() );
 		}
 		
 		// Add package info
@@ -248,11 +248,11 @@ void QueueListView::insertPackageList()
 		if ( size.isEmpty() )
 			item->setText( 3, i18n("na") );
 		else {
-			item->setText( 3, size );
+			item->setText( 3, size + " kB " );
 			addSize( size );
 		}
 		
-		item->setText( 4, description );
+		item->setText( 4, useFlags );
 		
 		indexPackage( id, item );
 		

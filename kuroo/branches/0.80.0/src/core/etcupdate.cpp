@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "message.h"
-#include "etcupdate.h"
 
 #include <kprocio.h>
 #include <kmessagebox.h>

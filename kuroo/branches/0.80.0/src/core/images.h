@@ -37,7 +37,7 @@ public:
 	
 private:
 	QObject*	m_parent;
-	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxEmpty;
+	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxEmpty, pxKuroo, pxEmerging;
 };
 
 #endif

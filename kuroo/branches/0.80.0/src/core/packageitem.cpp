@@ -51,7 +51,7 @@ PackageItem::~PackageItem()
  */
 void PackageItem::init()
 {
-	if ( m_status != FILTERALL_STRING )
+	if ( m_status != FILTER_ALL_STRING )
 		setStatus( INSTALLED );
 	else
 		setStatus( PACKAGE );

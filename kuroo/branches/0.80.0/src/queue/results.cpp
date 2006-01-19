@@ -19,7 +19,6 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "results.h"
 #include "threadweaver.h"
 
 #include <qvaluestack.h>

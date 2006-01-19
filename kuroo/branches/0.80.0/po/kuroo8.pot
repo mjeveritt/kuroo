@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 20:38+0100\n"
+"POT-Creation-Date: 2006-01-19 19:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgstr ""
 #: core/emerge.cpp:546 core/scanupdatesjob.cpp:143
 #: core/cacheportagejob.cpp:238 core/portagefiles.cpp:134
 #: core/portagefiles.cpp:220 core/portagefiles.cpp:306
-#: core/portagefiles.cpp:392 queue/queuetab.cpp:239 history/history.cpp:264
+#: core/portagefiles.cpp:392 queue/queuetab.cpp:238 history/history.cpp:264
 #: history/history.cpp:265 statusbar.cpp:93
 msgid "Done."
 msgstr ""
@@ -141,8 +141,8 @@ msgstr ""
 msgid "Checking updates..."
 msgstr ""
 
-#: core/emerge.cpp:335 queue/queuelistview.cpp:237 queue/queuelistview.cpp:242
-#: queue/queuelistview.cpp:247
+#: core/emerge.cpp:335 queue/queuelistview.cpp:239 queue/queuelistview.cpp:244
+#: queue/queuelistview.cpp:249
 msgid "na"
 msgstr ""
 
@@ -235,77 +235,89 @@ msgstr ""
 msgid "Updates scan aborted"
 msgstr ""
 
-#: core/portagedb.cpp:555
+#: core/portagedb.cpp:354 core/portagedb.cpp:369 core/portagefiles.cpp:425
+#: core/portagefiles.cpp:466 core/portagefiles.cpp:502
+#: core/portagefiles.cpp:607
+msgid "Error writing: %1."
+msgstr ""
+
+#: core/portagedb.cpp:382 core/portagedb.cpp:400 core/portagefiles.cpp:67
+#: core/portagefiles.cpp:159 core/portagefiles.cpp:245
+#: core/portagefiles.cpp:331 core/portagefiles.cpp:533
+msgid "Error reading: %1."
+msgstr ""
+
+#: core/portagedb.cpp:631
 msgid "Can not find package in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:572
+#: core/portagedb.cpp:648
 msgid "Can not find category in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:592
+#: core/portagedb.cpp:668
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/etcupdate.cpp:57
+#: core/etcupdate.cpp:56
 msgid ""
 "<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to "
 "merge changes?</qt>"
 msgstr ""
 
-#: core/etcupdate.cpp:57 core/etcupdate.cpp:71 core/etcupdate.cpp:174
+#: core/etcupdate.cpp:56 core/etcupdate.cpp:70 core/etcupdate.cpp:173
 msgid "Kuroo"
 msgstr ""
 
-#: core/etcupdate.cpp:71
+#: core/etcupdate.cpp:70
 msgid "Please specify merge tool in settings!"
 msgstr ""
 
-#: core/etcupdate.cpp:80
+#: core/etcupdate.cpp:79
 msgid ""
 "\n"
 "etc-update didn't start. "
 msgstr ""
 
-#: core/etcupdate.cpp:86
+#: core/etcupdate.cpp:85
 msgid ""
 "\n"
 "Running etc-update..."
 msgstr ""
 
-#: core/etcupdate.cpp:157
+#: core/etcupdate.cpp:156
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr ""
 
-#: core/etcupdate.cpp:160
+#: core/etcupdate.cpp:159
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
 msgstr ""
 
-#: core/etcupdate.cpp:160
+#: core/etcupdate.cpp:159
 msgid "etc-update (%1 of %2)"
 msgstr ""
 
-#: core/etcupdate.cpp:173
+#: core/etcupdate.cpp:172
 msgid "%1 didn't start."
 msgstr ""
 
-#: core/etcupdate.cpp:174
+#: core/etcupdate.cpp:173
 msgid "%1 could not start!"
 msgstr ""
 
-#: core/etcupdate.cpp:178
+#: core/etcupdate.cpp:177
 msgid "Merging changes in '%1'."
 msgstr ""
 
-#: core/etcupdate.cpp:187
+#: core/etcupdate.cpp:186
 msgid "Skipping '%1'. etc-update will ask again next time."
 msgstr ""
 
-#: core/etcupdate.cpp:194
+#: core/etcupdate.cpp:193
 msgid "etc-update completed."
 msgstr ""
 
-#: core/etcupdate.cpp:207
+#: core/etcupdate.cpp:206
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr ""
 
@@ -318,12 +330,6 @@ msgstr ""
 #: core/cacheportagejob.cpp:181 core/cacheportagejob.cpp:182
 #: core/cacheportagejob.cpp:199 core/cacheportagejob.cpp:200
 msgid "Caching aborted."
-msgstr ""
-
-#: core/portagefiles.cpp:67 core/portagefiles.cpp:159
-#: core/portagefiles.cpp:245 core/portagefiles.cpp:331
-#: core/portagefiles.cpp:533
-msgid "Error reading: %1."
 msgstr ""
 
 #: core/portagefiles.cpp:80
@@ -349,11 +355,6 @@ msgstr ""
 
 #: core/portagefiles.cpp:418
 msgid "No package keywords found. Saving to %1 aborted!"
-msgstr ""
-
-#: core/portagefiles.cpp:425 core/portagefiles.cpp:466
-#: core/portagefiles.cpp:502 core/portagefiles.cpp:607
-msgid "Error writing: %1."
 msgstr ""
 
 #: core/portagefiles.cpp:459
@@ -400,47 +401,46 @@ msgstr ""
 msgid "Completed saving user package use in %1."
 msgstr ""
 
-#: logs/log.cpp:59 portage/portage.cpp:228 portage/portage.cpp:273
+#: logs/log.cpp:58 portage/portage.cpp:228 portage/portage.cpp:273
 #: portage/portage.cpp:305
 msgid "Error writing: "
 msgstr ""
 
-#: logs/log.cpp:60
+#: logs/log.cpp:59
 msgid "Error writing %1kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:60 portage/portage.cpp:229 config/configdialog.cpp:234
+#: logs/log.cpp:59 portage/portage.cpp:229 config/configdialog.cpp:234
 msgid "Saving"
 msgstr ""
 
-#: queue/queuelistview.cpp:139 portage/portagelistview.cpp:253
-#: portage/portagelistview.cpp:302 portage/portagelistview.cpp:304 rc.cpp:214
+#: queue/queuelistview.cpp:139 portage/portagelistview.cpp:249
+#: portage/portagelistview.cpp:298 portage/portagelistview.cpp:300 rc.cpp:214
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:140 portage/versionview.cpp:71
+#: queue/queuelistview.cpp:140 portage/versionview.cpp:68
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:141 history/historylistview.cpp:49
+#: queue/queuelistview.cpp:141 history/historylistview.cpp:42
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:142 portage/versionview.cpp:73
+#: queue/queuelistview.cpp:142 portage/versionview.cpp:70
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:143 portage/portagelistview.cpp:257 rc.cpp:184
-#, no-c-format
-msgid "Description"
+#: queue/queuelistview.cpp:143
+msgid "Use Flags"
 msgstr ""
 
 #: queue/queuelistview.cpp:144
 msgid "Progress"
 msgstr ""
 
-#: queue/queue.cpp:201 queue/queue.cpp:216
+#: queue/queue.cpp:205 queue/queue.cpp:220
 msgid "Package id is empty, skipping!"
 msgstr ""
 
@@ -468,23 +468,23 @@ msgstr ""
 msgid "Start Installation!"
 msgstr ""
 
-#: queue/queuetab.cpp:210
+#: queue/queuetab.cpp:209
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:210 queue/queuetab.cpp:220
+#: queue/queuetab.cpp:209 queue/queuetab.cpp:219
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:220
-msgid "Do you want to emerge following packages?"
+#: queue/queuetab.cpp:219
+msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:236
+#: queue/queuetab.cpp:235
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:273
+#: queue/queuetab.cpp:272
 msgid "Emerge pretend"
 msgstr ""
 
@@ -496,8 +496,13 @@ msgstr ""
 msgid "Failed to save. Please run as root."
 msgstr ""
 
-#: portage/portagelistview.cpp:256
+#: portage/portagelistview.cpp:252
 msgid "Update"
+msgstr ""
+
+#: portage/portagelistview.cpp:253 rc.cpp:184
+#, no-c-format
+msgid "Description"
 msgstr ""
 
 #: portage/portagetab.cpp:199
@@ -623,11 +628,7 @@ msgstr ""
 msgid "Removing update package: can not match package %1."
 msgstr ""
 
-#: portage/versionview.cpp:70
-msgid " "
-msgstr ""
-
-#: portage/versionview.cpp:72
+#: portage/versionview.cpp:69
 msgid "Stability"
 msgstr ""
 
@@ -736,11 +737,11 @@ msgstr ""
 msgid "terminating"
 msgstr ""
 
-#: history/historylistview.cpp:48 history/mergelistview.cpp:44
+#: history/historylistview.cpp:41 history/mergelistview.cpp:40
 msgid "Date"
 msgstr ""
 
-#: history/historylistview.cpp:50
+#: history/historylistview.cpp:43
 msgid "Emerge info"
 msgstr ""
 
@@ -754,7 +755,7 @@ msgstr ""
 msgid "Ver&bose"
 msgstr ""
 
-#: rc.cpp:9 rc.cpp:52
+#: rc.cpp:9
 #, no-c-format
 msgid "Alt+B"
 msgstr ""
@@ -771,7 +772,7 @@ msgstr ""
 
 #: rc.cpp:18
 #, no-c-format
-msgid "<b>Installation Log</b>"
+msgid "<font size=\"+1\">Kuroo Log</font>"
 msgstr ""
 
 #: rc.cpp:21 rc.cpp:112 rc.cpp:257 rc.cpp:386 rc.cpp:584 rc.cpp:587 rc.cpp:599
@@ -781,7 +782,7 @@ msgstr ""
 
 #: rc.cpp:24
 #, no-c-format
-msgid "<b>Packages in Installation Queue</b>"
+msgid "<font size=\"+1\">Packages in Installation Queue</font>"
 msgstr ""
 
 #: rc.cpp:27
@@ -811,7 +812,12 @@ msgstr ""
 
 #: rc.cpp:49
 #, no-c-format
-msgid "Download all packages &before installing them"
+msgid "Download all pac&kages before installing them"
+msgstr ""
+
+#: rc.cpp:52 rc.cpp:136
+#, no-c-format
+msgid "Alt+K"
 msgstr ""
 
 #: rc.cpp:55 main.cpp:43
@@ -841,7 +847,7 @@ msgstr ""
 
 #: rc.cpp:75
 #, no-c-format
-msgid "<b>Show Packages matching</b>"
+msgid "<font size=\"+1\">Show Packages matching</font>"
 msgstr ""
 
 #: rc.cpp:80
@@ -912,11 +918,6 @@ msgstr ""
 #: rc.cpp:133
 #, no-c-format
 msgid "Mas&ked Version"
-msgstr ""
-
-#: rc.cpp:136
-#, no-c-format
-msgid "Alt+K"
 msgstr ""
 
 #: rc.cpp:139
@@ -1056,12 +1057,12 @@ msgstr ""
 
 #: rc.cpp:244
 #, no-c-format
-msgid "<b>Installation History</b>"
+msgid "<font size=\"+1\">Installation History</font>"
 msgstr ""
 
 #: rc.cpp:254
 #, no-c-format
-msgid "<b>Etc-update History</b>"
+msgid "<font size=\"+1\">Etc-update History</font>"
 msgstr ""
 
 #: rc.cpp:260
@@ -1598,7 +1599,7 @@ msgstr ""
 msgid "Edit your etc-update warning file list"
 msgstr ""
 
-#: config/configdialog.cpp:217 config/configdialog.cpp:268 kurooinit.cpp:162
+#: config/configdialog.cpp:217 config/configdialog.cpp:268 kurooinit.cpp:171
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
@@ -1614,29 +1615,29 @@ msgstr ""
 msgid "No scan"
 msgstr ""
 
-#: kurooinit.cpp:93
+#: kurooinit.cpp:101
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:181
+#: kurooinit.cpp:190
 msgid "Error reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:215
+#: kurooinit.cpp:224
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:215
+#: kurooinit.cpp:224
 msgid "User permissions"
 msgstr ""
 
-#: systemtray.cpp:47
+#: systemtray.cpp:41
 msgid "Kuroo - Portage frontend"
 msgstr ""
 
-#: systemtray.cpp:48
+#: systemtray.cpp:42
 msgid "&Configure Kuroo..."
 msgstr ""
 
@@ -1708,52 +1709,52 @@ msgid ""
 "qt>"
 msgstr ""
 
-#: kurooview.cpp:78
+#: kurooview.cpp:79
 msgid "Packages"
 msgstr ""
 
-#: kurooview.cpp:79
+#: kurooview.cpp:80
 msgid "Queue"
 msgstr ""
 
-#: kurooview.cpp:80
+#: kurooview.cpp:81
 msgid "History"
 msgstr ""
 
-#: kurooview.cpp:81
+#: kurooview.cpp:82
 msgid "Etc-update"
 msgstr ""
 
-#: kurooview.cpp:82
+#: kurooview.cpp:83
 msgid "Log"
 msgstr ""
 
-#: kurooview.cpp:124
+#: kurooview.cpp:128
 msgid ""
 "<qt>Kuroo database is empty!<br>Kuroo will now first scan your emerge log to "
 "create the emerge history. Package information in Portage will be cached.</"
 "qt>"
 msgstr ""
 
-#: kurooview.cpp:126 kurooview.cpp:143
+#: kurooview.cpp:130 kurooview.cpp:147
 msgid "Initialize Kuroo"
 msgstr ""
 
-#: kurooview.cpp:142
+#: kurooview.cpp:146
 msgid ""
 "<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
 "has changed.</qt>"
 msgstr ""
 
-#: kurooview.cpp:143
+#: kurooview.cpp:147
 msgid "Refresh"
 msgstr ""
 
-#: kurooview.cpp:143
+#: kurooview.cpp:147
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:187
+#: kurooview.cpp:195
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 

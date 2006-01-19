@@ -35,8 +35,6 @@ public:
 	void	insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
 	void	usedForInstallation( const QString& version );
 	
-private:
-	QPixmap pxInstalled;
 };
 
 #endif

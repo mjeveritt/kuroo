@@ -64,10 +64,7 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 VersionView::VersionView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxInstalled= ldr->loadIcon( "kuroo_queued", KIcon::Small );
-	
-	addColumn( i18n( " " ) );
+// 	addColumn( i18n( " " ) );
 	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Stability" ) );
 	addColumn( i18n( "Size" ) );
@@ -96,7 +93,7 @@ void VersionView::usedForInstallation( const QString& version )
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
 		if ( myChild->text(1) == version )
-			myChild->setPixmap( 0, pxInstalled );
+			myChild->setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 		myChild = myChild->nextSibling();
 	}
 }

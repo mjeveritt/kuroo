@@ -37,10 +37,6 @@
 MergeListView::MergeListView( QWidget *parent, const char *name )
 	: KListView( parent, name ), loc( KGlobal::locale() )
 {
-	// Load icons for category, package ...
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxPackageHeader = ldr->loadIcon( "kuroo_history", KIcon::Toolbar );
-	
 	addColumn( i18n("Date") );
 	
 	setMinimumSize( QSize(50, 0) );

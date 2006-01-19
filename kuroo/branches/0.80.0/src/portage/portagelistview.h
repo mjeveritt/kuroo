@@ -21,8 +21,6 @@
 #ifndef PORTAGELISTVIEW_H
 #define PORTAGELISTVIEW_H
 
-#include <qpixmap.h>
-
 #include "packagelistview.h"
 #include "packageitem.h"
 
@@ -63,7 +61,6 @@ private slots:
 	
 private:
 	QStringList						unmaskedList;
-	QPixmap 						pxQueuedColumn;
 };
 
 /**

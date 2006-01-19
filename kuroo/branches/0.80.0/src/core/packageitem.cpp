@@ -52,13 +52,6 @@ PackageItem::~PackageItem()
  */
 void PackageItem::init()
 {
-	// Load icons for category, package ... 
-	// @fixme: Optimize by loading in listview and pass pointer?
-// 	KIconLoader *ldr = KGlobal::iconLoader();
-// 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
-// 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
-// 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
-	
 	if ( m_status != FILTERALL_STRING )
 		setStatus( INSTALLED );
 	else

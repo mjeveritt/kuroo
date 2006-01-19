@@ -245,14 +245,10 @@ QValueList<PackageVersion*> PortageListView::PortageItem::sortedVersionList()
 PortageListView::PortageListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
 {
-	// Load icon
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxQueuedColumn = ldr->loadIcon( "kuroo_queued_column", KIcon::Small );
-	
 	// Setup geometry
 	addColumn( i18n( "Package" ) );
 	addColumn( " " );
-	header()->setLabel( 1, pxQueuedColumn, " " );
+	header()->setLabel( 1, ImagesSingleton::Instance()->icon( QUEUED ), " " );
 	addColumn( i18n( "Update" ) );
 	addColumn( i18n( "Description" ) );
 	

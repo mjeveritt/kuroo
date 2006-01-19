@@ -54,10 +54,10 @@ void PackageItem::init()
 {
 	// Load icons for category, package ... 
 	// @fixme: Optimize by loading in listview and pass pointer?
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
-	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
-	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
+// 	KIconLoader *ldr = KGlobal::iconLoader();
+// 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
+// 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
+// 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	
 	if ( m_status != FILTERALL_STRING )
 		setStatus( INSTALLED );
@@ -75,22 +75,21 @@ void PackageItem::setStatus( int status )
 	switch ( status ) {
 		
 		case INSTALLED :
-			setPixmap( 0, pxInstalled );
+			setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 			break;
 			
 		case PACKAGE :
-			setPixmap( 0, pxPackage );
+			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 			break;
 		
 		case QUEUED :
 			m_isQueued = true;
-			setPixmap( 1, pxQueued );
+			setPixmap( 1, ImagesSingleton::Instance()->icon( QUEUED ) );
 			break;
 		
 		case NOTQUEUED :
 			m_isQueued = false;
-			setPixmap( 1, 0 );
-			repaint();
+			setPixmap( 1, ImagesSingleton::Instance()->icon( EMPTY ) );
 		
 	}
 }

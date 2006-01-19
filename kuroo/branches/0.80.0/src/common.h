@@ -27,6 +27,7 @@
 #include <kdebug.h>
 
 #include "settings.h"
+#include "images.h"
 #include "message.h"
 #include "signalist.h"
 #include "emerge.h"
@@ -44,6 +45,7 @@
 #include "singleton.h"
 
 // Define all singleton objects
+typedef Singleton<Images> ImagesSingleton;
 typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
@@ -83,7 +85,10 @@ enum packageStatus {
 		INSTALLED, 
 		PACKAGE, 
 		QUEUED, 
-		NOTQUEUED 
+		NOTQUEUED,
+		UNMERGED,
+		NEW,
+		EMPTY
 };
 
 // The "maskedness" of a package version.

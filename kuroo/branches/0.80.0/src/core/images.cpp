@@ -18,42 +18,74 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef HISTORYLISTVIEW_H
-#define HISTORYLISTVIEW_H
+#include "common.h"
 
-#include <klistview.h>
+#include <qpixmap.h>
 
-class QTime;
-class Package;
-class PackageEmergeTime;
-class KProcIO;
-class KListViewItem;
-
-typedef QMap< QString, QListViewItem* > ItemMap;
-typedef QMap< QString, Package > PackageMap;
-typedef QMap< QString, PackageEmergeTime > EmergeTimeMap;
+#include <kiconloader.h>
 
 /**
- * @class HistoryListView
- * @short Specialized listview for emerge history.
+ * @class Images
+ * @short Initialize images 
  */
-class HistoryListView : public KListView
+Images::Images( QObject* m_parent )
+	: QObject( m_parent )
 {
-Q_OBJECT
-public:
-	HistoryListView( QWidget *parent = 0, const char *name = 0 );
-	~HistoryListView();
-	
-	QString 		current();
-	QStringList 	selected();
-	void 			loadFromDB();
-	
-private:
-	KLocale 		*loc;
-	ItemMap			itemMap;
-	
-signals:
-	void    	signalHistoryLoaded();
-};
+}
 
-#endif
+Images::~Images()
+{
+}
+
+/**
+ * Load icons.
+ */
+void Images::init( QObject *parent )
+{
+	m_parent = parent;
+	
+	KIconLoader *ldr = KGlobal::iconLoader();
+	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
+	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
+	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
+	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
+	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
+	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
+	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
+}
+
+/**
+ * Deliver icons.
+ * @return pointer to pixmap
+ */
+QPixmap& Images::icon( int state )
+{
+	switch ( state ) {
+	
+		case EMPTY:
+			return pxEmpty;
+			break;
+			
+		case INSTALLED:
+			return pxInstalled;
+			break;
+			
+		case PACKAGE:
+			return pxPackage;
+			break;
+			
+		case QUEUED:
+			return pxQueued;
+			break;
+	
+		case UNMERGED:
+			return pxUnmerged;
+			break;
+			
+		case NEW:
+			return pxNew;
+
+	}
+}
+
+#include "images.moc"

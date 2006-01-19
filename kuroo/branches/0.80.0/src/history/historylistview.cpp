@@ -38,13 +38,6 @@
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	: KListView( parent, name ), loc( KGlobal::locale() )
 {
-	// Load icons for category, package ...
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxPackageHeader = ldr->loadIcon( "kuroo_history", KIcon::Toolbar );
-	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
-	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
-	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
-	
 	addColumn( i18n("Date") );
 	addColumn( i18n("Duration") );
 	addColumn( i18n("Emerge info") );
@@ -134,9 +127,9 @@ void HistoryListView::loadFromDB()
 			
 			KListViewItem *item = new KListViewItem( itemMap[ emergeDate ], package );
 			if ( duration.isEmpty() )
-				item->setPixmap( 0, pxUnmerged );
+				item->setPixmap( 0, ImagesSingleton::Instance()->icon( UNMERGED ) );
 			else {
-				item->setPixmap( 0, pxNew );
+				item->setPixmap( 0, ImagesSingleton::Instance()->icon( NEW ) );
 				item->setText( 1, emergeDuration );
 				item->setText( 2, einfo );
 			}

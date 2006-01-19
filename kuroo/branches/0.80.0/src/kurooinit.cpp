@@ -110,9 +110,10 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		}
 	
 	// Initialize singletons objects
-	EtcUpdateSingleton::Instance()->init( this );
+	ImagesSingleton::Instance()->init( this );
 	SignalistSingleton::Instance()->init( this );
 	EmergeSingleton::Instance()->init( this );
+	EtcUpdateSingleton::Instance()->init( this );
 	HistorySingleton::Instance()->init( this );
 	InstalledSingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );

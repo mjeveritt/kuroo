@@ -18,42 +18,26 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef HISTORYLISTVIEW_H
-#define HISTORYLISTVIEW_H
+#ifndef IMAGES_H
+#define IMAGES_H
 
-#include <klistview.h>
+#include <qobject.h>
+#include <qpixmap.h>
 
-class QTime;
-class Package;
-class PackageEmergeTime;
-class KProcIO;
-class KListViewItem;
-
-typedef QMap< QString, QListViewItem* > ItemMap;
-typedef QMap< QString, Package > PackageMap;
-typedef QMap< QString, PackageEmergeTime > EmergeTimeMap;
-
-/**
- * @class HistoryListView
- * @short Specialized listview for emerge history.
- */
-class HistoryListView : public KListView
+class Images : public QObject
 {
 Q_OBJECT
 public:
-	HistoryListView( QWidget *parent = 0, const char *name = 0 );
-	~HistoryListView();
+	Images( QObject *m_parent = 0 );
+    ~Images();
+
+	void 		init( QObject *parent = 0 );
 	
-	QString 		current();
-	QStringList 	selected();
-	void 			loadFromDB();
+	QPixmap&	icon( int state );
 	
 private:
-	KLocale 		*loc;
-	ItemMap			itemMap;
-	
-signals:
-	void    	signalHistoryLoaded();
+	QObject*	m_parent;
+	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxEmpty;
 };
 
 #endif

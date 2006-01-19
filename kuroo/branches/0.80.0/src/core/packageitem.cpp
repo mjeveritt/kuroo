@@ -24,7 +24,6 @@
 #include <qpainter.h>
 
 #include <klistview.h>
-#include <kiconloader.h>
 
 /**
  * @class PackageItem

@@ -26,6 +26,10 @@
 #include <klistview.h>
 #include <kiconloader.h>
 
+/**
+ * @class VersionViewItem
+ * @short Subclass for formating text.
+ */
 class VersionView::VersionItem : public KListViewItem
 {
 public:
@@ -61,10 +65,13 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
 
+/**
+ * @class VersionView
+ * @short Version listview.
+ */
 VersionView::VersionView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
-// 	addColumn( i18n( " " ) );
 	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Stability" ) );
 	addColumn( i18n( "Size" ) );

@@ -54,6 +54,8 @@ private slots:
 	
 	void		slotClearFilter();
 	void		slotViewUnmerges( bool on );
+	
+	void		slotViewInfo( QListViewItem *item );
 };
 
 #endif

@@ -29,7 +29,8 @@
 #include <kdirwatch.h>
 
 /**
- * Object for the emerge history and statistics.
+ * @class History
+ * @short Object for the emerge history and statistics.
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *m_parent )

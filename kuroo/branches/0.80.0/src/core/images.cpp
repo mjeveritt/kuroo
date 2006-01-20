@@ -26,7 +26,7 @@
 
 /**
  * @class Images
- * @short Initialize images 
+ * @short Initialize images in Kuroo.
  */
 Images::Images( QObject* m_parent )
 	: QObject( m_parent )

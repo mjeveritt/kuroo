@@ -32,7 +32,8 @@
 #include <krun.h>
 
 /**
- * Tabpage for emerge log browser.
+ * @class HistoryTab
+ * @short Tabpage for emerge log browser.
  */
 HistoryTab::HistoryTab( QWidget* parent )
 	: HistoryBase( parent )
@@ -41,6 +42,8 @@ HistoryTab::HistoryTab( QWidget* parent )
 	
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
+	
+	connect( historyView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewInfo( QListViewItem* ) ) );
 	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
@@ -91,6 +94,16 @@ void HistoryTab::slotViewUnmerges( bool on )
 	kdDebug() << "HistoryTab::slotViewUnmerges" << endl;
 	KurooConfig::setViewUnmerges( on );
 	slotReload();
+}
+
+/**
+ * Open in external browser.
+ */
+void HistoryTab::slotViewInfo( QListViewItem *item )
+{
+	QString einfo = item->text(2);
+	if ( !einfo.isEmpty() )
+		Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:").arg( item->text(1) ), einfo );
 }
 
 #include "historytab.moc"

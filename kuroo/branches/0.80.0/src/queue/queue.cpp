@@ -161,7 +161,6 @@ void Queue::init( QObject *parent )
 
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
-	kdDebug() << "Queue::slotEmergePackageStart package=" << package << endl;
 	internalTimer->start( 1000 );
 	m_id = PortageSingleton::Instance()->id( package );
 	emit signalPackageStart( m_id );
@@ -169,7 +168,6 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
 
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
-	kdDebug() << "Queue::slotEmergePackageComplete package=" << package << endl;
 	internalTimer->stop();
 	m_id = PortageSingleton::Instance()->id( package );
 	emit signalPackageComplete( m_id );

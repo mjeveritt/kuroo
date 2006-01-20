@@ -24,6 +24,8 @@
 #include "packageversion.h"
 
 /**
+ * @class PackageVersion
+ * @short Class for comparing versions.
 * Initialize the version with its version string.
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
@@ -233,8 +235,6 @@ int PackageVersion::stability( const QString& arch ) const
 		QString pureArch( arch );
 		pureArch.remove( '~' );
 		
-// 		kdDebug() << " pureArch=" << pureArch << " m_acceptedKeywords=" << m_acceptedKeywords << endl;
-		
 		// The following checks are not completely correct, as they only check
 		// against arch instead of all version keywords. Should be sufficient
 		// for normal use though, as people are not supposed to add anything
@@ -253,7 +253,6 @@ int PackageVersion::stability( const QString& arch ) const
 				// Don't accept packages when the accepted keyword is -arch only
 				else 
 					if ( *keywordIterator == "-" + arch && m_keywords.contains( arch ) ) {
-// 						kdDebug() << "Don't accept packages when the accepted keyword is -arch only" << endl;
 						return NOTAVAILABLE;
 					}
 					// Accept stable packages for an accepted keyword named "*"
@@ -264,7 +263,6 @@ int PackageVersion::stability( const QString& arch ) const
 						// Don't accept anything if it's got -* in it
 						else 
 							if ( *keywordIterator == "-*" ) {
-// 								kdDebug() << "Don't accept anything if it's got -* in it" << endl;
 								return NOTARCH;
 							}
 			}
@@ -285,7 +283,6 @@ int PackageVersion::stability( const QString& arch ) const
 			else
 				if ( m_keywords.contains( "-*") || m_keywords.contains( "-" + arch ) ) {
 					// which is also "-*"
-// 					kdDebug() << "-*" << endl;
 					return NOTAVAILABLE;
 				}
 				else

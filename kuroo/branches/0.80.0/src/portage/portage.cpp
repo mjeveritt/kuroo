@@ -122,7 +122,7 @@ void Portage::pretendPackageList( const QStringList& packageIdList )
 {	
 	QStringList packageList;
 	foreach ( packageIdList ) {
-		packageList += Portage::category( *it ) + "/" + Portage::package( *it );
+		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
 	}
 	EmergeSingleton::Instance()->pretend( packageList );
 }
@@ -181,7 +181,7 @@ void Portage::clearCache()
 void Portage::untestingPackageList( const QStringList& packageIdList )
 {
 	foreach ( packageIdList ) {
-		QString package = Portage::category( *it ) + "/" + Portage::package( *it );
+		QString package = KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
 	
 		if ( !unmaskPackage( package, KurooConfig::filePackageKeywords() ) )
 			break;
@@ -221,7 +221,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 		if ( file.open( IO_WriteOnly ) ) {
 			QTextStream stream( &file );
 			foreach ( packageList ) {
-				stream << *it + "\n";
+				stream << *it << endl;
 			}
 		}
 		else {
@@ -266,7 +266,7 @@ void Portage::appendWorld( const QString& package )
 					found = true;
 			}
 			if ( !found )
-				stream << category + "/" + name << endl;
+				stream << category << "/" << name << endl;
 			file.close();
 		}
 		else
@@ -320,26 +320,6 @@ QString Portage::id( const QString& package )
 	QString name( temp.section( rxPortageVersion, 0, 0 ) );
 	
 	return KurooDBSingleton::Instance()->packageId( category, name );
-}
-
-/**
- * Get this packages category.
- * @param id
- * @return category
- */
-QString Portage::category( const QString& id )
-{
-	return KurooDBSingleton::Instance()->category( id );
-}
-
-/**
- * Get this packages category.
- * @param id
- * @return package
- */
-QString Portage::package( const QString& id )
-{
-	return KurooDBSingleton::Instance()->package( id );
 }
 
 #include "portage.moc"

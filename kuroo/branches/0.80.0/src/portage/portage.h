@@ -38,9 +38,6 @@ public slots:
 	void						init( QObject *parent = 0 );
 	void						slotChanged();
 	
-	QString						category( const QString& id );
-	QString						package( const QString& id );
-	
 	/**
 	 * Get this packages database id.
 	 * @return idDB

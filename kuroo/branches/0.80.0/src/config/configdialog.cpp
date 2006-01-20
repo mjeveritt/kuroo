@@ -39,7 +39,8 @@
 #include <kstringhandler.h>
 
 /**
- * Kuroo preferences widget.
+ * @class ConfigDialog
+ * @short Kuroo preferences.
  */
 ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *config )
 	: KConfigDialog( parent, name, config )
@@ -48,11 +49,11 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	
 	Options1* opt1 = new Options1( this, i18n("General") );
 	Options2* opt2 = new Options2( this, i18n("make.conf") );
-	Options7* opt7 = new Options7( this, i18n("etc warnings") );
+	Options7* opt7 = new Options7( this, i18n("Etc-update warnings") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt7, i18n("etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
+	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
 	
@@ -82,6 +83,15 @@ void ConfigDialog::readMakeConf()
 		
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
+			line = line.simplifyWhiteSpace();
+			
+			// Catch extended lines
+			if ( !line.endsWith("\"") )
+				do {
+					line += stream.readLine();
+					line = line.simplifyWhiteSpace();
+				} while ( !line.endsWith("\"") );
+			line.replace('\\', ' ');
 			line = line.simplifyWhiteSpace();
 			
 			if ( line.contains(QRegExp("^ACCEPT_KEYWORDS=")) )
@@ -195,13 +205,6 @@ void ConfigDialog::readMakeConf()
 				KurooConfig::setSync( kstr.word( line.section("SYNC=", 1, 1).remove("\"") , "0:" ) );
 			
 			if ( line.contains(QRegExp("^USE=\"")) ) {
-				if ( !line.endsWith("\"") )
-					do {
-						line += stream.readLine();
-					} while ( !line.endsWith("\"") );
-			
-				line.replace('\\', ' ');
-				line = line.simplifyWhiteSpace();
 				KurooConfig::setUse( kstr.word( line.section("USE=", 1, 1).remove("\"") , "0:" ) );
 			}
 			if ( line.contains(QRegExp("^USE_ORDER=\"")) )

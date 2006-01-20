@@ -39,6 +39,8 @@
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
 
 /**
+ * @class DependAtom
+ * @short Class that parse and compare depend atoms.
  * Initialize this object.
  * @param packages  The package that will be filtered out.
  */

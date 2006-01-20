@@ -33,7 +33,8 @@
 #include <kiconloader.h>
 
 /**
- * Specialized listview for emerge history.
+ * @class HistoryListView
+ * @short Specialized listview for emerge history.
  */
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	: KListView( parent, name ), loc( KGlobal::locale() )

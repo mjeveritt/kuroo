@@ -32,7 +32,8 @@
 #include <kiconloader.h>
 
 /**
- * Specialized listview for emerge history.
+ * @class MergeListView
+ * @short Specialized listview for emerge history.
  */
 MergeListView::MergeListView( QWidget *parent, const char *name )
 	: KListView( parent, name ), loc( KGlobal::locale() )

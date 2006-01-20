@@ -24,7 +24,8 @@
 #include <kuser.h>
 
 /**
- * Thread for removing single package from updates.
+ * @class RemoveUpdatesPackageJob
+ * @short Thread for removing single package from updates.
  */
 class RemoveUpdatesPackageJob : public ThreadWeaver::DependentJob
 {
@@ -62,7 +63,8 @@ private:
 };
 
 /**
- * Object for update packages.
+ * @class Updates
+ * @short Object for update packages.
  */
 Updates::Updates( QObject *m_parent )
 	: QObject( m_parent )

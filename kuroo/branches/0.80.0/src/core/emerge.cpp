@@ -27,7 +27,7 @@
 
 /**
  * @class Emerge
- * @short Object handling the Gentoo emerge command.
+ * @short All Gentoo emerge command.
  */
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent )
@@ -412,13 +412,13 @@ void Emerge::readFromStdout( KProcIO *proc )
 						}
 						else
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
-								importantMessage += line.section("# ", 1, 1) + "\n";
+								importantMessage += line.section("# ", 1, 1) + "<br>";
 	
-		////////////////////////////////////
+		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
-		////////////////////////////////////
-		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp())) || lastLineFlag || line.contains("**** ") ) ) {
-			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('\'', "''").replace('%', "&#37;") + "\n";
+		//////////////////////////////////////////////////////////////
+		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp()) ) || lastLineFlag || line.contains("**** ") ) ) {
+			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('\'', "''").replace('%', "&#37;") + "<br>";
 			cleanLine.remove( "!!!" );
 			
 			if ( line.endsWith( ":" ) )

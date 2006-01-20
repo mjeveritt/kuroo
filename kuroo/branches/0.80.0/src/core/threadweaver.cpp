@@ -19,7 +19,8 @@ typedef kndbgstream DebugStream;
 static inline kndbgstream debug()   { return kndbgstream(); }
 
 /**
- * Creates threads... from amaroK.
+ * @class ThreadWeaver
+ * @short For creating threaded objects.
  */
 ThreadWeaver::ThreadWeaver()
 {

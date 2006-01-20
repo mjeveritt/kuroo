@@ -279,7 +279,6 @@ void PortageTab::slotPackage()
 	packageInspector->dialog->cbVersionsInstalled->clear();
 	packageInspector->dialog->cbVersionsUse->clear();
 	packageInspector->dialog->cbVersionsSpecific->clear();
-/*	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );*/
 	packageInspector->dialog->groupAdvanced->setDisabled( true );
 	
 	// Initialize the portage package object with package and it's versions data
@@ -291,7 +290,7 @@ void PortageTab::slotPackage()
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ") <br>";
 			lines += packagesView->currentPortagePackage()->description() + "<br>";
-			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->description();
+			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
 			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a><br>";
 	
 	QString linesAvailable;
@@ -327,12 +326,6 @@ void PortageTab::slotPackage()
 						stability = i18n("Not available");
 						packageInspector->dialog->groupAdvanced->setDisabled( false );
 					}
-		
-// 		kdDebug() << "(*sortedVersionIterator)->version()=" << (*sortedVersionIterator)->version() << endl;
-// 		kdDebug() << "(*sortedVersionIterator)->isOriginalHardMasked()=" << (*sortedVersionIterator)->isOriginalHardMasked() << endl;
-// 		kdDebug() << "(*sortedVersionIterator)->isUnMasked()=" << (*sortedVersionIterator)->isUnMasked() << endl;
-// 		kdDebug() << "(*sortedVersionIterator)->isUserMasked()=" << (*sortedVersionIterator)->isUserMasked() << endl;
-// 		kdDebug() << "(*sortedVersionIterator)->isAvailable()=" << (*sortedVersionIterator)->isAvailable() << endl;
 		
 		// Insert version in Inspector version view
 		packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );

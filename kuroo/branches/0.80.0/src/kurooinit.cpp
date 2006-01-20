@@ -42,7 +42,7 @@
  * Check that user is in portage group.
  */
 KurooInit::KurooInit( QObject *parent, const char *name )
-	: QObject( parent, name ), wizardDialog(0)
+	: QObject( parent, name ), wizardDialog( 0 )
 {
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( KUROODIR );
@@ -188,6 +188,9 @@ bool KurooInit::getEnvironment()
 	}
 	else
 		kdDebug() << i18n("Error reading: /etc/make.profile") << endl;
+	
+	// Add default etc warning files
+	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
 	
 	KurooConfig::writeConfig();
 	return success;

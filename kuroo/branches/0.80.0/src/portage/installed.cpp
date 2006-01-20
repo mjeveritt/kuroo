@@ -22,7 +22,8 @@
 #include "threadweaver.h"
 
 /**
- * Thread for adding packages into installed in db.
+ * @class AddInstalledPackageJob
+ * @short Thread for adding packages into installed in db.
  */
 class AddInstalledPackageJob : public ThreadWeaver::DependentJob
 {
@@ -61,7 +62,8 @@ private:
 };
 
 /**
- * Thread for removing packages from installed in db.
+ * @class RemoveInstalledPackageJob
+ * @short Thread for removing packages from installed in db.
  */
 class RemoveInstalledPackageJob : public ThreadWeaver::DependentJob
 {
@@ -106,7 +108,8 @@ private:
 };
 
 /**
- * Object for installed packages.
+ * @class Installed
+ * @short Object for installed packages.
  */
 Installed::Installed( QObject *m_parent )
 	: QObject( m_parent )
@@ -127,7 +130,6 @@ void Installed::init( QObject *parent )
  */
 void Installed::slotChanged()
 {
-	kdDebug() << "Installed::slotChanged" << endl;
 	emit signalInstalledChanged();
 }
 
@@ -148,9 +150,8 @@ void Installed::slotReset()
 void Installed::uninstallPackageList( const QStringList& packageIdList )
 {
 	QStringList packageList;
-	foreach ( packageIdList ) {
-		packageList += PortageSingleton::Instance()->category( *it ) + "/" + PortageSingleton::Instance()->package( *it );
-	}
+	foreach ( packageIdList )
+		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
 	
 	EmergeSingleton::Instance()->unmerge( packageList );
 }

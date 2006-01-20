@@ -56,11 +56,14 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Build</string>
+                    <string>&amp;Build</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>5</number>
                     </property>
                     <spacer row="1" column="0">
                         <property name="name">
@@ -284,7 +287,7 @@
                                 <property name="sizeHint">
                                     <size>
                                         <width>81</width>
-                                        <height>251</height>
+                                        <height>200</height>
                                     </size>
                                 </property>
                             </spacer>
@@ -297,11 +300,14 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Advanced build</string>
+                    <string>&amp;Advanced build</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>5</number>
                     </property>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
@@ -586,7 +592,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>21</width>
-                                <height>91</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
@@ -602,6 +608,9 @@
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>5</number>
                     </property>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
@@ -953,11 +962,14 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Network</string>
+                    <string>&amp;Network</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>5</number>
                     </property>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
@@ -1216,7 +1228,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>21</width>
-                                <height>71</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>

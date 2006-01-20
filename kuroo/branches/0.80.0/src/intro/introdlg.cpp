@@ -35,9 +35,6 @@
 #include <kfiledialog.h>
 #include <kurlrequester.h>
 
-#define foreach( x ) \
-for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
-
 /**
  * @class IntroDlg
  * @short Kuroo introduction wizard.
@@ -75,8 +72,6 @@ void IntroDlg::next()
 	if ( QWizard::indexOf(this->currentPage()) == 0 ) {
 		KMessageBox::enableAllMessages();
 		
-		// Add default etc warning files
-		KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
 	}
 }
 

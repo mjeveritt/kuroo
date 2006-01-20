@@ -45,7 +45,7 @@
 
 /**
  * @class KurooDB
- * @short All Sqlite related as connections, queries...
+ * @short Handle database connections and queries.
  */
 KurooDB::KurooDB( QObject *m_parent )
 	: QObject( m_parent )

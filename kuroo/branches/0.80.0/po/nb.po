@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-20 15:52+0100\n"
-"PO-Revision-Date: 2006-01-20 19:36+0100\n"
+"PO-Revision-Date: 2006-01-20 19:47+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -818,7 +818,7 @@ msgstr "Skjema 1"
 #: rc.cpp:24
 #, no-c-format
 msgid "<font size=\"+1\">Packages in Installation Queue</font>"
-msgstr "font size=\"+1\">Pakker i installasjonskøen</font>"
+msgstr "<font size=\"+1\">Pakker i installasjonskøen</font>"
 
 #: rc.cpp:27
 #, no-c-format

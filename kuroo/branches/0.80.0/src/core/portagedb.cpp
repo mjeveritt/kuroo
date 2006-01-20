@@ -659,8 +659,8 @@ QString KurooDB::category( const QString& id )
 QString KurooDB::packageId( const QString& category, const QString& name )
 {
 	QString id = query( " SELECT package.id FROM package, catSubCategory WHERE "
-	                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' ) "
-	                    " AND catSubCategory.id =  package.idCatSubCategory; ").first();
+	                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
+	                    " AND catSubCategory.id = package.idCatSubCategory; ").first();
 	
 	if ( !id.isEmpty() )
 		return id;

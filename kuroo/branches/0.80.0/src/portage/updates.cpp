@@ -44,15 +44,8 @@ public:
 		else
 			kdDebug() << i18n("Removing update package: can not match package %1.").arg( m_package ) << endl;
 		
-// 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
-		
-		QString id = KurooDBSingleton::Instance()->query( QString( 
-			" SELECT id FROM package WHERE idCatSubCategory = ( SELECT id FROM catSubCategory WHERE name = '%1' ) "
-			" AND name = '%2';" ).arg( category ).arg( name ) ).first();
-		
-		if ( id.isEmpty() )
-			kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-		else {
+		QString id = KurooDBSingleton::Instance()->packageId( category, name );
+		if ( !id.isEmpty() ) {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
 			                                              "WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ) );
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( id ) );

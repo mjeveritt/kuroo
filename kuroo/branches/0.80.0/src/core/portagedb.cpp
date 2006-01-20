@@ -1112,11 +1112,11 @@ QStringList SqliteConnection::query( const QString& statement )
 		int number = sqlite3_column_count(stmt);
 		
         //execute virtual machine by iterating over rows
-		while (true) {
+		while ( true ) {
 			error = sqlite3_step(stmt);
 			
 			if ( error == SQLITE_BUSY ) {
-				if (busyCnt++ > 99) {
+				if ( busyCnt++ > 99 ) {
 					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!\n";
 					break;
 				}
@@ -1129,8 +1129,8 @@ QStringList SqliteConnection::query( const QString& statement )
 				break;
 			
             //iterate over columns
-			for (int i = 0; i < number; i++) {
-				values << QString::fromUtf8((const char*) sqlite3_column_text(stmt, i));
+			for ( int i = 0; i < number; i++ ) {
+				values << QString::fromUtf8( (const char*) sqlite3_column_text(stmt, i) );
 			}
 		}
         //deallocate vm ressources

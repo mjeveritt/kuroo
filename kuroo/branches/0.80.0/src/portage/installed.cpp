@@ -42,15 +42,8 @@ public:
 		else
 			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
 		
-// 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
-		
-		QString id = KurooDBSingleton::Instance()->query( QString( 
-			" SELECT id FROM package WHERE idCatSubCategory = ( SELECT id FROM catSubCategory WHERE name = '%1' ) "
-			" AND name = '%2';" ).arg( category ).arg( name ) ).first();
-		
-		if ( id.isEmpty() )
-			kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-		else {
+		QString id = KurooDBSingleton::Instance()->packageId( category, name );
+		if ( !id.isEmpty() ) {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
 			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
@@ -89,15 +82,8 @@ public:
 		else
 			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
 
-// 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
-		
-		QString id = KurooDBSingleton::Instance()->query( QString( 
-			" SELECT id FROM package WHERE idCatSubCategory = ( SELECT id FROM catSubCategory WHERE name = '%1' ) "
-			" AND name = '%2';" ).arg( category ).arg( name ) ).first();
-		
-		if ( id.isEmpty() )
-			kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-		else {
+		QString id = KurooDBSingleton::Instance()->packageId( category, name );
+		if ( !id.isEmpty() ) {
 			
 			// Mark package as uninstalled or remove it if old
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "

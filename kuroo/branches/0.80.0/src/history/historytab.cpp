@@ -103,7 +103,7 @@ void HistoryTab::slotViewInfo( QListViewItem *item )
 {
 	QString einfo = item->text(2);
 	if ( !einfo.isEmpty() )
-		Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:").arg( item->text(1) ), einfo );
+		Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:").arg( item->text(0) ), einfo );
 }
 
 #include "historytab.moc"

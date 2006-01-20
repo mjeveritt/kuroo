@@ -21,8 +21,6 @@
 #include "settings.h"
 #include "kuroo.h"
 
-#include <qregexp.h>
-
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kaboutdata.h>
@@ -31,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_190106_db13";
+static const char version[] = "0.80.0_200106_db13";
 
 static KCmdLineOptions options[] =
 {
@@ -47,6 +45,8 @@ int main(int argc, char **argv)
 	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
 	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");
 	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
+	about.addCredit("Björn Balazs", I18N_NOOP("Usability"), "B@lazs.de");
+	about.addCredit("Florian Graessle", I18N_NOOP("Usability"), "holehan@gmx.de");
 	
 	KCmdLineArgs::init(argc, argv, &about);
 	KCmdLineArgs::addCmdLineOptions(options);

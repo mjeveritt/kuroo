@@ -349,30 +349,13 @@
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="1">
                         <property name="name">
-                            <cstring>layout8</cstring>
+                            <cstring>layout13</cstring>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <spacer row="0" column="0">
-                                <property name="name">
-                                    <cstring>spacer5</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>5</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QCheckBox" row="2" column="0">
+                            <widget class="QCheckBox" row="1" column="0">
                                 <property name="name">
                                     <cstring>cbDownload</cstring>
                                 </property>
@@ -383,7 +366,7 @@
                                     <string>Alt+K</string>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="1" column="0">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>textLabel1_2</cstring>
                                 </property>
@@ -402,6 +385,23 @@
                                     <string>&lt;b&gt;Advanced Options&lt;/b&gt;:</string>
                                 </property>
                             </widget>
+                            <spacer row="2" column="0">
+                                <property name="name">
+                                    <cstring>spacer5</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
                         </grid>
                     </widget>
                 </grid>

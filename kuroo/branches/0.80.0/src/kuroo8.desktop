@@ -12,6 +12,7 @@ Name[en_US]=Kuroo8
 Path=
 StartupNotify=true
 Terminal=true
+TerminalOptions=
 Type=Application
 X-DCOP-ServiceType=Unique
 X-KDE-SubstituteUID=false

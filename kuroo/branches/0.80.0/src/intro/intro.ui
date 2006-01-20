@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>700</width>
-            <height>421</height>
+            <width>650</width>
+            <height>347</height>
         </rect>
     </property>
     <property name="caption">
@@ -77,20 +77,22 @@
                 </property>
                 <property name="minimumSize">
                     <size>
-                        <width>500</width>
+                        <width>450</width>
                         <height>0</height>
                     </size>
                 </property>
                 <property name="text">
-                    <string>&lt;h2&gt;Kuroo8 daily build&lt;/h2&gt;
+                    <string>&lt;h2&gt;Kuroo8_alfa&lt;/h2&gt;
 New features:&lt;br&gt;
 Faster portage scanning.&lt;br&gt;
-Flexible package browsing and searching with filters.&lt;br&gt;
-Parsing hardmasked packages in /usr/portage/profiles/package.mask and /etc/portage/package.unmask.&lt;br&gt;
-Parsing unmasked packages in /etc/portage/package.unmask.&lt;br&gt;
+Smart package browsing and searching with filters.&lt;br&gt;
+Parsing hardmasked packages in /usr/portage/profiles/package.mask and /etc/portage/package.unmask and /etc/portage/package.unmask.&lt;br&gt;
 Advanced package Inspector.&lt;br&gt;
-Etc-files updates are stored in history.&lt;br&gt;
-Emerge info and warning stored in history.&lt;br&gt;</string>
+Etc-update merge stored in history.&lt;br&gt;
+Emerge info and warning stored in history.&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;&lt;font color="red"&gt;Warning!&lt;br&gt;
+Please make backup of your files in /etc/portage.&lt;/font&gt;&lt;/b&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">
@@ -185,7 +187,7 @@ Emerge info and warning stored in history.&lt;br&gt;</string>
                                 <property name="sizeHint">
                                     <size>
                                         <width>31</width>
-                                        <height>232</height>
+                                        <height>150</height>
                                     </size>
                                 </property>
                             </spacer>

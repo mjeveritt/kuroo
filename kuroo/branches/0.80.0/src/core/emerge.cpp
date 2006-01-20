@@ -115,7 +115,7 @@ bool Emerge::queue( const QStringList& packageList )
 	}
 	else {
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( sPack ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Emerging packages in queue...") );
+		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
 		KurooStatusBar::instance()->startTimer();
 		return true;
 	}
@@ -152,7 +152,7 @@ bool Emerge::pretend( const QStringList& packageList )
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupPretend(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge pretend %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running emerge pretend...") );
+		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking installation queue...") );
 		KurooStatusBar::instance()->startProgress();
 		return true;
 	}
@@ -189,7 +189,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupUnmerge(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( sPack ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Unmerging packages...") );
+		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
 		KurooStatusBar::instance()->startProgress();
 		return true;
 	}
@@ -257,7 +257,7 @@ bool Emerge::checkUpdates()
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupCheckUpdates(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking updates...") );
+		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
 		KurooStatusBar::instance()->startProgress();
 		return true;
 	}
@@ -412,13 +412,13 @@ void Emerge::readFromStdout( KProcIO *proc )
 						}
 						else
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
-								importantMessage += line.section("# ", 1, 1) + "<br>";
+								importantMessage += line.section("# ", 1, 1) + "\n";
 	
 		////////////////////////////////////
 		// Collect einfo and ewarn messages
 		////////////////////////////////////
 		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp())) || lastLineFlag || line.contains("**** ") ) ) {
-			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('\'', "''").replace('%', "&#37;") + "<br>";
+			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('\'', "''").replace('%', "&#37;") + "\n";
 			cleanLine.remove( "!!!" );
 			
 			if ( line.endsWith( ":" ) )

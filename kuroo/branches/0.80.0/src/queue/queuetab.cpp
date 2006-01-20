@@ -133,26 +133,24 @@ void QueueTab::slotBusy( bool busy )
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		
-		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
+		if ( m_hasCheckedQueue && KUser().isSuperUser() )
 			pbGo->setText( i18n( "Start Installation!" ) );
-		}
 		else
 			pbGo->setText( i18n("Check Installation!") );
 	}
 	
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" || busy ) {
-		pbGo->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
 		cbDownload->setDisabled( true );
 	}
 	else {
-		pbGo->setDisabled( false );
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );
 		cbDownload->setDisabled( false );
 	}
+
 }
 
 /**
@@ -171,6 +169,8 @@ void QueueTab::slotGo()
 		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
 		return;
 	}
+// 	else
+// 		queueView->setPackagesChecked();
 	
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
@@ -208,6 +208,7 @@ void QueueTab::slotStop()
 		i18n( "Do you want to abort the running installation?" ) ) ) {
 		case KMessageBox::Yes : {
 			EmergeSingleton::Instance()->stop();
+			QueueSingleton::Instance()->stopTimer();
 			KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
 		}
 	}

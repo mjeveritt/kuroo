@@ -75,7 +75,7 @@ void QueueListView::QueueItem::setStatus( int status )
 }
 
 /**
- * Set progressbar as 100%.
+ * Show progressbar and launch it.
  */
 void QueueListView::QueueItem::setStart()
 {

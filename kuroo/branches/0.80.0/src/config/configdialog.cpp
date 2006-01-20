@@ -233,7 +233,6 @@ void ConfigDialog::saveAll()
 				show();
 				KMessageBox::error( this, i18n("Failed to save makeconf. Please run as root."), i18n("Saving"));
 			}
-			break;
 		}
 		
 	}
@@ -245,14 +244,14 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::saveMakeConf() 
 {
-	QString line = "";
+	QString line;
 	QFile file( "/etc/make.conf" );
 	
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		
 		while ( !stream.atEnd() ) {
-			QString eString = "";
+			QString eString;
 			do {
 				eString += stream.readLine();
 			}

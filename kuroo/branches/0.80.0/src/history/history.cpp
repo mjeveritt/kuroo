@@ -33,7 +33,7 @@
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *m_parent )
-	: QObject( m_parent ), userSync( false )
+	: QObject( m_parent ), userSync( false ), isEmerging( false )
 {
 	slotInit();
 }
@@ -193,8 +193,16 @@ void History::slotParse()
 			QString emergeLine = line.section( rxTimeStamp, 1, 1 );
 			emergeLine = emergeLine.section( QRegExp( "(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )" ), 1, 1 );
 			
+			// For translation
 			emergeLine.replace( " to ", i18n(" to ") );
 			emergeLine.replace( " of ", i18n(" of ") );
+			
+			// Is it a regular emerge or something else
+			if ( QRegExp("(\\s|\\S)*(\\*\\*\\* emerge)(\\s|\\S)*" ).exactMatch( line ) ) {
+				isEmerging = true;
+				if ( line.contains( QRegExp("fetch-all-uri|noconfmem") ) )
+					isEmerging = false;
+			}
 			
 			// Parse out nice statusbar text
 			if ( line.contains( QRegExp("(\\) )(Cleaning)|(Compiling/Merging)|(Post-Build Cleaning)") ) ) {
@@ -212,8 +220,8 @@ void History::slotParse()
 				line.replace( "Started emerge on", i18n( "Started emerge on" ) );
 				LogSingleton::Instance()->writeLog( line.section( rxTimeStamp, 1, 1 ), EMERGELOG );
 			}
-			else
-			if ( line.contains( ">>> emerge" ) ) {
+			else // Emerge has started, signal queue to launch progressbar for this package
+			if ( line.contains( ">>> emerge" ) && isEmerging ) {
 				if ( rxPackage.search( emergeLine ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
@@ -223,8 +231,8 @@ void History::slotParse()
 				else
 					kdDebug() << i18n("Can not parse package in /var/log/emerge.log!") << endl;
 			}
-			else
-			if ( line.contains( "::: completed emerge " ) ) {
+			else // Emerge has completed, signal queue to mark package as installed
+			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
 				if ( rxPackage.search( emergeLine ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
@@ -258,15 +266,19 @@ void History::slotParse()
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Sync completed." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Sync completed." ), EMERGELOG );
 			}
-			else
+			
 			if ( emergeLine.contains( "terminating." ) ) {
+
+				isEmerging = false;
 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
+				
 				if ( syncDone ) {
 					syncDone = false;
 					SignalistSingleton::Instance()->syncDone();
 				}
+				
 			}
 			else {
 				emergeLine.replace( "AUTOCLEAN", i18n( "AUTOCLEAN" ) );

@@ -99,7 +99,7 @@ private:
 	EmergeTimeMap	m_statisticsMap;
 	QFile 			log;
 	QTextStream 	stream;
-	bool			userSync;
+	bool			userSync, isEmerging;
 	
 signals:
 	void			signalHistoryChanged();

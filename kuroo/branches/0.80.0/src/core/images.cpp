@@ -57,10 +57,9 @@ void Images::init( QObject *parent )
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
 	
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
-	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
-	
 	pxQueuedColumn = ldr->loadIcon( "kuroo_queued_column", KIcon::Small );
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
+	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
 }
 
 /**
@@ -104,7 +103,7 @@ QPixmap& Images::icon( int state )
 			break;
 		
 		case VERSION_INSTALLED:
-			return pxQueued;
+			return pxVersionInstalled;
 			break;
 		
 		case QUEUED_COLUMN:

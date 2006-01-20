@@ -45,9 +45,8 @@ public:
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 		
-		foreach ( m_packageIdList ) {
+		foreach ( m_packageIdList )
 			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
-		}
 		
 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 		
@@ -78,9 +77,9 @@ public:
 	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJobGui" ), m_packageIdList( packageIdList ) {}
 	
 	virtual bool doJob() {
-		foreach ( m_packageIdList ) {
+		foreach ( m_packageIdList )
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it) );
-		}
+		
 		return true;
 	}
 	
@@ -115,9 +114,8 @@ public:
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 		
-		foreach ( m_packageIdList ) {
+		foreach ( m_packageIdList )
 			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
-		}
 		
 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 		
@@ -242,7 +240,6 @@ bool Queue::isQueued( const QString& id )
  */
 void Queue::refresh( bool hasCheckedQueue )
 {
-// 	kdDebug() << "Queue::refresh" << endl;
 	clearCache();
 	emit signalQueueChanged( hasCheckedQueue );
 }

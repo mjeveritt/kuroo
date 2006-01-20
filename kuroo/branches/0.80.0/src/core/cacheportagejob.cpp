@@ -71,8 +71,6 @@ int CachePortageJob::countPackages()
 		return 0;
 	}
 	
-// 	setStatus( i18n("Counting packages...") );
-	
 	int count(0);
 	const QStringList categoryList = dCategory.entryList();
 	foreach ( categoryList ) {

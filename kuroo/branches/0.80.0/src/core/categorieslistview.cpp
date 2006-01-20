@@ -197,9 +197,8 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 	}
 	
 	// Enable found categories from query
-	foreach ( categoriesList ) {
+	foreach ( categoriesList )
 		categories[(*it).toInt()]->setOn( true );
-	}
 	
 	emit selectionChanged();
 }

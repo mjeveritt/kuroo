@@ -468,7 +468,7 @@ public:
 		}
 		
 		foreach ( lines )
-				stream << *it << "\n";
+			stream << *it << "\n";
 		
 		file.close();
 		return true;

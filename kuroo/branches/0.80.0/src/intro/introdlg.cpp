@@ -64,8 +64,6 @@ void IntroDlg::back()
 }
 
 /**
- * Check for essential Portage directories.
- * Ask user to confirm their location.
  */
 void IntroDlg::next()
 {

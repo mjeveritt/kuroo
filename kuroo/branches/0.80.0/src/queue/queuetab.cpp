@@ -55,9 +55,10 @@ QueueTab::QueueTab( QWidget* parent )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
 	
-	// Reload view after changes.
+	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
 	
+	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance( const QString& ) ), queueView, SLOT( slotPackageProgress( const QString& ) ) );
@@ -151,6 +152,10 @@ void QueueTab::slotBusy( bool busy )
 		cbDownload->setDisabled( false );
 	}
 
+	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )
+		pbGo->setDisabled( true );
+	else
+		pbGo->setDisabled( false );
 }
 
 /**
@@ -169,8 +174,6 @@ void QueueTab::slotGo()
 		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
 		return;
 	}
-// 	else
-// 		queueView->setPackagesChecked();
 	
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();

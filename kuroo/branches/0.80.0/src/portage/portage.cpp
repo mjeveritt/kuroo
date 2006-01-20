@@ -121,9 +121,9 @@ bool Portage::slotSync()
 void Portage::pretendPackageList( const QStringList& packageIdList )
 {	
 	QStringList packageList;
-	foreach ( packageIdList ) {
+	foreach ( packageIdList )
 		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
-	}
+	
 	EmergeSingleton::Instance()->pretend( packageList );
 }
 
@@ -220,9 +220,8 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 		
 		if ( file.open( IO_WriteOnly ) ) {
 			QTextStream stream( &file );
-			foreach ( packageList ) {
+			foreach ( packageList )
 				stream << *it << endl;
-			}
 		}
 		else {
 			kdDebug() << i18n("Error writing: ") << maskFile << endl;

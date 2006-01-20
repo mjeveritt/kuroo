@@ -139,9 +139,8 @@ bool Emerge::pretend( const QStringList& packageList )
 	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
 	
 	// Add argument for each of the attached packages
-	foreach( packageList ) {
+	foreach( packageList )
 		*eProc << *it;
-	}
 	
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
@@ -176,9 +175,8 @@ bool Emerge::unmerge( const QStringList& packageList )
 	*eProc << "emerge" << "--unmerge" << "--nocolor";
 	
 	// Add argument for each of the attached packages
-	foreach( packageList ) {
+	foreach( packageList )
 		*eProc << *it;
-	}
 	
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );

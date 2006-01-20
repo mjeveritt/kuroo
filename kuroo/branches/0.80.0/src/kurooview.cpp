@@ -126,8 +126,9 @@ void KurooView::slotInit()
 		
 		switch( KMessageBox::warningContinueCancel( this,
 			i18n( "<qt>Kuroo database is empty!<br>"
-			     "Kuroo will now first scan your emerge log to create the emerge history. "
-			     "Package information in Portage will be cached.</qt>"), i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
+			      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
+			      "Next, package information in Portage will be collected.</qt>"), 
+		                                            i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
 				     
 			case KMessageBox::Continue: {
 				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );

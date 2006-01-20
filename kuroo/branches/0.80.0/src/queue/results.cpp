@@ -37,9 +37,8 @@ public:
 		// Collect end-user packages
 		QMap<QString, int> endUserPackageMap;
 		const QStringList endUserPackageList = KurooDBSingleton::Instance()->allQueueId();
-		foreach ( endUserPackageList ) {
+		foreach ( endUserPackageList )
 			endUserPackageMap.insert( *it, 0 );
-		}
 		
 		KurooDBSingleton::Instance()->query("DELETE FROM queue;");
 		
@@ -99,7 +98,6 @@ void Results::init( QObject *parent )
  */
 void Results::refresh()
 {
-// 	kdDebug() << "Results::refresh" << endl;
 	QueueSingleton::Instance()->refresh( true );
 }
 

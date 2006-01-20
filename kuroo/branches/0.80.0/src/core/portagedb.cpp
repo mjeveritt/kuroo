@@ -639,8 +639,9 @@ QString KurooDB::package( const QString& id )
  */
 QString KurooDB::category( const QString& id )
 {
-	QString category = (query( "SELECT name FROM catSubCategory "
-	                           "WHERE id = ( SELECT idCatSubCategory FROM package WHERE id = '" + id + "' );" )).first();
+	QString category = query( " SELECT catSubCategory.name FROM package, catSubCategory "
+	                          " WHERE package.id = '" + id + "' "
+	                          " AND catSubCategory.id = package.idCatSubCategory ;" ).first();
 	
 	if ( !category.isEmpty() )
 		return category;
@@ -657,10 +658,9 @@ QString KurooDB::category( const QString& id )
  */
 QString KurooDB::packageId( const QString& category, const QString& name )
 {
-	QString id = query( QString( " SELECT id FROM package WHERE "
-	                             " idCatSubCategory = ( SELECT id FROM catSubCategory WHERE name = '%1' ) "
-	                             " AND name = '%2';" 
-	                           ).arg( category ).arg( name ) ).first();
+	QString id = query( " SELECT package.id FROM package, catSubCategory WHERE "
+	                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' ) "
+	                    " AND catSubCategory.id =  package.idCatSubCategory; ").first();
 	
 	if ( !id.isEmpty() )
 		return id;

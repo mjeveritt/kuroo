@@ -248,7 +248,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	// Setup geometry
 	addColumn( i18n( "Package" ) );
 	addColumn( " " );
-	header()->setLabel( 1, ImagesSingleton::Instance()->icon( QUEUED ), " " );
+	header()->setLabel( 1, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), " " );
 	addColumn( i18n( "Update" ) );
 	addColumn( i18n( "Description" ) );
 	

@@ -279,7 +279,7 @@ void PortageTab::slotPackage()
 	packageInspector->dialog->cbVersionsInstalled->clear();
 	packageInspector->dialog->cbVersionsUse->clear();
 	packageInspector->dialog->cbVersionsSpecific->clear();
-	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );
+/*	packageInspector->dialog->cbVersionsSpecific->insertItem( i18n("Select version") );*/
 	packageInspector->dialog->groupAdvanced->setDisabled( true );
 	
 	// Initialize the portage package object with package and it's versions data

@@ -58,6 +58,9 @@ void Images::init( QObject *parent )
 	
 	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
+	
+	pxQueuedColumn = ldr->loadIcon( "kuroo_queued_column", KIcon::Small );
+	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 }
 
 /**
@@ -98,7 +101,14 @@ QPixmap& Images::icon( int state )
 			
 		case NEW:
 			return pxNew;
-
+			break;
+		
+		case VERSION_INSTALLED:
+			return pxQueued;
+			break;
+		
+		case QUEUED_COLUMN:
+			return pxQueuedColumn;
 	}
 }
 

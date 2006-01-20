@@ -90,7 +90,9 @@ enum status {
 		NEW,
 		EMPTY,
 		KUROO_READY,
-		KUROO_EMERGING
+		KUROO_EMERGING,
+		VERSION_INSTALLED,
+		QUEUED_COLUMN
 };
 
 // The "maskedness" of a package version.

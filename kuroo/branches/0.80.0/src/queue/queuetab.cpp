@@ -108,27 +108,10 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	queueBrowser->clear();
 	queueBrowser->setText( queueBrowserLines );
 	
-	if ( !m_hasCheckedQueue )
-		pbGo->setText( i18n("Check Installation!") );
-	else
-		queueView->setPackagesChecked();
-	
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;
 	
-	// No db no fun!
-	if ( queueView->count() == "0" ) {
-		pbGo->setDisabled( true );
-		pbClear->setDisabled( true );
-		pbRemove->setDisabled( true );
-		cbDownload->setDisabled( true );
-	}
-	else {
-		pbGo->setDisabled( false );
-		pbClear->setDisabled( false );
-		pbRemove->setDisabled( false );
-		cbDownload->setDisabled( false );
-	}
+	slotBusy( false );
 }
 
 /**
@@ -140,7 +123,7 @@ void QueueTab::slotBusy( bool busy )
 	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
-		pbGo->setText( i18n( "Stop Installation!" ) );
+		pbGo->setText( i18n( "Stop!" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
@@ -157,18 +140,8 @@ void QueueTab::slotBusy( bool busy )
 			pbGo->setText( i18n("Check Installation!") );
 	}
 	
-	// Disbaled add/remove packages when emerging
-	if ( busy ) {
-		pbClear->setDisabled( true );
-		pbRemove->setDisabled( true );
-	}
-	else {
-		pbClear->setDisabled( false );
-		pbRemove->setDisabled( false );
-	}
-	
 	// No db no fun!
-	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
+	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" || busy ) {
 		pbGo->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );

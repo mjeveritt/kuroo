@@ -93,7 +93,7 @@ void VersionView::usedForInstallation( const QString& version )
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
 		if ( myChild->text(1) == version )
-			myChild->setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+			myChild->setPixmap( 0, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
 		myChild = myChild->nextSibling();
 	}
 }

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>650</width>
-            <height>347</height>
+            <height>359</height>
         </rect>
     </property>
     <property name="caption">
@@ -88,8 +88,10 @@ Faster portage scanning.&lt;br&gt;
 Smart package browsing and searching with filters.&lt;br&gt;
 Parsing hardmasked packages in /usr/portage/profiles/package.mask and /etc/portage/package.unmask and /etc/portage/package.unmask.&lt;br&gt;
 Advanced package Inspector.&lt;br&gt;
-Etc-update merge stored in history.&lt;br&gt;
-Emerge info and warning stored in history.&lt;br&gt;
+Etc-update merge and emerge infos and warnings stored in history.&lt;br&gt;
+&lt;br&gt;
+Not supported yet:&lt;br&gt;
+Portage overlay is not scanned.&lt;br&gt;
 &lt;br&gt;
 &lt;b&gt;&lt;font color="red"&gt;Warning!&lt;br&gt;
 Please make backup of your files in /etc/portage.&lt;/font&gt;&lt;/b&gt;</string>

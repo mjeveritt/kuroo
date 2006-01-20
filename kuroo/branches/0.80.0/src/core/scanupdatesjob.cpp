@@ -119,7 +119,14 @@ bool ScanUpdatesJob::doJob()
 		setProgress( count++ );
 		
 		// Find id for this category in db
-		QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+// 		QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+		
+		QString id = KurooDBSingleton::Instance()->query( QString( 
+			" SELECT id FROM package WHERE idCatSubCategory = ( SELECT id FROM catSubCategory WHERE name = '%1' ) "
+			" AND name = '%2';" ).arg( (*it).category ).arg( (*it).name ) ).first();
+		
+		if ( id.isEmpty() )
+			kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
 		
 		// Mark as update in portage
 		if ( !(*it).updateFlags.contains("N") )

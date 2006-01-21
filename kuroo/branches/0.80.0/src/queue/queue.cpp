@@ -77,9 +77,11 @@ public:
 	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJobGui" ), m_packageIdList( packageIdList ) {}
 	
 	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it) );
-		
+			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue "
+			                                              "WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it), m_db );
+		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 		return true;
 	}
 	

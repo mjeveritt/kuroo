@@ -31,14 +31,14 @@
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
+	m_parent( parent ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description )
 {
 	init();
 }
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent->listView() ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), meta( PACKAGE )
+	m_parent( parent->listView() ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description )
 {
 	init();
 }
@@ -51,7 +51,7 @@ PackageItem::~PackageItem()
  */
 void PackageItem::init()
 {
-	if ( m_status == PACKAGE_STRING )
+	if ( m_status == FILTER_ALL_STRING )
 		setStatus( PACKAGE );
 	else
 		setStatus( INSTALLED );

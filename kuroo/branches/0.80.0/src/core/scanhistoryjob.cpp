@@ -124,7 +124,9 @@ bool ScanHistoryJob::doJob()
 							itMap.data().inc();
 						}
 						
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('%1', '%2', '%3', 'true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ), m_db );
+						KurooDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO history (package, timestamp, time, emerge) "
+							"VALUES ('%1', '%2', '%3', 'true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ), m_db );
 					}
 				}
 				else
@@ -133,11 +135,15 @@ bool ScanHistoryJob::doJob()
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {
 					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
-					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
+					KurooDBSingleton::Instance()->insert( QString( 
+						"INSERT INTO history (package, timestamp, emerge) "
+						"VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
 				}
 				else
 					if ( emergeLine.contains("=== Sync completed") ) {
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('', '%1', 'true');" ).arg( timeStamp ), m_db );
+						KurooDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO history (package, timestamp, emerge) "
+							"VALUES ('', '%1', 'true');" ).arg( timeStamp ), m_db );
 					}
 			}
 	}

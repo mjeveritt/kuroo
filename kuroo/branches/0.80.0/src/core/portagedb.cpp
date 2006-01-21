@@ -980,6 +980,20 @@ QString KurooDB::queueTotal()
 }
 
 /**
+ * Clear all updates.
+ */
+void KurooDB::resetUpdates()
+{
+	query( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
+	query( "DELETE FROM updates;" );
+}
+
+void KurooDB::resetInstalled()
+{
+	query( "UPDATE package set installed = '" + FILTER_ALL_STRING + "';" );
+}
+
+/**
  * Return timestamp last entry in history.
  */
 QStringList KurooDB::lastHistoryEntry()
@@ -997,6 +1011,12 @@ QStringList KurooDB::getLastSync()
 	return query(" SELECT timestamp "
 	             " FROM history "
 	             " WHERE id = (SELECT MAX(id) FROM history where package = '');");
+}
+
+void KurooDB::addEmergeInfo( const QString& einfo )
+{
+	query( QString("UPDATE history SET einfo = '%1' "
+	               "WHERE id = (SELECT MAX(id) FROM history);").arg( einfo ) );
 }
 
 /**

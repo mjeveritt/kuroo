@@ -48,7 +48,7 @@ public:
 			" AND catSubCategory.id = package.idCatSubCategory; ").first();
 		
 		if ( id.isEmpty() )
-			kdDebug() << i18n("Add installed package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
 			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
@@ -77,6 +77,7 @@ public:
 	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
 		QString category, name, version;
 		
@@ -91,23 +92,23 @@ public:
 		QString id = KurooDBSingleton::Instance()->query( 
 			" SELECT package.id FROM package, catSubCategory WHERE "
 			" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-			" AND catSubCategory.id = package.idCatSubCategory; ").first();
+			" AND catSubCategory.id = package.idCatSubCategory; ", m_db).first();
 		
 		if ( id.isEmpty() )
-			kdDebug() << i18n("Remove installed package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << i18n("Remove unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 		else {
 			
 			// Mark package as uninstalled or remove it if old
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
-			                                              "WHERE meta = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
+			                                              "WHERE meta = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM package "
-			                                              "WHERE meta = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ) );
+			                                              "WHERE meta = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
-			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ) );
-			
+			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}
-		
+		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 		return false;
 	}
 	
@@ -150,7 +151,7 @@ void Installed::slotChanged()
  */
 void Installed::slotReset()
 {
-	KurooDBSingleton::Instance()->query( QString( "UPDATE package set installed = '%1';" ).arg( FILTER_ALL_STRING ) );
+	KurooDBSingleton::Instance()->resetInstalled();
 	emit signalInstalledReset();
 }
 

@@ -274,7 +274,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 	static QString importantMessagePackage;
 	bool unterm = false;
 	
-	while ( proc->readln(line, false, &unterm) >= 0 ) {
+	while ( proc->readln( line, false, &unterm ) >= 0 ) {
 		int logDone = 0;
 
 		// Concatenate not completed lines
@@ -297,10 +297,10 @@ void Emerge::readFromStdout( KProcIO *proc )
 		///////////////////////////////////////////////////////
 		// Cleanup emerge output - remove damn escape sequences
 		///////////////////////////////////////////////////////
-		line.replace(QRegExp("\\x0007"), "\n");
+		line.replace( QRegExp("\\x0007"), "\n" );
 		int pos = 0;
 		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
-		while ( (pos = rx.search(line)) != -1 ) {
+		while ( ( pos = rx.search(line) ) != -1 ) {
 			line.replace( pos, rx.matchedLength(), "" );
 		}
 		
@@ -325,7 +325,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 				emergePackage.version = parsedPackage.section( ( emergePackage.name + "-" ), 1, 1 );
 				emergePackage.updateFlags = line.left( 14 ).section( QRegExp( "^\\[ebuild" ), 1, 1 );
 				
-				QString temp = line.section(emergePackage.package, 1, 1);
+				QString temp = line.section( emergePackage.package, 1, 1 );
 				
 				if ( temp.contains( " kB" ) )
 					emergePackage.size = temp.section( " kB", 0, 0 ).section( " ", -1 , -1 );
@@ -378,7 +378,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 					}
 					else
 						if ( logDone == 0 && lineLower.contains(QRegExp("(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|(^ \\* important)|(^>>> unmerging in)")) ) {
-							LogSingleton::Instance()->writeLog(line, EMERGE);
+							LogSingleton::Instance()->writeLog( line, EMERGE );
 							logDone++;
 						}
 		}
@@ -399,18 +399,18 @@ void Emerge::readFromStdout( KProcIO *proc )
 						logDone++;
 					}
 					else
-						if ( lineLower.startsWith("- ") && lineLower.contains("masked by") ) {
-							QString pName = line.section(" (masked by", 0, 0);
-							QString flags = line.section(" (masked by: ", 1, 1);
-							QString branch = flags.section(")", 0, 0);
-							pName = pName.section("- ", 1, 1);
-							QString cName = pName.section("/", 0, 0);
-							pName = pName.section("/", 1, 1);
+						if ( lineLower.startsWith("- ") && lineLower.contains( "masked by" ) ) {
+							QString pName = line.section( " (masked by", 0, 0 );
+							QString flags = line.section( " (masked by: ", 1, 1 );
+							QString branch = flags.section( ")", 0, 0 );
+							pName = pName.section( "- ", 1, 1 );
+							QString cName = pName.section( "/", 0, 0 );
+							pName = pName.section( "/", 1, 1 );
 							unmasked = cName + "/" + pName + "%" + branch;
 						}
 						else
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
-								importantMessage += line.section("# ", 1, 1) + "<br>";
+								importantMessage += line.section( "# ", 1, 1 ) + "<br>";
 	
 		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages

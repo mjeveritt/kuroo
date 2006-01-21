@@ -81,7 +81,7 @@ void ScanPortageJob::completeJob()
  */
 bool ScanPortageJob::doJob()
 {
-	int count(0);
+	int count;
 	QDir dCategory, dPackage;
 	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
 	dCategory.setSorting(QDir::Name);
@@ -177,11 +177,16 @@ bool ScanPortageJob::doJob()
 		QString subCategory = ( *itCategory ).section( "-", 1, 1 );
 		
 		if ( lastCategory != category )
-			idCategory = KurooDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+			idCategory = KurooDBSingleton::Instance()->insert( QString( 
+				"INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 		
-		int idSubCategory = KurooDBSingleton::Instance()->insert(QString("INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');").arg(subCategory).arg(QString::number(idCategory)), m_db);
+		int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
+			"INSERT INTO subCategory_temp (name, idCategory) "
+			"VALUES ('%1', '%2');").arg(subCategory).arg(QString::number(idCategory)), m_db);
 		
-		int idCatSubCategory = KurooDBSingleton::Instance()->insert(QString("INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');").arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
+		int idCatSubCategory = KurooDBSingleton::Instance()->insert( QString( 
+			"INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) "
+			"VALUES ('%1', '%2', '%3');").arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
 		
 		// Get list of packages in this category
 		dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -264,7 +269,9 @@ bool ScanPortageJob::doJob()
 		
 		lastCategory = category;
 	}
-
+	KurooConfig::setPortageCount( QString::number(count) );
+	KurooConfig::writeConfig();
+	
 	///////////////////////////////////////////////////////////////////////////////////////////
 // 	fileTest.close();
 	///////////////////////////////////////////////////////////////////////////////////////////
@@ -289,7 +296,8 @@ bool ScanPortageJob::doJob()
 			QString description = itPackage.data().description;
 			QString homepage = itPackage.data().homepage;
 			
-			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " ).arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta) "
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " ).arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
 			sql += QString( ");" );
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
 			
@@ -304,7 +312,9 @@ bool ScanPortageJob::doJob()
 				QString size = itVersion.data().size;
 				QString keywords = itVersion.data().keywords;
 				
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');" ).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ), m_db );
+				KurooDBSingleton::Instance()->insert( QString( 
+					"INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot) "
+					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');" ).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ), m_db );
 				
 			}
 		}
@@ -518,7 +528,7 @@ QString ScanPortageJob::formatSize( const QString& size )
 	if ( num < 1024 )
 		total = "1 kB ";
 	else
-		total = loc->formatNumber((double)(num / 1024), /*true, */0) + " kB ";
+		total = loc->formatNumber((double)(num / 1024), 0) + " kB ";
 	
 	return total;
 }

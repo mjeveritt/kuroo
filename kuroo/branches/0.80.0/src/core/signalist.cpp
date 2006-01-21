@@ -191,14 +191,4 @@ void Signalist::clearQueued()
 	emit signalClearQueued();
 }
 
-/**
- * Propagate signal that a package is unmasked.
- * @param id	package db id
- * @param true/false
- */
-void Signalist::setUnmasked( const QString& name, bool b )
-{
-	emit signalUnmasked( name, b );
-}
-
 #include "signalist.moc"

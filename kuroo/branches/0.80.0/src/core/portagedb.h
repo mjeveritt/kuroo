@@ -211,7 +211,7 @@ public:
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
-	// Queries for Queue 
+	// Miscellanious queries
 	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	allQueuePackages();
 	QStringList		allQueueId();
@@ -219,6 +219,9 @@ public:
 	QStringList 	allMergeHistory();
 	QStringList 	lastHistoryEntry();
 	QStringList		getLastSync();
+	void			resetUpdates();
+	void			resetInstalled();
+	void			addEmergeInfo( const QString& einfo );
 	void			addRefreshTime();
 	void			addBackup( const QString& source, const QString& destination );
 	QStringList 	allStatistic();

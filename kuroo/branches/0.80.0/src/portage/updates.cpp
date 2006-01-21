@@ -33,6 +33,7 @@ public:
 	RemoveUpdatesPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
 		QString category, name, version;
 		
@@ -47,16 +48,18 @@ public:
 		QString id = KurooDBSingleton::Instance()->query( 
 			" SELECT package.id FROM package, catSubCategory WHERE "
 			" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-			" AND catSubCategory.id = package.idCatSubCategory; ").first();
+			" AND catSubCategory.id = package.idCatSubCategory; ", m_db).first();
 		
 		if ( id.isEmpty() )
-			kdDebug() << i18n("Remove update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << i18n("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
-			                                              "WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ) );
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( id ) );
+			                                              "WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}
+		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 		return false;
 	}
 	
@@ -101,8 +104,7 @@ void Updates::slotChanged()
  */
 void Updates::slotReset()
 {
-	KurooDBSingleton::Instance()->query( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
-	KurooDBSingleton::Instance()->query( "DELETE FROM updates;" );
+	KurooDBSingleton::Instance()->resetUpdates();
 	slotChanged();
 }
 

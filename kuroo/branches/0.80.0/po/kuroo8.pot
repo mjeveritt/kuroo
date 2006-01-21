@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-21 18:06+0100\n"
+"POT-Creation-Date: 2006-01-21 20:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,16 +21,16 @@ msgstr ""
 msgid "Can not connect to database"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:82 core/scanhistoryjob.cpp:153
+#: core/scanhistoryjob.cpp:82 core/scanhistoryjob.cpp:159
 msgid "History scan aborted"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:100 core/scanhistoryjob.cpp:131
+#: core/scanhistoryjob.cpp:100 core/scanhistoryjob.cpp:133
 msgid "No package found!"
 msgstr ""
 
-#: core/scanportagejob.cpp:96 core/scanportagejob.cpp:263
-#: core/scanportagejob.cpp:350 core/scanportagejob.cpp:405
+#: core/scanportagejob.cpp:96 core/scanportagejob.cpp:268
+#: core/scanportagejob.cpp:360 core/scanportagejob.cpp:415
 #: core/cacheportagejob.cpp:70 core/cacheportagejob.cpp:107
 #: core/cacheportagejob.cpp:162 core/cacheportagejob.cpp:167
 #: core/cacheportagejob.cpp:223
@@ -41,15 +41,15 @@ msgstr ""
 msgid "Refreshing Portage view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:171 core/scanportagejob.cpp:200
+#: core/scanportagejob.cpp:171 core/scanportagejob.cpp:205
 msgid "Portage scan aborted"
 msgstr ""
 
-#: core/scanportagejob.cpp:255
+#: core/scanportagejob.cpp:260
 msgid "Scanning Portage cache: can not match package %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:334 core/scanportagejob.cpp:408 core/emerge.cpp:471
+#: core/scanportagejob.cpp:344 core/scanportagejob.cpp:418 core/emerge.cpp:471
 #: core/emerge.cpp:544 core/scanupdatesjob.cpp:155
 #: core/cacheportagejob.cpp:236 core/portagefiles.cpp:139
 #: core/portagefiles.cpp:231 core/portagefiles.cpp:323
@@ -58,15 +58,15 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: core/scanportagejob.cpp:352
+#: core/scanportagejob.cpp:362
 msgid "Collecting installed packages..."
 msgstr ""
 
-#: core/scanportagejob.cpp:401
+#: core/scanportagejob.cpp:411
 msgid "Scanning installed packages: can not match %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:423 core/scanportagejob.cpp:500
+#: core/scanportagejob.cpp:433 core/scanportagejob.cpp:510
 #: core/cacheportagejob.cpp:154 core/cacheportagejob.cpp:215
 #: portage/portage.cpp:205 portage/portage.cpp:275 portage/portage.cpp:307
 #: portage/packageinspector.cpp:493 portage/packageinspector.cpp:579
@@ -465,7 +465,7 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: queue/queue.cpp:201 queue/queue.cpp:216
+#: queue/queue.cpp:203 queue/queue.cpp:218
 msgid "Package id is empty, skipping!"
 msgstr ""
 
@@ -646,24 +646,24 @@ msgid "Inserting emerged package: can not match %1."
 msgstr ""
 
 #: portage/installed.cpp:51
-msgid "Add installed package: Can not find id in database for package %1/%2."
+msgid ""
+"Inserting emerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/installed.cpp:89
+#: portage/installed.cpp:90
 msgid "Removing unmerged package: can not match %1."
 msgstr ""
 
-#: portage/installed.cpp:97
-msgid ""
-"Remove installed package: Can not find id in database for package %1/%2."
+#: portage/installed.cpp:98
+msgid "Remove unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/updates.cpp:45
+#: portage/updates.cpp:46
 msgid "Removing update package: can not match package %1."
 msgstr ""
 
-#: portage/updates.cpp:53
-msgid "Remove update package: Can not find id in database for package %1/%2."
+#: portage/updates.cpp:54
+msgid "Removing update package: Can not find id in database for package %1/%2."
 msgstr ""
 
 #: portage/versionview.cpp:76

@@ -80,11 +80,6 @@ public slots:
 	void		setQueued( const QString& idDB, bool b );
 	void		clearQueued();
 	
-	/**
-	 * Methods for marking packages unmasked.
-	 */
-	void		setUnmasked( const QString& name, bool b );
-	
 signals:
 	void		signalKurooBusy( bool b );
 	void		signalCachePortageComplete();
@@ -99,7 +94,6 @@ signals:
 	void		signalViewPackage( const QString& package );
 	void		signalSetQueued( const QString& idDB, bool b );
 	void		signalClearQueued();
-	void		signalUnmasked( const QString& name, bool b );
 
 private:
 	QObject*	m_parent;

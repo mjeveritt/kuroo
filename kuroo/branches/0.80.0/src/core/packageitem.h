@@ -65,10 +65,8 @@ protected:
 	void			init();
 	
 private:
-	int				meta;
 	QString			m_id, m_name, m_status, m_packageTip, m_description;
 	QListView		*m_parent;
-// 	QPixmap 		pxPackage, pxInstalled, pxQueued;
 	bool			m_isQueued;
 
 };

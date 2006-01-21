@@ -53,8 +53,8 @@ QString Log::init( QObject *parent )
 	m_parent = parent;
 	
 	QString logName = KUROODIR + "kuroo.log";
-	logFile.setName(logName);
-	if( !logFile.open(IO_WriteOnly ) ) {
+	logFile.setName( logName );
+	if( !logFile.open( IO_WriteOnly ) ) {
 		kdDebug() << i18n("Error writing: ") << KUROODIR << "kuroo.log" << endl;
 		KMessageBox::error(0, i18n("Error writing %1kuroo.log.").arg(KUROODIR), i18n("Saving"));
 		return QString::null;
@@ -98,14 +98,14 @@ void Log::setGui( KTextBrowser* logBrowserGui, QCheckBox* verboseLogGui, QCheckB
 void Log::writeLog( const QString& output, int logType )
 {
 	QString line(output);
-	line.replace( '\'', "''" );
+	line.utf8().replace( '\'', "''" );
 	
 	switch ( logType ) {
 		
 		case EMERGE: {
 			if ( verboseLog && verboseLog->isChecked() ) {
 				line = "<font color=blue>" + line.replace('>', "&gt;").replace('<', "&lt;")+ "</font>";
-				logBrowser->append(line);
+				logBrowser->append( line );
 				emit signalLogChanged();
 			}
 			break;
@@ -118,7 +118,7 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case ERROR: {
 			line = "<font color=red>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
-			logBrowser->append(line);
+			logBrowser->append( line );
 			break;
 		}
 		
@@ -131,7 +131,7 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case EMERGELOG: {
 			line = "<font color=BlueViolet>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
-			logBrowser->append(line);
+			logBrowser->append( line );
 		}
 		
 	}

@@ -112,8 +112,6 @@ void Results::refresh()
  */
 void Results::addPackageList( const EmergePackageList &packageList )
 {
-	kdDebug() << "Results::addPackageList " << packageList.isEmpty() << endl;
-	
 	if ( !packageList.isEmpty() )
 		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
 }

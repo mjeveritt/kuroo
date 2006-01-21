@@ -262,9 +262,10 @@ void PortageTab::slotPackage()
 {
 // 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
-	pbUninstall->setDisabled( true );
-	if ( packagesView->currentItemStatus() == INSTALLED && KUser().isSuperUser() )
+	if ( packagesView->currentPortagePackage()->isInstalled() && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
+	else
+		pbUninstall->setDisabled( true );
 	
 	if ( packagesView->currentPortagePackage()->isQueued() )
 		pbQueue->setText( i18n("Remove from Install Queue") );

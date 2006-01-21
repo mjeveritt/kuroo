@@ -249,21 +249,4 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 		packageIndex[id]->setStatus( NOTQUEUED );
 }
 
-/**
- * Mark package as unmasked.
- * @param id
- * @param true/false
- */
-// void PackageListView::slotSetUnmasked( const QString& id, bool isUnmasked )
-// {
-// 	if ( id.isEmpty() || !packageIndex[id] )
-// 		return;
-// 
-// 	if ( isUnmasked )
-// 		packageIndex[id]->setStatus( UNTESTING );
-// 	else
-// 		packageIndex[id]->setStatus( NONE );
-// 
-// }
-
 #include "packagelistview.moc"

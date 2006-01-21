@@ -49,6 +49,8 @@ public:
  	 */
 	virtual void	setStatus( int status );
 	
+	virtual bool	isInstalled();
+	
 	/**
  	 * Convenience method.
  	 * @return true if package is in the queue.

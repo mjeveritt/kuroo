@@ -127,6 +127,15 @@ QString PackageItem::status()
 }
 
 /**
+ * Is this package installed.
+ * @return true/false
+ */
+bool PackageItem::isInstalled()
+{
+	return m_status == INSTALLED;
+}
+
+/**
  * Is this package is in the emerge queue?
  * @return true/false
  */
@@ -134,3 +143,5 @@ bool PackageItem::isQueued()
 {
 	return m_isQueued;
 }
+
+

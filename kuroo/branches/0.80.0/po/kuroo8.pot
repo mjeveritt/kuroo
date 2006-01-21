@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-20 21:55+0100\n"
+"POT-Creation-Date: 2006-01-21 11:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,9 +50,9 @@ msgid "Scanning Portage cache: can not match package %1."
 msgstr ""
 
 #: core/scanportagejob.cpp:334 core/scanportagejob.cpp:408 core/emerge.cpp:471
-#: core/emerge.cpp:544 core/scanupdatesjob.cpp:150
-#: core/cacheportagejob.cpp:236 core/portagefiles.cpp:141
-#: core/portagefiles.cpp:234 core/portagefiles.cpp:327
+#: core/emerge.cpp:544 core/scanupdatesjob.cpp:156
+#: core/cacheportagejob.cpp:236 core/portagefiles.cpp:140
+#: core/portagefiles.cpp:233 core/portagefiles.cpp:326
 #: core/portagefiles.cpp:419 queue/queuetab.cpp:215 history/history.cpp:275
 #: history/history.cpp:276 statusbar.cpp:93
 msgid "Done."
@@ -235,12 +235,8 @@ msgstr ""
 msgid "Updates scan aborted"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:129 core/portagedb.cpp:668
-#: core/portagefiles.cpp:122 core/portagefiles.cpp:215
-#: core/portagefiles.cpp:308 core/portagefiles.cpp:400
-#: core/portagefiles.cpp:595 queue/results.cpp:56 portage/installed.cpp:52
-#: portage/installed.cpp:99 portage/updates.cpp:54
-msgid "Can not find id in database for package %1/%2."
+#: core/scanupdatesjob.cpp:129
+msgid "ScanUpdatesJob: Can not find id in database for package %1/%2."
 msgstr ""
 
 #: core/portagedb.cpp:354 core/portagedb.cpp:369 core/portagefiles.cpp:452
@@ -250,8 +246,8 @@ msgid "Error writing: %1."
 msgstr ""
 
 #: core/portagedb.cpp:382 core/portagedb.cpp:400 core/portagefiles.cpp:67
-#: core/portagefiles.cpp:166 core/portagefiles.cpp:259
-#: core/portagefiles.cpp:352 core/portagefiles.cpp:560
+#: core/portagefiles.cpp:165 core/portagefiles.cpp:258
+#: core/portagefiles.cpp:351 core/portagefiles.cpp:560
 msgid "Error reading: %1."
 msgstr ""
 
@@ -259,8 +255,12 @@ msgstr ""
 msgid "Can not find package in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:648
+#: core/portagedb.cpp:649
 msgid "Can not find category in database for id %1."
+msgstr ""
+
+#: core/portagedb.cpp:673
+msgid "packageId: Can not find id in database for package %1/%2."
 msgstr ""
 
 #: core/etcupdate.cpp:56
@@ -340,21 +340,38 @@ msgstr ""
 msgid "Collecting user package keywords..."
 msgstr ""
 
-#: core/portagefiles.cpp:129 core/portagefiles.cpp:221
-#: core/portagefiles.cpp:314 core/portagefiles.cpp:406
+#: core/portagefiles.cpp:121
+msgid "LoadPackageKeywordsJob: Can not find id in database for package %1/%2."
+msgstr ""
+
+#: core/portagefiles.cpp:128 core/portagefiles.cpp:220
+#: core/portagefiles.cpp:313 core/portagefiles.cpp:406
 msgid "Can not match package %1 in %2."
 msgstr ""
 
-#: core/portagefiles.cpp:179
+#: core/portagefiles.cpp:178
 msgid "Collecting user unmasked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:272
+#: core/portagefiles.cpp:214
+msgid ""
+"LoadPackageUserUnMaskJob: Can not find id in database for package %1/%2."
+msgstr ""
+
+#: core/portagefiles.cpp:271
 msgid "Collecting hardmasked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:365
+#: core/portagefiles.cpp:307
+msgid "LoadPackageHardMaskJob: Can not find id in database for package %1/%2."
+msgstr ""
+
+#: core/portagefiles.cpp:364
 msgid "Collecting user masked packages..."
+msgstr ""
+
+#: core/portagefiles.cpp:400
+msgid "LoadPackageUserMaskJob: Can not find id in database for package %1/%2."
 msgstr ""
 
 #: core/portagefiles.cpp:445
@@ -367,6 +384,10 @@ msgstr ""
 
 #: core/portagefiles.cpp:522
 msgid "No user unmask depend atom found. Saving to %1 aborted!"
+msgstr ""
+
+#: core/portagefiles.cpp:595
+msgid "LoadPackageUseJob: Can not find id in database for package %1/%2."
 msgstr ""
 
 #: core/portagefiles.cpp:634
@@ -492,6 +513,11 @@ msgstr ""
 msgid "Emerge pretend"
 msgstr ""
 
+#: queue/results.cpp:54
+msgid ""
+"AddResultsPackageListJob: Can not find id in database for package %1/%2."
+msgstr ""
+
 #: portage/portage.cpp:97
 msgid "Wait-counter has reached maximum. Attempting to scan Portage."
 msgstr ""
@@ -520,95 +546,95 @@ msgid "Refreshing Packages"
 msgstr ""
 
 #: portage/portagetab.cpp:243 portage/portagetab.cpp:255
-#: portage/portagetab.cpp:272
+#: portage/portagetab.cpp:273
 msgid "Add to Install Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:253 portage/portagetab.cpp:270
+#: portage/portagetab.cpp:253 portage/portagetab.cpp:271
 msgid "Remove from Install Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:293
+#: portage/portagetab.cpp:294
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:315
+#: portage/portagetab.cpp:316
 msgid "Hardmasked"
 msgstr ""
 
-#: portage/portagetab.cpp:318
+#: portage/portagetab.cpp:319
 msgid "Testing"
 msgstr ""
 
-#: portage/portagetab.cpp:321
+#: portage/portagetab.cpp:322
 msgid "Stable"
 msgstr ""
 
-#: portage/portagetab.cpp:324
+#: portage/portagetab.cpp:325
 msgid "Not on %1"
 msgstr ""
 
-#: portage/portagetab.cpp:326
+#: portage/portagetab.cpp:327
 msgid "Not available"
 msgstr ""
 
-#: portage/portagetab.cpp:358
+#: portage/portagetab.cpp:359
 msgid "<b>Versions installed:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:360
+#: portage/portagetab.cpp:361
 msgid "<b>Versions installed:</b> Not installed<br>"
 msgstr ""
 
-#: portage/portagetab.cpp:371
+#: portage/portagetab.cpp:372
 msgid "<b>Version used for installation:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:375
+#: portage/portagetab.cpp:376
 msgid ""
 "<b>Version used for installation: <font color=darkRed>No version available "
 "on %1</font></b>"
 msgstr ""
 
-#: portage/portagetab.cpp:377
+#: portage/portagetab.cpp:378
 msgid ""
 "<b>Version used for installation: <font color=darkRed>No version available - "
 "please check advanced options</font></b>"
 msgstr ""
 
-#: portage/portagetab.cpp:382
+#: portage/portagetab.cpp:383
 msgid "<b>Versions available:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:384
+#: portage/portagetab.cpp:385
 msgid ""
 "<b>Versions available: <font color=darkRed>No version available on %1</"
 "font><br>"
 msgstr ""
 
-#: portage/portagetab.cpp:406
+#: portage/portagetab.cpp:407
 msgid "&Pretend"
 msgstr ""
 
-#: portage/portagetab.cpp:410
+#: portage/portagetab.cpp:411
 msgid "&Append to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:412
+#: portage/portagetab.cpp:413
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:414
+#: portage/portagetab.cpp:415
 msgid "&Install now"
 msgstr ""
 
-#: portage/portagetab.cpp:462
+#: portage/portagetab.cpp:463
 msgid ""
 "<qt>Portage will not check if the package you want to remove is required by "
 "another package.<br>Do you want to unmerge following packages?</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:463
+#: portage/portagetab.cpp:464
 msgid "Unmerge packages"
 msgstr ""
 
@@ -620,12 +646,25 @@ msgstr ""
 msgid "Inserting emerged package: can not match %1."
 msgstr ""
 
+#: portage/installed.cpp:52
+msgid "AddInstalledPackageJob: Can not find id in database for package %1/%2."
+msgstr ""
+
 #: portage/installed.cpp:90
 msgid "Removing unmerged package: can not match %1."
 msgstr ""
 
+#: portage/installed.cpp:99
+msgid ""
+"RemoveInstalledPackageJob: Can not find id in database for package %1/%2."
+msgstr ""
+
 #: portage/updates.cpp:45
 msgid "Removing update package: can not match package %1."
+msgstr ""
+
+#: portage/updates.cpp:54
+msgid "RemoveUpdatesPackageJob: Can not find id in database for package %1/%2."
 msgstr ""
 
 #: portage/versionview.cpp:76

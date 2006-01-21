@@ -112,13 +112,6 @@ protected slots:
  	 */
 	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
-	/**
-	* Fast method for marking packages as unmasked.
-	* @param idDB
-	* @param true/false
-	*/
-// 	virtual void 			slotSetUnmasked( const QString& name, bool b );
-	
 protected:
 	
 	/**

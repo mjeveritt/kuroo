@@ -39,12 +39,6 @@ public slots:
 	void						slotChanged();
 	
 	/**
-	 * Get this packages database id.
-	 * @return idDB
-	 */
-	QString						id( const QString& package );
-	
-	/**
 	 * Start scan of portage packages.
 	 * @return bool
 	 */

@@ -160,14 +160,14 @@ void Queue::init( QObject *parent )
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
 	internalTimer->start( 1000 );
-	m_id = PortageSingleton::Instance()->id( package );
+	m_id = KurooDBSingleton::Instance()->packageId( package );
 	emit signalPackageStart( m_id );
 }
 
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
 	internalTimer->stop();
-	m_id = PortageSingleton::Instance()->id( package );
+	m_id = KurooDBSingleton::Instance()->packageId( package );
 	emit signalPackageComplete( m_id );
 }
 

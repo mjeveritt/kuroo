@@ -656,8 +656,13 @@ QString KurooDB::category( const QString& id )
  * @param category 		category-subcategory
  * @param name
  */
-QString KurooDB::packageId( const QString& category, const QString& name )
+QString KurooDB::packageId( const QString& package )
 {
+	QString category = package.section( "/", 0, 0 );
+	QString name = package.section( "/", 1, 1 ).section( rxPortageVersion, 0, 0 );
+	
+	kdDebug() << "KurooDB::packageId package=" << package << ". category=" << category << ". name=" << name << "." << endl;
+	
 	QString id = query( " SELECT package.id FROM package, catSubCategory WHERE "
 	                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 	                    " AND catSubCategory.id = package.idCatSubCategory; ").first();
@@ -665,7 +670,7 @@ QString KurooDB::packageId( const QString& category, const QString& name )
 	if ( !id.isEmpty() )
 		return id;
 	else
-		kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+		kdDebug() << i18n("packageId: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 	
 	return QString::null;
 }
@@ -684,10 +689,10 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
 
 QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
-	return (query( " SELECT size FROM version "
-	               " WHERE idPackage = '" + idPackage + "'"
-	               " AND name = '" + version + "'"
-	               " ;")).first();
+	return query( " SELECT size FROM version "
+	              " WHERE idPackage = '" + idPackage + "'"
+	              " AND name = '" + version + "'"
+	              " ;").first();
 }
 
 QStringList KurooDB::packageHardMaskInfo( const QString& id )
@@ -1249,10 +1254,8 @@ DbConnectionPool::~DbConnectionPool()
 			kdDebug() << "Running VACUUM" << endl;
 			conn->query("VACUUM; ");
 		}
-		
 		delete conn;
 	}
-	
 	delete m_dbConfig;
 }
 
@@ -1264,7 +1267,7 @@ void DbConnectionPool::createDbConnections()
 		enqueue(dbConn);
 		m_semaphore--;
 	}
-	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
+	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnection *DbConnectionPool::getDbConnection()

@@ -119,15 +119,28 @@ bool ScanUpdatesJob::doJob()
 		setProgress( count++ );
 		
 		// Find id for this category in db
-		QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+// 		QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+		QString id = KurooDBSingleton::Instance()->query( 
+			" SELECT package.id FROM package, catSubCategory WHERE "
+			" package.name = '" + (*it).name + "' AND catSubCategory.name = '" + (*it).category + "' "
+			" AND catSubCategory.id = package.idCatSubCategory; ").first();
 		
-		// Mark as update in portage
-		if ( !(*it).updateFlags.contains("N") )
+		if ( id.isEmpty() )
+			kdDebug() << i18n("ScanUpdatesJob: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+		else {
+			
+			// Mark as update in portage
+			if ( !(*it).updateFlags.contains("N") )
+				if ( !id.isEmpty() )
+					KurooDBSingleton::Instance()->query( QString(
+						"UPDATE package_temp SET updateVersion = '%1' "
+						" WHERE id = '%2';").arg((*it).version).arg(id), m_db);
+	
 			if ( !id.isEmpty() )
-				KurooDBSingleton::Instance()->query(QString("UPDATE package_temp SET updateVersion = '%1' WHERE id = '%2';").arg((*it).version).arg(id), m_db);
-
-		if ( !id.isEmpty() )
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO updates_temp (idPackage, installedVersion, updateFlags, useFlags ) VALUES ('%1', '%2', '%3', '%4');").arg(id).arg((*it).installedVersion).arg((*it).updateFlags).arg((*it).useFlags), m_db);
+				KurooDBSingleton::Instance()->insert( QString(
+					"INSERT INTO updates_temp (idPackage, installedVersion, updateFlags, useFlags ) "
+					"VALUES ('%1', '%2', '%3', '%4');").arg(id).arg((*it).installedVersion).arg((*it).updateFlags).arg((*it).useFlags), m_db);
+		}
 	}
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	

@@ -246,7 +246,7 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 void Portage::appendWorld( const QString& package )
 {
 	QString category = package.section( "/", 0, 0 );
-	QString name = ( package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
+	QString name = package.section( "/", 1, 1 ).section( rxPortageVersion, 0, 0 );
 	
 	QFile file( KurooConfig::dirWorldFile() );
 	QStringList lines;
@@ -282,7 +282,7 @@ void Portage::appendWorld( const QString& package )
 void Portage::removeFromWorld( const QString& package )
 {
 	QString category = package.section( "/", 0, 0 );
-	QString name = ( package.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
+	QString name = package.section( "/", 1, 1 ).section( rxPortageVersion, 0, 0 );
 	
 	QFile file( KurooConfig::dirWorldFile() );
 	QStringList lines;
@@ -305,20 +305,6 @@ void Portage::removeFromWorld( const QString& package )
 	}
 	else
 		kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
-}
-
-/**
- * Get this packages database id.
- * @param package
- * @return idDB
- */
-QString Portage::id( const QString& package )
-{
-	QString category = package.section( "/", 0, 0 );
-	QString temp( package.section( "/", 1, 1 ).section( " ", 0, 0 ) );
-	QString name( temp.section( rxPortageVersion, 0, 0 ) );
-	
-	return KurooDBSingleton::Instance()->packageId( category, name );
 }
 
 #include "portage.moc"

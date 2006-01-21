@@ -21,8 +21,6 @@
 #include "common.h"
 #include "threadweaver.h"
 
-#include <qvaluestack.h>
-
 /**
  * @class AddResultsPackageListJob
  * @short Thread for adding packages to results in db. Used by emerge.
@@ -46,7 +44,14 @@ public:
 		QString idPackage;
 		EmergePackageList::ConstIterator itEnd = m_packageList.end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
-			QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+// 			QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+			QString id = KurooDBSingleton::Instance()->query( 
+				" SELECT package.id FROM package, catSubCategory WHERE "
+				" package.name = '" + (*it).name + "' AND catSubCategory.name = '" + (*it).category + "' "
+				" AND catSubCategory.id = package.idCatSubCategory; ").first();
+			
+			if ( id.isEmpty() )
+				kdDebug() << i18n("AddResultsPackageListJob: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
 			
 			// We found a dependency, add it
 			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {

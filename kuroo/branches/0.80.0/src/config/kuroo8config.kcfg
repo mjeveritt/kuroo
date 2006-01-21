@@ -84,10 +84,10 @@
 		<default>kdiff3</default>
 		</entry>
 		<entry name="matchColor" type="Color">
-		<default>218, 255, 202</default>
+		<default>126, 255, 112</default>
 		</entry>
 		<entry name="noMatchColor" type="Color">
-		<default>255, 203, 201</default>
+		<default>255, 159, 144</default>
 		</entry>
 	</group>
 	<group name="make.conf">

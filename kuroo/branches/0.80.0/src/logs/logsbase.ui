@@ -65,7 +65,7 @@
                 <enum>NoFrame</enum>
             </property>
             <property name="margin">
-                <number>2</number>
+                <number>0</number>
             </property>
             <property name="wrapPolicy">
                 <enum>AtWordOrDocumentBoundary</enum>

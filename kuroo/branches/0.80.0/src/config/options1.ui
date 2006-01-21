@@ -435,9 +435,9 @@
                             </property>
                             <property name="color">
                                 <color>
-                                    <red>172</red>
+                                    <red>126</red>
                                     <green>255</green>
-                                    <blue>169</blue>
+                                    <blue>112</blue>
                                 </color>
                             </property>
                             <property name="toolTip" stdset="0">
@@ -471,8 +471,8 @@
                             <property name="color">
                                 <color>
                                     <red>255</red>
-                                    <green>195</green>
-                                    <blue>193</blue>
+                                    <green>159</green>
+                                    <blue>144</blue>
                                 </color>
                             </property>
                             <property name="toolTip" stdset="0">

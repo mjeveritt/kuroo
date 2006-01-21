@@ -60,11 +60,11 @@ typedef Singleton<Updates> UpdatesSingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 
 // The package states used by the filters
-enum packageFilters { 
-		FILTER_ALL, 
-		FILTER_INSTALLED, 
-		FILTER_UPDATES, 
-		FILTER_OLD 
+enum packageFilters {
+		FILTER_ALL,
+		FILTER_INSTALLED,
+		FILTER_UPDATES,
+		FILTER_OLD
 };
 
 static const QString FILTER_ALL_STRING( QString::number( FILTER_ALL ) );
@@ -72,19 +72,19 @@ static const QString FILTER_INSTALLED_STRING( QString::number( FILTER_INSTALLED 
 static const QString FILTER_OLD_STRING( QString::number( FILTER_OLD ) );
 
 // Log output states
-enum LogActions { 
-		EMERGE, 
-		KUROO, 
-		ERROR, 
-		TOLOG, 
-		EMERGELOG 
+enum LogActions {
+		EMERGE,
+		KUROO,
+		ERROR,
+		TOLOG,
+		EMERGELOG
 };
 
 // Package and icons
-enum status { 
-		INSTALLED, 
-		PACKAGE, 
-		QUEUED, 
+enum status {
+		PACKAGE,
+		INSTALLED,
+		QUEUED,
 		NOTQUEUED,
 		UNMERGED,
 		NEW,
@@ -95,8 +95,11 @@ enum status {
 		QUEUED_COLUMN
 };
 
+static const QString PACKAGE_STRING( QString::number( PACKAGE ) );
+static const QString INSTALLED_STRING( QString::number( INSTALLED ) );
+
 // The "maskedness" of a package version.
-enum Stability { 
+enum Stability {
 		STABLE,
 		TESTING,
 		HARDMASKED,

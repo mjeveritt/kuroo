@@ -112,13 +112,12 @@ public:
 					keywords = "~*"; // in fact, it would be: m_keywords.prepend("~" + arch), but anyways
 				}
 
-// 				QString id = KurooDBSingleton::Instance()->packageId( category, name );
 				QString id = KurooDBSingleton::Instance()->query( " SELECT package.id FROM package, catSubCategory WHERE "
 				                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 				                    " AND catSubCategory.id = package.idCatSubCategory; ").first();
 				
 				if ( id.isEmpty() )
-					kdDebug() << i18n("LoadPackageKeywordsJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+					kdDebug() << i18n("Load package keywords: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 				else
 					KurooDBSingleton::Instance()->insert( QString( 
 						"INSERT INTO packageKeywords_temp (idPackage, keywords) "
@@ -204,14 +203,13 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-// 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						QString id = KurooDBSingleton::Instance()->query( 
 							" SELECT package.id FROM package, catSubCategory WHERE "
 							" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 							" AND catSubCategory.id = package.idCatSubCategory; ").first();
 						
 						if ( id.isEmpty() )
-							kdDebug() << i18n("LoadPackageUserUnMaskJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+							kdDebug() << i18n("Load user package unmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 						else
 							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
@@ -297,14 +295,13 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-// 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						QString id = KurooDBSingleton::Instance()->query( 
 							" SELECT package.id FROM package, catSubCategory WHERE "
 							" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 							" AND catSubCategory.id = package.idCatSubCategory; ").first();
 						
 						if ( id.isEmpty() )
-							kdDebug() << i18n("LoadPackageHardMaskJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+							kdDebug() << i18n("Load package hardmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 						else
 							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
 
@@ -390,14 +387,13 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-// 						QString id = KurooDBSingleton::Instance()->packageId( category, name );
 						QString id = KurooDBSingleton::Instance()->query( 
 							" SELECT package.id FROM package, catSubCategory WHERE "
 							" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 							" AND catSubCategory.id = package.idCatSubCategory; ").first();
 						
 						if ( id.isEmpty() )
-							kdDebug() << i18n("LoadPackageUserMaskJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+							kdDebug() << i18n("Load user package mask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 						else
 							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
@@ -585,14 +581,13 @@ public:
 			QString use = (*it).section( ' ', 1 );
 			use.simplifyWhiteSpace();
 			
-// 			QString id = KurooDBSingleton::Instance()->packageId( category, name );
 			QString id = KurooDBSingleton::Instance()->query( 
 				" SELECT package.id FROM package, catSubCategory WHERE "
 				" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 				" AND catSubCategory.id = package.idCatSubCategory; ").first();
 			
 			if ( id.isEmpty() )
-				kdDebug() << i18n("LoadPackageUseJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+				kdDebug() << i18n("Load package use: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 			else
 				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" ).arg( id ).arg( use ), m_db );
 			

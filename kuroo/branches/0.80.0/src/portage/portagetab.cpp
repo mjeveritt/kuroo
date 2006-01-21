@@ -461,7 +461,7 @@ void PortageTab::slotUninstall()
 		QStringList packageList( packagesView->selectedPackages() );
 		switch( KMessageBox::questionYesNoList( this, 
 				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
-				      "Do you want to unmerge following packages?</qt>" ), packageList, i18n( "Unmerge packages" ) ) ) {
+				      "Do you want to uninstall following packages?</qt>" ), packageList, i18n( "Uninstall packages" ) ) ) {
 				case KMessageBox::Yes:
 					InstalledSingleton::Instance()->uninstallPackageList( packagesView->selectedId() );
 			}

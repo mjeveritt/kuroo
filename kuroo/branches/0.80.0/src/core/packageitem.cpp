@@ -51,10 +51,10 @@ PackageItem::~PackageItem()
  */
 void PackageItem::init()
 {
-	if ( m_status != FILTER_ALL_STRING )
-		setStatus( INSTALLED );
-	else
+	if ( m_status == PACKAGE_STRING )
 		setStatus( PACKAGE );
+	else
+		setStatus( INSTALLED );
 }
 
 /**
@@ -132,7 +132,7 @@ QString PackageItem::status()
  */
 bool PackageItem::isInstalled()
 {
-	return m_status == INSTALLED;
+	return ( m_status == INSTALLED_STRING );
 }
 
 /**

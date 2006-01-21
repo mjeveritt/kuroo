@@ -42,14 +42,13 @@ public:
 		else
 			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
 		
-// 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		QString id = KurooDBSingleton::Instance()->query( 
 			" SELECT package.id FROM package, catSubCategory WHERE "
 			" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 			" AND catSubCategory.id = package.idCatSubCategory; ").first();
 		
 		if ( id.isEmpty() )
-			kdDebug() << i18n("AddInstalledPackageJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << i18n("Add installed package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
 			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
@@ -89,14 +88,13 @@ public:
 		else
 			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
 
-// 		QString id = KurooDBSingleton::Instance()->packageId( category, name );
 		QString id = KurooDBSingleton::Instance()->query( 
 			" SELECT package.id FROM package, catSubCategory WHERE "
 			" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
 			" AND catSubCategory.id = package.idCatSubCategory; ").first();
 		
 		if ( id.isEmpty() )
-			kdDebug() << i18n("RemoveInstalledPackageJob: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << i18n("Remove installed package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 		else {
 			
 			// Mark package as uninstalled or remove it if old

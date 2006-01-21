@@ -81,6 +81,7 @@ void HistoryTab::slotInit()
  */
 void HistoryTab::slotReload()
 {
+	kdDebug() << "HistoryTab::slotReload" << endl;
 	historyView->loadFromDB();
 }
 

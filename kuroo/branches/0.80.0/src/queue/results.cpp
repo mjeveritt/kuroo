@@ -44,14 +44,14 @@ public:
 		QString idPackage;
 		EmergePackageList::ConstIterator itEnd = m_packageList.end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
-// 			QString id = KurooDBSingleton::Instance()->packageId( (*it).category, (*it).name );
+			
 			QString id = KurooDBSingleton::Instance()->query( 
 				" SELECT package.id FROM package, catSubCategory WHERE "
 				" package.name = '" + (*it).name + "' AND catSubCategory.name = '" + (*it).category + "' "
 				" AND catSubCategory.id = package.idCatSubCategory; ").first();
 			
 			if ( id.isEmpty() )
-				kdDebug() << i18n("AddResultsPackageListJob: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+				kdDebug() << i18n("Add result package list: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
 			
 			// We found a dependency, add it
 			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {

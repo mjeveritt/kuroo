@@ -74,6 +74,7 @@ PortageTab::PortageTab( QWidget* parent )
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
+	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReload() ) );
 	
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
@@ -287,9 +288,10 @@ void PortageTab::slotPackage()
 	QString package( packagesView->currentPortagePackage()->name() );
 	QString category( packagesView->currentPortagePackage()->category() );
 	
-	QString lines = "<font size=\"+1\">" + package + "</font> ";
+	QString lines =  "<table width=100%><tr>";
+			lines += "<td bgcolor=#7a5ada><b><font color=white><font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
-			lines += category.section( "-", 1, 1 ) + ") <br>";
+			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr><tr><td>";
 			lines += packagesView->currentPortagePackage()->description() + "<br>";
 			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
 			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a><br>";
@@ -363,10 +365,10 @@ void PortageTab::slotPackage()
 	// Construct installation summary
 	if ( !linesEmergeVersion.isEmpty() ) {
 		
-	// Set active version in Inspector dropdown menus
-	packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
-	packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
-	packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
+		// Set active version in Inspector dropdown menus
+		packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
+		packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
+		packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
 		
 		packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
 		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
@@ -384,7 +386,7 @@ void PortageTab::slotPackage()
 	else
 		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available on %1</font><br>").arg( KurooConfig::arch() );
 	
-	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion );
+	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion + "</td></tr></table>");
 	
 	// Refresh inspector if visible
 	if ( packageInspector->isVisible() )

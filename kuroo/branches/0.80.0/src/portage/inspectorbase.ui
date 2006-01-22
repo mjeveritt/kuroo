@@ -640,16 +640,19 @@ in the official portage tree.</string>
             </property>
             <property name="paletteBackgroundColor">
                 <color>
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>122</red>
+                    <green>90</green>
+                    <blue>218</blue>
                 </color>
             </property>
             <property name="frameShape">
-                <enum>GroupBoxPanel</enum>
+                <enum>TabWidgetPanel</enum>
             </property>
             <property name="frameShadow">
                 <enum>Plain</enum>
+            </property>
+            <property name="lineWidth">
+                <number>0</number>
             </property>
             <grid>
                 <property name="name">

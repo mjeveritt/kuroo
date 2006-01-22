@@ -206,9 +206,9 @@ void PackageInspector::edit( PortageListView::PortageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
-	dialog->package->setText( "<font size=\"+2\">" + package + "</font> " +
+	dialog->package->setText( "<font color=white><font size=\"+2\">" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" +
-	                          category.section( "-", 1, 1 ) + ")");
+	                          category.section( "-", 1, 1 ) + ")</font> ");
 	
 	showSettings();
 	slotRefreshTabs();

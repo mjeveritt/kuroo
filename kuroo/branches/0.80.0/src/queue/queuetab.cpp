@@ -145,11 +145,13 @@ void QueueTab::slotBusy( bool busy )
 		pbClear->setDisabled( true );
 		pbRemove->setDisabled( true );
 		cbDownload->setDisabled( true );
+		cbForce->setDisabled( true );
 	}
 	else {
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );
 		cbDownload->setDisabled( false );
+		cbForce->setDisabled( false );
 	}
 
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )

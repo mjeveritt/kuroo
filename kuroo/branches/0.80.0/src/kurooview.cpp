@@ -128,7 +128,7 @@ void KurooView::slotInit()
 			i18n( "<qt>Kuroo database is empty!<br>"
 			      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
 			      "Next, package information in Portage will be collected.</qt>"), 
-		                                            i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
+					i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
 				     
 			case KMessageBox::Continue: {
 				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
@@ -176,8 +176,10 @@ void KurooView::slotReset()
 void KurooView::slotCheckPortage()
 {
 	// After db is recreated because of new version restore data
-	if ( hasHistoryRestored )
+	if ( hasHistoryRestored ) {
 		KurooDBSingleton::Instance()->restoreBackup();
+		hasHistoryRestored = false;
+	}
 	
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
@@ -282,6 +284,8 @@ void KurooView::slotResetMenu( QListBoxItem* menuItem )
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+// Create menu icons and highlight menutext when changes.
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
 	: QListBoxItem( listbox ), m_modified( false )
@@ -306,9 +310,10 @@ void KurooView::IconListItem::paint( QPainter *painter )
 	int wp = mPixmap.width();
 	int hp = mPixmap.height();
 	
-	painter->drawPixmap( (mMinimumWidth-wp)/2, 5, mPixmap );
+	painter->drawPixmap( (mMinimumWidth-wp) / 2, 5, mPixmap );
+	
 	if( !text().isEmpty() )
-		painter->drawText( 0, hp+7, mMinimumWidth, ht, Qt::AlignCenter, text() );
+		painter->drawText( 0, hp + 7, mMinimumWidth, ht, Qt::AlignCenter, text() );
 }
 
 int KurooView::IconListItem::height( const QListBox *lb ) const

@@ -445,15 +445,19 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	
+	// Allow for multiple words match
+	QString textString = escapeString( text.simplifyWhiteSpace() );
+	textString = textString.replace( ' ', '%' );
+	
 	// Name or description choice from comboBox
 	if ( !text.isEmpty() )
-		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
+		textQuery = " AND (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
 	
 	switch ( filter ) {
 		case FILTER_ALL:
 			filterQuery = QString::null;
 			if ( !text.isEmpty() )
-				textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%')";
+				textQuery = " WHERE (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%')";
 			break;
 			
 		case FILTER_INSTALLED:
@@ -479,9 +483,13 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 	QString filterQuery, textQuery;
 	QStringList resultList( categoryId );
 	
+	// Allow for multiple words match
+	QString textString = escapeString( text.simplifyWhiteSpace() );
+	textString = textString.replace( ' ', '%' );
+	
 	// Name or description choice from comboBox
 	if ( !text.isEmpty() )
-		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
+		textQuery = " AND (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
 
 	if ( categoryId != "0" ) {
 
@@ -520,9 +528,13 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 {
 	QString filterQuery, textQuery;
 	
+	// Allow for multiple words match
+	QString textString = escapeString( text.simplifyWhiteSpace() );
+	textString = textString.replace( ' ', '%' );
+	
 	// Name or description choice from comboBox
 	if ( !text.isEmpty() )
-		textQuery = " AND (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
+		textQuery = " AND (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
 	
 	if ( categoryId == "0" ) {
 		
@@ -531,7 +543,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 				case FILTER_ALL:
 					filterQuery = QString::null;
 					if ( !text.isEmpty() )
-						textQuery = " WHERE (name LIKE '%" + escapeString( text ) + "%' OR description LIKE '%" + escapeString( text ) + "%') ";
+						textQuery = " WHERE (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
 					break;
 					
 				case FILTER_INSTALLED:

@@ -101,20 +101,20 @@ class KurooView::IconListItem : public QListBoxItem
 {
 public:
 	IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text );
-	virtual int height( const QListBox *lb ) const;
-	virtual int width( const QListBox *lb ) const;
-	int expandMinimumWidth( int width );
-	void setChanged( bool modified );
-	bool isChanged();
+	virtual int 	height( const QListBox *lb ) const;
+	virtual int 	width( const QListBox *lb ) const;
+	int 			expandMinimumWidth( int width );
+	void 			setChanged( bool modified );
+	bool 			isChanged();
 	
 protected:
-	const QPixmap &defaultPixmap();
-	void paint( QPainter *painter );
+	const QPixmap 	&defaultPixmap();
+	void 			paint( QPainter *painter );
 	
 private:
-	bool m_modified;
-	QPixmap mPixmap;
-	int mMinimumWidth;
+	bool 			m_modified;
+	QPixmap 		mPixmap;
+	int 			mMinimumWidth;
 };
 
 #endif // _KUROOVIEW_H_

@@ -1,0 +1,755 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>InspectorBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>InspectorBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>552</width>
+            <height>405</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QTabWidget" row="1" column="0">
+            <property name="name">
+                <cstring>inspectorTabs</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Versions</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <widget class="QButtonGroup" row="0" column="1">
+                        <property name="name">
+                            <cstring>groupSelectStability</cstring>
+                        </property>
+                        <property name="title">
+                            <string>For this package always install:</string>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>5</number>
+                            </property>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>rbStable</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Stab&amp;le Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+L</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>rbTesting</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Testi&amp;ng Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>rbMasked</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Mas&amp;ked Version</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="3" column="0">
+                                <property name="name">
+                                    <cstring>layout26</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QComboBox" row="2" column="1">
+                                        <item>
+                                            <property name="text">
+                                                <string>Select Version</string>
+                                            </property>
+                                        </item>
+                                        <property name="name">
+                                            <cstring>cbVersionsSpecific</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                    <spacer row="2" column="0">
+                                        <property name="name">
+                                            <cstring>spacer20</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>13</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
+                                        <property name="name">
+                                            <cstring>rbVersionsSpecific</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Install onl&amp;y specific version 
+and do not update further</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+Y</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="Line" row="0" column="0" rowspan="1" colspan="3">
+                                        <property name="name">
+                                            <cstring>line1</cstring>
+                                        </property>
+                                        <property name="paletteForegroundColor">
+                                            <color>
+                                                <red>185</red>
+                                                <green>185</green>
+                                                <blue>185</blue>
+                                            </color>
+                                        </property>
+                                        <property name="frameShape">
+                                            <enum>HLine</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                            <enum>Plain</enum>
+                                        </property>
+                                        <property name="lineWidth">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                    </widget>
+                                    <spacer row="2" column="2">
+                                        <property name="name">
+                                            <cstring>spacer19</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Preferred</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>10</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </grid>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>groupAdvanced</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Advanced functionallity:</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>5</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Only use this if you really know what you do. &lt;b&gt;We have told you!&lt;/b&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QGroupBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>groupArchitecture</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>I know what I do and want to continue</string>
+                                </property>
+                                <property name="checkable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>5</number>
+                                    </property>
+                                    <widget class="QCheckBox" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>ckbAvailable</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Make this package available on your architecture though it is not activated
+in the official portage tree.</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+M</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>textLabel3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&lt;b&gt;Please note: this may harm your machine!&lt;/b&gt;</string>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>groupVersionsView</cstring>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="title">
+                            <string>Available Versions for this package:</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>3</number>
+                            </property>
+                            <property name="spacing">
+                                <number>3</number>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pixmapLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image0</pixmap>
+                                </property>
+                                <property name="scaledContents">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="VersionView" row="0" column="0" rowspan="1" colspan="4">
+                                <property name="name">
+                                    <cstring>versionsView</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>150</width>
+                                        <height>80</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>170</height>
+                                    </size>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="1">
+                                <property name="name">
+                                    <cstring>textLabel3_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Used for installation</string>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="2">
+                                <property name="name">
+                                    <cstring>spacer13</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>16</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KURLLabel" row="1" column="3">
+                                <property name="name">
+                                    <cstring>infoHardMasked</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Use Flags</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <widget class="KListView" row="2" column="0" rowspan="1" colspan="3">
+                        <column>
+                            <property name="text">
+                                <string>Add/Remove</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Available</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Description</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>useView</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>3</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>t1_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>100</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Add or Remove Use Flags support:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel5_2_3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Select version:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cbVersionsUse</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="0" column="2">
+                        <property name="name">
+                            <cstring>spacer10_3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>100</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Chan&amp;geLog</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <widget class="KTextBrowser" row="0" column="0">
+                        <property name="name">
+                            <cstring>changelogBrowser</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>E&amp;build</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <widget class="KTextBrowser" row="1" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>ebuildBrowser</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel5_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Select version:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cbVersionsEbuild</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="0" column="2">
+                        <property name="name">
+                            <cstring>spacer10</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>100</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Dependencies</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <widget class="KTextBrowser" row="1" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>dependencyBrowser</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel5_2_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Select version:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cbVersionsDependencies</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="0" column="2">
+                        <property name="name">
+                            <cstring>spacer10_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>100</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>I&amp;nstalled Files</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <widget class="KTextBrowser" row="1" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>installedFilesBrowser</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel5_2_2_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Select version:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cbVersionsInstalled</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="0" column="2">
+                        <property name="name">
+                            <cstring>spacer10_2_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>100</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+        </widget>
+        <widget class="QFrame" row="0" column="0">
+            <property name="name">
+                <cstring>frame7</cstring>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>3</number>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>package</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <property name="text">
+                        <string>Package</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>pbPrevious</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;&lt;</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Previous Package</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="2">
+                    <property name="name">
+                        <cstring>pbNext</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&gt;&gt;</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Next Package</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>VersionView</class>
+        <header location="local">versionview.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image1</pixmap>
+        <property type="String">name</property>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="606">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000022549444154388d8d925f48935118879ff37ddfa6ce5292965b4158d81f0a8240a3ccea6a096110d14545371581088145c16ebae86e8941574284b75217e54dd285a622b416d8aa513652736ee69c3ad996dbdcbe6da70b371836702ffc3870cefb3ee777cefb42797107705669dbfc46b5c20f3496590780d98829d6697d2edd8e84ecbd34222b35931f680050cb003cb171f74cd3da35867dfd2c27fe301f99a98de92be38057dba2f8402d968e73dc22c202e1e97542628a80f47e040600942d008e36ba342326bc8c2384e0ab1c04785848508a560b701ca8caefb558397cf9045708e245a030cb04511607800fc580d6ba8afaf4e9bdedc1f38dd7dd404ffeace72276040a3edc4891e5bb1cca00f6628b1ad066d3efa9579b6e506fb6a267539da3b3af9583b49e3ac459a671a10a035ec648107901fc2a06281a46dbb1dc059cefbe2084a0abe51926ada6a31d3b59322cf39b340926e5681c78bcf9931403953529d6b0248f32e47c8b75b785ae7d7dece1085ec65085811ff23d3aebdd40e83f4092d8ed57d8a52487ea6960e1ef2cd65033ba4812638938abcce00a024f4bb54905e6c3cc6dafa6ae653fcd2c7e4e225206260dc364659609f98608c10780ab14a0d0c64783744f8598a642566fdcac4709e32780e727d057aab818904c93b8d9cffd5c960c938ca008b530340ec0ccc69c146b67e1098508c458dab14ae06494103edc04f07c035ee693376b17b02a3639aa027a8138b0027c028279a7a514fd076d20c7b2d8901e6a0000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>versionview.h</includehint>
+    <includehint>kurllabel.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+    <includehint>ktextbrowser.h</includehint>
+</includehints>
+</UI>

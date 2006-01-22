@@ -349,7 +349,7 @@
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="1">
                         <property name="name">
-                            <cstring>layout13</cstring>
+                            <cstring>layout7</cstring>
                         </property>
                         <grid>
                             <property name="name">
@@ -358,17 +358,6 @@
                             <property name="spacing">
                                 <number>0</number>
                             </property>
-                            <widget class="QCheckBox" row="1" column="0">
-                                <property name="name">
-                                    <cstring>cbDownload</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Download all pac&amp;kages before installing them</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                            </widget>
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>textLabel1_2</cstring>
@@ -385,10 +374,10 @@
                                     <number>0</number>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;b&gt;Advanced Options&lt;/b&gt;</string>
+                                    <string>&lt;b&gt;Emerge Options&lt;/b&gt;</string>
                                 </property>
                             </widget>
-                            <spacer row="2" column="0">
+                            <spacer row="3" column="0">
                                 <property name="name">
                                     <cstring>spacer5</cstring>
                                 </property>
@@ -401,10 +390,32 @@
                                 <property name="sizeHint">
                                     <size>
                                         <width>20</width>
-                                        <height>20</height>
+                                        <height>5</height>
                                     </size>
                                 </property>
                             </spacer>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>cbForce</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Force reinstall of config files</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>cbDownload</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Download all pac&amp;kages before installing them</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
                         </grid>
                     </widget>
                 </grid>

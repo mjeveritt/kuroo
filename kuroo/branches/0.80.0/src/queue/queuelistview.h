@@ -24,10 +24,6 @@
 #include "packagelistview.h"
 #include "packageitem.h"
 
-#include <qvaluestack.h>
-#include <qpixmap.h>
-
-class QPixmap;
 class PackageItem;
 class KProgress;
 
@@ -101,8 +97,6 @@ signals:
 private:
 	KLocale 				*loc;
 	int 					sumSize;
-	QPixmap 				pxPackage, pxInstalled, pxStable, pxTesting;
-	QValueStack<QString> 	dependencyPackages;
 };
 
 /**

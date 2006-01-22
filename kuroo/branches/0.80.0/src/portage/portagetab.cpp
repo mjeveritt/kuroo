@@ -458,7 +458,17 @@ void PortageTab::slotQueue()
 void PortageTab::slotUninstall()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		QStringList packageList( packagesView->selectedPackages() );
+		const QStringList selectedList = packagesView->selectedId();
+		
+		// Pick only installed packages
+		QStringList packageList, idList;
+		foreach ( selectedList ) {
+			if ( packagesView->itemId( *it )->isInstalled() ) {
+				packageList += packagesView->itemId( *it )->name();
+				idList += *it;
+			}
+		}
+		
 		switch( KMessageBox::questionYesNoList( this, 
 				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
 				      "Do you want to uninstall following packages?</qt>" ), packageList, i18n( "Uninstall packages" ) ) ) {

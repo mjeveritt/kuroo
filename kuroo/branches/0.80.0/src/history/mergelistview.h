@@ -21,11 +21,8 @@
 #ifndef MERGELISTVIEW_H
 #define MERGELISTVIEW_H
 
-#include <qpixmap.h>
-
 #include <klistview.h>
 
-class QPixmap;
 class KListViewItem;
 
 typedef QMap< QString, QListViewItem* > ItemMap;
@@ -44,11 +41,10 @@ public:
 	void 			loadFromDB();
 	
 signals:
-	void    	signalHistoryLoaded();
+	void    		signalHistoryLoaded();
 	
 private:
 	KLocale 		*loc;
-	QPixmap 		pxPackageHeader;
 	ItemMap			itemMap;
 };
 

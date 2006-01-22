@@ -403,7 +403,7 @@
                                                 <cstring>pbAdvanced</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Advanced Options...</string>
+                                                <string>Options...</string>
                                             </property>
                                             <property name="accel">
                                                 <string></string>

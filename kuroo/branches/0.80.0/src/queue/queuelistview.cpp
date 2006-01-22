@@ -107,6 +107,7 @@ void QueueListView::QueueItem::oneStep()
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	if ( this->isVisible() ) {
+		
 		if ( column == 5 && m_isChecked ) {
 			QRect rect = listView()->itemRect( this );
 			QHeader *head = listView()->header();
@@ -115,6 +116,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 			bar->setGeometry( rect );
 			bar->show();
 		}
+		
 		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
 }
@@ -152,12 +154,13 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 2, QListView::Manual );
 	setColumnWidthMode( 3, QListView::Manual );
 	setColumnWidthMode( 4, QListView::Manual );
-	setResizeMode( QListView::LastColumn );
+	
 	setColumnWidth( 0, 200 );
 	setColumnWidth( 1, 60 );
 	setColumnWidth( 2, 60 );
 	setColumnWidth( 3, 80 );
-	setColumnWidth( 5, 100 );
+	setColumnWidth( 5, 80 );
+	
 	setTooltipColumn( 2 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.

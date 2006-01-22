@@ -49,9 +49,6 @@ public slots:
 	CategoryItem*							currentCategory();
 	QString									currentCategoryId();
 	void									setCurrentCategoryId( const QString& package );
-
-private:
-	QPixmap 								pxRepository, pxCategory;
 	
 protected:
 	int 									m_currentId;

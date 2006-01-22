@@ -178,6 +178,10 @@ void QueueTab::slotGo()
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
 	
+	// Force portage to reinstall files protected in CONFIG_PROTECT
+	if ( cbForce->isChecked() )
+		packageList.prepend( "--noconfmem" );
+	
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {

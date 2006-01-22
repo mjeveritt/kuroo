@@ -46,7 +46,7 @@
  * @short The package Inspector dialog for editing settings.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( QString::null ), package( QString::null ), m_portagePackage( 0 ), 
+: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( QString::null ), package( QString::null ), m_portagePackage( 0 ), 
 	hasVersionSettingsChanged( false ), hasUseSettingsChanged( false ), 
 	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
 	hardMaskComment( QString::null )
@@ -314,6 +314,12 @@ void PackageInspector::slotCancel()
 {
 	rollbackSettings();
 	hasVersionSettingsChanged = false;
+	accept();
+}
+
+void PackageInspector::slotOk()
+{
+	slotApply();
 	accept();
 }
 

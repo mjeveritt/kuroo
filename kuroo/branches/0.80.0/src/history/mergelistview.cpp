@@ -38,14 +38,16 @@
 MergeListView::MergeListView( QWidget *parent, const char *name )
 	: KListView( parent, name ), loc( KGlobal::locale() )
 {
-	addColumn( i18n("Date") );
+	addColumn( i18n("New") );
+	addColumn( i18n("Original") );
 	
-	setMinimumSize( QSize(50, 0) );
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated( true );
 	setFullWidth( true );
 
+	setColumnWidth( 0, 300 );
+	setColumnWidth( 1, 300 );
 	setColumnWidthMode( 0, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
 	
@@ -56,7 +58,7 @@ MergeListView::~MergeListView()
 {
 }
 
-/** 
+/**
  * Populate listview with log entries
  */
 void MergeListView::loadFromDB()
@@ -80,7 +82,7 @@ void MergeListView::loadFromDB()
 			item->setOpen( true );
 		}
 
-		new KListViewItem( itemMap[ date ], source );
+		new KListViewItem( itemMap[ date ], source, destination );
 	}
 	
 	emit signalHistoryLoaded();

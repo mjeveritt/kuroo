@@ -36,8 +36,7 @@
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
-	logBrowser->setTextFormat( Qt::LogText );
-
+	logBrowser->setTextFormat( Qt::LogText );	
 	slotInit();
 }
 
@@ -73,14 +72,6 @@ void LogsTab::slotInit()
 		verboseLog->setChecked( true );
 	else
 		verboseLog->setChecked( false );
-}
-
-/**
- * Reload history view.
- */
-void LogsTab::slotReload()
-{
-// 	historyView->loadFromDB();
 }
 
 #include "logstab.moc"

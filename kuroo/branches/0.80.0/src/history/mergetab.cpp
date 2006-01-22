@@ -30,6 +30,7 @@
 #include <kmessagebox.h>
 #include <klistviewsearchline.h>
 #include <krun.h>
+#include <kprocio.h>
 
 /**
  * @class MergeTab
@@ -80,9 +81,22 @@ void MergeTab::slotClearFilter()
  */
 void MergeTab::slotViewFile( QListViewItem *item )
 {
-	QString source = item->text( 0 );
-	if ( !source.isEmpty() )
-		new KRun( "file://" + KUROODIR + "backup/" + source );
+	QString source = KUROODIR + "backup/" + item->text( 0 );
+	QString destination = KUROODIR + "backup/" + item->text( 1 );
+	if ( !source.isEmpty() ) {
+// 		new KRun( "kdiff3 " + KUROODIR + "backup/" + source );
+		
+		KProcIO* eProc = new KProcIO();
+		*eProc << KurooConfig::etcUpdateTool() << source << destination;
+		connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );
+		eProc->start( KProcess::NotifyOnExit, true );
+	}
+}
+
+void MergeTab::cleanup( KProcess* eProc )
+{
+	delete eProc;
+	eProc = 0;
 }
 
 #include "mergetab.moc"

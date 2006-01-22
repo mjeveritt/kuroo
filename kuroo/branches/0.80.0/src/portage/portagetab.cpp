@@ -294,7 +294,7 @@ void PortageTab::slotPackage()
 			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr><tr><td>";
 			lines += packagesView->currentPortagePackage()->description() + "<br>";
 			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
-			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a><br>";
+			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a></td></tr><tr><td>";
 	
 	QString linesAvailable;
 	QString linesInstalled;

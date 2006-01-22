@@ -22,6 +22,8 @@
 #include "message.h"
 #include "statusbar.h"
 
+#include <qtextcodec.h>
+
 #include <kprocio.h>
 #include <kmessagebox.h>
 
@@ -32,7 +34,9 @@
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent )
 {
-	eProc = new KProcIO();
+	QTextCodec *codec = QTextCodec::codecForName("utf8");
+	eProc = new KProcIO( codec );
+	eProc->setUseShell( true );
 }
 
 Emerge::~Emerge()
@@ -446,7 +450,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
-			LogSingleton::Instance()->writeLog( line, EMERGE );
+			LogSingleton::Instance()->writeLog( line.remove("****"), EMERGE );
 		
 		countEtcUpdates( lineLower );
 	}

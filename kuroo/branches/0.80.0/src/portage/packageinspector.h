@@ -59,6 +59,7 @@ private slots:
 	void							slotGetInstalledFiles( const QString& version );
 	void							slotApply();
 	void							slotCancel();
+	void							slotOk();
 	void							rollbackSettings();
 	
 	void							slotSetStability( int rbStability );

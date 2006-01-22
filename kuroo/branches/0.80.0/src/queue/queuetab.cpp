@@ -31,7 +31,6 @@
 #include <kdialogbase.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
 #include <kpopupmenu.h>
 #include <kuser.h>
 

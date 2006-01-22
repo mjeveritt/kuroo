@@ -18,12 +18,12 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include <qlistview.h>
-
 #include "common.h"
 #include "packagelistview.h"
 #include "packageitem.h"
 #include "tooltip.h"
+
+#include <qlistview.h>
 
 /**
  * @class PackageListView

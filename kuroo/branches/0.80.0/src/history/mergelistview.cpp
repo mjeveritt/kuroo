@@ -23,13 +23,8 @@
 
 #include <qheader.h>
 #include <qlabel.h>
-#include <qimage.h>
-#include <qpixmap.h>
 
 #include <klistview.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kiconloader.h>
 
 /**
  * @class MergeListView

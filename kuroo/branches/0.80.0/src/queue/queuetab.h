@@ -25,7 +25,6 @@
 class KListView;
 class QListViewItem;
 class PretendInspector;
-class KDialogBase;
 
 /**
  * @class QueueTab

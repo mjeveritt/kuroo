@@ -23,10 +23,8 @@
 #define CATEGORIESLISTVIEW_H
 
 #include <klistview.h>
-#include <qpixmap.h>
 #include <qvaluevector.h>
 
-class QPixmap;
 
 /**
  * Creates category listview.

@@ -23,16 +23,6 @@
 
 #include <qobject.h>
 
-typedef struct Info {
-	QString slot;
-	QString homepage;
-	QString licenses;
-	QString description;
-	QString keywords;
-	QString useFlags;
-	QString size;
-};
-
 /**
  * @class Installed
  * @short Object for installed packages.

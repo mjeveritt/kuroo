@@ -26,7 +26,7 @@
 
 /**
  * @class Signalist
- * @short Object which forwards signals, so they can picked up system wide.
+ * @short Object which forwards signals, so they can picked up systemwide.
  * Just connect to this instance.
  */
 Signalist::Signalist( QObject* m_parent )

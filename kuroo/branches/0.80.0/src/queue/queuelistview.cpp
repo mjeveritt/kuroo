@@ -25,15 +25,8 @@
 #include "packagelistview.h"
 
 #include <qheader.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qpixmap.h>
 
 #include <klistview.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <kcursor.h>
 #include <kprogress.h>
 
 static QTime totalDuration;

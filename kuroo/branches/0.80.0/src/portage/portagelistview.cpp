@@ -27,9 +27,6 @@
 #include "dependatom.h"
 
 #include <qheader.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qpixmap.h>
 #include <qmap.h>
 
 #include <kconfig.h>

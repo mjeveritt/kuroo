@@ -21,8 +21,6 @@
 #ifndef RESULTS_H
 #define RESULTS_H
 
-// #include "package.h"
-
 #include <qobject.h>
 
 /**

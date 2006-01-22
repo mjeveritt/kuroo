@@ -21,11 +21,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include <qregexp.h>
-
-#include <klocale.h>
-#include <kdebug.h>
-
 #include "settings.h"
 #include "images.h"
 #include "message.h"
@@ -43,6 +38,12 @@
 #include "history.h"
 #include "portagefiles.h"
 #include "singleton.h"
+
+#include <qregexp.h>
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 // Define all singleton objects
 typedef Singleton<Images> ImagesSingleton;
@@ -133,3 +134,13 @@ for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
 
 #endif
+
+typedef struct Info {
+	QString slot;
+	QString homepage;
+	QString licenses;
+	QString description;
+	QString keywords;
+	QString useFlags;
+	QString size;
+};

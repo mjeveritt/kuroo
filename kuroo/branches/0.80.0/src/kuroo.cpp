@@ -35,13 +35,10 @@
 #include <qpaintdevicemetrics.h>
 #include <qtimer.h>
 
-#include <kglobal.h>
-#include <kiconloader.h>
 #include <kdeversion.h>
 #include <kstatusbar.h>
 #include <kaccel.h>
 #include <kfiledialog.h>
-#include <kconfig.h>
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>

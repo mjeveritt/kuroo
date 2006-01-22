@@ -29,7 +29,6 @@
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
 #include <klistviewsearchline.h>
-#include <krun.h>
 
 /**
  * @class HistoryTab

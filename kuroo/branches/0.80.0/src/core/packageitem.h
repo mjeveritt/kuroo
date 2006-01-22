@@ -23,7 +23,6 @@
 
 #include <klistview.h>
 
-#include <qpixmap.h>
 #include <qobject.h>
 
 /**

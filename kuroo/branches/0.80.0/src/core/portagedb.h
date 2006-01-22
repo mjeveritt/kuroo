@@ -1,11 +1,7 @@
-/***************************************************************************
+/**************************************************************************
 *   Copyright (C) 2004 by karye                                           *
 *   karye@users.sourceforge.net                                           *
-* (c) 2004 Mark Kretschmann <markey@web.de>
-* (c) 2004 Christian Muehlhaeuser <chris@chris.de>
-* (c) 2004 Sami Nieminen <sami.nieminen@iki.fi>
-* (c) 2005 Ian Monroe <ian@monroe.nu>
-*                                                                         *
+*   From Amarok code                                                      *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -225,15 +221,8 @@ public:
 	void			addRefreshTime();
 	void			addBackup( const QString& source, const QString& destination );
 	QStringList 	allStatistic();
-	
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for Cache
-	//////////////////////////////////////////////////////////////////////////////
 	QStringList 	allCache();
 	bool			isCacheEmpty();
-	
-	
 	
 private:
 	QObject*		m_parent;

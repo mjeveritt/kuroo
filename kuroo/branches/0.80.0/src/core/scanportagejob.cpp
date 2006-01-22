@@ -97,7 +97,11 @@ bool ScanPortageJob::doJob()
 		return false;
 	}
 	
-	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
+	if ( !KurooConfig::portageCount().isEmpty() )
+		setProgressTotalSteps( KurooConfig::portageCount().toInt() );
+	else
+		setProgressTotalSteps( 10000 );
+	
 	setStatus( "ScanPortage", i18n("Refreshing Portage view...") );
 	
 	// Temporary table for all categories
@@ -297,7 +301,9 @@ bool ScanPortageJob::doJob()
 			QString homepage = itPackage.data().homepage;
 			
 			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta) "
-			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " ).arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " 
+			                     ).arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
+			
 			sql += QString( ");" );
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
 			
@@ -312,9 +318,10 @@ bool ScanPortageJob::doJob()
 				QString size = itVersion.data().size;
 				QString keywords = itVersion.data().keywords;
 				
-				KurooDBSingleton::Instance()->insert( QString( 
+				KurooDBSingleton::Instance()->insert( QString(
 					"INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot) "
-					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');" ).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ), m_db );
+					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');" 
+					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ), m_db );
 				
 			}
 		}

@@ -263,7 +263,7 @@ void PortageTab::slotPackage()
 {
 // 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
-	if ( packagesView->currentPortagePackage()->isInstalled() && KUser().isSuperUser() )
+	if ( packagesView->currentPortagePackage()->isInstalled() && KUser().isSuperUser() && !EmergeSingleton::Instance()->isRunning() )
 		pbUninstall->setDisabled( false );
 	else
 		pbUninstall->setDisabled( true );

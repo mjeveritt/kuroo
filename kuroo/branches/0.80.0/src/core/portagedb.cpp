@@ -1154,10 +1154,10 @@ QStringList SqliteConnection::query( const QString& statement )
 					break;
 				}
 				::usleep(100000); // Sleep 100 msec
-				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << endl;
+				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << endl;
 			}
 			if ( error == SQLITE_MISUSE )
-				kdDebug() << "sqlite3_step: MISUSE" << endl;
+				kdDebug() << "sqlite3_step: MISUSE on query: " << statement << endl;
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 			
@@ -1207,11 +1207,11 @@ int SqliteConnection::insert( const QString& statement )
 					break;
 				}
 				::usleep(100000); // Sleep 100 msec
-				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << endl;
+				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on insert: " << statement << endl;
 			}
 			
 			if ( error == SQLITE_MISUSE )
-				kdDebug() << "sqlite3_step: MISUSE" << endl;
+				kdDebug() << "sqlite3_step: MISUSE on insert: " << statement << endl;
 			
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;

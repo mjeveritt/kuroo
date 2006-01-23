@@ -271,9 +271,9 @@ void PortageTab::slotPackage()
 	}
 	else {
 		pbUninstall->setDisabled( true );
-		pbQueue->setDisabled( true );
-		pbAdvanced->setDisabled( true );
-		packageInspector->setDisabled( true );
+// 		pbQueue->setDisabled( true );
+// 		pbAdvanced->setDisabled( true );
+// 		packageInspector->setDisabled( true );
 	}
 	
 	if ( packagesView->currentPortagePackage()->isQueued() )

@@ -256,6 +256,7 @@ void QueueListView::insertPackageList()
 		QueueSingleton::Instance()->insertInCache( id );
 	}
 	
+	setColumnWidth( 5, 80 );
 	emit( signalQueueLoaded() );
 }
 

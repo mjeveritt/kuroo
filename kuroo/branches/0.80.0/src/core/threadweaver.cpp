@@ -128,7 +128,6 @@ bool ThreadWeaver::event( QEvent *e )
 	{
 	case JobEvent: {
 		Job *job = (Job*)e;
-//         DebugStream d = kdDebug() << "Job ";
 		const QCString name = job->name();
 		Thread *thread = job->m_thread;
 
@@ -137,13 +136,14 @@ bool ThreadWeaver::event( QEvent *e )
 				new QCustomEvent( ThreadWeaver::RestoreOverrideCursorEvent ) );
 
 		if ( !job->isAborted() ) {
-// 			kdDebug() << "Job completed" << ": " << name << endl;
+			kdDebug() << "Job completed" << ": " << name << endl;
 			job->completeJob();
 		}
-// 		else kdDebug() << "Job aborted" << ": " << name << endl;
+		else 
+			kdDebug() << "Job aborted" << ": " << name << endl;
 
 		m_jobs.remove( job );
-// 		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
+		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
 
 		for( JobList::ConstIterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 			if ( name == (*it)->name() ) {

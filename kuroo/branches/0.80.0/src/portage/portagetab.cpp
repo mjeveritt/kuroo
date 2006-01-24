@@ -156,8 +156,9 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
-		pbQueue->setDisabled( true );
 		packageInspector->setDisabled( true );
+		if ( !EmergeSingleton::Instance()->isRunning() )
+			pbQueue->setDisabled( true );
 		
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
@@ -271,9 +272,6 @@ void PortageTab::slotPackage()
 	}
 	else {
 		pbUninstall->setDisabled( true );
-// 		pbQueue->setDisabled( true );
-// 		pbAdvanced->setDisabled( true );
-// 		packageInspector->setDisabled( true );
 	}
 	
 	if ( packagesView->currentPortagePackage()->isQueued() )

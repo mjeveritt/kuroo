@@ -351,9 +351,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 			}
 		}
 		
-		/////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
 		// Parse emerge output for correct log output
-		/////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
 		QString lineLower = line.lower();
 		if ( lineLower.contains( QRegExp("^>>>|^!!!") ) ) {
 			
@@ -378,6 +378,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 				else
 					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
+						importantMessage += line + "<br>";
 						logDone++;
 					}
 					else
@@ -385,6 +386,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 							LogSingleton::Instance()->writeLog( line, EMERGE );
 							logDone++;
 						}
+			
 		}
 		else
 			if ( lineLower.contains("please tell me") ) {
@@ -433,7 +435,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 			
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
-					importantMessage = importantMessagePackage + cleanLine;
+					importantMessage += importantMessagePackage + cleanLine;
 					importantMessagePackage = QString::null;
 				}
 				else

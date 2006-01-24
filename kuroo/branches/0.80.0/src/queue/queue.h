@@ -115,8 +115,7 @@ signals:
 	
 private:
 	QObject					*m_parent;
-	QString					package, m_id;
-	QStringList				packageIdList;
+	QString					m_id;
 	QMap<QString, bool>		packageCache;
 	QTimer*					internalTimer;
 };

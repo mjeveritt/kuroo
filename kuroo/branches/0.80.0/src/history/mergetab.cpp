@@ -81,11 +81,10 @@ void MergeTab::slotClearFilter()
  */
 void MergeTab::slotViewFile( QListViewItem *item )
 {
-	QString source = KUROODIR + "backup/" + item->text( 0 );
-	QString destination = KUROODIR + "backup/" + item->text( 1 );
-	if ( !source.isEmpty() ) {
-// 		new KRun( "kdiff3 " + KUROODIR + "backup/" + source );
-		
+	if ( item->parent() ) {
+		QString source = KUROODIR + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->source();
+		QString destination = KUROODIR + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->destination();
+
 		KProcIO* eProc = new KProcIO();
 		*eProc << KurooConfig::etcUpdateTool() << source << destination;
 		connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );

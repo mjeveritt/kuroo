@@ -112,9 +112,10 @@ public:
 					keywords = "~*"; // in fact, it would be: m_keywords.prepend("~" + arch), but anyways
 				}
 
-				QString id = KurooDBSingleton::Instance()->query( " SELECT package.id FROM package, catSubCategory WHERE "
-				                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-				                    " AND catSubCategory.id = package.idCatSubCategory; ").first();
+				QString id = KurooDBSingleton::Instance()->query( 
+					" SELECT id FROM package WHERE "
+					" name = '" + name + "' AND idCatSubCategory = "
+					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 				
 				if ( id.isEmpty() )
 					kdDebug() << i18n("Load package keywords: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -204,9 +205,9 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->query( 
-							" SELECT package.id FROM package, catSubCategory WHERE "
-							" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-							" AND catSubCategory.id = package.idCatSubCategory; ").first();
+							" SELECT id FROM package WHERE "
+							" name = '" + name + "' AND idCatSubCategory = "
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 						
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Load user package unmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -296,9 +297,9 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->query( 
-							" SELECT package.id FROM package, catSubCategory WHERE "
-							" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-							" AND catSubCategory.id = package.idCatSubCategory; ").first();
+							" SELECT id FROM package WHERE "
+							" name = '" + name + "' AND idCatSubCategory = "
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 						
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Load package hardmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -388,9 +389,9 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->query( 
-							" SELECT package.id FROM package, catSubCategory WHERE "
-							" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-							" AND catSubCategory.id = package.idCatSubCategory; ").first();
+							" SELECT id FROM package WHERE "
+							" name = '" + name + "' AND idCatSubCategory = "
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 						
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Load user package mask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -418,6 +419,77 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 	
 	virtual void completeJob() {
 		PortageFilesSingleton::Instance()->refresh( 3 );
+	}
+};
+
+/**
+ * @class: LoadPackageMaskJob
+ * @short: Thread for loading masked packages into db.
+ */
+class LoadPackageUseJob : public ThreadWeaver::DependentJob
+{
+public:
+LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	
+	virtual bool doJob() {
+		
+		QFile file( KurooConfig::filePackageUse() );
+		QTextStream stream( &file );
+		QStringList linesUse;
+		if ( !file.open( IO_ReadOnly ) ) {
+		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUse() ) << endl;
+		}
+		else {
+			while ( !stream.atEnd() ) {
+				linesUse += stream.readLine();
+			}
+			file.close();
+		}
+		
+		// Something is wrong, no files found, get outta here
+		if ( linesUse.isEmpty() )
+			return false;
+		
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
+		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+		                                    " idPackage INTEGER UNIQUE, "
+		                                    " use VARCHAR(255) "
+		                                    " );", m_db);
+		
+		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		
+		for ( QStringList::Iterator it = linesUse.begin(), end = linesUse.end(); it != end; ++it ) {
+			QString category = (*it).section( '/', 0, 0 );
+			QString name = ( (*it).section( '/', 1 ) ).section( ' ', 0, 0 );
+			QString use = (*it).section( ' ', 1 );
+			use.simplifyWhiteSpace();
+			
+			QString id = KurooDBSingleton::Instance()->query( 
+				" SELECT id FROM package WHERE "
+				" name = '" + name + "' AND idCatSubCategory = "
+				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
+			
+			if ( id.isEmpty() )
+				kdDebug() << i18n("Load package use: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			else
+				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" ).arg( id ).arg( use ), m_db );
+			
+		}
+		file.close();
+		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		
+		// Move content from temporary table to installedPackages
+		KurooDBSingleton::Instance()->query( "DELETE FROM packageUse;", m_db );
+		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUse SELECT * FROM packageUse_temp;", m_db );
+		KurooDBSingleton::Instance()->query( "DROP TABLE packageUse_temp;", m_db );
+		
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( 7 );
 	}
 };
 
@@ -539,84 +611,13 @@ public:
 };
 
 /**
- * @class: LoadPackageMaskJob
- * @short: Thread for loading masked packages into db.
- */
-class LoadPackageUseJob : public ThreadWeaver::DependentJob
-{
-public:
-	LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
-	
-	virtual bool doJob() {
-		
-		QFile file( KurooConfig::filePackageUse() );
-		QTextStream stream( &file );
-		QStringList linesUse;
-		if ( !file.open( IO_ReadOnly ) ) {
-			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUse() ) << endl;
-		}
-		else {
-			while ( !stream.atEnd() ) {
-				linesUse += stream.readLine();
-			}
-			file.close();
-		}
-		
-		// Something is wrong, no files found, get outta here
-		if ( linesUse.isEmpty() )
-			return false;
-		
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " use VARCHAR(255) "
-		                                    " );", m_db);
-		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
-		
-		for ( QStringList::Iterator it = linesUse.begin(), end = linesUse.end(); it != end; ++it ) {
-			QString category = (*it).section( '/', 0, 0 );
-			QString name = ( (*it).section( '/', 1 ) ).section( ' ', 0, 0 );
-			QString use = (*it).section( ' ', 1 );
-			use.simplifyWhiteSpace();
-			
-			QString id = KurooDBSingleton::Instance()->query( 
-				" SELECT package.id FROM package, catSubCategory WHERE "
-				" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-				" AND catSubCategory.id = package.idCatSubCategory; ").first();
-			
-			if ( id.isEmpty() )
-				kdDebug() << i18n("Load package use: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-			else
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" ).arg( id ).arg( use ), m_db );
-			
-		}
-		file.close();
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-		
-		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageUse;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUse SELECT * FROM packageUse_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageUse_temp;", m_db );
-		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
-	}
-	
-	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 7 );
-	}
-};
-
-/**
  * @class: SavePackageUserMaskJob
  * @short: Thread for loading packages unmasked by user.
  */
 class SavePackageUseJob : public ThreadWeaver::DependentJob
 {
 public:
-	SavePackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob3" ) {}
+	SavePackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob4" ) {}
 	
 	virtual bool doJob() {
 		

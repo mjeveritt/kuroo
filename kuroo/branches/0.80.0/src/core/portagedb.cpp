@@ -671,9 +671,9 @@ QString KurooDB::packageId( const QString& package )
 	
 	kdDebug() << "KurooDB::packageId package=" << package << ". category=" << category << ". name=" << name << "." << endl;
 	
-	QString id = query( " SELECT package.id FROM package, catSubCategory WHERE "
-	                    " package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-	                    " AND catSubCategory.id = package.idCatSubCategory; ").first();
+	QString id = query( " SELECT id FROM package WHERE "
+	                    " name = '" + name + "' AND idCatSubCategory = "
+	                    " ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ").first();
 	
 	if ( !id.isEmpty() )
 		return id;
@@ -1162,9 +1162,9 @@ QStringList SqliteConnection::query( const QString& statement )
 				break;
 			
             //iterate over columns
-			for ( int i = 0; i < number; i++ ) {
+			for ( int i = 0; i < number; i++ )
 				values << QString::fromUtf8( (const char*) sqlite3_column_text(stmt, i) );
-			}
+			
 		}
         //deallocate vm ressources
 		sqlite3_finalize(stmt);

@@ -25,8 +25,6 @@
 
 class KListViewItem;
 
-typedef QMap< QString, QListViewItem* > ItemMap;
-
 /**
  * @class MergeListView
  * @short Specialized listview for merge history.
@@ -40,12 +38,33 @@ public:
 	
 	void 			loadFromDB();
 	
+	class			MergeItem;
+	
 signals:
 	void    		signalHistoryLoaded();
 	
 private:
 	KLocale 		*loc;
+	
+	typedef QMap< QString, MergeItem* > ItemMap;
 	ItemMap			itemMap;
+};
+
+/**
+ * @class MergeItem
+ * @short 
+ */
+class MergeListView::MergeItem : public KListViewItem
+{
+public:
+	MergeItem::MergeItem( QListView* parent, const char* date );
+	MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination );
+	
+	QString	source();
+	QString	destination();
+	
+private:
+	QString m_source, m_destination;
 };
 
 #endif

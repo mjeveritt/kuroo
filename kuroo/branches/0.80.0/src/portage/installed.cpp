@@ -42,21 +42,25 @@ public:
 		else
 			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
 		
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QString id = KurooDBSingleton::Instance()->query( 
-			" SELECT package.id FROM package, catSubCategory WHERE "
-			" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-			" AND catSubCategory.id = package.idCatSubCategory; ").first();
+			" SELECT id FROM package WHERE "
+			" name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 		
-		if ( id.isEmpty() )
+		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return false;
+		}
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
-			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ) );
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
-			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ) );
+			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET meta = '%1' "
+			                                              " WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}
-		return false;
 	}
 	
 	virtual void completeJob() {
@@ -90,26 +94,30 @@ public:
 			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
 
 		QString id = KurooDBSingleton::Instance()->query( 
-			" SELECT package.id FROM package, catSubCategory WHERE "
-			" package.name = '" + name + "' AND catSubCategory.name = '" + category + "' "
-			" AND catSubCategory.id = package.idCatSubCategory; ", m_db).first();
+			" SELECT id FROM package WHERE "
+			" name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 		
-		if ( id.isEmpty() )
+		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Remove unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return false;
+		}
 		else {
 			
 			// Mark package as uninstalled or remove it if old
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
-			                                              "WHERE meta = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM package "
-			                                              "WHERE meta = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET meta = '%1' "
-			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->query( QString( 
+									"UPDATE package SET meta = '%1' "
+									"WHERE meta = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( 
+									"DELETE FROM package "
+									"WHERE meta = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( 
+									"UPDATE version SET meta = '%1' "
+									"WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
-		return false;
 	}
 	
 	virtual void completeJob() {

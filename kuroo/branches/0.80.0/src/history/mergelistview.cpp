@@ -26,6 +26,27 @@
 
 #include <klistview.h>
 
+MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
+: KListViewItem( parent, date )
+{
+}
+
+MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
+	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
+{
+	setText( 0 , m_source.section( "_", 2, 2 ) );
+}
+
+QString MergeListView::MergeItem::source()
+{
+	return m_source;
+}
+
+QString MergeListView::MergeItem::destination()
+{
+	return m_destination;
+}
+
 /**
  * @class MergeListView
  * @short Specialized listview for emerge history.
@@ -33,8 +54,7 @@
 MergeListView::MergeListView( QWidget *parent, const char *name )
 	: KListView( parent, name ), loc( KGlobal::locale() )
 {
-	addColumn( i18n("New") );
-	addColumn( i18n("Original") );
+	addColumn( i18n("Configuration file") );
 	
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
@@ -72,12 +92,12 @@ void MergeListView::loadFromDB()
 		QString date = loc->formatDate( dt.date() );
 		
 		if ( !itemMap.contains( date ) ) {
-			KListViewItem *item = new KListViewItem( this, date );
+			MergeItem *item = new MergeItem( this, date );
 			itemMap[ date ] = item;
 			item->setOpen( true );
 		}
 
-		new KListViewItem( itemMap[ date ], source, destination );
+		new MergeItem( itemMap[ date ], source, destination );
 	}
 	
 	emit signalHistoryLoaded();

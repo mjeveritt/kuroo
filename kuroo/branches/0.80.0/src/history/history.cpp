@@ -269,8 +269,6 @@ void History::slotParse()
 			}
 			
 			if ( emergeLine.contains( "terminating." ) ) {
-
-				isEmerging = false;
 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );

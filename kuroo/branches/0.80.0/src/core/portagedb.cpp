@@ -1024,7 +1024,7 @@ QStringList KurooDB::getLastSync()
 void KurooDB::addEmergeInfo( const QString& einfo )
 {
 	query( QString("UPDATE history SET einfo = '%1' "
-	               "WHERE id = (SELECT MAX(id) FROM history);").arg( einfo ) );
+	               "WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString(einfo) ) );
 }
 
 /**

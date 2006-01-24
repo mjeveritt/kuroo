@@ -244,15 +244,17 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ) );
+	
 	addColumn( " " );
 	header()->setLabel( 1, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), " " );
+	
 	addColumn( i18n( "Update" ) );
 	addColumn( i18n( "Description" ) );
 	
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator( true );
 	setItemMargin( 1 );
-	setRootIsDecorated( true );
+	setRootIsDecorated( false );
 	setFullWidth( true );
 	
 	setColumnWidthMode( 0, QListView::Manual );
@@ -265,6 +267,12 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidth( 2, 80 );
 	
 	setTooltipColumn( 3 );
+	
+	if ( KurooConfig::installedColumn() ) {
+		addColumn( i18n( "Installed" ) );
+		setColumnAlignment( 4, Qt::AlignHCenter );
+		header()->moveSection( 4, 1 );
+	}
 	
 	// @fixme: How to check if bottom of listview is reached
 // 	connect( this, SIGNAL( verticalSliderPressed() ), this, SLOT( slotLastPackage() ) );
@@ -335,6 +343,11 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		PortageItem* item = new PortageItem( this, name, id, description, homepage, meta );
 		item->setText( 2, update );
 		item->setText( 3, description );
+		
+		if ( meta == FILTER_ALL_STRING )
+			item->setStatus( PACKAGE );
+		else
+			item->setStatus( INSTALLED );
 		
 		indexPackage( id, item );
 	}

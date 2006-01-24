@@ -326,43 +326,24 @@
                 <cstring>portage_2_3</cstring>
             </property>
             <property name="title">
-                <string>Important notice filter for emerge output</string>
+                <string>Package view option</string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
-                        <cstring>kcfg_noticeRegExp</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>300</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>cFlags_2_3_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>0</height>
-                        </size>
+                        <cstring>kcfg_installedColumn</cstring>
                     </property>
                     <property name="text">
-                        <string>Pattern (regexp)</string>
+                        <string>Show installed column</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
                     </property>
                 </widget>
             </grid>

@@ -55,14 +55,7 @@ public:
  	 * @return true if package is in the queue.
  	 */
 	virtual bool	isQueued();
-	
-protected:
-	
-	/**
- 	 * Insert package meta text into the right column.
- 	 */
-	void			init();
-	
+
 private:
 	QString			m_id, m_name, m_status, m_packageTip, m_description;
 	QListView		*m_parent;

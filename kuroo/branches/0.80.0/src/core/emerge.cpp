@@ -421,7 +421,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
 		//////////////////////////////////////////////////////////////
-		if ( completedFlag && ( line.contains( QRegExp(KurooConfig::noticeRegExp()) ) || lastLineFlag || line.contains("**** ") ) ) {
+		if ( completedFlag && ( lastLineFlag || line.contains("**** ") ) ) {
 			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('\'', "''").replace('%', "&#37;") + "<br>";
 			cleanLine.remove( "!!!" );
 			

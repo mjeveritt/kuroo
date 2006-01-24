@@ -298,7 +298,7 @@ void PortageTab::slotPackage()
 			lines += "<td bgcolor=#7a5ada><b><font color=white><font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr><tr><td>";
-			lines += packagesView->currentPortagePackage()->description() + "<br>";
+			lines += packagesView->currentPortagePackage()->description() + "</td></tr><tr><td>";
 			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
 			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a></td></tr><tr><td>";
 	
@@ -364,9 +364,9 @@ void PortageTab::slotPackage()
 	
 	// Construct installed summary
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("<b>Versions installed:</b> ") + linesInstalled + "<br>";
+		linesInstalled = i18n("<b>Versions installed:</b></font> ") + linesInstalled + "<br>";
 	else
-		linesInstalled = i18n("<b>Versions installed:</b> Not installed<br>");
+		linesInstalled = i18n("<b>Versions installed:</b></font> Not installed<br>");
 	
 	// Construct installation summary
 	if ( !linesEmergeVersion.isEmpty() ) {
@@ -377,20 +377,23 @@ void PortageTab::slotPackage()
 		packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
 		
 		packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
-		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
+	linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
 	}
 	else {
 		if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-			linesEmergeVersion = i18n("<b>Version used for installation: <font color=darkRed>No version available on %1</font></b>").arg( KurooConfig::arch() );
+			linesEmergeVersion = i18n("<b>Version used for installation: "
+			                          "<font color=darkRed>No version available on %1</b>").arg( KurooConfig::arch() );
 		else
-			linesEmergeVersion = i18n("<b>Version used for installation: <font color=darkRed>No version available - please check advanced options</font></b>");
+			linesEmergeVersion = i18n("<b>Version used for installation:</font> "
+			                          "<font color=darkRed>No version available - please check advanced options</font></b>");
 	}
 	
 	// Construct available versions summary
 	if ( !linesAvailable.isEmpty() )
 		linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
 	else
-		linesAvailable = i18n("<b>Versions available: <font color=darkRed>No version available on %1</font><br>").arg( KurooConfig::arch() );
+		linesAvailable = i18n("<b>Versions available: "
+		                      "<font color=darkRed>No version available on %1</font></b><br>").arg( KurooConfig::arch() );
 	
 	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion + "</td></tr></table>");
 	

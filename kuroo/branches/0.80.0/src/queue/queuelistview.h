@@ -71,7 +71,6 @@ private slots:
 	
 	/**
 	* Format package size nicely 
-	* @fixme: Check out KIO_EXPORT QString KIO::convertSize
 	* @param size 
 	* @return total		as "xxx kB"
 	*/
@@ -107,16 +106,16 @@ class QueueListView::QueueItem : public PackageItem
 {
 public:
 	QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
-	QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
+	QueueItem::QueueItem( QueueItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration );
 	~QueueItem();
 	
 	void			setComplete();
 	void			setStart();
 	void			oneStep();
 	void			setChecked( bool isChecked );
+	void			setStatus( int status );
 	
 protected:
-	void			setStatus( int status );
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:

@@ -16,6 +16,8 @@
 		</entry>
 		<entry name="updateTree" type="Bool">
 		</entry>
+		<entry name="installedColumn" type="Bool">
+		</entry>
 		<entry name="init" type="Bool">
 		</entry>
 		<entry name="wizard" type="Bool">
@@ -46,9 +48,6 @@
 		<entry name="ScanHistoryDate" type="String">
 		</entry>
 		<entry name="Arch" type="String">
-		</entry>
-		<entry name="noticeRegExp" type="String">
-		<default>^!!!</default>
 		</entry>
 		<entry name="worldFile" type="String">
 		</entry>

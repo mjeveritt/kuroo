@@ -33,29 +33,16 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 	: KListViewItem( parent, name ),
 	m_parent( parent ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description )
 {
-	init();
 }
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent->listView() ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description )
 {
-	init();
 }
 
 PackageItem::~PackageItem()
 {}
-
-/**
- * Set package status.
- */
-void PackageItem::init()
-{
-	if ( m_status == FILTER_ALL_STRING )
-		setStatus( PACKAGE );
-	else
-		setStatus( INSTALLED );
-}
 
 /**
  * Is the listViewItem category, package or ebuild.
@@ -66,10 +53,15 @@ void PackageItem::setStatus( int status )
 {
 	switch ( status ) {
 		
-		case INSTALLED :
-			setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+		case INSTALLED : {
+			if ( KurooConfig::installedColumn() ) {
+				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+				setPixmap( 4, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+			}
+			else
+				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 			break;
-			
+		}
 		case PACKAGE :
 			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 			break;

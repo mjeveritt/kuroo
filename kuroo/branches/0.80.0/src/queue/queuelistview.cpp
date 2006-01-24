@@ -45,7 +45,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const 
 	bar->hide();
 }
 
-QueueListView::QueueItem::QueueItem( PackageItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
+QueueListView::QueueItem::QueueItem( QueueItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
 {
 	bar = new KProgress( duration + diffTime, parent->listView()->viewport() );
@@ -59,12 +59,21 @@ QueueListView::QueueItem::~QueueItem()
 }
 
 /**
- * Disable the queue checkmark.
+ * Reimplement four only two state.
+ * @param status
  */
 void QueueListView::QueueItem::setStatus( int status )
 {
-	if ( status < QUEUED )
-		PackageItem::setStatus( status );
+	switch ( status ) {
+		
+		case INSTALLED :
+			setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+			break;
+		
+		case PACKAGE :
+			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+		
+	}
 }
 
 /**
@@ -100,7 +109,6 @@ void QueueListView::QueueItem::oneStep()
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	if ( this->isVisible() ) {
-		
 		if ( column == 5 && m_isChecked ) {
 			QRect rect = listView()->itemRect( this );
 			QHeader *head = listView()->header();
@@ -217,7 +225,7 @@ void QueueListView::insertPackageList()
 		// If version get size also
 // 		QString size;
 // 		if ( !version.isEmpty() )
-// 			size = KurooDBSingleton::Instance()->versionSize( id, version );
+			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category + "/" + name, id, description, meta, duration.toInt() );
@@ -225,7 +233,7 @@ void QueueListView::insertPackageList()
 			item->setChecked( false );
 		}
 		else {
-			PackageItem* itemDepend = this->itemId( idDepend );
+			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
 			if ( itemDepend )
 				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration.toInt() );
 		}
@@ -249,6 +257,11 @@ void QueueListView::insertPackageList()
 		}
 		
 		item->setText( 4, useFlags );
+		
+		if ( meta == FILTER_ALL_STRING )
+			item->setStatus( PACKAGE );
+		else
+			item->setStatus( INSTALLED );
 		
 		indexPackage( id, item );
 		

@@ -63,9 +63,9 @@ public slots:
 	*/
 	QString		 			totalSize();
 	
-	void					slotPackageComplete( const QString& id );
+	void					slotPackageComplete( const QString& id, bool removeInstalled );
 	void					slotPackageStart( const QString& id );
-	void					slotPackageProgress( const QString& id );
+	void					slotPackageProgress();
 	
 private slots:
 	
@@ -96,6 +96,7 @@ signals:
 private:
 	KLocale 				*loc;
 	int 					sumSize;
+	QString					m_id;
 };
 
 /**

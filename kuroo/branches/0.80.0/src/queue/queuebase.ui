@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>701</width>
-            <height>513</height>
+            <width>734</width>
+            <height>594</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -349,7 +349,7 @@
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="1">
                         <property name="name">
-                            <cstring>layout7</cstring>
+                            <cstring>layout17</cstring>
                         </property>
                         <grid>
                             <property name="name">
@@ -358,6 +358,17 @@
                             <property name="spacing">
                                 <number>0</number>
                             </property>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>cbDownload</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Download all packages &amp;before installing them (--fetch-all-uri)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
+                            </widget>
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>textLabel1_2</cstring>
@@ -377,7 +388,18 @@
                                     <string>&lt;b&gt;Emerge Options&lt;/b&gt;</string>
                                 </property>
                             </widget>
-                            <spacer row="3" column="0">
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>cbForce</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Force reinstall of confi&amp;g files (--noconfmem)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                            </widget>
+                            <spacer row="4" column="0">
                                 <property name="name">
                                     <cstring>spacer5</cstring>
                                 </property>
@@ -390,30 +412,19 @@
                                 <property name="sizeHint">
                                     <size>
                                         <width>20</width>
-                                        <height>5</height>
+                                        <height>20</height>
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QCheckBox" row="2" column="0">
+                            <widget class="QCheckBox" row="3" column="0">
                                 <property name="name">
-                                    <cstring>cbForce</cstring>
+                                    <cstring>cbRemove</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Force reinstall of confi&amp;g files (--noconfmem)</string>
+                                    <string>Remove package from Q&amp;ueue after installation</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+G</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0">
-                                <property name="name">
-                                    <cstring>cbDownload</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Download all pac&amp;kages before installing them (--fetch-all-uri)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
+                                    <string>Alt+U</string>
                                 </property>
                             </widget>
                         </grid>

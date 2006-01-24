@@ -93,6 +93,7 @@ void QueueListView::QueueItem::setComplete()
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
 	QueueItem::setStatus( INSTALLED );
+	bar->hide();
 }
 
 /**
@@ -136,7 +137,7 @@ void QueueListView::QueueItem::setChecked( bool isChecked )
  * @short Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name ), loc( KGlobal::locale() )
+	: PackageListView( parent, name ), loc( KGlobal::locale() ), m_id( QString::null )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ) );
@@ -363,29 +364,41 @@ QString QueueListView::formatSize( const QString& sizeString )
 
 void QueueListView::slotPackageStart( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] )
+	if ( id.isEmpty() || !packageIndex[id] ) {
+		m_id = QString::null;
 		return;
+	}
 	else
 		dynamic_cast<QueueItem*>( packageIndex[id] )->setStart();
+	
+	m_id = id;
 }
 
-void QueueListView::slotPackageComplete( const QString& id )
+void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled )
 {
-	if ( id.isEmpty() || !packageIndex[id] )
+	if ( id.isEmpty() || !packageIndex[id] ) {
+		m_id = QString::null;
 		return;
-	else
+	}
+	else {
 		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
+		
+		if ( removeInstalled )
+			packageIndex[id]->setVisible( false );
+	}
+	
+	m_id = QString::null;
 }
 
 /**
  * 
  */
-void QueueListView::slotPackageProgress( const QString& id )
+void QueueListView::slotPackageProgress()
 {
-	if ( id.isEmpty() || !packageIndex[id] )
+	if ( m_id.isEmpty() || !packageIndex[m_id] )
 		return;
 	else
-		dynamic_cast<QueueItem*>( packageIndex[id] )->oneStep();
+		dynamic_cast<QueueItem*>( packageIndex[m_id] )->oneStep();
 }
 
 #include "queuelistview.moc"

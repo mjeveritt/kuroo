@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>539</width>
+            <width>617</width>
             <height>359</height>
         </rect>
     </property>
@@ -142,7 +142,8 @@
                         <number>0</number>
                     </property>
                     <property name="text">
-                        <string>&lt;font size="+1"&gt;Etc-update History&lt;/font&gt;</string>
+                        <string>&lt;font size="+1"&gt;Etc-update History&lt;/font&gt;&lt;br&gt;
+&lt;i&gt;Click on name to view diff&lt;/i&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

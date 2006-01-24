@@ -105,6 +105,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 
 KurooView::~KurooView()
 {
+	KurooDBSingleton::Instance()->backupDb();
 }
 
 /**

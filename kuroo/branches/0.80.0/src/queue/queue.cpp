@@ -74,7 +74,7 @@ private:
 class RemoveQueuePackageIdListJob : public ThreadWeaver::DependentJob
 {
 public:
-	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJobGui" ), m_packageIdList( packageIdList ) {}
+	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), m_packageIdList( packageIdList ) {}
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
@@ -143,7 +143,7 @@ private:
  * @short Object for packages to be emerged = installation queue.
  */
 Queue::Queue( QObject* m_parent )
-	: QObject( m_parent )
+	: QObject( m_parent ), m_removeInstalled( false )
 {
 	// Clock timer for showing progress when emerging
 	internalTimer = new QTimer( this );
@@ -159,23 +159,35 @@ void Queue::init( QObject *parent )
 	m_parent = parent;
 }
 
+/**
+ * Start the timer.
+ * @param package
+ */
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
+	QString id = KurooDBSingleton::Instance()->packageId( package );
 	internalTimer->start( 1000 );
-	m_id = KurooDBSingleton::Instance()->packageId( package );
-	emit signalPackageStart( m_id );
+	emit signalPackageStart( id );
 }
 
+/**
+ * Set package progress as 100% = complete.
+ * @param package
+ */
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
 	internalTimer->stop();
-	m_id = KurooDBSingleton::Instance()->packageId( package );
-	emit signalPackageComplete( m_id );
+	QString id = KurooDBSingleton::Instance()->packageId( package );
+	emit signalPackageComplete( id, m_removeInstalled );
 }
 
+/**
+ * Initialize with package id and after that emit 1sec progress signals.
+ * @param id
+ */
 void Queue::slotOneStep()
 {
-	emit signalPackageAdvance( m_id );
+	emit signalPackageAdvance();
 }
 
 void Queue::stopTimer()
@@ -298,6 +310,11 @@ void Queue::addPackageIdList( const QStringList& packageIdList )
 void Queue::installQueue( const QStringList& packageIdList )
 {
 	ThreadWeaver::instance()->queueJob( new InstallQueueJob( this, packageIdList ) );
+}
+
+void Queue::setRemoveInstalled( bool removeInstalled )
+{
+	m_removeInstalled = removeInstalled;
 }
 
 #include "queue.moc"

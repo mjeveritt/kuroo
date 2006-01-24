@@ -49,6 +49,8 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 		
+	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
+	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
@@ -59,8 +61,8 @@ QueueTab::QueueTab( QWidget* parent )
 	
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance( const QString& ) ), queueView, SLOT( slotPackageProgress( const QString& ) ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), queueView, SLOT( slotPackageComplete( const QString&, bool ) ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), queueView, SLOT( slotPackageProgress() ) );
 	
 	slotInit();
 }
@@ -145,12 +147,14 @@ void QueueTab::slotBusy( bool busy )
 		pbRemove->setDisabled( true );
 		cbDownload->setDisabled( true );
 		cbForce->setDisabled( true );
+		cbRemove->setDisabled( true );
 	}
 	else {
 		pbClear->setDisabled( false );
 		pbRemove->setDisabled( false );
 		cbDownload->setDisabled( false );
 		cbForce->setDisabled( false );
+		cbRemove->setDisabled( false );
 	}
 
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )
@@ -239,6 +243,18 @@ void QueueTab::slotRemove()
 }
 
 /**
+ * Remove package from Queue.
+ */
+void QueueTab::slotRemoveInstalled()
+{
+	if ( cbRemove->isChecked() )
+		QueueSingleton::Instance()->setRemoveInstalled( true );
+	else
+		QueueSingleton::Instance()->setRemoveInstalled( false );
+}
+
+
+/**
  * Popup menu for actions like emerge.
  * @param item
  * @param point
@@ -248,7 +264,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	if ( !item )
 		return;
 	
-	enum Actions { PRETEND, EMERGE, REMOVE, GOTO };
+	enum Actions { PRETEND, REMOVE };
 	
 	KPopupMenu menu( this );
 	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );

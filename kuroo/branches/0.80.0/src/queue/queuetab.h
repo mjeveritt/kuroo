@@ -68,6 +68,7 @@ private slots:
 	void				slotPretend();
 	void				slotStop();
 	void				slotRemove();
+	void				slotRemoveInstalled();
 	
 	/**
 	 * Popup menu for actions like emerge.

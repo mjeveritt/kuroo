@@ -107,17 +107,19 @@ public slots:
 	
 	void					installQueue( const QStringList& packageIdList );
 	
+	void					setRemoveInstalled( bool removeInstalled );
+	
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );
-	void					signalPackageAdvance( const QString& id );
+	void					signalPackageAdvance();
 	void					signalPackageStart( const QString& id );
-	void					signalPackageComplete( const QString& id );
+	void					signalPackageComplete( const QString& id, bool removeInstalled );
 	
 private:
 	QObject					*m_parent;
-	QString					m_id;
 	QMap<QString, bool>		packageCache;
 	QTimer*					internalTimer;
+	bool					m_removeInstalled;
 };
 
 #endif

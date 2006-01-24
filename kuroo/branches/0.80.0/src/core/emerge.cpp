@@ -327,7 +327,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 				emergePackage.category = parsedPackage.section( "/", 0, 0 );
 				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 				emergePackage.version = parsedPackage.section( ( emergePackage.name + "-" ), 1, 1 );
-				emergePackage.updateFlags = line.left( 14 ).section( QRegExp( "^\\[ebuild" ), 1, 1 );
+				emergePackage.updateFlags = line.left(14).section( QRegExp( "^\\[ebuild" ), 1, 1 );
 				
 				QString temp = line.section( emergePackage.package, 1, 1 );
 				

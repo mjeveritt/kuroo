@@ -157,8 +157,7 @@ void PortageTab::slotListPackages()
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
 		packageInspector->setDisabled( true );
-		if ( !EmergeSingleton::Instance()->isRunning() )
-			pbQueue->setDisabled( true );
+		pbQueue->setDisabled( true );
 		
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
@@ -171,8 +170,9 @@ void PortageTab::slotListPackages()
 	}
 	else {
 		pbAdvanced->setDisabled( false );
-		pbQueue->setDisabled( false );
 		packageInspector->setDisabled( false );
+		if ( !EmergeSingleton::Instance()->isRunning() )
+			pbQueue->setDisabled( false );
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )

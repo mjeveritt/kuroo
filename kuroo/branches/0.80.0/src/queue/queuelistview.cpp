@@ -111,7 +111,15 @@ int QueueListView::QueueItem::duration()
  */
 void QueueListView::QueueItem::oneStep()
 {
-	bar->setProgress( progress++ );
+	if ( progress < m_duration )
+		bar->setProgress( progress++ );
+	else 
+		if ( progress++ == m_duration ) {
+			bar->setTotalSteps( 0 );
+			bar->setTextEnabled( false );
+		}
+		else
+			bar->advance( 3 );
 }
 
 /**

@@ -143,7 +143,7 @@ bool ThreadWeaver::event( QEvent *e )
 			kdDebug() << "Job aborted" << ": " << name << endl;
 
 		m_jobs.remove( job );
-		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
+// 		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
 
 		for( JobList::ConstIterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 			if ( name == (*it)->name() ) {

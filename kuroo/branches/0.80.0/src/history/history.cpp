@@ -103,7 +103,7 @@ void History::slotInit()
  */
 bool History::slotRefresh()
 {
-	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry().first();
+	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry();
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
 	
@@ -198,8 +198,6 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
-	kdDebug() << "History::slotParse" << endl;
-	
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -207,10 +205,11 @@ void History::slotParse()
 	
 	while ( !stream.atEnd() )
 		emergeLines += stream.readLine() + " ";
-
-	// Update history
-	if ( !emergeLines.isEmpty() )
-		slotScanHistory( emergeLines );
+	
+	KurooDBSingleton::Instance()->insert( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('x11-libs/wxGTK-2.6.1', '1138183148', '1450', 'true');" );
+	QueueSingleton::Instance()->emergePackageStart( "app-admin/sudo", 0, 0 );
+	KurooDBSingleton::Instance()->insert( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('x11-libs/wxGTK-2.6.1', '1138183148', '1450', 'true');" );
+	QueueSingleton::Instance()->emergePackageComplete( "app-admin/sudo", 0, 0 );
 	
 	foreach ( emergeLines ) {
 		QString line = *it;
@@ -316,6 +315,10 @@ void History::slotParse()
 			}
 		}
 	}
+	
+	// Update history
+	if ( !emergeLines.isEmpty() )
+		slotScanHistory( emergeLines );
 }
 
 /**

@@ -51,6 +51,7 @@ private slots:
 	 * Reload history view.
 	 */
 	void		slotReload();
+	void		slotReload( int limit );
 	
 	void		slotClearFilter();
 	void		slotViewUnmerges( bool on );

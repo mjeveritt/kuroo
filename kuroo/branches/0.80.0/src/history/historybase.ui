@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>710</width>
-            <height>352</height>
+            <width>646</width>
+            <height>472</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,94 +25,6 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout11</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>5</number>
-                </property>
-                <widget class="QPushButton" row="1" column="3">
-                    <property name="name">
-                        <cstring>pbClearFilter</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image0</iconset>
-                    </property>
-                </widget>
-                <widget class="KListViewSearchLine" row="1" column="4">
-                    <property name="name">
-                        <cstring>historyFilter</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>210</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>viewUnmerges</cstring>
-                    </property>
-                    <property name="text">
-                        <string>View &amp;unmerges</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="2">
-                    <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Filter:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="5">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;font size="+1"&gt;Installation History&lt;/font&gt;&lt;br&gt;
-&lt;i&gt;Click on package with einfo to view all information&lt;/i&gt;</string>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>98</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
-        </widget>
         <widget class="Line" row="1" column="0">
             <property name="name">
                 <cstring>line1</cstring>
@@ -148,6 +60,135 @@
                 </size>
             </property>
         </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout11</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>5</number>
+                </property>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>viewUnmerges</cstring>
+                    </property>
+                    <property name="text">
+                        <string>View &amp;unmerges</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+U</string>
+                    </property>
+                </widget>
+                <widget class="KListViewSearchLine" row="1" column="6">
+                    <property name="name">
+                        <cstring>historyFilter</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>210</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="5">
+                    <property name="name">
+                        <cstring>pbClearFilter</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="4">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Filter:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="7">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;font size="+1"&gt;Installation History&lt;/font&gt;&lt;br&gt;
+&lt;i&gt;Click on package with einfo to view all information&lt;/i&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show Last:</string>
+                    </property>
+                </widget>
+                <spacer row="1" column="1">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>86</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QComboBox" row="1" column="3">
+                    <item>
+                        <property name="text">
+                            <string>Week</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Month</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>6 Month</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Year</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cbDays</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -179,7 +220,7 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistviewsearchline.h</includehint>
     <includehint>historylistview.h</includehint>
+    <includehint>klistviewsearchline.h</includehint>
 </includehints>
 </UI>

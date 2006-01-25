@@ -112,10 +112,9 @@ public:
 					keywords = "~*"; // in fact, it would be: m_keywords.prepend("~" + arch), but anyways
 				}
 
-				QString id = KurooDBSingleton::Instance()->query( 
-					" SELECT id FROM package WHERE "
-					" name = '" + name + "' AND idCatSubCategory = "
-					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
+				QString id = KurooDBSingleton::Instance()->querySingle( 
+					" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 				
 				if ( id.isEmpty() )
 					kdDebug() << i18n("Load package keywords: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -204,10 +203,9 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->query( 
-							" SELECT id FROM package WHERE "
-							" name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
+						QString id = KurooDBSingleton::Instance()->querySingle( 
+							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Load user package unmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -296,10 +294,9 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->query( 
-							" SELECT id FROM package WHERE "
-							" name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
+						QString id = KurooDBSingleton::Instance()->querySingle( 
+							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
 						
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Load package hardmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -388,10 +385,9 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->query( 
-							" SELECT id FROM package WHERE "
-							" name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
+						QString id = KurooDBSingleton::Instance()->querySingle( 
+							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Load user package mask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -465,10 +461,9 @@ LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 			QString use = (*it).section( ' ', 1 );
 			use.simplifyWhiteSpace();
 			
-			QString id = KurooDBSingleton::Instance()->query( 
-				" SELECT id FROM package WHERE "
-				" name = '" + name + "' AND idCatSubCategory = "
-				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
+			QString id = KurooDBSingleton::Instance()->querySingle( 
+				" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 			
 			if ( id.isEmpty() )
 				kdDebug() << i18n("Load package use: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;

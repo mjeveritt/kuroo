@@ -75,7 +75,6 @@ bool ScanHistoryJob::doJob()
 	QRegExp rxTimeStamp( "\\d+:\\s" );
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
-// 	bool isHistoryChanged( false );
 	
 	foreach ( m_logLines ) {
 		
@@ -128,7 +127,6 @@ bool ScanHistoryJob::doJob()
 						
 						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) "
 							"VALUES ('%1', '%2', '%3', 'true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ), m_db );
-// 						isHistoryChanged = true;
 					}
 				}
 				else
@@ -139,37 +137,16 @@ bool ScanHistoryJob::doJob()
 					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) "
 						"VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
-// 					isHistoryChanged = true;
 				}
 				else
 					if ( emergeLine.contains("=== Sync completed") ) {
 						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) "
 							"VALUES ('', '%1', 'true');" ).arg( timeStamp ), m_db );
-// 						isHistoryChanged = true;
 					}
 				
 			}
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-/*
-	if ( isHistoryChanged ) {
-		KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
-		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
-		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
-			
-			// Abort the scan
-			if ( isAborted() ) {
-				kdDebug() << i18n("History scan aborted") << endl;
-				KurooDBSingleton::Instance()->query("ROLLBACK TRANSACTION;", m_db);
-				return false;
-			}
-			
-			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" ).arg(itMap.data().emergeTime()).arg(itMap.data().count()).arg(itMap.key()), m_db );
-		}
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-	}*/
-	
 	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	KurooConfig::setScanHistoryDate( timeStamp );
 	KurooConfig::writeConfig();

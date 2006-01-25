@@ -46,14 +46,14 @@ public:
 	
 	QString 		current();
 	QStringList 	selected();
-	void 			loadFromDB();
+	void 			loadFromDB( int days );
 	
 private:
 	KLocale 		*loc;
 	ItemMap			itemMap;
 	
 signals:
-	void    	signalHistoryLoaded();
+	void    		signalHistoryLoaded();
 };
 
 #endif

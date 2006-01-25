@@ -25,6 +25,7 @@
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
+#include <qcombobox.h>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -41,6 +42,8 @@ HistoryTab::HistoryTab( QWidget* parent )
 	
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
+	
+	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
 	
 	connect( historyView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewInfo( QListViewItem* ) ) );
 	
@@ -80,8 +83,35 @@ void HistoryTab::slotInit()
  */
 void HistoryTab::slotReload()
 {
-	kdDebug() << "HistoryTab::slotReload" << endl;
-	historyView->loadFromDB();
+	slotReload( cbDays->currentItem() );
+}
+
+void HistoryTab::slotReload( int limit )
+{
+	int days;
+	
+	switch ( limit ) {
+		case 0 :
+			days = 7;
+			break;
+			
+		case 1:
+			days = 30;
+			break;
+			
+		case 2:
+			days = 180;
+			break;
+			
+		case 3:
+			days = 365;
+			break;
+			
+		case 4:
+			days = 10000;
+	}
+	
+	historyView->loadFromDB( days );
 }
 
 void HistoryTab::slotClearFilter()

@@ -31,6 +31,7 @@ public:
 	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), m_packageList( packageList ) {}
 	
 	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
 		// Collect end-user packages
 		QMap<QString, int> endUserPackageMap;
@@ -45,10 +46,9 @@ public:
 		EmergePackageList::ConstIterator itEnd = m_packageList.end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 			
-			QString id = KurooDBSingleton::Instance()->query( 
-				" SELECT package.id FROM package, catSubCategory WHERE "
-				" package.name = '" + (*it).name + "' AND catSubCategory.name = '" + (*it).category + "' "
-				" AND catSubCategory.id = package.idCatSubCategory; ").first();
+			QString id = KurooDBSingleton::Instance()->querySingle( 
+				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND idCatSubCategory = "
+				" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 			
 			if ( id.isEmpty() )
 				kdDebug() << i18n("Add result package list: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
@@ -58,16 +58,17 @@ public:
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
 					"VALUES ('%1', '%2', '%3', '%4', '%5')"
-					";" ).arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ) );
+					";" ).arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
 			}
 			else {
 				idPackage = id;
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
 					"VALUES ('%1', '0', '%2', '%3', '%4')"
-					";" ).arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ) );
+					";" ).arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
 			}
 		}
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	

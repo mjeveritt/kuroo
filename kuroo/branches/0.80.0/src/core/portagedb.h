@@ -56,6 +56,7 @@ public:
 	virtual ~DbConnection() = 0;
 	
 	virtual QStringList query( const QString& /* statement */) = 0;
+	virtual QString		querySingle( const QString& /* statement */) = 0;
 	virtual int 		insert( const QString& /* statement */) = 0;
 	const bool 			isInitialized() const { return m_initialized; }
 	virtual bool 		isConnected()const = 0;
@@ -73,6 +74,7 @@ public:
 	~SqliteConnection();
 	
 	QStringList 		query( const QString& /* statement */ );
+	QString		 		querySingle( const QString& /* statement */ );
 	int 				insert( const QString& /* statement */ );
 	bool 				isConnected()const { return true; }
 	
@@ -145,6 +147,7 @@ public:
 	
 	//sql helper methods
 	QStringList 	query( const QString& statement, DbConnection *conn = NULL );
+	QString		 	querySingle( const QString& statement, DbConnection *conn = NULL );
 	int 			insert( const QString& statement, DbConnection *conn = NULL );
 	
 	//table management methods
@@ -213,8 +216,8 @@ public:
 	QStringList		allQueueId();
 	QStringList 	allHistory();
 	QStringList 	allMergeHistory();
-	QStringList 	lastHistoryEntry();
-	QStringList		getLastSync();
+	QString		 	lastHistoryEntry();
+	QString			lastSyncEntry();
 	void			resetUpdates();
 	void			resetInstalled();
 	void			addEmergeInfo( const QString& einfo );

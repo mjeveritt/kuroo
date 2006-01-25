@@ -56,8 +56,8 @@ void Images::init( QObject *parent )
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
 	
-	pxQueued = ldr->loadIcon( "kuroo_queued", KIcon::Small );
-	pxQueuedColumn = ldr->loadIcon( "kuroo_queued_column", KIcon::Small );
+	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
+	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
 }

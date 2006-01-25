@@ -206,11 +206,6 @@ void History::slotParse()
 	while ( !stream.atEnd() )
 		emergeLines += stream.readLine() + " ";
 	
-	KurooDBSingleton::Instance()->insert( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('x11-libs/wxGTK-2.6.1', '1138183148', '1450', 'true');" );
-	QueueSingleton::Instance()->emergePackageStart( "app-admin/sudo", 0, 0 );
-	KurooDBSingleton::Instance()->insert( "INSERT INTO history (package, timestamp, time, emerge) VALUES ('x11-libs/wxGTK-2.6.1', '1138183148', '1450', 'true');" );
-	QueueSingleton::Instance()->emergePackageComplete( "app-admin/sudo", 0, 0 );
-	
 	foreach ( emergeLines ) {
 		QString line = *it;
 		

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-25 15:21+0100\n"
+"POT-Creation-Date: 2006-01-25 16:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,8 +99,8 @@ msgstr ""
 #: core/cacheportagejob.cpp:236 core/scanportagejob.cpp:351
 #: core/scanportagejob.cpp:425 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:139 core/portagefiles.cpp:230
-#: core/portagefiles.cpp:321 core/portagefiles.cpp:412 history/history.cpp:297
-#: history/history.cpp:298 statusbar.cpp:93
+#: core/portagefiles.cpp:321 core/portagefiles.cpp:412 history/history.cpp:292
+#: history/history.cpp:293 statusbar.cpp:93
 msgid "Done."
 msgstr ""
 
@@ -517,68 +517,68 @@ msgstr ""
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:222
+#: history/history.cpp:217
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:223
+#: history/history.cpp:218
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:236
+#: history/history.cpp:231
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:237
+#: history/history.cpp:232
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:238
+#: history/history.cpp:233
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:245
+#: history/history.cpp:240
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:257 history/history.cpp:270
+#: history/history.cpp:252 history/history.cpp:265
 msgid "Can not parse package in /var/log/emerge.log!"
 msgstr ""
 
-#: history/history.cpp:272
+#: history/history.cpp:267
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:280
+#: history/history.cpp:275
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:285 history/history.cpp:286
+#: history/history.cpp:280 history/history.cpp:281
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:291 history/history.cpp:292
+#: history/history.cpp:286 history/history.cpp:287
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:307 rc.cpp:495
+#: history/history.cpp:302 rc.cpp:495
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:308
+#: history/history.cpp:303
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:309
+#: history/history.cpp:304
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:310
+#: history/history.cpp:305
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:311
+#: history/history.cpp:306
 msgid "terminating"
 msgstr ""
 

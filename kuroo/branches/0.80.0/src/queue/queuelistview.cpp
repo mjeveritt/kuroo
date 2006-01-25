@@ -90,6 +90,7 @@ void QueueListView::QueueItem::setStart()
 void QueueListView::QueueItem::setComplete()
 {
 	m_isComplete = true;
+	bar->setTextEnabled( true );
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
 	QueueItem::setStatus( INSTALLED );

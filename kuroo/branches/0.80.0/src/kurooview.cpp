@@ -77,7 +77,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	// Create menu-icons for the pages
 	KIconLoader *ldr = KGlobal::iconLoader();
 	iconPackages = new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), i18n("Packages") );
-iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_queue", KIcon::Panel ), i18n("Queue") );
+	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_queue", KIcon::Panel ), i18n("Queue") );
 	iconHistory = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_history", KIcon::Panel ), i18n("History") );
 	iconMerge = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_etc", KIcon::Panel ), i18n("Etc-update") );
 	iconLog = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_log", KIcon::Panel ), i18n("Log") );
@@ -179,6 +179,7 @@ void KurooView::slotCheckPortage()
 	// After db is recreated because of new version restore data
 	if ( hasHistoryRestored ) {
 		KurooDBSingleton::Instance()->restoreBackup();
+		HistorySingleton::Instance()->updateStatistics();
 		hasHistoryRestored = false;
 	}
 	

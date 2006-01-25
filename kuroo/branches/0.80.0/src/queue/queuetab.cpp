@@ -99,7 +99,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	m_hasCheckedQueue = hasCheckedQueue;
 	
-	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
+// 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	queueView->insertPackageList();
 	
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
@@ -122,10 +122,10 @@ void QueueTab::slotReload( bool hasCheckedQueue )
  */
 void QueueTab::slotBusy( bool busy )
 {
-	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
+// 	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
-		pbGo->setText( i18n( "Stop!" ) );
+		pbGo->setText( i18n( "Abort Installation" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
@@ -136,9 +136,9 @@ void QueueTab::slotBusy( bool busy )
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		
 		if ( m_hasCheckedQueue && KUser().isSuperUser() )
-			pbGo->setText( i18n( "Start Installation!" ) );
+			pbGo->setText( i18n( "Start Installation" ) );
 		else
-			pbGo->setText( i18n("Check Installation!") );
+			pbGo->setText( i18n("Check Installation") );
 	}
 	
 	// No db no fun!
@@ -168,7 +168,7 @@ void QueueTab::slotBusy( bool busy )
  */
 void QueueTab::slotGo()
 {
-	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
+// 	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )

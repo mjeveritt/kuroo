@@ -242,7 +242,7 @@ void PortageTab::slotBusy( bool busy )
 
 void PortageTab::slotInitButtons()
 {
-	pbQueue->setText( i18n("Add to Install Queue") );
+	pbQueue->setText( i18n("Add to Queue") );
 }
 
 /**
@@ -252,9 +252,9 @@ void PortageTab::slotInitButtons()
 void PortageTab::slotButtons( bool isQueued )
 {
 	if ( isQueued )
-		pbQueue->setText( i18n("Remove from Install Queue") );
+		pbQueue->setText( i18n("Remove from Queue") );
 	else
-		pbQueue->setText( i18n("Add to Install Queue") );
+		pbQueue->setText( i18n("Add to Queue") );
 }
 
 /**
@@ -275,9 +275,9 @@ void PortageTab::slotPackage()
 	}
 	
 	if ( packagesView->currentPortagePackage()->isQueued() )
-		pbQueue->setText( i18n("Remove from Install Queue") );
+		pbQueue->setText( i18n("Remove from Queue") );
 	else
-		pbQueue->setText( i18n("Add to Install Queue") );
+		pbQueue->setText( i18n("Add to Queue") );
 	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -419,7 +419,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem2;
 	
 	if ( !packagesView->currentPortagePackage()->isQueued() )
-		menuItem2 = menu.insertItem(i18n("&Append to queue"), APPEND);
+		menuItem2 = menu.insertItem(i18n("&Add to queue"), APPEND);
 	else
 		menuItem2 = menu.insertItem(i18n("&Remove from queue"), APPEND);
 	

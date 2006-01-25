@@ -422,7 +422,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 		// Collect einfo and ewarn messages
 		//////////////////////////////////////////////////////////////
 		if ( completedFlag && ( lastLineFlag || line.contains("**** ") ) ) {
-			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('\'', "''").replace('%', "&#37;") + "<br>";
+			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('%', "&#37;") + "<br>";
 			cleanLine.remove( "!!!" );
 			
 			if ( line.endsWith( ":" ) )
@@ -435,12 +435,14 @@ void Emerge::readFromStdout( KProcIO *proc )
 			
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
-					importantMessage += importantMessagePackage + cleanLine;
+					importantMessage += "<br>" + importantMessagePackage + cleanLine;
 					importantMessagePackage = QString::null;
 				}
 				else
 					importantMessage += cleanLine;
 			}
+			
+			kdDebug() << "importantMessage=" << importantMessage << endl;
 		}
 		
 		// Save to kuroo.log for debugging
@@ -471,8 +473,6 @@ void Emerge::readFromStdout( KProcIO *proc )
  */
 void Emerge::cleanup()
 {
-	kdDebug() << "Emerge::cleanup" << endl;
-	
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );
@@ -502,6 +502,7 @@ void Emerge::cleanupQueue( KProcess* proc )
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupQueue(KProcess*) ) );
 	cleanup();
+	HistorySingleton::Instance()->updateStatistics();
 }
 
 /**

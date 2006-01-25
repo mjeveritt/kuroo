@@ -44,8 +44,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QString id = KurooDBSingleton::Instance()->query( 
-			" SELECT id FROM package WHERE "
-			" name = '" + name + "' AND idCatSubCategory = "
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db).first();
 		
 		if ( id.isEmpty() ) {
@@ -54,10 +53,10 @@ public:
 			return false;
 		}
 		else {
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' "
-			                                              "WHERE id = '%2';" ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET meta = '%1' "
-			                                              " WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET meta = '%1' WHERE id = '%2'"
+			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET meta = '%1' WHERE idPackage = '%2' AND name = '%3'"
+			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}

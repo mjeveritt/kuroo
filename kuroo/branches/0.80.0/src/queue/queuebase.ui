@@ -292,15 +292,15 @@
                                 </property>
                                 <property name="minimumSize">
                                     <size>
-                                        <width>200</width>
+                                        <width>180</width>
                                         <height>0</height>
                                     </size>
                                 </property>
                                 <property name="text">
-                                    <string>Check I&amp;nstallation</string>
+                                    <string>Chec&amp;k Installation</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+N</string>
+                                    <string>Alt+K</string>
                                 </property>
                             </widget>
                             <widget class="KTextBrowser" row="0" column="0" rowspan="1" colspan="2">

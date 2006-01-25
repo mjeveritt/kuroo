@@ -67,7 +67,7 @@ bool ScanHistoryJob::doJob()
 		return false;
 	}
 	
-	EmergeTimeMap emergeTimeMap(HistorySingleton::Instance()->getStatisticsMap());
+	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
@@ -75,6 +75,8 @@ bool ScanHistoryJob::doJob()
 	QRegExp rxTimeStamp( "\\d+:\\s" );
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
+// 	bool isHistoryChanged( false );
+	
 	foreach ( m_logLines ) {
 		
 		// Abort the scan
@@ -124,9 +126,9 @@ bool ScanHistoryJob::doJob()
 							itMap.data().inc();
 						}
 						
-						KurooDBSingleton::Instance()->insert( QString( 
-							"INSERT INTO history (package, timestamp, time, emerge) "
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) "
 							"VALUES ('%1', '%2', '%3', 'true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ), m_db );
+// 						isHistoryChanged = true;
 					}
 				}
 				else
@@ -135,40 +137,43 @@ bool ScanHistoryJob::doJob()
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {
 					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
-					KurooDBSingleton::Instance()->insert( QString( 
-						"INSERT INTO history (package, timestamp, emerge) "
+					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) "
 						"VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
+// 					isHistoryChanged = true;
 				}
 				else
 					if ( emergeLine.contains("=== Sync completed") ) {
-						KurooDBSingleton::Instance()->insert( QString( 
-							"INSERT INTO history (package, timestamp, emerge) "
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) "
 							"VALUES ('', '%1', 'true');" ).arg( timeStamp ), m_db );
+// 						isHistoryChanged = true;
 					}
+				
 			}
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-
-	KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
-	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
-	EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
-	for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
-		
-		// Abort the scan
-		if ( isAborted() ) {
-			kdDebug() << i18n("History scan aborted") << endl;
-			KurooDBSingleton::Instance()->query("ROLLBACK TRANSACTION;", m_db);
-			return false;
+/*
+	if ( isHistoryChanged ) {
+		KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
+		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
+		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
+			
+			// Abort the scan
+			if ( isAborted() ) {
+				kdDebug() << i18n("History scan aborted") << endl;
+				KurooDBSingleton::Instance()->query("ROLLBACK TRANSACTION;", m_db);
+				return false;
+			}
+			
+			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" ).arg(itMap.data().emergeTime()).arg(itMap.data().count()).arg(itMap.key()), m_db );
 		}
-		
-		KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" ).arg(itMap.data().emergeTime()).arg(itMap.data().count()).arg(itMap.key()), m_db );
-	}
-	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+	}*/
 	
-	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );	
+	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	KurooConfig::setScanHistoryDate( timeStamp );
 	KurooConfig::writeConfig();
-
+	
 	return true;
 }
 

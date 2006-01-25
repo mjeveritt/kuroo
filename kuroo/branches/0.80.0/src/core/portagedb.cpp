@@ -200,22 +200,23 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32)); "
-	      " CREATE INDEX index_name ON category (name)"
+	      " CREATE INDEX index_name_category ON category (name)"
 	      " ;", conn);
 	
 	query(" CREATE TABLE subCategory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32), "
 	      " idCategory INTEGER); "
-	      " CREATE INDEX index_name ON subCategory (name)"
+	      " CREATE INDEX index_name_subCategory ON subCategory (name)"
 	      " ;", conn);
 	
 	query(" CREATE TABLE catSubCategory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32), "
 	      " idCategory INTEGER, "
-	      " idSubCategory INTEGER) "
-	      " ;", conn);
+	      " idSubCategory INTEGER);"
+	      " CREATE INDEX index_name_catSubCategory ON catSubCategory (name);"
+	      " ", conn);
 	
 	query(" CREATE TABLE package ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -229,7 +230,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " date VARCHAR(32), "
 	      " meta INTEGER, "
 	      " updateVersion VARCHAR(32)); "
-	      " CREATE INDEX index_name ON package (name);"
+	      " CREATE INDEX index_name_package ON package (name);"
 	      " CREATE INDEX index_description ON package (description);"
 	      , conn);
 	
@@ -671,9 +672,14 @@ QString KurooDB::packageId( const QString& package )
 	
 	kdDebug() << "KurooDB::packageId package=" << package << ". category=" << category << ". name=" << name << "." << endl;
 	
+	QStringList idCategory = query( " SELECT id from catSubCategory WHERE name = '" + category + "'; ");
+	
+	kdDebug() << "KurooDB::packageId idCategory=" << idCategory << endl;
+	
 	QString id = query( " SELECT id FROM package WHERE "
-	                    " name = '" + name + "' AND idCatSubCategory = "
-	                    " ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ").first();
+	                    " name = '" + name + "' AND idCatSubCategory = '" + idCategory.first() + "'; ").first();
+	
+	kdDebug() << "KurooDB::packageId id=" << id << endl;
 	
 	if ( !id.isEmpty() )
 		return id;
@@ -1024,7 +1030,7 @@ QStringList KurooDB::getLastSync()
 void KurooDB::addEmergeInfo( const QString& einfo )
 {
 	query( QString("UPDATE history SET einfo = '%1' "
-	               "WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString(einfo) ) );
+	               "WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
 }
 
 /**
@@ -1131,6 +1137,8 @@ QStringList SqliteConnection::query( const QString& statement )
 	const char* tail;
 	sqlite3_stmt* stmt;
 	
+	kdDebug() << "Query: " << statement << endl;
+	
     //compile SQL program to virtual machine
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );
 	
@@ -1164,7 +1172,6 @@ QStringList SqliteConnection::query( const QString& statement )
             //iterate over columns
 			for ( int i = 0; i < number; i++ )
 				values << QString::fromUtf8( (const char*) sqlite3_column_text(stmt, i) );
-			
 		}
         //deallocate vm ressources
 		sqlite3_finalize(stmt);
@@ -1185,6 +1192,8 @@ int SqliteConnection::insert( const QString& statement )
 	int error;
 	const char* tail;
 	sqlite3_stmt* stmt;
+	
+	kdDebug() << "Insert: " << statement << endl;
 	
     //compile SQL program to virtual machine
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );

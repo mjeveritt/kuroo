@@ -28,6 +28,31 @@
 #include <kprocio.h>
 #include <kdirwatch.h>
 
+class UpdateStatisticsJob : public ThreadWeaver::DependentJob
+{
+public:
+UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
+		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		
+		EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
+		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
+		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
+			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" ).arg(itMap.data().emergeTime()).arg(itMap.data().count()).arg(itMap.key()), m_db );
+		}
+		
+		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+		return true;
+	}
+	
+	virtual void completeJob() {
+	}
+};
+
 /**
  * @class History
  * @short Object for the emerge history and statistics.
@@ -291,6 +316,14 @@ void History::slotParse()
 			}
 		}
 	}
+}
+
+/**
+ * Update emerge duration statistic.
+ */
+void History::updateStatistics()
+{
+	ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
 }
 
 /**

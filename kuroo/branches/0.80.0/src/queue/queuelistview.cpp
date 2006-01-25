@@ -225,7 +225,7 @@ void QueueListView::insertPackageList()
 		
 		// If version get size also
 // 		QString size;
-// 		if ( !version.isEmpty() )
+		if ( !version.isEmpty() )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
@@ -253,7 +253,7 @@ void QueueListView::insertPackageList()
 		if ( size.isEmpty() )
 			item->setText( 3, i18n("na") );
 		else {
-			item->setText( 3, size + " kB " );
+			item->setText( 3, size );
 			addSize( size );
 		}
 		
@@ -270,7 +270,6 @@ void QueueListView::insertPackageList()
 		QueueSingleton::Instance()->insertInCache( id );
 	}
 	
-	setColumnWidth( 5, 80 );
 	emit( signalQueueLoaded() );
 }
 

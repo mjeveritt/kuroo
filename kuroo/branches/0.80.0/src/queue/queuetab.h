@@ -47,6 +47,7 @@ public slots:
 	 * Load Queue packages.
 	 */
 	void				slotReload( bool hasCheckedQueue );
+	void				queueSummary();
 	
 private slots:
 	
@@ -80,6 +81,7 @@ private slots:
 	
 private:
 	bool				m_hasCheckedQueue;
+	QString				initialQueueTime;
 };
 
 #endif

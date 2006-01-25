@@ -98,6 +98,7 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
+// 	kdDebug() << "KurooStatusBar::setTotalSteps total=" << total << endl;
 	statusBarProgress->setTotalSteps( total );
 }
 

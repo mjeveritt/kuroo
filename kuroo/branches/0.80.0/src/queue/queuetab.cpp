@@ -39,7 +39,7 @@
  * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent )
-	: QueueBase( parent ), m_hasCheckedQueue( false )
+	: QueueBase( parent ), m_hasCheckedQueue( false ), initialQueueTime( QString::null )
 {
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
@@ -63,6 +63,7 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), queueView, SLOT( slotPackageComplete( const QString&, bool ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), queueView, SLOT( slotPackageProgress() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), this, SLOT( queueSummary() ) );
 	
 	slotInit();
 }
@@ -102,18 +103,24 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 // 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	queueView->insertPackageList();
 	
-	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
-			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( queueView->totalTime() );
-// 			queueBrowserLines += i18n( "Estimated time remaining: <br>" );
-	
-	queueBrowser->clear();
-	queueBrowser->setText( queueBrowserLines );
-	
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;
 	
 	slotBusy( false );
+	
+	initialQueueTime = queueView->totalTimeFormatted();
+	queueSummary();
+}
+
+void QueueTab::queueSummary()
+{
+	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
+			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
+			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( initialQueueTime );
+			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" ).arg( queueView->totalTimeFormatted() );
+	
+	queueBrowser->clear();
+	queueBrowser->setText( queueBrowserLines );
 }
 
 /**
@@ -276,7 +283,6 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	}
 	
 	switch( menu.exec( point ) ) {
-		
 		case PRETEND:
 			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
 			break;

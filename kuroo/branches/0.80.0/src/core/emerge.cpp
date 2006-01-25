@@ -442,7 +442,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 					importantMessage += cleanLine;
 			}
 			
-			kdDebug() << "importantMessage=" << importantMessage << endl;
+// 			kdDebug() << "importantMessage=" << importantMessage << endl;
 		}
 		
 		// Save to kuroo.log for debugging

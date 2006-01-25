@@ -54,8 +54,9 @@ public slots:
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.
 	*/
-	QString		 			totalTime();
+	QTime			 		totalTime();
 	int						sumTime();
+	QString					totalTimeFormatted();
 
 	/**
 	* Get sum of packages sizes.
@@ -87,7 +88,7 @@ private slots:
 	* @param time 			
 	* @return emergeTime  
 	*/
-	QString 				timeFormat( const QString& time );
+	QString 				formatTime( int time );
 	
 signals:
 	void					signalQueueLoaded();
@@ -111,6 +112,8 @@ public:
 	~QueueItem();
 	
 	void			setComplete();
+	bool			isComplete();
+	int				duration();
 	void			setStart();
 	void			oneStep();
 	void			setChecked( bool isChecked );
@@ -122,7 +125,7 @@ protected:
 private:
 	KProgress* 		bar;
 	int				progress, m_duration;
-	bool			m_isChecked;
+	bool			m_isChecked, m_isComplete;
 };
 
 #endif

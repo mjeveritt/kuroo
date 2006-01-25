@@ -136,7 +136,7 @@ bool ThreadWeaver::event( QEvent *e )
 				new QCustomEvent( ThreadWeaver::RestoreOverrideCursorEvent ) );
 
 		if ( !job->isAborted() ) {
-			kdDebug() << "Job completed" << ": " << name << endl;
+// 			kdDebug() << "Job completed" << ": " << name << endl;
 			job->completeJob();
 		}
 		else 

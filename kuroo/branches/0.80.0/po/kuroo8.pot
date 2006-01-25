@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-25 16:18+0100\n"
+"POT-Creation-Date: 2006-01-25 18:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,34 +16,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:143 portage/portagelistview.cpp:246
+#: queue/queuelistview.cpp:153 portage/portagelistview.cpp:246
 #: portage/portagelistview.cpp:303 portage/portagelistview.cpp:305 rc.cpp:261
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:144 portage/versionview.cpp:74
+#: queue/queuelistview.cpp:154 portage/versionview.cpp:74
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:145 history/historylistview.cpp:43
+#: queue/queuelistview.cpp:155 history/historylistview.cpp:43
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:146 portage/versionview.cpp:76
+#: queue/queuelistview.cpp:156 portage/versionview.cpp:76
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:147
+#: queue/queuelistview.cpp:157
 msgid "Use Flags"
 msgstr ""
 
-#: queue/queuelistview.cpp:148
+#: queue/queuelistview.cpp:158
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:244 queue/queuelistview.cpp:249
-#: queue/queuelistview.cpp:254 core/emerge.cpp:337
+#: queue/queuelistview.cpp:253 queue/queuelistview.cpp:258
+#: queue/queuelistview.cpp:263 core/emerge.cpp:337
 msgid "na"
 msgstr ""
 
@@ -55,47 +55,51 @@ msgstr ""
 msgid "Package id is empty, skipping!"
 msgstr ""
 
-#: queue/queuetab.cpp:105
+#: queue/queuetab.cpp:117
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:106
+#: queue/queuetab.cpp:118
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:107
+#: queue/queuetab.cpp:119
 msgid "Estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:128
+#: queue/queuetab.cpp:120
+msgid "Estimated time remaining: %1<br>"
+msgstr ""
+
+#: queue/queuetab.cpp:135
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:139
+#: queue/queuetab.cpp:146
 msgid "Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:141
+#: queue/queuetab.cpp:148
 msgid "Check Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:194
+#: queue/queuetab.cpp:201
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:194 queue/queuetab.cpp:204
+#: queue/queuetab.cpp:201 queue/queuetab.cpp:211
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:204
+#: queue/queuetab.cpp:211
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:220
+#: queue/queuetab.cpp:227
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:224 core/emerge.cpp:477 core/emerge.cpp:551
+#: queue/queuetab.cpp:231 core/emerge.cpp:477 core/emerge.cpp:551
 #: core/cacheportagejob.cpp:236 core/scanportagejob.cpp:351
 #: core/scanportagejob.cpp:425 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:139 core/portagefiles.cpp:230
@@ -104,7 +108,7 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:270
+#: queue/queuetab.cpp:277
 msgid "Emerge pretend"
 msgstr ""
 
@@ -992,7 +996,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:199
+#: kurooview.cpp:200
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 

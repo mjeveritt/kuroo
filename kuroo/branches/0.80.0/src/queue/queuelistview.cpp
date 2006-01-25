@@ -29,7 +29,7 @@
 #include <klistview.h>
 #include <kprogress.h>
 
-static QTime totalDuration;
+// static QTime totalDuration;
 
 // Tweak for time taken unpacking and installing single package.
 const int diffTime( 10 );
@@ -39,16 +39,16 @@ const int diffTime( 10 );
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
 {
-	bar = new KProgress( duration + diffTime, parent->viewport() );
+	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false )
+	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
 {
-	bar = new KProgress( duration + diffTime, parent->listView()->viewport() );
+	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
 }
 
@@ -65,14 +65,12 @@ QueueListView::QueueItem::~QueueItem()
 void QueueListView::QueueItem::setStatus( int status )
 {
 	switch ( status ) {
-		
 		case INSTALLED :
 			setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 			break;
 		
 		case PACKAGE :
 			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-		
 	}
 }
 
@@ -81,6 +79,7 @@ void QueueListView::QueueItem::setStatus( int status )
  */
 void QueueListView::QueueItem::setStart()
 {
+	m_isComplete = false;
 	m_isChecked = true;
 	repaint();
 }
@@ -90,10 +89,21 @@ void QueueListView::QueueItem::setStart()
  */
 void QueueListView::QueueItem::setComplete()
 {
+	m_isComplete = true;
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
 	QueueItem::setStatus( INSTALLED );
 	bar->hide();
+}
+
+bool QueueListView::QueueItem::isComplete()
+{
+	return m_isComplete;
+}
+
+int QueueListView::QueueItem::duration()
+{
+	return m_duration;
 }
 
 /**
@@ -202,7 +212,6 @@ void QueueListView::slotPackageDown()
 void QueueListView::insertPackageList()
 {
 	QueueItem* item;
-	totalDuration = QTime(0, 0, 0);
 	sumSize = 0;
 	
 	resetListView();
@@ -221,7 +230,7 @@ void QueueListView::insertPackageList()
 		QString version = *it;
 
 		// Get package emerge duration from statistics
-		QString duration = HistorySingleton::Instance()->packageTime( category + "/" + name );
+		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		
 		// If version get size also
 // 		QString size;
@@ -229,14 +238,14 @@ void QueueListView::insertPackageList()
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category + "/" + name, id, description, meta, duration.toInt() );
+			item = new QueueItem( this, category + "/" + name, id, description, meta, duration );
 			item->setOpen( true );
 			item->setChecked( false );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration.toInt() );
+				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration );
 		}
 		
 		// Add package info
@@ -245,10 +254,10 @@ void QueueListView::insertPackageList()
 		else
 			item->setText( 1, version );
 		
-		if ( duration.isEmpty() )
+		if ( duration == diffTime )
 			item->setText( 2, i18n("na") );
 		else
-			item->setText( 2, timeFormat( duration ) );
+			item->setText( 2, formatTime( duration ) );
 		
 		if ( size.isEmpty() )
 			item->setText( 3, i18n("na") );
@@ -275,7 +284,6 @@ void QueueListView::insertPackageList()
 
 void QueueListView::setPackagesChecked()
 {
-	kdDebug() << "QueueListView::setPackagesChecked" << endl;
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
 		dynamic_cast<QueueItem*>( myChild )->setChecked( true );
@@ -288,25 +296,27 @@ void QueueListView::setPackagesChecked()
  * @param time
  * @return emergeTime
  */
-QString QueueListView::timeFormat( const QString& time )
+QString QueueListView::formatTime( int time )
 {
-	if ( !time.isEmpty() && time != NULL ) {
-		QTime emergeTime( 0, 0, 0 );
-		emergeTime = emergeTime.addSecs( time.toInt() );
-		totalDuration = totalDuration.addSecs( time.toInt() + diffTime );
-		return loc->formatTime( emergeTime, true, true );
-	}
-	else
-		return QString::null;
+	QTime emergeTime( 0, 0, 0 );
+	emergeTime = emergeTime.addSecs( time );
+	return loc->formatTime( emergeTime, true, true );
 }
 
 /**
  * Get total emerge duration in format hh:mm:ss.
  * @return totalDuration 
  */
-QString QueueListView::totalTime()
+QTime QueueListView::totalTime()
 {
-	return loc->formatTime( totalDuration, true, true );
+	QTime totalDuration = QTime(0, 0, 0);
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		if ( !dynamic_cast<QueueItem*>( it.current() )->isComplete() )
+			totalDuration = totalDuration.addSecs( dynamic_cast<QueueItem*>( it.current() )->duration() );
+		++it;
+	}
+	return totalDuration;
 }
 
 /**
@@ -315,7 +325,12 @@ QString QueueListView::totalTime()
  */
 int QueueListView::sumTime()
 {
-	return abs( totalDuration.secsTo( QTime(0, 0, 0) ) );
+	return abs( totalTime().secsTo( QTime(0, 0, 0) ) );
+}
+
+QString QueueListView::totalTimeFormatted()
+{
+	return formatTime( sumTime() );
 }
 
 /**
@@ -340,7 +355,6 @@ QString QueueListView::totalSize()
 
 /**
  * Format package size nicely 
- * @fixme: Check out KIO_EXPORT QString KIO::convertSize
  * @param size 
  * @return total		as "xxx kB"
  */
@@ -371,6 +385,9 @@ void QueueListView::slotPackageStart( const QString& id )
 		dynamic_cast<QueueItem*>( packageIndex[id] )->setStart();
 	
 	m_id = id;
+	
+	// Update kuroo statusbar with remaining emerge duration
+// 	KurooStatusBar::instance()->setTotalSteps( sumTime() );
 }
 
 void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled )

@@ -674,12 +674,11 @@ QString KurooDB::packageId( const QString& package )
 	
 	QStringList idCategory = query( " SELECT id from catSubCategory WHERE name = '" + category + "'; ");
 	
-	kdDebug() << "KurooDB::packageId idCategory=" << idCategory << endl;
-	
+	// Is this a SQLite bug? First row is empty, and category comes in second row. Fix: join them.
 	QString id = query( " SELECT id FROM package WHERE "
-	                    " name = '" + name + "' AND idCatSubCategory = '" + idCategory.first() + "'; ").first();
+	                    " name = '" + name + "' AND idCatSubCategory = '" + idCategory.join("") + "'; ").first();
 	
-	kdDebug() << "KurooDB::packageId id=" << id << endl;
+	kdDebug() << "KurooDB::packageId id=" << id << " idCategory=" << idCategory << endl;
 	
 	if ( !id.isEmpty() )
 		return id;
@@ -1164,8 +1163,10 @@ QStringList SqliteConnection::query( const QString& statement )
 				::usleep(100000); // Sleep 100 msec
 				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << endl;
 			}
+			
 			if ( error == SQLITE_MISUSE )
 				kdDebug() << "sqlite3_step: MISUSE on query: " << statement << endl;
+			
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 			

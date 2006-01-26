@@ -291,6 +291,7 @@ void QueueListView::insertPackageList()
 	emit( signalQueueLoaded() );
 }
 
+// fixme: check iteration
 void QueueListView::setPackagesChecked()
 {
 	QListViewItem* myChild = firstChild();
@@ -396,7 +397,7 @@ void QueueListView::slotPackageStart( const QString& id )
 	m_id = id;
 	
 	// Update kuroo statusbar with remaining emerge duration
-// 	KurooStatusBar::instance()->setTotalSteps( sumTime() );
+	KurooStatusBar::instance()->setTotalSteps( sumTime() );
 }
 
 void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled )

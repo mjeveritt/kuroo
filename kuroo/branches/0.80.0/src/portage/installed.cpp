@@ -43,7 +43,7 @@ public:
 			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QString id = KurooDBSingleton::Instance()->querySingle( 
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
 			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
 		
@@ -92,7 +92,7 @@ public:
 		else
 			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
 
-		QString id = KurooDBSingleton::Instance()->querySingle( 
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
 			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
 		

@@ -77,7 +77,7 @@ public slots:
 	
 	void			slotChanged();
 
-	void			appendEmergeInfo( const QString& einfo );
+	void			appendEmergeInfo();
 	
 	void			updateStatistics();
 	

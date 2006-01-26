@@ -32,7 +32,7 @@
  * @short All Gentoo emerge command.
  */
 Emerge::Emerge( QObject* m_parent )
-	: QObject( m_parent )
+	: QObject( m_parent ), m_error( false ), m_packageMessage( QString::null )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
@@ -94,6 +94,7 @@ bool Emerge::queue( const QStringList& packageList )
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
+	m_error = false;
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -137,6 +138,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
+	m_error = false;
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -174,6 +176,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
 	emergePackageList.clear();
+	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--unmerge" << "--nocolor";
@@ -207,6 +210,7 @@ bool Emerge::sync()
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
+	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor";
@@ -236,6 +240,7 @@ bool Emerge::checkUpdates()
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
+	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "-pvu" << "--nocolor";
@@ -369,6 +374,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
 				logDone++;
+				m_error = true;
 			}
 			else
 				if ( lineLower.contains( "etc-update" ) ) {
@@ -435,14 +441,15 @@ void Emerge::readFromStdout( KProcIO *proc )
 			
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
-					importantMessage += "<br>" + importantMessagePackage + cleanLine;
+					if ( importantMessage.isEmpty() )
+						importantMessage += importantMessagePackage + cleanLine;
 					importantMessagePackage = QString::null;
 				}
-				else
+				else {
+					m_packageMessage += cleanLine;
 					importantMessage += cleanLine;
+				}
 			}
-			
-// 			kdDebug() << "importantMessage=" << importantMessage << endl;
 		}
 		
 		// Save to kuroo.log for debugging
@@ -461,6 +468,16 @@ void Emerge::readFromStdout( KProcIO *proc )
 	proc->ackRead();
 }
 
+/**
+ * Return einfo and ewarnings collected during emerge of the package.
+ * @return message
+ */
+QString Emerge::packageMessage()
+{
+	QString message = m_packageMessage;
+	m_packageMessage = QString::null;
+	return message;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Post emerge stuff
@@ -484,10 +501,8 @@ void Emerge::cleanup()
 	if ( !unmasked.isEmpty() )
 		askUnmaskPackage( unmasked );
 	else
-		if ( !importantMessage.isEmpty() ) {
-			HistorySingleton::Instance()->appendEmergeInfo( importantMessage );
+		if ( !importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
-		}
 	
 	if ( etcUpdateCount != 0 /*&& !SignalistSingleton::Instance()->isKurooBusy()*/ )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );

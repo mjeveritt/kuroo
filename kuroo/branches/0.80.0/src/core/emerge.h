@@ -90,6 +90,8 @@ public slots:
 	 */
 	bool 				isRunning();
 	
+	QString				packageMessage();
+	
 private slots:
 	
 	/**
@@ -122,11 +124,11 @@ private slots:
 private:
 	QObject*			m_parent;
 	KProcIO*			eProc;
-	QString 			importantMessage, unmasked;
+	QString 			importantMessage, unmasked, m_packageMessage;
 	QStringList 		blocks, lastEmergeList;
 	EmergePackageList	emergePackageList;
 	int					etcUpdateCount;
-
+	bool				m_error;
 };
 
 #endif

@@ -51,6 +51,8 @@ QueueTab::QueueTab( QWidget* parent )
 		
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
+	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
+	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
@@ -63,7 +65,7 @@ QueueTab::QueueTab( QWidget* parent )
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), queueView, SLOT( slotPackageComplete( const QString&, bool ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), queueView, SLOT( slotPackageProgress() ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), this, SLOT( queueSummary() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), this, SLOT( slotQueueSummary() ) );
 	
 	slotInit();
 }
@@ -90,6 +92,7 @@ void QueueTab::slotInit()
 	if ( !KurooConfig::init() )
 		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
 	
+	pbRemove->setDisabled( true );
 	slotBusy( false );
 }
 
@@ -109,10 +112,10 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	slotBusy( false );
 	
 	initialQueueTime = queueView->totalTimeFormatted();
-	queueSummary();
+	slotQueueSummary();
 }
 
-void QueueTab::queueSummary()
+void QueueTab::slotQueueSummary()
 {
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
@@ -151,14 +154,12 @@ void QueueTab::slotBusy( bool busy )
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" || busy ) {
 		pbClear->setDisabled( true );
-		pbRemove->setDisabled( true );
 		cbDownload->setDisabled( true );
 		cbForce->setDisabled( true );
 		cbRemove->setDisabled( true );
 	}
 	else {
 		pbClear->setDisabled( false );
-		pbRemove->setDisabled( false );
 		cbDownload->setDisabled( false );
 		cbForce->setDisabled( false );
 		cbRemove->setDisabled( false );
@@ -290,6 +291,19 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 	}
+}
+
+void QueueTab::slotButtons()
+{
+	if ( queueView->selectedId().isEmpty() ) {
+		pbRemove->setDisabled( true );
+		return;
+	}
+	
+	if ( !EmergeSingleton::Instance()->isRunning() )
+		pbRemove->setDisabled( false );
+	else
+		pbRemove->setDisabled( true );
 }
 
 #include "queuetab.moc"

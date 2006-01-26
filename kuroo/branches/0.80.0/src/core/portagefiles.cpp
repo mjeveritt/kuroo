@@ -67,9 +67,8 @@ public:
 			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
 		}
 		else {
-			while ( !stream.atEnd() ) {
+			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
-			}
 			file.close();
 		}
 		
@@ -112,7 +111,7 @@ public:
 					keywords = "~*"; // in fact, it would be: m_keywords.prepend("~" + arch), but anyways
 				}
 
-				QString id = KurooDBSingleton::Instance()->querySingle( 
+				QString id = KurooDBSingleton::Instance()->singleQuery( 
 					" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 				
@@ -164,9 +163,8 @@ public:
 			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
 		}
 		else {
-			while ( !stream.atEnd() ) {
+			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
-			}
 			file.close();
 		}
 		
@@ -203,7 +201,7 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->querySingle( 
+						QString id = KurooDBSingleton::Instance()->singleQuery( 
 							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
@@ -255,9 +253,8 @@ public:
 			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageHardMask() ) << endl;
 		}
 		else {
-			while ( !stream.atEnd() ) {
+			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
-			}
 			file.close();
 		}
 		
@@ -294,7 +291,7 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->querySingle( 
+						QString id = KurooDBSingleton::Instance()->singleQuery( 
 							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
 						
@@ -346,9 +343,8 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 			kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUserMask() ) << endl;
 		}
 		else {
-			while ( !stream.atEnd() ) {
+			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
-			}
 			file.close();
 		}
 		
@@ -385,7 +381,7 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->querySingle( 
+						QString id = KurooDBSingleton::Instance()->singleQuery( 
 							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
@@ -436,9 +432,8 @@ LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::filePackageUse() ) << endl;
 		}
 		else {
-			while ( !stream.atEnd() ) {
+			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
-			}
 			file.close();
 		}
 		
@@ -461,7 +456,7 @@ LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 			QString use = (*it).section( ' ', 1 );
 			use.simplifyWhiteSpace();
 			
-			QString id = KurooDBSingleton::Instance()->querySingle( 
+			QString id = KurooDBSingleton::Instance()->singleQuery( 
 				" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 			

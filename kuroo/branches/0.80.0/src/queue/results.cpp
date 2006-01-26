@@ -46,7 +46,7 @@ public:
 		EmergePackageList::ConstIterator itEnd = m_packageList.end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 			
-			QString id = KurooDBSingleton::Instance()->querySingle( 
+			QString id = KurooDBSingleton::Instance()->singleQuery( 
 				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND idCatSubCategory = "
 				" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 			

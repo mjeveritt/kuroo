@@ -262,7 +262,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 2, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
 	
-	setColumnWidth( 0, 200 );
+	setColumnWidth( 0, 180 );
 	setColumnWidth( 1, 25 );
 	setColumnWidth( 2, 80 );
 	

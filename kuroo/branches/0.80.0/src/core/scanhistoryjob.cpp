@@ -125,8 +125,10 @@ bool ScanHistoryJob::doJob()
 							itMap.data().inc();
 						}
 						
-						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, emerge) "
-							"VALUES ('%1', '%2', '%3', 'true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ), m_db );
+						QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
+						
+						KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, time, einfo, emerge) "
+							"VALUES ('%1', '%2', '%3', '%4','true');" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ).arg( einfo ), m_db );
 					}
 				}
 				else

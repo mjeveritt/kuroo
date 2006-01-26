@@ -327,9 +327,12 @@ void History::updateStatistics()
 /**
  * Register einfo in db for package.
  */
-void History::appendEmergeInfo( const QString& einfo )
+void History::appendEmergeInfo()
 {
-	KurooDBSingleton::Instance()->addEmergeInfo( einfo.section( ":<br>", 1, 1 ).utf8() );
+	QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
+	KurooDBSingleton::Instance()->addEmergeInfo( einfo );
+	
+	kdDebug() << "History::appendEmergeInfo einfo=" << einfo << endl;
 }
 
 /**

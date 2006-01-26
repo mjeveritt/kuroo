@@ -23,6 +23,7 @@
 #include "messagebase.h"
 
 #include <qlabel.h>
+#include <qclipboard.h>
 
 #include <ktextbrowser.h>
 
@@ -59,6 +60,9 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
 	setText( text );
 	setInitialSize( QSize(600, 300) );
 	show();
+	
+// 	QClipboard *cb = QApplication::clipboard();
+// 	cb->setText( text, QClipboard::Clipboard );
 }
 
 /**

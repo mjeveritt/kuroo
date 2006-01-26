@@ -47,7 +47,7 @@ public slots:
 	 * Load Queue packages.
 	 */
 	void				slotReload( bool hasCheckedQueue );
-	void				queueSummary();
+	void				slotQueueSummary();
 	
 private slots:
 	
@@ -78,6 +78,8 @@ private slots:
 	 * @param point
 	 */
 	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
+	
+	void				slotButtons();
 	
 private:
 	bool				m_hasCheckedQueue;

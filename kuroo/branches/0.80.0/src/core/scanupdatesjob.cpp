@@ -119,7 +119,7 @@ bool ScanUpdatesJob::doJob()
 		setProgress( count++ );
 		
 		// Find id for this category in db
-		QString id = KurooDBSingleton::Instance()->querySingle( 
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
 			" SELECT id FROM package WHERE name = '" + (*it).name + "' AND idCatSubCategory = "
 			" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 		

@@ -199,9 +199,9 @@ void PortageTab::slotRefresh()
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
-		case KMessageBox::Yes: {
+		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotRefresh();
-		}
+		
 	}
 }
 
@@ -374,9 +374,9 @@ void PortageTab::slotPackage()
 		m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
 		m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
 		m_packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
-		
 		m_packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
-	linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
+		
+		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
 	}
 	else {
 		if ( versionNotInArchitecture && linesAvailable.isEmpty() )

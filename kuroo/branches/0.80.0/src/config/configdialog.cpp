@@ -96,6 +96,8 @@ void ConfigDialog::readMakeConf()
 			line.replace('\\', ' ');
 			line = line.simplifyWhiteSpace();
 			
+			kdDebug() << "ConfigDialog::readMakeConf line=" << line << endl;
+			
 			if ( line.contains(QRegExp("^ACCEPT_KEYWORDS=")) )
 				KurooConfig::setAcceptKeywords( kstr.word( line.section("ACCEPT_KEYWORDS=", 1, 1).remove("\"") , "0:" ) );
 			
@@ -206,9 +208,9 @@ void ConfigDialog::readMakeConf()
 			if ( line.contains(QRegExp("^SYNC=\"")) )
 				KurooConfig::setSync( kstr.word( line.section("SYNC=", 1, 1).remove("\"") , "0:" ) );
 			
-			if ( line.contains(QRegExp("^USE=\"")) ) {
+			if ( line.contains(QRegExp("^USE=\"")) )
 				KurooConfig::setUse( kstr.word( line.section("USE=", 1, 1).remove("\"") , "0:" ) );
-			}
+			
 			if ( line.contains(QRegExp("^USE_ORDER=\"")) )
 				KurooConfig::setUseOrder( kstr.word( line.section("USE_ORDER=", 1, 1).remove("\"") , "0:" ) );
 			
@@ -220,6 +222,8 @@ void ConfigDialog::readMakeConf()
 	}
 	else
 		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
+	
+	kdDebug() << "ConfigDialog::readMakeConf end!" << endl;
 }
 
 /**

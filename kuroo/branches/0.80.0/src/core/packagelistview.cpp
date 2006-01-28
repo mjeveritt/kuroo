@@ -255,23 +255,25 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  */
 void PackageListView::slotNextPackage( bool isPrevious )
 {
-	QListViewItem* item = currentItem();
-	if ( isPrevious ) {
-		if ( item->itemAbove() ) {
-			selectAll( false );
-			item = item->itemAbove();
-			ensureItemVisible( item );
-			setCurrentItem( item );
-			setSelected( item, true );
+	if ( isVisible() ) {
+		QListViewItem* item = currentItem();
+		if ( isPrevious ) {
+			if ( item->itemAbove() ) {
+				selectAll( false );
+				item = item->itemAbove();
+				ensureItemVisible( item );
+				setCurrentItem( item );
+				setSelected( item, true );
+			}
 		}
-	}
-	else {
-		if ( item->itemBelow() ) {
-			selectAll( false );
-			item = item->itemBelow();
-			ensureItemVisible( item );
-			setCurrentItem( item );
-			setSelected( item, true );
+		else {
+			if ( item->itemBelow() ) {
+				selectAll( false );
+				item = item->itemBelow();
+				ensureItemVisible( item );
+				setCurrentItem( item );
+				setSelected( item, true );
+			}
 		}
 	}
 }

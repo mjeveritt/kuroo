@@ -75,6 +75,8 @@ void ConfigDialog::slotDefault()
  */
 void ConfigDialog::readMakeConf()
 {
+	kdDebug() << "ConfigDialog::readMakeConf" << endl;
+	
 	QFile makeconf( "/etc/make.conf" );
 	
 	if ( makeconf.open( IO_ReadOnly ) ) {

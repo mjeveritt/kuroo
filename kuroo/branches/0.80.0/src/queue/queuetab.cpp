@@ -274,6 +274,7 @@ void QueueTab::slotButtons()
 	if ( queueView->selectedId().isEmpty() ) {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
+		disconnect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 		return;
 	}
 	
@@ -283,6 +284,7 @@ void QueueTab::slotButtons()
 		pbRemove->setDisabled( true );
 	
 	pbAdvanced->setDisabled( false );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 }
 
 void QueueTab::slotAdvanced()

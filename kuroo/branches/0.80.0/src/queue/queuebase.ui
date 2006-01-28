@@ -434,6 +434,10 @@
                                 <property name="margin">
                                     <number>2</number>
                                 </property>
+                                <property name="text">
+                                    <string>&lt;b&gt;Summary&lt;/b&gt;&lt;br&gt;
+&lt;font color="gray"&gt;Installation is empty.&lt;/font&gt;</string>
+                                </property>
                             </widget>
                         </grid>
                     </widget>

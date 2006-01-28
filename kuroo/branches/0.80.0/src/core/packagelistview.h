@@ -94,6 +94,8 @@ public slots:
  	 */
 	virtual void			slotClearQueued();
 	
+	void					slotNextPackage( bool isPrevious );
+	
 protected slots:
 	
 	void					setPackageFocus( const QString& id );

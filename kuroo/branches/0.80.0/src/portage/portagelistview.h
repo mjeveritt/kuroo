@@ -51,8 +51,6 @@ public slots:
 	 * @param package
 	 */
 	int 							addSubCategoryPackages( const QStringList& packageList );
-
-	void							slotNextPackage( bool isPrevious );
 	
 private slots:
 	

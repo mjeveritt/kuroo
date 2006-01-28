@@ -17,6 +17,7 @@
 		<entry name="updateTree" type="Bool">
 		</entry>
 		<entry name="installedColumn" type="Bool">
+		<default>false</default>
 		</entry>
 		<entry name="init" type="Bool">
 		</entry>
@@ -53,6 +54,9 @@
 		</entry>
 		<entry name="DirWorldFile" type="String">
 		<default>/var/lib/portage/world</default>
+		</entry>
+		<entry name="FileMakeConf" type="String">
+		<default>/etc/make.conf</default>
 		</entry>
 		<entry name="FilePackageUserUnMask" type="String">
 		<default>/etc/portage/package.unmask</default>

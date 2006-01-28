@@ -25,7 +25,6 @@
 
 #include <qwidget.h>
 
-#include <kparts/part.h>
 #include <kurooiface.h>
 
 class PortageTab;
@@ -33,6 +32,7 @@ class QueueTab;
 class HistoryTab;
 class LogsTab;
 class MergeTab;
+class PackageInspector;
 
 /**
  * @class KurooView
@@ -48,29 +48,30 @@ public:
 	/**
 	 * The tabwidget and the tabs accessible by Kuroo.
 	 */
-	PortageTab*		tabPortage;
-	HistoryTab*		tabHistory;
-	QueueTab*		tabQueue;
-	LogsTab* 		tabLogs;
-	MergeTab*		tabMerge;
+	PortageTab*			tabPortage;
+	HistoryTab*			tabHistory;
+	QueueTab*			tabQueue;
+	LogsTab* 			tabLogs;
+	MergeTab*			tabMerge;
+	PackageInspector	*packageInspector;
 	
-	void 			quit();
+	void 				quit();
 	
 	/**
 	 * DCOP slot accessible by kuroo_watcher.
 	 */
-	void 			slotEmergePretend( QString package );
-
+	void 				slotEmergePretend( QString package );
+	
 public:
-	class 			IconListItem;
+	class 				IconListItem;
 	
 public slots:
 	/**
 	 * Check the validity of the database. Update history if emerge.log is changed.
 	 * Reset everything after a sync.
 	 */
-	void 			slotInit();
-	void			slotReset();
+	void 				slotInit();
+	void				slotReset();
 
 private slots:
 	/**
@@ -78,43 +79,43 @@ private slots:
 	 * Chain of events for refreshing "Portage", "Installed".
 	 * slotCheckPortage -> slotCheckInstalled -> slotCheckUpdates
 	 */
-	void 			slotCheckPortage();
+	void 				slotCheckPortage();
 	
 	/**
 	 * Update tab text color and package counts.
 	 */
-	void 			slotPortageUpdated();
-	void 			slotQueueUpdated();
-	void			slotHistoryUpdated();
-	void			slotMergeUpdated();
-	void 			slotLogUpdated();
-	void			slotResetMenu( QListBoxItem* menuItem );
+	void 				slotPortageUpdated();
+	void 				slotQueueUpdated();
+	void				slotHistoryUpdated();
+	void				slotMergeUpdated();
+	void 				slotLogUpdated();
+	void				slotResetMenu( QListBoxItem* menuItem );
 	
-	void 			slotShowView();
+	void 				slotShowView();
 	
 private:
-	IconListItem	*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
-	bool			hasHistoryRestored;
+	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
+	bool				hasHistoryRestored;
 };
 
 class KurooView::IconListItem : public QListBoxItem
 {
 public:
 	IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text );
-	virtual int 	height( const QListBox *lb ) const;
-	virtual int 	width( const QListBox *lb ) const;
-	int 			expandMinimumWidth( int width );
-	void 			setChanged( bool modified );
-	bool 			isChanged();
+	virtual int 		height( const QListBox *lb ) const;
+	virtual int 		width( const QListBox *lb ) const;
+	int 				expandMinimumWidth( int width );
+	void 				setChanged( bool modified );
+	bool 				isChanged();
 	
 protected:
-	const QPixmap 	&defaultPixmap();
-	void 			paint( QPainter *painter );
+	const QPixmap 		&defaultPixmap();
+	void 				paint( QPainter *painter );
 	
 private:
-	bool 			m_modified;
-	QPixmap 		mPixmap;
-	int 			mMinimumWidth;
+	bool 				m_modified;
+	QPixmap 			mPixmap;
+	int 				mMinimumWidth;
 };
 
 #endif // _KUROOVIEW_H_

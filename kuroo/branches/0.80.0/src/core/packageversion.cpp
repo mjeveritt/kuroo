@@ -30,7 +30,7 @@
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
 */
-PackageVersion::PackageVersion( PortageListView::PortageItem* package, const QString& version )
+PackageVersion::PackageVersion( PackageItem* package, const QString& version )
 	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_size( QString::null), m_isHardMasked( false ),
 	m_isOriginalHardMasked( false ), m_isUserMasked( false ), m_isUnMasked( false ),
 	// Regexp for a simple number, for use as a version number part

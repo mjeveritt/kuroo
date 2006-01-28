@@ -29,8 +29,6 @@
 #include <klistview.h>
 #include <kprogress.h>
 
-// static QTime totalDuration;
-
 // Tweak for time taken unpacking and installing single package.
 const int diffTime( 10 );
 
@@ -39,14 +37,16 @@ const int diffTime( 10 );
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
+	: PackageItem( parent, name, id, description, status ), 
+	bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
 {
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
+	: PackageItem( parent, name, id, description, status ), 
+	bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
 {
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
@@ -59,18 +59,20 @@ QueueListView::QueueItem::~QueueItem()
 }
 
 /**
- * Reimplement four only two state.
+ * Reimplement for only two state.
  * @param status
  */
 void QueueListView::QueueItem::setStatus( int status )
 {
 	switch ( status ) {
+		
 		case INSTALLED :
 			setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 			break;
 		
 		case PACKAGE :
 			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+		
 	}
 }
 

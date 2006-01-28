@@ -21,8 +21,6 @@
 #ifndef PACKAGEVERSION_H
 #define PACKAGEVERSION_H
 
-#include "portagelistview.h"
-
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qregexp.h>
@@ -36,7 +34,7 @@
 class PackageVersion
 {
 public:
-	friend class PortageListView::PortageItem;
+	friend class PackageItem;
 	
 	bool isAvailable() const;
 	bool isNotArch() const;
@@ -84,7 +82,7 @@ public:
 	void setUnMasked( bool isUnMasked );
 	
 protected:
-	PackageVersion( PortageListView::PortageItem* package, const QString& version );
+	PackageVersion( PackageItem* package, const QString& version );
 	virtual ~PackageVersion();
 	
 private:
@@ -93,7 +91,7 @@ private:
 	int trailingCharNumber( const QString& versionString, int* foundPos = NULL ) const;
 	
 	/** The package containing this version. */
-	PortageListView::PortageItem* m_package;
+	PackageItem* m_package;
 	
 	// Info retrievable by retrieving QFileInfos for ebuilds
 	// (without parsing their contents):

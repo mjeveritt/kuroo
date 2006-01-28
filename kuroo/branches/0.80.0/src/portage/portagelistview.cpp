@@ -30,8 +30,6 @@
 #include <qmap.h>
 
 #include <kconfig.h>
-#include <kglobal.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 
 static int packageCount( 0 );
@@ -41,17 +39,8 @@ static int packageCount( 0 );
  * @short Package item with all versions.
  */
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status )
-	: PackageItem( parent, name, id, description, status ), m_homepage( homepage ), m_category( QString::null ), hasDetailedInfo( false )
+	: PackageItem( parent, name, id, description, status ), m_homepage( homepage )
 {
-}
-
-/**
- * Accessor for category.
- * @return the package category.
- */
-QString PortageListView::PortageItem::category()
-{
-	return m_category;
 }
 
 /**
@@ -62,176 +51,6 @@ QString PortageListView::PortageItem::homepage()
 {
 	return m_homepage;
 }
-
-void PortageListView::PortageItem::resetDetailedInfo()
-{
-	hasDetailedInfo = false;
-}
-
-/**
- * Initialize the package with all its versions and info. Executed when PortageItem get focus first time.
- */
-void PortageListView::PortageItem::initVersions()
-{
-	if ( hasDetailedInfo )
-		return;
-	
-	m_versions.clear();
-	m_versionMap.clear();
-	
-// 	clock_t start = clock();
-	
-	// Get list of accepted keywords, eg if package is "untesting"
-	m_category = KurooDBSingleton::Instance()->category( id() );
-	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
-
-// 	kdDebug() << "acceptedKeywords=" << acceptedKeywords << endl;
-	
-	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
-	foreach ( versionsList ) {
-		QString versionString = *it++;
-		QString meta = *it++;
-		QString licenses = *it++;
-		QString useFlags = *it++;
-		QString slot = *it++;
-		QString keywords = *it++;
-		QString size = *it;
-		
-		PackageVersion* version = new PackageVersion( this, versionString );
-		version->setLicenses( QStringList::split( " ", licenses ) );
-		version->setUseflags( QStringList::split( " ", useFlags ) );
-		version->setSlot( slot );
-		version->setKeywords( QStringList::split( " ", keywords ) );
-		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
-		version->setSize( size );
-		
-		if ( meta == FILTER_INSTALLED_STRING )
-			version->setInstalled( true );
-		
-		m_versions.append( version );
-		m_versionMap.insert( versionString, version );
-	}
-	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
-	// Check if any of this package versions are hardmasked
-	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
-// 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
-	foreach ( atomHardMaskedList ) {
-
-		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
-		// and get the matching versions
-		if ( atom->parse( *it ) ) {
-			QValueList<PackageVersion*> versions = atom->matchingVersions();
-			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-				( *versionIterator )->setHardMasked( true );
-			}
-		}
-	}
-	delete atom;
-	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
-	// Check if any of this package versions are unmasked
-	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
-// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
-	foreach ( atomUnmaskedList ) {
-		
-		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
-		// and get the matching versions
-		if ( atom->parse( *it ) ) {
-			QValueList<PackageVersion*> versions = atom->matchingVersions();
-			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-				( *versionIterator )->setUnMasked( true );
-			}
-		}
-	}
-	delete atom;
-	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
-	// Check if any of this package versions are user-masked
-	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
-// 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
-	foreach ( atomUserMaskedList ) {
-		
-		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
-		// and get the matching versions
-		if ( atom->parse( *it ) ) {
-			QValueList<PackageVersion*> versions = atom->matchingVersions();
-			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-				( *versionIterator )->setUserMasked( true );
-			}
-		}
-	}
-	delete atom;
-	
-// 	clock_t finish = clock();
-// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;
-	hasDetailedInfo = true;
-}
-
-/**
- * Return list of versions.
- * @return QValueList<PackageVersion*>
- */
-QValueList<PackageVersion*> PortageListView::PortageItem::versionList()
-{
-	return m_versions;
-}
-
-/**
- * Return list of versions.
- * @return QMap<QString,PackageVersion*>
- */
-QMap<QString,PackageVersion*> PortageListView::PortageItem::versionMap()
-{
-	return m_versionMap;
-}
-
-/**
- * Return a list of PackageVersion objects sorted by their version numbers,
- * with the oldest version at the beginning and the latest version at the end
- * of the list.
- * @return sortedVersions
- */
-QValueList<PackageVersion*> PortageListView::PortageItem::sortedVersionList()
-{
-	QValueList<PackageVersion*> sortedVersions;
-	QValueList<PackageVersion*>::iterator sortedVersionIterator;
-	
-	for( QValueList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
-		if ( versionIterator == m_versions.begin() ) {
-			sortedVersions.append( *versionIterator );
-			continue; // if there is only one version, it can't be compared
-		}
-		
-		// reverse iteration through the sorted version list
-		sortedVersionIterator = sortedVersions.end();
-		while ( true ) {
-			if ( sortedVersionIterator == sortedVersions.begin() ) {
-				sortedVersions.prepend( *versionIterator );
-				break;
-			}
-			
-			sortedVersionIterator--;
-			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
-				sortedVersionIterator++; // insert after the compared one, not before
-				sortedVersions.insert( sortedVersionIterator, *versionIterator );
-				break;
-			}
-		}
-	}
-	return sortedVersions;
-}
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -262,7 +81,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 2, QListView::Manual );
 	setResizeMode( QListView::LastColumn );
 	
-	setColumnWidth( 0, 180 );
+	setColumnWidth( 0, 150 );
 	setColumnWidth( 1, 25 );
 	setColumnWidth( 2, 80 );
 	

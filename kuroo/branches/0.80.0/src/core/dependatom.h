@@ -38,7 +38,7 @@ class QRegExp;
 class DependAtom
 {
 public:
-	DependAtom( PortageListView::PortageItem* portagePackage );
+	DependAtom( PackageItem* portagePackage );
 	~DependAtom();
 	
 	bool parse( const QString& atom );
@@ -49,7 +49,7 @@ public:
 	
 private:
 	//! A pointer to the portage tree from which the packages are retrieved.
-	PortageListView::PortageItem* m_portagePackage;
+	PackageItem* m_portagePackage;
 	//! The regular expression for the whole atom.
 	QRegExp rxAtom;
 	//! This is set to the result of parse().

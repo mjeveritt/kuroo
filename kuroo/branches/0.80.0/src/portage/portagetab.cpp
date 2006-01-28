@@ -49,8 +49,8 @@
  * @class PortageTab
  * @short Package view with filters.
  */
-PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent ), queuedFilters( 0 )
+PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
+	: PortageBase( parent ), m_packageInspector( packageInspector ), queuedFilters( 0 )
 {
 	// Initialize category and subcategory views with all available data
 	categoriesView->init();
@@ -95,8 +95,7 @@ PortageTab::~PortageTab()
  */
 void PortageTab::slotInit()
 {
-	packageInspector = new PackageInspector( this );
-	connect( packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
 }
 
@@ -156,7 +155,7 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		pbAdvanced->setDisabled( true );
-		packageInspector->setDisabled( true );
+		m_packageInspector->setDisabled( true );
 		pbQueue->setDisabled( true );
 		
 		// Highlight text filter background in red if query failed
@@ -166,11 +165,11 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
 		// User has edited package, reload the package
-		disconnect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+		disconnect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 	else {
 		pbAdvanced->setDisabled( false );
-		packageInspector->setDisabled( false );
+		m_packageInspector->setDisabled( false );
 		if ( !EmergeSingleton::Instance()->isRunning() )
 			pbQueue->setDisabled( false );
 		
@@ -180,7 +179,7 @@ void PortageTab::slotListPackages()
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
-		connect( packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+		connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 }
 
@@ -264,41 +263,41 @@ void PortageTab::slotPackage()
 {
 // 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
-	if ( packagesView->currentPortagePackage()->isInstalled() && KUser().isSuperUser() && !EmergeSingleton::Instance()->isRunning() ) {
+	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() && !EmergeSingleton::Instance()->isRunning() ) {
 		pbUninstall->setDisabled( false );
 		pbQueue->setDisabled( false );
-		packageInspector->setDisabled( false );
+		m_packageInspector->setDisabled( false );
 		pbAdvanced->setDisabled( false );
 	}
 	else {
 		pbUninstall->setDisabled( true );
 	}
 	
-	if ( packagesView->currentPortagePackage()->isQueued() )
+	if ( packagesView->currentPackage()->isQueued() )
 		pbQueue->setText( i18n("Remove from Queue") );
 	else
 		pbQueue->setText( i18n("Add to Queue") );
 	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
-	packageInspector->dialog->versionsView->clear();
-	packageInspector->dialog->cbVersionsEbuild->clear();
-	packageInspector->dialog->cbVersionsDependencies->clear();
-	packageInspector->dialog->cbVersionsInstalled->clear();
-	packageInspector->dialog->cbVersionsUse->clear();
-	packageInspector->dialog->cbVersionsSpecific->clear();
-	packageInspector->dialog->groupAdvanced->setDisabled( true );
+	m_packageInspector->dialog->versionsView->clear();
+	m_packageInspector->dialog->cbVersionsEbuild->clear();
+	m_packageInspector->dialog->cbVersionsDependencies->clear();
+	m_packageInspector->dialog->cbVersionsInstalled->clear();
+	m_packageInspector->dialog->cbVersionsUse->clear();
+	m_packageInspector->dialog->cbVersionsSpecific->clear();
+	m_packageInspector->dialog->groupAdvanced->setDisabled( true );
 	
 	// Initialize the portage package object with package and it's versions data
-	packagesView->currentPortagePackage()->initVersions();
-	QString package( packagesView->currentPortagePackage()->name() );
-	QString category( packagesView->currentPortagePackage()->category() );
+	packagesView->currentPackage()->initVersions();
+	QString package( packagesView->currentPackage()->name() );
+	QString category( packagesView->currentPackage()->category() );
 	
 	QString lines =  "<table width=100%><tr>";
 			lines += "<td bgcolor=#7a5ada><b><font color=white><font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr><tr><td>";
-			lines += packagesView->currentPortagePackage()->description() + "</td></tr><tr><td>";
+			lines += packagesView->currentPackage()->description() + "</td></tr><tr><td>";
 			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
 			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a></td></tr><tr><td>";
 	
@@ -307,16 +306,16 @@ void PortageTab::slotPackage()
 	QString linesEmergeVersion;
 	
 	// Now parse sorted list of versions for current package
-	QValueList<PackageVersion*> sortedVersions = packagesView->currentPortagePackage()->sortedVersionList();
+	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
 	bool versionNotInArchitecture = false;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		
 		// Load all dropdown menus in the inspector with relevant versions
-		packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
-		packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
-		packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
-		packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
 		
 		// Mark official version stability for version listview
 		QString stability;
@@ -333,16 +332,16 @@ void PortageTab::slotPackage()
 						stability = i18n("Not on %1").arg( KurooConfig::arch() );
 					else {
 						stability = i18n("Not available");
-						packageInspector->dialog->groupAdvanced->setDisabled( false );
+						m_packageInspector->dialog->groupAdvanced->setDisabled( false );
 					}
 		
 		// Insert version in Inspector version view
-		packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
+		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
 		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-			packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
+			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
 		}
 		
 		// Collect all available packages except those not in users arch
@@ -372,11 +371,11 @@ void PortageTab::slotPackage()
 	if ( !linesEmergeVersion.isEmpty() ) {
 		
 		// Set active version in Inspector dropdown menus
-		packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
-		packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
-		packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
+		m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
+		m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
+		m_packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
 		
-		packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
+		m_packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
 	linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
 	}
 	else {
@@ -398,7 +397,7 @@ void PortageTab::slotPackage()
 	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion + "</td></tr></table>");
 	
 	// Refresh inspector if visible
-	if ( packageInspector->isVisible() )
+	if ( m_packageInspector->isVisible() )
 		slotAdvanced();
 }
 
@@ -418,7 +417,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
 	int menuItem2;
 	
-	if ( !packagesView->currentPortagePackage()->isQueued() )
+	if ( !packagesView->currentPackage()->isQueued() )
 		menuItem2 = menu.insertItem(i18n("&Add to queue"), APPEND);
 	else
 		menuItem2 = menu.insertItem(i18n("&Remove from queue"), APPEND);
@@ -456,7 +455,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 void PortageTab::slotQueue()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		if ( packagesView->currentPortagePackage()->isQueued() )
+		if ( packagesView->currentPackage()->isQueued() )
 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
 		else
 			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
@@ -494,9 +493,9 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
-	PortageListView::PortageItem* portagePackage = packagesView->currentPortagePackage();
+	PackageItem* portagePackage = packagesView->currentPackage();
 	if ( portagePackage )
-		packageInspector->edit( portagePackage );
+		m_packageInspector->edit( portagePackage );
 }
 
 #include "portagetab.moc"

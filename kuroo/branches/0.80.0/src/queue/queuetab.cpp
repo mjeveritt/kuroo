@@ -22,10 +22,16 @@
 #include "statusbar.h"
 #include "queuetab.h"
 #include "queuelistview.h"
+#include "packageinspector.h"
+#include "versionview.h"
+#include "packageversion.h"
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
+#include <qcombobox.h>
+#include <qbuttongroup.h>
+#include <qgroupbox.h>
 
 #include <ktextbrowser.h>
 #include <kdialogbase.h>
@@ -38,8 +44,8 @@
  * @class QueueTab
  * @short Page for the installation queue.
  */
-QueueTab::QueueTab( QWidget* parent )
-	: QueueBase( parent ), m_hasCheckedQueue( false ), initialQueueTime( QString::null )
+QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
+	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), initialQueueTime( QString::null )
 {
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
@@ -48,7 +54,8 @@ QueueTab::QueueTab( QWidget* parent )
 	// Button actions.
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
-		
+	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
+	
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
@@ -91,8 +98,9 @@ void QueueTab::slotInit()
 	
 	if ( !KurooConfig::init() )
 		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
-	
+
 	pbRemove->setDisabled( true );
+	pbAdvanced->setDisabled( true );
 	slotBusy( false );
 }
 
@@ -261,6 +269,80 @@ void QueueTab::slotRemoveInstalled()
 		QueueSingleton::Instance()->setRemoveInstalled( false );
 }
 
+void QueueTab::slotButtons()
+{
+	if ( queueView->selectedId().isEmpty() ) {
+		pbRemove->setDisabled( true );
+		pbAdvanced->setDisabled( true );
+		return;
+	}
+	
+	if ( !EmergeSingleton::Instance()->isRunning() )
+		pbRemove->setDisabled( false );
+	else
+		pbRemove->setDisabled( true );
+	
+	pbAdvanced->setDisabled( false );
+}
+
+void QueueTab::slotAdvanced()
+{
+	// clear text browsers and dropdown menus
+	m_packageInspector->dialog->versionsView->clear();
+	m_packageInspector->dialog->cbVersionsEbuild->clear();
+	m_packageInspector->dialog->cbVersionsDependencies->clear();
+	m_packageInspector->dialog->cbVersionsInstalled->clear();
+	m_packageInspector->dialog->cbVersionsUse->clear();
+	m_packageInspector->dialog->cbVersionsSpecific->clear();
+	m_packageInspector->dialog->groupAdvanced->setDisabled( true );
+	
+	// Initialize the portage package object with package and it's versions data
+	queueView->currentPackage()->initVersions();
+	QString package( queueView->currentPackage()->name() );
+	QString category( queueView->currentPackage()->category() );
+	
+	// Now parse sorted list of versions for current package
+	QValueList<PackageVersion*> sortedVersions = queueView->currentPackage()->sortedVersionList();
+	bool versionNotInArchitecture = false;
+	QValueList<PackageVersion*>::iterator sortedVersionIterator;
+	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
+		
+		// Load all dropdown menus in the inspector with relevant versions
+		m_packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
+		m_packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
+		
+		// Mark official version stability for version listview
+		QString stability;
+		if ( (*sortedVersionIterator)->isOriginalHardMasked() )
+			stability = i18n("Hardmasked");
+		else
+			if ( (*sortedVersionIterator)->isOriginalTesting() )
+				stability = i18n("Testing");
+			else
+				if ( (*sortedVersionIterator)->isAvailable() )
+					stability = i18n("Stable");
+				else
+					if ( (*sortedVersionIterator)->isNotArch() )
+						stability = i18n("Not on %1").arg( KurooConfig::arch() );
+					else {
+						stability = i18n("Not available");
+						m_packageInspector->dialog->groupAdvanced->setDisabled( false );
+					}
+		
+		// Insert version in Inspector version view
+		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
+		
+		// Create nice summary showing installed packages in green and unavailable as red
+		if ( (*sortedVersionIterator)->isInstalled() )
+			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
+		
+	}
+	
+	// Refresh inspector if visible
+	m_packageInspector->edit( queueView->currentPackage() );
+}
 
 /**
  * Popup menu for actions like emerge.
@@ -284,26 +366,15 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	}
 	
 	switch( menu.exec( point ) ) {
+		
 		case PRETEND:
 			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
 			break;
 			
 		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+		
 	}
-}
-
-void QueueTab::slotButtons()
-{
-	if ( queueView->selectedId().isEmpty() ) {
-		pbRemove->setDisabled( true );
-		return;
-	}
-	
-	if ( !EmergeSingleton::Instance()->isRunning() )
-		pbRemove->setDisabled( false );
-	else
-		pbRemove->setDisabled( true );
 }
 
 #include "queuetab.moc"

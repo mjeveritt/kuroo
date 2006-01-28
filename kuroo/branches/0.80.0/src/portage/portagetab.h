@@ -38,7 +38,7 @@ class PortageTab : public PortageBase
 {
 Q_OBJECT
 public:
-    PortageTab( QWidget *parent = 0 );
+	PortageTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
 	
 	/**
 	* Save splitters and listview geometry.
@@ -58,12 +58,12 @@ public slots:
 	*/
 	void				slotRefresh();
 	
+	
+private slots:
 	void				slotBusy( bool b );
 	
 	void				slotInitButtons();
 	void				slotButtons( bool isQueued );
-	
-private slots:
 	
 	/**
 	* Initialize Portage view.
@@ -101,7 +101,7 @@ private slots:
 private:
 	int					queuedFilters;
 	KPopupMenu 			*menu;
-	PackageInspector	*packageInspector;
+	PackageInspector	*m_packageInspector;
 	
 signals:
 	void				signalChanged();

@@ -23,7 +23,7 @@
 #include "common.h"
 #include "dependatom.h"
 #include "packageversion.h"
-#include "portagelistview.h"
+#include "packageitem.h"
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
 #define POS_CALLSIGN    1
@@ -44,7 +44,7 @@
  * Initialize this object.
  * @param packages  The package that will be filtered out.
  */
-DependAtom::DependAtom( PortageListView::PortageItem* portagePackage )
+DependAtom::DependAtom( PackageItem* portagePackage )
 	: m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null ),
 	rxAtom(	"^"    // Start of the string
 			"(!)?" // "Block these packages" flag, only occurring in ebuilds

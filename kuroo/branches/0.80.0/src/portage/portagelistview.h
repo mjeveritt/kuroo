@@ -72,20 +72,10 @@ class PortageListView::PortageItem : public PackageItem
 public:
 	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& homepage, const QString& status );
 	
-	QString 						category();
 	QString 						homepage();
-	void 							initVersions();
-	QValueList<PackageVersion*> 	versionList();
-	QMap<QString,PackageVersion*> 	versionMap();
-	QValueList<PackageVersion*> 	sortedVersionList();
-	void							resetDetailedInfo();
 	
 protected:
-	bool							hasDetailedInfo;
-	QString							m_homepage, m_category;
-	QValueList<PackageVersion*>		m_versions;
-	QMap<QString,PackageVersion*>	m_versionMap;
-	DependAtom* 					atom;
+	QString							m_homepage;
 };
 
 #endif

@@ -41,7 +41,7 @@ public:
 	 * Open use flags dialog.
 	 * @param newPackage	selected package
 	 */
-	void							edit( PortageListView::PortageItem* portagePackage );
+	void							edit( PackageItem* portagePackage );
 	void							showHardMaskInfo();
 	
 	InspectorBase					*dialog;
@@ -77,7 +77,7 @@ private:
 	bool							hasVersionSettingsChanged, hasUseSettingsChanged, isVirginState, isAvailableBefore;
 	QString							m_id, category, package, hardMaskComment;
 	QMap<QString, QString>			useMap;
-	PortageListView::PortageItem* 	m_portagePackage;
+	PackageItem* 					m_portagePackage;
 	int								stabilityBefore;
 	QString							versionBefore;
 	

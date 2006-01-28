@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>734</width>
-            <height>594</height>
+            <width>745</width>
+            <height>610</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -35,14 +35,14 @@
         </property>
         <widget class="QSplitter" row="0" column="0">
             <property name="name">
-                <cstring>splitter3</cstring>
+                <cstring>splitter8</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
             </property>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout23</cstring>
+                    <cstring>layout26</cstring>
                 </property>
                 <grid>
                     <property name="name">
@@ -54,72 +54,6 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="Line" row="2" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>line1</cstring>
-                        </property>
-                        <property name="paletteForegroundColor">
-                            <color>
-                                <red>185</red>
-                                <green>185</green>
-                                <blue>185</blue>
-                            </color>
-                        </property>
-                        <property name="frameShape">
-                            <enum>HLine</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>Plain</enum>
-                        </property>
-                        <property name="lineWidth">
-                            <number>1</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="1" column="0">
-                        <property name="name">
-                            <cstring>layout8</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>0</number>
-                            </property>
-                            <widget class="Line" row="0" column="1">
-                                <property name="name">
-                                    <cstring>line5</cstring>
-                                </property>
-                                <property name="paletteForegroundColor">
-                                    <color>
-                                        <red>185</red>
-                                        <green>185</green>
-                                        <blue>185</blue>
-                                    </color>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>VLine</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Plain</enum>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                            </widget>
-                            <widget class="QueueListView" row="0" column="0">
-                                <property name="name">
-                                    <cstring>queueView</cstring>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
                     <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>layout20</cstring>
@@ -165,18 +99,39 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QLayoutWidget" row="1" column="1">
+                    <widget class="Line" row="3" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>layout9</cstring>
+                            <cstring>line1</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="lineWidth">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="2" column="1">
+                        <property name="name">
+                            <cstring>layout21</cstring>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
                             <property name="margin">
-                                <number>4</number>
-                            </property>
-                            <property name="spacing">
                                 <number>5</number>
                             </property>
                             <widget class="QPushButton" row="1" column="0">
@@ -202,23 +157,6 @@
                                     <string>Abort running emerge process</string>
                                 </property>
                             </widget>
-                            <spacer row="4" column="0">
-                                <property name="name">
-                                    <cstring>spacer4</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>MinimumExpanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>300</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget class="QPushButton" row="0" column="0">
                                 <property name="name">
                                     <cstring>pbRemove</cstring>
@@ -240,6 +178,76 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Abort running emerge process</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pbAdvanced</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Options...</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <spacer row="3" column="0">
+                                <property name="name">
+                                    <cstring>spacer4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>MinimumExpanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>270</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="0" rowspan="2" colspan="1">
+                        <property name="name">
+                            <cstring>layout8</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                            <widget class="Line" row="0" column="1">
+                                <property name="name">
+                                    <cstring>line5</cstring>
+                                </property>
+                                <property name="paletteForegroundColor">
+                                    <color>
+                                        <red>185</red>
+                                        <green>185</green>
+                                        <blue>185</blue>
+                                    </color>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>VLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Plain</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                            </widget>
+                            <widget class="QueueListView" row="0" column="0">
+                                <property name="name">
+                                    <cstring>queueView</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -278,75 +286,6 @@
                     <property name="margin">
                         <number>4</number>
                     </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
-                        <property name="name">
-                            <cstring>layout7</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QPushButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>pbGo</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>180</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>Chec&amp;k Installation</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                            </widget>
-                            <widget class="KTextBrowser" row="0" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>queueBrowser</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>300</width>
-                                        <height>50</height>
-                                    </size>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>NoFrame</enum>
-                                </property>
-                                <property name="margin">
-                                    <number>2</number>
-                                </property>
-                            </widget>
-                            <spacer row="1" column="1">
-                                <property name="name">
-                                    <cstring>spacer3</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>60</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </grid>
-                    </widget>
                     <widget class="QLayoutWidget" row="0" column="1">
                         <property name="name">
                             <cstring>layout17</cstring>
@@ -393,10 +332,10 @@
                                     <cstring>cbForce</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Force reinstall of confi&amp;g files (--noconfmem)</string>
+                                    <string>Force reinstall of config files (--&amp;noconfmem)</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+G</string>
+                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <spacer row="4" column="0">
@@ -425,6 +364,75 @@
                                 </property>
                                 <property name="accel">
                                     <string>Alt+U</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout11</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer row="1" column="2">
+                                <property name="name">
+                                    <cstring>spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pbGo</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>180</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Chec&amp;k Installation</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
+                            <widget class="KTextBrowser" row="0" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>queueBrowser</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>300</width>
+                                        <height>50</height>
+                                    </size>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>NoFrame</enum>
+                                </property>
+                                <property name="margin">
+                                    <number>2</number>
                                 </property>
                             </widget>
                         </grid>

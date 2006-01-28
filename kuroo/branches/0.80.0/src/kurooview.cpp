@@ -28,6 +28,7 @@
 #include "mergetab.h"
 #include "packagelistview.h"
 #include "kurooviewbase.h"
+#include "packageinspector.h"
 
 #include <sys/stat.h>
 
@@ -53,16 +54,18 @@
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
-	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 ), tabMerge( 0 ),
+	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 ), tabMerge( 0 ), packageInspector( 0 ),
 	hasHistoryRestored( false )
 {
 	viewMenu->setCursor( KCursor::handCursor() );
 	
+	packageInspector = new PackageInspector( this );
+	
 	// Add all pages
-	tabPortage = new PortageTab( this );
+	tabPortage = new PortageTab( this, packageInspector );
 	viewStack->addWidget( tabPortage, 1 );
 	
-	tabQueue = new QueueTab( this );
+	tabQueue = new QueueTab( this, packageInspector );
 	viewStack->addWidget( tabQueue, 2 );
 	
 	tabHistory = new HistoryTab( this );
@@ -113,6 +116,7 @@ KurooView::~KurooView()
  */
 void KurooView::slotShowView()
 {
+	packageInspector->hide();
 	viewStack->raiseWidget( viewMenu->currentItem() + 1 );
 }
 

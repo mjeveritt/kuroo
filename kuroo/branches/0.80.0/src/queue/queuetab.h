@@ -25,6 +25,7 @@
 class KListView;
 class QListViewItem;
 class PretendInspector;
+class PackageInspector;
 
 /**
  * @class QueueTab
@@ -34,7 +35,7 @@ class QueueTab : public QueueBase
 {
 Q_OBJECT
 public:
-    QueueTab( QWidget *parent = 0 );
+	QueueTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
 	
 	/**
 	 * Save listview geometry.
@@ -80,10 +81,12 @@ private slots:
 	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
 	
 	void				slotButtons();
+	void				slotAdvanced();
 	
 private:
 	bool				m_hasCheckedQueue;
 	QString				initialQueueTime;
+	PackageInspector	*m_packageInspector;
 };
 
 #endif

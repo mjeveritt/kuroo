@@ -25,6 +25,9 @@
 
 #include <qobject.h>
 
+class PackageVersion;
+class DependAtom;
+
 /**
  * @class PackageItem
  * @short KListViewItem subclass to implement sorting, tooltip, color...
@@ -36,30 +39,41 @@ public:
 	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& description, const QString& status );
 	~PackageItem();
 	
-	QString			status();
-	QString 		id();
-	QString			name();
-	QString			description();
+	QString							status();
+	QString 						id();
+	QString							name();
+	QString							description();
 	
 	/**
  	 * Is the listViewItem category, package or ebuild.
  	 * Set icon and tooltip text.
  	 * @param status
  	 */
-	virtual void	setStatus( int status );
+	virtual void					setStatus( int status );
 	
-	virtual bool	isInstalled();
+	virtual bool					isInstalled();
 	
 	/**
  	 * Convenience method.
  	 * @return true if package is in the queue.
  	 */
-	virtual bool	isQueued();
+	virtual bool					isQueued();
 
+	QString 						category();
+	void 							initVersions();
+	QValueList<PackageVersion*> 	versionList();
+	QMap<QString,PackageVersion*> 	versionMap();
+	QValueList<PackageVersion*> 	sortedVersionList();
+	void							resetDetailedInfo();
+	
 private:
-	QString			m_id, m_name, m_status, m_packageTip, m_description;
-	QListView		*m_parent;
-	bool			m_isQueued;
+	QString							m_id, m_name, m_status, m_packageTip, m_description, m_category;
+	QListView						*m_parent;
+	bool							m_isQueued, hasDetailedInfo;
+	
+	QValueList<PackageVersion*>		m_versions;
+	QMap<QString,PackageVersion*>	m_versionMap;
+	DependAtom* 					atom;
 
 };
 

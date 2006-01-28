@@ -58,6 +58,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
+	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotAdvanced() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Lock/unlock if kuroo is busy.
@@ -101,6 +102,7 @@ void QueueTab::slotInit()
 
 	pbRemove->setDisabled( true );
 	pbAdvanced->setDisabled( true );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
 }
 
@@ -274,7 +276,6 @@ void QueueTab::slotButtons()
 	if ( queueView->selectedId().isEmpty() ) {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
-		disconnect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 		return;
 	}
 	
@@ -284,11 +285,11 @@ void QueueTab::slotButtons()
 		pbRemove->setDisabled( true );
 	
 	pbAdvanced->setDisabled( false );
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 }
 
 void QueueTab::slotAdvanced()
 {
+
 	// clear text browsers and dropdown menus
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();

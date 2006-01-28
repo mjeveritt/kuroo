@@ -75,155 +75,154 @@ void ConfigDialog::slotDefault()
  */
 void ConfigDialog::readMakeConf()
 {
-	kdDebug() << "ConfigDialog::readMakeConf" << endl;
-	
 	QFile makeconf( "/etc/make.conf" );
+	QRegExp rx( "(\")((\\s|\\S)*)(\")" );
 	
 	if ( makeconf.open( IO_ReadOnly ) ) {
 		QTextStream stream( &makeconf );
 		KStringHandler kstr;
+		QStringList lines;
 		
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
-			line = line.simplifyWhiteSpace();
+			
+			// Skip comment lines
+			if ( line.isEmpty() || line.contains( QRegExp("^\\s*#") ) )
+				continue;
 			
 			// Catch extended lines
-			if ( !line.endsWith("\"") )
-				do {
-					line += stream.readLine();
-					line = line.simplifyWhiteSpace();
-				} while ( !line.endsWith("\"") );
-			line.replace('\\', ' ');
-			line = line.simplifyWhiteSpace();
+			while ( line.contains( QRegExp("\\\\s*$") ) )
+				line += stream.readLine().simplifyWhiteSpace();
 			
-			kdDebug() << "ConfigDialog::readMakeConf line=" << line << endl;
+			lines += line.replace('\\', ' ').simplifyWhiteSpace();
+		}
+		
+		foreach ( lines ) {
 			
-			if ( line.contains(QRegExp("^ACCEPT_KEYWORDS=")) )
-				KurooConfig::setAcceptKeywords( kstr.word( line.section("ACCEPT_KEYWORDS=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*ACCEPT_KEYWORDS") ) && rx.search( *it ) > -1 )
+				KurooConfig::setAcceptKeywords( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^AUTOCLEAN=")) )
-				KurooConfig::setAutoClean( kstr.word( line.section("AUTOCLEAN=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*AUTOCLEAN") ) && rx.search( *it ) > -1 )
+				KurooConfig::setAutoClean( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^BUILD_PREFIX=\"")) )
-				KurooConfig::setBuildPrefix( kstr.word( line.section("BUILD_PREFIX=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*BUILD_PREFIX") ) && rx.search( *it ) > -1 )
+				KurooConfig::setBuildPrefix( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CBUILD=\"")) )
-				KurooConfig::setCBuild( kstr.word( line.section("CBUILD=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*CBUILD") ) && rx.search( *it ) > -1 )
+				KurooConfig::setCBuild( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CCACHE_SIZE=\"")) )
-				KurooConfig::setCCacheSize( kstr.word( line.section("CCACHE_SIZE=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*CCACHE_SIZE") ) && rx.search( *it ) > -1 )
+				KurooConfig::setCCacheSize( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CFLAGS=\"")) ) 
-				KurooConfig::setCFlags( kstr.word( line.section("CFLAGS=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*CFLAGS") ) && rx.search( *it ) > -1 )
+				KurooConfig::setCFlags( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CXXFLAGS=\"")) )
-				KurooConfig::setCXXFlags( kstr.word( line.section("CXXFLAGS=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*CXXFLAGS") ) && rx.search( *it ) > -1 )
+				KurooConfig::setCXXFlags( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CHOST=\"")) )
-				KurooConfig::setChost( kstr.word( line.section("CHOST=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*CHOST") ) && rx.search( *it ) > -1 )
+				KurooConfig::setChost( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CLEAN_DELAY=\"")) )
-				KurooConfig::setCleanDelay( kstr.word( line.section("CLEAN_DELAY=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*CLEAN_DELAY") ) && rx.search( *it ) > -1 )
+				KurooConfig::setCleanDelay( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CONFIG_PROTECT=\"")) )
-				KurooConfig::setConfigProtect( kstr.word( line.section("CONFIG_PROTECT=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*CONFIG_PROTECT") ) && rx.search( *it ) > -1 )
+				KurooConfig::setConfigProtect( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^CONFIG_PROTECT_MASK=\"")) )
-				KurooConfig::setConfigProtectMask( kstr.word( line.section("CONFIG_PROTECT_MASK=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*CONFIG_PROTECT_MASK") ) && rx.search( *it ) > -1 )
+				KurooConfig::setConfigProtectMask( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^DEBUGBUILD=\"")) )
-				KurooConfig::setDebugBuild( kstr.word( line.section("DEBUGBUILD=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*DEBUGBUILD") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDebugBuild( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^DISTDIR=\"")) )
-				KurooConfig::setDirDist( kstr.word( line.section("DISTDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*DISTDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirDist( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^FEATURES=\"")) )
-				KurooConfig::setFeatures( kstr.word( line.section("FEATURES=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*FEATURES") ) && rx.search( *it ) > -1 )
+				KurooConfig::setFeatures( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^FETCHCOMMAND=\"")) )
-				KurooConfig::setFetchCommand( kstr.word( line.section("FETCHCOMMAND=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*FETCHCOMMAND") ) && rx.search( *it ) > -1 )
+				KurooConfig::setFetchCommand( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^GENTOO_MIRRORS=\"")) )
-				KurooConfig::setGentooMirrors( kstr.word( line.section("GENTOO_MIRRORS=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*GENTOO_MIRRORS") ) && rx.search( *it ) > -1 )
+				KurooConfig::setGentooMirrors( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^HTTP_PROXY FTP_PROXY=\"")) )
-				KurooConfig::setProxy( kstr.word( line.section("HTTP_PROXY=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*HTTP_PROXY\\s+FTP_PROXY") ) && rx.search( *it ) > -1 )
+				KurooConfig::setProxy( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^MAKEOPTS=\"")) )
-				KurooConfig::setMakeOpts( kstr.word( line.section("MAKEOPTS=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*MAKEOPTS") ) && rx.search( *it ) > -1 )
+				KurooConfig::setMakeOpts( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^NOCOLOR=\"")) )
-				KurooConfig::setNoColor( kstr.word( line.section("NOCOLOR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*NOCOLOR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setNoColor( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PKG_TMPDIR=\"")) )
-				KurooConfig::setDirPkgTmp( kstr.word( line.section("PKG_TMPDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PKG_TMPDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirPkgTmp( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PKGDIR=\"")) )
-				KurooConfig::setDirPkg( kstr.word( line.section("PKGDIR=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*PKGDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirPkg( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PORT_LOGDIR =\"")) )
-				KurooConfig::setDirPortLog( kstr.word( line.section("PORT_LOGDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PORT_LOGDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirPortLog( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PORTAGE_BINHOST=\"")) )
-				KurooConfig::setPortageBinHost( kstr.word( line.section("PORTAGE_BINHOST=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PORTAGE_BINHOST") ) && rx.search( *it ) > -1 )
+				KurooConfig::setPortageBinHost( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PORTAGE_NICENESS=\"")) )
-				KurooConfig::setPortageNiceness( kstr.word( line.section("PORTAGE_NICENESS=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PORTAGE_NICENESS") ) && rx.search( *it ) > -1 )
+				KurooConfig::setPortageNiceness( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PORTAGE_TMPDIR=\"")) )
-				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PORTAGE_TMPDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirPortageTmp( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PORTDIR=\"")) )
-				KurooConfig::setDirPortage( kstr.word( line.section("PORTDIR=", 1, 1) .remove("\""), "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PORTDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirPortage( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=\"")) ) {
-				KurooConfig::setDirPortageOverlayAll( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0:" ) );
-				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*PORTDIR_OVERLAY") ) && rx.search( *it ) > -1 ) {
+				KurooConfig::setDirPortageOverlayAll( rx.cap(2) );
+				KurooConfig::setDirPortageOverlay( rx.cap(2) );
 			}
 			
-			if ( line.contains(QRegExp("^RESUMECOMMAND=\"")) )
-				KurooConfig::setResumeCommand( kstr.word( line.section("RESUMECOMMAND=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*RESUMECOMMAND") ) && rx.search( *it ) > -1 )
+				KurooConfig::setResumeCommand( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^ROOT=\"")) )
-				KurooConfig::setRoot( kstr.word( line.section("ROOT=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*ROOT") ) && rx.search( *it ) > -1 )
+				KurooConfig::setRoot( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^RSYNC_EXCLUDEFROM=\"")) )
-				KurooConfig::setRsyncExcludeFrom( kstr.word( line.section("RSYNC_EXCLUDEFROM=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*RSYNC_EXCLUDEFROM") ) && rx.search( *it ) > -1 )
+				KurooConfig::setRsyncExcludeFrom( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^RSYNC_PROXY=\"")) )
-				KurooConfig::setRsyncProxy( kstr.word( line.section("RSYNC_PROXY=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*RSYNC_PROXY") ) && rx.search( *it ) > -1 )
+				KurooConfig::setRsyncProxy( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^RSYNC_RETRIES=\"")) )
-				KurooConfig::setRsyncRetries( kstr.word( line.section("RSYNC_RETRIES=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*RSYNC_RETRIES") ) && rx.search( *it ) > -1 )
+				KurooConfig::setRsyncRetries( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^RSYNC_RATELIMIT=\"")) )
-				KurooConfig::setRsyncRateLimit( kstr.word( line.section("RSYNC_RATELIMIT=", 1, 1) , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*RSYNC_RATELIMIT") ) && rx.search( *it ) > -1 )
+				KurooConfig::setRsyncRateLimit( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^RSYNC_TIMEOUT=\"")) )
-				KurooConfig::setRsyncTimeOut( kstr.word( line.section("RSYNC_TIMEOUT=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*RSYNC_TIMEOUT") ) && rx.search( *it ) > -1 )
+				KurooConfig::setRsyncTimeOut(rx.cap(2)  );
 			
-			if ( line.contains(QRegExp("^RPMDIR=\"")) )
-				KurooConfig::setDirRpm( kstr.word( line.section("RPMDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*RPMDIR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setDirRpm( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^SYNC=\"")) )
-				KurooConfig::setSync( kstr.word( line.section("SYNC=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*SYNC") ) && rx.search( *it ) > -1 )
+				KurooConfig::setSync( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^USE=\"")) )
-				KurooConfig::setUse( kstr.word( line.section("USE=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*USE") ) && rx.search( *it ) > -1 )
+				KurooConfig::setUse( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^USE_ORDER=\"")) )
-				KurooConfig::setUseOrder( kstr.word( line.section("USE_ORDER=", 1, 1).remove("\"") , "0:" ) );
+			if ( (*it).contains( QRegExp("^\\s*USE_ORDER") ) && rx.search( *it ) > -1 )
+				KurooConfig::setUseOrder( rx.cap(2) );
 			
-			if ( line.contains(QRegExp("^NOCOLOR=\"")) )
-				KurooConfig::setNoColor( kstr.word( line.section("NOCOLOR=", 1, 1).remove("\"") , "0" ) );
+			if ( (*it).contains( QRegExp("^\\s*NOCOLOR") ) && rx.search( *it ) > -1 )
+				KurooConfig::setNoColor( rx.cap(2) );
 			
 		}
 		makeconf.close();
 	}
 	else
 		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
-	
-	kdDebug() << "ConfigDialog::readMakeConf end!" << endl;
 }
 
 /**
@@ -261,13 +260,12 @@ bool ConfigDialog::saveMakeConf()
 		
 		while ( !stream.atEnd() ) {
 			QString eString;
-			do {
+			do
 				eString += stream.readLine();
-			}
 			while ( eString.endsWith("\\") );
 
 			// Remove old lines to avoid duplicates
-			if ( !eString.contains(QRegExp("^CHOST|^CFLAGS|^CXXFLAGS|^MAKEOPTS|^USE|^GENTOO_MIRRORS|^PORTDIR_OVERLAY|^FEATURES|^PORTDIR|^PORTAGE_TMPDIR|^DISTDIR|^ACCEPT_KEYWORDS|^AUTOCLEAN|^BUILD_PREFIX|^CBUILD|^CCACHE_SIZE|^CLEAN_DELAY|^CONFIG_PROTECT|^CONFIG_PROTECT_MASK|^DEBUGBUILD|^FETCHCOMMAND|^HTTP_PROXY FTP_PROXY|^PKG_TMPDIR|^PKGDIR|^PORT_LOGDIR|^PORTAGE_BINHOST|^PORTAGE_NICENESS|^RESUMECOMMAND|^ROOT|^RSYNC_EXCLUDEFROM|^RSYNC_PROXY|^RSYNC_RETRIES|^RSYNC_RATELIMIT|^RSYNC_TIMEOUT|^RPMDIR|^SYNC|^USE_ORDER|^NOCOLOR")) )
+			if ( !eString.contains( QRegExp("^CHOST|^CFLAGS|^CXXFLAGS|^MAKEOPTS|^USE|^GENTOO_MIRRORS|^PORTDIR_OVERLAY|^FEATURES|^PORTDIR|^PORTAGE_TMPDIR|^DISTDIR|^ACCEPT_KEYWORDS|^AUTOCLEAN|^BUILD_PREFIX|^CBUILD|^CCACHE_SIZE|^CLEAN_DELAY|^CONFIG_PROTECT|^CONFIG_PROTECT_MASK|^DEBUGBUILD|^FETCHCOMMAND|^HTTP_PROXY FTP_PROXY|^PKG_TMPDIR|^PKGDIR|^PORT_LOGDIR|^PORTAGE_BINHOST|^PORTAGE_NICENESS|^RESUMECOMMAND|^ROOT|^RSYNC_EXCLUDEFROM|^RSYNC_PROXY|^RSYNC_RETRIES|^RSYNC_RATELIMIT|^RSYNC_TIMEOUT|^RPMDIR|^SYNC|^USE_ORDER|^NOCOLOR")) )
 			line += eString + "\n";
 		}
 		file.close();

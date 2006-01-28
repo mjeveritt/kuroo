@@ -13,3 +13,5 @@ libqueue_la_SOURCES = queuebase.ui queuetab.cpp queue.cpp queuelistview.cpp \
 
 noinst_HEADERS = queuetab.h queue.h queuelistview.h results.h
 
+libqueue_la_LIBADD = $(top_builddir)/src/portage/libportage.la \
+	$(top_builddir)/src/core/libcore.la

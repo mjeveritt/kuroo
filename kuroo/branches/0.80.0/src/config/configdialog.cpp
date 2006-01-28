@@ -102,6 +102,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setAcceptKeywords( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*AUTOCLEAN") ) ) {
@@ -109,6 +110,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setAutoClean( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse AUTOCLEAN.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*BUILD_PREFIX") ) ) {
@@ -116,6 +118,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setBuildPrefix( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse BUILD_PREFIX.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CBUILD") ) ) {
@@ -123,6 +126,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setCBuild( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CBUILD.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CCACHE_SIZE") ) ) {
@@ -130,6 +134,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setCCacheSize( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CCACHE_SIZE.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CFLAGS") ) ) {
@@ -137,6 +142,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setCFlags( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CFLAGS.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CXXFLAGS") ) ) {
@@ -144,6 +150,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setCXXFlags( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CXXFLAGS.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CHOST") ) ) {
@@ -151,6 +158,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setChost( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CHOST.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CLEAN_DELAY") ) ) {
@@ -158,6 +166,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setCleanDelay( rx.cap(4) );
 				else	
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CLEAN_DELAY.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CONFIG_PROTECT") ) ) {
@@ -165,6 +174,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setConfigProtect( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CONFIG_PROTECT.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*CONFIG_PROTECT_MASK") ) ) {
@@ -172,6 +182,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setConfigProtectMask( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse BUILD_PREFIX.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*DEBUGBUILD") ) ) {
@@ -179,6 +190,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDebugBuild( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse DEBUGBUILD.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*DISTDIR") ) ) {
@@ -186,6 +198,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirDist( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse DISTDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*FEATURES") ) ) {
@@ -193,6 +206,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setFeatures( rx.cap(4) );
 			else
 				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FEATURES.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*FETCHCOMMAND") ) ) {
@@ -200,6 +214,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setFetchCommand( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FETCHCOMMAND.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*GENTOO_MIRRORS") ) ) {
@@ -207,6 +222,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setGentooMirrors( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse GENTOO_MIRRORS.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*HTTP_PROXY FTP_PROXY") ) ) {
@@ -214,6 +230,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setProxy( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FTP_PROXY FTP_PROXY.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*MAKEOPTS") ) ) {
@@ -221,6 +238,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setMakeOpts( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse MAKEOPTS.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*NOCOLOR") ) ) {
@@ -228,6 +246,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setNoColor( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse NOCOLOR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PKG_TMPDIR") ) ) {
@@ -235,6 +254,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirPkgTmp( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PKG_TMPDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PKGDIR") ) ) {
@@ -242,6 +262,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirPkg( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PKGDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PORT_LOGDIR") ) ) {
@@ -249,6 +270,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirPortLog( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORT_LOGDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PORTAGE_BINHOST") ) ) {
@@ -256,6 +278,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setPortageBinHost( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTAGE_BINHOST.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PORTAGE_NICENESS") ) ) {
@@ -263,6 +286,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setPortageNiceness( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTAGE_NICENESS.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PORTAGE_TMPDIR") ) ) {
@@ -270,6 +294,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirPortageTmp( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTAGE_TMPDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PORTDIR") ) ) {
@@ -277,6 +302,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirPortage( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*PORTDIR_OVERLAY") ) ) {
@@ -286,6 +312,7 @@ void ConfigDialog::readMakeConf()
 				}
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RESUMECOMMAND") ) ) {
@@ -293,6 +320,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setResumeCommand( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RESUMECOMMAND.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*ROOT") ) ) {
@@ -300,6 +328,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setRoot( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse ROOT.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RSYNC_EXCLUDEFROM") ) ) {
@@ -307,6 +336,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setRsyncExcludeFrom( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RSYNC_PROXY") ) ) {
@@ -314,6 +344,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setRsyncProxy( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_PROXY.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RSYNC_RETRIES") ) ) {
@@ -321,6 +352,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setRsyncRetries( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_RETRIES.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RSYNC_RATELIMIT") ) ) {
@@ -328,6 +360,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setRsyncRateLimit( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RSYNC_TIMEOUT") ) ) {
@@ -335,6 +368,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setRsyncTimeOut(rx.cap(4)  );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*RPMDIR") ) ) {
@@ -342,6 +376,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setDirRpm( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RPMDIR.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*SYNC") ) ) {
@@ -349,6 +384,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setSync( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse SYNC.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*USE") ) ) {
@@ -356,6 +392,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setUse( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse USE.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*USE_ORDER") ) ) {
@@ -363,6 +400,7 @@ void ConfigDialog::readMakeConf()
 					KurooConfig::setUseOrder( rx.cap(4) );
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse USE_ORDER.") << endl;
+				continue;
 			}
 			
 			if ( (*it).contains( QRegExp("^\\s*NOCOLOR") ) ) {

@@ -209,7 +209,8 @@ void QueueTab::slotGo()
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {
 		switch( KMessageBox::questionYesNoList( this, 
-			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue") ) ) {
+		                                        i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
+		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
 			case KMessageBox::Yes: {
 				packageList.prepend( "--fetch-all-uri" );
 				QueueSingleton::Instance()->installPackageList( packageList );
@@ -219,7 +220,8 @@ void QueueTab::slotGo()
 	}
 	else {
 		switch( KMessageBox::questionYesNoList( this, 
-			i18n("Do you want to install following packages?"), packageList, i18n("Installation queue") ) ) {
+		                                        i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
+		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
 			case KMessageBox::Yes: {
 				QueueSingleton::Instance()->installPackageList( packageList );
 				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>460</width>
-            <height>475</height>
+            <width>473</width>
+            <height>554</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,9 +18,6 @@
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>5</number>
         </property>
         <widget class="QGroupBox" row="0" column="0">
             <property name="name">
@@ -36,6 +33,12 @@
                 <widget class="QLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>kcfg_DirDbPkg</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -234,53 +237,12 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>portage_2_2_2</cstring>
-            </property>
-            <property name="title">
-                <string>Emerge check update option</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>kcfg_updateDeep</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Deep</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>kcfg_updateDependency</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Dependenc&amp;y</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+Y</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
         <widget class="QGroupBox" row="2" column="0">
             <property name="name">
                 <cstring>portage_2</cstring>
             </property>
             <property name="title">
-                <string>etc-update merging frontend</string>
+                <string>Etc-update merging frontend</string>
             </property>
             <grid>
                 <property name="name">
@@ -321,32 +283,46 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="4" column="0">
+        <widget class="QGroupBox" row="3" column="0">
             <property name="name">
-                <cstring>portage_2_3</cstring>
+                <cstring>portage_2_2_2</cstring>
             </property>
             <property name="title">
-                <string>Package view option</string>
+                <string>Emerge check update options</string>
             </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox" row="0" column="0">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>kcfg_installedColumn</cstring>
+                        <cstring>kcfg_updateDeep</cstring>
                     </property>
                     <property name="text">
-                        <string>Show installed column</string>
+                        <string>&amp;Deep</string>
                     </property>
                     <property name="accel">
-                        <string></string>
+                        <string>Alt+D</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
                     </property>
                 </widget>
-            </grid>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>kcfg_updateDependency</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Dependenc&amp;y</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+Y</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <spacer row="6" column="0">
             <property name="name">
@@ -361,16 +337,133 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>40</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QGroupBox" row="5" column="0">
+        <widget class="QGroupBox" row="4" column="0">
             <property name="name">
-                <cstring>groupBox9</cstring>
+                <cstring>portage_2_3</cstring>
             </property>
             <property name="title">
-                <string>Package text filter</string>
+                <string>Kuroo options</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>spacer2_2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>146</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>kcfg_isSystrayEnabled</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Sh&amp;ow system tray icon</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>spacer2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QSpinBox" row="2" column="2">
+                    <property name="name">
+                        <cstring>kcfg_rowLimit</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string> packages</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>12000</number>
+                    </property>
+                    <property name="minValue">
+                        <number>100</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>100</number>
+                    </property>
+                    <property name="value">
+                        <number>1000</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>kcfg_installedColumn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show i&amp;nstalled packages in separate column</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>cFlags_2_4</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Maximum packages in list</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="5" column="0">
+            <property name="name">
+                <cstring>groupBox7</cstring>
+            </property>
+            <property name="title">
+                <string>Package filter options</string>
             </property>
             <grid>
                 <property name="name">

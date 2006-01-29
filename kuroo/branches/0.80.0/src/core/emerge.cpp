@@ -36,7 +36,6 @@ Emerge::Emerge( QObject* m_parent )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
-	eProc->setUseShell( true );
 }
 
 Emerge::~Emerge()
@@ -114,7 +113,7 @@ bool Emerge::queue( const QStringList& packageList )
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	
 	if ( !eProc->isRunning() ) {
-		LogSingleton::Instance()->writeLog(i18n("\nError: Emerge didn't start. "), ERROR);
+		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
 		cleanupQueue( eProc );
 		return false;
 	}

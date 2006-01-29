@@ -289,6 +289,7 @@ void QueueListView::insertPackageList()
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( id );
 	}
+	setPackageFocus( QString::null );
 	
 	emit( signalQueueLoaded() );
 }

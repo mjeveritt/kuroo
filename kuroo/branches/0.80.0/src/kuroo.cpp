@@ -66,11 +66,12 @@ Kuroo::Kuroo()
 	setupGUI();
 		
 	// Add system tray icon
-	SystemTray *systemTray = new SystemTray( this );
-	systemTray->show();
-	
-	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
-	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
+	if ( KurooConfig::isSystrayEnabled() ) {
+		SystemTray *systemTray = new SystemTray( this );
+		systemTray->show();
+		connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
+		connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
+	}
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );

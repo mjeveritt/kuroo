@@ -19,6 +19,12 @@
 		<entry name="installedColumn" type="Bool">
 		<default>false</default>
 		</entry>
+		<entry name="rowLimit" type="Int">
+		<default>1000</default>
+		</entry>
+		<entry name="isSystrayEnabled" type="Bool">
+		<default>true</default>
+		</entry>
 		<entry name="init" type="Bool">
 		</entry>
 		<entry name="wizard" type="Bool">

@@ -58,7 +58,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
-	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotAdvanced() ) );
+// 	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotAdvanced() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Lock/unlock if kuroo is busy.

@@ -144,7 +144,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	
 	// Don't load all packages, only first ROWLIMIT
 	packageCount = packageList.size() / 6;
-	int max( ( packageCount - ROWLIMIT ) * 6 ) ;
+	int max( ( packageCount - KurooConfig::rowLimit() ) * 6 ) ;
 	
 	foreach ( packageList ) {
 		
@@ -174,7 +174,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	setHeader( QString::number( packageCount ) );
 	setPackageFocus( currentId );
 	
-	// Cannot have current changed for only one package so let's emit manually
+	// Cannot have current changed for only one package so emit manually
 	if ( packageCount == 1 )
 		emit currentChanged( 0 );
 	

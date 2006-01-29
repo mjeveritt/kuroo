@@ -97,7 +97,7 @@ void ConfigDialog::readMakeConf()
 		
 		foreach ( lines ) {
 			
-			if ( (*it).contains( QRegExp("^\\s*ACCEPT_KEYWORDS") ) ) {
+			if ( (*it).contains( QRegExp("^\\bACCEPT_KEYWORDS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setAcceptKeywords( rx.cap(4) );
 				else
@@ -105,7 +105,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*AUTOCLEAN") ) ) {
+			if ( (*it).contains( QRegExp("^\\bAUTOCLEAN\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setAutoClean( rx.cap(4) );
 				else
@@ -113,7 +113,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*BUILD_PREFIX") ) ) {
+			if ( (*it).contains( QRegExp("^\\bBUILD_PREFIX\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setBuildPrefix( rx.cap(4) );
 				else
@@ -121,7 +121,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CBUILD") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCBUILD\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setCBuild( rx.cap(4) );
 				else
@@ -129,7 +129,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CCACHE_SIZE") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCCACHE_SIZE\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setCCacheSize( rx.cap(4) );
 				else
@@ -137,7 +137,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CFLAGS") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCFLAGS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setCFlags( rx.cap(4) );
 				else
@@ -145,7 +145,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CXXFLAGS") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCXXFLAGS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setCXXFlags( rx.cap(4) );
 				else
@@ -153,7 +153,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CHOST") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCHOST\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setChost( rx.cap(4) );
 				else
@@ -161,7 +161,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CLEAN_DELAY") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCLEAN_DELAY\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setCleanDelay( rx.cap(4) );
 				else	
@@ -169,7 +169,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CONFIG_PROTECT") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCONFIG_PROTECT\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setConfigProtect( rx.cap(4) );
 				else
@@ -177,7 +177,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*CONFIG_PROTECT_MASK") ) ) {
+			if ( (*it).contains( QRegExp("^\\bCONFIG_PROTECT_MASK\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setConfigProtectMask( rx.cap(4) );
 				else
@@ -185,7 +185,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*DEBUGBUILD") ) ) {
+			if ( (*it).contains( QRegExp("^\\bDEBUGBUILD\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDebugBuild( rx.cap(4) );
 				else
@@ -193,7 +193,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*DISTDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bDISTDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirDist( rx.cap(4) );
 				else
@@ -201,7 +201,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*FEATURES") ) ) {
+			if ( (*it).contains( QRegExp("^\\bFEATURES\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setFeatures( rx.cap(4) );
 			else
@@ -209,7 +209,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*FETCHCOMMAND") ) ) {
+			if ( (*it).contains( QRegExp("^\\bFETCHCOMMAND\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setFetchCommand( rx.cap(4) );
 				else
@@ -217,7 +217,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*GENTOO_MIRRORS") ) ) {
+			if ( (*it).contains( QRegExp("^\\bGENTOO_MIRRORS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setGentooMirrors( rx.cap(4) );
 				else
@@ -225,7 +225,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*HTTP_PROXY FTP_PROXY") ) ) {
+			if ( (*it).contains( QRegExp("^\\bHTTP_PROXY FTP_PROXY\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setProxy( rx.cap(4) );
 				else
@@ -233,7 +233,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*MAKEOPTS") ) ) {
+			if ( (*it).contains( QRegExp("^\\bMAKEOPTS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setMakeOpts( rx.cap(4) );
 				else
@@ -241,7 +241,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*NOCOLOR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bNOCOLOR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setNoColor( rx.cap(4) );
 				else
@@ -249,7 +249,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PKG_TMPDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPKG_TMPDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirPkgTmp( rx.cap(4) );
 				else
@@ -257,7 +257,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PKGDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPKGDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirPkg( rx.cap(4) );
 				else
@@ -265,7 +265,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PORT_LOGDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPORT_LOGDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirPortLog( rx.cap(4) );
 				else
@@ -273,7 +273,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PORTAGE_BINHOST") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPORTAGE_BINHOST\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setPortageBinHost( rx.cap(4) );
 				else
@@ -281,7 +281,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PORTAGE_NICENESS") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPORTAGE_NICENESS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setPortageNiceness( rx.cap(4) );
 				else
@@ -289,7 +289,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PORTAGE_TMPDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPORTAGE_TMPDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirPortageTmp( rx.cap(4) );
 				else
@@ -297,7 +297,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PORTDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPORTDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirPortage( rx.cap(4) );
 				else
@@ -305,7 +305,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*PORTDIR_OVERLAY") ) ) {
+			if ( (*it).contains( QRegExp("^\\bPORTDIR_OVERLAY\\b") ) ) {
 				if ( rx.search( *it ) > -1 ) {
 					KurooConfig::setDirPortageOverlayAll( rx.cap(4) );
 					KurooConfig::setDirPortageOverlay( rx.cap(4) );
@@ -315,7 +315,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RESUMECOMMAND") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRESUMECOMMAND\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setResumeCommand( rx.cap(4) );
 				else
@@ -323,7 +323,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*ROOT") ) ) {
+			if ( (*it).contains( QRegExp("^\\bROOT\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setRoot( rx.cap(4) );
 				else
@@ -331,7 +331,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RSYNC_EXCLUDEFROM") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRSYNC_EXCLUDEFROM\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setRsyncExcludeFrom( rx.cap(4) );
 				else
@@ -339,7 +339,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RSYNC_PROXY") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRSYNC_PROXY\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setRsyncProxy( rx.cap(4) );
 				else
@@ -347,7 +347,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RSYNC_RETRIES") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRSYNC_RETRIES\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setRsyncRetries( rx.cap(4) );
 				else
@@ -355,7 +355,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RSYNC_RATELIMIT") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRSYNC_RATELIMIT\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setRsyncRateLimit( rx.cap(4) );
 				else
@@ -363,7 +363,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RSYNC_TIMEOUT") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRSYNC_TIMEOUT\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setRsyncTimeOut(rx.cap(4)  );
 				else
@@ -371,7 +371,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*RPMDIR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bRPMDIR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirRpm( rx.cap(4) );
 				else
@@ -379,7 +379,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*SYNC") ) ) {
+			if ( (*it).contains( QRegExp("^\\bSYNC\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setSync( rx.cap(4) );
 				else
@@ -387,7 +387,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*USE") ) ) {
+			if ( (*it).contains( QRegExp("^\\bUSE\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setUse( rx.cap(4) );
 				else
@@ -395,7 +395,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*USE_ORDER") ) ) {
+			if ( (*it).contains( QRegExp("^\\bUSE_ORDER\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setUseOrder( rx.cap(4) );
 				else
@@ -403,7 +403,7 @@ void ConfigDialog::readMakeConf()
 				continue;
 			}
 			
-			if ( (*it).contains( QRegExp("^\\s*NOCOLOR") ) ) {
+			if ( (*it).contains( QRegExp("^\\bNOCOLOR\\b") ) ) {
 				if ( rx.search( *it ) > -1 )
 					KurooConfig::setNoColor( rx.cap(4) );
 				else
@@ -538,7 +538,7 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "RSYNC_EXCLUDEFROM" ] = KurooConfig::rsyncExcludeFrom();
 
-	keywords[ "HTTP_PROXY FTP_PROXY" ] = KurooConfig::proxy();
+	keywords[ "HTTP_PROXY" ] = KurooConfig::proxy();
 
 	keywords[ "GENTOO_MIRRORS" ] = KurooConfig::gentooMirrors();
 
@@ -558,7 +558,7 @@ bool ConfigDialog::saveMakeConf()
 		
 		foreach ( lines ) {
 			
-			if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
+			if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
 				if ( rxLine.search( *it ) > -1 ) {
 					QString keyword = rxLine.cap(1);
 					if ( !keywords[ keyword ].isEmpty() )

@@ -257,6 +257,16 @@ void PortageTab::slotButtons( bool isQueued )
 }
 
 /**
+ * Open advanced dialog with: ebuild, versions, use flags...
+ */
+void PortageTab::slotAdvanced()
+{
+	PackageItem* portagePackage = packagesView->currentPackage();
+	if ( portagePackage )
+		m_packageInspector->edit( portagePackage );
+}
+
+/**
  * View summary for selected package.
  */
 void PortageTab::slotPackage()
@@ -486,16 +496,6 @@ void PortageTab::slotUninstall()
 					InstalledSingleton::Instance()->uninstallPackageList( packagesView->selectedId() );
 			}
 	}
-}
-
-/**
- * Open advanced dialog with: ebuild, versions, use flags...
- */
-void PortageTab::slotAdvanced()
-{
-	PackageItem* portagePackage = packagesView->currentPackage();
-	if ( portagePackage )
-		m_packageInspector->edit( portagePackage );
 }
 
 #include "portagetab.moc"

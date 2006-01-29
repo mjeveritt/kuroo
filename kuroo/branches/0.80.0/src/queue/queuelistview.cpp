@@ -36,18 +36,20 @@ const int diffTime( 10 );
  * @class QueueListView::QueueItem
  * @short Package item with progressbar
  */
-QueueListView::QueueItem::QueueItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
+QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), 
 	bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
 {
+	setText( 0, category + "/" + name );
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
 
-QueueListView::QueueItem::QueueItem( QueueItem* parent, const char* name, const QString &id, const QString& description, const QString& status, int duration )
+QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ), 
 	bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
 {
+	setText( 0, category + "/" + name );
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
 }
@@ -249,14 +251,14 @@ void QueueListView::insertPackageList()
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category + "/" + name, id, description, meta, duration );
+			item = new QueueItem( this, category, name, id, description, meta, duration );
 			item->setOpen( true );
 			item->setChecked( false );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category + "/" + name, id, description, meta, duration );
+				item = new QueueItem( itemDepend, category, name, id, description, meta, duration );
 		}
 		
 		// Add package info

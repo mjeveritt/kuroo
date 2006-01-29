@@ -206,9 +206,6 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
-	
-	kdDebug() << "PackageInspector::edit package=" << package << endl;
-	
 	dialog->package->setText( "<font color=white><font size=\"+2\">" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</font> ");
 	
@@ -567,8 +564,6 @@ void PackageInspector::getChangeLog()
 	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
 		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
 		QFile file( fileName );
-		
-		kdDebug() << "PackageInspector::getChangeLog fileName=" << fileName << " category=" << category << " package=" << package << endl;
 		
 		if ( !file.exists() ) {
 			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";

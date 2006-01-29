@@ -308,6 +308,9 @@ void QueueTab::slotPackage()
 {
 	kdDebug() << "QueueTab::slotPackage" << endl;
 	
+	if ( !isVisible() )
+		return;
+	
 	// clear text browsers and dropdown menus
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();

@@ -81,6 +81,7 @@ private slots:
 	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
 	
 	void				slotButtons();
+	void				slotPackage();
 	void				slotAdvanced();
 	
 private:

@@ -58,7 +58,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
-// 	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotAdvanced() ) );
+	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Lock/unlock if kuroo is busy.
@@ -289,9 +289,18 @@ void QueueTab::slotButtons()
 	pbAdvanced->setDisabled( false );
 }
 
+/**
+ * Open advanced dialog with: ebuild, versions, use flags...
+ */
 void QueueTab::slotAdvanced()
 {
+	PackageItem* portagePackage = queueView->currentPackage();
+	if ( portagePackage )
+		m_packageInspector->edit( portagePackage );
+}
 
+void QueueTab::slotPackage()
+{
 	// clear text browsers and dropdown menus
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();
@@ -303,13 +312,12 @@ void QueueTab::slotAdvanced()
 	
 	// Initialize the portage package object with package and it's versions data
 	queueView->currentPackage()->initVersions();
-	QString package( queueView->currentPackage()->name() );
-	QString category( queueView->currentPackage()->category() );
-	
+
 	// Now parse sorted list of versions for current package
 	QValueList<PackageVersion*> sortedVersions = queueView->currentPackage()->sortedVersionList();
 	bool versionNotInArchitecture = false;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
+	QString latestVersion;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		
 		// Load all dropdown menus in the inspector with relevant versions
@@ -339,14 +347,26 @@ void QueueTab::slotAdvanced()
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
-		// Create nice summary showing installed packages in green and unavailable as red
+		// Mark installed version
 		if ( (*sortedVersionIterator)->isInstalled() )
 			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
 		
+		// Collect latest available version
+		if ( (*sortedVersionIterator)->isAvailable() )
+			latestVersion = (*sortedVersionIterator)->version();
+	}
+	
+	// Set active version in Inspector dropdown menus
+	if ( !latestVersion.isEmpty() ) {
+		m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( latestVersion );
+		m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( latestVersion );
+		m_packageInspector->dialog->cbVersionsUse->setCurrentText( latestVersion );
+		m_packageInspector->dialog->versionsView->usedForInstallation( latestVersion );
 	}
 	
 	// Refresh inspector if visible
-	m_packageInspector->edit( queueView->currentPackage() );
+	if ( m_packageInspector->isVisible() )
+		slotAdvanced();
 }
 
 /**

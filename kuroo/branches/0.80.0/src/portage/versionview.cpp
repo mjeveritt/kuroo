@@ -71,6 +71,7 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 VersionView::VersionView( QWidget *parent, const char *name )
 	: KListView( parent, name )
 {
+	addColumn( i18n( " " ) );
 	addColumn( i18n( "Version" ) );
 	addColumn( i18n( "Stability" ) );
 	addColumn( i18n( "Size" ) );

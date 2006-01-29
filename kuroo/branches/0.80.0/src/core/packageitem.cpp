@@ -147,6 +147,7 @@ bool PackageItem::isQueued()
  */
 QString PackageItem::category()
 {
+	kdDebug() << "PackageItem::category m_category=" << m_category << endl;
 	return m_category;
 }
 

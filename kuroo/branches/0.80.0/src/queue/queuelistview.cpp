@@ -118,13 +118,27 @@ void QueueListView::QueueItem::oneStep()
 {
 	if ( progress < m_duration )
 		bar->setProgress( progress++ );
-	else 
+	else
 		if ( progress++ == m_duration ) {
 			bar->setTotalSteps( 0 );
 			bar->setTextEnabled( false );
 		}
 		else
 			bar->advance( 3 );
+}
+
+/**
+ * Show progressbar after emerge pretend.
+ * @param isChecked
+ */
+void QueueListView::QueueItem::setChecked( bool isChecked )
+{
+	m_isChecked = isChecked;
+}
+
+void QueueListView::QueueItem::hideBar()
+{
+	bar->hide();
 }
 
 /**
@@ -141,18 +155,8 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 			bar->setGeometry( rect );
 			bar->show();
 		}
-		
-		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
-}
-
-/**
- * Show progressbar after emerge pretend.
- * @param isChecked
- */
-void QueueListView::QueueItem::setChecked( bool isChecked )
-{
-	m_isChecked = isChecked;
+	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 
 /**
@@ -193,6 +197,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
+	
+	connect( this, SIGNAL( collapsed( QListViewItem* ) ), this, SLOT( slotHideBars( QListViewItem* ) ) );
 }
 
 QueueListView::~QueueListView()
@@ -430,6 +436,15 @@ void QueueListView::slotPackageProgress()
 		return;
 	else
 		dynamic_cast<QueueItem*>( packageIndex[m_id] )->oneStep();
+}
+
+void QueueListView::slotHideBars( QListViewItem* item )
+{
+	QListViewItem* myChild = item->firstChild();
+	while ( myChild ) {
+		dynamic_cast<QueueItem*>( myChild )->hideBar();
+		myChild = myChild->nextSibling();
+	}
 }
 
 #include "queuelistview.moc"

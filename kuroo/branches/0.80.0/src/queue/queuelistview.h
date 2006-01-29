@@ -70,6 +70,8 @@ public slots:
 	
 private slots:
 	
+	void					slotHideBars( QListViewItem* item );
+	
 	/**
 	* Format package size nicely 
 	* @param size 
@@ -118,6 +120,7 @@ public:
 	void			oneStep();
 	void			setChecked( bool isChecked );
 	void			setStatus( int status );
+	void			hideBar();
 	
 protected:
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );

@@ -61,6 +61,8 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
+	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
 	
@@ -294,13 +296,18 @@ void QueueTab::slotButtons()
  */
 void QueueTab::slotAdvanced()
 {
-	PackageItem* portagePackage = queueView->currentPackage();
-	if ( portagePackage )
-		m_packageInspector->edit( portagePackage );
+	kdDebug() << "QueueTab::slotAdvanced" << endl;
+	
+	if ( queueView->currentPackage() ) {
+		m_packageInspector->show();
+		slotPackage();
+	}
 }
 
 void QueueTab::slotPackage()
 {
+	kdDebug() << "QueueTab::slotPackage" << endl;
+	
 	// clear text browsers and dropdown menus
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();
@@ -366,7 +373,7 @@ void QueueTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		slotAdvanced();
+		m_packageInspector->edit( queueView->currentPackage() );
 }
 
 /**

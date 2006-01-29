@@ -261,9 +261,12 @@ void PortageTab::slotButtons( bool isQueued )
  */
 void PortageTab::slotAdvanced()
 {
-	PackageItem* portagePackage = packagesView->currentPackage();
-	if ( portagePackage )
-		m_packageInspector->edit( portagePackage );
+	kdDebug() << "PortageTab::slotAdvanced" << endl;
+	
+	if ( packagesView->currentPackage() ) {
+		m_packageInspector->show();
+		slotPackage();
+	}
 }
 
 /**
@@ -271,7 +274,7 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-// 	kdDebug() << "PortageTab::slotPackage" << endl;
+	kdDebug() << "PortageTab::slotPackage" << endl;
 	
 	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() && !EmergeSingleton::Instance()->isRunning() ) {
 		pbUninstall->setDisabled( false );
@@ -408,7 +411,7 @@ void PortageTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		slotAdvanced();
+		m_packageInspector->edit( packagesView->currentPackage() );
 }
 
 /**

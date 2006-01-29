@@ -322,10 +322,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 			
 			EmergePackage emergePackage;
 			QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
-			int pos = rxPackage.search( line );
 			
 			// @fixme: check this!
-			if ( pos > -1 ) {
+			if ( rxPackage.search( line ) > -1 ) {
 				QString parsedPackage = rxPackage.cap(2);
 				emergePackage.package = parsedPackage;
 				emergePackage.category = parsedPackage.section( "/", 0, 0 );

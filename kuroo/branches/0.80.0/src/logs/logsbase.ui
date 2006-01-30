@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>622</width>
-            <height>317</height>
+            <width>542</width>
+            <height>374</height>
         </rect>
     </property>
     <property name="caption">
@@ -141,7 +141,7 @@
                         <number>0</number>
                     </property>
                     <property name="text">
-                        <string>&lt;font size="+1"&gt;Kuroo Log&lt;/font&gt;</string>
+                        <string>&lt;font size="+1"&gt;Activity Log&lt;/font&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

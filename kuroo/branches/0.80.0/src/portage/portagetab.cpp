@@ -38,7 +38,6 @@
 
 #include <ktextbrowser.h>
 #include <ktabwidget.h>
-#include <kiconloader.h>
 #include <kpopupmenu.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>

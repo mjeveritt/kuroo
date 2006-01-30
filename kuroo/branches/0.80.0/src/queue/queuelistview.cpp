@@ -36,20 +36,26 @@ const int diffTime( 10 );
  * @class QueueListView::QueueItem
  * @short Package item with progressbar
  */
-QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), 
-	bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
+QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& description, const QString& status, const QString& useFlags, int duration )
+	: PackageItem( parent, name, id, description, status ),
+	m_useFlags( useFlags ), m_duration( duration ),
+	bar( 0 ), progress( 0 ), 
+	m_isChecked( false ), m_isComplete( false )
 {
 	setText( 0, category + "/" + name );
+	setText( 4, m_useFlags );
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
 
-QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ), 
-	bar( 0 ), progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false )
+QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, const QString& useFlags, int duration )
+	: PackageItem( parent, name, id, description, status ),
+	m_useFlags( useFlags ), m_duration( duration ),
+	bar( 0 ), progress( 0 ), 
+	m_isChecked( false ), m_isComplete( false )
 {
 	setText( 0, category + "/" + name );
+	setText( 4, m_useFlags );
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
 }
@@ -58,6 +64,11 @@ QueueListView::QueueItem::~QueueItem()
 {
 	delete bar;
 	bar = 0;
+}
+
+QString QueueListView::QueueItem::useFlags()
+{
+	return m_useFlags;
 }
 
 /**
@@ -257,14 +268,14 @@ void QueueListView::insertPackageList()
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category, name, id, description, meta, duration );
+			item = new QueueItem( this, category, name, id, description, meta, useFlags, duration );
 			item->setOpen( true );
 			item->setChecked( false );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category, name, id, description, meta, duration );
+				item = new QueueItem( itemDepend, category, name, id, description, meta, useFlags, duration );
 		}
 		
 		// Add package info
@@ -284,8 +295,6 @@ void QueueListView::insertPackageList()
 			item->setText( 3, size );
 			addSize( size );
 		}
-		
-		item->setText( 4, useFlags );
 		
 		if ( meta == FILTER_ALL_STRING )
 			item->setStatus( PACKAGE );

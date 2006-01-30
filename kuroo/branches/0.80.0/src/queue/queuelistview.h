@@ -109,10 +109,11 @@ private:
 class QueueListView::QueueItem : public PackageItem
 {
 public:
-	QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, int duration );
-	QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, int duration );
+	QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, const QString& useFlags, int duration );
+	QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, const QString& useFlags, int duration );
 	~QueueItem();
 	
+	QString			useFlags();
 	void			setComplete();
 	bool			isComplete();
 	int				duration();
@@ -129,6 +130,7 @@ private:
 	KProgress* 		bar;
 	int				progress, m_duration;
 	bool			m_isChecked, m_isComplete;
+	QString			m_useFlags;
 };
 
 #endif

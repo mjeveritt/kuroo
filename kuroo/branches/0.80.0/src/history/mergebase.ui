@@ -25,11 +25,6 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="MergeListView" row="2" column="0">
-            <property name="name">
-                <cstring>mergeView</cstring>
-            </property>
-        </widget>
         <widget class="Line" row="1" column="0">
             <property name="name">
                 <cstring>line1</cstring>
@@ -56,7 +51,7 @@
         </widget>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>layout12</cstring>
+                <cstring>layout6</cstring>
             </property>
             <grid>
                 <property name="name">
@@ -65,71 +60,81 @@
                 <property name="margin">
                     <number>5</number>
                 </property>
-                <widget class="QPushButton" row="1" column="2">
+                <widget class="QLayoutWidget" row="0" column="1">
                     <property name="name">
-                        <cstring>pbClearFilter</cstring>
+                        <cstring>layout4</cstring>
                     </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image0</iconset>
-                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton" row="1" column="1">
+                            <property name="name">
+                                <cstring>pbClearFilter</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>image0</iconset>
+                            </property>
+                        </widget>
+                        <spacer row="0" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>spacer8</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Minimum</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>170</width>
+                                    <height>5</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <spacer row="1" column="0">
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>161</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="KListViewSearchLine" row="1" column="2">
+                            <property name="name">
+                                <cstring>mergeFilter</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>210</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
-                <widget class="KListViewSearchLine" row="1" column="3">
-                    <property name="name">
-                        <cstring>mergeFilter</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>210</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>100</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                </spacer>
-                <spacer row="0" column="1" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>spacer8</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>311</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLabel" row="0" column="0" rowspan="2" colspan="1">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel1</cstring>
                     </property>
@@ -159,6 +164,11 @@
                     </property>
                 </widget>
             </grid>
+        </widget>
+        <widget class="MergeListView" row="2" column="0">
+            <property name="name">
+                <cstring>mergeView</cstring>
+            </property>
         </widget>
     </grid>
 </widget>
@@ -191,7 +201,7 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>mergelistview.h</includehint>
     <includehint>klistviewsearchline.h</includehint>
+    <includehint>mergelistview.h</includehint>
 </includehints>
 </UI>

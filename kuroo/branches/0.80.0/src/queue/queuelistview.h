@@ -113,7 +113,6 @@ public:
 	QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, const QString& useFlags, int duration );
 	~QueueItem();
 	
-	QString			useFlags();
 	void			setComplete();
 	bool			isComplete();
 	int				duration();

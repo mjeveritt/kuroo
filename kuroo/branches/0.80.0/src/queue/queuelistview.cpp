@@ -66,11 +66,6 @@ QueueListView::QueueItem::~QueueItem()
 	bar = 0;
 }
 
-QString QueueListView::QueueItem::useFlags()
-{
-	return m_useFlags;
-}
-
 /**
  * Reimplement for only two state.
  * @param status

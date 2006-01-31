@@ -165,12 +165,16 @@ void QueueTab::slotBusy( bool busy )
 	
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" || busy ) {
+		pbRemove->setDisabled( true );
+		pbAdvanced->setDisabled( true );
 		pbClear->setDisabled( true );
 		cbDownload->setDisabled( true );
 		cbForce->setDisabled( true );
 		cbRemove->setDisabled( true );
 	}
 	else {
+		pbRemove->setDisabled( false );
+		pbAdvanced->setDisabled( false );
 		pbClear->setDisabled( false );
 		cbDownload->setDisabled( false );
 		cbForce->setDisabled( false );
@@ -203,10 +207,6 @@ void QueueTab::slotGo()
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
 	
-	// Force portage to reinstall files protected in CONFIG_PROTECT
-	if ( cbForce->isChecked() )
-		packageList.prepend( "--noconfmem" );
-	
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {
@@ -225,6 +225,11 @@ void QueueTab::slotGo()
 		                                        i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
 		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
 			case KMessageBox::Yes: {
+				
+				// Force portage to reinstall files protected in CONFIG_PROTECT
+				if ( cbForce->isChecked() )
+					packageList.prepend( "--noconfmem" );
+				
 				QueueSingleton::Instance()->installPackageList( packageList );
 				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
 				m_hasCheckedQueue = false;

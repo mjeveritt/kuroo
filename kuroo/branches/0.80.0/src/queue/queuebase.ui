@@ -35,14 +35,14 @@
         </property>
         <widget class="QSplitter" row="0" column="0">
             <property name="name">
-                <cstring>splitter8</cstring>
+                <cstring>splitter2</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
             </property>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout26</cstring>
+                    <cstring>layout18</cstring>
                 </property>
                 <grid>
                     <property name="name">
@@ -54,76 +54,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>layout20</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1</cstring>
-                                </property>
-                                <property name="margin">
-                                    <number>5</number>
-                                </property>
-                                <property name="text">
-                                    <string>&lt;font size="+1"&gt;Packages in Installation Queue&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="Line" row="1" column="0">
-                                <property name="name">
-                                    <cstring>line1_2</cstring>
-                                </property>
-                                <property name="paletteForegroundColor">
-                                    <color>
-                                        <red>185</red>
-                                        <green>185</green>
-                                        <blue>185</blue>
-                                    </color>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>HLine</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Plain</enum>
-                                </property>
-                                <property name="lineWidth">
-                                    <number>1</number>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="Line" row="3" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>line1</cstring>
-                        </property>
-                        <property name="paletteForegroundColor">
-                            <color>
-                                <red>185</red>
-                                <green>185</green>
-                                <blue>185</blue>
-                            </color>
-                        </property>
-                        <property name="frameShape">
-                            <enum>HLine</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>Plain</enum>
-                        </property>
-                        <property name="lineWidth">
-                            <number>1</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="2" column="1">
+                    <widget class="QLayoutWidget" row="1" column="2">
                         <property name="name">
                             <cstring>layout21</cstring>
                         </property>
@@ -210,23 +141,54 @@
                             </spacer>
                         </grid>
                     </widget>
-                    <widget class="QLayoutWidget" row="1" column="0" rowspan="2" colspan="1">
+                    <widget class="QLayoutWidget" row="1" column="0">
                         <property name="name">
-                            <cstring>layout8</cstring>
+                            <cstring>layout14</cstring>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>0</number>
-                            </property>
-                            <widget class="Line" row="0" column="1">
+                            <widget class="QueueListView" row="0" column="0">
                                 <property name="name">
-                                    <cstring>line5</cstring>
+                                    <cstring>queueView</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>cbRemove</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Remove package from Q&amp;ueue after installation</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>layout20</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>5</number>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;font size="+1"&gt;Packages in Installation Queue&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="Line" row="1" column="0">
+                                <property name="name">
+                                    <cstring>line1_2</cstring>
                                 </property>
                                 <property name="paletteForegroundColor">
                                     <color>
@@ -236,21 +198,64 @@
                                     </color>
                                 </property>
                                 <property name="frameShape">
-                                    <enum>VLine</enum>
+                                    <enum>HLine</enum>
                                 </property>
                                 <property name="frameShadow">
                                     <enum>Plain</enum>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
+                                <property name="lineWidth">
+                                    <number>1</number>
                                 </property>
-                            </widget>
-                            <widget class="QueueListView" row="0" column="0">
-                                <property name="name">
-                                    <cstring>queueView</cstring>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
                                 </property>
                             </widget>
                         </grid>
+                    </widget>
+                    <widget class="Line" row="1" column="1">
+                        <property name="name">
+                            <cstring>line5</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>VLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                    </widget>
+                    <widget class="Line" row="2" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>line1</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="lineWidth">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -355,17 +360,6 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QCheckBox" row="3" column="0">
-                                <property name="name">
-                                    <cstring>cbRemove</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Remove package from Q&amp;ueue after installation</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
-                            </widget>
                         </grid>
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="0">

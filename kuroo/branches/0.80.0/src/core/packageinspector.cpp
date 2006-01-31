@@ -293,8 +293,7 @@ void PackageInspector::slotApply()
 		QStringList useList;
 		QListViewItem* myChild = dialog->useView->firstChild();
 		while ( myChild ) {
-			if ( !myChild->text(0).isEmpty() )
-				useList += myChild->text(0);
+			useList += myChild->text(0);
 			myChild = myChild->nextSibling();
 		}
 		
@@ -445,11 +444,11 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 	switch ( dynamic_cast<QCheckListItem*>(useItem)->state() ) {
 	
 		case ( QCheckListItem::Off ) :
-			useItem->setText( 0, use.replace("+", "-") );
+			useItem->setText( 0, use.replace( QRegExp("^\\+"), "-") );
 			break;
 		
 		case ( QCheckListItem::On ) :
-			useItem->setText( 0, use.replace("-", "+") );
+			useItem->setText( 0, use.replace( QRegExp("^\\-"), "+") );
 
 	}
 	
@@ -678,6 +677,7 @@ void PackageInspector::slotGetInstalledFiles( const QString& version )
  */
 void PackageInspector::slotCalculateUse()
 {
+	dialog->pbUse->setDisabled( true );
 	pretendUseLines.clear();
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
@@ -699,32 +699,30 @@ void PackageInspector::cleanup( KProcess* eProc )
 {
 	kdDebug() << "PackageInspector::cleanup pretendUseLines=" << pretendUseLines << endl;
 	
+	dialog->pbUse->setDisabled( false );
 	delete eProc;
 	eProc = 0;
 	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+(\\S+/\\S+)\\s+(\\[?(\\d|.)*\\]?)\\s+([-+\\w\\s\\(\\)]+)[,\\d\\s]*kB" );
+	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+(\\S+/\\S+)\\s+(\\[?\\S*\\]?)\\s+([\\-\\+\\w\\s\\(\\)\\*]+)\\s+[\\d,]*\\s+kB" );
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(3).simplifyWhiteSpace().remove("(").remove(")").remove("*");
+			QString use = rxPretend.cap(4).simplifyWhiteSpace();
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}
 	
 	kdDebug() << "PackageInspector::cleanup pretendUseList=" << pretendUseList << endl;
 	
-	QMap<QString,PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( dialog->cbVersionsUse->currentText() );
-	QStringList useList;
-	if ( itMap != m_portagePackage->versionMap().end() )
-		useList = itMap.data()->useflags();
-	
 	// Get user set package use flags
 	dialog->useView->setDisabled( false );
 	dialog->useView->clear();
-	foreach ( useList ) {
+	foreach ( pretendUseList ) {
 		QString lines;
 		
-		QMap<QString, QString>::iterator itMap = useMap.find( *it );
+		QString useFlag = *it;
+		useFlag.remove( QRegExp("^\\+|^-|^\\(-|^\\(\\+|\\*$|\\*\\)$|\\)$") );
+		QMap<QString, QString>::iterator itMap = useMap.find( useFlag );
 		if ( itMap != useMap.end() )
 			lines = itMap.data();
 		
@@ -742,21 +740,25 @@ void PackageInspector::cleanup( KProcess* eProc )
 			description += lines;
 		}
 		
-		// Add use flag in use view
-		QCheckListItem* useItem = new QCheckListItem( dialog->useView, QString::null, QCheckListItem::CheckBox );
-		useItem->setMultiLinesEnabled( true );
-		useItem->setText( 1, description.join("\n") );
-		useItem->setOpen( true );
-		
 		// Set CheckBox state
-		if ( pretendUseList.contains( "+" + *it ) ) {
-			useItem->setText( 0, "+" + *it );
+		if ( (*it).startsWith( "+" ) ) {
+			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
+			useItem->setMultiLinesEnabled( true );
+			useItem->setText( 1, description.join("\n") );
 			useItem->setOn( true );
 		}
-		else {
-			useItem->setText( 0, "-" + *it );
-			useItem->setOn( false );
-		}
+		else
+			if ( (*it).startsWith( "-" ) ) {
+				QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
+				useItem->setMultiLinesEnabled( true );
+				useItem->setText( 1, description.join("\n") );
+				useItem->setOn( false );
+			}
+			else {
+				QListViewItem* useItem = new QListViewItem( dialog->useView, *it );
+				useItem->setMultiLinesEnabled( true );
+				useItem->setText( 1, description.join("\n") );
+			}
 	}
 }
 

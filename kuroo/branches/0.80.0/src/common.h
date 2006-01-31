@@ -119,6 +119,19 @@ static const QString KUROODIR = "/var/kuroo8/";
 // Max rows in queries
 static const int ROWLIMIT = 1000;
 
+// Regexp from Portage
+static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
+
+typedef struct Info {
+	QString slot;
+	QString homepage;
+	QString licenses;
+	QString description;
+	QString keywords;
+	QString useFlags;
+	QString size;
+};
+
 /**
  * Use this to const-iterate over QStringLists, if you like.
  * Watch out for the definition of last in the scope of your for.
@@ -130,17 +143,4 @@ static const int ROWLIMIT = 1000;
 #define foreach( x ) \
 for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 
-// Regexp from Portage
-static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
-
 #endif
-
-typedef struct Info {
-	QString slot;
-	QString homepage;
-	QString licenses;
-	QString description;
-	QString keywords;
-	QString useFlags;
-	QString size;
-};

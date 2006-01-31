@@ -210,6 +210,9 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
+	
+	kdDebug() << "PackageInspector::edit category=" << category << " package=" << package << endl;
+	
 	dialog->package->setText( "<font color=white><font size=\"+2\">" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</font> ");
 	
@@ -438,20 +441,17 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 	if ( !useItem )
 		return;
 	
-// 	QString use = useItem->parent()->text( 0 );
-// 	switch ( dynamic_cast<QCheckListItem*>(useItem)->state() ) {
-// 	
-// 		case ( QCheckListItem::Off ) :
-// 			useItem->setText( 0, QString::null );
-// 			break;
-// 		
-// 		case ( QCheckListItem::On ) :
-// 			useItem->setText( 0, "-" + use );
-// 			break;
-// 		
-// 		case ( QCheckListItem::NoChange ) :
-// 			useItem->setText( 0, use );
-// 	}
+	QString use = useItem->text( 0 );
+	switch ( dynamic_cast<QCheckListItem*>(useItem)->state() ) {
+	
+		case ( QCheckListItem::Off ) :
+			useItem->setText( 0, use.replace("+", "-") );
+			break;
+		
+		case ( QCheckListItem::On ) :
+			useItem->setText( 0, use.replace("-", "+") );
+
+	}
 	
 	enableButtonApply( true );
 	hasUseSettingsChanged = true;
@@ -505,6 +505,8 @@ void PackageInspector::loadUseFlagDescription()
  */
 void PackageInspector::slotGetUseFlags( const QString& version )
 {
+	dialog->useView->setDisabled( true );
+	
 	if (  dialog->inspectorTabs->currentPageIndex() == 1 ) {
 		QStringList useList;
 		
@@ -538,7 +540,7 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 			}
 			
 			// Add use flag in use view
-			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::RadioButtonController );
+			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
 			useItem->setMultiLinesEnabled( true );
 			useItem->setText( 1, description.join("\n") );
 			
@@ -704,7 +706,7 @@ void PackageInspector::cleanup( KProcess* eProc )
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(3).simplifyWhiteSpace().remove("(").remove(")");
+			QString use = rxPretend.cap(3).simplifyWhiteSpace().remove("(").remove(")").remove("*");
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}
@@ -717,8 +719,7 @@ void PackageInspector::cleanup( KProcess* eProc )
 		useList = itMap.data()->useflags();
 	
 	// Get user set package use flags
-	QStringList packageUseList = QStringList::split( " ", KurooDBSingleton::Instance()->packageUse( m_id ) );
-	
+	dialog->useView->setDisabled( false );
 	dialog->useView->clear();
 	foreach ( useList ) {
 		QString lines;
@@ -742,36 +743,20 @@ void PackageInspector::cleanup( KProcess* eProc )
 		}
 		
 		// Add use flag in use view
-		QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::RadioButtonController );
+		QCheckListItem* useItem = new QCheckListItem( dialog->useView, QString::null, QCheckListItem::CheckBox );
 		useItem->setMultiLinesEnabled( true );
 		useItem->setText( 1, description.join("\n") );
 		useItem->setOpen( true );
 		
 		// Set CheckBox state
-		bool found;
 		if ( pretendUseList.contains( "+" + *it ) ) {
-			QCheckListItem* checkItem = new QCheckListItem( useItem, "+" + *it, QCheckListItem::RadioButton );
-			checkItem->setOn( true );
-			found = true;
+			useItem->setText( 0, "+" + *it );
+			useItem->setOn( true );
 		}
-		else
-			new QCheckListItem( useItem, "+" + *it, QCheckListItem::RadioButton );
-
-		if ( pretendUseList.contains( "-" + *it ) ) {
-			QCheckListItem* checkItem = new QCheckListItem( useItem, "-" + *it, QCheckListItem::RadioButton );
-			checkItem->setOn( true );
-			found = true;
+		else {
+			useItem->setText( 0, "-" + *it );
+			useItem->setOn( false );
 		}
-		else
-			new QCheckListItem( useItem, "-" + *it, QCheckListItem::RadioButton );
-				
-		if ( !found ) {
-			QCheckListItem* checkItem = new QCheckListItem( useItem, QString::null, QCheckListItem::RadioButton );
-			checkItem->setOn( true );
-		}
-		else
-			new QCheckListItem( useItem, QString::null, QCheckListItem::RadioButton );
-
 	}
 }
 

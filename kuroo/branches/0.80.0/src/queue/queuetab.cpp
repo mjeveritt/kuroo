@@ -299,8 +299,8 @@ void QueueTab::slotAdvanced()
 	kdDebug() << "QueueTab::slotAdvanced" << endl;
 	
 	if ( queueView->currentPackage() ) {
-		m_packageInspector->show();
 		slotPackage();
+		m_packageInspector->edit( queueView->currentPackage() );
 	}
 }
 

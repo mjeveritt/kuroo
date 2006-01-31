@@ -57,8 +57,6 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
-
-	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -70,6 +68,10 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
+	// Toggle Queue button
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
+	connect( packagesView, SIGNAL( signalStatusChanged( bool ) ), this, SLOT( slotButtons( bool ) ) );
+	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
@@ -77,10 +79,9 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
-		
-	// Toggle Queue button
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
-	connect( packagesView, SIGNAL( signalStatusChanged( bool ) ), this, SLOT( slotButtons( bool ) ) );
+	
+	// Load Inspector with current package info
+	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	
 	slotInit();
 }
@@ -263,8 +264,8 @@ void PortageTab::slotAdvanced()
 	kdDebug() << "PortageTab::slotAdvanced" << endl;
 	
 	if ( packagesView->currentPackage() ) {
-		m_packageInspector->show();
 		slotPackage();
+		m_packageInspector->edit( packagesView->currentPackage() );
 	}
 }
 

@@ -153,14 +153,6 @@ bool ScanPortageJob::doJob()
 	
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 	QFile fileTest( "/home/karye/test" );
-// 	QTextStream stream( &fileTest );
-// 	if ( !fileTest.open( IO_WriteOnly ) ) {
-// 		kdDebug() << i18n("Error writing: %1.").arg( "/home/karye/test" ) << endl;
-// 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	// Get list of categories in Portage
 	int idCategory;
 	QString lastCategory;
@@ -211,21 +203,6 @@ bool ScanPortageJob::doJob()
 					return false;
 				}
 				
-				////////////////////////////////////////////////////////////////////////////////////////
-				// Testing rxPackage
-// 				QString tmpPackage = *itPackage;
-// 				QRegExp rxPackage( "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
-// 				QString category, name, version;
-// 				if ( rxPackage.search( tmpPackage ) > -1 ) {
-// 					category = rxPackage.cap(1);
-// 					name = rxPackage.cap(1);
-// 					version = ( tmpPackage ).section( name + "-", 1, 1 ).remove(' ');
-// 					stream << "Testing rxPackage: package=" << tmpPackage <<  "name=" << name << " version=" << version << endl;
-// 				}
-// 				else
-// 					stream << i18n("Testing rxPackage: can not match %1.").arg( tmpPackage ) << endl;
-				///////////////////////////////////////////////////////////////////////////////////////
-				
 				if ( rxAtom.exactMatch( *itPackage ) ) {
 					
 					// Get the captured strings
@@ -275,10 +252,6 @@ bool ScanPortageJob::doJob()
 	}
 	KurooConfig::setPortageCount( QString::number(count) );
 	KurooConfig::writeConfig();
-	
-	///////////////////////////////////////////////////////////////////////////////////////////
-// 	fileTest.close();
-	///////////////////////////////////////////////////////////////////////////////////////////
 	
 	scanInstalledPackages();
 	

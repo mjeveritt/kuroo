@@ -17,4 +17,3 @@ libcore_la_SOURCES = scanupdatesjob.cpp scanhistoryjob.cpp emerge.cpp \
 		packageversion.cpp portagesettings.h dependatom.cpp portagefiles.cpp
 
 noinst_LTLIBRARIES = libcore.la
-

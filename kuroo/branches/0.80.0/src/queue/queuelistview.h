@@ -49,6 +49,7 @@ public slots:
 	* Populate queue with packages from db
 	*/
 	void 					insertPackageList();
+	void					clearQueuePackageUse();
 	void					setPackagesChecked();
 	
 	/**

@@ -289,11 +289,14 @@ void PackageInspector::slotApply()
 	
 	if ( hasUseSettingsChanged ) {
 		
-		// Get use flags 
-		QStringList useList;
+		// Get use flags
+		QStringList useList, pretendUseList;
 		QListViewItem* myChild = dialog->useView->firstChild();
 		while ( myChild ) {
-			useList += myChild->text(0);
+			QString useFlag = myChild->text(0);
+			pretendUseList += useFlag;
+			if ( !useFlag.contains( "^\\(|\\)$" ) )
+				useList += useFlag.remove( QRegExp( "^\\+|\\*$" ) );
 			myChild = myChild->nextSibling();
 		}
 		
@@ -302,6 +305,8 @@ void PackageInspector::slotApply()
 			KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
 			PortageFilesSingleton::Instance()->savePackageUse();
 		}
+		
+		emit signalUseChanged();
 	}
 	
 	enableButtonApply( false );
@@ -703,7 +708,7 @@ void PackageInspector::cleanup( KProcess* eProc )
 	delete eProc;
 	eProc = 0;
 	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+(\\S+/\\S+)\\s+(\\[?\\S*\\]?)\\s+([\\-\\+\\w\\s\\(\\)\\*]+)\\s+[\\d,]*\\s+kB" );
+	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+(\\S+/\\S+)\\s+(\\[\\S*\\])*\\s+([\\-\\+\\w\\s\\(\\)\\*]+)\\s+[\\d,]*\\s+kB" );
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {

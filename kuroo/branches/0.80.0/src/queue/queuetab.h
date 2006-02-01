@@ -84,6 +84,8 @@ private slots:
 	void				slotPackage();
 	void				slotAdvanced();
 	
+	void				slotPackageUseChanged();
+	
 private:
 	bool				m_hasCheckedQueue;
 	QString				initialQueueTime;

@@ -62,6 +62,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+	connect( m_packageInspector, SIGNAL( signalUseChanged() ), this, SLOT( slotPackageUseChanged() ) );
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
@@ -125,6 +126,14 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	
 	initialQueueTime = queueView->totalTimeFormatted();
 	slotQueueSummary();
+}
+
+void QueueTab::slotPackageUseChanged()
+{
+	m_hasCheckedQueue = false;
+	KurooDBSingleton::Instance()->clearQueuePackageUse();
+	queueView->clearQueuePackageUse();
+	slotBusy( false );
 }
 
 void QueueTab::slotQueueSummary()

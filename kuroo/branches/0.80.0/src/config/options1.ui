@@ -374,10 +374,10 @@
                         <cstring>kcfg_isSystrayEnabled</cstring>
                     </property>
                     <property name="text">
-                        <string>Sh&amp;ow system tray icon</string>
+                        <string>Show system tr&amp;ay icon</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+O</string>
+                        <string>Alt+A</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -403,9 +403,6 @@
                 <widget class="QSpinBox" row="2" column="2">
                     <property name="name">
                         <cstring>kcfg_rowLimit</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string> packages</string>
                     </property>
                     <property name="maxValue">
                         <number>12000</number>

@@ -89,6 +89,7 @@ private:
 signals:
 	void							signalNextPackage( bool up );
 	void							signalPackageChanged();
+	void							signalUseChanged();
 };
 
 #endif

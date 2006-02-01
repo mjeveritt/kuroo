@@ -926,6 +926,11 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 // Query for installation queue
 //////////////////////////////////////////////////////////////////////////////
 
+void KurooDB::clearQueuePackageUse()
+{
+	query( "UPDATE queue SET use = '';" );
+}
+
 /**
  * Return all packages in the queue.
  */

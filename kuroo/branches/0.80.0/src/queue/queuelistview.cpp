@@ -306,6 +306,15 @@ void QueueListView::insertPackageList()
 	emit( signalQueueLoaded() );
 }
 
+void QueueListView::clearQueuePackageUse()
+{
+	QListViewItem* myChild = firstChild();
+	while ( myChild ) {
+		myChild->setText( 4, QString::null );
+		myChild = myChild->nextSibling();
+	}
+}
+
 // fixme: check iteration
 void QueueListView::setPackagesChecked()
 {

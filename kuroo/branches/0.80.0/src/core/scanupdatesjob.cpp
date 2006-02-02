@@ -90,6 +90,7 @@ bool ScanUpdatesJob::doJob()
 	                                    " homepage VARCHAR(32), "
 	                                    " date VARCHAR(32), "
 	                                    " meta INTEGER, "
+	                                    " path VARCHAR(64), "
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	

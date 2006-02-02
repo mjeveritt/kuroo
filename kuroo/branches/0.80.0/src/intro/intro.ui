@@ -90,9 +90,7 @@ Parsing hardmasked packages in /usr/portage/profiles/package.mask and /etc/porta
 Advanced package Inspector.&lt;br&gt;
 Etc-update merge and emerge infos and warnings stored in history.&lt;br&gt;
 &lt;br&gt;
-Not supported yet:&lt;br&gt;
-Portage overlay is not scanned.&lt;br&gt;
-&lt;br&gt;
+
 &lt;b&gt;&lt;font color="red"&gt;Warning!&lt;br&gt;
 Please make backup of your files in /etc/portage.&lt;/font&gt;&lt;/b&gt;</string>
                 </property>

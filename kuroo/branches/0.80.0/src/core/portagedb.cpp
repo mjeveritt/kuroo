@@ -227,7 +227,7 @@ void KurooDB::createTables( DbConnection *conn )
 	
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " name VARCHAR(32)); "
+	      " name VARCHAR(32) UNIQUE ); "
 	      " CREATE INDEX index_name_category ON category (name)"
 	      " ;", conn);
 	
@@ -240,7 +240,7 @@ void KurooDB::createTables( DbConnection *conn )
 	
 	query(" CREATE TABLE catSubCategory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " name VARCHAR(32), "
+	      " name VARCHAR(32) UNIQUE, "
 	      " idCategory INTEGER, "
 	      " idSubCategory INTEGER);"
 	      " CREATE INDEX index_name_catSubCategory ON catSubCategory (name);"
@@ -257,6 +257,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " homepage VARCHAR(32), "
 	      " date VARCHAR(32), "
 	      " meta INTEGER, "
+	      " path VARCHAR(64), "
 	      " updateVersion VARCHAR(32)); "
 	      " CREATE INDEX index_name_package ON package (name);"
 	      " CREATE INDEX index_description ON package (description);"
@@ -364,7 +365,7 @@ void KurooDB::createTables( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
-	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo NOTNULL; " );
+	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
@@ -414,7 +415,7 @@ void KurooDB::restoreBackup()
 	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
 		QString timestamp = *it++;
 		QString einfo = *it;
-		query( "UPDATE history SET einfo = '" + einfo + "' WHERE timestamp = '" + timestamp + "';" );
+		query( "UPDATE history SET einfo = '" + escapeString( einfo ) + "' WHERE timestamp = '" + timestamp + "';" );
 	}
 	
 	// Restore source and destination into table mergeHistory
@@ -731,6 +732,11 @@ QStringList KurooDB::packageHardMaskInfo( const QString& id )
 	return query( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
+QString KurooDB::packagePath( const QString& id )
+{
+	return singleQuery( "SELECT path FROM package WHERE id = '" + id + "';" );
+}
+
 /**
  * Return package hardmask depend atom.
  * @param id
@@ -922,8 +928,9 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
+
 //////////////////////////////////////////////////////////////////////////////
-// Query for installation queue
+// 
 //////////////////////////////////////////////////////////////////////////////
 
 void KurooDB::clearQueuePackageUse()

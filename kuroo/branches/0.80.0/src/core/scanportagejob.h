@@ -52,7 +52,7 @@ private:
 private slots:
 	
 	/**
-	 * Scan KurooConfig::dirEdbDep() + "/usr/portage" for packages in portage tree.
+	 * Scan Portage cache for packages in portage tree.
 	 * Inserting found packages in db.
 	 * @return bool 		true if successful.
 	 */
@@ -95,6 +95,7 @@ private:
 		QString							meta;
 		QString							description;
 		QString							homepage;
+		QString							path;
 		PortageVersions					versions;
 	};
 	typedef QMap<QString, Versions>		PortagePackages;

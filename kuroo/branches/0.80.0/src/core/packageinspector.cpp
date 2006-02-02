@@ -588,13 +588,8 @@ void PackageInspector::getChangeLog()
 void PackageInspector::slotGetEbuild( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
-		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
 		QFile file( fileName );
-		
-		if ( !file.exists() ) {
-			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
-			file.setName( fileName );
-		}
 		
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
@@ -618,13 +613,8 @@ void PackageInspector::slotGetEbuild( const QString& version )
 void PackageInspector::slotGetDependencies( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package + "-" + version;
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + category + "/" + package + "-" + version;
 		QFile file( fileName );
-		
-		if ( !file.exists() ) {
-			fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package + "-" + version;
-			file.setName( fileName );
-		}
 		
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );

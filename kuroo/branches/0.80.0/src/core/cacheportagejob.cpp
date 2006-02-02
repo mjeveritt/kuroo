@@ -38,7 +38,7 @@ CachePortageJob::CachePortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
-	KurooConfig::setPortageCount( QString::number(countPackages()) );
+	KurooConfig::setPortageCount( QString::number( countPackages() ) );
 	KurooConfig::writeConfig();
 }
 
@@ -58,6 +58,7 @@ void CachePortageJob::completeJob()
  */
 int CachePortageJob::countPackages()
 {
+	kdDebug() << "CachePortageJob::countPackages" << endl;
 	QDir dCategory;
 	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
 	dCategory.setSorting(QDir::Name);
@@ -66,8 +67,8 @@ int CachePortageJob::countPackages()
 	dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
 	dPackage.setSorting(QDir::Name);
 	
-	if ( !dCategory.cd( KurooConfig::dirEdbDep() + "/usr/portage" ) ) {
-		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage" << endl;
+	if ( !dCategory.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() ) ) {
+		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
 		return 0;
 	}
 	
@@ -76,9 +77,10 @@ int CachePortageJob::countPackages()
 	foreach ( categoryList ) {
 		if ( *it == "." || *it == ".." )
 			continue;
-		if ( dPackage.cd( KurooConfig::dirEdbDep() + "/usr/portage/" + *it ) )
+		if ( dPackage.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() + "/" + *it ) )
 			count += dPackage.entryList().count() - 2;
 	}
+	kdDebug() << "count=" << count << endl;
 	return count;
 }
 
@@ -88,6 +90,7 @@ int CachePortageJob::countPackages()
  */
 bool CachePortageJob::doJob()
 {
+	kdDebug() << "CachePortageJob::doJob" << endl;
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Can not connect to database") << endl;
 		return false;
@@ -102,125 +105,73 @@ bool CachePortageJob::doJob()
 	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
 	setStatus( "CachePortage", i18n("Collecting package information...") );
 	
-	// Get list of categories in Portage Overlay
-	if ( !dCategory.cd( KurooConfig::dirEdbDep() + "/usr/local/portage" ) )
-		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/local/portage" << endl;
+	// Get list of categories in Portage and Overlays
+	QStringList pathList = KurooConfig::dirPortage();
+	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlayAll() );
+	foreach ( pathOverlays )
+		pathList += *it;
 	
-	QStringList categoryList = dCategory.entryList();
-	QStringList::Iterator itCategoryEnd = categoryList.end();
-	for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-		
-		if ( *itCategory == "." || *itCategory == ".." )
+	// Scan Portage cache
+	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
+		if ( !dCategory.cd( *itPath ) ) {
+			kdDebug() << i18n("Can not access ") << *itPath << endl;
 			continue;
-		
-		// Abort the scan
-		if ( isAborted() ) {
-			kdDebug() << i18n("Caching aborted.") << endl;
-			setStatus( "CachePortage", i18n("Caching aborted.") );
-			return false;
 		}
 		
-		// Get list of packages in this category
-		dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
-		dPackage.setSorting( QDir::Name );
-		if ( dPackage.cd( KurooConfig::dirEdbDep() + "/usr/local/portage/" + *itCategory ) ) {
-			QStringList packageList = dPackage.entryList();
-			QStringList::Iterator itPackageEnd = packageList.end();
-			for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
-				
-				if ( *itPackage == "." || *itPackage == ".." )
-					continue;
-				
-				// Abort the scan
-				if ( isAborted() ) {
-					kdDebug() << i18n("Caching aborted.") << endl;
-					setStatus( "CachePortage", i18n("Caching aborted.") );
-					return false;
-				}
-				
-				QString package = *itCategory + "/" + *itPackage;
-				
-				// Get package size
-				QString path = KurooConfig::dirPortageOverlay() + "/" + *itCategory + "/" + (*itPackage).section(rxPortageVersion, 0, 0) + "/files/digest-" + *itPackage;
-				QFile file( path );
-				if ( file.open( IO_ReadOnly ) ) {
-					std::ifstream in( path );
-					std::string word;
-					while ( in >> word );
-					mapCache.insert( package, word );
-					file.close();
-				}
-				else
-					kdDebug() << i18n("Error reading: ") << path << endl;
-				
-				// Post scan count progress
-				if ( (++count % 100) == 0 )
-					setProgress( count );
+		QStringList categoryList = dCategory.entryList();
+		QStringList::Iterator itCategoryEnd = categoryList.end();
+		for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+			
+			if ( *itCategory == "." || *itCategory == ".." )
+				continue;
+			
+			// Abort the scan
+			if ( isAborted() ) {
+				kdDebug() << i18n("Caching aborted.") << endl;
+				setStatus( "CachePortage", i18n("Caching aborted.") );
+				return false;
 			}
-		}
-		else
-			kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/local/portage/" << *itCategory << endl;
-	}
-	
-	// Get list of categories in Portage
-	if ( !dCategory.cd(KurooConfig::dirEdbDep() + "/usr/portage") ) {
-		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage" << endl;
-		return false;
-	}
-	categoryList = dCategory.entryList();
-	itCategoryEnd = categoryList.end();
-	for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-		
-		if ( *itCategory == "." || *itCategory == ".." )
-			continue;
-		
-		// Abort the scan
-		if ( isAborted() ) {
-			kdDebug() << i18n("Caching aborted.") << endl;
-			setStatus( "CachePortage", i18n("Caching aborted.") );
-			return false;
-		}
-
-		// Get list of packages in this category
-		dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
-		dPackage.setSorting(QDir::Name);
-		if ( dPackage.cd(KurooConfig::dirEdbDep() + "/usr/portage/" + *itCategory) ) {
-			QStringList packageList = dPackage.entryList();
-			QStringList::Iterator itPackageEnd = packageList.end();
-			for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
-				
-				if ( *itPackage == "." || *itPackage == ".." )
-					continue;
-				
-				// Abort the scan
-				if ( isAborted() ) {
-					kdDebug() << i18n("Caching aborted.") << endl;
-					setStatus( "CachePortage", i18n("Caching aborted.") );
-					return false;
+			
+			// Get list of packages in this category
+			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
+			dPackage.setSorting( QDir::Name );
+			if ( dPackage.cd( KurooConfig::dirEdbDep() + *itPath + "/" + *itCategory ) ) {
+				QStringList packageList = dPackage.entryList();
+				QStringList::Iterator itPackageEnd = packageList.end();
+				for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
+					
+					if ( *itPackage == "." || *itPackage == ".." )
+						continue;
+					
+					// Abort the scan
+					if ( isAborted() ) {
+						kdDebug() << i18n("Caching aborted.") << endl;
+						setStatus( "CachePortage", i18n("Caching aborted.") );
+						return false;
+					}
+					QString package = *itCategory + "/" + *itPackage;
+					
+					// Get package size
+					QString path = *itPath + "/" + *itCategory + "/" + (*itPackage).section(rxPortageVersion, 0, 0) + "/files/digest-" + *itPackage;
+					QFile file( path );
+					if ( file.open( IO_ReadOnly ) ) {
+						std::ifstream in( path );
+						std::string word;
+						while ( in >> word );
+						mapCache.insert( package, word );
+						file.close();
+					}
+					else
+						kdDebug() << i18n("Creating cache, error reading: ") << path << endl;
+					
+					// Post scan count progress
+					if ( (++count % 100) == 0 )
+						setProgress( count );
 				}
-				
-				QString package = *itCategory + "/" + *itPackage;
-				
-				// Get package size
-				QString path = KurooConfig::dirPortage() + "/" + *itCategory + "/" + (*itPackage).section(rxPortageVersion, 0, 0) + "/files/digest-" + *itPackage;
-				QFile file( path );
-				if ( file.open( IO_ReadOnly ) ) {
-					std::ifstream in( path );
-					std::string word;
-					while ( in >> word );
-					mapCache.insert( package, word );
-					file.close();
-				}
-				else
-					kdDebug() << i18n("Error reading: ") << path << endl;
-				
-				// Post scan count progress
-				if ( (++count % 100) == 0 )
-					setProgress( count );
 			}
+			else
+				kdDebug() << i18n("Can not access ") << *itPath << "/" << *itCategory << endl;
 		}
-		else
-			kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << "/usr/portage/" << *itCategory << endl;
 	}
 	PortageSingleton::Instance()->setCache( mapCache );
 	

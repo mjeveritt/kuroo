@@ -279,7 +279,9 @@ void Emerge::readFromStdout( KProcIO *proc )
 	static bool lastLineFlag = false;
 	static bool completedFlag = false;
 	static QString importantMessagePackage;
-	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+((\\S+)/(\\S+))\\s+(?:\\[(\\S*)\\])*\\s+([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
+	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
+	                   "((\\S+)/(\\S+))\\s+(?:\\[(\\S*)\\])*\\s+"
+	                   "([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
 	
 	while ( proc->readln( line, true /*false, &unterm*/ ) >= 0 ) {
 		int logDone = 0;
@@ -295,7 +297,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 		///////////////////////////////////////////////////////
 		line.replace( QRegExp("\\x0007"), "\n" );
 		int pos = 0;
-		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
+		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
+		            "(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
 		while ( ( pos = rx.search(line) ) != -1 )
 			line.replace( pos, rx.matchedLength(), "" );
 		
@@ -305,7 +308,6 @@ void Emerge::readFromStdout( KProcIO *proc )
 		//////////////////////////////////////////////////////
 		// Parse out packages and info
 		//////////////////////////////////////////////////////
-		
 		if ( rxPackage.search( line ) > -1 ) {
 			EmergePackage emergePackage;
 			emergePackage.updateFlags = rxPackage.cap(1);
@@ -314,10 +316,6 @@ void Emerge::readFromStdout( KProcIO *proc )
 			emergePackage.installedVersion = rxPackage.cap(4);
 			emergePackage.useFlags = rxPackage.cap(6).simplifyWhiteSpace();
 			emergePackage.size = rxPackage.cap(7);
-				
-			kdDebug() << "emergePackage.category=" << emergePackage.category << endl;
-			kdDebug() << "emergePackage.package=" << emergePackage.package << endl;
-			
 			emergePackage.name = ( (emergePackage.package).section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
 			emergePackage.version = (emergePackage.package).section( ( emergePackage.name + "-" ), 1, 1 );
 			emergePackageList.prepend( emergePackage );
@@ -561,24 +559,22 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
-					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageUserUnMask() ) ) {
+					case KMessageBox::Yes :
+						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageUserUnMask() ) )
 							pretend( lastEmergeList );
-						}
 						break;
-					}
+					
 				}
 			}
 			else {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg(package.section(rxPortageVersion, 0, 0)), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
-					case KMessageBox::Yes : {
-						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageKeywords() ) ) {
+					case KMessageBox::Yes :
+						if ( PortageSingleton::Instance()->unmaskPackage( package.section(rxPortageVersion, 0, 0), KurooConfig::filePackageKeywords() ) )
 							pretend( lastEmergeList );
-						}
 						break;
-					}
+					
 				}
 			}
 		}

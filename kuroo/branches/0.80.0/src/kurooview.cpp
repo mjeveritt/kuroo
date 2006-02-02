@@ -125,6 +125,8 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
+	kdDebug() << "KurooView::slotInit" << endl;
+	
 	// After db is recreated because of new version restore data
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		hasHistoryRestored = true;
@@ -135,10 +137,10 @@ void KurooView::slotInit()
 			      "Next, package information in Portage will be collected.</qt>"), 
 					i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
 				     
-			case KMessageBox::Continue: {
+			case KMessageBox::Continue:
 				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 				HistorySingleton::Instance()->slotRefresh();
-			}
+			
 		}
 	}
 	else {
@@ -158,6 +160,7 @@ void KurooView::slotInit()
 
 				default:
 					slotCheckPortage();
+					     
 			}
 		}
 	}
@@ -180,6 +183,8 @@ void KurooView::slotReset()
  */
 void KurooView::slotCheckPortage()
 {
+	kdDebug() << "KurooView::slotCheckPortage" << endl;
+	
 	// After db is recreated because of new version restore data
 	if ( hasHistoryRestored ) {
 		KurooDBSingleton::Instance()->restoreBackup();
@@ -187,7 +192,6 @@ void KurooView::slotCheckPortage()
 		hasHistoryRestored = false;
 	}
 	
-	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
 	if ( KurooDBSingleton::Instance()->packageTotal() == "0" )

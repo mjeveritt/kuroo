@@ -82,7 +82,7 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>&lt;h2&gt;Kuroo8_alfa&lt;/h2&gt;
+                    <string>&lt;h2&gt;Kuroo8_beta1&lt;/h2&gt;
 New features:&lt;br&gt;
 Faster portage scanning.&lt;br&gt;
 Smart package browsing and searching with filters.&lt;br&gt;

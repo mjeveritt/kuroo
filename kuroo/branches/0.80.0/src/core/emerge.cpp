@@ -276,25 +276,13 @@ bool Emerge::checkUpdates()
 void Emerge::readFromStdout( KProcIO *proc )
 {
 	QString line;
-	static QString lineOver( QString::null );
 	static bool lastLineFlag = false;
 	static bool completedFlag = false;
 	static QString importantMessagePackage;
-	bool unterm = false;
+	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+((\\S+)/(\\S+))\\s+(?:\\[(\\S*)\\])*\\s+([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
 	
-	while ( proc->readln( line, false, &unterm ) >= 0 ) {
+	while ( proc->readln( line, true /*false, &unterm*/ ) >= 0 ) {
 		int logDone = 0;
-
-		// Concatenate not completed lines
-		if ( !unterm ) {
-			if ( !line.contains( QRegExp("^>>>|^!!!") ) )
-				line = lineOver + line;
-			lineOver = QString::null;
-		}
-		else {
-			lineOver = line;
-			break;
-		}
 		
 		/////////////////////////////////
 		// Catch ewarn and einfo messages
@@ -308,9 +296,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 		line.replace( QRegExp("\\x0007"), "\n" );
 		int pos = 0;
 		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
-		while ( ( pos = rx.search(line) ) != -1 ) {
+		while ( ( pos = rx.search(line) ) != -1 )
 			line.replace( pos, rx.matchedLength(), "" );
-		}
 		
 		if ( line.isEmpty() )
 			continue;
@@ -318,40 +305,22 @@ void Emerge::readFromStdout( KProcIO *proc )
 		//////////////////////////////////////////////////////
 		// Parse out packages and info
 		//////////////////////////////////////////////////////
-		if ( line.contains( QRegExp("^\\[ebuild") ) ) {
-			
+		
+		if ( rxPackage.search( line ) > -1 ) {
 			EmergePackage emergePackage;
-			QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
+			emergePackage.updateFlags = rxPackage.cap(1);
+			emergePackage.package = rxPackage.cap(2);
+			emergePackage.category = rxPackage.cap(3);
+			emergePackage.installedVersion = rxPackage.cap(4);
+			emergePackage.useFlags = rxPackage.cap(6).simplifyWhiteSpace();
+			emergePackage.size = rxPackage.cap(7);
+				
+			kdDebug() << "emergePackage.category=" << emergePackage.category << endl;
+			kdDebug() << "emergePackage.package=" << emergePackage.package << endl;
 			
-			// @fixme: check this!
-			if ( rxPackage.search( line ) > -1 ) {
-				QString parsedPackage = rxPackage.cap(2);
-				emergePackage.package = parsedPackage;
-				emergePackage.category = parsedPackage.section( "/", 0, 0 );
-				emergePackage.name = ( parsedPackage.section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
-				emergePackage.version = parsedPackage.section( ( emergePackage.name + "-" ), 1, 1 );
-				emergePackage.updateFlags = line.left(14).section( QRegExp( "^\\[ebuild" ), 1, 1 );
-				
-				QString temp = line.section( emergePackage.package, 1, 1 );
-				
-				if ( temp.contains( " kB" ) )
-					emergePackage.size = temp.section( " kB", 0, 0 ).section( " ", -1 , -1 );
-				else
-					emergePackage.size = i18n( "na" );
-				
-				temp = temp.section( " kB", 0, 0 );
-				emergePackage.installedVersion = temp.section( "[", 1, 1 ).section( "]", 0, 0 );
-
-				// Parse out USE flags
-				const QStringList field = QStringList::split( " ", temp );
-				QStringList useList;
-				foreach ( field ) {
-					if ( ( *it ).startsWith( "+" ) || ( *it ).startsWith( "-" ) )
-						useList += *it;
-				}
-				emergePackage.useFlags = useList.join( " " );
-				emergePackageList.prepend( emergePackage );
-			}
+			emergePackage.name = ( (emergePackage.package).section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
+			emergePackage.version = (emergePackage.package).section( ( emergePackage.name + "-" ), 1, 1 );
+			emergePackageList.prepend( emergePackage );
 		}
 		
 		////////////////////////////////////////////////////////////////////////
@@ -365,9 +334,8 @@ void Emerge::readFromStdout( KProcIO *proc )
 				importantMessagePackage = "<b>" + line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + "</b>:<br>";
 			}
 			else
-				if ( lineLower.contains( QRegExp("^>>> regenerating") ) ) {
+				if ( lineLower.contains( QRegExp("^>>> regenerating") ) )
 					completedFlag = false;
-				}
 			
 			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
@@ -463,7 +431,6 @@ void Emerge::readFromStdout( KProcIO *proc )
 		
 		countEtcUpdates( lineLower );
 	}
-	proc->ackRead();
 }
 
 /**

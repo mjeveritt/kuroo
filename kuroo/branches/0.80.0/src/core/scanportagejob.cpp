@@ -130,7 +130,6 @@ bool ScanPortageJob::doJob()
 	                                    " homepage VARCHAR(32), "
 	                                    " date VARCHAR(32), "
 	                                    " meta INTEGER, "
-	                                    " path VARCHAR(64), "
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	
@@ -144,21 +143,22 @@ bool ScanPortageJob::doJob()
 	                                    " slot VARCHAR(32),"
 	                                    " size VARCHAR(32), "
 	                                    " meta INTEGER, "
+	                                    " path VARCHAR(64), "
 	                                    " branch VARCHAR(32)"
 	                                    " );", m_db);
 	
 	
 	// Gather all path = portage and overlays
-	QStringList pathList = KurooConfig::dirEdbDep() + KurooConfig::dirPortage();
+	QStringList pathList = KurooConfig::dirPortage();
 	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlayAll() );
 	foreach ( pathOverlays )
-		pathList += KurooConfig::dirEdbDep() + *it;
+		pathList += *it;
 	
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 	
-		if ( !dCategory.cd( *itPath ) ) {
-			kdDebug() << i18n("Can not access ") << *itPath  << endl;
+		if ( !dCategory.cd( KurooConfig::dirEdbDep() + *itPath ) ) {
+			kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() + *itPath  << endl;
 			continue;
 		}
 		
@@ -197,7 +197,7 @@ bool ScanPortageJob::doJob()
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
 			dPackage.setSorting( QDir::Name );
 			
-			if ( dPackage.cd( *itPath + "/" + *itCategory) ) {
+			if ( dPackage.cd( KurooConfig::dirEdbDep() + *itPath + "/" + *itCategory) ) {
 				
 				QStringList packageList = dPackage.entryList();
 				QString meta, lastPackage;
@@ -219,7 +219,7 @@ bool ScanPortageJob::doJob()
 						QString name = rxAtom.cap( POS_PACKAGE );
 						QString version = rxAtom.cap( POS_VERSION );
 						
-						Info info( scanInfo( *itPath, *itCategory, name, version ) );
+						Info info( scanInfo( KurooConfig::dirEdbDep() + *itPath, *itCategory, name, version ) );
 						
 						// Insert category and db id's in portage
 						if ( !categories.contains( *itCategory ) ) {
@@ -234,7 +234,6 @@ bool ScanPortageJob::doJob()
 							categories[ *itCategory ].packages[ name ].meta = FILTER_ALL_STRING;
 							categories[ *itCategory ].packages[ name ].description = info.description;
 							categories[ *itCategory ].packages[ name ].homepage = info.homepage;
-							categories[ *itCategory ].packages[ name ].path = *itPath;
 						}
 						
 						// Insert version in portage
@@ -245,6 +244,7 @@ bool ScanPortageJob::doJob()
 							categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
 							categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
 							categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
+							categories[ *itCategory ].packages[ name ].versions[ version ].path = *itPath;
 						}
 					
 					}
@@ -284,12 +284,11 @@ bool ScanPortageJob::doJob()
 			QString meta = itPackage.data().meta;
 			QString description = itPackage.data().description;
 			QString homepage = itPackage.data().homepage;
-			QString path = itPackage.data().path;
 			
-			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta, path) "
-			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8' " 
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta) "
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " 
 			                     )
-				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta ).arg( path );
+				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
 			
 			sql += QString( ");" );
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
@@ -304,11 +303,12 @@ bool ScanPortageJob::doJob()
 				QString slot = itVersion.data().slot;
 				QString size = itVersion.data().size;
 				QString keywords = itVersion.data().keywords;
+				QString path = itVersion.data().path;
 				
 				KurooDBSingleton::Instance()->insert( QString(
-					"INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot) "
-					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');" 
-					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ), m_db );
+					"INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot, path) "
+					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');" 
+					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ).arg( path ), m_db );
 				
 			}
 		}

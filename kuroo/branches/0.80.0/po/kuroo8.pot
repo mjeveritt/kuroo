@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-02 20:32+0100\n"
+"POT-Creation-Date: 2006-02-02 21:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgstr ""
 
 #: queue/queuetab.cpp:260 core/emerge.cpp:457 core/emerge.cpp:529
 #: core/cacheportagejob.cpp:187 core/scanportagejob.cpp:338
-#: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:155
+#: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:138 core/portagefiles.cpp:228
 #: core/portagefiles.cpp:318 core/portagefiles.cpp:408 history/history.cpp:292
 #: history/history.cpp:293 statusbar.cpp:93
@@ -407,11 +407,11 @@ msgstr ""
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:114
+#: core/scanupdatesjob.cpp:113
 msgid "Updates scan aborted"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:128
+#: core/scanupdatesjob.cpp:127
 msgid "Scan update packages: Can not find id in database for package %1/%2."
 msgstr ""
 

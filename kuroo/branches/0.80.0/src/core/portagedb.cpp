@@ -257,7 +257,6 @@ void KurooDB::createTables( DbConnection *conn )
 	      " homepage VARCHAR(32), "
 	      " date VARCHAR(32), "
 	      " meta INTEGER, "
-	      " path VARCHAR(64), "
 	      " updateVersion VARCHAR(32)); "
 	      " CREATE INDEX index_name_package ON package (name);"
 	      " CREATE INDEX index_description ON package (description);"
@@ -272,6 +271,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " slot VARCHAR(32),"
 	      " size VARCHAR(32), "
 	      " meta INTEGER, "
+	      " path VARCHAR(64), "
 	      " branch VARCHAR(32)"
 	      " );", conn);
 	
@@ -732,9 +732,9 @@ QStringList KurooDB::packageHardMaskInfo( const QString& id )
 	return query( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
-QString KurooDB::packagePath( const QString& id )
+QString KurooDB::packagePath( const QString& idPackage, const QString& version )
 {
-	return singleQuery( "SELECT path FROM package WHERE id = '" + id + "';" );
+	return singleQuery( "SELECT path FROM version WHERE idPackage = '" + idPackage + "' AND name = '" + version + "';" );
 }
 
 /**

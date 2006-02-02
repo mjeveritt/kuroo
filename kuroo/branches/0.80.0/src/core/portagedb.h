@@ -174,7 +174,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-	QString 		packagePath( const QString& id );
+	QString 		packagePath( const QString& idPackage, const QString& version );
 	QStringList 	packageVersionsInfo( const QString& id );
 	QString 		versionSize( const QString& idPackage, const QString& version );
 	QStringList		packageHardMaskInfo( const QString& id );

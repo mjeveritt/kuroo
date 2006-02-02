@@ -588,7 +588,7 @@ void PackageInspector::getChangeLog()
 void PackageInspector::slotGetEbuild( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {
@@ -613,7 +613,7 @@ void PackageInspector::slotGetEbuild( const QString& version )
 void PackageInspector::slotGetDependencies( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + category + "/" + package + "-" + version;
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + category + "/" + package + "-" + version;
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {

@@ -65,12 +65,12 @@ void ScanUpdatesJob::completeJob()
 bool ScanUpdatesJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Can not connect to database") << endl;
+		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
 		return false;
 	}
 	
 	if ( m_packageList.isEmpty() ) {
-		kdDebug() << i18n("No update package found") << endl;
+		kdDebug() << i18n("Scanning updates. No update package found") << endl;
 		return false;
 	}
 	
@@ -110,7 +110,7 @@ bool ScanUpdatesJob::doJob()
 
 		// Abort the scan
 		if ( isAborted() ) {
-			kdDebug() << i18n("Updates scan aborted") << endl;
+			kdDebug() << i18n("Scanning updates. Updates scan aborted") << endl;
 			KurooDBSingleton::Instance()->query("ROLLBACK TRANSACTION;", m_db);
 			return false;
 		}
@@ -124,7 +124,7 @@ bool ScanUpdatesJob::doJob()
 			" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 		
 		if ( id.isEmpty() )
-			kdDebug() << i18n("Scan update packages: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+			kdDebug() << i18n("Scanning updates. Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
 		else {
 			
 			// Mark as update in portage

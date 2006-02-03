@@ -30,7 +30,7 @@ class DependAtom;
 
 /**
  * @class PackageItem
- * @short KListViewItem subclass to implement sorting, tooltip, color...
+ * @short KListViewItem subclass
  */
 class PackageItem : public KListViewItem
 {
@@ -44,19 +44,9 @@ public:
 	QString							name();
 	QString							description();
 	
-	/**
- 	 * Is the listViewItem category, package or ebuild.
- 	 * Set icon and tooltip text.
- 	 * @param status
- 	 */
 	virtual void					setStatus( int status );
 	
 	virtual bool					isInstalled();
-	
-	/**
- 	 * Convenience method.
- 	 * @return true if package is in the queue.
- 	 */
 	virtual bool					isQueued();
 
 	QString 						category();

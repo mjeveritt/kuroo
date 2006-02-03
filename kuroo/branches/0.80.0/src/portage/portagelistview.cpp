@@ -92,11 +92,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 		setColumnAlignment( 4, Qt::AlignHCenter );
 		header()->moveSection( 4, 1 );
 	}
-	
-	// @fixme: How to check if bottom of listview is reached
-// 	connect( this, SIGNAL( verticalSliderPressed() ), this, SLOT( slotLastPackage() ) );
-	
-// 	connect( this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotNewItem( int, int ) ) );
 }
 
 PortageListView::~PortageListView()
@@ -131,8 +126,6 @@ void PortageListView::setHeader( const QString& total )
 int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
 // 	clock_t start = clock();
-	
-// 	kdDebug() << "PortageListView::addSubCategoryPackages packageList=" << packageList << endl;
 	
 	// Store package focus
 	QString currentId = this->currentId();

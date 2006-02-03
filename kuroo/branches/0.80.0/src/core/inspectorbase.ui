@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>497</width>
-            <height>405</height>
+            <width>556</width>
+            <height>450</height>
         </rect>
     </property>
     <property name="caption">
@@ -188,72 +188,6 @@ and do not update further</string>
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>groupAdvanced</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Advanced functionallity:</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>5</number>
-                            </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Only use this if you really know what you do. &lt;b&gt;We have told you!&lt;/b&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QGroupBox" row="1" column="0">
-                                <property name="name">
-                                    <cstring>groupArchitecture</cstring>
-                                </property>
-                                <property name="title">
-                                    <string>I know what I do and want to continue</string>
-                                </property>
-                                <property name="checkable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                                <grid>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>5</number>
-                                    </property>
-                                    <widget class="QCheckBox" row="0" column="0">
-                                        <property name="name">
-                                            <cstring>ckbAvailable</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Make this package available on your architecture though it is not activated
-in the official portage tree.</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+M</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel" row="1" column="0">
-                                        <property name="name">
-                                            <cstring>textLabel3</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&lt;b&gt;Please note: this may harm your machine!&lt;/b&gt;</string>
-                                        </property>
-                                    </widget>
-                                </grid>
-                            </widget>
-                        </grid>
-                    </widget>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
                             <cstring>groupVersionsView</cstring>
@@ -298,7 +232,7 @@ in the official portage tree.</string>
                                 <property name="minimumSize">
                                     <size>
                                         <width>150</width>
-                                        <height>80</height>
+                                        <height>200</height>
                                     </size>
                                 </property>
                                 <property name="maximumSize">
@@ -336,6 +270,48 @@ in the official portage tree.</string>
                             <widget class="KURLLabel" row="1" column="3">
                                 <property name="name">
                                     <cstring>infoHardMasked</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>groupArchitecture</cstring>
+                        </property>
+                        <property name="title">
+                            <string>I know what I do and want to continue</string>
+                        </property>
+                        <property name="checkable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>5</number>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>ckbAvailable</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Make this package available on your architecture though it is not activated
+in the official portage tree.</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+M</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;b&gt;Please note: this may harm your machine!&lt;/b&gt;</string>
                                 </property>
                             </widget>
                         </grid>

@@ -55,7 +55,7 @@ private slots:
 	void		slotClearFilter();
 	
 	void 		slotViewFile( QListViewItem* item );
-	void		cleanup( KProcess* eProc );
+	void		slotCleanupOpenDiff( KProcess* eProc );
 	
 signals:
 	void		signalMergeChanged();

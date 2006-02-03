@@ -74,11 +74,7 @@ public slots:
 	void				slotReset();
 
 private slots:
-	/**
-	 * Methods for checking kuroo integrity when starting and after a sync.
-	 * Chain of events for refreshing "Portage", "Installed".
-	 * slotCheckPortage -> slotCheckInstalled -> slotCheckUpdates
-	 */
+
 	void 				slotCheckPortage();
 	
 	/**

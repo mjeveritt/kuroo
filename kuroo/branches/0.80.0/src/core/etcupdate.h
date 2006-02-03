@@ -57,8 +57,8 @@ private slots:
 	/**
  	 * Collect output from etc-update and terminate it.
  	 */
-	void 				readFromStdout( KProcIO *proc );
-	void				cleanup( KProcess* );
+	void 				slotEtcUpdateOutput( KProcIO *proc );
+	void				slotCleanupEtcUpdate( KProcess* );
 	
 	/**
  	 * Parse etc-update output and launch diff tool.
@@ -70,7 +70,7 @@ private slots:
  	 * And go for next...
  	 * @param proc
   	*/
-	void				cleanupDiff( KProcess* );
+	void				slotCleanupEtcUpdateDiff( KProcess* );
 	
 	void				backup( const QString& source, const QString& destination );
 

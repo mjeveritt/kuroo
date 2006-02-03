@@ -39,43 +39,21 @@ class PortageTab : public PortageBase
 Q_OBJECT
 public:
 	PortageTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
-	
-	/**
-	* Save splitters and listview geometry.
-	*/
     ~PortageTab();
 	
 public slots:
 	
-	/**
-	* Populate view with portage packages.
-	* Then load the emerge history.
-	*/
 	void				slotReload();
-
-	/**
-	* Refresh installed packages list.
-	*/
 	void				slotRefresh();
-	
 	
 private slots:
 	void				slotBusy( bool b );
 	
 	void				slotInitButtons();
 	void				slotButtons( bool isQueued );
-	
-	/**
-	* Initialize Portage view.
-	* Restore geometry: splitter positions, listViews width and columns width.
-	*/
 	void 				slotInit();
 	
 	void				slotListSubCategories();
-	
-	/**
-	* List packages when clicking on category in installed.
-	*/
 	void				slotFilters();
 	void				slotActivateFilters();
 	void				slotListPackages();
@@ -93,9 +71,6 @@ private slots:
 	void				slotAdvanced();
 	void				slotClearFilter();
 	
-	/**
-	* View summary for selected package.
-	*/
 	void				slotPackage();
 	
 private:

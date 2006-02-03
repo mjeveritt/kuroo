@@ -32,19 +32,10 @@ class LogsTab : public LogsBase
 Q_OBJECT
 public:
     LogsTab( QWidget *parent = 0 );
-	
-	/**
-	 * Save splitters and listview geometry.
-	 */
     ~LogsTab();
 
 	
 private slots:
-	
-	/**
-	 * Initialize geometry and content.
-	 * Restore geometry: splitter positions, listViews width and columns width.
-	 */
 	void 		slotInit();
 	
 };

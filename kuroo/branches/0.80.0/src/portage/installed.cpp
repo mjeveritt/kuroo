@@ -182,7 +182,6 @@ void Installed::uninstallPackageList( const QStringList& packageIdList )
  */
 void Installed::addPackage( const QString& package )
 {
-	kdDebug() << "Installed::addPackage package=" << package << endl;
 	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
 }
 
@@ -193,7 +192,6 @@ void Installed::addPackage( const QString& package )
  */
 void Installed::removePackage( const QString& package )
 {
-	kdDebug() << "Installed::removePackage package=" << package << endl;
 	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
 }
 

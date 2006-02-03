@@ -56,7 +56,7 @@ private slots:
 	void							slotRefreshTabs();
 	void							slotAdvancedToggle( bool isOn );
 	
-	void							slotGetInstalledFiles( const QString& version );
+	void							slotLoadInstalledFiles( const QString& version );
 	void							slotApply();
 	void							slotCancel();
 	void							slotOk();
@@ -68,14 +68,14 @@ private slots:
 	void							slotSetUseFlags( QListViewItem* useItem );
 	
 	void							loadUseFlagDescription();
-	void							slotGetEbuild( const QString& version );
-	void							getChangeLog();
-	void							slotGetDependencies( const QString& version );
-	void							slotGetUseFlags( const QString& version );
+	void							slotLoadEbuild( const QString& version );
+	void							loadChangeLog();
+	void							slotLoadDependencies( const QString& version );
+	void							slotLoadUseFlags( const QString& version );
 	
 	void							slotCalculateUse();
-	void							readFromStdout( KProcIO* eProc );
-	void							cleanup( KProcess* eProc );
+	void							slotEmergePretend( KProcIO* eProc );
+	void							slotParsePackageUse( KProcess* eProc );
 	
 private:
 	bool							hasVersionSettingsChanged, hasUseSettingsChanged, isVirginState, isAvailableBefore;

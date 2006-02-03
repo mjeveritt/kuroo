@@ -670,5 +670,4 @@ void PackageVersion::setUnMasked( bool isUnMasked )
 {
 	m_isHardMasked = !isUnMasked;
 	m_isUnMasked = isUnMasked;
-// 	kdDebug() << "PackageVersion::setUnMasked m_isHardMasked=" << m_isHardMasked << endl;
 }

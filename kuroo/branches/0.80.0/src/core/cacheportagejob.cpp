@@ -31,7 +31,7 @@
  * @class CachePortageJob
  * @short Thread to cache package information from the Portage directory to speed up portage refreshing.
  * In order to get progress in gui progressbar, packages are counted first.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for package sizes, and stored in portage cache map,
+ * Next portage cache is scanned for package sizes, and stored in portage cache map,
  * and in the table "cache" in the database.
  */
 CachePortageJob::CachePortageJob( QObject* parent )
@@ -58,7 +58,6 @@ void CachePortageJob::completeJob()
  */
 int CachePortageJob::countPackages()
 {
-	kdDebug() << "CachePortageJob::countPackages" << endl;
 	QDir dCategory;
 	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
 	dCategory.setSorting(QDir::Name);
@@ -68,7 +67,7 @@ int CachePortageJob::countPackages()
 	dPackage.setSorting(QDir::Name);
 	
 	if ( !dCategory.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() ) ) {
-		kdDebug() << i18n("Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
+		kdDebug() << i18n("Creating cache. Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
 		return 0;
 	}
 	
@@ -90,9 +89,8 @@ int CachePortageJob::countPackages()
  */
 bool CachePortageJob::doJob()
 {
-	kdDebug() << "CachePortageJob::doJob" << endl;
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Can not connect to database") << endl;
+		kdDebug() << i18n("Creating cache. Can not connect to database") << endl;
 		return false;
 	}
 	
@@ -114,7 +112,7 @@ bool CachePortageJob::doJob()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
-			kdDebug() << i18n("Can not access ") << *itPath << endl;
+			kdDebug() << i18n("Creating cache. Can not access ") << *itPath << endl;
 			continue;
 		}
 		
@@ -127,7 +125,7 @@ bool CachePortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdDebug() << i18n("Caching aborted.") << endl;
+				kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -145,7 +143,7 @@ bool CachePortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdDebug() << i18n("Caching aborted.") << endl;
+						kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}
@@ -162,7 +160,7 @@ bool CachePortageJob::doJob()
 						file.close();
 					}
 					else
-						kdDebug() << i18n("Creating cache, error reading: ") << path << endl;
+						kdDebug() << i18n("Creating cache. Error reading: ") << path << endl;
 					
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
@@ -170,7 +168,7 @@ bool CachePortageJob::doJob()
 				}
 			}
 			else
-				kdDebug() << i18n("Can not access ") << *itPath << "/" << *itCategory << endl;
+				kdDebug() << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << endl;
 		}
 	}
 	PortageSingleton::Instance()->setCache( mapCache );

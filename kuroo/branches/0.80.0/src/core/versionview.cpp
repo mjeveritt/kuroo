@@ -46,6 +46,9 @@ VersionView::VersionItem::VersionItem( QListView* parent, const char* version, b
 {
 }
 
+/**
+ * Paint the installed version in dark green.
+ */
 void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
 {
 	QColorGroup m_cg( cg );
@@ -95,6 +98,10 @@ void VersionView::insertItem( const char* version, const char* stability, const 
 	item->setText( 3, size );
 }
 
+/**
+ * Mark the installation version with icon.
+ * @param version
+ */
 void VersionView::usedForInstallation( const QString& version )
 {
 	QListViewItem* myChild = firstChild();

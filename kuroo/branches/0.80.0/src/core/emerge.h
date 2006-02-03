@@ -98,18 +98,18 @@ private slots:
  	 * Parse emerge process output for messages and packages.
  	 * @param proc	
  	 */
-	void 				readFromStdout( KProcIO *proc );
+	void 				slotEmergeOutput( KProcIO *proc );
 	
 	/**
  	 * Post emerge actions.
 	 * Notice user of messages, inform gui that emerge is completed...
  	 */
 	void				cleanup();
-	void 				cleanupQueue( KProcess *proc );
-	void 				cleanupPretend( KProcess *proc );
-	void 				cleanupUnmerge( KProcess *proc );
-	void 				cleanupSync( KProcess *proc );
-	void 				cleanupCheckUpdates( KProcess *proc );
+	void 				slotCleanupQueue( KProcess *proc );
+	void 				slotCleanupPretend( KProcess *proc );
+	void 				slotCleanupUnmerge( KProcess *proc );
+	void 				slotCleanupSync( KProcess *proc );
+	void 				slotCleanupCheckUpdates( KProcess *proc );
 	
 	/**
  	 * count etc-files to merge.

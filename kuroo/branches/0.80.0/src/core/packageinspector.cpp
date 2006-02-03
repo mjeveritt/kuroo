@@ -45,11 +45,11 @@
 
 /**
  * @class PackageInspector
- * @short The package Inspector dialog for editing settings.
+ * @short The package Inspector dialog for all advanced settings.
  */
 PackageInspector::PackageInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( QString::null ), package( QString::null ), m_portagePackage( 0 ), 
-	hasVersionSettingsChanged( false ), hasUseSettingsChanged( false ), 
+	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package Inspector" ), false, i18n( "Package Inspector" ), KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( QString::null ), package( QString::null ), m_portagePackage( 0 ),
+	hasVersionSettingsChanged( false ), hasUseSettingsChanged( false ),
 	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
 	hardMaskComment( QString::null )
 {
@@ -58,7 +58,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 	setMainWidget( dialog );
 	adjustSize();
 	
-	// Get use flag description
+	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
 	
 	// Shortcuts for browsing packages
@@ -66,10 +66,10 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->pbNext, SIGNAL( clicked() ), this, SLOT( slotNextPackage() ) );
 	
 	// Refresh files when changing version
-	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotGetEbuild( const QString& ) ) );
-	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetDependencies( const QString& ) ) );
-	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetInstalledFiles( const QString& ) ) );
-	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotGetUseFlags( const QString& ) ) );
+	connect( dialog->cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotLoadEbuild( const QString& ) ) );
+	connect( dialog->cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotLoadDependencies( const QString& ) ) );
+	connect( dialog->cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotLoadInstalledFiles( const QString& ) ) );
+	connect( dialog->cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotLoadUseFlags( const QString& ) ) );
 	
 	// Load files only if tabpage is open
 	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotRefreshTabs() ) );
@@ -194,7 +194,6 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
 		dialog->groupSelectStability->setDisabled( true );
-		dialog->groupAdvanced->setDisabled( true );
 		dialog->useView->setDisabled( true );
 	}
 	
@@ -477,11 +476,11 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
  */
 void PackageInspector::slotRefreshTabs()
 {
-	slotGetUseFlags( dialog->cbVersionsUse->currentText() );
-	slotGetEbuild( dialog->cbVersionsEbuild->currentText() );
-	slotGetDependencies( dialog->cbVersionsDependencies->currentText() );
-	slotGetInstalledFiles( dialog->cbVersionsInstalled->currentText() );
-	getChangeLog();
+	slotLoadUseFlags( dialog->cbVersionsUse->currentText() );
+	slotLoadEbuild( dialog->cbVersionsEbuild->currentText() );
+	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
+	slotLoadInstalledFiles( dialog->cbVersionsInstalled->currentText() );
+	loadChangeLog();
 }
 
 /**
@@ -514,7 +513,7 @@ void PackageInspector::loadUseFlagDescription()
  * View use flags for selected version.
  * @param version
  */
-void PackageInspector::slotGetUseFlags( const QString& version )
+void PackageInspector::slotLoadUseFlags( const QString& version )
 {
 	dialog->useView->setDisabled( true );
 	
@@ -562,16 +561,11 @@ void PackageInspector::slotGetUseFlags( const QString& version )
 /**
  * Get this package changelog.
  */
-void PackageInspector::getChangeLog()
+void PackageInspector::loadChangeLog()
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
-		QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package + "/ChangeLog";
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, dialog->cbVersionsEbuild->currentText() ) + "/" + category + "/" + package + "/ChangeLog";
 		QFile file( fileName );
-		
-		if ( !file.exists() ) {
-			fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package + "/ChangeLog";
-			file.setName( fileName );
-		}
 		
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
@@ -583,7 +577,7 @@ void PackageInspector::getChangeLog()
 		}
 		else {
 			kdDebug() << i18n("Error reading: ") << fileName << endl;
-			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>ChangeLog not found.</b></font>") );
+			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>No ChangeLog found.</b></font>") );
 		}
 	}
 }
@@ -592,7 +586,7 @@ void PackageInspector::getChangeLog()
  * Get ebuild for selected version.
  * @param version
  */
-void PackageInspector::slotGetEbuild( const QString& version )
+void PackageInspector::slotLoadEbuild( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
 		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
@@ -608,7 +602,7 @@ void PackageInspector::slotGetEbuild( const QString& version )
 		}
 		else {
 			kdDebug() << i18n("Error reading: ") << fileName << endl;
-			dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>Ebuild not found.</b></font>") );
+			dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>No ebuild found.</b></font>") );
 		}
 	}
 }
@@ -617,7 +611,7 @@ void PackageInspector::slotGetEbuild( const QString& version )
  * Get dependencies for selected version.
  * @param version
  */
-void PackageInspector::slotGetDependencies( const QString& version )
+void PackageInspector::slotLoadDependencies( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id, version ) + "/" + category + "/" + package + "-" + version;
@@ -642,7 +636,7 @@ void PackageInspector::slotGetDependencies( const QString& version )
 		}
 		else {
 			kdDebug() << i18n("Error reading: ") << fileName << endl;
-			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>Dependencies not found.</b></font>") );
+			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>No dependencies found.</b></font>") );
 		}
 	}
 }
@@ -651,7 +645,7 @@ void PackageInspector::slotGetDependencies( const QString& version )
  * Get list of installed files for selected version.
  * @param version
  */
-void PackageInspector::slotGetInstalledFiles( const QString& version )
+void PackageInspector::slotLoadInstalledFiles( const QString& version )
 {
 	if ( !version.isEmpty() && dialog->inspectorTabs->currentPageIndex() == 5 ) {
 		QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "-" + version + "/CONTENTS";
@@ -685,22 +679,28 @@ void PackageInspector::slotCalculateUse()
 	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << category + "/" + package;
 	
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );
-	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( readFromStdout( KProcIO* ) ) );
+	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEmergePretend( KProcIO* ) ) );
 	eProc->start( KProcess::NotifyOnExit, true );
 	SignalistSingleton::Instance()->setKurooBusy( true );
 }
 
-void PackageInspector::readFromStdout( KProcIO* eProc )
+/**
+ * Collect emerge pretend output in pretendUseLines.
+ * @param eProc
+ */
+void PackageInspector::slotEmergePretend( KProcIO* eProc )
 {
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 )
 		pretendUseLines += line;
 }
 
-void PackageInspector::cleanup( KProcess* eProc )
+/**
+ * Parse emerge pretend output for all use flags.
+ * @param eProc
+ */
+void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
-	kdDebug() << "PackageInspector::cleanup pretendUseLines=" << pretendUseLines << endl;
-	
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
 	eProc = 0;
@@ -715,9 +715,7 @@ void PackageInspector::cleanup( KProcess* eProc )
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}
-	
-	kdDebug() << "PackageInspector::cleanup pretendUseList=" << pretendUseList << endl;
-	
+
 	// Get user set package use flags
 	dialog->useView->setDisabled( false );
 	dialog->useView->clear();

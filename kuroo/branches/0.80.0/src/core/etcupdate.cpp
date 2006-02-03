@@ -80,8 +80,8 @@ bool EtcUpdate::etcUpdate()
 			return false;
 		}
 		else {
-			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( readFromStdout( KProcIO* ) ) );
-			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );
+			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
+			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
 			LogSingleton::Instance()->writeLog( i18n( "\nRunning etc-update..." ), KUROO );
 			SignalistSingleton::Instance()->setKurooBusy( true );
 			return true;
@@ -93,7 +93,7 @@ bool EtcUpdate::etcUpdate()
  * Collect output from etc-update and terminate it.
  * @param process
  */
-void  EtcUpdate::readFromStdout( KProcIO* proc )
+void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
 {
 	QString line;
 	
@@ -112,10 +112,10 @@ void  EtcUpdate::readFromStdout( KProcIO* proc )
  * Terminate.
  * @param process
  */
-void EtcUpdate::cleanup( KProcess* )
+void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 {
-	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( readFromStdout( KProcIO* ) ) );
-	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( cleanup( KProcess* ) ) );
+	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
+	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
 	runDiff();
 }
 
@@ -166,7 +166,7 @@ void EtcUpdate::runDiff()
 				eProc->start( KProcess::NotifyOnExit, true );
 				
 				diffSource = source;
-				connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanupDiff( KProcess* ) ) );
+				connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
 				
 				if ( !eProc->isRunning() ) {
 					LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
@@ -199,9 +199,9 @@ void EtcUpdate::runDiff()
  * And go for next...
  * @param proc
  */
-void EtcUpdate::cleanupDiff( KProcess* proc )
+void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
 {
-	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanupDiff( KProcess* ) ) );
+	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
 	KIO::file_delete( diffSource );
 	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( diffSource ).arg( KUROODIR + "backup" ), KUROO );
 	diffSource = QString::null;

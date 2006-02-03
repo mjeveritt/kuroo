@@ -108,13 +108,13 @@ bool Emerge::queue( const QStringList& packageList )
 	}
 	
 	eProc->start( KProcess::OwnGroup, true );
-	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupQueue(KProcess*) ) );
+	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	
 	if ( !eProc->isRunning() ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
-		cleanupQueue( eProc );
+		slotCleanupQueue( eProc );
 		return false;
 	}
 	else {
@@ -152,8 +152,8 @@ bool Emerge::pretend( const QStringList& packageList )
 		return false;
 	}
 	else {
-		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupPretend(KProcess*) ) );
+		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupPretend(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge pretend %1 started...").arg( packageList.join(" ") ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking installation queue...") );
@@ -189,8 +189,8 @@ bool Emerge::unmerge( const QStringList& packageList )
 		return false;
 	}
 	else {
-		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupUnmerge(KProcess*) ) );
+		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupUnmerge(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( sPack ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
@@ -219,8 +219,8 @@ bool Emerge::sync()
 		return false;
 	}
 	else {
-		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupSync(KProcess*) ) );
+		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupSync(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
@@ -259,8 +259,8 @@ bool Emerge::checkUpdates()
 		return false;
 	}
 	else {
-		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupCheckUpdates(KProcess*) ) );
+		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
@@ -273,7 +273,7 @@ bool Emerge::checkUpdates()
  * Parse emerge process output for messages and packages.
  * @param proc	
  */
-void Emerge::readFromStdout( KProcIO *proc )
+void Emerge::slotEmergeOutput( KProcIO *proc )
 {
 	QString line;
 	static bool lastLineFlag = false;
@@ -477,10 +477,10 @@ void Emerge::cleanup()
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
-void Emerge::cleanupQueue( KProcess* proc )
+void Emerge::slotCleanupQueue( KProcess* proc )
 {
-	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupQueue(KProcess*) ) );
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
 	cleanup();
 	HistorySingleton::Instance()->updateStatistics();
 }
@@ -489,10 +489,10 @@ void Emerge::cleanupQueue( KProcess* proc )
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
-void Emerge::cleanupPretend( KProcess* proc )
+void Emerge::slotCleanupPretend( KProcess* proc )
 {
-	disconnect( proc, SIGNAL(readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	disconnect( proc, SIGNAL(processExited(KProcess*) ), this, SLOT( cleanupPretend(KProcess*) ) );
+	disconnect( proc, SIGNAL(readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	disconnect( proc, SIGNAL(processExited(KProcess*) ), this, SLOT( slotCleanupPretend(KProcess*) ) );
 	cleanup();
 }
 
@@ -500,10 +500,10 @@ void Emerge::cleanupPretend( KProcess* proc )
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
-void Emerge::cleanupUnmerge( KProcess* proc )
+void Emerge::slotCleanupUnmerge( KProcess* proc )
 {
-	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupUnmerge(KProcess*) ) );
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupUnmerge(KProcess*) ) );
 	cleanup();
 }
 
@@ -511,10 +511,10 @@ void Emerge::cleanupUnmerge( KProcess* proc )
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
-void Emerge::cleanupSync( KProcess* proc )
+void Emerge::slotCleanupSync( KProcess* proc )
 {
-	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupSync(KProcess*) ) );
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupSync(KProcess*) ) );
 	cleanup();
 }
 
@@ -522,10 +522,10 @@ void Emerge::cleanupSync( KProcess* proc )
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
-void Emerge::cleanupCheckUpdates( KProcess* proc )
+void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 {
-	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( readFromStdout(KProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( cleanupCheckUpdates(KProcess*) ) );
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 	
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );

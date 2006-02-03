@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-02 21:05+0100\n"
+"POT-Creation-Date: 2006-02-03 08:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,8 +42,8 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:278 queue/queuelistview.cpp:283
-#: queue/queuelistview.cpp:288
+#: queue/queuelistview.cpp:293 queue/queuelistview.cpp:298
+#: queue/queuelistview.cpp:303
 msgid "na"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:260 core/emerge.cpp:457 core/emerge.cpp:529
+#: queue/queuetab.cpp:260 core/emerge.cpp:459 core/emerge.cpp:531
 #: core/cacheportagejob.cpp:187 core/scanportagejob.cpp:338
 #: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:138 core/portagefiles.cpp:228
@@ -108,27 +108,27 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:356 portage/portagetab.cpp:339
+#: queue/queuetab.cpp:360 portage/portagetab.cpp:339
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:359 portage/portagetab.cpp:342
+#: queue/queuetab.cpp:363 portage/portagetab.cpp:342
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:362 portage/portagetab.cpp:345
+#: queue/queuetab.cpp:366 portage/portagetab.cpp:345
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:365 portage/portagetab.cpp:348
+#: queue/queuetab.cpp:369 portage/portagetab.cpp:348
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:367 portage/portagetab.cpp:350
+#: queue/queuetab.cpp:371 portage/portagetab.cpp:350
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:409
+#: queue/queuetab.cpp:413
 msgid "Emerge pretend"
 msgstr ""
 
@@ -206,58 +206,58 @@ msgstr ""
 msgid "There is no ebuilds to satisfy %1"
 msgstr ""
 
-#: core/emerge.cpp:462 core/emerge.cpp:533
+#: core/emerge.cpp:464 core/emerge.cpp:535
 msgid "Blocks"
 msgstr ""
 
-#: core/emerge.cpp:462 core/emerge.cpp:533
+#: core/emerge.cpp:464 core/emerge.cpp:535
 msgid "Packages are blocking emerge, please correct!"
 msgstr ""
 
-#: core/emerge.cpp:468 core/emerge.cpp:536
+#: core/emerge.cpp:470 core/emerge.cpp:538
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:468 core/emerge.cpp:536
+#: core/emerge.cpp:470 core/emerge.cpp:538
 msgid "Please check log for more information!"
 msgstr ""
 
-#: core/emerge.cpp:549
+#: core/emerge.cpp:551
 msgid ""
 "<br><b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet. Ask the architecture porting team to test the package "
 "or test it for them and report your findings on Gentoo bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:550 core/emerge.cpp:555
+#: core/emerge.cpp:552 core/emerge.cpp:557
 msgid "<b>%1</b> is not available on your architecture %2!"
 msgstr ""
 
-#: core/emerge.cpp:554
+#: core/emerge.cpp:556
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture. If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:559
+#: core/emerge.cpp:561
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:561
+#: core/emerge.cpp:563
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:561 core/emerge.cpp:572
+#: core/emerge.cpp:563 core/emerge.cpp:574
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:570
+#: core/emerge.cpp:572
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:572
+#: core/emerge.cpp:574
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
@@ -384,9 +384,9 @@ msgid "Scanning installed packages: can not match %1."
 msgstr ""
 
 #: core/scanportagejob.cpp:427 core/scanportagejob.cpp:504
-#: core/packageinspector.cpp:503 core/packageinspector.cpp:578
-#: core/packageinspector.cpp:603 core/packageinspector.cpp:637
-#: core/packageinspector.cpp:664 portage/portage.cpp:205
+#: core/packageinspector.cpp:510 core/packageinspector.cpp:585
+#: core/packageinspector.cpp:610 core/packageinspector.cpp:644
+#: core/packageinspector.cpp:671 portage/portage.cpp:205
 #: portage/portage.cpp:275 portage/portage.cpp:307
 msgid "Error reading: "
 msgstr ""
@@ -557,19 +557,19 @@ msgstr ""
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:579
-msgid "<font color=darkGrey><b>ChangeLog not found.</b></font>"
+#: core/packageinspector.cpp:586
+msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:604
-msgid "<font color=darkGrey><b>Ebuild not found.</b></font>"
+#: core/packageinspector.cpp:611
+msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:638
-msgid "<font color=darkGrey><b>Dependencies not found.</b></font>"
+#: core/packageinspector.cpp:645
+msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:667
+#: core/packageinspector.cpp:674
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr ""
 
@@ -1096,10 +1096,10 @@ msgid "Portage version code"
 msgstr ""
 
 #: main.cpp:48 main.cpp:49
-msgid "Usability"
+msgid "OpenUsability"
 msgstr ""
 
-#: main.cpp:57
+#: main.cpp:58
 msgid "Kuroo8 is already running!"
 msgstr ""
 
@@ -1167,37 +1167,37 @@ msgstr ""
 
 #: rc.cpp:6
 #, no-c-format
+msgid "<font size=\"+1\">Packages in Installation Queue</font>"
+msgstr ""
+
+#: rc.cpp:9
+#, no-c-format
 msgid "Remove &All"
 msgstr ""
 
-#: rc.cpp:9 rc.cpp:135 rc.cpp:269 rc.cpp:401
+#: rc.cpp:12 rc.cpp:135 rc.cpp:268 rc.cpp:401
 #, no-c-format
 msgid "Alt+A"
 msgstr ""
 
-#: rc.cpp:12 rc.cpp:19
+#: rc.cpp:15 rc.cpp:22
 #, no-c-format
 msgid "Abort running emerge process"
 msgstr ""
 
-#: rc.cpp:22 rc.cpp:247
+#: rc.cpp:25 rc.cpp:247
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: rc.cpp:26
+#: rc.cpp:29
 #, no-c-format
 msgid "Remove package from Q&ueue after installation"
 msgstr ""
 
-#: rc.cpp:29 rc.cpp:210 rc.cpp:275
+#: rc.cpp:32 rc.cpp:210 rc.cpp:274
 #, no-c-format
 msgid "Alt+U"
-msgstr ""
-
-#: rc.cpp:32
-#, no-c-format
-msgid "<font size=\"+1\">Packages in Installation Queue</font>"
 msgstr ""
 
 #: rc.cpp:35
@@ -1220,7 +1220,7 @@ msgstr ""
 msgid "Force reinstall of config files (--&noconfmem)"
 msgstr ""
 
-#: rc.cpp:47 rc.cpp:78 rc.cpp:281 rc.cpp:407
+#: rc.cpp:47 rc.cpp:78 rc.cpp:280 rc.cpp:407
 #, no-c-format
 msgid "Alt+N"
 msgstr ""
@@ -1448,7 +1448,7 @@ msgstr ""
 #, no-c-format
 msgid ""
 "<font size=\"+1\">Installation History</font><br>\n"
-"<i>Click on package with einfo to view all information</i>"
+"<i>Click on package with info to view all information</i>"
 msgstr ""
 
 #: rc.cpp:233
@@ -1460,7 +1460,7 @@ msgstr ""
 #, no-c-format
 msgid ""
 "<font size=\"+1\">Etc-update History</font><br>\n"
-"<i>Click on name to view diff</i>"
+"<i>Click on configuration file to view changes in diff frontend</i>"
 msgstr ""
 
 #: rc.cpp:244
@@ -1483,22 +1483,22 @@ msgstr ""
 msgid "Uninstall"
 msgstr ""
 
-#: rc.cpp:262
+#: rc.cpp:261
 #, no-c-format
-msgid "<font size=\"+1\">Show:</font>"
+msgid "<font size=\"+1\">Packages in Portage</font>"
 msgstr ""
 
-#: rc.cpp:266
+#: rc.cpp:265
 #, no-c-format
 msgid "&All Packages"
 msgstr ""
 
-#: rc.cpp:272
+#: rc.cpp:271
 #, no-c-format
 msgid "&Updates"
 msgstr ""
 
-#: rc.cpp:278
+#: rc.cpp:277
 #, no-c-format
 msgid "I&nstalled Packages"
 msgstr ""

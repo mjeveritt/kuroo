@@ -314,8 +314,6 @@ void QueueTab::slotButtons()
  */
 void QueueTab::slotAdvanced()
 {
-	kdDebug() << "QueueTab::slotAdvanced" << endl;
-	
 	if ( queueView->currentPackage() ) {
 		slotPackage();
 		m_packageInspector->edit( queueView->currentPackage() );
@@ -324,8 +322,6 @@ void QueueTab::slotAdvanced()
 
 void QueueTab::slotPackage()
 {
-	kdDebug() << "QueueTab::slotPackage" << endl;
-	
 	if ( !isVisible() )
 		return;
 	
@@ -336,7 +332,6 @@ void QueueTab::slotPackage()
 	m_packageInspector->dialog->cbVersionsInstalled->clear();
 	m_packageInspector->dialog->cbVersionsUse->clear();
 	m_packageInspector->dialog->cbVersionsSpecific->clear();
-	m_packageInspector->dialog->groupAdvanced->setDisabled( true );
 	
 	// Initialize the portage package object with package and it's versions data
 	queueView->currentPackage()->initVersions();
@@ -367,10 +362,8 @@ void QueueTab::slotPackage()
 				else
 					if ( (*sortedVersionIterator)->isNotArch() )
 						stability = i18n("Not on %1").arg( KurooConfig::arch() );
-					else {
+					else
 						stability = i18n("Not available");
-						m_packageInspector->dialog->groupAdvanced->setDisabled( false );
-					}
 		
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );

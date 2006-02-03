@@ -87,12 +87,12 @@ void MergeTab::slotViewFile( QListViewItem *item )
 
 		KProcIO* eProc = new KProcIO();
 		*eProc << KurooConfig::etcUpdateTool() << source << destination;
-		connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );
+		connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupOpenDiff( KProcess* ) ) );
 		eProc->start( KProcess::NotifyOnExit, true );
 	}
 }
 
-void MergeTab::cleanup( KProcess* eProc )
+void MergeTab::slotCleanupOpenDiff( KProcess* eProc )
 {
 	delete eProc;
 	eProc = 0;

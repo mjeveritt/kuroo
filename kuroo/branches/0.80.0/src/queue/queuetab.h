@@ -36,36 +36,19 @@ class QueueTab : public QueueBase
 Q_OBJECT
 public:
 	QueueTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
-	
-	/**
-	 * Save listview geometry.
-	 */
     ~QueueTab();
 
 public slots:
 	
-	/**
-	 * Load Queue packages.
-	 */
 	void				slotReload( bool hasCheckedQueue );
 	void				slotQueueSummary();
 	
 private slots:
 	
-	/**
-	 * Initialize Queue view.
-	 */
 	void				slotInit();
 	
-	/**
-	 * Disable/enable buttons when kuroo is busy.
-	 * @param b
-	 */
 	void				slotBusy( bool busy );
 	
-	/**
-	 * Slots for button actions.
-	 */
 	void				slotGo();
 	void				slotPretend();
 	void				slotStop();

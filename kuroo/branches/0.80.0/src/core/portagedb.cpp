@@ -377,7 +377,7 @@ void KurooDB::backupDb()
 		file.close();
 	}
 	else
-		kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
 	
 	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory; " );
 	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
@@ -392,7 +392,7 @@ void KurooDB::backupDb()
 		file.close();
 	}
 	else
-		kdDebug() << i18n("Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
 }
 
 /**
@@ -405,7 +405,7 @@ void KurooDB::restoreBackup()
 	QTextStream stream( &file );
 	QStringList lines;
 	if ( !file.open( IO_ReadOnly ) )
-		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+		kdDebug() << i18n("Restoring backup of history. Error reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -423,7 +423,7 @@ void KurooDB::restoreBackup()
 	stream.setDevice( &file );
 	lines.clear();
 	if ( !file.open( IO_ReadOnly ) )
-		kdDebug() << i18n("Error reading: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+		kdDebug() << i18n("Restoring backup of history. Error reading: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -705,7 +705,7 @@ QString KurooDB::packageId( const QString& package )
 	if ( !id.isEmpty() )
 		return id;
 	else
-		kdDebug() << i18n("packageId: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+		kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 	
 	return QString::null;
 }
@@ -721,17 +721,31 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
 	              " ORDER BY version.name;");
 }
 
+/**
+ * Return the size of this package version.
+ * @param idPackage
+ * @param version
+ */
 QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
 	return singleQuery( " SELECT size FROM version WHERE idPackage = '" + idPackage + "'"
-	              " AND name = '" + version + "' ;");
+	                    " AND name = '" + version + "' ;");
 }
 
+/**
+ * Return hardmask dependAtom and the gentoo dev comment.
+ * @param id
+ */
 QStringList KurooDB::packageHardMaskInfo( const QString& id )
 {
 	return query( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
+/**
+ * Return path, eg where to find the package: in Portage or in any overlay.
+ * @param idPackage
+ * @param version
+ */
 QString KurooDB::packagePath( const QString& idPackage, const QString& version )
 {
 	return singleQuery( "SELECT path FROM version WHERE idPackage = '" + idPackage + "' AND name = '" + version + "';" );
@@ -933,6 +947,9 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 // 
 //////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Clear the use field for package in the Queue.
+ */
 void KurooDB::clearQueuePackageUse()
 {
 	query( "UPDATE queue SET use = '';" );
@@ -1024,6 +1041,9 @@ void KurooDB::resetUpdates()
 	query( "DELETE FROM updates;" );
 }
 
+/**
+ * Clear all installed.
+ */
 void KurooDB::resetInstalled()
 {
 	query( "UPDATE package set installed = '" + FILTER_ALL_STRING + "';" );

@@ -297,10 +297,14 @@ void QueueTab::slotButtons()
 		return;
 	}
 	
-	if ( !EmergeSingleton::Instance()->isRunning() )
+	if ( !EmergeSingleton::Instance()->isRunning() ) {
 		pbRemove->setDisabled( false );
-	else
+		pbAdvanced->setDisabled( false );
+	}
+	else {
 		pbRemove->setDisabled( true );
+		pbAdvanced->setDisabled( true );
+	}
 	
 	pbAdvanced->setDisabled( false );
 }

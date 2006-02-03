@@ -261,7 +261,7 @@ void PortageTab::slotButtons( bool isQueued )
  */
 void PortageTab::slotAdvanced()
 {
-	kdDebug() << "PortageTab::slotAdvanced" << endl;
+// 	kdDebug() << "PortageTab::slotAdvanced" << endl;
 	
 	if ( packagesView->currentPackage() ) {
 		slotPackage();
@@ -274,7 +274,7 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << "PortageTab::slotPackage" << endl;
+// 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
 	if ( !isVisible() )
 		return;

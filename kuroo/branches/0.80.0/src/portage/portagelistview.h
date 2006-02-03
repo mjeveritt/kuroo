@@ -53,10 +53,7 @@ public slots:
 	int 							addSubCategoryPackages( const QStringList& packageList );
 	
 private slots:
-	
-// 	void			slotLastPackage();
-// 	void			slotNewItem( int x, int y );
-	
+
 private:
 	QStringList						unmaskedList;
 };

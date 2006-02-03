@@ -231,6 +231,21 @@ void QueueListView::slotPackageDown()
 		packageItem->moveItem( packageItem->itemBelow() );
 }
 
+/** 
+ * All packages in listview by name - no children
+ * @return packageList
+ */
+QStringList QueueListView::allPackagesNoChildren()
+{
+	QStringList packageList;
+	QListViewItem* myChild = firstChild();
+	while ( myChild ) {
+		packageList += myChild->text(0).section( rxPortageVersion, 0, 0 );
+		myChild = myChild->nextSibling();
+	}
+	return packageList;
+}
+
 /**
  * Populate queue with packages from db
  */

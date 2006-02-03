@@ -191,12 +191,22 @@ void PackageInspector::edit( PackageItem* portagePackage )
 {
 	kdDebug() << "PackageInspector::edit" << endl;
 	
-// 	if ( !KUser().isSuperUser() ) {
-// 		enableButtonApply( false );
-// 		dialog->groupSelectStability->setDisabled( true );
-// 		dialog->groupAdvanced->setDisabled( true );
-// 		dialog->useView->setDisabled( true );
-// 	}
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->groupAdvanced->setDisabled( true );
+		dialog->useView->setDisabled( true );
+	}
+	
+	// Disabled editing when package is in Queue
+	if ( portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
+		dialog->inspectorTabs->page(0)->setDisabled( true );
+		dialog->inspectorTabs->page(1)->setDisabled( true );
+	}
+	else {
+		dialog->inspectorTabs->page(0)->setDisabled( false );
+		dialog->inspectorTabs->page(1)->setDisabled( false );
+	}
 	
 	// Is it first time we load this package
 	if ( m_id != portagePackage->id() ) {
@@ -210,9 +220,6 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	m_portagePackage = portagePackage;
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
-	
-	kdDebug() << "PackageInspector::edit category=" << category << " package=" << package << endl;
-	
 	dialog->package->setText( "<font color=white><font size=\"+2\">" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</font> ");
 	
@@ -672,7 +679,6 @@ void PackageInspector::slotGetInstalledFiles( const QString& version )
  */
 void PackageInspector::slotCalculateUse()
 {
-	dialog->pbUse->setDisabled( true );
 	pretendUseLines.clear();
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
@@ -681,6 +687,7 @@ void PackageInspector::slotCalculateUse()
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( readFromStdout( KProcIO* ) ) );
 	eProc->start( KProcess::NotifyOnExit, true );
+	SignalistSingleton::Instance()->setKurooBusy( true );
 }
 
 void PackageInspector::readFromStdout( KProcIO* eProc )
@@ -694,15 +701,17 @@ void PackageInspector::cleanup( KProcess* eProc )
 {
 	kdDebug() << "PackageInspector::cleanup pretendUseLines=" << pretendUseLines << endl;
 	
-	dialog->pbUse->setDisabled( false );
+	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
 	eProc = 0;
 	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+(\\S+/\\S+)\\s+(\\[\\S*\\])*\\s+([\\-\\+\\w\\s\\(\\)\\*]+)\\s+[\\d,]*\\s+kB" );
+	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
+	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
+	                   "([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(4).simplifyWhiteSpace();
+			QString use = rxPretend.cap(6).simplifyWhiteSpace();
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}

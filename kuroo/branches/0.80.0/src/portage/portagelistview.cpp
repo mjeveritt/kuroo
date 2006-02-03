@@ -185,21 +185,4 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 // 	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
 }
 
-/**
- * Check if last package is visible and inform that not all packages are listed.
- */
-// void PortageListView::slotLastPackage()
-// {
-// 	if ( packageCount > ROWLIMIT && lastItem()->isVisible() ) {
-// 		KMessageBox::information( 0, i18n("Only %1 packages are visible. Please use filters to browse for packages!").arg( QString::number( ROWLIMIT ) ), i18n("Information"), "dontAskAgainOverflow" );
-// 	}
-// }
-
-// void PortageListView::slotNewItem( int x, int y )
-// {
-// 	QListViewItem* item = itemAt( QPoint( 0, visibleHeight() ) );
-// 	if ( item )
-// 		kdDebug() << "PortageListView::slotNewItem name=" << item->text(0) << endl;
-// }
-
 #include "portagelistview.moc"

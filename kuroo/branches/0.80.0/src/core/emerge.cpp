@@ -280,10 +280,10 @@ void Emerge::readFromStdout( KProcIO *proc )
 	static bool completedFlag = false;
 	static QString importantMessagePackage;
 	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-	                   "((\\S+)/(\\S+))\\s+(?:\\[(\\S*)\\])*\\s+"
+	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
 	                   "([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
 	
-	while ( proc->readln( line, true /*false, &unterm*/ ) >= 0 ) {
+	while ( proc->readln( line, true ) >= 0 ) {
 		int logDone = 0;
 		
 		/////////////////////////////////
@@ -313,11 +313,11 @@ void Emerge::readFromStdout( KProcIO *proc )
 			emergePackage.updateFlags = rxPackage.cap(1);
 			emergePackage.package = rxPackage.cap(2);
 			emergePackage.category = rxPackage.cap(3);
-			emergePackage.installedVersion = rxPackage.cap(4);
+			emergePackage.installedVersion = rxPackage.cap(5);
 			emergePackage.useFlags = rxPackage.cap(6).simplifyWhiteSpace();
 			emergePackage.size = rxPackage.cap(7);
-			emergePackage.name = ( (emergePackage.package).section( "/", 1, 1 ) ).section( rxPortageVersion, 0, 0 );
-			emergePackage.version = (emergePackage.package).section( ( emergePackage.name + "-" ), 1, 1 );
+			emergePackage.name = ( rxPackage.cap(4) ).section( rxPortageVersion, 0, 0 );
+			emergePackage.version = ( rxPackage.cap(4) ).section( ( emergePackage.name + "-" ), 1, 1 );
 			emergePackageList.prepend( emergePackage );
 		}
 		
@@ -389,7 +389,7 @@ void Emerge::readFromStdout( KProcIO *proc )
 								importantMessage += line.section( "# ", 1, 1 ) + "<br>";
 	
 		//////////////////////////////////////////////////////////////
-		// Collect einfo and ewarn messages
+		// Collect einfo and ewarn messages @fixme: cleanup this!
 		//////////////////////////////////////////////////////////////
 		if ( completedFlag && ( lastLineFlag || line.contains("**** ") ) ) {
 			QString cleanLine = line.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('%', "&#37;") + "<br>";
@@ -397,16 +397,18 @@ void Emerge::readFromStdout( KProcIO *proc )
 			
 			if ( line.endsWith( ":" ) )
 				lastLineFlag = true;
-				else
-					lastLineFlag = false;
+			else
+				lastLineFlag = false;
 			
 			if ( line.contains( "**** " ) )
 				cleanLine = cleanLine.section( "**** ", 1, 1 );
 			
 			if ( !cleanLine.isEmpty() ) {
 				if ( !importantMessagePackage.isEmpty() ) {
-					if ( importantMessage.isEmpty() )
+					if ( importantMessage.isEmpty() ) {
 						importantMessage += importantMessagePackage + cleanLine;
+						m_packageMessage = importantMessagePackage + cleanLine;
+					}
 					importantMessagePackage = QString::null;
 				}
 				else {
@@ -467,7 +469,7 @@ void Emerge::cleanup()
 		if ( !importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
 	
-	if ( etcUpdateCount != 0 /*&& !SignalistSingleton::Instance()->isKurooBusy()*/ )
+	if ( etcUpdateCount != 0 )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
 }
 

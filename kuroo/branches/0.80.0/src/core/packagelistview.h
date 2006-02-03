@@ -80,7 +80,7 @@ public:
  	 * @return list of packages by name
  	 */
 	virtual QStringList		allPackages();
-	virtual QStringList		allPackagesNoChildren();
+
 	/**
  	 * Count packages.
  	 * @return QString

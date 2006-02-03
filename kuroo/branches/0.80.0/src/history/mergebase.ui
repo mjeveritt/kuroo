@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>617</width>
+            <width>643</width>
             <height>359</height>
         </rect>
     </property>
@@ -108,7 +108,7 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>161</width>
+                                    <width>20</width>
                                     <height>16</height>
                                 </size>
                             </property>
@@ -127,7 +127,7 @@
                             </property>
                             <property name="minimumSize">
                                 <size>
-                                    <width>210</width>
+                                    <width>200</width>
                                     <height>0</height>
                                 </size>
                             </property>
@@ -140,7 +140,7 @@
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>5</hsizetype>
+                            <hsizetype>3</hsizetype>
                             <vsizetype>5</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
@@ -148,7 +148,7 @@
                     </property>
                     <property name="minimumSize">
                         <size>
-                            <width>200</width>
+                            <width>300</width>
                             <height>0</height>
                         </size>
                     </property>
@@ -157,7 +157,7 @@
                     </property>
                     <property name="text">
                         <string>&lt;font size="+1"&gt;Etc-update History&lt;/font&gt;&lt;br&gt;
-&lt;i&gt;Click on name to view diff&lt;/i&gt;</string>
+&lt;i&gt;Click on configuration file to view changes in diff frontend&lt;/i&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

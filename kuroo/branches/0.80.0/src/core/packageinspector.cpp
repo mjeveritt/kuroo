@@ -620,7 +620,7 @@ void PackageInspector::slotGetEbuild( const QString& version )
 void PackageInspector::slotGetDependencies( const QString& version )
 {
 	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + category + "/" + package + "-" + version;
+		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id, version ) + "/" + category + "/" + package + "-" + version;
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {

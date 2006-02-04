@@ -449,7 +449,7 @@ void PortageTab::slotUninstall()
 		QStringList packageList, idList;
 		foreach ( selectedList ) {
 			if ( packagesView->itemId( *it )->isInstalled() ) {
-				packageList += packagesView->itemId( *it )->name();
+				packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + packagesView->itemId( *it )->name();
 				idList += *it;
 			}
 		}

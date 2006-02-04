@@ -152,16 +152,14 @@ void QueueListView::QueueItem::hideBar()
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-// 	if ( this->isVisible() ) {
-		if ( column == 5 && m_isChecked ) {
-			QRect rect = listView()->itemRect( this );
-			QHeader *head = listView()->header();
-			rect.setLeft( head->sectionPos( 5 ) - head->offset() );
-			rect.setWidth( head->sectionSize( 5 ) );
-			bar->setGeometry( rect );
-			bar->show();
-		}
-// 	}
+	if ( column == 5 && m_isChecked ) {
+		QRect rect = listView()->itemRect( this );
+		QHeader *head = listView()->header();
+		rect.setLeft( head->sectionPos( 5 ) - head->offset() );
+		rect.setWidth( head->sectionSize( 5 ) );
+		bar->setGeometry( rect );
+		bar->show();
+	}
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 
@@ -249,7 +247,7 @@ QStringList QueueListView::allPackagesNoChildren()
 /**
  * Populate queue with packages from db
  */
-void QueueListView::insertPackageList()
+void QueueListView::insertPackageList( bool hasCheckedQueue )
 {
 	QueueItem* item;
 	sumSize = 0;
@@ -279,7 +277,6 @@ void QueueListView::insertPackageList()
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, description, meta, useFlags, duration );
 			item->setOpen( true );
-			item->setChecked( false );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
@@ -310,6 +307,8 @@ void QueueListView::insertPackageList()
 		else
 			item->setStatus( INSTALLED );
 		
+		item->setChecked( hasCheckedQueue );
+		
 		indexPackage( id, item );
 		
 		// Inform all other listviews that this package is in queue
@@ -325,16 +324,6 @@ void QueueListView::clearQueuePackageUse()
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
 		myChild->setText( 4, QString::null );
-		myChild = myChild->nextSibling();
-	}
-}
-
-// fixme: check iteration
-void QueueListView::setPackagesChecked()
-{
-	QListViewItem* myChild = firstChild();
-	while ( myChild ) {
-		dynamic_cast<QueueItem*>( myChild )->setChecked( true );
 		myChild = myChild->nextSibling();
 	}
 }
@@ -423,6 +412,10 @@ QString QueueListView::formatSize( const QString& sizeString )
 	return total;
 }
 
+/**
+ * Initialize the package's progressbar.
+ * @param package id
+ */
 void QueueListView::slotPackageStart( const QString& id )
 {
 	if ( id.isEmpty() || !packageIndex[id] ) {
@@ -438,6 +431,10 @@ void QueueListView::slotPackageStart( const QString& id )
 	KurooStatusBar::instance()->setTotalSteps( sumTime() );
 }
 
+/**
+ * Stop progressbar!
+ * @param package id
+ */
 void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled )
 {
 	if ( id.isEmpty() || !packageIndex[id] ) {
@@ -455,7 +452,7 @@ void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled
 }
 
 /**
- * 
+ * Forward 1 sec signal to the progressbar for the package which is emerging.
  */
 void QueueListView::slotPackageProgress()
 {
@@ -465,6 +462,10 @@ void QueueListView::slotPackageProgress()
 		dynamic_cast<QueueItem*>( packageIndex[m_id] )->oneStep();
 }
 
+/**
+ * Hide dependency packages progressbar when collapsing the tree.
+ * @param the end-user package
+ */
 void QueueListView::slotHideBars( QListViewItem* item )
 {
 	QListViewItem* myChild = item->firstChild();

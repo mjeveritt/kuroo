@@ -52,6 +52,8 @@ public slots:
 	 */
 	void			slotInit();
 	
+	void			slotScanHistoryCompleted();
+	
 	/**
 	 * Check for new entries in emerge.log.
 	 */
@@ -75,8 +77,6 @@ public slots:
 	 */
 	QString 		packageTime( const QString& packageNoversion );
 	
-	void			slotChanged();
-
 	void			appendEmergeInfo();
 	
 	void			updateStatistics();
@@ -104,6 +104,7 @@ private:
 	bool			userSync, isEmerging;
 	
 signals:
+	void			signalScanHistoryCompleted();
 	void			signalHistoryChanged();
 };
 

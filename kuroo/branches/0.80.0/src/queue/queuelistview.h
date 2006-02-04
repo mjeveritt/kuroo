@@ -50,9 +50,8 @@ public slots:
 	/**
 	* Populate queue with packages from db
 	*/
-	void 					insertPackageList();
+	void 					insertPackageList( bool hasCheckedQueue );
 	void					clearQueuePackageUse();
-	void					setPackagesChecked();
 	
 	/**
 	* Get total emerge duration in format hh:mm:ss and int.

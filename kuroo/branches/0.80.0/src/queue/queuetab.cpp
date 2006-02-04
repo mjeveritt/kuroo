@@ -121,7 +121,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	m_hasCheckedQueue = hasCheckedQueue;
 	
-	queueView->insertPackageList();
+	queueView->insertPackageList( m_hasCheckedQueue );
 	
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;

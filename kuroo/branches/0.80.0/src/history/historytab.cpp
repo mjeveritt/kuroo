@@ -40,25 +40,28 @@ HistoryTab::HistoryTab( QWidget* parent )
 {
 	historyFilter->setListView( historyView );
 	
+	// Connect button and checkbox
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
-	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
-	
+	// Open dialog when user click for info
 	connect( historyView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewInfo( QListViewItem* ) ) );
 	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
+	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
+	
+	// Load history view after scan completed
+	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotReload() ) );
 	
 	slotInit();
 }
 
 /**
- * Save splitters and listview geometry.
+ * Save checkboxes state
  */
 HistoryTab::~HistoryTab()
 {
-	// Save checkboxes state
 	if ( viewUnmerges->isChecked() )
 		KurooConfig::setViewUnmerges( true );
 	else
@@ -67,11 +70,10 @@ HistoryTab::~HistoryTab()
 
 /**
  * Initialize geometry and content.
- * Restore geometry: splitter positions, listViews width and columns width.
+ * Restore checkboxes state
  */
 void HistoryTab::slotInit()
 {
-	// Restore checkboxes state
 	if ( KurooConfig::viewUnmerges() )
 		viewUnmerges->setChecked( true );
 	else
@@ -121,7 +123,6 @@ void HistoryTab::slotClearFilter()
 
 void HistoryTab::slotViewUnmerges( bool on )
 {
-	kdDebug() << "HistoryTab::slotViewUnmerges" << endl;
 	KurooConfig::setViewUnmerges( on );
 	slotReload();
 }

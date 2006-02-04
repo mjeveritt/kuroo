@@ -51,10 +51,15 @@ private:
 	bool 						doJob();
 	void 						completeJob();
 	
+	QString escapeString( QString string ) {
+		return string.replace('\'', "''");
+	}
+	
 private:
 	bool						aborted;
 	DbConnection* const			m_db;
 	QStringList 				m_logLines;
+	
 };
 
 #endif

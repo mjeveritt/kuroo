@@ -90,11 +90,17 @@ void History::slotInit()
 	log.setName("/var/log/emerge.log");
 	loadTimeStatistics();
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotChanged() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
 	
 	fileWatcher = new KDirWatch(this);
 	fileWatcher->addFile("/var/log/emerge.log");
 	connect( fileWatcher, SIGNAL( dirty(const QString&) ), this, SLOT( slotParse() ) );
+}
+
+void History::slotScanHistoryCompleted()
+{
+	kdDebug() << "History::slotScanHistoryCompleted" << endl;
+	emit signalScanHistoryCompleted();
 }
 
 /**
@@ -103,6 +109,8 @@ void History::slotInit()
  */
 bool History::slotRefresh()
 {
+	kdDebug() << "History::slotRefresh" << endl;
+	
 	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry();
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
@@ -124,14 +132,8 @@ bool History::slotRefresh()
 		return false;
 	}
 
-	slotChanged();
+	slotScanHistoryCompleted();
 	return true;
-}
-
-void History::slotChanged()
-{
-	kdDebug() << "History::slotChanged" << endl;
-	emit signalHistoryChanged();
 }
 
 /**
@@ -260,6 +262,7 @@ void History::slotParse()
 					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
 					InstalledSingleton::Instance()->addPackage( package );
 					UpdatesSingleton::Instance()->removePackage( package );
+					emit signalHistoryChanged();
 				}
 				else
 					kdDebug() << i18n("Can not parse package in /var/log/emerge.log!") << endl;
@@ -271,9 +274,9 @@ void History::slotParse()
 			if ( emergeLine.contains("unmerge success") ) {
 				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
 				InstalledSingleton::Instance()->removePackage( package );
-				
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
+				emit signalHistoryChanged();
 			}
 			else
 			if ( emergeLine.contains( "starting rsync" ) ) {
@@ -286,7 +289,7 @@ void History::slotParse()
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Sync completed." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Sync completed." ), EMERGELOG );
 			}
-			
+			else
 			if ( emergeLine.contains( "terminating." ) ) {
 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
@@ -299,13 +302,15 @@ void History::slotParse()
 				
 			}
 			else {
+				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
+				
 				emergeLine.replace( "AUTOCLEAN", i18n( "AUTOCLEAN" ) );
+				continue;
+				
 				emergeLine.replace( "Unmerging", i18n( "Unmerging" ) );
 				emergeLine.replace( "Finished. Cleaning up", i18n( "Finished. Cleaning up" ) );
 				emergeLine.replace( "exiting successfully", i18n( "exiting successfully" ) );
 				emergeLine.replace( "terminating", i18n( "terminating" ) );
-				
-				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
 		}
@@ -330,9 +335,8 @@ void History::updateStatistics()
 void History::appendEmergeInfo()
 {
 	QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
-	KurooDBSingleton::Instance()->addEmergeInfo( einfo );
-	
-	kdDebug() << "History::appendEmergeInfo einfo=" << einfo << endl;
+	if ( !einfo.isEmpty() )
+		KurooDBSingleton::Instance()->addEmergeInfo( einfo );
 }
 
 /**

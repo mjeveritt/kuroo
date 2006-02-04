@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-04 12:46+0100\n"
+"POT-Creation-Date: 2006-02-04 15:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,34 +16,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:176 portage/portagelistview.cpp:65
+#: queue/queuelistview.cpp:174 portage/portagelistview.cpp:65
 #: portage/portagelistview.cpp:117 portage/portagelistview.cpp:119 rc.cpp:162
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:177 core/versionview.cpp:78
+#: queue/queuelistview.cpp:175 core/versionview.cpp:78
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:178 history/historylistview.cpp:43
+#: queue/queuelistview.cpp:176 history/historylistview.cpp:43
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:179 core/versionview.cpp:80
+#: queue/queuelistview.cpp:177 core/versionview.cpp:80
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:180
+#: queue/queuelistview.cpp:178
 msgid "Use Flags"
 msgstr ""
 
-#: queue/queuelistview.cpp:181
+#: queue/queuelistview.cpp:179
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:292 queue/queuelistview.cpp:297
-#: queue/queuelistview.cpp:302
+#: queue/queuelistview.cpp:289 queue/queuelistview.cpp:294
+#: queue/queuelistview.cpp:299
 msgid "na"
 msgstr ""
 
@@ -55,85 +55,85 @@ msgstr ""
 msgid "Package id is empty, skipping!"
 msgstr ""
 
-#: queue/queuetab.cpp:151
+#: queue/queuetab.cpp:153
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:152
+#: queue/queuetab.cpp:154
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:153
+#: queue/queuetab.cpp:155
 msgid "Estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:154
+#: queue/queuetab.cpp:156
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:174
+#: queue/queuetab.cpp:176
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:185
+#: queue/queuetab.cpp:187
 msgid "Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:187
+#: queue/queuetab.cpp:189
 msgid "Check Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:266
+#: queue/queuetab.cpp:268
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:266 queue/queuetab.cpp:278
+#: queue/queuetab.cpp:268 queue/queuetab.cpp:280
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:278
+#: queue/queuetab.cpp:280
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:302
+#: queue/queuetab.cpp:304
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:307 core/emerge.cpp:459 core/emerge.cpp:531
+#: queue/queuetab.cpp:309 core/emerge.cpp:459 core/emerge.cpp:531
 #: core/cacheportagejob.cpp:185 core/scanportagejob.cpp:338
 #: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:138 core/portagefiles.cpp:228
-#: core/portagefiles.cpp:318 core/portagefiles.cpp:408 history/history.cpp:292
-#: history/history.cpp:293 statusbar.cpp:93
+#: core/portagefiles.cpp:318 core/portagefiles.cpp:408 history/history.cpp:295
+#: history/history.cpp:296 statusbar.cpp:93
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:385 portage/portagetab.cpp:348
+#: queue/queuetab.cpp:387 portage/portagetab.cpp:348
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:388 portage/portagetab.cpp:351
+#: queue/queuetab.cpp:390 portage/portagetab.cpp:351
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:391 portage/portagetab.cpp:354
+#: queue/queuetab.cpp:393 portage/portagetab.cpp:354
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:394 portage/portagetab.cpp:357
+#: queue/queuetab.cpp:396 portage/portagetab.cpp:357
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:396 portage/portagetab.cpp:359
+#: queue/queuetab.cpp:398 portage/portagetab.cpp:359
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:437 portage/portagetab.cpp:487 rc.cpp:25 rc.cpp:244
+#: queue/queuetab.cpp:439 portage/portagetab.cpp:487 rc.cpp:25 rc.cpp:244
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: queue/queuetab.cpp:438
+#: queue/queuetab.cpp:440
 msgid "Add to world"
 msgstr ""
 
@@ -405,15 +405,15 @@ msgid "Scanning installed packages. Error reading: "
 msgstr ""
 
 #: core/scanhistoryjob.cpp:66
-msgid "Can not connect to database"
+msgid "Parsing emerge.log. Can not connect to database"
 msgstr ""
 
 #: core/scanhistoryjob.cpp:83
-msgid "History scan aborted"
+msgid "Parsing emerge.log. History scan aborted"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:101 core/scanhistoryjob.cpp:135
-msgid "No package found!"
+#: core/scanhistoryjob.cpp:101 core/scanhistoryjob.cpp:137
+msgid "Parsing emerge.log. No package found!"
 msgstr ""
 
 #: core/scanupdatesjob.cpp:68
@@ -629,68 +629,68 @@ msgstr ""
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:217
+#: history/history.cpp:219
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:218
+#: history/history.cpp:220
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:231
+#: history/history.cpp:233
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:232
+#: history/history.cpp:234
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:233
+#: history/history.cpp:235
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:240
+#: history/history.cpp:242
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:252 history/history.cpp:265
+#: history/history.cpp:254 history/history.cpp:268
 msgid "Can not parse package in /var/log/emerge.log!"
 msgstr ""
 
-#: history/history.cpp:267
+#: history/history.cpp:270
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:275
+#: history/history.cpp:277
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:280 history/history.cpp:281
+#: history/history.cpp:283 history/history.cpp:284
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:286 history/history.cpp:287
+#: history/history.cpp:289 history/history.cpp:290
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:302 rc.cpp:449
+#: history/history.cpp:307 rc.cpp:449
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:303
+#: history/history.cpp:310
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:304
+#: history/history.cpp:311
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:305
+#: history/history.cpp:312
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:306
+#: history/history.cpp:313
 msgid "terminating"
 msgstr ""
 
@@ -698,11 +698,11 @@ msgstr ""
 msgid "Configuration file"
 msgstr ""
 
-#: history/historytab.cpp:136 history/historylistview.cpp:44
+#: history/historytab.cpp:137 history/historylistview.cpp:44
 msgid "Emerge info"
 msgstr ""
 
-#: history/historytab.cpp:136
+#: history/historytab.cpp:137
 msgid "Installation message for %1:"
 msgstr ""
 

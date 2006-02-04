@@ -100,7 +100,7 @@ void Results::init( QObject *parent )
 }
 
 /**
- * Forward signal to refresh results.
+ * Forward signal.
  */
 void Results::refresh()
 {

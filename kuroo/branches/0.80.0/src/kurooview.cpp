@@ -141,17 +141,17 @@ void KurooView::slotInit()
 					i18n("Initialize Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
 				     
 			case KMessageBox::Continue:
-				connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
+				connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 				HistorySingleton::Instance()->slotRefresh();
 			
 		}
 	}
 	else {
-		connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
+		connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 		
 		// Check if kuroo database needs updating.
 		if ( !HistorySingleton::Instance()->slotRefresh() ) {
-			disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
+			disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 			
 			switch( KMessageBox::warningYesNo( this,
 				i18n( "<qt>Kuroo database needs refreshing!<br>"
@@ -188,14 +188,14 @@ void KurooView::slotCheckPortage()
 {
 	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	
+	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
+	
 	// After db is recreated because of new version restore data
 	if ( hasHistoryRestored ) {
 		KurooDBSingleton::Instance()->restoreBackup();
 		HistorySingleton::Instance()->updateStatistics();
 		hasHistoryRestored = false;
 	}
-	
-	disconnect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotCheckPortage() ) );
 	
 	if ( KurooDBSingleton::Instance()->packageTotal() == "0" )
 		PortageSingleton::Instance()->slotRefresh();

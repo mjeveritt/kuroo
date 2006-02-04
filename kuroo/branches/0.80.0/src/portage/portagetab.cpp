@@ -99,6 +99,66 @@ void PortageTab::slotInit()
 	slotBusy( false );
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Toggle button slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Disable/enable buttons when kuroo is busy.
+ * @param busy
+ */
+void PortageTab::slotBusy( bool busy )
+{
+	if ( busy ) {
+		pbUninstall->setDisabled( true );
+		pbQueue->setDisabled( true );
+	}
+	else {
+		if ( !KUser().isSuperUser() )
+			pbUninstall->setDisabled( true );
+		else
+			pbUninstall->setDisabled( false );
+		
+		pbQueue->setDisabled( false );
+	}
+	
+	// No db no fun!
+	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
+		pbAdvanced->setDisabled( true );
+		pbQueue->setDisabled( true );
+		filterGroup->setDisabled( true );
+		searchFilter->setDisabled( true );
+		pbClearFilter->setDisabled( true );
+	}
+	else {
+		filterGroup->setDisabled( false );
+		searchFilter->setDisabled( false );
+		pbClearFilter->setDisabled( false );
+	}
+}
+
+void PortageTab::slotInitButtons()
+{
+	pbQueue->setText( i18n("Add to Queue") );
+}
+
+/**
+ * Toggle Add/Remove to Queue button.
+ * @param isQueued
+ */
+void PortageTab::slotButtons( bool isQueued )
+{
+	if ( isQueued )
+		pbQueue->setText( i18n("Remove from Queue") );
+	else
+		pbQueue->setText( i18n("Add to Queue") );
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Package view slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Populate view with portage packages.
  * Then load the emerge history.
@@ -205,56 +265,10 @@ void PortageTab::slotRefresh()
 	}
 }
 
-/**
- * Disable/enable buttons when kuroo is busy.
- * @param busy
- */
-void PortageTab::slotBusy( bool busy )
-{
-	if ( busy ) {
-		pbUninstall->setDisabled( true );
-		pbQueue->setDisabled( true );
-	}
-	else {
-		if ( !KUser().isSuperUser() )
-			pbUninstall->setDisabled( true );
-		else
-			pbUninstall->setDisabled( false );
-		
-		pbQueue->setDisabled( false );
-	}
-	
-	// No db no fun!
-	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
-		pbAdvanced->setDisabled( true );
-		pbQueue->setDisabled( true );
-		filterGroup->setDisabled( true );
-		searchFilter->setDisabled( true );
-		pbClearFilter->setDisabled( true );
-	}
-	else {
-		filterGroup->setDisabled( false );
-		searchFilter->setDisabled( false );
-		pbClearFilter->setDisabled( false );
-	}
-}
 
-void PortageTab::slotInitButtons()
-{
-	pbQueue->setText( i18n("Add to Queue") );
-}
-
-/**
- * Toggle Add/Remove to Queue button.
- * @param isQueued
- */
-void PortageTab::slotButtons( bool isQueued )
-{
-	if ( isQueued )
-		pbQueue->setText( i18n("Remove from Queue") );
-	else
-		pbQueue->setText( i18n("Add to Queue") );
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Package slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Open advanced dialog with: ebuild, versions, use flags...
@@ -411,54 +425,6 @@ void PortageTab::slotPackage()
 }
 
 /**
- * Popup menu for actions like emerge.
- * @param item
- * @param point
- */
-void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
-{
-	if ( !item )
-		return;
-	
-	enum Actions { PRETEND, APPEND, EMERGE };
-	
-	KPopupMenu menu( this );
-	int menuItem1 = menu.insertItem(i18n("&Pretend"), PRETEND);
-	int menuItem2;
-	
-	if ( !packagesView->currentPackage()->isQueued() )
-		menuItem2 = menu.insertItem(i18n("&Add to queue"), APPEND);
-	else
-		menuItem2 = menu.insertItem(i18n("&Remove from queue"), APPEND);
-	
-	int menuItem3 = menu.insertItem(i18n("&Install now"), EMERGE);
-	
-	// No access when kuroo is busy.
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
-		menu.setItemEnabled( menuItem1, false );
-		menu.setItemEnabled( menuItem2, false );
-		menu.setItemEnabled( menuItem3, false );
-	}
-	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem3, false );
-	
-	switch( menu.exec( point ) ) {
-		
-		case PRETEND:
-			PortageSingleton::Instance()->pretendPackageList( packagesView->selectedId() );
-			break;
-			
-		case APPEND:
-			slotQueue();
-			break;
-			
-		case EMERGE:
-			QueueSingleton::Instance()->installQueue( packagesView->selectedId() );
-	}
-}
-
-/**
  * Append or remove package to the queue.
  */
 void PortageTab::slotQueue()
@@ -494,6 +460,52 @@ void PortageTab::slotUninstall()
 				case KMessageBox::Yes:
 					InstalledSingleton::Instance()->uninstallPackageList( packagesView->selectedId() );
 			}
+	}
+}
+
+/**
+ * Popup menu for actions like emerge.
+ * @param item
+ * @param point
+ */
+void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
+{
+	if ( !item )
+		return;
+	
+	enum Actions { APPEND, UNINSTALL, OPTIONS };
+	
+	KPopupMenu menu( this );
+	int menuItem1;
+	
+	if ( !packagesView->currentPackage()->isQueued() )
+		menuItem1 = menu.insertItem(i18n("&Add to queue"), APPEND);
+	else
+		menuItem1 = menu.insertItem(i18n("&Remove from queue"), APPEND);
+	
+	int menuItem2 = menu.insertItem(i18n("&Uninstall"), UNINSTALL);
+	int menuItem3 = menu.insertItem( i18n( "Options..." ), OPTIONS );
+	
+	// No access when kuroo is busy.
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
+		menu.setItemEnabled( menuItem1, false );
+	
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
+			menu.setItemEnabled( menuItem2, false );
+	
+	switch( menu.exec( point ) ) {
+
+		case APPEND:
+			slotQueue();
+			break;
+			
+		case UNINSTALL:
+			slotUninstall();
+			break;
+		
+		case OPTIONS:
+			slotAdvanced();
+		
 	}
 }
 

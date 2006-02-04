@@ -243,11 +243,8 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  * Add package to world file.
  * @param package
  */
-void Portage::appendWorld( const QString& package )
+void Portage::appendWorld( const QString& category, const QString& name )
 {
-	QString category = package.section( "/", 0, 0 );
-	QString name = package.section( "/", 1, 1 ).section( rxPortageVersion, 0, 0 );
-	
 	QFile file( KurooConfig::dirWorldFile() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
@@ -269,21 +266,18 @@ void Portage::appendWorld( const QString& package )
 			file.close();
 		}
 		else
-			kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+			kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << i18n("Adding to world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
 }
 
 /**
  * Remove package from world file.
  * @param package
  */
-void Portage::removeFromWorld( const QString& package )
+void Portage::removeFromWorld( const QString& category, const QString& name )
 {
-	QString category = package.section( "/", 0, 0 );
-	QString name = package.section( "/", 1, 1 ).section( rxPortageVersion, 0, 0 );
-	
 	QFile file( KurooConfig::dirWorldFile() );
 	QStringList lines;
 	if ( file.open( IO_ReadOnly ) ) {
@@ -301,10 +295,10 @@ void Portage::removeFromWorld( const QString& package )
 			file.close();
 		}
 		else
-			kdDebug() << i18n("Error writing: ") << KurooConfig::dirWorldFile() << endl;
+			kdDebug() << i18n("Removing from world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
 	}
 	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << i18n("Removing from world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
 }
 
 #include "portage.moc"

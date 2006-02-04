@@ -30,7 +30,7 @@
  * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
-	: KListView( parent, name )
+	: KListView( parent, name ), index( 0 )
 {
 	setFrameShape( QFrame::NoFrame );
 	setSelectionModeExt( FileManager );
@@ -52,6 +52,7 @@ void PackageListView::resetListView()
 {
 	clear();
 	packageIndex.clear();
+	index = 0;
 }
 
 /**
@@ -158,15 +159,6 @@ QStringList PackageListView::allPackages()
 }
 
 /**
- * Total number of packages in listview.
- * @return QString
- */
-QString PackageListView::count()
-{
-	return QString::number( packageIndex.count() );
-}
-
-/**
  * Set focus in listview on this package.
  * @param id
  */
@@ -216,7 +208,7 @@ void PackageListView::slotSetQueued( const QString& id, bool isQueued )
 }
 
 /**
- * Register package in index and check weither it is in the queue.
+ * Register package in index and check if in the queue.
  * @param id
  * @param item
  */
@@ -231,6 +223,17 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 		packageIndex[id]->setStatus( QUEUED );
 	else
 		packageIndex[id]->setStatus( NOTQUEUED );
+	
+	packageIndex[id]->setPackageIndex( index++ );
+}
+
+/**
+ * Total number of packages in listview.
+ * @return QString
+ */
+QString PackageListView::count()
+{
+	return QString::number( packageIndex.count() );
 }
 
 /**

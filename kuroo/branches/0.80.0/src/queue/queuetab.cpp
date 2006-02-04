@@ -109,6 +109,11 @@ void QueueTab::slotInit()
 	slotBusy( false );
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue view slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Load Queue packages.
  */
@@ -116,7 +121,6 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	m_hasCheckedQueue = hasCheckedQueue;
 	
-// 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	queueView->insertPackageList();
 	
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
@@ -128,6 +132,9 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	slotQueueSummary();
 }
 
+/**
+ * After package use has changed, clear use column and go back to "Check Installation".
+ */
 void QueueTab::slotPackageUseChanged()
 {
 	m_hasCheckedQueue = false;
@@ -136,6 +143,9 @@ void QueueTab::slotPackageUseChanged()
 	slotBusy( false );
 }
 
+/**
+ * View current queue summary.
+ */
 void QueueTab::slotQueueSummary()
 {
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
@@ -146,6 +156,11 @@ void QueueTab::slotQueueSummary()
 	queueBrowser->clear();
 	queueBrowser->setText( queueBrowserLines );
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Toggle button slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Disable/enable buttons when kuroo busy signal is received.
@@ -189,12 +204,40 @@ void QueueTab::slotBusy( bool busy )
 		cbForce->setDisabled( false );
 		cbRemove->setDisabled( false );
 	}
-
+	
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )
 		pbGo->setDisabled( true );
 	else
 		pbGo->setDisabled( false );
 }
+
+/**
+ * Disable buttons if no package is selected or kuroo is busy emerging.
+ */
+void QueueTab::slotButtons()
+{
+	if ( queueView->selectedId().isEmpty() ) {
+		pbRemove->setDisabled( true );
+		pbAdvanced->setDisabled( true );
+		return;
+	}
+	
+	if ( !EmergeSingleton::Instance()->isRunning() ) {
+		pbRemove->setDisabled( false );
+		pbAdvanced->setDisabled( false );
+	}
+	else {
+		pbRemove->setDisabled( true );
+		pbAdvanced->setDisabled( true );
+	}
+	
+	pbAdvanced->setDisabled( false );
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Package slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Emerge all packages in the installation queue.
@@ -222,28 +265,31 @@ void QueueTab::slotGo()
 		switch( KMessageBox::questionYesNoList( this, 
 		                                        i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
 		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
-			case KMessageBox::Yes: {
-				packageList.prepend( "--fetch-all-uri" );
-				QueueSingleton::Instance()->installPackageList( packageList );
-				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-			}
-		}
+			                                        
+													case KMessageBox::Yes:
+														packageList.prepend( "--fetch-all-uri" );
+														QueueSingleton::Instance()->installPackageList( packageList );
+														KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+		                                        
+		                              			}
 	}
 	else {
 		switch( KMessageBox::questionYesNoList( this, 
 		                                        i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
 		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
-			case KMessageBox::Yes: {
-				
-				// Force portage to reinstall files protected in CONFIG_PROTECT
-				if ( cbForce->isChecked() )
-					packageList.prepend( "--noconfmem" );
-				
-				QueueSingleton::Instance()->installPackageList( packageList );
-				KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-				m_hasCheckedQueue = false;
-			}
-		}
+			                                        
+													case KMessageBox::Yes: {
+														
+														// Force portage to reinstall files protected in CONFIG_PROTECT
+														if ( cbForce->isChecked() )
+															packageList.prepend( "--noconfmem" );
+														
+														QueueSingleton::Instance()->installPackageList( packageList );
+														KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+														m_hasCheckedQueue = false;
+													}
+			                                        
+		                                       }
 	}
 }
 
@@ -253,13 +299,14 @@ void QueueTab::slotGo()
 void QueueTab::slotStop()
 {
 	switch ( KMessageBox::warningYesNo( this,
-		i18n( "Do you want to abort the running installation?" ) ) ) {
-		case KMessageBox::Yes : {
-			EmergeSingleton::Instance()->stop();
-			QueueSingleton::Instance()->stopTimer();
-			KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
-		}
-	}
+	                                    i18n( "Do you want to abort the running installation?" ) ) ) {
+		                                    
+											case KMessageBox::Yes : 
+												EmergeSingleton::Instance()->stop();
+												QueueSingleton::Instance()->stopTimer();
+												KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
+	                                    
+	                                   }
 }
 
 /**
@@ -289,26 +336,6 @@ void QueueTab::slotRemoveInstalled()
 		QueueSingleton::Instance()->setRemoveInstalled( false );
 }
 
-void QueueTab::slotButtons()
-{
-	if ( queueView->selectedId().isEmpty() ) {
-		pbRemove->setDisabled( true );
-		pbAdvanced->setDisabled( true );
-		return;
-	}
-	
-	if ( !EmergeSingleton::Instance()->isRunning() ) {
-		pbRemove->setDisabled( false );
-		pbAdvanced->setDisabled( false );
-	}
-	else {
-		pbRemove->setDisabled( true );
-		pbAdvanced->setDisabled( true );
-	}
-	
-	pbAdvanced->setDisabled( false );
-}
-
 /**
  * Open advanced dialog with: ebuild, versions, use flags...
  */
@@ -320,6 +347,9 @@ void QueueTab::slotAdvanced()
 	}
 }
 
+/**
+ * Load package item with all version data...
+ */
 void QueueTab::slotPackage()
 {
 	if ( !isVisible() )
@@ -391,7 +421,7 @@ void QueueTab::slotPackage()
 }
 
 /**
- * Popup menu for actions like emerge.
+ * Popup menu for current package.
  * @param item
  * @param point
  */
@@ -400,25 +430,32 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	if ( !item )
 		return;
 	
-	enum Actions { PRETEND, REMOVE };
+	enum Actions { REMOVE, OPTIONS, TOWORLD };
 	
 	KPopupMenu menu( this );
-	int menuItem1 = menu.insertItem( i18n( "Emerge pretend" ), PRETEND );
-	int menuItem2 = menu.insertItem( i18n( "Remove" ), REMOVE );
+	int menuItem1 = menu.insertItem( i18n( "Remove" ), REMOVE );
+	int menuItem2 = menu.insertItem( i18n( "Options..." ), OPTIONS );
+	int menuItem3 = menu.insertItem( i18n( "Add to world" ), TOWORLD );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
-		menu.setItemEnabled( menuItem2, false );
+		
+		if ( !KUser().isSuperUser() )
+			menu.setItemEnabled( menuItem3, false );
 	}
 	
 	switch( menu.exec( point ) ) {
-		
-		case PRETEND:
-			PortageSingleton::Instance()->pretendPackageList( queueView->selectedId() );
-			break;
 			
 		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+			break;
+		
+		case OPTIONS:
+			slotAdvanced();
+			break;
+		
+		case TOWORLD:
+			PortageSingleton::Instance()->appendWorld( queueView->currentPackage()->category(), queueView->currentPackage()->name() );
 		
 	}
 }

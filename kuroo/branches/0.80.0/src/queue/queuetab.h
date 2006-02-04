@@ -39,35 +39,26 @@ public:
     ~QueueTab();
 
 public slots:
-	
 	void				slotReload( bool hasCheckedQueue );
 	void				slotQueueSummary();
 	
 private slots:
-	
 	void				slotInit();
 	
 	void				slotBusy( bool busy );
+	void				slotButtons();
+	
+	void				slotPackageUseChanged();
 	
 	void				slotGo();
 	void				slotPretend();
 	void				slotStop();
 	void				slotRemove();
 	void				slotRemoveInstalled();
-	
-	/**
-	 * Popup menu for actions like emerge.
-	 * @param listView
-	 * @param item
-	 * @param point
-	 */
 	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
 	
-	void				slotButtons();
 	void				slotPackage();
 	void				slotAdvanced();
-	
-	void				slotPackageUseChanged();
 	
 private:
 	bool				m_hasCheckedQueue;

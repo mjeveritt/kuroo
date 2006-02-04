@@ -91,6 +91,11 @@ PackageInspector::~PackageInspector()
 {
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Buttons slots
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Make previous package in package view current - for easier browsing.
  * Ask to save settings if user has changed settings.
@@ -140,146 +145,6 @@ void PackageInspector::slotNextPackage()
 	hasUseSettingsChanged = false;
 	emit signalNextPackage( false );
 }
-
-/**
- * Create hardmask info link.
- */
-void PackageInspector::showHardMaskInfo()
-{
-	const QStringList hardMaskInfo = KurooDBSingleton::Instance()->packageHardMaskInfo( m_id );
-	
-	if ( !hardMaskInfo.isEmpty() ) {
-		QFont font;
-		font.setBold( true );
-		dialog->infoHardMasked->setFont( font );
-		dialog->infoHardMasked->setHighlightedColor( Qt::red );
-		dialog->infoHardMasked->setText( i18n("Click for hardmask info!") );
-		
-		hardMaskComment =
-			"<font size=\"+2\">" + package + "</font> " + 
-			"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
-			hardMaskInfo.last() + "<br><br>" +
-			"Hardmask rule: <i>\"" + hardMaskInfo.first() + "\"</i>";
-	}
-	else
-		dialog->infoHardMasked->setText( QString::null );
-}
-
-/**
- * Show gentoo devs reason for hardmasking this package/versions.
- */
-void PackageInspector::slotHardMaskInfo()
-{
-	KMessageBox::messageBox( 0, KMessageBox::Information, hardMaskComment, 
-	                         i18n("%1/%2 hardmask info!").arg( category ).arg( package ), i18n("Yes"), i18n("No"), 0 );
-}
-
-/**
- * Activate advanced groupBox.
- * @param isOn
- */
-void PackageInspector::slotAdvancedToggle( bool isOn )
-{
-	dialog->groupArchitecture->setDisabled( !isOn );
-}
-
-/**
- * Activate Inspector with current package.
- * @param portagePackage
- */
-void PackageInspector::edit( PackageItem* portagePackage )
-{
-	kdDebug() << "PackageInspector::edit" << endl;
-	
-	if ( !KUser().isSuperUser() ) {
-		enableButtonApply( false );
-		dialog->groupSelectStability->setDisabled( true );
-		dialog->useView->setDisabled( true );
-	}
-	
-	// Disabled editing when package is in Queue
-	if ( portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
-		dialog->inspectorTabs->page(0)->setDisabled( true );
-		dialog->inspectorTabs->page(1)->setDisabled( true );
-	}
-	else {
-		dialog->inspectorTabs->page(0)->setDisabled( false );
-		dialog->inspectorTabs->page(1)->setDisabled( false );
-	}
-	
-	// Is it first time we load this package
-	if ( m_id != portagePackage->id() ) {
-		m_id = portagePackage->id();
-		isVirginState = true;
-	}
-	else
-		isVirginState = false;
-	
-	// Construct header text
-	m_portagePackage = portagePackage;
-	package = m_portagePackage->name();
-	category = m_portagePackage->category();
-	dialog->package->setText( "<font color=white><font size=\"+2\">" + package + "</font> " +
-	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</font> ");
-	
-	showSettings();
-	slotRefreshTabs();
-	show();
-}
-
-/**
- * Stability choice for versions - enable the right radiobutton.
- * Priority is: specific version >> unmask package >> untest package >> stable package.
- */
-void PackageInspector::showSettings()
-{
-	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
-	
-	// Get user mask specific version
-	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
-	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
-	
-	// Enable stability radiobutton
-	if ( !userMaskVersion.isEmpty() ) {
-		dialog->rbVersionsSpecific->setChecked( true );
-		dialog->cbVersionsSpecific->setDisabled( false );
-		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
-	}
-	else {
-		dialog->ckbAvailable->setChecked( false );
-		
-		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
-			dialog->rbMasked->setChecked( true );
-		else
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_id ) )
-				dialog->rbTesting->setChecked( true );
-			else
-				dialog->rbStable->setChecked( true );
-	}
-	
-	// Enable available radiobutton
-	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_id ) )
-		dialog->ckbAvailable->setChecked( true );
-	else
-		dialog->ckbAvailable->setChecked( false );
-	
-	// Stability settings before user has changed it
-	if ( isVirginState ) {
-		stabilityBefore = dialog->groupSelectStability->selectedId();
-		versionBefore = userMaskVersion;
-		isAvailableBefore = dialog->ckbAvailable->isChecked();
-		dialog->groupArchitecture->setChecked( false );
-	}
-	
-	showHardMaskInfo();
-
-	// Reset the apply button for new package
-	if ( !hasVersionSettingsChanged )
-		enableButtonApply( false );
-	
-	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
-}
-
 
 /**
  * Save the stability setting for this package.
@@ -351,6 +216,164 @@ void PackageInspector::rollbackSettings()
 		if ( isAvailableBefore )
 			slotSetAvailable( true );
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Create hardmask info link.
+ */
+void PackageInspector::showHardMaskInfo()
+{
+	const QStringList hardMaskInfo = KurooDBSingleton::Instance()->packageHardMaskInfo( m_id );
+	
+	if ( !hardMaskInfo.isEmpty() ) {
+		QFont font;
+		font.setBold( true );
+		dialog->infoHardMasked->setFont( font );
+		dialog->infoHardMasked->setHighlightedColor( Qt::red );
+		dialog->infoHardMasked->setText( i18n("Click for hardmask info!") );
+		
+		hardMaskComment =
+			"<font size=\"+2\">" + package + "</font> " + 
+			"(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")<br><br>" +
+			hardMaskInfo.last() + "<br><br>" +
+			"Hardmask rule: <i>\"" + hardMaskInfo.first() + "\"</i>";
+	}
+	else
+		dialog->infoHardMasked->setText( QString::null );
+}
+
+/**
+ * Show gentoo devs reason for hardmasking this package/versions.
+ */
+void PackageInspector::slotHardMaskInfo()
+{
+	KMessageBox::messageBox( 0, KMessageBox::Information, hardMaskComment, 
+	                         i18n("%1/%2 hardmask info!").arg( category ).arg( package ), i18n("Yes"), i18n("No"), 0 );
+}
+
+/**
+ * Activate advanced groupBox.
+ * @param isOn
+ */
+void PackageInspector::slotAdvancedToggle( bool isOn )
+{
+	dialog->groupArchitecture->setDisabled( !isOn );
+}
+
+/**
+ * Activate Inspector with current package.
+ * @param portagePackage
+ */
+void PackageInspector::edit( PackageItem* portagePackage )
+{
+	m_portagePackage = portagePackage;
+	
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->useView->setDisabled( true );
+		dialog->groupArchitecture->setDisabled( true );
+	}
+	
+	// Disabled editing when package is in Queue
+	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
+		dialog->inspectorTabs->page(0)->setDisabled( true );
+		dialog->inspectorTabs->page(1)->setDisabled( true );
+	}
+	else {
+		dialog->inspectorTabs->page(0)->setDisabled( false );
+		dialog->inspectorTabs->page(1)->setDisabled( false );
+	}
+	
+	// Is it first time we load this package
+	if ( m_id != m_portagePackage->id() ) {
+		m_id = m_portagePackage->id();
+		isVirginState = true;
+	}
+	else
+		isVirginState = false;
+	
+	package = m_portagePackage->name();
+	category = m_portagePackage->category();
+
+	// Construct header text
+	dialog->package->setText( "<b><font color=white><font size=+1>" + package + "</font> " +
+	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</b></font>" );
+	dialog->package2->setText( m_portagePackage->description() );
+	
+	showSettings();
+	slotRefreshTabs();
+	
+	// Enable/disable shortcuts buttons if first or last package
+	if ( m_portagePackage->isFirstPackage() )
+		dialog->pbPrevious->setDisabled( true );
+	else
+		dialog->pbPrevious->setDisabled( false );
+		
+	if ( m_portagePackage->isLastPackage() )
+		dialog->pbNext->setDisabled( true );
+	else
+		dialog->pbNext->setDisabled( false );
+	
+	show();
+}
+
+/**
+ * Stability choice for versions - enable the right radiobutton.
+ * Priority is: specific version >> unmask package >> untest package >> stable package.
+ */
+void PackageInspector::showSettings()
+{
+	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
+	
+	// Get user mask specific version
+	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
+	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
+	
+	// Enable stability radiobutton
+	if ( !userMaskVersion.isEmpty() ) {
+		dialog->rbVersionsSpecific->setChecked( true );
+		dialog->cbVersionsSpecific->setDisabled( false );
+		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
+	}
+	else {
+		dialog->ckbAvailable->setChecked( false );
+		
+		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
+			dialog->rbMasked->setChecked( true );
+		else
+			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_id ) )
+				dialog->rbTesting->setChecked( true );
+			else
+				dialog->rbStable->setChecked( true );
+	}
+	
+	// Enable available radiobutton
+	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_id ) )
+		dialog->ckbAvailable->setChecked( true );
+	else
+		dialog->ckbAvailable->setChecked( false );
+	
+	// Stability settings before user has changed it
+	if ( isVirginState ) {
+		stabilityBefore = dialog->groupSelectStability->selectedId();
+		versionBefore = userMaskVersion;
+		isAvailableBefore = dialog->ckbAvailable->isChecked();
+		dialog->groupArchitecture->setChecked( false );
+	}
+	
+	showHardMaskInfo();
+
+	// Reset the apply button for new package
+	if ( !hasVersionSettingsChanged )
+		enableButtonApply( false );
+	
+	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
 }
 
 /**
@@ -466,6 +489,7 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 	enableButtonApply( true );
 	hasUseSettingsChanged = true;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Load files
@@ -668,6 +692,11 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>No installed files found.</b></font>") );
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Use calculation
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Run emerge pretend to get use active use flags.
  */
@@ -678,17 +707,22 @@ void PackageInspector::slotCalculateUse()
 	KProcIO* eProc = new KProcIO( codec );
 	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << category + "/" + package;
 	
-	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( cleanup( KProcess* ) ) );
-	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEmergePretend( KProcIO* ) ) );
+	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParsePackageUse( KProcess* ) ) );
+	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
 	eProc->start( KProcess::NotifyOnExit, true );
 	SignalistSingleton::Instance()->setKurooBusy( true );
+	
+	if ( !eProc->isRunning() ) {
+		LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.").arg( category ).arg( package ), ERROR );
+		slotParsePackageUse( eProc );
+	}
 }
 
 /**
  * Collect emerge pretend output in pretendUseLines.
  * @param eProc
  */
-void PackageInspector::slotEmergePretend( KProcIO* eProc )
+void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
 {
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 )
@@ -715,10 +749,14 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}
+	
+	dialog->useView->clear();
+	if ( pretendUseList.isEmpty() ) {
+		new QListViewItem( dialog->useView, i18n("No use flags available.") );
+		return;
+	}
 
 	// Get user set package use flags
-	dialog->useView->setDisabled( false );
-	dialog->useView->clear();
 	foreach ( pretendUseList ) {
 		QString lines;
 		
@@ -762,6 +800,9 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 				useItem->setText( 1, description.join("\n") );
 			}
 	}
+	
+	if ( KUser().isSuperUser() || EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy())
+		dialog->useView->setDisabled( false );
 }
 
 #include "packageinspector.moc"

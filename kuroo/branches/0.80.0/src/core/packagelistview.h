@@ -124,6 +124,9 @@ protected:
 signals:
 	void					signalStatusChanged( bool isQueued );
 	
+private:
+	int						index;
+	
 };
 
 #endif

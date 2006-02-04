@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>556</width>
-            <height>450</height>
+            <width>541</width>
+            <height>377</height>
         </rect>
     </property>
     <property name="caption">
@@ -229,16 +229,10 @@ and do not update further</string>
                                 <property name="name">
                                     <cstring>versionsView</cstring>
                                 </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>150</width>
-                                        <height>200</height>
-                                    </size>
-                                </property>
                                 <property name="maximumSize">
                                     <size>
                                         <width>32767</width>
-                                        <height>170</height>
+                                        <height>200</height>
                                     </size>
                                 </property>
                             </widget>
@@ -332,7 +326,7 @@ in the official portage tree.</string>
                     <property name="margin">
                         <number>3</number>
                     </property>
-                    <widget class="KListView" row="2" column="0">
+                    <widget class="KListView" row="2" column="0" rowspan="1" colspan="3">
                         <column>
                             <property name="text">
                                 <string>Use</string>
@@ -358,12 +352,6 @@ in the official portage tree.</string>
                         <property name="name">
                             <cstring>useView</cstring>
                         </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>0</width>
-                                <height>200</height>
-                            </size>
-                        </property>
                         <property name="maximumSize">
                             <size>
                                 <width>32767</width>
@@ -374,7 +362,7 @@ in the official portage tree.</string>
                             <enum>LastColumn</enum>
                         </property>
                     </widget>
-                    <widget class="QLayoutWidget" row="1" column="0">
+                    <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="3">
                         <property name="name">
                             <cstring>layout3</cstring>
                         </property>
@@ -437,45 +425,35 @@ in the official portage tree.</string>
                             </spacer>
                         </grid>
                     </widget>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <spacer row="0" column="2">
                         <property name="name">
-                            <cstring>layout4</cstring>
+                            <cstring>spacer10_3</cstring>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <spacer row="0" column="2">
-                                <property name="name">
-                                    <cstring>spacer10_3</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>21</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QComboBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>cbVersionsUse</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel5_2_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Select version:</string>
-                                </property>
-                            </widget>
-                        </grid>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cbVersionsUse</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel5_2_3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Select version:</string>
+                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -658,11 +636,19 @@ in the official portage tree.</string>
             <property name="name">
                 <cstring>frame7</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
             <property name="paletteBackgroundColor">
                 <color>
-                    <red>122</red>
-                    <green>90</green>
-                    <blue>218</blue>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
                 </color>
             </property>
             <property name="frameShape">
@@ -679,59 +665,105 @@ in the official portage tree.</string>
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>3</number>
+                    <number>5</number>
                 </property>
+                <property name="spacing">
+                    <number>2</number>
+                </property>
+                <widget class="QLayoutWidget" row="1" column="0">
+                    <property name="name">
+                        <cstring>layout28</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>package2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>100</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="margin">
+                                <number>2</number>
+                            </property>
+                            <property name="text">
+                                <string>Package</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignTop|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>pbPrevious</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>32767</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&lt;&lt;</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Previous Package</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="2">
+                            <property name="name">
+                                <cstring>pbNext</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>32767</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&gt;&gt;</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Next Package</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>package</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>0</height>
-                        </size>
+                    <property name="paletteBackgroundColor">
+                        <color>
+                            <red>122</red>
+                            <green>90</green>
+                            <blue>218</blue>
+                        </color>
                     </property>
                     <property name="margin">
-                        <number>3</number>
+                        <number>2</number>
                     </property>
                     <property name="text">
-                        <string>Package</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>pbPrevious</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;&lt;</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Previous Package</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>pbNext</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&gt;&gt;</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Next Package</string>
+                        <string>textLabel1</string>
                     </property>
                 </widget>
             </grid>

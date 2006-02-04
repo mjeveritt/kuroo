@@ -105,8 +105,8 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						appendWorld( const QString& package );
-	void						removeFromWorld( const QString& package );
+	void						appendWorld( const QString& category, const QString& name );
+	void						removeFromWorld( const QString& category, const QString& name );
 	
 signals:
 	void						signalPortageChanged();

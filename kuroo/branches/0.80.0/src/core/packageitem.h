@@ -44,11 +44,15 @@ public:
 	QString							name();
 	QString							description();
 	
+	virtual void					setPackageIndex( int index );
 	virtual void					setStatus( int status );
 	
 	virtual bool					isInstalled();
 	virtual bool					isQueued();
 
+	bool							isFirstPackage();
+	bool							isLastPackage();
+	
 	QString 						category();
 	void 							initVersions();
 	QValueList<PackageVersion*> 	versionList();
@@ -57,6 +61,8 @@ public:
 	void							resetDetailedInfo();
 	
 private:
+	int								m_index;
+	
 	QString							m_id, m_name, m_status, m_packageTip, m_description, m_category;
 	QListView						*m_parent;
 	bool							m_isQueued, hasDetailedInfo;

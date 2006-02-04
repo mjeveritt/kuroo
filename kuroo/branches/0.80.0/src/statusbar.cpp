@@ -98,7 +98,7 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
-// 	kdDebug() << "KurooStatusBar::setTotalSteps total=" << total << endl;
+	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
 }
 
@@ -151,7 +151,7 @@ void KurooStatusBar::slotOneStep()
 void KurooStatusBar::startProgress()
 {
 	setTotalSteps( 0 );
-	statusBarProgress->setTextEnabled(false);
+	statusBarProgress->setTextEnabled( false );
 	diffTimer->start( 1000 );
 }
 

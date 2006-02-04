@@ -152,7 +152,7 @@ void QueueListView::QueueItem::hideBar()
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-	if ( this->isVisible() ) {
+// 	if ( this->isVisible() ) {
 		if ( column == 5 && m_isChecked ) {
 			QRect rect = listView()->itemRect( this );
 			QHeader *head = listView()->header();
@@ -161,7 +161,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 			bar->setGeometry( rect );
 			bar->show();
 		}
-	}
+// 	}
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 
@@ -273,7 +273,6 @@ void QueueListView::insertPackageList()
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		
 		// If version get size also
-// 		QString size;
 		if ( !version.isEmpty() )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 

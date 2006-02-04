@@ -74,7 +74,7 @@ private slots:
 	void							slotLoadUseFlags( const QString& version );
 	
 	void							slotCalculateUse();
-	void							slotEmergePretend( KProcIO* eProc );
+	void							slotCollectPretendOutput( KProcIO* eProc );
 	void							slotParsePackageUse( KProcess* eProc );
 	
 private:

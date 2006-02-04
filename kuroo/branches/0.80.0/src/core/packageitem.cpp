@@ -33,20 +33,49 @@
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), 
-	m_category( QString::null ), hasDetailedInfo( false )
+	m_parent( parent ), m_index( 0 ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( QString::null ), m_isQueued( false ),
+	hasDetailedInfo( false )
 {
 }
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
-	m_parent( parent->listView() ), m_isQueued( false ), m_id( id ), m_name( name ), m_status( status ), m_description( description ), 
-	m_category( QString::null ), hasDetailedInfo( false )
+	m_parent( parent->listView() ), m_index( 0 ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( QString::null ), m_isQueued( false ),
+	hasDetailedInfo( false )
 {
 }
 
 PackageItem::~PackageItem()
 {}
+
+/**
+ * Register package index in parent listView.
+ * @param index
+ */
+void PackageItem::setPackageIndex( int index )
+{
+	m_index = index;
+}
+
+/**
+ * Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
+ * @return true if first
+ */
+bool PackageItem::isFirstPackage()
+{
+	return ( m_index + 1 == m_parent->childCount() );
+}
+
+/**
+ * Is this the last package?
+ * @return true if last
+ */
+bool PackageItem::isLastPackage()
+{
+	return ( m_index == 0 );
+}
 
 /**
  * Is the listViewItem category, package or ebuild.
@@ -271,9 +300,9 @@ QValueList<PackageVersion*> PackageItem::versionList()
 
 /**
  * Return list of versions.
- * @return QMap<QString,PackageVersion*>
+ * @return QMap<QString, PackageVersion*>
  */
-QMap<QString,PackageVersion*> PackageItem::versionMap()
+QMap<QString, PackageVersion*> PackageItem::versionMap()
 {
 	return m_versionMap;
 }

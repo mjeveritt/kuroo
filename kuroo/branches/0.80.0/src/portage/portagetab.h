@@ -47,31 +47,23 @@ public slots:
 	void				slotRefresh();
 	
 private slots:
-	void				slotBusy( bool b );
+	void 				slotInit();
 	
+	void				slotBusy( bool b );
 	void				slotInitButtons();
 	void				slotButtons( bool isQueued );
-	void 				slotInit();
 	
 	void				slotListSubCategories();
 	void				slotFilters();
 	void				slotActivateFilters();
+	void				slotClearFilter();
 	void				slotListPackages();
-	
-	/**
-	* Popup menu for actions like emerge.
-	* @param listView
-	* @param item
-	* @param point
-	*/
-	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
 	void				slotQueue();
 	void				slotUninstall();
 	void				slotAdvanced();
-	void				slotClearFilter();
-	
 	void				slotPackage();
+	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
 private:
 	int					queuedFilters;

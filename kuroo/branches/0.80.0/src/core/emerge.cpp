@@ -306,7 +306,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			continue;
 		
 		//////////////////////////////////////////////////////
-		// Parse out packages and info
+		// Parse out package and info
 		//////////////////////////////////////////////////////
 		if ( rxPackage.search( line ) > -1 ) {
 			EmergePackage emergePackage;
@@ -461,7 +461,7 @@ void Emerge::cleanup()
 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
-		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks );
+		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>") );
 
 	if ( !unmasked.isEmpty() )
 		askUnmaskPackage( unmasked );
@@ -532,7 +532,7 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !blocks.isEmpty() )
-		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks );
+		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>")  );
 	
 	if ( !importantMessage.isEmpty() )
 		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );

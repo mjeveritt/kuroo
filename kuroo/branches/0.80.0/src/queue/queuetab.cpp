@@ -105,6 +105,9 @@ void QueueTab::slotInit()
 
 	pbRemove->setDisabled( true );
 	pbAdvanced->setDisabled( true );
+	cbForce->setDisabled( true );
+	cbRemove->setDisabled( true );
+	
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
 }
@@ -171,7 +174,7 @@ void QueueTab::slotBusy( bool busy )
 // 	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
-		pbGo->setText( i18n( "Abort Installation" ) );
+		pbGo->setText( i18n( "Abort" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
@@ -181,10 +184,16 @@ void QueueTab::slotBusy( bool busy )
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		
-		if ( m_hasCheckedQueue && KUser().isSuperUser() )
+		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
 			pbGo->setText( i18n( "Start Installation" ) );
-		else
+			cbForce->setDisabled( false );
+			cbRemove->setDisabled( false );
+		}
+		else {
 			pbGo->setText( i18n("Check Installation") );
+			cbForce->setDisabled( true );
+			cbRemove->setDisabled( true );
+		}
 	}
 	
 	// No db no fun!
@@ -201,8 +210,6 @@ void QueueTab::slotBusy( bool busy )
 		pbAdvanced->setDisabled( false );
 		pbClear->setDisabled( false );
 		cbDownload->setDisabled( false );
-		cbForce->setDisabled( false );
-		cbRemove->setDisabled( false );
 	}
 	
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )

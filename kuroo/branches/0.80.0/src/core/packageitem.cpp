@@ -170,6 +170,11 @@ bool PackageItem::isQueued()
 	return m_isQueued;
 }
 
+void PackageItem::setQueued()
+{
+	m_isQueued = true;
+}
+
 /**
  * Accessor for category.
  * @return the package category.

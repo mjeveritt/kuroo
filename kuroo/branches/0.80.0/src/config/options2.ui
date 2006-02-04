@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>522</width>
-            <height>546</height>
+            <height>499</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -44,12 +44,6 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>500</width>
-                    <height>540</height>
-                </size>
             </property>
             <widget class="QWidget">
                 <property name="name">

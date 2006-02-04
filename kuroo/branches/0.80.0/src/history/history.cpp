@@ -99,7 +99,6 @@ void History::slotInit()
 
 void History::slotScanHistoryCompleted()
 {
-	kdDebug() << "History::slotScanHistoryCompleted" << endl;
 	emit signalScanHistoryCompleted();
 }
 
@@ -222,10 +221,12 @@ void History::slotParse()
 			// Is it a regular emerge or something else
 			if ( QRegExp("(\\s|\\S)*(\\*\\*\\* emerge)(\\s|\\S)*" ).exactMatch( line ) ) {
 				isEmerging = true;
-				if ( line.contains( QRegExp("fetch-all-uri|noconfmem") ) )
+				
+				// Not emerging - just downloading the packages
+				if ( line.contains( QRegExp("fetch-all-uri") ) )
 					isEmerging = false;
 			}
-			
+
 			// Parse out nice statusbar text
 			if ( line.contains( QRegExp("(\\) )(Cleaning)|(Compiling/Merging)|(Post-Build Cleaning)") ) ) {
 				QString logLine = "(" + emergeLine.section( "::", 0, 0 ).remove( "(" );

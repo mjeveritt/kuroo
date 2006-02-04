@@ -26,6 +26,7 @@
 #include <qclipboard.h>
 
 #include <ktextbrowser.h>
+#include <kapplication.h>
 
 Message* Message::s_instance = 0;
 
@@ -37,10 +38,10 @@ Message::Message( QWidget *parent, const char *name )
 	: KDialogBase( parent, name, false ), base( 0 )
 {
 	s_instance = this;
-	base = new MessageBase(this);
-	showButtonApply(false);
-	showButtonCancel(false);
-	setMainWidget(base);
+	base = new MessageBase( this );
+	showButtonApply( false );
+	showButtonCancel( false );
+	setMainWidget( base );
 }
 
 Message::~Message()
@@ -53,25 +54,18 @@ Message::~Message()
  * @param label
  * @param text	the message
  */
-void Message::prompt( const QString& caption, const QString& label, const QStringList& text )
+void Message::prompt( const QString& caption, const QString& label, const QString& text )
 {
 	setCaption( caption );
-	setLabel( label );
-	setText( text );
+	setLabel( "<b>" + label + "</b>" );
+	base->messageText->setText( text );
 	setInitialSize( QSize(600, 300) );
 	show();
 	
-// 	QClipboard *cb = QApplication::clipboard();
-// 	cb->setText( text, QClipboard::Clipboard );
-}
-
-/**
- * Set the message text and encode it for correct html presentation.
- * @param text	the message
- */
-void Message::setText( const QStringList& lines )
-{
-	base->messageText->setText( lines.join("<br>") );
+	QString lines = text;
+	lines.replace("<br>", "\x000a");
+	QClipboard *cb = QApplication::clipboard();
+	cb->setText( lines, QClipboard::Clipboard );
 }
 
 void Message::setLabel( const QString& label )

@@ -50,6 +50,8 @@ public:
 	virtual bool					isInstalled();
 	virtual bool					isQueued();
 
+	void							setQueued();
+	
 	bool							isFirstPackage();
 	bool							isLastPackage();
 	

@@ -54,7 +54,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
-	dialog->setMinimumSize( 600, 460 );
+	dialog->setMinimumSize( 600, 480 );
 	setMainWidget( dialog );
 	adjustSize();
 	
@@ -272,6 +272,8 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
 void PackageInspector::edit( PackageItem* portagePackage )
 {
 	m_portagePackage = portagePackage;
+	package = m_portagePackage->name();
+	category = m_portagePackage->category();
 	
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
@@ -280,7 +282,7 @@ void PackageInspector::edit( PackageItem* portagePackage )
 		dialog->groupArchitecture->setDisabled( true );
 	}
 	
-	// Disabled editing when package is in Queue
+	// Disabled editing when package is in Queue and kuroo is emerging
 	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
 		dialog->inspectorTabs->page(0)->setDisabled( true );
 		dialog->inspectorTabs->page(1)->setDisabled( true );
@@ -297,9 +299,6 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	}
 	else
 		isVirginState = false;
-	
-	package = m_portagePackage->name();
-	category = m_portagePackage->category();
 
 	// Construct header text
 	dialog->package->setText( "<b><font color=white><font size=+1>" + package + "</font> " +

@@ -184,7 +184,7 @@ void Kuroo::slotPreferences()
 void Kuroo::introWizard()
 {
 	if ( !wizardDialog )
-		wizardDialog = new IntroDlg(this);
+		wizardDialog = new IntroDlg( this );
 	
 	wizardDialog->show();
 }

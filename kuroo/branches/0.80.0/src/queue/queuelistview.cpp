@@ -42,6 +42,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 	bar( 0 ), progress( 0 ), 
 	m_isChecked( false ), m_isComplete( false )
 {
+	setQueued();
 	setText( 0, category + "/" + name );
 	setText( 4, m_useFlags );
 	bar = new KProgress( duration, parent->viewport() );
@@ -54,6 +55,7 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 	bar( 0 ), progress( 0 ), 
 	m_isChecked( false ), m_isComplete( false )
 {
+	setQueued();
 	setText( 0, category + "/" + name );
 	setText( 4, m_useFlags );
 	bar = new KProgress( duration, parent->listView()->viewport() );
@@ -89,6 +91,8 @@ void QueueListView::QueueItem::setStatus( int status )
  */
 void QueueListView::QueueItem::setStart()
 {
+	kdDebug() << "QueueListView::QueueItem::setStart" << endl;
+	
 	m_isComplete = false;
 	m_isChecked = true;
 	repaint();
@@ -99,6 +103,8 @@ void QueueListView::QueueItem::setStart()
  */
 void QueueListView::QueueItem::setComplete()
 {
+	kdDebug() << "QueueListView::QueueItem::setComplete" << endl;
+	
 	m_isComplete = true;
 	bar->setTextEnabled( true );
 	bar->setTotalSteps( 100 );

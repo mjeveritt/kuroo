@@ -1368,7 +1368,7 @@ DbConnectionPool::DbConnectionPool() : m_semaphore(POOL_SIZE)
 
 	enqueue(dbConn);
 	m_semaphore--;
-	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
+// 	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnectionPool::~DbConnectionPool()

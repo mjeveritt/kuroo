@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-05 11:10+0100\n"
+"POT-Creation-Date: 2006-02-05 14:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,34 +16,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:180 portage/portagelistview.cpp:65
-#: portage/portagelistview.cpp:117 portage/portagelistview.cpp:119 rc.cpp:63
+#: queue/queuelistview.cpp:181 portage/portagelistview.cpp:65
+#: portage/portagelistview.cpp:118 portage/portagelistview.cpp:120 rc.cpp:63
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:181 core/versionview.cpp:78
+#: queue/queuelistview.cpp:183 core/versionview.cpp:78
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:182 history/historylistview.cpp:43
+#: queue/queuelistview.cpp:184 history/historylistview.cpp:43
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:183 core/versionview.cpp:80
+#: queue/queuelistview.cpp:185 core/versionview.cpp:80
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:184
+#: queue/queuelistview.cpp:186
 msgid "Use Flags"
 msgstr ""
 
-#: queue/queuelistview.cpp:185
+#: queue/queuelistview.cpp:187
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:295 queue/queuelistview.cpp:300
-#: queue/queuelistview.cpp:305
+#: queue/queuelistview.cpp:305 queue/queuelistview.cpp:310
+#: queue/queuelistview.cpp:315
 msgid "na"
 msgstr ""
 
@@ -55,51 +55,51 @@ msgstr ""
 msgid "Package id is empty, skipping!"
 msgstr ""
 
-#: queue/queuetab.cpp:154
+#: queue/queuetab.cpp:144
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:155
+#: queue/queuetab.cpp:145
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:156
+#: queue/queuetab.cpp:146
 msgid "Estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:157
+#: queue/queuetab.cpp:147
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:177
+#: queue/queuetab.cpp:167
 msgid "Abort"
 msgstr ""
 
-#: queue/queuetab.cpp:188
+#: queue/queuetab.cpp:178
 msgid "Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:193
+#: queue/queuetab.cpp:183
 msgid "Check Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:273
+#: queue/queuetab.cpp:263
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:273 queue/queuetab.cpp:285
+#: queue/queuetab.cpp:263 queue/queuetab.cpp:275
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:285
+#: queue/queuetab.cpp:275
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:309
+#: queue/queuetab.cpp:299
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:314 core/emerge.cpp:459 core/emerge.cpp:531
+#: queue/queuetab.cpp:304 core/emerge.cpp:459 core/emerge.cpp:531
 #: core/cacheportagejob.cpp:185 core/scanportagejob.cpp:338
 #: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:137 core/portagefiles.cpp:226
@@ -108,32 +108,32 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:392 portage/portagetab.cpp:348
+#: queue/queuetab.cpp:382 portage/portagetab.cpp:348
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:395 portage/portagetab.cpp:351
+#: queue/queuetab.cpp:385 portage/portagetab.cpp:351
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:398 portage/portagetab.cpp:354
+#: queue/queuetab.cpp:388 portage/portagetab.cpp:354
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:401 portage/portagetab.cpp:357
+#: queue/queuetab.cpp:391 portage/portagetab.cpp:357
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:403 portage/portagetab.cpp:359
+#: queue/queuetab.cpp:393 portage/portagetab.cpp:359
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:444 portage/portagetab.cpp:487 rc.cpp:25 rc.cpp:245
+#: queue/queuetab.cpp:434 portage/portagetab.cpp:487 rc.cpp:25 rc.cpp:245
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: queue/queuetab.cpp:445
+#: queue/queuetab.cpp:435
 msgid "Add to world"
 msgstr ""
 
@@ -700,7 +700,7 @@ msgstr ""
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:308 rc.cpp:447
+#: history/history.cpp:308 rc.cpp:450
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
@@ -798,17 +798,13 @@ msgstr ""
 msgid "Remove unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portagelistview.cpp:70
+#: portage/portagelistview.cpp:69
 msgid "Update"
 msgstr ""
 
-#: portage/portagelistview.cpp:71 rc.cpp:155
+#: portage/portagelistview.cpp:70 rc.cpp:155
 #, no-c-format
 msgid "Description"
-msgstr ""
-
-#: portage/portagelistview.cpp:91
-msgid "Installed"
 msgstr ""
 
 #: portage/portagetab.cpp:143 portage/portagetab.cpp:155
@@ -1197,56 +1193,56 @@ msgstr ""
 msgid "&Configure Kuroo..."
 msgstr ""
 
-#: kurooview.cpp:82
+#: kurooview.cpp:78
 msgid "Packages"
 msgstr ""
 
-#: kurooview.cpp:83
+#: kurooview.cpp:79
 msgid "Queue"
 msgstr ""
 
-#: kurooview.cpp:84
+#: kurooview.cpp:80
 msgid "History"
 msgstr ""
 
-#: kurooview.cpp:85
+#: kurooview.cpp:81
 msgid "Etc-update"
 msgstr ""
 
-#: kurooview.cpp:86
+#: kurooview.cpp:82
 msgid "Log"
 msgstr ""
 
-#: kurooview.cpp:138
+#: kurooview.cpp:134
 msgid ""
 "<qt>Kuroo database is empty!<br>Kuroo will now first scan your emerge log to "
 "create the emerge history.<br>Next, package information in Portage will be "
 "collected.</qt>"
 msgstr ""
 
-#: kurooview.cpp:141 kurooview.cpp:158
+#: kurooview.cpp:137 kurooview.cpp:154
 msgid "Initialize Kuroo"
 msgstr ""
 
-#: kurooview.cpp:157
+#: kurooview.cpp:153
 msgid ""
 "<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
 "has changed.</qt>"
 msgstr ""
 
-#: kurooview.cpp:158
+#: kurooview.cpp:154
 msgid "Refresh"
 msgstr ""
 
-#: kurooview.cpp:158
+#: kurooview.cpp:154
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:211
+#: kurooview.cpp:207
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
-#: rc.cpp:3 rc.cpp:60 rc.cpp:300 rc.cpp:378 rc.cpp:576 rc.cpp:585 rc.cpp:594
+#: rc.cpp:3 rc.cpp:60 rc.cpp:300 rc.cpp:381 rc.cpp:579 rc.cpp:588 rc.cpp:597
 #, no-c-format
 msgid "Form1"
 msgstr ""
@@ -1261,7 +1257,7 @@ msgstr ""
 msgid "Remove &All"
 msgstr ""
 
-#: rc.cpp:12 rc.cpp:143 rc.cpp:266 rc.cpp:339
+#: rc.cpp:12 rc.cpp:143 rc.cpp:266 rc.cpp:375
 #, no-c-format
 msgid "Alt+A"
 msgstr ""
@@ -1301,7 +1297,7 @@ msgstr ""
 msgid "Force reinstall of config files (--&noconfmem)"
 msgstr ""
 
-#: rc.cpp:47 rc.cpp:118 rc.cpp:278 rc.cpp:345
+#: rc.cpp:47 rc.cpp:118 rc.cpp:278 rc.cpp:369
 #, no-c-format
 msgid "Alt+N"
 msgstr ""
@@ -1646,375 +1642,380 @@ msgstr ""
 
 #: rc.cpp:333
 #, no-c-format
-msgid "Kuroo options"
-msgstr ""
-
-#: rc.cpp:336
-#, no-c-format
-msgid "Show system tr&ay icon"
-msgstr ""
-
-#: rc.cpp:342
-#, no-c-format
-msgid "Show i&nstalled packages in separate column"
-msgstr ""
-
-#: rc.cpp:348
-#, no-c-format
 msgid "Package filter options"
 msgstr ""
 
-#: rc.cpp:353
+#: rc.cpp:338
 #, no-c-format
 msgid "Click to select the background color of the OSD."
 msgstr ""
 
-#: rc.cpp:356 rc.cpp:375
+#: rc.cpp:341 rc.cpp:360
 #, no-c-format
 msgid "The color of the OSD background."
 msgstr ""
 
-#: rc.cpp:360
+#: rc.cpp:345
 #, no-c-format
 msgid "Click to select the color of the OSD text."
 msgstr ""
 
-#: rc.cpp:363 rc.cpp:369
+#: rc.cpp:348 rc.cpp:354
 #, no-c-format
 msgid "The color of the OSD text."
 msgstr ""
 
-#: rc.cpp:366
+#: rc.cpp:351
 #, no-c-format
 msgid "No matching packages found"
 msgstr ""
 
-#: rc.cpp:372
+#: rc.cpp:357
 #, no-c-format
 msgid "Matching packages found"
 msgstr ""
 
-#: rc.cpp:381
+#: rc.cpp:363
 #, no-c-format
-msgid "&Build"
+msgid "Kuroo options"
+msgstr ""
+
+#: rc.cpp:366
+#, no-c-format
+msgid "Show i&nstalled packages in separate column"
+msgstr ""
+
+#: rc.cpp:372
+#, no-c-format
+msgid "Show system tr&ay icon"
+msgstr ""
+
+#: rc.cpp:378
+#, no-c-format
+msgid "<i>Restart for changes to take effect.</i>"
 msgstr ""
 
 #: rc.cpp:384
 #, no-c-format
-msgid "Build options"
+msgid "&Build"
 msgstr ""
 
 #: rc.cpp:387
 #, no-c-format
-msgid "i386-pc-linux-gnu"
+msgid "Build options"
 msgstr ""
 
 #: rc.cpp:390
 #, no-c-format
-msgid "i486-pc-linux-gnu"
+msgid "i386-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:393
 #, no-c-format
-msgid "i586-pc-linux-gnu"
+msgid "i486-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:396
 #, no-c-format
-msgid "i686-pc-linux-gnu"
+msgid "i586-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:399
 #, no-c-format
-msgid "alpha-unknown-linux-gnu"
+msgid "i686-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:402
 #, no-c-format
-msgid "powerpc-unknown-linux-gnu"
+msgid "alpha-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:405
 #, no-c-format
-msgid "powerpc64-unknown-linux-gnu"
+msgid "powerpc-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:408
 #, no-c-format
-msgid "sparc-unknown-linux-gnu"
+msgid "powerpc64-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:411
 #, no-c-format
-msgid "hppa-unknown-linux-gnu"
+msgid "sparc-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:414
 #, no-c-format
-msgid "hppa1.1-unknown-linux-gnu"
+msgid "hppa-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:417
 #, no-c-format
-msgid "hppa2.0-unknown-linux-gnu"
+msgid "hppa1.1-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:420
 #, no-c-format
-msgid "mips-unknown-linux-gnu"
+msgid "hppa2.0-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:423
 #, no-c-format
-msgid "x86_64-pc-linux-gnu"
+msgid "mips-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:426
 #, no-c-format
-msgid "CHOST"
+msgid "x86_64-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:429
 #, no-c-format
-msgid "CFLAGS"
+msgid "CHOST"
 msgstr ""
 
 #: rc.cpp:432
 #, no-c-format
-msgid "CXXFLAGS"
+msgid "CFLAGS"
 msgstr ""
 
 #: rc.cpp:435
 #, no-c-format
-msgid "MAKEOPTS"
+msgid "CXXFLAGS"
 msgstr ""
 
 #: rc.cpp:438
 #, no-c-format
-msgid "USE"
+msgid "MAKEOPTS"
 msgstr ""
 
 #: rc.cpp:441
 #, no-c-format
-msgid "&Advanced build"
+msgid "USE"
 msgstr ""
 
 #: rc.cpp:444
 #, no-c-format
-msgid "Advanced build options"
+msgid "&Advanced build"
 msgstr ""
 
-#: rc.cpp:450
+#: rc.cpp:447
 #, no-c-format
-msgid "NOCOLOR"
+msgid "Advanced build options"
 msgstr ""
 
 #: rc.cpp:453
 #, no-c-format
-msgid "true"
+msgid "NOCOLOR"
 msgstr ""
 
 #: rc.cpp:456
 #, no-c-format
-msgid "false"
+msgid "true"
 msgstr ""
 
 #: rc.cpp:459
 #, no-c-format
-msgid "USE_ORDER"
+msgid "false"
 msgstr ""
 
-#: rc.cpp:468
+#: rc.cpp:462
 #, no-c-format
-msgid "CBUILD"
+msgid "USE_ORDER"
 msgstr ""
 
 #: rc.cpp:471
 #, no-c-format
-msgid "FEATURES"
+msgid "CBUILD"
 msgstr ""
 
 #: rc.cpp:474
 #, no-c-format
-msgid "DEBUGBUILD"
+msgid "FEATURES"
 msgstr ""
 
 #: rc.cpp:477
 #, no-c-format
-msgid "BUILD_PREFIX"
+msgid "DEBUGBUILD"
 msgstr ""
 
 #: rc.cpp:480
 #, no-c-format
-msgid "CLEAN_DELAY"
+msgid "BUILD_PREFIX"
 msgstr ""
 
 #: rc.cpp:483
 #, no-c-format
-msgid "CCACHE_SIZE"
+msgid "CLEAN_DELAY"
 msgstr ""
 
 #: rc.cpp:486
 #, no-c-format
-msgid "ACCEPT_KEYWORDS"
+msgid "CCACHE_SIZE"
 msgstr ""
 
 #: rc.cpp:489
 #, no-c-format
-msgid "PORTAGE_NICENESS"
+msgid "ACCEPT_KEYWORDS"
 msgstr ""
 
 #: rc.cpp:492
 #, no-c-format
-msgid "Directories and files"
+msgid "PORTAGE_NICENESS"
 msgstr ""
 
 #: rc.cpp:495
 #, no-c-format
-msgid "Portage directories"
+msgid "Directories and files"
 msgstr ""
 
 #: rc.cpp:498
 #, no-c-format
-msgid "RPMDIR"
+msgid "Portage directories"
 msgstr ""
 
 #: rc.cpp:501
 #, no-c-format
-msgid "PORT_LOGDIR"
+msgid "RPMDIR"
 msgstr ""
 
 #: rc.cpp:504
 #, no-c-format
-msgid "PORTAGE_BINHOST"
+msgid "PORT_LOGDIR"
 msgstr ""
 
 #: rc.cpp:507
 #, no-c-format
-msgid "PORTDIR"
+msgid "PORTAGE_BINHOST"
 msgstr ""
 
 #: rc.cpp:510
 #, no-c-format
-msgid "ROOT"
+msgid "PORTDIR"
 msgstr ""
 
 #: rc.cpp:513
 #, no-c-format
-msgid "PORTAGE_TMPDIR"
+msgid "ROOT"
 msgstr ""
 
 #: rc.cpp:516
 #, no-c-format
-msgid "PORTDIR_OVERLAY"
+msgid "PORTAGE_TMPDIR"
 msgstr ""
 
 #: rc.cpp:519
 #, no-c-format
-msgid "PKG_DIR"
+msgid "PORTDIR_OVERLAY"
 msgstr ""
 
 #: rc.cpp:522
 #, no-c-format
-msgid "DISTDIR"
+msgid "PKG_DIR"
 msgstr ""
 
 #: rc.cpp:525
 #, no-c-format
-msgid "PKG_TMPDIR"
+msgid "DISTDIR"
 msgstr ""
 
 #: rc.cpp:528
 #, no-c-format
-msgid "Config files in /etc"
+msgid "PKG_TMPDIR"
 msgstr ""
 
 #: rc.cpp:531
 #, no-c-format
-msgid "CONFIG_PROTECT"
+msgid "Config files in /etc"
 msgstr ""
 
 #: rc.cpp:534
 #, no-c-format
-msgid "CONFIG_PROTECT_MASK"
+msgid "CONFIG_PROTECT"
 msgstr ""
 
 #: rc.cpp:537
 #, no-c-format
-msgid "&Network"
+msgid "CONFIG_PROTECT_MASK"
 msgstr ""
 
 #: rc.cpp:540
 #, no-c-format
-msgid "Download"
+msgid "&Network"
 msgstr ""
 
 #: rc.cpp:543
 #, no-c-format
-msgid "RESUMECOMMAND"
+msgid "Download"
 msgstr ""
 
 #: rc.cpp:546
 #, no-c-format
-msgid "HTTP_PROXY FTP_PROXY"
+msgid "RESUMECOMMAND"
 msgstr ""
 
 #: rc.cpp:549
 #, no-c-format
-msgid "FETCHCOMMAND"
+msgid "HTTP_PROXY FTP_PROXY"
 msgstr ""
 
 #: rc.cpp:552
 #, no-c-format
-msgid "GENTOO_MIRRORS"
+msgid "FETCHCOMMAND"
 msgstr ""
 
 #: rc.cpp:555
 #, no-c-format
-msgid "Sync"
+msgid "GENTOO_MIRRORS"
 msgstr ""
 
 #: rc.cpp:558
 #, no-c-format
-msgid "RSYNC_PROXY"
+msgid "Sync"
 msgstr ""
 
 #: rc.cpp:561
 #, no-c-format
-msgid "RSYNC_TIMEOUT"
+msgid "RSYNC_PROXY"
 msgstr ""
 
 #: rc.cpp:564
 #, no-c-format
-msgid "SYNC"
+msgid "RSYNC_TIMEOUT"
 msgstr ""
 
 #: rc.cpp:567
 #, no-c-format
-msgid "RSYNC_RETRIES"
+msgid "SYNC"
 msgstr ""
 
 #: rc.cpp:570
 #, no-c-format
-msgid "RSYNC_EXCLUDEFROM"
+msgid "RSYNC_RETRIES"
 msgstr ""
 
 #: rc.cpp:573
 #, no-c-format
+msgid "RSYNC_EXCLUDEFROM"
+msgstr ""
+
+#: rc.cpp:576
+#, no-c-format
 msgid "RSYNC_RATELIMIT"
 msgstr ""
 
-#: rc.cpp:579
+#: rc.cpp:582
 #, no-c-format
 msgid "&Portage"
 msgstr ""
 
-#: rc.cpp:588
+#: rc.cpp:591
 #, no-c-format
 msgid "<i>This text is now pasted into the clipboard.</i>"
 msgstr ""
 
-#: rc.cpp:591
+#: rc.cpp:594
 #, no-c-format
 msgid "Warning!"
 msgstr ""

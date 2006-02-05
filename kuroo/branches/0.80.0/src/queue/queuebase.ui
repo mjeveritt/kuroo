@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>721</width>
-            <height>651</height>
+            <width>701</width>
+            <height>586</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -496,10 +496,6 @@
     <customwidget>
         <class>QueueListView</class>
         <header location="local">queuelistview.h</header>
-        <sizehint>
-            <width>100</width>
-            <height>100</height>
-        </sizehint>
         <container>1</container>
         <sizepolicy>
             <hordata>3</hordata>

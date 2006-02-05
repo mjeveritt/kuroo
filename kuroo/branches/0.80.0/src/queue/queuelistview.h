@@ -72,6 +72,8 @@ public slots:
 	
 private slots:
 	
+	void					viewportResizeEvent(QResizeEvent *e);
+	
 	void					slotHideBars( QListViewItem* item );
 	
 	/**

@@ -89,7 +89,7 @@ void PackageItem::setStatus( int status )
 		case INSTALLED : {
 			if ( KurooConfig::installedColumn() ) {
 				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-				setPixmap( 4, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
 			}
 			else
 				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
@@ -102,12 +102,12 @@ void PackageItem::setStatus( int status )
 		
 		case QUEUED :
 			m_isQueued = true;
-			setPixmap( 1, ImagesSingleton::Instance()->icon( QUEUED ) );
+			setPixmap( 2, ImagesSingleton::Instance()->icon( QUEUED ) );
 			break;
 		
 		case NOTQUEUED :
 			m_isQueued = false;
-			setPixmap( 1, ImagesSingleton::Instance()->icon( EMPTY ) );
+			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
 		
 	}
 }

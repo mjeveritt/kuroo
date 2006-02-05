@@ -86,10 +86,6 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
  */
 QueueTab::~QueueTab()
 {
-	KConfig *config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	queueView->saveLayout( KurooConfig::self()->config(), "queueViewLayout" );
-	KurooConfig::writeConfig();
 }
 
 /**
@@ -97,12 +93,6 @@ QueueTab::~QueueTab()
  */
 void QueueTab::slotInit()
 {
-	KConfig *config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	
-	if ( !KurooConfig::init() )
-		queueView->restoreLayout( KurooConfig::self()->config(), "queueViewLayout" );
-
 	pbRemove->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	cbForce->setDisabled( true );

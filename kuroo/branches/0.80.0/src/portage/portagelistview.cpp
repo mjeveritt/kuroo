@@ -62,13 +62,18 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
 {
 	// Setup geometry
-	addColumn( i18n( "Package" ) );
+	addColumn( i18n( "Package" ), 150 );
+	addColumn( "" );
+	addColumn( "", 25 );
+	header()->setLabel( 2, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
+	addColumn( i18n( "Update" ), 80 );
+	addColumn( i18n( "Description" ), 200 );
 	
-	addColumn( " " );
-	header()->setLabel( 1, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), " " );
-	
-	addColumn( i18n( "Update" ) );
-	addColumn( i18n( "Description" ) );
+	setColumnWidthMode( 0, QListView::Manual );
+	setColumnWidthMode( 1, QListView::Manual );
+	setColumnWidthMode( 2, QListView::Manual );
+	setColumnWidthMode( 3, QListView::Manual );
+// 	setResizeMode( QListView::LastColumn );
 	
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator( true );
@@ -76,23 +81,18 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setRootIsDecorated( false );
 	setFullWidth( true );
 	
-	setColumnWidthMode( 0, QListView::Manual );
-	setColumnWidthMode( 1, QListView::Manual );
-	setColumnWidthMode( 2, QListView::Manual );
-	setResizeMode( QListView::LastColumn );
-	
-	setColumnWidth( 0, 150 );
-	setColumnWidth( 1, 25 );
-	setColumnWidth( 2, 80 );
-	
 	setTooltipColumn( 3 );
 	
 	if ( KurooConfig::installedColumn() ) {
-		addColumn( " " );
-		header()->setLabel( 4, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), " " );
-		setColumnAlignment( 4, Qt::AlignHCenter );
-		header()->moveSection( 4, 1 );
+		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
+		setColumnAlignment( 1, Qt::AlignHCenter );
+		setColumnWidth( 1, 25 );
 	}
+	else
+		hideColumn( 1 );
+	
+	header()->setResizeEnabled( false, 1 );
+	header()->setResizeEnabled( false, 2 );
 }
 
 PortageListView::~PortageListView()
@@ -148,8 +148,8 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString homepage = *it;
 		
 		PortageItem* item = new PortageItem( this, name, id, description, meta, homepage );
-		item->setText( 2, update );
-		item->setText( 3, description );
+		item->setText( 3, update );
+		item->setText( 4, description );
 		
 		if ( meta == FILTER_ALL_STRING )
 			item->setStatus( PACKAGE );

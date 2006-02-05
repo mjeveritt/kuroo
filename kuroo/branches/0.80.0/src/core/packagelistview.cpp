@@ -24,6 +24,7 @@
 #include "tooltip.h"
 
 #include <qlistview.h>
+#include <qheader.h>
 
 /**
  * @class PackageListView
@@ -34,6 +35,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 {
 	setFrameShape( QFrame::NoFrame );
 	setSelectionModeExt( FileManager );
+	header()->setStretchEnabled( false );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );

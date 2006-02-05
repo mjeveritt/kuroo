@@ -44,7 +44,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 {
 	setQueued();
 	setText( 0, category + "/" + name );
-	setText( 4, m_useFlags );
+	setText( 5, m_useFlags );
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
@@ -57,7 +57,7 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 {
 	setQueued();
 	setText( 0, category + "/" + name );
-	setText( 4, m_useFlags );
+	setText( 5, m_useFlags );
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
 }
@@ -79,7 +79,7 @@ void QueueListView::QueueItem::setStatus( int status )
 		case INSTALLED :
 			if ( KurooConfig::installedColumn() ) {
 				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-				setPixmap( 6, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
 			}
 			else
 				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
@@ -96,8 +96,6 @@ void QueueListView::QueueItem::setStatus( int status )
  */
 void QueueListView::QueueItem::setStart()
 {
-	kdDebug() << "QueueListView::QueueItem::setStart" << endl;
-	
 	m_isComplete = false;
 	m_isChecked = true;
 	repaint();
@@ -108,8 +106,6 @@ void QueueListView::QueueItem::setStart()
  */
 void QueueListView::QueueItem::setComplete()
 {
-	kdDebug() << "QueueListView::QueueItem::setComplete" << endl;
-	
 	m_isComplete = true;
 	bar->setTextEnabled( true );
 	bar->setTotalSteps( 100 );
@@ -163,11 +159,11 @@ void QueueListView::QueueItem::hideBar()
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-	if ( column == 5 && m_isChecked ) {
+	if ( column == 6 && m_isChecked ) {
 		QRect rect = listView()->itemRect( this );
 		QHeader *head = listView()->header();
-		rect.setLeft( head->sectionPos( 5 ) - head->offset() );
-		rect.setWidth( head->sectionSize( 5 ) );
+		rect.setLeft( head->sectionPos( 6 ) - head->offset() );
+		rect.setWidth( head->sectionSize( 6 ) );
 		bar->setGeometry( rect );
 		bar->show();
 	}
@@ -182,40 +178,42 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), loc( KGlobal::locale() ), m_id( QString::null )
 {
 	// Setup geometry
-	addColumn( i18n( "Package" ) );
-	addColumn( i18n( "Version" ) );
-	addColumn( i18n( "Duration" ) );
-	addColumn( i18n( "Size" ) );
+	addColumn( i18n( "Package" ), 200 );
+	addColumn( "" );
+	addColumn( i18n( "Version" ), 60 );
+	addColumn( i18n( "Duration" ), 60 );
+	addColumn( i18n( "Size" ), 80 );
 	addColumn( i18n( "Use Flags" ) );
-	addColumn( i18n( "Progress" ) );
+	addColumn( i18n( "Progress" ), 60 );
 	
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
 	setFullWidth( true );
-	setColumnAlignment( 3, Qt::AlignRight );
+
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
 	setColumnWidthMode( 3, QListView::Manual );
 	setColumnWidthMode( 4, QListView::Manual );
+	setColumnWidthMode( 5, QListView::Manual );
+	setColumnWidthMode( 6, QListView::Manual );
 	
-	setColumnWidth( 0, 200 );
-	setColumnWidth( 1, 60 );
-	setColumnWidth( 2, 60 );
-	setColumnWidth( 3, 80 );
-	setColumnWidth( 5, 80 );
+	setColumnAlignment( 4, Qt::AlignRight );
 	
-	setTooltipColumn( 2 );
+	setTooltipColumn( 4 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );
 	
 	if ( KurooConfig::installedColumn() ) {
-		addColumn( " " );
-		header()->setLabel( 6, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), " " );
-		setColumnAlignment( 6, Qt::AlignHCenter );
-		header()->moveSection( 6, 1 );
+		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
+		setColumnAlignment( 1, Qt::AlignHCenter );
+		setColumnWidth( 1, 25 );
 	}
+	else
+		hideColumn( 1 );
+	
+	header()->setResizeEnabled( false, 1 );
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
@@ -304,19 +302,19 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		
 		// Add package info
 		if ( version.isEmpty() )
-			item->setText( 1, i18n("na") );
-		else
-			item->setText( 1, version );
-		
-		if ( duration == diffTime )
 			item->setText( 2, i18n("na") );
 		else
-			item->setText( 2, formatTime( duration ) );
+			item->setText( 2, version );
+		
+		if ( duration == diffTime )
+			item->setText( 3, i18n("na") );
+		else
+			item->setText( 3, formatTime( duration ) );
 		
 		if ( size.isEmpty() )
-			item->setText( 3, i18n("na") );
+			item->setText( 4, i18n("na") );
 		else {
-			item->setText( 3, size );
+			item->setText( 4, size );
 			addSize( size );
 		}
 		
@@ -337,6 +335,22 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	emit( signalQueueLoaded() );
 }
 
+/**
+ * Make sure progress column don't eat width from use flag column.
+ */
+void QueueListView::viewportResizeEvent( QResizeEvent *e )
+{
+	setColumnWidth( 6, 60 );
+	
+	if ( KurooConfig::installedColumn() )
+		setColumnWidth( 5, this->visibleWidth() - 485 );
+	else
+		setColumnWidth( 5, this->visibleWidth() - 465 );
+}
+
+/**
+ * Clear use column after user changed use flag settings.
+ */
 void QueueListView::clearQueuePackageUse()
 {
 	QListViewItem* myChild = firstChild();

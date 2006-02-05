@@ -341,11 +341,12 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 void QueueListView::viewportResizeEvent( QResizeEvent *e )
 {
 	setColumnWidth( 6, 60 );
+	int totalWidth = columnWidth(0) + columnWidth(2) + columnWidth(3) + columnWidth(4) + 60;
 	
 	if ( KurooConfig::installedColumn() )
-		setColumnWidth( 5, this->visibleWidth() - 485 );
+		setColumnWidth( 5, this->visibleWidth() - totalWidth - 25 );
 	else
-		setColumnWidth( 5, this->visibleWidth() - 465 );
+		setColumnWidth( 5, this->visibleWidth() - totalWidth );
 }
 
 /**

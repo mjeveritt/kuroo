@@ -73,7 +73,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
 	setColumnWidthMode( 3, QListView::Manual );
-// 	setResizeMode( QListView::LastColumn );
 	
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator( true );

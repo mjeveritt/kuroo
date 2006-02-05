@@ -99,7 +99,7 @@ void Kuroo::setupActions()
 	KStdAction::preferences( this, SLOT(slotPreferences()), actionCollection() );
 	
 	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
-	                    this, SLOT( introWizard() ), actionCollection(), "wizard" );
+	                    				this, SLOT( introWizard() ), actionCollection(), "wizard" );
 	
 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
@@ -108,7 +108,7 @@ void Kuroo::setupActions()
 	                                    UpdatesSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_updates" );
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
-	                          this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
+	                          			this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
 	
 	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
 	                               		EtcUpdateSingleton::Instance(), SLOT( etcUpdate() ), actionCollection(), "etc_update" );
@@ -130,10 +130,14 @@ void Kuroo::slotBusy( bool busy )
 		actionRefreshUpdates->setEnabled( true );
 	}
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() )
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
-	else
+		actionEtcUpdate->setEnabled( false );
+	}
+	else {
 		actionSyncPortage->setEnabled( true );
+		actionEtcUpdate->setEnabled( true );
+	}
 	
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {

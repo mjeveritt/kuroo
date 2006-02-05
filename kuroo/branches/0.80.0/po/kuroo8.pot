@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-05 14:57+0100\n"
+"POT-Creation-Date: 2006-02-05 16:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: queue/queuelistview.cpp:181 portage/portagelistview.cpp:65
-#: portage/portagelistview.cpp:118 portage/portagelistview.cpp:120 rc.cpp:63
+#: portage/portagelistview.cpp:117 portage/portagelistview.cpp:119 rc.cpp:63
 #, no-c-format
 msgid "Package"
 msgstr ""
@@ -1098,21 +1098,21 @@ msgstr ""
 msgid "&Run etc-update"
 msgstr ""
 
-#: kuroo.cpp:162
+#: kuroo.cpp:166
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: kuroo.cpp:163
+#: kuroo.cpp:167
 msgid "Last sync: %1"
 msgstr ""
 
-#: kuroo.cpp:176 kuroo.cpp:178
+#: kuroo.cpp:180 kuroo.cpp:182
 msgid "settings"
 msgstr ""
 
-#: kuroo.cpp:237
+#: kuroo.cpp:241
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"

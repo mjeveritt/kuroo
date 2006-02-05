@@ -281,7 +281,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 	static QString importantMessagePackage;
 	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
 	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
+	                   "([\\-\\+\\w\\s\\(\\)\\*]*)\\s+([\\d,]*)\\s+kB" );
 	
 	while ( proc->readln( line, true ) >= 0 ) {
 		int logDone = 0;

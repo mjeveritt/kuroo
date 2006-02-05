@@ -56,7 +56,6 @@ PackageInspector::PackageInspector( QWidget *parent )
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
 	dialog->setMinimumSize( 600, 480 );
-// 	adjustSize();
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
@@ -740,7 +739,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	
 	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
 	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "([\\-\\+\\w\\s\\(\\)\\*]+)\\s+([\\d,]*)\\s+kB" );
+	                   "([\\-\\+\\w\\s\\(\\)\\*]*)\\s+([\\d,]*)\\s+kB" );
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {

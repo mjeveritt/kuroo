@@ -110,6 +110,9 @@ void Kuroo::setupActions()
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
 	                          this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
 	
+	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
+	                               		EtcUpdateSingleton::Instance(), SLOT( etcUpdate() ), actionCollection(), "etc_update" );
+	
 	createGUI();
 }
 

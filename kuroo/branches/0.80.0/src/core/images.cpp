@@ -59,16 +59,24 @@ void Images::init( QObject *parent )
 	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
 	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
+	
 	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
+	pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIcon::Small );
+	
+	pxViewPackages =  ldr->loadIcon( "kuroo", KIcon::Panel );
+	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIcon::Panel );
+	pxViewHistory = ldr->loadIcon( "kuroo_history", KIcon::Panel );
+	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIcon::Panel );
+	pxViewLog = ldr->loadIcon( "kuroo_log", KIcon::Panel );
 }
 
 /**
  * Deliver icons.
  * @return pointer to pixmap
  */
-QPixmap& Images::icon( int state )
+QPixmap& Images::icon( int image )
 {
-	switch ( state ) {
+	switch ( image ) {
 		
 		case KUROO_READY:
 			return pxKuroo;
@@ -108,6 +116,30 @@ QPixmap& Images::icon( int state )
 		
 		case QUEUED_COLUMN:
 			return pxQueuedColumn;
+			break;
+		
+		case INSTALLED_COLUMN:
+			return pxInstalledColumn;
+		
+		case VIEW_PACKAGES:
+			return pxViewPackages;
+			break;
+		
+		case VIEW_QUEUE:
+			return pxViewQueue;
+			break;
+		
+		case VIEW_HISTORY:
+			return pxViewHistory;
+			break;
+		
+		case VIEW_MERGE:
+			return pxViewMerge;
+			break;
+		
+		case VIEW_LOG:
+			return pxViewLog;
+		
 	}
 }
 

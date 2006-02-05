@@ -65,7 +65,7 @@ void PackageItem::setPackageIndex( int index )
  */
 bool PackageItem::isFirstPackage()
 {
-	return ( m_index + 1 == m_parent->childCount() );
+	return ( m_index == m_parent->childCount() );
 }
 
 /**
@@ -74,7 +74,7 @@ bool PackageItem::isFirstPackage()
  */
 bool PackageItem::isLastPackage()
 {
-	return ( m_index == 0 );
+	return ( m_index == 1 );
 }
 
 /**

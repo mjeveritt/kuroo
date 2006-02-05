@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd"> 
-<kcfg> <kcfgfile name="kuroo8rc"/> 
+	<kcfg>
+	<kcfgfile name="kuroo8rc"/> 
 	<group name="general">
 		<entry name="portageCount" type="String">
 		</entry>
@@ -18,9 +19,6 @@
 		</entry>
 		<entry name="installedColumn" type="Bool">
 		<default>false</default>
-		</entry>
-		<entry name="rowLimit" type="Int">
-		<default>1000</default>
 		</entry>
 		<entry name="isSystrayEnabled" type="Bool">
 		<default>true</default>

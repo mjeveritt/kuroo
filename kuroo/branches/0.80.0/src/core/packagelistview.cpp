@@ -30,7 +30,7 @@
  * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
-	: KListView( parent, name ), index( 0 )
+	: KListView( parent, name )
 {
 	setFrameShape( QFrame::NoFrame );
 	setSelectionModeExt( FileManager );
@@ -52,7 +52,6 @@ void PackageListView::resetListView()
 {
 	clear();
 	packageIndex.clear();
-	index = 0;
 }
 
 /**
@@ -224,7 +223,7 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 	else
 		packageIndex[id]->setStatus( NOTQUEUED );
 	
-	packageIndex[id]->setPackageIndex( index++ );
+	packageIndex[id]->setPackageIndex( packageIndex.count() );
 }
 
 /**

@@ -3,7 +3,7 @@
   <general>
     <author>karye</author>
     <email>karye@users.sourceforge.net</email>
-    <version>$VERSION$</version>
+    <version>0.80.0</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts/>
     <versioncontrol>kdevsubversion</versioncontrol>
   </general>
@@ -73,11 +73,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -159,7 +159,7 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -192,4 +192,28 @@
       <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
+  <dist>
+    <custom>false</custom>
+    <bzip>false</bzip>
+    <archname></archname>
+    <appname>kuroo8.kdevelop</appname>
+    <version>0.80.0_050206_db19</version>
+    <release></release>
+    <vendor></vendor>
+    <licence></licence>
+    <summary></summary>
+    <group></group>
+    <packager></packager>
+    <description></description>
+    <changelog></changelog>
+    <devpackage>false</devpackage>
+    <docspackage>false</docspackage>
+    <appicon>false</appicon>
+    <arch>0</arch>
+    <genHTML>false</genHTML>
+    <useRPM>false</useRPM>
+    <ftpkde>false</ftpkde>
+    <appskde>false</appskde>
+    <url></url>
+  </dist>
 </kdevelop>

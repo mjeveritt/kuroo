@@ -33,12 +33,14 @@ public:
 
 	void 		init( QObject *parent = 0 );
 	
-	QPixmap&	icon( int state );
+	QPixmap&	icon( int image );
 	
 private:
 	QObject*	m_parent;
 	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued;
-	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxVersionInstalled;
+	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxVersionInstalled, pxInstalledColumn;
+	QPixmap		pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
+
 };
 
 #endif

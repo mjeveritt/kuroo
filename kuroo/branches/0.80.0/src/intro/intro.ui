@@ -84,15 +84,16 @@
                 <property name="text">
                     <string>&lt;h2&gt;Kuroo8_beta1&lt;/h2&gt;
 New features:&lt;br&gt;
-Faster portage scanning.&lt;br&gt;
-Smart package browsing and searching with filters.&lt;br&gt;
-Parsing hardmasked packages in /usr/portage/profiles/package.mask and /etc/portage/package.unmask and /etc/portage/package.unmask.&lt;br&gt;
-Advanced package Inspector.&lt;br&gt;
+Unified package view: fast package browsing and searching with filters.&lt;br&gt;
+New Inspector for advanced package management.&lt;br&gt;
 Etc-update merge and emerge infos and warnings stored in history.&lt;br&gt;
+Support for multiple portage overlay's.&lt;br&gt;
+Package stability calculation.&lt;br&gt;
+And more...
 &lt;br&gt;
-
+&lt;br&gt;
 &lt;b&gt;&lt;font color="red"&gt;Warning!&lt;br&gt;
-Please make backup of your files in /etc/portage.&lt;/font&gt;&lt;/b&gt;</string>
+Please take backup of files in /etc/portage and /etc/make.conf.&lt;/font&gt;&lt;/b&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">

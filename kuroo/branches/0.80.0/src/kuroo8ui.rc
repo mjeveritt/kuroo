@@ -6,6 +6,7 @@
 		<Action name="sync_portage" />
 		<Action name="refresh_portage" />
 		<Action name="refresh_updates" />
+		<Action name="etc_update" />
 	</Menu>
 	<Menu name="custom2">
 		<text>&amp;View</text>

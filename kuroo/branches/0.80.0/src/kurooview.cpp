@@ -40,12 +40,9 @@
 
 #include <ktabwidget.h>
 #include <ktextbrowser.h>
-#include <ktrader.h>
-#include <klibloader.h>
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <kcursor.h>
-#include <kiconloader.h>
 
 /**
  * @class KurooView
@@ -78,12 +75,11 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	viewStack->addWidget( tabLogs, 5 );
 	
 	// Create menu-icons for the pages
-	KIconLoader *ldr = KGlobal::iconLoader();
-	iconPackages = new IconListItem( viewMenu, ldr->loadIcon( "kuroo", KIcon::Panel ), i18n("Packages") );
-	iconQueue = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_queue", KIcon::Panel ), i18n("Queue") );
-	iconHistory = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_history", KIcon::Panel ), i18n("History") );
-	iconMerge = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_etc", KIcon::Panel ), i18n("Etc-update") );
-	iconLog = new IconListItem( viewMenu, ldr->loadIcon( "kuroo_log", KIcon::Panel ), i18n("Log") );
+	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PACKAGES ), i18n("Packages") );
+	iconQueue = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_QUEUE ), i18n("Queue") );
+	iconHistory = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_HISTORY ), i18n("History") );
+	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Etc-update") );
+	iconLog = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_LOG ), i18n("Log") );
 	
 	// Connect menu-icons to the pages
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );

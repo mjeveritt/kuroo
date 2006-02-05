@@ -88,7 +88,8 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setTooltipColumn( 3 );
 	
 	if ( KurooConfig::installedColumn() ) {
-		addColumn( i18n( "Installed" ) );
+		addColumn( " " );
+		header()->setLabel( 4, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), " " );
 		setColumnAlignment( 4, Qt::AlignHCenter );
 		header()->moveSection( 4, 1 );
 	}
@@ -137,14 +138,8 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	
 	// Don't load all packages, only first ROWLIMIT
 	packageCount = packageList.size() / 6;
-	int max( ( packageCount - KurooConfig::rowLimit() ) * 6 ) ;
 	
 	foreach ( packageList ) {
-		
-		// Since packages are loaded in reverse alfabetical order, skip all except last ROWLIMIT
-		if ( max-- > 0 )
-			continue;
-		
 		QString id = *it++;
 		QString name = *it++;
 		QString description = *it++;
@@ -171,11 +166,11 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	if ( packageCount == 1 )
 		emit currentChanged( 0 );
 	
-	return packageCount;
-	
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
 // 	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
+	
+	return packageCount;
 }
 
 #include "portagelistview.moc"

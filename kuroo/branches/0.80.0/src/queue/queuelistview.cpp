@@ -77,7 +77,12 @@ void QueueListView::QueueItem::setStatus( int status )
 	switch ( status ) {
 		
 		case INSTALLED :
-			setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+			if ( KurooConfig::installedColumn() ) {
+				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+				setPixmap( 6, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+			}
+			else
+				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 			break;
 		
 		case PACKAGE :
@@ -204,6 +209,13 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );
+	
+	if ( KurooConfig::installedColumn() ) {
+		addColumn( " " );
+		header()->setLabel( 6, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), " " );
+		setColumnAlignment( 6, Qt::AlignHCenter );
+		header()->moveSection( 6, 1 );
+	}
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );

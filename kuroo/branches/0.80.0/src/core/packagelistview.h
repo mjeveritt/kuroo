@@ -125,7 +125,6 @@ signals:
 	void					signalStatusChanged( bool isQueued );
 	
 private:
-	int						index;
 	
 };
 

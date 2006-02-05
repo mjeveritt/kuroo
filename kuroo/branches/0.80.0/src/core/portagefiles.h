@@ -25,7 +25,7 @@
 
 /**
  * @class PortageFiles
- * @short Object for handling masked packages.
+ * @short Loading and saving portage files.
  */
 class PortageFiles : public QObject
 {
@@ -38,10 +38,6 @@ public slots:
 	void			init( QObject *parent = 0 );
 	void			refresh( int mask );
 	
-	/**
- 	 * Add packages to the results table in the db
- 	 * @param packageList
- 	 */
 	void 			loadPackageMask();
 	void			loadPackageKeywords();
 	void 			loadPackageUnmask();
@@ -52,8 +48,6 @@ public slots:
 	void 			savePackageUserUnMask();
 	void			savePackageUserMask();
 	void			savePackageUse();
-	
-private slots:
 	
 signals:
 	void			signalPortageFilesChanged();

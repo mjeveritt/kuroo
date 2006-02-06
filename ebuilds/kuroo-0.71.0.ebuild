@@ -15,6 +15,6 @@ IUSE=""
 
 RDEPEND="app-portage/gentoolkit
 	!app-portage/guitoo
-	kde-misc/kdiff3"
+	|| (kde-misc/kdiff3 kde-base/kompare)"
 
 need-kde 3.2

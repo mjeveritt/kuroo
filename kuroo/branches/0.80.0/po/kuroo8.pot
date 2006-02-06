@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-05 16:31+0100\n"
+"POT-Creation-Date: 2006-02-06 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:184 history/historylistview.cpp:43
+#: queue/queuelistview.cpp:184 history/historylistview.cpp:56
 msgid "Duration"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:304 core/emerge.cpp:459 core/emerge.cpp:531
+#: queue/queuetab.cpp:304 core/emerge.cpp:460 core/emerge.cpp:532
 #: core/cacheportagejob.cpp:185 core/scanportagejob.cpp:338
 #: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:137 core/portagefiles.cpp:226
@@ -211,58 +211,58 @@ msgstr ""
 msgid "There is no ebuilds to satisfy %1"
 msgstr ""
 
-#: core/emerge.cpp:464 core/emerge.cpp:535
+#: core/emerge.cpp:465 core/emerge.cpp:536
 msgid "Blocks"
 msgstr ""
 
-#: core/emerge.cpp:464 core/emerge.cpp:535
+#: core/emerge.cpp:465 core/emerge.cpp:536
 msgid "Packages are blocking emerge, please correct!"
 msgstr ""
 
-#: core/emerge.cpp:470 core/emerge.cpp:538
+#: core/emerge.cpp:471 core/emerge.cpp:539
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:470 core/emerge.cpp:538
+#: core/emerge.cpp:471 core/emerge.cpp:539
 msgid "Please check log for more information!"
 msgstr ""
 
-#: core/emerge.cpp:551
+#: core/emerge.cpp:552
 msgid ""
-"<br><b>missing keyword</b> means that the application has not been tested on "
+"<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet. Ask the architecture porting team to test the package "
 "or test it for them and report your findings on Gentoo bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:552 core/emerge.cpp:557
+#: core/emerge.cpp:553 core/emerge.cpp:558
 msgid "<b>%1</b> is not available on your architecture %2!"
 msgstr ""
 
-#: core/emerge.cpp:556
+#: core/emerge.cpp:557
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture. If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:561
+#: core/emerge.cpp:562
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:563
+#: core/emerge.cpp:564
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:563 core/emerge.cpp:574
+#: core/emerge.cpp:564 core/emerge.cpp:575
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:572
+#: core/emerge.cpp:573
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:574
+#: core/emerge.cpp:575
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
@@ -596,51 +596,51 @@ msgstr ""
 msgid "Package Inspector"
 msgstr ""
 
-#: core/packageinspector.cpp:108 core/packageinspector.cpp:133
+#: core/packageinspector.cpp:107 core/packageinspector.cpp:132
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr ""
 
-#: core/packageinspector.cpp:109 core/packageinspector.cpp:134
+#: core/packageinspector.cpp:108 core/packageinspector.cpp:133
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:238
+#: core/packageinspector.cpp:237
 msgid "Click for hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:256
+#: core/packageinspector.cpp:255
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:532 core/packageinspector.cpp:602
-#: core/packageinspector.cpp:627 core/packageinspector.cpp:661
-#: core/packageinspector.cpp:688 portage/portage.cpp:205
+#: core/packageinspector.cpp:531 core/packageinspector.cpp:601
+#: core/packageinspector.cpp:626 core/packageinspector.cpp:660
+#: core/packageinspector.cpp:687 portage/portage.cpp:205
 msgid "Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:603
+#: core/packageinspector.cpp:602
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:628
+#: core/packageinspector.cpp:627
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:662
+#: core/packageinspector.cpp:661
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:691
+#: core/packageinspector.cpp:690
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:715
+#: core/packageinspector.cpp:714
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:754
+#: core/packageinspector.cpp:753
 msgid "No use flags available."
 msgstr ""
 
@@ -721,19 +721,19 @@ msgstr ""
 msgid "terminating"
 msgstr ""
 
-#: history/mergelistview.cpp:57
+#: history/mergelistview.cpp:54
 msgid "Configuration file"
 msgstr ""
 
-#: history/historytab.cpp:137 history/historylistview.cpp:44
+#: history/historytab.cpp:135 history/historylistview.cpp:57
 msgid "Emerge info"
 msgstr ""
 
-#: history/historytab.cpp:137
+#: history/historytab.cpp:135
 msgid "Installation message for %1:"
 msgstr ""
 
-#: history/historylistview.cpp:42
+#: history/historylistview.cpp:55
 msgid "Date"
 msgstr ""
 
@@ -1185,6 +1185,14 @@ msgstr ""
 msgid "Kuroo8 is already running!"
 msgstr ""
 
+#: message.cpp:38
+msgid "Message"
+msgstr ""
+
+#: message.cpp:44
+msgid "Copy text to clipboard"
+msgstr ""
+
 #: systemtray.cpp:41
 msgid "Kuroo - Portage frontend"
 msgstr ""
@@ -1242,7 +1250,7 @@ msgstr ""
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
-#: rc.cpp:3 rc.cpp:60 rc.cpp:300 rc.cpp:381 rc.cpp:579 rc.cpp:588 rc.cpp:597
+#: rc.cpp:3 rc.cpp:60 rc.cpp:300 rc.cpp:381 rc.cpp:579 rc.cpp:588 rc.cpp:594
 #, no-c-format
 msgid "Form1"
 msgstr ""
@@ -2011,11 +2019,6 @@ msgid "&Portage"
 msgstr ""
 
 #: rc.cpp:591
-#, no-c-format
-msgid "<i>This text is now pasted into the clipboard.</i>"
-msgstr ""
-
-#: rc.cpp:594
 #, no-c-format
 msgid "Warning!"
 msgstr ""

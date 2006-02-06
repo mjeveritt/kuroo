@@ -33,17 +33,21 @@ class Message : public KDialogBase
 Q_OBJECT
 	static Message* s_instance;
 public:
-	Message( QWidget *parent = 0, const char *name = 0 );
+	Message( QWidget *parent = 0 );
     ~Message();
 	
 	static Message* instance() { return s_instance; }
 	
 public slots:
 	void			prompt( const QString& caption, const QString& label, const QString& text );
+	
+private slots:
 	void			setLabel( const QString& label );
+	void			slotUser1();
 	
 private:
 	MessageBase 	*base;
+	QString			m_text;
 };
 
 #endif

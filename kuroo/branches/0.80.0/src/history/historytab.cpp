@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "historylistview.h"
-#include "mergelistview.h"
 #include "historytab.h"
 
 #include <qcheckbox.h>
@@ -132,9 +131,9 @@ void HistoryTab::slotViewUnmerges( bool on )
  */
 void HistoryTab::slotViewInfo( QListViewItem *item )
 {
-	QString einfo = item->text(2);
-	if ( !einfo.isEmpty() )
-		Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:").arg( item->text(0) ), einfo );
+	if ( !( item->text(2) ).isEmpty() )
+		Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:")
+		                             .arg( item->text(0) ), dynamic_cast<HistoryListView::HistoryItem*>( item )->einfo() );
 }
 
 #include "historytab.moc"

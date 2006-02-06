@@ -21,13 +21,10 @@
 #include "common.h"
 #include "mergelistview.h"
 
-#include <qheader.h>
-#include <qlabel.h>
-
 #include <klistview.h>
 
 MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
-: KListViewItem( parent, date )
+	: KListViewItem( parent, date )
 {
 }
 

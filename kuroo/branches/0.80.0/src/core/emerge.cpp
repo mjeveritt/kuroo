@@ -329,7 +329,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			
 			if ( lineLower.contains( QRegExp("^>>> completed installing") ) ) {
 				completedFlag = true;
-				importantMessagePackage = "<b>" + line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + "</b>:<br>";
+				importantMessagePackage = line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + ":<br>";
 			}
 			else
 				if ( lineLower.contains( QRegExp("^>>> regenerating") ) )
@@ -404,11 +404,11 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				cleanLine = cleanLine.section( "**** ", 1, 1 );
 			
 			if ( !cleanLine.isEmpty() ) {
+				
+				// Append package einfo
 				if ( !importantMessagePackage.isEmpty() ) {
-					if ( importantMessage.isEmpty() ) {
-						importantMessage += importantMessagePackage + cleanLine;
-						m_packageMessage = importantMessagePackage + cleanLine;
-					}
+					importantMessage += "<br>" + importantMessagePackage + cleanLine;
+					m_packageMessage = cleanLine;
 					importantMessagePackage = QString::null;
 				}
 				else {
@@ -443,6 +443,7 @@ QString Emerge::packageMessage()
 	m_packageMessage = QString::null;
 	return message;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Post emerge stuff
@@ -548,7 +549,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString keyword = (packageKeyword.section("%", 1, 1)).section(" keyword", 0, 0);
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
-		importantMessage += i18n("<br><b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
+		importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
 		Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg(package.section(rxPortageVersion, 0, 0)).arg(KurooConfig::arch()), importantMessage );
 	}
 	else

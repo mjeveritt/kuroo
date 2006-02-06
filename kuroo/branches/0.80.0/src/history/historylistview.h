@@ -23,15 +23,12 @@
 
 #include <klistview.h>
 
-class QTime;
 class Package;
 class PackageEmergeTime;
-class KProcIO;
 class KListViewItem;
 
-typedef QMap< QString, QListViewItem* > ItemMap;
-typedef QMap< QString, Package > PackageMap;
-typedef QMap< QString, PackageEmergeTime > EmergeTimeMap;
+typedef QMap<QString, Package> PackageMap;
+typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
 
 /**
  * @class HistoryListView
@@ -44,16 +41,37 @@ public:
 	HistoryListView( QWidget *parent = 0, const char *name = 0 );
 	~HistoryListView();
 	
+	class			HistoryItem;
+	
 	QString 		current();
 	QStringList 	selected();
 	void 			loadFromDB( int days );
 	
 private:
 	KLocale 		*loc;
+	
+	typedef QMap<QString, HistoryItem*> ItemMap;
 	ItemMap			itemMap;
 	
 signals:
 	void    		signalHistoryLoaded();
+};
+
+/**
+ * @class MergeItem
+ * @short 
+ */
+class HistoryListView::HistoryItem : public KListViewItem
+{
+public:
+	HistoryItem::HistoryItem( QListView* parent, const char* date );
+	HistoryListView::HistoryItem::HistoryItem( HistoryItem* parent, const char* package );
+	
+	void			setEinfo( const QString& einfo );
+	QString			einfo();
+	
+private:
+	QString 		m_einfo;
 };
 
 #endif

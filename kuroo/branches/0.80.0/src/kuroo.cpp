@@ -56,7 +56,7 @@
 Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
 	kurooInit( new KurooInit( this, "KurooInit" ) ),
-	kurooMessage( new Message( this, "Message" ) ),
+	kurooMessage( new Message( this ) ),
 	m_view( new KurooView( this, "KurooView" ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {

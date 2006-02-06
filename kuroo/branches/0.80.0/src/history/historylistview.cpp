@@ -22,15 +22,28 @@
 #include "packageemergetime.h"
 #include "historylistview.h"
 
-#include <qheader.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qpixmap.h>
-
 #include <klistview.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kiconloader.h>
+
+HistoryListView::HistoryItem::HistoryItem( QListView* parent, const char* date )
+	: KListViewItem( parent, date )
+{
+}
+
+HistoryListView::HistoryItem::HistoryItem( HistoryItem* parent, const char* package )
+	: KListViewItem( parent, package ), m_einfo( QString::null )
+{
+}
+
+void HistoryListView::HistoryItem::setEinfo( const QString& einfo )
+{
+	m_einfo = einfo;
+	setText( 2 , m_einfo.section( "<br>", 0, 0 ) );
+}
+
+QString HistoryListView::HistoryItem::einfo()
+{
+	return m_einfo;
+}
 
 /**
  * @class HistoryListView
@@ -43,7 +56,6 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	addColumn( i18n("Duration") );
 	addColumn( i18n("Emerge info") );
 	
-	setMinimumSize( QSize(50, 0) );
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated( true );
@@ -116,7 +128,7 @@ void HistoryListView::loadFromDB( int days )
 		dt.setTime_t( timeStamp.toUInt() );
 		QString emergeDate = loc->formatDate( dt.date() );
 		
-		if ( dt >= dtLimit  ) {
+		if ( dt >= dtLimit ) {
 		
 			// Convert emerge duration (in seconds) to local time format
 			QTime t( 0, 0, 0 );
@@ -126,18 +138,18 @@ void HistoryListView::loadFromDB( int days )
 			if ( !duration.isEmpty() || KurooConfig::viewUnmerges() && !package.isEmpty() ) {
 				
 				if ( !itemMap.contains( emergeDate ) ) {
-					KListViewItem *item = new KListViewItem( this, emergeDate );
+					HistoryItem *item = new HistoryItem( this, emergeDate );
 					item->setOpen( true );
 					itemMap[ emergeDate ] = item;
 				}
 				
-				KListViewItem *item = new KListViewItem( itemMap[ emergeDate ], package );
+				HistoryItem *item = new HistoryItem( itemMap[ emergeDate ], package );
 				if ( duration.isEmpty() )
 					item->setPixmap( 0, ImagesSingleton::Instance()->icon( UNMERGED ) );
 				else {
 					item->setPixmap( 0, ImagesSingleton::Instance()->icon( NEW ) );
 					item->setText( 1, emergeDuration );
-					item->setText( 2, einfo );
+					item->setEinfo( einfo );
 				}
 			}
 		}

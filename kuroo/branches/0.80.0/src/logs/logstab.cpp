@@ -36,7 +36,7 @@
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
-	logBrowser->setTextFormat( Qt::LogText );	
+	logBrowser->setTextFormat( Qt::LogText );
 	slotInit();
 }
 

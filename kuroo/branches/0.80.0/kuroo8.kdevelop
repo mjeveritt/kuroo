@@ -12,7 +12,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <ignoreparts/>
     <versioncontrol>kdevsubversion</versioncontrol>
   </general>
@@ -73,11 +73,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs></programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <programargs/>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -159,7 +159,7 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -195,17 +195,17 @@
   <dist>
     <custom>false</custom>
     <bzip>false</bzip>
-    <archname></archname>
+    <archname/>
     <appname>kuroo8.kdevelop</appname>
     <version>0.80.0_050206_db19</version>
-    <release></release>
-    <vendor></vendor>
-    <licence></licence>
-    <summary></summary>
-    <group></group>
-    <packager></packager>
-    <description></description>
-    <changelog></changelog>
+    <release/>
+    <vendor/>
+    <licence/>
+    <summary/>
+    <group/>
+    <packager/>
+    <description/>
+    <changelog/>
     <devpackage>false</devpackage>
     <docspackage>false</docspackage>
     <appicon>false</appicon>
@@ -214,6 +214,6 @@
     <useRPM>false</useRPM>
     <ftpkde>false</ftpkde>
     <appskde>false</appskde>
-    <url></url>
+    <url/>
   </dist>
 </kdevelop>

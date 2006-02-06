@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="debug"
 
-RDEPEND="<=sys/apps/portage-2.0.54
+RDEPEND="<=sys-apps/portage-2.0.54
 	app-portage/gentoolkit
 	!app-portage/guitoo
 	|| (kde-misc/kdiff3 kde-base/kdesdk)

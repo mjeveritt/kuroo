@@ -608,7 +608,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>categorieslistview.h</includehint>
-    <includehint>subcategorieslistview.h</includehint>
     <includehint>portagelistview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
 </includehints>

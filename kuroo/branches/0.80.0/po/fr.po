@@ -1,16 +1,14 @@
 # translation of kuroo8.po to French
-# translation of kuroo8.po to
 # Copyright (C) 2006 karye.
 # This file is distributed under the same license as the kuroo8 package.
 #
 # Gombault Damien <desintegr@gmail.com>, 2006.
-# Desintegr <desintegr@gmail.com>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: kuroo8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-05 16:31+0100\n"
-"PO-Revision-Date: 2006-02-09 19:21+0100\n"
+"POT-Creation-Date: 2006-02-06 17:00+0100\n"
+"PO-Revision-Date: 2006-02-09 21:00+0100\n"
 "Last-Translator: Gombault Damien <desintegr@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +27,7 @@ msgstr "Paquet"
 msgid "Version"
 msgstr "Version"
 
-#: queue/queuelistview.cpp:184 history/historylistview.cpp:43
+#: queue/queuelistview.cpp:184 history/historylistview.cpp:56
 msgid "Duration"
 msgstr "Durée"
 
@@ -51,13 +49,12 @@ msgid "na"
 msgstr "N/A"
 
 #: queue/results.cpp:54
-#, fuzzy
 msgid "Add result package list: Can not find id in database for package %1/%2."
 msgstr "Ajout du résultat de la liste de paquet : impossible de trouver l'id dans la base de données pour le paquet %1/%2."
 
 #: queue/queue.cpp:215 queue/queue.cpp:230
 msgid "Package id is empty, skipping!"
-msgstr "L'id du paquet est vide, on passe !"
+msgstr "L'id du paquet est vide !"
 
 #: queue/queuetab.cpp:144
 msgid "<b>Summary</b><br>"
@@ -69,7 +66,7 @@ msgstr "Nombre de paquets : %1<br>"
 
 #: queue/queuetab.cpp:146
 msgid "Estimated time for installation: %1<br>"
-msgstr "Estimation du temps pour l'installation : %1 <br>"
+msgstr "Estimation du temps pour l'installation : %1<br>"
 
 #: queue/queuetab.cpp:147
 msgid "Estimated time remaining: %1<br>"
@@ -103,7 +100,7 @@ msgstr "Voulez-vous installer les paquets suivants ?"
 msgid "Do you want to abort the running installation?"
 msgstr "Voulez-vous annuler l'installation en cours ?"
 
-#: queue/queuetab.cpp:304 core/emerge.cpp:459 core/emerge.cpp:531
+#: queue/queuetab.cpp:304 core/emerge.cpp:460 core/emerge.cpp:532
 #: core/cacheportagejob.cpp:185 core/scanportagejob.cpp:338
 #: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:137 core/portagefiles.cpp:226
@@ -195,7 +192,7 @@ msgstr ""
 
 #: core/emerge.cpp:196
 msgid "Uninstalling packages..."
-msgstr "Désinstallation des.paquets..."
+msgstr "Désinstallation des paquets..."
 
 #: core/emerge.cpp:225
 msgid ""
@@ -229,59 +226,59 @@ msgstr "Droits root requis !"
 msgid "There is no ebuilds to satisfy %1"
 msgstr "Il n'existe pas d'ebuild correspondant à %1"
 
-#: core/emerge.cpp:464 core/emerge.cpp:535
+#: core/emerge.cpp:465 core/emerge.cpp:536
 msgid "Blocks"
 msgstr "Bloquant"
 
-#: core/emerge.cpp:464 core/emerge.cpp:535
+#: core/emerge.cpp:465 core/emerge.cpp:536
 msgid "Packages are blocking emerge, please correct!"
 msgstr "Des paquets bloquent emerge, veuillez corriger !"
 
-#: core/emerge.cpp:470 core/emerge.cpp:538
+#: core/emerge.cpp:471 core/emerge.cpp:539
 msgid "Important"
 msgstr "Important"
 
-#: core/emerge.cpp:470 core/emerge.cpp:538
+#: core/emerge.cpp:471 core/emerge.cpp:539
 msgid "Please check log for more information!"
 msgstr "Vérifiez les journaux pour obtenir plus d'informations !"
 
-#: core/emerge.cpp:551
+#: core/emerge.cpp:552
 msgid ""
-"<br><b>missing keyword</b> means that the application has not been tested on "
+"<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet. Ask the architecture porting team to test the package "
 "or test it for them and report your findings on Gentoo bugzilla website."
-msgstr "<br><b>missing keyword</b> indique que l'application n'a pas encore été testé sur votre architecture. Demandez à l'équipe de cette architecture de tester le paquet ou bien testez le vous-même et faites un rapport sur le bugzilla Gentoo."
+msgstr "<b>missing keyword</b> indique que l'application n'a pas encore été testé sur votre architecture. Demandez à l'équipe de cette architecture de tester le paquet ou bien testez le vous-même et faites un rapport sur le bugzilla Gentoo."
 
-#: core/emerge.cpp:552 core/emerge.cpp:557
+#: core/emerge.cpp:553 core/emerge.cpp:558
 msgid "<b>%1</b> is not available on your architecture %2!"
 msgstr "<b>%1</b> n'est pas disponible pour votre architecture %2 !"
 
-#: core/emerge.cpp:556
+#: core/emerge.cpp:557
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture. If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr "<br><b>-* keyword</b> indique que l'application ne fonctionne pas sur votre architecture. Si vous pensez que le paquet peut quand même fonctionner, faites un rapport sur le bugzilla Gentoo."
 
-#: core/emerge.cpp:561
+#: core/emerge.cpp:562
 msgid "Please add package to \"package.unmask\"."
 msgstr "Ajoutez le paquet à \"package.unmask\"."
 
-#: core/emerge.cpp:563
+#: core/emerge.cpp:564
 msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr "<qt>Impossible d'emerger le paquet masqué !<br>Voulez-vous démasquer <b>%1</b> ?</qt>"
+msgstr "<qt>Impossible d'installer le paquet masqué !<br>Voulez-vous démasquer <b>%1</b> ?</qt>"
 
-#: core/emerge.cpp:563 core/emerge.cpp:574
+#: core/emerge.cpp:564 core/emerge.cpp:575
 msgid "Unmask"
 msgstr "Démasquer"
 
-#: core/emerge.cpp:572
+#: core/emerge.cpp:573
 msgid "Please add package to \"package.keywords\"."
 msgstr "Ajoutez ce paquet à \"package.keywords\"."
 
-#: core/emerge.cpp:574
+#: core/emerge.cpp:575
 msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr "<qt>Impossible d'emerger le paquet en testing !<br>Voulez-vous démasquer <b>%1</b> ?</qt>"
+msgstr "<qt>Impossible d'installer le paquet en test !<br>Voulez-vous démasquer <b>%1</b> ?</qt>"
 
 #: core/cacheportagejob.cpp:70 core/cacheportagejob.cpp:115
 #: core/cacheportagejob.cpp:171
@@ -613,45 +610,45 @@ msgstr "Enregistrement terminé du use de paquet de l'utilisateur dans %1."
 msgid "Package Inspector"
 msgstr "Inspecteur de paquet"
 
-#: core/packageinspector.cpp:108 core/packageinspector.cpp:133
+#: core/packageinspector.cpp:107 core/packageinspector.cpp:132
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr "<qt>Les paramètres ont changé !<br>Voulez-vous les enregistrer ?</qt>"
 
-#: core/packageinspector.cpp:109 core/packageinspector.cpp:134
+#: core/packageinspector.cpp:108 core/packageinspector.cpp:133
 msgid "Saving settings"
 msgstr "Enregistrement des paramètres"
 
-#: core/packageinspector.cpp:238
+#: core/packageinspector.cpp:237
 msgid "Click for hardmask info!"
 msgstr "Cliquez pour les informations du hard masque !"
 
-#: core/packageinspector.cpp:256
+#: core/packageinspector.cpp:255
 msgid "%1/%2 hardmask info!"
 msgstr "%1/%2 informations du hard masque !"
 
-#: core/packageinspector.cpp:532 core/packageinspector.cpp:602
-#: core/packageinspector.cpp:627 core/packageinspector.cpp:661
-#: core/packageinspector.cpp:688 portage/portage.cpp:205
+#: core/packageinspector.cpp:531 core/packageinspector.cpp:601
+#: core/packageinspector.cpp:626 core/packageinspector.cpp:660
+#: core/packageinspector.cpp:687 portage/portage.cpp:205
 msgid "Error reading: "
 msgstr "Erreur lors de la lecture : "
 
-#: core/packageinspector.cpp:603
+#: core/packageinspector.cpp:602
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr "<font color=darkGrey><b>Aucun changelog trouvé.</b></font>"
 
-#: core/packageinspector.cpp:628
+#: core/packageinspector.cpp:627
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr "<font color=darkGrey><b>Aucun ebuild trouvé.</b></font>"
 
-#: core/packageinspector.cpp:662
+#: core/packageinspector.cpp:661
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr "<font color=darkGrey><b>Aucune dépendance trouvée.</b></font>"
 
-#: core/packageinspector.cpp:691
+#: core/packageinspector.cpp:690
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr "<font color=darkGrey><b>Aucun fichier installé trouvé.</b></font>"
 
-#: core/packageinspector.cpp:715
+#: core/packageinspector.cpp:714
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -659,7 +656,7 @@ msgstr ""
 "\n"
 "Erreur : Impossible de calculer les use flags pour le paquet %1/%2."
 
-#: core/packageinspector.cpp:754
+#: core/packageinspector.cpp:753
 msgid "No use flags available."
 msgstr "Aucun use flag disponible."
 
@@ -740,19 +737,19 @@ msgstr "sortie effectué avec succès"
 msgid "terminating"
 msgstr "En cours d'arrêt"
 
-#: history/mergelistview.cpp:57
+#: history/mergelistview.cpp:54
 msgid "Configuration file"
 msgstr "Fichier de configuration"
 
-#: history/historytab.cpp:137 history/historylistview.cpp:44
+#: history/historytab.cpp:135 history/historylistview.cpp:57
 msgid "Emerge info"
 msgstr "Informations d'emerge"
 
-#: history/historytab.cpp:137
+#: history/historytab.cpp:135
 msgid "Installation message for %1:"
 msgstr "Message d'installation pour %1 :"
 
-#: history/historylistview.cpp:42
+#: history/historylistview.cpp:55
 msgid "Date"
 msgstr "Date"
 
@@ -1207,6 +1204,14 @@ msgstr "OpenUsability"
 msgid "Kuroo8 is already running!"
 msgstr "Kuroo8 est déjà lancé !"
 
+#: message.cpp:38
+msgid "Message"
+msgstr "Message"
+
+#: message.cpp:44
+msgid "Copy text to clipboard"
+msgstr "Copier le texte dans le presse-papier"
+
 #: systemtray.cpp:41
 msgid "Kuroo - Portage frontend"
 msgstr "Kuroo - Interface graphique pour Portage"
@@ -1264,7 +1269,7 @@ msgstr "Passer"
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr "Vous devez lancer Kuroo avec les droits root pour pouvoir installer des paquets !"
 
-#: rc.cpp:3 rc.cpp:60 rc.cpp:300 rc.cpp:381 rc.cpp:579 rc.cpp:588 rc.cpp:597
+#: rc.cpp:3 rc.cpp:60 rc.cpp:300 rc.cpp:381 rc.cpp:579 rc.cpp:588 rc.cpp:594
 #, no-c-format
 msgid "Form1"
 msgstr "Form1"
@@ -2055,11 +2060,6 @@ msgid "&Portage"
 msgstr "&Portage"
 
 #: rc.cpp:591
-#, no-c-format
-msgid "<i>This text is now pasted into the clipboard.</i>"
-msgstr "<i>Ce texte a été copié dans le presse-papier.</i>"
-
-#: rc.cpp:594
 #, no-c-format
 msgid "Warning!"
 msgstr "Attention !"

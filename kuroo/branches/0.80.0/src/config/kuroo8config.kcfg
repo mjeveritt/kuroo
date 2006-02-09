@@ -3,6 +3,9 @@
 	<kcfg>
 	<kcfgfile name="kuroo8rc"/> 
 	<group name="general">
+		<entry name="portageVersion21" type="Bool">
+		<default>false</default>
+		</entry>
 		<entry name="portageCount" type="String">
 		</entry>
 		<entry name="scanTimeStamp" type="String">

@@ -83,8 +83,8 @@ bool ScanPortageJob::doJob()
 {
 	int count;
 	QDir dCategory, dPackage;
-	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
-	dCategory.setSorting(QDir::Name);
+	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
+	dCategory.setSorting( QDir::Name );
 	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning Portage. Can not connect to database") << endl;
@@ -440,44 +440,70 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QTextStream stream( &file );
 	int lineNumber = 0;
 	
-	// Read out the package info strings
-	while ( !stream.atEnd() ) {
-		line = stream.readLine();
-		lineNumber++;
-		
-		// each line has a fixed meaning, as it seems.
-		// so iterate through the lines.
-		switch( lineNumber ) {
-			case 1: // some dependency stuff
-				break;
-			case 2: // some other dependency stuff
-				break;
-			case 3: // the package slot
-				info.slot = line;
-				break;
-			case 4: // file location, starting with mirror://
-				break;
-			case 5: // empty?
-				break;
-			case 6: // DirHome page
-				info.homepage = line.replace('\'', "''").replace('%', "&#37;");
-				break;
-			case 7: // licenses
-				info.licenses = line.replace('\'', "''").replace('%', "&#37;");
-				break;
-			case 8: // description
-				info.description = line.replace('\'', "''").replace('%', "&#37;");
-				break;
-			case 9: // keywords
-				info.keywords = line;
-				break;
-			case 10: // inherited eclasses?
-				break;
-			case 11: // useFlags
-				info.useFlags = line;
-				break;
-			default:
-				break;
+	if ( KurooConfig::portageVersion21() ) {
+		while ( !stream.atEnd() ) {
+			line = stream.readLine();
+			
+			if ( line.startsWith( "LICENSE=" ) )
+				info.licenses = line.section("LICENSE=", 1, 1).replace('\'', "''").replace('%', "&#37;");
+			else
+				if ( line.startsWith( "KEYWORDS=" ) )
+					info.keywords = line.section("KEYWORDS=", 1, 1);
+				else
+					if ( line.startsWith( "SLOT=" ) )
+						info.slot = line.section("SLOT=", 1, 1);
+					else
+						if ( line.startsWith( "DESCRIPTION=" ) )
+							info.description = line.section("DESCRIPTION=", 1, 1).replace('\'', "''").replace('%', "&#37;");
+						else
+							if ( line.startsWith( "IUSE=" ) )
+								info.useFlags = line.section("IUSE=", 1, 1);
+							else
+								if ( line.startsWith( "HOMEPAGE=" ) )
+									info.homepage = line.section("HOMEPAGE=", 1, 1);
+		}
+	}
+	else {
+	
+		// Read out the package info strings
+		while ( !stream.atEnd() ) {
+			line = stream.readLine();
+			lineNumber++;
+			
+			// each line has a fixed meaning, as it seems.
+			// so iterate through the lines.
+			switch( lineNumber ) {
+				case 1: // some dependency stuff
+					break;
+				case 2: // some other dependency stuff
+					break;
+				case 3: // the package slot
+					info.slot = line;
+					break;
+				case 4: // file location, starting with mirror://
+					break;
+				case 5: // empty?
+					break;
+				case 6: // DirHome page
+					info.homepage = line.replace('\'', "''").replace('%', "&#37;");
+					break;
+				case 7: // licenses
+					info.licenses = line.replace('\'', "''").replace('%', "&#37;");
+					break;
+				case 8: // description
+					info.description = line.replace('\'', "''").replace('%', "&#37;");
+					break;
+				case 9: // keywords
+					info.keywords = line;
+					break;
+				case 10: // inherited eclasses?
+					break;
+				case 11: // useFlags
+					info.useFlags = line;
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	file.close();

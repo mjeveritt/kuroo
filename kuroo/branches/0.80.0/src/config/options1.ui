@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>454</height>
+            <height>498</height>
         </rect>
     </property>
     <property name="caption">
@@ -198,7 +198,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>16</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>
@@ -373,37 +373,6 @@
                         </size>
                     </property>
                 </spacer>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>kcfg_installedColumn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Show i&amp;nstalled packages in separate column</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
                 <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
                         <cstring>kcfg_isSystrayEnabled</cstring>
@@ -426,6 +395,68 @@
                         <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
                     </property>
                 </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>kcfg_installedColumn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show installed pac&amp;kages in separate column</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="1" column="1">
+                    <property name="name">
+                        <cstring>spacer2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="3" column="0">
+                    <property name="name">
+                        <cstring>kcfg_portageVersion21</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Portage version &gt;=&amp;2.1</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+2</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="3" column="1">
+                    <property name="name">
+                        <cstring>spacer2_2_3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>108</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </grid>
         </widget>
     </grid>

@@ -298,22 +298,21 @@ void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 {
 	int progress = static_cast<ProgressEvent*>(e)->progress;
 
-	switch( progress )
-	{
-	case -2:
-		KurooStatusBar::instance()->setProgressStatus( m_id, m_status );
-		break;
-
-	case -1:
-// 		kdDebug() << "ThreadWeaver::Job::customEventprogress progress=" << progress << "." << endl;
-		/*KurooStatusBar::instance()->newProgressOperation( this )
-				.setDescription( m_description )
-				.setAbortSlot( this, SLOT(abort()) )
-				.setTotalSteps( 100 )*/;
-		break;
-
-	default:
-		KurooStatusBar::instance()->setProgress( progress );
+	switch( progress ) {
+		case -2:
+			KurooStatusBar::instance()->setProgressStatus( m_id, m_status );
+			break;
+	
+		case -1:
+	// 		kdDebug() << "ThreadWeaver::Job::customEventprogress progress=" << progress << "." << endl;
+			/*KurooStatusBar::instance()->newProgressOperation( this )
+					.setDescription( m_description )
+					.setAbortSlot( this, SLOT(abort()) )
+					.setTotalSteps( 100 )*/;
+			break;
+	
+		default:
+			KurooStatusBar::instance()->setProgress( progress );
 	}
 }
 

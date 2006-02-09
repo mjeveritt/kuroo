@@ -43,6 +43,7 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	addWidget( statusBarProgress, 0, true );
 	
 	statusBarProgress->setTotalSteps( 100 );
+	statusBarProgress->hide();
 	
 	// Clock timer for showing progress when emerging packages.
 	internalTimer = new QTimer( this );
@@ -98,10 +99,16 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
-	internalTimer->stop();
+	kdDebug() << "KurooStatusBar::setTotalSteps" << endl;
+	
+	if ( total == 0 )
+		statusBarProgress->hide();
+	else
+		if ( !statusBarProgress->isVisible() )
+			statusBarProgress->show();
+	
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
-	startTimer();
 }
 
 /**
@@ -118,6 +125,7 @@ void KurooStatusBar::setProgress( int steps )
  */
 void KurooStatusBar::startTimer()
 {
+	kdDebug() << "KurooStatusBar::startTimer" << endl;
 	internalTimer->start( 1000 );
 	timerSteps = 0;
 }
@@ -127,11 +135,13 @@ void KurooStatusBar::startTimer()
  */
 void KurooStatusBar::stopTimer()
 {
+	kdDebug() << "KurooStatusBar::stopTimer" << endl;
 	internalTimer->stop();
 	diffTimer->stop();
 	statusBarProgress->setProgress( 0 );
 	statusBarProgress->setTotalSteps( 100 );
 	statusBarProgress->setTextEnabled( true );
+	statusBarProgress->hide();
 }
 
 /**
@@ -152,6 +162,8 @@ void KurooStatusBar::slotOneStep()
  */
 void KurooStatusBar::startProgress()
 {
+	kdDebug() << "KurooStatusBar::startProgress" << endl;
+	statusBarProgress->show();
 	statusBarProgress->setTotalSteps( 0 );
 	statusBarProgress->setTextEnabled( false );
 	diffTimer->start( 1000 );

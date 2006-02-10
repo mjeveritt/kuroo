@@ -152,7 +152,7 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE updates_temp;", m_db);
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
-	setProgress( 0 );
+	setProgressTotalSteps( 0 );
 	return true;
 }
 

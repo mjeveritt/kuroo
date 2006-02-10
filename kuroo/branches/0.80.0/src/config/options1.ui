@@ -431,7 +431,7 @@
                         <cstring>kcfg_portageVersion21</cstring>
                     </property>
                     <property name="text">
-                        <string>Portage version &gt;=&amp;2.1</string>
+                        <string>Portage version &gt;= &amp;2.1</string>
                     </property>
                     <property name="accel">
                         <string>Alt+2</string>

@@ -336,7 +336,7 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
 	setStatus( "ScanPortage", i18n("Done.") );
-	setProgress( 0 );
+	setProgressTotalSteps( 0 );
 	return true;
 }
 
@@ -440,6 +440,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QTextStream stream( &file );
 	int lineNumber = 0;
 	
+	// Check portage version
 	if ( KurooConfig::portageVersion21() ) {
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();

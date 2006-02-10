@@ -739,7 +739,8 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	
 	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
 	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "([\\-\\+\\w\\s\\(\\)\\*]*)\\s+([\\d,]*)\\s+kB" );
+	                   "(?:(?:USE=\"([\\-\\+\\w\\s\\(\\)\\*]*)\")|([\\-\\+\\w\\s\\(\\)\\*]*))"
+	                   "\\s+([\\d,]*)\\s+kB" );
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
@@ -747,6 +748,8 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}
+	
+	kdDebug() << "PackageInspector::slotParsePackageUse pretendUseList=" << pretendUseList << endl;
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {
@@ -779,7 +782,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		}
 		
 		// Set CheckBox state
-		if ( (*it).startsWith( "+" ) ) {
+		if ( (*it).startsWith( "+" ) || ( KurooConfig::portageVersion21() && !(*it).startsWith( "-" ) ) ) {
 			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
 			useItem->setMultiLinesEnabled( true );
 			useItem->setText( 1, description.join("\n") );

@@ -4,7 +4,7 @@
 inherit kde subversion
 
 ESVN_PROJECT="${PN/-svn}"
-ESVN_REPO_URI="svn://tux.myftp.org/repos/kuroo/tags/0.80.0_alfa2"
+ESVN_REPO_URI="svn://tux.myftp.org/repos/kuroo/branches/0.80.0"
 ESVN_STORE_DIR="${DISTDIR}/svn-src"
 ESVN_BOOTSTRAP="make -f Makefile.cvs"
 
@@ -13,7 +13,7 @@ HOMEPAGE="http://tux.myftp.org/kuroo"
 LICENSE="GPL-2"
 
 SLOT="0"
-KEYWORDS="x86 amd64"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug"
 
 RDEPEND="app-portage/gentoolkit
@@ -21,4 +21,4 @@ RDEPEND="app-portage/gentoolkit
 	|| (kde-misc/kdiff3 kde-base/kdesdk)
 	|| (kde-base/dcoprss kde-base/kdenetwork)"
 
-need-kde 3.2
+need-kde 3.4

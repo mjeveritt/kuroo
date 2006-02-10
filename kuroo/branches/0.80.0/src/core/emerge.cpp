@@ -281,7 +281,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 	static QString importantMessagePackage;
 	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
 	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:(?:USE=\"([\\-\\+\\w\\s\\(\\)\\*]*)\")|([\\-\\+\\w\\s\\(\\)\\*]*))"
+	                   "(?:USE=\")*([\\-\\+\\w\\s\\(\\)\\*]*)\"*"
 	                   "\\s+([\\d,]*)\\s+kB" );
 	
 	while ( proc->readln( line, true ) >= 0 ) {
@@ -316,7 +316,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.category = rxPackage.cap(3);
 			emergePackage.installedVersion = rxPackage.cap(5);
 			emergePackage.useFlags = rxPackage.cap(6).simplifyWhiteSpace();
-			emergePackage.size = rxPackage.cap(8);
+			emergePackage.size = rxPackage.cap(7);
 			emergePackage.name = ( rxPackage.cap(4) ).section( rxPortageVersion, 0, 0 );
 			emergePackage.version = ( rxPackage.cap(4) ).section( ( emergePackage.name + "-" ), 1, 1 );
 			emergePackageList.prepend( emergePackage );

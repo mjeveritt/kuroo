@@ -542,7 +542,7 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 	if (  dialog->inspectorTabs->currentPageIndex() == 1 ) {
 		QStringList useList;
 		
-		QMap<QString,PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
+		QMap<QString, PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
 		if ( itMap != m_portagePackage->versionMap().end() )
 			useList = itMap.data()->useflags();
 		
@@ -550,9 +550,16 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 		QStringList packageUseList = QStringList::split( " ", KurooDBSingleton::Instance()->packageUse( m_id ) );
 		
 		dialog->useView->clear();
+		QStringList tmpUseList;
 		foreach ( useList ) {
-			QString lines;
 			
+			// Seems some use flags are duplicated, filter them out
+			if ( tmpUseList.find(*it) != tmpUseList.end() )
+				continue;
+			else
+				tmpUseList += *it;
+			
+			QString lines;
 			QMap<QString, QString>::iterator itMap = useMap.find( *it );
 			if ( itMap != useMap.end() )
 				lines = itMap.data();
@@ -575,7 +582,6 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
 			useItem->setMultiLinesEnabled( true );
 			useItem->setText( 1, description.join("\n") );
-			
 		}
 	}
 }

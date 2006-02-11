@@ -25,6 +25,8 @@
 #include <qstringlist.h>
 #include <qregexp.h>
 
+class PackageItem;
+
 /**
 * A PackageVersion specializing in Portage.
 * It features accurate version comparison just like Portage itself does,

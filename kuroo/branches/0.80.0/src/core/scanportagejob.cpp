@@ -440,8 +440,10 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QTextStream stream( &file );
 	int lineNumber = 0;
 	
-	// Check portage version
+	// Check portage version and read out the package info strings
 	if ( KurooConfig::portageVersion21() ) {
+		
+		// We are on portage version post-2.1
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 			
@@ -466,7 +468,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	}
 	else {
 	
-		// Read out the package info strings
+		// We are on portage version pre-2.1
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 			lineNumber++;

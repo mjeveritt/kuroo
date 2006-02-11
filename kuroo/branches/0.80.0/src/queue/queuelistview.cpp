@@ -44,7 +44,6 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 {
 	setQueued();
 	setText( 0, category + "/" + name );
-	setText( 5, m_useFlags );
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
 }
@@ -57,7 +56,6 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 {
 	setQueued();
 	setText( 0, category + "/" + name );
-	setText( 5, m_useFlags );
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
 }
@@ -159,11 +157,11 @@ void QueueListView::QueueItem::hideBar()
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-	if ( column == 6 && m_isChecked ) {
+	if ( column == 5 && m_isChecked ) {
 		QRect rect = listView()->itemRect( this );
 		QHeader *head = listView()->header();
-		rect.setLeft( head->sectionPos( 6 ) - head->offset() );
-		rect.setWidth( head->sectionSize( 6 ) );
+		rect.setLeft( head->sectionPos( 5 ) - head->offset() );
+		rect.setWidth( head->sectionSize( 5 ) );
 		bar->setGeometry( rect );
 		bar->show();
 	}
@@ -178,12 +176,11 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), loc( KGlobal::locale() ), m_id( QString::null )
 {
 	// Setup geometry
-	addColumn( i18n( "Package" ), 200 );
+	addColumn( i18n( "Package" ), 320 );
 	addColumn( "" );
-	addColumn( i18n( "Version" ), 60 );
-	addColumn( i18n( "Duration" ), 60 );
-	addColumn( i18n( "Size" ), 80 );
-	addColumn( i18n( "Use Flags" ) );
+	addColumn( i18n( "Version" ), 100 );
+	addColumn( i18n( "Duration" ), 100 );
+	addColumn( i18n( "Size" ), 100 );
 	addColumn( i18n( "Progress" ), 60 );
 	
 	setProperty( "selectionMode", "Extended" );
@@ -196,10 +193,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 3, QListView::Manual );
 	setColumnWidthMode( 4, QListView::Manual );
 	setColumnWidthMode( 5, QListView::Manual );
-	setColumnWidthMode( 6, QListView::Manual );
 	
 	setColumnAlignment( 4, Qt::AlignRight );
-	
 	setTooltipColumn( 4 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
@@ -340,13 +335,13 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
  */
 void QueueListView::viewportResizeEvent( QResizeEvent *e )
 {
-	setColumnWidth( 6, 60 );
-	int totalWidth = columnWidth(0) + columnWidth(2) + columnWidth(3) + columnWidth(4) + 60;
+	setColumnWidth( 5, 60 );
+	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + 60;
 	
 	if ( KurooConfig::installedColumn() )
-		setColumnWidth( 5, this->visibleWidth() - totalWidth - 25 );
+		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );
 	else
-		setColumnWidth( 5, this->visibleWidth() - totalWidth );
+		setColumnWidth( 0, this->visibleWidth() - totalWidth );
 }
 
 /**

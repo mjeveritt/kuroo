@@ -961,7 +961,7 @@ void KurooDB::clearQueuePackageUse()
 QStringList KurooDB::allQueuePackages()
 {
 	return query( " SELECT package.id, catSubCategory.name, package.name, "
-	              " package.description, package.meta, queue.idDepend, queue.use, queue.size, queue.version "
+	              " package.description, package.meta, queue.idDepend, queue.size, queue.version "
 	              " FROM queue, catSubCategory, package "
 	              " WHERE queue.idPackage = package.id "
 	              " AND catSubCategory.id = package.idCatSubCategory "

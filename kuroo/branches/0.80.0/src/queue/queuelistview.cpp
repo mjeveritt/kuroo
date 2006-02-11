@@ -36,11 +36,10 @@ const int diffTime( 10 );
  * @class QueueListView::QueueItem
  * @short Package item with progressbar
  */
-QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& description, const QString& status, const QString& useFlags, int duration )
+QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ),
-	m_useFlags( useFlags ), m_duration( duration ),
-	bar( 0 ), progress( 0 ), 
-	m_isChecked( false ), m_isComplete( false )
+	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
+	bar( 0 )
 {
 	setQueued();
 	setText( 0, category + "/" + name );
@@ -48,11 +47,10 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 	bar->hide();
 }
 
-QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, const QString& useFlags, int duration )
+QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, int duration )
 	: PackageItem( parent, name, id, description, status ),
-	m_useFlags( useFlags ), m_duration( duration ),
-	bar( 0 ), progress( 0 ), 
-	m_isChecked( false ), m_isComplete( false )
+	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
+	bar( 0 )
 {
 	setQueued();
 	setText( 0, category + "/" + name );
@@ -127,15 +125,20 @@ int QueueListView::QueueItem::duration()
  */
 void QueueListView::QueueItem::oneStep()
 {
-	if ( progress < m_duration )
-		bar->setProgress( progress++ );
+	if ( m_progress < m_duration )
+		bar->setProgress( m_progress++ );
 	else
-		if ( progress++ == m_duration ) {
+		if ( m_progress++ == m_duration ) {
 			bar->setTotalSteps( 0 );
 			bar->setTextEnabled( false );
 		}
 		else
 			bar->advance( 3 );
+}
+
+int QueueListView::QueueItem::progress()
+{
+	return m_progress;
 }
 
 /**
@@ -181,7 +184,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Version" ), 100 );
 	addColumn( i18n( "Duration" ), 100 );
 	addColumn( i18n( "Size" ), 100 );
-	addColumn( i18n( "Progress" ), 60 );
+	addColumn( i18n( "Progress" ), 70 );
 	
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
@@ -274,7 +277,6 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString description = *it++;
 		QString meta = *it++;
 		QString idDepend = *it++;
-		QString useFlags = *it++;
 		QString size = *it++;
 		QString version = *it;
 
@@ -286,13 +288,13 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category, name, id, description, meta, useFlags, duration );
+			item = new QueueItem( this, category, name, id, description, meta, duration );
 			item->setOpen( true );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category, name, id, description, meta, useFlags, duration );
+				item = new QueueItem( itemDepend, category, name, id, description, meta, duration );
 		}
 		
 		// Add package info
@@ -331,12 +333,12 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 }
 
 /**
- * Make sure progress column don't eat width from use flag column.
+ * Resize package column only when resizing widget.
  */
 void QueueListView::viewportResizeEvent( QResizeEvent *e )
 {
-	setColumnWidth( 5, 60 );
-	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + 60;
+	setColumnWidth( 5, 70 );
+	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + 70;
 	
 	if ( KurooConfig::installedColumn() )
 		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );
@@ -363,7 +365,7 @@ void QueueListView::clearQueuePackageUse()
  */
 QString QueueListView::formatTime( int time )
 {
-	QTime emergeTime( 0, 0, 0 );
+	QTime emergeTime(0, 0, 0);
 	emergeTime = emergeTime.addSecs( time );
 	return loc->formatTime( emergeTime, true, true );
 }

@@ -30,12 +30,12 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qgroupbox.h>
-#include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qbuttongroup.h>
 #include <qtimer.h>
 
+#include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <ktabwidget.h>
 #include <kpopupmenu.h>

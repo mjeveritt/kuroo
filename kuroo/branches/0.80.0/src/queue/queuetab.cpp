@@ -77,6 +77,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), queueView, SLOT( slotPackageComplete( const QString&, bool ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), queueView, SLOT( slotPackageProgress() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), this, SLOT( slotQueueSummary() ) );
+// 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), this, SLOT( slotQueueSummary() ) );
 	
 	slotInit();
 }
@@ -141,12 +142,11 @@ void QueueTab::slotPackageUseChanged()
  */
 void QueueTab::slotQueueSummary()
 {
+	queueBrowser->clear();
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
 			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( initialQueueTime );
 			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" ).arg( queueView->totalTimeFormatted() );
-	
-	queueBrowser->clear();
 	queueBrowser->setText( queueBrowserLines );
 }
 
@@ -177,12 +177,10 @@ void QueueTab::slotBusy( bool busy )
 		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
 			pbGo->setText( i18n( "Start Installation" ) );
 			cbForce->setDisabled( false );
-			cbRemove->setDisabled( false );
 		}
 		else {
 			pbGo->setText( i18n("Check Installation") );
 			cbForce->setDisabled( true );
-			cbRemove->setDisabled( true );
 		}
 	}
 	
@@ -200,6 +198,7 @@ void QueueTab::slotBusy( bool busy )
 		pbAdvanced->setDisabled( false );
 		pbClear->setDisabled( false );
 		cbDownload->setDisabled( false );
+		cbRemove->setDisabled( false );
 	}
 	
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )

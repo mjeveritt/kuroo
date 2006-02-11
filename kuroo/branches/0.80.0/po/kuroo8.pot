@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-10 18:34+0100\n"
+"POT-Creation-Date: 2006-02-11 10:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,34 +16,30 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:181 portage/portagelistview.cpp:65
+#: queue/queuelistview.cpp:182 portage/portagelistview.cpp:65
 #: portage/portagelistview.cpp:117 portage/portagelistview.cpp:119 rc.cpp:63
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:183 core/versionview.cpp:78
+#: queue/queuelistview.cpp:184 core/versionview.cpp:78
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:184 history/historylistview.cpp:56
+#: queue/queuelistview.cpp:185 history/historylistview.cpp:56
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:185 core/versionview.cpp:80
+#: queue/queuelistview.cpp:186 core/versionview.cpp:80
 msgid "Size"
-msgstr ""
-
-#: queue/queuelistview.cpp:186
-msgid "Use Flags"
 msgstr ""
 
 #: queue/queuelistview.cpp:187
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:305 queue/queuelistview.cpp:310
-#: queue/queuelistview.cpp:315
+#: queue/queuelistview.cpp:302 queue/queuelistview.cpp:307
+#: queue/queuelistview.cpp:312
 msgid "na"
 msgstr ""
 
@@ -55,19 +51,19 @@ msgstr ""
 msgid "Package id is empty, skipping!"
 msgstr ""
 
-#: queue/queuetab.cpp:144
+#: queue/queuetab.cpp:146
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:145
+#: queue/queuetab.cpp:147
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:146
+#: queue/queuetab.cpp:148
 msgid "Estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:147
+#: queue/queuetab.cpp:149
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
@@ -79,27 +75,27 @@ msgstr ""
 msgid "Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:183
+#: queue/queuetab.cpp:182
 msgid "Check Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:263
+#: queue/queuetab.cpp:262
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:263 queue/queuetab.cpp:275
+#: queue/queuetab.cpp:262 queue/queuetab.cpp:274
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:275
+#: queue/queuetab.cpp:274
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:299
+#: queue/queuetab.cpp:298
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:304 core/emerge.cpp:461 core/emerge.cpp:533
+#: queue/queuetab.cpp:303 core/emerge.cpp:461 core/emerge.cpp:533
 #: core/cacheportagejob.cpp:185 core/scanportagejob.cpp:338
 #: core/scanportagejob.cpp:412 core/scanupdatesjob.cpp:154
 #: core/portagefiles.cpp:137 core/portagefiles.cpp:226
@@ -108,32 +104,32 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:382 portage/portagetab.cpp:348
+#: queue/queuetab.cpp:381 portage/portagetab.cpp:348
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:385 portage/portagetab.cpp:351
+#: queue/queuetab.cpp:384 portage/portagetab.cpp:351
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:388 portage/portagetab.cpp:354
+#: queue/queuetab.cpp:387 portage/portagetab.cpp:354
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:391 portage/portagetab.cpp:357
+#: queue/queuetab.cpp:390 portage/portagetab.cpp:357
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:393 portage/portagetab.cpp:359
+#: queue/queuetab.cpp:392 portage/portagetab.cpp:359
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:434 portage/portagetab.cpp:487 rc.cpp:25 rc.cpp:245
+#: queue/queuetab.cpp:433 portage/portagetab.cpp:487 rc.cpp:25 rc.cpp:255
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: queue/queuetab.cpp:435
+#: queue/queuetab.cpp:434
 msgid "Add to world"
 msgstr ""
 
@@ -400,7 +396,7 @@ msgstr ""
 msgid "Scanning installed packages. Can not match %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:427 core/scanportagejob.cpp:531
+#: core/scanportagejob.cpp:427 core/scanportagejob.cpp:533
 msgid "Scanning installed packages. Error reading: "
 msgstr ""
 
@@ -612,35 +608,35 @@ msgstr ""
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:531 core/packageinspector.cpp:601
-#: core/packageinspector.cpp:626 core/packageinspector.cpp:660
-#: core/packageinspector.cpp:687 portage/portage.cpp:205
+#: core/packageinspector.cpp:531 core/packageinspector.cpp:607
+#: core/packageinspector.cpp:632 core/packageinspector.cpp:666
+#: core/packageinspector.cpp:693 portage/portage.cpp:205
 msgid "Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:602
+#: core/packageinspector.cpp:608
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:627
+#: core/packageinspector.cpp:633
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:661
+#: core/packageinspector.cpp:667
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:690
+#: core/packageinspector.cpp:696
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:714
+#: core/packageinspector.cpp:720
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:756
+#: core/packageinspector.cpp:762
 msgid "No use flags available."
 msgstr ""
 
@@ -1315,7 +1311,7 @@ msgstr ""
 msgid "Chec&k Installation"
 msgstr ""
 
-#: rc.cpp:53 rc.cpp:124 rc.cpp:378
+#: rc.cpp:53 rc.cpp:124 rc.cpp:375
 #, no-c-format
 msgid "Alt+K"
 msgstr ""
@@ -1548,6 +1544,11 @@ msgstr ""
 msgid "Form2"
 msgstr ""
 
+#: rc.cpp:245
+#, no-c-format
+msgid "Uninstall"
+msgstr ""
+
 #: rc.cpp:249
 #, no-c-format
 msgid "Add to &Queue"
@@ -1556,11 +1557,6 @@ msgstr ""
 #: rc.cpp:252
 #, no-c-format
 msgid "Alt+Q"
-msgstr ""
-
-#: rc.cpp:255
-#, no-c-format
-msgid "Uninstall"
 msgstr ""
 
 #: rc.cpp:259
@@ -1695,22 +1691,22 @@ msgstr ""
 
 #: rc.cpp:372
 #, no-c-format
-msgid "<i>Restart for changes to take effect.</i>"
-msgstr ""
-
-#: rc.cpp:375
-#, no-c-format
 msgid "Show installed pac&kages in separate column"
 msgstr ""
 
-#: rc.cpp:381
+#: rc.cpp:378
 #, no-c-format
 msgid "Portage version >= &2.1"
 msgstr ""
 
-#: rc.cpp:384
+#: rc.cpp:381
 #, no-c-format
 msgid "Alt+2"
+msgstr ""
+
+#: rc.cpp:384
+#, no-c-format
+msgid "<i>Restart for changes to take effect.</i>"
 msgstr ""
 
 #: rc.cpp:390

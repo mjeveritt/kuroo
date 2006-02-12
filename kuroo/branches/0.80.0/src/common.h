@@ -37,6 +37,7 @@
 #include "portagedb.h"
 #include "history.h"
 #include "portagefiles.h"
+#include "filewatcher.h"
 #include "singleton.h"
 
 #include <qregexp.h>
@@ -59,6 +60,7 @@ typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<Updates> UpdatesSingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
+typedef Singleton<FileWatcher> FileWatcherSingleton;
 
 // The package states used by the filters
 enum packageFilters {

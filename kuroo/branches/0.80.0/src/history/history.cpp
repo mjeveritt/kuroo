@@ -58,7 +58,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *m_parent )
-	: QObject( m_parent ), userSync( false ), isEmerging( false )
+	: QObject( m_parent ), userSync( false ), isEmerging( false ), logWatcher( 0 )
 {
 	slotInit();
 }
@@ -67,8 +67,8 @@ History::~History()
 {
 	log.close();
 	
-	delete fileWatcher;
-	fileWatcher = 0;
+	delete logWatcher;
+	logWatcher = 0;
 }
 
 void History::init( QObject *parent )
@@ -86,14 +86,14 @@ void History::init( QObject *parent )
  */
 void History::slotInit()
 {
-	log.setName("/var/log/emerge.log");
+	log.setName( "/var/log/emerge.log" );
 	loadTimeStatistics();
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
 	
-	fileWatcher = new KDirWatch(this);
-	fileWatcher->addFile("/var/log/emerge.log");
-	connect( fileWatcher, SIGNAL( dirty(const QString&) ), this, SLOT( slotParse() ) );
+	logWatcher = new KDirWatch(this);
+	logWatcher->addFile( "/var/log/emerge.log" );
+	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
 }
 
 void History::slotScanHistoryCompleted()

@@ -65,6 +65,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Button actions.
 	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
+	connect( packagesView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	

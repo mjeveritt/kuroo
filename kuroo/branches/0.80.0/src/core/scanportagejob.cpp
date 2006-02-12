@@ -97,7 +97,7 @@ bool ScanPortageJob::doJob()
 		setProgressTotalSteps( 10000 );
 	
 	setStatus( "ScanPortage", i18n("Refreshing Portage view...") );
-	
+		
 	// Temporary table for all categories
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE category_temp ("
@@ -424,7 +424,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QFile file( path + "/" + category + "/" + name + "-" + version );
 	
 	if( !file.open( IO_ReadOnly ) ) {
-		kdDebug() << i18n("Scanning installed packages. Error reading: ") << path << "/" << category << "/" << name << "-" << version << endl;
+		kdDebug() << i18n("Scanning Portage cache. Error reading: ") << path << "/" << category << "/" << name << "-" << version << endl;
 		
 		info.slot = "0";
 		info.homepage = "0";
@@ -443,7 +443,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	// Check portage version and read out the package info strings
 	if ( KurooConfig::portageVersion21() ) {
 		
-		// We are on portage version post-2.1
+		// We are on portage version post 2.1
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 			
@@ -468,7 +468,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	}
 	else {
 	
-		// We are on portage version pre-2.1
+		// We are on portage version pre 2.1
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 			lineNumber++;

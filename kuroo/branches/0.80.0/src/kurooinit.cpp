@@ -54,6 +54,25 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		if ( !KUser().isSuperUser() )
 			checkUser();
 	
+	// Get portage version
+	QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
+	dPortageApp.setNameFilter( "portage-*" );
+	dPortageApp.setSorting( QDir::Time );
+	QString portage = dPortageApp.entryList().first();
+	if ( portage.isEmpty() ) {
+		KMessageBox::error( 0, i18n("Can not identify portage version!\n"
+		                            "Kuroo can not correctly parse package information.\n"
+		                            "You can select portage version in settings."), i18n("Portage version") );
+	}
+	else {
+		if ( portage.section( "portage-", 1, 1).startsWith( "2.1" ) )
+			KurooConfig::setPortageVersion21( true );
+		else
+			KurooConfig::setPortageVersion21( false );
+		
+		kdDebug() << i18n("Identifying portage version. Found: %1").arg( portage ) << endl;
+	}
+	
 	// Get portage groupid to set directories and files owned by portage
 	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
 	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
@@ -121,6 +140,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	QueueSingleton::Instance()->init( this );
 	ResultsSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
+	FileWatcherSingleton::Instance()->init( this );
 }
 
 KurooInit::~KurooInit()

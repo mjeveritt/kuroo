@@ -102,6 +102,7 @@ void QueueListView::QueueItem::setStart()
  */
 void QueueListView::QueueItem::setComplete()
 {
+	m_progress = m_duration;
 	m_isComplete = true;
 	bar->setTextEnabled( true );
 	bar->setTotalSteps( 100 );
@@ -115,9 +116,11 @@ bool QueueListView::QueueItem::isComplete()
 	return m_isComplete;
 }
 
-int QueueListView::QueueItem::duration()
+int QueueListView::QueueItem::remainingDuration()
 {
-	return m_duration;
+	kdDebug() << "QueueListView::QueueItem::remainingDuration remainingDuration=" << m_duration - m_progress << endl;
+	
+	return m_duration - m_progress;
 }
 
 /**
@@ -134,11 +137,6 @@ void QueueListView::QueueItem::oneStep()
 		}
 		else
 			bar->advance( 3 );
-}
-
-int QueueListView::QueueItem::progress()
-{
-	return m_progress;
 }
 
 /**
@@ -358,6 +356,11 @@ void QueueListView::clearQueuePackageUse()
 	}
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////
+// Emerge duration and progress
+/////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Convert emerge duration from seconds to format hh:mm:ss.
  * @param time
@@ -380,7 +383,7 @@ QTime QueueListView::totalTime()
 	QListViewItemIterator it( this );
 	while ( it.current() ) {
 		if ( !dynamic_cast<QueueItem*>( it.current() )->isComplete() )
-			totalDuration = totalDuration.addSecs( dynamic_cast<QueueItem*>( it.current() )->duration() );
+			totalDuration = totalDuration.addSecs( dynamic_cast<QueueItem*>( it.current() )->remainingDuration() );
 		++it;
 	}
 	return totalDuration;
@@ -399,6 +402,11 @@ QString QueueListView::totalTimeFormatted()
 {
 	return formatTime( sumTime() );
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// 
+/////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Add this package size to total.

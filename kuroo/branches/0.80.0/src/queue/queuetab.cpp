@@ -76,8 +76,10 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), queueView, SLOT( slotPackageComplete( const QString&, bool ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), queueView, SLOT( slotPackageProgress() ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), this, SLOT( slotQueueSummary() ) );
-// 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), this, SLOT( slotQueueSummary() ) );
+
+	// Update Queue summary timer
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), this, SLOT( slotQueueSummary() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), this, SLOT( slotQueueSummary() ) );
 	
 	slotInit();
 }

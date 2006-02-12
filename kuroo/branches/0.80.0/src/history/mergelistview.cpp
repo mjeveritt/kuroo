@@ -31,7 +31,7 @@ MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
 MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
 	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
 {
-	setText( 0 , m_source.section( "_", 2, 2 ) );
+	setText( 0 , m_source.section( QRegExp("_\\d*_\\d*"), 0, 0 ) );
 }
 
 QString MergeListView::MergeItem::source()

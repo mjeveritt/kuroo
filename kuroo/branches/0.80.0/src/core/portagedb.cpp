@@ -372,14 +372,14 @@ void KurooDB::backupDb()
 		foreach ( historyData ) {
 			QString timestamp = *it++;
 			QString einfo = *it;
-			stream << timestamp << "\n" << einfo << "\n";
+			stream << timestamp << ":" << einfo << "\n";
 		}
 		file.close();
 	}
 	else
 		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
 	
-	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory; " );
+	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory;" );
 	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
@@ -387,7 +387,7 @@ void KurooDB::backupDb()
 			QString timestamp = *it++;
 			QString source = *it++;
 			QString destination = *it;
-			stream << timestamp << "\n" << source << "\n" << destination << "\n";
+			stream << timestamp << ":" << source << ":" << destination << "\n";
 		}
 		file.close();
 	}
@@ -412,10 +412,13 @@ void KurooDB::restoreBackup()
 		file.close();
 	}
 	
+	QRegExp rxHistoryLine( "(\\d+):((?:\\S|\\s)*)" );
 	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
-		QString timestamp = *it++;
-		QString einfo = *it;
-		query( "UPDATE history SET einfo = '" + escapeString( einfo ) + "' WHERE timestamp = '" + timestamp + "';" );
+		if ( !(*it).isEmpty() && rxHistoryLine.exactMatch( *it ) ) {
+			QString timestamp = rxHistoryLine.cap(1);
+			QString einfo = rxHistoryLine.cap(2);
+			query( "UPDATE history SET einfo = '" + escapeString( einfo ) + "' WHERE timestamp = '" + timestamp + "';" );
+		}
 	}
 	
 	// Restore source and destination into table mergeHistory
@@ -430,12 +433,15 @@ void KurooDB::restoreBackup()
 		file.close();
 	}
 	
+	QRegExp rxMergeLine( "(\\d+):((?:\\S|\\s)*):((?:\\S|\\s)*)" );
 	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
-		QString timestamp = *it++;
-		QString source = *it++;
-		QString destination = *it;
-		query( "INSERT INTO mergeHistory (timestamp, source, destination) "
-		       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
+		if ( !(*it).isEmpty() && rxMergeLine.exactMatch( *it ) ) {
+			QString timestamp = rxMergeLine.cap(1);
+			QString source = rxMergeLine.cap(2);
+			QString destination = rxMergeLine.cap(3);
+			query( "INSERT INTO mergeHistory (timestamp, source, destination) "
+			       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
+		}
 	}
 }
 

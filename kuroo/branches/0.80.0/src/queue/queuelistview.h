@@ -119,10 +119,9 @@ public:
 	
 	void			setComplete();
 	bool			isComplete();
-	int				duration();
+	int				remainingDuration();
 	void			setStart();
 	void			oneStep();
-	int				progress();
 	void			setChecked( bool isChecked );
 	void			setStatus( int status );
 	void			hideBar();

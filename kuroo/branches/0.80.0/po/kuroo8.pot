@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-12 16:17+0100\n"
+"POT-Creation-Date: 2006-02-12 17:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -652,6 +652,14 @@ msgstr ""
 msgid "Stability"
 msgstr ""
 
+#: core/filewatcher.cpp:63
+msgid "Portage version is upgraded to 2.1. Please refresh package view."
+msgstr ""
+
+#: core/filewatcher.cpp:64 kurooinit.cpp:65
+msgid "Portage version"
+msgstr ""
+
 #: history/history.cpp:78
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
@@ -1125,33 +1133,33 @@ msgid ""
 "You can select portage version in settings."
 msgstr ""
 
-#: kurooinit.cpp:65
-msgid "Portage version"
+#: kurooinit.cpp:73
+msgid "Identifying portage version. Found: %1"
 msgstr ""
 
-#: kurooinit.cpp:82 kurooinit.cpp:83
+#: kurooinit.cpp:84 kurooinit.cpp:85
 msgid "No scan"
 msgstr ""
 
-#: kurooinit.cpp:118
+#: kurooinit.cpp:120
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:188
+#: kurooinit.cpp:191
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
-#: kurooinit.cpp:207
+#: kurooinit.cpp:210
 msgid "Error reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:244
+#: kurooinit.cpp:247
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:244
+#: kurooinit.cpp:247
 msgid "User permissions"
 msgstr ""
 

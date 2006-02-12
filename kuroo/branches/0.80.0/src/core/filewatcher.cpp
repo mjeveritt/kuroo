@@ -53,18 +53,17 @@ void FileWatcher::init( QObject *parent )
  */
 void FileWatcher::slotChanged( const QString& package )
 {
-	kdDebug() << "FileWatcher::slotCreated package=" << package << endl;
+	QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
+	dPortageApp.setNameFilter( "portage-*" );
+	dPortageApp.setSorting( QDir::Time );
+	QString portage = dPortageApp.entryList().first();
 	
-	QString packageName = package.section( "/", 1 ).section( rxPortageVersion, 0, 0 );
-	if ( packageName == "portage" ) {
-		
-		if ( package.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
-			KurooConfig::setPortageVersion21( true );
-			KMessageBox::sorry( 0, i18n("Portage version is upgraded to 2.1.\n"
-			                            "Please refresh package view."), i18n("Portage version") );
-		}
-	
+	if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
+		KurooConfig::setPortageVersion21( true );
+		KMessageBox::sorry( 0, i18n("Portage version is upgraded to 2.1. "
+									"Please refresh package view."), i18n("Portage version") );
 	}
+	
 }
 
 #include "filewatcher.moc"

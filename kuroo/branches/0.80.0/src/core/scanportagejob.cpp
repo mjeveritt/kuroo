@@ -463,7 +463,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 								info.useFlags = line.section("IUSE=", 1, 1);
 							else
 								if ( line.startsWith( "HOMEPAGE=" ) )
-									info.homepage = line.section("HOMEPAGE=", 1, 1);
+									info.homepage = line.section("HOMEPAGE=", 1, 1).replace('\'', "''").replace('%', "&#37;");
 		}
 	}
 	else {

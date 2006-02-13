@@ -58,6 +58,10 @@ void Images::init( QObject *parent )
 	
 	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
 	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
+	
+	pxWorld = ldr->loadIcon( "kuroo_queue", KIcon::Small );
+	pxWorldColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
+	
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 	
 	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
@@ -111,7 +115,7 @@ QPixmap& Images::icon( int image )
 			break;
 		
 		case WORLD:
-			return pxNew;
+			return pxWorld;
 			break;
 		
 		case VERSION_INSTALLED:
@@ -127,7 +131,7 @@ QPixmap& Images::icon( int image )
 			break;
 		
 		case WORLD_COLUMN:
-			return pxInstalledColumn;
+			return pxWorldColumn;
 			break;
 		
 		case VIEW_PACKAGES:

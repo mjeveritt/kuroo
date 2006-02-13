@@ -37,8 +37,8 @@ public:
 	
 private:
 	QObject*	m_parent;
-	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued;
-	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxVersionInstalled, pxInstalledColumn;
+	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxWorld;
+	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
 	QPixmap		pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
 
 };

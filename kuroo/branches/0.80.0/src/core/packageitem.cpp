@@ -255,9 +255,8 @@ void PackageItem::initVersions()
 		if ( atom->parse( *it ) ) {
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 				( *versionIterator )->setHardMasked( true );
-			}
 		}
 	}
 	delete atom;
@@ -274,9 +273,8 @@ void PackageItem::initVersions()
 		if ( atom->parse( *it ) ) {
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 				( *versionIterator )->setUnMasked( true );
-			}
 		}
 	}
 	delete atom;
@@ -293,9 +291,8 @@ void PackageItem::initVersions()
 		if ( atom->parse( *it ) ) {
 			QValueList<PackageVersion*> versions = atom->matchingVersions();
 			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 				( *versionIterator )->setUserMasked( true );
-			}
 		}
 	}
 	delete atom;

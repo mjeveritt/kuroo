@@ -225,7 +225,7 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-// 	kdDebug() << "PackageVersion::stability id=" << m_package->id() << " m_keywords=" << m_keywords << " m_version=" << m_version << endl;
+// 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << endl;
 	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;

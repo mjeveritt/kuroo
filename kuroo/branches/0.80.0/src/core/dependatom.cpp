@@ -46,16 +46,16 @@
  */
 DependAtom::DependAtom( PackageItem* portagePackage )
 	: m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null ),
-	rxAtom(	"^"    // Start of the string
-			"(!)?" // "Block these packages" flag, only occurring in ebuilds
-			"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
-			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
-			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-			"("            // start of the version part
-			"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
-			"(?:_(?:alpha|beta|pre|rc|p)\\d+)?" // version suffix
-			"(?:-r\\d+)?"  // revision
-			")?$"          // end of the (optional) version part and the atom string
+	rxAtom(	"^"    										// Start of the string
+			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
+			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
+			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory
+			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+			"("           								// start of the version part
+			"(?:-\\d+(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+	       	"(?:-r\\d*)?"  								// revision
+	       	"(?:\\*$)?)?"          					// end of the (optional) version part and the atom string
 		)
 {
 }
@@ -134,9 +134,8 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 		m_version = m_version.left( m_version.length() - 1 );
 		matchBaseVersion = true;
 	}
-	else {
+	else
 		matchBaseVersion = false;
-	}
 	
 	// When this is set true, it will match all versions
 	// with exactly the same version string as the parsed one.

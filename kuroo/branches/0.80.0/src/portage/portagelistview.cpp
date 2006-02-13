@@ -65,9 +65,11 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Package" ), 150 );
 	addColumn( "" );
 	addColumn( "", 25 );
-	header()->setLabel( 2, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
+	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
+	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( "", 25 );
-	header()->setLabel( 3, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
+	header()->setLabel( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
+	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( i18n( "Update" ), 80 );
 	addColumn( i18n( "Description" ), 200 );
 	
@@ -95,6 +97,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	
 	header()->setResizeEnabled( false, 1 );
 	header()->setResizeEnabled( false, 2 );
+	header()->setResizeEnabled( false, 3 );
 }
 
 PortageListView::~PortageListView()

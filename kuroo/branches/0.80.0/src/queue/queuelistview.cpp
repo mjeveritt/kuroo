@@ -166,6 +166,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 		bar->setGeometry( rect );
 		bar->show();
 	}
+	
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 
@@ -180,7 +181,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Package" ), 320 );
 	addColumn( "" );
 	addColumn( "", 25 );
-	header()->setLabel( 3, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
+	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
+	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( i18n( "Version" ), 100 );
 	addColumn( i18n( "Duration" ), 100 );
 	addColumn( i18n( "Size" ), 100 );
@@ -213,6 +215,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 		hideColumn( 1 );
 	
 	header()->setResizeEnabled( false, 1 );
+	header()->setResizeEnabled( false, 2 );
 	
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );

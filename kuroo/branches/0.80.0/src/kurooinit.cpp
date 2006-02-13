@@ -69,8 +69,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 			KurooConfig::setPortageVersion21( true );
 		else
 			KurooConfig::setPortageVersion21( false );
-		
-		kdDebug() << i18n("Identifying portage version. Found: %1").arg( portage ) << endl;
 	}
 	
 	// Get portage groupid to set directories and files owned by portage

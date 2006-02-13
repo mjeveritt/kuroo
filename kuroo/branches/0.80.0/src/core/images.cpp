@@ -59,8 +59,8 @@ void Images::init( QObject *parent )
 	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
 	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
 	
-	pxWorld = ldr->loadIcon( "kuroo_queue", KIcon::Small );
-	pxWorldColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
+	pxWorld = ldr->loadIcon( "kuroo_world", KIcon::Small );
+	pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIcon::Small );
 	
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 	

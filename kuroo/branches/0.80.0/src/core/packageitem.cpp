@@ -102,12 +102,12 @@ void PackageItem::setStatus( int status )
 		
 		case QUEUED :
 			m_isQueued = true;
-			setPixmap( 2, ImagesSingleton::Instance()->icon( QUEUED ) );
+			setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
 			break;
 		
 		case NOTQUEUED :
 			m_isQueued = false;
-			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
+			setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
 		
 	}
 }
@@ -119,7 +119,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 {
 	if ( this->isVisible() ) {
 		if ( PortageSingleton::Instance()->isInWorld( m_category, m_name ) )
-			setPixmap( 3, ImagesSingleton::Instance()->icon( WORLD ) );
+			setPixmap( 2, ImagesSingleton::Instance()->icon( WORLD ) );
 		KListViewItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
 }

@@ -436,11 +436,13 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	int menuItem2 = menu.insertItem( i18n( "Options..." ), OPTIONS );
 	int menuItem3 = menu.insertItem( i18n( "Add to world" ), TOWORLD );
 	
+	menu.setItemEnabled( menuItem3, false );
+	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
 		
-		if ( !KUser().isSuperUser() )
-			menu.setItemEnabled( menuItem3, false );
+		if ( KUser().isSuperUser() )
+			menu.setItemEnabled( menuItem3, true );
 	}
 	
 	switch( menu.exec( point ) ) {

@@ -158,11 +158,11 @@ void QueueListView::QueueItem::hideBar()
  */
 void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
-	if ( column == 5 && m_isChecked ) {
+	if ( column == 6 && m_isChecked ) {
 		QRect rect = listView()->itemRect( this );
 		QHeader *head = listView()->header();
-		rect.setLeft( head->sectionPos( 5 ) - head->offset() );
-		rect.setWidth( head->sectionSize( 5 ) );
+		rect.setLeft( head->sectionPos( 6 ) - head->offset() );
+		rect.setWidth( head->sectionSize( 6 ) );
 		bar->setGeometry( rect );
 		bar->show();
 	}

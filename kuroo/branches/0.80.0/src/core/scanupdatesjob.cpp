@@ -85,6 +85,7 @@ bool ScanUpdatesJob::doJob()
 	                                    " idSubCategory INTEGER, "
 	                                    " idCatSubCategory INTEGER, "
 	                                    " name VARCHAR(32), "
+	                                    " category VARCHAR(32), "
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
@@ -127,12 +128,10 @@ bool ScanUpdatesJob::doJob()
 			kdDebug() << i18n("Scanning updates. Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
 		else {
 			
-			// Mark as update in portage
-			if ( !(*it).updateFlags.contains("N") )
-				if ( !id.isEmpty() )
-					KurooDBSingleton::Instance()->query( QString(
-						"UPDATE package_temp SET updateVersion = '%1' "
-						" WHERE id = '%2';").arg((*it).version).arg(id), m_db);
+			// Mark as update in portage, but not for new packages
+			if ( !(*it).updateFlags.contains( QRegExp("\\bN\\b") ) && !id.isEmpty() )
+				KurooDBSingleton::Instance()->query( QString(
+					"UPDATE package_temp SET updateVersion = '%1' WHERE id = '%2';").arg((*it).version).arg(id), m_db);
 	
 			if ( !id.isEmpty() )
 				KurooDBSingleton::Instance()->insert( QString(

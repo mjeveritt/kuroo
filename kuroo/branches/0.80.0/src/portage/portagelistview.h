@@ -65,7 +65,7 @@ private:
 class PortageListView::PortageItem : public PackageItem
 {
 public:
-	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, const QString& homepage );
+	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status, const QString& homepage );
 	
 	QString 						homepage();
 	

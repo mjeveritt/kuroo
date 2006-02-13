@@ -34,6 +34,9 @@ public:
 	Portage( QObject *m_parent = 0 );
     ~Portage();
 	
+	void						loadWorld();
+	bool						isInWorld( const QString& category, const QString& name );
+	
 public slots:
 	void						init( QObject *parent = 0 );
 	void						slotChanged();
@@ -114,6 +117,7 @@ signals:
 private:
 	QObject*					m_parent;
 	QMap<QString, QString> 		mapCache, mapPackageKeywords;
+	QMap<QString, QString>		mapWorld;
 };
 
 #endif

@@ -252,6 +252,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idSubCategory INTEGER, "
 	      " idCatSubCategory INTEGER, "
 	      " name VARCHAR(32), "
+	      " category VARCHAR(32), "
 	      " latest VARCHAR(32), "
 	      " description VARCHAR(255), "
 	      " homepage VARCHAR(32), "
@@ -586,7 +587,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " WHERE updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
 						  " FROM package "
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
@@ -605,7 +606,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
 			              " FROM package "
 			              " WHERE idSubCategory = '" + subCategoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
@@ -627,7 +628,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
 						  " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
@@ -647,7 +648,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
 					      " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 						  " AND idSubCategory = '" + subCategoryId + "'"

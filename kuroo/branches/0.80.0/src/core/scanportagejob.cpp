@@ -125,6 +125,7 @@ bool ScanPortageJob::doJob()
 	                                    " idSubCategory INTEGER, "
 	                                    " idCatSubCategory INTEGER, "
 	                                    " name VARCHAR(32), "
+	                                    " category VARCHAR(32), "
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
@@ -285,10 +286,10 @@ bool ScanPortageJob::doJob()
 			QString description = itPackage.data().description;
 			QString homepage = itPackage.data().homepage;
 			
-			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta) "
-			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7' " 
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta, category) "
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8' " 
 			                     )
-				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta );
+				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta ).arg( category );
 			
 			sql += QString( ");" );
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );

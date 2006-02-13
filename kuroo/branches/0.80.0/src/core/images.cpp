@@ -110,6 +110,10 @@ QPixmap& Images::icon( int image )
 			return pxNew;
 			break;
 		
+		case WORLD:
+			return pxNew;
+			break;
+		
 		case VERSION_INSTALLED:
 			return pxVersionInstalled;
 			break;
@@ -120,6 +124,11 @@ QPixmap& Images::icon( int image )
 		
 		case INSTALLED_COLUMN:
 			return pxInstalledColumn;
+			break;
+		
+		case WORLD_COLUMN:
+			return pxInstalledColumn;
+			break;
 		
 		case VIEW_PACKAGES:
 			return pxViewPackages;

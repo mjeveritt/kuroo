@@ -37,7 +37,7 @@ const int diffTime( 10 );
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ),
+	: PackageItem( parent, name, id, category, description, status ),
 	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	bar( 0 )
 {
@@ -48,7 +48,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& description, const QString& status, int duration )
-	: PackageItem( parent, name, id, description, status ),
+	: PackageItem( parent, name, id, category, description, status ),
 	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	bar( 0 )
 {
@@ -179,6 +179,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
 	addColumn( "" );
+	addColumn( "", 25 );
+	header()->setLabel( 3, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
 	addColumn( i18n( "Version" ), 100 );
 	addColumn( i18n( "Duration" ), 100 );
 	addColumn( i18n( "Size" ), 100 );
@@ -194,9 +196,10 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 3, QListView::Manual );
 	setColumnWidthMode( 4, QListView::Manual );
 	setColumnWidthMode( 5, QListView::Manual );
+	setColumnWidthMode( 6, QListView::Manual );
 	
-	setColumnAlignment( 4, Qt::AlignRight );
-	setTooltipColumn( 4 );
+	setColumnAlignment( 5, Qt::AlignRight );
+	setTooltipColumn( 5 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );
@@ -297,19 +300,19 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		
 		// Add package info
 		if ( version.isEmpty() )
-			item->setText( 2, i18n("na") );
-		else
-			item->setText( 2, version );
-		
-		if ( duration == diffTime )
 			item->setText( 3, i18n("na") );
 		else
-			item->setText( 3, formatTime( duration ) );
+			item->setText( 3, version );
+		
+		if ( duration == diffTime )
+			item->setText( 4, i18n("na") );
+		else
+			item->setText( 4, formatTime( duration ) );
 		
 		if ( size.isEmpty() )
-			item->setText( 4, i18n("na") );
+			item->setText( 5, i18n("na") );
 		else {
-			item->setText( 4, size );
+			item->setText( 5, size );
 			addSize( size );
 		}
 		
@@ -335,8 +338,8 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
  */
 void QueueListView::viewportResizeEvent( QResizeEvent *e )
 {
-	setColumnWidth( 5, 70 );
-	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + 70;
+	setColumnWidth( 6, 70 );
+	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + columnWidth(5) + 70;
 	
 	if ( KurooConfig::installedColumn() )
 		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );

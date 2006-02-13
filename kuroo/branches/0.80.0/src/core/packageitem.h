@@ -35,8 +35,8 @@ class DependAtom;
 class PackageItem : public KListViewItem
 {
 public:
-	PackageItem( QListView *parent, const char* name, const QString& id, const QString& description, const QString& status );
-	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& description, const QString& status );
+	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status );
+	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status );
 	~PackageItem();
 	
 	QString							status();
@@ -61,6 +61,9 @@ public:
 	QMap<QString,PackageVersion*> 	versionMap();
 	QValueList<PackageVersion*> 	sortedVersionList();
 	void							resetDetailedInfo();
+
+protected:
+	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
 	int								m_index;

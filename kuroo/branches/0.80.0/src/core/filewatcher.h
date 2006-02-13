@@ -36,7 +36,7 @@ public:
 	void			init( QObject *parent = 0 );
 	
 private slots:
-	void			slotChanged( const QString& package );
+	void			slotChanged( const QString& path );
 	
 private:
 	QObject*		m_parent;

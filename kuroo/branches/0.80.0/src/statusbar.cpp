@@ -63,8 +63,6 @@ KurooStatusBar::~KurooStatusBar()
  */
 void KurooStatusBar::setProgressStatus( const QString& id, const QString& message )
 {
-	kdDebug() << "KurooStatusBar::setProgressStatus id=" << id << " message=" << message << endl;
-	
 	if ( id.isEmpty() ) {
 		statusBarLabel->setText( message );
 		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
@@ -128,6 +126,7 @@ void KurooStatusBar::setProgress( int steps )
 void KurooStatusBar::startTimer()
 {
 	kdDebug() << "KurooStatusBar::startTimer" << endl;
+	
 	internalTimer->start( 1000 );
 	timerSteps = 0;
 }
@@ -138,6 +137,7 @@ void KurooStatusBar::startTimer()
 void KurooStatusBar::stopTimer()
 {
 	kdDebug() << "KurooStatusBar::stopTimer" << endl;
+	
 	internalTimer->stop();
 	diffTimer->stop();
 	statusBarProgress->setProgress( 0 );

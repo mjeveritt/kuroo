@@ -38,8 +38,8 @@ static int packageCount( 0 );
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
  */
-PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& description, const QString& status, const QString& homepage )
-	: PackageItem( parent, name, id, description, status ), m_homepage( homepage )
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status, const QString& homepage )
+	: PackageItem( parent, name, id, category, description, status ), m_homepage( homepage )
 {
 }
 
@@ -66,6 +66,8 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	addColumn( "" );
 	addColumn( "", 25 );
 	header()->setLabel( 2, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
+	addColumn( "", 25 );
+	header()->setLabel( 3, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
 	addColumn( i18n( "Update" ), 80 );
 	addColumn( i18n( "Description" ), 200 );
 	
@@ -73,6 +75,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
 	setColumnWidthMode( 3, QListView::Manual );
+	setColumnWidthMode( 4, QListView::Manual );
 	
 	setProperty( "selectionMode", "Extended" );
 	setShowSortIndicator( true );
@@ -136,19 +139,20 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	setHeader( QString::null );
 	
 	// Don't load all packages, only first ROWLIMIT
-	packageCount = packageList.size() / 6;
-	
+	packageCount = packageList.size() / 7;
+
 	foreach ( packageList ) {
 		QString id = *it++;
 		QString name = *it++;
+		QString category = *it++;
 		QString description = *it++;
 		QString meta = *it++;
 		QString update = *it++;
 		QString homepage = *it;
-		
-		PortageItem* item = new PortageItem( this, name, id, description, meta, homepage );
-		item->setText( 3, update );
-		item->setText( 4, description );
+
+		PortageItem* item = new PortageItem( this, name, id, category, description, meta, homepage );
+		item->setText( 4, update );
+		item->setText( 5, description );
 		
 		if ( meta == FILTER_ALL_STRING )
 			item->setStatus( PACKAGE );

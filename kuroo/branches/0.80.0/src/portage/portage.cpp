@@ -48,6 +48,7 @@ void Portage::init( QObject *parent )
 {
 	m_parent = parent;
 	loadCache();
+	loadWorld();
 }
 
 /**
@@ -237,6 +238,42 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
 	QString name( temp.section ( rxPortageVersion, 0, 0 ) );
 	
 	return true;
+}
+
+/**
+ * Load packages in world file. @fixme: optimize this...
+ */
+void Portage::loadWorld()
+{
+	mapWorld.clear();
+	
+	QRegExp rxPackage( "(\\S+)/(\\S+)" );
+	QFile file( KurooConfig::dirWorldFile() );
+	if ( file.open( IO_ReadOnly ) ) {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() ) {
+			QString line = stream.readLine();
+			
+			mapWorld[ line ] = line;
+			
+// 			if ( rxPackage.exactMatch( line ) )
+// 				mapWorld[ rxPackage.cap(1) ] = rxPackage.cap(2);
+// 			else
+// 				kdDebug() << i18n("Loading packages in world. Can not parse: ") << line << endl;
+		}
+	}
+	else
+		kdDebug() << i18n("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+	
+	kdDebug() << "Portage::loadWorld ... done!" << endl;
+}
+
+bool Portage::isInWorld( const QString& category, const QString& name )
+{
+	if ( mapWorld.contains( category + "/" + name ) )
+		return true;
+	else
+		return false;
 }
 
 /**

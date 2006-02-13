@@ -745,7 +745,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	
 	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
 	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:USE=\")*([\\-\\+\\w\\s\\(\\)\\*]*)\"*"
+	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
 	                   "\\s+([\\d,]*)\\s+kB" );
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {

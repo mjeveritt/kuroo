@@ -31,18 +31,18 @@
  * @class PackageItem
  * @short KListViewItem subclass
  */
-PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& description, const QString& status )
+PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent ), m_index( 0 ),
-	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( QString::null ), m_isQueued( false ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ),
 	hasDetailedInfo( false )
 {
 }
 
-PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& description, const QString& status )
+PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent->listView() ), m_index( 0 ),
-	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( QString::null ), m_isQueued( false ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ),
 	hasDetailedInfo( false )
 {
 }
@@ -109,6 +109,18 @@ void PackageItem::setStatus( int status )
 			m_isQueued = false;
 			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
 		
+	}
+}
+
+/**
+ * Reimplemented...
+ */
+void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
+{
+	if ( this->isVisible() ) {
+		if ( PortageSingleton::Instance()->isInWorld( m_category, m_name ) )
+			setPixmap( 3, ImagesSingleton::Instance()->icon( WORLD ) );
+		KListViewItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
 }
 
@@ -203,7 +215,7 @@ void PackageItem::initVersions()
 // 	clock_t start = clock();
 	
 	// Get list of accepted keywords, eg if package is "untesting"
-	m_category = KurooDBSingleton::Instance()->category( id() );
+// 	m_category = KurooDBSingleton::Instance()->category( id() );
 	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
 	
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );

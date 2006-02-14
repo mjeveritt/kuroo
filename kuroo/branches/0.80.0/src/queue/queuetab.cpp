@@ -429,20 +429,24 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	if ( !item )
 		return;
 	
-	enum Actions { REMOVE, OPTIONS, TOWORLD };
+	enum Actions { REMOVE, OPTIONS, ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
 	int menuItem1 = menu.insertItem( i18n( "Remove" ), REMOVE );
 	int menuItem2 = menu.insertItem( i18n( "Options..." ), OPTIONS );
-	int menuItem3 = menu.insertItem( i18n( "Add to world" ), TOWORLD );
+	int menuItem3 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
+	int menuItem4 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
 	
-	menu.setItemEnabled( menuItem3, false );
+// 	menu.setItemEnabled( menuItem3, false );
+// 	menu.setItemEnabled( menuItem4, false );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
 		
-		if ( KUser().isSuperUser() )
+		if ( KUser().isSuperUser() ) {
 			menu.setItemEnabled( menuItem3, true );
+			menu.setItemEnabled( menuItem4, true );
+		}
 	}
 	
 	switch( menu.exec( point ) ) {
@@ -455,8 +459,12 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 			slotAdvanced();
 			break;
 		
-		case TOWORLD:
-			PortageSingleton::Instance()->appendWorld( queueView->currentPackage()->category(), queueView->currentPackage()->name() );
+		case ADDWORLD:
+			PortageSingleton::Instance()->appendWorld( queueView->currentPackage()->category() + "/" + queueView->currentPackage()->name() );
+			break;
+		
+		case DELWORLD:
+			PortageSingleton::Instance()->removeFromWorld( queueView->currentPackage()->category() + "/" + queueView->currentPackage()->name() );
 		
 	}
 }

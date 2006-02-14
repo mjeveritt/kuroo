@@ -118,8 +118,6 @@ bool QueueListView::QueueItem::isComplete()
 
 int QueueListView::QueueItem::remainingDuration()
 {
-	kdDebug() << "QueueListView::QueueItem::remainingDuration remainingDuration=" << m_duration - m_progress << endl;
-	
 	return m_duration - m_progress;
 }
 

@@ -40,6 +40,9 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
 
+	// Update visible items when is changed
+	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
+	
 // 	new ToolTip( this ); @fixme
 }
 

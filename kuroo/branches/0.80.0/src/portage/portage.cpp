@@ -254,7 +254,8 @@ void Portage::loadWorld()
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
 			
-			mapWorld[ line ] = line;
+			// Insert if not found
+			mapWorld[ line ] = QString::null;
 			
 // 			if ( rxPackage.exactMatch( line ) )
 // 				mapWorld[ rxPackage.cap(1) ] = rxPackage.cap(2);
@@ -264,13 +265,29 @@ void Portage::loadWorld()
 	}
 	else
 		kdDebug() << i18n("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
-	
-	kdDebug() << "Portage::loadWorld ... done!" << endl;
 }
 
-bool Portage::isInWorld( const QString& category, const QString& name )
+/**
+ * Save back content of map to world file.
+ */
+void Portage::saveWorld()
 {
-	if ( mapWorld.contains( category + "/" + name ) )
+	QFile file( KurooConfig::dirWorldFile() );
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream( &file );
+		for ( QMap<QString, QString>::Iterator it = mapWorld.begin(); it != mapWorld.end(); ++it )
+			stream << it.key() << endl;
+		file.close();
+		
+		emit signalWorldChanged();
+	}
+	else
+		kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
+}
+
+bool Portage::isInWorld( const QString& package )
+{
+	if ( mapWorld.contains( package ) )
 		return true;
 	else
 		return false;
@@ -280,62 +297,21 @@ bool Portage::isInWorld( const QString& category, const QString& name )
  * Add package to world file.
  * @param package
  */
-void Portage::appendWorld( const QString& category, const QString& name )
+void Portage::appendWorld( const QString& package )
 {
-	QFile file( KurooConfig::dirWorldFile() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		file.close();
-		
-		if ( file.open( IO_WriteOnly ) ) {
-			bool found;
-			QTextStream stream( &file );
-			foreach ( lines ) {
-				stream << *it << endl;
-				if ( *it == ( category + "/" + name ) )
-					found = true;
-			}
-			if ( !found )
-				stream << category << "/" << name << endl;
-			file.close();
-		}
-		else
-			kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
-	}
-	else
-		kdDebug() << i18n("Adding to world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+	// Insert if not found
+	mapWorld[ package ] = QString::null;
+	saveWorld();
 }
 
 /**
  * Remove package from world file.
  * @param package
  */
-void Portage::removeFromWorld( const QString& category, const QString& name )
+void Portage::removeFromWorld( const QString& package )
 {
-	QFile file( KurooConfig::dirWorldFile() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		file.close();
-		
-		if ( file.open( IO_WriteOnly ) ) {
-			QTextStream stream( &file );
-			foreach ( lines ) {
-				if ( *it != ( category + "/" + name ) )
-					stream << *it << endl;
-			}
-			file.close();
-		}
-		else
-			kdDebug() << i18n("Removing from world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
-	}
-	else
-		kdDebug() << i18n("Removing from world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+	mapWorld.remove( package );
+	saveWorld();
 }
 
 #include "portage.moc"

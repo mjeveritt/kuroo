@@ -79,7 +79,7 @@ bool PackageItem::isLastPackage()
 
 /**
  * Is the listViewItem category, package or ebuild.
- * Set icon and tooltip text. @fixme!
+ * Set icon and tooltip text.
  * @param status
  */
 void PackageItem::setStatus( int status )
@@ -113,13 +113,16 @@ void PackageItem::setStatus( int status )
 }
 
 /**
- * Reimplemented...
+ * Check if package is in world only for visible package.
  */
 void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	if ( this->isVisible() ) {
-		if ( PortageSingleton::Instance()->isInWorld( m_category, m_name ) )
+		
+		if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
 			setPixmap( 2, ImagesSingleton::Instance()->icon( WORLD ) );
+		else
+			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
 		KListViewItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
 }

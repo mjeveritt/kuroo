@@ -46,7 +46,7 @@ void FileWatcher::init( QObject *parent )
 	
 	watcher->addDir( KurooConfig::dirDbPkg() + "/sys-apps" );
 	
-	watcher->addFile( KurooConfig::dirWorldFile() );
+// 	watcher->addFile( KurooConfig::dirWorldFile() );
 	
 	connect( watcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged( const QString& ) ) );
 }
@@ -69,9 +69,9 @@ void FileWatcher::slotChanged( const QString& path )
 										"Please refresh package view."), i18n("Portage version") );
 		}
 	}
-	else
-	if ( path == KurooConfig::dirWorldFile() )
-		PortageSingleton::Instance()->loadWorld();
+// 	else
+// 	if ( path == KurooConfig::dirWorldFile() )
+// 		PortageSingleton::Instance()->loadWorld();
 }
 
 #include "filewatcher.moc"

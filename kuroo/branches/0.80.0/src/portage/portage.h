@@ -35,7 +35,7 @@ public:
     ~Portage();
 	
 	void						loadWorld();
-	bool						isInWorld( const QString& category, const QString& name );
+	bool						isInWorld( const QString& package );
 	
 public slots:
 	void						init( QObject *parent = 0 );
@@ -108,11 +108,13 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						appendWorld( const QString& category, const QString& name );
-	void						removeFromWorld( const QString& category, const QString& name );
+	void						saveWorld();
+	void						appendWorld( const QString& package );
+	void						removeFromWorld( const QString& package );
 	
 signals:
 	void						signalPortageChanged();
+	void						signalWorldChanged();
 	
 private:
 	QObject*					m_parent;

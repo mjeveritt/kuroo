@@ -199,7 +199,7 @@ bool KurooDB::isValid()
  */
 QString KurooDB::kurooDbVersion()
 {
-	return query( "SELECT version FROM dbInfo ;" ).first();
+	return query( "SELECT version FROM dbInfo;" ).first();
 }
 
 /**
@@ -718,13 +718,24 @@ QString KurooDB::packageId( const QString& package )
 }
 
 /**
+ * Return all versions for this package.
+ * @param id
+ */
+QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
+{
+	return query( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
+	              " AND meta = '" + FILTER_INSTALLED_STRING + "'"
+	              " ORDER BY version.name;");
+}
+
+/**
  * Return all versions and their info for this package.
  * @param id
  */
-QStringList KurooDB::packageVersionsInfo( const QString& id )
+QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
 	return query( " SELECT name, meta, licenses, useFlags, slot, branch, size "
-	              " FROM version WHERE idPackage = '" + id + "'"
+	              " FROM version WHERE idPackage = '" + idPackage + "'"
 	              " ORDER BY version.name;");
 }
 
@@ -735,7 +746,7 @@ QStringList KurooDB::packageVersionsInfo( const QString& id )
  */
 QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
-	return singleQuery( " SELECT size FROM version WHERE idPackage = '" + idPackage + "'"
+	return singleQuery( " SELECT size, meta FROM version WHERE idPackage = '" + idPackage + "'"
 	                    " AND name = '" + version + "' ;");
 }
 

@@ -29,6 +29,7 @@
 class CategoriesListView;
 class KPopupMenu;
 class PackageInspector;
+class UninstallInspector;
 
 /**
  * @class PortageTab
@@ -69,6 +70,7 @@ private:
 	int					queuedFilters;
 	KPopupMenu 			*menu;
 	PackageInspector	*m_packageInspector;
+	UninstallInspector	*uninstallInspector;
 	
 signals:
 	void				signalChanged();

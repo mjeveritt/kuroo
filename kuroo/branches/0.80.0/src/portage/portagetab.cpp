@@ -26,6 +26,7 @@
 #include "packageinspector.h"
 #include "packageversion.h"
 #include "versionview.h"
+#include "uninstallinspector.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -49,11 +50,13 @@
  * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
-	: PortageBase( parent ), m_packageInspector( packageInspector ), queuedFilters( 0 )
+	: PortageBase( parent ), m_packageInspector( packageInspector ), uninstallInspector( 0 ),queuedFilters( 0 )
 {
 	// Initialize category and subcategory views with all available data
 	categoriesView->init();
 	subcategoriesView->init();
+	
+	uninstallInspector = new UninstallInspector( this );
 	
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
@@ -89,6 +92,8 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 
 PortageTab::~PortageTab()
 {
+	delete uninstallInspector;
+	uninstallInspector = 0;
 }
 
 /**
@@ -112,13 +117,13 @@ void PortageTab::slotInit()
 void PortageTab::slotBusy( bool busy )
 {
 	if ( busy ) {
-		pbUninstall->setDisabled( true );
+// 		pbUninstall->setDisabled( true );
 		pbQueue->setDisabled( true );
 	}
 	else {
-		if ( !KUser().isSuperUser() )
-			pbUninstall->setDisabled( true );
-		else
+// 		if ( !KUser().isSuperUser() )
+// 			pbUninstall->setDisabled( true );
+// 		else
 			pbUninstall->setDisabled( false );
 		
 		pbQueue->setDisabled( false );
@@ -296,9 +301,8 @@ void PortageTab::slotPackage()
 		m_packageInspector->setDisabled( false );
 		pbAdvanced->setDisabled( false );
 	}
-	else {
-		pbUninstall->setDisabled( true );
-	}
+// 	else 
+// 		pbUninstall->setDisabled( true );
 	
 	if ( packagesView->currentPackage()->isQueued() )
 		pbQueue->setText( i18n("Remove from Queue") );
@@ -447,20 +451,22 @@ void PortageTab::slotUninstall()
 		const QStringList selectedList = packagesView->selectedId();
 		
 		// Pick only installed packages
-		QStringList packageList, idList;
+		QStringList packageList;
 		foreach ( selectedList ) {
 			if ( packagesView->itemId( *it )->isInstalled() ) {
+				packageList += *it;
 				packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + packagesView->itemId( *it )->name();
-				idList += *it;
 			}
 		}
 		
-		switch( KMessageBox::questionYesNoList( this, 
-				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
-				      "Do you want to uninstall following packages?</qt>" ), packageList, i18n( "Uninstall packages" ) ) ) {
-				case KMessageBox::Yes:
-					InstalledSingleton::Instance()->uninstallPackageList( packagesView->selectedId() );
-			}
+		uninstallInspector->view( packageList );
+		
+// 		switch( KMessageBox::questionYesNoList( this, 
+// 				i18n( "<qt>Portage will not check if the package you want to remove is required by another package.<br>"
+// 				      "Do you want to uninstall following packages?</qt>" ), packageList, i18n( "Uninstall packages" ) ) ) {
+// 				case KMessageBox::Yes:
+// 					InstalledSingleton::Instance()->uninstallPackageList( packagesView->selectedId() );
+// 			}
 	}
 }
 

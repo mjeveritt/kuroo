@@ -108,7 +108,7 @@ public slots:
 	* @param category
 	* @param packageList
 	*/
-	void						saveWorld();
+	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
 	

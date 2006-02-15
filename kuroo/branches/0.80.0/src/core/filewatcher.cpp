@@ -44,7 +44,7 @@ void FileWatcher::init( QObject *parent )
 	m_parent = parent;
 	watcher = new KDirWatch( this );
 	
-	watcher->addDir( KurooConfig::dirDbPkg() + "/sys-apps" );
+// 	watcher->addDir( KurooConfig::dirDbPkg() + "/sys-apps" );
 	
 // 	watcher->addFile( KurooConfig::dirWorldFile() );
 	

@@ -247,7 +247,7 @@ void Portage::loadWorld()
 {
 	mapWorld.clear();
 	
-	QRegExp rxPackage( "(\\S+)/(\\S+)" );
+// 	QRegExp rxPackage( "(\\S+)/(\\S+)" );
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
@@ -270,19 +270,21 @@ void Portage::loadWorld()
 /**
  * Save back content of map to world file.
  */
-void Portage::saveWorld()
+bool Portage::saveWorld( const QMap<QString, QString>& map )
 {
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
-		for ( QMap<QString, QString>::Iterator it = mapWorld.begin(); it != mapWorld.end(); ++it )
+		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
 			stream << it.key() << endl;
 		file.close();
-		
-		emit signalWorldChanged();
+
+		return true;
 	}
 	else
 		kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
+	
+	return false;
 }
 
 bool Portage::isInWorld( const QString& package )
@@ -299,9 +301,14 @@ bool Portage::isInWorld( const QString& package )
  */
 void Portage::appendWorld( const QString& package )
 {
-	// Insert if not found
-	mapWorld[ package ] = QString::null;
-	saveWorld();
+	QMap<QString, QString> map = mapWorld;
+	map[ package ] = QString::null;
+	
+	// Try saving changes first
+	if ( saveWorld( map ) ) {
+		mapWorld = map;
+		emit signalWorldChanged();
+	}
 }
 
 /**
@@ -310,8 +317,14 @@ void Portage::appendWorld( const QString& package )
  */
 void Portage::removeFromWorld( const QString& package )
 {
-	mapWorld.remove( package );
-	saveWorld();
+	QMap<QString, QString> map = mapWorld;
+	map.remove( package );
+	
+	// Try saving changes first
+	if ( saveWorld( map ) ) {
+		mapWorld = map;
+		emit signalWorldChanged();
+	}
 }
 
 #include "portage.moc"

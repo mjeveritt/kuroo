@@ -49,7 +49,8 @@ public:
 	
 	virtual bool					isInstalled();
 	virtual bool					isQueued();
-
+	virtual bool					isInWorld();
+	
 	void							setQueued();
 	
 	bool							isFirstPackage();
@@ -70,7 +71,7 @@ private:
 	
 	QString							m_id, m_name, m_status, m_packageTip, m_description, m_category;
 	QListView						*m_parent;
-	bool							m_isQueued, hasDetailedInfo;
+	bool							m_isQueued, m_inWorld, hasDetailedInfo;
 	
 	QValueList<PackageVersion*>		m_versions;
 	QMap<QString,PackageVersion*>	m_versionMap;

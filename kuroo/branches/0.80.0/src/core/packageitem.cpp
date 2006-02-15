@@ -34,7 +34,7 @@
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent ), m_index( 0 ),
-	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	hasDetailedInfo( false )
 {
 }
@@ -42,7 +42,7 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
 	m_parent( parent->listView() ), m_index( 0 ),
-	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	hasDetailedInfo( false )
 {
 }
@@ -119,10 +119,15 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 {
 	if ( this->isVisible() ) {
 		
-		if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+		if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
+			m_inWorld = true;
 			setPixmap( 2, ImagesSingleton::Instance()->icon( WORLD ) );
-		else
+		}
+		else {
+			m_inWorld = false;
 			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
+		}
+		
 		KListViewItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
 }
@@ -183,6 +188,11 @@ bool PackageItem::isInstalled()
 bool PackageItem::isQueued()
 {
 	return m_isQueued;
+}
+
+bool PackageItem::isInWorld()
+{
+	return m_inWorld;
 }
 
 void PackageItem::setQueued()

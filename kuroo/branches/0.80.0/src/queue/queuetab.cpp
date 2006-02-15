@@ -437,16 +437,18 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	int menuItem3 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
 	int menuItem4 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
 	
-// 	menu.setItemEnabled( menuItem3, false );
-// 	menu.setItemEnabled( menuItem4, false );
+	menu.setItemEnabled( menuItem3, false );
+	menu.setItemEnabled( menuItem4, false );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		menu.setItemEnabled( menuItem1, false );
-		
-		if ( KUser().isSuperUser() ) {
-			menu.setItemEnabled( menuItem3, true );
+	}
+	
+	if ( KUser().isSuperUser() ) {
+		if ( dynamic_cast<PackageItem*>( item )->isInWorld() )
 			menu.setItemEnabled( menuItem4, true );
-		}
+		else
+			menu.setItemEnabled( menuItem3, true );
 	}
 	
 	switch( menu.exec( point ) ) {

@@ -149,6 +149,7 @@ void Installed::init( QObject *parent )
  */
 void Installed::slotChanged()
 {
+	PortageSingleton::Instance()->loadWorld();
 	emit signalInstalledChanged();
 }
 

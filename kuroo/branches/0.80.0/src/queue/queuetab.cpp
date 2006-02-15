@@ -249,46 +249,46 @@ void QueueTab::slotGo()
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
 	
-	// First we must run emerge pretend
-	if ( !m_hasCheckedQueue ) {
-		PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
-		return;
-	}
-	
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
+
+		// First we must run emerge pretend
+	if ( !m_hasCheckedQueue ) {
+		EmergeSingleton::Instance()->pretend( packageList );
+		return;
+	}
 	
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {
 		switch( KMessageBox::questionYesNoList( this, 
-		                                        i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
-		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
-			                                        
-													case KMessageBox::Yes:
-														packageList.prepend( "--fetch-all-uri" );
-														QueueSingleton::Instance()->installPackageList( packageList );
-														KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-		                                        
-		                              			}
+			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
+			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
+				
+				case KMessageBox::Yes:
+					packageList.prepend( "--fetch-all-uri" );
+					QueueSingleton::Instance()->installPackageList( packageList );
+					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+			
+			}
 	}
 	else {
 		switch( KMessageBox::questionYesNoList( this, 
-		                                        i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
-		                                        KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
-			                                        
-													case KMessageBox::Yes: {
-														
-														// Force portage to reinstall files protected in CONFIG_PROTECT
-														if ( cbForce->isChecked() )
-															packageList.prepend( "--noconfmem" );
-														
-														QueueSingleton::Instance()->installPackageList( packageList );
-														KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-														m_hasCheckedQueue = false;
-													}
-			                                        
-		                                       }
+			i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
+			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
+				
+				case KMessageBox::Yes: {
+					
+					// Force portage to reinstall files protected in CONFIG_PROTECT
+					if ( cbForce->isChecked() )
+						packageList.prepend( "--noconfmem" );
+					
+					QueueSingleton::Instance()->installPackageList( packageList );
+					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+					m_hasCheckedQueue = false;
+				}
+				
+			}
 	}
 }
 
@@ -298,14 +298,14 @@ void QueueTab::slotGo()
 void QueueTab::slotStop()
 {
 	switch ( KMessageBox::warningYesNo( this,
-	                                    i18n( "Do you want to abort the running installation?" ) ) ) {
-		                                    
-											case KMessageBox::Yes : 
-												EmergeSingleton::Instance()->stop();
-												QueueSingleton::Instance()->stopTimer();
-												KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
-	                                    
-	                                   }
+		i18n( "Do you want to abort the running installation?" ) ) ) {
+			
+			case KMessageBox::Yes : 
+				EmergeSingleton::Instance()->stop();
+				QueueSingleton::Instance()->stopTimer();
+				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
+		
+		}
 }
 
 /**

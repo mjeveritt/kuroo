@@ -35,7 +35,9 @@ public:
 		
 		// Collect end-user packages
 		QMap<QString, int> endUserPackageMap;
-		const QStringList endUserPackageList = KurooDBSingleton::Instance()->allQueueId();
+		const QStringList endUserPackageList = KurooDBSingleton::Instance()->query( 
+			" SELECT idPackage FROM queue WHERE idDepend = '0';", m_db );
+		
 		foreach ( endUserPackageList )
 			endUserPackageMap.insert( *it, 0 );
 		
@@ -50,11 +52,13 @@ public:
 				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND idCatSubCategory = "
 				" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 			
-			if ( id.isEmpty() )
+			if ( id.isEmpty() ) {
 				kdDebug() << i18n("Add result package list: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+				return false;
+			}
 			
 			// We found a dependency, add it
-			if ( !idPackage.isEmpty() && !endUserPackageMap.contains( id ) ) {
+			if ( !endUserPackageMap.contains( id ) ) {
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
 					"VALUES ('%1', '%2', '%3', '%4', '%5')"

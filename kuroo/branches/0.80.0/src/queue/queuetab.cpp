@@ -97,7 +97,7 @@ QueueTab::~QueueTab()
  */
 void QueueTab::slotInit()
 {
-	pbRemove->setDisabled( true );
+// 	pbRemove->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	cbForce->setDisabled( true );
 	cbRemove->setDisabled( true );

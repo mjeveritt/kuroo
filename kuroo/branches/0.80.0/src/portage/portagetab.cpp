@@ -225,7 +225,9 @@ void PortageTab::slotListPackages()
 		pbQueue->setDisabled( true );
 		
 		summaryBrowser->clear();
-		summaryBrowser->setText( i18n("<font color=darkGray><b>No package selected!</b></font>") );
+		summaryBrowser->setText( i18n("<font color=darkGray size=+1><b>No package available with these filter settings</font><br>"
+		                              "<font color=darkGray>Please modify the filter settings you have chosen!<br>"
+		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
 		
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )

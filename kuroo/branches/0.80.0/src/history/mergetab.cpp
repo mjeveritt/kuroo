@@ -31,6 +31,7 @@
 #include <klistviewsearchline.h>
 #include <krun.h>
 #include <kprocio.h>
+#include <kiconloader.h>
 
 /**
  * @class MergeTab
@@ -39,6 +40,8 @@
 MergeTab::MergeTab( QWidget* parent )
 	: MergeBase( parent )
 {
+	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+	
 	mergeFilter->setListView( mergeView );
 
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );

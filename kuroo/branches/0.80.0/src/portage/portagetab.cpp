@@ -44,14 +44,17 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <klineedit.h>
+#include <kiconloader.h>
 
 /**
  * @class PortageTab
  * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
-	: PortageBase( parent ), m_packageInspector( packageInspector ), uninstallInspector( 0 ),queuedFilters( 0 )
+	: PortageBase( parent ), m_packageInspector( packageInspector ), uninstallInspector( 0 ), queuedFilters( 0 )
 {
+	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+	
 	// Initialize category and subcategory views with all available data
 	categoriesView->init();
 	subcategoriesView->init();

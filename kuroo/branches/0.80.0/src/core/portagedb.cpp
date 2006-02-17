@@ -477,20 +477,26 @@ QStringList KurooDB::allSubCategories()
 QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
+	int len;
 	
 	// Allow for multiple words match
 	QString textString = escapeString( text.simplifyWhiteSpace() );
-	textString = textString.replace( ' ', '%' );
+	QStringList textStringList = QStringList::split( " ", textString );
 	
-	// Name or description choice from comboBox
-	if ( !text.isEmpty() )
-		textQuery = " AND (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
+	if ( !textStringList.isEmpty() ) {
+		while ( !textStringList.isEmpty() ) {
+			textQuery += " OR name LIKE '%" + textStringList.first() + "%' OR description LIKE '%" + textStringList.first() + "%'";
+			textStringList.pop_front();
+		}
+		len = textQuery.length();
+		textQuery = " AND ( " + textQuery.right( len - 4 ) + " ) ";
+	}
 	
 	switch ( filter ) {
 		case FILTER_ALL:
 			filterQuery = QString::null;
 			if ( !text.isEmpty() )
-				textQuery = " WHERE (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%')";
+				textQuery = " WHERE ( " + textQuery.right( len - 1 );
 			break;
 			
 		case FILTER_INSTALLED:
@@ -501,7 +507,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 			filterQuery = " WHERE package.updateVersion != '' ";
 	}
 	
-	return query( " SELECT DISTINCT idCategory FROM package "
+	return query( "SELECT DISTINCT idCategory FROM package "
 	              + filterQuery + textQuery + " ; ");
 }
 
@@ -515,14 +521,20 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 {
 	QString filterQuery, textQuery;
 	QStringList resultList( categoryId );
+	int len;
 	
 	// Allow for multiple words match
 	QString textString = escapeString( text.simplifyWhiteSpace() );
-	textString = textString.replace( ' ', '%' );
+	QStringList textStringList = QStringList::split( " ", textString );
 	
-	// Name or description choice from comboBox
-	if ( !text.isEmpty() )
-		textQuery = " AND (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
+	if ( !textStringList.isEmpty() ) {
+		while ( !textStringList.isEmpty() ) {
+			textQuery += " OR name LIKE '%" + textStringList.first() + "%' OR description LIKE '%" + textStringList.first() + "%'";
+			textStringList.pop_front();
+		}
+		len = textQuery.length();
+		textQuery = " AND ( " + textQuery.right( len - 4 ) + " ) ";
+	}
 
 	if ( categoryId != "0" ) {
 
@@ -560,14 +572,20 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
+	int len;
 	
 	// Allow for multiple words match
 	QString textString = escapeString( text.simplifyWhiteSpace() );
-	textString = textString.replace( ' ', '%' );
+	QStringList textStringList = QStringList::split( " ", textString );
 	
-	// Name or description choice from comboBox
-	if ( !text.isEmpty() )
-		textQuery = " AND (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
+	if ( !textStringList.isEmpty() ) {
+		while ( !textStringList.isEmpty() ) {
+			textQuery += " OR name LIKE '%" + textStringList.first() + "%' OR description LIKE '%" + textStringList.first() + "%'";
+			textStringList.pop_front();
+		}
+		len = textQuery.length();
+		textQuery = " AND ( " + textQuery.right( len - 4 ) + " ) ";
+	}
 	
 	if ( categoryId == "0" ) {
 		
@@ -576,7 +594,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 				case FILTER_ALL:
 					filterQuery = QString::null;
 					if ( !text.isEmpty() )
-						textQuery = " WHERE (name LIKE '%" + textString + "%' OR description LIKE '%" + textString + "%') ";
+						textQuery = " WHERE ( " + textQuery.right( len - 1 );
 					break;
 					
 				case FILTER_INSTALLED:

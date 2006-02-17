@@ -29,6 +29,7 @@
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
 #include <klistviewsearchline.h>
+#include <kiconloader.h>
 
 /**
  * @class HistoryTab
@@ -37,6 +38,8 @@
 HistoryTab::HistoryTab( QWidget* parent )
 	: HistoryBase( parent )
 {
+	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+	
 	historyFilter->setListView( historyView );
 	
 	// Connect button and checkbox

@@ -258,7 +258,7 @@
                                                 </property>
                                                 <property name="sizeHint">
                                                     <size>
-                                                        <width>91</width>
+                                                        <width>20</width>
                                                         <height>20</height>
                                                     </size>
                                                 </property>
@@ -496,6 +496,10 @@
     <customwidget>
         <class>QueueListView</class>
         <header location="local">queuelistview.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
         <container>1</container>
         <sizepolicy>
             <hordata>3</hordata>

@@ -31,7 +31,7 @@
  * The external diff tool is launched for merging changes in etc config files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
-	: QObject( m_parent, name )
+	: QObject( m_parent, name ), noFiles( true )
 {
 	eProc = new KProcIO();
 }
@@ -71,6 +71,7 @@ bool EtcUpdate::etcUpdate()
 	else {
 		etcUpdateLines.clear();
 		diffSource = QString::null;
+		noFiles = true;
 		
 		eProc->resetAll();
 		*eProc << "etc-update" ;
@@ -83,6 +84,7 @@ bool EtcUpdate::etcUpdate()
 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
 			LogSingleton::Instance()->writeLog( i18n( "\nRunning etc-update..." ), KUROO );
+			KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Checking for configuration file updates...") );
 			SignalistSingleton::Instance()->setKurooBusy( true );
 			return true;
 		}
@@ -102,6 +104,7 @@ void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
 		LogSingleton::Instance()->writeLog( line, EMERGE );
 
 		if ( line.contains("Please select a file") ) {
+			noFiles = false;
 			proc->writeStdin( (QString)"-1", true );
 			proc->closeWhenDone();
 		}
@@ -114,9 +117,17 @@ void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
  */
 void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 {
+	KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Done.") );
+	
 	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
-	runDiff();
+	
+	if ( noFiles ) {
+		KMessageBox::sorry( 0, i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
+		SignalistSingleton::Instance()->setKurooBusy( false );
+	}
+	else
+		runDiff();
 }
 
 /**

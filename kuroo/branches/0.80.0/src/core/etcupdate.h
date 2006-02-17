@@ -82,6 +82,8 @@ private:
 	KProcIO*			eProc;
 	QStringList			etcUpdateLines;
 	QString				diffSource;
+	bool				noFiles;
+	
 };
 
 #endif

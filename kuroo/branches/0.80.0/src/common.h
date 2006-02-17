@@ -124,7 +124,7 @@ static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 
 // Kuroo home directory
-static const QString KUROODIR = "/var/kuroo8/";
+static const QString KUROODIR = "/var/cache/kuroo/";
 
 // Max rows in queries
 static const int ROWLIMIT = 1000;

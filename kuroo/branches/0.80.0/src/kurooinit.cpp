@@ -84,6 +84,35 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		if ( !KurooConfig::wizard() )
 			getEnvironment();
+		
+		// Create DirHome dir and set permissions so common user can run Kuroo
+		if ( !d.exists() ) {
+			if ( !d.mkdir(KUROODIR) ) {
+				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
+				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+				                            "Please try again!</qt>"), i18n("Initialization") );
+				exit(0);
+			} else {
+				chmod( KUROODIR, 0770 );
+				chown( KUROODIR, portageGid->gr_gid, portageUid->pw_uid );
+			}
+			d.setCurrent(KUROODIR);
+		}
+	}
+	
+	// Check that backup directory exists and set correct permissions
+	QString backupDir = KUROODIR + "backup";
+	if ( !d.cd(backupDir) ) {
+		if ( !d.mkdir(backupDir) ) {
+			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
+			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+			                            "Please try again!</qt>"), i18n("Initialization") );
+			exit(0);
+		}
+		else {
+			chmod( backupDir, 0770 );
+			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
+		}
 	}
 	
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
@@ -98,7 +127,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-	kdDebug() << "databaseFile=" << databaseFile << endl;
 	
 	QString database = KUROODIR + KurooConfig::databas();
 	if ( KurooDBSingleton::Instance()->kurooDbVersion().isEmpty() ) {

@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Kuroo8</string>
+        <string>Kuroo</string>
     </property>
     <widget class="QWidget">
         <property name="name">
@@ -93,7 +93,8 @@ And more...
 &lt;br&gt;
 &lt;br&gt;
 &lt;b&gt;&lt;font color="red"&gt;Warning!&lt;br&gt;
-Please take backup of files in /etc/portage and /etc/make.conf.&lt;/font&gt;&lt;/b&gt;</string>
+Please take backup of all files in /etc/portage, /etc/make.conf and&lt;br&gt;
+/var/lib/portage/world.&lt;/font&gt;&lt;/b&gt;</string>
                 </property>
             </widget>
             <spacer row="2" column="2">

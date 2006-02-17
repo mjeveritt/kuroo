@@ -38,11 +38,13 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char **argv)
 {
-	KAboutData about("kuroo8", I18N_NOOP("Kuroo8"), version, description,
+	KAboutData about("Kuroo", I18N_NOOP("Kuroo"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "karye@users.sourceforge.net");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "karye@users.sourceforge.net");
-	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
+	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
+	about.addCredit("Alexander Reiterer", I18N_NOOP("German translation"), "alexander.reiterer@tuwien.ac.at");
 	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
+	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
 	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");
 	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
 	about.addCredit("Björn Balazs", I18N_NOOP("OpenUsability"), "B@lazs.de");
@@ -54,8 +56,8 @@ int main(int argc, char **argv)
 	KApplication app;
 	
     // register ourselves as a dcop client
-	if ( app.dcopClient()->isApplicationRegistered("kuroo8") )  {
-		kdDebug() << I18N_NOOP("Kuroo8 is already running!") << endl;
+	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
+		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
 		exit(0);
 	}
 	app.dcopClient()->registerAs( app.name(), false );

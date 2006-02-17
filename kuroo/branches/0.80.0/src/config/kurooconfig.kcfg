@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd"> 
 	<kcfg>
-	<kcfgfile name="kuroo8rc"/> 
+	<kcfgfile name="kuroorc"/> 
 	<group name="general">
 		<entry name="portageVersion21" type="Bool">
 		<default>false</default>
@@ -37,7 +37,7 @@
 		<entry name="hardVersion" type="String">
 		</entry>
 		<entry name="databas" type="String">
-		<default>portage8.db</default>
+		<default>portage.db</default>
 		</entry>
 		<entry name="FileHistoryBackup" type="String">
 		<default>history.bak</default>

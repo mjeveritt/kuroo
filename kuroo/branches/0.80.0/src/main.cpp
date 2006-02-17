@@ -38,7 +38,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char **argv)
 {
-	KAboutData about("kuroo", I18N_NOOP("kuroo"), version, description,
+	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "karye@users.sourceforge.net");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "karye@users.sourceforge.net");
 	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");

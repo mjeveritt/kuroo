@@ -149,18 +149,13 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString name = *it++;
 		QString category = *it++;
 		QString description = *it++;
-		QString meta = *it++;
+		QString status = *it++;
 		QString update = *it++;
 		QString homepage = *it;
 
-		PortageItem* item = new PortageItem( this, name, id, category, description, meta, homepage );
+		PortageItem* item = new PortageItem( this, name, id, category, description, status, homepage );
 		item->setText( 4, update );
 		item->setText( 5, description );
-		
-		if ( meta == FILTER_ALL_STRING )
-			item->setStatus( PACKAGE );
-		else
-			item->setStatus( INSTALLED );
 		
 		indexPackage( id, item );
 	}

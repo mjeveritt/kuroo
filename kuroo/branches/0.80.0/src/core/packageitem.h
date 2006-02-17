@@ -48,6 +48,7 @@ public:
 	virtual void					setStatus( int status );
 	
 	virtual bool					isInstalled();
+	virtual bool					isInPortage();
 	virtual bool					isQueued();
 	virtual bool					isInWorld();
 	

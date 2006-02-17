@@ -78,7 +78,7 @@ bool PackageItem::isLastPackage()
 }
 
 /**
- * Is the listViewItem category, package or ebuild.
+ * Is the listViewItem category, package or ebuild. @todo: use paintCell instead to mark Queued packages.
  * Set icon and tooltip text.
  * @param status
  */
@@ -86,19 +86,19 @@ void PackageItem::setStatus( int status )
 {
 	switch ( status ) {
 		
-		case INSTALLED : {
-			if ( KurooConfig::installedColumn() ) {
-				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
-			}
-			else
-				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
-			break;
-		}
-		
-		case PACKAGE :
-			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-			break;
+// 		case INSTALLED : {
+// 			if ( KurooConfig::installedColumn() ) {
+// 				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+// 				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+// 			}
+// 			else
+// 				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+// 			break;
+// 		}
+// 		
+// 		case PACKAGE :
+// 			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+// 			break;
 		
 		case QUEUED :
 			m_isQueued = true;
@@ -118,6 +118,7 @@ void PackageItem::setStatus( int status )
 void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	if ( this->isVisible() ) {
+		QColorGroup m_colorgroup( colorgroup );
 		
 		if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
 			m_inWorld = true;
@@ -128,7 +129,25 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
 		}
 		
-		KListViewItem::paintCell( painter, colorgroup, column, width, alignment );
+		if ( m_status == FILTER_ALL_STRING )
+			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+		else {
+			if ( KurooConfig::installedColumn() ) {
+				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+			}
+			else
+				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+
+			if ( m_status == FILTER_OLD_STRING ) {
+				QFont font( painter->font() );
+				font.setItalic( true );
+				painter->setFont( font );
+				m_colorgroup.setColor( QColorGroup::Text, Qt::gray );
+			}
+		}
+		
+		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }
 
@@ -174,11 +193,20 @@ QString PackageItem::status()
 
 /**
  * Is this package installed.
- * @return true/false
+ * @return true if yes
  */
 bool PackageItem::isInstalled()
 {
-	return ( m_status == INSTALLED_STRING );
+	return ( m_status == FILTER_INSTALLED_STRING );
+}
+
+/**
+ * Is this package available in Portage tree?
+ * @return true if yes
+ */
+bool PackageItem::isInPortage()
+{
+	return ( m_status != FILTER_OLD_STRING );
 }
 
 /**
@@ -228,7 +256,6 @@ void PackageItem::initVersions()
 // 	clock_t start = clock();
 	
 	// Get list of accepted keywords, eg if package is "untesting"
-// 	m_category = KurooDBSingleton::Instance()->category( id() );
 	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
 	
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );

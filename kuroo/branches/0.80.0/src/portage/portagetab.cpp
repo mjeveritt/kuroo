@@ -327,9 +327,14 @@ void PortageTab::slotPackage()
 			lines += "<td bgcolor=#7a5ada><b><font color=white><font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr><tr><td>";
+	
+	if ( packagesView->currentPackage()->isInPortage() ) {
 			lines += packagesView->currentPackage()->description() + "</td></tr><tr><td>";
 			lines += i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
 			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a></td></tr><tr><td>";
+	}
+	else
+		lines += i18n("<font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr><tr><td>");
 	
 	QString linesAvailable;
 	QString linesInstalled;
@@ -395,34 +400,39 @@ void PortageTab::slotPackage()
 	else
 		linesInstalled = i18n("<b>Versions installed:</b></font> Not installed<br>");
 	
-	// Construct installation summary
-	if ( !linesEmergeVersion.isEmpty() ) {
+	if ( packagesView->currentPackage()->isInPortage() ) {
+	
+		// Construct installation summary
+		if ( !linesEmergeVersion.isEmpty() ) {
+			
+			// Set active version in Inspector dropdown menus
+			m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
+			m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
+			m_packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
+			m_packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
+			
+			linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
+		}
+		else {
+			if ( versionNotInArchitecture && linesAvailable.isEmpty() )
+				linesEmergeVersion = i18n("<b>Version used for installation: "
+										"<font color=darkRed>No version available on %1</b>").arg( KurooConfig::arch() );
+			else
+				linesEmergeVersion = i18n("<b>Version used for installation:</font> "
+										"<font color=darkRed>No version available - please check advanced options</font></b>");
+		}
 		
-		// Set active version in Inspector dropdown menus
-		m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
-		m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
-		m_packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
-		m_packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
-		
-		linesEmergeVersion = i18n("<b>Version used for installation:</b> ") + linesEmergeVersion;
-	}
-	else {
-		if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-			linesEmergeVersion = i18n("<b>Version used for installation: "
-			                          "<font color=darkRed>No version available on %1</b>").arg( KurooConfig::arch() );
+		// Construct available versions summary
+		if ( !linesAvailable.isEmpty() )
+			linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
 		else
-			linesEmergeVersion = i18n("<b>Version used for installation:</font> "
-			                          "<font color=darkRed>No version available - please check advanced options</font></b>");
+			linesAvailable = i18n("<b>Versions available: "
+								"<font color=darkRed>No version available on %1</font></b><br>").arg( KurooConfig::arch() );
+		
+		summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion + "</td></tr></table>");
 	}
-	
-	// Construct available versions summary
-	if ( !linesAvailable.isEmpty() )
-		linesAvailable = i18n("<b>Versions available:</b> ") + linesAvailable + "<br>";
 	else
-		linesAvailable = i18n("<b>Versions available: "
-		                      "<font color=darkRed>No version available on %1</font></b><br>").arg( KurooConfig::arch() );
-	
-	summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion + "</td></tr></table>");
+		summaryBrowser->setText( lines + linesInstalled + "</td></tr></table>");
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )

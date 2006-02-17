@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-14 18:13+0100\n"
+"POT-Creation-Date: 2006-02-17 17:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,35 +16,35 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:181 portage/portagelistview.cpp:65
+#: queue/queuelistview.cpp:179 portage/portagelistview.cpp:65
 #: portage/portagelistview.cpp:123 portage/portagelistview.cpp:125 rc.cpp:63
 #: rc.cpp:249
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:186 core/versionview.cpp:78
+#: queue/queuelistview.cpp:184 core/versionview.cpp:78
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:187 history/historylistview.cpp:56
+#: queue/queuelistview.cpp:185 history/historylistview.cpp:56
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:188 core/versionview.cpp:80
+#: queue/queuelistview.cpp:186 core/versionview.cpp:80
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:189
+#: queue/queuelistview.cpp:187
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:306 queue/queuelistview.cpp:311
-#: queue/queuelistview.cpp:316
+#: queue/queuelistview.cpp:304 queue/queuelistview.cpp:309
+#: queue/queuelistview.cpp:314
 msgid "na"
 msgstr ""
 
-#: queue/results.cpp:54
+#: queue/results.cpp:56
 msgid "Add result package list: Can not find id in database for package %1/%2."
 msgstr ""
 
@@ -105,33 +105,37 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:384 portage/portagetab.cpp:353
+#: queue/queuetab.cpp:384 portage/portagetab.cpp:367
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:387 portage/portagetab.cpp:356
+#: queue/queuetab.cpp:387 portage/portagetab.cpp:370
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:390 portage/portagetab.cpp:359
+#: queue/queuetab.cpp:390 portage/portagetab.cpp:373
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:393 portage/portagetab.cpp:362
+#: queue/queuetab.cpp:393 portage/portagetab.cpp:376
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:395 portage/portagetab.cpp:364
+#: queue/queuetab.cpp:395 portage/portagetab.cpp:378
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:436 portage/portagetab.cpp:494 rc.cpp:25 rc.cpp:265
+#: queue/queuetab.cpp:436 portage/portagetab.cpp:506 rc.cpp:25 rc.cpp:265
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: queue/queuetab.cpp:437
+#: queue/queuetab.cpp:437 portage/portagetab.cpp:507
 msgid "Add to world"
+msgstr ""
+
+#: queue/queuetab.cpp:438 portage/portagetab.cpp:508
+msgid "Remove from world"
 msgstr ""
 
 #: core/emerge.cpp:59
@@ -762,24 +766,12 @@ msgstr ""
 msgid "Saving"
 msgstr ""
 
-#: portage/portage.cpp:266
+#: portage/portage.cpp:267
 msgid "Loading packages in world. Error reading: "
 msgstr ""
 
-#: portage/portage.cpp:306
+#: portage/portage.cpp:285
 msgid "Adding to world. Error writing: "
-msgstr ""
-
-#: portage/portage.cpp:309
-msgid "Adding to world. Error reading: "
-msgstr ""
-
-#: portage/portage.cpp:335
-msgid "Removing from world. Error writing: "
-msgstr ""
-
-#: portage/portage.cpp:338
-msgid "Removing from world. Error reading: "
 msgstr ""
 
 #: portage/updates.cpp:46
@@ -817,71 +809,81 @@ msgid "Description"
 msgstr ""
 
 #: portage/portagetab.cpp:149 portage/portagetab.cpp:161
-#: portage/portagetab.cpp:310
+#: portage/portagetab.cpp:305
 msgid "Add to Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:159 portage/portagetab.cpp:308
+#: portage/portagetab.cpp:159 portage/portagetab.cpp:303
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:266
+#: portage/portagetab.cpp:228
+msgid "<font color=darkGray><b>No package selected!</b></font>"
+msgstr ""
+
+#: portage/portagetab.cpp:269
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:267
+#: portage/portagetab.cpp:270
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:331
+#: portage/portagetab.cpp:342
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:394
+#: portage/portagetab.cpp:346
+msgid ""
+"<font color=darkRed><b>Package not available in Portage tree anymore!</b></"
+"font></td></tr><tr><td>"
+msgstr ""
+
+#: portage/portagetab.cpp:408
 msgid "<b>Versions installed:</b></font> "
 msgstr ""
 
-#: portage/portagetab.cpp:396
+#: portage/portagetab.cpp:410
 msgid "<b>Versions installed:</b></font> Not installed<br>"
 msgstr ""
 
-#: portage/portagetab.cpp:407
+#: portage/portagetab.cpp:423
 msgid "<b>Version used for installation:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:411
+#: portage/portagetab.cpp:427
 msgid ""
 "<b>Version used for installation: <font color=darkRed>No version available "
 "on %1</b>"
 msgstr ""
 
-#: portage/portagetab.cpp:414
+#: portage/portagetab.cpp:430
 msgid ""
 "<b>Version used for installation:</font> <font color=darkRed>No version "
 "available - please check advanced options</font></b>"
 msgstr ""
 
-#: portage/portagetab.cpp:420
+#: portage/portagetab.cpp:436
 msgid "<b>Versions available:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:422
+#: portage/portagetab.cpp:438
 msgid ""
 "<b>Versions available: <font color=darkRed>No version available on %1</"
 "font></b><br>"
 msgstr ""
 
-#: portage/portagetab.cpp:489
+#: portage/portagetab.cpp:501
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:491
+#: portage/portagetab.cpp:503
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:493
+#: portage/portagetab.cpp:505
 msgid "&Uninstall"
 msgstr ""
 
@@ -1491,7 +1493,7 @@ msgstr ""
 #: rc.cpp:188
 #, no-c-format
 msgid ""
-"<h2>Kuroo8_beta1</h2>\n"
+"<h2>Kuroo_beta2</h2>\n"
 "New features:<br>\n"
 "Unified package view: fast package browsing and searching with filters.<br>\n"
 "New Inspector for advanced package management.<br>\n"

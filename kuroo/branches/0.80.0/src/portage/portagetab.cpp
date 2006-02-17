@@ -224,6 +224,9 @@ void PortageTab::slotListPackages()
 		m_packageInspector->setDisabled( true );
 		pbQueue->setDisabled( true );
 		
+		summaryBrowser->clear();
+		summaryBrowser->setText( i18n("<font color=darkGray><b>No package selected!</b></font>") );
+		
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
@@ -295,6 +298,17 @@ void PortageTab::slotPackage()
 	if ( !isVisible() )
 		return;
 	
+	if ( packagesView->currentPackage()->isInPortage() ) {
+		if ( packagesView->currentPackage()->isQueued() )
+			pbQueue->setText( i18n("Remove from Queue") );
+		else
+			pbQueue->setText( i18n("Add to Queue") );
+		
+		pbQueue->setDisabled( false );
+	}
+	else
+		pbQueue->setDisabled( true );
+	
 	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() && !EmergeSingleton::Instance()->isRunning() ) {
 		pbUninstall->setDisabled( false );
 		pbQueue->setDisabled( false );
@@ -303,11 +317,6 @@ void PortageTab::slotPackage()
 	}
 	else 
 		pbUninstall->setDisabled( true );
-	
-	if ( packagesView->currentPackage()->isQueued() )
-		pbQueue->setText( i18n("Remove from Queue") );
-	else
-		pbQueue->setText( i18n("Add to Queue") );
 	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -440,7 +449,7 @@ void PortageTab::slotPackage()
 }
 
 /**
- * Append or remove package to the queue.
+ * Append or remove package to the queue. @fixme: What if package not in portage is in list?
  */
 void PortageTab::slotQueue()
 {
@@ -502,7 +511,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	menu.setItemEnabled( menuItem5, false );
 	
 	// No access when kuroo is busy.
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInPortage() )
 		menu.setItemEnabled( menuItem1, false );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )

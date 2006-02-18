@@ -1289,6 +1289,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
+// 					KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Kuroo database is busy! Aborting this sql statement." ) );
 					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!\n";
 					break;
 				}
@@ -1343,6 +1344,7 @@ int SqliteConnection::insert( const QString& statement )
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
+// 					KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Kuroo database is busy! Aborting this sql statement." ) );
 					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!\n";
 					break;
 				}

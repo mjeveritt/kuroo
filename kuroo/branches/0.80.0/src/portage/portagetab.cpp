@@ -503,11 +503,11 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem1;
 	
 	if ( !packagesView->currentPackage()->isQueued() )
-		menuItem1 = menu.insertItem(i18n("&Add to queue"), APPEND);
+		menuItem1 = menu.insertItem( i18n("&Add to queue"), APPEND );
 	else
-		menuItem1 = menu.insertItem(i18n("&Remove from queue"), APPEND);
+		menuItem1 = menu.insertItem( i18n("&Remove from queue"), APPEND );
 	
-	int menuItem2 = menu.insertItem(i18n("&Uninstall"), UNINSTALL);
+	int menuItem2 = menu.insertItem( i18n("&Uninstall"), UNINSTALL );
 	int menuItem3 = menu.insertItem( i18n( "Options..." ), OPTIONS );
 	int menuItem4 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
 	int menuItem5 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );

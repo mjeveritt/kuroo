@@ -178,7 +178,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	m_error = false;
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "--unmerge" << "--nocolor";
+	*eProc << "emerge" << "--unmerge" << "--nocolor" << "--nospinner";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList )
@@ -212,7 +212,7 @@ bool Emerge::sync()
 	m_error = false;
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor";
+	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
 	
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
@@ -242,7 +242,7 @@ bool Emerge::checkUpdates()
 	m_error = false;
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "-pvu" << "--nocolor";
+	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner";
 	
 	// Add deep if checked in gui
 	if ( KurooConfig::updateDeep() )

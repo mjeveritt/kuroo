@@ -251,13 +251,14 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idCategory INTEGER, "
 	      " idSubCategory INTEGER, "
 	      " idCatSubCategory INTEGER, "
-	      " name VARCHAR(32), "
 	      " category VARCHAR(32), "
+	      " name VARCHAR(32), "
 	      " latest VARCHAR(32), "
 	      " description VARCHAR(255), "
 	      " homepage VARCHAR(32), "
 	      " date VARCHAR(32), "
-	      " meta INTEGER, "
+	      " status INTEGER, "
+	      " meta VARCHAR(255), "
 	      " updateVersion VARCHAR(32)); "
 	      " CREATE INDEX index_name_package ON package (name);"
 	      " CREATE INDEX index_description ON package (description);"
@@ -271,7 +272,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " useFlags VARCHAR(32),"
 	      " slot VARCHAR(32),"
 	      " size VARCHAR(32), "
-	      " meta INTEGER, "
+	      " status INTEGER, "
 	      " path VARCHAR(64), "
 	      " branch VARCHAR(32)"
 	      " );", conn);
@@ -483,9 +484,10 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 	QString textString = escapeString( text.simplifyWhiteSpace() );
 	QStringList textStringList = QStringList::split( " ", textString );
 	
+	// Concatenate all search words
 	if ( !textStringList.isEmpty() ) {
 		while ( !textStringList.isEmpty() ) {
-			textQuery += " OR name LIKE '%" + textStringList.first() + "%' OR description LIKE '%" + textStringList.first() + "%'";
+			textQuery += " OR meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
@@ -500,7 +502,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 			break;
 			
 		case FILTER_INSTALLED:
-			filterQuery = " WHERE package.meta != " + FILTER_ALL_STRING;
+			filterQuery = " WHERE package.status != " + FILTER_ALL_STRING;
 			break;
 			
 		case FILTER_UPDATES:
@@ -508,7 +510,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 	}
 	
 	return query( "SELECT DISTINCT idCategory FROM package "
-	              + filterQuery + textQuery + " ; ");
+	              + filterQuery + textQuery + " ; " );
 }
 
 /**
@@ -527,9 +529,10 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 	QString textString = escapeString( text.simplifyWhiteSpace() );
 	QStringList textStringList = QStringList::split( " ", textString );
 	
+	// Concatenate all search words
 	if ( !textStringList.isEmpty() ) {
 		while ( !textStringList.isEmpty() ) {
-			textQuery += " OR name LIKE '%" + textStringList.first() + "%' OR description LIKE '%" + textStringList.first() + "%'";
+			textQuery += " OR meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
@@ -544,7 +547,7 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 				break;
 				
 			case FILTER_INSTALLED:
-				filterQuery = " AND package.meta != " + FILTER_ALL_STRING;
+				filterQuery = " AND package.status != " + FILTER_ALL_STRING;
 				break;
 				
 			case FILTER_UPDATES:
@@ -578,9 +581,10 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 	QString textString = escapeString( text.simplifyWhiteSpace() );
 	QStringList textStringList = QStringList::split( " ", textString );
 	
+	// Concatenate all search words
 	if ( !textStringList.isEmpty() ) {
 		while ( !textStringList.isEmpty() ) {
-			textQuery += " OR name LIKE '%" + textStringList.first() + "%' OR description LIKE '%" + textStringList.first() + "%'";
+			textQuery += " OR meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
@@ -598,14 +602,14 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					break;
 					
 				case FILTER_INSTALLED:
-					filterQuery = " WHERE meta != " + FILTER_ALL_STRING;
+					filterQuery = " WHERE status != " + FILTER_ALL_STRING;
 					break;
 					
 				case FILTER_UPDATES:
 					filterQuery = " WHERE updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
 						  " FROM package "
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
@@ -617,14 +621,14 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					break;
 					
 				case FILTER_INSTALLED:
-					filterQuery = " AND meta != " + FILTER_ALL_STRING;
+					filterQuery = " AND status != " + FILTER_ALL_STRING;
 					break;
 					
 				case FILTER_UPDATES:
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
 			              " FROM package "
 			              " WHERE idSubCategory = '" + subCategoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
@@ -639,14 +643,14 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					break;
 					
 				case FILTER_INSTALLED:
-					filterQuery = " AND meta != " + FILTER_ALL_STRING;
+					filterQuery = " AND status != " + FILTER_ALL_STRING;
 					break;
 					
 				case FILTER_UPDATES:
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
 						  " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
@@ -659,14 +663,14 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					break;
 					
 				case FILTER_INSTALLED:
-					filterQuery = " AND meta != " + FILTER_ALL_STRING;
+					filterQuery = " AND status != " + FILTER_ALL_STRING;
 					break;
 					
 				case FILTER_UPDATES:
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, meta, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
 					      " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 						  " AND idSubCategory = '" + subCategoryId + "'"
@@ -742,7 +746,7 @@ QString KurooDB::packageId( const QString& package )
 QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
 {
 	return query( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
-	              " AND meta = '" + FILTER_INSTALLED_STRING + "'"
+	              " AND status = '" + FILTER_INSTALLED_STRING + "'"
 	              " ORDER BY version.name;");
 }
 
@@ -752,7 +756,7 @@ QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
  */
 QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
-	return query( " SELECT name, meta, licenses, useFlags, slot, branch, size "
+	return query( " SELECT name, status, licenses, useFlags, slot, branch, size "
 	              " FROM version WHERE idPackage = '" + idPackage + "'"
 	              " ORDER BY version.name;");
 }
@@ -764,7 +768,7 @@ QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
  */
 QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
-	return singleQuery( " SELECT size, meta FROM version WHERE idPackage = '" + idPackage + "'"
+	return singleQuery( " SELECT size, status FROM version WHERE idPackage = '" + idPackage + "'"
 	                    " AND name = '" + version + "' ;");
 }
 
@@ -997,7 +1001,7 @@ void KurooDB::clearQueuePackageUse()
 QStringList KurooDB::allQueuePackages()
 {
 	return query( " SELECT package.id, catSubCategory.name, package.name, "
-	              " package.description, package.meta, queue.idDepend, queue.size, queue.version "
+	              " package.description, package.status, queue.idDepend, queue.size, queue.version "
 	              " FROM queue, catSubCategory, package "
 	              " WHERE queue.idPackage = package.id "
 	              " AND catSubCategory.id = package.idCatSubCategory "

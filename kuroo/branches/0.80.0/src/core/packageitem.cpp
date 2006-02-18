@@ -261,7 +261,7 @@ void PackageItem::initVersions()
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
-		QString meta = *it++;
+		QString status = *it++;
 		QString licenses = *it++;
 		QString useFlags = *it++;
 		QString slot = *it++;
@@ -276,7 +276,7 @@ void PackageItem::initVersions()
 		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
 		
-		if ( meta == FILTER_INSTALLED_STRING )
+		if ( status == FILTER_INSTALLED_STRING )
 			version->setInstalled( true );
 		
 		m_versions.append( version );

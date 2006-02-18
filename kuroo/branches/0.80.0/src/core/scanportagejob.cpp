@@ -96,7 +96,7 @@ bool ScanPortageJob::doJob()
 	else
 		setProgressTotalSteps( 10000 );
 	
-	setStatus( "ScanPortage", i18n("Refreshing Portage view...") );
+	setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );
 		
 	// Temporary table for all categories
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
@@ -124,13 +124,14 @@ bool ScanPortageJob::doJob()
 	                                    " idCategory INTEGER, "
 	                                    " idSubCategory INTEGER, "
 	                                    " idCatSubCategory INTEGER, "
-	                                    " name VARCHAR(32), "
 	                                    " category VARCHAR(32), "
+	                                    " name VARCHAR(32), "
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
 	                                    " date VARCHAR(32), "
-	                                    " meta INTEGER, "
+	                                    " status INTEGER, "
+	                                    " meta VARCHAR(255), "
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	
@@ -143,7 +144,7 @@ bool ScanPortageJob::doJob()
 	                                    " useFlags VARCHAR(32),"
 	                                    " slot VARCHAR(32),"
 	                                    " size VARCHAR(32), "
-	                                    " meta INTEGER, "
+	                                    " status INTEGER, "
 	                                    " path VARCHAR(64), "
 	                                    " branch VARCHAR(32)"
 	                                    " );", m_db);
@@ -201,7 +202,7 @@ bool ScanPortageJob::doJob()
 			if ( dPackage.cd( KurooConfig::dirEdbDep() + *itPath + "/" + *itCategory) ) {
 				
 				QStringList packageList = dPackage.entryList();
-				QString meta, lastPackage;
+				QString status, lastPackage;
 				for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 					
 					if ( *itPackage == "." || *itPackage == ".." || (*itPackage).contains("MERGING") )
@@ -232,14 +233,14 @@ bool ScanPortageJob::doJob()
 						// Insert package in portage
 						if ( !categories[ *itCategory ].packages.contains( name ) ) {
 							categories[ *itCategory ].packages[ name ];
-							categories[ *itCategory ].packages[ name ].meta = FILTER_ALL_STRING;
+							categories[ *itCategory ].packages[ name ].status = FILTER_ALL_STRING;
 							categories[ *itCategory ].packages[ name ].description = info.description;
 							categories[ *itCategory ].packages[ name ].homepage = info.homepage;
 						}
 						
 						// Insert version in portage
 						if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
-							categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTER_ALL_STRING;
+							categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_ALL_STRING;
 							categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
 							categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
 							categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
@@ -279,17 +280,20 @@ bool ScanPortageJob::doJob()
 			QString idCategory = itCategory.data().idCategory;
 			QString idSubCategory = itCategory.data().idSubCategory;
 			QString idCatSubCategory = itCategory.data().idCatSubCategory;
-				
+			
 			QString category = itCategory.key();
 			QString package = itPackage.key();
-			QString meta = itPackage.data().meta;
+			QString status = itPackage.data().status;
 			QString description = itPackage.data().description;
 			QString homepage = itPackage.data().homepage;
 			
-			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, name, description, homepage, meta, category) "
-			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8' " 
+			// Create meta tag containing all text of interest for searching
+			QString meta = category + " " + package + " " + description;
+			
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, category, name, description, homepage, status, meta) "
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9' " 
 			                     )
-				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( package ).arg( description ).arg( homepage ).arg( meta ).arg( category );
+				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( category ).arg( package ).arg( description ).arg( homepage ).arg( status ).arg( meta );
 			
 			sql += QString( ");" );
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
@@ -298,7 +302,7 @@ bool ScanPortageJob::doJob()
 			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
 				
 				QString version = itVersion.key();
-				QString meta = itVersion.data().meta;
+				QString status = itVersion.data().status;
 				QString licenses = itVersion.data().licenses;
 				QString useFlags = itVersion.data().useFlags;
 				QString slot = itVersion.data().slot;
@@ -307,9 +311,9 @@ bool ScanPortageJob::doJob()
 				QString path = itVersion.data().path;
 				
 				KurooDBSingleton::Instance()->insert( QString(
-					"INSERT INTO version_temp (idPackage, name, size, branch, meta, licenses, useFlags, slot, path) "
+					"INSERT INTO version_temp (idPackage, name, size, branch, status, licenses, useFlags, slot, path) "
 					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');" 
-					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( meta ).arg( licenses ).arg( useFlags ).arg( slot ).arg( path ), m_db );
+					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( status ).arg( licenses ).arg( useFlags ).arg( slot ).arg( path ), m_db );
 				
 			}
 		}
@@ -389,17 +393,17 @@ void ScanPortageJob::scanInstalledPackages()
 					// Insert and/or mark package as installed (old is package not in portage anymore)
 					if ( !categories[ *itCategory ].packages.contains( name ) ) {
 						categories[ *itCategory ].packages[ name ];
-						categories[ *itCategory ].packages[ name ].meta = FILTER_OLD_STRING;
+						categories[ *itCategory ].packages[ name ].status = FILTER_OLD_STRING;
 					}
 					else
-						categories[ *itCategory ].packages[ name ].meta = FILTER_INSTALLED_STRING;
+						categories[ *itCategory ].packages[ name ].status = FILTER_INSTALLED_STRING;
 					
 					// Insert old version in portage
 					if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) )
 						categories[ *itCategory ].packages[ name ].versions[ version ];
 					
 					// Mark version as installed
-					categories[ *itCategory ].packages[ name ].versions[ version ].meta = FILTER_INSTALLED_STRING;
+					categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_INSTALLED_STRING;
 					
 				}
 				else

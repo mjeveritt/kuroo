@@ -127,32 +127,23 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-	
 	QString database = KUROODIR + KurooConfig::databas();
-	if ( KurooDBSingleton::Instance()->kurooDbVersion().isEmpty() ) {
-		KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
+	if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->kurooDbVersion() ) {
 		
-		// Give permissions to portage:portage to access the db also
-		chmod( databaseFile, 0660 );
-		chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
+		// Old db structure, must delete old db and backup history 
+		KurooDBSingleton::Instance()->backupDb();
+		KurooDBSingleton::Instance()->destroy();
+		remove( database );
+		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		
+		// and recreate with new structure
+		KurooDBSingleton::Instance()->init( this );
+		KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
 	}
-	else // Check db structure version
-		if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->kurooDbVersion() ) {
-			
-			// Old db structure, must delete old db and backup history 
-			KurooDBSingleton::Instance()->backupDb();
-			KurooDBSingleton::Instance()->destroy();
-			remove( database );
-			kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
-			
-			// and recreate with new structure
-			KurooDBSingleton::Instance()->init( this );
-			KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
-			
-			// Give permissions to portage:portage to access the db also
-			chmod( databaseFile, 0660 );
-			chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
-		}
+	
+	// Give permissions to portage:portage to access the db also
+	chmod( databaseFile, 0660 );
+	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
 	
 	// Initialize singletons objects
 	ImagesSingleton::Instance()->init( this );

@@ -84,13 +84,14 @@ bool ScanUpdatesJob::doJob()
 	                                    " idCategory INTEGER, "
 	                                    " idSubCategory INTEGER, "
 	                                    " idCatSubCategory INTEGER, "
-	                                    " name VARCHAR(32), "
 	                                    " category VARCHAR(32), "
+	                                    " name VARCHAR(32), "
 	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " homepage VARCHAR(32), "
 	                                    " date VARCHAR(32), "
-	                                    " meta INTEGER, "
+	                                    " status INTEGER, "
+	                                    " meta VARCHAR(255), "
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	

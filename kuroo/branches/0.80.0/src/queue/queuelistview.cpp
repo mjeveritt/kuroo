@@ -277,7 +277,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString category = *it++;
 		QString name = *it++;
 		QString description = *it++;
-		QString meta = *it++;
+		QString status = *it++;
 		QString idDepend = *it++;
 		QString size = *it++;
 		QString version = *it;
@@ -290,13 +290,13 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category, name, id, description, meta, duration );
+			item = new QueueItem( this, category, name, id, description, status, duration );
 			item->setOpen( true );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category, name, id, description, meta, duration );
+				item = new QueueItem( itemDepend, category, name, id, description, status, duration );
 		}
 		
 		// Add package info
@@ -317,10 +317,10 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			addSize( size );
 		}
 		
-		if ( meta == FILTER_ALL_STRING )
-			item->setStatus( PACKAGE );
-		else
-			item->setStatus( INSTALLED );
+// 		if ( meta == FILTER_ALL_STRING )
+// 			item->setStatus( PACKAGE );
+// 		else
+// 			item->setStatus( INSTALLED );
 		
 		item->setChecked( hasCheckedQueue );
 		

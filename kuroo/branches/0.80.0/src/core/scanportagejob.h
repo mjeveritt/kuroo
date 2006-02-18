@@ -83,7 +83,7 @@ private:
 	DbConnection* const 				m_db;
 	
 	struct Data {
-		QString							meta;
+		QString							status;
 		QString							licenses;
 		QString							useFlags;
 		QString							slot;
@@ -93,7 +93,7 @@ private:
 	};
 	typedef QMap<QString, Data>			PortageVersions;
 	struct Versions {
-		QString							meta;
+		QString							status;
 		QString							description;
 		QString							homepage;
 		PortageVersions					versions;

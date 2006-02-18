@@ -36,16 +36,24 @@
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
 
 QRegExp
-rxAtom(	"^"    // Start of the string
+rxAtom(	
+       	"^"    // Start of the string
        	"(!)?" // "Block these packages" flag, only occurring in ebuilds
        	"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
-       	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
-       	"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-       	"("            // start of the version part
-       	"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
-       	"(?:_(?:alpha|beta|pre|rc|p)(\\d+|\\*$))?" // version suffix
-       	"(?:-r(\\d+|\\*$))?"  // revision
-       	")?$"          // end of the (optional) version part and the atom string
+//        	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
+//        	"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
+//        	"("            // start of the version part
+//        	"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
+//        	"(?:_(?:alpha|beta|pre|rc|p)(\\d+|\\*$))?" // version suffix
+//        	"(?:-r(\\d+|\\*$))?"  // revision
+//        	")?$"          // end of the (optional) version part and the atom string
+       	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory
+       	"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+       	"("           								// start of the version part
+       	"(?:-\\d+(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+       	"(?:-r\\d*)?"  								// revision
+       	"(?:\\*)?)?$"          						// end of the (optional) version part and the atom string
       );
 
 /**

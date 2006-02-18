@@ -47,12 +47,13 @@
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted( true ),
-	rxAtom( "((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-			"-("            // start of the version part
-			"(?:\\d+(?:\\.\\d+)*[a-z]?)" // base version number, including wildcard version matching (*)
-			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" // version suffix
-			"(?:-r\\d*)?"  // revision
-			")?$"          // end of the (optional) version part and the atom string
+	rxAtom(
+			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+			"-("           								// start of the version part
+			"(?:\\d+(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+	       	"(?:-r\\d*)?"  								// revision
+	       	"(?:\\*$)?)?"          						// end of the (optional) version part and the atom string
 		)
 {
 }

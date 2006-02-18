@@ -487,11 +487,11 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() ) {
 		while ( !textStringList.isEmpty() ) {
-			textQuery += " OR meta LIKE '%" + textStringList.first() + "%' ";
+			textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
-		textQuery = " AND ( " + textQuery.right( len - 4 ) + " ) ";
+		textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
 	}
 	
 	switch ( filter ) {
@@ -532,11 +532,11 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() ) {
 		while ( !textStringList.isEmpty() ) {
-			textQuery += " OR meta LIKE '%" + textStringList.first() + "%' ";
+			textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
-		textQuery = " AND ( " + textQuery.right( len - 4 ) + " ) ";
+		textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
 	}
 
 	if ( categoryId != "0" ) {
@@ -584,11 +584,11 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() ) {
 		while ( !textStringList.isEmpty() ) {
-			textQuery += " OR meta LIKE '%" + textStringList.first() + "%' ";
+			textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
-		textQuery = " AND ( " + textQuery.right( len - 4 ) + " ) ";
+		textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
 	}
 	
 	if ( categoryId == "0" ) {

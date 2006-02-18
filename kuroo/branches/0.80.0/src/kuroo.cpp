@@ -82,6 +82,11 @@ Kuroo::Kuroo()
 	// Kuroo must initialize with db first
 	SignalistSingleton::Instance()->setKurooReady( false );
 	
+	// Initialize with settings in make.conf
+	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
+	if ( !prefDialog )
+		prefDialog = new ConfigDialog( m_view, i18n( "settings" ), KurooConfig::self() );
+	
 	// Zack Rusin's delayed initialization technique
 	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
 }

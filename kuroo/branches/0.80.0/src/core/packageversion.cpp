@@ -48,19 +48,23 @@ PackageVersion::~PackageVersion()
 {}
 
 /**
-* Returns true if this version is available (as in: can be installed)
-* and false if not.
+* Returns true if this version is available (as in: can be installed) and false if not.
+* Use global ACCEPT_KEYWORDS in make.conf if set by user.
 */
 bool PackageVersion::isAvailable() const
 {
-	int state = stability( KurooConfig::arch() );
-	return ( state == STABLE );
+	if ( KurooConfig::acceptKeywords().startsWith("~") )
+		return ( stability( "~" + KurooConfig::arch() ) == STABLE );
+	else
+		return ( stability( KurooConfig::arch() ) == STABLE );
 }
 
 bool PackageVersion::isNotArch() const
 {
-	int state = stability( KurooConfig::arch() );
-	return ( state == NOTARCH );
+	if ( KurooConfig::acceptKeywords().startsWith("~") )
+		return ( stability( "~" + KurooConfig::arch() ) == NOTARCH );
+	else
+		return ( stability( KurooConfig::arch() ) == NOTARCH );
 }
 
 /**
@@ -225,7 +229,7 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-// 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << endl;
+// 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << " m_arch=" << m_arch << endl;
 	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
@@ -246,22 +250,22 @@ int PackageVersion::stability( const QString& arch ) const
 				return STABLE;
 			}
 			// Accept packages when the accepted keyword is -arch and keywords contain -arch!
-			else 
+			else
 				if ( (*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ) || ( *keywordIterator == "-*" && m_keywords.contains("-*") )) ) {
 					return STABLE;
 				}
 				// Don't accept packages when the accepted keyword is -arch only
-				else 
+				else
 					if ( *keywordIterator == "-" + arch && m_keywords.contains( arch ) ) {
 						return NOTAVAILABLE;
 					}
 					// Accept stable packages for an accepted keyword named "*"
-					else 
+					else
 						if ( *keywordIterator == "*" && m_keywords.contains( pureArch ) ) {
 							return STABLE;
 						}
 						// Don't accept anything if it's got -* in it
-						else 
+						else
 							if ( *keywordIterator == "-*" ) {
 								return NOTARCH;
 							}
@@ -272,11 +276,11 @@ int PackageVersion::stability( const QString& arch ) const
 	if ( m_keywords.contains( arch ) )
 		return STABLE;
 	// check if there is a masked version of the architecture in there
-	else 
+	else
 		if ( m_keywords.contains( "~" + arch ) )
 			return TESTING;
 		// if arch is masked, check if a stable version is in there
-		else 
+		else
 			if ( ( arch[0] == '~' ) && ( m_keywords.contains( arch.mid(1) ) ) )
 				return STABLE;
 			// well, no such arch in the version info

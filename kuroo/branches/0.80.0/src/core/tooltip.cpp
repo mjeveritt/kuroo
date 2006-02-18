@@ -28,7 +28,7 @@
 
 /**
  * @class ToolTip
- * @short Creates tooltip for packages in views.
+ * @short Creates tooltip for icons in views.
  */
 ToolTip::ToolTip( KListView* pWidget, QToolTipGroup* group )
 	: QToolTip( pWidget->viewport(), group ), m_pParent( pWidget )
@@ -39,8 +39,7 @@ ToolTip::~ToolTip()
 {}
 
 /**
- * View Tooltip for item.
- * Also expand "actions" with text explanation.
+ * View Tooltip for the icons.
  * @param pos	mouse position
  */
 void ToolTip::maybeTip( const QPoint& pos )
@@ -66,7 +65,10 @@ void ToolTip::maybeTip( const QPoint& pos )
 				if ( packageItem->isInstalled() )
 					tipText = i18n( "Package is installed" );
 				else
-					tipText = i18n( "Package" );
+					if ( packageItem->isInPortage() )
+						tipText = i18n( "Package in Portage" );
+					else
+						tipText = i18n( "Package not in Portage" );
 				break;
 				
 			case 1 :

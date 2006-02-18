@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-18 18:26+0100\n"
+"POT-Creation-Date: 2006-02-18 18:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:183 core/tooltip.cpp:69
-#: portage/portagelistview.cpp:65 portage/portagelistview.cpp:121
-#: portage/portagelistview.cpp:123 rc.cpp:162 rc.cpp:256
+#: queue/queuelistview.cpp:183 portage/portagelistview.cpp:65
+#: portage/portagelistview.cpp:121 portage/portagelistview.cpp:123 rc.cpp:162
+#: rc.cpp:256
 #, no-c-format
 msgid "Package"
 msgstr ""
@@ -612,15 +612,23 @@ msgstr ""
 msgid "Completed saving user package use in %1."
 msgstr ""
 
-#: core/tooltip.cpp:67 core/tooltip.cpp:74
+#: core/tooltip.cpp:66 core/tooltip.cpp:76
 msgid "Package is installed"
 msgstr ""
 
-#: core/tooltip.cpp:79
+#: core/tooltip.cpp:69
+msgid "Package in Portage"
+msgstr ""
+
+#: core/tooltip.cpp:71
+msgid "Package not in Portage"
+msgstr ""
+
+#: core/tooltip.cpp:81
 msgid "Package present in world"
 msgstr ""
 
-#: core/tooltip.cpp:84
+#: core/tooltip.cpp:86
 msgid "Package present in Queue"
 msgstr ""
 

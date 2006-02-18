@@ -209,6 +209,11 @@ bool PackageItem::isInWorld()
 	return m_inWorld;
 }
 
+void PackageItem::setInstalled()
+{
+	m_status = FILTER_INSTALLED_STRING;
+}
+
 void PackageItem::setQueued()
 {
 	m_isQueued = true;

@@ -65,29 +65,6 @@ QueueListView::QueueItem::~QueueItem()
 }
 
 /**
- * Reimplement for only two state.
- * @param status
- */
-void QueueListView::QueueItem::setStatus( int status )
-{
-	switch ( status ) {
-		
-		case INSTALLED :
-			if ( KurooConfig::installedColumn() ) {
-				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
-			}
-			else
-				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
-			break;
-		
-		case PACKAGE :
-			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-		
-	}
-}
-
-/**
  * Show progressbar and launch it.
  */
 void QueueListView::QueueItem::setStart()
@@ -107,7 +84,7 @@ void QueueListView::QueueItem::setComplete()
 	bar->setTextEnabled( true );
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
-	QueueItem::setStatus( INSTALLED );
+	setInstalled();
 	bar->hide();
 }
 

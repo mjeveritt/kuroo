@@ -123,7 +123,6 @@ public:
 	void			setStart();
 	void			oneStep();
 	void			setChecked( bool isChecked );
-	void			setStatus( int status );
 	void			hideBar();
 	
 protected:

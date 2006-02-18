@@ -52,6 +52,7 @@ public:
 	virtual bool					isQueued();
 	virtual bool					isInWorld();
 	
+	void							setInstalled();
 	void							setQueued();
 	
 	bool							isFirstPackage();

@@ -150,7 +150,7 @@ bool CachePortageJob::doJob()
 					QString package = *itCategory + "/" + *itPackage;
 					
 					// Get package size
-					QString path = *itPath + "/" + *itCategory + "/" + (*itPackage).section(rxPortageVersion, 0, 0) + "/files/digest-" + *itPackage;
+					QString path = *itPath + "/" + *itCategory + "/" + (*itPackage).section( rxPortageVersion, 0, 0 ) + "/files/digest-" + *itPackage;
 					QFile file( path );
 					if ( file.open( IO_ReadOnly ) ) {
 						std::ifstream in( path );

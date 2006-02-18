@@ -145,6 +145,8 @@ void QueueTab::slotPackageUseChanged()
  */
 void QueueTab::slotQueueSummary()
 {
+	QString timeRemaining;
+	
 	queueBrowser->clear();
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );

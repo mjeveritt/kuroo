@@ -118,7 +118,11 @@ bool QueueListView::QueueItem::isComplete()
 
 int QueueListView::QueueItem::remainingDuration()
 {
-	return m_duration - m_progress;
+	int diff = m_duration - m_progress;
+	if ( diff > 0 )
+		return diff;
+	else
+		return 0;
 }
 
 /**
@@ -316,11 +320,6 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			item->setText( 5, size );
 			addSize( size );
 		}
-		
-// 		if ( meta == FILTER_ALL_STRING )
-// 			item->setStatus( PACKAGE );
-// 		else
-// 			item->setStatus( INSTALLED );
 		
 		item->setChecked( hasCheckedQueue );
 		

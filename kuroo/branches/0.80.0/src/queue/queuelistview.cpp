@@ -203,7 +203,6 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 6, QListView::Manual );
 	
 	setColumnAlignment( 5, Qt::AlignRight );
-	setTooltipColumn( 5 );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );

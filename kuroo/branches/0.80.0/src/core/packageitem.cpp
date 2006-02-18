@@ -85,21 +85,7 @@ bool PackageItem::isLastPackage()
 void PackageItem::setStatus( int status )
 {
 	switch ( status ) {
-		
-// 		case INSTALLED : {
-// 			if ( KurooConfig::installedColumn() ) {
-// 				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-// 				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
-// 			}
-// 			else
-// 				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
-// 			break;
-// 		}
-// 		
-// 		case PACKAGE :
-// 			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-// 			break;
-		
+
 		case QUEUED :
 			m_isQueued = true;
 			setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );

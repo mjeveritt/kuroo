@@ -43,7 +43,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	// Update visible items when is changed
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	
-// 	new ToolTip( this ); @fixme
+	new ToolTip( this );
 }
 
 PackageListView::~PackageListView()

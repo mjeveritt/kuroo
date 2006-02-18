@@ -85,8 +85,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setRootIsDecorated( false );
 	setFullWidth( true );
 	
-	setTooltipColumn( 3 );
-	
 	if ( KurooConfig::installedColumn() ) {
 		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
 		setColumnAlignment( 1, Qt::AlignHCenter );

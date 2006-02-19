@@ -5,7 +5,7 @@ inherit kde
 
 DESCRIPTION="A KDE Portage frontend"
 HOMEPAGE="http://tux.myftp.org/kuroo"
-SRC_URI="http://tux.myftp.org/kuroo/browser/packages/${P}.tar.bz2"
+SRC_URI="svn://tux.myftp.org/repos/packages/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"
@@ -15,6 +15,6 @@ IUSE="debug"
 RDEPEND="app-portage/gentoolkit
 	!app-portage/guitoo
 	|| (kde-misc/kdiff3 kde-base/kdesdk)
-	|| (kde-base/dcoprss kde-base/kdenetwork)"
+	|| (kde-base/dcoprss§ kde-base/kdenetwork)"
 
 need-kde 3.4

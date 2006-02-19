@@ -124,8 +124,6 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
-	kdDebug() << "KurooView::slotInit" << endl;
-	
 	// After db is recreated because of new version restore data
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		hasHistoryRestored = true;
@@ -170,7 +168,6 @@ void KurooView::slotInit()
  */
 void KurooView::slotReset()
 {
-	kdDebug() << "KurooView::slotReset" << endl;
 	slotPortageUpdated();
 	UpdatesSingleton::Instance()->slotReset();
 	slotInit();
@@ -182,8 +179,6 @@ void KurooView::slotReset()
  */
 void KurooView::slotCheckPortage()
 {
-	kdDebug() << "KurooView::slotCheckPortage" << endl;
-	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// After db is recreated because of new version restore data

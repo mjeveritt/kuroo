@@ -83,7 +83,7 @@ void QueueListView::QueueItem::setComplete()
 	bar->setTotalSteps( 100 );
 	bar->setProgress( 100 );
 	setInstalled();
-	bar->hide();
+	repaint();
 }
 
 bool QueueListView::QueueItem::isComplete()

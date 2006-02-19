@@ -87,8 +87,7 @@ bool Portage::slotScan()
 	int maxLoops(99);
 	
 	// Wait for cache job to finish before launching the scan.
-	while ( true )
-	{
+	while ( true ) {
 		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
 			::usleep(100000); // Sleep 100 msec
 		else
@@ -245,6 +244,8 @@ bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
  */
 void Portage::loadWorld()
 {
+	kdDebug() << "Portage::loadWorld" << endl;
+	
 	mapWorld.clear();
 	
 // 	QRegExp rxPackage( "(\\S+)/(\\S+)" );
@@ -272,6 +273,8 @@ void Portage::loadWorld()
  */
 bool Portage::saveWorld( const QMap<QString, QString>& map )
 {
+	kdDebug() << "Portage::saveWorld" << endl;
+	
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
@@ -289,6 +292,8 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 
 bool Portage::isInWorld( const QString& package )
 {
+	kdDebug() << "Portage::isInWorld package=" << package << endl;
+	
 	if ( mapWorld.contains( package ) )
 		return true;
 	else
@@ -301,6 +306,8 @@ bool Portage::isInWorld( const QString& package )
  */
 void Portage::appendWorld( const QString& package )
 {
+	kdDebug() << "Portage::appendWorld package=" << package << endl;
+	
 	QMap<QString, QString> map = mapWorld;
 	map[ package ] = QString::null;
 	
@@ -317,6 +324,8 @@ void Portage::appendWorld( const QString& package )
  */
 void Portage::removeFromWorld( const QString& package )
 {
+	kdDebug() << "Portage::removeFromWorld package=" << package << endl;
+	
 	QMap<QString, QString> map = mapWorld;
 	map.remove( package );
 	

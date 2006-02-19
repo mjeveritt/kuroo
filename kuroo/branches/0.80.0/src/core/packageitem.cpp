@@ -78,59 +78,49 @@ bool PackageItem::isLastPackage()
 }
 
 /**
- * Is the listViewItem category, package or ebuild. @todo: use paintCell instead to mark Queued packages.
- * Set icon and tooltip text.
- * @param status
- */
-void PackageItem::setStatus( int status )
-{
-	switch ( status ) {
-
-		case QUEUED :
-			m_isQueued = true;
-			setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
-			break;
-		
-		case NOTQUEUED :
-			m_isQueued = false;
-			setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
-		
-	}
-}
-
-/**
- * Check if package is in world only for visible package.
+ * Set icons when package is visible.
  */
 void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
 {
 	if ( this->isVisible() ) {
 		QColorGroup m_colorgroup( colorgroup );
 		
-		if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
-			m_inWorld = true;
-			setPixmap( 2, ImagesSingleton::Instance()->icon( WORLD ) );
-		}
-		else {
-			m_inWorld = false;
-			setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
-		}
-		
-		if ( m_status == FILTER_ALL_STRING )
-			setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-		else {
-			if ( KurooConfig::installedColumn() ) {
-				setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-				setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+		// Optimizing - do not check for not relevant columns
+		switch ( column ) {
+			
+			case 0 : {
+				if ( m_status == FILTER_ALL_STRING )
+					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+				else {
+					if ( KurooConfig::installedColumn() ) {
+						setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+						setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+					}
+					else
+						setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+					
+					if ( m_status == FILTER_OLD_STRING ) {
+						QFont font( painter->font() );
+						font.setItalic( true );
+						painter->setFont( font );
+						m_colorgroup.setColor( QColorGroup::Text, Qt::gray );
+					}
+				}
+				break;
 			}
-			else
-				setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
-
-			if ( m_status == FILTER_OLD_STRING ) {
-				QFont font( painter->font() );
-				font.setItalic( true );
-				painter->setFont( font );
-				m_colorgroup.setColor( QColorGroup::Text, Qt::gray );
+			
+			case 2 : {
+				if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
+					m_inWorld = true;
+					setPixmap( 2, ImagesSingleton::Instance()->icon( WORLD ) );
+				}
+				else {
+					m_inWorld = false;
+					setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
+				}
+				break;
 			}
+			
 		}
 		
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
@@ -214,9 +204,9 @@ void PackageItem::setInstalled()
 	m_status = FILTER_INSTALLED_STRING;
 }
 
-void PackageItem::setQueued()
+void PackageItem::setQueued( bool isQueued )
 {
-	m_isQueued = true;
+	m_isQueued = isQueued;
 }
 
 /**

@@ -93,50 +93,6 @@ private:
 	const QStringList m_packageIdList;
 };
 
-/**
- * @class InstallQueueJob
- * @short Thread for setting queue in db to packages list.
- */
-class InstallQueueJob : public ThreadWeaver::DependentJob
-{
-public:
-	InstallQueueJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), m_packageIdList( packageIdList ) {}
-	
-	virtual bool doJob() {
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
-		KurooDBSingleton::Instance()->query("CREATE TEMP TABLE queue_temp (	"
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " idDepend INTEGER, "
-		                                    " use VARCHAR(255), "
-		                                    " size VARCHAR(32), "
-		                                    " version VARCHAR(32) "
-		                                    " );", m_db);
-		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
-		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
-		
-		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
-		
-		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
-		
-		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->insert("INSERT INTO queue SELECT * FROM queue_temp;", m_db);
-		KurooDBSingleton::Instance()->query("DROP TABLE queue_temp;", m_db);
-		
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
-		return true;
-	}
-	
-	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false );
-		SignalistSingleton::Instance()->startInstallQueue();
-	}
-	
-private:
-	const QStringList m_packageIdList;
-};
 
 /**
  * @class Queue
@@ -202,7 +158,6 @@ void Queue::stopTimer()
 void Queue::clearCache()
 {
 	packageCache.clear();
-	SignalistSingleton::Instance()->clearQueued();
 }
 
 /**
@@ -217,7 +172,6 @@ void Queue::insertInCache( const QString& id )
 	}
 	
 	packageCache[ id ] = true;
-	SignalistSingleton::Instance()->setQueued( id, true );
 }
 
 /**
@@ -232,7 +186,6 @@ void Queue::deleteFromCache( const QString& id )
 	}
 	
 	packageCache[ id ] = false;
-	SignalistSingleton::Instance()->setQueued( id, false );
 }
 
 /**
@@ -268,24 +221,6 @@ void Queue::reset()
 }
 
 /**
- * Launch emerge pretend of packages.
- * @param packageList
- */
-void Queue::pretendPackageList( const QStringList& packageList )
-{
-	EmergeSingleton::Instance()->pretend( packageList );
-}
-
-/**
- * Launch emerge package list
- * @param packageList
- */
-void Queue::installPackageList( const QStringList& packageList )
-{
-	EmergeSingleton::Instance()->queue( packageList );
-}
-
-/**
  * Remove packages from queue.
  * @param packageIdList
  */
@@ -307,9 +242,24 @@ void Queue::addPackageIdList( const QStringList& packageIdList )
  * Launch emerge of all packages in the queue.
  * @param packageIdList
  */
-void Queue::installQueue( const QStringList& packageIdList )
+void Queue::installQueue( const QString& emergeOptions, const QStringList& endUserList )
 {
-	ThreadWeaver::instance()->queueJob( new InstallQueueJob( this, packageIdList ) );
+	QStringList packageList( endUserList );
+	packageList.prepend( emergeOptions );
+	
+	// Only end-user packages not the dependencies
+// 	foreach ( endUserList ) {
+// 		QString package = *it++;
+// 		QString version = *it;
+// 		
+// 		// if package not in world emerge as oneshot
+// 		if ( !PortageSingleton::Instance()->isInWorld( package ) )
+// 			packageList += "=" + package + "-" + version;
+// 		else
+// 			packageList += package;
+// 	}
+	
+	EmergeSingleton::Instance()->queue( packageList );
 }
 
 void Queue::setRemoveInstalled( bool removeInstalled )

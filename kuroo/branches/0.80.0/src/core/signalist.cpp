@@ -176,19 +176,4 @@ void Signalist::startInstallQueue()
 	emit signalEmergeQueue();
 }
 
-/**
- * Propagate signal that a package is added to the queue.
- * @param id	package db id
- * @param true/false
- */
-void Signalist::setQueued( const QString& idDB, bool b )
-{
-	emit signalSetQueued( idDB, b );
-}
-
-void Signalist::clearQueued()
-{
-	emit signalClearQueued();
-}
-
 #include "signalist.moc"

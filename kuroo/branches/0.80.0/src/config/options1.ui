@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>498</height>
+            <height>582</height>
         </rect>
     </property>
     <property name="caption">
@@ -144,37 +144,40 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="2" column="0">
+        <widget class="QGroupBox" row="3" column="0">
             <property name="name">
-                <cstring>portage_2_2_2</cstring>
+                <cstring>portage_2_3</cstring>
             </property>
             <property name="title">
-                <string>Emerge check update options</string>
+                <string>Kuroo options</string>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
+                <spacer row="0" column="1">
                     <property name="name">
-                        <cstring>kcfg_updateDeep</cstring>
+                        <cstring>spacer2_2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>146</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>kcfg_isSystrayEnabled</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Deep</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>kcfg_updateDependency</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Dependenc&amp;y</string>
+                        <string>Show s&amp;ystem tray icon</string>
                     </property>
                     <property name="accel">
                         <string>Alt+Y</string>
@@ -183,25 +186,78 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>kcfg_installedColumn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show installed pac&amp;kages in separate column</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="1" column="1">
+                    <property name="name">
+                        <cstring>spacer2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>kcfg_portageVersion21</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Portage version &gt;= &amp;2.1</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+2</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="2" column="1">
+                    <property name="name">
+                        <cstring>spacer2_2_3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>108</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <spacer row="5" column="0">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QGroupBox" row="4" column="0">
             <property name="name">
                 <cstring>groupBox7</cstring>
@@ -345,116 +401,54 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="3" column="0">
+        <spacer row="5" column="0">
             <property name="name">
-                <cstring>portage_2_3</cstring>
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>portage_2_2_2</cstring>
             </property>
             <property name="title">
-                <string>Kuroo options</string>
+                <string>Emerge check update options</string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer row="0" column="1">
+                <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>spacer2_2_2</cstring>
+                        <cstring>textLabel1_2</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
+                    <property name="text">
+                        <string>&lt;i&gt;Forces emerge to consider the entire dependency tree of packages.&lt;/i&gt;</string>
                     </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>146</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
+                </widget>
                 <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
-                        <cstring>kcfg_isSystrayEnabled</cstring>
+                        <cstring>kcfg_updateDeep</cstring>
                     </property>
                     <property name="text">
-                        <string>Show system tr&amp;ay icon</string>
+                        <string>&amp;Deep</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+A</string>
+                        <string>Alt+D</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>kcfg_installedColumn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Show installed pac&amp;kages in separate column</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox" row="2" column="0">
-                    <property name="name">
-                        <cstring>kcfg_portageVersion21</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Portage version &gt;= &amp;2.1</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+2</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <spacer row="2" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2_3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>108</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
                     </property>
                 </widget>
             </grid>

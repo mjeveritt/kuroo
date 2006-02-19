@@ -100,12 +100,8 @@ bool Emerge::queue( const QStringList& packageList )
 	*eProc << "emerge" << "--nospinner" << "--nocolor";
 	
 	// Add emerge options and packages
-	foreach( packageList ) {
-		if ( (*it).startsWith("-") )
-			*eProc << *it;
-		else
-			*eProc << *it;
-	}
+	foreach( packageList )
+		*eProc << *it;
 	
 	eProc->start( KProcess::OwnGroup, true );
 	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
@@ -249,8 +245,8 @@ bool Emerge::checkUpdates()
 		*eProc << "-D";
 	
 	// Remove dependencies if not checked in gui
-	if ( !KurooConfig::updateDependency() )
-		*eProc << "-O";
+// 	if ( !KurooConfig::updateDependency() )
+// 		*eProc << "-O";
 	
 	*eProc << "world";
 

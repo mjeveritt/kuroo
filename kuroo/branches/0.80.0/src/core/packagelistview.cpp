@@ -37,9 +37,6 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	setSelectionModeExt( FileManager );
 	header()->setStretchEnabled( false );
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
-
 	// Update visible items when is changed
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	
@@ -181,37 +178,6 @@ void PackageListView::setPackageFocus( const QString& id )
 }
 
 /**
- * Clear the queued hightlighting.
- */
-void PackageListView::slotClearQueued()
-{
-	QListViewItemIterator it( this );
-	while ( it.current() ) {
-		dynamic_cast<PackageItem*>( it.current() )->setStatus( NOTQUEUED );
-		++it;
-	}
-}
-
-/**
- * Mark packages as queued.
- * @param idDB
- * @param true/false
- */
-void PackageListView::slotSetQueued( const QString& id, bool isQueued )
-{
-	if ( id.isEmpty() || !packageIndex[id] )
-		return;
-	
-	if ( isQueued )
-		packageIndex[id]->setStatus( QUEUED );
-	else
-		packageIndex[id]->setStatus( NOTQUEUED );
-	
-	if ( id == currentId() )
-		emit signalStatusChanged( isQueued );
-}
-
-/**
  * Register package in index and check if in the queue.
  * @param id
  * @param item
@@ -222,12 +188,6 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 		return;
 	
 	packageIndex.insert( id, item );
-	
-	if ( QueueSingleton::Instance()->isQueued( id ) )
-		packageIndex[id]->setStatus( QUEUED );
-	else
-		packageIndex[id]->setStatus( NOTQUEUED );
-	
 	packageIndex[id]->setPackageIndex( packageIndex.count() );
 }
 

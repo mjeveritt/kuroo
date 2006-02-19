@@ -254,7 +254,7 @@ void QueueTab::slotGo()
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
 
-		// First we must run emerge pretend
+	// First we must run emerge pretend
 	if ( !m_hasCheckedQueue ) {
 		EmergeSingleton::Instance()->pretend( packageList );
 		return;
@@ -268,8 +268,7 @@ void QueueTab::slotGo()
 			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes:
-					packageList.prepend( "--fetch-all-uri" );
-					QueueSingleton::Instance()->installPackageList( packageList );
+					QueueSingleton::Instance()->installQueue( "--fetch-all-uri", packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
 			
 			}
@@ -280,12 +279,13 @@ void QueueTab::slotGo()
 			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes: {
-					
+
 					// Force portage to reinstall files protected in CONFIG_PROTECT
 					if ( cbForce->isChecked() )
-						packageList.prepend( "--noconfmem" );
+						QueueSingleton::Instance()->installQueue( "--noconfmem", packageList );
+					else
+						QueueSingleton::Instance()->installQueue( QString::null, packageList );
 					
-					QueueSingleton::Instance()->installPackageList( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
 					m_hasCheckedQueue = false;
 				}

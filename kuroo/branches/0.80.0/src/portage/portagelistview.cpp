@@ -52,6 +52,28 @@ QString PortageListView::PortageItem::homepage()
 	return m_homepage;
 }
 
+/**
+ * Set icons when package is visible.
+ */
+void PortageListView::PortageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
+{
+	if ( this->isVisible() ) {
+		
+		if ( column == 3 ) {
+			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
+				setQueued( true );
+				setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
+			}
+			else {
+				setQueued( false );
+				setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
+			}
+		}
+		
+		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -96,6 +118,8 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 1 );
 	header()->setResizeEnabled( false, 2 );
 	header()->setResizeEnabled( false, 3 );
+	
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
 }
 
 PortageListView::~PortageListView()

@@ -41,7 +41,6 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	bar( 0 )
 {
-	setQueued();
 	setText( 0, category + "/" + name );
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
@@ -52,7 +51,6 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	bar( 0 )
 {
-	setQueued();
 	setText( 0, category + "/" + name );
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();
@@ -145,7 +143,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 		bar->setGeometry( rect );
 		bar->show();
 	}
-	
+
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 }
 
@@ -195,9 +193,6 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 1 );
 	header()->setResizeEnabled( false, 2 );
 	
-	disconnect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( slotSetQueued(const QString&, bool) ) );
-	disconnect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
-	
 	connect( this, SIGNAL( collapsed( QListViewItem* ) ), this, SLOT( slotHideBars( QListViewItem* ) ) );
 }
 
@@ -234,7 +229,23 @@ QStringList QueueListView::allPackagesNoChildren()
 	QStringList packageList;
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
-		packageList += myChild->text(0).section( rxPortageVersion, 0, 0 );
+		packageList += myChild->text(0);
+		myChild = myChild->nextSibling();
+	}
+	return packageList;
+}
+
+/** 
+ * All packages in listview by name - no children
+ * @return packageList
+ */
+QStringList QueueListView::allEndUserPackages()
+{
+	QStringList packageList;
+	QListViewItem* myChild = firstChild();
+	while ( myChild ) {
+		packageList += myChild->text(0);
+		packageList += myChild->text(3);
 		myChild = myChild->nextSibling();
 	}
 	return packageList;

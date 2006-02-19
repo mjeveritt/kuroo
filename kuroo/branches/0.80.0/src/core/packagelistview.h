@@ -89,23 +89,11 @@ public:
 	
 public slots:
 	
-	/**
- 	 * Clear the queued hightlighting.
- 	 */
-	virtual void			slotClearQueued();
-	
 	void					slotNextPackage( bool isPrevious );
 	
 protected slots:
 	
 	void					setPackageFocus( const QString& id );
-	
-	/**
- 	 * Fast method for marking packages as queued.
- 	 * @param idDB
- 	 * @param true/false
- 	 */
-	virtual void 			slotSetQueued( const QString& idDB, bool b );
 	
 	/**
  	 * Insert package and check if in the queue.

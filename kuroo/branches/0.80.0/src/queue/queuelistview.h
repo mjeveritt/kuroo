@@ -46,6 +46,7 @@ public slots:
 	void					slotPackageDown();
 
 	QStringList				allPackagesNoChildren();
+	QStringList				allEndUserPackages();
 	
 	/**
 	* Populate queue with packages from db

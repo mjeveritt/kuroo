@@ -44,16 +44,14 @@ public:
 	QString							name();
 	QString							description();
 	
-	virtual void					setPackageIndex( int index );
-	virtual void					setStatus( int status );
-	
+	virtual void					setPackageIndex( int index );	
 	virtual bool					isInstalled();
 	virtual bool					isInPortage();
 	virtual bool					isQueued();
 	virtual bool					isInWorld();
 	
 	void							setInstalled();
-	void							setQueued();
+	void							setQueued( bool isQueued );
 	
 	bool							isFirstPackage();
 	bool							isLastPackage();

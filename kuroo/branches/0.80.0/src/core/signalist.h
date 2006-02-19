@@ -74,12 +74,6 @@ public slots:
 	 */
 	void		startInstallQueue();
 	
-	/**
-	 * Methods for marking packages as present in the queue.
-	 */
-	void		setQueued( const QString& idDB, bool b );
-	void		clearQueued();
-	
 signals:
 	void		signalKurooBusy( bool b );
 	void		signalCachePortageComplete();

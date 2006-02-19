@@ -94,18 +94,10 @@ public slots:
     void 					addPackageIdList( const QStringList& packageIdList );
 	
 	/**
-	* Launch emerge pretend of packages.
-	* @param packageList
-	*/
-	void					pretendPackageList( const QStringList& packageList );
-	
-	/**
 	* Launch emerge package list
 	* @param packageList
 	*/
-	void					installPackageList( const QStringList& packageList );
-	
-	void					installQueue( const QStringList& packageIdList );
+	void					installQueue( const QString& emergeOptions, const QStringList& endUserList );
 	
 	void					setRemoveInstalled( bool removeInstalled );
 	

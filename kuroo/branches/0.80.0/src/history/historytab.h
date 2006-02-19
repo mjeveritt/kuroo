@@ -32,30 +32,14 @@ class HistoryTab : public HistoryBase
 Q_OBJECT
 public:
     HistoryTab( QWidget *parent = 0 );
-	
-	/**
-	 * Save splitters and listview geometry.
-	 */
     ~HistoryTab();
 
-	
 private slots:
-	
-	/**
-	 * Initialize geometry and content.
-	 * Restore geometry: splitter positions, listViews width and columns width.
-	 */
 	void 		slotInit();
-	
-	/**
-	 * Reload history view.
-	 */
 	void		slotReload();
 	void		slotReload( int limit );
-	
 	void		slotClearFilter();
 	void		slotViewUnmerges( bool on );
-	
 	void		slotViewInfo( QListViewItem *item );
 };
 

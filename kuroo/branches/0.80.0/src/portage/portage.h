@@ -40,74 +40,16 @@ public:
 public slots:
 	void						init( QObject *parent = 0 );
 	void						slotChanged();
-	
-	/**
-	 * Start scan of portage packages.
-	 * @return bool
-	 */
 	bool						slotRefresh();
-	
-	/**
-	 * Continue scan of portage packages.
-	 * @return bool
-	 */
 	bool						slotScan();
-	
-	/**
-	 * Start emerge sync.
-	 * @return bool
-	 */
 	bool						slotSync();
-	
-	/**
-	 * Launch emerge pretend of packages.
-	 * @param category
-	 * @param packageList
-	 */
 	void						pretendPackageList( const QStringList& packageIdList );
-	
-	/**
-	* Find cached size for package.
-	* @param packages
-	* @return size or NULL if na
-	*/
 	QString						cacheFind( const QString& package );
-	
-	/**
-	* Get cache from threaded scan.
-	*/
 	void						setCache( const QMap< QString, QString > &mapCacheIn );
-	
-	/**
-	* Load mapCache with items from DB.
-	*/
 	void						loadCache();
-	
-	/**
-	* Free cache memory.
-	*/
 	void						clearCache();
-	
-	/**
-	* Unmask list of packages by adding them to package.keyword.
-	* @param category
-	* @param packageList
-	*/
 	void						untestingPackageList( const QStringList& packageIdList );
-	
-	/**
-	* Unmask package by adding to "maskFile".
-	* @param package
-	* @param maskFile
-	* @return success
-	*/
 	bool						unmaskPackage( const QString& package, const QString& maskFile );
-	
-	/**
-	* Clear the unmasking of packages by removing them to package.keyword.
-	* @param category
-	* @param packageList
-	*/
 	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
@@ -118,7 +60,7 @@ signals:
 	
 private:
 	QObject*					m_parent;
-	QMap<QString, QString> 		mapCache, mapPackageKeywords;
+	QMap<QString, QString> 		mapCache;
 	QMap<QString, QString>		mapWorld;
 };
 

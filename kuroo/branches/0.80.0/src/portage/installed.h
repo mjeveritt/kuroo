@@ -36,36 +36,10 @@ public:
 	
 public slots:
 	void			init( QObject *parent = 0 );
-	
-	/**
-	 * Forward signal after a new scan.
-	 */
 	void			slotChanged();
-	
-	/**
-	 * Clear packages.
-	 */
 	void			slotReset();
-	
-	/**
-	 * Launch unmerge of packages
-	 * @param category
-	 * @param packageList
-	 */
 	void			uninstallPackageList( const QStringList& packageIdList );
-	
-	/**
-	 * @fixme: Check for failure.
-	 * Add package as installed in db.
-	 * @param package
-	 */
 	void			addPackage( const QString& package );
-	
-	/**
-	 * @fixme: Check for failure.
-	 * Remove packages from db.
-	 * @param packageIdList
- 	*/
 	void			removePackage( const QString& package );
 	
 signals:

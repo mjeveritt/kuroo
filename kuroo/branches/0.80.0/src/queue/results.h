@@ -37,15 +37,8 @@ public:
 public slots:
 	void			init( QObject *parent = 0 );
 	void			refresh();
-	
-	/**
- 	 * Add packages to the queue table in the db
- 	 * @param packageList
- 	 */
 	void 			addPackageList( const EmergePackageList &packageList );
-	
-signals:
-	
+
 private:
 	QObject			*m_parent;
 };

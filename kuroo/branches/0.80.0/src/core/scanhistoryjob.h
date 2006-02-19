@@ -43,11 +43,6 @@ public:
 	~ScanHistoryJob();
 
 private:
-	
-	/** 
-	 * If new entries are found in emerge.log insert them into history and 
-	 * add emerge time and increment how many time package have been installed
-	 */
 	bool 						doJob();
 	void 						completeJob();
 	

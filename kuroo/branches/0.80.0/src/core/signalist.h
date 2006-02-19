@@ -37,30 +37,11 @@ public:
 
 public slots:
 	void		init( QObject *parent = 0 );
-	
 	void		setKurooReady( bool isReady );
 	bool		isKurooReady();
-	
-	/**
-	 * Toggle busy flag for kuroo.
-	 * @param true/false
-	 */
 	void		setKurooBusy( bool busy );
-	
-	/**
-	 * Job wasn't successful.
-	 */
 	void		scanAborted();
-	
-	/**
-	 * Convenience methods.
-	 * Return true when kuroo is emerging or scanning.
-	 */
 	bool		isKurooBusy();
-	
-	/**
-	 * For forwarding kuroo threads status.
-	 */
 	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();
@@ -68,10 +49,6 @@ public slots:
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
-	
-	/**
-	 * Tell queue to start emerging.
-	 */
 	void		startInstallQueue();
 	
 signals:

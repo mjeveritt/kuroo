@@ -44,19 +44,15 @@ public slots:
 	
 private slots:
 	void				slotInit();
-	
 	void				slotBusy( bool busy );
 	void				slotButtons();
-	
 	void				slotPackageUseChanged();
-	
 	void				slotGo();
 	void				slotPretend();
 	void				slotStop();
 	void				slotRemove();
 	void				slotRemoveInstalled();
 	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
-	
 	void				slotPackage();
 	void				slotAdvanced();
 	

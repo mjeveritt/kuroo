@@ -37,42 +37,32 @@ public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 	
-	/**
-	 * Open use flags dialog.
-	 * @param newPackage	selected package
-	 */
 	void							edit( PackageItem* portagePackage );
 	void							showHardMaskInfo();
 	
 	InspectorBase					*dialog;
 	
 private slots:
-	
 	void							slotHardMaskInfo();
-	
 	void							slotPreviousPackage();
 	void							slotNextPackage();
 	void							showSettings();
 	void							slotRefreshTabs();
 	void							slotAdvancedToggle( bool isOn );
-	
 	void							slotLoadInstalledFiles( const QString& version );
 	void							slotApply();
 	void							slotCancel();
 	void							slotOk();
 	void							rollbackSettings();
-	
 	void							slotSetStability( int rbStability );
 	void							slotSetSpecificVersion( const QString& version );
 	void							slotSetAvailable( bool isAvailable );
 	void							slotSetUseFlags( QListViewItem* useItem );
-	
 	void							loadUseFlagDescription();
 	void							slotLoadEbuild( const QString& version );
 	void							loadChangeLog();
 	void							slotLoadDependencies( const QString& version );
 	void							slotLoadUseFlags( const QString& version );
-	
 	void							slotCalculateUse();
 	void							slotCollectPretendOutput( KProcIO* eProc );
 	void							slotParsePackageUse( KProcess* eProc );

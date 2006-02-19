@@ -52,7 +52,6 @@ public:
 	
 	void							setInstalled();
 	void							setQueued( bool isQueued );
-	
 	bool							isFirstPackage();
 	bool							isLastPackage();
 	
@@ -68,7 +67,6 @@ protected:
 	
 private:
 	int								m_index;
-	
 	QString							m_id, m_name, m_status, m_packageTip, m_description, m_category;
 	QListView						*m_parent;
 	bool							m_isQueued, m_inWorld, hasDetailedInfo;

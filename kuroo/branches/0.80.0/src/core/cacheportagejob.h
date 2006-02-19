@@ -41,15 +41,7 @@ public:
     ~CachePortageJob();
 
 private slots:
-	
-	/**
-	 * Count portage packages for correct progress timing.
-	 */
 	int							countPackages();
-	
-	/**
-	 * Scan for package size found in digest files and store in db.
-	 */
 	bool 						doJob();
 	void 						completeJob();
 	

@@ -40,10 +40,7 @@ public:
     ~KurooStatusBar();
 	
 	static 					KurooStatusBar* instance() { return s_instance; }
-	
-	/**
- 	 * Progress methods.
- 	 */
+
 	void 					setProgressStatus( const QString& id, const QString& text );
 	void					setTotalSteps( int total );
 	void 					setProgress( int steps );

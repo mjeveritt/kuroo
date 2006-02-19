@@ -40,73 +40,24 @@ public:
 
 public:
 	virtual	void			resetListView();
-	
 	virtual	PackageItem* 	itemId( const QString& id );
-	
-	/**
- 	 * Current package idDB.
- 	 * @return idDB
- 	 */
 	virtual QString			currentId();
-	
 	QString					currentItemStatus();
-	
-	/**
- 	 * Get current package.
-  	 * @return package name
- 	 */
 	virtual PackageItem* 	currentPackage();
-	
-	/**
- 	 * Get selected packages DB id.
- 	 * @return idList
- 	 */
 	virtual QStringList		selectedId();
-	
-	/**
- 	 * Get selected packages by name as "metalog-0.10.0" or "metalog".
- 	 * @return packageList
- 	 */
 	virtual QStringList		selectedPackages();
-	
-	/** 
-  	 * Return all packages by DB id in listview.
- 	 * @return packageList
- 	 */
 	virtual QStringList		allId();
-	
-	/** 
- 	 * Return all packages in listview.
- 	 * @return list of packages by name
- 	 */
 	virtual QStringList		allPackages();
-
-	/**
- 	 * Count packages.
- 	 * @return QString
- 	 */
 	virtual QString			count();
 	
 public slots:
-	
 	void					slotNextPackage( bool isPrevious );
 	
 protected slots:
-	
 	void					setPackageFocus( const QString& id );
-	
-	/**
- 	 * Insert package and check if in the queue.
- 	 * @param item
- 	 * @param idDB
- 	 */
 	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
 protected:
-	
-	/**
-	 * Internal index of packages in listView.
-	 */
 	QDict<PackageItem>		packageIndex;
 	
 signals:

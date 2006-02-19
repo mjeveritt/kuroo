@@ -32,28 +32,13 @@ class MergeTab : public MergeBase
 Q_OBJECT
 public:
     MergeTab( QWidget *parent = 0 );
-	
-	/**
-	 * Save splitters and listview geometry.
-	 */
     ~MergeTab();
 
 	
 private slots:
-	
-	/**
-	 * Initialize geometry and content.
-	 * Restore geometry: splitter positions, listViews width and columns width.
-	 */
 	void 		slotInit();
-	
-	/**
-	 * Reload history view.
-	 */
 	void		slotReload();
-	
 	void		slotClearFilter();
-	
 	void 		slotViewFile( QListViewItem* item );
 	void		slotCleanupOpenDiff( KProcess* eProc );
 	

@@ -45,11 +45,6 @@ public:
 public slots:
 	
 	void							setHeader( const QString& text );
-	
-	/**
-	 * Populate listview with content of this category.
-	 * @param package
-	 */
 	int 							addSubCategoryPackages( const QStringList& packageList );
 	
 private slots:

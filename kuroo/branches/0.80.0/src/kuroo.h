@@ -55,38 +55,16 @@ public:
 	
 private slots:
 	
-	/**
-	 * Dialogs:
-	 * Show the wizard.
-	 * Show the full emerge log 
-	 * Kuroo preferences window.
-	 */
 	void 				introWizard();
 	void 				slotPreferences();
-	
-	/**
-	 * Disable buttons when kuroo is busy.
-	 */
 	void				slotBusy( bool b );
-	
-	/**
-	 * Launch emerge portage sync.
-	 */
 	void				slotSync();
-	
-	/**
-	 * Hide kuroo window when clicking in close button.
-	 * Wait for the backup of the log is completed before terminating.
-	 */
 	bool 				queryClose();
 	bool 				queryExit();
 	void 				slotQuit();
 	void				slotWait();
 	void 				slotTerminate();
 	
-	/**
-	* Build mainwindow menus and toolbar.
-	*/
 private:
 	void 				setupActions();
 	

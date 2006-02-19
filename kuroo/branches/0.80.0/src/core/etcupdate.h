@@ -40,38 +40,14 @@ public:
 
 public slots:
 	void				init( QObject *parent = 0 );
-	
-	/**
- 	 * Ask user if to run etc-update.
- 	 * @param count is number of etc files to merge.
- 	 */
 	void				askUpdate( const int &count );
 
 private slots:
-	
-	/**
- 	 * Run etc-update command and parse for etc files and terminate it.
- 	 */
 	bool				etcUpdate();
-	
-	/**
- 	 * Collect output from etc-update and terminate it.
- 	 */
 	void 				slotEtcUpdateOutput( KProcIO *proc );
 	void				slotCleanupEtcUpdate( KProcess* );
-	
-	/**
- 	 * Parse etc-update output and launch diff tool.
- 	 */
 	void				runDiff();
-	
-	/**
- 	 * Post diff action, delete original diff file.
- 	 * And go for next...
- 	 * @param proc
-  	*/
 	void				slotCleanupEtcUpdateDiff( KProcess* );
-	
 	void				backup( const QString& source, const QString& destination );
 
 signals:

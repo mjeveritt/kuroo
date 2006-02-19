@@ -45,9 +45,6 @@ public:
 	KurooView( QWidget *parent, const char *name );
 	~KurooView();
 	
-	/**
-	 * The tabwidget and the tabs accessible by Kuroo.
-	 */
 	PortageTab*			tabPortage;
 	HistoryTab*			tabHistory;
 	QueueTab*			tabQueue;
@@ -56,37 +53,24 @@ public:
 	PackageInspector	*packageInspector;
 	
 	void 				quit();
-	
-	/**
-	 * DCOP slot accessible by kuroo_watcher.
-	 */
 	void 				slotEmergePretend( QString package );
 	
 public:
 	class 				IconListItem;
 	
 public slots:
-	/**
-	 * Check the validity of the database. Update history if emerge.log is changed.
-	 * Reset everything after a sync.
-	 */
 	void 				slotInit();
 	void				slotReset();
 
 private slots:
 
 	void 				slotCheckPortage();
-	
-	/**
-	 * Update tab text color and package counts.
-	 */
 	void 				slotPortageUpdated();
 	void 				slotQueueUpdated();
 	void				slotHistoryUpdated();
 	void				slotMergeUpdated();
 	void 				slotLogUpdated();
 	void				slotResetMenu( QListBoxItem* menuItem );
-	
 	void 				slotShowView();
 	
 private:

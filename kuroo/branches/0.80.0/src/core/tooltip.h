@@ -35,12 +35,6 @@ public:
 	ToolTip( KListView *pWidget, QToolTipGroup *group = 0 );
 	virtual ~ToolTip();
 	
-	/**
-	 * View Tooltip for item.
-	 * Also explains emerge actions with text explanation, for example:
-	 * "N" = "New, (not yet installed)"
-	 * @param pos	mouse position
-	 */
 	void 		maybeTip( const QPoint &pos );
 	
 private:

@@ -39,26 +39,11 @@ public:
 	Log( QObject *m_parent = 0 );
     ~Log();
 	
-	/**
-	 * Connect log output browser in gui.
-	 * @param logBrowserGui			pointer to text browser.
-	 * @param checkBoxVerboseGui	pointer to verbose checkbox.
-	 */
 	void 			setGui( KTextBrowser *logBrowserGui, QCheckBox *verboseLogGui, QCheckBox *saveLogGui );
-	
-	/**
-	 * Write log lines to text browser and log file.
-	 * @param output		line of text.
-	 * @param i			type of log = EMERGE, KUROO, WARNING, TOLOG, EMERGELOG.
-	 */
 	void 			writeLog( const QString& output, int logType );
 
 public slots:
 	QString			init( QObject *parent = 0 );
-	
-	/**
-	 * Backup job of "kuroo.log".
-	 */
 	KIO::Job*		backupLog();
 	
 private:

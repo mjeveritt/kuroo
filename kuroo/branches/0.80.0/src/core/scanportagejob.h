@@ -30,12 +30,6 @@ class DbConnection;
 typedef QMap<QString, QString> InstalledMap;
 
 /**
- * Thread for scanning local portage tree for available packages.
- * The packages are counted first, this to get a correct refresh progress in the gui.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
- * first the portage overlay cache the official portage cache.
- * All packages are stored in table "package" in the database.
- * 
  * @class ScanPortageJob
  * @short Thread for scanning local portage tree.
  */
@@ -50,29 +44,9 @@ private:
 	void								scanInstalledPackages();
 	
 private slots:
-	
-	/**
-	 * Scan Portage cache for packages in portage tree.
-	 * Inserting found packages in db.
-	 * @return bool 		true if successful.
-	 */
 	bool 								doJob();
 	void 								completeJob();
-	
-	/**
-	 * Collect info about this ebuild.
-	 * @param category   	
-	 * @param package  	
-	 * @return  false if the file can't be opened, true otherwise.
-	 */
 	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
-	
-	/**
-	 * Format package size nicely 
-	 * @fixme: Check out KIO_EXPORT QString KIO::convertSize
-	 * @param size 
-	 * @return total		as "xxx kB"
-	 */
 	QString								formatSize( const QString& size );
 	
 private:

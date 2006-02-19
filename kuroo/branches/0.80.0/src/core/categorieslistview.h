@@ -39,11 +39,6 @@ public:
 	class CategoryItem;
 	
 public slots:
-	
-	/**
-	 * Current category as "category-subcategory", for example "app-admin".
-	 * @param package
-	 */
 	CategoryItem*							currentCategory();
 	QString									currentCategoryId();
 	void									setCurrentCategoryId( const QString& package );
@@ -68,11 +63,6 @@ public:
 	~CategoriesListView();
 	
 	void									init();
-	
-	/**
- 	 * Load categories.
- 	 * @param categoriesList 
-	 */
 	void 									loadCategories( const QStringList& categoriesList );
 };
 
@@ -87,11 +77,6 @@ public:
 	~SubCategoriesListView();
 	
 	void									init();
-	
-	/**
- 	 * Load categories.
- 	 * @param categoriesList 
-	 */
 	void 									loadCategories( const QStringList& categoriesList );
 	
 private:

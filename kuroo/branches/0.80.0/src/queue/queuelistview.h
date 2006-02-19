@@ -41,60 +41,25 @@ public:
 	class					QueueItem;
 	
 public slots:
-
 	void					slotPackageUp();
 	void					slotPackageDown();
-
 	QStringList				allPackagesNoChildren();
 	QStringList				allEndUserPackages();
-	
-	/**
-	* Populate queue with packages from db
-	*/
 	void 					insertPackageList( bool hasCheckedQueue );
 	void					clearQueuePackageUse();
-	
-	/**
-	* Get total emerge duration in format hh:mm:ss and int.
-	*/
 	QTime			 		totalTime();
 	int						sumTime();
 	QString					totalTimeFormatted();
-
-	/**
-	* Get sum of packages sizes.
-	* @return sumSize 
-	*/
 	QString		 			totalSize();
-	
 	void					slotPackageComplete( const QString& id, bool removeInstalled );
 	void					slotPackageStart( const QString& id );
 	void					slotPackageProgress();
 	
 private slots:
-	
 	void					viewportResizeEvent(QResizeEvent *e);
-	
 	void					slotHideBars( QListViewItem* item );
-	
-	/**
-	* Format package size nicely 
-	* @param size 
-	* @return total		as "xxx kB"
-	*/
 	QString		 			formatSize( const QString& sizeString );
-	
-	/**
-	* Add this package size to total.
-	* @param size
-	*/
 	void 					addSize( const QString& size );
-	
-	/**
-	* Convert emerge duration from seconds to format hh:mm:ss.
-	* @param time 			
-	* @return emergeTime  
-	*/
 	QString 				formatTime( int time );
 	
 signals:

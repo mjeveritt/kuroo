@@ -43,23 +43,19 @@ public:
     ~PortageTab();
 	
 public slots:
-	
 	void				slotReload();
 	void				slotRefresh();
 	
 private slots:
 	void 				slotInit();
-	
 	void				slotBusy( bool b );
 	void				slotInitButtons();
 	void				slotButtons( bool isQueued );
-	
 	void				slotListSubCategories();
 	void				slotFilters();
 	void				slotActivateFilters();
 	void				slotClearFilter();
 	void				slotListPackages();
-	
 	void				slotQueue();
 	void				slotUninstall();
 	void				slotAdvanced();

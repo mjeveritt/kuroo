@@ -39,10 +39,6 @@ public:
 	~ScanUpdatesJob();
 
 private:
-	
-	/**
-	 * Insert found updates into db.
-	 */
 	bool 						doJob();
 	void 						completeJob();
 

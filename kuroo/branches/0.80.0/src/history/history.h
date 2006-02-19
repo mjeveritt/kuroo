@@ -46,54 +46,19 @@ public:
 	void			init( QObject *parent = 0 );
 	
 public slots:
-
-	/**
-	 * Load emerge statistics if any.
-	 * And start a watch on the emerge.log so as to parse for emerge activities.
-	 */
 	void			slotInit();
-	
 	void			slotScanHistoryCompleted();
-	
-	/**
-	 * Check for new entries in emerge.log.
-	 */
 	bool			slotRefresh();
-	
-	/**
-	 * Load all emerge times statistics.
-	 */
 	void			loadTimeStatistics();
-	
-	/**
- 	* Statistics object.
-	 */
 	EmergeTimeMap 	getStatisticsMap();
 	void 			setStatisticsMap( const EmergeTimeMap& statisticsMap );
-	
-	/**
-	 * Get emerge time for this package.
-	 * @param package
-	 * @return emergeTime		time or na
-	 */
 	QString 		packageTime( const QString& packageNoversion );
-	
 	void			appendEmergeInfo();
-	
 	void			updateStatistics();
-	
 	QStringList		allMergeHistory();
 	
 private slots:
-	
-	/**
-	 * Launch scan to load into db.
-	 */
 	void			slotScanHistory( const QStringList& lines );
-	
-	/**
-	 * Parse emerge.log when it has been changed, eg after, emerge, unmerge, sync...
- 	 */
 	void			slotParse();
 
 private:

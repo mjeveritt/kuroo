@@ -39,66 +39,19 @@ public:
 	
 public slots:
 	void					init( QObject *parent = 0 );
-	
 	void					emergePackageStart( const QString& package, int order, int total );
 	void					emergePackageComplete( const QString& package, int order, int total );
 	void					slotOneStep();
 	void					stopTimer();
-	
-	/**
-	* When the package is inserted in the register it in the cache too.
-	* @param id
-	*/
 	void					clearCache();
-	
-	/**
-	* When the package is inserted in the register it in the cache too.
-	* @param id
-	*/
 	void					insertInCache( const QString& id );
-	
-	/**
-	* When the package is inserted in the register it in the cache too.
-	* @param id
-	*/
 	void					deleteFromCache( const QString& id );
-	
-	/**
-	* Check if package is the queue.
-	* @param id
-	* @return true/false
-	*/
 	bool					isQueued( const QString& id );
-	
-	/**
-	* Clear the queue.
-	* @param packageIdList
-	*/
 	void					reset();
-	
-	/**
-	* Forward signal to refresh queue.
-	*/
 	void					refresh( bool hasCheckedQueue );
-	
-	/**
-	* Remove packages from queue.
-	* @param packageIdList
-	*/
 	void					removePackageIdList( const QStringList& packageIdList );
-	
-	/**
-	* Add packages to the installation queue table in the db.
-	* @param packageIdList
-	*/
     void 					addPackageIdList( const QStringList& packageIdList );
-	
-	/**
-	* Launch emerge package list
-	* @param packageList
-	*/
 	void					installQueue( const QStringList& packageList );
-	
 	void					setRemoveInstalled( bool removeInstalled );
 	
 signals:

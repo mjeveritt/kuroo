@@ -40,18 +40,9 @@ public:
 	~ConfigDialog();
 	
 private slots:
-	
-	/**
- 	 * Load the contents of the these inte KTextBoxes.
- 	 */
 	void readMakeConf();
-	
-	/**
- 	 * And save back...
- 	 */
 	bool saveMakeConf();
 	void saveAll();
-
 	void slotDefault();
 
 private:

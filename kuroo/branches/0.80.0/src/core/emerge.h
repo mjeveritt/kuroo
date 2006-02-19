@@ -45,80 +45,27 @@ public slots:
 	
 	void				init( QObject *parent = 0 );
 	bool				stop();
-	
-	/**
- 	 * Launch emerge pretend list of packages.
- 	 * @param packageList	
- 	 * @return true 		if emerge process started.
- 	 */
 	bool 				pretend( const QStringList& packageList );
-	
-	/**
- 	 * Launch emerge packages process.
- 	 * @param category
- 	 * @param packageList	
- 	 * @return true 		if emerge process started.
- 	 */
 	bool 				queue( const QStringList& packageList );
-	
-	/**
- 	 * Launch unmerge list of packages.
- 	 * @param packageList	
- 	 * @return true 		if emerge process started.
- 	 */
 	bool 				unmerge( const QStringList& packageList );
-	
-	/**
- 	 * Launch synchronize Portage tree.
- 	 * @return true 		if emerge process started.
- 	 */
 	bool				sync();
-	
-	/**
- 	 * Launch process to check for updates of world and system = "emerge -u(D)rxPortageVersion world".
- 	 * @return true 		if emerge process started.
- 	 */
 	bool				checkUpdates();
 	
-	/**
- 	 * @return list of packages parsed out from emerge output.
- 	 */
 	EmergePackageList	packageList();
 	
-	/**
-	 * @return if true if emerging.
-	 */
 	bool 				isRunning();
 	
 	QString				packageMessage();
 	
 private slots:
-	
-	/**
- 	 * Parse emerge process output for messages and packages.
- 	 * @param proc	
- 	 */
 	void 				slotEmergeOutput( KProcIO *proc );
-	
-	/**
- 	 * Post emerge actions.
-	 * Notice user of messages, inform gui that emerge is completed...
- 	 */
 	void				cleanup();
 	void 				slotCleanupQueue( KProcess *proc );
 	void 				slotCleanupPretend( KProcess *proc );
 	void 				slotCleanupUnmerge( KProcess *proc );
 	void 				slotCleanupSync( KProcess *proc );
 	void 				slotCleanupCheckUpdates( KProcess *proc );
-	
-	/**
- 	 * count etc-files to merge.
- 	 */
 	bool				countEtcUpdates( const QString& line );
-	
-	/**
-	 * Check if package is masked, if so ask to unmask.
-	 */
 	void				askUnmaskPackage( const QString& packageKeyword );
 	
 private:

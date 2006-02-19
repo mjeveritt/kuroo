@@ -246,20 +246,12 @@ void Portage::loadWorld()
 {
 	mapWorld.clear();
 	
-// 	QRegExp rxPackage( "(\\S+)/(\\S+)" );
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			
-			// Insert if not found
-			mapWorld[ line ] = QString::null;
-			
-// 			if ( rxPackage.exactMatch( line ) )
-// 				mapWorld[ rxPackage.cap(1) ] = rxPackage.cap(2);
-// 			else
-// 				kdDebug() << i18n("Loading packages in world. Can not parse: ") << line << endl;
+			QString package = stream.readLine();
+			mapWorld[ package.stripWhiteSpace() ] = QString::null;
 		}
 	}
 	else

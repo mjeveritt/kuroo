@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 
 /**
- * @class kurooinit
+ * @class kurooInit
  * @short KurooInit checks that kuroo environment is correctly setup.
  * 
  * And launch intro wizard whenever a new version of kuroo is installed.

@@ -78,9 +78,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
-		KurooConfig::setSaveLog(false);
+		KurooConfig::setSaveLog( false );
 		KurooConfig::setScanUpdateDate( i18n("No scan") );
-		KurooConfig::setScanSizeDate( i18n("No scan") );
 		
 		if ( !KurooConfig::wizard() )
 			getEnvironment();

@@ -242,23 +242,8 @@ void Queue::addPackageIdList( const QStringList& packageIdList )
  * Launch emerge of all packages in the queue.
  * @param packageIdList
  */
-void Queue::installQueue( const QString& emergeOptions, const QStringList& endUserList )
+void Queue::installQueue( const QStringList& packageList )
 {
-	QStringList packageList( endUserList );
-	packageList.prepend( emergeOptions );
-	
-	// Only end-user packages not the dependencies
-// 	foreach ( endUserList ) {
-// 		QString package = *it++;
-// 		QString version = *it;
-// 		
-// 		// if package not in world emerge as oneshot
-// 		if ( !PortageSingleton::Instance()->isInWorld( package ) )
-// 			packageList += "=" + package + "-" + version;
-// 		else
-// 			packageList += package;
-// 	}
-	
 	EmergeSingleton::Instance()->queue( packageList );
 }
 

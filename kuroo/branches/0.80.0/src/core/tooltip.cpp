@@ -61,16 +61,18 @@ void ToolTip::maybeTip( const QPoint& pos )
 		
 		switch ( section ) {
 		
-			case 0 :
+			case 0 : {
 				if ( packageItem->isInstalled() )
 					tipText = i18n( "Package is installed" );
-				else
-					if ( packageItem->isInPortage() )
-						tipText = i18n( "Package in Portage" );
-					else
-						tipText = i18n( "Package not in Portage" );
+				else {
+						if ( packageItem->isInPortage() )
+							tipText = i18n( "Package is not installed" );
+						else
+							tipText = i18n( "Package not in Portage" );
+				}
 				break;
-				
+			}
+			
 			case 1 :
 				if ( packageItem->isInstalled() )
 					tipText = i18n( "Package is installed" );
@@ -78,7 +80,7 @@ void ToolTip::maybeTip( const QPoint& pos )
 				
 			case 2 :
 				if ( packageItem->isInWorld() )
-					tipText = i18n( "Package present in world" );
+					tipText = i18n( "Package present in World profile" );
 				break;
 		
 			case 3 :

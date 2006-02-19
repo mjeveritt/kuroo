@@ -32,6 +32,7 @@
 #include <qcombobox.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
+#include <qtooltip.h>
 
 #include <ktextbrowser.h>
 #include <kdialogbase.h>
@@ -90,6 +91,25 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
  */
 QueueTab::~QueueTab()
 {
+	if ( cbForceConf->isChecked() )
+		KurooConfig::setForceConf( true );
+	else
+		KurooConfig::setForceConf( false );
+	
+	if ( cbDownload->isChecked() )
+		KurooConfig::setDownload( true );
+	else
+		KurooConfig::setDownload( false );
+	
+	if ( cbNoWorld->isChecked() )
+		KurooConfig::setNoWorld( true );
+	else
+		KurooConfig::setNoWorld( false );
+	
+	if ( cbRemove->isChecked() )
+		KurooConfig::setRemove( true );
+	else
+		KurooConfig::setRemove( false );
 }
 
 /**
@@ -97,10 +117,41 @@ QueueTab::~QueueTab()
  */
 void QueueTab::slotInit()
 {
-// 	pbRemove->setDisabled( true );
+	if ( KurooConfig::forceConf() )
+		cbForceConf->setChecked( true );
+	else
+		cbForceConf->setChecked( false );
+	
+	if ( KurooConfig::download() )
+		cbDownload->setChecked( true );
+	else
+		cbDownload->setChecked( false );
+	
+	if ( KurooConfig::noWorld() )
+		cbNoWorld->setChecked( true );
+	else
+		cbNoWorld->setChecked( false );
+	
+	if ( KurooConfig::remove() )
+		cbRemove->setChecked( true );
+	else
+		cbRemove->setChecked( false );
+	
+	QToolTip::add( cbDownload, i18n( "<qt><table width=300><tr><td>Instead of doing any package building, "
+	                                 "just perform fetches for all packages (the main package as well as all dependencies), "
+	                                 "grabbing all potential files.</td></tr></table></qt>" ) );
+	QToolTip::add( cbNoWorld, i18n( "<qt><table width=300><tr><td>Emerge as normal, "
+	                                "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+	QToolTip::add( cbForceConf, i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
+	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
+	                                  "Portage will normally merge those files only once to prevent the user"
+	                                  "from dealing with the same config multiple times. "
+	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+	
 	pbAdvanced->setDisabled( true );
-	cbForce->setDisabled( true );
+	cbForceConf->setDisabled( true );
 	cbRemove->setDisabled( true );
+	cbNoWorld->setDisabled( true );
 	
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
 	slotBusy( false );
@@ -145,8 +196,6 @@ void QueueTab::slotPackageUseChanged()
  */
 void QueueTab::slotQueueSummary()
 {
-	QString timeRemaining;
-	
 	queueBrowser->clear();
 	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
@@ -181,11 +230,11 @@ void QueueTab::slotBusy( bool busy )
 		
 		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
 			pbGo->setText( i18n( "Start Installation" ) );
-			cbForce->setDisabled( false );
+			cbForceConf->setDisabled( false );
 		}
 		else {
 			pbGo->setText( i18n("Check Installation") );
-			cbForce->setDisabled( true );
+			cbForceConf->setDisabled( true );
 		}
 	}
 	
@@ -195,8 +244,9 @@ void QueueTab::slotBusy( bool busy )
 		pbAdvanced->setDisabled( true );
 		pbClear->setDisabled( true );
 		cbDownload->setDisabled( true );
-		cbForce->setDisabled( true );
+		cbForceConf->setDisabled( true );
 		cbRemove->setDisabled( true );
+		cbNoWorld->setDisabled( true );
 	}
 	else {
 		pbRemove->setDisabled( false );
@@ -204,6 +254,7 @@ void QueueTab::slotBusy( bool busy )
 		pbClear->setDisabled( false );
 		cbDownload->setDisabled( false );
 		cbRemove->setDisabled( false );
+		cbNoWorld->setDisabled( false );
 	}
 	
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )
@@ -265,10 +316,11 @@ void QueueTab::slotGo()
 	if ( cbDownload->isChecked() ) {
 		switch( KMessageBox::questionYesNoList( this, 
 			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
-			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
+			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes:
-					QueueSingleton::Instance()->installQueue( "--fetch-all-uri", packageList );
+					packageList.prepend( "--fetch-all-uri" );
+					QueueSingleton::Instance()->installQueue( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
 			
 			}
@@ -276,15 +328,19 @@ void QueueTab::slotGo()
 	else {
 		switch( KMessageBox::questionYesNoList( this, 
 			i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
-			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
+			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes: {
-
+					
 					// Force portage to reinstall files protected in CONFIG_PROTECT
-					if ( cbForce->isChecked() )
-						QueueSingleton::Instance()->installQueue( "--noconfmem", packageList );
-					else
-						QueueSingleton::Instance()->installQueue( QString::null, packageList );
+					if ( cbForceConf->isChecked() )
+						packageList.prepend( "--noconfmem" );
+					
+					// Emerge as normal, but do not add the packages to the world profile for later updating.
+					if ( cbNoWorld->isChecked() )
+						packageList.prepend( "--oneshot" );
+						
+					QueueSingleton::Instance()->installQueue( packageList );
 					
 					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
 					m_hasCheckedQueue = false;

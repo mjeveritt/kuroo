@@ -82,16 +82,6 @@
 		<entry name="FilePackageUse" type="String">
 		<default>/etc/portage/package.use</default>
 		</entry>
-		<entry name="latestInstalledCategory" type="String">
-		</entry>
-		<entry name="latestInstalledPackage" type="String">
-		</entry>
-		<entry name="latestPortageCategory" type="String">
-		</entry>
-		<entry name="latestPortagePackage" type="String">
-		</entry>
-		<entry name="latestUpdatesCategory" type="String">
-		</entry>
 		<entry name="etcUpdateTool" type="String">
 		<default>kdiff3</default>
 		</entry>
@@ -102,113 +92,99 @@
 		<default>255, 159, 144</default>
 		</entry>
 	</group>
+	<group name="queue">
+		<entry name="forceConf" type="Bool">
+		<default>false</default>
+		</entry>
+		<entry name="download" type="Bool">
+		<default>false</default>
+		</entry>
+		<entry name="noWorld" type="Bool">
+		<default>true</default>
+		</entry>
+		<entry name="remove" type="Bool">
+		<default>false</default>
+		</entry>
+	</group>
 	<group name="make.conf">
 		<entry name="AcceptKeywords" type="String">
-			</entry>
+		</entry>
 		<entry name="AutoClean" type="String">
-			</entry>
+		</entry>
 		<entry name="BuildPrefix" type="String">
-			</entry>
+		</entry>
 		<entry name="CBuild" type="String">
-			</entry>
+		</entry>
 		<entry name="CCacheSize" type="String">
-			</entry>
+		</entry>
 		<entry name="CFlags" type="String">
-			</entry>
+		</entry>
 		<entry name="CXXFlags" type="String">
-			</entry>
-			<entry name="Chost" type="String">
-			</entry>
+		</entry>
+		<entry name="Chost" type="String">
+		</entry>
 		<entry name="CleanDelay" type="String">
-			</entry>
+		</entry>
 		<entry name="ConfigProtect" type="String">
-			</entry>
+		</entry>
 		<entry name="ConfigProtectMask" type="String">
-			</entry>
+		</entry>
 		<entry name="DebugBuild" type="String">
-			</entry>
+		</entry>
 		<entry name="DirDist" type="String">
-			</entry>
+		</entry>
 		<entry name="Features" type="String">
-			</entry>
+		</entry>
 		<entry name="FetchCommand" type="String">
-			</entry>
+		</entry>
 		<entry name="GentooMirrors" type="String">
-			</entry>
+		</entry>
 		<entry name="Proxy" type="String">
-			</entry>
-			<entry name="MakeOpts" type="String">
-			</entry>
+		</entry>
+		<entry name="MakeOpts" type="String">
+		</entry>
 		<entry name="NoColor" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPkgTmp" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPkg" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPortLog" type="String">
-			</entry>
+		</entry>
 		<entry name="PortageBinHost" type="String">
-			</entry>
+		</entry>
 		<entry name="PortageNiceness" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPortageTmp" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPortage" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPortageOverlayAll" type="String">
-			</entry>
+		</entry>
 		<entry name="DirPortageOverlay" type="String">
-			</entry>
+		</entry>
 		<entry name="ResumeCommand" type="String">
-			</entry>
+		</entry>
 		<entry name="Root" type="String">
-			</entry>
+		</entry>
 		<entry name="RsyncExcludeFrom" type="String">
-			</entry>
+		</entry>
 		<entry name="RsyncProxy" type="String">
-			</entry>
+		</entry>
 		<entry name="RsyncRetries" type="String">
-			</entry>
+		</entry>
 		<entry name="RsyncRateLimit" type="String">
-			</entry>
+		</entry>
 		<entry name="RsyncTimeOut" type="String">
-			</entry>
+		</entry>
 		<entry name="DirRpm" type="String">
-			</entry>
+		</entry>
 		<entry name="Sync" type="String">
-			</entry>
+		</entry>
 		<entry name="Use" type="String">
-			</entry>
+		</entry>
 		<entry name="UseOrder" type="String">
-			</entry>
-	</group>
-		<group name="emergeFiles"> 
-			<entry name="packageKeywords" type="String">
-			</entry>
-		<entry name="packageUnmask" type="String">
-			</entry>
-		<entry name="packageMask" type="String">
-			</entry>
-	</group>
-	<group name="portageSize"> 
-			<entry name="scanSizeDate" type="String">
-			</entry>
-			<entry name="diskUsageportage" type="String">
-			</entry>
-			<entry name="diskUsagedep" type="String">
-			</entry>
-			<entry name="diskUsagepkg" type="String">
-			</entry>
-			<entry name="diskUsagelocalportage" type="String">
-			</entry>
-			<entry name="diskUsagehome" type="String">
-			</entry>
-			<entry name="diskUsageusrportage" type="String">
-			</entry>
-			<entry name="diskUsagedistfiles" type="String">
-			</entry>
-			<entry name="diskUsagePkgDir" type="String">
-			</entry>
+		</entry>
 	</group>
 	<group name="etcUpdateWarnings"> 
 		<entry name="etcFiles" type="String">

@@ -97,7 +97,7 @@ public slots:
 	* Launch emerge package list
 	* @param packageList
 	*/
-	void					installQueue( const QString& emergeOptions, const QStringList& endUserList );
+	void					installQueue( const QStringList& packageList );
 	
 	void					setRemoveInstalled( bool removeInstalled );
 	

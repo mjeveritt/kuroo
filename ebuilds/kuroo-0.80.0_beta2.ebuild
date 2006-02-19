@@ -5,7 +5,7 @@ inherit kde
 
 DESCRIPTION="A KDE Portage frontend"
 HOMEPAGE="http://tux.myftp.org/kuroo"
-SRC_URI="svn://tux.myftp.org/repos/packages/${P}.tar.bz2"
+SRC_URI="http://tux.myftp.org/kuroo/chrome/site/packages/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"

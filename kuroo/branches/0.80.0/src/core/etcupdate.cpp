@@ -31,7 +31,8 @@
  * The external diff tool is launched for merging changes in etc config files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
-	: QObject( m_parent, name ), noFiles( true )
+	: QObject( m_parent, name ), 
+	noFiles( true ), count( 0 ), totalEtcCount( 0 )
 {
 	eProc = new KProcIO();
 }
@@ -72,6 +73,8 @@ bool EtcUpdate::etcUpdate()
 		etcUpdateLines.clear();
 		diffSource = QString::null;
 		noFiles = true;
+		count = 1;
+		totalEtcCount = 0;
 		
 		eProc->resetAll();
 		*eProc << "etc-update" ;
@@ -135,8 +138,8 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
  */
 void EtcUpdate::runDiff()
 {
-	static int count( 1 );
-	static int totalEtcCount( 0 );
+// 	static int count( 1 );
+// 	static int totalEtcCount( 0 );
 	QString etcWarning;
 	
 	// Add date tag in the log

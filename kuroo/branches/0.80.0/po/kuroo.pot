@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-19 14:19+0100\n"
+"POT-Creation-Date: 2006-02-19 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,7 +119,7 @@ msgid "Do you want to abort the running installation?"
 msgstr ""
 
 #: queue/queuetab.cpp:364 core/emerge.cpp:450 core/emerge.cpp:522
-#: core/cacheportagejob.cpp:185 core/etcupdate.cpp:120
+#: core/cacheportagejob.cpp:185 core/etcupdate.cpp:123
 #: core/scanportagejob.cpp:344 core/scanportagejob.cpp:418
 #: core/scanupdatesjob.cpp:154 core/portagefiles.cpp:145
 #: core/portagefiles.cpp:234 core/portagefiles.cpp:323
@@ -316,79 +316,79 @@ msgstr ""
 msgid "Creating cache. Error reading: "
 msgstr ""
 
-#: core/etcupdate.cpp:56
+#: core/etcupdate.cpp:57
 msgid ""
 "<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to "
 "merge changes?</qt>"
 msgstr ""
 
-#: core/etcupdate.cpp:56 core/etcupdate.cpp:70 core/etcupdate.cpp:184
+#: core/etcupdate.cpp:57 core/etcupdate.cpp:71 core/etcupdate.cpp:187
 #: main.cpp:41 rc.cpp:186
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
 
-#: core/etcupdate.cpp:70
+#: core/etcupdate.cpp:71
 msgid "Please specify merge tool in settings!"
 msgstr ""
 
-#: core/etcupdate.cpp:80
+#: core/etcupdate.cpp:83
 msgid ""
 "\n"
 "etc-update didn't start. "
 msgstr ""
 
-#: core/etcupdate.cpp:86
+#: core/etcupdate.cpp:89
 msgid ""
 "\n"
 "Running etc-update..."
 msgstr ""
 
-#: core/etcupdate.cpp:87
+#: core/etcupdate.cpp:90
 msgid "Checking for configuration file updates..."
 msgstr ""
 
-#: core/etcupdate.cpp:126
+#: core/etcupdate.cpp:129
 msgid "There are no files that need to be updated through etc-update."
 msgstr ""
 
-#: core/etcupdate.cpp:126 kurooview.cpp:81
+#: core/etcupdate.cpp:129 kurooview.cpp:81
 msgid "Etc-update"
 msgstr ""
 
-#: core/etcupdate.cpp:167
+#: core/etcupdate.cpp:170
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr ""
 
-#: core/etcupdate.cpp:170
+#: core/etcupdate.cpp:173
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
 msgstr ""
 
-#: core/etcupdate.cpp:170
+#: core/etcupdate.cpp:173
 msgid "etc-update (%1 of %2)"
 msgstr ""
 
-#: core/etcupdate.cpp:183
+#: core/etcupdate.cpp:186
 msgid "%1 didn't start."
 msgstr ""
 
-#: core/etcupdate.cpp:184
+#: core/etcupdate.cpp:187
 msgid "%1 could not start!"
 msgstr ""
 
-#: core/etcupdate.cpp:188
+#: core/etcupdate.cpp:191
 msgid "Merging changes in '%1'."
 msgstr ""
 
-#: core/etcupdate.cpp:197
+#: core/etcupdate.cpp:200
 msgid "Skipping '%1'. etc-update will ask again next time."
 msgstr ""
 
-#: core/etcupdate.cpp:204
+#: core/etcupdate.cpp:207
 msgid "etc-update completed."
 msgstr ""
 
-#: core/etcupdate.cpp:217
+#: core/etcupdate.cpp:220
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr ""
 

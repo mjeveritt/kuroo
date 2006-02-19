@@ -54,6 +54,7 @@ signals:
 	void				signalEtcFileMerged();
 	
 private:
+	int 				count, totalEtcCount;
 	QObject*			m_parent;
 	KProcIO*			eProc;
 	QStringList			etcUpdateLines;

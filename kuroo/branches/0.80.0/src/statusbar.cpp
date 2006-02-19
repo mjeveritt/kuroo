@@ -101,14 +101,17 @@ void KurooStatusBar::setTotalSteps( int total )
 {
 	kdDebug() << "KurooStatusBar::setTotalSteps total=" << total << endl;
 	
+	stopTimer();
+	statusBarProgress->setTextEnabled( true );
+	statusBarProgress->setTotalSteps( total );
+	
 	if ( total == 0 )
 		statusBarProgress->hide();
 	else
-		if ( !statusBarProgress->isVisible() )
+		if ( !statusBarProgress->isVisible() ) {
 			statusBarProgress->show();
-	
-	statusBarProgress->setTextEnabled( true );
-	statusBarProgress->setTotalSteps( total );
+			startTimer();
+		}
 }
 
 /**

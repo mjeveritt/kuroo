@@ -4,8 +4,8 @@
 inherit kde
 
 DESCRIPTION="A KDE Portage frontend"
-HOMEPAGE="http://tux.myftp.org/kuroo"
-SRC_URI="http://tux.myftp.org/kuroo/chrome/site/packages/${P}.tar.bz2"
+HOMEPAGE="http://kuroo.org"
+SRC_URI="http://kuroo.org/chrome/site/packages/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"

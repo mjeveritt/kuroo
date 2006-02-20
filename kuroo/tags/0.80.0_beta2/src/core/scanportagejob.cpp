@@ -255,8 +255,10 @@ bool ScanPortageJob::doJob()
 						kdDebug() << i18n("Scanning Portage. Scanning Portage cache: can not match package %1.").arg( *itPackage ) << endl;
 					
 					// Post scan count progress
-					if ( ( ++count % 100 ) == 0 )
+					if ( ( ++count % 100 ) == 0 ) {
 						setProgress( count );
+						kdDebug() << "ScanPortageJob::doJob count=" << count << endl;
+					}
 				}
 			}
 			else

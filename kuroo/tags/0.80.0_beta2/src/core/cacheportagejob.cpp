@@ -183,6 +183,7 @@ bool CachePortageJob::doJob()
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	
 	setStatus( "CachePortage", i18n("Done.") );
+	setProgress( 0 );
 	return true;
 }
 

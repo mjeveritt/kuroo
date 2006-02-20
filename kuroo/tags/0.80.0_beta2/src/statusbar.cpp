@@ -113,6 +113,21 @@ void KurooStatusBar::setTotalSteps( int total )
 }
 
 /**
+ * Set total.
+ */
+void KurooStatusBar::setThreadTotalSteps( int total )
+{
+	statusBarProgress->setTextEnabled( true );
+	statusBarProgress->setTotalSteps( total );
+	
+	if ( total == 0 )
+		statusBarProgress->hide();
+	else
+		if ( !statusBarProgress->isVisible() )
+			statusBarProgress->show();
+}
+
+/**
  * View progress.
  * @param steps		in %
  */

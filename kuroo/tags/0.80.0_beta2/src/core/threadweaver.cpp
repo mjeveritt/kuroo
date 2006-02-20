@@ -261,11 +261,11 @@ void ThreadWeaver::Job::setProgressTotalSteps( uint steps )
 {
 	if ( steps == 0 ) {
 		kdDebug() << "You can't set steps to 0!\n";
-		KurooStatusBar::instance()->setTotalSteps( 0 );
+		KurooStatusBar::instance()->setThreadTotalSteps( 0 );
 		steps = 1;
 	}
 	else
-		KurooStatusBar::instance()->setTotalSteps( 100 );
+		KurooStatusBar::instance()->setThreadTotalSteps( 100 );
 	
 	m_totalSteps = steps;
 

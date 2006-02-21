@@ -15,6 +15,6 @@ IUSE="debug"
 RDEPEND="app-portage/gentoolkit
 	!app-portage/guitoo
 	|| (kde-misc/kdiff3 kde-base/kdesdk)
-	|| (kde-base/dcoprss§ kde-base/kdenetwork)"
+	|| (kde-base/dcoprss kde-base/kdenetwork)"
 
 need-kde 3.4

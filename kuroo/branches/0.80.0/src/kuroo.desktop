@@ -14,6 +14,5 @@ StartupNotify=true
 Terminal=true
 TerminalOptions=
 Type=Application
-X-DCOP-ServiceType=Unique
 X-KDE-SubstituteUID=false
 X-KDE-Username=Kuroo

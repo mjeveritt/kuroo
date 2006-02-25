@@ -77,7 +77,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Toggle Queue button
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
-	connect( packagesView, SIGNAL( signalStatusChanged( bool ) ), this, SLOT( slotButtons( bool ) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
@@ -156,9 +156,9 @@ void PortageTab::slotInitButtons()
  * Toggle Add/Remove to Queue button.
  * @param isQueued
  */
-void PortageTab::slotButtons( bool isQueued )
+void PortageTab::slotButtons()
 {
-	if ( isQueued )
+	if ( packagesView->currentPackage()->isQueued() )
 		pbQueue->setText( i18n("Remove from Queue") );
 	else
 		pbQueue->setText( i18n("Add to Queue") );
@@ -279,6 +279,40 @@ void PortageTab::slotRefresh()
 	}
 }
 
+/**
+ * Append or remove package to the queue. @fixme: What if package not in portage is in list?
+ */
+void PortageTab::slotQueue()
+{
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
+		if ( packagesView->currentPackage()->isQueued() )
+			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
+		else
+			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
+	}
+}
+
+/**
+ * Uninstall selected package.
+ */
+void PortageTab::slotUninstall()
+{
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+		const QStringList selectedList = packagesView->selectedId();
+		
+		// Pick only installed packages
+		QStringList packageList;
+		foreach ( selectedList ) {
+			if ( packagesView->itemId( *it )->isInstalled() ) {
+				packageList += *it;
+				packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + packagesView->itemId( *it )->name();
+			}
+		}
+		
+		uninstallInspector->view( packageList );
+	}
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Package slots
@@ -300,6 +334,8 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
+// 	kdDebug() << "PortageTab::slotPackage" << endl;
+	
 	if ( !isVisible() )
 		return;
 	
@@ -451,40 +487,6 @@ void PortageTab::slotPackage()
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
 		m_packageInspector->edit( packagesView->currentPackage() );
-}
-
-/**
- * Append or remove package to the queue. @fixme: What if package not in portage is in list?
- */
-void PortageTab::slotQueue()
-{
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		if ( packagesView->currentPackage()->isQueued() )
-			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
-		else
-			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
-	}
-}
-
-/**
- * Uninstall selected package.
- */
-void PortageTab::slotUninstall()
-{
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		const QStringList selectedList = packagesView->selectedId();
-		
-		// Pick only installed packages
-		QStringList packageList;
-		foreach ( selectedList ) {
-			if ( packagesView->itemId( *it )->isInstalled() ) {
-				packageList += *it;
-				packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + packagesView->itemId( *it )->name();
-			}
-		}
-		
-		uninstallInspector->view( packageList );
-	}
 }
 
 /**

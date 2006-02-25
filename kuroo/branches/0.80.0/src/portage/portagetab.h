@@ -50,7 +50,7 @@ private slots:
 	void 				slotInit();
 	void				slotBusy( bool b );
 	void				slotInitButtons();
-	void				slotButtons( bool isQueued );
+	void				slotButtons();
 	void				slotListSubCategories();
 	void				slotFilters();
 	void				slotActivateFilters();

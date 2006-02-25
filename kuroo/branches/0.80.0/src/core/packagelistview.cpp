@@ -37,7 +37,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	setSelectionModeExt( FileManager );
 	header()->setStretchEnabled( false );
 	
-	// Update visible items when is changed
+	// Update visible items when world is changed
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	
 	new ToolTip( this );

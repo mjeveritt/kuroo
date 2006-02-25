@@ -50,6 +50,7 @@ public slots:
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
 	void		startInstallQueue();
+	void		packageChanged();
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -62,9 +63,7 @@ signals:
 	void		signalSyncDone();
 	void 		signalScanHistoryComplete();
 	void		signalInstalledChanged();
-	void		signalViewPackage( const QString& package );
-	void		signalSetQueued( const QString& idDB, bool b );
-	void		signalClearQueued();
+	void		signalPackageChanged();
 
 private:
 	QObject*	m_parent;

@@ -39,7 +39,7 @@ static int packageCount( 0 );
  * @short Package item with all versions.
  */
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status, const QString& homepage )
-	: PackageItem( parent, name, id, category, description, status ), m_homepage( homepage )
+	: PackageItem( parent, name, id, category, description, status ), m_parent( parent ), m_homepage( homepage )
 {
 }
 

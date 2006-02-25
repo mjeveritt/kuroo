@@ -69,6 +69,7 @@ private:
 	
 protected:
 	QString							m_homepage;
+	QListView						*m_parent;
 };
 
 #endif

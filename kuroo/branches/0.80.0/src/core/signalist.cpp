@@ -176,4 +176,9 @@ void Signalist::startInstallQueue()
 	emit signalEmergeQueue();
 }
 
+void Signalist::packageChanged()
+{
+	emit signalPackageChanged();
+}
+
 #include "signalist.moc"

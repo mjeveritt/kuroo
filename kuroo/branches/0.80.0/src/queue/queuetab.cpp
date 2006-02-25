@@ -245,7 +245,7 @@ void QueueTab::slotBusy( bool busy )
 		pbClear->setDisabled( true );
 		cbDownload->setDisabled( true );
 		cbForceConf->setDisabled( true );
-		cbRemove->setDisabled( true );
+// 		cbRemove->setDisabled( true );
 		cbNoWorld->setDisabled( true );
 	}
 	else {

@@ -61,7 +61,7 @@ protected:
 	QDict<PackageItem>		packageIndex;
 	
 signals:
-	void					signalStatusChanged( bool isQueued );
+	void					signalPackageChanged();
 	
 private:
 	

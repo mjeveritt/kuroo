@@ -55,7 +55,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
-	dialog->setMinimumSize( 600, 480 );
+	setInitialSize( QSize(600, 480) );
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();

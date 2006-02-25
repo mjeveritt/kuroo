@@ -114,9 +114,8 @@ public:
 					keywords += *tokenIterator + " ";
 					tokenIterator++;
 				}
-				if ( keywords.isEmpty() ) {
+				if ( keywords.isEmpty() )
 					keywords = "~*"; // in fact, it would be: m_keywords.prepend("~" + arch), but anyways
-				}
 
 				QString id = KurooDBSingleton::Instance()->singleQuery( 
 					" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "

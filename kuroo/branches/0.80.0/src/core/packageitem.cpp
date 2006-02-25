@@ -204,9 +204,16 @@ void PackageItem::setInstalled()
 	m_status = FILTER_INSTALLED_STRING;
 }
 
+/**
+ * Mark package as queued. Emit signal only if status is changed.
+ * @param isQueued
+ */
 void PackageItem::setQueued( bool isQueued )
 {
-	m_isQueued = isQueued;
+	if ( m_isQueued != isQueued ) {
+		m_isQueued = isQueued;
+		SignalistSingleton::Instance()->packageChanged();
+	}
 }
 
 /**

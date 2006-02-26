@@ -195,34 +195,17 @@ bool KurooDB::isValid()
 }
 
 /**
- * Return database structure version.
- */
-QString KurooDB::kurooDbVersion()
-{
-	return query( "SELECT version FROM dbInfo;" ).first();
-}
-
-/**
- * Set current db structure version.
- * @param version
- */
-void KurooDB::setKurooDbVersion( const QString& version )
-{
-	bool hasVersion = singleQuery("SELECT COUNT(version) FROM dbInfo LIMIT 0, 1;") == "0" ;
-	
-	if ( hasVersion )
-		insert( "INSERT INTO dbInfo (version) VALUES ('" + version + "');" );
-	else
-		query( "UPDATE dbInfo SET version = '" + version + ";" );
-}
-
-/**
  * Create all necessary tables.
  */
 void KurooDB::createTables( DbConnection *conn )
 {
 	query(" CREATE TABLE dbInfo ("
-	      " version VARCHAR(32) )"
+	      " version VARCHAR(32),"
+	      " updatesTotal INTEGER"
+		  " );", conn);
+	
+	query(" INSERT INTO dbInfo "
+	      " (version, updatesTotal) VALUES ('0', '0')"
 	      " ;", conn);
 	
 	query(" CREATE TABLE category ("
@@ -275,14 +258,6 @@ void KurooDB::createTables( DbConnection *conn )
 	      " status INTEGER, "
 	      " path VARCHAR(64), "
 	      " branch VARCHAR(32)"
-	      " );", conn);
-	
-	query(" CREATE TABLE updates ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER UNIQUE, "
-	      " installedVersion VARCHAR(32),"
-	      " updateFlags VARCHAR(32),"
-	      " useFlags VARCHAR(32)"
 	      " );", conn);
 	
 	query(" CREATE TABLE queue ("
@@ -445,6 +420,28 @@ void KurooDB::restoreBackup()
 			       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
 		}
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Queries for kuroo
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Return database structure version.
+ */
+QString KurooDB::kurooDbVersion()
+{
+	return query( "SELECT version FROM dbInfo;" ).first();
+}
+
+/**
+ * Set current db structure version.
+ * @param version
+ */
+void KurooDB::setKurooDbVersion( const QString& version )
+{
+	query( "UPDATE dbInfo SET version = '" + version + "' ;" );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1061,7 +1058,7 @@ QString KurooDB::packageTotal()
  */
 QString KurooDB::updatesTotal()
 {
-	return singleQuery( "SELECT COUNT(id) FROM updates LIMIT 1;" );
+	return singleQuery( "SELECT updatesTotal FROM dbInfo;" );
 }
 
 /**
@@ -1078,7 +1075,6 @@ QString KurooDB::queueTotal()
 void KurooDB::resetUpdates()
 {
 	query( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
-	query( "DELETE FROM updates;" );
 }
 
 /**

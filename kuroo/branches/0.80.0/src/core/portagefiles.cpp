@@ -101,7 +101,7 @@ public:
 			QString package = tokens[0];
 			
 			if ( !(*it).isEmpty() && rxAtom.exactMatch( package ) ) {
-					
+	
 				// Get the captured strings
 				QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 				QString name = rxAtom.cap( POS_PACKAGE );

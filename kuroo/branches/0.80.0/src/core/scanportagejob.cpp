@@ -255,10 +255,8 @@ bool ScanPortageJob::doJob()
 						kdDebug() << i18n("Scanning Portage. Scanning Portage cache: can not match package %1.").arg( *itPackage ) << endl;
 					
 					// Post scan count progress
-					if ( ( ++count % 100 ) == 0 ) {
+					if ( ( ++count % 100 ) == 0 )
 						setProgress( count );
-						kdDebug() << "ScanPortageJob::doJob count=" << count << endl;
-					}
 				}
 			}
 			else
@@ -342,6 +340,8 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE catSubCategory_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
+	
+	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET updatesTotal = '0';"), m_db );
 	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );

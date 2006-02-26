@@ -57,7 +57,6 @@ public:
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
 			                                              "WHERE name = '%1' AND updateVersion = '%2';" ).arg( name ).arg( version ), m_db );
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM updates WHERE idPackage = '%1';" ).arg( id ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}

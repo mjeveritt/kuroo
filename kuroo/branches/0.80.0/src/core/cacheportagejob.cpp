@@ -79,7 +79,6 @@ int CachePortageJob::countPackages()
 		if ( dPackage.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() + "/" + *it ) )
 			count += dPackage.entryList().count() - 2;
 	}
-	kdDebug() << "count=" << count << endl;
 	return count;
 }
 

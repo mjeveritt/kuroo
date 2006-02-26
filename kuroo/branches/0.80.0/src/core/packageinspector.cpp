@@ -151,6 +151,8 @@ void PackageInspector::slotNextPackage()
  */
 void PackageInspector::slotApply()
 {
+	kdDebug() << "PackageInspector::slotApply" << endl;
+	
 	if ( hasVersionSettingsChanged ) {
 		PortageFilesSingleton::Instance()->savePackageKeywords();
 		PortageFilesSingleton::Instance()->savePackageUserMask();

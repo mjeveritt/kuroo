@@ -38,9 +38,9 @@ PackageVersion::PackageVersion( PackageItem* package, const QString& version )
 	// Regexp for a revision number, which are everywhere
 	rxRevision("-r(\\d+)$"),
 	// Regexp for a version suffix, like in freetts-1.2_beta
-	rxSuffix("_(alpha|beta|pre|rc|p)(\\d?)(?:-r\\d+)?$"),
+	rxSuffix("_(alpha|beta|pre|rc|p)(\\d*)(?:-r\\d+)?$"),
 	// Regexp for a trailing character, like in util-linux-2.12i
-	rxTrailingChar("\\d([a-z])(?:_(?:alpha|beta|pre|rc|p)\\d?)?(?:-r\\d+)?$")
+	rxTrailingChar("\\d([a-z])(?:_(?:alpha|beta|pre|rc|p)\\d*)?(?:-r\\d+)?$")
 {
 }
 
@@ -99,7 +99,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	thisRevision = PackageVersion::revisionNumber( m_version, &revisionPos );
 	thisSuffix = PackageVersion::suffixNumber( m_version, &suffixPos );
 	thisTrailingChar = PackageVersion::trailingCharNumber( m_version, &trailingCharPos );
-	
+		
 	// determine the first non-base-version character
 	if ( trailingCharPos != -1 )
 		pos = trailingCharPos;
@@ -229,7 +229,7 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-// 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << " m_arch=" << m_arch << endl;
+// 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << endl;
 	
 	if ( m_isHardMasked == true )
 		return HARDMASKED;

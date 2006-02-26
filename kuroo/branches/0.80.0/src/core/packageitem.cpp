@@ -276,6 +276,7 @@ void PackageItem::initVersions()
 	
 	// Check if any of this package versions are hardmasked
 	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
+// 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -294,6 +295,7 @@ void PackageItem::initVersions()
 	
 	// Check if any of this package versions are unmasked
 	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
+// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -312,6 +314,7 @@ void PackageItem::initVersions()
 	
 	// Check if any of this package versions are user-masked
 	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
+// 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
 		
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,

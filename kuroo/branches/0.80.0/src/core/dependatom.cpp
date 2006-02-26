@@ -150,12 +150,18 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	
 	QValueList<PackageVersion*> versions = m_portagePackage->versionList();
 
+// 	kdDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan << endl;
+	
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-		if ( ( matchAllVersions == true ) ||
-		    ( matchBaseVersion == true  && (*versionIterator)->version().startsWith( m_version ) ) ||
-		    ( matchEqual       == true  && (*versionIterator)->version() == m_version ) ||
-		    ( matchEqual == false && matchGreaterThan == true  && (*versionIterator)->isNewerThan( m_version ) ) ||
+		
+// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() << endl;
+		
+		if (
+		    ( matchAllVersions == true ) ||
+		    ( matchBaseVersion == true && (*versionIterator)->version().startsWith( m_version ) ) ||
+		    ( matchEqual       == true && (*versionIterator)->version() == m_version ) ||
+		    ( /*matchEqual == false &&*/ matchGreaterThan == true && (*versionIterator)->isNewerThan( m_version ) ) ||
 		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan( m_version ) )
 		  )
 		{

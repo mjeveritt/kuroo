@@ -418,6 +418,8 @@ void PortageTab::slotPackage()
 					else
 						stability = i18n("Not available");
 		
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " stability=" << stability << endl;
+		
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		

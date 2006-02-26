@@ -685,10 +685,10 @@ void PortageFiles::refresh( int mask )
 			kdDebug() << i18n("Completed saving package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
 			break;
 		case 5:
-			kdDebug() << i18n("Completed saving unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
+			kdDebug() << i18n("Completed saving user masked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
 			break;
 		case 6:
-			kdDebug() << i18n("Completed saving unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
+			kdDebug() << i18n("Completed saving user unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
 			break;
 		case 7:
 			kdDebug() << i18n("Completed scanning user package use flags in %1.").arg( KurooConfig::filePackageUse() ) << endl;

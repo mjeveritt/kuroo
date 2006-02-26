@@ -273,12 +273,16 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString size = *it++;
 		QString version = *it;
 
+		kdDebug() << "1 QueueListView::insertPackageList size=" << size << endl;
+		
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		
 		// If version get size
-		if ( !version.isEmpty() )
+		if ( size == "0" )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
+		else
+			size = formatSize( size );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, description, status, duration );
@@ -300,7 +304,9 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			item->setText( 4, i18n("na") );
 		else
 			item->setText( 4, formatTime( duration ) );
-
+		
+		kdDebug() << "2 QueueListView::insertPackageList size=" << size << endl;
+		
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
 		else {
@@ -426,16 +432,13 @@ QString QueueListView::totalSize()
 QString QueueListView::formatSize( const QString& sizeString )
 {
 	QString total;
-	int size = sizeString.toInt();
+	QString tmp ( sizeString );
+	int size = tmp.remove(',').toInt();
 	
 	if ( size == 0 )
 		total = "0 kB ";
-	else {
-		if ( size < 1024 )
-			total = "1 kB ";
-		else
-			total = loc->formatNumber( (double)(size / 1024), 0 ) + " kB ";
-	}
+	else
+		total = loc->formatNumber( (double)size, 0 ) + " kB ";
 	
 	return total;
 }

@@ -276,7 +276,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		
-		// If version get size also
+		// If version get size
 		if ( !version.isEmpty() )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 
@@ -300,7 +300,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			item->setText( 4, i18n("na") );
 		else
 			item->setText( 4, formatTime( duration ) );
-		
+
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
 		else {

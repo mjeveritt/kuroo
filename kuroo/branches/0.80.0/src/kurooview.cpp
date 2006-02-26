@@ -188,13 +188,13 @@ void KurooView::slotCheckPortage()
 		hasHistoryRestored = false;
 	}
 	
-	if ( KurooDBSingleton::Instance()->packageTotal() == "0" )
+	if ( KurooDBSingleton::Instance()->isPackagesEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
 		tabPortage->slotReload();
 		tabQueue->slotReload( false );
 		
-		if ( KurooDBSingleton::Instance()->updatesTotal() == "0" )
+		if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
 			UpdatesSingleton::Instance()->slotRefresh();
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled

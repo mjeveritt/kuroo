@@ -201,11 +201,13 @@ void KurooDB::createTables( DbConnection *conn )
 {
 	query(" CREATE TABLE dbInfo ("
 	      " version VARCHAR(32),"
+	      " syncTimeStamp VARCHAR(16),"
 	      " updatesTotal INTEGER"
 		  " );", conn);
 	
 	query(" INSERT INTO dbInfo "
-	      " (version, updatesTotal) VALUES ('0', '0')"
+	      " (version, syncTimeStamp, updatesTotal) "
+	      " VALUES ('0', '0', '0')"
 	      " ;", conn);
 	
 	query(" CREATE TABLE category ("
@@ -442,6 +444,38 @@ QString KurooDB::kurooDbVersion()
 void KurooDB::setKurooDbVersion( const QString& version )
 {
 	query( "UPDATE dbInfo SET version = '" + version + "' ;" );
+}
+
+/**
+ * Return timestamp for last sync.
+ */
+QString KurooDB::lastSyncEntry()
+{
+	return singleQuery(" SELECT syncTimeStamp FROM dbInfo;");
+}
+
+/**
+ * Return the total number of packages.
+ */
+bool KurooDB::isPackagesEmpty()
+{
+	return singleQuery( " SELECT COUNT(id) FROM package LIMIT 1;" ) == "0";
+}
+
+/**
+ * Return the total number of updates.
+ */
+bool KurooDB::isUpdatesEmpty()
+{
+	return singleQuery( "SELECT updatesTotal FROM dbInfo;" ) == "0";
+}
+
+/**
+ * Return the total number of packages in queue.
+ */
+bool KurooDB::isQueueEmpty()
+{
+	return singleQuery( "SELECT COUNT(id) FROM queue LIMIT 1;" ) == "0";
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1046,30 +1080,6 @@ QStringList KurooDB::allStatistic()
 }
 
 /**
- * Return the total number of packages.
- */
-QString KurooDB::packageTotal()
-{
-	return singleQuery( " SELECT COUNT(id) FROM package LIMIT 1;" );
-}
-
-/**
- * Return the total number of updates.
- */
-QString KurooDB::updatesTotal()
-{
-	return singleQuery( "SELECT updatesTotal FROM dbInfo;" );
-}
-
-/**
- * Return the total number of packages in queue.
- */
-QString KurooDB::queueTotal()
-{
-	return singleQuery( "SELECT COUNT(id) FROM queue LIMIT 1;" );
-}
-
-/**
  * Clear all updates.
  */
 void KurooDB::resetUpdates()
@@ -1091,14 +1101,6 @@ void KurooDB::resetInstalled()
 QString KurooDB::lastHistoryEntry()
 {
 	return singleQuery(" SELECT timestamp FROM history WHERE id = (SELECT MAX(id) FROM history);");
-}
-
-/**
- * Return timestamp for last sync.
- */
-QString KurooDB::lastSyncEntry()
-{
-	return singleQuery(" SELECT timestamp FROM history WHERE id = (SELECT MAX(id) FROM history where package = '');");
 }
 
 void KurooDB::addEmergeInfo( const QString& einfo )

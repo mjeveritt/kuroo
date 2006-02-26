@@ -53,6 +53,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
+	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
 	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
@@ -167,6 +168,8 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
+	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
+	
 	m_hasCheckedQueue = hasCheckedQueue;
 	
 	queueView->insertPackageList( m_hasCheckedQueue );
@@ -215,26 +218,31 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy( bool busy )
 {
-// 	kdDebug() << "QueueTab::slotBusy busy=" << busy << endl;
+	kdDebug() << "QueueTab::slotBusy busy=" << busy << " m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
-		pbGo->setText( i18n( "Abort" ) );
+		pbGo->setText( i18n( "Abort Installation" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 	}
 	else {
+		pbGo->setText( i18n( "Start Installation" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		
 		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
-			pbGo->setText( i18n( "Start Installation" ) );
+			pbGo->setDisabled( false );
 			cbForceConf->setDisabled( false );
+			cbNoWorld->setDisabled( false );
+			cbRemove->setDisabled( false );
 		}
 		else {
-			pbGo->setText( i18n("Check Installation") );
+			pbGo->setDisabled( true );
 			cbForceConf->setDisabled( true );
+			cbNoWorld->setDisabled( true );
+			cbRemove->setDisabled( true );
 		}
 	}
 	
@@ -245,22 +253,16 @@ void QueueTab::slotBusy( bool busy )
 		pbClear->setDisabled( true );
 		cbDownload->setDisabled( true );
 		cbForceConf->setDisabled( true );
-// 		cbRemove->setDisabled( true );
 		cbNoWorld->setDisabled( true );
+		pbCheck->setDisabled( true );
 	}
 	else {
 		pbRemove->setDisabled( false );
 		pbAdvanced->setDisabled( false );
 		pbClear->setDisabled( false );
 		cbDownload->setDisabled( false );
-		cbRemove->setDisabled( false );
-		cbNoWorld->setDisabled( false );
+		pbCheck->setDisabled( false );
 	}
-	
-	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" )
-		pbGo->setDisabled( true );
-	else
-		pbGo->setDisabled( false );
 }
 
 /**
@@ -277,10 +279,12 @@ void QueueTab::slotButtons()
 	if ( !EmergeSingleton::Instance()->isRunning() ) {
 		pbRemove->setDisabled( false );
 		pbAdvanced->setDisabled( false );
+		pbCheck->setDisabled( false );
 	}
 	else {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
+		pbCheck->setDisabled( true );
 	}
 	
 	pbAdvanced->setDisabled( false );
@@ -290,6 +294,17 @@ void QueueTab::slotButtons()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Package slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Emerge all packages in the installation queue.
+ */
+void QueueTab::slotCheck()
+{
+	// Only user-end packages not the dependencies
+	QStringList packageList = queueView->allPackagesNoChildren();
+	
+	EmergeSingleton::Instance()->pretend( packageList );
+}
 
 /**
  * Emerge all packages in the installation queue.
@@ -304,12 +319,6 @@ void QueueTab::slotGo()
 	
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
-
-	// First we must run emerge pretend
-	if ( !m_hasCheckedQueue ) {
-		EmergeSingleton::Instance()->pretend( packageList );
-		return;
-	}
 	
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages

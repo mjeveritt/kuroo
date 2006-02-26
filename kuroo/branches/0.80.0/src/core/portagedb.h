@@ -179,9 +179,9 @@ public:
 	QStringList 	packageVersionsInfo( const QString& idPackage );
 	QString 		versionSize( const QString& idPackage, const QString& version );
 	QStringList		packageHardMaskInfo( const QString& id );
-	QString			packageTotal();
-	QString		 	updatesTotal();
-	QString			queueTotal();
+	bool			isPackagesEmpty();
+	bool		 	isUpdatesEmpty();
+	bool			isQueueEmpty();
 	QString		 	package( const QString& id );
 	QString		 	category( const QString& id );
 	

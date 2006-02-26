@@ -45,6 +45,7 @@ int main(int argc, char **argv)
 	about.addCredit("Alexander Reiterer", I18N_NOOP("German translation"), "alexander.reiterer@tuwien.ac.at");
 	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
 	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
+	about.addCredit("Konrad Mantorski", I18N_NOOP("Polish translation"), "konrad@mantorski.com");
 	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");
 	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
 	about.addCredit("Björn Balazs", I18N_NOOP("OpenUsability"), "B@lazs.de");

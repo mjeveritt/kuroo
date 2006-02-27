@@ -67,6 +67,8 @@ QueueListView::QueueItem::~QueueItem()
  */
 void QueueListView::QueueItem::setStart()
 {
+	kdDebug() << "QueueListView::QueueItem::setStart" << endl;
+	
 	m_isComplete = false;
 	m_isChecked = true;
 	repaint();
@@ -77,6 +79,8 @@ void QueueListView::QueueItem::setStart()
  */
 void QueueListView::QueueItem::setComplete()
 {
+	kdDebug() << "QueueListView::QueueItem::setComplete" << endl;
+	
 	m_progress = m_duration;
 	m_isComplete = true;
 	bar->setTextEnabled( true );

@@ -99,6 +99,8 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
+	kdDebug() << "KurooStatusBar::setTotalSteps total=" << total << endl;
+	
 	stopTimer();
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
@@ -117,6 +119,8 @@ void KurooStatusBar::setTotalSteps( int total )
  */
 void KurooStatusBar::setThreadTotalSteps( int total )
 {
+	kdDebug() << "KurooStatusBar::setThreadTotalSteps total=" << total << endl;
+	
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
 	
@@ -141,6 +145,8 @@ void KurooStatusBar::setProgress( int steps )
  */
 void KurooStatusBar::startTimer()
 {
+	kdDebug() << "KurooStatusBar::startTimer" << endl;
+	
 	internalTimer->start( 1000 );
 	timerSteps = 0;
 }
@@ -150,6 +156,8 @@ void KurooStatusBar::startTimer()
  */
 void KurooStatusBar::stopTimer()
 {
+	kdDebug() << "KurooStatusBar::stopTimer" << endl;
+	
 	internalTimer->stop();
 	diffTimer->stop();
 	statusBarProgress->setProgress( 0 );

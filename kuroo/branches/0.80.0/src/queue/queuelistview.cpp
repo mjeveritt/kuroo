@@ -156,7 +156,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
  * @short Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name ), loc( KGlobal::locale() ), m_id( QString::null )
+	: PackageListView( parent, name ), loc( KGlobal::locale() ), m_id( QString::null ), m_removeInstalled( false )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
@@ -203,6 +203,12 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 QueueListView::~QueueListView()
 {
 }
+
+void QueueListView::setRemoveInstalled( bool removeInstalled )
+{
+	m_removeInstalled = removeInstalled;
+}
+
 
 /**
  * Move the package up in the list.
@@ -466,7 +472,7 @@ void QueueListView::slotPackageStart( const QString& id )
  * Stop progressbar!
  * @param package id
  */
-void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled )
+void QueueListView::slotPackageComplete( const QString& id )
 {
 	if ( id.isEmpty() || !packageIndex[id] ) {
 		m_id = QString::null;
@@ -475,7 +481,7 @@ void QueueListView::slotPackageComplete( const QString& id, bool removeInstalled
 	else {
 		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
 		
-		if ( removeInstalled )
+		if ( m_removeInstalled )
 			packageIndex[id]->setVisible( false );
 	}
 	

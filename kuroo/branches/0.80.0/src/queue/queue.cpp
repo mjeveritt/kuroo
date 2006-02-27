@@ -134,7 +134,7 @@ void Queue::emergePackageComplete( const QString& package, int order, int total 
 {
 	internalTimer->stop();
 	QString id = KurooDBSingleton::Instance()->packageId( package );
-	emit signalPackageComplete( id, m_removeInstalled );
+	emit signalPackageComplete( id );
 }
 
 /**
@@ -247,10 +247,10 @@ void Queue::installQueue( const QStringList& packageList )
 	EmergeSingleton::Instance()->queue( packageList );
 }
 
-void Queue::setRemoveInstalled( bool removeInstalled )
-{
-	m_removeInstalled = removeInstalled;
-}
+// void Queue::setRemoveInstalled( bool removeInstalled )
+// {
+// 	m_removeInstalled = removeInstalled;
+// }
 
 #include "queue.moc"
 

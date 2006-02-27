@@ -189,7 +189,7 @@ QString History::packageTime( const QString& packageNoversion )
 void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanHistoryJob(this, lines) );
+	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
 }
 
 /**
@@ -251,7 +251,7 @@ void History::slotParse()
 					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
 				else
-					kdDebug() << i18n("Can not parse package in /var/log/emerge.log!") << endl;
+					kdDebug() << i18n("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << endl;
 			}
 			else // Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
@@ -265,7 +265,7 @@ void History::slotParse()
 					emit signalHistoryChanged();
 				}
 				else
-					kdDebug() << i18n("Can not parse package in /var/log/emerge.log!") << endl;
+					kdDebug() << i18n("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << endl;
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );

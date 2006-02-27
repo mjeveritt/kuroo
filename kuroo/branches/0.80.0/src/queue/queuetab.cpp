@@ -77,7 +77,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), queueView, SLOT( slotPackageComplete( const QString&, bool ) ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), queueView, SLOT( slotPackageProgress() ) );
 
 	// Update Queue summary timer
@@ -396,10 +396,11 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotRemoveInstalled()
 {
-	if ( cbRemove->isChecked() )
-		QueueSingleton::Instance()->setRemoveInstalled( true );
-	else
-		QueueSingleton::Instance()->setRemoveInstalled( false );
+	queueView->setRemoveInstalled( cbRemove->isChecked() );
+// 	if ( cbRemove->isChecked() )
+// 		QueueSingleton::Instance()->setRemoveInstalled( true );
+// 	else
+// 		QueueSingleton::Instance()->setRemoveInstalled( false );
 }
 
 /**

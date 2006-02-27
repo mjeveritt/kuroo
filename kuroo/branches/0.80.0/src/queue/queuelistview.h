@@ -41,6 +41,7 @@ public:
 	class					QueueItem;
 	
 public slots:
+	void					setRemoveInstalled( bool removeInstalled );
 	void					slotPackageUp();
 	void					slotPackageDown();
 	QStringList				allPackagesNoChildren();
@@ -51,7 +52,7 @@ public slots:
 	int						sumTime();
 	QString					totalTimeFormatted();
 	QString		 			totalSize();
-	void					slotPackageComplete( const QString& id, bool removeInstalled );
+	void					slotPackageComplete( const QString& id );
 	void					slotPackageStart( const QString& id );
 	void					slotPackageProgress();
 	
@@ -67,6 +68,7 @@ signals:
 	void					signalPackageEmerged();
 	
 private:
+	bool					m_removeInstalled;
 	KLocale 				*loc;
 	int 					sumSize;
 	QString					m_id;

@@ -52,13 +52,12 @@ public slots:
 	void					removePackageIdList( const QStringList& packageIdList );
     void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
-	void					setRemoveInstalled( bool removeInstalled );
 	
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );
 	void					signalPackageAdvance();
 	void					signalPackageStart( const QString& id );
-	void					signalPackageComplete( const QString& id, bool removeInstalled );
+	void					signalPackageComplete( const QString& id );
 	
 private:
 	QObject					*m_parent;

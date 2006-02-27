@@ -82,7 +82,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 
 	// Update Queue summary timer
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), this, SLOT( slotQueueSummary() ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString&, bool ) ), this, SLOT( slotQueueSummary() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), this, SLOT( slotQueueSummary() ) );
 	
 	slotInit();
 }
@@ -397,10 +397,6 @@ void QueueTab::slotRemove()
 void QueueTab::slotRemoveInstalled()
 {
 	queueView->setRemoveInstalled( cbRemove->isChecked() );
-// 	if ( cbRemove->isChecked() )
-// 		QueueSingleton::Instance()->setRemoveInstalled( true );
-// 	else
-// 		QueueSingleton::Instance()->setRemoveInstalled( false );
 }
 
 /**

@@ -305,8 +305,6 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		else
 			item->setText( 4, formatTime( duration ) );
 		
-		kdDebug() << "2 QueueListView::insertPackageList size=" << size << endl;
-		
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
 		else {

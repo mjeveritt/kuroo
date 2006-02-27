@@ -168,7 +168,7 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
-	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
+// 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
 	
 	m_hasCheckedQueue = hasCheckedQueue;
 	
@@ -218,7 +218,7 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy( bool busy )
 {
-	kdDebug() << "QueueTab::slotBusy busy=" << busy << " m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
+// 	kdDebug() << "QueueTab::slotBusy busy=" << busy << " m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );

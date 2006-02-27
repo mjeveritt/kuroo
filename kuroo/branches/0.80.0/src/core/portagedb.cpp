@@ -244,7 +244,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " date VARCHAR(32), "
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
-	      " updateVersion VARCHAR(32)); "
+	      " updateVersion VARCHAR(32) "
+	      " ); "
 	      " CREATE INDEX index_name_package ON package (name);"
 	      " CREATE INDEX index_description ON package (description);"
 	      , conn);

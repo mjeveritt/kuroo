@@ -104,13 +104,13 @@ public:
 		else {
 			
 			// Mark package as uninstalled or remove it if old
-			KurooDBSingleton::Instance()->query( QString( 
+			KurooDBSingleton::Instance()->query( QString(
 			                        "UPDATE package SET status = '%1' "
 			                        "WHERE status = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( 
+			KurooDBSingleton::Instance()->query( QString(
 									"DELETE FROM package "
 			                        "WHERE status = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( 
+			KurooDBSingleton::Instance()->query( QString(
 									"UPDATE version SET status = '%1' "
 									"WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);

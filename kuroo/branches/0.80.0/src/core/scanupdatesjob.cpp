@@ -95,19 +95,11 @@ bool ScanUpdatesJob::doJob()
 	                                    " updateVersion VARCHAR(32) "
 	                                    " );", m_db);
 	
-// 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE updates_temp ("
-// 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-// 	                                    " idPackage INTEGER UNIQUE, "
-// 	                                    " installedVersion VARCHAR(32),"
-// 	                                    " updateFlags VARCHAR(32),"
-// 	                                    " useFlags VARCHAR(32)"
-// 	                                    " );", m_db);
-	
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
 	KurooDBSingleton::Instance()->query( "UPDATE package_temp SET updateVersion = '';", m_db );
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	
-	int updatesCount;
+	int updatesCount( 0 );
 	EmergePackageList::ConstIterator itEnd = m_packageList.end();
 	for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 

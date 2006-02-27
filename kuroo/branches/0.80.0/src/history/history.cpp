@@ -244,7 +244,7 @@ void History::slotParse()
 			}
 			else // Emerge has started, signal queue to launch progressbar for this package
 			if ( line.contains( ">>> emerge" ) && isEmerging ) {
-				if ( rxPackage.search( emergeLine ) > -1 ) {
+				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
 					QString package = rxPackage.cap(6);
@@ -255,7 +255,7 @@ void History::slotParse()
 			}
 			else // Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
-				if ( rxPackage.search( emergeLine ) > -1 ) {
+				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
 					QString package = rxPackage.cap(6);

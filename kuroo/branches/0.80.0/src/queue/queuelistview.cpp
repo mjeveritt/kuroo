@@ -273,8 +273,6 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString size = *it++;
 		QString version = *it;
 
-		kdDebug() << "1 QueueListView::insertPackageList size=" << size << endl;
-		
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		

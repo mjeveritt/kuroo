@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-26 16:00+0100\n"
+"POT-Creation-Date: 2006-02-27 15:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,8 +39,8 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:299 queue/queuelistview.cpp:304
-#: queue/queuelistview.cpp:311
+#: queue/queuelistview.cpp:297 queue/queuelistview.cpp:302
+#: queue/queuelistview.cpp:307
 msgid "na"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 #: queue/queuetab.cpp:373 core/emerge.cpp:450 core/emerge.cpp:522
 #: core/cacheportagejob.cpp:184 core/etcupdate.cpp:123
 #: core/scanportagejob.cpp:346 core/scanportagejob.cpp:420
-#: core/scanupdatesjob.cpp:159 core/portagefiles.cpp:144
+#: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:144
 #: core/portagefiles.cpp:233 core/portagefiles.cpp:322
 #: core/portagefiles.cpp:411 history/history.cpp:295 history/history.cpp:296
 #: statusbar.cpp:94
@@ -467,39 +467,39 @@ msgstr ""
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:116
+#: core/scanupdatesjob.cpp:108
 msgid "Scanning updates. Scan aborted!"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:130
+#: core/scanupdatesjob.cpp:122
 msgid "Scanning updates. Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:359 core/portagedb.cpp:374
+#: core/portagedb.cpp:360 core/portagedb.cpp:375
 msgid "Creating backup of history. Error writing: %1."
 msgstr ""
 
-#: core/portagedb.cpp:387 core/portagedb.cpp:408
+#: core/portagedb.cpp:388 core/portagedb.cpp:409
 msgid "Restoring backup of history. Error reading: %1."
 msgstr ""
 
-#: core/portagedb.cpp:729
+#: core/portagedb.cpp:730
 msgid "Can not find package in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:747
+#: core/portagedb.cpp:748
 msgid "Can not find category in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:768
+#: core/portagedb.cpp:769
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:1173
+#: core/portagedb.cpp:1174
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1177
+#: core/portagedb.cpp:1178
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 
@@ -1259,18 +1259,22 @@ msgid "Norwegian translation"
 msgstr ""
 
 #: main.cpp:48
-msgid "Kuroo icons"
+msgid "Polish translation"
 msgstr ""
 
 #: main.cpp:49
+msgid "Kuroo icons"
+msgstr ""
+
+#: main.cpp:50
 msgid "Portage version code"
 msgstr ""
 
-#: main.cpp:50 main.cpp:51
+#: main.cpp:51 main.cpp:52
 msgid "OpenUsability"
 msgstr ""
 
-#: main.cpp:60
+#: main.cpp:61
 msgid "Kuroo is already running!"
 msgstr ""
 

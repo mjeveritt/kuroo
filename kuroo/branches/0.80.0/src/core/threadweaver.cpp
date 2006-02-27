@@ -30,7 +30,7 @@ ThreadWeaver::ThreadWeaver()
 
 ThreadWeaver::~ThreadWeaver()
 {
-	for( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it ) {
+	for ( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it ) {
 // 		kdDebug() << "ThreadWeaver::~ThreadWeaver Waiting on thread..." << endl;
 		(*it)->wait();
 // 		kdDebug() << "ThreadWeaver::~ThreadWeaver finished" << endl;
@@ -41,7 +41,7 @@ uint ThreadWeaver::jobCount( const QCString &name )
 {
 	uint count = 0;
 
-	for( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
+	for ( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 		if ( name == (*it)->name() )
 			count++;
 
@@ -102,7 +102,7 @@ int ThreadWeaver::abortAllJobsNamed( const QCString &name )
 {
 	int count = 0;
 
-	for( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
+	for ( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 		if ( name == (*it)->name() ) {
 			count++;
 			(*it)->abort();
@@ -113,7 +113,7 @@ int ThreadWeaver::abortAllJobsNamed( const QCString &name )
 
 ThreadWeaver::Thread* ThreadWeaver::gimmeThread()
 {
-	for( ThreadList::ConstIterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
+	for ( ThreadList::ConstIterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
 		if ( !(*it)->running() && (*it)->job() == 0 )
 			return *it;
 
@@ -253,7 +253,7 @@ ThreadWeaver::Job::Job( const char *name )
 
 ThreadWeaver::Job::~Job()
 {
-	if( m_thread->running() && m_thread->job() == this )
+	if ( m_thread->running() && m_thread->job() == this )
 		kdDebug() << "Deleting a job before its thread has finished with it!\n";
 }
 

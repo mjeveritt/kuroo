@@ -227,7 +227,7 @@ void QueueTab::slotBusy( bool busy )
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 	}
 	else {
-		pbGo->setText( i18n( "Start Installation" ) );
+		pbGo->setText( i18n( "Step &2: Start Installation" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );

@@ -29,14 +29,14 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_270206_db25";
+static const char version[] = "0.80.0_280206_db25";
 
 static KCmdLineOptions options[] =
 {
 	{ "option <argument>", I18N_NOOP("Initialize Kuroo with init"), 0 }, KCmdLineLastOption
 };
 
-int main(int argc, char **argv)
+int main( int argc, char **argv )
 {
 	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "karye@users.sourceforge.net");
@@ -52,8 +52,8 @@ int main(int argc, char **argv)
 	about.addCredit("Florian Graessle", I18N_NOOP("OpenUsability"), "holehan@gmx.de");
 	about.setHomepage("http://kuroo.org");
 	
-	KCmdLineArgs::init(argc, argv, &about);
-	KCmdLineArgs::addCmdLineOptions(options);
+	KCmdLineArgs::init( argc, argv, &about );
+	KCmdLineArgs::addCmdLineOptions( options );
 	KApplication app;
 	
     // register ourselves as a dcop client

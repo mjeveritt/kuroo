@@ -395,10 +395,10 @@
                                     <cstring>cbNoWorld</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Do not add the packages to the world profile (--oneshot)</string>
+                                    <string>Do not add the pac&amp;kages to the world profile (--oneshot)</string>
                                 </property>
                                 <property name="accel">
-                                    <string></string>
+                                    <string>Alt+K</string>
                                 </property>
                             </widget>
                             <spacer row="4" column="0">
@@ -433,13 +433,52 @@
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>layout10</cstring>
+                            <cstring>layout9</cstring>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="KTextBrowser" row="0" column="0" rowspan="1" colspan="3">
+                            <widget class="QPushButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pbCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Step &amp;1: Check Installation</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+1</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pbGo</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Step &amp;2: Start Installation</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+2</string>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="1" rowspan="2" colspan="1">
+                                <property name="name">
+                                    <cstring>spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>130</width>
+                                        <height>50</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KTextBrowser" row="0" column="0" rowspan="1" colspan="2">
                                 <property name="name">
                                     <cstring>queueBrowser</cstring>
                                 </property>
@@ -468,45 +507,6 @@
 &lt;font color="gray"&gt;Installation Queue is empty.&lt;/font&gt;</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>pbCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Chec&amp;k Packages</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="1" column="1">
-                                <property name="name">
-                                    <cstring>pbGo</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Start Installation</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <spacer row="1" column="2">
-                                <property name="name">
-                                    <cstring>spacer3</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
                         </grid>
                     </widget>
                 </grid>

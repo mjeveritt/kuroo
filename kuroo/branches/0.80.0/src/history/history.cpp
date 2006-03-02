@@ -107,8 +107,6 @@ void History::slotScanHistoryCompleted()
  */
 bool History::slotRefresh()
 {
-	kdDebug() << "History::slotRefresh" << endl;
-	
 	QString lastDate = KurooDBSingleton::Instance()->lastHistoryEntry();
 	if ( lastDate.isEmpty() )
 		lastDate = "0";

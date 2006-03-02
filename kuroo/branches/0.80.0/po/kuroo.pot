@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-02 07:43+0100\n"
+"POT-Creation-Date: 2006-03-02 08:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,31 +16,31 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:163 portage/portagelistview.cpp:87
+#: queue/queuelistview.cpp:159 portage/portagelistview.cpp:87
 #: portage/portagelistview.cpp:145 portage/portagelistview.cpp:147 rc.cpp:174
 #: rc.cpp:268
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:168 core/versionview.cpp:78
+#: queue/queuelistview.cpp:164 core/versionview.cpp:78
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:169 history/historylistview.cpp:56
+#: queue/queuelistview.cpp:165 history/historylistview.cpp:56
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:170 core/versionview.cpp:80
+#: queue/queuelistview.cpp:166 core/versionview.cpp:80
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:171
+#: queue/queuelistview.cpp:167
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:302 queue/queuelistview.cpp:307
-#: queue/queuelistview.cpp:312
+#: queue/queuelistview.cpp:298 queue/queuelistview.cpp:303
+#: queue/queuelistview.cpp:308
 msgid "na"
 msgstr ""
 
@@ -52,20 +52,20 @@ msgstr ""
 msgid "Package id is empty, skipping!"
 msgstr ""
 
-#: queue/queuetab.cpp:141
+#: queue/queuetab.cpp:143
 msgid ""
 "<qt><table width=300><tr><td>Instead of doing any package building, just "
 "perform fetches for all packages (the main package as well as all "
 "dependencies), grabbing all potential files.</td></tr></table></qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:144
+#: queue/queuetab.cpp:146
 msgid ""
 "<qt><table width=300><tr><td>Emerge as normal, but do not add the packages "
 "to the world profile for later updating.</td></tr></table></qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:146
+#: queue/queuetab.cpp:148
 msgid ""
 "<qt><table width=300><tr><td>Causes portage to disregard merge records "
 "indicating that a config fileinside of a CONFIG_PROTECT directory has been "
@@ -74,87 +74,87 @@ msgid ""
 "cause the file to always be merged.</td></tr></table></qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:203
+#: queue/queuetab.cpp:205
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:204
+#: queue/queuetab.cpp:206
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:205
+#: queue/queuetab.cpp:207
 msgid "Estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:206
+#: queue/queuetab.cpp:208
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:224
+#: queue/queuetab.cpp:226
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:230 rc.cpp:62
+#: queue/queuetab.cpp:232 rc.cpp:62
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:327
+#: queue/queuetab.cpp:329
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:327 queue/queuetab.cpp:339
+#: queue/queuetab.cpp:329 queue/queuetab.cpp:341
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:339
+#: queue/queuetab.cpp:341
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:368
+#: queue/queuetab.cpp:370
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:373 core/emerge.cpp:450 core/emerge.cpp:522
+#: queue/queuetab.cpp:375 core/emerge.cpp:450 core/emerge.cpp:523
 #: core/cacheportagejob.cpp:184 core/etcupdate.cpp:123
 #: core/scanportagejob.cpp:346 core/scanportagejob.cpp:420
 #: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:144
 #: core/portagefiles.cpp:233 core/portagefiles.cpp:322
-#: core/portagefiles.cpp:411 history/history.cpp:295 history/history.cpp:296
+#: core/portagefiles.cpp:411 history/history.cpp:293 history/history.cpp:294
 #: statusbar.cpp:94
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:448 portage/portagetab.cpp:408
+#: queue/queuetab.cpp:450 portage/portagetab.cpp:408
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:451 portage/portagetab.cpp:411
+#: queue/queuetab.cpp:453 portage/portagetab.cpp:411
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:454 portage/portagetab.cpp:414
+#: queue/queuetab.cpp:456 portage/portagetab.cpp:414
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:457 portage/portagetab.cpp:417
+#: queue/queuetab.cpp:459 portage/portagetab.cpp:417
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:459 portage/portagetab.cpp:419
+#: queue/queuetab.cpp:461 portage/portagetab.cpp:419
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:500 portage/portagetab.cpp:515 rc.cpp:25 rc.cpp:284
+#: queue/queuetab.cpp:502 portage/portagetab.cpp:515 rc.cpp:25 rc.cpp:284
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: queue/queuetab.cpp:501 portage/portagetab.cpp:516
+#: queue/queuetab.cpp:503 portage/portagetab.cpp:516
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:502 portage/portagetab.cpp:517
+#: queue/queuetab.cpp:504 portage/portagetab.cpp:517
 msgid "Remove from world"
 msgstr ""
 
@@ -232,58 +232,58 @@ msgstr ""
 msgid "There is no ebuilds to satisfy %1"
 msgstr ""
 
-#: core/emerge.cpp:455 core/emerge.cpp:526
+#: core/emerge.cpp:455 core/emerge.cpp:527
 msgid "Blocks"
 msgstr ""
 
-#: core/emerge.cpp:455 core/emerge.cpp:526
+#: core/emerge.cpp:455 core/emerge.cpp:527
 msgid "Packages are blocking emerge, please correct!"
 msgstr ""
 
-#: core/emerge.cpp:461 core/emerge.cpp:529
+#: core/emerge.cpp:461 core/emerge.cpp:530
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:461 core/emerge.cpp:529
+#: core/emerge.cpp:461 core/emerge.cpp:530
 msgid "Please check log for more information!"
 msgstr ""
 
-#: core/emerge.cpp:543
+#: core/emerge.cpp:544
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet. Ask the architecture porting team to test the package "
 "or test it for them and report your findings on Gentoo bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:544 core/emerge.cpp:549
+#: core/emerge.cpp:545 core/emerge.cpp:550
 msgid "<b>%1</b> is not available on your architecture %2!"
 msgstr ""
 
-#: core/emerge.cpp:548
+#: core/emerge.cpp:549
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture. If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:553
+#: core/emerge.cpp:554
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:555
+#: core/emerge.cpp:556
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:555 core/emerge.cpp:566
+#: core/emerge.cpp:556 core/emerge.cpp:567
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:564
+#: core/emerge.cpp:565
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:566
+#: core/emerge.cpp:567
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
@@ -727,72 +727,72 @@ msgstr ""
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:217
+#: history/history.cpp:215
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:218
+#: history/history.cpp:216
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:233
+#: history/history.cpp:231
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:234
+#: history/history.cpp:232
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:235
+#: history/history.cpp:233
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:242
+#: history/history.cpp:240
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:254
+#: history/history.cpp:252
 msgid "Can not parse package emerge start in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:268
+#: history/history.cpp:266
 msgid "Can not parse package emerge complete in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:270
+#: history/history.cpp:268
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:277
+#: history/history.cpp:275
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:283 history/history.cpp:284
+#: history/history.cpp:281 history/history.cpp:282
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:289 history/history.cpp:290
+#: history/history.cpp:287 history/history.cpp:288
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:307 rc.cpp:485
+#: history/history.cpp:305 rc.cpp:485
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:310
+#: history/history.cpp:308
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:311
+#: history/history.cpp:309
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:312
+#: history/history.cpp:310
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:313
+#: history/history.cpp:311
 msgid "terminating"
 msgstr ""
 
@@ -1321,18 +1321,14 @@ msgid ""
 "collected.</qt>"
 msgstr ""
 
-#: kurooview.cpp:135
-msgid "Initialize Kuroo"
+#: kurooview.cpp:135 kurooview.cpp:152
+msgid "Initialiazing Kuroo"
 msgstr ""
 
 #: kurooview.cpp:151
 msgid ""
 "<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
 "has changed.</qt>"
-msgstr ""
-
-#: kurooview.cpp:152
-msgid "Initialiazing Kuroo"
 msgstr ""
 
 #: kurooview.cpp:152

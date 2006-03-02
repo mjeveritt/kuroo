@@ -156,7 +156,8 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
  * @short Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name ), loc( KGlobal::locale() ), m_id( QString::null ), m_removeInstalled( false )
+	: PackageListView( parent, name ), 
+	loc( KGlobal::locale() ), m_id( QString::null )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
@@ -203,12 +204,6 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 QueueListView::~QueueListView()
 {
 }
-
-void QueueListView::setRemoveInstalled( bool removeInstalled )
-{
-	m_removeInstalled = removeInstalled;
-}
-
 
 /**
  * Move the package up in the list.
@@ -480,9 +475,6 @@ void QueueListView::slotPackageComplete( const QString& id )
 	}
 	else {
 		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
-		
-		if ( m_removeInstalled )
-			packageIndex[id]->setVisible( false );
 	}
 	
 	m_id = QString::null;

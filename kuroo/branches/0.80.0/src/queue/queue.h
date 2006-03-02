@@ -52,6 +52,8 @@ public slots:
 	void					removePackageIdList( const QStringList& packageIdList );
     void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
+	void					setRemoveInstalled( bool removeInstalled );
+	void					slotClearQueue();
 	
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );

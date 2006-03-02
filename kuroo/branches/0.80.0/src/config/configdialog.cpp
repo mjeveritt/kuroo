@@ -306,10 +306,8 @@ void ConfigDialog::readMakeConf()
 			}
 			
 			if ( (*it).contains( QRegExp("^\\bPORTDIR_OVERLAY\\b") ) ) {
-				if ( rx.search( *it ) > -1 ) {
-					KurooConfig::setDirPortageOverlayAll( rx.cap(4) );
+				if ( rx.search( *it ) > -1 )
 					KurooConfig::setDirPortageOverlay( rx.cap(4) );
-				}
 				else
 					kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY.") << endl;
 				continue;

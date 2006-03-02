@@ -6,11 +6,23 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>0</x>
+            <x>2</x>
             <y>0</y>
-            <width>538</width>
-            <height>481</height>
+            <width>550</width>
+            <height>440</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>550</width>
+            <height>440</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>550</width>
+            <height>440</height>
+        </size>
     </property>
     <property name="caption">
         <string>Form1</string>
@@ -25,6 +37,12 @@
         <widget class="QTabWidget" row="1" column="0">
             <property name="name">
                 <cstring>inspectorTabs</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>550</width>
+                    <height>380</height>
+                </size>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -330,141 +348,131 @@ and do not update further</string>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <spacer row="1" column="2">
                         <property name="name">
-                            <cstring>layout22</cstring>
+                            <cstring>spacer15</cstring>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <spacer row="1" column="2">
-                                <property name="name">
-                                    <cstring>spacer15</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <spacer row="0" column="3">
-                                <property name="name">
-                                    <cstring>spacer10_3</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>160</width>
-                                        <height>21</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QPushButton" row="1" column="3">
-                                <property name="name">
-                                    <cstring>pbUse</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>C&amp;alculate Use Flags</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Previous Package</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>t1_2</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>3</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>100</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>Add or Remove Use Flags support:</string>
-                                </property>
-                            </widget>
-                            <widget class="KListView" row="2" column="0" rowspan="1" colspan="4">
-                                <column>
-                                    <property name="text">
-                                        <string>Use</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <column>
-                                    <property name="text">
-                                        <string>Description</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>useView</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>300</height>
-                                    </size>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>cbVersionsUse</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>100</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel5_2_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Select version:</string>
-                                </property>
-                            </widget>
-                        </grid>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>124</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton" row="1" column="3">
+                        <property name="name">
+                            <cstring>pbUse</cstring>
+                        </property>
+                        <property name="text">
+                            <string>C&amp;alculate Use Flags</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+A</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Previous Package</string>
+                        </property>
                     </widget>
+                    <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>t1_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>100</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Add or Remove Use Flags support:</string>
+                        </property>
+                    </widget>
+                    <widget class="KListView" row="2" column="0" rowspan="1" colspan="4">
+                        <column>
+                            <property name="text">
+                                <string>Use</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Description</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>useView</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>0</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cbVersionsUse</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>100</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel5_2_3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Select version:</string>
+                        </property>
+                    </widget>
+                    <spacer row="0" column="2" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>spacer10_3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>280</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -722,14 +730,6 @@ and do not update further</string>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
                         <cstring>package2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
                     </property>
                     <property name="minimumSize">
                         <size>

@@ -474,6 +474,7 @@ void Emerge::slotCleanupQueue( KProcess* proc )
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
 	cleanup();
 	HistorySingleton::Instance()->updateStatistics();
+	emit signalEmergeComplete();
 }
 
 /**

@@ -194,10 +194,8 @@ bool KurooInit::getEnvironment()
 				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
 			
 			// Parse out first overlay directory, because can only handle one overlay
-			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) ) {
-				KurooConfig::setDirPortageOverlayAll( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0:" ) );
+			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) )
 				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
-			}
 			
 			success = true;
 		}

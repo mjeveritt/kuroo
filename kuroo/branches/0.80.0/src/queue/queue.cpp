@@ -104,6 +104,9 @@ Queue::Queue( QObject* m_parent )
 	// Clock timer for showing progress when emerging
 	internalTimer = new QTimer( this );
 	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
+	
+	// When all packages are emerged...
+	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotClearQueue() ) );
 }
 
 Queue::~Queue()
@@ -247,10 +250,23 @@ void Queue::installQueue( const QStringList& packageList )
 	EmergeSingleton::Instance()->queue( packageList );
 }
 
-// void Queue::setRemoveInstalled( bool removeInstalled )
-// {
-// 	m_removeInstalled = removeInstalled;
-// }
+/**
+ * User wants queue to be cleared after emerge is done.
+ * @param removeInstalled
+ */
+void Queue::setRemoveInstalled( bool removeInstalled )
+{
+	m_removeInstalled = removeInstalled;
+}
+
+/**
+ * Clear queue after all packages are emerged.
+ */
+void Queue::slotClearQueue()
+{
+	if ( m_removeInstalled )
+		reset();
+}
 
 #include "queue.moc"
 

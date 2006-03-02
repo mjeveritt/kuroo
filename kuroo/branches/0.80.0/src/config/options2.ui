@@ -756,7 +756,7 @@
                             </widget>
                             <widget class="QLineEdit" row="3" column="1">
                                 <property name="name">
-                                    <cstring>kcfg_DirPortageOverlayAll</cstring>
+                                    <cstring>kcfg_DirPortageOverlay</cstring>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="5" column="0">

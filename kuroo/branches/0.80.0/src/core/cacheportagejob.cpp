@@ -104,7 +104,7 @@ bool CachePortageJob::doJob()
 	
 	// Get list of categories in Portage and Overlays
 	QStringList pathList = KurooConfig::dirPortage();
-	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlayAll() );
+	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlay() );
 	foreach ( pathOverlays )
 		pathList += *it;
 	

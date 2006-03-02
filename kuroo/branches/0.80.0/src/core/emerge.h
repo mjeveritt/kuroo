@@ -68,6 +68,9 @@ private slots:
 	bool				countEtcUpdates( const QString& line );
 	void				askUnmaskPackage( const QString& packageKeyword );
 	
+signals:
+	void				signalEmergeComplete();
+	
 private:
 	QObject*			m_parent;
 	KProcIO*			eProc;

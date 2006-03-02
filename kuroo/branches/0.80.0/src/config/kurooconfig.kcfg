@@ -159,8 +159,6 @@
 		</entry>
 		<entry name="DirPortage" type="String">
 		</entry>
-		<entry name="DirPortageOverlayAll" type="String">
-		</entry>
 		<entry name="DirPortageOverlay" type="String">
 		</entry>
 		<entry name="ResumeCommand" type="String">

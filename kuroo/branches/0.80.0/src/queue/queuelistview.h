@@ -41,7 +41,6 @@ public:
 	class					QueueItem;
 	
 public slots:
-	void					setRemoveInstalled( bool removeInstalled );
 	void					slotPackageUp();
 	void					slotPackageDown();
 	QStringList				allPackagesNoChildren();
@@ -68,9 +67,8 @@ signals:
 	void					signalPackageEmerged();
 	
 private:
-	bool					m_removeInstalled;
 	KLocale 				*loc;
-	int 					sumSize;
+	int 					sumSize, m_order;
 	QString					m_id;
 };
 

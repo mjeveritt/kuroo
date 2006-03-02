@@ -138,11 +138,13 @@ void QueueTab::slotInit()
 	else
 		cbRemove->setChecked( false );
 	
+	slotRemoveInstalled();
+	
 	QToolTip::add( cbDownload, i18n( "<qt><table width=300><tr><td>Instead of doing any package building, "
 	                                 "just perform fetches for all packages (the main package as well as all dependencies), "
 	                                 "grabbing all potential files.</td></tr></table></qt>" ) );
-	QToolTip::add( cbNoWorld, i18n( "<qt><table width=300><tr><td>Emerge as normal, "
-	                                "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+	QToolTip::add( cbNoWorld, i18n(  "<qt><table width=300><tr><td>Emerge as normal, "
+	                                 "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
 	QToolTip::add( cbForceConf, i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
 	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
 	                                  "Portage will normally merge those files only once to prevent the user"
@@ -200,7 +202,7 @@ void QueueTab::slotPackageUseChanged()
 void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
-	QString queueBrowserLines( i18n( "<b>Summary</b><br>" ) );
+	QString queueBrowserLines( i18n(   "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
 			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( initialQueueTime );
 			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" ).arg( queueView->totalTimeFormatted() );
@@ -396,7 +398,7 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotRemoveInstalled()
 {
-	queueView->setRemoveInstalled( cbRemove->isChecked() );
+	QueueSingleton::Instance()->setRemoveInstalled( cbRemove->isChecked() );
 }
 
 /**

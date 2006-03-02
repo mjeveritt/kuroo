@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-28 21:53+0100\n"
+"POT-Creation-Date: 2006-03-02 07:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,31 +16,31 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:162 portage/portagelistview.cpp:87
+#: queue/queuelistview.cpp:163 portage/portagelistview.cpp:87
 #: portage/portagelistview.cpp:145 portage/portagelistview.cpp:147 rc.cpp:174
 #: rc.cpp:268
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:167 core/versionview.cpp:78
+#: queue/queuelistview.cpp:168 core/versionview.cpp:78
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:168 history/historylistview.cpp:56
+#: queue/queuelistview.cpp:169 history/historylistview.cpp:56
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:169 core/versionview.cpp:80
+#: queue/queuelistview.cpp:170 core/versionview.cpp:80
 msgid "Size"
 msgstr ""
 
-#: queue/queuelistview.cpp:170
+#: queue/queuelistview.cpp:171
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:307 queue/queuelistview.cpp:312
-#: queue/queuelistview.cpp:317
+#: queue/queuelistview.cpp:302 queue/queuelistview.cpp:307
+#: queue/queuelistview.cpp:312
 msgid "na"
 msgstr ""
 
@@ -48,7 +48,7 @@ msgstr ""
 msgid "Add result package list: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: queue/queue.cpp:170 queue/queue.cpp:184
+#: queue/queue.cpp:173 queue/queue.cpp:187
 msgid "Package id is empty, skipping!"
 msgstr ""
 
@@ -824,7 +824,7 @@ msgstr ""
 msgid "Failed to save. Please run as root."
 msgstr ""
 
-#: portage/portage.cpp:228 logs/log.cpp:59 config/configdialog.cpp:433
+#: portage/portage.cpp:228 logs/log.cpp:59 config/configdialog.cpp:431
 msgid "Saving"
 msgstr ""
 
@@ -1053,7 +1053,7 @@ msgstr ""
 msgid "Error parsing /etc/make.conf: can not parse MAKEOPTS."
 msgstr ""
 
-#: config/configdialog.cpp:248 config/configdialog.cpp:410
+#: config/configdialog.cpp:248 config/configdialog.cpp:408
 msgid "Error parsing /etc/make.conf: can not parse NOCOLOR."
 msgstr ""
 
@@ -1085,67 +1085,67 @@ msgstr ""
 msgid "Error parsing /etc/make.conf: can not parse PORTDIR."
 msgstr ""
 
-#: config/configdialog.cpp:314
+#: config/configdialog.cpp:312
 msgid "Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY."
 msgstr ""
 
-#: config/configdialog.cpp:322
+#: config/configdialog.cpp:320
 msgid "Error parsing /etc/make.conf: can not parse RESUMECOMMAND."
 msgstr ""
 
-#: config/configdialog.cpp:330
+#: config/configdialog.cpp:328
 msgid "Error parsing /etc/make.conf: can not parse ROOT."
 msgstr ""
 
-#: config/configdialog.cpp:338
+#: config/configdialog.cpp:336
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
 msgstr ""
 
-#: config/configdialog.cpp:346
+#: config/configdialog.cpp:344
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
 msgstr ""
 
-#: config/configdialog.cpp:354
+#: config/configdialog.cpp:352
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_RETRIES."
 msgstr ""
 
-#: config/configdialog.cpp:362
+#: config/configdialog.cpp:360
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT."
 msgstr ""
 
-#: config/configdialog.cpp:370
+#: config/configdialog.cpp:368
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT."
 msgstr ""
 
-#: config/configdialog.cpp:378
+#: config/configdialog.cpp:376
 msgid "Error parsing /etc/make.conf: can not parse RPMDIR."
 msgstr ""
 
-#: config/configdialog.cpp:386
+#: config/configdialog.cpp:384
 msgid "Error parsing /etc/make.conf: can not parse SYNC."
 msgstr ""
 
-#: config/configdialog.cpp:394
+#: config/configdialog.cpp:392
 msgid "Error parsing /etc/make.conf: can not parse USE."
 msgstr ""
 
-#: config/configdialog.cpp:402
+#: config/configdialog.cpp:400
 msgid "Error parsing /etc/make.conf: can not parse USE_ORDER."
 msgstr ""
 
-#: config/configdialog.cpp:416 config/configdialog.cpp:476
+#: config/configdialog.cpp:414 config/configdialog.cpp:474
 msgid "Error reading: %1"
 msgstr ""
 
-#: config/configdialog.cpp:433
+#: config/configdialog.cpp:431
 msgid "Failed to save %1. Please run as root."
 msgstr ""
 
-#: config/configdialog.cpp:466
+#: config/configdialog.cpp:464
 msgid "Parsing %1: can not match keyword %2."
 msgstr ""
 
-#: config/configdialog.cpp:582
+#: config/configdialog.cpp:580
 msgid "Error writing: %1"
 msgstr ""
 
@@ -1220,21 +1220,21 @@ msgstr ""
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:207
+#: kurooinit.cpp:205
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
-#: kurooinit.cpp:226
+#: kurooinit.cpp:224
 msgid "Error reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:263
+#: kurooinit.cpp:261
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:263
+#: kurooinit.cpp:261
 msgid "User permissions"
 msgstr ""
 
@@ -1321,7 +1321,7 @@ msgid ""
 "collected.</qt>"
 msgstr ""
 
-#: kurooview.cpp:135 kurooview.cpp:152
+#: kurooview.cpp:135
 msgid "Initialize Kuroo"
 msgstr ""
 
@@ -1329,6 +1329,10 @@ msgstr ""
 msgid ""
 "<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
 "has changed.</qt>"
+msgstr ""
+
+#: kurooview.cpp:152
+msgid "Initialiazing Kuroo"
 msgstr ""
 
 #: kurooview.cpp:152

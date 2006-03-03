@@ -509,27 +509,26 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	else
 		menuItem1 = menu.insertItem( i18n("&Remove from queue"), APPEND );
 	
-	int menuItem2 = menu.insertItem( i18n("&Uninstall"), UNINSTALL );
-	int menuItem3 = menu.insertItem( i18n( "Options..." ), OPTIONS );
-	int menuItem4 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
-	int menuItem5 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
+	int menuItem3 = menu.insertItem( i18n( "Details..." ), OPTIONS );
 	
+	int menuItem4;
+	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
+		menuItem4 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
+	else
+		menuItem4 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem4, false );
-	menu.setItemEnabled( menuItem5, false );
 	
-	// No access when kuroo is busy.
+	int menuItem2 = menu.insertItem( i18n("&Uninstall"), UNINSTALL );
+	
+	// No access when kuroo is busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInPortage() )
 		menu.setItemEnabled( menuItem1, false );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
 			menu.setItemEnabled( menuItem2, false );
 	
-	if ( KUser().isSuperUser() ) {
-		if ( dynamic_cast<PackageItem*>( item )->isInWorld() )
-			menu.setItemEnabled( menuItem5, true );
-		else
-			menu.setItemEnabled( menuItem4, true );
-	}
+	if ( KUser().isSuperUser() )
+		menu.setItemEnabled( menuItem4, true );
 	
 	switch( menu.exec( point ) ) {
 

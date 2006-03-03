@@ -159,7 +159,7 @@
                         <string></string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Clear search</string>
+                        <string>Clear filter</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0" rowspan="1" colspan="7">

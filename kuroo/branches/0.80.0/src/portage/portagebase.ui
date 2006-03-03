@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>688</width>
-            <height>618</height>
+            <height>545</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -421,6 +421,9 @@
                     <property name="name">
                         <cstring>searchFilter</cstring>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Filter packages here...</string>
+                    </property>
                 </widget>
                 <widget class="QButtonGroup" row="0" column="0">
                     <property name="name">
@@ -508,7 +511,7 @@
                         <string></string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Clear search</string>
+                        <string>Clear filter</string>
                     </property>
                 </widget>
                 <spacer row="0" column="1">

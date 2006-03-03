@@ -55,7 +55,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
-// 	setInitialSize( QSize(600, 500) );
+	setInitialSize( QSize(600, 500) );
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
@@ -157,6 +157,11 @@ void PackageInspector::slotApply()
 		PortageFilesSingleton::Instance()->savePackageKeywords();
 		PortageFilesSingleton::Instance()->savePackageUserMask();
 		PortageFilesSingleton::Instance()->savePackageUserUnMask();
+		
+		// Check if this version is in updates. If not add it! (Only for packages in world).
+		if ( PortageSingleton::Instance()->isInWorld( category + "/" + package ) )
+			UpdatesSingleton::Instance()->checkUpdates( m_id, "", dialog->versionsView->updateVersion(), dialog->versionsView->hasUpdate() );
+		
 	}
 	
 	if ( hasUseSettingsChanged ) {
@@ -377,7 +382,7 @@ void PackageInspector::showSettings()
 }
 
 /**
- * Apply stability settings from radiobuttons.
+ * Apply stability settings from radiobuttons. @fixme: use enum
  * @param the selected radiobutton
  */
 void PackageInspector::slotSetStability( int rbStability )
@@ -541,7 +546,7 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 {
 	dialog->useView->setDisabled( true );
 	
-	if (  dialog->inspectorTabs->currentPageIndex() == 1 ) {
+	if ( dialog->inspectorTabs->currentPageIndex() == 1 ) {
 		QStringList useList;
 		
 		QMap<QString, PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
@@ -722,6 +727,8 @@ void PackageInspector::slotCalculateUse()
 		LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.").arg( category ).arg( package ), ERROR );
 		slotParsePackageUse( eProc );
 	}
+	else
+		dialog->setDisabled( true );
 }
 
 /**
@@ -741,6 +748,8 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
  */
 void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
+	dialog->setDisabled( false );
+	
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
 	eProc = 0;

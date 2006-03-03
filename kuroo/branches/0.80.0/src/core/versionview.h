@@ -30,11 +30,16 @@ public:
     VersionView( QWidget *parent = 0, const char *name = 0 );
     ~VersionView();
 
-	class 	VersionItem;
+	class 		VersionItem;
 	
-	void	insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
-	void	usedForInstallation( const QString& version );
+	void		insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
+	void		usedForInstallation( const QString& version );
+	int			hasUpdate();
+	QString 	updateVersion();
 	
+private:
+	QString		m_emergeVersion;
+	int			m_installedIndex, m_emergeIndex;
 };
 
 #endif

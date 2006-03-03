@@ -386,13 +386,10 @@ void PortageTab::slotPackage()
 	else
 		lines += i18n("<font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr><tr><td>");
 	
-	QString linesAvailable;
-	QString linesInstalled;
-	QString linesEmergeVersion;
-	
 	// Now parse sorted list of versions for current package
+	QString installedVersion, emergeVersion, linesAvailable, linesInstalled, linesEmergeVersion;
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
-	bool versionNotInArchitecture = false;
+	bool versionNotInArchitecture( false );
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
 		
@@ -425,13 +422,14 @@ void PortageTab::slotPackage()
 		
 		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
-			linesInstalled += "<font color=darkGreen><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
+			installedVersion = (*sortedVersionIterator)->version();
+			linesInstalled += "<font color=darkGreen><b>" + installedVersion + "</b></font>, ";
+			m_packageInspector->dialog->cbVersionsInstalled->insertItem( installedVersion );
 		}
 		
 		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
-			linesEmergeVersion = (*sortedVersionIterator)->version();
+			emergeVersion = (*sortedVersionIterator)->version();
 			linesAvailable += (*sortedVersionIterator)->version() + ", ";
 		}
 		else
@@ -439,8 +437,8 @@ void PortageTab::slotPackage()
 				versionNotInArchitecture = true;
 			else
 				linesAvailable += "<font color=darkRed><b>" + (*sortedVersionIterator)->version() + "</b></font>, ";
-		
 	}
+	linesEmergeVersion = emergeVersion;
 	
 	// Remove trailing commas
 	linesInstalled.truncate( linesInstalled.length() - 2 );

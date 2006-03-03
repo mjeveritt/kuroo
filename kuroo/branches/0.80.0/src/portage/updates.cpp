@@ -72,6 +72,42 @@ private:
 };
 
 /**
+ * @class CheckUpdatesPackageJob
+ * @short Thread for marking packages as updates or donwgrades.
+ */
+class CheckUpdatesPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	CheckUpdatesPackageJob( QObject *dependent, const QString& id, const QString& updateVersion, int hasUpdate ) : DependentJob( dependent, "DBJob" ), 
+		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		
+		QString updateString;
+		if ( m_hasUpdate > 0 )
+			updateString = m_updateVersion + " (U)";
+		else
+			if ( m_hasUpdate < 0 )
+				updateString = m_updateVersion + " (D)";
+				
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';"
+				                                            ).arg( updateString ).arg( m_id ), m_db );
+		
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		UpdatesSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const 	QString m_id, m_updateVersion;
+	int 	m_hasUpdate;
+};
+
+/**
  * @class Updates
  * @short Object for update packages.
  */
@@ -137,6 +173,14 @@ bool Updates::slotLoadUpdates()
 void Updates::removePackage( const QString& package )
 {
 	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
+}
+
+/**
+ * Update packages when user changes package stability.
+ */
+void Updates::checkUpdates( const QString& id, const QString& installedVersion, const QString& emergeVersion, int hasUpdate )
+{
+	ThreadWeaver::instance()->queueJob( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
 }
 
 #include "updates.moc"

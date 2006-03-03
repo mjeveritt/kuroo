@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-02 08:57+0100\n"
+"POT-Creation-Date: 2006-03-03 08:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:164 core/versionview.cpp:78
+#: queue/queuelistview.cpp:164 core/versionview.cpp:85
 msgid "Version"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:166 core/versionview.cpp:80
+#: queue/queuelistview.cpp:166 core/versionview.cpp:87
 msgid "Size"
 msgstr ""
 
@@ -125,36 +125,36 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:450 portage/portagetab.cpp:408
+#: queue/queuetab.cpp:450 portage/portagetab.cpp:405
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:453 portage/portagetab.cpp:411
+#: queue/queuetab.cpp:453 portage/portagetab.cpp:408
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:456 portage/portagetab.cpp:414
+#: queue/queuetab.cpp:456 portage/portagetab.cpp:411
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:459 portage/portagetab.cpp:417
+#: queue/queuetab.cpp:459 portage/portagetab.cpp:414
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:461 portage/portagetab.cpp:419
+#: queue/queuetab.cpp:461 portage/portagetab.cpp:416
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:502 portage/portagetab.cpp:515 rc.cpp:25 rc.cpp:284
+#: queue/queuetab.cpp:502 portage/portagetab.cpp:513 rc.cpp:25 rc.cpp:284
 #, no-c-format
 msgid "Options..."
 msgstr ""
 
-#: queue/queuetab.cpp:503 portage/portagetab.cpp:516
+#: queue/queuetab.cpp:503 portage/portagetab.cpp:514
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:504 portage/portagetab.cpp:517
+#: queue/queuetab.cpp:504 portage/portagetab.cpp:515
 msgid "Remove from world"
 msgstr ""
 
@@ -495,11 +495,11 @@ msgstr ""
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:1174
+#: core/portagedb.cpp:1173
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1178
+#: core/portagedb.cpp:1177
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 
@@ -667,51 +667,51 @@ msgstr ""
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:239
+#: core/packageinspector.cpp:244
 msgid "Click for hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:257
+#: core/packageinspector.cpp:262
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:533 core/packageinspector.cpp:609
-#: core/packageinspector.cpp:634 core/packageinspector.cpp:668
-#: core/packageinspector.cpp:695 portage/portage.cpp:205
+#: core/packageinspector.cpp:538 core/packageinspector.cpp:614
+#: core/packageinspector.cpp:639 core/packageinspector.cpp:673
+#: core/packageinspector.cpp:700 portage/portage.cpp:205
 msgid "Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:610
+#: core/packageinspector.cpp:615
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:635
+#: core/packageinspector.cpp:640
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:669
+#: core/packageinspector.cpp:674
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:698
+#: core/packageinspector.cpp:703
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:722
+#: core/packageinspector.cpp:727
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:764
+#: core/packageinspector.cpp:773
 msgid "No use flags available."
 msgstr ""
 
-#: core/versionview.cpp:77
+#: core/versionview.cpp:84
 msgid " "
 msgstr ""
 
-#: core/versionview.cpp:79
+#: core/versionview.cpp:86
 msgid "Stability"
 msgstr ""
 
@@ -907,49 +907,49 @@ msgid ""
 "font></td></tr><tr><td>"
 msgstr ""
 
-#: portage/portagetab.cpp:451
+#: portage/portagetab.cpp:449
 msgid "<b>Versions installed:</b></font> "
 msgstr ""
 
-#: portage/portagetab.cpp:453
+#: portage/portagetab.cpp:451
 msgid "<b>Versions installed:</b></font> Not installed<br>"
 msgstr ""
 
-#: portage/portagetab.cpp:466
+#: portage/portagetab.cpp:464
 msgid "<b>Version used for installation:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:470
+#: portage/portagetab.cpp:468
 msgid ""
 "<b>Version used for installation: <font color=darkRed>No version available "
 "on %1</b>"
 msgstr ""
 
-#: portage/portagetab.cpp:473
+#: portage/portagetab.cpp:471
 msgid ""
 "<b>Version used for installation:</font> <font color=darkRed>No version "
 "available - please check advanced options</font></b>"
 msgstr ""
 
-#: portage/portagetab.cpp:479
+#: portage/portagetab.cpp:477
 msgid "<b>Versions available:</b> "
 msgstr ""
 
-#: portage/portagetab.cpp:481
+#: portage/portagetab.cpp:479
 msgid ""
 "<b>Versions available: <font color=darkRed>No version available on %1</"
 "font></b><br>"
 msgstr ""
 
-#: portage/portagetab.cpp:510
+#: portage/portagetab.cpp:508
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:512
+#: portage/portagetab.cpp:510
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:514
+#: portage/portagetab.cpp:512
 msgid "&Uninstall"
 msgstr ""
 

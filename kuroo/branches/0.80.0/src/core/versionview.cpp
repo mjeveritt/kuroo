@@ -34,6 +34,8 @@ class VersionView::VersionItem : public KListViewItem
 public:
 	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled );
 	
+	bool	isInstalled();
+	
 protected:
 	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 	
@@ -44,6 +46,11 @@ private:
 VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled )
 	: KListViewItem( parent, version ), m_isInstalled( isInstalled )
 {
+}
+
+bool VersionView::VersionItem::isInstalled()
+{
+	return m_isInstalled;
 }
 
 /**
@@ -72,7 +79,7 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
  * @short Version listview.
  */
 VersionView::VersionView( QWidget *parent, const char *name )
-	: KListView( parent, name )
+	: KListView( parent, name ), m_installedIndex( 0 ), m_emergeIndex( 0 ), m_emergeVersion( QString::null )
 {
 	addColumn( i18n( " " ) );
 	addColumn( i18n( "Version" ) );
@@ -106,10 +113,27 @@ void VersionView::usedForInstallation( const QString& version )
 {
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
-		if ( myChild->text(1) == version )
+		if ( dynamic_cast<VersionItem*>( myChild )->isInstalled() )
+			m_installedIndex = itemIndex( myChild );
+		
+		if ( myChild->text(1) == version ) {
 			myChild->setPixmap( 0, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+			m_emergeIndex = itemIndex( myChild );
+		}
 		myChild = myChild->nextSibling();
 	}
+	
+	m_emergeVersion = version;
+}
+
+int VersionView::hasUpdate()
+{
+	return m_emergeIndex - m_installedIndex;
+}
+
+QString VersionView::updateVersion()
+{
+	return m_emergeVersion;
 }
 
 #include "versionview.moc"

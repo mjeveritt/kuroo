@@ -452,7 +452,7 @@ void KurooDB::setKurooDbVersion( const QString& version )
  */
 QString KurooDB::lastSyncEntry()
 {
-	return singleQuery(" SELECT syncTimeStamp FROM dbInfo;");
+	return singleQuery("SELECT syncTimeStamp FROM dbInfo;");
 }
 
 /**
@@ -460,7 +460,7 @@ QString KurooDB::lastSyncEntry()
  */
 bool KurooDB::isPackagesEmpty()
 {
-	return singleQuery( " SELECT COUNT(id) FROM package LIMIT 1;" ) == "0";
+	return singleQuery( "SELECT COUNT(id) FROM package LIMIT 1;" ) == "0";
 }
 
 /**
@@ -490,7 +490,7 @@ bool KurooDB::isQueueEmpty()
 QStringList KurooDB::allCategories()
 {
 	QStringList resultList( "0" );
-	resultList += query( " SELECT name FROM category; " );
+	resultList += query( "SELECT name FROM category; " );
 	return resultList;
 }
 
@@ -499,7 +499,7 @@ QStringList KurooDB::allCategories()
  */
 QStringList KurooDB::allSubCategories()
 {
-	return query( " SELECT idCategory, id, name FROM subCategory ORDER BY name; " );
+	return query( "SELECT idCategory, id, name FROM subCategory ORDER BY name; " );
 }
 
 /**
@@ -905,8 +905,7 @@ bool KurooDB::isPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 {
-	query( "DELETE FROM packageUse WHERE idPackage = '" + id + "'" );
-	insert( "INSERT INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
+	insert( "REPLACE INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
 }
 
 /**
@@ -946,7 +945,7 @@ void KurooDB::setPackageUnTesting( const QString& id )
 	if ( keywords.isEmpty() )
 		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
 	else
-		query( " UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
+		query( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -963,7 +962,7 @@ void KurooDB::setPackageAvailable( const QString& id )
 	if ( keywords.isEmpty() )
 		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '-* -" + KurooConfig::arch() + "');" );
 	else
-		query( " UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		query( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -976,9 +975,9 @@ void KurooDB::clearPackageUnTesting( const QString& id )
 	
 	// If only testing keywords - remove it, else set only available keywords
 	if ( !keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
-		query( " DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+		query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		query( " UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		query( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -991,9 +990,9 @@ void KurooDB::clearPackageAvailable( const QString& id )
 	
 	// If only available keywords - remove it, else set only testing keyword
 	if ( !keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
-		query( " DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+		query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		query( " UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
+		query( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
 }
 
 /**
@@ -1045,7 +1044,7 @@ QStringList KurooDB::allQueuePackages()
  */
 QStringList KurooDB::allQueueId()
 {
-	return query( " SELECT idPackage FROM queue;" );
+	return query( "SELECT idPackage FROM queue;" );
 }
 
 /**
@@ -1053,7 +1052,7 @@ QStringList KurooDB::allQueueId()
  */
 QStringList KurooDB::allCache()
 {
-	return query(" SELECT package, size FROM cache ;");
+	return query("SELECT package, size FROM cache ;");
 }
 
 /**
@@ -1061,7 +1060,7 @@ QStringList KurooDB::allCache()
  */
 QStringList KurooDB::allHistory()
 {
-	return query( " SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;");
+	return query( "SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;");
 }
 
 /**
@@ -1069,7 +1068,7 @@ QStringList KurooDB::allHistory()
  */
 QStringList KurooDB::allMergeHistory()
 {
-	return query( " SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;");
+	return query( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;");
 }
 
 /**
@@ -1437,7 +1436,7 @@ void DbConnectionPool::createDbConnections()
 		enqueue(dbConn);
 		m_semaphore--;
 	}
-	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << endl;
+// 	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnection *DbConnectionPool::getDbConnection()

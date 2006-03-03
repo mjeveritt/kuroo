@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-03 08:41+0100\n"
+"POT-Creation-Date: 2006-03-03 16:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,8 +145,7 @@ msgstr ""
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:502 portage/portagetab.cpp:513 rc.cpp:25 rc.cpp:284
-#, no-c-format
+#: queue/queuetab.cpp:502 portage/portagetab.cpp:513
 msgid "Options..."
 msgstr ""
 
@@ -656,7 +655,7 @@ msgid "Package present in Queue"
 msgstr ""
 
 #: core/packageinspector.cpp:51
-msgid "Package Inspector"
+msgid "Package details"
 msgstr ""
 
 #: core/packageinspector.cpp:107 core/packageinspector.cpp:132
@@ -1367,6 +1366,11 @@ msgstr ""
 #: rc.cpp:15 rc.cpp:22
 #, no-c-format
 msgid "Abort running emerge process"
+msgstr ""
+
+#: rc.cpp:25 rc.cpp:284
+#, no-c-format
+msgid "Details..."
 msgstr ""
 
 #: rc.cpp:29

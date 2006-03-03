@@ -181,7 +181,7 @@
                                             <cstring>pbAdvanced</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Options...</string>
+                                            <string>Details...</string>
                                         </property>
                                         <property name="accel">
                                             <string></string>

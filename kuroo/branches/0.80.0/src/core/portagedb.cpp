@@ -1436,7 +1436,7 @@ void DbConnectionPool::createDbConnections()
 		enqueue(dbConn);
 		m_semaphore--;
 	}
-// 	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << endl;
+	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnection *DbConnectionPool::getDbConnection()

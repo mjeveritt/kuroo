@@ -158,7 +158,7 @@ in the official portage tree.</string>
                                             <cstring>textLabel3_2</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Used for installation</string>
+                                            <string>Emerge version</string>
                                         </property>
                                     </widget>
                                     <spacer row="1" column="2">

@@ -425,7 +425,7 @@ void PortageTab::slotPackage()
 		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			version = "<b>" + version + "</b>";
-			linesInstalled += "<font color=darkGreen>" + version + "</font>, ";
+			linesInstalled += version + ", ";
 			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
 		}
 		
@@ -433,14 +433,14 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			emergeVersion = (*sortedVersionIterator)->version();
 			linesEmergeVersion = version;
-			linesAvailable += version + ", ";
+			linesAvailable.prepend( version + ", " );
 		}
 		else {
 			if ( (*sortedVersionIterator)->isNotArch() )
 				versionNotInArchitecture = true;
 			else {
 				version = "<font color=darkRed><i>" + version + "</i></font>";
-				linesAvailable += version + ", ";
+				linesAvailable.prepend( version + ", " );
 			}
 		}
 		

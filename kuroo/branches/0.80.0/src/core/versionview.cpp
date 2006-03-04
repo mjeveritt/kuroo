@@ -64,12 +64,12 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 	if ( m_isInstalled ) {
 		font.setBold( true );
 		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, Qt::darkGreen );
+// 		m_cg.setColor( QColorGroup::Text, Qt::darkGreen );
 	}
 	else {
 		font.setBold( false );
 		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, Qt::black );
+// 		m_cg.setColor( QColorGroup::Text, Qt::black );
 	}
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }

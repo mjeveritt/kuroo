@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-04 17:10+0100\n"
+"POT-Creation-Date: 2006-03-04 18:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1474,7 +1474,7 @@ msgstr ""
 
 #: rc.cpp:95
 #, no-c-format
-msgid "Used for installation"
+msgid "Emerge version"
 msgstr ""
 
 #: rc.cpp:98

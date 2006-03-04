@@ -145,7 +145,11 @@
     </configurations>
   </kdevautoproject>
   <kdevcppsupport>
-    <references/>
+    <references>
+      <pcs>Qt</pcs>
+      <pcs>KDElibs</pcs>
+      <pcs>kuroo</pcs>
+    </references>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>

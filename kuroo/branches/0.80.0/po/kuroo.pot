@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-04 18:21+0100\n"
+"POT-Creation-Date: 2006-03-04 21:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -908,39 +908,39 @@ msgid ""
 msgstr ""
 
 #: portage/portagetab.cpp:456
-msgid "<tr><td width=30%><b>Installed versions:</b></font></td><td width=70%>"
+msgid "<tr><td width=10%><b>Installed versions:</b></font></td><td width=90%>"
 msgstr ""
 
 #: portage/portagetab.cpp:458
 msgid ""
-"<tr><td width=30%><b>Installed versions:</b></font></td><td width=70%>Not "
+"<tr><td width=10%><b>Installed versions:</b></font></td><td width=90%>Not "
 "installed</td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:471
-msgid "<tr><td width=30%><b>Emerge version:</b></td><td width=70%>"
+msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>"
 msgstr ""
 
 #: portage/portagetab.cpp:475
 msgid ""
-"<tr><td width=30%><b>Emerge version:</font></td><td width=70%><font "
+"<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available on %1</b></td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:478
 msgid ""
-"<tr><td width=30%><b>Emerge version:</font></td><td width=70%><font "
+"<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available - please check package details</font></"
 "b></td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:484
-msgid "<tr><td width=30%><b>Available versions:</b></td><td width=70%>"
+msgid "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>"
 msgstr ""
 
 #: portage/portagetab.cpp:486
 msgid ""
-"<tr><td width=30%><b>Available versions:</td><td width=70%><font "
+"<tr><td width=10%><b>Available&nbsp;versions:</td><td width=90%><font "
 "color=darkRed>No version available on %1</font></b></td></tr>"
 msgstr ""
 

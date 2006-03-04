@@ -50,10 +50,13 @@ void ToolTip::maybeTip( const QPoint& pos )
 		
       	// Get the section the mouse is in
 		int section = m_pParent->header()->sectionAt( pos.x() );
+		
       	// Get the rect of the whole item (the row for the tip)
 		QRect itemRect = m_pParent->itemRect( packageItem );
+		
       	// Get the rect of the whole section (the column for the tip)
 		QRect headerRect = m_pParent->header()->sectionRect( section );
+		
       	// "Intersect" row and column to get exact rect for the tip
 		QRect destRect( headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height() );
 		

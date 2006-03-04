@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-03 16:56+0100\n"
+"POT-Creation-Date: 2006-03-04 13:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -635,23 +635,23 @@ msgstr ""
 msgid "Completed saving user package use in %1."
 msgstr ""
 
-#: core/tooltip.cpp:66 core/tooltip.cpp:78
+#: core/tooltip.cpp:69 core/tooltip.cpp:81
 msgid "Package is installed"
 msgstr ""
 
-#: core/tooltip.cpp:69
+#: core/tooltip.cpp:72
 msgid "Package is not installed"
 msgstr ""
 
-#: core/tooltip.cpp:71
+#: core/tooltip.cpp:74
 msgid "Package not in Portage"
 msgstr ""
 
-#: core/tooltip.cpp:83
+#: core/tooltip.cpp:86
 msgid "Package present in World profile"
 msgstr ""
 
-#: core/tooltip.cpp:88
+#: core/tooltip.cpp:91
 msgid "Package present in Queue"
 msgstr ""
 
@@ -903,42 +903,46 @@ msgstr ""
 
 #: portage/portagetab.cpp:387
 msgid ""
-"<font color=darkRed><b>Package not available in Portage tree anymore!</b></"
-"font></td></tr><tr><td>"
+"<tr><td colspan=2><font color=darkRed><b>Package not available in Portage "
+"tree anymore!</b></font></td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:449
-msgid "<b>Versions installed:</b></font> "
+msgid "<tr><td width=40%><b>Versions installed:</b></font></td><td width=60%>"
 msgstr ""
 
 #: portage/portagetab.cpp:451
-msgid "<b>Versions installed:</b></font> Not installed<br>"
+msgid ""
+"<tr><td width=40%><b>Versions installed:</b></font></td><td width=60%>Not "
+"installed</td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:464
-msgid "<b>Version used for installation:</b> "
+msgid ""
+"<tr><td width=40%><b>Version used for installation:</b></td><td width=60%>"
 msgstr ""
 
 #: portage/portagetab.cpp:468
 msgid ""
-"<b>Version used for installation: <font color=darkRed>No version available "
-"on %1</b>"
+"<tr><td width=40%><b>Version used for installation:</font></td><td width=60%"
+"><font color=darkRed>No version available on %1</b></td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:471
 msgid ""
-"<b>Version used for installation:</font> <font color=darkRed>No version "
-"available - please check advanced options</font></b>"
+"<tr><td width=40%><b>Version used for installation:</font></td><td width=60%"
+"><font color=darkRed>No version available - please check package details</"
+"font></b></td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:477
-msgid "<b>Versions available:</b> "
+msgid "<tr><td width=40%><b>Versions available:</b></td><td width=60%>"
 msgstr ""
 
 #: portage/portagetab.cpp:479
 msgid ""
-"<b>Versions available: <font color=darkRed>No version available on %1</"
-"font></b><br>"
+"<tr><td width=40%><b>Versions available:</td><td width=60%><font "
+"color=darkRed>No version available on %1</font></b></td></tr>"
 msgstr ""
 
 #: portage/portagetab.cpp:508

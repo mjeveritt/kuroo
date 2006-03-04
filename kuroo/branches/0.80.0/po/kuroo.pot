@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-04 13:16+0100\n"
+"POT-Creation-Date: 2006-03-04 17:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,16 +145,16 @@ msgstr ""
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:502 portage/portagetab.cpp:512 rc.cpp:25 rc.cpp:284
+#: queue/queuetab.cpp:502 portage/portagetab.cpp:519 rc.cpp:25 rc.cpp:284
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:506 portage/portagetab.cpp:516
+#: queue/queuetab.cpp:506 portage/portagetab.cpp:523
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:508 portage/portagetab.cpp:518
+#: queue/queuetab.cpp:508 portage/portagetab.cpp:525
 msgid "Remove from world"
 msgstr ""
 
@@ -907,53 +907,52 @@ msgid ""
 "tree anymore!</b></font></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:449
-msgid "<tr><td width=40%><b>Versions installed:</b></font></td><td width=60%>"
+#: portage/portagetab.cpp:456
+msgid "<tr><td width=30%><b>Installed versions:</b></font></td><td width=70%>"
 msgstr ""
 
-#: portage/portagetab.cpp:451
+#: portage/portagetab.cpp:458
 msgid ""
-"<tr><td width=40%><b>Versions installed:</b></font></td><td width=60%>Not "
+"<tr><td width=30%><b>Installed versions:</b></font></td><td width=70%>Not "
 "installed</td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:464
-msgid ""
-"<tr><td width=40%><b>Version used for installation:</b></td><td width=60%>"
-msgstr ""
-
-#: portage/portagetab.cpp:468
-msgid ""
-"<tr><td width=40%><b>Version used for installation:</font></td><td width=60%"
-"><font color=darkRed>No version available on %1</b></td></tr>"
-msgstr ""
-
 #: portage/portagetab.cpp:471
-msgid ""
-"<tr><td width=40%><b>Version used for installation:</font></td><td width=60%"
-"><font color=darkRed>No version available - please check package details</"
-"font></b></td></tr>"
+msgid "<tr><td width=30%><b>Emerge version:</b></td><td width=70%>"
 msgstr ""
 
-#: portage/portagetab.cpp:477
-msgid "<tr><td width=40%><b>Versions available:</b></td><td width=60%>"
+#: portage/portagetab.cpp:475
+msgid ""
+"<tr><td width=30%><b>Emerge version:</font></td><td width=70%><font "
+"color=darkRed>No version available on %1</b></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:479
+#: portage/portagetab.cpp:478
 msgid ""
-"<tr><td width=40%><b>Versions available:</td><td width=60%><font "
+"<tr><td width=30%><b>Emerge version:</font></td><td width=70%><font "
+"color=darkRed>No version available - please check package details</font></"
+"b></td></tr>"
+msgstr ""
+
+#: portage/portagetab.cpp:484
+msgid "<tr><td width=30%><b>Available versions:</b></td><td width=70%>"
+msgstr ""
+
+#: portage/portagetab.cpp:486
+msgid ""
+"<tr><td width=30%><b>Available versions:</td><td width=70%><font "
 "color=darkRed>No version available on %1</font></b></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:508
+#: portage/portagetab.cpp:515
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:510
+#: portage/portagetab.cpp:517
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:521
+#: portage/portagetab.cpp:528
 msgid "&Uninstall"
 msgstr ""
 

@@ -387,7 +387,7 @@ void PortageTab::slotPackage()
 		lines += i18n("<tr><td colspan=2><font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr>");
 	
 	// Now parse sorted list of versions for current package
-	QString installedVersion, emergeVersion, linesAvailable, linesInstalled, linesEmergeVersion;
+	QString version, emergeVersion, linesAvailable, linesInstalled, linesEmergeVersion;
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
 	bool versionNotInArchitecture( false );
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
@@ -420,25 +420,32 @@ void PortageTab::slotPackage()
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
+		version = (*sortedVersionIterator)->version();
+		
 		// Create nice summary showing installed packages in green and unavailable as red
 		if ( (*sortedVersionIterator)->isInstalled() ) {
-			installedVersion = (*sortedVersionIterator)->version();
-			linesInstalled += "<font color=darkGreen><b>" + installedVersion + "</b></font>, ";
-			m_packageInspector->dialog->cbVersionsInstalled->insertItem( installedVersion );
+			version = "<b>" + version + "</b>";
+			linesInstalled += "<font color=darkGreen>" + version + "</font>, ";
+			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
 		}
 		
 		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			emergeVersion = (*sortedVersionIterator)->version();
-			linesAvailable += (*sortedVersionIterator)->version() + ", ";
+			linesEmergeVersion = version;
+			linesAvailable += version + ", ";
 		}
-		else
+		else {
 			if ( (*sortedVersionIterator)->isNotArch() )
 				versionNotInArchitecture = true;
-			else
-				linesAvailable += "<font color=darkRed><b><i>" + (*sortedVersionIterator)->version() + "</i></b></font>, ";
+			else {
+				version = "<font color=darkRed><i>" + version + "</i></font>";
+				linesAvailable += version + ", ";
+			}
+		}
+		
+// 		kdDebug() << "version=" << version << endl;
 	}
-	linesEmergeVersion = emergeVersion;
 	
 	// Remove trailing commas
 	linesInstalled.truncate( linesInstalled.length() - 2 );
@@ -446,9 +453,9 @@ void PortageTab::slotPackage()
 	
 	// Construct installed summary
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("<tr><td width=40%><b>Versions installed:</b></font></td><td width=60%>") + linesInstalled + "</td></tr>";
+		linesInstalled = i18n("<tr><td width=30%><b>Installed versions:</b></font></td><td width=70%>") + linesInstalled + "</td></tr>";
 	else
-		linesInstalled = i18n("<tr><td width=40%><b>Versions installed:</b></font></td><td width=60%>Not installed</td></tr>");
+		linesInstalled = i18n("<tr><td width=30%><b>Installed versions:</b></font></td><td width=70%>Not installed</td></tr>");
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 	
@@ -456,30 +463,30 @@ void PortageTab::slotPackage()
 		if ( !linesEmergeVersion.isEmpty() ) {
 			
 			// Set active version in Inspector dropdown menus
-			m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( linesEmergeVersion );
-			m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( linesEmergeVersion );
-			m_packageInspector->dialog->cbVersionsUse->setCurrentText( linesEmergeVersion );
-			m_packageInspector->dialog->versionsView->usedForInstallation( linesEmergeVersion );
+			m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( emergeVersion );
+			m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( emergeVersion );
+			m_packageInspector->dialog->cbVersionsUse->setCurrentText( emergeVersion );
+			m_packageInspector->dialog->versionsView->usedForInstallation( emergeVersion );
 			
-			linesEmergeVersion = i18n("<tr><td width=40%><b>Version used for installation:</b></td><td width=60%>") + linesEmergeVersion + "</td></tr>";
+			linesEmergeVersion = i18n("<tr><td width=30%><b>Emerge version:</b></td><td width=70%>") + linesEmergeVersion + "</td></tr>";
 		}
 		else {
 			if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-				linesEmergeVersion = i18n("<tr><td width=40%><b>Version used for installation:</font></td>"
-				                          "<td width=60%><font color=darkRed>No version available on %1</b></td></tr>").arg( KurooConfig::arch() );
+				linesEmergeVersion = i18n("<tr><td width=30%><b>Emerge version:</font></td>"
+				                          "<td width=70%><font color=darkRed>No version available on %1</b></td></tr>").arg( KurooConfig::arch() );
 			else
-				linesEmergeVersion = i18n("<tr><td width=40%><b>Version used for installation:</font></td>"
-				                          "<td width=60%><font color=darkRed>No version available - please check package details</font></b></td></tr>");
+				linesEmergeVersion = i18n("<tr><td width=30%><b>Emerge version:</font></td>"
+				                          "<td width=70%><font color=darkRed>No version available - please check package details</font></b></td></tr>");
 		}
 		
 		// Construct available versions summary
 		if ( !linesAvailable.isEmpty() )
-			linesAvailable = i18n("<tr><td width=40%><b>Versions available:</b></td><td width=60%>") + linesAvailable + "</td></tr>";
+			linesAvailable = i18n("<tr><td width=30%><b>Available versions:</b></td><td width=70%>") + linesAvailable + "</td></tr>";
 		else
-			linesAvailable = i18n("<tr><td width=40%><b>Versions available:</td>"
-			                      "<td width=60%><font color=darkRed>No version available on %1</font></b></td></tr>").arg( KurooConfig::arch() );
+			linesAvailable = i18n("<tr><td width=30%><b>Available versions:</td>"
+			                      "<td width=70%><font color=darkRed>No version available on %1</font></b></td></tr>").arg( KurooConfig::arch() );
 		
-		summaryBrowser->setText( lines + linesInstalled + linesAvailable + linesEmergeVersion + "</table>");
+		summaryBrowser->setText( lines + linesInstalled + linesEmergeVersion + linesAvailable + "</table>");
 	}
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");

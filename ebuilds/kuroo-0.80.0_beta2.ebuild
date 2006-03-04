@@ -12,8 +12,7 @@ SLOT="0"
 KEYWORDS="~x86 ~ppc ~sparc ~amd64"
 IUSE="debug"
 
-RDEPEND="app-portage/gentoolkit
-	!app-portage/guitoo
+RDEPEND="!app-portage/guitoo
 	|| (kde-misc/kdiff3 kde-base/kdesdk)"
 
 need-kde 3.4

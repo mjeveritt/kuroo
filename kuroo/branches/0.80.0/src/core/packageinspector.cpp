@@ -54,8 +54,8 @@ PackageInspector::PackageInspector( QWidget *parent )
 	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
+	dialog->setMinimumSize( QSize(550, 450) );
 	setMainWidget( dialog );
-	setInitialSize( QSize(600, 500) );
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();

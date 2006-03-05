@@ -32,7 +32,7 @@
 class VersionView::VersionItem : public KListViewItem
 {
 public:
-	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled );
+	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, bool isStable );
 	
 	bool	isInstalled();
 	
@@ -40,11 +40,11 @@ protected:
 	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 	
 private:
-	bool	m_isInstalled;
+	bool	m_isInstalled, m_isStable;
 };
 
-VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled )
-	: KListViewItem( parent, version ), m_isInstalled( isInstalled )
+VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, bool isStable )
+	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_isStable( isStable )
 {
 }
 
@@ -61,16 +61,15 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 	QColorGroup m_cg( cg );
 	QFont font( p->font() );
 	
-	if ( m_isInstalled ) {
+	if ( m_isInstalled )
 		font.setBold( true );
-		p->setFont( font );
-// 		m_cg.setColor( QColorGroup::Text, Qt::darkGreen );
+	
+	if ( !m_isStable ) {
+		font.setItalic( true );
+		m_cg.setColor( QColorGroup::Text, Qt::darkRed );
 	}
-	else {
-		font.setBold( false );
-		p->setFont( font );
-// 		m_cg.setColor( QColorGroup::Text, Qt::black );
-	}
+		
+	p->setFont( font );
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
 
@@ -99,7 +98,7 @@ VersionView::~VersionView()
 
 void VersionView::insertItem( const char* version, const char* stability, const char* size, bool isInstalled )
 {
-	VersionItem* item = new VersionItem( this, " ", isInstalled );
+	VersionItem* item = new VersionItem( this, " ", isInstalled, stability == i18n("Stable") );
 	item->setText( 1, version );
 	item->setText( 2, stability );
 	item->setText( 3, size );

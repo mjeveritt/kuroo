@@ -95,7 +95,7 @@
                         <cstring>viewUnmerges</cstring>
                     </property>
                     <property name="text">
-                        <string>View &amp;unmerges</string>
+                        <string>Show &amp;unmerges</string>
                     </property>
                     <property name="accel">
                         <string>Alt+U</string>
@@ -176,7 +176,7 @@
                         <cstring>textLabel1_2_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Show Last:</string>
+                        <string>Show last:</string>
                     </property>
                 </widget>
             </grid>

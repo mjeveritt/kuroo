@@ -258,6 +258,9 @@
                                             <property name="accel">
                                                 <string></string>
                                             </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>Uninstall selected packages...</string>
+                                            </property>
                                         </widget>
                                         <widget class="KPushButton" row="0" column="0">
                                             <property name="name">
@@ -275,6 +278,9 @@
                                             <property name="accel">
                                                 <string>Alt+Q</string>
                                             </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>Add/Remove selected packages to the Installation Queue</string>
+                                            </property>
                                         </widget>
                                         <widget class="QPushButton" row="0" column="3">
                                             <property name="name">
@@ -285,6 +291,9 @@
                                             </property>
                                             <property name="accel">
                                                 <string></string>
+                                            </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>Show package details...</string>
                                             </property>
                                         </widget>
                                     </grid>

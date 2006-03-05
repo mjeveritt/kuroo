@@ -228,8 +228,8 @@ void PortageTab::slotListPackages()
 		pbQueue->setDisabled( true );
 		
 		summaryBrowser->clear();
-		summaryBrowser->setText( i18n("<font color=darkGray size=+1><b>No package available with these filter settings</font><br>"
-		                              "<font color=darkGray>Please modify the filter settings you have chosen!<br>"
+		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
+		                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
 		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
 		
 		// Highlight text filter background in red if query failed
@@ -399,13 +399,19 @@ void PortageTab::slotPackage()
 		m_packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
 		m_packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
 		
+		version = (*sortedVersionIterator)->version();
+		
 		// Mark official version stability for version listview
 		QString stability;
-		if ( (*sortedVersionIterator)->isOriginalHardMasked() )
+		if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
 			stability = i18n("Hardmasked");
+			version = "<font color=darkRed><i>" + version + "</i></font>";
+			}
 		else
-			if ( (*sortedVersionIterator)->isOriginalTesting() )
+			if ( (*sortedVersionIterator)->isOriginalTesting() ) {
 				stability = i18n("Testing");
+				version = "<font color=darkRed><i>" + version + "</i></font>";
+				}
 			else
 				if ( (*sortedVersionIterator)->isAvailable() )
 					stability = i18n("Stable");
@@ -420,30 +426,26 @@ void PortageTab::slotPackage()
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
-		version = (*sortedVersionIterator)->version();
-		
-		// Create nice summary showing installed packages in green and unavailable as red
+		// Create nice summary showing installed packages
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			version = "<b>" + version + "</b>";
-			linesInstalled.prepend( version + ", " );
+			linesInstalled.prepend( version + " (" + stability + "), " );
 			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
 		}
 		
 		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			emergeVersion = (*sortedVersionIterator)->version();
-			linesEmergeVersion = version;
+			linesEmergeVersion = version + " (" + stability + ")";
 			linesAvailable.prepend( version + ", " );
 		}
 		else {
 			if ( (*sortedVersionIterator)->isNotArch() )
 				versionNotInArchitecture = true;
-			else {
-				version = "<font color=darkRed><i>" + version + "</i></font>";
+			else
 				linesAvailable.prepend( version + ", " );
-			}
 		}
-		
+			
 // 		kdDebug() << "version=" << version << endl;
 	}
 	
@@ -453,9 +455,9 @@ void PortageTab::slotPackage()
 	
 	// Construct installed summary
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("<tr><td width=10%><b>Installed versions:</b></font></td><td width=90%>") + linesInstalled + "</td></tr>";
+		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>") + linesInstalled + "</td></tr>";
 	else
-		linesInstalled = i18n("<tr><td width=10%><b>Installed versions:</b></font></td><td width=90%>Not installed</td></tr>");
+		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>Not installed</td></tr>");
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 	
@@ -484,7 +486,7 @@ void PortageTab::slotPackage()
 			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>") + linesAvailable + "</td></tr>";
 		else
 			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</td>"
-			                      "<td width=90%><font color=darkRed>No version available on %1</font></b></td></tr>").arg( KurooConfig::arch() );
+			                      "<td width=90%><font color=darkRed>No versions available on %1</font></b></td></tr>").arg( KurooConfig::arch() );
 		
 		summaryBrowser->setText( lines + linesInstalled + linesEmergeVersion + linesAvailable + "</table>");
 	}

@@ -779,7 +779,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		QString lines;
 		
 		QString useFlag = *it;
-		useFlag.remove( QRegExp("^\\+|^-|^\\(-|^\\(\\+|\\*$|\\*\\)$|\\)$") );
+		useFlag = useFlag.remove( QRegExp("^\\+|^-|^\\(-|^\\(\\+|\\*$|\\*\\)$|\\)$") );
 		QMap<QString, QString>::iterator itMap = useMap.find( useFlag );
 		if ( itMap != useMap.end() )
 			lines = itMap.data();

@@ -1,0 +1,356 @@
+# translation of pl_PL.po to Polish
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Konrad Mantorski <konrad@mantorski.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: pl_PL\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-11-28 08:36+0100\n"
+"PO-Revision-Date: 2006-03-01 17:53+0100\n"
+"Last-Translator: Konrad Mantorski <konrad@mantorski.com>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.1\n"
+
+#: gentoowatcher.cpp:74 kuroo_watcher.cpp:51
+msgid "Gentoo Watcher"
+msgstr "Strażnik Gentoo"
+
+#: gentoowatcher.cpp:77
+msgid "&Configure Watcher..."
+msgstr "&Konfiguruj..."
+
+#: gentoowatcher.cpp:78
+msgid "&Check updates"
+msgstr "&Sprawdź aktualizacje"
+
+#: gentoowatcher.cpp:83
+msgid "Latest Gentoo packages and Security Advisories"
+msgstr "Najnowsze pakiety Gentoo i zalecenia dotyczące bezpieczeństwa"
+
+#: gentoowatcher.cpp:360 gentoowatcher.cpp:362
+msgid "settings"
+msgstr "ustawienia"
+
+#: gentoowatcher.cpp:363 gentoowatcher.cpp:364
+msgid "Connection"
+msgstr "Połączenie"
+
+#: gentoowatcher.cpp:365
+msgid "General"
+msgstr "Ogólne"
+
+#: gentoowatcher.cpp:365
+msgid "General settings"
+msgstr "Ustawienia ogólne"
+
+#: gentoowatcher.cpp:366
+msgid "Advanced"
+msgstr "Zaawansowane"
+
+#: gentoowatcher.cpp:366
+msgid "Glsa and alert settings"
+msgstr "Ustawienia GLSA i alarmów"
+
+#: gentoowatcher.cpp:441
+msgid "Latest Gentoo packages and Security Advisories %1"
+msgstr "Najnowsze pakiety Gentoo i zalecenia dotyczące bezpieczeństwa %1"
+
+#: gentoowatcher.cpp:480
+msgid "<br><br><b>Latest GLSA</b>"
+msgstr "<br><br><b>Najnowsze GLSA</b>"
+
+#: gentoowatcher.cpp:501
+msgid "<br><br><b>Latest stable packages</b>"
+msgstr "<br><br><b>Najnowsze stabilne pakiety</b>"
+
+#: gentoowatcher.cpp:522
+msgid "<br><br><b>Latest testing packages</b>"
+msgstr "<br><br><b>Najnowsze testowe pakiety</b>"
+
+#: gentooagent.cpp:98 gentooagent.cpp:214
+msgid "Starting Kuroo..."
+msgstr "Uruchamianie programu Kuroo..."
+
+#: gentooagent.cpp:123
+msgid " sent to Kuroo..."
+msgstr " wysłano do programu Kuroo..."
+
+#: gentooagent.cpp:126
+msgid "Gentoo Watcher: Kuroo is not responding!"
+msgstr "Strażnik Gentoo: program Kuroo nie odpowiada!"
+
+#: gentooagent.cpp:169
+msgid "glsa-check -d "
+msgstr "glsa-check -d "
+
+#: gentooagent.cpp:177
+msgid "Experimental glsa-check!"
+msgstr "Eksperymentalne narzędzie glsa-check!"
+
+#: gentooagent.cpp:233 gentooagent.cpp:234
+msgid "&Emerge package now"
+msgstr "&Emerguj pakiet teraz"
+
+#: gentooagent.cpp:235
+msgid "&Open Glsa in browser"
+msgstr "&Otwórz stronę zaleceń GLSA"
+
+#: gentooagent.cpp:236
+msgid "&Sort by published date"
+msgstr "&Sortuj wg daty opublikowania"
+
+#: gentooagent.cpp:237
+msgid "Open in &Kuroo"
+msgstr "Otwórz w &Kuroo"
+
+#: gentooagent.cpp:240
+msgid "&Glsa-check now"
+msgstr "&Wyświetl raport GLSA"
+
+#: kuroo_watcher.cpp:41
+msgid "A KDE KPart Application"
+msgstr "Aplikacja KDE w technologii KPart"
+
+#: kuroo_watcher.cpp:46
+msgid "start or init"
+msgstr "startuj lub inicjuj"
+
+#: kuroo_watcher.cpp:87 rc.cpp:108
+#, no-c-format
+msgid "Start Gentoo Watcher automatically at login?"
+msgstr "Uruchamiać Strażnika Gentoo automatycznie po zalogowaniu?"
+
+#: rc.cpp:3
+#, no-c-format
+msgid "Latest Gentoo ebuilds and security advisories"
+msgstr "Najnowsze ebuildy Gentoo i zalecenia dotyczące bezpieczeństwa"
+
+#: rc.cpp:6
+#, no-c-format
+msgid "Sta&ble"
+msgstr "Sta&bilne"
+
+#: rc.cpp:9 rc.cpp:24
+#, no-c-format
+msgid "Package"
+msgstr "Pakiet"
+
+#: rc.cpp:12 rc.cpp:27 rc.cpp:42 rc.cpp:57
+#, no-c-format
+msgid "Description"
+msgstr "Opis"
+
+#: rc.cpp:15 rc.cpp:30 rc.cpp:45 rc.cpp:60
+#, no-c-format
+msgid "Order"
+msgstr "Porządek"
+
+#: rc.cpp:18 rc.cpp:33
+#, no-c-format
+msgid "Right-click package you want to emerge in kuroo"
+msgstr "Aby emergować pakiet w programie Kuroo, kliknij go prawym przyciskiem myszy"
+
+#: rc.cpp:21
+#, no-c-format
+msgid "Testi&ng"
+msgstr "Test&owe"
+
+#: rc.cpp:36
+#, no-c-format
+msgid "Gentoo Linux Security &Advisories"
+msgstr "Z&alecenia GLSA"
+
+#: rc.cpp:39
+#, no-c-format
+msgid "Package and Severity"
+msgstr "Pakiet i stopień zagrożenia"
+
+#: rc.cpp:48 rc.cpp:63
+#, no-c-format
+msgid "Address"
+msgstr "Adres"
+
+#: rc.cpp:51
+#, no-c-format
+msgid "&Kuroo releases (SourceForge)"
+msgstr "&Wydania programu Kuroo (z SourceForge)"
+
+#: rc.cpp:54
+#, no-c-format
+msgid "New release"
+msgstr "Nowe wydanie"
+
+#: rc.cpp:66 rc.cpp:134 rc.cpp:189
+#, no-c-format
+msgid "Form1"
+msgstr "Formularz1"
+
+#: rc.cpp:69
+#, no-c-format
+msgid "View in alert popup"
+msgstr "Wyświetlaj w wyskakującym okienku alertu"
+
+#: rc.cpp:72 rc.cpp:81 rc.cpp:177
+#, no-c-format
+msgid "Glsa"
+msgstr "GLSA"
+
+#: rc.cpp:75 rc.cpp:164
+#, no-c-format
+msgid "Stable"
+msgstr "Stabilne"
+
+#: rc.cpp:78 rc.cpp:167
+#, no-c-format
+msgid "Testing"
+msgstr "Testowe"
+
+#: rc.cpp:84
+#, no-c-format
+msgid "View all"
+msgstr "Wyświetlaj wszystko"
+
+#: rc.cpp:87
+#, no-c-format
+msgid "gentoolkit-0.2.0 must be installed!"
+msgstr "Narzędzie gentoolkit-0.2.0 musi być zainstalowane!"
+
+#: rc.cpp:90
+#, no-c-format
+msgid "Use experimental glsa-check"
+msgstr "Używaj eksperymentalnego narzędzia glsa-check"
+
+#: rc.cpp:93
+#, no-c-format
+msgid " rows"
+msgstr " wiersze(-y)"
+
+#: rc.cpp:96
+#, no-c-format
+msgid "The log in-interval"
+msgstr "Interwał logowania"
+
+#: rc.cpp:99
+#, no-c-format
+msgid "Glsa rows"
+msgstr "Wiersze raportów GLSA"
+
+#: rc.cpp:102
+#, no-c-format
+msgid "Is it first time running?"
+msgstr "Czy uruchamiasz program po raz pierwszy?"
+
+#: rc.cpp:105
+#, no-c-format
+msgid "The interval rss checks"
+msgstr "Interwał sprawdzania źródeł RSS"
+
+#: rc.cpp:111
+#, no-c-format
+msgid "Number of Glsa rows to view"
+msgstr "Liczba wierszy GLSA do wyświetlania"
+
+#: rc.cpp:114
+#, no-c-format
+msgid "Home directory"
+msgstr "Katalog domowy"
+
+#: rc.cpp:117
+#, no-c-format
+msgid "Url to Glsa rss"
+msgstr "Adres źródła RSS z GLSA"
+
+#: rc.cpp:120
+#, no-c-format
+msgid "Url to stable packages rss"
+msgstr "Adres źródła RSS dla stabilnych pakietów"
+
+#: rc.cpp:123
+#, no-c-format
+msgid "Url to testing packages rss"
+msgstr "Adres źródła RSS dla pakietów testowych"
+
+#: rc.cpp:126
+#, no-c-format
+msgid "Url to SourceForge Kuroo"
+msgstr "Adres projektu Kuroo w serwisie SourceForge"
+
+#: rc.cpp:137
+#, no-c-format
+msgid "Check rss"
+msgstr "Sprawdź RSS"
+
+#: rc.cpp:140
+#, no-c-format
+msgid "Interval"
+msgstr "Interwał"
+
+#: rc.cpp:143
+#, no-c-format
+msgid " hours"
+msgstr " godzina(-y)"
+
+#: rc.cpp:146
+#, no-c-format
+msgid "The log interval"
+msgstr "Interwał logowania"
+
+#: rc.cpp:149
+#, no-c-format
+msgid "&Autostart at login"
+msgstr "&Automatycznie uruchamianie po zalogowaniu"
+
+#: rc.cpp:152
+#, no-c-format
+msgid "Alt+A"
+msgstr "Alt+A"
+
+#: rc.cpp:155
+#, no-c-format
+msgid "Re-log in so you don't get disconnected"
+msgstr "Ponowne zalogowanie w celu utrzymania połączenia"
+
+#: rc.cpp:158
+#, no-c-format
+msgid "Without this enabled, you will get disconnected after a while of inactivity."
+msgstr "Po wyłączeniu tej opcji połączenie zostanie przerwane w razie braku aktywności."
+
+#: rc.cpp:161
+#, no-c-format
+msgid "Rss feeds"
+msgstr "Źródła RSS"
+
+#: rc.cpp:170
+#, no-c-format
+msgid "Here you enter the username for the internet connection"
+msgstr "Tutaj należy wprowadzić adres źródła RSS"
+
+#: rc.cpp:174 rc.cpp:180 rc.cpp:186
+#, no-c-format
+msgid "Here you enter the password for the internet connection"
+msgstr "Tutaj należy wprowadzić adres źródła RSS"
+
+#: rc.cpp:183
+#, no-c-format
+msgid "News"
+msgstr "Wiadomości"
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Konrad Mantorski"
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""
+"konrad@mantorski.com "
+"JID: KonMan@kdetalk.net"
+

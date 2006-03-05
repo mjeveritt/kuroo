@@ -127,7 +127,7 @@ void VersionView::usedForInstallation( const QString& version )
 
 int VersionView::hasUpdate()
 {
-	return m_emergeIndex - m_installedIndex;
+	return m_installedIndex - m_emergeIndex;
 }
 
 QString VersionView::updateVersion()

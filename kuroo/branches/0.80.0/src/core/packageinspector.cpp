@@ -160,7 +160,7 @@ void PackageInspector::slotApply()
 		
 		// Check if this version is in updates. If not add it! (Only for packages in world).
 		if ( PortageSingleton::Instance()->isInWorld( category + "/" + package ) )
-			UpdatesSingleton::Instance()->checkUpdates( m_id, "", dialog->versionsView->updateVersion(), dialog->versionsView->hasUpdate() );
+			UpdatesSingleton::Instance()->checkUpdates( m_id, dialog->versionsView->updateVersion(), dialog->versionsView->hasUpdate() );
 		
 	}
 	

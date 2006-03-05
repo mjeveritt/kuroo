@@ -178,7 +178,7 @@ void Updates::removePackage( const QString& package )
 /**
  * Update packages when user changes package stability.
  */
-void Updates::checkUpdates( const QString& id, const QString& installedVersion, const QString& emergeVersion, int hasUpdate )
+void Updates::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
 {
 	ThreadWeaver::instance()->queueJob( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
 }

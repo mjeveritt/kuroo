@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-05 14:58+0100\n"
+"POT-Creation-Date: 2006-03-05 18:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Package"
 msgstr ""
 
-#: queue/queuelistview.cpp:164 core/versionview.cpp:85
+#: queue/queuelistview.cpp:164 core/versionview.cpp:84
 msgid "Version"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: queue/queuelistview.cpp:166 core/versionview.cpp:87
+#: queue/queuelistview.cpp:166 core/versionview.cpp:86
 msgid "Size"
 msgstr ""
 
@@ -133,7 +133,7 @@ msgstr ""
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:456 portage/portagetab.cpp:417
+#: queue/queuetab.cpp:456 core/versionview.cpp:101 portage/portagetab.cpp:417
 msgid "Stable"
 msgstr ""
 
@@ -707,11 +707,11 @@ msgstr ""
 msgid "No use flags available."
 msgstr ""
 
-#: core/versionview.cpp:84
+#: core/versionview.cpp:83
 msgid " "
 msgstr ""
 
-#: core/versionview.cpp:86
+#: core/versionview.cpp:85
 msgid "Stability"
 msgstr ""
 

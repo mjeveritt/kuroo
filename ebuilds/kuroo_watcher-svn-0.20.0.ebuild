@@ -4,12 +4,12 @@
 inherit kde subversion
 
 ESVN_PROJECT="${PN/-svn}"
-ESVN_REPO_URI="svn://tux.myftp.org/repos/kuroo_watcher/branches/0.20.0"
+ESVN_REPO_URI="svn://kuroo.org/repos/kuroo_watcher/branches/0.20.0"
 ESVN_STORE_DIR="${DISTDIR}/svn-src"
 ESVN_BOOTSTRAP="make -f Makefile.cvs"
 
 DESCRIPTION="A KDE Portage frontend"
-HOMEPAGE="http://tux.myftp.org/kuroo"
+HOMEPAGE="http://kuroo.org"
 LICENSE="GPL-2"
 
 SLOT="0"

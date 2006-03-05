@@ -32,7 +32,7 @@
 class VersionView::VersionItem : public KListViewItem
 {
 public:
-	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, bool isStable );
+	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
 	
 	bool	isInstalled();
 	
@@ -40,11 +40,12 @@ protected:
 	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 	
 private:
-	bool	m_isInstalled, m_isStable;
+	bool	m_isInstalled;
+	int		m_stability;
 };
 
-VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, bool isStable )
-	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_isStable( isStable )
+VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, int stability )
+	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_stability( stability )
 {
 }
 
@@ -64,9 +65,14 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 	if ( m_isInstalled )
 		font.setBold( true );
 	
-	if ( !m_isStable ) {
-		font.setItalic( true );
-		m_cg.setColor( QColorGroup::Text, Qt::darkRed );
+	switch ( m_stability ) {
+		case ( TESTING ) :
+			font.setItalic( true );
+			break;
+	
+		case ( HARDMASKED ) :
+			font.setItalic( true );
+			m_cg.setColor( QColorGroup::Text, Qt::darkRed );
 	}
 		
 	p->setFont( font );
@@ -98,7 +104,15 @@ VersionView::~VersionView()
 
 void VersionView::insertItem( const char* version, const char* stability, const char* size, bool isInstalled )
 {
-	VersionItem* item = new VersionItem( this, " ", isInstalled, stability == i18n("Stable") );
+	VersionItem* item;
+	if ( stability == i18n("Testing") )
+		item = new VersionItem( this, " ", isInstalled, TESTING );
+	else
+		if ( stability == i18n("Hardmasked") )
+			item = new VersionItem( this, " ", isInstalled, HARDMASKED );
+		else
+			item = new VersionItem( this, " ", isInstalled, NULL );
+			
 	item->setText( 1, version );
 	item->setText( 2, stability );
 	item->setText( 3, size );

@@ -406,12 +406,12 @@ void PortageTab::slotPackage()
 		if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
 			stability = i18n("Hardmasked");
 			version = "<font color=darkRed><i>" + version + "</i></font>";
-			}
+		}
 		else
 			if ( (*sortedVersionIterator)->isOriginalTesting() ) {
 				stability = i18n("Testing");
-				version = "<font color=darkRed><i>" + version + "</i></font>";
-				}
+				version = "<i>" + version + "</i>";
+			}
 			else
 				if ( (*sortedVersionIterator)->isAvailable() )
 					stability = i18n("Stable");

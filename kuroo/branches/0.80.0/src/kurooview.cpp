@@ -51,28 +51,27 @@
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
-	tabPortage( 0 ), tabQueue( 0 ), tabHistory( 0 ), tabLogs( 0 ), tabMerge( 0 ), packageInspector( 0 ),
+	viewPortage( 0 ), viewQueue( 0 ), viewHistory( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	hasHistoryRestored( false )
 {
 	viewMenu->setCursor( KCursor::handCursor() );
-	
 	packageInspector = new PackageInspector( this );
 	
 	// Add all pages
-	tabPortage = new PortageTab( this, packageInspector );
-	viewStack->addWidget( tabPortage, 1 );
+	viewPortage = new PortageTab( this, packageInspector );
+	viewStack->addWidget( viewPortage, VIEW_PACKAGES );
 	
-	tabQueue = new QueueTab( this, packageInspector );
-	viewStack->addWidget( tabQueue, 2 );
+	viewQueue = new QueueTab( this, packageInspector );
+	viewStack->addWidget( viewQueue, VIEW_QUEUE );
 	
-	tabHistory = new HistoryTab( this );
-	viewStack->addWidget( tabHistory, 3 );
+	viewHistory = new HistoryTab( this );
+	viewStack->addWidget( viewHistory, VIEW_HISTORY );
 	
-	tabMerge = new MergeTab( this );
-	viewStack->addWidget( tabMerge, 4 );
+	viewMerge = new MergeTab( this );
+	viewStack->addWidget( viewMerge, VIEW_MERGE );
 	
-	tabLogs = new LogsTab( this );
-	viewStack->addWidget( tabLogs, 5 );
+	viewLogs = new LogsTab( this );
+	viewStack->addWidget( viewLogs, VIEW_LOG );
 	
 	// Create menu-icons for the pages
 	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PACKAGES ), i18n("Packages") );
@@ -87,7 +86,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
-	LogSingleton::Instance()->setGui( tabLogs->logBrowser, tabLogs->verboseLog, tabLogs->saveLog );
+	LogSingleton::Instance()->setGui( viewLogs->logBrowser, viewLogs->verboseLog, viewLogs->saveLog );
 	
 	// Reset everything when a portage scan is started
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
@@ -97,7 +96,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
-	connect( tabMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
+	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
@@ -116,19 +115,19 @@ KurooView::~KurooView()
 void KurooView::slotShowView()
 {
 	packageInspector->hide();
-	int pageIndex = viewMenu->currentItem() + 1;
-	viewStack->raiseWidget( pageIndex );
+	int tabIndex = viewMenu->currentItem() + VIEW_PACKAGES;
+	viewStack->raiseWidget( tabIndex );
 	
-	switch ( pageIndex ) {
+	switch ( tabIndex ) {
 	
-		case ( 1 ) :
-			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), tabQueue, SLOT( slotPackage() ) );
-			connect( packageInspector, SIGNAL( signalPackageChanged() ), tabPortage, SLOT( slotPackage() ) );
+		case ( VIEW_PACKAGES ) :
+			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), viewQueue, SLOT( slotPackage() ) );
+			connect( packageInspector, SIGNAL( signalPackageChanged() ), viewPortage, SLOT( slotPackage() ) );
 			break;
 			
-		case ( 2 ) :
-			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), tabPortage, SLOT( slotPackage() ) );
-			connect( packageInspector, SIGNAL( signalPackageChanged() ), tabQueue, SLOT( slotPackage() ) );
+		case ( VIEW_QUEUE ) :
+			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), viewPortage, SLOT( slotPackage() ) );
+			connect( packageInspector, SIGNAL( signalPackageChanged() ), viewQueue, SLOT( slotPackage() ) );
 			break;
 		
 	}
@@ -206,8 +205,8 @@ void KurooView::slotCheckPortage()
 	if ( KurooDBSingleton::Instance()->isPackagesEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-		tabPortage->slotReload();
-		tabQueue->slotReload( false );
+		viewPortage->slotReload();
+		viewQueue->slotReload( false );
 		
 		if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
 			UpdatesSingleton::Instance()->slotRefresh();

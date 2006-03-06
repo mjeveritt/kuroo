@@ -72,7 +72,7 @@ private:
 	QString							m_id, category, package, hardMaskComment;
 	QMap<QString, QString>			useMap;
 	PackageItem* 					m_portagePackage;
-	int								stabilityBefore;
+	int								stabilityBefore, packageStability;
 	QString							versionBefore;
 	QStringList						pretendUseLines;
 	

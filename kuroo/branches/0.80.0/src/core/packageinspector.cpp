@@ -43,6 +43,14 @@
 #include <kurllabel.h>
 #include <kprocio.h>
 
+// Portage files
+enum portageFiles {
+		PACKAGE_STABLE = 1,
+		PACKAGE_KEYWORDS = 2,
+		PACKAGE_UNMASK = 4,
+		PACKAGE_MASK = 8
+};
+
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
@@ -50,12 +58,12 @@
 PackageInspector::PackageInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), category( QString::null ), package( QString::null ), m_portagePackage( 0 ),
 	hasVersionSettingsChanged( false ), hasUseSettingsChanged( false ),
-	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ),
+	isVirginState( true ), stabilityBefore ( 0 ), versionBefore( QString::null ), isAvailableBefore( false ), packageStability( PACKAGE_STABLE ),
 	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
-	dialog->setMinimumSize( QSize(600, 500) );
 	setMainWidget( dialog );
+	adjustSize();
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
@@ -151,12 +159,13 @@ void PackageInspector::slotNextPackage()
  */
 void PackageInspector::slotApply()
 {
-	kdDebug() << "PackageInspector::slotApply" << endl;
-	
 	if ( hasVersionSettingsChanged ) {
-		PortageFilesSingleton::Instance()->savePackageKeywords();
-		PortageFilesSingleton::Instance()->savePackageUserMask();
-		PortageFilesSingleton::Instance()->savePackageUserUnMask();
+		if ( packageStability & PACKAGE_KEYWORDS )
+			PortageFilesSingleton::Instance()->savePackageKeywords();
+		if ( packageStability & PACKAGE_MASK )
+			PortageFilesSingleton::Instance()->savePackageUserMask();
+		if ( packageStability & PACKAGE_UNMASK )
+			PortageFilesSingleton::Instance()->savePackageUserUnMask();
 		
 		// Check if this version is in updates. If not add it! (Only for packages in world).
 		if ( PortageSingleton::Instance()->isInWorld( category + "/" + package ) )
@@ -281,12 +290,12 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
 	
-// 	if ( !KUser().isSuperUser() ) {
-// 		enableButtonApply( false );
-// 		dialog->groupSelectStability->setDisabled( true );
-// 		dialog->useView->setDisabled( true );
-// 		dialog->groupArchitecture->setDisabled( true );
-// 	}
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->useView->setDisabled( true );
+		dialog->groupArchitecture->setDisabled( true );
+	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging
 	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
@@ -389,7 +398,7 @@ void PackageInspector::showSettings()
 void PackageInspector::slotSetStability( int rbStability )
 {
 	switch ( rbStability ) {
-	
+		
 		// User wants only stable package
 		case 0 :
 			dialog->cbVersionsSpecific->setDisabled( true );
@@ -401,6 +410,7 @@ void PackageInspector::slotSetStability( int rbStability )
 			KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
 		
 			m_portagePackage->resetDetailedInfo();
+			packageStability = PACKAGE_STABLE;
 			emit signalPackageChanged();
 			break;
 		
@@ -414,6 +424,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
 			m_portagePackage->resetDetailedInfo();
+			packageStability = PACKAGE_KEYWORDS;
 			emit signalPackageChanged();
 			break;
 		
@@ -427,15 +438,16 @@ void PackageInspector::slotSetStability( int rbStability )
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
 			KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
 			m_portagePackage->resetDetailedInfo();
+			packageStability = PACKAGE_KEYWORDS | PACKAGE_UNMASK;
 			emit signalPackageChanged();
 			break;
 		
-		// User wants only specific version and no further
+		// User wants only specific version
 		case 3 :
 			dialog->cbVersionsSpecific->setDisabled( false );
 		
 	}
-	
+
 	enableButtonApply( true );
 	hasVersionSettingsChanged = true;
 }
@@ -454,6 +466,7 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 	KurooDBSingleton::Instance()->setPackageUserMasked( m_id, version );
 	
 	m_portagePackage->resetDetailedInfo();
+	packageStability = PACKAGE_KEYWORDS | PACKAGE_UNMASK | PACKAGE_MASK;
 	emit signalPackageChanged();
 }
 
@@ -514,6 +527,7 @@ void PackageInspector::slotRefreshTabs()
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
 	slotLoadInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	loadChangeLog();
+	adjustSize();
 }
 
 /**

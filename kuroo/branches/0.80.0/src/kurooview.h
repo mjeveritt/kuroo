@@ -45,11 +45,11 @@ public:
 	KurooView( QWidget *parent, const char *name );
 	~KurooView();
 	
-	PortageTab*			tabPortage;
-	HistoryTab*			tabHistory;
-	QueueTab*			tabQueue;
-	LogsTab* 			tabLogs;
-	MergeTab*			tabMerge;
+	PortageTab*			viewPortage;
+	HistoryTab*			viewHistory;
+	QueueTab*			viewQueue;
+	LogsTab* 			viewLogs;
+	MergeTab*			viewMerge;
 	PackageInspector	*packageInspector;
 	
 	void 				quit();

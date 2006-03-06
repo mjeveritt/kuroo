@@ -160,11 +160,11 @@ void PackageInspector::slotNextPackage()
 void PackageInspector::slotApply()
 {
 	if ( hasVersionSettingsChanged ) {
-		if ( packageStability & PACKAGE_KEYWORDS )
+// 		if ( packageStability & PACKAGE_KEYWORDS )
 			PortageFilesSingleton::Instance()->savePackageKeywords();
-		if ( packageStability & PACKAGE_MASK )
+// 		if ( packageStability & PACKAGE_MASK )
 			PortageFilesSingleton::Instance()->savePackageUserMask();
-		if ( packageStability & PACKAGE_UNMASK )
+// 		if ( packageStability & PACKAGE_UNMASK )
 			PortageFilesSingleton::Instance()->savePackageUserUnMask();
 		
 		// Check if this version is in updates. If not add it! (Only for packages in world).
@@ -410,7 +410,7 @@ void PackageInspector::slotSetStability( int rbStability )
 			KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
 		
 			m_portagePackage->resetDetailedInfo();
-			packageStability = PACKAGE_STABLE;
+// 			packageStability = PACKAGE_STABLE;
 			emit signalPackageChanged();
 			break;
 		
@@ -424,7 +424,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
 			m_portagePackage->resetDetailedInfo();
-			packageStability = PACKAGE_KEYWORDS;
+// 			packageStability = PACKAGE_KEYWORDS;
 			emit signalPackageChanged();
 			break;
 		
@@ -438,7 +438,7 @@ void PackageInspector::slotSetStability( int rbStability )
 			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
 			KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
 			m_portagePackage->resetDetailedInfo();
-			packageStability = PACKAGE_KEYWORDS | PACKAGE_UNMASK;
+// 			packageStability = PACKAGE_KEYWORDS | PACKAGE_UNMASK;
 			emit signalPackageChanged();
 			break;
 		
@@ -466,7 +466,7 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 	KurooDBSingleton::Instance()->setPackageUserMasked( m_id, version );
 	
 	m_portagePackage->resetDetailedInfo();
-	packageStability = PACKAGE_KEYWORDS | PACKAGE_UNMASK | PACKAGE_MASK;
+// 	packageStability = PACKAGE_KEYWORDS | PACKAGE_UNMASK | PACKAGE_MASK;
 	emit signalPackageChanged();
 }
 
@@ -527,7 +527,7 @@ void PackageInspector::slotRefreshTabs()
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
 	slotLoadInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	loadChangeLog();
-// 	adjustSize();
+	adjustSize();
 }
 
 /**

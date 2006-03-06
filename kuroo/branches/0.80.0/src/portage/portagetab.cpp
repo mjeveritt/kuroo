@@ -255,6 +255,7 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		
+		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
 		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No package found with these filter settings</font><br>"
@@ -266,9 +267,6 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
-		
-		// User has edited package, reload the package
-		disconnect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 	else {
 		
@@ -278,8 +276,9 @@ void PortageTab::slotListPackages()
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
-		connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+		slotPackage();
 	}
+	
 }
 
 /**

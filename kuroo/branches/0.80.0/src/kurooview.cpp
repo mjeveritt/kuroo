@@ -116,7 +116,22 @@ KurooView::~KurooView()
 void KurooView::slotShowView()
 {
 	packageInspector->hide();
-	viewStack->raiseWidget( viewMenu->currentItem() + 1 );
+	int pageIndex = viewMenu->currentItem() + 1;
+	viewStack->raiseWidget( pageIndex );
+	
+	switch ( pageIndex ) {
+	
+		case ( 1 ) :
+			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), tabQueue, SLOT( slotPackage() ) );
+			connect( packageInspector, SIGNAL( signalPackageChanged() ), tabPortage, SLOT( slotPackage() ) );
+			break;
+			
+		case ( 2 ) :
+			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), tabPortage, SLOT( slotPackage() ) );
+			connect( packageInspector, SIGNAL( signalPackageChanged() ), tabQueue, SLOT( slotPackage() ) );
+			break;
+		
+	}
 }
 
 /**

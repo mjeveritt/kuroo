@@ -64,10 +64,10 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
-	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+	// Recalculate package when user change settings in Inspector
 	connect( m_packageInspector, SIGNAL( signalUseChanged() ), this, SLOT( slotPackageUseChanged() ) );
 	
-	// Lock/unlock if kuroo is busy.
+	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
@@ -298,8 +298,8 @@ void QueueTab::slotButtons()
 		cbRemove->setDisabled( true );
 	}
 	
-	pbAdvanced->setDisabled( false );
 	m_packageInspector->setDisabled( false );
+	pbAdvanced->setDisabled( false );
 }
 
 

@@ -41,6 +41,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	bar( 0 )
 {
+	setQueued( true );
 	setText( 0, category + "/" + name );
 	bar = new KProgress( duration, parent->viewport() );
 	bar->hide();
@@ -51,6 +52,7 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	bar( 0 )
 {
+	setQueued( true );
 	setText( 0, category + "/" + name );
 	bar = new KProgress( duration, parent->listView()->viewport() );
 	bar->hide();

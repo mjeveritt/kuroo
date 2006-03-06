@@ -755,7 +755,7 @@ and do not update further</string>
                 </widget>
                 <widget class="QFrame" row="0" column="0">
                     <property name="name">
-                        <cstring>frame7_2</cstring>
+                        <cstring>headerFrame</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -764,13 +764,6 @@ and do not update further</string>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
-                    </property>
-                    <property name="paletteBackgroundColor">
-                        <color>
-                            <red>122</red>
-                            <green>90</green>
-                            <blue>218</blue>
-                        </color>
                     </property>
                     <property name="frameShape">
                         <enum>TabWidgetPanel</enum>
@@ -830,13 +823,6 @@ and do not update further</string>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
-                            </property>
-                            <property name="paletteBackgroundColor">
-                                <color>
-                                    <red>122</red>
-                                    <green>90</green>
-                                    <blue>218</blue>
-                                </color>
                             </property>
                             <property name="margin">
                                 <number>2</number>

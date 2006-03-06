@@ -48,7 +48,7 @@ public slots:
 	
 private slots:
 	void 				slotInit();
-	void				slotBusy( bool b );
+	void				slotBusy();
 	void				slotInitButtons();
 	void				slotButtons();
 	void				slotListSubCategories();

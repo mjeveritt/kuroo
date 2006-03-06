@@ -54,7 +54,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
-	connect( pbClear, SIGNAL( clicked() ), QueueSingleton::Instance(), SLOT( reset() ) );
+	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( queueView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
@@ -68,7 +68,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( m_packageInspector, SIGNAL( signalUseChanged() ), this, SLOT( slotPackageUseChanged() ) );
 	
 	// Lock/unlock if kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
 	
@@ -151,13 +151,8 @@ void QueueTab::slotInit()
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
 	
-	pbAdvanced->setDisabled( true );
-	cbForceConf->setDisabled( true );
-	cbRemove->setDisabled( true );
-	cbNoWorld->setDisabled( true );
-	
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
-	slotBusy( false );
+	slotBusy();
 }
 
 
@@ -170,16 +165,20 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
-// 	kdDebug() << "QueueTab::slotReload hasCheckedQueue=" << hasCheckedQueue << endl;
+	// Reenable the inspector after queue changes
+	m_packageInspector->setDisabled( true );
+	pbAdvanced->setDisabled( true );
 	
+	// If user is not su emerge pretend will not set packages as checked
 	m_hasCheckedQueue = hasCheckedQueue;
-	
-	queueView->insertPackageList( m_hasCheckedQueue );
-	
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;
 	
-	slotBusy( false );
+	// Load all packages
+	queueView->insertPackageList( m_hasCheckedQueue );
+	
+	// Enable the gui
+	slotBusy();
 	
 	initialQueueTime = queueView->totalTimeFormatted();
 	slotQueueSummary();
@@ -193,7 +192,7 @@ void QueueTab::slotPackageUseChanged()
 	m_hasCheckedQueue = false;
 	KurooDBSingleton::Instance()->clearQueuePackageUse();
 	queueView->clearQueuePackageUse();
-	slotBusy( false );
+	slotBusy();
 }
 
 /**
@@ -216,12 +215,31 @@ void QueueTab::slotQueueSummary()
 
 /**
  * Disable/enable buttons when kuroo busy signal is received.
- * @param busy
  */
-void QueueTab::slotBusy( bool busy )
+void QueueTab::slotBusy()
 {
-// 	kdDebug() << "QueueTab::slotBusy busy=" << busy << " m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
-	
+	// No db or queue is empty - no fun!
+	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
+		pbRemove->setDisabled( true );
+		pbAdvanced->setDisabled( true );
+		pbClear->setDisabled( true );
+		cbDownload->setDisabled( true );
+		cbForceConf->setDisabled( true );
+		cbNoWorld->setDisabled( true );
+		cbRemove->setDisabled( true );
+		pbCheck->setDisabled( true );
+		pbGo->setDisabled( true );
+	}
+	else
+		slotButtons();
+}
+
+/**
+ * Disable buttons if no package is selected or kuroo is busy emerging.
+ */
+void QueueTab::slotButtons()
+{
+	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
@@ -233,63 +251,43 @@ void QueueTab::slotBusy( bool busy )
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		
-		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
-			pbGo->setDisabled( false );
-			cbForceConf->setDisabled( false );
-			cbNoWorld->setDisabled( false );
-			cbRemove->setDisabled( false );
-		}
-		else {
-			pbGo->setDisabled( true );
-			cbForceConf->setDisabled( true );
-			cbNoWorld->setDisabled( true );
-			cbRemove->setDisabled( true );
-		}
 	}
 	
-	// No db no fun!
-	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" || busy ) {
-		pbRemove->setDisabled( true );
-		pbAdvanced->setDisabled( true );
-		pbClear->setDisabled( true );
-		cbDownload->setDisabled( true );
-		cbForceConf->setDisabled( true );
-		cbNoWorld->setDisabled( true );
-		pbCheck->setDisabled( true );
-	}
-	else {
-		pbRemove->setDisabled( false );
-		pbAdvanced->setDisabled( false );
-		pbClear->setDisabled( false );
-		cbDownload->setDisabled( false );
-		pbCheck->setDisabled( false );
-	}
-}
-
-/**
- * Disable buttons if no package is selected or kuroo is busy emerging.
- */
-void QueueTab::slotButtons()
-{
+	// No package selected, disable all buttons
 	if ( queueView->selectedId().isEmpty() ) {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 		return;
 	}
 	
-	if ( !EmergeSingleton::Instance()->isRunning() ) {
-		pbRemove->setDisabled( false );
-		pbAdvanced->setDisabled( false );
-		pbCheck->setDisabled( false );
-	}
-	else {
+	// Queue is not empty - enable button "Remove all" and "Check Installation"
+	pbRemove->setDisabled( false );
+	pbClear->setDisabled( false );
+	pbCheck->setDisabled( false );
+	
+	// When emerging packages do not allow user to change the queue
+	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbRemove->setDisabled( true );
-		pbAdvanced->setDisabled( true );
+		pbClear->setDisabled( true );
 		pbCheck->setDisabled( true );
 	}
 	
+	// User is su and packages in queue are "checked" - enable checkboxes
+	if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
+		pbGo->setDisabled( false );
+		cbForceConf->setDisabled( false );
+		cbNoWorld->setDisabled( false );
+		cbRemove->setDisabled( false );
+	}
+	else {
+		pbGo->setDisabled( true );
+		cbForceConf->setDisabled( true );
+		cbNoWorld->setDisabled( true );
+		cbRemove->setDisabled( true );
+	}
+	
 	pbAdvanced->setDisabled( false );
+	m_packageInspector->setDisabled( false );
 }
 
 
@@ -352,9 +350,7 @@ void QueueTab::slotGo()
 						packageList.prepend( "--oneshot" );
 						
 					QueueSingleton::Instance()->installQueue( packageList );
-					
 					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-					m_hasCheckedQueue = false;
 				}
 				
 			}
@@ -390,7 +386,17 @@ void QueueTab::slotPretend()
  */
 void QueueTab::slotRemove()
 {
+	m_packageInspector->hide();
 	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+}
+
+/**
+ * Remove package from Queue.
+ */
+void QueueTab::slotClear()
+{
+	m_packageInspector->hide();
+	QueueSingleton::Instance()->reset();
 }
 
 /**

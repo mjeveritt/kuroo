@@ -85,10 +85,11 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReload() ) );
 	
 	// Lock/unlock actions when kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Load Inspector with current package info
 	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	slotInit();
 }
@@ -105,7 +106,7 @@ PortageTab::~PortageTab()
 void PortageTab::slotInit()
 {
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );
-	slotBusy( false );
+	slotBusy();
 }
 
 
@@ -113,27 +114,19 @@ void PortageTab::slotInit()
 // Toggle button slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void PortageTab::slotInitButtons()
+{
+	pbQueue->setText( i18n("Add to Queue") );
+}
+
 /**
  * Disable/enable buttons when kuroo is busy.
- * @param busy
  */
-void PortageTab::slotBusy( bool busy )
+void PortageTab::slotBusy()
 {
-	if ( busy ) {
-		pbUninstall->setDisabled( true );
-		pbQueue->setDisabled( true );
-	}
-	else {
-		if ( !KUser().isSuperUser() )
-			pbUninstall->setDisabled( true );
-		else
-			pbUninstall->setDisabled( false );
-		
-		pbQueue->setDisabled( false );
-	}
-	
-	// No db no fun!
+	// If kuroo busy or no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
+		pbUninstall->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 		pbQueue->setDisabled( true );
 		filterGroup->setDisabled( true );
@@ -144,24 +137,48 @@ void PortageTab::slotBusy( bool busy )
 		filterGroup->setDisabled( false );
 		searchFilter->setDisabled( false );
 		pbClearFilter->setDisabled( false );
+		slotButtons();
 	}
 }
 
-void PortageTab::slotInitButtons()
-{
-	pbQueue->setText( i18n("Add to Queue") );
-}
-
 /**
- * Toggle Add/Remove to Queue button.
- * @param isQueued
+ * Toggle buttons states.
  */
 void PortageTab::slotButtons()
 {
-	if ( packagesView->currentPackage()->isQueued() )
-		pbQueue->setText( i18n("Remove from Queue") );
+	// No package selected, disable all buttons
+	if ( packagesView->selectedId().isEmpty() ) {
+		pbQueue->setDisabled( true );
+		pbAdvanced->setDisabled( true );
+		pbUninstall->setDisabled( true );
+		return;
+	}
+	
+	m_packageInspector->setDisabled( false );
+	pbAdvanced->setDisabled( false );
+	
+	// Toggle queue button between add/remove
+	if ( packagesView->currentPackage()->isInPortage() ) {
+		if ( packagesView->currentPackage()->isQueued() )
+			pbQueue->setText( i18n("Remove from Queue") );
+		else
+			pbQueue->setText( i18n("Add to Queue") );
+	}
+
+	// When kuroo is busy disable queue and uninstall button
+	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
+		pbQueue->setDisabled( true );
+		pbUninstall->setDisabled( true );
+		return;
+	}
 	else
-		pbQueue->setText( i18n("Add to Queue") );
+		pbQueue->setDisabled( false );
+	
+	// If user is su enable uninstall
+	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
+		pbUninstall->setDisabled( false );
+	else
+		pbUninstall->setDisabled( true );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,6 +191,9 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
+	m_packageInspector->setDisabled( true );
+	pbAdvanced->setDisabled( true );
+	
 	// Prepare categories by loading index
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
@@ -223,12 +243,10 @@ void PortageTab::slotListPackages()
 	
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-		pbAdvanced->setDisabled( true );
-		m_packageInspector->setDisabled( true );
-		pbQueue->setDisabled( true );
 		
+		slotButtons();
 		summaryBrowser->clear();
-		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
+		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No package found with these filter settings</font><br>"
 		                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
 		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
 		
@@ -242,10 +260,6 @@ void PortageTab::slotListPackages()
 		disconnect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	}
 	else {
-		pbAdvanced->setDisabled( false );
-		m_packageInspector->setDisabled( false );
-		if ( !EmergeSingleton::Instance()->isRunning() )
-			pbQueue->setDisabled( false );
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
@@ -334,30 +348,8 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-// 	kdDebug() << "PortageTab::slotPackage" << endl;
-	
 	if ( !isVisible() )
 		return;
-	
-	if ( packagesView->currentPackage()->isInPortage() ) {
-		if ( packagesView->currentPackage()->isQueued() )
-			pbQueue->setText( i18n("Remove from Queue") );
-		else
-			pbQueue->setText( i18n("Add to Queue") );
-		
-		pbQueue->setDisabled( false );
-	}
-	else
-		pbQueue->setDisabled( true );
-	
-	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() && !EmergeSingleton::Instance()->isRunning() ) {
-		pbUninstall->setDisabled( false );
-		pbQueue->setDisabled( false );
-		m_packageInspector->setDisabled( false );
-		pbAdvanced->setDisabled( false );
-	}
-	else 
-		pbUninstall->setDisabled( true );
 	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -374,7 +366,7 @@ void PortageTab::slotPackage()
 	QString category( packagesView->currentPackage()->category() );
 	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
-			lines += "<tr><td bgcolor=#7a5ada colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
+			lines += "<tr><td bgcolor=#88bb22 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
 	
@@ -445,8 +437,6 @@ void PortageTab::slotPackage()
 			else
 				linesAvailable.prepend( version + ", " );
 		}
-			
-// 		kdDebug() << "version=" << version << endl;
 	}
 	
 	// Remove trailing commas
@@ -455,7 +445,7 @@ void PortageTab::slotPackage()
 	
 	// Construct installed summary
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>") + linesInstalled + "</td></tr>";
+		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%1</td></tr>").arg( linesInstalled );
 	else
 		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>Not installed</td></tr>");
 	
@@ -470,7 +460,7 @@ void PortageTab::slotPackage()
 			m_packageInspector->dialog->cbVersionsUse->setCurrentText( emergeVersion );
 			m_packageInspector->dialog->versionsView->usedForInstallation( emergeVersion );
 			
-			linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>") + linesEmergeVersion + "</td></tr>";
+			linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>").arg( linesEmergeVersion );
 		}
 		else {
 			if ( versionNotInArchitecture && linesAvailable.isEmpty() )
@@ -483,7 +473,7 @@ void PortageTab::slotPackage()
 		
 		// Construct available versions summary
 		if ( !linesAvailable.isEmpty() )
-			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>") + linesAvailable + "</td></tr>";
+			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></td></tr>").arg( linesAvailable );
 		else
 			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</td>"
 			                      "<td width=90%><font color=darkRed>No versions available on %1</font></b></td></tr>").arg( KurooConfig::arch() );

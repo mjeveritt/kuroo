@@ -54,7 +54,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 	hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
-	dialog->setMinimumSize( QSize(600, 450) );
+	dialog->setMinimumSize( QSize(600, 500) );
 	setMainWidget( dialog );
 	
 	// Get use flag description @fixme: load local description
@@ -307,6 +307,7 @@ void PackageInspector::edit( PackageItem* portagePackage )
 		isVirginState = false;
 
 	// Construct header text
+	dialog->headerFrame->setPaletteBackgroundColor( QColor(136,187,34) );
 	dialog->package->setText( "<b><font color=white><font size=+1>" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->package2->setText( m_portagePackage->description() );

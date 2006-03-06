@@ -527,7 +527,7 @@ void PackageInspector::slotRefreshTabs()
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
 	slotLoadInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	loadChangeLog();
-	adjustSize();
+// 	adjustSize();
 }
 
 /**

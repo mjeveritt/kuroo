@@ -67,6 +67,7 @@ private slots:
 	void 				slotCleanupCheckUpdates( KProcess *proc );
 	bool				countEtcUpdates( const QString& line );
 	void				askUnmaskPackage( const QString& packageKeyword );
+	void				slotTryEmerge();
 	
 signals:
 	void				signalEmergeComplete();

@@ -148,7 +148,7 @@ in the official portage tree.</string>
                                         </property>
                                         <property name="maximumSize">
                                             <size>
-                                                <width>32767</width>
+                                                <width>350</width>
                                                 <height>150</height>
                                             </size>
                                         </property>
@@ -360,7 +360,7 @@ and do not update further</string>
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>124</width>
+                                <width>20</width>
                                 <height>20</height>
                             </size>
                         </property>
@@ -435,7 +435,7 @@ and do not update further</string>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>32767</width>
+                                <width>570</width>
                                 <height>270</height>
                             </size>
                         </property>
@@ -474,7 +474,7 @@ and do not update further</string>
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>280</width>
+                                <width>20</width>
                                 <height>21</height>
                             </size>
                         </property>

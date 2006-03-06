@@ -48,8 +48,6 @@ public slots:
 	void						setCache( const QMap< QString, QString > &mapCacheIn );
 	void						loadCache();
 	void						clearCache();
-	void						untestingPackageList( const QStringList& packageIdList );
-	bool						unmaskPackage( const QString& package, const QString& maskFile );
 	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );

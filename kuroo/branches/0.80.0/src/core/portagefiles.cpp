@@ -683,9 +683,11 @@ void PortageFiles::refresh( int mask )
 			break;
 		case 4:
 			kdDebug() << i18n("Completed saving package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << endl;
+			emit signalPortageFilesChanged();
 			break;
 		case 5:
 			kdDebug() << i18n("Completed saving user masked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;
+			emit signalPortageFilesChanged();
 			break;
 		case 6:
 			kdDebug() << i18n("Completed saving user unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << endl;

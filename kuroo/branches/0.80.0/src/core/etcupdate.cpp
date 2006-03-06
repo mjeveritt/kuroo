@@ -27,7 +27,7 @@
 
 /**
  * @class EtcUpdate
- * @short Object for handling etc-updates.
+ * @short Handles etc-updates.
  * The external diff tool is launched for merging changes in etc config files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
@@ -54,7 +54,8 @@ void EtcUpdate::init( QObject *parent )
  */
 void EtcUpdate::askUpdate( const int& count )
 {
-	switch ( KMessageBox::questionYesNo( 0, i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>").arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
+	switch ( KMessageBox::questionYesNo( 0, i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
+										 .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
 		
 		case KMessageBox::Yes :
 			etcUpdate();
@@ -129,46 +130,36 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 		KMessageBox::sorry( 0, i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
 		SignalistSingleton::Instance()->setKurooBusy( false );
 	}
-	else
+	else {
+		
+		// Parse out etc-files
+		QRegExp rxEtcFiles( "(?:^\\d+\\))*\\s+(/\\s*\\S*)" );
+		foreach( etcUpdateLines )
+			if ( rxEtcFiles.search( *it ) > -1 )
+				etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
+		
 		runDiff();
+	}
 }
 
 /**
- * Parse etc-update output and launch diff tool.
+ * Launch diff tool with first etc-file in list.
  */
 void EtcUpdate::runDiff()
 {
-// 	static int count( 1 );
-// 	static int totalEtcCount( 0 );
-	QString etcWarning;
-	
-	// Add date tag in the log
-	QRegExp rx( "^\\d+\\)\\s" );
-	
-	// Skip first rows
-	do {
-		if ( rx.search( etcUpdateLines.first() ) == -1 )
-			etcUpdateLines.pop_front();
-		else
-			break;
-	} while( etcUpdateLines.size() > 0 );
-	
-	// Count etc updates first time
-	if ( totalEtcCount == 0 )
-		totalEtcCount = etcUpdateLines.size()/2 - 2;
-	
-	if ( etcUpdateLines.size() > 0 && rx.search( etcUpdateLines.first() ) != -1 ) {
-		QString destination = etcUpdateLines.first().section( rx, 1, 1 );
-		etcUpdateLines.pop_front();
-		QString source = etcUpdateLines.first();
-		etcUpdateLines.pop_front();
+	totalEtcCount = etcFilesList.size() / 2;
+	if ( totalEtcCount > 0 ) {
+		QString destination = etcFilesList.first();
+		etcFilesList.pop_front();
+		QString source = etcFilesList.first();
+		etcFilesList.pop_front();
 		
 		// Check for etc warning
+		QString etcWarning;
 		const QStringList etcFilesList = QStringList::split( "\n", KurooConfig::etcFiles() );
-		foreach ( etcFilesList ) {
+		foreach ( etcFilesList )
 			if ( *it == destination )
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
-		}
 		
 		switch ( KMessageBox::questionYesNo( 0, i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), i18n("etc-update (%1 of %2)").arg( count++ ).arg( totalEtcCount ) ) ) {
 			
@@ -191,7 +182,7 @@ void EtcUpdate::runDiff()
 					LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( destination ), KUROO );
 					backup( source, destination );
 				}
-				
+			
 				break;
 			}
 			

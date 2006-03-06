@@ -26,6 +26,7 @@
 
 #include <kprocio.h>
 #include <kmessagebox.h>
+#include <kuser.h>
 
 /**
  * @class Emerge
@@ -365,14 +366,14 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 						logDone++;
 					}
 					else
-						if ( lineLower.startsWith("- ") && lineLower.contains( "masked by" ) ) {
-							QString pName = line.section( " (masked by", 0, 0 );
-							QString flags = line.section( " (masked by: ", 1, 1 );
-							QString branch = flags.section( ")", 0, 0 );
-							pName = pName.section( "- ", 1, 1 );
-							QString cName = pName.section( "/", 0, 0 );
-							pName = pName.section( "/", 1, 1 );
-							unmasked = cName + "/" + pName + "%" + branch;
+						if ( lineLower.contains( " (masked by: " ) ) {
+// 							QString pName = line.section( " (masked by", 0, 0 );
+// 							QString flags = line.section( " (masked by: ", 1, 1 );
+// 							QString branch = flags.section( ")", 0, 0 );
+// 							pName = pName.section( "- ", 1, 1 );
+// 							QString cName = pName.section( "/", 0, 0 );
+// 							pName = pName.section( "/", 1, 1 );
+							unmasked = line.section( "- ", 1 ).section( ")", 0 );;
 						}
 						else
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
@@ -454,8 +455,12 @@ void Emerge::cleanup()
 	if ( !blocks.isEmpty() )
 		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>") );
 
-	if ( !unmasked.isEmpty() )
-		askUnmaskPackage( unmasked );
+	if ( !unmasked.isEmpty() ) {
+		if ( KUser().isSuperUser() )
+			askUnmaskPackage( unmasked );
+		else
+			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), "dontAskAgainNotEmerge" );
+	}
 	else
 		if ( !importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
@@ -536,9 +541,11 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
  */
 void Emerge::askUnmaskPackage( const QString& packageKeyword )
 {
-	QString package = packageKeyword.section("%", 0, 0);
-	QString keyword = (packageKeyword.section("%", 1, 1)).section(" keyword", 0, 0);
+	QString package = packageKeyword.section( "(masked by: ", 0, 0);
+	QString keyword = ( packageKeyword.section("(masked by: ", 1, 1) ).section(" keyword", 0, 0);
 	QString name = package.section( rxPortageVersion, 0, 0 );
+	
+	kdDebug() << "Emerge::askUnmaskPackage packageKeyword=" << packageKeyword << endl;
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
 		importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
@@ -555,10 +562,11 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( name ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes :
-					if ( PortageSingleton::Instance()->unmaskPackage( name, KurooConfig::filePackageUserUnMask() ) )
-							pretend( lastEmergeList );
+						KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( name ) );
+						PortageFilesSingleton::Instance()->savePackageUserUnMask();
+						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 						break;
-					
 				}
 			}
 			else {
@@ -566,13 +574,23 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( name ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes :
-					if ( PortageSingleton::Instance()->unmaskPackage( name, KurooConfig::filePackageKeywords() ) )
-							pretend( lastEmergeList );
+						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( name ) );
+						PortageFilesSingleton::Instance()->savePackageKeywords();
+						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 						break;
-					
 				}
 			}
 		}
+}
+
+/**
+ * After package is auto-unmasked try remerging the list again to find next package to unmask.
+ */
+void Emerge::slotTryEmerge()
+{
+	pretend( lastEmergeList );
+	disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 }
 
 /**
@@ -585,7 +603,7 @@ bool Emerge::countEtcUpdates( const QString& line )
 	// count etc-files to merge
 	if ( line.contains(" need updating") ) {
 		QString tmp = line.section("config files", 0, 0);
-		QRegExp rx("(\\d+)");
+		QRegExp rx("^\\d+\\)");
 		int pos = rx.search(tmp);
 		if ( pos > -1 )
 			etcUpdateCount += (rx.cap(1)).toInt();

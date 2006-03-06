@@ -57,7 +57,7 @@ private:
 	int 				count, totalEtcCount;
 	QObject*			m_parent;
 	KProcIO*			eProc;
-	QStringList			etcUpdateLines;
+	QStringList			etcUpdateLines, etcFilesList;
 	QString				diffSource;
 	bool				noFiles;
 	

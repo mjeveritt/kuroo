@@ -105,10 +105,21 @@ PortageTab::~PortageTab()
  */
 void PortageTab::slotInit()
 {
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), packagesView, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	slotBusy();
 }
 
+/**
+ * Forward signal from next-buttons only if this tab is visible for user.
+ * @param isNext
+ */
+void PortageTab::slotNextPackage( bool isNext )
+{
+	if ( !isVisible() )
+		return;
+	
+	packagesView->slotNextPackage( isNext );
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Toggle button slots
@@ -348,9 +359,6 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-	if ( !isVisible() )
-		return;
-	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
 	m_packageInspector->dialog->versionsView->clear();

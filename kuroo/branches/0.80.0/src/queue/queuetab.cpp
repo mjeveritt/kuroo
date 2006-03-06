@@ -151,10 +151,21 @@ void QueueTab::slotInit()
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
 	
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), queueView, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	slotBusy();
 }
 
+/**
+ * Forward signal from next-buttons only if this tab is visible for user.
+ * @param isNext
+ */
+void QueueTab::slotNextPackage( bool isNext )
+{
+	if ( !isVisible() )
+		return;
+	
+	queueView->slotNextPackage( isNext );
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue view slots
@@ -264,6 +275,7 @@ void QueueTab::slotButtons()
 	pbRemove->setDisabled( false );
 	pbClear->setDisabled( false );
 	pbCheck->setDisabled( false );
+	cbDownload->setDisabled( false );
 	
 	// When emerging packages do not allow user to change the queue
 	if ( EmergeSingleton::Instance()->isRunning() ) {
@@ -423,9 +435,6 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
-	if ( !isVisible() )
-		return;
-	
 	// clear text browsers and dropdown menus
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();

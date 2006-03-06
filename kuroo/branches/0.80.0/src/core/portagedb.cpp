@@ -908,15 +908,22 @@ void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 	insert( "REPLACE INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
 }
 
-/**
- * Add package in package.unmask. @fixme: check category and package?
- * @param id
- */
 void KurooDB::setPackageUnMasked( const QString& id )
 {
 	if ( !isPackageUnMasked( id ) )
 		insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-	       		"'" + category( id ) + "/" + package( id ) + "');" );
+		        "'" + category( id ) + "/" + package( id ) + "');" );
+}
+
+/**
+ * Add package in package.unmask. @fixme: check category and package?
+ * @param id
+ */
+void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
+{
+	if ( !isPackageUnMasked( id ) )
+		insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+		        "'<=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**

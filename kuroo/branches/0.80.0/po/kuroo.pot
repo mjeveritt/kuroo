@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-06 10:47+0100\n"
+"POT-Creation-Date: 2006-03-06 12:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -503,11 +503,11 @@ msgstr ""
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:1173
+#: core/portagedb.cpp:1180
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1177
+#: core/portagedb.cpp:1184
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 
@@ -683,35 +683,35 @@ msgstr ""
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:538 core/packageinspector.cpp:614
-#: core/packageinspector.cpp:639 core/packageinspector.cpp:673
-#: core/packageinspector.cpp:700 portage/portage.cpp:207
+#: core/packageinspector.cpp:541 core/packageinspector.cpp:617
+#: core/packageinspector.cpp:642 core/packageinspector.cpp:676
+#: core/packageinspector.cpp:703
 msgid "Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:615
+#: core/packageinspector.cpp:618
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:640
+#: core/packageinspector.cpp:643
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:674
+#: core/packageinspector.cpp:677
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:703
+#: core/packageinspector.cpp:706
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:727
+#: core/packageinspector.cpp:730
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:773
+#: core/packageinspector.cpp:776
 msgid "No use flags available."
 msgstr ""
 
@@ -820,27 +820,15 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: portage/portage.cpp:97
+#: portage/portage.cpp:98
 msgid "Wait-counter has reached maximum. Attempting to scan Portage."
 msgstr ""
 
-#: portage/portage.cpp:229 logs/log.cpp:58
-msgid "Error writing: "
-msgstr ""
-
-#: portage/portage.cpp:230
-msgid "Failed to save. Please run as root."
-msgstr ""
-
-#: portage/portage.cpp:230 logs/log.cpp:59 config/configdialog.cpp:431
-msgid "Saving"
-msgstr ""
-
-#: portage/portage.cpp:260
+#: portage/portage.cpp:193
 msgid "Loading packages in world. Error reading: "
 msgstr ""
 
-#: portage/portage.cpp:278
+#: portage/portage.cpp:211
 msgid "Adding to world. Error writing: "
 msgstr ""
 
@@ -969,8 +957,16 @@ msgstr ""
 msgid "Uninstall Packages"
 msgstr ""
 
+#: logs/log.cpp:58
+msgid "Error writing: "
+msgstr ""
+
 #: logs/log.cpp:59
 msgid "Error writing %1kuroo.log."
+msgstr ""
+
+#: logs/log.cpp:59 config/configdialog.cpp:431
+msgid "Saving"
 msgstr ""
 
 #: config/configdialog.cpp:49 config/configdialog.cpp:53

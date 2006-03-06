@@ -56,6 +56,7 @@ void Portage::init( QObject *parent )
  */
 void Portage::slotChanged()
 {
+	clearCache();
 	emit signalPortageChanged();
 	KurooDBSingleton::Instance()->addRefreshTime();
 	PortageFilesSingleton::Instance()->loadPackageMask();

@@ -149,7 +149,7 @@ in the official portage tree.</string>
                                         <property name="maximumSize">
                                             <size>
                                                 <width>350</width>
-                                                <height>150</height>
+                                                <height>200</height>
                                             </size>
                                         </property>
                                     </widget>

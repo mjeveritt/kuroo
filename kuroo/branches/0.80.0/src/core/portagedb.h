@@ -202,6 +202,7 @@ public:
 	void			setPackageUse( const QString& id, const QString& useFlags );
 	void			setPackageUnTesting( const QString& id );
 	void			setPackageUnMasked( const QString& id );
+	void			setPackageUnMasked( const QString& id, const QString& version );
 	void			setPackageUserMasked( const QString& id, const QString& version );
 	void			setPackageAvailable( const QString& id );
 	

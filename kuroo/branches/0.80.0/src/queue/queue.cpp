@@ -155,7 +155,7 @@ void Queue::stopTimer()
 }
 
 /**
- * When the package is inserted in the register it in the cache too.
+ * Clear Queue.
  * @param id
  */
 void Queue::clearCache()

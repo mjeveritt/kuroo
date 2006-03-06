@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-06 15:29+0100\n"
-"PO-Revision-Date: 2006-03-06 18:11+0100\n"
+"PO-Revision-Date: 2006-03-06 18:38+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -980,7 +980,7 @@ msgstr "<tr><td width=10%><b>Installert&nbsp;versjon:</b></font></td><td width=9
 
 #: portage/portagetab.cpp:463
 msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
-msgstr "<tr><td width=10%><b>Vil&installere:</b></td><td width=90%>%1</td></tr>"
+msgstr "<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
 
 #: portage/portagetab.cpp:467
 msgid ""
@@ -1594,7 +1594,7 @@ msgstr "Tilgjengelige versjoner av denne pakken:"
 #: rc.cpp:104
 #, no-c-format
 msgid "Emerge version"
-msgstr "Portage-versjon"
+msgstr "Vil installere"
 
 #: rc.cpp:107
 #, no-c-format

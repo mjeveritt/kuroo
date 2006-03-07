@@ -910,8 +910,8 @@ void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 
 void KurooDB::setPackageUnMasked( const QString& id )
 {
-	if ( !isPackageUnMasked( id ) )
-		insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+// 	if ( !isPackageUnMasked( id ) )
+		insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
 		        "'" + category( id ) + "/" + package( id ) + "');" );
 }
 
@@ -921,8 +921,10 @@ void KurooDB::setPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
 {
-	if ( !isPackageUnMasked( id ) )
-		insert( "INSERT INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+	kdDebug() << "KurooDB::setPackageUnMasked id=" << id << " version=" << version << endl;
+	
+// 	if ( !isPackageUnMasked( id ) )
+		insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
 		        "'<=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
@@ -932,8 +934,10 @@ void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
  */
 void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 {
-	clearPackageUserMasked( id );
-	insert( "INSERT INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
+	kdDebug() << "KurooDB::setPackageUserMasked id=" << id << " version=" << version << endl;
+	
+// 	clearPackageUserMasked( id );
+	insert( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
 	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 

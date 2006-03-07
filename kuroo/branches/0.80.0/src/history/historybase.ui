@@ -121,27 +121,27 @@
                 <widget class="QComboBox" row="1" column="3">
                     <item>
                         <property name="text">
-                            <string>Week</string>
+                            <string>last week</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Month</string>
+                            <string>last month</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>6 Month</string>
+                            <string>last 6 months</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Year</string>
+                            <string>last year</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>All</string>
+                            <string>all</string>
                         </property>
                     </item>
                     <property name="name">
@@ -176,7 +176,7 @@
                         <cstring>textLabel1_2_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Show last:</string>
+                        <string>Show:</string>
                     </property>
                 </widget>
             </grid>

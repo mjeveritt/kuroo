@@ -93,7 +93,6 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	// Confirm changes in views with bleue text menu
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
-// 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
@@ -168,9 +167,8 @@ void KurooView::slotInit()
  */
 void KurooView::slotReset()
 {
-	slotPortageUpdated();
-// 	UpdatesSingleton::Instance()->slotReset();
-	slotInit();
+// 	slotPortageUpdated();
+// 	slotInit();
 }
 
 /**
@@ -193,9 +191,6 @@ void KurooView::slotCheckPortage()
 	else {
 		viewPortage->slotReload();
 		viewQueue->slotReload( false );
-		
-		if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
-			PortageSingleton::Instance()->slotRefreshUpdates();
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled
 		if ( !KUser().isSuperUser() )

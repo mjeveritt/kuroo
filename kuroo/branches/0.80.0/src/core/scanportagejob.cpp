@@ -329,7 +329,7 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM version;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
-	
+
 	KurooDBSingleton::Instance()->insert("INSERT INTO category SELECT * FROM category_temp;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db);
 	KurooDBSingleton::Instance()->insert("INSERT INTO catSubCategory SELECT * FROM catSubCategory_temp;", m_db);

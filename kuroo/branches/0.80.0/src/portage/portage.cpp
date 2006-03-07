@@ -271,6 +271,16 @@ bool Portage::slotRefresh()
 }
 
 /**
+ * Start emerge sync.
+ * @return bool
+ */
+bool Portage::slotSync()
+{
+	EmergeSingleton::Instance()->sync();
+	return true;
+}
+
+/**
  * Continue scan of portage packages.
  * @return bool
  */
@@ -301,19 +311,13 @@ bool Portage::slotScan()
 void Portage::slotScanCompleted()
 {
 	kdDebug() << "Portage::slotScanCompleted" << endl;
-	emit signalPortageChanged();
 	KurooDBSingleton::Instance()->addRefreshTime();
 	PortageFilesSingleton::Instance()->loadPackageMask();
-}
-
-/**
- * Start emerge sync.
- * @return bool
- */
-bool Portage::slotSync()
-{
-	EmergeSingleton::Instance()->sync();
-	return true;
+	
+	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
+		slotRefreshUpdates();
+	else
+		emit signalPortageChanged();
 }
 
 /**

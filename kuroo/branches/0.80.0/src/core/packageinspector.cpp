@@ -292,12 +292,12 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
 	
-// 	if ( !KUser().isSuperUser() ) {
-// 		enableButtonApply( false );
-// 		dialog->groupSelectStability->setDisabled( true );
-// 		dialog->useView->setDisabled( true );
-// 		dialog->groupArchitecture->setDisabled( true );
-// 	}
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->useView->setDisabled( true );
+		dialog->groupArchitecture->setDisabled( true );
+	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging
 	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
@@ -464,7 +464,7 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 	hasVersionSettingsChanged = true;
 	
 	KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
-	KurooDBSingleton::Instance()->setPackageUnMasked( m_id, version );
+	KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
 	KurooDBSingleton::Instance()->setPackageUserMasked( m_id, version );
 	
 	m_portagePackage->resetDetailedInfo();

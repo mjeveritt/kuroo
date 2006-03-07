@@ -8,9 +8,8 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libportage.la
 
 libportage_la_SOURCES = portagebase.ui portagelistview.cpp portagetab.cpp \
-		portage.cpp installed.cpp updates.cpp uninstallinspector.cpp uninstallbase.ui
+	portage.cpp uninstallinspector.cpp uninstallbase.ui
 
-noinst_HEADERS = portagelistview.h portagetab.h portage.h installed.h updates.h \
-	uninstallinspector.h
+noinst_HEADERS = portagelistview.h portagetab.h portage.h uninstallinspector.h
 
 libportage_la_LIBADD = $(top_builddir)/src/core/libcore.la

@@ -150,9 +150,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	EmergeSingleton::Instance()->init( this );
 	EtcUpdateSingleton::Instance()->init( this );
 	HistorySingleton::Instance()->init( this );
-	InstalledSingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
-	UpdatesSingleton::Instance()->init( this );
 	QueueSingleton::Instance()->init( this );
 	ResultsSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );

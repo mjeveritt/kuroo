@@ -41,16 +41,30 @@ public slots:
 	void						init( QObject *parent = 0 );
 	void						slotChanged();
 	bool						slotRefresh();
+	
 	bool						slotScan();
+	void						slotScanCompleted();
+	
 	bool						slotSync();
 	void						pretendPackageList( const QStringList& packageIdList );
+	
 	QString						cacheFind( const QString& package );
 	void						setCache( const QMap< QString, QString > &mapCacheIn );
 	void						loadCache();
 	void						clearCache();
+	
 	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
+	
+	void						uninstallInstalledPackageList( const QStringList& packageIdList );
+	void						addInstalledPackage( const QString& package );
+	void						removeInstalledPackage( const QString& package );
+	
+	bool						slotRefreshUpdates();
+	bool						slotLoadUpdates();
+	void						removeUpdatePackage( const QString& package );
+	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
 	
 signals:
 	void						signalPortageChanged();

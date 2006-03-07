@@ -89,11 +89,11 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	LogSingleton::Instance()->setGui( viewLogs->logBrowser, viewLogs->verboseLog, viewLogs->saveLog );
 	
 	// Reset everything when a portage scan is started
-	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
+// 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
 	
 	// Confirm changes in views with bleue text menu
-	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotPortageUpdated() ) );
-	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
+	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
+// 	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotPortageUpdated() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
@@ -117,20 +117,6 @@ void KurooView::slotShowView()
 	packageInspector->hide();
 	int tabIndex = viewMenu->currentItem() + VIEW_PACKAGES;
 	viewStack->raiseWidget( tabIndex );
-	
-	switch ( tabIndex ) {
-	
-		case ( VIEW_PACKAGES ) :
-			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), viewQueue, SLOT( slotPackage() ) );
-			connect( packageInspector, SIGNAL( signalPackageChanged() ), viewPortage, SLOT( slotPackage() ) );
-			break;
-			
-		case ( VIEW_QUEUE ) :
-			disconnect( packageInspector, SIGNAL( signalPackageChanged() ), viewPortage, SLOT( slotPackage() ) );
-			connect( packageInspector, SIGNAL( signalPackageChanged() ), viewQueue, SLOT( slotPackage() ) );
-			break;
-		
-	}
 }
 
 /**
@@ -183,7 +169,7 @@ void KurooView::slotInit()
 void KurooView::slotReset()
 {
 	slotPortageUpdated();
-	UpdatesSingleton::Instance()->slotReset();
+// 	UpdatesSingleton::Instance()->slotReset();
 	slotInit();
 }
 
@@ -209,7 +195,7 @@ void KurooView::slotCheckPortage()
 		viewQueue->slotReload( false );
 		
 		if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
-			UpdatesSingleton::Instance()->slotRefresh();
+			PortageSingleton::Instance()->slotRefreshUpdates();
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled
 		if ( !KUser().isSuperUser() )

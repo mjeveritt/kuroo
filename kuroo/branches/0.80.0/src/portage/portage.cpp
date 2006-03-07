@@ -21,10 +21,200 @@
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
+#include "scanupdatesjob.h"
 
 #include <kmessagebox.h>
 
 #include <unistd.h>
+
+/**
+ * @class AddInstalledPackageJob
+ * @short Thread for adding packages into installed in db.
+ */
+class AddInstalledPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+	
+	virtual bool doJob() {
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else
+			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+		
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+		
+		if ( id.isEmpty() ) {
+			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return false;
+		}
+		else {
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%2'"
+			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3'"
+			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return true;
+		}
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const QString m_package;
+};
+
+/**
+ * @class RemoveInstalledPackageJob
+ * @short Thread for removing packages from installed in db.
+ */
+class RemoveInstalledPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else
+			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+		
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+		
+		if ( id.isEmpty() ) {
+			kdDebug() << i18n("Remove unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return false;
+		}
+		else {
+			
+			// Mark package as uninstalled or remove it if old
+			KurooDBSingleton::Instance()->query( QString(
+			                                              "UPDATE package SET status = '%1' "
+			                                              "WHERE status = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString(
+			                                              "DELETE FROM package "
+			                                              "WHERE status = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString(
+			                                              "UPDATE version SET status = '%1' "
+			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return true;
+		}
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const QString m_package;
+};
+
+/**
+ * @class RemoveUpdatesPackageJob
+ * @short Thread for removing single package from updates.
+ */
+class RemoveUpdatesPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	RemoveUpdatesPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else
+			kdDebug() << i18n("Removing update package: can not match package %1.").arg( m_package ) << endl;
+		
+		QString id = KurooDBSingleton::Instance()->singleQuery(
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+		
+		if ( id.isEmpty() ) {
+			kdDebug() << i18n("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+			return false;
+		}
+		else {
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
+			                                              "WHERE name = '%1' AND ( updateVersion = '%2' OR updateVersion = '%3' );"
+			                                            ).arg( name ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+			return true;
+		}
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const QString m_package;
+};
+
+/**
+ * @class CheckUpdatesPackageJob
+ * @short Thread for marking packages as updates or donwgrades.
+ */
+class CheckUpdatesPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	CheckUpdatesPackageJob( QObject *dependent, const QString& id, const QString& updateVersion, int hasUpdate ) : DependentJob( dependent, "DBJob" ), 
+		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		
+		QString updateString;
+		if ( m_hasUpdate > 0 )
+			updateString = m_updateVersion + " (U)";
+		else
+			if ( m_hasUpdate < 0 )
+				updateString = m_updateVersion + " (D)";
+		
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';"
+		                                            ).arg( updateString ).arg( m_id ), m_db );
+		
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const 	QString m_id, m_updateVersion;
+	int 	m_hasUpdate;
+};
 
 /**
  * @class Portage
@@ -33,8 +223,11 @@
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )
 {
-	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotChanged() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotScanCompleted() ) );
+	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
 	
 	// Start refresh directly after emerge sync
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotRefresh() ) );
@@ -52,14 +245,12 @@ void Portage::init( QObject *parent )
 }
 
 /**
- * Forward signal after a new portage scan.
+ * 
  */
 void Portage::slotChanged()
 {
-	clearCache();
+	kdDebug() << "Portage::slotChanged" << endl;
 	emit signalPortageChanged();
-	KurooDBSingleton::Instance()->addRefreshTime();
-	PortageFilesSingleton::Instance()->loadPackageMask();
 }
 
 /**
@@ -102,6 +293,17 @@ bool Portage::slotScan()
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
 	return true;
+}
+
+/**
+ * Forward signal after a new portage scan.
+ */
+void Portage::slotScanCompleted()
+{
+	kdDebug() << "Portage::slotScanCompleted" << endl;
+	emit signalPortageChanged();
+	KurooDBSingleton::Instance()->addRefreshTime();
+	PortageFilesSingleton::Instance()->loadPackageMask();
 }
 
 /**
@@ -251,6 +453,79 @@ void Portage::removeFromWorld( const QString& package )
 		mapWorld = map;
 		emit signalWorldChanged();
 	}
+}
+
+/**
+ * Launch unmerge of packages
+ * @param category
+ * @param packageList
+ */
+void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
+{
+	QStringList packageList;
+	foreach ( packageIdList )
+		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
+	
+	EmergeSingleton::Instance()->unmerge( packageList );
+}
+
+/**
+ * @fixme: Check for failure.
+ * Add package as installed in db.
+ * @param package
+ */
+void Portage::addInstalledPackage( const QString& package )
+{
+	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
+}
+
+/**
+ * @fixme: Check for failure.
+ * Remove packages from db.
+ * @param packageIdList
+ */
+void Portage::removeInstalledPackage( const QString& package )
+{
+	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
+}
+
+/**
+ * Start scan of update packages.
+ * @return bool
+ */
+bool Portage::slotRefreshUpdates()
+{
+	EmergeSingleton::Instance()->checkUpdates();
+	return true;
+}
+
+/**
+ * Start scan of update packages.
+ * @return bool
+ */
+bool Portage::slotLoadUpdates()
+{
+	SignalistSingleton::Instance()->scanStarted();
+	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
+	return true;
+}
+
+/**
+ * @fixme: Check for failure.
+ * Remove packages from db.
+ * @param packageIdList
+ */
+void Portage::removeUpdatePackage( const QString& package )
+{
+	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
+}
+
+/**
+ * Update packages when user changes package stability.
+ */
+void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
+{
+	ThreadWeaver::instance()->queueJob( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
 }
 
 #include "portage.moc"

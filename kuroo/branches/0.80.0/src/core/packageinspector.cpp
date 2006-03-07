@@ -159,6 +159,8 @@ void PackageInspector::slotNextPackage()
  */
 void PackageInspector::slotApply()
 {
+	kdDebug() << "PackageInspector::slotApply" << endl;
+	
 	if ( hasVersionSettingsChanged ) {
 // 		if ( packageStability & PACKAGE_KEYWORDS )
 			PortageFilesSingleton::Instance()->savePackageKeywords();
@@ -169,7 +171,7 @@ void PackageInspector::slotApply()
 		
 		// Check if this version is in updates. If not add it! (Only for packages in world).
 		if ( PortageSingleton::Instance()->isInWorld( category + "/" + package ) )
-			UpdatesSingleton::Instance()->checkUpdates( m_id, dialog->versionsView->updateVersion(), dialog->versionsView->hasUpdate() );
+			PortageSingleton::Instance()->checkUpdates( m_id, dialog->versionsView->updateVersion(), dialog->versionsView->hasUpdate() );
 		
 	}
 	
@@ -290,12 +292,12 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	package = m_portagePackage->name();
 	category = m_portagePackage->category();
 	
-	if ( !KUser().isSuperUser() ) {
-		enableButtonApply( false );
-		dialog->groupSelectStability->setDisabled( true );
-		dialog->useView->setDisabled( true );
-		dialog->groupArchitecture->setDisabled( true );
-	}
+// 	if ( !KUser().isSuperUser() ) {
+// 		enableButtonApply( false );
+// 		dialog->groupSelectStability->setDisabled( true );
+// 		dialog->useView->setDisabled( true );
+// 		dialog->groupArchitecture->setDisabled( true );
+// 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging
 	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {

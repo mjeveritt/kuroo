@@ -76,6 +76,8 @@ bool Signalist::isKurooBusy()
  */
 void Signalist::setKurooBusy( bool busy )
 {
+	kdDebug() << "Signalist::setKurooBusy busy=" << busy << endl;
+	
 	static int busySession(0);
 	
 	if ( !busy ) {
@@ -173,7 +175,7 @@ void Signalist::scanHistoryComplete()
  */
 void Signalist::startInstallQueue()
 {
-	emit signalEmergeQueue();
+// 	emit signalEmergeQueue();
 }
 
 void Signalist::packageChanged()

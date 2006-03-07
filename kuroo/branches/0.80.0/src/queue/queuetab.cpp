@@ -64,13 +64,10 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
-	// Recalculate package when user change settings in Inspector
-	connect( m_packageInspector, SIGNAL( signalUseChanged() ), this, SLOT( slotPackageUseChanged() ) );
-	
 	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
 	
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
@@ -83,6 +80,10 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	// Update Queue summary timer
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), this, SLOT( slotQueueSummary() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), this, SLOT( slotQueueSummary() ) );
+	
+	// Recalculate package when user change settings in Inspector
+	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	
 	slotInit();
 }
@@ -151,8 +152,7 @@ void QueueTab::slotInit()
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
 	
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
-	slotBusy();
+// 	slotBusy();
 }
 
 /**
@@ -229,6 +229,8 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy()
 {
+	kdDebug() << "QueueTab::slotBusy" << endl;
+	
 	// No db or queue is empty - no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
 		pbRemove->setDisabled( true );
@@ -435,6 +437,12 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
+	kdDebug() << "QueueTab::slotPackage" << endl;
+	
+	// Queue view is hidden don't update
+	if ( !isVisible() )
+		return;
+	
 	// clear text browsers and dropdown menus
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();

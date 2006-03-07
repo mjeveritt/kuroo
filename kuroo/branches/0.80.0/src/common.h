@@ -31,8 +31,6 @@
 #include "log.h"
 #include "queue.h"
 #include "results.h"
-#include "updates.h"
-#include "installed.h"
 #include "portage.h"
 #include "portagedb.h"
 #include "history.h"
@@ -53,12 +51,10 @@ typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
 typedef Singleton<Queue> QueueSingleton;
 typedef Singleton<Results> ResultsSingleton;
-typedef Singleton<Installed> InstalledSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
-typedef Singleton<Updates> UpdatesSingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
 

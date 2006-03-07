@@ -81,8 +81,6 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
-	connect( InstalledSingleton::Instance(), SIGNAL( signalInstalledChanged() ), this, SLOT( slotReload() ) );
-	connect( UpdatesSingleton::Instance(), SIGNAL( signalUpdatesChanged() ), this, SLOT( slotReload() ) );
 	
 	// Lock/unlock actions when kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
@@ -91,7 +89,10 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
-	slotInit();
+	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	
+// 	slotInit();
 }
 
 PortageTab::~PortageTab()
@@ -105,7 +106,6 @@ PortageTab::~PortageTab()
  */
 void PortageTab::slotInit()
 {
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	slotBusy();
 }
 
@@ -135,6 +135,8 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
+	kdDebug() << "PortageTab::slotBusy" << endl;
+	
 	// If kuroo busy or no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		pbUninstall->setDisabled( true );
@@ -157,6 +159,8 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
+	kdDebug() << "PortageTab::slotButtons" << endl;
+	
 	// No package selected, disable all buttons
 	if ( packagesView->selectedId().isEmpty() ) {
 		pbQueue->setDisabled( true );
@@ -202,6 +206,8 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
+	kdDebug() << "PortageTab::slotReload" << endl;
+	
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
@@ -249,6 +255,8 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
+	kdDebug() << "PortageTab::slotListPackages" << endl;
+	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
 	
@@ -275,8 +283,6 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
-		
-		slotPackage();
 	}
 	
 }
@@ -290,16 +296,17 @@ void PortageTab::slotClearFilter()
 }
 
 /**
- * Refresh installed packages list.
+ * Refresh packages list.
  */
 void PortageTab::slotRefresh()
 {
+	kdDebug() << "PortageTab::slotRefresh" << endl;
+	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotRefresh();
-		
 	}
 }
 
@@ -358,6 +365,12 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
+	kdDebug() << "PortageTab::slotPackage" << endl;
+	
+	// Packages view is hidden don't update
+	if ( !isVisible() )
+		return;
+	
 	// clear text browsers and dropdown menus
 	summaryBrowser->clear();
 	m_packageInspector->dialog->versionsView->clear();

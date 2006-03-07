@@ -110,7 +110,7 @@ void Kuroo::setupActions()
 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
-	                                    UpdatesSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_updates" );
+	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
 	                          			this, SLOT( slotSync() ), actionCollection(), "sync_portage" );

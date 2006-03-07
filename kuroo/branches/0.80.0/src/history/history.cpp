@@ -258,8 +258,8 @@ void History::slotParse()
 					int total = rxPackage.cap(4).toInt();
 					QString package = rxPackage.cap(6);
 					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
-					InstalledSingleton::Instance()->addPackage( package );
-					UpdatesSingleton::Instance()->removePackage( package );
+					PortageSingleton::Instance()->addInstalledPackage( package );
+					PortageSingleton::Instance()->removeUpdatePackage( package );
 					emit signalHistoryChanged();
 				}
 				else
@@ -271,7 +271,7 @@ void History::slotParse()
 			else
 			if ( emergeLine.contains("unmerge success") ) {
 				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
-				InstalledSingleton::Instance()->removePackage( package );
+				PortageSingleton::Instance()->removeInstalledPackage( package );
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 				emit signalHistoryChanged();

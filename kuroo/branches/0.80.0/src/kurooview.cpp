@@ -54,6 +54,8 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	viewPortage( 0 ), viewQueue( 0 ), viewHistory( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	hasHistoryRestored( false )
 {
+	setMinimumSize( QSize(800, 550) );
+	
 	viewMenu->setCursor( KCursor::handCursor() );
 	packageInspector = new PackageInspector( this );
 	
@@ -87,9 +89,6 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( viewLogs->logBrowser, viewLogs->verboseLog, viewLogs->saveLog );
-	
-	// Reset everything when a portage scan is started
-// 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReset() ) );
 	
 	// Confirm changes in views with bleue text menu
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
@@ -160,15 +159,6 @@ void KurooView::slotInit()
 			}
 		}
 	}
-}
-
-/**
- * Reset everything when a portage scan is started.
- */
-void KurooView::slotReset()
-{
-// 	slotPortageUpdated();
-// 	slotInit();
 }
 
 /**

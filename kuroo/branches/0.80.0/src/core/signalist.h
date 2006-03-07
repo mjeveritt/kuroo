@@ -49,7 +49,6 @@ public slots:
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
-	void		startInstallQueue();
 	void		packageChanged();
 	
 signals:

@@ -91,8 +91,6 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
-	
-// 	slotInit();
 }
 
 PortageTab::~PortageTab()
@@ -135,7 +133,7 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
-	kdDebug() << "PortageTab::slotBusy" << endl;
+// 	kdDebug() << "PortageTab::slotBusy" << endl;
 	
 	// If kuroo busy or no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
@@ -159,7 +157,7 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	kdDebug() << "PortageTab::slotButtons" << endl;
+// 	kdDebug() << "PortageTab::slotButtons" << endl;
 	
 	// No package selected, disable all buttons
 	if ( packagesView->selectedId().isEmpty() ) {
@@ -206,7 +204,7 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << "PortageTab::slotReload" << endl;
+// 	kdDebug() << "PortageTab::slotReload" << endl;
 	
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
@@ -255,7 +253,7 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
+// 	kdDebug() << "PortageTab::slotListPackages" << endl;
 	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
@@ -300,7 +298,7 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotRefresh()
 {
-	kdDebug() << "PortageTab::slotRefresh" << endl;
+// 	kdDebug() << "PortageTab::slotRefresh" << endl;
 	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
@@ -365,7 +363,7 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << "PortageTab::slotPackage" << endl;
+// 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
 	// Packages view is hidden don't update
 	if ( !isVisible() )
@@ -386,7 +384,7 @@ void PortageTab::slotPackage()
 	QString category( packagesView->currentPackage()->category() );
 	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
-			lines += "<tr><td bgcolor=#88bb22 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
+			lines += "<tr><td bgcolor=#687DE3 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
 			lines += "(" + category.section( "-", 0, 0 ) + "/";
 			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
 	

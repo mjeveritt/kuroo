@@ -151,8 +151,6 @@ void QueueTab::slotInit()
 	                                  "Portage will normally merge those files only once to prevent the user"
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
-	
-// 	slotBusy();
 }
 
 /**
@@ -229,7 +227,7 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy()
 {
-	kdDebug() << "QueueTab::slotBusy" << endl;
+// 	kdDebug() << "QueueTab::slotBusy" << endl;
 	
 	// No db or queue is empty - no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
@@ -437,7 +435,7 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
-	kdDebug() << "QueueTab::slotPackage" << endl;
+// 	kdDebug() << "QueueTab::slotPackage" << endl;
 	
 	// Queue view is hidden don't update
 	if ( !isVisible() )

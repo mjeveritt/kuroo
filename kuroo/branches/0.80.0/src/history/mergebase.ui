@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>643</width>
-            <height>359</height>
+            <width>625</width>
+            <height>377</height>
         </rect>
     </property>
     <property name="caption">
@@ -148,7 +148,7 @@
                     </property>
                     <property name="minimumSize">
                         <size>
-                            <width>300</width>
+                            <width>250</width>
                             <height>0</height>
                         </size>
                     </property>
@@ -157,7 +157,7 @@
                     </property>
                     <property name="text">
                         <string>&lt;font size="+1"&gt;Etc-update History&lt;/font&gt;&lt;br&gt;
-&lt;i&gt;Click on configuration file to view changes in diff frontend&lt;/i&gt;</string>
+&lt;i&gt;Click on configuration file to view changes...&lt;/i&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

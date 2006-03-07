@@ -60,7 +60,6 @@ public:
 	
 public slots:
 	void 				slotInit();
-	void				slotReset();
 
 private slots:
 

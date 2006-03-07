@@ -54,7 +54,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	viewPortage( 0 ), viewQueue( 0 ), viewHistory( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	hasHistoryRestored( false )
 {
-	setMinimumSize( QSize(800, 550) );
+	setMinimumSize( QSize(750, 550) );
 	
 	viewMenu->setCursor( KCursor::handCursor() );
 	packageInspector = new PackageInspector( this );

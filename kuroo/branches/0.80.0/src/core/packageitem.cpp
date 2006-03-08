@@ -249,6 +249,8 @@ void PackageItem::initVersions()
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
+		QString description = *it++;
+		QString homepage = *it++;
 		QString status = *it++;
 		QString licenses = *it++;
 		QString useFlags = *it++;
@@ -257,6 +259,8 @@ void PackageItem::initVersions()
 		QString size = *it;
 		
 		PackageVersion* version = new PackageVersion( this, versionString );
+		version->setDescription( description );
+		version->setHomepage( homepage );
 		version->setLicenses( QStringList::split( " ", licenses ) );
 		version->setUseflags( QStringList::split( " ", useFlags ) );
 		version->setSlot( slot );

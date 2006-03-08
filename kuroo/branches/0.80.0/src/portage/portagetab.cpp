@@ -162,7 +162,7 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-// 	kdDebug() << "PortageTab::slotButtons" << endl;
+	kdDebug() << "PortageTab::slotButtons" << endl;
 	
 	// No package selected, disable all buttons
 	if ( packagesView->selectedId().isEmpty() ) {
@@ -208,7 +208,7 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-// 	kdDebug() << "PortageTab::slotReload" << endl;
+	kdDebug() << "PortageTab::slotReload" << endl;
 	
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
@@ -258,7 +258,7 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-// 	kdDebug() << "PortageTab::slotListPackages" << endl;
+	kdDebug() << "PortageTab::slotListPackages" << endl;
 	
 	QString categoryId = categoriesView->currentCategoryId();
 	QString subCategoryId = subcategoriesView->currentCategoryId();
@@ -303,7 +303,7 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotRefresh()
 {
-// 	kdDebug() << "PortageTab::slotRefresh" << endl;
+	kdDebug() << "PortageTab::slotRefresh" << endl;
 	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
@@ -368,7 +368,7 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-// 	kdDebug() << "PortageTab::slotPackage" << endl;
+	kdDebug() << "PortageTab::slotPackage" << endl;
 	
 	// Packages view is hidden don't update
 	if ( !isVisible() )
@@ -388,21 +388,8 @@ void PortageTab::slotPackage()
 	QString package( packagesView->currentPackage()->name() );
 	QString category( packagesView->currentPackage()->category() );
 	
-	QString lines =  "<table width=100% border=0 cellpadding=0>";
-			lines += "<tr><td bgcolor=#687DE3 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
-			lines += "(" + category.section( "-", 0, 0 ) + "/";
-			lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
-	
-	if ( packagesView->currentPackage()->isInPortage() ) {
-			lines += "<tr><td colspan=2>" + packagesView->currentPackage()->description() + "</td></tr>";
-			lines += "<tr><td colspan=2>" + i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPortagePackage()->homepage();
-			lines += "\">" + packagesView->currentPortagePackage()->homepage() + "</a></td></tr>";
-	}
-	else
-		lines += i18n("<tr><td colspan=2><font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr>");
-	
 	// Now parse sorted list of versions for current package
-	QString version, emergeVersion, linesAvailable, linesInstalled, linesEmergeVersion;
+	QString version, emergeVersion, linesAvailable, linesInstalled, linesEmergeVersion, description, homepage;
 	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
 	bool versionNotInArchitecture( false );
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
@@ -436,7 +423,7 @@ void PortageTab::slotPackage()
 					else
 						stability = i18n("Not available");
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " stability=" << stability << endl;
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " homepage=" << (*sortedVersionIterator)->homepage() << endl;
 		
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
@@ -460,11 +447,27 @@ void PortageTab::slotPackage()
 			else
 				linesAvailable.prepend( version + ", " );
 		}
+		
+		description = (*sortedVersionIterator)->description();
+		homepage = (*sortedVersionIterator)->homepage();
 	}
 	
 	// Remove trailing commas
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );
+	
+	QString lines =  "<table width=100% border=0 cellpadding=0>";
+	lines += "<tr><td bgcolor=#687DE3 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
+	lines += "(" + category.section( "-", 0, 0 ) + "/";
+	lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
+	
+	if ( packagesView->currentPackage()->isInPortage() ) {
+		lines += "<tr><td colspan=2>" + description + "</td></tr>";
+		lines += "<tr><td colspan=2>" + i18n("<b>Homepage: </b>") + "<a href=\"" + homepage;
+		lines += "\">" + homepage + "</a></td></tr>";
+	}
+	else
+		lines += i18n("<tr><td colspan=2><font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr>");
 	
 	// Construct installed summary
 	if ( !linesInstalled.isEmpty() )

@@ -127,9 +127,8 @@ bool ScanPortageJob::doJob()
 	                                    " idCatSubCategory INTEGER, "
 	                                    " category VARCHAR(32), "
 	                                    " name VARCHAR(32), "
-	                                    " latest VARCHAR(32), "
 	                                    " description VARCHAR(255), "
-	                                    " homepage VARCHAR(32), "
+	                                    " latest VARCHAR(32), "
 	                                    " date VARCHAR(32), "
 	                                    " status INTEGER, "
 	                                    " meta VARCHAR(255), "
@@ -141,6 +140,8 @@ bool ScanPortageJob::doJob()
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                    " idPackage INTEGER, "
 	                                    " name VARCHAR(32),"
+	                                    " description VARCHAR(255), "
+	                                    " homepage VARCHAR(32), "
 	                                    " licenses VARCHAR(32), "
 	                                    " useFlags VARCHAR(32),"
 	                                    " slot VARCHAR(32),"
@@ -236,11 +237,12 @@ bool ScanPortageJob::doJob()
 							categories[ *itCategory ].packages[ name ];
 							categories[ *itCategory ].packages[ name ].status = FILTER_ALL_STRING;
 							categories[ *itCategory ].packages[ name ].description = info.description;
-							categories[ *itCategory ].packages[ name ].homepage = info.homepage;
 						}
 						
 						// Insert version in portage
 						if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
+							categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
+							categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
 							categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_ALL_STRING;
 							categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
 							categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
@@ -286,23 +288,22 @@ bool ScanPortageJob::doJob()
 			QString package = itPackage.key();
 			QString status = itPackage.data().status;
 			QString description = itPackage.data().description;
-			QString homepage = itPackage.data().homepage;
 			
 			// Create meta tag containing all text of interest for searching
 			QString meta = category + " " + package + " " + description;
 			
-			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, category, name, description, homepage, status, meta) "
-			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9' " 
-			                     )
-				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( category ).arg( package ).arg( description ).arg( homepage ).arg( status ).arg( meta );
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, category, name, description, status, meta) "
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');"
+			                     ).arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( category ).arg( package ).arg( description ).arg( status ).arg( meta );
 			
-			sql += QString( ");" );
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
 			
 			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
 			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
 				
 				QString version = itVersion.key();
+				description = itVersion.data().description;
+				QString homepage = itVersion.data().homepage;
 				QString status = itVersion.data().status;
 				QString licenses = itVersion.data().licenses;
 				QString useFlags = itVersion.data().useFlags;
@@ -311,10 +312,18 @@ bool ScanPortageJob::doJob()
 				QString keywords = itVersion.data().keywords;
 				QString path = itVersion.data().path;
 				
-				KurooDBSingleton::Instance()->insert( QString(
-					"INSERT INTO version_temp (idPackage, name, size, branch, status, licenses, useFlags, slot, path) "
-					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');" 
-					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( status ).arg( licenses ).arg( useFlags ).arg( slot ).arg( path ), m_db );
+				QString sqlVersion = QString( "INSERT INTO version_temp "
+				                              "(idPackage, name, description, homepage, size, branch, status, licenses, useFlags, slot, path) "
+				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9'," 
+				                            ).arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size ).arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );
+				
+				sqlVersion += QString( "'%1', '%2');" ).arg( slot ).arg( path );
+				KurooDBSingleton::Instance()->insert( sqlVersion, m_db );
+				
+// 				KurooDBSingleton::Instance()->insert( QString(
+// 					"INSERT INTO version_temp (idPackage, name, description, homepage, size, branch, status, licenses, useFlags, slot, path) "
+// 					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');" 
+// 					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( status ).arg( licenses ).arg( useFlags ).arg( slot ).arg( path ), m_db );
 				
 			}
 		}

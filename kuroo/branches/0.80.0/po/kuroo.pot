@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 08:33+0100\n"
+"POT-Creation-Date: 2006-03-08 18:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: queue/queuelistview.cpp:161 portage/portagelistview.cpp:87
-#: portage/portagelistview.cpp:145 portage/portagelistview.cpp:147 rc.cpp:183
+#: queue/queuelistview.cpp:161 portage/portagelistview.cpp:78
+#: portage/portagelistview.cpp:136 portage/portagelistview.cpp:138 rc.cpp:183
 #: rc.cpp:277
 #, no-c-format
 msgid "Package"
@@ -39,8 +39,8 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:300 queue/queuelistview.cpp:305
-#: queue/queuelistview.cpp:310
+#: queue/queuelistview.cpp:299 queue/queuelistview.cpp:304
+#: queue/queuelistview.cpp:309
 msgid "na"
 msgstr ""
 
@@ -117,44 +117,44 @@ msgstr ""
 
 #: queue/queuetab.cpp:370 core/emerge.cpp:451 core/emerge.cpp:528
 #: core/cacheportagejob.cpp:184 core/etcupdate.cpp:124
-#: core/scanportagejob.cpp:346 core/scanportagejob.cpp:420
-#: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:144
+#: core/scanportagejob.cpp:355 core/scanportagejob.cpp:429
+#: core/scanupdatesjob.cpp:150 core/portagefiles.cpp:144
 #: core/portagefiles.cpp:233 core/portagefiles.cpp:322
 #: core/portagefiles.cpp:411 history/history.cpp:293 history/history.cpp:294
 #: statusbar.cpp:94
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:458 core/versionview.cpp:111 portage/portagetab.cpp:422
+#: queue/queuetab.cpp:458 core/versionview.cpp:111 portage/portagetab.cpp:409
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:461 core/versionview.cpp:108 portage/portagetab.cpp:427
+#: queue/queuetab.cpp:461 core/versionview.cpp:108 portage/portagetab.cpp:414
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:464 portage/portagetab.cpp:432
+#: queue/queuetab.cpp:464 portage/portagetab.cpp:419
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:467 portage/portagetab.cpp:435
+#: queue/queuetab.cpp:467 portage/portagetab.cpp:422
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:469 portage/portagetab.cpp:437
+#: queue/queuetab.cpp:469 portage/portagetab.cpp:424
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:510 portage/portagetab.cpp:534 rc.cpp:25 rc.cpp:299
+#: queue/queuetab.cpp:510 portage/portagetab.cpp:537 rc.cpp:25 rc.cpp:299
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:514 portage/portagetab.cpp:538
+#: queue/queuetab.cpp:514 portage/portagetab.cpp:541
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:516 portage/portagetab.cpp:540
+#: queue/queuetab.cpp:516 portage/portagetab.cpp:543
 msgid "Remove from world"
 msgstr ""
 
@@ -418,35 +418,35 @@ msgstr ""
 msgid "Refreshing Portage packages view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:164 core/scanportagejob.cpp:263
+#: core/scanportagejob.cpp:165 core/scanportagejob.cpp:265
 msgid "Scanning Portage. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:179 core/scanportagejob.cpp:214
+#: core/scanportagejob.cpp:180 core/scanportagejob.cpp:215
 msgid "Scanning Portage. Portage scan aborted"
 msgstr ""
 
-#: core/scanportagejob.cpp:255
+#: core/scanportagejob.cpp:257
 msgid "Scanning Portage. Scanning Portage cache: can not match package %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:362 core/scanportagejob.cpp:417
+#: core/scanportagejob.cpp:371 core/scanportagejob.cpp:426
 msgid "Scanning installed packages. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:364
+#: core/scanportagejob.cpp:373
 msgid "Collecting installed packages..."
 msgstr ""
 
-#: core/scanportagejob.cpp:413
+#: core/scanportagejob.cpp:422
 msgid "Scanning installed packages. Can not match %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:435
+#: core/scanportagejob.cpp:444
 msgid "Scanning Portage cache. Error reading: "
 msgstr ""
 
-#: core/scanportagejob.cpp:541
+#: core/scanportagejob.cpp:550
 msgid "Scanning installed packages. Error reading: "
 msgstr ""
 
@@ -474,39 +474,39 @@ msgstr ""
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:108
+#: core/scanupdatesjob.cpp:107
 msgid "Scanning updates. Scan aborted!"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:122
+#: core/scanupdatesjob.cpp:121
 msgid "Scanning updates. Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:360 core/portagedb.cpp:375
+#: core/portagedb.cpp:361 core/portagedb.cpp:376
 msgid "Creating backup of history. Error writing: %1."
 msgstr ""
 
-#: core/portagedb.cpp:388 core/portagedb.cpp:409
+#: core/portagedb.cpp:389 core/portagedb.cpp:410
 msgid "Restoring backup of history. Error reading: %1."
 msgstr ""
 
-#: core/portagedb.cpp:730
+#: core/portagedb.cpp:731
 msgid "Can not find package in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:748
+#: core/portagedb.cpp:749
 msgid "Can not find category in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:769
+#: core/portagedb.cpp:770
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:1184
+#: core/portagedb.cpp:1185
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1188
+#: core/portagedb.cpp:1189
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 
@@ -856,11 +856,11 @@ msgstr ""
 msgid "Adding to world. Error writing: "
 msgstr ""
 
-#: portage/portagelistview.cpp:95
+#: portage/portagelistview.cpp:86
 msgid "Update"
 msgstr ""
 
-#: portage/portagelistview.cpp:96 rc.cpp:156
+#: portage/portagelistview.cpp:87 rc.cpp:156
 #, no-c-format
 msgid "Description"
 msgstr ""
@@ -891,67 +891,67 @@ msgstr ""
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:398
+#: portage/portagetab.cpp:466
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:402
+#: portage/portagetab.cpp:470
 msgid ""
 "<tr><td colspan=2><font color=darkRed><b>Package not available in Portage "
 "tree anymore!</b></font></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:471
+#: portage/portagetab.cpp:474
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%"
 "1</td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:473
+#: portage/portagetab.cpp:476
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%"
 ">Not installed</td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:486
+#: portage/portagetab.cpp:489
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:490
+#: portage/portagetab.cpp:493
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available on %1</b></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:493
+#: portage/portagetab.cpp:496
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available - please check package details</font></"
 "b></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:499
+#: portage/portagetab.cpp:502
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></"
 "td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:501
+#: portage/portagetab.cpp:504
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</td><td width=90%><font "
 "color=darkRed>No versions available on %1</font></b></td></tr>"
 msgstr ""
 
-#: portage/portagetab.cpp:530
+#: portage/portagetab.cpp:533
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:532
+#: portage/portagetab.cpp:535
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:543
+#: portage/portagetab.cpp:546
 msgid "&Uninstall"
 msgstr ""
 

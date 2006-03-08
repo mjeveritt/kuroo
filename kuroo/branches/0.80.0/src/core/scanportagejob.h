@@ -57,6 +57,8 @@ private:
 	DbConnection* const 				m_db;
 	
 	struct Data {
+		QString							description;
+		QString							homepage;
 		QString							status;
 		QString							licenses;
 		QString							useFlags;
@@ -69,7 +71,6 @@ private:
 	struct Versions {
 		QString							status;
 		QString							description;
-		QString							homepage;
 		PortageVersions					versions;
 	};
 	typedef QMap<QString, Versions>		PortagePackages;

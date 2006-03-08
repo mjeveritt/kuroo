@@ -238,9 +238,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idCatSubCategory INTEGER, "
 	      " category VARCHAR(32), "
 	      " name VARCHAR(32), "
-	      " latest VARCHAR(32), "
 	      " description VARCHAR(255), "
-	      " homepage VARCHAR(32), "
+	      " latest VARCHAR(32), "
 	      " date VARCHAR(32), "
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
@@ -254,6 +253,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " name VARCHAR(32),"
+	      " description VARCHAR(255), "
+	      " homepage VARCHAR(32), "
 	      " licenses VARCHAR(32), "
 	      " useFlags VARCHAR(32),"
 	      " slot VARCHAR(32),"
@@ -641,7 +642,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " WHERE updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 						  " FROM package "
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
@@ -660,7 +661,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 			              " FROM package "
 			              " WHERE idSubCategory = '" + subCategoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
@@ -682,7 +683,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 						  " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
@@ -702,7 +703,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 					filterQuery = " AND updateVersion != '' ";
 			}
 			
-			return query( " SELECT id, name, category, description, status, updateVersion, homepage "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 					      " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 						  " AND idSubCategory = '" + subCategoryId + "'"
@@ -788,7 +789,7 @@ QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
  */
 QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
-	return query( " SELECT name, status, licenses, useFlags, slot, branch, size "
+	return query( " SELECT name, description, homepage, status, licenses, useFlags, slot, branch, size "
 	              " FROM version WHERE idPackage = '" + idPackage + "'"
 	              " ORDER BY version.name;");
 }
@@ -1043,7 +1044,7 @@ void KurooDB::clearQueuePackageUse()
 QStringList KurooDB::allQueuePackages()
 {
 	return query( " SELECT package.id, catSubCategory.name, package.name, "
-	              " package.description, package.status, queue.idDepend, queue.size, queue.version "
+	              " package.status, queue.idDepend, queue.size, queue.version "
 	              " FROM queue, catSubCategory, package "
 	              " WHERE queue.idPackage = package.id "
 	              " AND catSubCategory.id = package.idCatSubCategory "

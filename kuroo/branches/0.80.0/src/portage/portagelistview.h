@@ -60,15 +60,12 @@ private:
 class PortageListView::PortageItem : public PackageItem
 {
 public:
-	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status, const QString& homepage );
+	PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status );
 	
-	QString 						homepage();
-
 private:
 	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 protected:
-	QString							m_homepage;
 	QListView						*m_parent;
 };
 

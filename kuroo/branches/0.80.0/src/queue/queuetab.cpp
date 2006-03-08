@@ -214,7 +214,7 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy()
 {
-// 	kdDebug() << "QueueTab::slotBusy" << endl;
+	kdDebug() << "QueueTab::slotBusy" << endl;
 	
 	// No db or queue is empty - no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
@@ -310,7 +310,7 @@ void QueueTab::slotCheck()
  */
 void QueueTab::slotGo()
 {
-// 	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
+	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
 	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
@@ -422,7 +422,7 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
-// 	kdDebug() << "QueueTab::slotPackage" << endl;
+	kdDebug() << "QueueTab::slotPackage" << endl;
 	
 	// Queue view is hidden don't update
 	if ( !isVisible() )

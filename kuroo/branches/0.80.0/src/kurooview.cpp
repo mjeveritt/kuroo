@@ -122,7 +122,7 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
-// 	kdDebug() << "KurooView::slotInit" << endl;
+	kdDebug() << "KurooView::slotInit" << endl;
 	
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
@@ -133,7 +133,7 @@ void KurooView::slotInit()
 		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
 		                                      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
 		                                      "Next, package information in Portage will be collected.</qt>"), 
-		                                      i18n("Initialiazing Kuroo"), "dontAskAgainInitKuroo" );
+		                                      i18n("Initialiazing Kuroo") );
 		HistorySingleton::Instance()->slotRefresh();
 	}
 	else {
@@ -170,7 +170,7 @@ void KurooView::slotInit()
  */
 void KurooView::slotCheckPortage()
 {
-// 	kdDebug() << "KurooView::slotCheckPortage" << endl;
+	kdDebug() << "KurooView::slotCheckPortage" << endl;
 	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	

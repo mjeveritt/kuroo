@@ -38,18 +38,9 @@ static int packageCount( 0 );
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
  */
-PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status, const QString& homepage )
-	: PackageItem( parent, name, id, category, description, status ), m_parent( parent ), m_homepage( homepage )
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status )
+	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
-}
-
-/**
- * Accessor for homepage.
- * @return the package homepage.
- */
-QString PortageListView::PortageItem::homepage()
-{
-	return m_homepage;
 }
 
 /**
@@ -172,10 +163,9 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString category = *it++;
 		QString description = *it++;
 		QString status = *it++;
-		QString update = *it++;
-		QString homepage = *it;
+		QString update = *it;
 
-		PortageItem* item = new PortageItem( this, name, id, category, description, status, homepage );
+		PortageItem* item = new PortageItem( this, name, id, category, description, status );
 		item->setText( 4, update );
 		item->setText( 5, description );
 		

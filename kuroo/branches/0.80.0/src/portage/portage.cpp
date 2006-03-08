@@ -249,7 +249,7 @@ void Portage::init( QObject *parent )
  */
 void Portage::slotChanged()
 {
-	kdDebug() << "Portage::slotChanged" << endl;
+// 	kdDebug() << "Portage::slotChanged" << endl;
 	emit signalPortageChanged();
 }
 
@@ -300,6 +300,7 @@ bool Portage::slotScan()
 			break;
 		}
 	}
+	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
 	return true;
@@ -310,14 +311,18 @@ bool Portage::slotScan()
  */
 void Portage::slotScanCompleted()
 {
-	kdDebug() << "Portage::slotScanCompleted" << endl;
+// 	kdDebug() << "Portage::slotScanCompleted" << endl;
+	
+	QueueSingleton::Instance()->reset();
 	KurooDBSingleton::Instance()->addRefreshTime();
 	PortageFilesSingleton::Instance()->loadPackageMask();
 	
+	// Ready to roll
+	SignalistSingleton::Instance()->setKurooReady( true );
+	emit signalPortageChanged();
+	
 	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
 		slotRefreshUpdates();
-	else
-		emit signalPortageChanged();
 }
 
 /**

@@ -122,26 +122,29 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
-	// After db is recreated because of new version restore data
+// 	kdDebug() << "KurooView::slotInit" << endl;
+	
+	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
+	
+	// Check is history is empty, then maybe this is also a fresh install with empty db
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		hasHistoryRestored = true;
 		
-		switch( KMessageBox::warningContinueCancel( this,
-			i18n( "<qt>Kuroo database is empty!<br>"
-			      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
-			      "Next, package information in Portage will be collected.</qt>"), 
-					i18n("Initialiazing Kuroo"), KStdGuiItem::cont(), "dontAskAgainInitKuroo", 0 ) ) {
-				     
-			case KMessageBox::Continue:
-				connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
-				HistorySingleton::Instance()->slotRefresh();
-			
-		}
+		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
+		                                      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
+		                                      "Next, package information in Portage will be collected.</qt>"), 
+		                                      i18n("Initialiazing Kuroo"), "dontAskAgainInitKuroo" );
+		HistorySingleton::Instance()->slotRefresh();
 	}
 	else {
-		connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 		
-		// Check if kuroo database needs updating.
+		// Load packages if db is not empty
+		if ( !KurooDBSingleton::Instance()->isPortageEmpty() ) {
+			viewPortage->slotReload();
+			viewQueue->slotReload( false );
+		}
+		
+		// Check if kuroo db needs updating
 		if ( !HistorySingleton::Instance()->slotRefresh() ) {
 			disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 			
@@ -150,12 +153,12 @@ void KurooView::slotInit()
 				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialiazing Kuroo"), i18n("Refresh"), i18n("Skip"), 0 ) ) {
 
 				case KMessageBox::Yes:
+					SignalistSingleton::Instance()->setKurooReady( true );
 					PortageSingleton::Instance()->slotRefresh();
 					break;
 
 				default:
 					slotCheckPortage();
-
 			}
 		}
 	}
@@ -167,9 +170,11 @@ void KurooView::slotInit()
  */
 void KurooView::slotCheckPortage()
 {
+// 	kdDebug() << "KurooView::slotCheckPortage" << endl;
+	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
-	// After db is recreated because of new version restore data
+	// Restore backup after db is recreated because of new version
 	if ( hasHistoryRestored ) {
 		KurooDBSingleton::Instance()->restoreBackup();
 		HistorySingleton::Instance()->updateStatistics();
@@ -179,12 +184,10 @@ void KurooView::slotCheckPortage()
 	if ( KurooDBSingleton::Instance()->isPackagesEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-		viewPortage->slotReload();
-		viewQueue->slotReload( false );
 		
 		// Warn user that emerge need root permissions - many rmb actions are disabled
 		if ( !KUser().isSuperUser() )
-			KMessageBox::information( 0, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
+			KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
 		
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );

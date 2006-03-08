@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_070306_db25";
+static const char version[] = "0.80.0_080306_db25";
 
 static KCmdLineOptions options[] =
 {
@@ -44,6 +44,7 @@ int main( int argc, char **argv )
 	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
 	about.addCredit("Alexander Reiterer", I18N_NOOP("German translation"), "alexander.reiterer@tuwien.ac.at");
 	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
+	about.addCredit("Matteo Azzali", I18N_NOOP("Italian translation"), "kaioth@tiscalinet.it");
 	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
 	about.addCredit("Konrad Mantorski", I18N_NOOP("Polish translation"), "konrad@mantorski.com");
 	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");

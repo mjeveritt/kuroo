@@ -53,14 +53,7 @@
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	: PortageBase( parent ), m_packageInspector( packageInspector ), uninstallInspector( 0 ), queuedFilters( 0 )
 {
-	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
-	
-	// Initialize category and subcategory views with all available data
-	categoriesView->init();
-	subcategoriesView->init();
-	
-	uninstallInspector = new UninstallInspector( this );
-	
+	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
 	
@@ -75,22 +68,25 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
-	// Toggle Queue button
+	// Toggle Queue button between "add/remove" when after queue has been edited
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	
-	// Lock/unlock actions when kuroo is busy.
+	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Load Inspector with current package info
 	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
+	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	
+	slotInit();
 }
 
 PortageTab::~PortageTab()
@@ -104,6 +100,11 @@ PortageTab::~PortageTab()
  */
 void PortageTab::slotInit()
 {
+	// Initialize the uninstall dialog
+	uninstallInspector = new UninstallInspector( this );
+	
+	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+	
 	slotBusy();
 }
 
@@ -119,10 +120,14 @@ void PortageTab::slotNextPackage( bool isNext )
 	packagesView->slotNextPackage( isNext );
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Toggle button slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Reset queue button text when queue is refreshed.
+ */
 void PortageTab::slotInitButtons()
 {
 	pbQueue->setText( i18n("Add to Queue") );
@@ -199,8 +204,7 @@ void PortageTab::slotButtons()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Populate view with portage packages.
- * Then load the emerge history.
+ * Initialize category and subcategory views with the available categories and subcategories.
  */
 void PortageTab::slotReload()
 {
@@ -209,11 +213,12 @@ void PortageTab::slotReload()
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
-	// Prepare categories by loading index
 	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+	
 	categoriesView->init();
 	subcategoriesView->init();
+	
 	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
 	

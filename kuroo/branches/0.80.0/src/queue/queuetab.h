@@ -47,7 +47,6 @@ private slots:
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();
 	void				slotButtons();
-	void				slotPackageUseChanged();
 	void				slotCheck();
 	void				slotGo();
 	void				slotPretend();

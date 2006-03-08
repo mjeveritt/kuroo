@@ -193,8 +193,6 @@ void PackageInspector::slotApply()
 			KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
 			PortageFilesSingleton::Instance()->savePackageUse();
 		}
-		
-		emit signalUseChanged();
 	}
 	
 	enableButtonApply( false );

@@ -67,8 +67,6 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalEmergeQueue() ), this, SLOT( slotGo() ) );
-	
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
 	
@@ -191,17 +189,6 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	
 	initialQueueTime = queueView->totalTimeFormatted();
 	slotQueueSummary();
-}
-
-/**
- * After package use has changed, clear use column and go back to "Check Installation".
- */
-void QueueTab::slotPackageUseChanged()
-{
-	m_hasCheckedQueue = false;
-	KurooDBSingleton::Instance()->clearQueuePackageUse();
-	queueView->clearQueuePackageUse();
-	slotBusy();
 }
 
 /**

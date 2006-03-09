@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 08:33+0100\n"
+"POT-Creation-Date: 2006-03-08 18:11+0100\n"
 "PO-Revision-Date: 2006-03-08 18:06+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10.2\n"
 
-#: queue/queuelistview.cpp:161 portage/portagelistview.cpp:87
-#: portage/portagelistview.cpp:145 portage/portagelistview.cpp:147 rc.cpp:183
+#: queue/queuelistview.cpp:161 portage/portagelistview.cpp:78
+#: portage/portagelistview.cpp:136 portage/portagelistview.cpp:138 rc.cpp:183
 #: rc.cpp:277
 #, no-c-format
 msgid "Package"
@@ -41,8 +41,8 @@ msgstr "Størrelse"
 msgid "Progress"
 msgstr "Framgang"
 
-#: queue/queuelistview.cpp:300 queue/queuelistview.cpp:305
-#: queue/queuelistview.cpp:310
+#: queue/queuelistview.cpp:299 queue/queuelistview.cpp:304
+#: queue/queuelistview.cpp:309
 msgid "na"
 msgstr "I/T"
 
@@ -130,44 +130,44 @@ msgstr "Avbryte installasjonen som pågår?"
 
 #: queue/queuetab.cpp:370 core/emerge.cpp:451 core/emerge.cpp:528
 #: core/cacheportagejob.cpp:184 core/etcupdate.cpp:124
-#: core/scanportagejob.cpp:346 core/scanportagejob.cpp:420
-#: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:144
+#: core/scanportagejob.cpp:355 core/scanportagejob.cpp:429
+#: core/scanupdatesjob.cpp:150 core/portagefiles.cpp:144
 #: core/portagefiles.cpp:233 core/portagefiles.cpp:322
 #: core/portagefiles.cpp:411 history/history.cpp:293 history/history.cpp:294
 #: statusbar.cpp:94
 msgid "Done."
 msgstr "Ferdig"
 
-#: queue/queuetab.cpp:458 core/versionview.cpp:111 portage/portagetab.cpp:422
+#: queue/queuetab.cpp:458 core/versionview.cpp:111 portage/portagetab.cpp:409
 msgid "Hardmasked"
 msgstr "Hardmaskert"
 
-#: queue/queuetab.cpp:461 core/versionview.cpp:108 portage/portagetab.cpp:427
+#: queue/queuetab.cpp:461 core/versionview.cpp:108 portage/portagetab.cpp:414
 msgid "Testing"
 msgstr "Testing"
 
-#: queue/queuetab.cpp:464 portage/portagetab.cpp:432
+#: queue/queuetab.cpp:464 portage/portagetab.cpp:419
 msgid "Stable"
 msgstr "Stabil"
 
-#: queue/queuetab.cpp:467 portage/portagetab.cpp:435
+#: queue/queuetab.cpp:467 portage/portagetab.cpp:422
 msgid "Not on %1"
 msgstr "Ikke på %1"
 
-#: queue/queuetab.cpp:469 portage/portagetab.cpp:437
+#: queue/queuetab.cpp:469 portage/portagetab.cpp:424
 msgid "Not available"
 msgstr "Ikke tilgjengelig"
 
-#: queue/queuetab.cpp:510 portage/portagetab.cpp:534 rc.cpp:25 rc.cpp:299
+#: queue/queuetab.cpp:510 portage/portagetab.cpp:537 rc.cpp:25 rc.cpp:299
 #, no-c-format
 msgid "Details..."
 msgstr "Detaljer . . ."
 
-#: queue/queuetab.cpp:514 portage/portagetab.cpp:538
+#: queue/queuetab.cpp:514 portage/portagetab.cpp:541
 msgid "Add to world"
 msgstr "Legg til i verden"
 
-#: queue/queuetab.cpp:516 portage/portagetab.cpp:540
+#: queue/queuetab.cpp:516 portage/portagetab.cpp:543
 msgid "Remove from world"
 msgstr "Fjern fra verden"
 
@@ -311,7 +311,8 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Legg pakken til i «package.unmask»."
 
 #: core/emerge.cpp:563
-msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid ""
+"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Klarte ikke installere maskert pakke?<br>Vil du avmaskere <b>«%1»</b>?</"
 "qt>"
@@ -325,8 +326,10 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Legg pakken til i «package.keywords»."
 
 #: core/emerge.cpp:575
-msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr "<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
+msgid ""
+"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr ""
+"<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
 
 #: core/cacheportagejob.cpp:70 core/cacheportagejob.cpp:114
 #: core/cacheportagejob.cpp:170
@@ -460,37 +463,37 @@ msgstr "Undersøker Portage: klarte ikke koble til databsen"
 msgid "Refreshing Portage packages view..."
 msgstr "Oppdaterer Portage-visningen . . ."
 
-#: core/scanportagejob.cpp:164 core/scanportagejob.cpp:263
+#: core/scanportagejob.cpp:165 core/scanportagejob.cpp:265
 msgid "Scanning Portage. Can not access "
 msgstr "Undersøker Portage: fikk ikke tilgang til "
 
-#: core/scanportagejob.cpp:179 core/scanportagejob.cpp:214
+#: core/scanportagejob.cpp:180 core/scanportagejob.cpp:215
 msgid "Scanning Portage. Portage scan aborted"
 msgstr "Undersøker Portage: avbrutt"
 
-#: core/scanportagejob.cpp:255
+#: core/scanportagejob.cpp:257
 msgid "Scanning Portage. Scanning Portage cache: can not match package %1."
 msgstr ""
 "Undersøker Portage: leser Portages hurtigminne: klarte ikke treffe pakken «%"
 "1»."
 
-#: core/scanportagejob.cpp:362 core/scanportagejob.cpp:417
+#: core/scanportagejob.cpp:371 core/scanportagejob.cpp:426
 msgid "Scanning installed packages. Can not access "
 msgstr "Søker i installerte pakker: fikk ikke tilgang til "
 
-#: core/scanportagejob.cpp:364
+#: core/scanportagejob.cpp:373
 msgid "Collecting installed packages..."
 msgstr "Samler installerte pakker . . ."
 
-#: core/scanportagejob.cpp:413
+#: core/scanportagejob.cpp:422
 msgid "Scanning installed packages. Can not match %1."
 msgstr "Søker i installerte pakker: klarte ikke treffe «%1»."
 
-#: core/scanportagejob.cpp:435
+#: core/scanportagejob.cpp:444
 msgid "Scanning Portage cache. Error reading: "
 msgstr "Leser Portage-hurtigminne: klarte ikke lese: "
 
-#: core/scanportagejob.cpp:541
+#: core/scanportagejob.cpp:550
 msgid "Scanning installed packages. Error reading: "
 msgstr "Søker i installerte pakker: klarte ikke lese: "
 
@@ -518,39 +521,40 @@ msgstr "Ser etter oppdateringer: ingen oppdateringspakke funnet"
 msgid "Refreshing updates view..."
 msgstr "Oppdaterer oppdateringsoversikten . . ."
 
-#: core/scanupdatesjob.cpp:108
+#: core/scanupdatesjob.cpp:107
 msgid "Scanning updates. Scan aborted!"
 msgstr "Ser etter oppdateringer: avbrutt"
 
-#: core/scanupdatesjob.cpp:122
+#: core/scanupdatesjob.cpp:121
 msgid "Scanning updates. Can not find id in database for package %1/%2."
-msgstr "Ser etter oppdateringer: klarte ikke finne id i databasen for pakken «%1/%2»."
+msgstr ""
+"Ser etter oppdateringer: klarte ikke finne id i databasen for pakken «%1/%2»."
 
-#: core/portagedb.cpp:360 core/portagedb.cpp:375
+#: core/portagedb.cpp:361 core/portagedb.cpp:376
 msgid "Creating backup of history. Error writing: %1."
 msgstr "Sikkerhetskopierer loggen: klarte ikke skrive: %1."
 
-#: core/portagedb.cpp:388 core/portagedb.cpp:409
+#: core/portagedb.cpp:389 core/portagedb.cpp:410
 msgid "Restoring backup of history. Error reading: %1."
 msgstr "Gjenoppretter sikkerhetskopien av loggen: klarte ikke lese: %1."
 
-#: core/portagedb.cpp:730
+#: core/portagedb.cpp:731
 msgid "Can not find package in database for id %1."
 msgstr "Klarte ikke finne pakke i databasen for id %1."
 
-#: core/portagedb.cpp:748
+#: core/portagedb.cpp:749
 msgid "Can not find category in database for id %1."
 msgstr "Klarte ikke finne kategori i databasen for id %1."
 
-#: core/portagedb.cpp:769
+#: core/portagedb.cpp:770
 msgid "Can not find id in database for package %1/%2."
 msgstr "Klarte ikke finne id i databsen for pakken «%1/%2»."
 
-#: core/portagedb.cpp:1184
+#: core/portagedb.cpp:1185
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr "Databaseversjoner er inkompatible; bygger den på nytt.\n"
 
-#: core/portagedb.cpp:1188
+#: core/portagedb.cpp:1189
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr "Databasefilen er korrupt; bygger databasen på nytt.\n"
 
@@ -581,7 +585,8 @@ msgid "Collecting user unmasked packages..."
 msgstr "Samler bruker-avmaskerte pakker . . ."
 
 #: core/portagefiles.cpp:214
-msgid "Load user package unmask: Can not find id in database for package %1/%2."
+msgid ""
+"Load user package unmask: Can not find id in database for package %1/%2."
 msgstr ""
 "Lasting av bruker-avmaskerte pakker: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -600,7 +605,8 @@ msgstr "Samler hardmaskerte pakker . . ."
 
 #: core/portagefiles.cpp:303
 msgid "Parsing package.mask. Can not find id in database for package %1/%2."
-msgstr "Leser «package.mask»: klarte ikke finne id i databsen for pakken «%1/%2»."
+msgstr ""
+"Leser «package.mask»: klarte ikke finne id i databsen for pakken «%1/%2»."
 
 #: core/portagefiles.cpp:309
 msgid "Parsing package.mask. Can not match package %1 in %2."
@@ -615,21 +621,24 @@ msgid "Collecting user masked packages..."
 msgstr "Samler bruker-maskerte pakker . . ."
 
 #: core/portagefiles.cpp:392
-msgid "Parsing user package.mask. Can not find id in database for package %1/%2."
+msgid ""
+"Parsing user package.mask. Can not find id in database for package %1/%2."
 msgstr ""
 "Leser brukerdefinert «package.mask»: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
 
 #: core/portagefiles.cpp:398
 msgid "Parsing user package.mask. Can not match package %1 in %2."
-msgstr "Leser brukerdefinert «package.mask»: klarte ikek treffe pakken «%1» i «%2»."
+msgstr ""
+"Leser brukerdefinert «package.mask»: klarte ikek treffe pakken «%1» i «%2»."
 
 #: core/portagefiles.cpp:435
 msgid "Parsing user package.use. Error reading: %1."
 msgstr "Leser brukerdefinert «package.use»: klarte ikke lese: %1."
 
 #: core/portagefiles.cpp:466
-msgid "Parsing user package.use. Can not find id in database for package %1/%2."
+msgid ""
+"Parsing user package.use. Can not find id in database for package %1/%2."
 msgstr ""
 "Leser brukerdefinert «package.use»: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -645,7 +654,8 @@ msgstr "Klarte ikke skrive til «%1»."
 
 #: core/portagefiles.cpp:546
 msgid "No user mask depend atom found. Saving to %1 aborted!"
-msgstr "Fant ikke noe bruker-maskert avhengighetsatom. Lagring til «%1» avbrutt."
+msgstr ""
+"Fant ikke noe bruker-maskert avhengighetsatom. Lagring til «%1» avbrutt."
 
 #: core/portagefiles.cpp:582
 msgid "No user unmask depend atom found. Saving to %1 aborted!"
@@ -875,7 +885,8 @@ msgid "Inserting emerged package: can not match %1."
 msgstr "Setter inn installerte pakker: klarte ikke treffe «%1»."
 
 #: portage/portage.cpp:57
-msgid "Inserting emerged package: Can not find id in database for package %1/%2."
+msgid ""
+"Inserting emerged package: Can not find id in database for package %1/%2."
 msgstr ""
 "Innsetting av installerte pakker: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -912,11 +923,11 @@ msgstr "Leser pakker i verden: klarte ikke lese: "
 msgid "Adding to world. Error writing: "
 msgstr "Legger til i verden: klarte ikke skrive: "
 
-#: portage/portagelistview.cpp:95
+#: portage/portagelistview.cpp:86
 msgid "Update"
 msgstr "Oppdater"
 
-#: portage/portagelistview.cpp:96 rc.cpp:156
+#: portage/portagelistview.cpp:87 rc.cpp:156
 #, no-c-format
 msgid "Description"
 msgstr "Beskrivelse"
@@ -953,11 +964,11 @@ msgstr ""
 msgid "Refreshing Packages"
 msgstr "Oppdaterer pakker"
 
-#: portage/portagetab.cpp:398
+#: portage/portagetab.cpp:466
 msgid "<b>Homepage: </b>"
 msgstr "<b>Hjemmeside: </b>"
 
-#: portage/portagetab.cpp:402
+#: portage/portagetab.cpp:470
 msgid ""
 "<tr><td colspan=2><font color=darkRed><b>Package not available in Portage "
 "tree anymore!</b></font></td></tr>"
@@ -965,7 +976,7 @@ msgstr ""
 "<tr><td colspan=2><font color=darkRed><b>Pakken er ikke tilgjengelig i "
 "Portage-treet lenger.</b></font></td></tr>"
 
-#: portage/portagetab.cpp:471
+#: portage/portagetab.cpp:474
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%"
 "1</td></tr>"
@@ -973,7 +984,7 @@ msgstr ""
 "<tr><td width=10%><b>Intallert&nbsp;versjon:</b></font></td><td width=90%>%"
 "1</td></tr>"
 
-#: portage/portagetab.cpp:473
+#: portage/portagetab.cpp:476
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%"
 ">Not installed</td></tr>"
@@ -981,11 +992,13 @@ msgstr ""
 "<tr><td width=10%><b>Installert&nbsp;versjon:</b></font></td><td width=90%"
 ">Ikke installert</td></tr>"
 
-#: portage/portagetab.cpp:486
-msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
-msgstr "<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
+#: portage/portagetab.cpp:489
+msgid ""
+"<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
+msgstr ""
+"<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
 
-#: portage/portagetab.cpp:490
+#: portage/portagetab.cpp:493
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available on %1</b></td></tr>"
@@ -993,7 +1006,7 @@ msgstr ""
 "<tr><td width=10%><b>Vil&nbsp;installere:</font></td><td width=90%><font "
 "color=darkRed>Ingen versjon tilgjengelig på %1</b></td></tr>"
 
-#: portage/portagetab.cpp:493
+#: portage/portagetab.cpp:496
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available - please check package details</font></"
@@ -1003,7 +1016,7 @@ msgstr ""
 "color=darkRed>Ingen versjon tilgjengelig - se i pakkeinnstillingene</font></"
 "b></td></tr>"
 
-#: portage/portagetab.cpp:499
+#: portage/portagetab.cpp:502
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></"
 "td></tr>"
@@ -1011,7 +1024,7 @@ msgstr ""
 "<tr><td width=10%><b>Tilgjengelige&nbsp;versjoner:</b></td><td width=90%>%1</"
 "b></td></tr>"
 
-#: portage/portagetab.cpp:501
+#: portage/portagetab.cpp:504
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</td><td width=90%><font "
 "color=darkRed>No versions available on %1</font></b></td></tr>"
@@ -1019,15 +1032,15 @@ msgstr ""
 "<tr><td width=10%><b>Tilgjengelige&nbsp;versjoner:</td><td width=90%><font "
 "color=darkRed>Ingen versjon tilgjengelig på %1</font></b></td></tr>"
 
-#: portage/portagetab.cpp:530
+#: portage/portagetab.cpp:533
 msgid "&Add to queue"
 msgstr "&Legg til i kø"
 
-#: portage/portagetab.cpp:532
+#: portage/portagetab.cpp:535
 msgid "&Remove from queue"
 msgstr "Fje&rn fra køen"
 
-#: portage/portagetab.cpp:543
+#: portage/portagetab.cpp:546
 msgid "&Uninstall"
 msgstr "&Avinstaller"
 
@@ -1185,7 +1198,8 @@ msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «ROOT»."
 
 #: config/configdialog.cpp:336
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_EXCLUDEFROM»."
+msgstr ""
+"Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_EXCLUDEFROM»."
 
 #: config/configdialog.cpp:344
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
@@ -1998,7 +2012,8 @@ msgstr "Sjekk oppdatering-innstillinger"
 
 #: rc.cpp:428
 #, no-c-format
-msgid "<i>Forces emerge to consider the entire dependency tree of packages.</i>"
+msgid ""
+"<i>Forces emerge to consider the entire dependency tree of packages.</i>"
 msgstr "<i>Tvinger Portage til å se på hele avhengighetstreet til pakker.</i>"
 
 #: rc.cpp:431
@@ -2342,4 +2357,3 @@ msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
 msgstr "alex@thehandofagony.com"
-

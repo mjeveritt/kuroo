@@ -51,6 +51,8 @@ enum portageFiles {
 		PACKAGE_MASK = 8
 };
 
+QStringList globalUseList;
+
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
@@ -187,11 +189,29 @@ void PackageInspector::slotApply()
 				useList += useFlag.remove( QRegExp( "^\\+|\\*$" ) );
 			myChild = myChild->nextSibling();
 		}
-		
+		kdDebug() << "useList=" << useList << endl;
 		// Store in db and save to file
 		if ( !useList.isEmpty() ) {
-			KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
+			//set use flags to nothing to check if a string is necessary in package.use
+			KurooDBSingleton::Instance()->setPackageUse( m_id, "" );
 			PortageFilesSingleton::Instance()->savePackageUse();
+
+;			//recalculate use flags
+			pretendUseLines.clear();
+			QTextCodec *codec = QTextCodec::codecForName("utf8");
+			KProcIO* eProc = new KProcIO( codec );
+			*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << category + "/" + package;
+			globalUseList=useList;
+
+			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );
+			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
+			eProc->start( KProcess::NotifyOnExit, true );
+			SignalistSingleton::Instance()->setKurooBusy( true );
+			if ( !eProc->isRunning() ) {
+				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.").arg( category ).arg( package ), ERROR );
+				//from slotParsePackageUse( eProc );
+				//endif
+			}
 		}
 	}
 	
@@ -500,11 +520,17 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 	switch ( dynamic_cast<QCheckListItem*>(useItem)->state() ) {
 	
 		case ( QCheckListItem::Off ) :
-			useItem->setText( 0, use.replace( QRegExp("^\\+"), "-") );
+			if ( useItem->text(0).startsWith( "+" ) )
+				useItem->setText( 0, use.replace( QRegExp("^\\+"), "-") );
+			if ( !useItem->text(0).startsWith( "-" ) )
+				useItem->setText( 0, use.insert(0, "-") );
 			break;
 		
 		case ( QCheckListItem::On ) :
+			if ( useItem->text(0).startsWith( "-" ) )
 			useItem->setText( 0, use.replace( QRegExp("^\\-"), "+") );
+			if ( !useItem->text(0).startsWith( "+" ) )
+				useItem->setText( 0, use.insert(0, "+") );
 
 	}
 	
@@ -758,6 +784,55 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 )
 		pretendUseLines += line;
+}
+
+/**
+ * Parse emerge pretend output for all use flags, and return a List.
+ * @param eProc
+ */
+void PackageInspector::slotParseTempUse( KProcess* eProc )
+{
+// 	::usleep(100000);
+	SignalistSingleton::Instance()->setKurooBusy( false );
+	delete eProc;
+	eProc = 0;	
+	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
+                       "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
+	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
+	                   "\\s+([\\d,]*)\\s+kB" );
+	QStringList tmpUseList;
+	foreach ( pretendUseLines ) {
+		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
+			QString use = rxPretend.cap(6).simplifyWhiteSpace();
+			tmpUseList = QStringList::split( " ", use );
+		}
+	}
+	kdDebug() << "tmpUseList=" << tmpUseList << endl;
+	
+	//recalculated use, now needs to check if a line in package.use is needed
+	//do it better: check if a word is needed in package.use
+	QStringList useList = useList.split( QString(", "), globalUseList.join(", ").remove( QRegExp("/b\\+|\\*/b") ) );
+	foreach ( tmpUseList ){
+		QString aux = (*it);
+		//removes all * since it's not a characted admitted in use flags
+		aux = aux.remove( QRegExp("/b\\+|\\*") );
+		foreach ( globalUseList ) {
+			QString aux2 = (*it);
+			aux2 = aux2.remove( QRegExp("/b\\+|\\*") );
+			if (aux == aux2 ) {
+				useList = useList.grep( QRegExp (QString("^(?!").append( aux ).append(")") ) );
+			}
+		}
+	}
+	//end of better
+	kdDebug() << "useList=" << useList << endl;
+	QString checkUse = useList.join(", ");
+	if ( !checkUse.remove(", ").remove(" ").isEmpty() ) {
+		KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
+		PortageFilesSingleton::Instance()->savePackageUse();
+	}
+	
+	kdDebug() << "hasUseSettingsChanged use=" << KurooDBSingleton::Instance()->packageUse( m_id ) << endl;
 }
 
 /**

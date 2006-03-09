@@ -634,7 +634,9 @@ public:
 			QString category = *it++;
 			QString package = *it++;
 			QString use = *it;
-			stream << category << "/" << package << " " << use << "\n";
+			QString tmpuse = use;
+			if ( !tmpuse.remove( " ", false).isEmpty() )
+				stream << category << "/" << package << " " << use << "\n";
 		}
 		
 		file.close();

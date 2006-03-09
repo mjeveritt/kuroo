@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.0_080306_db27";
+static const char version[] = "0.80.0_080306_db28";
 
 static KCmdLineOptions options[] =
 {
@@ -38,6 +38,8 @@ static KCmdLineOptions options[] =
 
 int main( int argc, char **argv )
 {
+	kdDebug() << "Kuroo version=" << version << endl;
+	
 	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "karye@users.sourceforge.net");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "karye@users.sourceforge.net");

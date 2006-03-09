@@ -66,6 +66,7 @@ private slots:
 	void							slotCalculateUse();
 	void							slotCollectPretendOutput( KProcIO* eProc );
 	void							slotParsePackageUse( KProcess* eProc );
+	void							slotParseTempUse( KProcess* eProc );
 	
 private:
 	bool							hasVersionSettingsChanged, hasUseSettingsChanged, isVirginState, isAvailableBefore;

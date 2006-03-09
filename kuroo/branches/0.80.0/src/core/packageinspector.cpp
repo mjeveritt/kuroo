@@ -811,14 +811,14 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	
 	//recalculated use, now needs to check if a line in package.use is needed
 	//do it better: check if a word is needed in package.use
-	QStringList useList = useList.split( QString(", "), globalUseList.join(", ").remove( QRegExp("/b\\+|\\*/b") ) );
+	QStringList useList = useList.split( QString(", "), globalUseList.join(", ").remove( QRegExp("/b\\+|\\*|\\%") ) );
 	foreach ( tmpUseList ){
 		QString aux = (*it);
 		//removes all * since it's not a characted admitted in use flags
-		aux = aux.remove( QRegExp("/b\\+|\\*") );
+		aux = aux.remove( QRegExp("/b\\+|\\*|\\%") );
 		foreach ( globalUseList ) {
 			QString aux2 = (*it);
-			aux2 = aux2.remove( QRegExp("/b\\+|\\*") );
+			aux2 = aux2.remove( QRegExp("/b\\+|\\*|\\%") );
 			if (aux == aux2 ) {
 				useList = useList.grep( QRegExp (QString("^(?!").append( aux ).append(")") ) );
 			}

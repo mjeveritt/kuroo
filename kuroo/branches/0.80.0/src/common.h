@@ -126,9 +126,7 @@ static const QString KUROODIR = "/var/cache/kuroo/";
 static const int ROWLIMIT = 1000;
 
 // Regexp from Portage
-// ((?:[a-z]|[A-Z]|[0-9]|-(?=\d+dpi)|-(?!\d)|\+|_)+)((-(?:\d+\.)*\d+[a-z]?)(?:_(?:alpha|beta|pre|rc|p)\d*)?(?:-r\d*)?)
 // static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
-
 static QRegExp rxPortageVersion("(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)");
 
 typedef struct Info {

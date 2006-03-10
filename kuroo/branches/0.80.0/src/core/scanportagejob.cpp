@@ -449,7 +449,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	
 	QString line;
 	QTextStream stream( &file );
-	int lineNumber = 0;
+	int lineNumber(0);
 	
 	// Check portage version and read out the package info strings
 	if ( KurooConfig::portageVersion21() ) {

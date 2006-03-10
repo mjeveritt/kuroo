@@ -57,7 +57,7 @@ private slots:
 	
 	void 				introWizard();
 	void 				slotPreferences();
-	void				slotBusy( bool b );
+	void				slotBusy();
 	void				slotSync();
 	bool 				queryClose();
 	bool 				queryExit();

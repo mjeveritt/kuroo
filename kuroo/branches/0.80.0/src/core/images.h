@@ -24,6 +24,10 @@
 #include <qobject.h>
 #include <qpixmap.h>
 
+/**
+ * @class Images
+ * @short Initialize images in Kuroo.
+ */
 class Images : public QObject
 {
 Q_OBJECT

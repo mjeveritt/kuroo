@@ -29,7 +29,6 @@ class KProcIO;
 /**
  * @class EtcUpdate
  * @short Object for handling etc-updates.
- * The external diff tool is launched for merging changes in etc config files.
  */
 class EtcUpdate : public QObject
 {

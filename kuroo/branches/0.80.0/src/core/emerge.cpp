@@ -245,10 +245,6 @@ bool Emerge::checkUpdates()
 	if ( KurooConfig::updateDeep() )
 		*eProc << "-D";
 	
-	// Remove dependencies if not checked in gui
-// 	if ( !KurooConfig::updateDependency() )
-// 		*eProc << "-O";
-	
 	*eProc << "world";
 
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
@@ -281,13 +277,13 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 	                   "\\s+([\\d,]*)\\s+kB" );
 	
 	while ( proc->readln( line, true ) >= 0 ) {
-		int logDone = 0;
+		int logDone(0);
 		
 		////////////////////////////////////////////////////////////////////////////////
 		// Cleanup emerge output - remove damn escape sequences
 		////////////////////////////////////////////////////////////////////////////////
 		line.replace( QRegExp("\\x0007"), "\n" );
-		int pos = 0;
+		int pos(0);
 		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
 		            "(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
 		while ( ( pos = rx.search(line) ) != -1 )

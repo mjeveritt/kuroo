@@ -100,7 +100,7 @@ void ThreadWeaver::onlyOneJob( Job *job )
 
 int ThreadWeaver::abortAllJobsNamed( const QCString &name )
 {
-	int count = 0;
+	int count(0);
 
 	for ( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 		if ( name == (*it)->name() ) {

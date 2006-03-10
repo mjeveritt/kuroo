@@ -50,8 +50,6 @@
 /**
  * @class Kuroo
  * @short Create main window with menus, system tray icon and statusbar.
- * 
- * First launch KurooInit to check the integrity of kuroo setup.
  */
 Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
@@ -74,7 +72,7 @@ Kuroo::Kuroo()
 	}
 	
 	// Lock/unlock if kuroo is busy.
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy( bool ) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// when the last window is closed, the application should quit
 	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );
@@ -124,7 +122,7 @@ void Kuroo::setupActions()
 /**
  * Disable buttons when kuroo is busy.
  */
-void Kuroo::slotBusy( bool busy )
+void Kuroo::slotBusy()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
 		actionRefreshPortage->setEnabled( false );
@@ -135,7 +133,8 @@ void Kuroo::slotBusy( bool busy )
 		actionRefreshUpdates->setEnabled( true );
 	}
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
+	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
 		actionEtcUpdate->setEnabled( false );
 	}

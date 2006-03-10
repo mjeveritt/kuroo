@@ -28,7 +28,7 @@
 
 /**
  * @class PackageInspector
- * @short Specialized dialog 
+ * @short The package Inspector dialog for all advanced settings.
  */
 class PackageInspector : public KDialogBase
 {

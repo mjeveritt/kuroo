@@ -1238,7 +1238,7 @@ QStringList SqliteConnection::query( const QString& statement )
 		values = QStringList();
 	}
 	else {
-		int busyCnt = 0;
+		int busyCnt(0);
 		int number = sqlite3_column_count(stmt);
 		
         //execute virtual machine by iterating over rows
@@ -1296,7 +1296,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 		kdDebug() << "on query: " << statement << endl;
 	}
 	else {
-		int busyCnt = 0;
+		int busyCnt(0);
 		
         //execute virtual machine
 		while ( true ) {
@@ -1351,7 +1351,7 @@ int SqliteConnection::insert( const QString& statement )
 		kdDebug() << "on insert: " << statement << endl;
 	}
 	else {
-		int busyCnt = 0;
+		int busyCnt(0);
 		
         //execute virtual machine by iterating over rows
 		while (true) {

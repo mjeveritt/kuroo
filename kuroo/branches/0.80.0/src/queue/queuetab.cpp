@@ -420,7 +420,7 @@ void QueueTab::slotAdvanced()
 }
 
 /**
- * Load package item with all version data...
+ * Process package and view in Inspector.
  */
 void QueueTab::slotPackage()
 {

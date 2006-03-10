@@ -29,7 +29,7 @@
 
 /**
  * @class AddInstalledPackageJob
- * @short Thread for adding packages into installed in db.
+ * @short Thread for registrating packages as installed in db.
  */
 class AddInstalledPackageJob : public ThreadWeaver::DependentJob
 {
@@ -78,7 +78,7 @@ private:
 
 /**
  * @class RemoveInstalledPackageJob
- * @short Thread for removing packages from installed in db.
+ * @short Thread for removing packages as installed in db.
  */
 class RemoveInstalledPackageJob : public ThreadWeaver::DependentJob
 {
@@ -240,12 +240,11 @@ Portage::~Portage()
 void Portage::init( QObject *parent )
 {
 	m_parent = parent;
-	loadCache();
 	loadWorld();
 }
 
 /**
- * 
+ * Emit signal after changes in Portage.
  */
 void Portage::slotChanged()
 {
@@ -253,90 +252,24 @@ void Portage::slotChanged()
 	emit signalPortageChanged();
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Parse Portage cache files to speed up portage scan
+////////////////////////////////////////////////////////////////////////////////////////
+
 /**
- * Start scan of portage packages.
- * @return bool
+ * Load mapCache with items from DB.
  */
-bool Portage::slotRefresh()
+void Portage::loadCache()
 {
-	// Update cache if empty
-	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
-		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+	mapCache.clear();
+	
+	const QStringList cacheList = KurooDBSingleton::Instance()->allCache();
+	foreach ( cacheList ) {
+		QString package = *it++;
+		QString size = *it;
+		mapCache.insert( package, size );
 	}
-	else
-		slotScan();
-	
-	return true;
-}
-
-/**
- * Start emerge sync.
- * @return bool
- */
-bool Portage::slotSync()
-{
-	EmergeSingleton::Instance()->sync();
-	return true;
-}
-
-/**
- * Continue scan of portage packages.
- * @return bool
- */
-bool Portage::slotScan()
-{
-	int maxLoops(99);
-	
-	// Wait for cache job to finish before launching the scan.
-	while ( true ) {
-		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
-			::usleep(100000); // Sleep 100 msec
-		else
-			break;
-		
-		if ( maxLoops-- == 0 ) {
-			kdDebug() << i18n("Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
-			break;
-		}
-	}
-	
-	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
-	return true;
-}
-
-/**
- * Forward signal after a new portage scan.
- */
-void Portage::slotScanCompleted()
-{
-// 	kdDebug() << "Portage::slotScanCompleted" << endl;
-	
-	QueueSingleton::Instance()->reset();
-	KurooDBSingleton::Instance()->addRefreshTime();
-	PortageFilesSingleton::Instance()->loadPackageMask();
-	
-	// Ready to roll
-	SignalistSingleton::Instance()->setKurooReady( true );
-	emit signalPortageChanged();
-	
-	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
-		slotRefreshUpdates();
-}
-
-/**
- * Launch emerge pretend of packages.
- * @param category
- * @param packageList
- */
-void Portage::pretendPackageList( const QStringList& packageIdList )
-{	
-	QStringList packageList;
-	foreach ( packageIdList )
-		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
-	
-	EmergeSingleton::Instance()->pretend( packageList );
 }
 
 /**
@@ -363,21 +296,6 @@ void Portage::setCache( const QMap<QString, QString> &mapCacheIn )
 }
 
 /**
- * Load mapCache with items from DB.
- */
-void Portage::loadCache()
-{
-	mapCache.clear();
-	
-	const QStringList cacheList = KurooDBSingleton::Instance()->allCache();
-	foreach ( cacheList ) {
-		QString package = *it++;
-		QString size = *it;
-		mapCache.insert( package, size );
-	}
-}
-
-/**
  * Free cache memory.
  */
 void Portage::clearCache()
@@ -385,11 +303,18 @@ void Portage::clearCache()
 	mapCache.clear();
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Load packages in world file. @fixme: optimize this...
  */
 void Portage::loadWorld()
 {
+	kdDebug() << "Portage::loadWorld" << endl;
+	
 	mapWorld.clear();
 	
 	QFile file( KurooConfig::dirWorldFile() );
@@ -415,7 +340,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
 			stream << it.key() << endl;
 		file.close();
-
+		
 		return true;
 	}
 	else
@@ -462,6 +387,103 @@ void Portage::removeFromWorld( const QString& package )
 		mapWorld = map;
 		emit signalWorldChanged();
 	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Start scan of portage packages.
+ * @return bool
+ */
+bool Portage::slotRefresh()
+{
+	kdDebug() << "Portage::slotRefresh" << endl;
+	
+	// Update cache if empty
+	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
+		SignalistSingleton::Instance()->scanStarted();
+		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+	}
+	else {
+		loadCache();
+		slotScan();
+	}
+	
+	return true;
+}
+
+/**
+ * Start emerge sync.
+ * @return bool
+ */
+bool Portage::slotSync()
+{
+	EmergeSingleton::Instance()->sync();
+	return true;
+}
+
+/**
+ * Continue scan of portage packages.
+ * @return bool
+ */
+bool Portage::slotScan()
+{
+	kdDebug() << "Portage::slotScan" << endl;
+	
+	int maxLoops(99);
+	
+	// Wait for cache job to finish before launching the scan.
+	while ( true ) {
+		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
+			::usleep(100000); // Sleep 100 msec
+		else
+			break;
+		
+		if ( maxLoops-- == 0 ) {
+			kdDebug() << i18n("Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
+			break;
+		}
+	}
+	
+	SignalistSingleton::Instance()->scanStarted();
+	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
+	return true;
+}
+
+/**
+ * Forward signal after a new portage scan.
+ */
+void Portage::slotScanCompleted()
+{
+	kdDebug() << "Portage::slotScanCompleted" << endl;
+	
+	QueueSingleton::Instance()->reset();
+	KurooDBSingleton::Instance()->addRefreshTime();
+	PortageFilesSingleton::Instance()->loadPackageMask();
+	
+	// Ready to roll
+	SignalistSingleton::Instance()->setKurooReady( true );
+	emit signalPortageChanged();
+	
+	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
+		slotRefreshUpdates();
+}
+
+/**
+ * Launch emerge pretend of packages.
+ * @param category
+ * @param packageList
+ */
+void Portage::pretendPackageList( const QStringList& packageIdList )
+{	
+	QStringList packageList;
+	foreach ( packageIdList )
+		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
+	
+	EmergeSingleton::Instance()->pretend( packageList );
 }
 
 /**

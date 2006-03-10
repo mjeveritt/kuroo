@@ -25,7 +25,7 @@
 
 /**
  * @class Portage
- * @short Object for the Portage tree.
+ * @short Handling of Portage.
  */
 class Portage : public QObject
 {

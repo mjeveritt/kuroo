@@ -140,7 +140,7 @@ void PortageTab::slotBusy()
 {
 // 	kdDebug() << "PortageTab::slotBusy" << endl;
 	
-	// If kuroo busy or no db no fun!
+	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		pbUninstall->setDisabled( true );
 		pbAdvanced->setDisabled( true );
@@ -249,8 +249,8 @@ void PortageTab::slotActivateFilters()
  */
 void PortageTab::slotListSubCategories()
 {
-	QString categoryId = categoriesView->currentCategoryId();
-	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoryId, filterGroup->selectedId(), searchFilter->text() ) );
+	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->
+	                                   portageSubCategories( categoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) );
 }
 
 /**
@@ -260,11 +260,10 @@ void PortageTab::slotListPackages()
 {
 	kdDebug() << "PortageTab::slotListPackages" << endl;
 	
-	QString categoryId = categoriesView->currentCategoryId();
-	QString subCategoryId = subcategoriesView->currentCategoryId();
-	
 	// Disable all buttons if query result is empty
-	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoryId, subCategoryId, filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
+	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->
+	                                           portagePackagesBySubCategory( categoriesView->currentCategoryId(), subcategoriesView->currentCategoryId(),
+		                                       filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		
 		m_packageInspector->hide();
 		slotButtons();
@@ -291,7 +290,7 @@ void PortageTab::slotListPackages()
 }
 
 /**
- * Reset text filter.
+ * Reset text filter when clicking on clear button.
  */
 void PortageTab::slotClearFilter()
 {
@@ -364,7 +363,8 @@ void PortageTab::slotAdvanced()
 }
 
 /**
- * View summary for selected package.
+ * Process package and all it's versions.
+ * Update summary and Inspector.
  */
 void PortageTab::slotPackage()
 {
@@ -374,7 +374,7 @@ void PortageTab::slotPackage()
 	if ( !isVisible() )
 		return;
 	
-	// clear text browsers and dropdown menus
+	// Clear summary and Inspector text browsers and dropdown menus
 	summaryBrowser->clear();
 	m_packageInspector->dialog->versionsView->clear();
 	m_packageInspector->dialog->cbVersionsEbuild->clear();
@@ -383,7 +383,7 @@ void PortageTab::slotPackage()
 	m_packageInspector->dialog->cbVersionsUse->clear();
 	m_packageInspector->dialog->cbVersionsSpecific->clear();
 	
-	// Initialize the portage package object with package and it's versions data
+	// Initialize the portage package object with the current package and it's versions data
 	packagesView->currentPackage()->initVersions();
 	QString package( packagesView->currentPackage()->name() );
 	QString category( packagesView->currentPackage()->category() );
@@ -456,6 +456,7 @@ void PortageTab::slotPackage()
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
+	// Build summary html-view
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
 	lines += "<tr><td bgcolor=#687DE3 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
 	lines += "(" + category.section( "-", 0, 0 ) + "/";
@@ -469,7 +470,7 @@ void PortageTab::slotPackage()
 	else
 		lines += i18n("<tr><td colspan=2><font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr>");
 	
-	// Construct installed summary
+	// Construct installed verions line
 	if ( !linesInstalled.isEmpty() )
 		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%1</td></tr>").arg( linesInstalled );
 	else
@@ -477,7 +478,7 @@ void PortageTab::slotPackage()
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 	
-		// Construct emerge summary
+		// Construct emerge version line
 		if ( !linesEmergeVersion.isEmpty() ) {
 			
 			// Set active version in Inspector dropdown menus
@@ -497,7 +498,7 @@ void PortageTab::slotPackage()
 				                          "<td width=90%><font color=darkRed>No version available - please check package details</font></b></td></tr>");
 		}
 		
-		// Construct available versions summary
+		// Construct available versions line
 		if ( !linesAvailable.isEmpty() )
 			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></td></tr>").arg( linesAvailable );
 		else

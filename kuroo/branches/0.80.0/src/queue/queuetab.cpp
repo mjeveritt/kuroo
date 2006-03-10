@@ -237,6 +237,8 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
+	kdDebug() << "QueueTab::slotButtons" << endl;
+	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-08 18:11+0100\n"
+"POT-Creation-Date: 2006-03-10 10:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,71 +90,71 @@ msgstr ""
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:242
+#: queue/queuetab.cpp:244
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:248 rc.cpp:68
+#: queue/queuetab.cpp:250 rc.cpp:68
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:326
+#: queue/queuetab.cpp:328
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:326 queue/queuetab.cpp:338
+#: queue/queuetab.cpp:328 queue/queuetab.cpp:340
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:338
+#: queue/queuetab.cpp:340
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:365
+#: queue/queuetab.cpp:367
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:370 core/emerge.cpp:451 core/emerge.cpp:528
+#: queue/queuetab.cpp:372 core/emerge.cpp:451 core/emerge.cpp:528
 #: core/cacheportagejob.cpp:184 core/etcupdate.cpp:124
 #: core/scanportagejob.cpp:355 core/scanportagejob.cpp:429
 #: core/scanupdatesjob.cpp:150 core/portagefiles.cpp:144
 #: core/portagefiles.cpp:233 core/portagefiles.cpp:322
-#: core/portagefiles.cpp:411 history/history.cpp:293 history/history.cpp:294
+#: core/portagefiles.cpp:411 history/history.cpp:295 history/history.cpp:296
 #: statusbar.cpp:94
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:458 core/versionview.cpp:111 portage/portagetab.cpp:409
+#: queue/queuetab.cpp:460 core/versionview.cpp:111 portage/portagetab.cpp:409
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:461 core/versionview.cpp:108 portage/portagetab.cpp:414
+#: queue/queuetab.cpp:463 core/versionview.cpp:108 portage/portagetab.cpp:414
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:464 portage/portagetab.cpp:419
+#: queue/queuetab.cpp:466 portage/portagetab.cpp:419
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:467 portage/portagetab.cpp:422
+#: queue/queuetab.cpp:469 portage/portagetab.cpp:422
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:469 portage/portagetab.cpp:424
+#: queue/queuetab.cpp:471 portage/portagetab.cpp:424
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:510 portage/portagetab.cpp:537 rc.cpp:25 rc.cpp:299
+#: queue/queuetab.cpp:512 portage/portagetab.cpp:537 rc.cpp:25 rc.cpp:299
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:514 portage/portagetab.cpp:541
+#: queue/queuetab.cpp:516 portage/portagetab.cpp:541
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:516 portage/portagetab.cpp:543
+#: queue/queuetab.cpp:518 portage/portagetab.cpp:543
 msgid "Remove from world"
 msgstr ""
 
@@ -328,7 +328,7 @@ msgid ""
 msgstr ""
 
 #: core/etcupdate.cpp:58 core/etcupdate.cpp:72 core/etcupdate.cpp:178
-#: main.cpp:41 rc.cpp:203
+#: main.cpp:43 rc.cpp:203
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
@@ -450,15 +450,15 @@ msgstr ""
 msgid "Scanning installed packages. Error reading: "
 msgstr ""
 
-#: core/scanhistoryjob.cpp:66
+#: core/scanhistoryjob.cpp:68
 msgid "Parsing emerge.log. Can not connect to database"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:83
+#: core/scanhistoryjob.cpp:85
 msgid "Parsing emerge.log. History scan aborted"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:101 core/scanhistoryjob.cpp:137
+#: core/scanhistoryjob.cpp:103 core/scanhistoryjob.cpp:139
 msgid "Parsing emerge.log. No package found!"
 msgstr ""
 
@@ -606,39 +606,39 @@ msgstr ""
 msgid "No package use found. Saving to %1 aborted!"
 msgstr ""
 
-#: core/portagefiles.cpp:673
+#: core/portagefiles.cpp:675
 msgid "Completed scanning for package keywords in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:676
+#: core/portagefiles.cpp:678
 msgid "Completed scanning for unmasked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:679
+#: core/portagefiles.cpp:681
 msgid "Completed scanning for hardmasked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:682
+#: core/portagefiles.cpp:684
 msgid "Completed scanning for user masked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:685
+#: core/portagefiles.cpp:687
 msgid "Completed saving package keywords in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:689
+#: core/portagefiles.cpp:691
 msgid "Completed saving user masked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:693
+#: core/portagefiles.cpp:695
 msgid "Completed saving user unmasked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:696
+#: core/portagefiles.cpp:698
 msgid "Completed scanning user package use flags in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:699
+#: core/portagefiles.cpp:701
 msgid "Completed saving user package use in %1."
 msgstr ""
 
@@ -662,56 +662,57 @@ msgstr ""
 msgid "Package present in Queue"
 msgstr ""
 
-#: core/packageinspector.cpp:59
+#: core/packageinspector.cpp:61
 msgid "Package details"
 msgstr ""
 
-#: core/packageinspector.cpp:115 core/packageinspector.cpp:140
+#: core/packageinspector.cpp:117 core/packageinspector.cpp:142
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr ""
 
-#: core/packageinspector.cpp:116 core/packageinspector.cpp:141
+#: core/packageinspector.cpp:118 core/packageinspector.cpp:143
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:253
-msgid "Click for hardmask info!"
-msgstr ""
-
-#: core/packageinspector.cpp:271
-msgid "%1/%2 hardmask info!"
-msgstr ""
-
-#: core/packageinspector.cpp:556 core/packageinspector.cpp:632
-#: core/packageinspector.cpp:657 core/packageinspector.cpp:691
-#: core/packageinspector.cpp:718
-msgid "Error reading: "
-msgstr ""
-
-#: core/packageinspector.cpp:633
-msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
-msgstr ""
-
-#: core/packageinspector.cpp:658
-msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
-msgstr ""
-
-#: core/packageinspector.cpp:692
-msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
-msgstr ""
-
-#: core/packageinspector.cpp:721
-msgid "<font color=darkGrey><b>No installed files found.</b></font>"
-msgstr ""
-
-#: core/packageinspector.cpp:745
+#: core/packageinspector.cpp:211 core/packageinspector.cpp:772
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:791
-msgid "No use flags available."
+#: core/packageinspector.cpp:273
+msgid "Click for hardmask info!"
+msgstr ""
+
+#: core/packageinspector.cpp:291
+msgid "%1/%2 hardmask info!"
+msgstr ""
+
+#: core/packageinspector.cpp:582 core/packageinspector.cpp:659
+#: core/packageinspector.cpp:684 core/packageinspector.cpp:718
+#: core/packageinspector.cpp:745
+msgid "Error reading: "
+msgstr ""
+
+#: core/packageinspector.cpp:660
+msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
+msgstr ""
+
+#: core/packageinspector.cpp:685
+msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
+msgstr ""
+
+#: core/packageinspector.cpp:719
+msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
+msgstr ""
+
+#: core/packageinspector.cpp:748
+msgid "<font color=darkGrey><b>No installed files found.</b></font>"
+msgstr ""
+
+#: core/packageinspector.cpp:815 core/packageinspector.cpp:875
+msgid ""
+"Use flags could not be calculated. Please check log for more information"
 msgstr ""
 
 #: core/versionview.cpp:89
@@ -734,72 +735,72 @@ msgstr ""
 msgid "Error reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:215
+#: history/history.cpp:217
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:216
+#: history/history.cpp:218
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:231
+#: history/history.cpp:233
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:232
+#: history/history.cpp:234
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:233
+#: history/history.cpp:235
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:240
+#: history/history.cpp:242
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:252
+#: history/history.cpp:254
 msgid "Can not parse package emerge start in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:266
+#: history/history.cpp:268
 msgid "Can not parse package emerge complete in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:268
+#: history/history.cpp:270
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:275
+#: history/history.cpp:277
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:281 history/history.cpp:282
+#: history/history.cpp:283 history/history.cpp:284
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:287 history/history.cpp:288
+#: history/history.cpp:289 history/history.cpp:290
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:305 rc.cpp:506
+#: history/history.cpp:307 rc.cpp:506
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:308
+#: history/history.cpp:310
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:309
+#: history/history.cpp:311
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:310
+#: history/history.cpp:312
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:311
+#: history/history.cpp:313
 msgid "terminating"
 msgstr ""
 
@@ -1256,43 +1257,43 @@ msgstr ""
 msgid "Initialize Kuroo with init"
 msgstr ""
 
-#: main.cpp:43
+#: main.cpp:45
 msgid "Original author and maintainer"
 msgstr ""
 
-#: main.cpp:44
+#: main.cpp:46
 msgid "French translation"
 msgstr ""
 
-#: main.cpp:45 main.cpp:46
+#: main.cpp:47 main.cpp:48
 msgid "German translation"
 msgstr ""
 
-#: main.cpp:47
+#: main.cpp:49
 msgid "Italian translation"
 msgstr ""
 
-#: main.cpp:48
+#: main.cpp:50
 msgid "Norwegian translation"
 msgstr ""
 
-#: main.cpp:49
+#: main.cpp:51
 msgid "Polish translation"
 msgstr ""
 
-#: main.cpp:50
+#: main.cpp:52
 msgid "Kuroo icons"
 msgstr ""
 
-#: main.cpp:51
+#: main.cpp:53
 msgid "Portage version code"
 msgstr ""
 
-#: main.cpp:52 main.cpp:53
+#: main.cpp:54 main.cpp:55
 msgid "OpenUsability"
 msgstr ""
 
-#: main.cpp:62
+#: main.cpp:64
 msgid "Kuroo is already running!"
 msgstr ""
 

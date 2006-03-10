@@ -62,6 +62,8 @@ void ScanHistoryJob::completeJob()
  */
 bool ScanHistoryJob::doJob()
 {
+	kdDebug() << "ScanHistoryJob::doJob" << endl;
+	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Parsing emerge.log. Can not connect to database") << endl;
 		return false;

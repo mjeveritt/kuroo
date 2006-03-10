@@ -589,6 +589,7 @@ void PackageInspector::loadUseFlagDescription()
 void PackageInspector::slotLoadUseFlags( const QString& version )
 {
 	dialog->useView->setDisabled( true );
+	dialog->useView->setColumnWidth( 0, 20 );
 	
 	if ( dialog->inspectorTabs->currentPageIndex() == 1 ) {
 		QStringList useList;
@@ -809,6 +810,14 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	}
 	kdDebug() << "tmpUseList=" << tmpUseList << endl;
 	
+	dialog->useView->clear();
+	if ( tmpUseList.isEmpty() ) {
+		new QListViewItem( dialog->useView, i18n("Use flags could not be calculated. Please check log for more information") );
+		foreach ( pretendUseLines )
+			LogSingleton::Instance()->writeLog( *it, ERROR );
+		return;
+	}
+	
 	//recalculated use, now needs to check if a line in package.use is needed
 	//do it better: check if a word is needed in package.use
 	QStringList useList = useList.split( QString(", "), globalUseList.join(", ").remove( QRegExp("/b\\+|\\*|\\%") ) );
@@ -863,10 +872,14 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {
-		new QListViewItem( dialog->useView, i18n("No use flags available.") );
+		new QListViewItem( dialog->useView, i18n("Use flags could not be calculated. Please check log for more information") );
+		foreach ( pretendUseLines )
+			LogSingleton::Instance()->writeLog( *it, ERROR );
 		return;
 	}
-
+	else
+		dialog->useView->setColumnWidth( 0, 20 );
+	
 	// Get user set package use flags
 	foreach ( pretendUseList ) {
 		QString lines;

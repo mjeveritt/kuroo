@@ -759,15 +759,20 @@ QString KurooDB::category( const QString& id )
 QString KurooDB::packageId( const QString& package )
 {
 	QString category = package.section( "/", 0, 0 );
-	QString name = package.section( "/", 1, 1 ).section( rxPortageVersion, 0, 0 );
+	QString packageString = package.section( "/", 1, 1 );
 	
-	QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+	if ( rxPortageVersion.search( packageString ) != -1 ) {
+		QString name = packageString.section( rxPortageVersion.cap( 1 ), 0, 0 );
+		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 	                          " ( SELECT id from catSubCategory WHERE name = '" + category + "' ); " );
 	
-	if ( !id.isEmpty() )
-		return id;
+		if ( !id.isEmpty() )
+			return id;
+		else
+			kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+	}
 	else
-		kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+		kdDebug() << i18n("Querying for package id. Can not parse: ") << packageString << endl;
 	
 	return QString::null;
 }

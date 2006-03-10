@@ -114,25 +114,29 @@ bool ScanHistoryJob::doJob()
 						int secTime = timeStamp.toUInt() - itLogMap.data();
 						logMap.erase( itLogMap );
 						
-						QString packageNoVersion = package.section( rxPortageVersion, 0, 0 );
-		
-						// Update emerge time and increment count for packageNoVersion
-						EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
-						if ( itMap == emergeTimeMap.end() ) {
-							PackageEmergeTime pItem( secTime, 1 );
-							emergeTimeMap.insert( packageNoVersion, pItem );
+						if ( rxPortageVersion.search( package ) != -1 ) {
+							QString packageNoVersion = package.section( rxPortageVersion.cap( 1 ), 0, 0 );
+			
+							// Update emerge time and increment count for packageNoVersion
+							EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
+							if ( itMap == emergeTimeMap.end() ) {
+								PackageEmergeTime pItem( secTime, 1 );
+								emergeTimeMap.insert( packageNoVersion, pItem );
+							}
+							else {
+								itMap.data().add(secTime);
+								itMap.data().inc();
+							}
+							
+							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
+							
+							KurooDBSingleton::Instance()->insert( QString( 
+								"INSERT INTO history (package, timestamp, time, einfo, emerge) "
+								"VALUES ('%1', '%2', '%3', '%4','true')"
+								";" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ).arg( escapeString( einfo ) ), m_db );
 						}
-						else {
-							itMap.data().add(secTime);
-							itMap.data().inc();
-						}
-						
-						QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
-						
-						KurooDBSingleton::Instance()->insert( QString( 
-							"INSERT INTO history (package, timestamp, time, einfo, emerge) "
-							"VALUES ('%1', '%2', '%3', '%4','true')"
-							";" ).arg( package ).arg( timeStamp ).arg( QString::number(secTime) ).arg( escapeString( einfo ) ), m_db );
+						else
+							kdDebug() << i18n("Parsing emerge.log. Can not parse: ") << package << endl;
 					}
 				}
 				else

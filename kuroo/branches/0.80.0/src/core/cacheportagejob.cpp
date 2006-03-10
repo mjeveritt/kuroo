@@ -148,18 +148,26 @@ bool CachePortageJob::doJob()
 					}
 					QString package = *itCategory + "/" + *itPackage;
 					
-					// Get package size
-					QString path = *itPath + "/" + *itCategory + "/" + (*itPackage).section( rxPortageVersion, 0, 0 ) + "/files/digest-" + *itPackage;
-					QFile file( path );
-					if ( file.open( IO_ReadOnly ) ) {
-						std::ifstream in( path );
-						std::string word;
-						while ( in >> word );
-						mapCache.insert( package, word );
-						file.close();
+					if ( rxPortageVersion.search( *itPackage ) != -1 ) {
+						QString packageName = (*itPackage).section( rxPortageVersion.cap( 1 ), 0, 0 );
+						
+						// Get package size
+						QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;
+						QFile file( path );
+						if ( file.open( IO_ReadOnly ) ) {
+							std::ifstream in( path );
+							std::string word;
+							while ( in >> word );
+							mapCache.insert( package, word );
+							file.close();
+						}
+						else {
+							kdDebug() << i18n("Creating cache. Error reading: ") << path << endl;
+							kdDebug() << "*itPackage=" << *itPackage << " name=" << (*itPackage).section( rxPortageVersion, 0, 0 ) << endl;
+						}
 					}
 					else
-						kdDebug() << i18n("Creating cache. Error reading: ") << path << endl;
+						kdDebug() << i18n("Creating cache. Can not parse: ") << *itPackage << endl;
 					
 					// Post scan count progress
 					if ( (++count % 100) == 0 )

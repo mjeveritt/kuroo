@@ -144,7 +144,7 @@ void Signalist::scanPortageComplete()
 }
 
 /**
- * "emerge -urxPortageVersion world" completed.
+ * "emerge -upv" completed.
  */
 void Signalist::scanUpdatesComplete()
 {

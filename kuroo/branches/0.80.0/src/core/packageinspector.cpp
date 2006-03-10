@@ -368,13 +368,17 @@ void PackageInspector::showSettings()
 	
 	// Get user mask specific version
 	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
-	userMaskVersion = userMaskVersion.section( ( userMaskVersion.section( rxPortageVersion, 0, 0 ) + "-" ), 1, 1 );
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
-		dialog->rbVersionsSpecific->setChecked( true );
-		dialog->cbVersionsSpecific->setDisabled( false );
-		dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
+		if ( rxPortageVersion.search( userMaskVersion ) != -1 ) {
+			userMaskVersion = rxPortageVersion.cap( 1 ).remove( 0, 1 ) + userMaskVersion.section( rxPortageVersion.cap( 1 ), 1, 1 );
+			dialog->rbVersionsSpecific->setChecked( true );
+			dialog->cbVersionsSpecific->setDisabled( false );
+			dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
+		}
+		else
+			kdDebug() << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << endl;
 	}
 	else {
 		dialog->ckbAvailable->setChecked( false );

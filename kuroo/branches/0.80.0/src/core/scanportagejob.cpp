@@ -54,7 +54,7 @@ ScanPortageJob::ScanPortageJob( QObject* parent )
 	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
 	       	"(?:-r\\d*)?"  								// revision
 	       	"(?:\\*$)?)?"          						// end of the (optional) version part and the atom string
-		)
+		  )
 {
 }
 

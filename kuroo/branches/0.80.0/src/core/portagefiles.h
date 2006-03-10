@@ -37,11 +37,13 @@ public:
 public slots:
 	void			init( QObject *parent = 0 );
 	void			refresh( int mask );
-	void 			loadPackageMask();
+	
+	void 			loadPackageFiles();
 	void			loadPackageKeywords();
 	void 			loadPackageUnmask();
 	void			loadPackageUserMask();
 	void			loadPackageUse();
+	
 	void			savePackageKeywords();
 	void 			savePackageUserUnMask();
 	void			savePackageUserMask();

@@ -88,11 +88,18 @@ void QueueListView::QueueItem::setComplete()
 	repaint();
 }
 
+/**
+ * Is this package progress 100%?
+ */
 bool QueueListView::QueueItem::isComplete()
 {
 	return m_isComplete;
 }
 
+/**
+ * Calculate remaining emerge duration.
+ * @return time or '0' if time has exceeded
+ */
 int QueueListView::QueueItem::remainingDuration()
 {
 	int diff = m_duration - m_progress;
@@ -103,7 +110,7 @@ int QueueListView::QueueItem::remainingDuration()
 }
 
 /**
- * Advance progress by 1 sec.
+ * Advance package progress by 1 sec.
  */
 void QueueListView::QueueItem::oneStep()
 {

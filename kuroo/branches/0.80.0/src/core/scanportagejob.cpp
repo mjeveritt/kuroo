@@ -319,12 +319,6 @@ bool ScanPortageJob::doJob()
 				
 				sqlVersion += QString( "'%1', '%2');" ).arg( slot ).arg( path );
 				KurooDBSingleton::Instance()->insert( sqlVersion, m_db );
-				
-// 				KurooDBSingleton::Instance()->insert( QString(
-// 					"INSERT INTO version_temp (idPackage, name, description, homepage, size, branch, status, licenses, useFlags, slot, path) "
-// 					"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');" 
-// 					).arg( idPackage ).arg( version ).arg( size ).arg( keywords ).arg( status ).arg( licenses ).arg( useFlags ).arg( slot ).arg( path ), m_db );
-				
 			}
 		}
 	}

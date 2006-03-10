@@ -216,6 +216,11 @@ private:
 	int 	m_hasUpdate;
 };
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * @class Portage
  * @short Object handling the Portage tree.
@@ -248,7 +253,7 @@ void Portage::init( QObject *parent )
  */
 void Portage::slotChanged()
 {
-// 	kdDebug() << "Portage::slotChanged" << endl;
+	kdDebug() << "Portage::slotChanged" << endl;
 	emit signalPortageChanged();
 }
 
@@ -305,7 +310,99 @@ void Portage::clearCache()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//
+// Portage handling...
+////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Start scan of portage packages.
+ * @return bool
+ */
+bool Portage::slotRefresh()
+{
+	kdDebug() << "Portage::slotRefresh" << endl;
+	
+	// Update cache if empty
+	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
+		SignalistSingleton::Instance()->scanStarted();
+		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+	}
+	else {
+		loadCache();
+		slotScan();
+	}
+	
+	return true;
+}
+
+/**
+ * Start emerge sync.
+ * @return bool
+ */
+bool Portage::slotSync()
+{
+	EmergeSingleton::Instance()->sync();
+	return true;
+}
+
+/**
+ * Continue with scan of portage packages.
+ * @return bool
+ */
+bool Portage::slotScan()
+{
+	kdDebug() << "Portage::slotScan" << endl;
+	
+	int maxLoops(99);
+	
+	// Wait for cache job to finish before launching the scan.
+	while ( true ) {
+		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
+			::usleep(100000); // Sleep 100 msec
+		else
+			break;
+		
+		if ( maxLoops-- == 0 ) {
+			kdDebug() << i18n("Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
+			break;
+		}
+	}
+	
+	SignalistSingleton::Instance()->scanStarted();
+	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
+	return true;
+}
+
+/**
+ * Forward signal after a new portage scan.
+ */
+void Portage::slotScanCompleted()
+{
+	kdDebug() << "Portage::slotScanCompleted" << endl;
+	
+	// Packages are scanned, we don't the cache anymore
+	clearCache();
+	
+	// Reset Queue with it's own cache
+	QueueSingleton::Instance()->reset();
+	
+	// Register this scan in history so we can check at next start if user has emerged any packages outside kuroo
+	KurooDBSingleton::Instance()->addRefreshTime();
+	
+	// Now all Portage files
+	PortageFilesSingleton::Instance()->loadPackageFiles();
+	
+	// Ready to roll!
+	SignalistSingleton::Instance()->setKurooReady( true );
+	slotChanged();
+	
+	// Go on with checking for updates
+	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
+		slotRefreshUpdates();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// World handling...
 ////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -349,6 +446,11 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 	return false;
 }
 
+/**
+ * Check if this package in is world file.
+ * @param package
+ * @return true/false
+ */
 bool Portage::isInWorld( const QString& package )
 {
 	if ( mapWorld.contains( package ) )
@@ -391,86 +493,8 @@ void Portage::removeFromWorld( const QString& package )
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//
+// Package handlling...
 ////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Start scan of portage packages.
- * @return bool
- */
-bool Portage::slotRefresh()
-{
-	kdDebug() << "Portage::slotRefresh" << endl;
-	
-	// Update cache if empty
-	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
-		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
-	}
-	else {
-		loadCache();
-		slotScan();
-	}
-	
-	return true;
-}
-
-/**
- * Start emerge sync.
- * @return bool
- */
-bool Portage::slotSync()
-{
-	EmergeSingleton::Instance()->sync();
-	return true;
-}
-
-/**
- * Continue scan of portage packages.
- * @return bool
- */
-bool Portage::slotScan()
-{
-	kdDebug() << "Portage::slotScan" << endl;
-	
-	int maxLoops(99);
-	
-	// Wait for cache job to finish before launching the scan.
-	while ( true ) {
-		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
-			::usleep(100000); // Sleep 100 msec
-		else
-			break;
-		
-		if ( maxLoops-- == 0 ) {
-			kdDebug() << i18n("Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
-			break;
-		}
-	}
-	
-	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
-	return true;
-}
-
-/**
- * Forward signal after a new portage scan.
- */
-void Portage::slotScanCompleted()
-{
-	kdDebug() << "Portage::slotScanCompleted" << endl;
-	
-	QueueSingleton::Instance()->reset();
-	KurooDBSingleton::Instance()->addRefreshTime();
-	PortageFilesSingleton::Instance()->loadPackageMask();
-	
-	// Ready to roll
-	SignalistSingleton::Instance()->setKurooReady( true );
-	emit signalPortageChanged();
-	
-	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
-		slotRefreshUpdates();
-}
 
 /**
  * Launch emerge pretend of packages.

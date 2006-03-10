@@ -25,7 +25,7 @@
 
 /**
  * @class AddQueuePackageIdListJob
- * @short Thread for adding packages to the queue in db. Used by other views.
+ * @short Thread for adding packages to the queue in db.
  */
 class AddQueuePackageIdListJob : public ThreadWeaver::DependentJob
 {
@@ -94,6 +94,10 @@ private:
 };
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * @class Queue
  * @short Object for packages to be emerged = installation queue.
@@ -119,7 +123,86 @@ void Queue::init( QObject *parent )
 }
 
 /**
- * Start the timer.
+ * Forward signal to refresh queue.
+ */
+void Queue::refresh( bool hasCheckedQueue )
+{
+	clearCache();
+	emit signalQueueChanged( hasCheckedQueue );
+}
+
+/**
+ * Clear the queue.
+ */
+void Queue::reset()
+{
+	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
+	refresh( false );
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue cache handling
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Check if package is the queue.
+ * @param id
+ * @return true/false
+ */
+bool Queue::isQueued( const QString& id )
+{
+	QMap<QString, bool>::iterator itMap = queueCache.find( id );
+	if ( itMap == queueCache.end() )
+		return false;
+	else
+		return true;
+}
+
+/**
+ * Clear Queue.
+ * @param id
+ */
+void Queue::clearCache()
+{
+	queueCache.clear();
+}
+
+/**
+ * When the package is inserted in the queue register it in the cache too.
+ * @param id
+ */
+void Queue::insertInCache( const QString& id )
+{
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
+	
+	queueCache[ id ] = true;
+}
+
+/**
+ * When the package is removed from queue remove from cache.
+ * @param id
+ */
+void Queue::deleteFromCache( const QString& id )
+{
+	if ( id.isEmpty() ) {
+		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		return;
+	}
+	
+	queueCache[ id ] = false;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// package progress handling
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Start the package installation timer.
  * @param package
  */
 void Queue::emergePackageStart( const QString& package, int order, int total )
@@ -154,74 +237,10 @@ void Queue::stopTimer()
 	internalTimer->stop();
 }
 
-/**
- * Clear Queue.
- * @param id
- */
-void Queue::clearCache()
-{
-	packageCache.clear();
-}
 
-/**
- * When the package is inserted in the register it in the cache too.
- * @param id
- */
-void Queue::insertInCache( const QString& id )
-{
-	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
-		return;
-	}
-	
-	packageCache[ id ] = true;
-}
-
-/**
- * When the package is inserted in the register it in the cache too.
- * @param id
- */
-void Queue::deleteFromCache( const QString& id )
-{
-	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
-		return;
-	}
-	
-	packageCache[ id ] = false;
-}
-
-/**
- * Check if package is the queue.
- * @param id
- * @return true/false
- */
-bool Queue::isQueued( const QString& id )
-{
-	QMap<QString, bool>::iterator itMap = packageCache.find( id );
-	if ( itMap == packageCache.end() )
-		return false;
-	else
-		return true;
-}
-
-/**
- * Forward signal to refresh queue.
- */
-void Queue::refresh( bool hasCheckedQueue )
-{
-	clearCache();
-	emit signalQueueChanged( hasCheckedQueue );
-}
-
-/**
- * Clear the queue.
- */
-void Queue::reset()
-{
-	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
-	refresh( false );
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Package handling
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Remove packages from queue.

@@ -63,7 +63,7 @@ signals:
 	
 private:
 	QObject					*m_parent;
-	QMap<QString, bool>		packageCache;
+	QMap<QString, bool>		queueCache;
 	QTimer*					internalTimer;
 	bool					m_removeInstalled;
 };

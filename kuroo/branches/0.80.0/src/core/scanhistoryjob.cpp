@@ -149,10 +149,6 @@ bool ScanHistoryJob::doJob()
 					if ( emergeLine.contains("=== Sync completed") ) {
 						KurooDBSingleton::Instance()->query( QString(
 							"UPDATE dbInfo SET syncTimeStamp = '%1';").arg( timeStamp ), m_db );
-						
-// 						KurooDBSingleton::Instance()->insert( QString( 
-// 							"INSERT INTO history (package, timestamp, emerge) "
-// 							"VALUES ('', '%1', 'true');" ).arg( timeStamp ), m_db );
 					}
 				
 			}

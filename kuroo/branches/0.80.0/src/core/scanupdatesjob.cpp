@@ -34,7 +34,7 @@
 
 /**
  * @class ScanUpdatesJob
- * @short Thread for loading emerge -uDrxPortageVersion World output into db.
+ * @short Thread for loading 'emerge -uDrxv World' output into db.
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),

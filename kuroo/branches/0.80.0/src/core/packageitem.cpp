@@ -29,7 +29,7 @@
 
 /**
  * @class PackageItem
- * @short KListViewItem subclass
+ * @short Base class for packages.
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),

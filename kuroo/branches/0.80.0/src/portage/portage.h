@@ -44,9 +44,7 @@ public slots:
 	
 	bool						slotScan();
 	void						slotScanCompleted();
-	
 	bool						slotSync();
-	void						pretendPackageList( const QStringList& packageIdList );
 	
 	QString						cacheFind( const QString& package );
 	void						setCache( const QMap< QString, QString > &mapCacheIn );
@@ -57,6 +55,7 @@ public slots:
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
 	
+	void						pretendPackageList( const QStringList& packageIdList );
 	void						uninstallInstalledPackageList( const QStringList& packageIdList );
 	void						addInstalledPackage( const QString& package );
 	void						removeInstalledPackage( const QString& package );

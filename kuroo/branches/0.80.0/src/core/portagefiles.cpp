@@ -40,13 +40,6 @@ rxAtom(
        	"^"    // Start of the string
        	"(!)?" // "Block these packages" flag, only occurring in ebuilds
        	"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
-//        	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   // category and subcategory
-//        	"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" // package name
-//        	"("            // start of the version part
-//        	"(?:\\*$|-\\d+(?:\\.\\d+)*[a-z]?(?:\\*$)?)" // base version number, including wildcard version matching (*)
-//        	"(?:_(?:alpha|beta|pre|rc|p)(\\d+|\\*$))?" // version suffix
-//        	"(?:-r(\\d+|\\*$))?"  // revision
-//        	")?$"          // end of the (optional) version part and the atom string
        	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   						// category and subcategory
        	"((?:[a-z]|[A-Z]|[0-9]|-(?=\\d+dpi)|-(?!\\d)|\\+|_)+)" 			// package name
        	"("           													// start of the version part
@@ -58,7 +51,7 @@ rxAtom(
 
 /**
  * @class: LoadPackageKeywordsJob
- * @short: Thread for loading packages unmasked by user.
+ * @short: Thread for loading packages keyword-unmasked by user.
  */
 class LoadPackageKeywordsJob : public ThreadWeaver::DependentJob
 {
@@ -330,12 +323,12 @@ public:
 
 /**
  * @class: LoadPackageMaskJob
- * @short: Thread for loading masked packages into db.
+ * @short: Thread for loading user masked packages into db.
  */
 class LoadPackageUserMaskJob : public ThreadWeaver::DependentJob
 {
 public:
-LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 	
 	virtual bool doJob() {
 		
@@ -424,7 +417,7 @@ LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" 
 class LoadPackageUseJob : public ThreadWeaver::DependentJob
 {
 public:
-LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+	LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
 	
 	virtual bool doJob() {
 		
@@ -532,7 +525,7 @@ public:
 
 /**
  * @class: SavePackageUserMaskJob
- * @short: Thread for loading packages unmasked by user.
+ * @short: Thread for saving packages unmasked by user.
  */
 class SavePackageUserMaskJob : public ThreadWeaver::DependentJob
 {
@@ -568,7 +561,7 @@ public:
 
 /**
  * @class: SavePackageUserMaskJob
- * @short: Thread for loading packages unmasked by user.
+ * @short: Thread for saving packages unmasked by user.
  */
 class SavePackageUserUnMaskJob : public ThreadWeaver::DependentJob
 {
@@ -604,7 +597,7 @@ public:
 
 /**
  * @class: SavePackageUserMaskJob
- * @short: Thread for loading packages unmasked by user.
+ * @short: Thread for saving packages use-setting by user.
  */
 class SavePackageUseJob : public ThreadWeaver::DependentJob
 {
@@ -706,7 +699,7 @@ void PortageFiles::refresh( int mask )
 /**
  * Load all!
  */
-void PortageFiles::loadPackageMask()
+void PortageFiles::loadPackageFiles()
 {
 	ThreadWeaver::instance()->queueJob( new LoadPackageHardMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );

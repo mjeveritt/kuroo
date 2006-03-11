@@ -134,6 +134,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		KurooDBSingleton::Instance()->destroy();
 		remove( database );
 		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		kdDebug() << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
 		
 		// and recreate with new structure
 		KurooDBSingleton::Instance()->init( this );
@@ -201,6 +202,7 @@ bool KurooInit::getEnvironment()
 	}
 	else {
 		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
+		kdDebug() << QString("Error reading: /etc/make.conf") << endl;
 		success = false;
 	}
 	
@@ -218,8 +220,10 @@ bool KurooInit::getEnvironment()
 		}
 		f.close();
 	}
-	else
+	else {
 		kdDebug() << i18n("Error reading: /etc/make.profile") << endl;
+		kdDebug() << QString("Error reading: /etc/make.profile") << endl;
+	}
 	
 	// Add default etc warning files
 	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
@@ -256,6 +260,7 @@ void KurooInit::checkUser()
 		if ( *it == "portage" )
 			return;
 	}
+	
 	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), i18n("User permissions") );
 	exit(0);
 }

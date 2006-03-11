@@ -58,6 +58,7 @@ bool Emerge::stop()
 {
 	if ( eProc->isRunning() && eProc->kill(9) ) {
 		kdDebug() << i18n("Emerge process killed!") << endl;
+		kdDebug() << QString("Emerge process killed!") << endl;
 		return true;
 	}
 	else
@@ -310,8 +311,10 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				emergePackage.version = packageVersion.section( ( emergePackage.name + "-" ), 1, 1 );
 				emergePackageList.prepend( emergePackage );
 			}
-			else
+			else {
 				kdDebug() << i18n("Collecting emerge output. Can not parse: ") << packageVersion << endl;
+				kdDebug() << QString("Collecting emerge output. Can not parse: ") << packageVersion << endl;
+			}
 		}
 		
 		////////////////////////////////////////////////////////////////////////
@@ -368,15 +371,8 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 						logDone++;
 					}
 					else
-						if ( lineLower.contains( " (masked by: " ) ) {
-// 							QString pName = line.section( " (masked by", 0, 0 );
-// 							QString flags = line.section( " (masked by: ", 1, 1 );
-// 							QString branch = flags.section( ")", 0, 0 );
-// 							pName = pName.section( "- ", 1, 1 );
-// 							QString cName = pName.section( "/", 0, 0 );
-// 							pName = pName.section( "/", 1, 1 );
-							unmasked = line.section( "- ", 1 ).section( ")", 0 );;
-						}
+						if ( lineLower.contains( " (masked by: " ) )
+							unmasked = line.section( "- ", 1 ).section( ")", 0 );
 						else
 							if ( !unmasked.isEmpty() && line.startsWith("# ") )
 								importantMessage += line.section( "# ", 1, 1 ) + "<br>";
@@ -588,8 +584,10 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			}
 		}
 	}
-	else
+	else {
 		kdDebug() << i18n("Unmasking packages. Can not parse: ") << package << endl;
+		kdDebug() << QString("Unmasking packages. Can not parse: ") << package << endl;
+	}
 }
 
 /**

@@ -189,7 +189,9 @@ void PackageInspector::slotApply()
 				useList += useFlag.remove( QRegExp( "^\\+|\\*$" ) );
 			myChild = myChild->nextSibling();
 		}
+		
 		kdDebug() << "useList=" << useList << endl;
+		
 		// Store in db and save to file
 		if ( !useList.isEmpty() ) {
 			//set use flags to nothing to check if a string is necessary in package.use
@@ -377,8 +379,10 @@ void PackageInspector::showSettings()
 			dialog->cbVersionsSpecific->setDisabled( false );
 			dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
 		}
-		else
+		else {
 			kdDebug() << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << endl;
+			kdDebug() << QString("Marking user masked version. Can not parse: ") << userMaskVersion << endl;
+		}
 	}
 	else {
 		dialog->ckbAvailable->setChecked( false );
@@ -582,8 +586,10 @@ void PackageInspector::loadUseFlagDescription()
 		}
 		f.close();
 	}
-	else
-		kdDebug() << i18n( "Error reading: " ) << useFile << endl;
+	else {
+		kdDebug() << i18n( "Loading use flag description. Error reading: " ) << useFile << endl;
+		kdDebug() << QString( "Loading use flag description. Error reading: " ) << useFile << endl;
+	}
 }
 
 /**
@@ -660,7 +666,8 @@ void PackageInspector::loadChangeLog()
 			dialog->changelogBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Error reading: ") << fileName << endl;
+			kdDebug() << i18n("Loading changelog. Error reading: ") << fileName << endl;
+			kdDebug() << QString("Loading changelog. Error reading: ") << fileName << endl;
 			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>No ChangeLog found.</b></font>") );
 		}
 	}
@@ -685,7 +692,8 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 			dialog->ebuildBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Error reading: ") << fileName << endl;
+			kdDebug() << i18n("Loading ebuild. Error reading: ") << fileName << endl;
+			kdDebug() << QString("Loading ebuild. Error reading: ") << fileName << endl;
 			dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>No ebuild found.</b></font>") );
 		}
 	}
@@ -719,7 +727,8 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			dialog->dependencyBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Error reading: ") << fileName << endl;
+			kdDebug() << i18n("Load dependencies. Error reading: ") << fileName << endl;
+			kdDebug() << QString("Load dependencies. Error reading: ") << fileName << endl;
 			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>No dependencies found.</b></font>") );
 		}
 	}
@@ -745,11 +754,12 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 			file.close();
 			dialog->installedFilesBrowser->setText( textLines );
 		}
-		else
-			kdDebug() << i18n( "Error reading: " ) << filename << endl;
+		else {
+			kdDebug() << i18n( "Loading installed files list. Error reading: " ) << filename << endl;
+			kdDebug() << QString( "Loading installed files list. Error reading: " ) << filename << endl;
+			dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>No installed files found.</b></font>") );
+		}
 	}
-	else
-		dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>No installed files found.</b></font>") );
 }
 
 

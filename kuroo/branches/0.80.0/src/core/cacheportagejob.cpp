@@ -68,6 +68,7 @@ int CachePortageJob::countPackages()
 	
 	if ( !dCategory.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() ) ) {
 		kdDebug() << i18n("Creating cache. Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
+		kdDebug() << QString("Creating cache. Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
 		return 0;
 	}
 	
@@ -90,6 +91,7 @@ bool CachePortageJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Creating cache. Can not connect to database") << endl;
+		kdDebug() << QString("Creating cache. Can not connect to database") << endl;
 		return false;
 	}
 	
@@ -112,6 +114,7 @@ bool CachePortageJob::doJob()
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
 			kdDebug() << i18n("Creating cache. Can not access ") << *itPath << endl;
+			kdDebug() << QString("Creating cache. Can not access ") << *itPath << endl;
 			continue;
 		}
 		
@@ -125,6 +128,7 @@ bool CachePortageJob::doJob()
 			// Abort the scan
 			if ( isAborted() ) {
 				kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
+				kdDebug() << QString("Creating cache. Caching aborted.") << endl;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -143,6 +147,7 @@ bool CachePortageJob::doJob()
 					// Abort the scan
 					if ( isAborted() ) {
 						kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
+						kdDebug() << QString("Creating cache. Caching aborted.") << endl;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}
@@ -163,19 +168,23 @@ bool CachePortageJob::doJob()
 						}
 						else {
 							kdDebug() << i18n("Creating cache. Error reading: ") << path << endl;
-							kdDebug() << "*itPackage=" << *itPackage << " name=" << (*itPackage).section( rxPortageVersion, 0, 0 ) << endl;
+							kdDebug() << QString("Creating cache. Error reading: ") << path << endl;
 						}
 					}
-					else
+					else {
 						kdDebug() << i18n("Creating cache. Can not parse: ") << *itPackage << endl;
+						kdDebug() << QString("Creating cache. Can not parse: ") << *itPackage << endl;
+					}
 					
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
 						setProgress( count );
 				}
 			}
-			else
+			else {
 				kdDebug() << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << endl;
+				kdDebug() << QString("Creating cache. Can not access ") << *itPath << "/" << *itCategory << endl;
+			}
 		}
 	}
 	PortageSingleton::Instance()->setCache( mapCache );

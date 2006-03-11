@@ -74,8 +74,10 @@ History::~History()
 void History::init( QObject *parent )
 {
 	m_parent = parent;
-	if ( !log.open(IO_ReadOnly) )
+	if ( !log.open(IO_ReadOnly) ) {
 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
+		kdDebug() << QString("Error reading /var/log/emerge.log") << endl;
+	}
 	else
 		stream.setDevice( &log );
 }
@@ -250,8 +252,10 @@ void History::slotParse()
 					QString package = rxPackage.cap(6);
 					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
-				else
+				else {
 					kdDebug() << i18n("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << endl;
+					kdDebug() << QString("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << endl;
+				}
 			}
 			else // Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
@@ -264,8 +268,10 @@ void History::slotParse()
 					PortageSingleton::Instance()->removeUpdatePackage( package );
 					emit signalHistoryChanged();
 				}
-				else
+				else {
 					kdDebug() << i18n("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << endl;
+					kdDebug() << QString("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << endl;
+				}
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );

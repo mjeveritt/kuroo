@@ -176,6 +176,7 @@ void Queue::insertInCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
 		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		kdDebug() << QString("Package id is empty, skipping!") << endl;
 		return;
 	}
 	
@@ -190,6 +191,7 @@ void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
 		kdDebug() << i18n("Package id is empty, skipping!") << endl;
+		kdDebug() << QString("Package id is empty, skipping!") << endl;
 		return;
 	}
 	

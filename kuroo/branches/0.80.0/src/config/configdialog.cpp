@@ -410,8 +410,10 @@ void ConfigDialog::readMakeConf()
 		}
 		makeconf.close();
 	}
-	else
+	else {
 		kdDebug() << i18n("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+		kdDebug() << QString("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+	}
 }
 
 /**
@@ -460,8 +462,10 @@ bool ConfigDialog::saveMakeConf()
 			if ( line.contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
 				if ( rxLine.search( line ) > -1 )
 					keywords[ rxLine.cap(1) ] = rxLine.cap(4);
-				else
+				else {
 					kdDebug() << i18n("Parsing %1: can not match keyword %2.").arg( KurooConfig::fileMakeConf() ).arg( rxLine.cap(1) ) << endl;
+					kdDebug() << QString("Parsing %1: can not match keyword %2.").arg( KurooConfig::fileMakeConf() ).arg( rxLine.cap(1) ) << endl;
+				}
 				
 				lines += rxLine.cap(1) + "=" + rxLine.cap(3);
 			}
@@ -470,8 +474,10 @@ bool ConfigDialog::saveMakeConf()
 		}
 		file.close();
 	}
-	else
+	else {
 		kdDebug() << i18n("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+		kdDebug() << QString("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+	}
 	
 	// Update keywords from settings
 	keywords[ "ACCEPT_KEYWORDS" ] = KurooConfig::acceptKeywords();
@@ -578,6 +584,7 @@ bool ConfigDialog::saveMakeConf()
 	}
 	else {
 		kdDebug() << i18n("Error writing: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+		kdDebug() << QString("Error writing: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 		return false;
 	}
 }

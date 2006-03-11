@@ -66,11 +66,13 @@ bool ScanUpdatesJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
+		kdDebug() << QString("Scanning updates. Can not connect to database") << endl;
 		return false;
 	}
 	
 	if ( m_packageList.isEmpty() ) {
 		kdDebug() << i18n("Scanning updates. No update package found") << endl;
+		kdDebug() << QString("Scanning updates. No update package found") << endl;
 		return false;
 	}
 	
@@ -105,6 +107,7 @@ bool ScanUpdatesJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdDebug() << i18n("Scanning updates. Scan aborted!") << endl;
+			kdDebug() << QString("Scanning updates. Scan aborted!") << endl;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -117,8 +120,10 @@ bool ScanUpdatesJob::doJob()
 			" SELECT id FROM package WHERE name = '" + (*it).name + "' AND idCatSubCategory = "
 			" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 		
-		if ( id.isEmpty() )
+		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Scanning updates. Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+			kdDebug() << QString("Scanning updates. Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+		}
 		else {
 			
 			// Mark as update in portage, but not for new packages

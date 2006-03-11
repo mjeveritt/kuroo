@@ -357,8 +357,10 @@ void KurooDB::backupDb()
 		}
 		file.close();
 	}
-	else
+	else {
 		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+		kdDebug() << QString("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+	}
 	
 	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory;" );
 	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
@@ -372,8 +374,10 @@ void KurooDB::backupDb()
 		}
 		file.close();
 	}
-	else
+	else {
 		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+		kdDebug() << QString("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+	}
 }
 
 /**
@@ -385,8 +389,10 @@ void KurooDB::restoreBackup()
 	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
 	QTextStream stream( &file );
 	QStringList lines;
-	if ( !file.open( IO_ReadOnly ) )
+	if ( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << i18n("Restoring backup of history. Error reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+		kdDebug() << QString("Restoring backup of history. Error reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << endl;
+	}
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -406,8 +412,10 @@ void KurooDB::restoreBackup()
 	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
 	stream.setDevice( &file );
 	lines.clear();
-	if ( !file.open( IO_ReadOnly ) )
+	if ( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << i18n("Restoring backup of history. Error reading: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+		kdDebug() << QString("Restoring backup of history. Error reading: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
+	}
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -727,8 +735,10 @@ QString KurooDB::package( const QString& id )
 	
 	if ( !name.isEmpty() )
 		return name;
-	else
+	else {
 		kdDebug() << i18n("Can not find package in database for id %1.").arg( id ) << endl;
+		kdDebug() << QString("Can not find package in database for id %1.").arg( id ) << endl;
+	}
 	
 	return QString::null;
 }
@@ -745,8 +755,10 @@ QString KurooDB::category( const QString& id )
 	
 	if ( !category.isEmpty() )
 		return category;
-	else
+	else {
 		kdDebug() << i18n("Can not find category in database for id %1.").arg( id ) << endl;
+		kdDebug() << QString("Can not find category in database for id %1.").arg( id ) << endl;
+	}
 	
 	return QString::null;
 }
@@ -768,11 +780,15 @@ QString KurooDB::packageId( const QString& package )
 	
 		if ( !id.isEmpty() )
 			return id;
-		else
+		else {
 			kdDebug() << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+		}
 	}
-	else
+	else {
 		kdDebug() << i18n("Querying for package id. Can not parse: ") << packageString << endl;
+		kdDebug() << QString("Querying for package id. Can not parse: ") << packageString << endl;
+	}
 	
 	return QString::null;
 }
@@ -916,9 +932,8 @@ void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 
 void KurooDB::setPackageUnMasked( const QString& id )
 {
-// 	if ( !isPackageUnMasked( id ) )
-		insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-		        "'" + category( id ) + "/" + package( id ) + "');" );
+	insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+		    "'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
@@ -927,11 +942,8 @@ void KurooDB::setPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
 {
-	kdDebug() << "KurooDB::setPackageUnMasked id=" << id << " version=" << version << endl;
-	
-// 	if ( !isPackageUnMasked( id ) )
-		insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-		        "'<=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
+	insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+		    "'<=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**
@@ -940,9 +952,6 @@ void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
  */
 void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
 {
-	kdDebug() << "KurooDB::setPackageUserMasked id=" << id << " version=" << version << endl;
-	
-// 	clearPackageUserMasked( id );
 	insert( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
 	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
@@ -1247,7 +1256,7 @@ QStringList SqliteConnection::query( const QString& statement )
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
-					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!\n";
+					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!" << endl;
 					break;
 				}
 				::usleep(100000); // Sleep 100 msec
@@ -1270,7 +1279,7 @@ QStringList SqliteConnection::query( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-			kdDebug() << k_funcinfo << "sqlite_step error.\n";
+			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
 			kdDebug() << sqlite3_errmsg(m_db) << endl;
 			kdDebug() << "on query: " << statement << endl;
 			values = QStringList();
@@ -1304,8 +1313,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
-// 					KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Kuroo database is busy! Aborting this sql statement." ) );
-					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!\n";
+					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!" << endl;
 					break;
 				}
 				::usleep(100000); // Sleep 100 msec
@@ -1326,7 +1334,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-			kdDebug() << k_funcinfo << "sqlite_step error.\n";
+			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
 			kdDebug() << sqlite3_errmsg(m_db) << endl;
 			kdDebug() << "on query: " << statement << endl;
 			value = QString::null;
@@ -1359,8 +1367,7 @@ int SqliteConnection::insert( const QString& statement )
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
-// 					KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Kuroo database is busy! Aborting this sql statement." ) );
-					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!\n";
+					kdDebug() << "Busy-counter has reached maximum. Aborting this sql statement!" << endl;
 					break;
 				}
 				::usleep(100000); // Sleep 100 msec
@@ -1378,7 +1385,7 @@ int SqliteConnection::insert( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-			kdDebug() << k_funcinfo << "sqlite_step error.\n";
+			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
 			kdDebug() << sqlite3_errmsg(m_db) << endl;
 			kdDebug() << "on insert: " << statement << endl;
 			return 0;

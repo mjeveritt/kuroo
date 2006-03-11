@@ -45,8 +45,10 @@ public:
 			name = rxPackage.cap(2);
 			version = m_package.section( name + "-", 1, 1 ).remove(' ');
 		}
-		else
+		else {
 			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+			kdDebug() << QString("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+		}
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QString id = KurooDBSingleton::Instance()->singleQuery( 
@@ -55,6 +57,7 @@ public:
 		
 		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return false;
 		}
@@ -95,8 +98,10 @@ public:
 			name = rxPackage.cap(2);
 			version = m_package.section( name + "-", 1, 1 ).remove(' ');
 		}
-		else
+		else {
 			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+			kdDebug() << QString("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+		}
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery( 
 			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
@@ -104,6 +109,7 @@ public:
 		
 		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Remove unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Remove unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return false;
 		}
@@ -151,8 +157,10 @@ public:
 			name = rxPackage.cap(2);
 			version = m_package.section( name + "-", 1, 1 ).remove(' ');
 		}
-		else
+		else {
 			kdDebug() << i18n("Removing update package: can not match package %1.").arg( m_package ) << endl;
+			kdDebug() << QString("Removing update package: can not match package %1.").arg( m_package ) << endl;
+		}
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery(
 			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
@@ -160,6 +168,7 @@ public:
 		
 		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return false;
 		}
@@ -362,7 +371,8 @@ bool Portage::slotScan()
 			break;
 		
 		if ( maxLoops-- == 0 ) {
-			kdDebug() << i18n("Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
+			kdDebug() << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
+			kdDebug() << QString("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
 			break;
 		}
 	}
@@ -422,8 +432,10 @@ void Portage::loadWorld()
 			mapWorld[ package.stripWhiteSpace() ] = QString::null;
 		}
 	}
-	else
+	else {
 		kdDebug() << i18n("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << QString("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+	}
 }
 
 /**
@@ -440,8 +452,10 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 		
 		return true;
 	}
-	else
+	else {
 		kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << QString("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
+	}
 	
 	return false;
 }

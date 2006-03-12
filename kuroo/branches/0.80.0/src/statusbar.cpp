@@ -117,6 +117,8 @@ void KurooStatusBar::setTotalSteps( int total )
  */
 void KurooStatusBar::setThreadTotalSteps( int total )
 {
+	kdDebug() << "KurooStatusBar::setThreadTotalSteps total=" << total << endl;
+	
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
 	

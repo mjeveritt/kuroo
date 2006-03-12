@@ -127,7 +127,7 @@ public:
 			
 				// Remove package completely if "old" = not in official Portage anymore
 				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package "
-																"WHERE status = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
+															  "WHERE status = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
 			}
 			
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' "

@@ -79,7 +79,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
 		KurooConfig::setSaveLog( false );
-		KurooConfig::setScanUpdateDate( i18n("No scan") );
 		
 		if ( !KurooConfig::wizard() )
 			getEnvironment();
@@ -127,7 +126,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
 	QString database = KUROODIR + KurooConfig::databas();
-	if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->kurooDbVersion() ) {
+	if ( KurooConfig::version().section( "_db", 1, 1 ) != KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" ) ) {
 		
 		// Old db structure, must delete old db and backup history 
 		KurooDBSingleton::Instance()->backupDb();
@@ -138,7 +137,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		// and recreate with new structure
 		KurooDBSingleton::Instance()->init( this );
-		KurooDBSingleton::Instance()->setKurooDbVersion( KurooConfig::version().section( "_db", 1, 1 ) );
+		KurooDBSingleton::Instance()->setKurooDbMeta( "kurooVersion", KurooConfig::version().section( "_db", 1, 1 ) );
 	}
 	
 	// Give permissions to portage:portage to access the db also

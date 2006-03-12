@@ -64,6 +64,8 @@ void ScanUpdatesJob::completeJob()
  */
 bool ScanUpdatesJob::doJob()
 {
+	kdDebug() << "ScanUpdatesJob::doJob" << endl;
+	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
 		kdDebug() << QString("Scanning updates. Can not connect to database") << endl;
@@ -150,7 +152,7 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
 	
-	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET updatesTotal = '%1';").arg( QString::number( updatesCount ) ), m_db );
+	KurooDBSingleton::Instance()->setKurooDbMeta( "updatesCount", QString::number( updatesCount ) );
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );

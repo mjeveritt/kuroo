@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-11 15:39+0100\n"
+"POT-Creation-Date: 2006-03-12 13:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,87 +74,87 @@ msgid ""
 "cause the file to always be merged.</td></tr></table></qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:200
+#: queue/queuetab.cpp:202
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:201
+#: queue/queuetab.cpp:203
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:202
+#: queue/queuetab.cpp:204
 msgid "Estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:203
+#: queue/queuetab.cpp:205
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:244
+#: queue/queuetab.cpp:246
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:250 rc.cpp:68
+#: queue/queuetab.cpp:252 rc.cpp:68
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:328
+#: queue/queuetab.cpp:330
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:328 queue/queuetab.cpp:340
+#: queue/queuetab.cpp:330 queue/queuetab.cpp:342
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:340
+#: queue/queuetab.cpp:342
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:367
+#: queue/queuetab.cpp:369
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:372 core/emerge.cpp:449 core/emerge.cpp:526
-#: core/cacheportagejob.cpp:201 core/etcupdate.cpp:124
-#: core/scanportagejob.cpp:357 core/scanportagejob.cpp:437
-#: core/scanupdatesjob.cpp:155 core/portagefiles.cpp:143
+#: queue/queuetab.cpp:374 core/emerge.cpp:449 core/emerge.cpp:526
+#: core/cacheportagejob.cpp:174 core/etcupdate.cpp:124
+#: core/scanportagejob.cpp:361 core/scanportagejob.cpp:441
+#: core/scanupdatesjob.cpp:157 core/portagefiles.cpp:143
 #: core/portagefiles.cpp:238 core/portagefiles.cpp:331
 #: core/portagefiles.cpp:426 history/history.cpp:301 history/history.cpp:302
 #: statusbar.cpp:94
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:460 core/versionview.cpp:111 portage/portagetab.cpp:409
+#: queue/queuetab.cpp:462 core/versionview.cpp:111 portage/portagetab.cpp:409
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:463 core/versionview.cpp:108 portage/portagetab.cpp:414
+#: queue/queuetab.cpp:465 core/versionview.cpp:108 portage/portagetab.cpp:414
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:466 portage/portagetab.cpp:419
+#: queue/queuetab.cpp:468 portage/portagetab.cpp:419
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:469 portage/portagetab.cpp:422
+#: queue/queuetab.cpp:471 portage/portagetab.cpp:422
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:471 portage/portagetab.cpp:424
+#: queue/queuetab.cpp:473 portage/portagetab.cpp:424
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:512 portage/portagetab.cpp:538 rc.cpp:25 rc.cpp:299
+#: queue/queuetab.cpp:514 portage/portagetab.cpp:538 rc.cpp:25 rc.cpp:299
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:516 portage/portagetab.cpp:542
+#: queue/queuetab.cpp:518 portage/portagetab.cpp:542
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:518 portage/portagetab.cpp:544
+#: queue/queuetab.cpp:520 portage/portagetab.cpp:544
 msgid "Remove from world"
 msgstr ""
 
@@ -304,32 +304,31 @@ msgstr ""
 msgid "Unmasking packages. Can not parse: "
 msgstr ""
 
-#: core/cacheportagejob.cpp:70 core/cacheportagejob.cpp:116
-#: core/cacheportagejob.cpp:185
-msgid "Creating cache. Can not access "
-msgstr ""
-
-#: core/cacheportagejob.cpp:93
+#: core/cacheportagejob.cpp:60
 msgid "Creating cache. Can not connect to database"
 msgstr ""
 
-#: core/cacheportagejob.cpp:105
+#: core/cacheportagejob.cpp:77
 msgid "Collecting package information..."
 msgstr ""
 
-#: core/cacheportagejob.cpp:130 core/cacheportagejob.cpp:149
+#: core/cacheportagejob.cpp:88 core/cacheportagejob.cpp:157
+msgid "Creating cache. Can not access "
+msgstr ""
+
+#: core/cacheportagejob.cpp:102 core/cacheportagejob.cpp:121
 msgid "Creating cache. Caching aborted."
 msgstr ""
 
-#: core/cacheportagejob.cpp:132 core/cacheportagejob.cpp:151
+#: core/cacheportagejob.cpp:104 core/cacheportagejob.cpp:123
 msgid "Caching aborted."
 msgstr ""
 
-#: core/cacheportagejob.cpp:170
+#: core/cacheportagejob.cpp:142
 msgid "Creating cache. Error reading: "
 msgstr ""
 
-#: core/cacheportagejob.cpp:175
+#: core/cacheportagejob.cpp:147
 msgid "Creating cache. Can not parse: "
 msgstr ""
 
@@ -422,43 +421,43 @@ msgstr ""
 msgid "Subcategory"
 msgstr ""
 
-#: core/scanportagejob.cpp:91
+#: core/scanportagejob.cpp:93
 msgid "Scanning Portage. Can not connect to database"
 msgstr ""
 
-#: core/scanportagejob.cpp:101
+#: core/scanportagejob.cpp:105
 msgid "Refreshing Portage packages view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:166 core/scanportagejob.cpp:271
+#: core/scanportagejob.cpp:170 core/scanportagejob.cpp:275
 msgid "Scanning Portage. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:182 core/scanportagejob.cpp:218
+#: core/scanportagejob.cpp:186 core/scanportagejob.cpp:222
 msgid "Scanning Portage. Portage scan aborted"
 msgstr ""
 
-#: core/scanportagejob.cpp:261
+#: core/scanportagejob.cpp:265
 msgid "Scanning Portage. Scanning Portage cache: can not match package %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:373 core/scanportagejob.cpp:432
+#: core/scanportagejob.cpp:377 core/scanportagejob.cpp:436
 msgid "Scanning installed packages. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:377
+#: core/scanportagejob.cpp:381
 msgid "Collecting installed packages..."
 msgstr ""
 
-#: core/scanportagejob.cpp:426
+#: core/scanportagejob.cpp:430
 msgid "Scanning installed packages. Can not match %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:452
+#: core/scanportagejob.cpp:456
 msgid "Scanning Portage cache. Error reading: "
 msgstr ""
 
-#: core/scanportagejob.cpp:559
+#: core/scanportagejob.cpp:563
 msgid "Scanning installed packages. Error reading: "
 msgstr ""
 
@@ -478,55 +477,55 @@ msgstr ""
 msgid "Parsing emerge.log. Can not parse: "
 msgstr ""
 
-#: core/scanupdatesjob.cpp:68
+#: core/scanupdatesjob.cpp:70
 msgid "Scanning updates. Can not connect to database"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:74
+#: core/scanupdatesjob.cpp:76
 msgid "Scanning updates. No update package found"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:79
+#: core/scanupdatesjob.cpp:81
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:109
+#: core/scanupdatesjob.cpp:111
 msgid "Scanning updates. Scan aborted!"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:124
+#: core/scanupdatesjob.cpp:126
 msgid "Scanning updates. Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:361 core/portagedb.cpp:378
+#: core/portagedb.cpp:362 core/portagedb.cpp:379
 msgid "Creating backup of history. Error writing: %1."
 msgstr ""
 
-#: core/portagedb.cpp:393 core/portagedb.cpp:416
+#: core/portagedb.cpp:398 core/portagedb.cpp:421
 msgid "Restoring backup of history. Error reading: %1."
 msgstr ""
 
-#: core/portagedb.cpp:739
+#: core/portagedb.cpp:766
 msgid "Can not find package in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:759
+#: core/portagedb.cpp:786
 msgid "Can not find category in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:784
+#: core/portagedb.cpp:811
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:789
+#: core/portagedb.cpp:816
 msgid "Querying for package id. Can not parse: "
 msgstr ""
 
-#: core/portagedb.cpp:1199
+#: core/portagedb.cpp:1226
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1203
+#: core/portagedb.cpp:1230
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 
@@ -872,28 +871,29 @@ msgid "Removing unmerged package: can not match %1."
 msgstr ""
 
 #: portage/portage.cpp:111
-msgid "Remove unmerged package: Can not find id in database for package %1/%2."
+msgid ""
+"Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:161
+#: portage/portage.cpp:169
 msgid "Removing update package: can not match package %1."
 msgstr ""
 
-#: portage/portage.cpp:170
+#: portage/portage.cpp:178
 msgid "Removing update package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:374
+#: portage/portage.cpp:382
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
 msgstr ""
 
-#: portage/portage.cpp:436
+#: portage/portage.cpp:444
 msgid "Loading packages in world. Error reading: "
 msgstr ""
 
-#: portage/portage.cpp:456
+#: portage/portage.cpp:464
 msgid "Adding to world. Error writing: "
 msgstr ""
 
@@ -1247,45 +1247,41 @@ msgid ""
 "You can select portage version in settings."
 msgstr ""
 
-#: kurooinit.cpp:82
-msgid "No scan"
-msgstr ""
-
-#: kurooinit.cpp:90
+#: kurooinit.cpp:89
 msgid ""
 "<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:92 kurooinit.cpp:108
+#: kurooinit.cpp:91 kurooinit.cpp:107
 msgid "Initialization"
 msgstr ""
 
-#: kurooinit.cpp:106
+#: kurooinit.cpp:105
 msgid ""
 "<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:136
+#: kurooinit.cpp:135
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:204
+#: kurooinit.cpp:203
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
-#: kurooinit.cpp:224
+#: kurooinit.cpp:223
 msgid "Error reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:264
+#: kurooinit.cpp:263
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:264
+#: kurooinit.cpp:263
 msgid "User permissions"
 msgstr ""
 

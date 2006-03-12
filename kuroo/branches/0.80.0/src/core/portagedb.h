@@ -154,9 +154,11 @@ public:
 	bool 			isPortageEmpty();
 	bool 			isHistoryEmpty();
 	bool 			isValid();
-	void 			createTables(DbConnection *conn = NULL);
-	QString		 	kurooDbVersion();
-	void 			setKurooDbVersion( const QString& version );
+	void 			createTables( DbConnection *conn = NULL );
+	QString			getKurooDbMeta( const QString& meta );
+	void			setKurooDbMeta( const QString& meta, const QString& data );
+// 	QString		 	kurooDbVersion();
+// 	void 			setKurooDbVersion( const QString& version );
 	void			backupDb();
 	void			restoreBackup();
 	
@@ -221,7 +223,7 @@ public:
 	QStringList 	allHistory();
 	QStringList 	allMergeHistory();
 	QString		 	lastHistoryEntry();
-	QString			lastSyncEntry();
+// 	QString			lastSyncEntry();
 	void			resetUpdates();
 	void			resetInstalled();
 	void			addEmergeInfo( const QString& einfo );

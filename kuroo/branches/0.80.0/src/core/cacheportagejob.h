@@ -41,7 +41,6 @@ public:
     ~CachePortageJob();
 
 private slots:
-	int							countPackages();
 	bool 						doJob();
 	void 						completeJob();
 	

@@ -38,8 +38,6 @@ CachePortageJob::CachePortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
-	KurooConfig::setPortageCount( QString::number( countPackages() ) );
-	KurooConfig::writeConfig();
 }
 
 CachePortageJob::~CachePortageJob()
@@ -50,37 +48,6 @@ CachePortageJob::~CachePortageJob()
 void CachePortageJob::completeJob()
 {
 	SignalistSingleton::Instance()->cachePortageComplete();
-}
-
-/**
- * Count packages in Portage.
- * @return count
- */
-int CachePortageJob::countPackages()
-{
-	QDir dCategory;
-	dCategory.setFilter(QDir::Dirs | QDir::NoSymLinks);
-	dCategory.setSorting(QDir::Name);
-	
-	QDir dPackage;
-	dPackage.setFilter(QDir::Files | QDir::NoSymLinks);
-	dPackage.setSorting(QDir::Name);
-	
-	if ( !dCategory.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() ) ) {
-		kdDebug() << i18n("Creating cache. Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
-		kdDebug() << QString("Creating cache. Can not access ") << KurooConfig::dirEdbDep() << KurooConfig::dirPortage() << endl;
-		return 0;
-	}
-	
-	int count(0);
-	const QStringList categoryList = dCategory.entryList();
-	foreach ( categoryList ) {
-		if ( *it == "." || *it == ".." )
-			continue;
-		if ( dPackage.cd( KurooConfig::dirEdbDep() + KurooConfig::dirPortage() + "/" + *it ) )
-			count += dPackage.entryList().count() - 2;
-	}
-	return count;
 }
 
 /**
@@ -101,7 +68,12 @@ bool CachePortageJob::doJob()
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
 	
-	setProgressTotalSteps( KurooConfig::portageCount().toInt() );
+	// Get a count of total packages for proper progress
+	QString packageCount = KurooDBSingleton::Instance()->getKurooDbMeta( "packageCount" );
+	if ( packageCount.isEmpty() )
+		setProgressTotalSteps( 35000 );
+	else
+		setProgressTotalSteps( packageCount.toInt() );
 	setStatus( "CachePortage", i18n("Collecting package information...") );
 	
 	// Get list of categories in Portage and Overlays
@@ -188,13 +160,14 @@ bool CachePortageJob::doJob()
 		}
 	}
 	PortageSingleton::Instance()->setCache( mapCache );
+	KurooDBSingleton::Instance()->setKurooDbMeta( "packageCount", QString::number( count ) );
 	
 	// Store cache in DB
-	KurooDBSingleton::Instance()->query("DELETE FROM cache;", m_db);
-	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
+	KurooDBSingleton::Instance()->query( "DELETE FROM cache;", m_db );
+	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	QMap< QString, QString >::iterator itMapEnd = mapCache.end();
 	for ( QMap< QString, QString >::iterator itMap = mapCache.begin(); itMap != itMapEnd; ++itMap )
-		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(itMap.key()).arg(itMap.data()), m_db);
+		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(itMap.key()).arg(itMap.data()), m_db );
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	

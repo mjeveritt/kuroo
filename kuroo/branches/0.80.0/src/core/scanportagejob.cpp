@@ -82,6 +82,8 @@ void ScanPortageJob::completeJob()
  */
 bool ScanPortageJob::doJob()
 {
+	kdDebug() << "ScanPortageJob::doJob" << endl;
+	
 	int count;
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -93,10 +95,12 @@ bool ScanPortageJob::doJob()
 		return false;
 	}
 	
-	if ( !KurooConfig::portageCount().isEmpty() )
-		setProgressTotalSteps( KurooConfig::portageCount().toInt() );
+	// Get a count of total packages for proper progress
+	QString packageCount = KurooDBSingleton::Instance()->getKurooDbMeta( "packageCount" );
+	if ( packageCount.isEmpty() )
+		setProgressTotalSteps( 35000 );
 	else
-		setProgressTotalSteps( 10000 );
+		setProgressTotalSteps( packageCount.toInt() );
 	
 	setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );
 		
@@ -275,9 +279,8 @@ bool ScanPortageJob::doJob()
 			lastCategory = category;
 		}
 	}
-	KurooConfig::setPortageCount( QString::number(count) );
-	KurooConfig::writeConfig();
 	
+	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
 	scanInstalledPackages();
 	
 	// Iterate through portage map and insert everything in db
@@ -332,7 +335,8 @@ bool ScanPortageJob::doJob()
 	}
 	categories.clear();
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
-		
+	KurooDBSingleton::Instance()->setKurooDbMeta( "packageCount", QString::number( count ) );
+	
 	// Move content from temporary table 
 	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db);
 	KurooDBSingleton::Instance()->query("DELETE FROM subCategory;", m_db);

@@ -172,6 +172,8 @@ void QueueTab::slotNextPackage( bool isNext )
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
+	kdDebug() << "QueueTab::slotReload" << endl;
+	
 	// Reenable the inspector after queue changes
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );

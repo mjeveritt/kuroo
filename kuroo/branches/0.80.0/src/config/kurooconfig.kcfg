@@ -6,10 +6,6 @@
 		<entry name="portageVersion21" type="Bool">
 		<default>false</default>
 		</entry>
-		<entry name="portageCount" type="String">
-		</entry>
-		<entry name="scanTimeStamp" type="String">
-		</entry>
 		<entry name="saveLog" type="Bool">
 		</entry>
 		<entry name="verboseLog" type="Bool">
@@ -52,10 +48,6 @@
 		</entry>
 		<entry name="DirEdbDep" type="String">
 		<default>/var/cache/edb/dep</default>
-		</entry>
-		<entry name="ScanUpdateDate" type="String">
-		</entry>
-		<entry name="ScanHistoryDate" type="String">
 		</entry>
 		<entry name="Arch" type="String">
 		</entry>

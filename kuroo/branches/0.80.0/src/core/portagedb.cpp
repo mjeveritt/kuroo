@@ -200,15 +200,14 @@ bool KurooDB::isValid()
 void KurooDB::createTables( DbConnection *conn )
 {
 	query(" CREATE TABLE dbInfo ("
-	      " version VARCHAR(32),"
-	      " syncTimeStamp VARCHAR(16),"
-	      " updatesTotal INTEGER"
+	      " meta VARCHAR(64), "
+	      " data VARCHAR(64) "
 		  " );", conn);
 	
-	query(" INSERT INTO dbInfo "
-	      " (version, syncTimeStamp, updatesTotal) "
-	      " VALUES ('0', '0', '0')"
-	      " ;", conn);
+// 	query(" INSERT INTO dbInfo "
+// 	      " (version, syncTimeStamp, updatesTotal) "
+// 	      " VALUES ('0', '0', '0')"
+// 	      " ;", conn);
 	
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -346,6 +345,8 @@ void KurooDB::createTables( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
+	kdDebug() << "KurooDB::backupDb" << endl;
+	
 	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
 	if ( file.open( IO_WriteOnly ) ) {
@@ -378,6 +379,8 @@ void KurooDB::backupDb()
 		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
 		kdDebug() << QString("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
 	}
+	
+	kdDebug() << "KurooDB::backupDb... completed!" << endl;
 }
 
 /**
@@ -385,6 +388,8 @@ void KurooDB::backupDb()
  */
 void KurooDB::restoreBackup()
 {
+	kdDebug() << "KurooDB::restoreBackup" << endl;
+	
 	// Restore einfo into table history
 	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
 	QTextStream stream( &file );
@@ -432,6 +437,8 @@ void KurooDB::restoreBackup()
 			       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
 		}
 	}
+	
+	kdDebug() << "KurooDB::restoreBackup... completed!" << endl;
 }
 
 
@@ -442,27 +449,47 @@ void KurooDB::restoreBackup()
 /**
  * Return database structure version.
  */
-QString KurooDB::kurooDbVersion()
+QString KurooDB::getKurooDbMeta( const QString& meta )
 {
-	return query( "SELECT version FROM dbInfo;" ).first();
+	return singleQuery( QString("SELECT data FROM dbInfo WHERE meta = '%1';").arg( meta ) );
 }
 
 /**
  * Set current db structure version.
  * @param version
  */
-void KurooDB::setKurooDbVersion( const QString& version )
+void KurooDB::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	query( "UPDATE dbInfo SET version = '" + version + "' ;" );
+	if ( singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ) ) == "0" )
+		query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ) );
+	else
+		query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ) );
 }
+
+/**
+ * Return database structure version.
+ */
+// QString KurooDB::kurooDbVersion()
+// {
+// 	return query( "SELECT version FROM dbInfo;" ).first();
+// }
+
+/**
+ * Set current db structure version.
+ * @param version
+ */
+// void KurooDB::setKurooDbVersion( const QString& version )
+// {
+// 	query( "UPDATE dbInfo SET version = '" + version + "' ;" );
+// }
 
 /**
  * Return timestamp for last sync.
  */
-QString KurooDB::lastSyncEntry()
-{
-	return singleQuery("SELECT syncTimeStamp FROM dbInfo;");
-}
+// QString KurooDB::lastSyncEntry()
+// {
+// 	return singleQuery("SELECT syncTimeStamp FROM dbInfo;");
+// }
 
 /**
  * Return the total number of packages.

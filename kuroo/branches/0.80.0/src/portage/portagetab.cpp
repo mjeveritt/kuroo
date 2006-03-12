@@ -138,7 +138,7 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
-// 	kdDebug() << "PortageTab::slotBusy" << endl;
+	kdDebug() << "PortageTab::slotBusy" << endl;
 	
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
@@ -191,7 +191,7 @@ void PortageTab::slotButtons()
 	}
 	else
 		pbQueue->setDisabled( false );
-	
+
 	// If user is su enable uninstall
 	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
@@ -423,7 +423,7 @@ void PortageTab::slotPackage()
 					else
 						stability = i18n("Not available");
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " homepage=" << (*sortedVersionIterator)->homepage() << endl;
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " stability=" << stability<< endl;
 		
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );

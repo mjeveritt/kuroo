@@ -173,7 +173,7 @@ QString PackageItem::status()
  */
 bool PackageItem::isInstalled()
 {
-	return ( m_status == FILTER_INSTALLED_STRING );
+	return ( m_status == FILTER_INSTALLED_STRING || m_status == FILTER_OLD_STRING );
 }
 
 /**

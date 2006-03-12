@@ -180,7 +180,7 @@ void Queue::insertInCache( const QString& id )
 		return;
 	}
 	
-	queueCache[ id ] = true;
+	queueCache[ id ] = false;
 }
 
 /**
@@ -195,7 +195,7 @@ void Queue::deleteFromCache( const QString& id )
 		return;
 	}
 	
-	queueCache[ id ] = false;
+	queueCache.remove( id );
 }
 
 
@@ -210,6 +210,9 @@ void Queue::deleteFromCache( const QString& id )
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
 	QString id = KurooDBSingleton::Instance()->packageId( package );
+	if ( isQueued( id ) )
+		queueCache[ id ] = false;
+	
 	internalTimer->start( 1000 );
 	emit signalPackageStart( id );
 }
@@ -222,6 +225,9 @@ void Queue::emergePackageComplete( const QString& package, int order, int total 
 {
 	internalTimer->stop();
 	QString id = KurooDBSingleton::Instance()->packageId( package );
+	if ( isQueued( id ) )
+		queueCache[ id ] = true;
+	
 	emit signalPackageComplete( id );
 }
 
@@ -281,12 +287,21 @@ void Queue::setRemoveInstalled( bool removeInstalled )
 }
 
 /**
- * Clear queue after all packages are emerged.
+ * Clear installed packages from queue after emerge is done.
  */
 void Queue::slotClearQueue()
 {
-	if ( m_removeInstalled )
-		reset();
+	if ( m_removeInstalled ) {
+		
+		// Collect only 100% complete packages
+		QStringList idList;
+		for ( QMap<QString, bool>::iterator itMap = queueCache.begin(), itMapEnd = queueCache.end(); itMap != itMapEnd; ++itMap )
+			if ( itMap.data() )
+				idList += itMap.key();
+	
+		if ( !idList.isEmpty() )
+			removePackageIdList( idList );
+	}
 }
 
 #include "queue.moc"

@@ -451,19 +451,17 @@ void Emerge::cleanup()
 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
-		KMessageBox::informationList( 0, i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>"),
-		                              i18n("Blocks"), NULL );
+		importantMessage += "<br>" + blocks.join("<br>");
 	
 	if ( !unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
 			askUnmaskPackage( unmasked );
 		else
-			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), "dontAskAgainNotEmerge" );
+			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), NULL );
 	}
 	else
 		if ( !importantMessage.isEmpty() )
-			KMessageBox::informationList( 0, i18n("Please check log for more information!"), importantMessage,
-			                              i18n("Important"), NULL );
+			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n("Important message"), NULL );
 	if ( etcUpdateCount != 0 )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
 }
@@ -528,7 +526,7 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !blocks.isEmpty() )
-		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>")  );
+		importantMessage += "<br>" + blocks.join("<br>");
 	
 	if ( !importantMessage.isEmpty() )
 		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
@@ -549,13 +547,19 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 		kdDebug() << "Emerge::askUnmaskPackage packageKeyword=" << packageKeyword << endl;
 		
 		if ( packageKeyword.contains( "missing keyword" ) ) {
-			importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
-			Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg( name ).arg(KurooConfig::arch()), importantMessage );
+			importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( name ).arg( KurooConfig::arch() );
+			importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
+			                         "Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
+			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
+			                          i18n( "Missing Keyword" ) , NULL );
 		}
 		else {
 			if ( keyword.contains( "-*" ) ) {
-				importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture. If you believe the package does work file a bug at Gentoo bugzilla website.");
-				Message::instance()->prompt( i18n("Information"), i18n("<b>%1</b> is not available on your architecture %2!").arg( name ).arg(KurooConfig::arch()), importantMessage );
+				importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( name ).arg( KurooConfig::arch() );
+				importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
+				                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
+				KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
+				                          i18n( "-* Keyword" ) , NULL );
 			}
 			else {
 				if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {

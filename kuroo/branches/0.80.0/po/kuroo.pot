@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 15:08+0100\n"
+"POT-Creation-Date: 2006-03-13 17:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,7 +115,7 @@ msgstr ""
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:374 core/emerge.cpp:449 core/emerge.cpp:527
+#: queue/queuetab.cpp:374 core/emerge.cpp:449 core/emerge.cpp:526
 #: core/cacheportagejob.cpp:174 core/etcupdate.cpp:124
 #: core/scanportagejob.cpp:361 core/scanportagejob.cpp:441
 #: core/scanupdatesjob.cpp:157 core/portagefiles.cpp:143
@@ -236,71 +236,76 @@ msgstr ""
 msgid "There is no ebuilds to satisfy %1"
 msgstr ""
 
-#: core/emerge.cpp:454 core/emerge.cpp:531
-msgid "Packages are blocking emerge, please correct!"
-msgstr ""
-
-#: core/emerge.cpp:455 core/emerge.cpp:531
-msgid "Blocks"
-msgstr ""
-
-#: core/emerge.cpp:461
+#: core/emerge.cpp:460
 msgid "You must run Kuroo as root to unmask packages!"
 msgstr ""
 
-#: core/emerge.cpp:461
+#: core/emerge.cpp:460
 msgid "Auto-unmasking packages"
 msgstr ""
 
-#: core/emerge.cpp:465 core/emerge.cpp:534
+#: core/emerge.cpp:465
+msgid "Important message"
+msgstr ""
+
+#: core/emerge.cpp:533
+msgid "Important"
+msgstr ""
+
+#: core/emerge.cpp:533
 msgid "Please check log for more information!"
 msgstr ""
 
-#: core/emerge.cpp:466 core/emerge.cpp:534
-msgid "Important"
+#: core/emerge.cpp:551 core/emerge.cpp:559
+msgid "%1 is not available on your architecture %2!<br><br>"
 msgstr ""
 
 #: core/emerge.cpp:552
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
-"your architecture yet. Ask the architecture porting team to test the package "
-"or test it for them and report your findings on Gentoo bugzilla website."
+"your architecture yet.<br>Ask the architecture porting team to test the "
+"package or test it for them and report your findings on Gentoo bugzilla "
+"website."
 msgstr ""
 
-#: core/emerge.cpp:553 core/emerge.cpp:558
-msgid "<b>%1</b> is not available on your architecture %2!"
+#: core/emerge.cpp:555
+msgid "Missing Keyword"
 msgstr ""
 
-#: core/emerge.cpp:557
+#: core/emerge.cpp:560
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
-"architecture. If you believe the package does work file a bug at Gentoo "
+"architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:562
+#: core/emerge.cpp:563
+msgid "-* Keyword"
+msgstr ""
+
+#: core/emerge.cpp:567
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:564
+#: core/emerge.cpp:569
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:564 core/emerge.cpp:576
+#: core/emerge.cpp:569 core/emerge.cpp:581
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:574
+#: core/emerge.cpp:579
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:576
+#: core/emerge.cpp:581
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:589
+#: core/emerge.cpp:594
 msgid "Unmasking packages. Can not parse: "
 msgstr ""
 
@@ -1200,51 +1205,51 @@ msgstr ""
 msgid "Error writing: %1"
 msgstr ""
 
-#: kuroo.cpp:85 kuroo.cpp:87 kuroo.cpp:186 kuroo.cpp:188
+#: kuroo.cpp:84 kuroo.cpp:86 kuroo.cpp:185 kuroo.cpp:187
 msgid "settings"
 msgstr ""
 
-#: kuroo.cpp:106
+#: kuroo.cpp:105
 msgid "&Wizard"
 msgstr ""
 
-#: kuroo.cpp:109
+#: kuroo.cpp:108
 msgid "&Refresh Packages"
 msgstr ""
 
-#: kuroo.cpp:112
+#: kuroo.cpp:111
 msgid "&Refresh Updates"
 msgstr ""
 
-#: kuroo.cpp:115
+#: kuroo.cpp:114
 msgid "&Sync Portage"
 msgstr ""
 
-#: kuroo.cpp:118
+#: kuroo.cpp:117
 msgid "&Run etc-update"
 msgstr ""
 
-#: kuroo.cpp:172
+#: kuroo.cpp:171
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: kuroo.cpp:173
+#: kuroo.cpp:172
 msgid "Last sync: %1"
 msgstr ""
 
-#: kuroo.cpp:214
+#: kuroo.cpp:213
 msgid ""
 "<qt>Closing the main window will keep Kuroo running in the System Tray. Use "
 "Quit from the File menu to quit the application.</qt>"
 msgstr ""
 
-#: kuroo.cpp:216
+#: kuroo.cpp:215
 msgid "Docking in System Tray"
 msgstr ""
 
-#: kuroo.cpp:257
+#: kuroo.cpp:256
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1402,32 +1407,6 @@ msgstr ""
 
 #: kurooview.cpp:190
 msgid "You must run Kuroo as root to emerge packages!"
-msgstr ""
-
-#: closedialog.cpp:32
-msgid "Closing Kuroo"
-msgstr ""
-
-#: closedialog.cpp:34
-msgid "Exit"
-msgstr ""
-
-#: closedialog.cpp:35
-msgid "Minimize to task-bar"
-msgstr ""
-
-#: closedialog.cpp:37
-msgid "<b>What do you want kuroo to do?</b>"
-msgstr ""
-
-#: closedialog.cpp:38
-msgid "Always do this when closing kuroo"
-msgstr ""
-
-#: closedialog.cpp:39
-msgid ""
-"<qt>This setting can always be changed in:<br>Settings -> Configure kuroo</"
-"qt>"
 msgstr ""
 
 #: rc.cpp:3 rc.cpp:81 rc.cpp:271 rc.cpp:354 rc.cpp:438 rc.cpp:636 rc.cpp:639

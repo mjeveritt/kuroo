@@ -69,7 +69,7 @@
                         <cstring>kcfg_isSystrayEnabled</cstring>
                     </property>
                     <property name="text">
-                        <string>Show s&amp;ystem tray icon</string>
+                        <string>Dock kuroo in s&amp;ystem tray (close does not exit kuroo)</string>
                     </property>
                     <property name="accel">
                         <string>Alt+Y</string>

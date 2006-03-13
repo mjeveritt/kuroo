@@ -155,10 +155,10 @@ public:
 	bool 			isHistoryEmpty();
 	bool 			isValid();
 	void 			createTables( DbConnection *conn = NULL );
+	
+	// Kuroo main
 	QString			getKurooDbMeta( const QString& meta );
 	void			setKurooDbMeta( const QString& meta, const QString& data );
-// 	QString		 	kurooDbVersion();
-// 	void 			setKurooDbVersion( const QString& version );
 	void			backupDb();
 	void			restoreBackup();
 	
@@ -182,7 +182,6 @@ public:
 	QString 		versionSize( const QString& idPackage, const QString& version );
 	QStringList		packageHardMaskInfo( const QString& id );
 	bool			isPackagesEmpty();
-	bool		 	isUpdatesEmpty();
 	bool			isQueueEmpty();
 	QString		 	package( const QString& id );
 	QString		 	category( const QString& id );
@@ -222,12 +221,9 @@ public:
 	QStringList		allQueueId();
 	QStringList 	allHistory();
 	QStringList 	allMergeHistory();
-	QString		 	lastHistoryEntry();
-// 	QString			lastSyncEntry();
 	void			resetUpdates();
 	void			resetInstalled();
 	void			addEmergeInfo( const QString& einfo );
-	void			addRefreshTime();
 	void			addBackup( const QString& source, const QString& destination );
 	QStringList 	allStatistic();
 	QStringList 	allCache();

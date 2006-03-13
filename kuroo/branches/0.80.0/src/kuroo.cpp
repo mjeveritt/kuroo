@@ -34,6 +34,7 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qtimer.h>
+#include <qcheckbox.h>
 
 #include <kdeversion.h>
 #include <kstatusbar.h>
@@ -55,7 +56,7 @@ Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
 	kurooInit( new KurooInit( this, "KurooInit" ) ),
 	kurooMessage( new Message( this ) ),
-	m_view( new KurooView( this, "KurooView" ) ),
+	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	setCentralWidget( m_view );
@@ -64,12 +65,11 @@ Kuroo::Kuroo()
 	setupGUI();
 		
 	// Add system tray icon
-	if ( KurooConfig::isSystrayEnabled() ) {
-		SystemTray *systemTray = new SystemTray( this );
-		systemTray->show();
-		connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
-		connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
-	}
+	if ( KurooConfig::isSystrayEnabled() )
+		systemTray->slotShow();
+	
+	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
+	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
 	
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
@@ -91,6 +91,7 @@ Kuroo::Kuroo()
 
 Kuroo::~Kuroo()
 {
+	kdDebug() << "Kuroo::~Kuroo" << endl;
 }
 
 /**
@@ -205,12 +206,20 @@ void Kuroo::introWizard()
  */
 bool Kuroo::queryClose()
 {
-	if( !m_shuttingDown ) {
+	kdDebug() << "Kuroo::queryClose" << endl;
+		
+	if ( !m_shuttingDown && KurooConfig::isSystrayEnabled() ) {
+		
+		KMessageBox::information( this, i18n("<qt>Closing the main window will keep Kuroo running in the System Tray. "
+		                                     "Use Quit from the File menu to quit the application.</qt>"),
+	                         		    i18n("Docking in System Tray"), "hideOnCloseInfo");
+		
 		hide();
 		return false;
 	}
-	else
+	else {
 		return true;
+	}
 }
 
 /**
@@ -218,6 +227,7 @@ bool Kuroo::queryClose()
  */
 bool Kuroo::queryExit()
 {
+	kdDebug() << "Kuroo::queryExit" << endl;
 	return true;
 }
 
@@ -226,6 +236,7 @@ bool Kuroo::queryExit()
  */
 void Kuroo::slotQuit()
 {
+	kdDebug() << "Kuroo::slotQuit" << endl;
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
 		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
@@ -263,6 +274,7 @@ void Kuroo::slotWait()
  */
 void Kuroo::slotTerminate()
 {
+	kdDebug() << "Kuroo::slotTerminate" << endl;
 	m_shuttingDown = true;
 	qApp->closeAllWindows();
 }

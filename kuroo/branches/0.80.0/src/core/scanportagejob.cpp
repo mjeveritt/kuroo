@@ -356,7 +356,7 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
-	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET updatesTotal = '0';"), m_db );
+	KurooDBSingleton::Instance()->setKurooDbMeta( "updatesCount", "0" );
 	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );

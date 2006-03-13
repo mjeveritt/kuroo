@@ -451,8 +451,9 @@ void Emerge::cleanup()
 	ResultsSingleton::Instance()->addPackageList( emergePackageList );
 	
 	if ( !blocks.isEmpty() )
-		Message::instance()->prompt( i18n("Blocks"), i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>") );
-
+		KMessageBox::informationList( 0, i18n("Packages are blocking emerge, please correct!"), blocks.join("<br>"),
+		                              i18n("Blocks"), NULL );
+	
 	if ( !unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
 			askUnmaskPackage( unmasked );
@@ -461,8 +462,8 @@ void Emerge::cleanup()
 	}
 	else
 		if ( !importantMessage.isEmpty() )
-			Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
-	
+			KMessageBox::informationList( 0, i18n("Please check log for more information!"), importantMessage,
+			                              i18n("Important"), NULL );
 	if ( etcUpdateCount != 0 )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
 }

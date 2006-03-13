@@ -467,44 +467,11 @@ void KurooDB::setKurooDbMeta( const QString& meta, const QString& data )
 }
 
 /**
- * Return database structure version.
- */
-// QString KurooDB::kurooDbVersion()
-// {
-// 	return query( "SELECT version FROM dbInfo;" ).first();
-// }
-
-/**
- * Set current db structure version.
- * @param version
- */
-// void KurooDB::setKurooDbVersion( const QString& version )
-// {
-// 	query( "UPDATE dbInfo SET version = '" + version + "' ;" );
-// }
-
-/**
- * Return timestamp for last sync.
- */
-// QString KurooDB::lastSyncEntry()
-// {
-// 	return singleQuery("SELECT syncTimeStamp FROM dbInfo;");
-// }
-
-/**
  * Return the total number of packages.
  */
 bool KurooDB::isPackagesEmpty()
 {
 	return singleQuery( "SELECT COUNT(id) FROM package LIMIT 1;" ) == "0";
-}
-
-/**
- * Return the total number of updates.
- */
-bool KurooDB::isUpdatesEmpty()
-{
-	return singleQuery( "SELECT updatesTotal FROM dbInfo;" ) == "0";
 }
 
 /**
@@ -1148,28 +1115,10 @@ void KurooDB::resetInstalled()
 	query( "UPDATE package set installed = '" + FILTER_ALL_STRING + "';" );
 }
 
-/**
- * Return timestamp last entry in history.
- */
-QString KurooDB::lastHistoryEntry()
-{
-	return singleQuery(" SELECT timestamp FROM history WHERE id = (SELECT MAX(id) FROM history);");
-}
-
 void KurooDB::addEmergeInfo( const QString& einfo )
 {
 	query( QString("UPDATE history SET einfo = '%1' "
 	               "WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
-}
-
-/**
- * Insert timestamp for portage view refresh.
- */
-void KurooDB::addRefreshTime()
-{
-	QDateTime currentTime( QDateTime::currentDateTime() );
-	insert( QString( "INSERT INTO history ( package, timestamp, emerge ) "
-	                 " VALUES ('', '%1', 'false');").arg( QString::number( currentTime.toTime_t() ) ) );
 }
 
 /**

@@ -44,8 +44,8 @@ noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 	systemtray.h message.h common.h
 
 # source for kuroo
-kuroo_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp \
-	mainwindow.cpp statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
+kuroo_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
+	statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
 	kurooviewbase.ui
 
 # let automoc handle all of the meta source files (moc)

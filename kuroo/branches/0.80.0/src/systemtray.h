@@ -39,6 +39,10 @@ public:
 	
 	static SystemTray* 	instance() { return s_instance; }
 	
+public slots:
+	void				slotShow();
+	void				slotHide();
+
 private slots:
 	void 				slotPreferences();
 	void				slotBusy( bool busy );

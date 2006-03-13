@@ -19,6 +19,7 @@
 ***************************************************************************/
 
 #include "common.h"
+#include "systemtray.h"
 #include "configdialog.h"
 #include "options1.h"
 #include "options2.h"
@@ -29,7 +30,7 @@
 #include <qfile.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qpushbutton.h>
+#include <qcheckbox.h>
 
 #include <kconfigdialog.h>
 #include <kconfig.h>
@@ -424,6 +425,10 @@ void ConfigDialog::saveAll()
 	switch( activePageIndex() ) {
 		
 		case 0:
+			if ( KurooConfig::isSystrayEnabled() )
+				SystemTray::instance()->slotShow();
+			else
+				SystemTray::instance()->slotHide();
 			break;
 		
 		case 1:

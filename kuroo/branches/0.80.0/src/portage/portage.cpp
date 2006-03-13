@@ -404,7 +404,7 @@ void Portage::slotScanCompleted()
 	QueueSingleton::Instance()->reset();
 	
 	// Register this scan in history so we can check at next start if user has emerged any packages outside kuroo
-	KurooDBSingleton::Instance()->addRefreshTime();
+	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	// Now all Portage files
 	PortageFilesSingleton::Instance()->loadPackageFiles();
@@ -414,7 +414,7 @@ void Portage::slotScanCompleted()
 	slotChanged();
 	
 	// Go on with checking for updates
-	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
+	if ( KurooDBSingleton::Instance()->getKurooDbMeta( "updatesCount" ) == "0" )
 		slotRefreshUpdates();
 }
 

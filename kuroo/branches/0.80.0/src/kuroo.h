@@ -41,6 +41,7 @@ class KurooInit;
 class Message;
 class Queue;
 class Results;
+class SystemTray;
 
 /**
  * @class Kuroo
@@ -69,6 +70,7 @@ private:
 	void 				setupActions();
 	
 private:
+	SystemTray			*systemTray;
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
 	Message 			*kurooMessage;

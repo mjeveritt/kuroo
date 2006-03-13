@@ -35,17 +35,25 @@ SystemTray::SystemTray( QWidget *parent )
 	: KSystemTray( parent )
 {
 	s_instance = this;
-	
-	slotBusy( false );
-	
 	QToolTip::add( this, i18n("Kuroo - Portage frontend") );
 	contextMenu()->insertItem( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
-	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 }
 
 SystemTray::~SystemTray()
 {
+}
+
+void SystemTray::slotShow()
+{
+	slotBusy( false );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	show();
+}
+
+void SystemTray::slotHide()
+{
+	disconnect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	hide();
 }
 
 void SystemTray::slotPreferences()

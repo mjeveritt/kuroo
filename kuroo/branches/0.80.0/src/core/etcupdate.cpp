@@ -127,8 +127,8 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
 	
 	if ( noFiles ) {
-		KMessageBox::sorry( 0, i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
 		SignalistSingleton::Instance()->setKurooBusy( false );
+		KMessageBox::sorry( 0, i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
 	}
 	else {
 		

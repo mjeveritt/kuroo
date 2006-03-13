@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-13 17:11+0100\n"
+"POT-Creation-Date: 2006-03-13 18:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -244,23 +244,23 @@ msgstr ""
 msgid "Auto-unmasking packages"
 msgstr ""
 
-#: core/emerge.cpp:465
-msgid "Important message"
+#: core/emerge.cpp:464
+msgid "Emerge messages"
+msgstr ""
+
+#: core/emerge.cpp:464 core/emerge.cpp:533
+msgid "Please check log for more information!"
 msgstr ""
 
 #: core/emerge.cpp:533
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:533
-msgid "Please check log for more information!"
-msgstr ""
-
-#: core/emerge.cpp:551 core/emerge.cpp:559
+#: core/emerge.cpp:546 core/emerge.cpp:554
 msgid "%1 is not available on your architecture %2!<br><br>"
 msgstr ""
 
-#: core/emerge.cpp:552
+#: core/emerge.cpp:547
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet.<br>Ask the architecture porting team to test the "
@@ -268,45 +268,41 @@ msgid ""
 "website."
 msgstr ""
 
-#: core/emerge.cpp:555
+#: core/emerge.cpp:550
 msgid "Missing Keyword"
 msgstr ""
 
-#: core/emerge.cpp:560
+#: core/emerge.cpp:555
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:563
+#: core/emerge.cpp:558
 msgid "-* Keyword"
 msgstr ""
 
-#: core/emerge.cpp:567
+#: core/emerge.cpp:562
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:569
+#: core/emerge.cpp:564
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:569 core/emerge.cpp:581
+#: core/emerge.cpp:564 core/emerge.cpp:576
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:579
+#: core/emerge.cpp:574
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:581
+#: core/emerge.cpp:576
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
-
-#: core/emerge.cpp:594
-msgid "Unmasking packages. Can not parse: "
 msgstr ""
 
 #: core/cacheportagejob.cpp:60
@@ -369,11 +365,11 @@ msgstr ""
 msgid "Checking for configuration file updates..."
 msgstr ""
 
-#: core/etcupdate.cpp:130
+#: core/etcupdate.cpp:131
 msgid "There are no files that need to be updated through etc-update."
 msgstr ""
 
-#: core/etcupdate.cpp:130 kurooview.cpp:82
+#: core/etcupdate.cpp:131 kurooview.cpp:82
 msgid "Etc-update"
 msgstr ""
 
@@ -518,19 +514,19 @@ msgstr ""
 msgid "Can not find category in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:778
+#: core/portagedb.cpp:780
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:783
+#: core/portagedb.cpp:785
 msgid "Querying for package id. Can not parse: "
 msgstr ""
 
-#: core/portagedb.cpp:1175
+#: core/portagedb.cpp:1177
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1179
+#: core/portagedb.cpp:1181
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 

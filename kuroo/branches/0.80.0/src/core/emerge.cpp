@@ -393,9 +393,9 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					// Append package einfo
 					if ( !importantMessagePackage.isEmpty() ) {
 						if ( importantMessage.isEmpty() )
-							importantMessage += importantMessagePackage + eMessage;
+							importantMessage += "<b>" + importantMessagePackage + "</b>" + eMessage;
 						else
-							importantMessage += "<br>" + importantMessagePackage + eMessage;
+							importantMessage += "<br><b>" + importantMessagePackage + "</b>" + eMessage;
 						m_packageMessage = eMessage;
 						importantMessagePackage = QString::null;
 					}
@@ -461,7 +461,8 @@ void Emerge::cleanup()
 	}
 	else
 		if ( !importantMessage.isEmpty() )
-			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n("Important message"), NULL );
+			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), importantMessage ); 
+	
 	if ( etcUpdateCount != 0 )
 		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
 }
@@ -541,57 +542,47 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString package = packageKeyword.section( "(masked by: ", 0, 0);
 	QString keyword = ( packageKeyword.section("(masked by: ", 1, 1) ).section(" keyword", 0, 0);
 	
-	if ( rxPortageVersion.search( package ) != -1 ) {
-		QString name = package.section( rxPortageVersion.cap( 1 ), 0, 0 );
-	
-		kdDebug() << "Emerge::askUnmaskPackage packageKeyword=" << packageKeyword << endl;
-		
-		if ( packageKeyword.contains( "missing keyword" ) ) {
-			importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( name ).arg( KurooConfig::arch() );
-			importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
-			                         "Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
-			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
-			                          i18n( "Missing Keyword" ) , NULL );
-		}
-		else {
-			if ( keyword.contains( "-*" ) ) {
-				importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( name ).arg( KurooConfig::arch() );
-				importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
-				                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
-				KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
-				                          i18n( "-* Keyword" ) , NULL );
-			}
-			else {
-				if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
-					LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
-					
-					switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( name ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
-						case KMessageBox::Yes :
-							KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( name ) );
-							PortageFilesSingleton::Instance()->savePackageUserUnMask();
-							disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-							connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-							break;
-					}
-				}
-				else {
-					LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
-					
-					switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( name ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
-						case KMessageBox::Yes :
-							KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( name ) );
-							PortageFilesSingleton::Instance()->savePackageKeywords();
-							disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-							connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-							break;
-					}
-				}
-			}
-		}
+	if ( packageKeyword.contains( "missing keyword" ) ) {
+		importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+		importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
+									"Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
+		KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
+									i18n( "Missing Keyword" ) , NULL );
 	}
 	else {
-		kdDebug() << i18n("Unmasking packages. Can not parse: ") << package << endl;
-		kdDebug() << QString("Unmasking packages. Can not parse: ") << package << endl;
+		if ( keyword.contains( "-*" ) ) {
+			importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
+										"If you believe the package does work file a bug at Gentoo bugzilla website.");
+			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
+										i18n( "-* Keyword" ) , NULL );
+		}
+		else {
+			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
+				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
+				
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
+					case KMessageBox::Yes :
+						KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
+						PortageFilesSingleton::Instance()->savePackageUserUnMask();
+						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+						break;
+				}
+			}
+			else {
+				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
+				
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
+					case KMessageBox::Yes :
+						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
+						PortageFilesSingleton::Instance()->savePackageKeywords();
+						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+						break;
+				}
+			}
+		}
 	}
 }
 

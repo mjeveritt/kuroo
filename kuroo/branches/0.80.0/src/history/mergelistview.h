@@ -57,8 +57,8 @@ private:
 class MergeListView::MergeItem : public KListViewItem
 {
 public:
-	MergeItem::MergeItem( QListView* parent, const char* date );
-	MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination );
+	MergeItem( QListView* parent, const char* date );
+	MergeItem( MergeItem* parent, const char* source, const char* destination );
 	
 	QString	source();
 	QString	destination();

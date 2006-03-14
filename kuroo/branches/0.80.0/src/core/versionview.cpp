@@ -32,7 +32,7 @@
 class VersionView::VersionItem : public KListViewItem
 {
 public:
-	VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
+	VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
 	
 	bool	isInstalled();
 	

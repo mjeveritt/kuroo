@@ -152,7 +152,10 @@ QPixmap& Images::icon( int image )
 		
 		case VIEW_LOG:
 			return pxViewLog;
+			break;
 		
+		default:
+			pxEmpty;
 	}
 }
 

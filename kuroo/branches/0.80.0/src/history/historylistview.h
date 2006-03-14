@@ -64,8 +64,8 @@ signals:
 class HistoryListView::HistoryItem : public KListViewItem
 {
 public:
-	HistoryItem::HistoryItem( QListView* parent, const char* date );
-	HistoryListView::HistoryItem::HistoryItem( HistoryItem* parent, const char* package );
+	HistoryItem( QListView* parent, const char* date );
+	HistoryItem( HistoryItem* parent, const char* package );
 	
 	void			setEinfo( const QString& einfo );
 	QString			einfo();

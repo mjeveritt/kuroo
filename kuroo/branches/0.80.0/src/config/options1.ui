@@ -421,7 +421,7 @@
                 </widget>
                 <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
-                        <cstring>kcfg_installedColumn_2</cstring>
+                        <cstring>kcfg_installedColumn</cstring>
                     </property>
                     <property name="text">
                         <string>Show i&amp;nstalled packages in separate column</string>
@@ -452,7 +452,7 @@
                 </spacer>
                 <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
-                        <cstring>kcfg_portageVersion21_2</cstring>
+                        <cstring>kcfg_portageVersion21</cstring>
                     </property>
                     <property name="text">
                         <string>Port&amp;age version &gt;= 2.1</string>

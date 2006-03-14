@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-14 17:26+0100\n"
-"PO-Revision-Date: 2006-03-14 19:42+0100\n"
+"PO-Revision-Date: 2006-03-14 19:46+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1321,11 +1321,11 @@ msgstr "Visning i systemkurven"
 
 #: kuroo.cpp:215
 msgid "Exit"
-msgstr ""
+msgstr "Avslutt"
 
 #: kuroo.cpp:215
 msgid "Dock in System Tray"
-msgstr ""
+msgstr "Legg til i systemkurven"
 
 #: kuroo.cpp:259
 msgid ""
@@ -1775,7 +1775,7 @@ msgid "textLabel1"
 msgstr "tekstmerkelapp1"
 
 #: rc.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "<h2>Kuroo-0.80.0_rc2</h2>\n"
 "<p>Kuroo - A KDE Portage frontend that allows you to do most common software "
@@ -1794,6 +1794,7 @@ msgid ""
 "/var/lib/portage/world.</font></b>"
 msgstr ""
 "<h2>Kuroo-0.80.0_rc2</h2>\n"
+"<p>Kuroo - Et KDE-grensesnitt for Portage som støtter de fleste vanlige oppgavene for vedlikehold av programmer på Gentoo-systemer.</p>\n"
 "Ny funksjonalitet:<br>\n"
 "- Forent pakkevisning: finn pakker raskere og søk med filtre<br>\n"
 "- Ny inspektør for avansert pakkebehandling<br>\n"
@@ -2050,12 +2051,12 @@ msgstr "Kuroo-innstillinger"
 #: rc.cpp:417
 #, no-c-format
 msgid "Dock kuroo in s&ystem tray (close does not exit kuroo)"
-msgstr ""
+msgstr "Legg Kuroo til i s&ystemkurven (lukking avslutter ikke Kuroo)"
 
 #: rc.cpp:423
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Package options"
-msgstr "Innstillinger for pakkefiltre"
+msgstr "Pakkeinnstillinger"
 
 #: rc.cpp:426
 #, no-c-format
@@ -2068,9 +2069,9 @@ msgid "Show i&nstalled packages in separate column"
 msgstr "Vis i&nstallerte pakker i egen kolonne"
 
 #: rc.cpp:435
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Port&age version >= 2.1"
-msgstr "Portage versjon &2.1 eller nyere"
+msgstr "Port&age versjon 2.1 eller nyere"
 
 #: rc.cpp:444
 #, no-c-format

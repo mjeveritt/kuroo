@@ -45,7 +45,7 @@ class SystemTray;
 
 /**
  * @class Kuroo
- * @short Create main window with menus, system tray icon and statusbar.
+ * @short Main window with menus, system tray icon and statusbar.
  */
 class Kuroo : public MainWindow
 {
@@ -55,7 +55,6 @@ public:
 	virtual ~Kuroo();
 	
 private slots:
-	
 	void 				introWizard();
 	void 				slotPreferences();
 	void				slotBusy();
@@ -76,7 +75,7 @@ private:
 	Message 			*kurooMessage;
 	KurooInit 			*kurooInit;
 	KurooView 			*m_view;
-	KConfigDialog 			*prefDialog;
+	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage, *actionEtcUpdate;

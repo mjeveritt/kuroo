@@ -33,7 +33,7 @@ class UninstallInspector;
 
 /**
  * @class PortageTab
- * @short Tab page for portage packages.
+ * @short Package view with filters.
  */
 class PortageTab : public PortageBase
 {
@@ -64,6 +64,7 @@ private slots:
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
 private:
+	bool				m_isInitialized;
 	int					queuedFilters;
 	KPopupMenu 			*menu;
 	PackageInspector	*m_packageInspector;

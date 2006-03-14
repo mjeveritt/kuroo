@@ -482,6 +482,9 @@ void QueueTab::slotPackage()
 		// Collect latest available version
 		if ( (*sortedVersionIterator)->isAvailable() )
 			latestVersion = (*sortedVersionIterator)->version();
+		
+		// Update current package with description from latest version
+		queueView->currentPackage()->setDescription( (*sortedVersionIterator)->description() );
 	}
 	
 	// Set active version in Inspector dropdown menus

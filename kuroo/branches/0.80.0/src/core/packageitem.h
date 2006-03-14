@@ -51,6 +51,7 @@ public:
 	virtual bool					isInWorld();
 	
 	void							setInstalled();
+	void							setDescription( const QString& description );
 	void							setQueued( bool isQueued );
 	bool							isFirstPackage();
 	bool							isLastPackage();

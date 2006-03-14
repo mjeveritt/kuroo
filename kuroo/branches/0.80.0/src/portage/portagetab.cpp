@@ -51,7 +51,8 @@
  * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
-	: PortageBase( parent ), m_packageInspector( packageInspector ), uninstallInspector( 0 ), queuedFilters( 0 )
+	: PortageBase( parent ), 
+	m_packageInspector( packageInspector ), uninstallInspector( 0 ), queuedFilters( 0 ), m_isInitialized( false )
 {
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
@@ -210,6 +211,7 @@ void PortageTab::slotReload()
 {
 	kdDebug() << "PortageTab::slotReload" << endl;
 	
+	m_isInitialized = false;
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
@@ -371,8 +373,11 @@ void PortageTab::slotPackage()
 	kdDebug() << "PortageTab::slotPackage" << endl;
 	
 	// Packages view is hidden don't update
-	if ( !isVisible() )
+	// We may get signal to update from Queue since it share same Inspector
+	if ( !isVisible() && m_isInitialized )
 		return;
+	else
+		m_isInitialized = true;
 	
 	// Clear summary and Inspector text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -451,6 +456,9 @@ void PortageTab::slotPackage()
 		description = (*sortedVersionIterator)->description();
 		homepage = (*sortedVersionIterator)->homepage();
 	}
+	
+	// Update current package with description from latest version
+	packagesView->currentPackage()->setDescription( description );
 	
 	// Remove trailing commas
 	linesInstalled.truncate( linesInstalled.length() - 2 );

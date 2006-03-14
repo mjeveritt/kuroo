@@ -736,7 +736,7 @@ and do not update further</string>
                 </property>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>package2</cstring>
+                        <cstring>description</cstring>
                     </property>
                     <property name="minimumSize">
                         <size>

@@ -194,11 +194,12 @@ void PackageInspector::slotApply()
 		
 		// Store in db and save to file
 		if ( !useList.isEmpty() ) {
+			
 			//set use flags to nothing to check if a string is necessary in package.use
 			KurooDBSingleton::Instance()->setPackageUse( m_id, "" );
 			PortageFilesSingleton::Instance()->savePackageUse();
 
-;			//recalculate use flags
+			//recalculate use flags
 			pretendUseLines.clear();
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
@@ -209,11 +210,9 @@ void PackageInspector::slotApply()
 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
 			eProc->start( KProcess::NotifyOnExit, true );
 			SignalistSingleton::Instance()->setKurooBusy( true );
-			if ( !eProc->isRunning() ) {
+			if ( !eProc->isRunning() )
 				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.").arg( category ).arg( package ), ERROR );
-				//from slotParsePackageUse( eProc );
-				//endif
-			}
+			
 		}
 	}
 	
@@ -341,7 +340,7 @@ void PackageInspector::edit( PackageItem* portagePackage )
 	dialog->headerFrame->setPaletteBackgroundColor( QColor(104, 125, 227) );
 	dialog->package->setText( "<b><font color=white><font size=+1>" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</b></font>" );
-	dialog->package2->setText( m_portagePackage->description() );
+	dialog->description->setText( m_portagePackage->description() );
 	
 	showSettings();
 	slotRefreshTabs();

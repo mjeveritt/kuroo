@@ -34,7 +34,7 @@
 class CategoriesView::CategoryItem : public QListViewItem
 {
 public:
-	CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id );
+	CategoryItem( QListView* parent, const char* name, const QString &id );
 	
 	void 	setOn( bool on );
 	QString id();

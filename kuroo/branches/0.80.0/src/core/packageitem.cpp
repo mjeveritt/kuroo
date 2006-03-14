@@ -199,6 +199,11 @@ bool PackageItem::isInWorld()
 	return m_inWorld;
 }
 
+void PackageItem::setDescription( const QString& description )
+{
+	m_description = description;
+}
+
 void PackageItem::setInstalled()
 {
 	m_status = FILTER_INSTALLED_STRING;

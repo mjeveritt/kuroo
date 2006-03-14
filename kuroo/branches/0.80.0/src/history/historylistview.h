@@ -58,8 +58,8 @@ signals:
 };
 
 /**
- * @class MergeItem
- * @short 
+ * @class HistoryItem
+ * @short ListViewItem for package emerge/unmerges date
  */
 class HistoryListView::HistoryItem : public KListViewItem
 {

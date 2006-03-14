@@ -212,7 +212,7 @@ bool Kuroo::queryClose()
 		switch( KMessageBox::questionYesNo( this, 
 			i18n("<qt>Closing the main window will keep Kuroo running in the System Tray.<br>"
 				"Use Quit from the File menu to exit Kuroo.</qt>"),
-			i18n("Docking in System Tray"), i18n("Exit"), i18n("Dock in System Tray"), NULL ) ) {
+		    i18n("Docking in System Tray"), i18n("Exit"), i18n("Dock in System Tray"), "hideOnCloseInfo" ) ) {
 		
 			case KMessageBox::Yes :
 			    return true;
@@ -223,8 +223,8 @@ bool Kuroo::queryClose()
 				return false;
 		}
 	}
-	else
-		return true;
+	
+	return true;
 }
 
 /**

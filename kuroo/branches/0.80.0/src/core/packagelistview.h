@@ -41,13 +41,17 @@ public:
 public:
 	virtual	void			resetListView();
 	virtual	PackageItem* 	itemId( const QString& id );
+	
 	virtual QString			currentId();
 	QString					currentItemStatus();
 	virtual PackageItem* 	currentPackage();
+	
 	virtual QStringList		selectedId();
 	virtual QStringList		selectedPackages();
+	
 	virtual QStringList		allId();
 	virtual QStringList		allPackages();
+	
 	virtual QString			count();
 	
 public slots:

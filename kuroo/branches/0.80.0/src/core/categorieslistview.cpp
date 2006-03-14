@@ -91,7 +91,7 @@ QString CategoriesView::CategoryItem::name()
 
 /**
  * @class CategoriesListView
- * @short Creates category listview.
+ * @short Base class for category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
 	: KListView( parent, name ), categories( 0 )
@@ -139,7 +139,7 @@ void CategoriesView::setCurrentCategoryId( const QString& id )
 
 /**
  * @class CategoriesListView
- * @short Creates category listview.
+ * @short Categories listview.
  */
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
@@ -201,7 +201,7 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 
 /**
  * @class SubCategoriesListView
- * @short Creates category listview.
+ * @short Subcategories listview.
  */
 SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )

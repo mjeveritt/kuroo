@@ -74,6 +74,8 @@ private slots:
 	
 private:
 	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
+	
+	// True if history needs to be recreated from scratch
 	bool				hasHistoryRestored;
 };
 

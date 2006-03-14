@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-14 15:43+0100\n"
+"POT-Creation-Date: 2006-03-14 17:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: queue/queuelistview.cpp:174 history/historylistview.cpp:56
+#: queue/queuelistview.cpp:174 history/historylistview.cpp:60
 msgid "Duration"
 msgstr ""
 
@@ -682,73 +682,73 @@ msgstr ""
 msgid "Package present in Queue"
 msgstr ""
 
-#: core/packageinspector.cpp:61
+#: core/packageinspector.cpp:51
 msgid "Package details"
 msgstr ""
 
-#: core/packageinspector.cpp:117 core/packageinspector.cpp:142
+#: core/packageinspector.cpp:107 core/packageinspector.cpp:132
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr ""
 
-#: core/packageinspector.cpp:118 core/packageinspector.cpp:143
+#: core/packageinspector.cpp:108 core/packageinspector.cpp:133
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:214 core/packageinspector.cpp:785
+#: core/packageinspector.cpp:201 core/packageinspector.cpp:768
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:274
+#: core/packageinspector.cpp:261
 msgid "Click for hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:292
+#: core/packageinspector.cpp:279
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:382
+#: core/packageinspector.cpp:369
 msgid "Marking user masked version. Can not parse: "
 msgstr ""
 
-#: core/packageinspector.cpp:589
+#: core/packageinspector.cpp:572
 msgid "Loading use flag description. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:668
+#: core/packageinspector.cpp:651
 msgid "Loading changelog. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:670
+#: core/packageinspector.cpp:653
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:694
+#: core/packageinspector.cpp:677
 msgid "Loading ebuild. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:696
+#: core/packageinspector.cpp:679
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:729
+#: core/packageinspector.cpp:712
 msgid "Load dependencies. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:731
+#: core/packageinspector.cpp:714
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:757
+#: core/packageinspector.cpp:740
 msgid "Loading installed files list. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:759
+#: core/packageinspector.cpp:742
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr ""
 
-#: core/packageinspector.cpp:828 core/packageinspector.cpp:888
+#: core/packageinspector.cpp:811 core/packageinspector.cpp:871
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -821,7 +821,7 @@ msgstr ""
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:313 rc.cpp:507
+#: history/history.cpp:313 rc.cpp:510
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
@@ -842,11 +842,11 @@ msgstr ""
 msgid "terminating"
 msgstr ""
 
-#: history/mergelistview.cpp:54
+#: history/mergelistview.cpp:58
 msgid "Configuration file"
 msgstr ""
 
-#: history/historytab.cpp:138 history/historylistview.cpp:57
+#: history/historytab.cpp:138 history/historylistview.cpp:61
 msgid "Emerge info"
 msgstr ""
 
@@ -854,7 +854,7 @@ msgstr ""
 msgid "Installation message for %1:"
 msgstr ""
 
-#: history/historylistview.cpp:55
+#: history/historylistview.cpp:59
 msgid "Date"
 msgstr ""
 
@@ -890,11 +890,11 @@ msgid ""
 "Portage."
 msgstr ""
 
-#: portage/portage.cpp:444
+#: portage/portage.cpp:441
 msgid "Loading packages in world. Error reading: "
 msgstr ""
 
-#: portage/portage.cpp:464
+#: portage/portage.cpp:461
 msgid "Adding to world. Error writing: "
 msgstr ""
 
@@ -1253,7 +1253,7 @@ msgstr ""
 msgid "Dock in System Tray"
 msgstr ""
 
-#: kuroo.cpp:261
+#: kuroo.cpp:259
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1282,25 +1282,25 @@ msgid ""
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:135
+#: kurooinit.cpp:136
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:203
+#: kurooinit.cpp:204
 msgid "Error reading: /etc/make.conf"
 msgstr ""
 
-#: kurooinit.cpp:223
+#: kurooinit.cpp:224
 msgid "Error reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:263
+#: kurooinit.cpp:264
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:263
+#: kurooinit.cpp:264
 msgid "User permissions"
 msgstr ""
 
@@ -1413,8 +1413,8 @@ msgstr ""
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
-#: rc.cpp:3 rc.cpp:81 rc.cpp:271 rc.cpp:354 rc.cpp:438 rc.cpp:636 rc.cpp:639
-#: rc.cpp:651
+#: rc.cpp:3 rc.cpp:81 rc.cpp:271 rc.cpp:354 rc.cpp:441 rc.cpp:639 rc.cpp:642
+#: rc.cpp:654
 #, no-c-format
 msgid "Form1"
 msgstr ""
@@ -1429,7 +1429,7 @@ msgstr ""
 msgid "Remove &All"
 msgstr ""
 
-#: rc.cpp:12 rc.cpp:147 rc.cpp:317
+#: rc.cpp:12 rc.cpp:147 rc.cpp:317 rc.cpp:438
 #, no-c-format
 msgid "Alt+A"
 msgstr ""
@@ -1489,7 +1489,7 @@ msgstr ""
 msgid "Force reinstall of config files (--&noconfmem)"
 msgstr ""
 
-#: rc.cpp:56 rc.cpp:119 rc.cpp:329 rc.cpp:369
+#: rc.cpp:56 rc.cpp:119 rc.cpp:329 rc.cpp:432
 #, no-c-format
 msgid "Alt+N"
 msgstr ""
@@ -1509,7 +1509,7 @@ msgstr ""
 msgid "Check packages in Queue with emerge pretend"
 msgstr ""
 
-#: rc.cpp:71 rc.cpp:375
+#: rc.cpp:71
 #, no-c-format
 msgid "Alt+2"
 msgstr ""
@@ -1601,7 +1601,7 @@ msgid ""
 "and do not update further"
 msgstr ""
 
-#: rc.cpp:135 rc.cpp:363
+#: rc.cpp:135 rc.cpp:420
 #, no-c-format
 msgid "Alt+Y"
 msgstr ""
@@ -1845,426 +1845,431 @@ msgstr ""
 
 #: rc.cpp:357
 #, no-c-format
-msgid "Kuroo options"
+msgid "Paths"
 msgstr ""
 
 #: rc.cpp:360
 #, no-c-format
-msgid "Dock kuroo in s&ystem tray (close does not exit kuroo)"
-msgstr ""
-
-#: rc.cpp:366
-#, no-c-format
-msgid "Show i&nstalled packages in separate column"
-msgstr ""
-
-#: rc.cpp:372
-#, no-c-format
-msgid "Portage version >= &2.1"
-msgstr ""
-
-#: rc.cpp:378
-#, no-c-format
-msgid "<i>Restart for changes to take effect.</i>"
-msgstr ""
-
-#: rc.cpp:381
-#, no-c-format
-msgid "Package filter options"
-msgstr ""
-
-#: rc.cpp:386
-#, no-c-format
-msgid "Click to select the background color of the OSD."
-msgstr ""
-
-#: rc.cpp:389 rc.cpp:408
-#, no-c-format
-msgid "The color of the OSD background."
-msgstr ""
-
-#: rc.cpp:393
-#, no-c-format
-msgid "Click to select the color of the OSD text."
-msgstr ""
-
-#: rc.cpp:396 rc.cpp:402
-#, no-c-format
-msgid "The color of the OSD text."
-msgstr ""
-
-#: rc.cpp:399
-#, no-c-format
-msgid "No matching packages found"
-msgstr ""
-
-#: rc.cpp:405
-#, no-c-format
-msgid "Matching packages found"
-msgstr ""
-
-#: rc.cpp:411
-#, no-c-format
-msgid "Paths"
-msgstr ""
-
-#: rc.cpp:414
-#, no-c-format
 msgid "Installed repository"
 msgstr ""
 
-#: rc.cpp:417
+#: rc.cpp:363
 #, no-c-format
 msgid "Portage cache"
 msgstr ""
 
-#: rc.cpp:420
+#: rc.cpp:366
 #, no-c-format
 msgid "Etc-update merging frontend"
 msgstr ""
 
-#: rc.cpp:423
+#: rc.cpp:369
 #, no-c-format
 msgid "External tool"
 msgstr ""
 
-#: rc.cpp:426
+#: rc.cpp:372
 #, no-c-format
 msgid "Emerge check update options"
 msgstr ""
 
-#: rc.cpp:429
+#: rc.cpp:375
 #, no-c-format
 msgid ""
 "<i>Forces emerge to consider the entire dependency tree of packages.</i>"
 msgstr ""
 
-#: rc.cpp:432
+#: rc.cpp:378
 #, no-c-format
 msgid "&Deep"
 msgstr ""
 
-#: rc.cpp:435
+#: rc.cpp:381
 #, no-c-format
 msgid "Alt+D"
 msgstr ""
 
-#: rc.cpp:441
+#: rc.cpp:384
 #, no-c-format
-msgid "&Build"
+msgid "Package filter options"
+msgstr ""
+
+#: rc.cpp:389
+#, no-c-format
+msgid "Click to select the background color of the OSD."
+msgstr ""
+
+#: rc.cpp:392 rc.cpp:411
+#, no-c-format
+msgid "The color of the OSD background."
+msgstr ""
+
+#: rc.cpp:396
+#, no-c-format
+msgid "Click to select the color of the OSD text."
+msgstr ""
+
+#: rc.cpp:399 rc.cpp:405
+#, no-c-format
+msgid "The color of the OSD text."
+msgstr ""
+
+#: rc.cpp:402
+#, no-c-format
+msgid "No matching packages found"
+msgstr ""
+
+#: rc.cpp:408
+#, no-c-format
+msgid "Matching packages found"
+msgstr ""
+
+#: rc.cpp:414
+#, no-c-format
+msgid "Kuroo options"
+msgstr ""
+
+#: rc.cpp:417
+#, no-c-format
+msgid "Dock kuroo in s&ystem tray (close does not exit kuroo)"
+msgstr ""
+
+#: rc.cpp:423
+#, no-c-format
+msgid "Package options"
+msgstr ""
+
+#: rc.cpp:426
+#, no-c-format
+msgid "<i>Restart for changes to take effect.</i>"
+msgstr ""
+
+#: rc.cpp:429
+#, no-c-format
+msgid "Show i&nstalled packages in separate column"
+msgstr ""
+
+#: rc.cpp:435
+#, no-c-format
+msgid "Port&age version >= 2.1"
 msgstr ""
 
 #: rc.cpp:444
 #, no-c-format
-msgid "Build options"
+msgid "&Build"
 msgstr ""
 
 #: rc.cpp:447
 #, no-c-format
-msgid "i386-pc-linux-gnu"
+msgid "Build options"
 msgstr ""
 
 #: rc.cpp:450
 #, no-c-format
-msgid "i486-pc-linux-gnu"
+msgid "i386-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:453
 #, no-c-format
-msgid "i586-pc-linux-gnu"
+msgid "i486-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:456
 #, no-c-format
-msgid "i686-pc-linux-gnu"
+msgid "i586-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:459
 #, no-c-format
-msgid "alpha-unknown-linux-gnu"
+msgid "i686-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:462
 #, no-c-format
-msgid "powerpc-unknown-linux-gnu"
+msgid "alpha-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:465
 #, no-c-format
-msgid "powerpc64-unknown-linux-gnu"
+msgid "powerpc-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:468
 #, no-c-format
-msgid "sparc-unknown-linux-gnu"
+msgid "powerpc64-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:471
 #, no-c-format
-msgid "hppa-unknown-linux-gnu"
+msgid "sparc-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:474
 #, no-c-format
-msgid "hppa1.1-unknown-linux-gnu"
+msgid "hppa-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:477
 #, no-c-format
-msgid "hppa2.0-unknown-linux-gnu"
+msgid "hppa1.1-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:480
 #, no-c-format
-msgid "mips-unknown-linux-gnu"
+msgid "hppa2.0-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:483
 #, no-c-format
-msgid "x86_64-pc-linux-gnu"
+msgid "mips-unknown-linux-gnu"
 msgstr ""
 
 #: rc.cpp:486
 #, no-c-format
-msgid "CHOST"
+msgid "x86_64-pc-linux-gnu"
 msgstr ""
 
 #: rc.cpp:489
 #, no-c-format
-msgid "CFLAGS"
+msgid "CHOST"
 msgstr ""
 
 #: rc.cpp:492
 #, no-c-format
-msgid "CXXFLAGS"
+msgid "CFLAGS"
 msgstr ""
 
 #: rc.cpp:495
 #, no-c-format
-msgid "MAKEOPTS"
+msgid "CXXFLAGS"
 msgstr ""
 
 #: rc.cpp:498
 #, no-c-format
-msgid "USE"
+msgid "MAKEOPTS"
 msgstr ""
 
 #: rc.cpp:501
 #, no-c-format
-msgid "&Advanced build"
+msgid "USE"
 msgstr ""
 
 #: rc.cpp:504
 #, no-c-format
-msgid "Advanced build options"
+msgid "&Advanced build"
 msgstr ""
 
-#: rc.cpp:510
+#: rc.cpp:507
 #, no-c-format
-msgid "NOCOLOR"
+msgid "Advanced build options"
 msgstr ""
 
 #: rc.cpp:513
 #, no-c-format
-msgid "true"
+msgid "NOCOLOR"
 msgstr ""
 
 #: rc.cpp:516
 #, no-c-format
-msgid "false"
+msgid "true"
 msgstr ""
 
 #: rc.cpp:519
 #, no-c-format
-msgid "USE_ORDER"
+msgid "false"
 msgstr ""
 
-#: rc.cpp:528
+#: rc.cpp:522
 #, no-c-format
-msgid "CBUILD"
+msgid "USE_ORDER"
 msgstr ""
 
 #: rc.cpp:531
 #, no-c-format
-msgid "FEATURES"
+msgid "CBUILD"
 msgstr ""
 
 #: rc.cpp:534
 #, no-c-format
-msgid "DEBUGBUILD"
+msgid "FEATURES"
 msgstr ""
 
 #: rc.cpp:537
 #, no-c-format
-msgid "BUILD_PREFIX"
+msgid "DEBUGBUILD"
 msgstr ""
 
 #: rc.cpp:540
 #, no-c-format
-msgid "CLEAN_DELAY"
+msgid "BUILD_PREFIX"
 msgstr ""
 
 #: rc.cpp:543
 #, no-c-format
-msgid "CCACHE_SIZE"
+msgid "CLEAN_DELAY"
 msgstr ""
 
 #: rc.cpp:546
 #, no-c-format
-msgid "ACCEPT_KEYWORDS"
+msgid "CCACHE_SIZE"
 msgstr ""
 
 #: rc.cpp:549
 #, no-c-format
-msgid "PORTAGE_NICENESS"
+msgid "ACCEPT_KEYWORDS"
 msgstr ""
 
 #: rc.cpp:552
 #, no-c-format
-msgid "Directories and files"
+msgid "PORTAGE_NICENESS"
 msgstr ""
 
 #: rc.cpp:555
 #, no-c-format
-msgid "Portage directories"
+msgid "Directories and files"
 msgstr ""
 
 #: rc.cpp:558
 #, no-c-format
-msgid "RPMDIR"
+msgid "Portage directories"
 msgstr ""
 
 #: rc.cpp:561
 #, no-c-format
-msgid "PORT_LOGDIR"
+msgid "RPMDIR"
 msgstr ""
 
 #: rc.cpp:564
 #, no-c-format
-msgid "PORTAGE_BINHOST"
+msgid "PORT_LOGDIR"
 msgstr ""
 
 #: rc.cpp:567
 #, no-c-format
-msgid "PORTDIR"
+msgid "PORTAGE_BINHOST"
 msgstr ""
 
 #: rc.cpp:570
 #, no-c-format
-msgid "ROOT"
+msgid "PORTDIR"
 msgstr ""
 
 #: rc.cpp:573
 #, no-c-format
-msgid "PORTAGE_TMPDIR"
+msgid "ROOT"
 msgstr ""
 
 #: rc.cpp:576
 #, no-c-format
-msgid "PORTDIR_OVERLAY"
+msgid "PORTAGE_TMPDIR"
 msgstr ""
 
 #: rc.cpp:579
 #, no-c-format
-msgid "PKG_DIR"
+msgid "PORTDIR_OVERLAY"
 msgstr ""
 
 #: rc.cpp:582
 #, no-c-format
-msgid "DISTDIR"
+msgid "PKG_DIR"
 msgstr ""
 
 #: rc.cpp:585
 #, no-c-format
-msgid "PKG_TMPDIR"
+msgid "DISTDIR"
 msgstr ""
 
 #: rc.cpp:588
 #, no-c-format
-msgid "Config files in /etc"
+msgid "PKG_TMPDIR"
 msgstr ""
 
 #: rc.cpp:591
 #, no-c-format
-msgid "CONFIG_PROTECT"
+msgid "Config files in /etc"
 msgstr ""
 
 #: rc.cpp:594
 #, no-c-format
-msgid "CONFIG_PROTECT_MASK"
+msgid "CONFIG_PROTECT"
 msgstr ""
 
 #: rc.cpp:597
 #, no-c-format
-msgid "&Network"
+msgid "CONFIG_PROTECT_MASK"
 msgstr ""
 
 #: rc.cpp:600
 #, no-c-format
-msgid "Download"
+msgid "&Network"
 msgstr ""
 
 #: rc.cpp:603
 #, no-c-format
-msgid "RESUMECOMMAND"
+msgid "Download"
 msgstr ""
 
 #: rc.cpp:606
 #, no-c-format
-msgid "HTTP_PROXY FTP_PROXY"
+msgid "RESUMECOMMAND"
 msgstr ""
 
 #: rc.cpp:609
 #, no-c-format
-msgid "FETCHCOMMAND"
+msgid "HTTP_PROXY FTP_PROXY"
 msgstr ""
 
 #: rc.cpp:612
 #, no-c-format
-msgid "GENTOO_MIRRORS"
+msgid "FETCHCOMMAND"
 msgstr ""
 
 #: rc.cpp:615
 #, no-c-format
-msgid "Sync"
+msgid "GENTOO_MIRRORS"
 msgstr ""
 
 #: rc.cpp:618
 #, no-c-format
-msgid "RSYNC_PROXY"
+msgid "Sync"
 msgstr ""
 
 #: rc.cpp:621
 #, no-c-format
-msgid "RSYNC_TIMEOUT"
+msgid "RSYNC_PROXY"
 msgstr ""
 
 #: rc.cpp:624
 #, no-c-format
-msgid "SYNC"
+msgid "RSYNC_TIMEOUT"
 msgstr ""
 
 #: rc.cpp:627
 #, no-c-format
-msgid "RSYNC_RETRIES"
+msgid "SYNC"
 msgstr ""
 
 #: rc.cpp:630
 #, no-c-format
-msgid "RSYNC_EXCLUDEFROM"
+msgid "RSYNC_RETRIES"
 msgstr ""
 
 #: rc.cpp:633
 #, no-c-format
+msgid "RSYNC_EXCLUDEFROM"
+msgstr ""
+
+#: rc.cpp:636
+#, no-c-format
 msgid "RSYNC_RATELIMIT"
 msgstr ""
 
-#: rc.cpp:642
+#: rc.cpp:645
 #, no-c-format
 msgid "Warning!"
 msgstr ""
 
-#: rc.cpp:645
+#: rc.cpp:648
 #, no-c-format
 msgid "&Portage"
 msgstr ""

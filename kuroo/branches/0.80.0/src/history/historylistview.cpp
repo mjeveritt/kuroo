@@ -24,6 +24,10 @@
 
 #include <klistview.h>
 
+/**
+ * @class HistoryItem
+ * @short ListViewItem for package emerge/unmerges date
+ */
 HistoryListView::HistoryItem::HistoryItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
 {

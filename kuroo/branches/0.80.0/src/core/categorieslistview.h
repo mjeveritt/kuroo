@@ -25,9 +25,9 @@
 #include <klistview.h>
 #include <qvaluevector.h>
 
-
 /**
- * Creates category listview.
+ * @class CategoriesListView
+ * @short Base class for category listview.
  */
 class CategoriesView : public KListView
 {
@@ -53,7 +53,8 @@ protected:
 
 
 /**
- * Creates category listview.
+ * @class CategoriesListView
+ * @short Categories listview.
  */
 class CategoriesListView : public CategoriesView
 {
@@ -67,7 +68,8 @@ public:
 };
 
 /**
- * Creates subcategory listview.
+ * @class SubCategoriesListView
+ * @short Subcategories listview.
  */
 class SubCategoriesListView : public CategoriesView
 {

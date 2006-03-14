@@ -23,6 +23,10 @@
 
 #include <klistview.h>
 
+/**
+ * @class MergeItem
+ * @short ListViewItem with merge files.
+ */
 MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
 {

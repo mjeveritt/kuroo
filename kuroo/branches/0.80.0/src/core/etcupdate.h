@@ -53,11 +53,22 @@ signals:
 	void				signalEtcFileMerged();
 	
 private:
-	int 				count, totalEtcCount;
 	QObject*			m_parent;
 	KProcIO*			eProc;
-	QStringList			etcUpdateLines, etcFilesList;
+	
+	// Keep track of current etc-file position in the total
+	int 				count, totalEtcCount;
+	
+	// Collected output from etc-update
+	QStringList			etcUpdateLines;
+	
+	// List of etc-files for merging
+	QStringList			etcFilesList;
+	
+	// Remember last source file when iterating
 	QString				diffSource;
+	
+	// True if etc-update didn't find any files for merging
 	bool				noFiles;
 	
 };

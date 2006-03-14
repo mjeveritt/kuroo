@@ -397,9 +397,6 @@ void Portage::slotScanCompleted()
 {
 	kdDebug() << "Portage::slotScanCompleted" << endl;
 	
-	// Packages are scanned, we don't the cache anymore
-	clearCache();
-	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();
 	

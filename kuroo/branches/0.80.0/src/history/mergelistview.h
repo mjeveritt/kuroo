@@ -52,7 +52,7 @@ private:
 
 /**
  * @class MergeItem
- * @short 
+ * @short ListViewItem with merge files.
  */
 class MergeListView::MergeItem : public KListViewItem
 {
@@ -60,11 +60,11 @@ public:
 	MergeItem( QListView* parent, const char* date );
 	MergeItem( MergeItem* parent, const char* source, const char* destination );
 	
-	QString	source();
-	QString	destination();
+	QString			source();
+	QString			destination();
 	
 private:
-	QString m_source, m_destination;
+	QString 		m_source, m_destination;
 };
 
 #endif

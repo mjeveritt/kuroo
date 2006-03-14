@@ -67,13 +67,42 @@ protected:
 	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
-	int								m_index;
-	QString							m_id, m_name, m_status, m_packageTip, m_description, m_category;
 	QListView						*m_parent;
-	bool							m_isQueued, m_inWorld, hasDetailedInfo;
 	
+	// Keep track of package's index in parent listview
+	int								m_index;
+	
+	// Package's db id
+	QString							m_id;
+	
+	// Package name-string
+	QString							m_name;
+	
+	// Is package INSTALLED or OLD ( INSTALLED but not in Portage anymore )
+	QString							m_status;
+	
+	// Package description
+	QString							m_description;
+	
+	// Keep track of package's category
+	QString							m_category;
+	
+	// True if package is in installation queue
+	bool							m_isQueued;
+	
+	// True if package is in world file
+	bool							m_inWorld;
+	
+	// True if package and its versions has been initialized with all data
+	bool							hasDetailedInfo;
+	
+	// Valuelist with all versions and their data
 	QValueList<PackageVersion*>		m_versions;
-	QMap<QString,PackageVersion*>	m_versionMap;
+	
+	// Alternatively map with all versions and their data
+	QMap<QString, PackageVersion*>	m_versionMap;
+	
+	// Atom object needed for versions stability
 	DependAtom* 					atom;
 
 };

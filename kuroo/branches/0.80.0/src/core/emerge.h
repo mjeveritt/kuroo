@@ -75,11 +75,29 @@ signals:
 private:
 	QObject*			m_parent;
 	KProcIO*			eProc;
-	QString 			importantMessage, unmasked, m_packageMessage;
-	QStringList 		blocks, lastEmergeList;
+	
+	// Collects messages from emerge, like masked errors, ewarn and einfos
+	QString 			importantMessage;
+	
+	// The current package
+	QString				m_packageMessage;
+	
+	// The parsed package emerge says need unmasking
+	QString				unmasked;
+	
+	// Collect all blocking packages
+	QStringList 		blocks;
+	
+	// Remember packages emerge started with, used when auto-unmasking
+	QStringList			lastEmergeList;
+	
+	// List of parsed packages
 	EmergePackageList	emergePackageList;
+	
+	// Count of etc-updates files to merge
 	int					etcUpdateCount;
-	bool				m_error;
+	
+// 	bool				m_error;
 };
 
 #endif

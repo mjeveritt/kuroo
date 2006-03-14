@@ -33,7 +33,7 @@
  * @short All Gentoo emerge command.
  */
 Emerge::Emerge( QObject* m_parent )
-	: QObject( m_parent ), m_error( false ), m_packageMessage( QString::null )
+	: QObject( m_parent )/*, m_error( false )*/, m_packageMessage( QString::null )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
@@ -95,7 +95,7 @@ bool Emerge::queue( const QStringList& packageList )
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
-	m_error = false;
+// 	m_error = false;
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -135,7 +135,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
-	m_error = false;
+// 	m_error = false;
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -173,7 +173,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
 	emergePackageList.clear();
-	m_error = false;
+// 	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--unmerge" << "--nocolor" << "--nospinner";
@@ -207,7 +207,7 @@ bool Emerge::sync()
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
-	m_error = false;
+// 	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
@@ -237,7 +237,7 @@ bool Emerge::checkUpdates()
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
-	m_error = false;
+// 	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner";
@@ -334,7 +334,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
 				logDone++;
-				m_error = true;
+// 				m_error = true;
 			}
 			else
 				if ( lineLower.contains( "etc-update" ) ) {

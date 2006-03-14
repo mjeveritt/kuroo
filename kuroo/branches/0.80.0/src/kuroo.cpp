@@ -209,19 +209,19 @@ bool Kuroo::queryClose()
 	kdDebug() << "Kuroo::queryClose" << endl;
 		
 	if ( !m_shuttingDown && KurooConfig::isSystrayEnabled() ) {
-		switch( KMessageBox::questionYesNo( this, 
-			i18n("<qt>Closing the main window will keep Kuroo running in the System Tray.<br>"
-				"Use Quit from the File menu to exit Kuroo.</qt>"),
-		    i18n("Docking in System Tray"), i18n("Exit"), i18n("Dock in System Tray"), "hideOnCloseInfo" ) ) {
-		
-			case KMessageBox::Yes :
-			    return true;
-				break;
-				
-		    case KMessageBox::No :
+// 		switch( KMessageBox::questionYesNoCancel( this, 
+// 			i18n("<qt>Closing the main window will keep Kuroo running in the System Tray.<br>"
+// 				"Use Quit from the File menu to exit Kuroo.</qt>"),
+// 		    i18n("Docking in System Tray"), i18n("Exit"), i18n("Dock in System Tray"), i18n("Cancel"), "hideOnCloseInfo" ) ) {
+// 		
+// 			case KMessageBox::Yes :
+// 			    return true;
+// 				break;
+// 				
+// 		    case KMessageBox::No :
 				hide();
 				return false;
-		}
+// 		}
 	}
 	
 	return true;

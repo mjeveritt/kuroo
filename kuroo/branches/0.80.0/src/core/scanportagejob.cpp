@@ -84,7 +84,7 @@ bool ScanPortageJob::doJob()
 {
 	kdDebug() << "ScanPortageJob::doJob" << endl;
 	
-	int count;
+	int count( 0 );
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
@@ -98,7 +98,7 @@ bool ScanPortageJob::doJob()
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->getKurooDbMeta( "packageCount" );
 	if ( packageCount.isEmpty() )
-		setProgressTotalSteps( 35000 );
+		setProgressTotalSteps( 25000 );
 	else
 		setProgressTotalSteps( packageCount.toInt() );
 	

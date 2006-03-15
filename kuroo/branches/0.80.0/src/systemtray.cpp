@@ -37,6 +37,8 @@ SystemTray::SystemTray( QWidget *parent )
 	s_instance = this;
 	QToolTip::add( this, i18n("Kuroo - Portage frontend") );
 	contextMenu()->insertItem( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	
 }
 
 SystemTray::~SystemTray()
@@ -46,13 +48,11 @@ SystemTray::~SystemTray()
 void SystemTray::slotShow()
 {
 	slotBusy( false );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 	show();
 }
 
 void SystemTray::slotHide()
 {
-	disconnect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 	hide();
 }
 
@@ -67,7 +67,7 @@ void SystemTray::slotPreferences()
  */
 void SystemTray::slotBusy( bool busy )
 {
-	if ( busy )
+	if ( busy && isVisible() )
 		setPixmap( ImagesSingleton::Instance()->icon( KUROO_EMERGING ) );
 	else
 		setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );

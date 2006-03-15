@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-14 17:26+0100\n"
+"POT-Creation-Date: 2006-03-15 08:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1235,25 +1235,7 @@ msgstr ""
 msgid "Last sync: %1"
 msgstr ""
 
-#: kuroo.cpp:213
-msgid ""
-"<qt>Closing the main window will keep Kuroo running in the System Tray."
-"<br>Use Quit from the File menu to exit Kuroo.</qt>"
-msgstr ""
-
-#: kuroo.cpp:215
-msgid "Docking in System Tray"
-msgstr ""
-
-#: kuroo.cpp:215
-msgid "Exit"
-msgstr ""
-
-#: kuroo.cpp:215
-msgid "Dock in System Tray"
-msgstr ""
-
-#: kuroo.cpp:259
+#: kuroo.cpp:273
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"

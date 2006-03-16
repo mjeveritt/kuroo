@@ -82,6 +82,7 @@ void ConfigDialog::readMakeConf()
 		QTextStream stream( &makeconf );
 		QStringList lines;
 		
+		// Collect all lines except comments
 		while ( !stream.atEnd() ) {
 			QString line = stream.readLine();
 			
@@ -89,14 +90,49 @@ void ConfigDialog::readMakeConf()
 			if ( line.isEmpty() || line.contains( QRegExp("^\\s*#") ) )
 				continue;
 			
-			// Catch extended lines ending with (\) or simply not ending with (")
-			while ( line.contains( QRegExp("\\\\s*$") ) || !line.endsWith( "\"") )
-				line += " " + stream.readLine().simplifyWhiteSpace();
-
-			lines += line.replace('\\', ' ').simplifyWhiteSpace();
+			lines += line.simplifyWhiteSpace();
 		}
 		
+		// Concatenate extended lines
+		bool isQuote( false );
+		QStringList linesConcatenated;
+		QString extendedLine;
 		foreach ( lines ) {
+			
+			// Catch lines quoted in one row
+			if ( (*it).contains( QRegExp("=\\s*\"") ) && (*it).endsWith( "\"") ) {
+				linesConcatenated += *it;
+				isQuote = false;
+				continue;
+			}
+			
+			// Start catching lines beginning with a quote
+			if ( (*it).contains( QRegExp("=\\s*\"") ) ) {
+				extendedLine = *it;
+				isQuote = true;
+				continue;
+			}
+			
+			// Continue catching lines 
+			if ( isQuote && !(*it).endsWith( "\"") ) {
+				extendedLine += " " + *it;
+				continue;
+			}
+			
+			// Assemble extended quoted lines
+			if ( isQuote && (*it).endsWith( "\"") ) {
+				extendedLine += " " + *it;
+				linesConcatenated += extendedLine;
+				isQuote = false;
+				continue;
+			}
+			
+			// Collect resting lines
+			linesConcatenated += *it;
+		}
+		
+		// Parse the lines
+		foreach ( linesConcatenated ) {
 			
 			if ( (*it).contains( QRegExp("\\bACCEPT_KEYWORDS\\b") ) ) {
 				if ( rx.search( *it ) > -1 )

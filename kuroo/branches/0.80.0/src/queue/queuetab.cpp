@@ -216,7 +216,7 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy()
 {
-	kdDebug() << "QueueTab::slotBusy" << endl;
+// 	kdDebug() << "QueueTab::slotBusy" << endl;
 	
 	// No db or queue is empty - no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
@@ -239,7 +239,7 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
-	kdDebug() << "QueueTab::slotButtons" << endl;
+// 	kdDebug() << "QueueTab::slotButtons" << endl;
 	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {

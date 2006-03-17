@@ -64,7 +64,7 @@ void ScanUpdatesJob::completeJob()
  */
 bool ScanUpdatesJob::doJob()
 {
-	kdDebug() << "ScanUpdatesJob::doJob" << endl;
+	kdDebug() << "ScanUpdatesJob::doJob..." << endl;
 	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
@@ -156,6 +156,7 @@ bool ScanUpdatesJob::doJob()
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );
+	kdDebug() << "ScanUpdatesJob::doJob... completed!" << endl;
 	return true;
 }
 

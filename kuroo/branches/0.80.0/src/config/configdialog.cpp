@@ -75,6 +75,8 @@ void ConfigDialog::slotDefault()
  */
 void ConfigDialog::readMakeConf()
 {
+	kdDebug() << "Parse /etc/make.conf..." << endl;
+	
 	QFile makeconf( KurooConfig::fileMakeConf() );
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
 	
@@ -451,6 +453,8 @@ void ConfigDialog::readMakeConf()
 		kdDebug() << i18n("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 		kdDebug() << QString("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 	}
+	
+	kdDebug() << "Parse /etc/make.conf... completed!" << endl;
 }
 
 /**
@@ -483,6 +487,8 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::saveMakeConf()
 {
+	kdDebug() << "Save back /etc/make.conf..." << endl;
+	
 	QString line;
 	QStringList lines;
 	QFile file( KurooConfig::fileMakeConf() );
@@ -628,6 +634,8 @@ bool ConfigDialog::saveMakeConf()
 		kdDebug() << QString("Error writing: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 		return false;
 	}
+	
+	kdDebug() << "Save back /etc/make.conf... completed!" << endl;
 }
 
 #include "configdialog.moc"

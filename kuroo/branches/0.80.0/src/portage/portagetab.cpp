@@ -139,7 +139,7 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
-	kdDebug() << "PortageTab::slotBusy" << endl;
+// 	kdDebug() << "PortageTab::slotBusy" << endl;
 	
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
@@ -163,7 +163,7 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	kdDebug() << "PortageTab::slotButtons" << endl;
+// 	kdDebug() << "PortageTab::slotButtons" << endl;
 	
 	// No package selected, disable all buttons
 	if ( packagesView->selectedId().isEmpty() ) {
@@ -304,7 +304,7 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotRefresh()
 {
-	kdDebug() << "PortageTab::slotRefresh" << endl;
+// 	kdDebug() << "PortageTab::slotRefresh" << endl;
 	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"

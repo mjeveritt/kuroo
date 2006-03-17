@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-14 17:26+0100\n"
+"POT-Creation-Date: 2006-03-15 08:33+0100\n"
 "PO-Revision-Date: 2006-03-14 19:46+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
@@ -295,8 +295,9 @@ msgid ""
 "website."
 msgstr ""
 "<b>manglende nøkkelord</b> betyr at programmet ikke er testet på din "
-"arkitektur ennå.<br>Be laget for arkitektur-tilrettelegging om å teste pakken "
-"eller test den for dem og send inn resultatene på Gentoos feilsøkingsside."
+"arkitektur ennå.<br>Be laget for arkitektur-tilrettelegging om å teste "
+"pakken eller test den for dem og send inn resultatene på Gentoos "
+"feilsøkingsside."
 
 #: core/emerge.cpp:550
 msgid "Missing Keyword"
@@ -307,7 +308,9 @@ msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
-msgstr "<br><b>-*-nøkkelord</b> betyr at programmet ikke virker på din arkitektur.<br>Skriv en feilrapport på Gentoos feilsøkingsside hvis du tror det virker."
+msgstr ""
+"<br><b>-*-nøkkelord</b> betyr at programmet ikke virker på din arkitektur."
+"<br>Skriv en feilrapport på Gentoos feilsøkingsside hvis du tror det virker."
 
 #: core/emerge.cpp:558
 msgid "-* Keyword"
@@ -318,7 +321,8 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Legg pakken til i «package.unmask»."
 
 #: core/emerge.cpp:564
-msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid ""
+"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Klarte ikke installere maskert pakke?<br>Vil du avmaskere <b>«%1»</b>?</"
 "qt>"
@@ -332,8 +336,10 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Legg pakken til i «package.keywords»."
 
 #: core/emerge.cpp:576
-msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr "<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
+msgid ""
+"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr ""
+"<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
 
 #: core/cacheportagejob.cpp:60
 msgid "Creating cache. Can not connect to database"
@@ -538,7 +544,8 @@ msgstr "Ser etter oppdateringer: avbrutt"
 
 #: core/scanupdatesjob.cpp:126
 msgid "Scanning updates. Can not find id in database for package %1/%2."
-msgstr "Ser etter oppdateringer: klarte ikke finne id i databasen for pakken «%1/%2»."
+msgstr ""
+"Ser etter oppdateringer: klarte ikke finne id i databasen for pakken «%1/%2»."
 
 #: core/portagedb.cpp:362 core/portagedb.cpp:379
 msgid "Creating backup of history. Error writing: %1."
@@ -599,7 +606,8 @@ msgid "Collecting user unmasked packages..."
 msgstr "Samler bruker-avmaskerte pakker . . ."
 
 #: core/portagefiles.cpp:215
-msgid "Load user package unmask: Can not find id in database for package %1/%2."
+msgid ""
+"Load user package unmask: Can not find id in database for package %1/%2."
 msgstr ""
 "Lasting av bruker-avmaskerte pakker: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -618,7 +626,8 @@ msgstr "Samler hardmaskerte pakker . . ."
 
 #: core/portagefiles.cpp:310
 msgid "Parsing package.mask. Can not find id in database for package %1/%2."
-msgstr "Leser «package.mask»: klarte ikke finne id i databsen for pakken «%1/%2»."
+msgstr ""
+"Leser «package.mask»: klarte ikke finne id i databsen for pakken «%1/%2»."
 
 #: core/portagefiles.cpp:316
 msgid "Parsing package.mask. Can not match package %1 in %2."
@@ -633,21 +642,24 @@ msgid "Collecting user masked packages..."
 msgstr "Samler bruker-maskerte pakker . . ."
 
 #: core/portagefiles.cpp:403
-msgid "Parsing user package.mask. Can not find id in database for package %1/%2."
+msgid ""
+"Parsing user package.mask. Can not find id in database for package %1/%2."
 msgstr ""
 "Leser brukerdefinert «package.mask»: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
 
 #: core/portagefiles.cpp:411
 msgid "Parsing user package.mask. Can not match package %1 in %2."
-msgstr "Leser brukerdefinert «package.mask»: klarte ikek treffe pakken «%1» i «%2»."
+msgstr ""
+"Leser brukerdefinert «package.mask»: klarte ikek treffe pakken «%1» i «%2»."
 
 #: core/portagefiles.cpp:450
 msgid "Parsing user package.use. Error reading: %1."
 msgstr "Leser brukerdefinert «package.use»: klarte ikke lese: %1."
 
 #: core/portagefiles.cpp:483
-msgid "Parsing user package.use. Can not find id in database for package %1/%2."
+msgid ""
+"Parsing user package.use. Can not find id in database for package %1/%2."
 msgstr ""
 "Leser brukerdefinert «package.use»: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -663,7 +675,8 @@ msgstr "Klarte ikke skrive til «%1»."
 
 #: core/portagefiles.cpp:567
 msgid "No user mask depend atom found. Saving to %1 aborted!"
-msgstr "Fant ikke noe bruker-maskert avhengighetsatom. Lagring til «%1» avbrutt."
+msgstr ""
+"Fant ikke noe bruker-maskert avhengighetsatom. Lagring til «%1» avbrutt."
 
 #: core/portagefiles.cpp:605
 msgid "No user unmask depend atom found. Saving to %1 aborted!"
@@ -798,7 +811,8 @@ msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr "<font color=darkGrey><b>Fant ingen installerte filer.</b></font>"
 
 #: core/packageinspector.cpp:811 core/packageinspector.cpp:871
-msgid "Use flags could not be calculated. Please check log for more information"
+msgid ""
+"Use flags could not be calculated. Please check log for more information"
 msgstr "Klarte ikke regne ut bruk-flagg. Se i loggen for mer informasjon"
 
 #: core/versionview.cpp:89
@@ -911,7 +925,8 @@ msgid "Inserting emerged package: can not match %1."
 msgstr "Setter inn installerte pakker: klarte ikke treffe «%1»."
 
 #: portage/portage.cpp:59
-msgid "Inserting emerged package: Can not find id in database for package %1/%2."
+msgid ""
+"Inserting emerged package: Can not find id in database for package %1/%2."
 msgstr ""
 "Innsetting av installerte pakker: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -921,7 +936,8 @@ msgid "Removing unmerged package: can not match %1."
 msgstr "Fjerner avinstallert pakke: klarte ikke treffe «%1»."
 
 #: portage/portage.cpp:111
-msgid "Removing unmerged package: Can not find id in database for package %1/%2."
+msgid ""
+"Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 "Fjerer avinstallert pakke: klarte ikke finne id i databasen for pakken «%1/%"
 "2»."
@@ -1022,8 +1038,10 @@ msgstr ""
 ">Ikke installert</td></tr>"
 
 #: portage/portagetab.cpp:498
-msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
-msgstr "<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
+msgid ""
+"<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
+msgstr ""
+"<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
 
 #: portage/portagetab.cpp:502
 msgid ""
@@ -1225,7 +1243,8 @@ msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «ROOT»."
 
 #: config/configdialog.cpp:337
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_EXCLUDEFROM»."
+msgstr ""
+"Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_EXCLUDEFROM»."
 
 #: config/configdialog.cpp:345
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
@@ -1309,25 +1328,7 @@ msgstr "<qt>Synkronisere Portage?<br>Dette kan ta et par minutter . . .</qt>"
 msgid "Last sync: %1"
 msgstr "Siste synkronisering: %1"
 
-#: kuroo.cpp:213
-msgid ""
-"<qt>Closing the main window will keep Kuroo running in the System Tray."
-"<br>Use Quit from the File menu to exit Kuroo.</qt>"
-msgstr "<qt>Selv om du lukker hovedvinduet, fortsetter Kuroo å kjøre i systemkurven.<br>Bruk <b>Avslutt fra <b>Fil</b>-menyen for å avslutte Kuroo.</qt>"
-
-#: kuroo.cpp:215
-msgid "Docking in System Tray"
-msgstr "Visning i systemkurven"
-
-#: kuroo.cpp:215
-msgid "Exit"
-msgstr "Avslutt"
-
-#: kuroo.cpp:215
-msgid "Dock in System Tray"
-msgstr "Legg til i systemkurven"
-
-#: kuroo.cpp:259
+#: kuroo.cpp:273
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1794,7 +1795,8 @@ msgid ""
 "/var/lib/portage/world.</font></b>"
 msgstr ""
 "<h2>Kuroo-0.80.0_rc2</h2>\n"
-"<p>Kuroo - Et KDE-grensesnitt for Portage som støtter de fleste vanlige oppgavene for vedlikehold av programmer på Gentoo-systemer.</p>\n"
+"<p>Kuroo - Et KDE-grensesnitt for Portage som støtter de fleste vanlige "
+"oppgavene for vedlikehold av programmer på Gentoo-systemer.</p>\n"
 "Ny funksjonalitet:<br>\n"
 "- Forent pakkevisning: finn pakker raskere og søk med filtre<br>\n"
 "- Ny inspektør for avansert pakkebehandling<br>\n"
@@ -1995,7 +1997,8 @@ msgstr "Sjekk oppdatering-innstillinger"
 
 #: rc.cpp:375
 #, no-c-format
-msgid "<i>Forces emerge to consider the entire dependency tree of packages.</i>"
+msgid ""
+"<i>Forces emerge to consider the entire dependency tree of packages.</i>"
 msgstr "<i>Tvinger Portage til å se på hele avhengighetstreet til pakker.</i>"
 
 #: rc.cpp:378
@@ -2405,3 +2408,19 @@ msgid ""
 "Your emails"
 msgstr "alex@thehandofagony.com"
 
+#~ msgid ""
+#~ "<qt>Closing the main window will keep Kuroo running in the System Tray."
+#~ "<br>Use Quit from the File menu to exit Kuroo.</qt>"
+#~ msgstr ""
+#~ "<qt>Selv om du lukker hovedvinduet, fortsetter Kuroo å kjøre i "
+#~ "systemkurven.<br>Bruk <b>Avslutt fra <b>Fil</b>-menyen for å avslutte "
+#~ "Kuroo.</qt>"
+
+#~ msgid "Docking in System Tray"
+#~ msgstr "Visning i systemkurven"
+
+#~ msgid "Exit"
+#~ msgstr "Avslutt"
+
+#~ msgid "Dock in System Tray"
+#~ msgstr "Legg til i systemkurven"

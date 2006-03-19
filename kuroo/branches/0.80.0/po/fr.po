@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kuroo\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-15 08:33+0100\n"
-"PO-Revision-Date: 2006-03-17 15:44+0100\n"
+"PO-Revision-Date: 2006-03-19 11:41+0100\n"
 "Last-Translator: Gombault Damien <desintegr@gmail.com>\n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1729,8 +1729,7 @@ msgstr ""
 "<br>\n"
 "<br>\n"
 "<b><font color=\"red\">Attention !<br>\n"
-"Veuillez faire une sauvegarde de /etc/portage, /etc/make.conf et<br>\n"
-"/var/lib/portage/world.</font></b>"
+"Veuillez faire une sauvegarde de /etc/portage, /etc/make.conf et /var/lib/portage/world.</font></b>"
 
 #: rc.cpp:225 rc.cpp:260 rc.cpp:336
 #, no-c-format
@@ -1779,7 +1778,7 @@ msgid ""
 "<i>Click on package with info to view all information</i>"
 msgstr ""
 "<font size=\"+1\">Historique d'installation</font><br>\n"
-"<i>Double-cliquer sur un paquet pour afficher plus d'informations</i>"
+"<i>Cliquer sur un paquet pour afficher plus d'informations</i>"
 
 #: rc.cpp:257
 #, no-c-format

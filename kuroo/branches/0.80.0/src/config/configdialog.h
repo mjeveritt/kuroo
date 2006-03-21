@@ -40,6 +40,7 @@ public:
 	~ConfigDialog();
 	
 private slots:
+	QStringList parseMakeConf();
 	void readMakeConf();
 	bool saveMakeConf();
 	void saveAll();

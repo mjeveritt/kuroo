@@ -204,11 +204,6 @@ void KurooDB::createTables( DbConnection *conn )
 	      " data VARCHAR(64) "
 		  " );", conn);
 	
-// 	query(" INSERT INTO dbInfo "
-// 	      " (version, syncTimeStamp, updatesTotal) "
-// 	      " VALUES ('0', '0', '0')"
-// 	      " ;", conn);
-	
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32) UNIQUE ); "

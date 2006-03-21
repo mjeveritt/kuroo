@@ -128,8 +128,10 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	QString database = KUROODIR + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 	
+	kdDebug() << "dbVersion=" << dbVersion << endl;
+	
 	// Old db structure, must delete it and backup history 
-	if ( !dbVersion.isEmpty() && KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
+	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
 		KurooDBSingleton::Instance()->backupDb();
 		KurooDBSingleton::Instance()->destroy();
 		remove( database );

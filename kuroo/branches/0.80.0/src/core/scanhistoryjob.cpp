@@ -168,7 +168,7 @@ bool ScanHistoryJob::doJob()
 	
 	setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
 	setKurooDbMeta( "scanTimeStamp", timeStamp );
-	
+	kdDebug() << "ScanHistoryJob::doJob... done!" << endl;
 	return true;
 }
 

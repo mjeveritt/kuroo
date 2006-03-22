@@ -68,13 +68,13 @@ bool ScanUpdatesJob::doJob()
 	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
-		kdDebug() << QString("Scanning updates. Can not connect to database") << endl;
+		kdDebug() << "Scanning updates. Can not connect to database" << endl;
 		return false;
 	}
 	
 	if ( m_packageList.isEmpty() ) {
 		kdDebug() << i18n("Scanning updates. No update package found") << endl;
-		kdDebug() << QString("Scanning updates. No update package found") << endl;
+		kdDebug() << "Scanning updates. No update package found" << endl;
 		return false;
 	}
 	
@@ -111,7 +111,7 @@ bool ScanUpdatesJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdDebug() << i18n("Scanning updates. Scan aborted!") << endl;
-			kdDebug() << QString("Scanning updates. Scan aborted!") << endl;
+			kdDebug() << "Scanning updates. Scan aborted!" << endl;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -140,8 +140,8 @@ bool ScanUpdatesJob::doJob()
 				else
 					updateVersion = (*it).version + " (U)";
 				
-				KurooDBSingleton::Instance()->query( QString(
-					"UPDATE package_temp SET updateVersion = '%1' WHERE id = '%2';").arg( updateVersion ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package_temp SET updateVersion = '%1' WHERE id = '%2';")
+				                                     .arg( updateVersion ).arg( id ), m_db );
 				
 				updatesCount++;
 			}

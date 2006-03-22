@@ -126,8 +126,10 @@ public:
 						"VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
 			}
 			else {
-				kdDebug() << i18n("Parsing package.keywords. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageKeywords() ) << endl;
-				kdDebug() << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageKeywords() ) << endl;
+				kdDebug() << i18n("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+					.arg( KurooConfig::filePackageKeywords() ) << endl;
+				kdDebug() << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+					.arg( KurooConfig::filePackageKeywords() ) << endl;
 			}
 			
 		}
@@ -216,12 +218,15 @@ public:
 							kdDebug() << QString("Load user package unmask: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 						}
 						else
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
+								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 					else {
-						kdDebug() << i18n("Parsing package.unmask. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUserUnMask() ) << endl;
-						kdDebug() << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUserUnMask() ) << endl;
+						kdDebug() << i18n("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageUserUnMask() ) << endl;
+						kdDebug() << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageUserUnMask() ) << endl;
 					}
 				}
 			}
@@ -309,12 +314,15 @@ public:
 						if ( id.isEmpty() )
 							kdDebug() << i18n("Parsing package.mask. Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
 						else
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
+								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
 
 					}
 					else {
-						kdDebug() << i18n("Parsing package.mask. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageHardMask() ) << endl;
-						kdDebug() << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageHardMask() ) << endl;
+						kdDebug() << i18n("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageHardMask() ) << endl;
+						kdDebug() << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageHardMask() ) << endl;
 					}
 				}
 			}
@@ -400,16 +408,21 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() ) {
-							kdDebug() << i18n("Parsing user package.mask. Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-							kdDebug() << QString("Parsing user package.mask. Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+							kdDebug() << i18n("Parsing user package.mask. Can not find id in database for package %1/%2.")
+								.arg( category ).arg( name ) << endl;
+							kdDebug() << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
+								.arg( category ).arg( name ) << endl;
 						}
 						else
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
+								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 					else {
-						kdDebug() << i18n("Parsing user package.mask. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUserMask() ) << endl;
-						kdDebug() << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it ).arg( KurooConfig::filePackageUserMask() ) << endl;
+						kdDebug() << i18n("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageUserMask() ) << endl;
+						kdDebug() << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageUserMask() ) << endl;
 					}
 				}
 			}
@@ -480,11 +493,14 @@ public:
 				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 			
 			if ( id.isEmpty() ) {
-				kdDebug() << i18n("Parsing user package.use. Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-				kdDebug() << QString("Parsing user package.use. Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+				kdDebug() << i18n("Parsing user package.use. Can not find id in database for package %1/%2.")
+					.arg( category ).arg( name ) << endl;
+				kdDebug() << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
+					.arg( category ).arg( name ) << endl;
 			}
 			else
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" ).arg( id ).arg( use ), m_db );
+				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )
+				                                      .arg( id ).arg( use ), m_db );
 			
 		}
 		file.close();

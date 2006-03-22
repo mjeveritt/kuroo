@@ -1396,8 +1396,6 @@ SqliteConfig::SqliteConfig( const QString& dbfile )
  */
 DbConnectionPool::DbConnectionPool() : m_semaphore(POOL_SIZE)
 {
-// 	m_dbConnType = DbConnection::sqlite;
-	
 	m_semaphore += POOL_SIZE;
 	DbConnection *dbConn;
 	m_dbConfig = new SqliteConfig( KurooConfig::databas() );
@@ -1405,7 +1403,7 @@ DbConnectionPool::DbConnectionPool() : m_semaphore(POOL_SIZE)
 
 	enqueue(dbConn);
 	m_semaphore--;
-// 	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
+	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnectionPool::~DbConnectionPool()
@@ -1415,7 +1413,7 @@ DbConnectionPool::~DbConnectionPool()
 	bool vacuum = true;
 	
 	while ( (conn = dequeue()) != 0 ) {
-		if (/*m_dbConnType == DbConnection::sqlite && */vacuum) {
+		if ( vacuum ) {
 			vacuum = false;
 			kdDebug() << "Running VACUUM" << endl;
 			conn->query("VACUUM; ");
@@ -1439,13 +1437,15 @@ void DbConnectionPool::createDbConnections()
 DbConnection *DbConnectionPool::getDbConnection()
 {
 	m_semaphore++;
+	kdDebug() << "Get. Available db connections: " << m_semaphore.available() << endl;
 	return dequeue();
 }
 
 void DbConnectionPool::putDbConnection( const DbConnection *conn )
 {
-	enqueue(conn);
+	enqueue( conn );
 	m_semaphore--;
+	kdDebug() << "Put. Available db connections: " << m_semaphore.available() << endl;
 }
 
 #include "portagedb.moc"

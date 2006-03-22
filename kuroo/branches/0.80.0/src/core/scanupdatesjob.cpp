@@ -145,12 +145,12 @@ bool ScanUpdatesJob::doJob()
 			}
 		}
 	}
-	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
+	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 	
 	// Move content from temporary table
-	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db);
-	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db);
-	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
+	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db );
+	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db );
+	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db );
 	
 	KurooDBSingleton::Instance()->setKurooDbMeta( "updatesCount", QString::number( updatesCount ) );
 	
@@ -158,6 +158,14 @@ bool ScanUpdatesJob::doJob()
 	setProgressTotalSteps( 0 );
 	kdDebug() << "ScanUpdatesJob::doJob... completed!" << endl;
 	return true;
+}
+
+void ScanUpdatesJob::setKurooDbMeta( const QString& meta, const QString& data )
+{
+	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
+		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
+	else
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
 }
 
 #include "scanupdatesjob.moc"

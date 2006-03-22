@@ -127,8 +127,6 @@ QStringList ConfigDialog::parseMakeConf()
  */
 void ConfigDialog::readMakeConf()
 {
-	kdDebug() << "Parsing /etc/make.conf..." << endl;
-	
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return;
@@ -484,7 +482,7 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::saveMakeConf()
 {
-	kdDebug() << "Save back /etc/make.conf..." << endl;
+	kdDebug() << "Saving back /etc/make.conf..." << endl;
 	
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
@@ -628,7 +626,7 @@ bool ConfigDialog::saveMakeConf()
 		return false;
 	}
 	
-	kdDebug() << "Save back /etc/make.conf... completed!" << endl;
+	kdDebug() << "Saving back /etc/make.conf... completed!" << endl;
 }
 
 #include "configdialog.moc"

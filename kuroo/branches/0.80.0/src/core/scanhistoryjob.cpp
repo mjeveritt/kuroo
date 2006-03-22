@@ -172,5 +172,13 @@ bool ScanHistoryJob::doJob()
 	return true;
 }
 
+void ScanHistoryJob::setKurooDbMeta( const QString& meta, const QString& data )
+{
+	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
+		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
+	else
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
+}
+
 #include "scanhistoryjob.moc"
 

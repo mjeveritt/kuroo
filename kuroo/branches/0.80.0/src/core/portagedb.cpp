@@ -442,7 +442,7 @@ void KurooDB::restoreBackup()
 //////////////////////////////////////////////////////////////////////////////
 
 /**
- * Return database structure version.
+ * Return db meta data.
  */
 QString KurooDB::getKurooDbMeta( const QString& meta )
 {
@@ -450,7 +450,7 @@ QString KurooDB::getKurooDbMeta( const QString& meta )
 }
 
 /**
- * Set current db structure version.
+ * Set db meta data.
  * @param version
  */
 void KurooDB::setKurooDbMeta( const QString& meta, const QString& data )

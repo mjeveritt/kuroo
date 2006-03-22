@@ -178,6 +178,8 @@ void CategoriesListView::init()
 	item->setOn( true );
 	categories[0] = item;
 	setSelected( firstChild(), true );
+	
+	kdDebug() << "CategoriesListView::init... done!" << endl;
 }
 
 /**
@@ -187,13 +189,12 @@ void CategoriesListView::init()
 void CategoriesListView::loadCategories( const QStringList& categoriesList )
 {
 	// Set all categories off = empty
-	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it ) {
+	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it )
 		(*it)->setOn( false );
-	}
 	
 	// Enable found categories from query
 	foreach ( categoriesList )
-		categories[(*it).toInt()]->setOn( true );
+		categories[ (*it).toInt() ]->setOn( true );
 	
 	emit selectionChanged();
 }
@@ -237,6 +238,8 @@ void SubCategoriesListView::init()
 		QString name = *it;
 		allSubCategories[idCategory].insert( std::pair<int, QString>(idSubCategory, name) );
 	}
+	
+	kdDebug() << "SubCategoriesListView::init... done!" << endl;
 }
 
 /**

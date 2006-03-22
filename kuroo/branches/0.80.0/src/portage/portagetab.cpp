@@ -232,6 +232,8 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
+	kdDebug() << "PortageTab::slotFilters" << endl;
+	
 	queuedFilters++;
 	QTimer::singleShot( 250, this, SLOT( slotActivateFilters() ) );
 }
@@ -243,7 +245,7 @@ void PortageTab::slotActivateFilters()
 {
 	--queuedFilters;
 	if ( queuedFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(),searchFilter->text()  ) );
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(),searchFilter->text() ) );
 }
 
 /**
@@ -431,7 +433,8 @@ void PortageTab::slotPackage()
 // 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " stability=" << stability<< endl;
 		
 		// Insert version in Inspector version view
-		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
+		m_packageInspector->dialog->versionsView->insertItem( 
+			(*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
 		// Create nice summary showing installed packages
 		if ( (*sortedVersionIterator)->isInstalled() ) {

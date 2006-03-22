@@ -302,10 +302,10 @@ void KurooView::IconListItem::paint( QPainter *painter )
 	int wp = mPixmap.width();
 	int hp = mPixmap.height();
 	
-	painter->drawPixmap( (mMinimumWidth-wp) / 2, 5, mPixmap );
+	painter->drawPixmap( (listBox()->maxItemWidth()-wp) / 2, 5, mPixmap );
 	
 	if( !text().isEmpty() )
-		painter->drawText( 0, hp + 7, mMinimumWidth, ht, Qt::AlignCenter, text() );
+		painter->drawText( 0, hp + 7, listBox()->maxItemWidth(), ht, Qt::AlignCenter, text() );
 }
 
 int KurooView::IconListItem::height( const QListBox *lb ) const

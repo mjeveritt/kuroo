@@ -55,7 +55,7 @@ void EtcUpdate::init( QObject *parent )
 void EtcUpdate::askUpdate( const int& count )
 {
 	switch ( KMessageBox::questionYesNo( 0, i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
-										 .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
+	                                     .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
 		
 		case KMessageBox::Yes :
 			etcUpdate();
@@ -132,8 +132,8 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 	}
 	else {
 		
-		// Parse out etc-files
-		QRegExp rxEtcFiles( "(?:^\\d+\\))*\\s+(/\\s*\\S*)" );
+		// Parse out etc-files list
+		QRegExp rxEtcFiles( "(?:^\\d+\\)\\s+){0,1}(/\\S*)" );
 		foreach( etcUpdateLines )
 			if ( rxEtcFiles.search( *it ) > -1 )
 				etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
@@ -156,12 +156,13 @@ void EtcUpdate::runDiff()
 		
 		// Check for etc warning
 		QString etcWarning;
-		const QStringList etcFilesList = QStringList::split( "\n", KurooConfig::etcFiles() );
-		foreach ( etcFilesList )
+		const QStringList etcFilesWarningsList = QStringList::split( "\n", KurooConfig::etcFiles() );
+		foreach ( etcFilesWarningsList )
 			if ( *it == destination )
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
 		
-		switch ( KMessageBox::questionYesNo( 0, i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), i18n("etc-update (%1 of %2)").arg( count++ ).arg( totalEtcCount ) ) ) {
+		switch ( KMessageBox::questionYesNo( 0, i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), 
+		                                     i18n("etc-update (%1 of %2)").arg( count++ ).arg( totalEtcCount ) ) ) {
 			
 			// Merge this etc-file
 			case KMessageBox::Yes : {

@@ -199,7 +199,6 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 	emit selectionChanged();
 }
 
-
 /**
  * @class SubCategoriesListView
  * @short Subcategories listview.

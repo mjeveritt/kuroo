@@ -30,7 +30,6 @@ KurooStatusBar* KurooStatusBar::s_instance = 0;
 /**
  * @class KurooStatusBar
  * @short Singleton object to build statusbar with progressbar in right corner.
- * The one and only instance created from this class can can be accessed from all classes.
  */
 KurooStatusBar::KurooStatusBar( QWidget *parent )
 	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
@@ -95,7 +94,7 @@ void KurooStatusBar::slotLastMessage()
 }
 
 /**
- * Set total.
+ * Set total for timer progress.
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
@@ -113,12 +112,10 @@ void KurooStatusBar::setTotalSteps( int total )
 }
 
 /**
- * Set total.
+ * Set total for stepped progress.
  */
 void KurooStatusBar::setThreadTotalSteps( int total )
 {
-	kdDebug() << "KurooStatusBar::setThreadTotalSteps total=" << total << endl;
-	
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
 	

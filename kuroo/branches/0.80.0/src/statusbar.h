@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef STATUSBAR_H
 #define STATUSBAR_H
 
@@ -40,7 +41,7 @@ public:
     ~KurooStatusBar();
 	
 	static 					KurooStatusBar* instance() { return s_instance; }
-
+	
 	void 					setProgressStatus( const QString& id, const QString& text );
 	void					setTotalSteps( int total );
 	void					setThreadTotalSteps( int total );

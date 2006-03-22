@@ -46,7 +46,7 @@
 
 /**
  * @class KurooView
- * @short Gui content
+ * @short Main gui with icon-menu and corresponding pages (tabs).
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
@@ -57,6 +57,8 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	setMinimumSize( QSize(750, 550) );
 	
 	viewMenu->setCursor( KCursor::handCursor() );
+	
+	// Create the package inspector
 	packageInspector = new PackageInspector( this );
 	
 	// Add all pages
@@ -108,7 +110,7 @@ KurooView::~KurooView()
 }
 
 /**
- * Activate corresponding view when clicking on icon in menu.
+ * Activate corresponding page when clicking on icon in menu.
  */
 void KurooView::slotShowView()
 {

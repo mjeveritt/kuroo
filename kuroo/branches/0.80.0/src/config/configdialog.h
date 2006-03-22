@@ -45,9 +45,6 @@ private slots:
 	bool saveMakeConf();
 	void saveAll();
 	void slotDefault();
-
-private:
-	QString m_chost, m_cflags, m_makeopts, m_useFlags, m_overlay, m_rsyncMirror, m_language;
 };
 
 #endif

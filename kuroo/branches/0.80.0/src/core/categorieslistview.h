@@ -50,8 +50,6 @@ protected:
 	Categories			 					categories;
 };
 
-
-
 /**
  * @class CategoriesListView
  * @short Categories listview.

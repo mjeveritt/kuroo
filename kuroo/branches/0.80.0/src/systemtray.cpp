@@ -45,13 +45,13 @@ SystemTray::~SystemTray()
 {
 }
 
-void SystemTray::slotShow()
+void SystemTray::activate()
 {
 	slotBusy( false );
 	show();
 }
 
-void SystemTray::slotHide()
+void SystemTray::inactivate()
 {
 	hide();
 }

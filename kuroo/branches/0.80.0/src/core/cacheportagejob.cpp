@@ -30,9 +30,8 @@
 /**
  * @class CachePortageJob
  * @short Thread to cache package information from the Portage directory to speed up portage refreshing.
- * In order to get progress in gui progressbar, packages are counted first.
- * Next portage cache is scanned for package sizes, and stored in portage cache map,
- * and in the table "cache" in the database.
+ * 
+ * Portage cache is scanned for package sizes, and stored in portage cache map and in the database.
  */
 CachePortageJob::CachePortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
@@ -42,7 +41,7 @@ CachePortageJob::CachePortageJob( QObject* parent )
 
 CachePortageJob::~CachePortageJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 }
 
 void CachePortageJob::completeJob()
@@ -58,11 +57,11 @@ bool CachePortageJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Creating cache. Can not connect to database") << endl;
-		kdDebug() << QString("Creating cache. Can not connect to database") << endl;
+		kdDebug() << "Creating cache. Can not connect to database" << endl;
 		return false;
 	}
 	
-	int count(0);
+	int count( 0 );
 	QMap <QString, QString> mapCache;
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -86,7 +85,7 @@ bool CachePortageJob::doJob()
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
 			kdDebug() << i18n("Creating cache. Can not access ") << *itPath << endl;
-			kdDebug() << QString("Creating cache. Can not access ") << *itPath << endl;
+			kdDebug() << "Creating cache. Can not access " << *itPath << endl;
 			continue;
 		}
 		
@@ -167,7 +166,8 @@ bool CachePortageJob::doJob()
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	QMap< QString, QString >::iterator itMapEnd = mapCache.end();
 	for ( QMap< QString, QString >::iterator itMap = mapCache.begin(); itMap != itMapEnd; ++itMap )
-		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").arg(itMap.key()).arg(itMap.data()), m_db );
+		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").
+		                                      arg( itMap.key() ).arg( itMap.data() ), m_db );
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 	
@@ -178,10 +178,13 @@ bool CachePortageJob::doJob()
 
 void CachePortageJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
+	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").
+	                                                arg( meta ), m_db ) == "0" )
+		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").
+		                                     arg( meta ).arg( data ), m_db );
 	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").
+		                                     arg( meta ).arg( data ), m_db );
 }
 
 #include "cacheportagejob.moc"

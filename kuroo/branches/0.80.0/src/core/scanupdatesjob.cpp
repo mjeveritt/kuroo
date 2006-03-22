@@ -152,7 +152,7 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db );
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db );
 	
-	KurooDBSingleton::Instance()->setKurooDbMeta( "updatesCount", QString::number( updatesCount ) );
+	setKurooDbMeta( "updatesCount", QString::number( updatesCount ) );
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );

@@ -201,7 +201,6 @@ void ThreadWeaver::Thread::runJob( Job *job )
 
 	if ( job->isAborted() )
 		QApplication::postEvent( ThreadWeaver::instance(), job );
-
 	else {
 		m_job = job;
 //         start( Thread::IdlePriority ); //will wait() first if necessary
@@ -219,7 +218,7 @@ void ThreadWeaver::Thread::run()
 
 	m_job->m_aborted |= !m_job->doJob();
 
-	if( m_job )
+	if ( m_job )
 		QApplication::postEvent( ThreadWeaver::instance(), m_job );
 
 	// almost always the thread doesn't finish until after the
@@ -261,15 +260,13 @@ void ThreadWeaver::Job::setProgressTotalSteps( uint steps )
 {
 	if ( steps == 0 ) {
 		kdDebug() << "You can't set steps to 0!\n";
-		KurooStatusBar::instance()->setThreadTotalSteps( 0 );
+		QApplication::postEvent( this, new ProgressEvent( -2 ) );
 		steps = 1;
 	}
 	else
-		KurooStatusBar::instance()->setThreadTotalSteps( 100 );
+		QApplication::postEvent( this, new ProgressEvent( -1 ) );
 	
 	m_totalSteps = steps;
-
-	QApplication::postEvent( this, new ProgressEvent( -1 ) );
 }
 
 void ThreadWeaver::Job::setProgress( uint steps )
@@ -289,7 +286,7 @@ void ThreadWeaver::Job::setStatus( const QString& id, const QString& status )
 	m_id = id;
 	m_status = status;
 
-	QApplication::postEvent( this, new ProgressEvent( -2 ) );
+	QApplication::postEvent( this, new ProgressEvent( -3 ) );
 }
 
 void ThreadWeaver::Job::incrementProgress()
@@ -302,16 +299,16 @@ void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 	int progress = static_cast<ProgressEvent*>(e)->progress;
 	
 	switch( progress ) {
-		case -2:
+		case -3:
 			KurooStatusBar::instance()->setProgressStatus( m_id, m_status );
 			break;
 	
+		case -2:
+			KurooStatusBar::instance()->setThreadTotalSteps( 0 );
+			break;
+		
 		case -1:
-	// 		kdDebug() << "ThreadWeaver::Job::customEventprogress progress=" << progress << "." << endl;
-			/*KurooStatusBar::instance()->newProgressOperation( this )
-					.setDescription( m_description )
-					.setAbortSlot( this, SLOT(abort()) )
-					.setTotalSteps( 100 )*/;
+			KurooStatusBar::instance()->setThreadTotalSteps( 100 );
 			break;
 	
 		default:
@@ -320,8 +317,7 @@ void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 }
 
 ThreadWeaver::DependentJob::DependentJob( QObject *dependent, const char *name )
-	: Job( name )
-	, m_dependent( dependent )
+	: Job( name ), m_dependent( dependent )
 {
 	connect( dependent, SIGNAL(destroyed()), SLOT(abort()) );
 

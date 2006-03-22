@@ -62,7 +62,6 @@ public slots:
 	void 				slotInit();
 
 private slots:
-
 	void 				slotCheckPortage();
 	void 				slotPortageUpdated();
 	void 				slotQueueUpdated();

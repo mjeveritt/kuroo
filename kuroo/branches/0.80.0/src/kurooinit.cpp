@@ -173,7 +173,7 @@ KurooInit::~KurooInit()
 bool KurooInit::getEnvironment()
 {
 	QString line;
-	bool success(false);
+	bool success( false );
 	
 	QFile makeconf("/etc/make.conf");
 	if ( makeconf.open(IO_ReadOnly) ) {
@@ -194,7 +194,6 @@ bool KurooInit::getEnvironment()
 			if ( line.contains(QRegExp("^PORTAGE_TMPDIR=")) )
 				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
 			
-			// Parse out first overlay directory, because can only handle one overlay
 			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) )
 				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
 			
@@ -227,8 +226,10 @@ bool KurooInit::getEnvironment()
 		kdDebug() << QString("Error reading: /etc/make.profile") << endl;
 	}
 	
-	// Add default etc warning files
-	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
+	// Add default etc-files warnings
+	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
+	                         "/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n"
+	                         "/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
 	
 	KurooConfig::writeConfig();
 	return success;
@@ -263,7 +264,8 @@ void KurooInit::checkUser()
 			return;
 	}
 	
-	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), i18n("User permissions") );
+	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), 
+	                    i18n("User permissions") );
 	exit(0);
 }
 

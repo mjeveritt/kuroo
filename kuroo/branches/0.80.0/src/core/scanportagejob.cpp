@@ -96,7 +96,7 @@ bool ScanPortageJob::doJob()
 	}
 	
 	// Get a count of total packages for proper progress
-	QString packageCount = KurooDBSingleton::Instance()->getKurooDbMeta( "packageCount" );
+	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
 	if ( packageCount.isEmpty() )
 		setProgressTotalSteps( 25000 );
 	else
@@ -335,7 +335,7 @@ bool ScanPortageJob::doJob()
 	}
 	categories.clear();
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
-	KurooDBSingleton::Instance()->setKurooDbMeta( "packageCount", QString::number( count ) );
+	setKurooDbMeta( "packageCount", QString::number( count ) );
 	
 	// Move content from temporary table 
 	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db);
@@ -356,7 +356,7 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
-	KurooDBSingleton::Instance()->setKurooDbMeta( "updatesCount", "0" );
+	setKurooDbMeta( "updatesCount", "0" );
 	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );

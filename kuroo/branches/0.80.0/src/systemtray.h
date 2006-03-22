@@ -38,10 +38,8 @@ public:
     ~SystemTray();
 	
 	static SystemTray* 	instance() { return s_instance; }
-	
-public slots:
-	void				slotShow();
-	void				slotHide();
+	void				activate();
+	void				inactivate();
 
 private slots:
 	void 				slotPreferences();

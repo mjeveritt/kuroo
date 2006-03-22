@@ -166,8 +166,8 @@ bool ScanHistoryJob::doJob()
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	
-	KurooDBSingleton::Instance()->setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
-	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", timeStamp );
+	setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
+	setKurooDbMeta( "scanTimeStamp", timeStamp );
 	
 	return true;
 }

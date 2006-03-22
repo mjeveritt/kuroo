@@ -42,7 +42,6 @@ public:
     ~Emerge();
 
 public slots:
-	
 	void				init( QObject *parent = 0 );
 	bool				stop();
 	bool 				pretend( const QStringList& packageList );
@@ -50,11 +49,8 @@ public slots:
 	bool 				unmerge( const QStringList& packageList );
 	bool				sync();
 	bool				checkUpdates();
-	
 	EmergePackageList	packageList();
-	
 	bool 				isRunning();
-	
 	QString				packageMessage();
 	
 private slots:
@@ -96,8 +92,6 @@ private:
 	
 	// Count of etc-updates files to merge
 	int					etcUpdateCount;
-	
-// 	bool				m_error;
 };
 
 #endif

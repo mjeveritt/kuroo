@@ -66,7 +66,7 @@ Kuroo::Kuroo()
 		
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() )
-		systemTray->slotShow();
+		systemTray->activate();
 	
 	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );

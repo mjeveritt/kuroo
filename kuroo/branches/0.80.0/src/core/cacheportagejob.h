@@ -28,8 +28,6 @@
 class DbConnection;
 
 /**
- * Thread to cache package information from the Portage directory to speed up portage refreshing.
- * 
  * @class CachePortageJob
  * @short Thread to cache package information from the Portage directory to speed up portage view refreshing.
  */

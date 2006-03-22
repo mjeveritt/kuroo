@@ -33,7 +33,7 @@
  * @short All Gentoo emerge command.
  */
 Emerge::Emerge( QObject* m_parent )
-	: QObject( m_parent )/*, m_error( false )*/, m_packageMessage( QString::null )
+	: QObject( m_parent ), m_packageMessage( QString::null )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
@@ -95,7 +95,6 @@ bool Emerge::queue( const QStringList& packageList )
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
-// 	m_error = false;
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -135,7 +134,6 @@ bool Emerge::pretend( const QStringList& packageList )
 	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
-// 	m_error = false;
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -173,7 +171,6 @@ bool Emerge::unmerge( const QStringList& packageList )
 	etcUpdateCount = 0;
 	QString sPack = packageList.join(" ");
 	emergePackageList.clear();
-// 	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--unmerge" << "--nocolor" << "--nospinner";
@@ -207,7 +204,6 @@ bool Emerge::sync()
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
-// 	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
@@ -237,7 +233,6 @@ bool Emerge::checkUpdates()
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
 	emergePackageList.clear();
-// 	m_error = false;
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner";
@@ -334,7 +329,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
 				logDone++;
-// 				m_error = true;
 			}
 			else
 				if ( lineLower.contains( "etc-update" ) ) {
@@ -348,7 +342,9 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 						logDone++;
 					}
 					else
-						if ( logDone == 0 && lineLower.contains(QRegExp("(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|(^ \\* important)|(^>>> unmerging in)")) ) {
+						if ( logDone == 0 && lineLower.contains( QRegExp( 
+							"(^>>> (merging|unmerge|unmerging|clean|unpacking source|"
+							"extracting|completed|regenerating))|(^ \\* important)|(^>>> unmerging in)")) ) {
 							LogSingleton::Instance()->writeLog( line, EMERGE );
 							logDone++;
 						}
@@ -545,23 +541,24 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	if ( packageKeyword.contains( "missing keyword" ) ) {
 		importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
 		importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
-									"Ask the architecture porting team to test the package or test it for them and report your findings on Gentoo bugzilla website.");
-		KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
-									i18n( "Missing Keyword" ) , NULL );
+		                         "Ask the architecture porting team to test the package or test it for them and report your "
+		                         "findings on Gentoo bugzilla website.");
+		KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n( "Missing Keyword" ) , NULL );
 	}
 	else {
 		if ( keyword.contains( "-*" ) ) {
 			importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
 			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
-										"If you believe the package does work file a bug at Gentoo bugzilla website.");
-			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", 
-										i18n( "-* Keyword" ) , NULL );
+			                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
+			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n( "-* Keyword" ) , NULL );
 		}
 		else {
 			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")), KGuiItem::KGuiItem(i18n("Cancel"))) ) {
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
+				                                     .arg( package ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")),
+				                                     KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes :
 						KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
 						PortageFilesSingleton::Instance()->savePackageUserUnMask();
@@ -573,7 +570,8 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			else {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
+				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
+				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes :
 						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
 						PortageFilesSingleton::Instance()->savePackageKeywords();
@@ -608,7 +606,7 @@ bool Emerge::countEtcUpdates( const QString& line )
 		QRegExp rx("^\\d+\\)");
 		int pos = rx.search(tmp);
 		if ( pos > -1 )
-			etcUpdateCount += (rx.cap(1)).toInt();
+			etcUpdateCount += ( rx.cap(1) ).toInt();
 		
 		return true;
 	}

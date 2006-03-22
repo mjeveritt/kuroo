@@ -459,11 +459,12 @@ void ConfigDialog::saveAll()
 {
 	switch( activePageIndex() ) {
 		
+		// Activate the systray directly (not needing restarting kuroo)
 		case 0:
 			if ( KurooConfig::isSystrayEnabled() )
-				SystemTray::instance()->slotShow();
+				SystemTray::instance()->activate();
 			else
-				SystemTray::instance()->slotHide();
+				SystemTray::instance()->inactivate();
 			break;
 		
 		case 1:

@@ -557,7 +557,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			
 			// Add new value into cache.
 			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) "
-			                                              "VALUES ('%1', '%2');").arg( name + "-" + version ).arg( word ), m_db);
+			                                              "VALUES ('%1', '%2');").arg( name + "-" + version ).arg( word ), m_db );
 		}
 		else {
 			kdDebug() << i18n("Scanning installed packages. Error reading: ") << path << endl;

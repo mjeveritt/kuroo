@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 08:33+0100\n"
-"PO-Revision-Date: 2006-03-14 19:46+0100\n"
+"POT-Creation-Date: 2006-03-23 18:46+0100\n"
+"PO-Revision-Date: 2006-03-23 20:02+0100\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Legg til resulterende pakkeliste: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
 
-#: queue/queue.cpp:178 queue/queue.cpp:193
+#: queue/queue.cpp:180 queue/queue.cpp:195
 msgid "Package id is empty, skipping!"
 msgstr "Pakke-id er tom; hopper over."
 
@@ -128,46 +128,46 @@ msgstr "Vil du installere følgende pakker?"
 msgid "Do you want to abort the running installation?"
 msgstr "Avbryte installasjonen som pågår?"
 
-#: queue/queuetab.cpp:374 core/emerge.cpp:449 core/emerge.cpp:526
-#: core/cacheportagejob.cpp:174 core/etcupdate.cpp:124
-#: core/scanportagejob.cpp:361 core/scanportagejob.cpp:441
-#: core/scanupdatesjob.cpp:157 core/portagefiles.cpp:143
-#: core/portagefiles.cpp:238 core/portagefiles.cpp:331
-#: core/portagefiles.cpp:426 history/history.cpp:301 history/history.cpp:302
-#: statusbar.cpp:94
+#: queue/queuetab.cpp:374 core/emerge.cpp:443 core/emerge.cpp:520
+#: core/cacheportagejob.cpp:177 core/etcupdate.cpp:124
+#: core/scanportagejob.cpp:370 core/scanportagejob.cpp:451
+#: core/scanupdatesjob.cpp:159 core/portagefiles.cpp:145
+#: core/portagefiles.cpp:243 core/portagefiles.cpp:339
+#: core/portagefiles.cpp:439 history/history.cpp:259 history/history.cpp:260
+#: statusbar.cpp:93
 msgid "Done."
 msgstr "Ferdig"
 
-#: queue/queuetab.cpp:462 core/versionview.cpp:111 portage/portagetab.cpp:414
+#: queue/queuetab.cpp:462 core/versionview.cpp:111 portage/portagetab.cpp:416
 msgid "Hardmasked"
 msgstr "Hardmaskert"
 
-#: queue/queuetab.cpp:465 core/versionview.cpp:108 portage/portagetab.cpp:419
+#: queue/queuetab.cpp:465 core/versionview.cpp:108 portage/portagetab.cpp:421
 msgid "Testing"
 msgstr "Testing"
 
-#: queue/queuetab.cpp:468 portage/portagetab.cpp:424
+#: queue/queuetab.cpp:468 portage/portagetab.cpp:426
 msgid "Stable"
 msgstr "Stabil"
 
-#: queue/queuetab.cpp:471 portage/portagetab.cpp:427
+#: queue/queuetab.cpp:471 portage/portagetab.cpp:429
 msgid "Not on %1"
 msgstr "Ikke på %1"
 
-#: queue/queuetab.cpp:473 portage/portagetab.cpp:429
+#: queue/queuetab.cpp:473 portage/portagetab.cpp:431
 msgid "Not available"
 msgstr "Ikke tilgjengelig"
 
-#: queue/queuetab.cpp:517 portage/portagetab.cpp:546 rc.cpp:25 rc.cpp:300
+#: queue/queuetab.cpp:517 portage/portagetab.cpp:549 rc.cpp:25 rc.cpp:300
 #, no-c-format
 msgid "Details..."
 msgstr "Detaljer . . ."
 
-#: queue/queuetab.cpp:521 portage/portagetab.cpp:550
+#: queue/queuetab.cpp:521 portage/portagetab.cpp:553
 msgid "Add to world"
 msgstr "Legg til i verden"
 
-#: queue/queuetab.cpp:523 portage/portagetab.cpp:552
+#: queue/queuetab.cpp:523 portage/portagetab.cpp:555
 msgid "Remove from world"
 msgstr "Fjern fra verden"
 
@@ -175,7 +175,7 @@ msgstr "Fjern fra verden"
 msgid "Emerge process killed!"
 msgstr "Installasjonsprosessen ble drept."
 
-#: core/emerge.cpp:114 core/emerge.cpp:149
+#: core/emerge.cpp:112 core/emerge.cpp:146
 msgid ""
 "\n"
 "Error: Emerge didn't start. "
@@ -183,7 +183,7 @@ msgstr ""
 "\n"
 "Feil: installasjonen staret ikke. "
 
-#: core/emerge.cpp:119
+#: core/emerge.cpp:117
 msgid ""
 "\n"
 "Emerge %1 started..."
@@ -191,11 +191,11 @@ msgstr ""
 "\n"
 "Installasjon av %1 har startet . . ."
 
-#: core/emerge.cpp:120
+#: core/emerge.cpp:118
 msgid "Installing packages in queue..."
 msgstr "Installerer pakkene i køen . . ."
 
-#: core/emerge.cpp:156
+#: core/emerge.cpp:153
 msgid ""
 "\n"
 "Emerge pretend %1 started..."
@@ -203,11 +203,11 @@ msgstr ""
 "\n"
 "Kartlegging av %1 har startet . . ."
 
-#: core/emerge.cpp:157
+#: core/emerge.cpp:154
 msgid "Checking installation queue..."
 msgstr "Kontrollerer installasjonskø . . ."
 
-#: core/emerge.cpp:186 core/emerge.cpp:216 core/emerge.cpp:252
+#: core/emerge.cpp:181 core/emerge.cpp:210 core/emerge.cpp:245
 msgid ""
 "\n"
 "Error: Emerge didn't start."
@@ -215,7 +215,7 @@ msgstr ""
 "\n"
 "Feil: installasjonen startet ikke."
 
-#: core/emerge.cpp:193
+#: core/emerge.cpp:188
 msgid ""
 "\n"
 "Unmerge %1 started..."
@@ -223,11 +223,11 @@ msgstr ""
 "\n"
 "Avinstallering av %1 startet . . ."
 
-#: core/emerge.cpp:194
+#: core/emerge.cpp:189
 msgid "Uninstalling packages..."
 msgstr "Avinstaller pakker . . ."
 
-#: core/emerge.cpp:223
+#: core/emerge.cpp:217
 msgid ""
 "\n"
 "Emerge synchronize Portage Tree started..."
@@ -235,11 +235,11 @@ msgstr ""
 "\n"
 "Synkronisering av Portage-treet startet . . ."
 
-#: core/emerge.cpp:224
+#: core/emerge.cpp:218
 msgid "Synchronizing portage tree..."
 msgstr "Synkroniserer Portage-treet . . ."
 
-#: core/emerge.cpp:259
+#: core/emerge.cpp:252
 msgid ""
 "\n"
 "Emerge check package updates started..."
@@ -247,47 +247,47 @@ msgstr ""
 "\n"
 "Ser etter nye versjoner av installerte pakker . . ."
 
-#: core/emerge.cpp:260
+#: core/emerge.cpp:253
 msgid "Checking for package updates..."
 msgstr "Ser etter oppdateringer . . ."
 
-#: core/emerge.cpp:315
+#: core/emerge.cpp:308
 msgid "Collecting emerge output. Can not parse: "
 msgstr "Samler utdata fra installasjon: klarte ikke lese: "
 
-#: core/emerge.cpp:364
+#: core/emerge.cpp:358
 msgid "Root access required!"
 msgstr "Superbrukerprivilegier er nødvendig."
 
-#: core/emerge.cpp:370
+#: core/emerge.cpp:364
 msgid "There is no ebuilds to satisfy %1"
 msgstr "Ingen pakker tilfredstiller «%1»"
 
-#: core/emerge.cpp:460
+#: core/emerge.cpp:454
 msgid "You must run Kuroo as root to unmask packages!"
 msgstr "Kuroo må kjøres med superbrukerrettigheter for å avmaskere pakker."
 
-#: core/emerge.cpp:460
+#: core/emerge.cpp:454
 msgid "Auto-unmasking packages"
 msgstr "Auto-avmaskerer pakker"
 
-#: core/emerge.cpp:464
+#: core/emerge.cpp:458
 msgid "Emerge messages"
 msgstr "Installasjonsmeldinger"
 
-#: core/emerge.cpp:464 core/emerge.cpp:533
+#: core/emerge.cpp:458 core/emerge.cpp:527
 msgid "Please check log for more information!"
 msgstr "Se i loggen for mer informasjon."
 
-#: core/emerge.cpp:533
+#: core/emerge.cpp:527
 msgid "Important"
 msgstr "Viktig"
 
-#: core/emerge.cpp:546 core/emerge.cpp:554
+#: core/emerge.cpp:540 core/emerge.cpp:548
 msgid "%1 is not available on your architecture %2!<br><br>"
 msgstr "%1 er ikke tilgjengelig for din arkitektur, «%2».<br><br>"
 
-#: core/emerge.cpp:547
+#: core/emerge.cpp:541
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet.<br>Ask the architecture porting team to test the "
@@ -299,11 +299,11 @@ msgstr ""
 "pakken eller test den for dem og send inn resultatene på Gentoos "
 "feilsøkingsside."
 
-#: core/emerge.cpp:550
+#: core/emerge.cpp:544
 msgid "Missing Keyword"
 msgstr "Manglende nøkkelord"
 
-#: core/emerge.cpp:555
+#: core/emerge.cpp:549
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
@@ -312,60 +312,57 @@ msgstr ""
 "<br><b>-*-nøkkelord</b> betyr at programmet ikke virker på din arkitektur."
 "<br>Skriv en feilrapport på Gentoos feilsøkingsside hvis du tror det virker."
 
-#: core/emerge.cpp:558
+#: core/emerge.cpp:551
 msgid "-* Keyword"
 msgstr "-*-nøkkelord"
 
-#: core/emerge.cpp:562
+#: core/emerge.cpp:555
 msgid "Please add package to \"package.unmask\"."
 msgstr "Legg pakken til i «package.unmask»."
 
-#: core/emerge.cpp:564
-msgid ""
-"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+#: core/emerge.cpp:557
+msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Klarte ikke installere maskert pakke?<br>Vil du avmaskere <b>«%1»</b>?</"
 "qt>"
 
-#: core/emerge.cpp:564 core/emerge.cpp:576
+#: core/emerge.cpp:558 core/emerge.cpp:572
 msgid "Unmask"
 msgstr "Avmasker"
 
-#: core/emerge.cpp:574
+#: core/emerge.cpp:569
 msgid "Please add package to \"package.keywords\"."
 msgstr "Legg pakken til i «package.keywords»."
 
-#: core/emerge.cpp:576
-msgid ""
-"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
-"<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
+#: core/emerge.cpp:571
+msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr "<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>«%1»</b>?</qt>"
 
-#: core/cacheportagejob.cpp:60
+#: core/cacheportagejob.cpp:63
 msgid "Creating cache. Can not connect to database"
 msgstr "Oppretter hurtigminne: klarte ikke koble til databasen"
 
-#: core/cacheportagejob.cpp:77
+#: core/cacheportagejob.cpp:80
 msgid "Collecting package information..."
 msgstr "Samler pakkeinformasjon . . ."
 
-#: core/cacheportagejob.cpp:88 core/cacheportagejob.cpp:157
+#: core/cacheportagejob.cpp:91 core/cacheportagejob.cpp:160
 msgid "Creating cache. Can not access "
 msgstr "Oppretter hurtigminne: fikk ikke tilgang til "
 
-#: core/cacheportagejob.cpp:102 core/cacheportagejob.cpp:121
+#: core/cacheportagejob.cpp:105 core/cacheportagejob.cpp:124
 msgid "Creating cache. Caching aborted."
 msgstr "Oppretter hurtigminne: avbrutt."
 
-#: core/cacheportagejob.cpp:104 core/cacheportagejob.cpp:123
+#: core/cacheportagejob.cpp:107 core/cacheportagejob.cpp:126
 msgid "Caching aborted."
 msgstr "Lagring i hurtigminne ble avbrutt."
 
-#: core/cacheportagejob.cpp:142
+#: core/cacheportagejob.cpp:145
 msgid "Creating cache. Error reading: "
 msgstr "Oppretter hurtigminne: klarte ikke lese: "
 
-#: core/cacheportagejob.cpp:147
+#: core/cacheportagejob.cpp:150
 msgid "Creating cache. Can not parse: "
 msgstr "Oppretter hurtigminne: fikk ikke tilgang til: "
 
@@ -377,7 +374,7 @@ msgstr ""
 "<qt>VIKTIG: %1 oppsettsfiler i «/etc» må oppdateres.<br>Slå sammen endringer?"
 "</qt>"
 
-#: core/etcupdate.cpp:58 core/etcupdate.cpp:72 core/etcupdate.cpp:178
+#: core/etcupdate.cpp:58 core/etcupdate.cpp:72 core/etcupdate.cpp:180
 #: main.cpp:43 rc.cpp:203
 #, no-c-format
 msgid "Kuroo"
@@ -411,7 +408,7 @@ msgstr "Ser etter oppdateringer for oppsettsfiler . . ."
 msgid "There are no files that need to be updated through etc-update."
 msgstr "Det er ingen oppsettsfiler som må oppdateres."
 
-#: core/etcupdate.cpp:131 kurooview.cpp:82
+#: core/etcupdate.cpp:131 kurooview.cpp:84
 msgid "Etc-update"
 msgstr ""
 "Oppsetts-\n"
@@ -421,161 +418,160 @@ msgstr ""
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr "<font color=red>Advarsel!<br>Du har redigert «%1».</font><br>"
 
-#: core/etcupdate.cpp:164
+#: core/etcupdate.cpp:165
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
 msgstr "<qt>%1Slå sammen endringer i «%2»?</qt>"
 
-#: core/etcupdate.cpp:164
+#: core/etcupdate.cpp:166
 msgid "etc-update (%1 of %2)"
 msgstr "Oppsettsoppdaterer («etc-update») (%1 av %2)"
 
-#: core/etcupdate.cpp:177
+#: core/etcupdate.cpp:179
 msgid "%1 didn't start."
 msgstr "«%1» startet ikke."
 
-#: core/etcupdate.cpp:178
+#: core/etcupdate.cpp:180
 msgid "%1 could not start!"
 msgstr "«%1» klarte ikke starte."
 
-#: core/etcupdate.cpp:182
+#: core/etcupdate.cpp:184
 msgid "Merging changes in '%1'."
 msgstr "Slår sammen endringer i «%1»."
 
-#: core/etcupdate.cpp:191
+#: core/etcupdate.cpp:193
 msgid "Skipping '%1'. etc-update will ask again next time."
 msgstr ""
 "Hopper over «%1»; oppsettsoppdatereren («etc-update») spør på nytt igjen "
 "neste gang."
 
-#: core/etcupdate.cpp:198
+#: core/etcupdate.cpp:200
 msgid "etc-update completed."
 msgstr "Oppsettsoppdatereren («etc-update») fullførte."
 
-#: core/etcupdate.cpp:211
+#: core/etcupdate.cpp:213
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr "Sletter «%1«, sikkerhetskopi lagret i «%2»."
 
-#: core/categorieslistview.cpp:147 core/categorieslistview.cpp:148
+#: core/categorieslistview.cpp:148 core/categorieslistview.cpp:149
 msgid "Category"
 msgstr "Kategori"
 
-#: core/categorieslistview.cpp:177 core/categorieslistview.cpp:231
-#: core/categorieslistview.cpp:281 core/categorieslistview.cpp:293
+#: core/categorieslistview.cpp:178 core/categorieslistview.cpp:230
+#: core/categorieslistview.cpp:280 core/categorieslistview.cpp:292
 msgid "All"
 msgstr "Alle"
 
-#: core/categorieslistview.cpp:209 core/categorieslistview.cpp:210
+#: core/categorieslistview.cpp:208 core/categorieslistview.cpp:209
 msgid "Subcategory"
 msgstr "Underkategori"
 
-#: core/scanportagejob.cpp:93
+#: core/scanportagejob.cpp:96
 msgid "Scanning Portage. Can not connect to database"
 msgstr "Undersøker Portage: klarte ikke koble til databsen"
 
-#: core/scanportagejob.cpp:105
+#: core/scanportagejob.cpp:108
 msgid "Refreshing Portage packages view..."
 msgstr "Oppdaterer Portage-visningen . . ."
 
-#: core/scanportagejob.cpp:170 core/scanportagejob.cpp:275
+#: core/scanportagejob.cpp:176 core/scanportagejob.cpp:281
 msgid "Scanning Portage. Can not access "
 msgstr "Undersøker Portage: fikk ikke tilgang til "
 
-#: core/scanportagejob.cpp:186 core/scanportagejob.cpp:222
+#: core/scanportagejob.cpp:192 core/scanportagejob.cpp:228
 msgid "Scanning Portage. Portage scan aborted"
 msgstr "Undersøker Portage: avbrutt"
 
-#: core/scanportagejob.cpp:265
+#: core/scanportagejob.cpp:271
 msgid "Scanning Portage. Scanning Portage cache: can not match package %1."
 msgstr ""
 "Undersøker Portage: leser Portages hurtigminne: klarte ikke treffe pakken «%"
 "1»."
 
-#: core/scanportagejob.cpp:377 core/scanportagejob.cpp:436
+#: core/scanportagejob.cpp:388 core/scanportagejob.cpp:447
 msgid "Scanning installed packages. Can not access "
 msgstr "Søker i installerte pakker: fikk ikke tilgang til "
 
-#: core/scanportagejob.cpp:381
+#: core/scanportagejob.cpp:392
 msgid "Collecting installed packages..."
 msgstr "Samler installerte pakker . . ."
 
-#: core/scanportagejob.cpp:430
+#: core/scanportagejob.cpp:441
 msgid "Scanning installed packages. Can not match %1."
 msgstr "Søker i installerte pakker: klarte ikke treffe «%1»."
 
-#: core/scanportagejob.cpp:456
+#: core/scanportagejob.cpp:466
 msgid "Scanning Portage cache. Error reading: "
 msgstr "Leser Portage-hurtigminne: klarte ikke lese: "
 
-#: core/scanportagejob.cpp:563
+#: core/scanportagejob.cpp:573
 msgid "Scanning installed packages. Error reading: "
 msgstr "Søker i installerte pakker: klarte ikke lese: "
 
-#: core/scanhistoryjob.cpp:68
+#: core/scanhistoryjob.cpp:70
 msgid "Parsing emerge.log. Can not connect to database"
 msgstr "Leser «emerge.log»: klarte ikke koble til databasen"
 
-#: core/scanhistoryjob.cpp:86
+#: core/scanhistoryjob.cpp:88
 msgid "Parsing emerge.log. History scan aborted"
 msgstr "Leser «emerge.log»: avbrutt"
 
-#: core/scanhistoryjob.cpp:105 core/scanhistoryjob.cpp:149
+#: core/scanhistoryjob.cpp:107 core/scanhistoryjob.cpp:151
 msgid "Parsing emerge.log. No package found!"
 msgstr "Leser «emerge.log»: fant ingen pakke."
 
-#: core/scanhistoryjob.cpp:143
+#: core/scanhistoryjob.cpp:145
 msgid "Parsing emerge.log. Can not parse: "
 msgstr "Leser «emerge.log»: klarte ikke lese: "
 
-#: core/scanupdatesjob.cpp:70
+#: core/scanupdatesjob.cpp:72
 msgid "Scanning updates. Can not connect to database"
 msgstr "Ser etter oppdateringer: klarte ikke koble til databsen"
 
-#: core/scanupdatesjob.cpp:76
+#: core/scanupdatesjob.cpp:78
 msgid "Scanning updates. No update package found"
 msgstr "Ser etter oppdateringer: ingen oppdateringspakke funnet"
 
-#: core/scanupdatesjob.cpp:81
+#: core/scanupdatesjob.cpp:83
 msgid "Refreshing updates view..."
 msgstr "Oppdaterer oppdateringsoversikten . . ."
 
-#: core/scanupdatesjob.cpp:111
+#: core/scanupdatesjob.cpp:113
 msgid "Scanning updates. Scan aborted!"
 msgstr "Ser etter oppdateringer: avbrutt"
 
-#: core/scanupdatesjob.cpp:126
+#: core/scanupdatesjob.cpp:128
 msgid "Scanning updates. Can not find id in database for package %1/%2."
-msgstr ""
-"Ser etter oppdateringer: klarte ikke finne id i databasen for pakken «%1/%2»."
+msgstr "Ser etter oppdateringer: klarte ikke finne id i databasen for pakken «%1/%2»."
 
-#: core/portagedb.cpp:362 core/portagedb.cpp:379
+#: core/portagedb.cpp:357 core/portagedb.cpp:374
 msgid "Creating backup of history. Error writing: %1."
 msgstr "Sikkerhetskopierer loggen: klarte ikke skrive: %1."
 
-#: core/portagedb.cpp:398 core/portagedb.cpp:421
+#: core/portagedb.cpp:391 core/portagedb.cpp:414
 msgid "Restoring backup of history. Error reading: %1."
 msgstr "Gjenoppretter sikkerhetskopien av loggen: klarte ikke lese: %1."
 
-#: core/portagedb.cpp:733
+#: core/portagedb.cpp:724
 msgid "Can not find package in database for id %1."
 msgstr "Klarte ikke finne pakke i databasen for id %1."
 
-#: core/portagedb.cpp:753
+#: core/portagedb.cpp:744
 msgid "Can not find category in database for id %1."
 msgstr "Klarte ikke finne kategori i databasen for id %1."
 
-#: core/portagedb.cpp:780
+#: core/portagedb.cpp:771
 msgid "Can not find id in database for package %1/%2."
 msgstr "Klarte ikke finne id i databsen for pakken «%1/%2»."
 
-#: core/portagedb.cpp:785
+#: core/portagedb.cpp:776
 msgid "Querying for package id. Can not parse: "
 msgstr "Spør etter pakke-ID: klarte ikke lese: "
 
-#: core/portagedb.cpp:1177
+#: core/portagedb.cpp:1160
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr "Databaseversjoner er inkompatible; bygger den på nytt.\n"
 
-#: core/portagedb.cpp:1181
+#: core/portagedb.cpp:1164
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr "Databasefilen er korrupt; bygger databasen på nytt.\n"
 
@@ -597,128 +593,122 @@ msgstr ""
 msgid "Parsing package.keywords. Can not match package %1 in %2."
 msgstr "Leser «package.keywords»: klarte ikke treffe pakken «%1» i «%2»."
 
-#: core/portagefiles.cpp:168
+#: core/portagefiles.cpp:170
 msgid "Parsing package.unmask. Error reading: %1."
 msgstr "Leser «package.unmask»: klarte ikke lese: %1."
 
-#: core/portagefiles.cpp:181
+#: core/portagefiles.cpp:183
 msgid "Collecting user unmasked packages..."
 msgstr "Samler bruker-avmaskerte pakker . . ."
 
-#: core/portagefiles.cpp:215
-msgid ""
-"Load user package unmask: Can not find id in database for package %1/%2."
+#: core/portagefiles.cpp:217
+msgid "Load user package unmask: Can not find id in database for package %1/%2."
 msgstr ""
 "Lasting av bruker-avmaskerte pakker: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
 
-#: core/portagefiles.cpp:223
+#: core/portagefiles.cpp:226
 msgid "Parsing package.unmask. Can not match package %1 in %2."
 msgstr "Leser «package.unmask»: klarte ikke treffe pakken «%1» i «%2»."
 
-#: core/portagefiles.cpp:263
+#: core/portagefiles.cpp:268
 msgid "Parsing package.mask. Error reading: %1."
 msgstr "Leser «package.mask»: klarte ikke lese: %1."
 
-#: core/portagefiles.cpp:276
+#: core/portagefiles.cpp:281
 msgid "Collecting hardmasked packages..."
 msgstr "Samler hardmaskerte pakker . . ."
 
-#: core/portagefiles.cpp:310
+#: core/portagefiles.cpp:315
 msgid "Parsing package.mask. Can not find id in database for package %1/%2."
-msgstr ""
-"Leser «package.mask»: klarte ikke finne id i databsen for pakken «%1/%2»."
+msgstr "Leser «package.mask»: klarte ikke finne id i databsen for pakken «%1/%2»."
 
-#: core/portagefiles.cpp:316
+#: core/portagefiles.cpp:322
 msgid "Parsing package.mask. Can not match package %1 in %2."
 msgstr "Leser «package.mask»: klarte ikke treffe pakken «%1» i «%2»."
 
-#: core/portagefiles.cpp:356
+#: core/portagefiles.cpp:364
 msgid "Parsing user package.mask. Error reading: %1."
 msgstr "Leser brukerdefinert «package.mask»: klarte ikke lese: %1."
 
-#: core/portagefiles.cpp:369
+#: core/portagefiles.cpp:377
 msgid "Collecting user masked packages..."
 msgstr "Samler bruker-maskerte pakker . . ."
 
-#: core/portagefiles.cpp:403
-msgid ""
-"Parsing user package.mask. Can not find id in database for package %1/%2."
+#: core/portagefiles.cpp:411
+msgid "Parsing user package.mask. Can not find id in database for package %1/%2."
 msgstr ""
 "Leser brukerdefinert «package.mask»: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
 
-#: core/portagefiles.cpp:411
+#: core/portagefiles.cpp:422
 msgid "Parsing user package.mask. Can not match package %1 in %2."
-msgstr ""
-"Leser brukerdefinert «package.mask»: klarte ikek treffe pakken «%1» i «%2»."
+msgstr "Leser brukerdefinert «package.mask»: klarte ikek treffe pakken «%1» i «%2»."
 
-#: core/portagefiles.cpp:450
+#: core/portagefiles.cpp:463
 msgid "Parsing user package.use. Error reading: %1."
 msgstr "Leser brukerdefinert «package.use»: klarte ikke lese: %1."
 
-#: core/portagefiles.cpp:483
-msgid ""
-"Parsing user package.use. Can not find id in database for package %1/%2."
+#: core/portagefiles.cpp:496
+msgid "Parsing user package.use. Can not find id in database for package %1/%2."
 msgstr ""
 "Leser brukerdefinert «package.use»: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
 
-#: core/portagefiles.cpp:524
+#: core/portagefiles.cpp:540
 msgid "No package keywords found. Saving to %1 aborted!"
 msgstr "Fant ingen pakkenøkkelord. Lagring til «%1» ble avbrutt."
 
-#: core/portagefiles.cpp:532 core/portagefiles.cpp:575
-#: core/portagefiles.cpp:613 core/portagefiles.cpp:655
+#: core/portagefiles.cpp:548 core/portagefiles.cpp:591
+#: core/portagefiles.cpp:629 core/portagefiles.cpp:671
 msgid "Error writing: %1."
 msgstr "Klarte ikke skrive til «%1»."
 
-#: core/portagefiles.cpp:567
+#: core/portagefiles.cpp:583
 msgid "No user mask depend atom found. Saving to %1 aborted!"
-msgstr ""
-"Fant ikke noe bruker-maskert avhengighetsatom. Lagring til «%1» avbrutt."
+msgstr "Fant ikke noe bruker-maskert avhengighetsatom. Lagring til «%1» avbrutt."
 
-#: core/portagefiles.cpp:605
+#: core/portagefiles.cpp:621
 msgid "No user unmask depend atom found. Saving to %1 aborted!"
 msgstr "Fant ikke bruker-avmaskert avhengighetsatom. Lagring til «%1» avbrutt."
 
-#: core/portagefiles.cpp:647
+#: core/portagefiles.cpp:663
 msgid "No package use found. Saving to %1 aborted!"
 msgstr "Fant ikke pakke-brukflagg. Lagring til «%1» avbrutt."
 
-#: core/portagefiles.cpp:702
+#: core/portagefiles.cpp:718
 msgid "Completed scanning for package keywords in %1."
 msgstr "Fullførte søk etter pakke-nøkkelord i «%1»."
 
-#: core/portagefiles.cpp:706
+#: core/portagefiles.cpp:722
 msgid "Completed scanning for unmasked packages in %1."
 msgstr "Fullførte søk etter avmaskerte pakker i «%1»."
 
-#: core/portagefiles.cpp:710
+#: core/portagefiles.cpp:726
 msgid "Completed scanning for hardmasked packages in %1."
 msgstr "Fullførte søk etter hardmaskerte pakker i «%1»."
 
-#: core/portagefiles.cpp:714
+#: core/portagefiles.cpp:730
 msgid "Completed scanning for user masked packages in %1."
 msgstr "Fullførte søk etter brukermaskerte pakker i «%1»."
 
-#: core/portagefiles.cpp:718
+#: core/portagefiles.cpp:734
 msgid "Completed saving package keywords in %1."
 msgstr "Ferdig med å lagre pakkenøkkelord i «%1»."
 
-#: core/portagefiles.cpp:723
+#: core/portagefiles.cpp:739
 msgid "Completed saving user masked packages in %1."
 msgstr "Fullførte lagring av brukermaskerte pakker i «%1»."
 
-#: core/portagefiles.cpp:728
+#: core/portagefiles.cpp:744
 msgid "Completed saving user unmasked packages in %1."
 msgstr "Fullførte lagring av brukeravmaskerte pakker i «%1»."
 
-#: core/portagefiles.cpp:732
+#: core/portagefiles.cpp:748
 msgid "Completed scanning user package use flags in %1."
 msgstr "Fullførte søk etter brukerdefinerte pakke-brukflagg i «%1»."
 
-#: core/portagefiles.cpp:736
+#: core/portagefiles.cpp:752
 msgid "Completed saving user package use in %1."
 msgstr "Fullførte lagring av brukerdefinerte bruk-flagg for pakker i «%1»."
 
@@ -754,7 +744,7 @@ msgstr "<qt>Innstillingene er endret.<br>Vil du lagre dem?</qt>"
 msgid "Saving settings"
 msgstr "Lagrer innstillinger"
 
-#: core/packageinspector.cpp:201 core/packageinspector.cpp:768
+#: core/packageinspector.cpp:202 core/packageinspector.cpp:769
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -762,57 +752,56 @@ msgstr ""
 "\n"
 "Feil: klarte ikke beregne bruk-flagg for pakken «%1/%2»."
 
-#: core/packageinspector.cpp:261
+#: core/packageinspector.cpp:262
 msgid "Click for hardmask info!"
 msgstr "Trykk for informasjon om hardmaskering."
 
-#: core/packageinspector.cpp:279
+#: core/packageinspector.cpp:280
 msgid "%1/%2 hardmask info!"
 msgstr "Hardmaskeringsinformasjon om «%1/%2»"
 
-#: core/packageinspector.cpp:369
+#: core/packageinspector.cpp:370
 msgid "Marking user masked version. Can not parse: "
 msgstr "Markerer brukermaskert versjon: klarte ikke lese: "
 
-#: core/packageinspector.cpp:572
+#: core/packageinspector.cpp:573
 msgid "Loading use flag description. Error reading: "
 msgstr "Laster beskrivelse av bruk-flagg: klarte ikke lese: "
 
-#: core/packageinspector.cpp:651
+#: core/packageinspector.cpp:652
 msgid "Loading changelog. Error reading: "
 msgstr "Laster endringslogg: klarte ikke lese: "
 
-#: core/packageinspector.cpp:653
+#: core/packageinspector.cpp:654
 msgid "<font color=darkGrey><b>No ChangeLog found.</b></font>"
 msgstr "<font color=darkGrey><b>Fant ikke endringslogg.</b></font>"
 
-#: core/packageinspector.cpp:677
+#: core/packageinspector.cpp:678
 msgid "Loading ebuild. Error reading: "
 msgstr "Laster pakke: klarte ikke lese: "
 
-#: core/packageinspector.cpp:679
+#: core/packageinspector.cpp:680
 msgid "<font color=darkGrey><b>No ebuild found.</b></font>"
 msgstr "<font color=darkGrey><b>Fant ikke pakkefilen.</b></font>"
 
-#: core/packageinspector.cpp:712
+#: core/packageinspector.cpp:713
 msgid "Load dependencies. Error reading: "
 msgstr "Laster avhengigheter: klarte ikke lese: "
 
-#: core/packageinspector.cpp:714
+#: core/packageinspector.cpp:715
 msgid "<font color=darkGrey><b>No dependencies found.</b></font>"
 msgstr "<font color=darkGrey><b>Fant ikke avhengigheter.</b></font>"
 
-#: core/packageinspector.cpp:740
+#: core/packageinspector.cpp:741
 msgid "Loading installed files list. Error reading: "
 msgstr "Laster liste over installerte filer: klarte ikke lese: "
 
-#: core/packageinspector.cpp:742
+#: core/packageinspector.cpp:743
 msgid "<font color=darkGrey><b>No installed files found.</b></font>"
 msgstr "<font color=darkGrey><b>Fant ingen installerte filer.</b></font>"
 
-#: core/packageinspector.cpp:811 core/packageinspector.cpp:871
-msgid ""
-"Use flags could not be calculated. Please check log for more information"
+#: core/packageinspector.cpp:813 core/packageinspector.cpp:875
+msgid "Use flags could not be calculated. Please check log for more information"
 msgstr "Klarte ikke regne ut bruk-flagg. Se i loggen for mer informasjon"
 
 #: core/versionview.cpp:89
@@ -835,72 +824,72 @@ msgstr "Portage-versjon"
 msgid "Error reading /var/log/emerge.log"
 msgstr "Klarte ikke lese «/var/log/emerge.log»"
 
-#: history/history.cpp:219
+#: history/history.cpp:177
 msgid " to "
 msgstr " til "
 
-#: history/history.cpp:220
+#: history/history.cpp:178
 msgid " of "
 msgstr " av "
 
-#: history/history.cpp:235
+#: history/history.cpp:193
 msgid "Compiling/Merging"
 msgstr "Bygger/Installerer"
 
-#: history/history.cpp:236
+#: history/history.cpp:194
 msgid "Post-Build Cleaning"
 msgstr "Rydder opp etter bygging"
 
-#: history/history.cpp:237
+#: history/history.cpp:195
 msgid "Cleaning"
 msgstr "Rydder"
 
-#: history/history.cpp:244
+#: history/history.cpp:202
 msgid "Started emerge on"
 msgstr "Startet installasjon"
 
-#: history/history.cpp:256
+#: history/history.cpp:214
 msgid "Can not parse package emerge start in /var/log/emerge.log: %1"
 msgstr "Klarte ikke lese installasjonsstart i «/var/log/emerge.log»: %1"
 
-#: history/history.cpp:272
+#: history/history.cpp:230
 msgid "Can not parse package emerge complete in /var/log/emerge.log: %1"
 msgstr "Klarte ikke lese installasjonsfullføring i «/var/log/emerge.log»: %1"
 
-#: history/history.cpp:276
+#: history/history.cpp:234
 msgid "completed emerge"
 msgstr "Installasjon fullført"
 
-#: history/history.cpp:283
+#: history/history.cpp:241
 msgid "unmerge success"
 msgstr "Vellykket avinstallering"
 
-#: history/history.cpp:289 history/history.cpp:290
+#: history/history.cpp:247 history/history.cpp:248
 msgid "Synchronizing Portage..."
 msgstr "Synkroniserer Portage . . ."
 
-#: history/history.cpp:295 history/history.cpp:296
+#: history/history.cpp:253 history/history.cpp:254
 msgid "Sync completed."
 msgstr "Synkronisering fullført."
 
-#: history/history.cpp:313 rc.cpp:510
+#: history/history.cpp:271 rc.cpp:510
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr "AUTOCLEAN"
 
-#: history/history.cpp:316
+#: history/history.cpp:274
 msgid "Unmerging"
 msgstr "Avinstallerer"
 
-#: history/history.cpp:317
+#: history/history.cpp:275
 msgid "Finished. Cleaning up"
 msgstr "Ferdig, rydder opp"
 
-#: history/history.cpp:318
+#: history/history.cpp:276
 msgid "exiting successfully"
 msgstr "Avslutter vellykket"
 
-#: history/history.cpp:319
+#: history/history.cpp:277
 msgid "terminating"
 msgstr "Stopper"
 
@@ -908,11 +897,11 @@ msgstr "Stopper"
 msgid "Configuration file"
 msgstr "Oppsettsfil"
 
-#: history/historytab.cpp:138 history/historylistview.cpp:61
+#: history/historytab.cpp:140 history/historylistview.cpp:61
 msgid "Emerge info"
 msgstr "Installasjonsinformasjon"
 
-#: history/historytab.cpp:138
+#: history/historytab.cpp:140
 msgid "Installation message for %1:"
 msgstr "Installasjonsmelding for «%1»:"
 
@@ -925,8 +914,7 @@ msgid "Inserting emerged package: can not match %1."
 msgstr "Setter inn installerte pakker: klarte ikke treffe «%1»."
 
 #: portage/portage.cpp:59
-msgid ""
-"Inserting emerged package: Can not find id in database for package %1/%2."
+msgid "Inserting emerged package: Can not find id in database for package %1/%2."
 msgstr ""
 "Innsetting av installerte pakker: klarte ikke finne id i databasen for "
 "pakken «%1/%2»."
@@ -936,8 +924,7 @@ msgid "Removing unmerged package: can not match %1."
 msgstr "Fjerner avinstallert pakke: klarte ikke treffe «%1»."
 
 #: portage/portage.cpp:111
-msgid ""
-"Removing unmerged package: Can not find id in database for package %1/%2."
+msgid "Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 "Fjerer avinstallert pakke: klarte ikke finne id i databasen for pakken «%1/%"
 "2»."
@@ -952,7 +939,7 @@ msgstr ""
 "Fjerning av oppdatert pakke: klarte ikke finne id i databasen for pakken «%1/"
 "%2»."
 
-#: portage/portage.cpp:382
+#: portage/portage.cpp:332
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
@@ -960,11 +947,11 @@ msgstr ""
 "Undersøker Portage. Vente-telleren har nådd høyeste verdi. Prøver å "
 "undersøke Portage."
 
-#: portage/portage.cpp:441
+#: portage/portage.cpp:391
 msgid "Loading packages in world. Error reading: "
 msgstr "Leser pakker i verden: klarte ikke lese: "
 
-#: portage/portage.cpp:461
+#: portage/portage.cpp:413
 msgid "Adding to world. Error writing: "
 msgstr "Legger til i verden: klarte ikke skrive: "
 
@@ -985,7 +972,7 @@ msgstr "Legg til i køen"
 msgid "Remove from Queue"
 msgstr "Fjern fra køen"
 
-#: portage/portagetab.cpp:273
+#: portage/portagetab.cpp:275
 msgid ""
 "<font color=darkRed size=+1><b>No package found with these filter settings</"
 "font><br><font color=darkRed>Please modify the filter settings you have "
@@ -997,7 +984,7 @@ msgstr ""
 "generelle filterinnstillinger, sånn at Kuroo kan finne passende pakker.</b></"
 "font>"
 
-#: portage/portagetab.cpp:310
+#: portage/portagetab.cpp:312
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
@@ -1005,15 +992,15 @@ msgstr ""
 "<qt>Vil du oppdatere Portage-visningen?<br>Dette vil ta et par minutter . . ."
 "</qt>"
 
-#: portage/portagetab.cpp:311
+#: portage/portagetab.cpp:313
 msgid "Refreshing Packages"
 msgstr "Oppdaterer pakker"
 
-#: portage/portagetab.cpp:475
+#: portage/portagetab.cpp:478
 msgid "<b>Homepage: </b>"
 msgstr "<b>Hjemmeside: </b>"
 
-#: portage/portagetab.cpp:479
+#: portage/portagetab.cpp:482
 msgid ""
 "<tr><td colspan=2><font color=darkRed><b>Package not available in Portage "
 "tree anymore!</b></font></td></tr>"
@@ -1021,7 +1008,7 @@ msgstr ""
 "<tr><td colspan=2><font color=darkRed><b>Pakken er ikke tilgjengelig i "
 "Portage-treet lenger.</b></font></td></tr>"
 
-#: portage/portagetab.cpp:483
+#: portage/portagetab.cpp:486
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%"
 "1</td></tr>"
@@ -1029,7 +1016,7 @@ msgstr ""
 "<tr><td width=10%><b>Intallert&nbsp;versjon:</b></font></td><td width=90%>%"
 "1</td></tr>"
 
-#: portage/portagetab.cpp:485
+#: portage/portagetab.cpp:488
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%"
 ">Not installed</td></tr>"
@@ -1037,13 +1024,11 @@ msgstr ""
 "<tr><td width=10%><b>Installert&nbsp;versjon:</b></font></td><td width=90%"
 ">Ikke installert</td></tr>"
 
-#: portage/portagetab.cpp:498
-msgid ""
-"<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
-msgstr ""
-"<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
+#: portage/portagetab.cpp:501
+msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
+msgstr "<tr><td width=10%><b>Vil&nbsp;installere:</b></td><td width=90%>%1</td></tr>"
 
-#: portage/portagetab.cpp:502
+#: portage/portagetab.cpp:505
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available on %1</b></td></tr>"
@@ -1051,7 +1036,7 @@ msgstr ""
 "<tr><td width=10%><b>Vil&nbsp;installere:</font></td><td width=90%><font "
 "color=darkRed>Ingen versjon tilgjengelig på %1</b></td></tr>"
 
-#: portage/portagetab.cpp:505
+#: portage/portagetab.cpp:508
 msgid ""
 "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
 "color=darkRed>No version available - please check package details</font></"
@@ -1061,7 +1046,7 @@ msgstr ""
 "color=darkRed>Ingen versjon tilgjengelig - se i pakkeinnstillingene</font></"
 "b></td></tr>"
 
-#: portage/portagetab.cpp:511
+#: portage/portagetab.cpp:514
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></"
 "td></tr>"
@@ -1069,7 +1054,7 @@ msgstr ""
 "<tr><td width=10%><b>Tilgjengelige&nbsp;versjoner:</b></td><td width=90%>%1</"
 "b></td></tr>"
 
-#: portage/portagetab.cpp:513
+#: portage/portagetab.cpp:516
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</td><td width=90%><font "
 "color=darkRed>No versions available on %1</font></b></td></tr>"
@@ -1077,15 +1062,15 @@ msgstr ""
 "<tr><td width=10%><b>Tilgjengelige&nbsp;versjoner:</td><td width=90%><font "
 "color=darkRed>Ingen versjon tilgjengelig på %1</font></b></td></tr>"
 
-#: portage/portagetab.cpp:542
+#: portage/portagetab.cpp:545
 msgid "&Add to queue"
 msgstr "&Legg til i kø"
 
-#: portage/portagetab.cpp:544
+#: portage/portagetab.cpp:547
 msgid "&Remove from queue"
 msgstr "Fje&rn fra køen"
 
-#: portage/portagetab.cpp:555
+#: portage/portagetab.cpp:558
 msgid "&Uninstall"
 msgstr "&Avinstaller"
 
@@ -1101,7 +1086,7 @@ msgstr "Klarte ikke skrive til: "
 msgid "Error writing %1kuroo.log."
 msgstr "Klarte ikke skrive til «%1kuroo.log»."
 
-#: logs/log.cpp:60 config/configdialog.cpp:438
+#: logs/log.cpp:60 config/configdialog.cpp:475
 msgid "Saving"
 msgstr "Lagrer"
 
@@ -1129,172 +1114,171 @@ msgstr "Rediger «make.conf»-filen"
 msgid "Edit your etc-update warning file list"
 msgstr "Rediger advarselsfillisten for oppsettsoppdatereren"
 
-#: config/configdialog.cpp:105
-msgid "Error parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «ACCEPT_KEYWORDS»."
-
-#: config/configdialog.cpp:113
-msgid "Error parsing /etc/make.conf: can not parse AUTOCLEAN."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «AUTOCLEAN»."
-
-#: config/configdialog.cpp:121 config/configdialog.cpp:185
-msgid "Error parsing /etc/make.conf: can not parse BUILD_PREFIX."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «BUILD_PREFIX»."
-
-#: config/configdialog.cpp:129
-msgid "Error parsing /etc/make.conf: can not parse CBUILD."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CBUILD»."
-
-#: config/configdialog.cpp:137
-msgid "Error parsing /etc/make.conf: can not parse CCACHE_SIZE."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CCACHE_SIZE»."
-
-#: config/configdialog.cpp:145
-msgid "Error parsing /etc/make.conf: can not parse CFLAGS."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CFLAGS»."
-
-#: config/configdialog.cpp:153
-msgid "Error parsing /etc/make.conf: can not parse CXXFLAGS."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CXXFLAGS»."
-
-#: config/configdialog.cpp:161
-msgid "Error parsing /etc/make.conf: can not parse CHOST."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CHOST»."
-
-#: config/configdialog.cpp:169
-msgid "Error parsing /etc/make.conf: can not parse CLEAN_DELAY."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CLEAN_DELAY»."
-
-#: config/configdialog.cpp:177
-msgid "Error parsing /etc/make.conf: can not parse CONFIG_PROTECT."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CONFIG_PROTECT»."
-
-#: config/configdialog.cpp:193
-msgid "Error parsing /etc/make.conf: can not parse DEBUGBUILD."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «DEBUGBUILD»."
-
-#: config/configdialog.cpp:201
-msgid "Error parsing /etc/make.conf: can not parse DISTDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «DISTDIR»."
-
-#: config/configdialog.cpp:209
-msgid "Error parsing /etc/make.conf: can not parse FEATURES."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «FEATURES»."
-
-#: config/configdialog.cpp:217
-msgid "Error parsing /etc/make.conf: can not parse FETCHCOMMAND."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «FETCHCOMMAND»."
-
-#: config/configdialog.cpp:225
-msgid "Error parsing /etc/make.conf: can not parse GENTOO_MIRRORS."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «GENTOO_MIRRORS»."
-
-#: config/configdialog.cpp:233
-msgid "Error parsing /etc/make.conf: can not parse FTP_PROXY FTP_PROXY."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «FTP_PROXY»."
-
-#: config/configdialog.cpp:241
-msgid "Error parsing /etc/make.conf: can not parse MAKEOPTS."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «MAKEOPTS»."
-
-#: config/configdialog.cpp:249 config/configdialog.cpp:409
-msgid "Error parsing /etc/make.conf: can not parse NOCOLOR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «NOCOLOR»."
-
-#: config/configdialog.cpp:257
-msgid "Error parsing /etc/make.conf: can not parse PKG_TMPDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PKG_TMPDIR»."
-
-#: config/configdialog.cpp:265
-msgid "Error parsing /etc/make.conf: can not parse PKGDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PKGDIR»."
-
-#: config/configdialog.cpp:273
-msgid "Error parsing /etc/make.conf: can not parse PORT_LOGDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORT_LOGDIR»."
-
-#: config/configdialog.cpp:281
-msgid "Error parsing /etc/make.conf: can not parse PORTAGE_BINHOST."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTAGE_BINHOST»."
-
-#: config/configdialog.cpp:289
-msgid "Error parsing /etc/make.conf: can not parse PORTAGE_NICENESS."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTAGE_NICENESS»."
-
-#: config/configdialog.cpp:297
-msgid "Error parsing /etc/make.conf: can not parse PORTAGE_TMPDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTAGE_TMPDIR»."
-
-#: config/configdialog.cpp:305
-msgid "Error parsing /etc/make.conf: can not parse PORTDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTDIR»."
-
-#: config/configdialog.cpp:313
-msgid "Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTDIR_OVERLAY»."
-
-#: config/configdialog.cpp:321
-msgid "Error parsing /etc/make.conf: can not parse RESUMECOMMAND."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RESUMECOMMAND»."
-
-#: config/configdialog.cpp:329
-msgid "Error parsing /etc/make.conf: can not parse ROOT."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «ROOT»."
-
-#: config/configdialog.cpp:337
-msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
-msgstr ""
-"Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_EXCLUDEFROM»."
-
-#: config/configdialog.cpp:345
-msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_PROXY»."
-
-#: config/configdialog.cpp:353
-msgid "Error parsing /etc/make.conf: can not parse RSYNC_RETRIES."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_RETRIES»."
-
-#: config/configdialog.cpp:361
-msgid "Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_RATELIMIT»."
-
-#: config/configdialog.cpp:369
-msgid "Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_TIMEOUT»."
-
-#: config/configdialog.cpp:377
-msgid "Error parsing /etc/make.conf: can not parse RPMDIR."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RPMDIR»."
-
-#: config/configdialog.cpp:385
-msgid "Error parsing /etc/make.conf: can not parse SYNC."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «SYNC»."
-
-#: config/configdialog.cpp:393
-msgid "Error parsing /etc/make.conf: can not parse USE."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «USE»."
-
-#: config/configdialog.cpp:401
-msgid "Error parsing /etc/make.conf: can not parse USE_ORDER."
-msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «USE_ORDER»."
-
-#: config/configdialog.cpp:415 config/configdialog.cpp:483
+#: config/configdialog.cpp:117
 msgid "Error reading: %1"
 msgstr "Klarte ikke lese «%1»"
 
-#: config/configdialog.cpp:438
+#: config/configdialog.cpp:147
+msgid "Error parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «ACCEPT_KEYWORDS»."
+
+#: config/configdialog.cpp:155
+msgid "Error parsing /etc/make.conf: can not parse AUTOCLEAN."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «AUTOCLEAN»."
+
+#: config/configdialog.cpp:163 config/configdialog.cpp:227
+msgid "Error parsing /etc/make.conf: can not parse BUILD_PREFIX."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «BUILD_PREFIX»."
+
+#: config/configdialog.cpp:171
+msgid "Error parsing /etc/make.conf: can not parse CBUILD."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CBUILD»."
+
+#: config/configdialog.cpp:179
+msgid "Error parsing /etc/make.conf: can not parse CCACHE_SIZE."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CCACHE_SIZE»."
+
+#: config/configdialog.cpp:187
+msgid "Error parsing /etc/make.conf: can not parse CFLAGS."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CFLAGS»."
+
+#: config/configdialog.cpp:195
+msgid "Error parsing /etc/make.conf: can not parse CXXFLAGS."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CXXFLAGS»."
+
+#: config/configdialog.cpp:203
+msgid "Error parsing /etc/make.conf: can not parse CHOST."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CHOST»."
+
+#: config/configdialog.cpp:211
+msgid "Error parsing /etc/make.conf: can not parse CLEAN_DELAY."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CLEAN_DELAY»."
+
+#: config/configdialog.cpp:219
+msgid "Error parsing /etc/make.conf: can not parse CONFIG_PROTECT."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «CONFIG_PROTECT»."
+
+#: config/configdialog.cpp:235
+msgid "Error parsing /etc/make.conf: can not parse DEBUGBUILD."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «DEBUGBUILD»."
+
+#: config/configdialog.cpp:243
+msgid "Error parsing /etc/make.conf: can not parse DISTDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «DISTDIR»."
+
+#: config/configdialog.cpp:251
+msgid "Error parsing /etc/make.conf: can not parse FEATURES."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «FEATURES»."
+
+#: config/configdialog.cpp:259
+msgid "Error parsing /etc/make.conf: can not parse FETCHCOMMAND."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «FETCHCOMMAND»."
+
+#: config/configdialog.cpp:267
+msgid "Error parsing /etc/make.conf: can not parse GENTOO_MIRRORS."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «GENTOO_MIRRORS»."
+
+#: config/configdialog.cpp:275
+msgid "Error parsing /etc/make.conf: can not parse FTP_PROXY FTP_PROXY."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «FTP_PROXY»."
+
+#: config/configdialog.cpp:283
+msgid "Error parsing /etc/make.conf: can not parse MAKEOPTS."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «MAKEOPTS»."
+
+#: config/configdialog.cpp:291 config/configdialog.cpp:451
+msgid "Error parsing /etc/make.conf: can not parse NOCOLOR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «NOCOLOR»."
+
+#: config/configdialog.cpp:299
+msgid "Error parsing /etc/make.conf: can not parse PKG_TMPDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PKG_TMPDIR»."
+
+#: config/configdialog.cpp:307
+msgid "Error parsing /etc/make.conf: can not parse PKGDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PKGDIR»."
+
+#: config/configdialog.cpp:315
+msgid "Error parsing /etc/make.conf: can not parse PORT_LOGDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORT_LOGDIR»."
+
+#: config/configdialog.cpp:323
+msgid "Error parsing /etc/make.conf: can not parse PORTAGE_BINHOST."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTAGE_BINHOST»."
+
+#: config/configdialog.cpp:331
+msgid "Error parsing /etc/make.conf: can not parse PORTAGE_NICENESS."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTAGE_NICENESS»."
+
+#: config/configdialog.cpp:339
+msgid "Error parsing /etc/make.conf: can not parse PORTAGE_TMPDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTAGE_TMPDIR»."
+
+#: config/configdialog.cpp:347
+msgid "Error parsing /etc/make.conf: can not parse PORTDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTDIR»."
+
+#: config/configdialog.cpp:355
+msgid "Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «PORTDIR_OVERLAY»."
+
+#: config/configdialog.cpp:363
+msgid "Error parsing /etc/make.conf: can not parse RESUMECOMMAND."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RESUMECOMMAND»."
+
+#: config/configdialog.cpp:371
+msgid "Error parsing /etc/make.conf: can not parse ROOT."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «ROOT»."
+
+#: config/configdialog.cpp:379
+msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_EXCLUDEFROM»."
+
+#: config/configdialog.cpp:387
+msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_PROXY»."
+
+#: config/configdialog.cpp:395
+msgid "Error parsing /etc/make.conf: can not parse RSYNC_RETRIES."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_RETRIES»."
+
+#: config/configdialog.cpp:403
+msgid "Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_RATELIMIT»."
+
+#: config/configdialog.cpp:411
+msgid "Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RSYNC_TIMEOUT»."
+
+#: config/configdialog.cpp:419
+msgid "Error parsing /etc/make.conf: can not parse RPMDIR."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «RPMDIR»."
+
+#: config/configdialog.cpp:427
+msgid "Error parsing /etc/make.conf: can not parse SYNC."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «SYNC»."
+
+#: config/configdialog.cpp:435
+msgid "Error parsing /etc/make.conf: can not parse USE."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «USE»."
+
+#: config/configdialog.cpp:443
+msgid "Error parsing /etc/make.conf: can not parse USE_ORDER."
+msgstr "Klarte ikke lse «/etc/make.conf»: klarte ikke lese «USE_ORDER»."
+
+#: config/configdialog.cpp:475
 msgid "Failed to save %1. Please run as root."
 msgstr "Klarte ikke lagre «%1»; kjør som superbruker."
 
-#: config/configdialog.cpp:471
+#: config/configdialog.cpp:511
 msgid "Parsing %1: can not match keyword %2."
 msgstr "Leser «%1»: klarte ikke treffe nøkkelordet «%2»."
 
-#: config/configdialog.cpp:591
+#: config/configdialog.cpp:626
 msgid "Error writing: %1"
 msgstr "Klarte ikke skrive: «%1»"
 
-#: kuroo.cpp:84 kuroo.cpp:86 kuroo.cpp:185 kuroo.cpp:187
+#: kuroo.cpp:84 kuroo.cpp:86 kuroo.cpp:184 kuroo.cpp:186
 msgid "settings"
 msgstr "Innstillinger"
 
@@ -1366,19 +1350,19 @@ msgstr ""
 "<qt>Klarte ikke lage sikkerhetskopikatalog.<br>Du må starte Kuroo med "
 "«kdesu» første gangen for en sikker initialisering.<br>Prøv igjen.</qt>"
 
-#: kurooinit.cpp:136
+#: kurooinit.cpp:138
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr "Databasestrukturen er endret. Sletter gammel versjon av databasen «%1»"
 
-#: kurooinit.cpp:204
+#: kurooinit.cpp:205
 msgid "Error reading: /etc/make.conf"
 msgstr "Klarte ikke lese «/etc/make.conf»"
 
-#: kurooinit.cpp:224
+#: kurooinit.cpp:225
 msgid "Error reading: /etc/make.profile"
 msgstr "Klarte ikke lese «/etc/make.profile»"
 
-#: kurooinit.cpp:264
+#: kurooinit.cpp:267
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
@@ -1386,7 +1370,7 @@ msgstr ""
 "Du har ikke tilstrekkelige rettigheter for å kjøre Kuroo;\n"
 "legg deg selv til i gruppen «portage»."
 
-#: kurooinit.cpp:264
+#: kurooinit.cpp:268
 msgid "User permissions"
 msgstr "Bruker-tillatelser"
 
@@ -1454,25 +1438,25 @@ msgstr "Kuroo - grafisk grensesnitt for Portage"
 msgid "&Configure Kuroo..."
 msgstr "Konfigurer Kuroo . . ."
 
-#: kurooview.cpp:79
+#: kurooview.cpp:81
 msgid "Packages"
 msgstr "Pakker"
 
-#: kurooview.cpp:80
+#: kurooview.cpp:82
 msgid "Queue"
 msgstr "Kø"
 
-#: kurooview.cpp:81
+#: kurooview.cpp:83
 msgid "History"
 msgstr ""
 "Tidligere\n"
 "installasjoner"
 
-#: kurooview.cpp:83
+#: kurooview.cpp:85
 msgid "Log"
 msgstr "Logg"
 
-#: kurooview.cpp:133
+#: kurooview.cpp:135
 msgid ""
 "<qt>Kuroo database is empty!<br>Kuroo will now first scan your emerge log to "
 "create the emerge history.<br>Next, package information in Portage will be "
@@ -1481,11 +1465,11 @@ msgstr ""
 "<qt>Kuroos database er tom.<br>Først leses installasjonsloggen for å lage "
 "installasjonsloggen.<br>Deretter samles pakkeinformasjon fra Portage.</qt>"
 
-#: kurooview.cpp:136 kurooview.cpp:153
+#: kurooview.cpp:138 kurooview.cpp:155
 msgid "Initialiazing Kuroo"
 msgstr "Initialiserer Kuroo"
 
-#: kurooview.cpp:152
+#: kurooview.cpp:154
 msgid ""
 "<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
 "has changed.</qt>"
@@ -1493,15 +1477,15 @@ msgstr ""
 "<qt>Kuroo-databasen må oppdateres;<br>installasjonsloggen viser at systemet "
 "er endret.</qt>"
 
-#: kurooview.cpp:153
+#: kurooview.cpp:155
 msgid "Refresh"
 msgstr "Oppdater"
 
-#: kurooview.cpp:153
+#: kurooview.cpp:155
 msgid "Skip"
 msgstr "Hopp over"
 
-#: kurooview.cpp:190
+#: kurooview.cpp:192
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr "Kuroo må kjøres med superbrukerrettigheter for å installere pakker."
 
@@ -1778,7 +1762,7 @@ msgstr "tekstmerkelapp1"
 #: rc.cpp:209
 #, no-c-format
 msgid ""
-"<h2>Kuroo-0.80.0_rc2</h2>\n"
+"<h2>Kuroo-0.80.0_rc3</h2>\n"
 "<p>Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>\n"
 "New features:<br>\n"
@@ -1794,7 +1778,7 @@ msgid ""
 "Please take backup of all files in /etc/portage, /etc/make.conf and<br>\n"
 "/var/lib/portage/world.</font></b>"
 msgstr ""
-"<h2>Kuroo-0.80.0_rc2</h2>\n"
+"<h2>Kuroo-0.80.0_rc3</h2>\n"
 "<p>Kuroo - Et KDE-grensesnitt for Portage som støtter de fleste vanlige "
 "oppgavene for vedlikehold av programmer på Gentoo-systemer.</p>\n"
 "Ny funksjonalitet:<br>\n"
@@ -1997,8 +1981,7 @@ msgstr "Sjekk oppdatering-innstillinger"
 
 #: rc.cpp:375
 #, no-c-format
-msgid ""
-"<i>Forces emerge to consider the entire dependency tree of packages.</i>"
+msgid "<i>Forces emerge to consider the entire dependency tree of packages.</i>"
 msgstr "<i>Tvinger Portage til å se på hele avhengighetstreet til pakker.</i>"
 
 #: rc.cpp:378
@@ -2408,19 +2391,3 @@ msgid ""
 "Your emails"
 msgstr "alex@thehandofagony.com"
 
-#~ msgid ""
-#~ "<qt>Closing the main window will keep Kuroo running in the System Tray."
-#~ "<br>Use Quit from the File menu to exit Kuroo.</qt>"
-#~ msgstr ""
-#~ "<qt>Selv om du lukker hovedvinduet, fortsetter Kuroo å kjøre i "
-#~ "systemkurven.<br>Bruk <b>Avslutt fra <b>Fil</b>-menyen for å avslutte "
-#~ "Kuroo.</qt>"
-
-#~ msgid "Docking in System Tray"
-#~ msgstr "Visning i systemkurven"
-
-#~ msgid "Exit"
-#~ msgstr "Avslutt"
-
-#~ msgid "Dock in System Tray"
-#~ msgstr "Legg til i systemkurven"

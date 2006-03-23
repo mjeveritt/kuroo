@@ -151,7 +151,7 @@ void PackageInspector::slotNextPackage()
  */
 void PackageInspector::slotApply()
 {
-	kdDebug() << "PackageInspector::slotApply" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	if ( hasVersionSettingsChanged ) {
 			PortageFilesSingleton::Instance()->savePackageKeywords();
@@ -790,6 +790,8 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
  */
 void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 // 	::usleep(100000);
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
@@ -840,7 +842,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 		PortageFilesSingleton::Instance()->savePackageUse();
 	}
 	
-	kdDebug() << "hasUseSettingsChanged use=" << KurooDBSingleton::Instance()->packageUse( m_id ) << endl;
+	kdDebug() << "use=" << KurooDBSingleton::Instance()->packageUse( m_id ) << endl;
 }
 
 /**
@@ -849,6 +851,8 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
  */
 void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	dialog->setDisabled( false );
 	
 	SignalistSingleton::Instance()->setKurooBusy( false );
@@ -868,7 +872,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		}
 	}
 	
-	kdDebug() << "PackageInspector::slotParsePackageUse pretendUseList=" << pretendUseList << endl;
+	kdDebug() << "pretendUseList=" << pretendUseList << endl;
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {

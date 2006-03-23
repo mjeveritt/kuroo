@@ -76,7 +76,7 @@ bool ScanHistoryJob::doJob()
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
-	QString timeStamp, syncTimeStamp;
+	QString timeStamp;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
@@ -160,16 +160,13 @@ bool ScanHistoryJob::doJob()
 						"VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
 				}
 				else
-					if ( emergeLine.contains("=== Sync completed") )
-						syncTimeStamp = timeStamp;
-				
+					if ( emergeLine.contains( "=== Sync completed" ) )
+						setKurooDbMeta( "syncTimeStamp", timeStamp );
 			}
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
-	
-	setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
-	setKurooDbMeta( "scanTimeStamp", timeStamp );
+
 	return true;
 }
 

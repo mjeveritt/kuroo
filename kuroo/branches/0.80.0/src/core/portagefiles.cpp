@@ -760,6 +760,8 @@ void PortageFiles::refresh( int mask )
  */
 void PortageFiles::loadPackageFiles()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	ThreadWeaver::instance()->queueJob( new LoadPackageHardMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserUnMaskJob( this ) );

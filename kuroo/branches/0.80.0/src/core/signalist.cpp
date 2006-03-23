@@ -76,8 +76,6 @@ bool Signalist::isKurooBusy()
  */
 void Signalist::setKurooBusy( bool busy )
 {
-	kdDebug() << "Signalist::setKurooBusy busy=" << busy << endl;
-	
 	static int busySession(0);
 	
 	if ( !busy ) {

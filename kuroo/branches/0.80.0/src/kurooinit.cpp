@@ -203,7 +203,7 @@ bool KurooInit::getEnvironment()
 	}
 	else {
 		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
-		kdDebug() << QString("Error reading: /etc/make.conf") << endl;
+		kdDebug() << "Error reading: /etc/make.conf" << endl;
 		success = false;
 	}
 	
@@ -223,7 +223,7 @@ bool KurooInit::getEnvironment()
 	}
 	else {
 		kdDebug() << i18n("Error reading: /etc/make.profile") << endl;
-		kdDebug() << QString("Error reading: /etc/make.profile") << endl;
+		kdDebug() << "Error reading: /etc/make.profile" << endl;
 	}
 	
 	// Add default etc-files warnings

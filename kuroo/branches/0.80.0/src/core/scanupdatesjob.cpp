@@ -54,6 +54,8 @@ ScanUpdatesJob::~ScanUpdatesJob()
  */
 void ScanUpdatesJob::completeJob()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	SignalistSingleton::Instance()->loadUpdatesComplete();
 	aborted = false;
 }
@@ -64,7 +66,7 @@ void ScanUpdatesJob::completeJob()
  */
 bool ScanUpdatesJob::doJob()
 {
-	kdDebug() << "ScanUpdatesJob::doJob..." << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
@@ -156,12 +158,13 @@ bool ScanUpdatesJob::doJob()
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );
-	kdDebug() << "ScanUpdatesJob::doJob... completed!" << endl;
 	return true;
 }
 
 void ScanUpdatesJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else

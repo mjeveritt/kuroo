@@ -91,7 +91,7 @@ Kuroo::Kuroo()
 
 Kuroo::~Kuroo()
 {
-	kdDebug() << "Kuroo::~Kuroo" << endl;
+	kdDebug() << k_funcinfo << endl;
 }
 
 /**
@@ -173,7 +173,6 @@ void Kuroo::slotSync()
 			     
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
-		
 	}
 }
 
@@ -206,8 +205,8 @@ void Kuroo::introWizard()
  */
 bool Kuroo::queryClose()
 {
-	kdDebug() << "Kuroo::queryClose" << endl;
-		
+	kdDebug() << k_funcinfo << endl;
+	
 // 	if ( !m_shuttingDown && KurooConfig::isSystrayEnabled() ) {
 // 		switch( KMessageBox::questionYesNoCancel( this, 
 // 			i18n("<qt>Closing the main window will keep Kuroo running in the System Tray.<br>"
@@ -242,7 +241,7 @@ bool Kuroo::queryClose()
  */
 bool Kuroo::queryExit()
 {
-	kdDebug() << "Kuroo::queryExit" << endl;
+	kdDebug() << k_funcinfo << endl;
 	return true;
 }
 
@@ -251,7 +250,7 @@ bool Kuroo::queryExit()
  */
 void Kuroo::slotQuit()
 {
-	kdDebug() << "Kuroo::slotQuit" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
@@ -267,7 +266,8 @@ void Kuroo::slotQuit()
  */
 void Kuroo::slotWait()
 {
-	kdDebug() << "Kuroo::slotWait" << endl;
+	kdDebug() << k_funcinfo << endl;
+	
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		switch( KMessageBox::questionYesNo( this, 
 			i18n("<qt>Kuroo is busy<br><br>"
@@ -290,7 +290,8 @@ void Kuroo::slotWait()
  */
 void Kuroo::slotTerminate()
 {
-	kdDebug() << "Kuroo::slotTerminate" << endl;
+	kdDebug() << k_funcinfo << endl;
+	
 	m_shuttingDown = true;
 	qApp->exit();
 }

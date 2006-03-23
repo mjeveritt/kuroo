@@ -51,6 +51,8 @@ ScanHistoryJob::~ScanHistoryJob()
  */
 void ScanHistoryJob::completeJob()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	SignalistSingleton::Instance()->scanHistoryComplete();
 	aborted = false;
 }
@@ -62,11 +64,11 @@ void ScanHistoryJob::completeJob()
  */
 bool ScanHistoryJob::doJob()
 {
-	kdDebug() << "ScanHistoryJob::doJob" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Parsing emerge.log. Can not connect to database") << endl;
-		kdDebug() << QString("Parsing emerge.log. Can not connect to database") << endl;
+		kdDebug() << "Parsing emerge.log. Can not connect to database" << endl;
 		return false;
 	}
 	
@@ -84,7 +86,7 @@ bool ScanHistoryJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdDebug() << i18n("Parsing emerge.log. History scan aborted") << endl;
-			kdDebug() << QString("Parsing emerge.log. History scan aborted") << endl;
+			kdDebug() << "Parsing emerge.log. History scan aborted" << endl;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -103,7 +105,7 @@ bool ScanHistoryJob::doJob()
 			}
 			else {
 				kdDebug() << i18n("Parsing emerge.log. No package found!") << endl;
-				kdDebug() << QString("Parsing emerge.log. No package found!") << endl;
+				kdDebug() << "Parsing emerge.log. No package found!" << endl;
 			}
 		}
 		else
@@ -141,13 +143,13 @@ bool ScanHistoryJob::doJob()
 						}
 						else {
 							kdDebug() << i18n("Parsing emerge.log. Can not parse: ") << package << endl;
-							kdDebug() << QString("Parsing emerge.log. Can not parse: ") << package << endl;
+							kdDebug() << "Parsing emerge.log. Can not parse: " << package << endl;
 						}
 					}
 				}
 				else {
 					kdDebug() << i18n("Parsing emerge.log. No package found!") << endl;
-					kdDebug() << QString("Parsing emerge.log. No package found!") << endl;
+					kdDebug() << "Parsing emerge.log. No package found!" << endl;
 				}
 			}
 			else {
@@ -168,12 +170,13 @@ bool ScanHistoryJob::doJob()
 	
 	setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
 	setKurooDbMeta( "scanTimeStamp", timeStamp );
-	kdDebug() << "ScanHistoryJob::doJob... done!" << endl;
 	return true;
 }
 
 void ScanHistoryJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else

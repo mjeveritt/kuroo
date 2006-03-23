@@ -82,7 +82,7 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>&lt;h2&gt;Kuroo-0.80.0_rc2&lt;/h2&gt;
+                    <string>&lt;h2&gt;Kuroo-0.80.0_rc3&lt;/h2&gt;
 &lt;p&gt;Kuroo - A KDE Portage frontend that allows you to do most common software maintenance tasks on gentoo systems&lt;/p&gt;
 New features:&lt;br&gt;
 Unified package view: fast package browsing and searching with filters.&lt;br&gt;

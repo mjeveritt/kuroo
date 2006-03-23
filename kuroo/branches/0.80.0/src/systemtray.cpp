@@ -47,12 +47,16 @@ SystemTray::~SystemTray()
 
 void SystemTray::activate()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	slotBusy( false );
 	show();
 }
 
 void SystemTray::inactivate()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	hide();
 }
 

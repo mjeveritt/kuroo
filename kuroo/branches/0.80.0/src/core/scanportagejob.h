@@ -50,12 +50,17 @@ private:
 	QString								formatSize( const QString& size );
 	void								setKurooDbMeta( const QString& meta, const QString& data );
 	
+	void								loadCache();
+	QString								cacheFind( const QString& package );
+	
 private:
 	QRegExp								rxAtom;
 	InstalledMap						installedMap;
 	int									totalPackages;
 	bool								aborted;
 	DbConnection* const 				m_db;
+	
+	QMap<QString, QString> 				mapCache;
 	
 	struct Data {
 		QString							description;

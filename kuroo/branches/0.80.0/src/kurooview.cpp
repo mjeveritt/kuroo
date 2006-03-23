@@ -124,7 +124,7 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
-	kdDebug() << "KurooView::slotInit" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
@@ -172,7 +172,7 @@ void KurooView::slotInit()
  */
 void KurooView::slotCheckPortage()
 {
-	kdDebug() << "KurooView::slotCheckPortage" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	

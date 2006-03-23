@@ -368,7 +368,7 @@ void PackageInspector::showSettings()
 		}
 		else {
 			kdDebug() << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << endl;
-			kdDebug() << QString("Marking user masked version. Can not parse: ") << userMaskVersion << endl;
+			kdDebug() << "Marking user masked version. Can not parse: " << userMaskVersion << endl;
 		}
 	}
 	else {

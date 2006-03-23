@@ -108,6 +108,8 @@ void Results::init( QObject *parent )
  */
 void Results::refresh()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	QueueSingleton::Instance()->refresh( true );
 }
 

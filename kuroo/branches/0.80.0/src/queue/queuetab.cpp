@@ -172,7 +172,7 @@ void QueueTab::slotNextPackage( bool isNext )
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
-	kdDebug() << "QueueTab::slotReload" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Reenable the inspector after queue changes
 	m_packageInspector->setDisabled( true );
@@ -314,7 +314,7 @@ void QueueTab::slotCheck()
  */
 void QueueTab::slotGo()
 {
-	kdDebug() << "QueueTab::slotGo m_hasCheckedQueue=" << m_hasCheckedQueue << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
@@ -426,7 +426,7 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
-	kdDebug() << "QueueTab::slotPackage" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Queue view is hidden don't update
 	if ( !isVisible() )

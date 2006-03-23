@@ -70,6 +70,9 @@ ScanPortageJob::~ScanPortageJob()
  */
 void ScanPortageJob::completeJob()
 {
+	kdDebug() << k_funcinfo << endl;
+	
+	mapCache.clear();
 	SignalistSingleton::Instance()->scanPortageComplete();
 	aborted = false;
 }
@@ -82,7 +85,7 @@ void ScanPortageJob::completeJob()
  */
 bool ScanPortageJob::doJob()
 {
-	kdDebug() << "ScanPortageJob::doJob" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	int count( 0 );
 	QDir dCategory, dPackage;
@@ -91,7 +94,7 @@ bool ScanPortageJob::doJob()
 	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Scanning Portage. Can not connect to database") << endl;
-		kdDebug() << QString("Scanning Portage. Can not connect to database") << endl;
+		kdDebug() << "Scanning Portage. Can not connect to database" << endl;
 		return false;
 	}
 	
@@ -103,7 +106,10 @@ bool ScanPortageJob::doJob()
 		setProgressTotalSteps( packageCount.toInt() );
 	
 	setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );
-		
+	
+	// Load Portage cache files to speed up portage scan
+	loadCache();
+	
 	// Temporary table for all categories
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE category_temp ("
@@ -168,7 +174,7 @@ bool ScanPortageJob::doJob()
 	
 		if ( !dCategory.cd( KurooConfig::dirEdbDep() + *itPath ) ) {
 			kdDebug() << i18n("Scanning Portage. Can not access ") << KurooConfig::dirEdbDep() + *itPath  << endl;
-			kdDebug() << QString("Scanning Portage. Can not access ") << KurooConfig::dirEdbDep() + *itPath  << endl;
+			kdDebug() << "Scanning Portage. Can not access " << KurooConfig::dirEdbDep() + *itPath  << endl;
 			continue;
 		}
 		
@@ -184,7 +190,7 @@ bool ScanPortageJob::doJob()
 			// Abort the scan
 			if ( isAborted() ) {
 				kdDebug() << i18n("Scanning Portage. Portage scan aborted") << endl;
-				kdDebug() << QString("Scanning Portage. Portage scan aborted") << endl;
+				kdDebug() << "Scanning Portage. Portage scan aborted" << endl;
 				KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 				return false;
 			}
@@ -220,7 +226,7 @@ bool ScanPortageJob::doJob()
 					// Abort the scan
 					if ( isAborted() ) {
 						kdDebug() << i18n( "Scanning Portage. Portage scan aborted" ) << endl;
-						kdDebug() << QString( "Scanning Portage. Portage scan aborted" ) << endl;
+						kdDebug() << "Scanning Portage. Portage scan aborted" << endl;
 						KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 						return false;
 					}
@@ -273,7 +279,7 @@ bool ScanPortageJob::doJob()
 			}
 			else {
 				kdDebug() << i18n( "Scanning Portage. Can not access " ) << KurooConfig::dirEdbDep() << *itPath << *itCategory << endl;
-				kdDebug() << QString( "Scanning Portage. Can not access " ) << KurooConfig::dirEdbDep() << *itPath << *itCategory << endl;
+				kdDebug() << "Scanning Portage. Can not access " << KurooConfig::dirEdbDep() << *itPath << *itCategory << endl;
 			}
 			
 			lastCategory = category;
@@ -361,7 +367,6 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
 	
 	setKurooDbMeta( "updatesCount", "0" );
-	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );
 	return true;
@@ -372,6 +377,8 @@ bool ScanPortageJob::doJob()
  */
 void ScanPortageJob::scanInstalledPackages()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	installedMap.clear();
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -379,7 +386,7 @@ void ScanPortageJob::scanInstalledPackages()
 	
 	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) ) {
 		kdDebug() << i18n( "Scanning installed packages. Can not access " ) << KurooConfig::dirDbPkg() << endl;
-		kdDebug() << QString( "Scanning installed packages. Can not access " ) << KurooConfig::dirDbPkg() << endl;
+		kdDebug() << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << endl;
 	}
 	
 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
@@ -438,10 +445,9 @@ void ScanPortageJob::scanInstalledPackages()
 		}
 		else {
 			kdDebug() << i18n( "Scanning installed packages. Can not access " ) << KurooConfig::dirDbPkg() << "/" << *itCategory << endl;
-			kdDebug() << QString( "Scanning installed packages. Can not access " ) << KurooConfig::dirDbPkg() << "/" << *itCategory << endl;
+			kdDebug() << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << "/" << *itCategory << endl;
 		}
 	}
-	
 	setStatus( "ScanInstalled", i18n("Done.") );
 }
 
@@ -458,7 +464,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	
 	if( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << i18n("Scanning Portage cache. Error reading: ") << path << "/" << category << "/" << name << "-" << version << endl;
-		kdDebug() << QString("Scanning Portage cache. Error reading: ") << path << "/" << category << "/" << name << "-" << version << endl;
+		kdDebug() << "Scanning Portage cache. Error reading: " << path << "/" << category << "/" << name << "-" << version << endl;
 		
 		info.slot = "0";
 		info.homepage = "0";
@@ -546,7 +552,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	file.close();
 	
 	// Get package size. Try in cache first.
-	QString size = PortageSingleton::Instance()->cacheFind( category + "/" + name + "-" + version ) ;
+	QString size = cacheFind( category + "/" + name + "-" + version ) ;
 	if ( !size.isEmpty() )
 		info.size = formatSize( size );
 	else {
@@ -565,7 +571,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 		}
 		else {
 			kdDebug() << i18n("Scanning installed packages. Error reading: ") << path << endl;
-			kdDebug() << QString("Scanning installed packages. Error reading: ") << path << endl;
+			kdDebug() << "Scanning installed packages. Error reading: " << path << endl;
 		}
 	}
 	
@@ -594,10 +600,43 @@ QString ScanPortageJob::formatSize( const QString& size )
 
 void ScanPortageJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else
 		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
+}
+
+/**
+ * Load mapCache with items from DB.
+ */
+void ScanPortageJob::loadCache()
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	mapCache.clear();
+	
+	const QStringList cacheList = KurooDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
+	foreach ( cacheList ) {
+		QString package = *it++;
+		QString size = *it;
+		mapCache.insert( package, size );
+	}
+}
+
+/**
+ * Find cached size for package.
+ * @param packages
+ * @return size or NULL if na
+ */
+QString ScanPortageJob::cacheFind( const QString& package )
+{
+	QMap<QString, QString>::iterator it = mapCache.find( package ) ;
+	if ( it != mapCache.end() )
+		return it.data();
+	else
+		return QString::null;
 }
 
 #include "scanportagejob.moc"

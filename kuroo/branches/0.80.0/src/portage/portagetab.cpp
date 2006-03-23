@@ -209,7 +209,7 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << "PortageTab::slotReload" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	m_isInitialized = false;
 	m_packageInspector->setDisabled( true );
@@ -232,7 +232,7 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
-	kdDebug() << "PortageTab::slotFilters" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	queuedFilters++;
 	QTimer::singleShot( 250, this, SLOT( slotActivateFilters() ) );
@@ -262,7 +262,7 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << "PortageTab::slotListPackages" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->
@@ -372,7 +372,7 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << "PortageTab::slotPackage" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Packages view is hidden don't update
 	// We may get signal to update from Queue since it share same Inspector

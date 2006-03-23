@@ -340,7 +340,7 @@ void KurooDB::createTables( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
-	kdDebug() << "KurooDB::backupDb" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
@@ -374,8 +374,6 @@ void KurooDB::backupDb()
 		kdDebug() << i18n("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
 		kdDebug() << QString("Creating backup of history. Error writing: %1.").arg( KurooConfig::fileMergeBackup() ) << endl;
 	}
-	
-	kdDebug() << "KurooDB::backupDb... completed!" << endl;
 }
 
 /**
@@ -383,7 +381,7 @@ void KurooDB::backupDb()
  */
 void KurooDB::restoreBackup()
 {
-	kdDebug() << "KurooDB::restoreBackup" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Restore einfo into table history
 	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
@@ -432,8 +430,6 @@ void KurooDB::restoreBackup()
 			       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
 		}
 	}
-	
-	kdDebug() << "KurooDB::restoreBackup... completed!" << endl;
 }
 
 
@@ -778,7 +774,7 @@ QString KurooDB::packageId( const QString& package )
 	}
 	else {
 		kdDebug() << i18n("Querying for package id. Can not parse: ") << packageString << endl;
-		kdDebug() << QString("Querying for package id. Can not parse: ") << packageString << endl;
+		kdDebug() << "Querying for package id. Can not parse: " << packageString << endl;
 	}
 	
 	return QString::null;
@@ -1065,14 +1061,6 @@ QStringList KurooDB::allQueueId()
 }
 
 /**
- * Return all package cache info.
- */
-QStringList KurooDB::allCache()
-{
-	return query("SELECT package, size FROM cache ;");
-}
-
-/**
  * Return all history.
  */
 QStringList KurooDB::allHistory()
@@ -1168,11 +1156,11 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 		QString format;
 		file.readLine(format, 50);
 		
-		if ( !format.startsWith("SQLite format 3") )
+		if ( !format.startsWith( "SQLite format 3" ) )
 			kdDebug() << i18n("Database versions incompatible. Removing and rebuilding database.\n");
 
 		else
-			if ( sqlite3_open(path, &m_db) != SQLITE_OK ) {
+			if ( sqlite3_open( path, &m_db ) != SQLITE_OK ) {
 				kdDebug() << i18n("Database file corrupt. Removing and rebuilding database.\n");
 				sqlite3_close(m_db);
 			}
@@ -1360,7 +1348,7 @@ int SqliteConnection::insert( const QString& statement )
 		
 		if ( error != SQLITE_DONE ) {
 			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
-			kdDebug() << sqlite3_errmsg(m_db) << endl;
+			kdDebug() << sqlite3_errmsg( m_db ) << endl;
 			kdDebug() << "on insert: " << statement << endl;
 			return 0;
 		}
@@ -1371,20 +1359,20 @@ int SqliteConnection::insert( const QString& statement )
 // this implements a RAND() function compatible with the MySQL RAND() (0-param-form without seed)
 void SqliteConnection::sqlite_rand( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ )
 {
-	sqlite3_result_double(context, static_cast<double>(KApplication::random()) / (RAND_MAX+1.0));
+	sqlite3_result_double( context, static_cast<double>( KApplication::random() ) / ( RAND_MAX + 1.0 ) );
 }
 
 // this implements a POWER() function compatible with the MySQL POWER()
 void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3_value **argv )
 {
 	Q_ASSERT(argc==2);
-	if ( sqlite3_value_type(argv[0])==SQLITE_NULL || sqlite3_value_type(argv[1])==SQLITE_NULL ) {
+	if ( sqlite3_value_type(argv[0]) == SQLITE_NULL || sqlite3_value_type( argv[1] ) == SQLITE_NULL ) {
 		sqlite3_result_null(context);
 		return;
 	}
-	double a = sqlite3_value_double(argv[0]);
-	double b = sqlite3_value_double(argv[1]);
-	sqlite3_result_double(context, pow(a,b));
+	double a = sqlite3_value_double( argv[0] );
+	double b = sqlite3_value_double( argv[1] );
+	sqlite3_result_double( context, pow(a,b) );
 }
 
 SqliteConfig::SqliteConfig( const QString& dbfile )
@@ -1404,7 +1392,6 @@ DbConnectionPool::DbConnectionPool() : m_semaphore( POOL_SIZE )
 
 	enqueue( dbConn );
 	m_semaphore--;
-// 	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnectionPool::~DbConnectionPool()

@@ -46,11 +46,6 @@ public slots:
 	void						slotScanCompleted();
 	bool						slotSync();
 	
-	QString						cacheFind( const QString& package );
-	void						setCache( const QMap< QString, QString > &mapCacheIn );
-	void						loadCache();
-	void						clearCache();
-	
 	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
@@ -71,7 +66,7 @@ signals:
 	
 private:
 	QObject*					m_parent;
-	QMap<QString, QString> 		mapCache;
+	
 	QMap<QString, QString>		mapWorld;
 };
 

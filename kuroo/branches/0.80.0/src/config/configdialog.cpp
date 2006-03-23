@@ -72,7 +72,7 @@ void ConfigDialog::slotDefault()
 
 QStringList ConfigDialog::parseMakeConf()
 {
-	kdDebug() << "Parsing /etc/make.conf..." << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );
@@ -118,7 +118,6 @@ QStringList ConfigDialog::parseMakeConf()
 		kdDebug() << QString("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 	}
 	
-	kdDebug() << "Parsing /etc/make.conf... completed!" << endl;
 	return linesConcatenated;
 }
 
@@ -127,6 +126,8 @@ QStringList ConfigDialog::parseMakeConf()
  */
 void ConfigDialog::readMakeConf()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return;
@@ -483,7 +484,7 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::saveMakeConf()
 {
-	kdDebug() << "Saving back /etc/make.conf..." << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
@@ -626,8 +627,6 @@ bool ConfigDialog::saveMakeConf()
 		kdDebug() << QString("Error writing: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 		return false;
 	}
-	
-	kdDebug() << "Saving back /etc/make.conf... completed!" << endl;
 }
 
 #include "configdialog.moc"

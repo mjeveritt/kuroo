@@ -270,59 +270,9 @@ void Portage::init( QObject *parent )
  */
 void Portage::slotChanged()
 {
-	kdDebug() << "Portage::slotChanged" << endl;
-	emit signalPortageChanged();
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-// Parse Portage cache files to speed up portage scan
-////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Load mapCache with items from DB.
- */
-void Portage::loadCache()
-{
-	mapCache.clear();
+	kdDebug() << k_funcinfo << endl;
 	
-	const QStringList cacheList = KurooDBSingleton::Instance()->allCache();
-	foreach ( cacheList ) {
-		QString package = *it++;
-		QString size = *it;
-		mapCache.insert( package, size );
-	}
-}
-
-/**
- * Find cached size for package.
- * @param packages
- * @return size or NULL if na
- */
-QString Portage::cacheFind( const QString& package )
-{
-	QMap<QString, QString>::iterator it = mapCache.find( package ) ;
-	if ( it != mapCache.end() )
-		return it.data();
-	else
-		return QString::null;
-}
-
-/**
- * Get cache from threaded scan.
- * @param map of cached packages
- */
-void Portage::setCache( const QMap<QString, QString> &mapCacheIn )
-{
-	mapCache = mapCacheIn;
-}
-
-/**
- * Free cache memory.
- */
-void Portage::clearCache()
-{
-	mapCache.clear();
+	emit signalPortageChanged();
 }
 
 
@@ -336,17 +286,15 @@ void Portage::clearCache()
  */
 bool Portage::slotRefresh()
 {
-	kdDebug() << "Portage::slotRefresh" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
 		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
 	}
-	else {
-		loadCache();
+	else
 		slotScan();
-	}
 	
 	return true;
 }
@@ -357,6 +305,8 @@ bool Portage::slotRefresh()
  */
 bool Portage::slotSync()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	EmergeSingleton::Instance()->sync();
 	return true;
 }
@@ -367,7 +317,7 @@ bool Portage::slotSync()
  */
 bool Portage::slotScan()
 {
-	kdDebug() << "Portage::slotScan" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	int maxLoops(99);
 	
@@ -380,7 +330,7 @@ bool Portage::slotScan()
 		
 		if ( maxLoops-- == 0 ) {
 			kdDebug() << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
-			kdDebug() << QString("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
+			kdDebug() << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << endl;
 			break;
 		}
 	}
@@ -395,7 +345,7 @@ bool Portage::slotScan()
  */
 void Portage::slotScanCompleted()
 {
-	kdDebug() << "Portage::slotScanCompleted" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();
@@ -425,7 +375,7 @@ void Portage::slotScanCompleted()
  */
 void Portage::loadWorld()
 {
-	kdDebug() << "Portage::loadWorld" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	mapWorld.clear();
 	
@@ -439,7 +389,7 @@ void Portage::loadWorld()
 	}
 	else {
 		kdDebug() << i18n("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
-		kdDebug() << QString("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << "Loading packages in world. Error reading: " << KurooConfig::dirWorldFile() << endl;
 	}
 }
 
@@ -448,6 +398,8 @@ void Portage::loadWorld()
  */
 bool Portage::saveWorld( const QMap<QString, QString>& map )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
@@ -459,7 +411,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 	}
 	else {
 		kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
-		kdDebug() << QString("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << "Adding to world. Error writing: " << KurooConfig::dirWorldFile() << endl;
 	}
 	
 	return false;

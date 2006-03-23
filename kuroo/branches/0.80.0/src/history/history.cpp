@@ -76,7 +76,7 @@ void History::init( QObject *parent )
 	m_parent = parent;
 	if ( !log.open(IO_ReadOnly) ) {
 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
-		kdDebug() << QString("Error reading /var/log/emerge.log") << endl;
+		kdDebug() << "Error reading /var/log/emerge.log" << endl;
 	}
 	else
 		stream.setDevice( &log );
@@ -88,6 +88,8 @@ void History::init( QObject *parent )
  */
 void History::slotInit()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	log.setName( "/var/log/emerge.log" );
 	loadTimeStatistics();
 	
@@ -109,7 +111,7 @@ void History::slotScanHistoryCompleted()
  */
 bool History::slotRefresh()
 {
-	kdDebug() << "History::slotRefresh" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	QString lastDate = KurooDBSingleton::Instance()->getKurooDbMeta( "scanTimeStamp" );
 	if ( lastDate.isEmpty() )
@@ -142,7 +144,7 @@ bool History::slotRefresh()
  */
 void History::slotScanHistory( const QStringList& lines )
 {
-	kdDebug() << "History::slotScanHistory" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
@@ -154,6 +156,8 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -286,6 +290,8 @@ void History::slotParse()
  */
 void History::updateStatistics()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
 }
 
@@ -294,6 +300,8 @@ void History::updateStatistics()
  */
 void History::appendEmergeInfo()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
 	if ( !einfo.isEmpty() )
 		KurooDBSingleton::Instance()->addEmergeInfo( einfo );
@@ -313,6 +321,8 @@ QStringList History::allMergeHistory()
  */
 void History::loadTimeStatistics()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	m_statisticsMap.clear();
 	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
 	foreach ( timePackageList ) {
@@ -339,6 +349,8 @@ EmergeTimeMap History::getStatisticsMap()
  */
 void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	m_statisticsMap = statisticsMap;
 }
 

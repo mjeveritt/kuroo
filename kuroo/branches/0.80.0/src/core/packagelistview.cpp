@@ -65,7 +65,11 @@ QString PackageListView::currentItemStatus()
 	return currentPackage()->status();
 }
 
-PackageItem* PackageListView::itemId( const QString& id )
+/**
+ * Return PackageItem from listview index.
+ * @param id
+ */
+PackageItem* PackageListView::packageItemById( const QString& id )
 {
 	if ( id.isEmpty() || !packageIndex[id] )
 		return NULL;

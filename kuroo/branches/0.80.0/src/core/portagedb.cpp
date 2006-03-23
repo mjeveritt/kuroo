@@ -1147,7 +1147,7 @@ bool KurooDB::isCacheEmpty()
 /**
  */
 DbConnection::DbConnection( DbConfig* config )
- 	: m_config(config)
+ 	: m_config( config )
 {}
 
 DbConnection::~DbConnection()
@@ -1157,7 +1157,7 @@ DbConnection::~DbConnection()
  * Sqlite methods
  */
 SqliteConnection::SqliteConnection( SqliteConfig* config )
-	: DbConnection(config)
+	: DbConnection( config )
 {
 	const QCString path = QString( KUROODIR + KurooConfig::databas() ).local8Bit();
 	
@@ -1215,7 +1215,7 @@ QStringList SqliteConnection::query( const QString& statement )
 	
 	if ( error != SQLITE_OK ) {
 		kdDebug() << k_funcinfo << " sqlite3_compile error:" << endl;
-		kdDebug() << sqlite3_errmsg(m_db) << endl;
+		kdDebug() << sqlite3_errmsg( m_db ) << endl;
 		kdDebug() << "on query: " << statement << endl;
 		values = QStringList();
 	}
@@ -1253,7 +1253,7 @@ QStringList SqliteConnection::query( const QString& statement )
 		
 		if ( error != SQLITE_DONE ) {
 			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
-			kdDebug() << sqlite3_errmsg(m_db) << endl;
+			kdDebug() << sqlite3_errmsg( m_db ) << endl;
 			kdDebug() << "on query: " << statement << endl;
 			values = QStringList();
 		}
@@ -1308,7 +1308,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 		
 		if ( error != SQLITE_DONE ) {
 			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
-			kdDebug() << sqlite3_errmsg(m_db) << endl;
+			kdDebug() << sqlite3_errmsg( m_db ) << endl;
 			kdDebug() << "on query: " << statement << endl;
 			value = QString::null;
 		}
@@ -1328,7 +1328,7 @@ int SqliteConnection::insert( const QString& statement )
 	
 	if ( error != SQLITE_OK ) {
 		kdDebug() << k_funcinfo << " sqlite3_compile error:" << endl;
-		kdDebug() << sqlite3_errmsg(m_db) << endl;
+		kdDebug() << sqlite3_errmsg( m_db ) << endl;
 		kdDebug() << "on insert: " << statement << endl;
 	}
 	else {
@@ -1354,6 +1354,7 @@ int SqliteConnection::insert( const QString& statement )
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 		}
+		
         //deallocate vm ressources
 		sqlite3_finalize(stmt);
 		
@@ -1364,7 +1365,7 @@ int SqliteConnection::insert( const QString& statement )
 			return 0;
 		}
 	}
-	return sqlite3_last_insert_rowid(m_db);
+	return sqlite3_last_insert_rowid( m_db );
 }
 
 // this implements a RAND() function compatible with the MySQL RAND() (0-param-form without seed)
@@ -1387,23 +1388,23 @@ void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3
 }
 
 SqliteConfig::SqliteConfig( const QString& dbfile )
-	: m_dbfile(dbfile)
+	: m_dbfile( dbfile )
 {
 }
 
 /** 
  * Connections pool with thread support
  */
-DbConnectionPool::DbConnectionPool() : m_semaphore(POOL_SIZE)
+DbConnectionPool::DbConnectionPool() : m_semaphore( POOL_SIZE )
 {
 	m_semaphore += POOL_SIZE;
 	DbConnection *dbConn;
 	m_dbConfig = new SqliteConfig( KurooConfig::databas() );
 	dbConn = new SqliteConnection( static_cast<SqliteConfig*> (m_dbConfig) );
 
-	enqueue(dbConn);
+	enqueue( dbConn );
 	m_semaphore--;
-	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
+// 	kdDebug() << "Available db connections: " << m_semaphore.available() << endl;
 }
 
 DbConnectionPool::~DbConnectionPool()
@@ -1427,8 +1428,8 @@ void DbConnectionPool::createDbConnections()
 {
 	for ( int i = 0; i < POOL_SIZE - 1; i++ ) {
 		DbConnection *dbConn;
-		dbConn = new SqliteConnection(static_cast<SqliteConfig*> (m_dbConfig));
-		enqueue(dbConn);
+		dbConn = new SqliteConnection( static_cast<SqliteConfig*> (m_dbConfig) );
+		enqueue( dbConn );
 		m_semaphore--;
 	}
 	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << endl;
@@ -1437,7 +1438,6 @@ void DbConnectionPool::createDbConnections()
 DbConnection *DbConnectionPool::getDbConnection()
 {
 	m_semaphore++;
-	kdDebug() << "Get. Available db connections: " << m_semaphore.available() << endl;
 	return dequeue();
 }
 
@@ -1445,7 +1445,6 @@ void DbConnectionPool::putDbConnection( const DbConnection *conn )
 {
 	enqueue( conn );
 	m_semaphore--;
-	kdDebug() << "Put. Available db connections: " << m_semaphore.available() << endl;
 }
 
 #include "portagedb.moc"

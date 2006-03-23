@@ -58,7 +58,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *m_parent )
-	: QObject( m_parent ), userSync( false ), isEmerging( false ), logWatcher( 0 )
+	: QObject( m_parent ), isEmerging( false ), logWatcher( 0 )
 {
 	slotInit();
 }
@@ -93,7 +93,7 @@ void History::slotInit()
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
 	
-	logWatcher = new KDirWatch(this);
+	logWatcher = new KDirWatch( this );
 	logWatcher->addFile( "/var/log/emerge.log" );
 	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
 }
@@ -137,59 +137,13 @@ bool History::slotRefresh()
 }
 
 /**
- * Load the history map with emerge times statistics from database.
- */
-void History::loadTimeStatistics()
-{
-	m_statisticsMap.clear();
-	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
-	foreach ( timePackageList ) {
-		QString package = *it++;
-		QString time = *it++;
-		QString count = *it;
-		PackageEmergeTime p( time.toInt(), count.toInt() );
-		m_statisticsMap.insert( package, p );
-	}
-}
-
-/**
- * Return statistics map.
- * @return m_statisticsMap
- */
-EmergeTimeMap History::getStatisticsMap()
-{
-	return m_statisticsMap;
-}
-
-/**
- * Set statistics map.
- * @param timeMap
- */
-void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
-{
-	m_statisticsMap = statisticsMap;
-}
-
-/**
- * Get emerge time for this package.
- * @param package
- * @return emergeTime		time or na
- */
-QString History::packageTime( const QString& packageNoversion )
-{
-	EmergeTimeMap::iterator itMap = m_statisticsMap.find( packageNoversion );
-	if ( itMap != m_statisticsMap.end() )
-		return QString::number( itMap.data().emergeTime() / itMap.data().count() );
-	else
-		return QString::null;
-}
-
-/**
  * Launch scan to load into db.
  * @param emergeLines
  */
 void History::slotScanHistory( const QStringList& lines )
 {
+	kdDebug() << "History::slotScanHistory" << endl;
+	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
 }
@@ -352,6 +306,54 @@ void History::appendEmergeInfo()
 QStringList History::allMergeHistory()
 {
 	return KurooDBSingleton::Instance()->allMergeHistory();
+}
+
+/**
+ * Load the history map with emerge times statistics from database.
+ */
+void History::loadTimeStatistics()
+{
+	m_statisticsMap.clear();
+	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
+	foreach ( timePackageList ) {
+		QString package = *it++;
+		QString time = *it++;
+		QString count = *it;
+		PackageEmergeTime p( time.toInt(), count.toInt() );
+		m_statisticsMap.insert( package, p );
+	}
+}
+
+/**
+ * Return statistics map.
+ * @return m_statisticsMap
+ */
+EmergeTimeMap History::getStatisticsMap()
+{
+	return m_statisticsMap;
+}
+
+/**
+ * Set statistics map.
+ * @param timeMap
+ */
+void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
+{
+	m_statisticsMap = statisticsMap;
+}
+
+/**
+ * Get emerge time for this package.
+ * @param package
+ * @return emergeTime		time or na
+ */
+QString History::packageTime( const QString& packageNoversion )
+{
+	EmergeTimeMap::iterator itMap = m_statisticsMap.find( packageNoversion );
+	if ( itMap != m_statisticsMap.end() )
+		return QString::number( itMap.data().emergeTime() / itMap.data().count() );
+	else
+		return QString::null;
 }
 
 #include "history.moc"

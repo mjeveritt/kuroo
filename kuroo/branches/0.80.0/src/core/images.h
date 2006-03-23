@@ -26,7 +26,7 @@
 
 /**
  * @class Images
- * @short Initialize images in Kuroo.
+ * @short Delivers icons in Kuroo.
  */
 class Images : public QObject
 {
@@ -36,7 +36,6 @@ public:
     ~Images();
 
 	void 		init( QObject *parent = 0 );
-	
 	QPixmap&	icon( int image );
 	
 private:
@@ -44,7 +43,6 @@ private:
 	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxWorld;
 	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
 	QPixmap		pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
-
 };
 
 #endif

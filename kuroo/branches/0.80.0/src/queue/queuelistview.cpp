@@ -296,7 +296,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			item->setOpen( true );
 		}
 		else {
-			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->itemId( idDepend ) );
+			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->packageItemById( idDepend ) );
 			if ( itemDepend )
 				item = new QueueItem( itemDepend, category, name, id, status, duration );
 		}

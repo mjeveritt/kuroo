@@ -106,8 +106,6 @@ bool ScanUpdatesJob::doJob()
 	EmergePackageList::ConstIterator itEnd = m_packageList.end();
 	for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 
-		kdDebug() << "package=" << (*it).category << " " << (*it).name << endl;
-		
 		// Abort the scan
 		if ( isAborted() ) {
 			kdDebug() << i18n("Scanning updates. Scan aborted!") << endl;

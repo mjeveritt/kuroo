@@ -29,7 +29,7 @@
 
 /**
  * @class CategoriesView::CategoryItem
- * @short Highlight category header with bold darkGray
+ * @short Highlight empty category.
  */
 class CategoriesView::CategoryItem : public QListViewItem
 {
@@ -70,6 +70,7 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg
 		p->setFont( font );
 		m_cg.setColor( QColorGroup::Text, Qt::black );
 	}
+	
 	QListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
 
@@ -178,8 +179,6 @@ void CategoriesListView::init()
 	item->setOn( true );
 	categories[0] = item;
 	setSelected( firstChild(), true );
-	
-	kdDebug() << "CategoriesListView::init... done!" << endl;
 }
 
 /**
@@ -237,8 +236,6 @@ void SubCategoriesListView::init()
 		QString name = *it;
 		allSubCategories[idCategory].insert( std::pair<int, QString>(idSubCategory, name) );
 	}
-	
-	kdDebug() << "SubCategoriesListView::init... done!" << endl;
 }
 
 /**

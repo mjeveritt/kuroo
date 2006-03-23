@@ -94,7 +94,6 @@ bool Emerge::queue( const QStringList& packageList )
 	unmasked = QString::null;
 	lastEmergeList = packageList;
 	etcUpdateCount = 0;
-	QString sPack = packageList.join(" ");
 	
 	emergePackageList.clear();
 	eProc->resetAll();
@@ -115,7 +114,7 @@ bool Emerge::queue( const QStringList& packageList )
 		return false;
 	}
 	else {
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( sPack ), KUROO );
+		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( packageList.join(" ") ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
 		KurooStatusBar::instance()->startTimer();
 		return true;
@@ -169,7 +168,6 @@ bool Emerge::unmerge( const QStringList& packageList )
 	blocks.clear();
 	importantMessage = QString::null;
 	etcUpdateCount = 0;
-	QString sPack = packageList.join(" ");
 	emergePackageList.clear();
 	
 	eProc->resetAll();
@@ -187,7 +185,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupUnmerge(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
-		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( sPack ), KUROO );
+		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( packageList.join(" ") ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
 		KurooStatusBar::instance()->startProgress();
 		return true;
@@ -273,13 +271,13 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 	                   "\\s+([\\d,]*)\\s+kB" );
 	
 	while ( proc->readln( line, true ) >= 0 ) {
-		int logDone(0);
+		int logDone( 0 );
 		
 		////////////////////////////////////////////////////////////////////////////////
 		// Cleanup emerge output - remove damn escape sequences
 		////////////////////////////////////////////////////////////////////////////////
 		line.replace( QRegExp("\\x0007"), "\n" );
-		int pos(0);
+		int pos( 0 );
 		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
 		            "(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
 		while ( ( pos = rx.search(line) ) != -1 )

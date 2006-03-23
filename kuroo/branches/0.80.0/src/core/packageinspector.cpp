@@ -177,7 +177,7 @@ void PackageInspector::slotApply()
 			myChild = myChild->nextSibling();
 		}
 		
-		kdDebug() << "useList=" << useList << endl;
+// 		kdDebug() << "useList=" << useList << endl;
 		
 		// Store in db and save to file
 		if ( !useList.isEmpty() ) {
@@ -191,12 +191,13 @@ void PackageInspector::slotApply()
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
 			*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << category + "/" + package;
-			globalUseList=useList;
+			globalUseList = useList;
 
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );
 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
 			eProc->start( KProcess::NotifyOnExit, true );
 			SignalistSingleton::Instance()->setKurooBusy( true );
+			
 			if ( !eProc->isRunning() )
 				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.").arg( category ).arg( package ), ERROR );
 			
@@ -649,7 +650,7 @@ void PackageInspector::loadChangeLog()
 		}
 		else {
 			kdDebug() << i18n("Loading changelog. Error reading: ") << fileName << endl;
-			kdDebug() << QString("Loading changelog. Error reading: ") << fileName << endl;
+			kdDebug() << "Loading changelog. Error reading: " << fileName << endl;
 			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>No ChangeLog found.</b></font>") );
 		}
 	}
@@ -675,7 +676,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 		}
 		else {
 			kdDebug() << i18n("Loading ebuild. Error reading: ") << fileName << endl;
-			kdDebug() << QString("Loading ebuild. Error reading: ") << fileName << endl;
+			kdDebug() << "Loading ebuild. Error reading: " << fileName << endl;
 			dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>No ebuild found.</b></font>") );
 		}
 	}
@@ -710,7 +711,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 		}
 		else {
 			kdDebug() << i18n("Load dependencies. Error reading: ") << fileName << endl;
-			kdDebug() << QString("Load dependencies. Error reading: ") << fileName << endl;
+			kdDebug() << "Load dependencies. Error reading: " << fileName << endl;
 			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>No dependencies found.</b></font>") );
 		}
 	}
@@ -738,7 +739,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		}
 		else {
 			kdDebug() << i18n( "Loading installed files list. Error reading: " ) << filename << endl;
-			kdDebug() << QString( "Loading installed files list. Error reading: " ) << filename << endl;
+			kdDebug() <<  "Loading installed files list. Error reading: "  << filename << endl;
 			dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>No installed files found.</b></font>") );
 		}
 	}
@@ -797,6 +798,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
                        "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
 	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
 	                   "\\s+([\\d,]*)\\s+kB" );
+	
 	QStringList tmpUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
@@ -819,18 +821,19 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	QStringList useList = useList.split( QString(", "), globalUseList.join(", ").remove( QRegExp("/b\\+|\\*|\\%") ) );
 	foreach ( tmpUseList ){
 		QString aux = (*it);
+		
 		//removes all * since it's not a characted admitted in use flags
 		aux = aux.remove( QRegExp("/b\\+|\\*|\\%") );
 		foreach ( globalUseList ) {
 			QString aux2 = (*it);
 			aux2 = aux2.remove( QRegExp("/b\\+|\\*|\\%") );
-			if (aux == aux2 ) {
+			if (aux == aux2 )
 				useList = useList.grep( QRegExp (QString("^(?!").append( aux ).append(")") ) );
-			}
 		}
 	}
 	//end of better
 	kdDebug() << "useList=" << useList << endl;
+	
 	QString checkUse = useList.join(", ");
 	if ( !checkUse.remove(", ").remove(" ").isEmpty() ) {
 		KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
@@ -856,6 +859,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
 	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
 	                   "\\s+([\\d,]*)\\s+kB" );
+	
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
 		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {

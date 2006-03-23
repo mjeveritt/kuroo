@@ -32,7 +32,7 @@ class KProcess;
 
 /**
  * @class Emerge
- * @short Object handling the Gentoo emerge command.
+ * @short The Gentoo emerge command.
  */
 class Emerge : public QObject
 {

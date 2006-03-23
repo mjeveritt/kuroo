@@ -63,11 +63,21 @@ private slots:
 
 private:
 	QObject*		m_parent;
+	
+	// Watches the emerge.log file
 	KDirWatch		*logWatcher;
+	
+	// Map with packages emerge duration
 	EmergeTimeMap	m_statisticsMap;
+	
+	// The emerge.log
 	QFile 			log;
+	
+	// Stream for emerge.log
 	QTextStream 	stream;
-	bool			userSync, isEmerging;
+	
+	// Is kuroo emerging or just downloading the package
+	bool			isEmerging;
 	
 signals:
 	void			signalScanHistoryCompleted();

@@ -154,13 +154,14 @@ void EtcUpdate::runDiff()
 		QString source = etcFilesList.first();
 		etcFilesList.pop_front();
 		
-		// Check for etc warning
+		// Check for etc-files warnings
 		QString etcWarning;
 		const QStringList etcFilesWarningsList = QStringList::split( "\n", KurooConfig::etcFiles() );
 		foreach ( etcFilesWarningsList )
 			if ( *it == destination )
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
 		
+		// Ask user what to do with this etc-file
 		switch ( KMessageBox::questionYesNo( 0, i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), 
 		                                     i18n("etc-update (%1 of %2)").arg( count++ ).arg( totalEtcCount ) ) ) {
 			

@@ -29,7 +29,7 @@
 
 /**
  * @class PackageItem
- * @short Base class for packages.
+ * @short Base class for package.
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
 	: KListViewItem( parent, name ),
@@ -126,10 +126,6 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Accessor methods
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Package db id.
@@ -340,6 +336,8 @@ void PackageItem::initVersions()
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
 // 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;
+	
+	// This package has collected all it's data
 	hasDetailedInfo = true;
 }
 

@@ -40,7 +40,7 @@ public:
 
 public:
 	virtual	void			resetListView();
-	virtual	PackageItem* 	itemId( const QString& id );
+	virtual	PackageItem* 	packageItemById( const QString& id );
 	
 	virtual QString			currentId();
 	QString					currentItemStatus();

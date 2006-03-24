@@ -141,8 +141,6 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
-// 	kdDebug() << "PortageTab::slotBusy" << endl;
-	
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		pbUninstall->setDisabled( true );
@@ -165,8 +163,6 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-// 	kdDebug() << "PortageTab::slotButtons" << endl;
-	
 	// No package selected, disable all buttons
 	if ( packagesView->selectedId().isEmpty() ) {
 		pbQueue->setDisabled( true );

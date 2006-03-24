@@ -69,6 +69,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
+	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotClear() ) );
 	
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
@@ -144,8 +145,10 @@ void QueueTab::slotInit()
 	QToolTip::add( cbDownload, i18n( "<qt><table width=300><tr><td>Instead of doing any package building, "
 	                                 "just perform fetches for all packages (the main package as well as all dependencies), "
 	                                 "grabbing all potential files.</td></tr></table></qt>" ) );
+	
 	QToolTip::add( cbNoWorld, i18n(  "<qt><table width=300><tr><td>Emerge as normal, "
 	                                 "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+	
 	QToolTip::add( cbForceConf, i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
 	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
 	                                  "Portage will normally merge those files only once to prevent the user"
@@ -218,8 +221,6 @@ void QueueTab::slotQueueSummary()
  */
 void QueueTab::slotBusy()
 {
-// 	kdDebug() << "QueueTab::slotBusy" << endl;
-	
 	// No db or queue is empty - no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
 		pbRemove->setDisabled( true );
@@ -241,8 +242,6 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
-// 	kdDebug() << "QueueTab::slotButtons" << endl;
-	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );

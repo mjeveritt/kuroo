@@ -115,23 +115,26 @@ public:
 		}
 		else {
 			
-			QString installedVersionCount = KurooDBSingleton::Instance()->singleQuery( QString( 
-					"SELECT COUNT(id) FROM version WHERE idPackage = '%1' LIMIT 1;").arg( id ), m_db );
+			// Check how many version are installed
+			QString installedVersionCount = KurooDBSingleton::Instance()->singleQuery( 
+				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status != '%2' LIMIT 1;")
+				.arg( id ).arg( FILTER_ALL_STRING ), m_db );
 			
 			// Mark package as uninstalled only when one version is found
 			if ( installedVersionCount == "1" ) {
 			
 				// Mark package as uninstalled
-				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' "
-															  "WHERE status = '%2' AND id = '%3'").arg( FILTER_ALL_STRING ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%2' AND id = '%3'")
+				                                     .arg( FILTER_ALL_STRING )
+				                                     .arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
 			
 				// Remove package completely if "old" = not in official Portage anymore
-				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package "
-															  "WHERE status = '%1' AND id = '%2';" ).arg( FILTER_OLD_STRING ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE status = '%1' AND id = '%2';" )
+				                                     .arg( FILTER_OLD_STRING ).arg( id ), m_db );
 			}
 			
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' "
-			                                              "WHERE idPackage = '%2' AND name = '%3';" ).arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
+			                                     .arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
@@ -182,8 +185,8 @@ public:
 		}
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
-			                                              "WHERE name = '%1' AND ( updateVersion = '%2' OR updateVersion = '%3' );"
-			                                            ).arg( name ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
+			                                              "WHERE name = '%1' AND ( updateVersion = '%2' OR updateVersion = '%3' );" )
+			                                     .arg( name ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
 		}
@@ -217,8 +220,8 @@ public:
 			if ( m_hasUpdate < 0 )
 				updateString = m_updateVersion + " (D)";
 		
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';"
-		                                            ).arg( updateString ).arg( m_id ), m_db );
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';" )
+		                                     .arg( updateString ).arg( m_id ), m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
@@ -271,6 +274,9 @@ void Portage::init( QObject *parent )
 void Portage::slotChanged()
 {
 	kdDebug() << k_funcinfo << endl;
+	
+	// Register in db so we can check at next start if user has emerged any packages outside kuroo
+	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	emit signalPortageChanged();
 }
@@ -349,9 +355,6 @@ void Portage::slotScanCompleted()
 	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();
-	
-	// Register this scan in history so we can check at next start if user has emerged any packages outside kuroo
-	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	// Now all Portage files
 	PortageFilesSingleton::Instance()->loadPackageFiles();
@@ -502,6 +505,8 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
  */
 void Portage::addInstalledPackage( const QString& package )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
 }
 
@@ -512,6 +517,8 @@ void Portage::addInstalledPackage( const QString& package )
  */
 void Portage::removeInstalledPackage( const QString& package )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
 }
 

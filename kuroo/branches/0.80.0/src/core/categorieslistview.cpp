@@ -63,12 +63,12 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg
 	if ( !m_on ) {
 		font.setItalic( true );
 		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, Qt::gray );
+		m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 	}
 	else {
 		font.setItalic( false );
 		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, Qt::black );
+		m_cg.setColor( QColorGroup::Text, m_cg.text() );
 	}
 	
 	QListViewItem::paintCell( p, m_cg, column, width, alignment );

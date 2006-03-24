@@ -325,8 +325,12 @@ void PackageInspector::edit( PackageItem* portagePackage )
 		isVirginState = false;
 
 	// Construct header text
-	dialog->headerFrame->setPaletteBackgroundColor( QColor(104, 125, 227) );
-	dialog->package->setText( "<b><font color=white><font size=+1>" + package + "</font> " +
+	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
+		+ QString::number( colorGroup().highlightedText().green(), 16 ) 
+		+ QString::number( colorGroup().highlightedText().blue(), 16 );
+	
+	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
+	dialog->package->setText( "<b><font color=#" + fgColor + "><font size=+1>" + package + "</font> " +
 	                          "(" + category.section( "-", 0, 0 ) + "/" + category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->description->setText( m_portagePackage->description() );
 	

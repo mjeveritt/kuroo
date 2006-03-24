@@ -285,7 +285,7 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 	: QListBoxItem( listbox ), m_modified( false )
 {
 	mPixmap = pixmap;
-	if( mPixmap.isNull() )
+	if ( mPixmap.isNull() )
 		mPixmap = defaultPixmap();
 	
 	setText( text );
@@ -295,9 +295,12 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 void KurooView::IconListItem::paint( QPainter *painter )
 {
 	if ( m_modified )
-		painter->setPen( Qt::blue );
+		painter->setPen( listBox()->colorGroup().link() );
 	else
-		painter->setPen( Qt::black );
+		painter->setPen( listBox()->colorGroup().text() );
+	
+	if ( isCurrent() )
+		painter->setPen( listBox()->colorGroup().highlightedText() );
 	
 	QFontMetrics fm = painter->fontMetrics();
 	int ht = fm.boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).height();
@@ -306,13 +309,13 @@ void KurooView::IconListItem::paint( QPainter *painter )
 	
 	painter->drawPixmap( (listBox()->maxItemWidth()-wp) / 2, 5, mPixmap );
 	
-	if( !text().isEmpty() )
+	if ( !text().isEmpty() )
 		painter->drawText( 0, hp + 7, listBox()->maxItemWidth(), ht, Qt::AlignCenter, text() );
 }
 
 int KurooView::IconListItem::height( const QListBox *lb ) const
 {
-	if( text().isEmpty() )
+	if ( text().isEmpty() )
 		return mPixmap.height();
 	else {
 		int ht = lb->fontMetrics().boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).height();

@@ -103,7 +103,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 						QFont font( painter->font() );
 						font.setItalic( true );
 						painter->setFont( font );
-						m_colorgroup.setColor( QColorGroup::Text, Qt::gray );
+						m_colorgroup.setColor( QColorGroup::Text, m_colorgroup.dark() );
 					}
 				}
 				break;

@@ -117,6 +117,8 @@ QueueTab::~QueueTab()
  */
 void QueueTab::slotInit()
 {
+	queueFrame->setPaletteBackgroundColor( colorGroup().base() );
+	
 	if ( KurooConfig::forceConf() )
 		cbForceConf->setChecked( true );
 	else

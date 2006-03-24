@@ -316,7 +316,7 @@
             </widget>
             <widget class="QFrame">
                 <property name="name">
-                    <cstring>frame4</cstring>
+                    <cstring>queueFrame</cstring>
                 </property>
                 <property name="sizePolicy">
                     <sizepolicy>
@@ -331,13 +331,6 @@
                         <width>0</width>
                         <height>100</height>
                     </size>
-                </property>
-                <property name="paletteBackgroundColor">
-                    <color>
-                        <red>255</red>
-                        <green>255</green>
-                        <blue>255</blue>
-                    </color>
                 </property>
                 <property name="frameShape">
                     <enum>NoFrame</enum>
@@ -504,6 +497,9 @@
                                         <width>200</width>
                                         <height>50</height>
                                     </size>
+                                </property>
+                                <property name="backgroundOrigin">
+                                    <enum>ParentOrigin</enum>
                                 </property>
                                 <property name="frameShape">
                                     <enum>NoFrame</enum>

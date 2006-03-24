@@ -101,6 +101,8 @@ PortageTab::~PortageTab()
  */
 void PortageTab::slotInit()
 {
+	portageFrame->setPaletteBackgroundColor( colorGroup().base() );
+	
 	// Initialize the uninstall dialog
 	uninstallInspector = new UninstallInspector( this );
 	
@@ -462,14 +464,22 @@ void PortageTab::slotPackage()
 	
 	// Update current package with description from latest version
 	packagesView->currentPackage()->setDescription( description );
-	
+
 	// Remove trailing commas
 	linesInstalled.truncate( linesInstalled.length() - 2 );
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
 	// Build summary html-view
+	QString bgColor = QString::number( colorGroup().highlight().red(), 16 )
+		+ QString::number( colorGroup().highlight().green(), 16 ) 
+		+ QString::number( colorGroup().highlight().blue(), 16 );
+	
+	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
+		+ QString::number( colorGroup().highlightedText().green(), 16 ) 
+		+ QString::number( colorGroup().highlightedText().blue(), 16 );
+	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
-	lines += "<tr><td bgcolor=#687DE3 colspan=2><b><font color=white><font size=\"+1\">" + package + "</font> ";
+	lines += "<tr><td bgcolor=#" + bgColor + " colspan=2><b><font color=#" + fgColor + "><font size=\"+1\">" + package + "</font> ";
 	lines += "(" + category.section( "-", 0, 0 ) + "/";
 	lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
 	

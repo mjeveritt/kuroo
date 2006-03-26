@@ -27,8 +27,6 @@ class QComboBox;
 class QGroupBox;
 class QVBox;
 
-extern QRegExp pv;
-
 /**
  * @class ConfigDialog
  * @short Kuroo preferences widget.
@@ -41,37 +39,12 @@ public:
 	ConfigDialog( QWidget *parent, const char *name, KConfigSkeleton *config );
 	~ConfigDialog();
 	
-	/**
- 	 * Slot to save all installed packages into the world file.
- 	 */
-	bool exportToWorld();
-	
 private slots:
-	
-	/**
- 	 * Load the contents of the these inte KTextBoxes.
- 	 */
+	QStringList parseMakeConf();
 	void readMakeConf();
-	void readPackageUnmask();
-	void readPackageMask();
-	void readPackageKeywords();
-	void readWorldFile();
-	
-	/**
- 	 * And save back...
- 	 */
 	bool saveMakeConf();
-	bool savePackageUnmask();
-	bool savePackageMask();
-	bool savePackageKeywords();
-	bool saveWorldFile();
 	void saveAll();
-
-	void exportWorld();
 	void slotDefault();
-
-private:
-	QString m_chost, m_cflags, m_makeopts, m_useFlags, m_overlay, m_rsyncMirror, m_language;
 };
 
 #endif

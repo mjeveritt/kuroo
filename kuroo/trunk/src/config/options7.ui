@@ -19,6 +19,9 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
         <widget class="KTextEdit" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>kcfg_etcFiles</cstring>
@@ -26,6 +29,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>ktextedit.h</includehint>

@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "common.h"
-#include "log.h"
 
 #include <sys/stat.h>
 
@@ -32,10 +31,11 @@
 #include <kmessagebox.h>
 
 /**
- * Log output from all actions as emerge, scanning... to log window and to file.
+ * @class Log
+ * @short Log output from all actions as emerge, scanning... to log window and to file.
  */
-Log::Log( QObject* parent )
-	: QObject( parent ), logBrowser(0), verboseLog(0), saveLog(0)
+Log::Log( QObject* m_parent )
+	: QObject( m_parent ), logBrowser( 0 ), verboseLog( 0 ), saveLog( 0 )
 {
 }
 
@@ -48,16 +48,17 @@ Log::~Log()
  * Open persistent log.
  * @return log file name
  */
-QString Log::init( QObject *myParent )
+QString Log::init( QObject *parent )
 {
-	parent = myParent;
+	m_parent = parent;
 	
-	QString logName = KUROODIR + "/kuroo.log";
-	logFile.setName(logName);
-	if( !logFile.open(IO_WriteOnly ) ) {
-		kdDebug() << i18n("Error writing: ") << KUROODIR << "/kuroo.log" << endl;
-		KMessageBox::error(0, i18n("Error writing %1/kuroo.log.").arg(KUROODIR), i18n("Saving"));
-		return "";
+	QString logName = KUROODIR + "kuroo.log";
+	logFile.setName( logName );
+	if( !logFile.open( IO_WriteOnly ) ) {
+		kdDebug() << i18n("Error writing: ") << KUROODIR << "kuroo.log" << endl;
+		kdDebug() << "Error writing: " << KUROODIR << "kuroo.log" << endl;
+		KMessageBox::error(0, i18n("Error writing %1kuroo.log.").arg(KUROODIR), i18n("Saving"));
+		return QString::null;
 	}
 	else
 		return logName;
@@ -71,9 +72,7 @@ KIO::Job* Log::backupLog()
 {
 	if ( saveLog && saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
-		
-		KIO::Job *cpjob = KIO::file_copy( KUROODIR + "/kuroo.log", KUROODIR + "/kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
-		
+		KIO::Job *cpjob = KIO::file_copy( KUROODIR + "kuroo.log", KUROODIR + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
 		return cpjob;
 	}
 	else
@@ -95,45 +94,48 @@ void Log::setGui( KTextBrowser* logBrowserGui, QCheckBox* verboseLogGui, QCheckB
 /**
  * Write log lines to text browser and log file.
  * @param output		line of text.
- * @param i			type of log = EMERGE, KUROO, WARNING, TOLOG, EMERGELOG.
+ * @param logType			type of log = EMERGE, KUROO, WARNING, TOLOG, EMERGELOG.
  */
-void Log::writeLog( const QString& output, int i )
+void Log::writeLog( const QString& output, int logType )
 {
 	QString line(output);
-	line.replace('\'', "''");
+	line.utf8().replace( '\'', "''" );
 	
-	switch(i) {
+	switch ( logType ) {
+		
 		case EMERGE: {
 			if ( verboseLog && verboseLog->isChecked() ) {
 				line = "<font color=blue>" + line.replace('>', "&gt;").replace('<', "&lt;")+ "</font>";
-				logBrowser->append(line);
+				logBrowser->append( line );
+				emit signalLogChanged();
 			}
 			break;
 		}
+		
 		case KUROO: {
 			logBrowser->append(line);
 			break;
 		}
+		
 		case ERROR: {
 			line = "<font color=red>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
-			
-			logBrowser->append(line);
+			logBrowser->append( line );
 			break;
 		}
+		
 		case TOLOG: {
 			QTextStream st( &logFile );
 			st << line << endl;
 			logFile.flush();
 			break;
 		}
+		
 		case EMERGELOG: {
 			line = "<font color=BlueViolet>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
-			
-			logBrowser->append(line);
+			logBrowser->append( line );
 		}
+		
 	}
-	
-	emit signalLogUpdated();
 }
 
 #include "log.moc"

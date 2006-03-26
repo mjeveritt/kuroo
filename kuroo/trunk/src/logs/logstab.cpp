@@ -30,78 +30,48 @@
 #include <kmessagebox.h>
 
 /**
- * Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * @class LogsTab
+ * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
  */
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
 	logBrowser->setTextFormat( Qt::LogText );
-	
-	// Reload view after changes.
-	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
-	
 	slotInit();
 }
 
 /**
- * Save splitters and listview geometry.
+ * Save checkboxes state.
  */
 LogsTab::~LogsTab()
 {
-	KConfig* config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	
-	QValueList<int> list = splitterV->sizes();
-	config->writeEntry("splitterLogsV", list);
-	
-	historyView->saveLayout( KurooConfig::self()->config(), "logsViewLayout" );
-	
-	// Save checkboxes state
 	if ( saveLog->isChecked() )
-		KurooConfig::setSaveLog(true);
+		KurooConfig::setSaveLog( true );
 	else
-		KurooConfig::setSaveLog(false);
+		KurooConfig::setSaveLog( false );
 	
 	if ( verboseLog->isChecked() )
-		KurooConfig::setVerboseLog(true);
+		KurooConfig::setVerboseLog( true );
 	else
-		KurooConfig::setVerboseLog(false);
+		KurooConfig::setVerboseLog( false );
 	
 	KurooConfig::writeConfig();
 }
 
 /**
- * Initialize geometry and content.
- * Restore geometry: splitter positions, listViews width and columns width.
+ * Restore checkboxes state
  */
 void LogsTab::slotInit()
 {
-	KConfig* config = KurooConfig::self()->config();
-	config->setGroup("Kuroo Geometry");
-	
-	QValueList<int> sizes = config->readIntListEntry("splitterLogsV");
-	splitterV->setSizes(sizes);
-	
-	historyView->restoreLayout( KurooConfig::self()->config(), "logsViewLayout" );
-	
-	// Restore checkboxes state
 	if ( KurooConfig::saveLog() )
-		saveLog->setChecked(true);
+		saveLog->setChecked( true );
 	else
-		saveLog->setChecked(false);
+		saveLog->setChecked( false );
 	
 	if ( KurooConfig::verboseLog() )
-		verboseLog->setChecked(true);
+		verboseLog->setChecked( true );
 	else
-		verboseLog->setChecked(false);
-}
-
-/**
- * Reload history view.
- */
-void LogsTab::slotReload()
-{
-	historyView->loadFromDB();
+		verboseLog->setChecked( false );
 }
 
 #include "logstab.moc"

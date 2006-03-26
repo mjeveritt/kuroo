@@ -25,32 +25,17 @@
 
 /**
  * @class LogsTab
- * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * @short Tabpage for emerge log browser.
  */
 class LogsTab : public LogsBase
 {
 Q_OBJECT
 public:
     LogsTab( QWidget *parent = 0 );
-	
-	/**
-	 * Save splitters and listview geometry.
-	 */
     ~LogsTab();
-
 	
 private slots:
-	
-	/**
-	 * Initialize geometry and content.
-	 * Restore geometry: splitter positions, listViews width and columns width.
-	 */
 	void 		slotInit();
-	
-	/**
-	 * Reload history view.
-	 */
-	void		slotReload();
 	
 };
 

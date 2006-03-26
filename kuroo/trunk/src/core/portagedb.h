@@ -1,11 +1,7 @@
-/***************************************************************************
+/**************************************************************************
 *   Copyright (C) 2004 by karye                                           *
 *   karye@users.sourceforge.net                                           *
-* (c) 2004 Mark Kretschmann <markey@web.de>
-* (c) 2004 Christian Muehlhaeuser <chris@chris.de>
-* (c) 2004 Sami Nieminen <sami.nieminen@iki.fi>
-* (c) 2005 Ian Monroe <ian@monroe.nu>
-*                                                                         *
+*   From Amarok code                                                      *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -60,6 +56,7 @@ public:
 	virtual ~DbConnection() = 0;
 	
 	virtual QStringList query( const QString& /* statement */) = 0;
+	virtual QString		singleQuery( const QString& /* statement */) = 0;
 	virtual int 		insert( const QString& /* statement */) = 0;
 	const bool 			isInitialized() const { return m_initialized; }
 	virtual bool 		isConnected()const = 0;
@@ -77,6 +74,7 @@ public:
 	~SqliteConnection();
 	
 	QStringList 		query( const QString& /* statement */ );
+	QString		 		singleQuery( const QString& /* statement */ );
 	int 				insert( const QString& /* statement */ );
 	bool 				isConnected()const { return true; }
 	
@@ -100,7 +98,7 @@ public:
 	DbConnection 		*getDbConnection();
 	void 				putDbConnection( const DbConnection* /* conn */ );
 	
-	QString escapeString(QString string) {
+	QString escapeString( QString string ) {
 		return string.replace('\'', "''");
 	}
 	
@@ -118,18 +116,17 @@ private:
 class KurooDB : public QObject
 {
 Q_OBJECT
-		
-signals:
 
 public:
-	KurooDB( QObject *parent = 0 );
+	KurooDB( QObject *m_parent = 0 );
 	~KurooDB();
+	
+	void 			destroy();
 	
 	/**
 	 * Check db integrity and create new db if necessary.
 	 */
-	QString 		init( QObject *myParent = 0 );
-	
+	QString 		init( QObject *parent = 0 );
 	QString 		escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
 	
 	/**
@@ -150,88 +147,92 @@ public:
 	
 	//sql helper methods
 	QStringList 	query( const QString& statement, DbConnection *conn = NULL );
+	QString		 	singleQuery( const QString& statement, DbConnection *conn = NULL );
 	int 			insert( const QString& statement, DbConnection *conn = NULL );
 	
 	//table management methods
 	bool 			isPortageEmpty();
 	bool 			isHistoryEmpty();
 	bool 			isValid();
-	void 			createTables(DbConnection *conn = NULL);
+	void 			createTables( DbConnection *conn = NULL );
 	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for allPackages
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	isInstalled( const QString& name, const QString& version );
-	QStringList 	packageVersions( const QString& name );
-	QStringList 	packageKeywords( const QString& idCategory, const QString& name );
-	QStringList 	categoryByPackageId( const QString& id );
+	// Kuroo main
+	QString			getKurooDbMeta( const QString& meta );
+	void			setKurooDbMeta( const QString& meta, const QString& data );
+	void			backupDb();
+	void			restoreBackup();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	portageCategories();
-	QStringList 	portageCategoryId( const QString& category );
-	QStringList 	portagePackagesByCategory( const QString& idCategory );
-	QStringList 	portagePackageInfo( const QString& id );
-	QStringList 	portageIdByCategoryNameVersion( const QString& category, const QString& name, const QString& version );
-	QStringList 	findPortagePackagesName( const QString& name );
-	QStringList 	findPortagePackagesDescription( const QString& description );
+	QStringList		allCategories();
+	QStringList		allSubCategories();
+	QStringList 	portageCategories( int filter, const QString& text );
+	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
+	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
+	QString		 	packageId( const QString& package );
+
 	
 	//////////////////////////////////////////////////////////////////////////////
-	// Queries for installed
+	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	installedPackages();
-	QStringList 	installedCategories();
-	QStringList 	installedPackagesByCategory( const QString& idCategory );
-	QStringList 	installedPackageInfo( const QString& id );
-	QStringList 	findInstalledPackagesName( const QString& name );
-	QStringList 	findInstalledPackagesDescription( const QString& description );
+	QString 		packagePath( const QString& idPackage, const QString& version );
+	QStringList 	packageVersionsInstalled( const QString& idPackage );
+	QStringList 	packageVersionsInfo( const QString& idPackage );
+	QString 		versionSize( const QString& idPackage, const QString& version );
+	QStringList		packageHardMaskInfo( const QString& id );
+	bool			isPackagesEmpty();
+	bool			isQueueEmpty();
+	QString		 	package( const QString& id );
+	QString		 	category( const QString& id );
+	
+	
+	///////////////////////////////////////////////////////////////////////////////
+	// Queries for portage files
+	///////////////////////////////////////////////////////////////////////////////
+	QString		 	packageHardMaskAtom( const QString& id );
+	QString		 	packageUserMaskAtom( const QString& id );
+	QString		 	packageUnMaskAtom( const QString& id );
+	QString			packageKeywordsAtom( const QString& id );
+	QString			packageUse( const QString& id );
+	
+	bool 			isPackageUnMasked( const QString& id );
+	bool 			isPackageUnTesting( const QString& id );
+	bool 			isPackageAvailable( const QString& id );
+	
+	void			setPackageUse( const QString& id, const QString& useFlags );
+	void			setPackageUnTesting( const QString& id );
+	void			setPackageUnMasked( const QString& id );
+	void			setPackageUnMasked( const QString& id, const QString& version );
+	void			setPackageUserMasked( const QString& id, const QString& version );
+	void			setPackageAvailable( const QString& id );
+	
+	void			clearPackageUnTesting( const QString& id );
+	void			clearPackageUnMasked( const QString& id );
+	void			clearPackageUserMasked( const QString& id );
+	void			clearPackageAvailable( const QString& id );
+	
 	
 	//////////////////////////////////////////////////////////////////////////////
-	// Queries for updates 
+	// Miscellanious queries
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	updatesCategories();
-	QStringList 	updatesPackages();
-	QStringList 	updatesPackagesByCategory( const QString& idCategory );
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for Queue 
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	queuePackages();
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for Results 
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	resultPackages();
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for History 
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	history();
-	QStringList 	lastHistoryEntry();
-	QStringList		getLastSync();
-	QStringList 	statistic();
-	
-	//////////////////////////////////////////////////////////////////////////////
-	// Queries for Cache
-	//////////////////////////////////////////////////////////////////////////////
-	QStringList 	cache();
+	void			clearQueuePackageUse();
+	QStringList 	allQueuePackages();
+	QStringList		allQueueId();
+	QStringList 	allHistory();
+	QStringList 	allMergeHistory();
+	void			resetUpdates();
+	void			resetInstalled();
+	void			addEmergeInfo( const QString& einfo );
+	void			addBackup( const QString& source, const QString& destination );
+	QStringList 	allStatistic();
 	bool			isCacheEmpty();
 	
-	
-	
 private:
-	QObject	*parent;
-	
-    //bump DATABASE_VERSION whenever changes to the table structure are made. will remove old db file.
-	static const int DATABASE_VERSION = 18;
-	static const int DATABASE_STATS_VERSION = 3;
-	static const int MONITOR_INTERVAL = 60; //sec
-
-	void destroy();
+	QObject*		m_parent;
 
 	DbConnectionPool *m_dbConnPool;
-	bool m_monitor;
+	bool 			m_monitor;
 };
 
 #endif /* KUROODB_H */

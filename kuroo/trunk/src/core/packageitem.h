@@ -23,73 +23,88 @@
 
 #include <klistview.h>
 
-#include <qpixmap.h>
+#include <qobject.h>
 
-typedef QMap<QString, QString> Meta;
+class PackageVersion;
+class DependAtom;
 
 /**
  * @class PackageItem
- * @short KListViewItem subclass to implement sorting, tooltip, color...
+ * @short KListViewItem subclass
  */
 class PackageItem : public KListViewItem
 {
 public:
-	PackageItem( QListView *parent, const char *name, Meta meta, int status );
-	PackageItem( QListViewItem *parent, const char *name, Meta meta, int status );
+	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status );
+	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status );
 	~PackageItem();
+	
+	QString							status();
+	QString 						id();
+	QString							name();
+	QString							description();
+	
+	virtual void					setPackageIndex( int index );	
+	virtual bool					isInstalled();
+	virtual bool					isInPortage();
+	virtual bool					isQueued();
+	virtual bool					isInWorld();
+	
+	void							setInstalled();
+	void							setDescription( const QString& description );
+	void							setQueued( bool isQueued );
+	bool							isFirstPackage();
+	bool							isLastPackage();
+	
+	QString 						category();
+	void 							initVersions();
+	QValueList<PackageVersion*> 	versionList();
+	QMap<QString,PackageVersion*> 	versionMap();
+	QValueList<PackageVersion*> 	sortedVersionList();
+	void							resetDetailedInfo();
 
-	/**
-	 * @return meta inf on package
-	 */
-	Meta			getMeta();
-	
-	/**
- 	 * Is the listViewItem category, package or ebuild.
- 	 * Set icon and tooltip text.
- 	 * @param status
- 	 */
-	void			setStatus( int status );
-	
 protected:
-	
-	/**
- 	 * Insert package meta text into the right column.
- 	 */
-	void			init();
-	
-	/**
- 	 * Convenience method.
- 	 * @return true if package is in the queue.
- 	 */
-	virtual bool	isQueued();
-	
-	/**
- 	 * Compare size and order numerically.
- 	 * @param i
- 	 * @param col
- 	 * @param ascending
-  	 * @return -1 or 0 or 1
-  	 */
-	virtual int		compare( QListViewItem*, int, bool ) const;
-	
-	/**
- 	 * Mark package as "masked"/"unmasked"/"present in queue" with text formating.
-	 * @param p
-	 * @param cq
-	 * @param column
-	 * @param width
-	 * @param alignment
-	 */
-	virtual void 	paintCell( QPainter *p, const QColorGroup &cg,int column, int width, int alignment );
+	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
-	QString			m_packageTip;
-	QListView		*m_parent;
-	Meta			m_meta;
-	QPixmap 		pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting, pxStableUnmasked;
-	QPixmap			pxPackageUnmasked, pxInstalledUnmasked, pxEbuild, pxEbuildMasked, pxEbuildInstalled, pxQueued;
-	int				m_status;
-	bool			queued;
+	QListView						*m_parent;
+	
+	// Keep track of package's index in parent listview
+	int								m_index;
+	
+	// Package's db id
+	QString							m_id;
+	
+	// Package name-string
+	QString							m_name;
+	
+	// Is package INSTALLED or OLD ( INSTALLED but not in Portage anymore )
+	QString							m_status;
+	
+	// Package description
+	QString							m_description;
+	
+	// Keep track of package's category
+	QString							m_category;
+	
+	// True if package is in installation queue
+	bool							m_isQueued;
+	
+	// True if package is in world file
+	bool							m_inWorld;
+	
+	// True if package and its versions has been initialized with all data
+	bool							hasDetailedInfo;
+	
+	// Valuelist with all versions and their data
+	QValueList<PackageVersion*>		m_versions;
+	
+	// Alternatively map with all versions and their data
+	QMap<QString, PackageVersion*>	m_versionMap;
+	
+	// Atom object needed for versions stability
+	DependAtom* 					atom;
+
 };
 
 #endif

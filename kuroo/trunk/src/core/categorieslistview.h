@@ -23,48 +23,79 @@
 #define CATEGORIESLISTVIEW_H
 
 #include <klistview.h>
-#include <qpixmap.h>
-
-class QPixmap;
+#include <qvaluevector.h>
 
 /**
- * Creates category listview.
+ * @class CategoriesListView
+ * @short Base class for category listview.
  */
-class CategoriesListView : public KListView
+class CategoriesView : public KListView
 {
 Q_OBJECT
-	public:
+public:
+	CategoriesView( QWidget *parent = 0, const char *name = 0 );
+	~CategoriesView();
+
+	class CategoryItem;
+	
+public slots:
+	CategoryItem*							currentCategory();
+	QString									currentCategoryId();
+	
+protected slots:
+	void									storeFocus( QListViewItem* item );
+	
+protected:
+	void									restoreFocus( bool isFiltered );
+	
+protected:
+	
+	// Category that has focus
+	QString									m_focus;
+	
+	// Index of categoris in listview
+	QDict<CategoryItem>						categoryIndex;
+	
+	typedef QValueVector<CategoryItem*>		Categories;
+	Categories			 					categories;
+	
+signals:
+	void									categoriesChanged();
+};
+
+/**
+ * @class CategoriesListView
+ * @short Categories listview.
+ */
+class CategoriesListView : public CategoriesView
+{
+Q_OBJECT
+public:
 	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesListView();
+	
+	void									init();
+	void 									loadCategories( const QStringList& categoriesList, bool isFiltered );
+};
 
-public slots:
+/**
+ * @class SubCategoriesListView
+ * @short Subcategories listview.
+ */
+class SubCategoriesListView : public CategoriesView
+{
+Q_OBJECT
+public:
+	SubCategoriesListView( QWidget *parent = 0, const char *name = 0 );
+	~SubCategoriesListView();
 	
-	/**
-	 * Current category as "category-subcategory", for example "app-admin".
-	 * @param package
-	 */
-	QString									currentCategory();
-	
-	/**
-	 * Set category current.
-	 * @param category
-	 */
-	void									setCurrentCategory( const QString& category );
-	
-	/**
- 	 * Load categories.
- 	 * With Jakob Petsovits technique for inserting items fast.
- 	 * @param categoriesList 
-	 */
-	void									loadCategories( const QStringList& categoriesList );
+	void									init();
+	void 									loadCategories( const QStringList& categoriesList );
 	
 private:
-	QPixmap 								pxRepository, pxCategory;
-	struct TreeViewCategory {
-		QListViewItem * item;
-		QMap<QString, QListViewItem*> 		subcategories;
-	};
-	QMap<QString, TreeViewCategory> 		categories;
+	typedef std::map<int, QString>			SubCategory;
+	typedef std::vector<SubCategory>		AllSubCategories;
+	AllSubCategories			 			allSubCategories;
 };
 
 #endif

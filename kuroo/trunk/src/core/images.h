@@ -18,44 +18,31 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef SCANHISTORYJOB_H
-#define SCANHISTORYJOB_H
-
-#include "threadweaver.h"
+#ifndef IMAGES_H
+#define IMAGES_H
 
 #include <qobject.h>
-
-class DbConnection;
-class QStringList;
-class PackageEmergeTime;
-
-typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
+#include <qpixmap.h>
 
 /**
- * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @class Images
+ * @short Delivers icons in Kuroo.
  */
-class ScanHistoryJob : public ThreadWeaver::DependentJob
+class Images : public QObject
 {
 Q_OBJECT
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = "" );
-	~ScanHistoryJob();
+	Images( QObject *m_parent = 0 );
+    ~Images();
 
-private:
-	bool 						doJob();
-	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
-	
-	QString escapeString( QString string ) {
-		return string.replace('\'', "''");
-	}
+	void 		init( QObject *parent = 0 );
+	QPixmap&	icon( int image );
 	
 private:
-	bool						aborted;
-	DbConnection* const			m_db;
-	QStringList 				m_logLines;
-	
+	QObject*	m_parent;
+	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxWorld;
+	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
+	QPixmap		pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
 };
 
 #endif

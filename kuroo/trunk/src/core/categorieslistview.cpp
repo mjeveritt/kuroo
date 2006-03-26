@@ -22,37 +22,149 @@
 #include "categorieslistview.h"
 
 #include <qheader.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qregexp.h>
+#include <qpainter.h>
 
 #include <klistview.h>
-#include <klocale.h>
-#include <kconfig.h>
 #include <kglobal.h>
-#include <kiconloader.h>
-#include <kdebug.h>
+
+/**
+ * @class CategoriesView::CategoryItem
+ * @short Highlight empty category.
+ */
+class CategoriesView::CategoryItem : public QListViewItem
+{
+public:
+	CategoryItem( QListView* parent, const char* name, const QString &id );
+	
+	void 	setOn( bool on );
+	QString id();
+	QString name();
+	
+protected:
+	QString	m_id, m_name;
+	bool 	m_on;
+	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+};
+
+
+CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
+	: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
+{
+}
+
+/**
+ * Paint empty categories in italic and grey when empty.
+ */
+void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+{
+	QColorGroup m_cg( cg );
+	QFont font( p->font() );
+	
+	if ( !m_on ) {
+		font.setItalic( true );
+		p->setFont( font );
+		m_cg.setColor( QColorGroup::Text, m_cg.dark() );
+	}
+	else {
+		font.setItalic( false );
+		p->setFont( font );
+		m_cg.setColor( QColorGroup::Text, m_cg.text() );
+	}
+	
+	QListViewItem::paintCell( p, m_cg, column, width, alignment );
+}
+
+void CategoriesView::CategoryItem::setOn( bool on )
+{
+	m_on = on;
+	repaint();
+}
+
+QString CategoriesView::CategoryItem::id()
+{
+	return m_id;
+}
+
+QString CategoriesView::CategoryItem::name()
+{
+	return m_name;
+}
 
 /**
  * @class CategoriesListView
- * @short Creates category listview.
+ * @short Base class for category listview.
+ */
+CategoriesView::CategoriesView( QWidget *parent, const char *name )
+	: KListView( parent, name ), categories( 0 ), m_focus( i18n("All") )
+{
+	setFullWidth( true );
+	setFrameShape( QFrame::NoFrame );
+	setSorting( -1 );
+	
+	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( storeFocus( QListViewItem* ) ) );
+}
+
+CategoriesView::~CategoriesView()
+{
+}
+
+/**
+ * Retreive focus category when a new category is made current.
+ * @categoryItem*
+ */
+void CategoriesView::storeFocus( QListViewItem* item )
+{
+	m_focus = item->text(0);
+}
+
+/**
+ * Retreive last focus category from internal index, and making that category current.
+ * bool is this triggered by filter action?
+ */
+void CategoriesView::restoreFocus( bool isFiltered )
+{
+	CategoryItem* focusCategory = categoryIndex.find( m_focus );
+	if ( !focusCategory )
+		focusCategory = dynamic_cast<CategoryItem*>( firstChild() );
+	
+	setCurrentItem( focusCategory );
+	setSelected( focusCategory, true );
+	
+	// Emit manually 'currentChanged' if triggered by filter
+	if ( isFiltered )
+		emit currentChanged( focusCategory );
+}
+
+CategoriesView::CategoryItem* CategoriesView::currentCategory()
+{
+	return dynamic_cast<CategoryItem*>( this->currentItem() );
+}
+
+/**
+ * Get current category idDB.
+ * @return category
+ */
+QString CategoriesView::currentCategoryId()
+{
+	CategoryItem* item = dynamic_cast<CategoryItem*>( this->currentItem() );
+	if ( item )
+		return item->id();
+	else
+		return "0";
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @class CategoriesListView
+ * @short Categories listview.
  */
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
-	: KListView( parent, name )
+	: CategoriesView( parent, name )
 {
-	// Load icons for category, package ...
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxCategory = ldr->loadIcon("kuroo_category", KIcon::Small);
-	pxRepository = ldr->loadIcon("kuroo_repository", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true);
-		
-	addColumn(i18n("Category"));
-	header()->setLabel(header()->count() - 1, i18n("Category"));
-	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()));
-	setMinimumSize(QSize(150, 0));
-	setShowSortIndicator(true);
-	setRootIsDecorated(true);
-	setFullWidth(true);
+	addColumn( i18n( "Category" ) );
+	header()->setLabel( header()->count() - 1, i18n("Category") );
 }
 
 CategoriesListView::~CategoriesListView()
@@ -60,67 +172,148 @@ CategoriesListView::~CategoriesListView()
 }
 
 /**
- * Get current category.
- * @return category
+ * Create index of all categories name by db id.
+ * Insert them in listview.
  */
-QString CategoriesListView::currentCategory()
+void CategoriesListView::init()
 {
-	QListViewItem *item = this->currentItem();
+	categories.clear();
+	clear();
 	
-	if ( !item || !item->parent() )
-		return i18n("na");
+	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
+	int i = allCategoriesList.size() - 1;
+	categories.resize( i + 1 );
 	
-	return item->parent()->text(0) + "-" + item->text(0);
+	// Insert categories in reverse order to get them in alfabetical order
+	CategoryItem* item;
+	categoryIndex.clear();
+	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
+		item = new CategoryItem( this, *it, QString::number( i ) );
+		categories[i] = item;
+		categoryIndex.insert( *it, item );
+		i--;
+	}
+	
+	// Insert the meta-category All on top as id = 0
+	item = new CategoryItem( this, i18n("All"), "0" );
+	categoryIndex.insert( i18n("All"), item );
+	item->setOn( true );
+	categories[0] = item;
 }
 
 /**
- * Set category current.
- * @param category
+ * View available categories.
+ * @param categoriesList list category id
  */
-void CategoriesListView::setCurrentCategory( const QString& category )
+void CategoriesListView::loadCategories( const QStringList& categoriesList, bool isFiltered )
 {
-	QString categoryName = category.section("-", 0, 0);
-	QString subcategoryName = category.section("-", 1, 1);
+	// Set all categories off = empty
+	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it )
+		(*it)->setOn( false );
 	
-	if( categories.contains(categoryName) ) {
-		if ( categories[categoryName].subcategories.contains(subcategoryName) ) {
-			QListViewItem *item = categories[categoryName].subcategories[subcategoryName];
-			ensureItemVisible(item);
-			setCurrentItem(item);
-			item->setSelected(true);
-		}
+	// Enable found categories from query
+	foreach ( categoriesList )
+		categories[ (*it).toInt() ]->setOn( true );
+	
+	// After all categories are loaded try restoring last known focus-category
+	restoreFocus( isFiltered );
+}
+
+/**
+ * @class SubCategoriesListView
+ * @short Subcategories listview.
+ */
+SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
+	: CategoriesView( parent, name )
+{
+	addColumn( i18n("Subcategory") );
+	header()->setLabel( header()->count() - 1, i18n("Subcategory") );
+}
+
+SubCategoriesListView::~SubCategoriesListView()
+{
+}
+
+/**
+ * Create index of all subcategories name by db id.
+ */
+void SubCategoriesListView::init()
+{
+	categories.clear();
+	allSubCategories.clear();
+	
+	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allSubCategories();
+	int size = allCategoriesList.size() / 3 + 1;
+
+	// Prepend the meta-category All at id = 0
+	allSubCategories.resize( size );
+	categories.resize( size );
+	allSubCategories[0].insert( std::pair<int, QString>(0, i18n("All")) );
+	
+	// Insert all in matrix
+	foreach ( allCategoriesList ) {
+		int idCategory = (*it++).toInt();
+		int idSubCategory = (*it++).toInt();
+		QString name = *it;
+		allSubCategories[idCategory].insert( std::pair<int, QString>(idSubCategory, name) );
 	}
 }
 
 /**
- * Load categories.
- * From Jakob Petsovits solution for inserting items fast.
- * @param categoriesList 
+ * View available subcategories.
+ * @param categoriesList list category id
  */
-void CategoriesListView::loadCategories( const QStringList& categoriesList )
+void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	QListViewItem *catItem, *subcatItem;
+	// Get the category id
+	static int idCategory( -1 );
+	if ( idCategory != categoriesList.first().toInt() )
+		idCategory = categoriesList.first().toInt();
 	
-	categories.clear();
-	clear();
-	setRootIsDecorated(true);
+	clear(); // @warning: categoryItem cannot be used anymore
+	CategoryItem* item;
+// 	item = new CategoryItem( this, QString::null, "0" ); // Insert empty item to get focus to work on last before last item
+	
+	// When meta-category is selected skip to show only meta-subcategory
+	categoryIndex.clear();
+	if ( idCategory != 0 ) {
+	
+		// Insert all subcategories in reverse order to get them alfabetically listed, and set them off = empty
+		for ( SubCategory::reverse_iterator it = allSubCategories[idCategory].rbegin(); it != allSubCategories[idCategory].rend(); ++it ) {
+			QString id = QString::number( (*it).first );
+			QString name = (*it).second;
 
-	foreach ( categoriesList ) {
-		QString categoryName = (*it).section("-", 0, 0);
-		QString subcategoryName = (*it).section("-", 1, 1);
-		
-		if( !categories.contains(categoryName) ) {
-			catItem = new KListViewItem( this, categoryName );
-			catItem->setExpandable(true);
-			catItem->setPixmap(0, pxCategory);
-			categories[categoryName].item = catItem;
+			// Skip empty subcategory
+			if ( !name.isEmpty() ) {
+				item = new CategoryItem( this, name, id );
+				categories[(*it).first] = item;
+				categoryIndex.insert( name, item );
+			}
 		}
 		
-		if( !categories[categoryName].subcategories.contains(subcategoryName) ) {
-			subcatItem = new KListViewItem(categories[categoryName].item, subcategoryName);
-			subcatItem->setPixmap(0, pxCategory);
-			categories[categoryName].subcategories[subcategoryName] = subcatItem;
+		// Insert meta-subcategory
+		item = new CategoryItem( this, i18n("All"), "0" );
+		categoryIndex.insert( i18n("All"), item );
+		categories[0] = item;
+		
+		// Enable subcategories from query. Skip first which is the category
+		for( QStringList::ConstIterator it = ++( categoriesList.begin() ), end = categoriesList.end(); it != end; ++it ) {
+			if ( categories[(*it).toInt()] )
+				categories[(*it).toInt()]->setOn( true );
 		}
+		
+		// After all categories are loaded try restoring last known focus-category
+		restoreFocus( false );
+	}
+	else {
+	
+		// Insert meta-subcategory
+		item = new CategoryItem( this, i18n("All"), "0" );
+		categoryIndex.insert( i18n("All"), item );
+		item->setOn( true );
+		
+		// After all categories are loaded try restoring last known focus-category
+		restoreFocus( true );
 	}
 }
 

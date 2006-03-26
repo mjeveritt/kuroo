@@ -20,15 +20,15 @@
 
 #include "tooltip.h"
 #include "packageitem.h"
+#include "common.h"
 
 #include <qheader.h>
 
 #include <klistview.h>
-#include <kdebug.h>
-#include <klocale.h>
 
 /**
- * Creates tooltip for packages in views.
+ * @class ToolTip
+ * @short Creates tooltip for icons in views.
  */
 ToolTip::ToolTip( KListView* pWidget, QToolTipGroup* group )
 	: QToolTip( pWidget->viewport(), group ), m_pParent( pWidget )
@@ -39,77 +39,59 @@ ToolTip::~ToolTip()
 {}
 
 /**
- * View Tooltip for item.
- * Also expand "actions" with text explanation.
+ * View Tooltip for the icons.
  * @param pos	mouse position
  */
 void ToolTip::maybeTip( const QPoint& pos )
 {
-	PackageItem* packageItem = dynamic_cast<PackageItem*>(m_pParent->itemAt(pos));
+	PackageItem* packageItem = dynamic_cast<PackageItem*>( m_pParent->itemAt( pos ) );
 	
-	if ( packageItem )
-	{
-      	// Get the section the mouse is in
-		int section = m_pParent->header()->sectionAt(pos.x());
-      	// Get the rect of the whole item (the row for the tip)
-		QRect itemRect = m_pParent->itemRect(packageItem);
-      	// Get the rect of the whole section (the column for the tip)
-		QRect headerRect = m_pParent->header()->sectionRect(section);
-      	// "Intersect" row and column to get exact rect for the tip
-		QRect destRect(headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height());
+	if ( packageItem ) {
 		
-		if ( section == m_pParent->tooltipColumn() ) {
-			
-			// Get meta data about this package
-			Meta packageMeta = packageItem->getMeta();
-			
-			if ( packageMeta.size() > 1 ) {
-				QString tipText("<qt><table>");
-				for ( Meta::Iterator itMeta = packageMeta.begin(); itMeta != packageMeta.end(); ++itMeta ) {
-					
-					QString key = itMeta.key();
-					QString data = itMeta.data();
-					tipText += "<tr><td>" + key.right(key.length()-1) + "</td><td>";
-					
-					// Include explaination for USE flags
-					if ( key.contains(i18n("Action")) ) {
-						
-						if ( data.contains("N"))
-							tipText += i18n("New, (not yet installed)<br>");
-						
-						if ( data.contains("S"))
-							tipText += i18n("New slot installation (side-by-side versions)<br>");
-						
-						if ( data.contains("U"))
-							tipText += i18n("Update, (changing versions)<br>");
-						
-						if ( data.contains("D"))
-							tipText += i18n("Downgrade, (Best version seems lower)<br>");
-						
-						if ( data.contains("R"))
-							tipText += i18n("Replacing, (Remerging same version)<br>");
-						
-						if ( data.contains("F"))
-							tipText += i18n("Fetch restricted, (Manual download)<br>");
-						
-						if ( data.contains("f"))
-							tipText += i18n("fetch restricted, (Already downloaded)<br>");
-						
-						if ( data.contains("B"))
-							tipText += i18n("Blocked by an already installed package<br>");
-						
-						// Remove ending <br>
-						tipText.truncate( tipText.length() - 4 );
-						tipText += "</td></tr>";
-						}
-					else
-						tipText += data + "</td></tr>";
+      	// Get the section the mouse is in
+		int section = m_pParent->header()->sectionAt( pos.x() );
+		
+      	// Get the rect of the whole item (the row for the tip)
+		QRect itemRect = m_pParent->itemRect( packageItem );
+		
+      	// Get the rect of the whole section (the column for the tip)
+		QRect headerRect = m_pParent->header()->sectionRect( section );
+		
+      	// "Intersect" row and column to get exact rect for the tip
+		QRect destRect( headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height() );
+		
+		QString tipText;
+		
+		switch ( section ) {
+		
+			case 0 : {
+				if ( packageItem->isInstalled() )
+					tipText = i18n( "Package is installed" );
+				else {
+						if ( packageItem->isInPortage() )
+							tipText = i18n( "Package is not installed" );
+						else
+							tipText = i18n( "Package not in Portage" );
 				}
-				tipText += "</table></qt>";
-				tip( destRect, tipText );
+				break;
 			}
+			
+			case 1 :
+				if ( packageItem->isInstalled() )
+					tipText = i18n( "Package is installed" );
+				break;
+				
+			case 2 :
+				if ( packageItem->isInWorld() )
+					tipText = i18n( "Package present in World profile" );
+				break;
+		
+			case 3 :
+				if ( packageItem->isQueued() )
+					tipText = i18n( "Package present in Queue" );
 		}
 		
+		tip( destRect, tipText );
 	}
 }
 

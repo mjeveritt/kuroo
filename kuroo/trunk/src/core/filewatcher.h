@@ -18,44 +18,29 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef SCANHISTORYJOB_H
-#define SCANHISTORYJOB_H
 
-#include "threadweaver.h"
+#ifndef FILEWATCHER_H
+#define FILEWATCHER_H
 
 #include <qobject.h>
 
-class DbConnection;
-class QStringList;
-class PackageEmergeTime;
+class KDirWatch;
 
-typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
-
-/**
- * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
- */
-class ScanHistoryJob : public ThreadWeaver::DependentJob
+class FileWatcher : public QObject
 {
 Q_OBJECT
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = "" );
-	~ScanHistoryJob();
+	FileWatcher( QObject *m_parent = 0 );
+    ~FileWatcher();
 
-private:
-	bool 						doJob();
-	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
+	void			init( QObject *parent = 0 );
 	
-	QString escapeString( QString string ) {
-		return string.replace('\'', "''");
-	}
+private slots:
+	void			slotChanged( const QString& path );
 	
 private:
-	bool						aborted;
-	DbConnection* const			m_db;
-	QStringList 				m_logLines;
-	
+	QObject*		m_parent;
+	KDirWatch		*watcher;
 };
 
 #endif

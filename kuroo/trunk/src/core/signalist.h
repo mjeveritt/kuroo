@@ -25,70 +25,31 @@
 
 /**
  * @class Signalist
- * @short Object which forwards signals, so they can picked up system wide.
+ * @short Object which forwards signals, so they can picked up systemwide.
  * Just connect to this instance.
  */
 class Signalist : public QObject
 {
 Q_OBJECT
 public:
-	Signalist( QObject *parent = 0 );
+	Signalist( QObject *m_parent = 0 );
     ~Signalist();
 
 public slots:
-	void		init( QObject *myParent = 0 );
-	
-	/**
-	 * Toggle busy flag for kuroo.
-	 * @param true/false
-	 */
-	void		setKurooBusy( bool b );
-	
-	/**
-	 * Job wasn't successful.
-	 */
+	void		init( QObject *parent = 0 );
+	void		setKurooReady( bool isReady );
+	bool		isKurooReady();
+	void		setKurooBusy( bool busy );
 	void		scanAborted();
-	
-	/**
-	 * Convenience methods.
-	 * Return true when kuroo is emerging or scanning.
-	 */
 	bool		isKurooBusy();
-	bool		isKurooDiskUsageBusy();
-	
-	/**
-	 * For forwarding kuroo threads status.
-	 */
-	void		scanDiskUsage( bool b );
 	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();
 	void 		scanPortageComplete();
-	void		scanInstalledComplete();
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
-	
-	/**
-	 * Tell queue to start emerging.
-	 */
-	void		startInstallQueue();
-		
-	/**
-	 * Jump to the package and view it's summary info.
-	 */
-	void		viewPackage( const QString& package );
-	
-	/**
-	 * Methods for marking packages as present in the queue.
-	 */
-	void		setQueued( const QString& idDB, bool b );
-	void		clearQueued();
-	
-	/**
-	 * Methods for marking packages unmasked.
-	 */
-	void		setUnmasked( const QString& name, bool b );
+	void		packageChanged();
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -101,14 +62,11 @@ signals:
 	void		signalSyncDone();
 	void 		signalScanHistoryComplete();
 	void		signalInstalledChanged();
-	void		signalViewPackage( const QString& package );
-	void		signalSetQueued( const QString& idDB, bool b );
-	void		signalClearQueued();
-	void		signalUnmasked( const QString& name, bool b );
-	
+	void		signalPackageChanged();
+
 private:
-	QObject	*parent;
-	bool		busy, busyScanning, busyDiskUsage;
+	QObject*	m_parent;
+	bool		m_busy, m_isReady;
 };
 
 #endif

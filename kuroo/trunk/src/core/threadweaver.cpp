@@ -19,7 +19,8 @@ typedef kndbgstream DebugStream;
 static inline kndbgstream debug()   { return kndbgstream(); }
 
 /**
- * Creates threads... from amaroK.
+ * @class ThreadWeaver
+ * @short For creating threaded objects.
  */
 ThreadWeaver::ThreadWeaver()
 {
@@ -29,7 +30,7 @@ ThreadWeaver::ThreadWeaver()
 
 ThreadWeaver::~ThreadWeaver()
 {
-	for( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it ) {
+	for ( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it ) {
 // 		kdDebug() << "ThreadWeaver::~ThreadWeaver Waiting on thread..." << endl;
 		(*it)->wait();
 // 		kdDebug() << "ThreadWeaver::~ThreadWeaver finished" << endl;
@@ -40,7 +41,7 @@ uint ThreadWeaver::jobCount( const QCString &name )
 {
 	uint count = 0;
 
-	for( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
+	for ( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 		if ( name == (*it)->name() )
 			count++;
 
@@ -99,9 +100,9 @@ void ThreadWeaver::onlyOneJob( Job *job )
 
 int ThreadWeaver::abortAllJobsNamed( const QCString &name )
 {
-	int count = 0;
+	int count(0);
 
-	for( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
+	for ( JobList::Iterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 		if ( name == (*it)->name() ) {
 			count++;
 			(*it)->abort();
@@ -112,7 +113,7 @@ int ThreadWeaver::abortAllJobsNamed( const QCString &name )
 
 ThreadWeaver::Thread* ThreadWeaver::gimmeThread()
 {
-	for( ThreadList::ConstIterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
+	for ( ThreadList::ConstIterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
 		if ( !(*it)->running() && (*it)->job() == 0 )
 			return *it;
 
@@ -127,7 +128,6 @@ bool ThreadWeaver::event( QEvent *e )
 	{
 	case JobEvent: {
 		Job *job = (Job*)e;
-//         DebugStream d = kdDebug() << "Job ";
 		const QCString name = job->name();
 		Thread *thread = job->m_thread;
 
@@ -136,13 +136,14 @@ bool ThreadWeaver::event( QEvent *e )
 				new QCustomEvent( ThreadWeaver::RestoreOverrideCursorEvent ) );
 
 		if ( !job->isAborted() ) {
-			kdDebug() << "Job completed" << ": " << name << endl;
+// 			kdDebug() << "Job completed" << ": " << name << endl;
 			job->completeJob();
 		}
-		else kdDebug() << "Job aborted" << ": " << name << endl;
+		else 
+			kdDebug() << "Job aborted" << ": " << name << endl;
 
 		m_jobs.remove( job );
-		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
+// 		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
 
 		for( JobList::ConstIterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 			if ( name == (*it)->name() ) {
@@ -200,7 +201,6 @@ void ThreadWeaver::Thread::runJob( Job *job )
 
 	if ( job->isAborted() )
 		QApplication::postEvent( ThreadWeaver::instance(), job );
-
 	else {
 		m_job = job;
 //         start( Thread::IdlePriority ); //will wait() first if necessary
@@ -218,7 +218,7 @@ void ThreadWeaver::Thread::run()
 
 	m_job->m_aborted |= !m_job->doJob();
 
-	if( m_job )
+	if ( m_job )
 		QApplication::postEvent( ThreadWeaver::instance(), m_job );
 
 	// almost always the thread doesn't finish until after the
@@ -252,7 +252,7 @@ ThreadWeaver::Job::Job( const char *name )
 
 ThreadWeaver::Job::~Job()
 {
-	if( m_thread->running() && m_thread->job() == this )
+	if ( m_thread->running() && m_thread->job() == this )
 		kdDebug() << "Deleting a job before its thread has finished with it!\n";
 }
 
@@ -260,12 +260,13 @@ void ThreadWeaver::Job::setProgressTotalSteps( uint steps )
 {
 	if ( steps == 0 ) {
 		kdDebug() << "You can't set steps to 0!\n";
+		QApplication::postEvent( this, new ProgressEvent( -2 ) );
 		steps = 1;
 	}
-
+	else
+		QApplication::postEvent( this, new ProgressEvent( -1 ) );
+	
 	m_totalSteps = steps;
-
-	QApplication::postEvent( this, new ProgressEvent( -1 ) );
 }
 
 void ThreadWeaver::Job::setProgress( uint steps )
@@ -280,11 +281,12 @@ void ThreadWeaver::Job::setProgress( uint steps )
 	}
 }
 
-void ThreadWeaver::Job::setStatus( const QString& status )
+void ThreadWeaver::Job::setStatus( const QString& id, const QString& status )
 {
+	m_id = id;
 	m_status = status;
 
-	QApplication::postEvent( this, new ProgressEvent( -2 ) );
+	QApplication::postEvent( this, new ProgressEvent( -3 ) );
 }
 
 void ThreadWeaver::Job::incrementProgress()
@@ -295,29 +297,27 @@ void ThreadWeaver::Job::incrementProgress()
 void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 {
 	int progress = static_cast<ProgressEvent*>(e)->progress;
-
-	switch( progress )
-	{
-	case -2:
-		KurooStatusBar::instance()->setProgressStatus( m_status );
-		break;
-
-	case -1:
-// 		kdDebug() << "ThreadWeaver::Job::customEventprogress progress=" << progress << "." << endl;
-		/*KurooStatusBar::instance()->newProgressOperation( this )
-				.setDescription( m_description )
-				.setAbortSlot( this, SLOT(abort()) )
-				.setTotalSteps( 100 )*/;
-		break;
-
-	default:
-		KurooStatusBar::instance()->setProgress( progress );
+	
+	switch( progress ) {
+		case -3:
+			KurooStatusBar::instance()->setProgressStatus( m_id, m_status );
+			break;
+	
+		case -2:
+			KurooStatusBar::instance()->setThreadTotalSteps( 0 );
+			break;
+		
+		case -1:
+			KurooStatusBar::instance()->setThreadTotalSteps( 100 );
+			break;
+	
+		default:
+			KurooStatusBar::instance()->setProgress( progress );
 	}
 }
 
 ThreadWeaver::DependentJob::DependentJob( QObject *dependent, const char *name )
-	: Job( name )
-	, m_dependent( dependent )
+	: Job( name ), m_dependent( dependent )
 {
 	connect( dependent, SIGNAL(destroyed()), SLOT(abort()) );
 

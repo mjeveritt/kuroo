@@ -25,11 +25,12 @@
 #include <kcursor.h>
 
 /**
- * Object which forwards signals, so they can picked up system wide.
+ * @class Signalist
+ * @short Object which forwards signals, so they can picked up systemwide.
  * Just connect to this instance.
  */
-Signalist::Signalist( QObject* parent )
-	: QObject( parent ), busy(false), busyScanning(false), busyDiskUsage(false)
+Signalist::Signalist( QObject* m_parent )
+	: QObject( m_parent ), m_busy( false ), m_isReady( false )
 {
 }
 
@@ -37,31 +38,51 @@ Signalist::~Signalist()
 {
 }
 
-void Signalist::init( QObject* myParent )
+void Signalist::init( QObject* parent )
 {
-	parent = myParent;
+	m_parent = parent;
 }
 
 /**
- * Convenience flag.
+ * Sanity level. No db means not ready.
+ * @param isReady
+ */
+void Signalist::setKurooReady( bool isReady )
+{
+	m_isReady = isReady;
+	emit signalKurooBusy( !isReady );
+}
+
+/**
+ * Return kuroo ready state.
+ */
+bool Signalist::isKurooReady()
+{
+	return m_isReady;
+}
+
+/**
+ * Kuroo is busy while scanning for packages or emerging.
  * @return busy
  */
 bool Signalist::isKurooBusy()
 {
-	return busy;
+	return m_busy;
 }
 
 /**
  * Toggle busy flag for kuroo.
  * @param busy
  */
-void Signalist::setKurooBusy( bool b )
+void Signalist::setKurooBusy( bool busy )
 {
 	static int busySession(0);
 	
-	if ( !b ) {
-		busySession--;
-		QApplication::restoreOverrideCursor();
+	if ( !busy ) {
+		if ( busySession > 0 ) {
+			busySession--;
+			QApplication::restoreOverrideCursor();
+		}
 	}
 	else {
 		busySession++;
@@ -69,12 +90,12 @@ void Signalist::setKurooBusy( bool b )
 	}
 	
 	if ( busySession == 0 ) {
-		busy = false;
-		emit signalKurooBusy(false);
+		m_busy = false;
+		emit signalKurooBusy( false );
 	}
 	else {
-		busy = true;
-		emit signalKurooBusy(true);
+		m_busy = true;
+		emit signalKurooBusy( true );
 	}
 }
 
@@ -83,7 +104,7 @@ void Signalist::setKurooBusy( bool b )
  */
 void Signalist::scanAborted()
 {
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -99,7 +120,7 @@ void Signalist::syncDone()
  */
 void Signalist::scanStarted()
 {
-	setKurooBusy(true);
+	setKurooBusy( true );
 }
 
 /**
@@ -108,7 +129,7 @@ void Signalist::scanStarted()
 void Signalist::cachePortageComplete()
 {
 	emit signalCachePortageComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -117,25 +138,16 @@ void Signalist::cachePortageComplete()
 void Signalist::scanPortageComplete()
 {
 	emit signalScanPortageComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
- * Installed scan thread completed.
- */
-void Signalist::scanInstalledComplete()
-{
-	emit signalScanInstalledComplete();
-	setKurooBusy(false);
-}
-
-/**
- * "emerge -upv world" completed.
+ * "emerge -upv" completed.
  */
 void Signalist::scanUpdatesComplete()
 {
 	emit signalScanUpdatesComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -144,7 +156,7 @@ void Signalist::scanUpdatesComplete()
 void Signalist::loadUpdatesComplete()
 {
 	emit signalLoadUpdatesComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
 /**
@@ -153,74 +165,12 @@ void Signalist::loadUpdatesComplete()
 void Signalist::scanHistoryComplete()
 {
 	emit signalScanHistoryComplete();
-	setKurooBusy(false);
+	setKurooBusy( false );
 }
 
-/**
- * Kuroo is scanning disk usage.
- * @param true/false
- */
-void Signalist::scanDiskUsage( bool b )
+void Signalist::packageChanged()
 {
-	if ( b ) {
-		busyDiskUsage = true;
-		emit signalKurooBusy(true);
-	}
-	else {
-		busyDiskUsage = false;
-		emit signalKurooBusy(false);
-	}
-}
-
-/**
- * Convenience flag.
- * @return busy 
- */
-bool Signalist::isKurooDiskUsageBusy()
-{
-	return busyDiskUsage;
-}
-
-/**
- * Tell queue to start emerging.
- */
-void Signalist::startInstallQueue()
-{
-	emit signalEmergeQueue();
-}
-
-/**
- * Jump to the package and view it's summary info.
- * @param package
- */
-void Signalist::viewPackage( const QString& package )
-{
-	emit signalViewPackage( package );
-}
-
-/**
- * Propagate signal that a package is added to the queue.
- * @param id	package db id
- * @param true/false
- */
-void Signalist::setQueued( const QString& idDB, bool b )
-{
-	emit signalSetQueued( idDB, b );
-}
-
-void Signalist::clearQueued()
-{
-	emit signalClearQueued();
-}
-
-/**
- * Propagate signal that a package is unmasked.
- * @param id	package db id
- * @param true/false
- */
-void Signalist::setUnmasked( const QString& name, bool b )
-{
-	emit signalUnmasked( name, b );
+	emit signalPackageChanged();
 }
 
 #include "signalist.moc"

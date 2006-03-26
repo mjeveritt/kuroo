@@ -26,13 +26,10 @@
 #include <qobject.h>
 
 class DbConnection;
-class QRegExp;
-
-extern QRegExp pv;
 
 /**
  * @class ScanUpdatesJob
- * @short Thread for loading emerge -uDpv World output into db.
+ * @short Thread for loading emerge -uDrxPortageVersion World output into db.
  */
 class ScanUpdatesJob : public ThreadWeaver::DependentJob
 {
@@ -42,13 +39,10 @@ public:
 	~ScanUpdatesJob();
 
 private:
-	
-	/**
-	 * Insert found updates into db.
-	 */
 	bool 						doJob();
 	void 						completeJob();
-
+	void						setKurooDbMeta( const QString& meta, const QString& data );
+	
 private:
 	DbConnection* const 		m_db;
 	bool						aborted;

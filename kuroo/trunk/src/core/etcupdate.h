@@ -29,54 +29,48 @@ class KProcIO;
 /**
  * @class EtcUpdate
  * @short Object for handling etc-updates.
- * The external diff tool is launched for merging changes in etc config files.
  */
 class EtcUpdate : public QObject
 {
 Q_OBJECT
 public:
-    EtcUpdate( QObject *parent = 0, const char *name = 0 );
+    EtcUpdate( QObject *m_parent = 0, const char *name = 0 );
     ~EtcUpdate();
 
 public slots:
-	void				init( QObject *myParent = 0 );
-	
-	/**
- 	 * Ask user if to run etc-update.
- 	 * @param count is number of etc files to merge.
- 	 */
+	void				init( QObject *parent = 0 );
 	void				askUpdate( const int &count );
 
 private slots:
-	
-	/**
- 	 * Run etc-update command and parse for etc files and terminate it.
- 	 */
 	bool				etcUpdate();
-	
-	/**
- 	 * Collect output from etc-update and terminate it.
- 	 */
-	void 				readFromStdout( KProcIO *proc );
-	void				cleanup( KProcess* );
-	
-	/**
- 	 * Parse etc-update output and launch diff tool.
- 	 */
+	void 				slotEtcUpdateOutput( KProcIO *proc );
+	void				slotCleanupEtcUpdate( KProcess* );
 	void				runDiff();
-	
-	/**
- 	 * Post diff action, delete original diff file.
- 	 * And go for next...
- 	 * @param proc
-  	*/
-	void				cleanupDiff( KProcess* );
+	void				slotCleanupEtcUpdateDiff( KProcess* );
+	void				backup( const QString& source, const QString& destination );
+
+signals:
+	void				signalEtcFileMerged();
 	
 private:
-	QObject				*parent;
-	KProcIO 			*eProc;
+	QObject*			m_parent;
+	KProcIO*			eProc;
+	
+	// Keep track of current etc-file position in the total
+	int 				count, totalEtcCount;
+	
+	// Collected output from etc-update
 	QStringList			etcUpdateLines;
+	
+	// List of etc-files for merging
+	QStringList			etcFilesList;
+	
+	// Remember last source file when iterating
 	QString				diffSource;
+	
+	// True if etc-update didn't find any files for merging
+	bool				noFiles;
+	
 };
 
 #endif

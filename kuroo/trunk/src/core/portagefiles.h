@@ -18,44 +18,42 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef SCANHISTORYJOB_H
-#define SCANHISTORYJOB_H
-
-#include "threadweaver.h"
+#ifndef PORTAGEFILES_H
+#define PORTAGEFILES_H
 
 #include <qobject.h>
 
-class DbConnection;
-class QStringList;
-class PackageEmergeTime;
-
-typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
-
 /**
- * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @class PortageFiles
+ * @short Loading and saving portage files.
  */
-class ScanHistoryJob : public ThreadWeaver::DependentJob
+class PortageFiles : public QObject
 {
-Q_OBJECT
+Q_OBJECT	
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = "" );
-	~ScanHistoryJob();
-
+	PortageFiles( QObject *m_parent = 0 );
+    ~PortageFiles();
+	
+public slots:
+	void			init( QObject *parent = 0 );
+	void			refresh( int mask );
+	
+	void 			loadPackageFiles();
+	void			loadPackageKeywords();
+	void 			loadPackageUnmask();
+	void			loadPackageUserMask();
+	void			loadPackageUse();
+	
+	void			savePackageKeywords();
+	void 			savePackageUserUnMask();
+	void			savePackageUserMask();
+	void			savePackageUse();
+	
+signals:
+	void			signalPortageFilesChanged();
+	
 private:
-	bool 						doJob();
-	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
-	
-	QString escapeString( QString string ) {
-		return string.replace('\'', "''");
-	}
-	
-private:
-	bool						aborted;
-	DbConnection* const			m_db;
-	QStringList 				m_logLines;
-	
+	QObject*		m_parent;
 };
 
 #endif

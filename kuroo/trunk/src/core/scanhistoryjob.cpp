@@ -27,21 +27,21 @@
 #include <qstringlist.h>
 #include <qheader.h>
 #include <qfileinfo.h>
-#include <qregexp.h>
 #include <qtextstream.h>
 
 /**
- * Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @class ScanHistoryJob
+ * @short Thread for parsing emerge/unmerge entries found in emerge.log.
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines ), aborted(true)
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines ), aborted( true )
 {
 }
 
 ScanHistoryJob::~ScanHistoryJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 	if ( aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }
@@ -51,107 +51,133 @@ ScanHistoryJob::~ScanHistoryJob()
  */
 void ScanHistoryJob::completeJob()
 {
-	kdDebug() << "ScanHistoryJob::completeJob" << endl;
+	kdDebug() << k_funcinfo << endl;
+	
 	SignalistSingleton::Instance()->scanHistoryComplete();
 	aborted = false;
 }
 
 /** 
- * If new entries are found in emerge.log insert them into history and 
- * add emerge time and increment how many time package have been installed
+ * If new entries are found in emerge.log insert them into history and,
+ * add emerge duration and increment emerge counts.
  * @return success
  */
 bool ScanHistoryJob::doJob()
 {
-	kdDebug() << "ScanHistoryJob::doJob" << endl;
+	kdDebug() << k_funcinfo << endl;
 	
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Can not connect to database") << endl;
+		kdDebug() << i18n("Parsing emerge.log. Can not connect to database") << endl;
+		kdDebug() << "Parsing emerge.log. Can not connect to database" << endl;
 		return false;
 	}
 	
-	EmergeTimeMap emergeTimeMap(HistorySingleton::Instance()->getStatisticsMap());
+	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	
-	// Parse the output from genlog for new emerges, and unmerges
-	static uint emergeStart(0);
-	static QString emergeDate("");
+	// Parse emerge.log lines
 	QString timeStamp;
+	QRegExp rxTimeStamp( "\\d+:\\s" );
+	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
+	static QMap<QString, uint> logMap;
 	
 	foreach ( m_logLines ) {
 		
 		// Abort the scan
 		if ( isAborted() ) {
-			kdDebug() << i18n("History scan aborted") << endl;
+			kdDebug() << i18n("Parsing emerge.log. History scan aborted") << endl;
+			kdDebug() << "Parsing emerge.log. History scan aborted" << endl;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
 		
-		QRegExp rx("\\d+:\\s");
-		QString package;
-		QString emergeLine = QString(*it).section(rx, 1, 1);
-		timeStamp = QString(*it).section(": " + emergeLine, 0, 0);
-		QDateTime t;
-		t.setTime_t(timeStamp.toUInt());
-		emergeDate = t.toString("MMM dd yyyy");
+		QString emergeLine = QString(*it).section( rxTimeStamp, 1, 1 );
+		timeStamp = QString(*it).section( ": " + emergeLine, 0, 0 );
 		
-		if ( emergeLine.contains(">>> emerge") ) {
-			emergeStart = timeStamp.toUInt();
+		if ( emergeLine.contains( ">>> emerge" ) ) {
+			uint emergeStart = timeStamp.toUInt();
+			
+			// Collect package and timestamp in map to match for completion
+			QString package;
+			if ( rxPackage.search( emergeLine ) > -1 ) {
+				package = rxPackage.cap(2);
+				logMap[ package ] = emergeStart;
+			}
+			else {
+				kdDebug() << i18n("Parsing emerge.log. No package found!") << endl;
+				kdDebug() << "Parsing emerge.log. No package found!" << endl;
+			}
 		}
 		else
-			if ( emergeLine.contains("::: completed emerge ") ) {
-				rx.setPattern("\\s\\S+/\\S+\\s");
-				if ( rx.search(emergeLine) > -1 ) {
-					package = rx.cap(0).stripWhiteSpace();
-				}
+			if ( emergeLine.contains( "::: completed emerge " ) ) {
+				QString package;
+				if ( rxPackage.search( emergeLine ) > -1 ) {
+					package = rxPackage.cap(2);
 				
-				QString packageNoVersion = package.section(pv, 0, 0);
-				int secTime = timeStamp.toUInt() - emergeStart;
-				QTime duration(0, 0, 0);
-				duration = duration.addSecs(secTime);
-				
-				// Update emerge time and increment count for packageNoVersion
-				EmergeTimeMap::iterator itMap = emergeTimeMap.find(packageNoVersion);
-				if ( itMap == emergeTimeMap.end() ) {
-					PackageEmergeTime pItem(secTime, 1);
-					emergeTimeMap.insert(packageNoVersion, pItem);
+					// Find matching package emerge start entry in map and calculate the emerge duration
+					QMap<QString, uint>::iterator itLogMap = logMap.find( package );
+					if ( itLogMap != logMap.end() ) {
+						int secTime = timeStamp.toUInt() - itLogMap.data();
+						logMap.erase( itLogMap );
+						
+						if ( rxPortageVersion.search( package ) != -1 ) {
+							QString packageNoVersion = package.section( rxPortageVersion.cap( 1 ), 0, 0 );
+			
+							// Update emerge time and increment count for packageNoVersion
+							EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
+							if ( itMap == emergeTimeMap.end() ) {
+								PackageEmergeTime pItem( secTime, 1 );
+								emergeTimeMap.insert( packageNoVersion, pItem );
+							}
+							else {
+								itMap.data().add(secTime);
+								itMap.data().inc();
+							}
+							
+							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
+							
+							KurooDBSingleton::Instance()->insert( QString( 
+								"INSERT INTO history (package, timestamp, time, einfo, emerge) "
+								"VALUES ('%1', '%2', '%3', '%4','true')"
+								";" ).arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
+						}
+						else {
+							kdDebug() << i18n("Parsing emerge.log. Can not parse: ") << package << endl;
+							kdDebug() << "Parsing emerge.log. Can not parse: " << package << endl;
+						}
+					}
 				}
 				else {
-					itMap.data().add(secTime);
-					itMap.data().inc();
+					kdDebug() << i18n("Parsing emerge.log. No package found!") << endl;
+					kdDebug() << "Parsing emerge.log. No package found!" << endl;
 				}
-				
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, date, timestamp, time, emerge) VALUES ('%1', '%2', '%3', '%4', 'true');" ).arg(package).arg(emergeDate).arg(timeStamp).arg(duration.toString(Qt::TextDate)), m_db );
 			}
-			else
-				if ( emergeLine.contains(">>> unmerge success") ) {
-					package = emergeLine.section(">>> unmerge success: ", 1, 1);
-					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, date, timestamp, emerge) VALUES ('%1', '%2', '%3', 'false');" ).arg(package).arg(emergeDate).arg(timeStamp), m_db );
+			else {
+				if ( emergeLine.contains( ">>> unmerge success" ) ) {
+					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
+					KurooDBSingleton::Instance()->insert( QString( 
+						"INSERT INTO history (package, timestamp, emerge) "
+						"VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
 				}
+				else
+					if ( emergeLine.contains( "=== Sync completed" ) )
+						setKurooDbMeta( "syncTimeStamp", timeStamp );
+			}
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-
-	KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
-	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
-	EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
-	for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
-		
-		// Abort the scan
-		if ( isAborted() ) {
-			kdDebug() << i18n("History scan aborted") << endl;
-			KurooDBSingleton::Instance()->query("ROLLBACK TRANSACTION;", m_db);
-			return false;
-		}
-		
-		KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" ).arg(itMap.data().emergeTime()).arg(itMap.data().count()).arg(itMap.key()), m_db );
-	}
-	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-	
-	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );	
-	KurooConfig::setScanHistoryDate( timeStamp );
-	KurooConfig::writeConfig();
+	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 
 	return true;
+}
+
+void ScanHistoryJob::setKurooDbMeta( const QString& meta, const QString& data )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
+		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
+	else
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
 }
 
 #include "scanhistoryjob.moc"

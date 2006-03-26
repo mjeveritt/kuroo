@@ -267,7 +267,7 @@ public:
         /**
          * If you set progress information, you should set this too, changing it when appropriate
          */
-        void setStatus( const QString& status );
+	    void setStatus( const QString& id, const QString& status );
 
         /**
          * This shows the progressBar too, the user will be able to abort
@@ -322,6 +322,7 @@ public:
 
         QString m_description;
         QString m_status;
+	    QString m_id;
 
     protected:
         DISABLE_GENERATED_MEMBER_FUNCTIONS_4( Job )

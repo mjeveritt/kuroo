@@ -23,20 +23,24 @@
 #include "packageitem.h"
 #include "tooltip.h"
 
+#include <qlistview.h>
+#include <qheader.h>
+
 /**
- * Base class for listViews containing packages.
+ * @class PackageListView
+ * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
 	: KListView( parent, name )
 {
-	connect( SignalistSingleton::Instance(), SIGNAL( signalSetQueued(const QString&, bool) ), this, SLOT( setQueued(const QString&, bool) ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalClearQueued() ), this, SLOT( slotClearQueued() ) );
+	setFrameShape( QFrame::NoFrame );
+	setSelectionModeExt( FileManager );
+	header()->setStretchEnabled( false );
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalUnmasked(const QString&, bool) ), this, SLOT( setUnmasked(const QString&, bool) ) );
+	// Update visible items when world is changed
+	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	
-	setSelectionModeExt(FileManager);
-	
-	new ToolTip(this);
+	new ToolTip( this );
 }
 
 PackageListView::~PackageListView()
@@ -44,171 +48,188 @@ PackageListView::~PackageListView()
 }
 
 /**
- * Clear this listView and packages.
+ * Clear this listView and package index.
  */
-void PackageListView::reset()
+void PackageListView::resetListView()
 {
 	clear();
-	packages.clear();
+	packageIndex.clear();
 }
 
 /**
- * Current package idDB.
- * @return idDB
+ * Current package status.
+ * @return status
+ */
+QString PackageListView::currentItemStatus()
+{
+	return currentPackage()->status();
+}
+
+/**
+ * Return PackageItem from listview index.
+ * @param id
+ */
+PackageItem* PackageListView::packageItemById( const QString& id )
+{
+	if ( id.isEmpty() || !packageIndex[id] )
+		return NULL;
+	else
+		return packageIndex[id];
+}
+
+/**
+ * Current package id.
+ * @return id
  */
 QString PackageListView::currentId()
 {
-	if ( !packages.isEmpty() ) {
-		for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-			if ( it.current()->text(0) == this->currentItem()->text(0) )
-				return it.currentKey();
-		}
-	}
-	else
-		return i18n("na");
-}
-
-/**
- * Get current package.
- * @return package name
- */
-QString PackageListView::currentPackage()
-{
-	QListViewItem *item = this->currentItem();
-	
+	PackageItem* item = currentPackage();
 	if ( item )
-		return item->text(0);
+		return item->id();
 	else
-		return i18n("na");
+		return QString::null;
 }
 
 /**
- * Get selected packages DB id.
+ * The current package.
+ * @return PackageItem*
+ */
+PackageItem* PackageListView::currentPackage()
+{
+	return dynamic_cast<PackageItem*>( this->currentItem() );
+}
+
+/**
+ * All selected packages by id.
  * @return idList
  */
 QStringList PackageListView::selectedId()
 {
-	QStringList idDBList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->parent() ) {
-			if ( it.current()->isSelected() && it.current()->isVisible() )
-				idDBList += it.currentKey();
-		}
-		else {
-			if ( it.current()->isSelected() && it.current()->isVisible() )
-				idDBList += it.currentKey();
-		}
+	QStringList idList;
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		QListViewItem *item = it.current();
+		if ( item->isSelected() )
+			idList += dynamic_cast<PackageItem*>( item )->id();
+		++it;
 	}
-	return idDBList;
+	return idList;
 }
 
 /**
- * Get selected packages.
+ * All selected packages by name.
  * @return packageList
  */
 QStringList PackageListView::selectedPackages()
 {
 	QStringList packageList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		if ( it.current()->isSelected() && it.current()->isVisible() )
-			packageList += it.current()->text(0);
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		QListViewItem *item = it.current();
+		if ( item->isSelected() )
+			packageList += dynamic_cast<PackageItem*>( item )->name();
+		++it;
 	}
 	return packageList;
 }
 
 /** 
- * Return all packages DB id in listview.
- * @return packageList
+ * All packages in listview by id.
+ * @return idList
  */
 QStringList PackageListView::allId()
 {
-	QStringList idDBList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		idDBList += it.currentKey();
-	
-	return idDBList;
+	QStringList idList;
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		idList += dynamic_cast<PackageItem*>( it.current() )->id();
+		++it;
+	}
+	return idList;
 }
 
 /** 
- * Return all packages in listview.
- * @return list of packages by name
+ * All packages in listview by name.
+ * @return packageList
  */
 QStringList PackageListView::allPackages()
 {
-	QStringList idDBList;
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it )
-		idDBList += it.current()->text(0);
-	
-	return idDBList;
+	QStringList packageList;
+	QListViewItemIterator it( this );
+	while ( it.current() ) {
+		packageList += dynamic_cast<PackageItem*>( it.current() )->name();
+		++it;
+	}
+	return packageList;
 }
 
 /**
- * Count packages in this category.
+ * Set focus in listview on this package.
+ * @param id
+ */
+void PackageListView::setPackageFocus( const QString& id )
+{
+	if ( id.isEmpty() || !packageIndex[id] ) {
+		setCurrentItem( firstChild() );
+		setSelected( firstChild(), true );
+	}
+	else {
+		PackageItem* item = packageIndex[id];
+		setCurrentItem( item );
+		setSelected( item, true );
+		ensureItemVisible( item );
+	}
+}
+
+/**
+ * Register package in index and check if in the queue.
+ * @param id
+ * @param item
+ */
+void PackageListView::indexPackage( const QString& id, PackageItem *item )
+{
+	if ( id.isEmpty() )
+		return;
+	
+	packageIndex.insert( id, item );
+	packageIndex[id]->setPackageIndex( packageIndex.count() );
+}
+
+/**
+ * Total number of packages in listview.
  * @return QString
  */
 QString PackageListView::count()
 {
-	return QString::number( packages.count() );
+	return QString::number( packageIndex.count() );
 }
 
 /**
- * Clear the queued hightlighting.
+ * Move to next package in listview.
+ * @param isUp true is previous, false is next
  */
-void PackageListView::slotClearQueued()
+void PackageListView::slotNextPackage( bool isPrevious )
 {
-	QString name = this->name();
-	for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-		packages[it.currentKey()]->setStatus(NOTQUEUED);
-	}
-}
-
-/**
- * Fast method for marking packages as queued.
- * @param idDB
- * @param true/false
- */
-void PackageListView::setQueued( const QString& idDB, bool b )
-{
-	if ( packages[idDB] ) {
-		if ( b )
-			packages[idDB]->setStatus(QUEUED);
-		else
-			packages[idDB]->setStatus(NOTQUEUED);
-	}
-}
-
-/**
- * Register package and check weither it is in the queue.
- * @param item
- * @param idDB
- */
-void PackageListView::insertPackage( const QString& idDB, PackageItem *item )
-{
-	packages.insert( idDB, item );
-	
-	if ( QueueSingleton::Instance()->isQueued(idDB) )
-		packages[idDB]->setStatus(QUEUED);
-	else
-		packages[idDB]->setStatus(NOTQUEUED);
-}
-
-/**
- * Fast method for marking packages as unmasked.
- * @param idDB
- * @param true/false
- */
-void PackageListView::setUnmasked( const QString& name, bool b )
-{
-	PackageItem *myChild = dynamic_cast<PackageItem*>( this->firstChild() );
-	while ( myChild ) {
-		if ( myChild->text(0) == name ) {
-			if ( b )
-				myChild->setStatus(UNMASKED);
-			else
-				myChild->setStatus(NONE);
-			break;
+	if ( isVisible() ) {
+		QListViewItem* item = currentItem();
+		if ( isPrevious ) {
+			if ( item->itemAbove() ) {
+				selectAll( false );
+				item = item->itemAbove();
+				ensureItemVisible( item );
+				setCurrentItem( item );
+				setSelected( item, true );
+			}
 		}
-		myChild = dynamic_cast<PackageItem*>( myChild->nextSibling() );
+		else {
+			if ( item->itemBelow() ) {
+				selectAll( false );
+				item = item->itemBelow();
+				ensureItemVisible( item );
+				setCurrentItem( item );
+				setSelected( item, true );
+			}
+		}
 	}
 }
 

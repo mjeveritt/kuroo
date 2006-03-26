@@ -32,103 +32,66 @@ class KProcess;
 
 /**
  * @class Emerge
- * @short Object handling the Gentoo emerge command.
+ * @short The Gentoo emerge command.
  */
 class Emerge : public QObject
 {
 Q_OBJECT
 public:
-	Emerge( QObject *parent = 0 );
+	Emerge( QObject *m_parent = 0 );
     ~Emerge();
 
 public slots:
-	
-	void				init( QObject *myParent = 0 );
+	void				init( QObject *parent = 0 );
 	bool				stop();
-	
-	/**
- 	 * Launch emerge pretend list of packages.
- 	 * @param packageList	
- 	 * @return true 		if emerge process started.
- 	 */
-	bool 				pretend( const QString& category, const QStringList& packageList );
 	bool 				pretend( const QStringList& packageList );
-	
-	/**
- 	 * Launch emerge packages process.
- 	 * @param category
- 	 * @param packageList	
- 	 * @return true 		if emerge process started.
- 	 */
-	bool 				queue( const QString& category, const QStringList& packageList );
 	bool 				queue( const QStringList& packageList );
-	
-	/**
- 	 * Launch unmerge list of packages.
- 	 * @param packageList	
- 	 * @return true 		if emerge process started.
- 	 */
-	bool 				unmerge( const QString& category, const QStringList& packageList );
-	
-	/**
- 	 * Launch synchronize Portage tree.
- 	 * @return true 		if emerge process started.
- 	 */
+	bool 				unmerge( const QStringList& packageList );
 	bool				sync();
-	
-	/**
- 	 * Launch process to check for updates of world and system = "emerge -u(D)pv world".
- 	 * @return true 		if emerge process started.
- 	 */
 	bool				checkUpdates();
-	
-	/**
- 	 * @return list of packages parsed out from emerge output.
- 	 */
 	EmergePackageList	packageList();
-	
-	/**
-	 * @return if true if emerging.
-	 */
 	bool 				isRunning();
+	QString				packageMessage();
 	
 private slots:
-	
-	/**
- 	 * Parse emerge process output for messages and packages.
- 	 * @param proc	
- 	 */
-	void 				readFromStdout( KProcIO *proc );
-	
-	/**
- 	 * Post emerge actions.
-	 * Notice user of messages, inform gui that emerge is completed...
- 	 */
+	void 				slotEmergeOutput( KProcIO *proc );
 	void				cleanup();
-	void 				cleanupQueue( KProcess *proc );
-	void 				cleanupPretend( KProcess *proc );
-	void 				cleanupUnmerge( KProcess *proc );
-	void 				cleanupSync( KProcess *proc );
-	void 				cleanupCheckUpdates( KProcess *proc );
-	
-	/**
- 	 * count etc-files to merge.
- 	 */
+	void 				slotCleanupQueue( KProcess *proc );
+	void 				slotCleanupPretend( KProcess *proc );
+	void 				slotCleanupUnmerge( KProcess *proc );
+	void 				slotCleanupSync( KProcess *proc );
+	void 				slotCleanupCheckUpdates( KProcess *proc );
 	bool				countEtcUpdates( const QString& line );
-	
-	/**
-	 * Check if package is masked, if so ask to unmask.
-	 */
 	void				askUnmaskPackage( const QString& packageKeyword );
+	void				slotTryEmerge();
+	
+signals:
+	void				signalEmergeComplete();
 	
 private:
-	QObject				*parent;
-	KProcIO 			*eProc;
-	QString 			importantMessage, unmasked;
-	QStringList 		blocks, lastEmergeList;
+	QObject*			m_parent;
+	KProcIO*			eProc;
+	
+	// Collects messages from emerge, like masked errors, ewarn and einfos
+	QString 			importantMessage;
+	
+	// The current package
+	QString				m_packageMessage;
+	
+	// The parsed package emerge says need unmasking
+	QString				unmasked;
+	
+	// Collect all blocking packages
+	QStringList 		blocks;
+	
+	// Remember packages emerge started with, used when auto-unmasking
+	QStringList			lastEmergeList;
+	
+	// List of parsed packages
 	EmergePackageList	emergePackageList;
+	
+	// Count of etc-updates files to merge
 	int					etcUpdateCount;
-
 };
 
 #endif

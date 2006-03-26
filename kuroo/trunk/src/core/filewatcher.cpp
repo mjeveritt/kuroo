@@ -18,44 +18,60 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef SCANHISTORYJOB_H
-#define SCANHISTORYJOB_H
+#include "common.h"
+#include "filewatcher.h"
 
-#include "threadweaver.h"
-
-#include <qobject.h>
-
-class DbConnection;
-class QStringList;
-class PackageEmergeTime;
-
-typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
+#include <kdirwatch.h>
+#include <kmessagebox.h>
 
 /**
- * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @class FileWatcher.
+ * @short Check important portage files for changes.
  */
-class ScanHistoryJob : public ThreadWeaver::DependentJob
+FileWatcher::FileWatcher( QObject *parent )
+	: QObject( m_parent ), watcher( 0 )
 {
-Q_OBJECT
-public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = "" );
-	~ScanHistoryJob();
+}
 
-private:
-	bool 						doJob();
-	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
+FileWatcher::~FileWatcher()
+{
+	delete watcher;
+	watcher = 0;
+}
+
+void FileWatcher::init( QObject *parent )
+{
+	m_parent = parent;
+	watcher = new KDirWatch( this );
 	
-	QString escapeString( QString string ) {
-		return string.replace('\'', "''");
+// 	watcher->addDir( KurooConfig::dirDbPkg() + "/sys-apps" );
+	
+// 	watcher->addFile( KurooConfig::dirWorldFile() );
+	
+	connect( watcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged( const QString& ) ) );
+}
+
+/**
+ * Check for changes of portage version.
+ * @param the new package
+ */
+void FileWatcher::slotChanged( const QString& path )
+{
+	if ( path == KurooConfig::dirDbPkg() + "/sys-apps" ) {
+		QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
+		dPortageApp.setNameFilter( "portage-*" );
+		dPortageApp.setSorting( QDir::Time );
+		QString portage = dPortageApp.entryList().first();
+		
+		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
+			KurooConfig::setPortageVersion21( true );
+			KMessageBox::sorry( 0, i18n("Portage version is upgraded to 2.1. "
+										"Please refresh package view."), i18n("Portage version") );
+		}
 	}
-	
-private:
-	bool						aborted;
-	DbConnection* const			m_db;
-	QStringList 				m_logLines;
-	
-};
+// 	else
+// 	if ( path == KurooConfig::dirWorldFile() )
+// 		PortageSingleton::Instance()->loadWorld();
+}
 
-#endif
+#include "filewatcher.moc"

@@ -18,44 +18,28 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef SCANHISTORYJOB_H
-#define SCANHISTORYJOB_H
+#ifndef VERSIONVIEW_H
+#define VERSIONVIEW_H
 
-#include "threadweaver.h"
+#include <klistview.h>
 
-#include <qobject.h>
-
-class DbConnection;
-class QStringList;
-class PackageEmergeTime;
-
-typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
-
-/**
- * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
- */
-class ScanHistoryJob : public ThreadWeaver::DependentJob
+class VersionView : public KListView
 {
 Q_OBJECT
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = "" );
-	~ScanHistoryJob();
+    VersionView( QWidget *parent = 0, const char *name = 0 );
+    ~VersionView();
 
-private:
-	bool 						doJob();
-	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
+	class 		VersionItem;
 	
-	QString escapeString( QString string ) {
-		return string.replace('\'', "''");
-	}
+	void		insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
+	void		usedForInstallation( const QString& version );
+	int			hasUpdate();
+	QString 	updateVersion();
 	
 private:
-	bool						aborted;
-	DbConnection* const			m_db;
-	QStringList 				m_logLines;
-	
+	QString		m_emergeVersion;
+	int			m_installedIndex, m_emergeIndex;
 };
 
 #endif

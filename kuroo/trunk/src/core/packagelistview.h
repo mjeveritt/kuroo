@@ -39,86 +39,35 @@ public:
     ~PackageListView();
 
 public:
-	virtual	void			reset();
+	virtual	void			resetListView();
+	virtual	PackageItem* 	packageItemById( const QString& id );
 	
-	/**
- 	 * Current package idDB.
- 	 * @return idDB
- 	 */
 	virtual QString			currentId();
+	QString					currentItemStatus();
+	virtual PackageItem* 	currentPackage();
 	
-	/**
- 	 * Get current package.
-  	 * @return package name
- 	 */
-	virtual QString 		currentPackage();
-	
-	/**
- 	 * Get selected packages DB id.
- 	 * @return idList
- 	 */
 	virtual QStringList		selectedId();
-	
-	/**
- 	 * Get selected packages by name as "metalog-0.10.0" or "metalog".
- 	 * @return packageList
- 	 */
 	virtual QStringList		selectedPackages();
 	
-	/** 
-  	 * Return all packages by DB id in listview.
- 	 * @return packageList
- 	 */
 	virtual QStringList		allId();
-	
-	/** 
- 	 * Return all packages in listview.
- 	 * @return list of packages by name
- 	 */
 	virtual QStringList		allPackages();
 	
-	/**
- 	 * Count packages.
- 	 * @return QString
- 	 */
 	virtual QString			count();
 	
 public slots:
-	
-	/**
- 	 * Clear the queued hightlighting.
- 	 */
-	virtual void			slotClearQueued();
+	void					slotNextPackage( bool isPrevious );
 	
 protected slots:
-	
-	/**
- 	 * Fast method for marking packages as queued.
- 	 * @param idDB
- 	 * @param true/false
- 	 */
-	virtual void 			setQueued( const QString& idDB, bool b );
-	
-	/**
- 	 * Insert package and check if in the queue.
- 	 * @param item
- 	 * @param idDB
- 	 */
-	virtual void 			insertPackage( const QString& idDB, PackageItem *item );
-	
-	/**
-	* Fast method for marking packages as unmasked.
-	* @param idDB
-	* @param true/false
-	*/
-	virtual void 			setUnmasked( const QString& name, bool b );
+	void					setPackageFocus( const QString& id );
+	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
 protected:
+	QDict<PackageItem>		packageIndex;
 	
-	/**
-	 * Internal index of packages in listView.
-	 */
-	QDict<PackageItem>		packages;
+signals:
+	void					signalPackageChanged();
+	
+private:
 	
 };
 

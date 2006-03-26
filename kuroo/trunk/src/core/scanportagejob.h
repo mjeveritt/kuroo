@@ -26,17 +26,10 @@
 #include <qobject.h>
 
 class DbConnection;
-class QRegExp;
 
-extern QRegExp pv;
+typedef QMap<QString, QString> InstalledMap;
 
 /**
- * Thread for scanning local portage tree for available packages.
- * The packages are counted first, this to get a correct refresh progress in the gui.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
- * first the portage overlay cache the official portage cache.
- * All packages are stored in table "package" in the database.
- * 
  * @class ScanPortageJob
  * @short Thread for scanning local portage tree.
  */
@@ -47,46 +40,54 @@ public:
 	ScanPortageJob( QObject *parent = 0 );
 	~ScanPortageJob();
 
-private slots:
-	
-	/**
-	 * Scan KurooConfig::dirEdbDep() + "/usr/portage" for packages in portage tree.
-	 * Inserting found packages in db.
-	 * @return bool 		true if successful.
-	 */
-	bool 						doJob();
-	void 						completeJob();
-	
-	/**
-	 * Collect info about this ebuild.
-	 * @param category   	
-	 * @param package  	
-	 * @return  false if the file can't be opened, true otherwise.
-	 */
-	bool						scanInfo( const QString& path, const QString& category, const QString& package );
-	
-	/**
-	 * Format package size nicely 
-	 * @fixme: Check out KIO_EXPORT QString KIO::convertSize
-	 * @param size 
-	 * @return total		as "xxx kB"
-	 */
-	QString						kBSize( const QString& size );
+private:
+	void								scanInstalledPackages();
 	
 private:
-	int							totalPackages;
-	bool						aborted;
-	DbConnection* const 		m_db;
-	struct Info {
-		QString packageSlots;
-		QString homepage;
-		QString licenses;
-		QString description;
-		QString keywords;
-		QString useFlags;
-		QString size;
+	bool 								doJob();
+	void 								completeJob();
+	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
+	QString								formatSize( const QString& size );
+	void								setKurooDbMeta( const QString& meta, const QString& data );
+	
+	void								loadCache();
+	QString								cacheFind( const QString& package );
+	
+private:
+	QRegExp								rxAtom;
+	InstalledMap						installedMap;
+	int									totalPackages;
+	bool								aborted;
+	DbConnection* const 				m_db;
+	
+	QMap<QString, QString> 				mapCache;
+	
+	struct Data {
+		QString							description;
+		QString							homepage;
+		QString							status;
+		QString							licenses;
+		QString							useFlags;
+		QString							slot;
+		QString							size;
+		QString							keywords;
+		QString							path;
 	};
-	Info 						info;
+	typedef QMap<QString, Data>			PortageVersions;
+	struct Versions {
+		QString							status;
+		QString							description;
+		PortageVersions					versions;
+	};
+	typedef QMap<QString, Versions>		PortagePackages;
+	struct Categories {
+		QString							idCategory;
+		QString							idSubCategory;
+		QString							idCatSubCategory;
+		PortagePackages					packages;
+	};
+	typedef QMap<QString, Categories>	PortageCategories;
+	PortageCategories					categories;
 };
 
 #endif

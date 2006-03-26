@@ -23,7 +23,6 @@
 
 #include <qobject.h>
 
-class KCmdLineArgs;
 class IntroDlg;
 
 /**

@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef STATUSBAR_H
 #define STATUSBAR_H
 
@@ -39,27 +40,29 @@ public:
 	KurooStatusBar( QWidget *parent = 0 );
     ~KurooStatusBar();
 	
-	static 			KurooStatusBar* instance() { return s_instance; }
+	static 					KurooStatusBar* instance() { return s_instance; }
 	
-	/**
- 	 * Progress methods.
- 	 */
-	void 			setProgressStatus( const QString& text );
-	void			setTotalSteps( int total );
-	void 			setProgress( int steps );
-	void			startTimer();
-	void			stopTimer();
-	void			startProgress();
+	void 					setProgressStatus( const QString& id, const QString& text );
+	void					setTotalSteps( int total );
+	void					setThreadTotalSteps( int total );
+	void 					setProgress( int steps );
+	void					startTimer();
+	void					stopTimer();
+	void					startProgress();
 	
 public slots:
-	void			oneStep();
-	void			advance();
+	void					slotOneStep();
+	void					slotAdvance();
 
+private slots:
+	void					slotLastMessage();
+	
 private:
-	KProgress 		*statusBarProgress;
-	QLabel 			*statusBarLabel;
-	QTimer 			*internalTimer, *diffTimer;
-	int				timerSteps;
+	QMap<QString, QString> 	messageMap;
+	KProgress 				*statusBarProgress;
+	QLabel 					*statusBarLabel;
+	QTimer 					*internalTimer, *diffTimer;
+	int						timerSteps;
 };
 
 #endif

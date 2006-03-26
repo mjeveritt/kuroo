@@ -18,21 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "common.h"
 #include "statusbar.h"
 
 #include <qlabel.h>
 
-#include <kdebug.h>
 #include <qtimer.h>
 
 KurooStatusBar* KurooStatusBar::s_instance = 0;
 
 /**
- * Singleton object to build statusbar with progressbar in right corner.
- * The one and only instance created from this class can can be accessed from all classes.
+ * @class KurooStatusBar
+ * @short Singleton object to build statusbar with progressbar in right corner.
  */
 KurooStatusBar::KurooStatusBar( QWidget *parent )
-	: KStatusBar( parent ),	statusBarProgress(0), statusBarLabel(0)
+	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
 {
 	s_instance = this;
 	statusBarProgress = new KProgress( 0, "statusBarProgress" );
@@ -41,15 +41,16 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	addWidget( statusBarLabel, 1, 1 );
 	addWidget( statusBarProgress, 0, true );
 	
-	setTotalSteps(100);
+	statusBarProgress->setTotalSteps( 100 );
+	statusBarProgress->hide();
 	
 	// Clock timer for showing progress when emerging packages.
 	internalTimer = new QTimer( this );
-	connect( internalTimer, SIGNAL(timeout()), SLOT(oneStep()) );
+	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
 	// Progress timer for activities when total duration is not specified.
 	diffTimer = new QTimer( this );
-	connect( diffTimer, SIGNAL(timeout()), SLOT(advance()) );
+	connect( diffTimer, SIGNAL( timeout() ), SLOT( slotAdvance() ) );
 }
 
 KurooStatusBar::~KurooStatusBar()
@@ -59,17 +60,70 @@ KurooStatusBar::~KurooStatusBar()
 /**
  * Set label text in statusbar.
  */
-void KurooStatusBar::setProgressStatus( const QString& text )
+void KurooStatusBar::setProgressStatus( const QString& id, const QString& message )
 {
-	statusBarLabel->setText(text);
+	if ( id.isEmpty() ) {
+		statusBarLabel->setText( message );
+		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
+		return;
+	}
+	
+	if ( !messageMap.contains( id ) ) {
+		messageMap.insert( id, message );
+		statusBarLabel->setText( message );
+	}
+	else {
+		messageMap.erase( id );
+		statusBarLabel->setText( message );
+		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
+	}
 }
 
 /**
- * Set total.
+ * View last message.
+ */
+void KurooStatusBar::slotLastMessage()
+{
+	QMap<QString, QString>::Iterator it = messageMap.end();
+	if ( messageMap.size() > 0 ) {
+		it--;
+		statusBarLabel->setText( it.data() );
+	}
+	else
+		statusBarLabel->setText( i18n("Done.") );
+}
+
+/**
+ * Set total for timer progress.
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
-	statusBarProgress->setTotalSteps(total);
+	stopTimer();
+	statusBarProgress->setTextEnabled( true );
+	statusBarProgress->setTotalSteps( total );
+	
+	if ( total == 0 )
+		statusBarProgress->hide();
+	else
+		if ( !statusBarProgress->isVisible() ) {
+			statusBarProgress->show();
+			startTimer();
+		}
+}
+
+/**
+ * Set total for stepped progress.
+ */
+void KurooStatusBar::setThreadTotalSteps( int total )
+{
+	statusBarProgress->setTextEnabled( true );
+	statusBarProgress->setTotalSteps( total );
+	
+	if ( total == 0 )
+		statusBarProgress->hide();
+	else
+		if ( !statusBarProgress->isVisible() )
+			statusBarProgress->show();
 }
 
 /**
@@ -78,7 +132,7 @@ void KurooStatusBar::setTotalSteps( int total )
  */
 void KurooStatusBar::setProgress( int steps )
 {
-	statusBarProgress->setProgress(steps);
+	statusBarProgress->setProgress( steps );
 }
 
 /**
@@ -86,7 +140,7 @@ void KurooStatusBar::setProgress( int steps )
  */
 void KurooStatusBar::startTimer()
 {
-	internalTimer->start(1000);
+	internalTimer->start( 1000 );
 	timerSteps = 0;
 }
 
@@ -97,17 +151,18 @@ void KurooStatusBar::stopTimer()
 {
 	internalTimer->stop();
 	diffTimer->stop();
-	setProgress(0);
-	setTotalSteps(100);
-	statusBarProgress->setTextEnabled(true);
+	statusBarProgress->setProgress( 0 );
+	statusBarProgress->setTotalSteps( 100 );
+	statusBarProgress->setTextEnabled( true );
+	statusBarProgress->hide();
 }
 
 /**
  * Increase progress by 1 second.
  */
-void KurooStatusBar::oneStep()
+void KurooStatusBar::slotOneStep()
 {
-	setProgress(timerSteps++);
+	setProgress( timerSteps++ );
 	
 	if ( timerSteps > statusBarProgress->totalSteps() ) {
 		stopTimer();
@@ -120,17 +175,18 @@ void KurooStatusBar::oneStep()
  */
 void KurooStatusBar::startProgress()
 {
-	setTotalSteps(0);
-	statusBarProgress->setTextEnabled(false);
-	diffTimer->start(1000);
+	statusBarProgress->show();
+	statusBarProgress->setTotalSteps( 0 );
+	statusBarProgress->setTextEnabled( false );
+	diffTimer->start( 1000 );
 }
 
 /**
  * Show relative advance progress.
  */
-void KurooStatusBar::advance()
+void KurooStatusBar::slotAdvance()
 {
-	statusBarProgress->advance(2);
+	statusBarProgress->advance( 2 );
 }
 
 #include "statusbar.moc"

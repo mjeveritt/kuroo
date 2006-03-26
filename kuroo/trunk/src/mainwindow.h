@@ -35,10 +35,6 @@ public:
     MainWindow( QWidget *parent = 0, const char *name = 0 );
     ~MainWindow();
 
-	/**
-	 * Create statusBar.
- 	 * @return sb	pointer to statusBar
- 	 */
 	KurooStatusBar 	*statusBar();
 
 private:

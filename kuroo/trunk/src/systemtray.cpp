@@ -23,34 +23,41 @@
 
 #include <qtooltip.h>
 
-#include <kiconloader.h>
 #include <kpopupmenu.h>
 
 SystemTray* SystemTray::s_instance = 0;
 
 /**
- * Singleton object that creates the kuroo systemtray icon and actions.
+ * @class SystemTray
+ * @short Singleton object that creates the kuroo systemtray icon and actions.
  */
 SystemTray::SystemTray( QWidget *parent )
 	: KSystemTray( parent )
 {
 	s_instance = this;
-	
-	//Load Kuroo icons
-	ldr = KGlobal::iconLoader();
-	pxKuroo = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
-	pxEmerging = ldr->loadIcon( "kuroo1", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
-	
-	slotBusy(false);
-	
-	QToolTip::add( this, i18n("Kuroo - Portage frontend"));
-	contextMenu()->insertItem( i18n("&Configure Kuroo..."), this, SLOT(slotPreferences()) );
-	
+	QToolTip::add( this, i18n("Kuroo - Portage frontend") );
+	contextMenu()->insertItem( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	
 }
 
 SystemTray::~SystemTray()
 {
+}
+
+void SystemTray::activate()
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	slotBusy( false );
+	show();
+}
+
+void SystemTray::inactivate()
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	hide();
 }
 
 void SystemTray::slotPreferences()
@@ -62,12 +69,12 @@ void SystemTray::slotPreferences()
  * Show busy kuroo icon.
  * @param	kuroo state = busy or ready
  */
-void SystemTray::slotBusy( bool b )
+void SystemTray::slotBusy( bool busy )
 {
-	if ( b )
-		setPixmap( pxEmerging );
+	if ( busy && isVisible() )
+		setPixmap( ImagesSingleton::Instance()->icon( KUROO_EMERGING ) );
 	else
-		setPixmap( pxKuroo );
+		setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
 }
 
 #include "systemtray.moc"

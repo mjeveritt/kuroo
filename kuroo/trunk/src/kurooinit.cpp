@@ -18,16 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "common.h"
 #include "kurooinit.h"
 #include "introdlg.h"
-#include "common.h"
 
 #include <sys/stat.h>
 #include <grp.h>
 #include <pwd.h>
 
 #include <qdir.h>
-#include <qregexp.h>
 
 #include <kcmdlineargs.h>
 #include <kstringhandler.h>
@@ -35,22 +34,19 @@
 #include <kmessagebox.h>
 
 /**
- * KurooInit checks that kuroo environment is correctly setup.
+ * @class kurooInit
+ * @short KurooInit checks that kuroo environment is correctly setup.
+ * 
  * And launch intro wizard whenever a new version of kuroo is installed.
  * Set ownership for directories and files to portage:portage.
  * Check that user is in portage group.
  */
 KurooInit::KurooInit( QObject *parent, const char *name )
-	: QObject( parent, name ), wizardDialog(0)
+	: QObject( parent, name ), wizardDialog( 0 )
 {
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( KUROODIR );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
-		if ( !KUser().isSuperUser() ) {
-			KMessageBox::error( 0, i18n("You must start Kuroo with kdesu first time for a secure initialization.\nPlease try again!"), i18n("Initialization") );
-			exit(0);
-		}
-		
 		getEnvironment();
 		firstTimeWizard();
 	}
@@ -58,66 +54,110 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		if ( !KUser().isSuperUser() )
 			checkUser();
 	
+	// Get portage version
+	QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
+	dPortageApp.setNameFilter( "portage-*" );
+	dPortageApp.setSorting( QDir::Time );
+	QString portage = dPortageApp.entryList().first();
+	if ( portage.isEmpty() ) {
+		KMessageBox::error( 0, i18n("Can not identify portage version!\n"
+		                            "Kuroo can not correctly parse package information.\n"
+		                            "You can select portage version in settings."), i18n("Portage version") );
+	}
+	else {
+		if ( portage.section( "portage-", 1, 1).startsWith( "2.1" ) )
+			KurooConfig::setPortageVersion21( true );
+		else
+			KurooConfig::setPortageVersion21( false );
+	}
+	
 	// Get portage groupid to set directories and files owned by portage
-	struct group* portageGid = getgrnam(QFile::encodeName("portage"));
-	struct passwd* portageUid = getpwnam(QFile::encodeName("portage"));
+	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
+	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
 	
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
-		KurooConfig::setSaveLog(false);
-		KurooConfig::setScanUpdateDate(i18n("No scan"));
-		KurooConfig::setScanSizeDate(i18n("No scan"));
+		KurooConfig::setSaveLog( false );
 		
 		if ( !KurooConfig::wizard() )
 			getEnvironment();
 		
-		// Create DirHome dir and set permissions so common user can run Kuroo.
+		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
-			d.mkdir(KUROODIR);
+			if ( !d.mkdir(KUROODIR) ) {
+				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
+				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+				                            "Please try again!</qt>"), i18n("Initialization") );
+				exit(0);
+			} else {
+				chmod( KUROODIR, 0770 );
+				chown( KUROODIR, portageGid->gr_gid, portageUid->pw_uid );
+			}
 			d.setCurrent(KUROODIR);
 		}
 	}
-	chmod(KUROODIR, 0770);
-	chown(KUROODIR, portageGid->gr_gid, portageUid->pw_uid);
 	
-	// Check that backup directory exists.
+	// Check that backup directory exists and set correct permissions
 	QString backupDir = KUROODIR + "backup";
-	if ( !d.cd(backupDir) )
-		d.mkdir(backupDir);
-	chmod(backupDir, 0770);
-	chown(backupDir, portageGid->gr_gid, portageUid->pw_uid);
-	
-	// If new release delete old db files
-	QString database = KUROODIR + KurooConfig::databas();
-	if ( KurooConfig::version() != KurooConfig::hardVersion() ) {
-		remove( database );
-		kdDebug() << i18n("Deleting old version of database %1").arg(database) << endl;
+	if ( !d.cd(backupDir) ) {
+		if ( !d.mkdir(backupDir) ) {
+			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
+			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+			                            "Please try again!</qt>"), i18n("Initialization") );
+			exit(0);
+		}
+		else {
+			chmod( backupDir, 0770 );
+			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
+		}
 	}
 	
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
 	KurooConfig::writeConfig();
 	
-	// Initialize singletons objects
-	QString logFile = LogSingleton::Instance()->init(this);
+	// Initialize the log
+	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
-		chmod(logFile, 0660);
-		chown(logFile, portageGid->gr_gid, portageUid->pw_uid);
+		chmod( logFile, 0660 );
+		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
 	}
 	
-	QString databaseFile = KurooDBSingleton::Instance()->init(this);
-	chmod(databaseFile, 0660);
-	chown(databaseFile, portageGid->gr_gid, portageUid->pw_uid);
+	// Initialize the database
+	QString databaseFile = KurooDBSingleton::Instance()->init( this );
+	QString database = KUROODIR + KurooConfig::databas();
+	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 	
-	EtcUpdateSingleton::Instance()->init(this);
-	SignalistSingleton::Instance()->init(this);
-	EmergeSingleton::Instance()->init(this);
-	HistorySingleton::Instance()->init(this);
-	InstalledSingleton::Instance()->init(this);
-	PortageSingleton::Instance()->init(this);
-	UpdatesSingleton::Instance()->init(this);
-	QueueSingleton::Instance()->init(this);
-	ResultsSingleton::Instance()->init(this);
+	kdDebug() << "dbVersion=" << dbVersion << endl;
+	
+	// Old db structure, must delete it and backup history 
+	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
+		KurooDBSingleton::Instance()->backupDb();
+		KurooDBSingleton::Instance()->destroy();
+		remove( database );
+		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		kdDebug() << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		
+		// and recreate with new structure
+		KurooDBSingleton::Instance()->init( this );
+		KurooDBSingleton::Instance()->setKurooDbMeta( "kurooVersion", KurooConfig::version().section( "_db", 1, 1 ) );
+	}
+	
+	// Give permissions to portage:portage to access the db also
+	chmod( databaseFile, 0660 );
+	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
+	
+	// Initialize singletons objects
+	ImagesSingleton::Instance()->init( this );
+	SignalistSingleton::Instance()->init( this );
+	EmergeSingleton::Instance()->init( this );
+	EtcUpdateSingleton::Instance()->init( this );
+	HistorySingleton::Instance()->init( this );
+	PortageSingleton::Instance()->init( this );
+	QueueSingleton::Instance()->init( this );
+	ResultsSingleton::Instance()->init( this );
+	PortageFilesSingleton::Instance()->init( this );
+	FileWatcherSingleton::Instance()->init( this );
 }
 
 KurooInit::~KurooInit()
@@ -133,7 +173,7 @@ KurooInit::~KurooInit()
 bool KurooInit::getEnvironment()
 {
 	QString line;
-	bool success(false);
+	bool success( false );
 	
 	QFile makeconf("/etc/make.conf");
 	if ( makeconf.open(IO_ReadOnly) ) {
@@ -154,11 +194,8 @@ bool KurooInit::getEnvironment()
 			if ( line.contains(QRegExp("^PORTAGE_TMPDIR=")) )
 				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
 			
-			// Parse out first overlay directory, because can only handle one overlay
-			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) ) {
-				KurooConfig::setDirPortageOverlayAll( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0:" ) );
+			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) )
 				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
-			}
 			
 			success = true;
 		}
@@ -166,6 +203,7 @@ bool KurooInit::getEnvironment()
 	}
 	else {
 		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
+		kdDebug() << "Error reading: /etc/make.conf" << endl;
 		success = false;
 	}
 	
@@ -183,8 +221,15 @@ bool KurooInit::getEnvironment()
 		}
 		f.close();
 	}
-	else
+	else {
 		kdDebug() << i18n("Error reading: /etc/make.profile") << endl;
+		kdDebug() << "Error reading: /etc/make.profile" << endl;
+	}
+	
+	// Add default etc-files warnings
+	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
+	                         "/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n"
+	                         "/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
 	
 	KurooConfig::writeConfig();
 	return success;
@@ -218,7 +263,9 @@ void KurooInit::checkUser()
 		if ( *it == "portage" )
 			return;
 	}
-	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), i18n("User permissions") );
+	
+	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), 
+	                    i18n("User permissions") );
 	exit(0);
 }
 

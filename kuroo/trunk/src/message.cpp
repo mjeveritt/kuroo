@@ -23,8 +23,10 @@
 #include "messagebase.h"
 
 #include <qlabel.h>
+#include <qclipboard.h>
 
 #include <ktextbrowser.h>
+#include <kapplication.h>
 
 Message* Message::s_instance = 0;
 
@@ -32,14 +34,18 @@ Message* Message::s_instance = 0;
  * @class Message
  * @short Convenience singleton dialog for simple messages to user.
  */
-Message::Message( QWidget *parent, const char *name )
-	: KDialogBase( parent, name, false ), base(0)
+Message::Message( QWidget *parent )
+	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n("Message"), false, i18n("Message"), KDialogBase::Ok | KDialogBase::User1, KDialogBase::Ok, false ),
+	base( 0 ), m_text( QString::null )
 {
 	s_instance = this;
-	base = new MessageBase(this);
-	showButtonApply(false);
-	showButtonCancel(false);
-	setMainWidget(base);
+	base = new MessageBase( this );
+	
+	setButtonText( KDialogBase::User1, i18n("Copy text to clipboard") );
+	showButtonCancel( false );
+	
+// 	base->messageText->setTextFormat( Qt::LogText );
+	setMainWidget( base );
 }
 
 Message::~Message()
@@ -52,27 +58,29 @@ Message::~Message()
  * @param label
  * @param text	the message
  */
-void Message::prompt( const QString& caption, const QString& label, const QStringList& text )
+void Message::prompt( const QString& caption, const QString& label, const QString& text )
 {
-	setCaption(caption);
-	setLabel(label);
-	setText(text);
+	m_text = text;
+	setCaption( caption );
+	setLabel( "<b>" + label + "</b>" );
+	
+	QString m_text = text;
+	m_text.replace( "<br>", "\x000a" );
+	
+	base->messageText->setText( text );
 	setInitialSize( QSize(600, 300) );
 	show();
-}
-
-/**
- * Set the message text and encode it for correct html presentation.
- * @param text	the message
- */
-void Message::setText( const QStringList& lines )
-{
-	base->messageText->setText( lines.join("\n") );
 }
 
 void Message::setLabel( const QString& label )
 {
 	base->messageLabel->setText( label );
+}
+
+void Message::slotUser1()
+{
+	QClipboard *cb = QApplication::clipboard();
+	cb->setText( m_text, QClipboard::Clipboard );
 }
 
 #include "message.moc"

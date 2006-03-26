@@ -36,16 +36,16 @@ class KAction;
 class KConfigDialog;
 class KURL;
 class IntroDlg;
-class EmergeLogDlg;
 class KCmdLineArgs;
 class KurooInit;
 class Message;
 class Queue;
 class Results;
+class SystemTray;
 
 /**
  * @class Kuroo
- * @short Create main window with menus, system tray icon and statusbar.
+ * @short Main window with menus, system tray icon and statusbar.
  */
 class Kuroo : public MainWindow
 {
@@ -55,52 +55,21 @@ public:
 	virtual ~Kuroo();
 	
 private slots:
-	
-	/**
-	 * Method for enable right slot depending on which tab is activated.
-	 * @param page
-	 */
-	void				activateToolbar( QWidget *page );
-	
-	/**
-	 * Dialogs:
-	 * Show the wizard.
-	 * Show the full emerge log 
-	 * Kuroo preferences window.
-	 */
 	void 				introWizard();
-	void 				emergeLog();
 	void 				slotPreferences();
-	
-	/**
-	 * Disable buttons when kuroo is busy.
-	 */
-	void				slotBusy( bool b );
-	
-	/**
-	 * Launch emerge portage sync.
-	 */
+	void				slotBusy();
 	void				slotSync();
-	
-	/**
-	 * Hide kuroo window when clicking in close button.
-	 * Wait for the backup of the log is completed before terminating.
-	 */
 	bool 				queryClose();
 	bool 				queryExit();
 	void 				slotQuit();
 	void				slotWait();
 	void 				slotTerminate();
 	
-	void				slotNull();
-	
-	/**
-	* Build mainwindow menus and toolbar.
-	*/
 private:
 	void 				setupActions();
 	
 private:
+	SystemTray			*systemTray;
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
 	Message 			*kurooMessage;
@@ -108,9 +77,8 @@ private:
 	KurooView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
-	EmergeLogDlg 		*emergeLogDialog;
 	bool 				m_shuttingDown;
-	KAction 			*actionRefresh, *actionSync, *actionFind;
+	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage, *actionEtcUpdate;
 };
 
 #endif // _KUROO_H_

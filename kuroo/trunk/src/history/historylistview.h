@@ -21,22 +21,14 @@
 #ifndef HISTORYLISTVIEW_H
 #define HISTORYLISTVIEW_H
 
-#include <qpixmap.h>
-
 #include <klistview.h>
 
-class QTime;
-class QPixmap;
 class Package;
 class PackageEmergeTime;
-class KProcIO;
 class KListViewItem;
 
-typedef QMap< QString, QListViewItem * > ItemMap;
-typedef QMap< QString, Package > PackageMap;
-typedef QMap< QString, PackageEmergeTime > EmergeTimeMap;
-
-extern QRegExp pv;
+typedef QMap<QString, Package> PackageMap;
+typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
 
 /**
  * @class HistoryListView
@@ -46,19 +38,40 @@ class HistoryListView : public KListView
 {
 Q_OBJECT
 public:
-	HistoryListView(QWidget *parent = 0, const char *name = 0);
+	HistoryListView( QWidget *parent = 0, const char *name = 0 );
 	~HistoryListView();
+	
+	class			HistoryItem;
 	
 	QString 		current();
 	QStringList 	selected();
-	void 			loadFromDB();
+	void 			loadFromDB( int days );
 	
 private:
-	QPixmap 		pxPackageHeader, pxCategory, pxNew, pxUnmerged;
+	KLocale 		*loc;
+	
+	typedef QMap<QString, HistoryItem*> ItemMap;
 	ItemMap			itemMap;
 	
 signals:
-	void    	signalHistoryLoaded();
+	void    		signalHistoryLoaded();
+};
+
+/**
+ * @class HistoryItem
+ * @short ListViewItem for package emerge/unmerges date
+ */
+class HistoryListView::HistoryItem : public KListViewItem
+{
+public:
+	HistoryItem( QListView* parent, const char* date );
+	HistoryItem( HistoryItem* parent, const char* package );
+	
+	void			setEinfo( const QString& einfo );
+	QString			einfo();
+	
+private:
+	QString 		m_einfo;
 };
 
 #endif

@@ -18,70 +18,53 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef HISTORY_H
-#define HISTORY_H
+#ifndef MERGELISTVIEW_H
+#define MERGELISTVIEW_H
 
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qfile.h>
+#include <klistview.h>
 
-class KProcIO;
-class PackageEmergeTime;
-class QString;
-class KDirWatch;
-
-typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
+class KListViewItem;
 
 /**
- * @class History
- * @short Object for the emerge history and statistics.
+ * @class MergeListView
+ * @short Specialized listview for merge history.
  */
-class History : public QObject
+class MergeListView : public KListView
 {
 Q_OBJECT
 public:
-	History( QObject *m_parent = 0 );
-    ~History();
-
-	void			init( QObject *parent = 0 );
+	MergeListView(QWidget *parent = 0, const char *name = 0);
+	~MergeListView();
 	
-public slots:
-	void			slotInit();
-	void			slotScanHistoryCompleted();
-	bool			slotRefresh();
-	void			loadTimeStatistics();
-	EmergeTimeMap 	getStatisticsMap();
-	void 			setStatisticsMap( const EmergeTimeMap& statisticsMap );
-	QString 		packageTime( const QString& packageNoversion );
-	void			appendEmergeInfo();
-	void			updateStatistics();
-	QStringList		allMergeHistory();
+	void 			loadFromDB();
 	
-private slots:
-	void			slotScanHistory( const QStringList& lines );
-	void			slotParse();
-
-private:
-	QObject*		m_parent;
-	
-	// Watches the emerge.log file
-	KDirWatch		*logWatcher;
-	
-	// Map with packages emerge duration
-	EmergeTimeMap	m_statisticsMap;
-	
-	// The emerge.log
-	QFile 			log;
-	
-	// Stream for emerge.log
-	QTextStream 	stream;
-	
-	// Is kuroo emerging or just downloading the package
-	bool			isEmerging;
+	class			MergeItem;
 	
 signals:
-	void			signalScanHistoryCompleted();
-	void			signalHistoryChanged();
+	void    		signalHistoryLoaded();
+	
+private:
+	KLocale 		*loc;
+	
+	typedef QMap< QString, MergeItem* > ItemMap;
+	ItemMap			itemMap;
+};
+
+/**
+ * @class MergeItem
+ * @short ListViewItem with merge files.
+ */
+class MergeListView::MergeItem : public KListViewItem
+{
+public:
+	MergeItem( QListView* parent, const char* date );
+	MergeItem( MergeItem* parent, const char* source, const char* destination );
+	
+	QString			source();
+	QString			destination();
+	
+private:
+	QString 		m_source, m_destination;
 };
 
 #endif

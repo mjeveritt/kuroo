@@ -18,20 +18,14 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef INSTALLATIONLISTVIEW_H
-#define INSTALLATIONLISTVIEW_H
+#ifndef QUEUELISTVIEW_H
+#define QUEUELISTVIEW_H
 
 #include "packagelistview.h"
+#include "packageitem.h"
 
-#include <qpixmap.h>
-
-class QTime;
-class QPixmap;
-class Package;
-class QRegExp;
 class PackageItem;
-
-extern QRegExp pv;
+class KProgress;
 
 /**
  * @class QueueListView
@@ -40,89 +34,70 @@ extern QRegExp pv;
 class QueueListView : public PackageListView
 {
 Q_OBJECT
-	
 public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
+
+	class					QueueItem;
 	
 public slots:
-	
-	/**
-	* Get all packages in the queue
-	* @return packageList
-	*/
-	QStringList 						allPackages();
-	
-	/**
-	* Return selected packages in queue
-	* @return packageList		
-	*/
-	QStringList 						selectedPackages();
-	
-	/**
-	* Get current package in queue (clicked on).
-	* @return package
-	*/
-	QString		 						currentPackage();
-	
-	/**
-	* Populate queue with packages from db
-	*/
-	void 								loadFromDB();
-	
-	/**
-	* Get total emerge duration in format hh:mm:ss and int.
-	*/
-	QString		 						totalTime();
-	int									sumTime();
-	
-	/**
-	* Get sum of packages sizes.
-	* @return sumSize 
-	*/
-	QString		 						totalSize();
+	void					slotPackageUp();
+	void					slotPackageDown();
+	QStringList				allPackagesNoChildren();
+	QStringList				allEndUserPackages();
+	void 					insertPackageList( bool hasCheckedQueue );
+	void					clearQueuePackageUse();
+	QTime			 		totalTime();
+	int						sumTime();
+	QString					totalTimeFormatted();
+	QString		 			totalSize();
+	void					slotPackageComplete( const QString& id );
+	void					slotPackageStart( const QString& id );
+	void					slotPackageProgress();
 	
 private slots:
-	
-	/**
-	* Clear this listView and packages.
-	*/
-	void								reset();
-	
-	/**
-	* Format package size nicely 
-	* @fixme: Check out KIO_EXPORT QString KIO::convertSize
-	* @param size 
-	* @return total		as "xxx kB"
-	*/
-	QString		 						kBSize( const int& size );
-	
-	/**
-	* Add this package size to total.
-	* @param size
-	*/
-	void 								addSize( const QString& size );
-	
-	/**
-	* Convert emerge duration from seconds to format hh:mm:ss.
-	* @param time 			
-	* @return emergeTime  
-	*/
-	QString 							timeFormat( const QString& time );
+	void					viewportResizeEvent(QResizeEvent *e);
+	void					slotHideBars( QListViewItem* item );
+	QString		 			formatSize( const QString& sizeString );
+	void 					addSize( const QString& size );
+	QString 				formatTime( int time );
 	
 signals:
-	void								signalQueueLoaded();
-	void								signalPackageEmerged();
+	void					signalQueueLoaded();
+	void					signalPackageEmerged();
 	
 private:
-	int 								sumSize;
-	QPixmap 							pxPackageHeader, pxCategory, pxPackage, pxInstalled, pxStable, pxTesting;
-	struct TreeViewCategory {
-		PackageItem* item;
-		QMap< QString, PackageItem* > 	packageItems;
-	};
-	QMap< QString, TreeViewCategory > 	categoryItems;
+	KLocale 				*loc;
+	int 					sumSize, m_order;
+	QString					m_id;
+};
+
+/**
+ * @class QueueListView::QueueItem
+ * @short Package item with progressbar
+ */
+class QueueListView::QueueItem : public PackageItem
+{
+public:
+	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration );
+	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration );
+	~QueueItem();
 	
+	void			setComplete();
+	bool			isComplete();
+	int				remainingDuration();
+	void			setStart();
+	void			oneStep();
+	void			setChecked( bool isChecked );
+	void			hideBar();
+	
+protected:
+	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+	
+private:
+	KProgress* 		bar;
+	int				m_progress, m_duration;
+	bool			m_isChecked, m_isComplete;
 };
 
 #endif

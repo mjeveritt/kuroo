@@ -18,54 +18,29 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef RESULTS_H
+#define RESULTS_H
 
 #include <qobject.h>
 
-class QTimer;
-
 /**
- * @class Queue
- * @short Object for packages to be emerged = installation queue.
+ * @class Results
+ * @short Object for the resulting list of packages from emerge actions.
  */
-class Queue : public QObject
+class Results : public QObject
 {
-Q_OBJECT
-	
+Q_OBJECT	
 public:
-	Queue( QObject *m_parent = 0 );
-	~Queue();
+	Results( QObject *m_parent = 0 );
+    ~Results();
 	
 public slots:
-	void					init( QObject *parent = 0 );
-	void					emergePackageStart( const QString& package, int order, int total );
-	void					emergePackageComplete( const QString& package, int order, int total );
-	void					slotOneStep();
-	void					stopTimer();
-	void					clearCache();
-	void					insertInCache( const QString& id );
-	void					deleteFromCache( const QString& id );
-	bool					isQueued( const QString& id );
-	void					reset();
-	void					refresh( bool hasCheckedQueue );
-	void					removePackageIdList( const QStringList& packageIdList );
-    void 					addPackageIdList( const QStringList& packageIdList );
-	void					installQueue( const QStringList& packageList );
-	void					setRemoveInstalled( bool removeInstalled );
-	void					slotClearQueue();
-	
-signals:
-	void					signalQueueChanged( bool hasCheckedQueue );
-	void					signalPackageAdvance();
-	void					signalPackageStart( const QString& id );
-	void					signalPackageComplete( const QString& id );
-	
+	void			init( QObject *parent = 0 );
+	void			refresh();
+	void 			addPackageList( const EmergePackageList &packageList );
+
 private:
-	QObject					*m_parent;
-	QMap<QString, bool>		queueCache;
-	QTimer*					internalTimer;
-	bool					m_removeInstalled;
+	QObject			*m_parent;
 };
 
 #endif

@@ -24,8 +24,8 @@
 
 class KListView;
 class QListViewItem;
-class EmergeOptionsBase;
-class KDialogBase;
+class PretendInspector;
+class PackageInspector;
 
 /**
  * @class QueueTab
@@ -35,56 +35,33 @@ class QueueTab : public QueueBase
 {
 Q_OBJECT
 public:
-    QueueTab( QWidget *parent = 0 );
-	
-	/**
-	 * Save listview geometry.
-	 */
+	QueueTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
     ~QueueTab();
 
 public slots:
-	
-	/**
-	 * Load Queue packages.
-	 */
-	void		slotReload();
+	void				slotReload( bool hasCheckedQueue );
+	void				slotQueueSummary();
 	
 private slots:
-	
-	/**
-	 * Initialize Queue view.
-	 */
-	void		slotInit();
-	
-	/**
-	 * Disable/enable buttons when kuroo is busy.
-	 * @param b
-	 */
-	void		slotBusy( bool b );
-	
-	/**
-	 * Open dialog for advanced emerge options.
-	 */
-	void		slotOptions();
-	void		slotClearOptions();
-	void		slotGo();
-	
-	/**
-	 * Kill the running emerge process.
-	 */
-	void		slotStop();
-	
-	/**
-	 * Popup menu for actions like emerge.
-	 * @param listView
-	 * @param item
-	 * @param point
-	 */
-	void		contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
+	void				slotInit();
+	void				slotNextPackage( bool isNext );
+	void				slotBusy();
+	void				slotButtons();
+	void				slotCheck();
+	void				slotGo();
+	void				slotPretend();
+	void				slotStop();
+	void				slotRemove();
+	void				slotClear();
+	void				slotRemoveInstalled();
+	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
+	void				slotPackage();
+	void				slotAdvanced();
 	
 private:
-	EmergeOptionsBase *optionsDialog;
-	KDialogBase *dial;
+	bool				m_hasCheckedQueue;
+	QString				initialQueueTime;
+	PackageInspector	*m_packageInspector;
 };
 
 #endif

@@ -37,11 +37,6 @@ public:
 private slots:
 	void 	help();
 	void 	back();
-	
-	/**
-	 * Check for essential Portage directories.
-	 * Ask user to confirm their location.
-	 */
 	void 	next();
 	void 	reject();
 	void 	accept();

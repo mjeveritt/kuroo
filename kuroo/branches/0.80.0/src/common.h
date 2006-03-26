@@ -81,6 +81,11 @@ enum LogActions {
 
 // Package and icons
 enum status {
+		VIEW_PORTAGE = 1,
+		VIEW_QUEUE,
+		VIEW_HISTORY,
+		VIEW_MERGE,
+		VIEW_LOG,
 		PACKAGE,
 		INSTALLED,
 		QUEUED,
@@ -94,12 +99,7 @@ enum status {
 		VERSION_INSTALLED,
 		QUEUED_COLUMN,
 		INSTALLED_COLUMN,
-		WORLD_COLUMN,
-		VIEW_PACKAGES,
-		VIEW_QUEUE,
-		VIEW_HISTORY,
-		VIEW_MERGE,
-		VIEW_LOG
+		WORLD_COLUMN
 };
 
 static const QString PACKAGE_STRING( QString::number( PACKAGE ) );

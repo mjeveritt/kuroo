@@ -38,7 +38,6 @@
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
-#include <ktabwidget.h>
 #include <kpopupmenu.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>
@@ -198,6 +197,7 @@ void PortageTab::slotButtons()
 		pbUninstall->setDisabled( true );
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Package view slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,14 +213,14 @@ void PortageTab::slotReload()
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
-	disconnect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-	disconnect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+	disconnect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
+	disconnect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
 	
 	categoriesView->init();
 	subcategoriesView->init();
 	
-	connect( categoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListSubCategories() ) );
-	connect( subcategoriesView, SIGNAL( selectionChanged() ), this, SLOT( slotListPackages() ) );
+	connect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
+	connect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
 	
 	slotFilters();
 }
@@ -230,8 +230,6 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	queuedFilters++;
 	QTimer::singleShot( 250, this, SLOT( slotActivateFilters() ) );
 }
@@ -243,7 +241,8 @@ void PortageTab::slotActivateFilters()
 {
 	--queuedFilters;
 	if ( queuedFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(),searchFilter->text() ) );
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ),
+		                              true );
 }
 
 /**
@@ -251,8 +250,8 @@ void PortageTab::slotActivateFilters()
  */
 void PortageTab::slotListSubCategories()
 {
-	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->
-	                                   portageSubCategories( categoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) );
+	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoriesView->currentCategoryId(), 
+		filterGroup->selectedId(), searchFilter->text() ) );
 }
 
 /**
@@ -260,12 +259,9 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Disable all buttons if query result is empty
-	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->
-	                                           portagePackagesBySubCategory( categoriesView->currentCategoryId(), subcategoriesView->currentCategoryId(),
-		                                       filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
+	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
+		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		
 		m_packageInspector->hide();
 		slotButtons();
@@ -288,7 +284,6 @@ void PortageTab::slotListPackages()
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
-	
 }
 
 /**
@@ -308,7 +303,8 @@ void PortageTab::slotRefresh()
 	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
-		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
+		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
+	                                    KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotRefresh();
 	}
@@ -489,7 +485,8 @@ void PortageTab::slotPackage()
 	
 	// Construct installed verions line
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%1</td></tr>").arg( linesInstalled );
+		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%1</td></tr>")
+		.arg( linesInstalled );
 	else
 		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>Not installed</td></tr>");
 	
@@ -504,23 +501,28 @@ void PortageTab::slotPackage()
 			m_packageInspector->dialog->cbVersionsUse->setCurrentText( emergeVersion );
 			m_packageInspector->dialog->versionsView->usedForInstallation( emergeVersion );
 			
-			linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>").arg( linesEmergeVersion );
+			linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>")
+				.arg( linesEmergeVersion );
 		}
 		else {
 			if ( versionNotInArchitecture && linesAvailable.isEmpty() )
 				linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</font></td>"
-				                          "<td width=90%><font color=darkRed>No version available on %1</b></td></tr>").arg( KurooConfig::arch() );
+				                          "<td width=90%><font color=darkRed>No version available on %1</b></td></tr>")
+				.arg( KurooConfig::arch() );
 			else
 				linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</font></td>"
-				                          "<td width=90%><font color=darkRed>No version available - please check package details</font></b></td></tr>");
+				                          "<td width=90%><font color=darkRed>No version available - "
+				                          "please check package details</font></b></td></tr>");
 		}
 		
 		// Construct available versions line
 		if ( !linesAvailable.isEmpty() )
-			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></td></tr>").arg( linesAvailable );
+			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></td></tr>")
+			.arg( linesAvailable );
 		else
 			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</td>"
-			                      "<td width=90%><font color=darkRed>No versions available on %1</font></b></td></tr>").arg( KurooConfig::arch() );
+			                      "<td width=90%><font color=darkRed>No versions available on %1</font></b></td></tr>")
+			.arg( KurooConfig::arch() );
 		
 		summaryBrowser->setText( lines + linesInstalled + linesEmergeVersion + linesAvailable + "</table>");
 	}
@@ -564,10 +566,12 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem2 = menu.insertItem( i18n("&Uninstall"), UNINSTALL );
 	
 	// No access when kuroo is busy
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInPortage() )
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
+	     || !packagesView->currentPackage()->isInPortage() )
 		menu.setItemEnabled( menuItem1, false );
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
+	     || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
 			menu.setItemEnabled( menuItem2, false );
 	
 	if ( KUser().isSuperUser() )

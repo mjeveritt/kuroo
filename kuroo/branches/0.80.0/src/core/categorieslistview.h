@@ -41,13 +41,26 @@ public:
 public slots:
 	CategoryItem*							currentCategory();
 	QString									currentCategoryId();
-	void									setCurrentCategoryId( const QString& package );
+	
+protected slots:
+	void									storeFocus( QListViewItem* item );
 	
 protected:
-	int 									m_currentId;
+	void									restoreFocus( bool isFiltered );
+	
+protected:
+	
+	// Category that has focus
+	QString									m_focus;
+	
+	// Index of categoris in listview
+	QDict<CategoryItem>						categoryIndex;
 	
 	typedef QValueVector<CategoryItem*>		Categories;
 	Categories			 					categories;
+	
+signals:
+	void									categoriesChanged();
 };
 
 /**
@@ -62,7 +75,7 @@ public:
 	~CategoriesListView();
 	
 	void									init();
-	void 									loadCategories( const QStringList& categoriesList );
+	void 									loadCategories( const QStringList& categoriesList, bool isFiltered );
 };
 
 /**

@@ -95,23 +95,50 @@ QString CategoriesView::CategoryItem::name()
  * @short Base class for category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
-	: KListView( parent, name ), categories( 0 )
+	: KListView( parent, name ), categories( 0 ), m_focus( i18n("All") )
 {
-	setSizePolicy( QSizePolicy((QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, sizePolicy().hasHeightForWidth()) );
 	setFullWidth( true );
 	setFrameShape( QFrame::NoFrame );
 	setSorting( -1 );
+	
+	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( storeFocus( QListViewItem* ) ) );
 }
 
 CategoriesView::~CategoriesView()
 {
 }
 
+/**
+ * Retreive focus category when a new category is made current.
+ * @categoryItem*
+ */
+void CategoriesView::storeFocus( QListViewItem* item )
+{
+	m_focus = item->text(0);
+}
+
+/**
+ * Retreive last focus category from internal index, and making that category current.
+ * bool is this triggered by filter action?
+ */
+void CategoriesView::restoreFocus( bool isFiltered )
+{
+	CategoryItem* focusCategory = categoryIndex.find( m_focus );
+	if ( !focusCategory )
+		focusCategory = dynamic_cast<CategoryItem*>( firstChild() );
+	
+	setCurrentItem( focusCategory );
+	setSelected( focusCategory, true );
+	
+	// Emit manually 'currentChanged' if triggered by filter
+	if ( isFiltered )
+		emit currentChanged( focusCategory );
+}
+
 CategoriesView::CategoryItem* CategoriesView::currentCategory()
 {
 	return dynamic_cast<CategoryItem*>( this->currentItem() );
 }
-
 
 /**
  * Get current category idDB.
@@ -124,15 +151,6 @@ QString CategoriesView::currentCategoryId()
 		return item->id();
 	else
 		return "0";
-}
-
-/**
- * Mark package as current.
- * @param package
- */
-void CategoriesView::setCurrentCategoryId( const QString& id )
-{
-	setCurrentItem( categories[id.toInt()] );
 }
 
 
@@ -168,24 +186,26 @@ void CategoriesListView::init()
 	
 	// Insert categories in reverse order to get them in alfabetical order
 	CategoryItem* item;
+	categoryIndex.clear();
 	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
 		item = new CategoryItem( this, *it, QString::number( i ) );
 		categories[i] = item;
+		categoryIndex.insert( *it, item );
 		i--;
 	}
 	
 	// Insert the meta-category All on top as id = 0
 	item = new CategoryItem( this, i18n("All"), "0" );
+	categoryIndex.insert( i18n("All"), item );
 	item->setOn( true );
 	categories[0] = item;
-	setSelected( firstChild(), true );
 }
 
 /**
  * View available categories.
  * @param categoriesList list category id
  */
-void CategoriesListView::loadCategories( const QStringList& categoriesList )
+void CategoriesListView::loadCategories( const QStringList& categoriesList, bool isFiltered )
 {
 	// Set all categories off = empty
 	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it )
@@ -195,7 +215,8 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList )
 	foreach ( categoriesList )
 		categories[ (*it).toInt() ]->setOn( true );
 	
-	emit selectionChanged();
+	// After all categories are loaded try restoring last known focus-category
+	restoreFocus( isFiltered );
 }
 
 /**
@@ -244,24 +265,17 @@ void SubCategoriesListView::init()
  */
 void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
-	// Retreive focus
-	QString currentId = currentCategoryId();
-	bool isSameCategory( false );
-	
 	// Get the category id
 	static int idCategory( -1 );
-	if ( idCategory != categoriesList.first().toInt() ) {
+	if ( idCategory != categoriesList.first().toInt() )
 		idCategory = categoriesList.first().toInt();
-		isSameCategory = false;
-	}
-	else
-		isSameCategory = true;
 	
 	clear(); // @warning: categoryItem cannot be used anymore
 	CategoryItem* item;
-	item = new CategoryItem( this, QString::null, "0" ); // Insert empty item to get focus to work on last before last item
+// 	item = new CategoryItem( this, QString::null, "0" ); // Insert empty item to get focus to work on last before last item
 	
 	// When meta-category is selected skip to show only meta-subcategory
+	categoryIndex.clear();
 	if ( idCategory != 0 ) {
 	
 		// Insert all subcategories in reverse order to get them alfabetically listed, and set them off = empty
@@ -273,11 +287,13 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 			if ( !name.isEmpty() ) {
 				item = new CategoryItem( this, name, id );
 				categories[(*it).first] = item;
+				categoryIndex.insert( name, item );
 			}
 		}
 		
 		// Insert meta-subcategory
 		item = new CategoryItem( this, i18n("All"), "0" );
+		categoryIndex.insert( i18n("All"), item );
 		categories[0] = item;
 		
 		// Enable subcategories from query. Skip first which is the category
@@ -285,19 +301,20 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 			if ( categories[(*it).toInt()] )
 				categories[(*it).toInt()]->setOn( true );
 		}
+		
+		// After all categories are loaded try restoring last known focus-category
+		restoreFocus( false );
 	}
 	else {
 	
 		// Insert meta-subcategory
 		item = new CategoryItem( this, i18n("All"), "0" );
+		categoryIndex.insert( i18n("All"), item );
 		item->setOn( true );
+		
+		// After all categories are loaded try restoring last known focus-category
+		restoreFocus( true );
 	}
-	
-	// Restore focus
-	if ( isSameCategory && currentId != "0" )
-		setCurrentCategoryId( currentId );
-	else
-		setCurrentItem( firstChild() );
 }
 
 #include "categorieslistview.moc"

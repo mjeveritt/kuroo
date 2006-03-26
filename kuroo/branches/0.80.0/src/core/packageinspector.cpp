@@ -199,7 +199,8 @@ void PackageInspector::slotApply()
 			SignalistSingleton::Instance()->setKurooBusy( true );
 			
 			if ( !eProc->isRunning() )
-				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.").arg( category ).arg( package ), ERROR );
+				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
+				                                    .arg( category ).arg( package ), ERROR );
 			
 		}
 	}
@@ -575,7 +576,7 @@ void PackageInspector::loadUseFlagDescription()
 	}
 	else {
 		kdDebug() << i18n( "Loading use flag description. Error reading: " ) << useFile << endl;
-		kdDebug() << QString( "Loading use flag description. Error reading: " ) << useFile << endl;
+		kdDebug() << "Loading use flag description. Error reading: " << useFile << endl;
 	}
 }
 
@@ -640,6 +641,7 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
  */
 void PackageInspector::loadChangeLog()
 {
+	dialog->changelogBrowser->clear();
 	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
 		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, dialog->cbVersionsEbuild->currentText() ) + "/" + category + "/" + package + "/ChangeLog";
 		QFile file( fileName );
@@ -655,7 +657,7 @@ void PackageInspector::loadChangeLog()
 		else {
 			kdDebug() << i18n("Loading changelog. Error reading: ") << fileName << endl;
 			kdDebug() << "Loading changelog. Error reading: " << fileName << endl;
-			dialog->changelogBrowser->setText( i18n("<font color=darkGrey><b>No ChangeLog found.</b></font>") );
+			dialog->changelogBrowser->setText( i18n("<font color=darkRed><b>No ChangeLog found.</b></font>") );
 		}
 	}
 }
@@ -666,6 +668,7 @@ void PackageInspector::loadChangeLog()
  */
 void PackageInspector::slotLoadEbuild( const QString& version )
 {
+	dialog->ebuildBrowser->clear();
 	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
 		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + "/" + category + "/" + package + "/" + package + "-" + version + ".ebuild";
 		QFile file( fileName );
@@ -681,7 +684,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 		else {
 			kdDebug() << i18n("Loading ebuild. Error reading: ") << fileName << endl;
 			kdDebug() << "Loading ebuild. Error reading: " << fileName << endl;
-			dialog->ebuildBrowser->setText( i18n("<font color=darkGrey><b>No ebuild found.</b></font>") );
+			dialog->ebuildBrowser->setText( i18n("<font color=darkRed><b>No ebuild found.</b></font>") );
 		}
 	}
 }
@@ -692,6 +695,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
+	dialog->dependencyBrowser->clear();
 	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id, version ) + "/" + category + "/" + package + "-" + version;
 		QFile file( fileName );
@@ -716,7 +720,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 		else {
 			kdDebug() << i18n("Load dependencies. Error reading: ") << fileName << endl;
 			kdDebug() << "Load dependencies. Error reading: " << fileName << endl;
-			dialog->dependencyBrowser->setText( i18n("<font color=darkGrey><b>No dependencies found.</b></font>") );
+			dialog->dependencyBrowser->setText( i18n("<font color=darkRed><b>No dependencies found.</b></font>") );
 		}
 	}
 }
@@ -727,6 +731,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
  */
 void PackageInspector::slotLoadInstalledFiles( const QString& version )
 {
+	dialog->installedFilesBrowser->clear();
 	if ( !version.isEmpty() && dialog->inspectorTabs->currentPageIndex() == 5 ) {
 		QString filename = KurooConfig::dirDbPkg() + "/" + category + "/" + package + "-" + version + "/CONTENTS";
 		QFile file( filename );
@@ -744,7 +749,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		else {
 			kdDebug() << i18n( "Loading installed files list. Error reading: " ) << filename << endl;
 			kdDebug() <<  "Loading installed files list. Error reading: "  << filename << endl;
-			dialog->installedFilesBrowser->setText( i18n("<font color=darkGrey><b>No installed files found.</b></font>") );
+			dialog->installedFilesBrowser->setText( i18n("<font color=darkRed><b>No installed files found.</b></font>") );
 		}
 	}
 }
@@ -796,7 +801,6 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
 	kdDebug() << k_funcinfo << endl;
 	
-// 	::usleep(100000);
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
 	eProc = 0;	

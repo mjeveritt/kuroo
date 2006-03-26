@@ -134,7 +134,7 @@ QPixmap& Images::icon( int image )
 			return pxWorldColumn;
 			break;
 		
-		case VIEW_PACKAGES:
+		case VIEW_PORTAGE:
 			return pxViewPackages;
 			break;
 		

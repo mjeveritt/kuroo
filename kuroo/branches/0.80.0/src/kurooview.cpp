@@ -38,7 +38,6 @@
 #include <qwidgetstack.h>
 #include <qbitmap.h>
 
-#include <ktabwidget.h>
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
 #include <kuser.h>
@@ -63,7 +62,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
-	viewStack->addWidget( viewPortage, VIEW_PACKAGES );
+	viewStack->addWidget( viewPortage, VIEW_PORTAGE );
 	
 	viewQueue = new QueueTab( this, packageInspector );
 	viewStack->addWidget( viewQueue, VIEW_QUEUE );
@@ -78,7 +77,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	viewStack->addWidget( viewLogs, VIEW_LOG );
 	
 	// Create menu-icons for the pages
-	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PACKAGES ), i18n("Packages") );
+	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PORTAGE ), i18n("Packages") );
 	iconQueue = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_QUEUE ), i18n("Queue") );
 	iconHistory = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_HISTORY ), i18n("History") );
 	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Etc-update") );
@@ -98,6 +97,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
+	
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
 
@@ -115,7 +115,7 @@ KurooView::~KurooView()
 void KurooView::slotShowView()
 {
 	packageInspector->hide();
-	int tabIndex = viewMenu->currentItem() + VIEW_PACKAGES;
+	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
 }
 
@@ -268,7 +268,7 @@ void KurooView::slotLogUpdated()
 }
 
 /**
- * Disable icon menu text, from blue to black.
+ * Clear the highlighting menu text back to normal when visits the view.
  */
 void KurooView::slotResetMenu( QListBoxItem* menuItem )
 {
@@ -294,20 +294,23 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 
 void KurooView::IconListItem::paint( QPainter *painter )
 {
-	if ( m_modified )
-		painter->setPen( listBox()->colorGroup().link() );
-	else
-		painter->setPen( listBox()->colorGroup().text() );
-	
-	if ( isCurrent() )
+	if ( isSelected() ) {
 		painter->setPen( listBox()->colorGroup().highlightedText() );
+		m_modified = false;
+	}
+	else {
+		if ( m_modified )
+			painter->setPen( listBox()->colorGroup().link() );
+		else
+			painter->setPen( listBox()->colorGroup().text() );
+	}
 	
 	QFontMetrics fm = painter->fontMetrics();
 	int ht = fm.boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).height();
 	int wp = mPixmap.width();
 	int hp = mPixmap.height();
 	
-	painter->drawPixmap( (listBox()->maxItemWidth()-wp) / 2, 5, mPixmap );
+	painter->drawPixmap( ( listBox()->maxItemWidth()-wp ) / 2, 5, mPixmap );
 	
 	if ( !text().isEmpty() )
 		painter->drawText( 0, hp + 7, listBox()->maxItemWidth(), ht, Qt::AlignCenter, text() );

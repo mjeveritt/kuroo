@@ -1,7 +1,6 @@
-/**************************************************************************
+/***************************************************************************
 *   Copyright (C) 2004 by karye                                           *
 *   karye@users.sourceforge.net                                           *
-*   Copyright (C) 2005 by Jakob Petsovits                                 *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -23,19 +22,14 @@
 #define PORTAGELISTVIEW_H
 
 #include "packagelistview.h"
+#include "packageitem.h"
 
-#include <qpixmap.h>
-
-class QPixmap;
-class Package;
-class QRegExp;
-class PackageItem;
-
-extern QRegExp pv;
+class PackageVersion;
+class DependAtom;
 
 /**
  * @class PortageListView
- * @short Specialized listview for viewing all portage packages in selected category.
+ * @short Installed packages listview.
  */
 class PortageListView : public PackageListView
 {
@@ -44,41 +38,35 @@ public:
 	PortageListView( QWidget *parent = 0, const char *name = 0 );
 	~PortageListView();
 	
+	class 							PortageItem;
+	
+	PortageListView::PortageItem* 	currentPortagePackage();
+	
 public slots:
 	
-	/**
-	* Current package id.
-	* If Package is selected return ebuild id.
-	* @param id
-	*/
-	QString 							currentId();
+	void							setHeader( const QString& text );
+	int 							addSubCategoryPackages( const QStringList& packageList );
 	
-	/**
-	* Mark package as selected in view
-	* @param package	
-	*/
-	QStringList 						selectedPackages();
-	
-	/**
-	* Get selected packages.
-	* @param packageList
-	*/
-	void 								setCurrentPackage( const QString& package );
-	
-	/**
-	* Populate listview with packages from selected category.
-	* Jakob Petsovits technique for fast item loading.
-	* @param category package clicked on in categories listview.
-	*/
-	void 								addCategoryPackages( const QString& category );
+private slots:
+
+private:
+	QStringList						unmaskedList;
+};
+
+/**
+ * @class PortageListView::PortageItem
+ * @short Package item with all versions.
+ */
+class PortageListView::PortageItem : public PackageItem
+{
+public:
+	PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status );
 	
 private:
-	QPixmap 							pxQueuedColumn;
-	struct TreeViewPackage {
-		PackageItem* item;
-		QMap< QString, PackageItem* > 	versionItems;
-	};
-	QMap< QString, TreeViewPackage > 	packageItems;
+	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+	
+protected:
+	QListView						*m_parent;
 };
 
 #endif

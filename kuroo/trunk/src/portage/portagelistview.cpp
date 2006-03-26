@@ -23,59 +23,94 @@
 #include "packageitem.h"
 #include "tooltip.h"
 #include "packagelistview.h"
+#include "packageversion.h"
+#include "dependatom.h"
 
 #include <qheader.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qregexp.h>
 #include <qmap.h>
-#include <qdir.h>
-#include <qtimer.h>
 
 #include <kconfig.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <kcursor.h>
-#include <kiconloader.h>
+#include <kmessagebox.h>
+
+static int packageCount( 0 );
 
 /**
- * Specialized listview for viewing all portage packages in selected category.
+ * @class PortageListView::PortageItem
+ * @short Package item with all versions.
+ */
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status )
+	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
+{
+}
+
+/**
+ * Set icons when package is visible.
+ */
+void PortageListView::PortageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
+{
+	if ( this->isVisible() ) {
+		
+		if ( column == 3 ) {
+			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
+				setQueued( true );
+				setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
+			}
+			else {
+				setQueued( false );
+				setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
+			}
+		}
+		
+		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @class PortageListView
+ * @short All packages listview.
  */
 PortageListView::PortageListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
 {
-	// Load icon
-	KIconLoader *ldr = KGlobal::iconLoader();
-	pxQueuedColumn = ldr->loadIcon( "kuroo_queued_column", KIcon::Small );
-	
 	// Setup geometry
-	addColumn(i18n("Package"));
-	addColumn( " " );
-	header()->setLabel( 1, pxQueuedColumn, " " );
-	addColumn(i18n("Size"));
-	addColumn(i18n("Description"));
-	setSizePolicy(QSizePolicy((QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, sizePolicy().hasHeightForWidth()));
-
-	setProperty("selectionMode", "Extended");
-	setShowSortIndicator(true);
-
-	setItemMargin(1);
-	setRootIsDecorated(true);
-	setFullWidth(true);
-
-	setColumnWidthMode(0, QListView::Manual);
-	setColumnWidthMode(1, QListView::Manual);
-	setColumnWidthMode(2, QListView::Manual);
-	setColumnAlignment(2, Qt::AlignRight);
-	setResizeMode(QListView::LastColumn);
+	addColumn( i18n( "Package" ), 150 );
+	addColumn( "" );
+	addColumn( "", 25 );
+	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
+	setColumnAlignment( 2, Qt::AlignHCenter );
+	addColumn( "", 25 );
+	header()->setLabel( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
+	setColumnAlignment( 2, Qt::AlignHCenter );
+	addColumn( i18n( "Update" ), 80 );
+	addColumn( i18n( "Description" ), 200 );
 	
-	setColumnWidth(0, 200);
-	setColumnWidth(1, 20);
-	setColumnWidth(2, 80);
-	setColumnWidth(3, 80);
+	setColumnWidthMode( 0, QListView::Manual );
+	setColumnWidthMode( 1, QListView::Manual );
+	setColumnWidthMode( 2, QListView::Manual );
+	setColumnWidthMode( 3, QListView::Manual );
+	setColumnWidthMode( 4, QListView::Manual );
 	
-	setTooltipColumn(3);
+	setProperty( "selectionMode", "Extended" );
+	setShowSortIndicator( true );
+	setItemMargin( 1 );
+	setRootIsDecorated( false );
+	setFullWidth( true );
+	
+	if ( KurooConfig::installedColumn() ) {
+		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
+		setColumnAlignment( 1, Qt::AlignHCenter );
+		setColumnWidth( 1, 25 );
+	}
+	else
+		hideColumn( 1 );
+	
+	header()->setResizeEnabled( false, 1 );
+	header()->setResizeEnabled( false, 2 );
+	header()->setResizeEnabled( false, 3 );
+	
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
 }
 
 PortageListView::~PortageListView()
@@ -83,132 +118,71 @@ PortageListView::~PortageListView()
 }
 
 /**
- * Current package id.
- * If Package is selected return ebuild id.
- * @param id
+ * Current package with focus.
+ * @return name
  */
-QString PortageListView::currentId()
+PortageListView::PortageItem* PortageListView::currentPortagePackage()
 {
-	if ( !packages.isEmpty() ) {
-		for ( QDictIterator<PackageItem> it(packages); it.current(); ++it ) {
-			if ( it.current()->text(0) == this->currentItem()->text(0) ) {
-				return it.currentKey();
-			}
-			else {
-				if ( it.current()->text(0).section(pv, 0, 0) == this->currentItem()->text(0) )
-					return it.currentKey();
-			}
-		}
-	}
+	return dynamic_cast<PortageItem*>( PackageListView::currentPackage() );
+}
+
+/**
+ * View package total in package name section header.
+ * @param total
+ */
+void PortageListView::setHeader( const QString& total )
+{
+	if ( !total.isEmpty() )
+		header()->setLabel( 0, i18n("Package") + " (" + total + ")" );
 	else
-		return i18n("na");
+		header()->setLabel( 0, i18n("Package") );
 }
 
 /**
- * Mark package as selected in view
- * @param package	
+ * Populate listview with content of this category.
+ * @param package
  */
-void PortageListView::setCurrentPackage( const QString& package )
+int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 {
-	clearSelection();
-	QListViewItemIterator it(this);
-	for (; it.current(); ++it)
-		if ( package == it.current()->text(0) ) {
-			ensureItemVisible(it.current());
-			setCurrentItem(it.current());
-			it.current()->setSelected(true);
-			it.current()->setOpen(true);
-			break;
-		}
-}
-
-/**
- * Get selected packages.
- * @param packageList
- */
-QStringList PortageListView::selectedPackages()
-{
-	QStringList packageList;
-	QListViewItemIterator it(this);
-	for ( ; it.current(); ++it )
-		if ( it.current()->isSelected() ) {
-			packageList += it.current()->text(0);
-		}
-		
-	return packageList;
-}
-
-/**
- * Populate listview with packages from selected category.
- * Jakob Petsovits technique for fast item loading.
- * @param category package clicked on in categories listview.
- */
-void PortageListView::addCategoryPackages( const QString& category )
-{
-	PackageItem *packageItem, *versionItem;
-	static bool packageInstalled(false);
+// 	clock_t start = clock();
 	
-	reset();
-	packageItems.clear();
+	// Store package focus
+	QString currentId = this->currentId();
+
+	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
+	setSorting( -1 );
+	resetListView();
+	setHeader( QString::null );
 	
-	const QStringList packageList = PortageSingleton::Instance()->packagesInCategory(category);
+	// Don't load all packages, only first ROWLIMIT
+	packageCount = packageList.size() / 6;
 	foreach ( packageList ) {
-		QString idDB = *it++;
+		QString id = *it++;
 		QString name = *it++;
+		QString category = *it++;
 		QString description = *it++;
-		QString keywords = *it++;
-		QString size = *it++;
-		QString latest = *it++;
-		QString version = *it++;
-		QString installed = *it;
-		QString package = name + "-" + version;
-		
-		Meta packageMeta;
-		packageMeta.insert(i18n("3Description"), description);
-		packageMeta.insert(i18n("4Size"), size);
-		
-		// A version of a package may be installed but not actual in Portage anymore.
-		if ( installed == "2" )
-			packageInstalled = true;
-		else {
-			if ( !packageItems.contains(name) ) {
-				packageItem = new PackageItem( this, name, packageMeta, PACKAGE );
-				packageItem->setExpandable(true);
-				packageItems[name].item = packageItem;
-				
-				// Mark package as installed even when the version is not available in Portage.
-				if ( packageInstalled ) {
-					packageItem->setStatus(INSTALLED);
-					packageInstalled = false;
-				}
-			}
-			
-			if ( !packageItems[name].versionItems.contains(version) ) {
-				packageMeta.insert(i18n("3Description"), "");
-				versionItem = new PackageItem( packageItems[name].item, package, packageMeta, EBUILD );
-				packageItems[name].versionItems[version] = versionItem;
+		QString status = *it++;
+		QString update = *it;
 
-				// Only list packages from official Portage tree and Portage Overlay (not old packages)
-				if ( installed != "0" ) {
-					versionItem->setStatus(EBUILD_INSTALLED);
-					if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-						versionItem->setStatus(MASKED);
-					
-					// We have an installed version
-					packageItem->setStatus(INSTALLED);
-				}
-				else {
-					if ( !keywords.contains( QRegExp("(^" + KurooConfig::arch() + "\\b)|(\\s" + KurooConfig::arch() + "\\b)") ))
-						versionItem->setStatus(MASKED);
-				}
-				
-				insertPackage( idDB, versionItem );
-			}
-			
-			if ( PortageSingleton::Instance()->isUnmasked( category + "/" + name ) )
-				packageItem->setStatus(UNMASKED);
-		}
+		PortageItem* item = new PortageItem( this, name, id, category, description, status );
+		item->setText( 4, update );
+		item->setText( 5, description );
+		
+		indexPackage( id, item );
 	}
+	setSorting( 0 );
+	setHeader( QString::number( packageCount ) );
+	setPackageFocus( currentId );
+	
+	// Cannot have current changed for only one package so emit manually
+	if ( packageCount == 1 )
+		emit currentChanged( 0 );
+	
+// 	clock_t finish = clock();
+// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
+// 	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
+	
+	return packageCount;
 }
 
 #include "portagelistview.moc"

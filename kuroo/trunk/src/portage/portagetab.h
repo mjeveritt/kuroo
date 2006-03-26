@@ -27,100 +27,48 @@
 #include "scanportagejob.h"
 
 class CategoriesListView;
-class PortageListView;
-class KTabWidget;
-class KTextBrowser;
-class KActionSelector;
-class QPushButton;
-class PortageListView;
 class KPopupMenu;
-class UseDialog;
+class PackageInspector;
+class UninstallInspector;
 
 /**
  * @class PortageTab
- * @short Tab page for portage packages.
+ * @short Package view with filters.
  */
 class PortageTab : public PortageBase
 {
 Q_OBJECT
 public:
-    PortageTab( QWidget *parent = 0 );
-	
-	/**
-	* Save splitters and listview geometry.
-	*/
+	PortageTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
     ~PortageTab();
 	
 public slots:
-	
-	/**
-	* Populate view with portage packages.
-	* Then load the emerge history.
-	*/
 	void				slotReload();
-	
-	/**
-	* Refresh installed packages list.
-	*/
 	void				slotRefresh();
 	
-	/**
-	* Find package by name or description among portage packages.
-	*/
-	void				slotFind();
-	
-	/**
-	* Activate this package to view its info.
-	* @param package
-	*/
-	void				slotViewPackage( const QString& package );
-	
 private slots:
-	
-	/**
-	* Save latest selected packages in tabs All packages, Installed packages and Updates categories.
-	*/
-	void				saveCurrentView();
-	
-	/**
-	* Initialize Portage view.
-	* Restore geometry: splitter positions, listViews width and columns width.
-	*/
 	void 				slotInit();
-	
-	/**
-	* List packages when clicking on category in installed.
-	*/
+	void				slotNextPackage( bool isNext );
+	void				slotBusy();
+	void				slotInitButtons();
+	void				slotButtons();
+	void				slotListSubCategories();
+	void				slotFilters();
+	void				slotActivateFilters();
+	void				slotClearFilter();
 	void				slotListPackages();
-	
-	/**
-	* Popup menu for actions like emerge.
-	* @param listView
-	* @param item
-	* @param point
-	*/
+	void				slotQueue();
+	void				slotUninstall();
+	void				slotAdvanced();
+	void				slotPackage();
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
-	/**
-	* View summary for selected package.
-	*/
-	void				slotSummary();
-	
-	/**
-	* View ebuild, changelog and dependencies.
-	* @param page
-	*/
-	void				slotPackageInfo( QWidget* page );
-	
-	/**
-	* For editing use flags per package.
-	*/
-	void				useFlags();
-	
 private:
-	PortageListView 		*packagesView;
+	bool				m_isInitialized;
+	int					queuedFilters;
 	KPopupMenu 			*menu;
-	UseDialog 			*useDialog;
+	PackageInspector	*m_packageInspector;
+	UninstallInspector	*uninstallInspector;
 	
 signals:
 	void				signalChanged();

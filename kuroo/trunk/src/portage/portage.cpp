@@ -21,21 +21,238 @@
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
-
-#include <qregexp.h>
+#include "scanupdatesjob.h"
 
 #include <kmessagebox.h>
 
 #include <unistd.h>
 
 /**
- * Object handling the Portage tree.
+ * @class AddInstalledPackageJob
+ * @short Thread for registrating packages as installed in db.
  */
-Portage::Portage( QObject *parent )
-	: QObject( parent )
+class AddInstalledPackageJob : public ThreadWeaver::DependentJob
 {
-	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotChanged() ) );
+public:
+	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+	
+	virtual bool doJob() {
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else {
+			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+			kdDebug() << QString("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+		}
+		
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+		
+		if ( id.isEmpty() ) {
+			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return false;
+		}
+		else {
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%2'"
+			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3'"
+			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return true;
+		}
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const QString m_package;
+};
+
+/**
+ * @class RemoveInstalledPackageJob
+ * @short Thread for removing packages as installed in db.
+ */
+class RemoveInstalledPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else {
+			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+			kdDebug() << QString("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+		}
+		
+		QString id = KurooDBSingleton::Instance()->singleQuery( 
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+		
+		if ( id.isEmpty() ) {
+			kdDebug() << i18n("Removing unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Removing unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+			return false;
+		}
+		else {
+			
+			// Check how many version are installed
+			QString installedVersionCount = KurooDBSingleton::Instance()->singleQuery( 
+				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status != '%2' LIMIT 1;")
+				.arg( id ).arg( FILTER_ALL_STRING ), m_db );
+			
+			// Mark package as uninstalled only when one version is found
+			if ( installedVersionCount == "1" ) {
+			
+				// Mark package as uninstalled
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%2' AND id = '%3'")
+				                                     .arg( FILTER_ALL_STRING )
+				                                     .arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+			
+				// Remove package completely if "old" = not in official Portage anymore
+				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE status = '%1' AND id = '%2';" )
+				                                     .arg( FILTER_OLD_STRING ).arg( id ), m_db );
+			}
+			
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
+			                                     .arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
+			
+			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			return true;
+		}
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const QString m_package;
+};
+
+/**
+ * @class RemoveUpdatesPackageJob
+ * @short Thread for removing single package from updates.
+ */
+class RemoveUpdatesPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	RemoveUpdatesPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QString category, name, version;
+		
+		if ( rxPackage.search( m_package ) > -1 ) {
+			category = rxPackage.cap(1);
+			name = rxPackage.cap(2);
+			version = m_package.section( name + "-", 1, 1 ).remove(' ');
+		}
+		else {
+			kdDebug() << i18n("Removing update package: can not match package %1.").arg( m_package ) << endl;
+			kdDebug() << QString("Removing update package: can not match package %1.").arg( m_package ) << endl;
+		}
+		
+		QString id = KurooDBSingleton::Instance()->singleQuery(
+			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+		
+		if ( id.isEmpty() ) {
+			kdDebug() << i18n("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdDebug() << QString("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+			return false;
+		}
+		else {
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
+			                                              "WHERE name = '%1' AND ( updateVersion = '%2' OR updateVersion = '%3' );" )
+			                                     .arg( name ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+			return true;
+		}
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const QString m_package;
+};
+
+/**
+ * @class CheckUpdatesPackageJob
+ * @short Thread for marking packages as updates or donwgrades.
+ */
+class CheckUpdatesPackageJob : public ThreadWeaver::DependentJob
+{
+public:
+	CheckUpdatesPackageJob( QObject *dependent, const QString& id, const QString& updateVersion, int hasUpdate ) : DependentJob( dependent, "DBJob" ), 
+		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		
+		QString updateString;
+		if ( m_hasUpdate > 0 )
+			updateString = m_updateVersion + " (U)";
+		else
+			if ( m_hasUpdate < 0 )
+				updateString = m_updateVersion + " (D)";
+		
+		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';" )
+		                                     .arg( updateString ).arg( m_id ), m_db );
+		
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		PortageSingleton::Instance()->slotChanged();
+	}
+	
+private:
+	const 	QString m_id, m_updateVersion;
+	int 	m_hasUpdate;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @class Portage
+ * @short Object handling the Portage tree.
+ */
+Portage::Portage( QObject *m_parent )
+	: QObject( m_parent )
+{
 	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotScanCompleted() ) );
+	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
 	
 	// Start refresh directly after emerge sync
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotRefresh() ) );
@@ -45,21 +262,29 @@ Portage::~Portage()
 {
 }
 
-void Portage::init( QObject *myParent )
+void Portage::init( QObject *parent )
 {
-	parent = myParent;
-	loadUnmaskedList();
-	loadCache();
+	m_parent = parent;
+	loadWorld();
 }
 
 /**
- * Forward signal after a new scan.
+ * Emit signal after changes in Portage.
  */
 void Portage::slotChanged()
 {
+	kdDebug() << k_funcinfo << endl;
+	
+	// Register in db so we can check at next start if user has emerged any packages outside kuroo
+	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
+	
 	emit signalPortageChanged();
-	setRefreshTime();
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Portage handling...
+////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Start scan of portage packages.
@@ -67,40 +292,16 @@ void Portage::slotChanged()
  */
 bool Portage::slotRefresh()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob(this) );
+		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
 	}
 	else
 		slotScan();
 	
-	return true;
-}
-
-/**
- * Continue scan of portage packages.
- * @return bool
- */
-bool Portage::slotScan()
-{
-	int maxLoops(99);
-	
-	// Wait for cache job to finish before launching the scan.
-	while (true)
-	{
-		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
-			::usleep(100000); // Sleep 100 msec
-		else
-			break;
-		
-		if ( maxLoops-- == 0 ) {
-			kdDebug() << i18n("Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
-			break;
-		}
-	}
-	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanPortageJob(this) );
 	return true;
 }
 
@@ -110,517 +311,254 @@ bool Portage::slotScan()
  */
 bool Portage::slotSync()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	EmergeSingleton::Instance()->sync();
 	return true;
 }
 
 /**
- * Add timestamp in history for when kuroo database is refreshed.
+ * Continue with scan of portage packages.
+ * @return bool
  */
-void Portage::setRefreshTime()
+bool Portage::slotScan()
 {
-	QDateTime t(QDateTime::currentDateTime());
-	QString timeStamp = QString::number(t.toTime_t());
-	KurooDBSingleton::Instance()->insert( QString("INSERT INTO history (package, date, timestamp, emerge) VALUES ('', '%1', '%2', 'false');").arg(t.toString("yyyy MM dd hh:mm")).arg(timeStamp) );
+	kdDebug() << k_funcinfo << endl;
+	
+	int maxLoops(99);
+	
+	// Wait for cache job to finish before launching the scan.
+	while ( true ) {
+		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
+			::usleep(100000); // Sleep 100 msec
+		else
+			break;
+		
+		if ( maxLoops-- == 0 ) {
+			kdDebug() << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
+			kdDebug() << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << endl;
+			break;
+		}
+	}
+	
+	SignalistSingleton::Instance()->scanStarted();
+	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
+	return true;
 }
+
+/**
+ * Forward signal after a new portage scan.
+ */
+void Portage::slotScanCompleted()
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	// Reset Queue with it's own cache
+	QueueSingleton::Instance()->reset();
+	
+	// Now all Portage files
+	PortageFilesSingleton::Instance()->loadPackageFiles();
+	
+	// Ready to roll!
+	SignalistSingleton::Instance()->setKurooReady( true );
+	slotChanged();
+	
+	// Go on with checking for updates
+	if ( KurooDBSingleton::Instance()->getKurooDbMeta( "updatesCount" ) == "0" )
+		slotRefreshUpdates();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// World handling...
+////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Load packages in world file. @fixme: optimize this...
+ */
+void Portage::loadWorld()
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	mapWorld.clear();
+	
+	QFile file( KurooConfig::dirWorldFile() );
+	if ( file.open( IO_ReadOnly ) ) {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() ) {
+			QString package = stream.readLine();
+			mapWorld[ package.stripWhiteSpace() ] = QString::null;
+		}
+	}
+	else {
+		kdDebug() << i18n("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << "Loading packages in world. Error reading: " << KurooConfig::dirWorldFile() << endl;
+	}
+}
+
+/**
+ * Save back content of map to world file.
+ */
+bool Portage::saveWorld( const QMap<QString, QString>& map )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	QFile file( KurooConfig::dirWorldFile() );
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream( &file );
+		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
+			stream << it.key() << endl;
+		file.close();
+		
+		return true;
+	}
+	else {
+		kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
+		kdDebug() << "Adding to world. Error writing: " << KurooConfig::dirWorldFile() << endl;
+	}
+	
+	return false;
+}
+
+/**
+ * Check if this package in is world file.
+ * @param package
+ * @return true/false
+ */
+bool Portage::isInWorld( const QString& package )
+{
+	if ( mapWorld.contains( package ) )
+		return true;
+	else
+		return false;
+}
+
+/**
+ * Add package to world file.
+ * @param package
+ */
+void Portage::appendWorld( const QString& package )
+{
+	QMap<QString, QString> map = mapWorld;
+	map[ package ] = QString::null;
+	
+	// Try saving changes first
+	if ( saveWorld( map ) ) {
+		mapWorld = map;
+		emit signalWorldChanged();
+	}
+}
+
+/**
+ * Remove package from world file.
+ * @param package
+ */
+void Portage::removeFromWorld( const QString& package )
+{
+	QMap<QString, QString> map = mapWorld;
+	map.remove( package );
+	
+	// Try saving changes first
+	if ( saveWorld( map ) ) {
+		mapWorld = map;
+		emit signalWorldChanged();
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Package handlling...
+////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Launch emerge pretend of packages.
  * @param category
  * @param packageList
  */
-void Portage::pretendPackage( const QString& category, const QStringList& packageList )
-{
-	EmergeSingleton::Instance()->pretend( category, packageList );
-}
-
-/**
- * Check if package is installed.
- * @param package
- * @return success
- */
-bool Portage::isInstalled( const QString& package )
-{
-	QString tmp = package.section("/", 1, 1);
-	QString name = tmp.section(pv, 0, 0);
-	QString version = tmp.section(name + "-", 1, 1);
+void Portage::pretendPackageList( const QStringList& packageIdList )
+{	
+	QStringList packageList;
+	foreach ( packageIdList )
+		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
 	
-	QString installedFlag = KurooDBSingleton::Instance()->isInstalled( name, version ).first();
-	
-	if ( installedFlag == "1" )
-		return true;
-	else
-		return false;
+	EmergeSingleton::Instance()->pretend( packageList );
 }
 
 /**
- * Get list of all categories for portage packages.
- * @return QStringList
- */
-QStringList Portage::categories()
-{
-	return KurooDBSingleton::Instance()->portageCategories();
-}
-
-/**
- * Get list of packages in this category from database.
- * @param category
- * @return QStringList
- */
-QStringList Portage::packagesInCategory( const QString& category )
-{
-	QString idCategory = KurooDBSingleton::Instance()->portageCategoryId(category).first();	
-	return KurooDBSingleton::Instance()->portagePackagesByCategory(idCategory);
-}
-
-/**
- * Get list of versions available.
- * @param package name
- * @return list of versions
- */
-QStringList Portage::packageVersions( const QString& name )
-{
-	return KurooDBSingleton::Instance()->packageVersions(name);
-}
-
-/**
- * Find packages by name or description.
- * @param text		string
- * @param isName	find in name or description
- */
-void Portage::findPackage( const QString& text, const bool& isName )
-{
-	QStringList packageIdList;
-	
-	if ( isName )
-		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesDescription(text);
-	else
-		packageIdList = KurooDBSingleton::Instance()->findPortagePackagesName(text);
-	
-	if ( !packageIdList.isEmpty() )
-		ResultsSingleton::Instance()->addPackageIdList( packageIdList );
-	else
-		LogSingleton::Instance()->writeLog( i18n("<br>No packages found matching: %1").arg(text), KUROO );
-}
-
-/**
- * Count packages.
- * @return total
- */
-QString Portage::count()
-{
-	QStringList total = KurooDBSingleton::Instance()->query("SELECT COUNT(id) FROM package WHERE installed != '2' LIMIT 1;");
-	return total.first();
-}
-
-/**
- * Return info for package as description, homepage ...
- * @param package id
- * @return info
- */
-Info Portage::packageInfo( const QString& packageId )
-{
-	Info info;
-	
-	QStringList packageList = KurooDBSingleton::Instance()->portagePackageInfo(packageId);
-	QStringList::Iterator it = packageList.begin();
-	info.description = *it++;
-	info.size = *it++;
-	info.keywords = *it++;
-	info.homepage = *it++;
-	info.licenses = *it++;
-	info.useFlags = *it++;
-	info.packageSlots = *it;
-	
-	return info;
-}
-
-/**
- * Find cached size for package.
- * @param packages
- * @return size or NULL if na
- */
-QString Portage::cacheFind( const QString& package )
-{
-	QMap<QString, QString>::iterator it = cacheMap.find( package ) ;
-	if ( it != cacheMap.end() )
-		return it.data();
-	else
-		return NULL;
-}
-
-/**
- * Get cache from threaded scan.
- * @param map of cached packages
- */
-void Portage::setCache( const QMap<QString, QString> &cacheMapIn )
-{
-	cacheMap = cacheMapIn;
-}
-
-/**
- * Load cacheMap with items from DB.
- */
-void Portage::loadCache()
-{
-	cacheMap.clear();
-	
-	const QStringList cacheList = KurooDBSingleton::Instance()->cache();
-	foreach ( cacheList ) {
-		QString package = *it++;
-		QString size = *it;
-		cacheMap.insert( package, size );
-	}
-}
-
-/**
- * Free cache memory.
- */
-void Portage::clearCache()
-{
-	cacheMap.clear();
-}
-
-/**
- * Load unmasked packages list = packages in package.keyword.
- */
-void Portage::loadUnmaskedList()
-{
-	unmaskedMap.clear();
-	
-	// Load package.keyword
-	QFile file( KurooConfig::dirPackageKeywords() );
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString line(stream.readLine());
-			if ( !line.startsWith("#") )
-				unmaskedMap.insert( line.section(" ", 0, 0), line.section(" ", 1, 1) );
-		}
-	}
-	else
-		kdDebug() << i18n("Error reading: package.keyword.") << endl;
-	
-	file.close();
-}
-
-/**
- * Check if package is unmasked. @fixme not checking if just testing or hardmasked.
- * @param package
- * @return success
- */
-bool Portage::isUnmasked( const QString& package )
-{
-	QMap<QString, QString>::iterator itMap = unmaskedMap.find( package ) ;
-	if ( itMap != unmaskedMap.end() )
-		return true;
-	else
-		return false;
-}
-
-/**
- * Unmask list of packages by adding them to package.keyword.
+ * Launch unmerge of packages
  * @param category
  * @param packageList
  */
-void Portage::unmaskPackageList( const QString& category, const QStringList& packageList )
+void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
 {
-	foreach ( packageList ) {
-		QString name = (*it).section(pv, 0, 0);
-		QString package = category + "/" + name;
+	QStringList packageList;
+	foreach ( packageIdList )
+		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
 	
-		if ( !unmaskPackage( package + " ~" + KurooConfig::arch(), KurooConfig::dirPackageKeywords() ) )
-			break;
-		else
-			unmaskedMap.insert( package, "~" + KurooConfig::arch() );
-	}
+	EmergeSingleton::Instance()->unmerge( packageList );
 }
 
 /**
- * Unmask package by adding to "maskFile".
+ * @fixme: Check for failure.
+ * Add package as installed in db.
  * @param package
- * @param maskFile
- * @return success
  */
-bool Portage::unmaskPackage( const QString& package, const QString& maskFile )
+void Portage::addInstalledPackage( const QString& package )
 {
-	QStringList packageList;
-	bool found = false;
-	QFile file( maskFile );
+	kdDebug() << k_funcinfo << endl;
 	
-	if( !file.open( IO_ReadOnly ) ) {
-		file.close();
-		kdDebug() << i18n("Error reading: ") << maskFile << endl;
-		return false;
-	}
-	else {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.contains( package ) )
-				found = true;
-			packageList += line;
-		}
-		file.close();
-		
-		if ( !found )
-			packageList += package;
-		
-		if ( file.open( IO_WriteOnly ) ) {
-			QTextStream stream( &file );
-			for ( QStringList::Iterator it0 = packageList.begin(); it0 != packageList.end(); ++it0 ) {
-				stream << *it0 + "\n";
-			}
-		}
-		else {
-			kdDebug() << i18n("Error writing: ") << maskFile << endl;
-			KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
-			return false;
-		}
-		
-		file.close();
-	}
+	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
+}
+
+/**
+ * @fixme: Check for failure.
+ * Remove packages from db.
+ * @param packageIdList
+ */
+void Portage::removeInstalledPackage( const QString& package )
+{
+	kdDebug() << k_funcinfo << endl;
 	
-	// Signal to gui to mark package as unmasked
-	QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-	QString name( temp.section(pv, 0, 0) );
-	SignalistSingleton::Instance()->setUnmasked( name, true );
-	
+	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
+}
+
+/**
+ * Start scan of update packages.
+ * @return bool
+ */
+bool Portage::slotRefreshUpdates()
+{
+	EmergeSingleton::Instance()->checkUpdates();
 	return true;
 }
 
 /**
- * Clear the unmasking of packages by removing from package.keyword.
- * @param category
- * @param packageList
+ * Start scan of update packages.
+ * @return bool
  */
-void Portage::clearUnmaskPackageList( const QString& category, const QStringList& packageList )
+bool Portage::slotLoadUpdates()
 {
-	QFile file( KurooConfig::dirPackageKeywords() );
-	
-	// Store back list of unmasked packages
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		
-		foreach ( packageList ) {
-			QString package = category + "/" + (*it).section(pv, 0, 0);
-			unmaskedMap.remove( package );
-			
-			// Signal to gui to mark package as not unmasked anymore
-			QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-			QString name( temp.section(pv, 0, 0) );
-			SignalistSingleton::Instance()->setUnmasked( name, false );
-		}
-		
-		QMap< QString, QString >::iterator itMapEnd = unmaskedMap.end();
-		for ( QMap< QString, QString >::iterator itMap = unmaskedMap.begin(); itMap != itMapEnd; ++itMap ) {
-			stream << itMap.key() + " " + itMap.data() + "\n";
-		}
-		file.close();
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::dirPackageKeywords() << endl;
-		KMessageBox::error( 0, i18n("Failed to save. Please run as root."), i18n("Saving"));
-	}
+	SignalistSingleton::Instance()->scanStarted();
+	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
+	return true;
 }
 
 /**
- * Get this packages database id.
- * @param package
- * @return idDB
+ * @fixme: Check for failure.
+ * Remove packages from db.
+ * @param packageIdList
  */
-QString Portage::idDb( const QString& package )
+void Portage::removeUpdatePackage( const QString& package )
 {
-	QString category = package.section("/", 0, 0);
-	QString temp( package.section("/", 1, 1).section(" ", 0, 0) );
-	QString name( temp.section(pv, 0, 0) );
-	QString version( temp.section(name + "-", 1, 1) );
-	
-	return KurooDBSingleton::Instance()->portageIdByCategoryNameVersion( category, name, version ).first();
+	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
 }
 
 /**
- * Get this packages category.
- * @param id
- * @return category
+ * Update packages when user changes package stability.
  */
-QString Portage::category( const QString& id )
+void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
 {
-	return KurooDBSingleton::Instance()->query(QString("SELECT name FROM category WHERE id = ( SELECT idCategory FROM package WHERE id = '%1' );").arg(id)).first();
-}
-
-/**
- * Get this packages category.
- * @param id
- * @return package
- */
-QString Portage::package( const QString& id )
-{
-	QStringList packageList = KurooDBSingleton::Instance()->query(QString("SELECT name, version FROM package WHERE id = '%1';").arg(id));
-	QStringList::Iterator it = packageList.begin();
-	QString name = *it++;
-	QString version = *it;
-	return name + "-" + version;
-}
-
-/**
- * Get summary for selected package.
- * @param id
- * @return summary
- */
-QString Portage::packageSummary( const QString& packageId )
-{
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	Info info( packageInfo( packageId ) );
-
-	QString textLines = "<font size=\"+2\">" + category + "/" + package.section(pv, 0, 0) + "</font><br>";
-			textLines += info.description + "<br>";
-			textLines += "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
-			textLines += i18n("<b>Licenses:</b> ") + info.licenses + "<br>";
-			textLines += i18n("<b>Available versions:</b> ");
-	
-	const QStringList versionList = packageVersions( package.section(pv, 0, 0) );
-	foreach ( versionList ) {
-		QString version = *it++;
-		QString installed = *it;
-		
-		if ( installed == "1" )
-			textLines += "<font color=darkGreen><b>" + version + "</b></font>, ";
-		else
-			textLines += version + ", ";
-	}
-	textLines.truncate( textLines.length() - 2 );
-	return textLines;
-}
-
-/**
- * Get summary for selected version.
- * @param id
- * @return summary
- */
-QString Portage::versionSummary( const QString& packageId )
-{
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	Info info( packageInfo( packageId ) );
-	
-	QString textLines = "<font size=\"+2\">" + category + "/" + package + "</font><br>";
-			textLines += info.description + "<br>";
-			textLines += "<a href=\"" + info.homepage + "\">" + info.homepage + "</a><br>";
-			textLines += i18n("<b>Licenses:</b> ") + info.licenses + "<br>";
-			textLines += i18n("<b>Slot:</b> ") + info.packageSlots + "<br>";
-			textLines += i18n("<b>Branches:</b> ") + info.keywords + "<br>";
-			textLines += i18n("<b>Use flags:</b> ") + info.useFlags + "<br>";
-			textLines += i18n("<b>Size:</b> ") + info.size;
-
-	return textLines;
-}
-
-/**
- * Get this version ebuild.
- * @param id
- * @return ebuild text
- */
-QString Portage::ebuild( const QString& packageId )
-{
-	kdDebug() << "Portage::ebuild" << endl;
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/" + package + ".ebuild";
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "<br>";
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		return i18n("na");
-	}
-}
-
-/**
- * Get this package changelog.
- * @param id
- * @return changelog text
- */
-QString Portage::changelog( const QString& packageId )
-{
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	
-	QString fileName = KurooConfig::dirPortage() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirPortageOverlay() + "/" + category + "/" + package.section(pv, 0, 0) + "/ChangeLog";
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		while ( !stream.atEnd() )
-			textLines += stream.readLine() + "<br>";
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		return i18n("na");
-	}
-}
-
-/**
- * Get this package dependencies.
- * @param id
- * @return summary
- */
-QString Portage::dependencies( const QString& packageId )
-{
-	QString package(Portage::package( packageId ));
-	QString category(Portage::category( packageId ));
-	
-	QString fileName = KurooConfig::dirEdbDep() + "/usr/portage/" + category + "/" + package;
-	QFile file( fileName );
-	
-	if ( !file.exists() ) {
-		fileName = KurooConfig::dirEdbDep() + "/usr/local/portage/" + category + "/" + package;
-		file.setName( fileName );
-	}
-	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		QString textLines;
-		int lineCount(0);
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.isEmpty() )
-				continue;
-			
-			if ( lineCount++ > 1 || line == "0" )
-				break;
-			else
-				textLines += line + "<br>";
-		}
-		file.close();
-		return textLines;
-	}
-	else {
-		kdDebug() << i18n("Error reading: ") << fileName << endl;
-		return i18n("na");
-	}
+	ThreadWeaver::instance()->queueJob( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
 }
 
 #include "portage.moc"

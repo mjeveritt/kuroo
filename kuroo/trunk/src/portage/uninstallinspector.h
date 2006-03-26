@@ -18,39 +18,27 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef USEDIALOG_H
-#define USEDIALOG_H
-
-#include "usebase.h"
+#ifndef UNINSTALLINSPECTOR_H
+#define UNINSTALLINSPECTOR_H
 
 #include <kdialogbase.h>
 
-/**
- * @class UseDialog
- * @short Specialized dialog for editing Use Flags per package.
- */
-class UseDialog : public KDialogBase
+class UninstallBase;
+
+class UninstallInspector : public KDialogBase
 {
 Q_OBJECT
 public:
-    UseDialog(QWidget *parent = 0, const char *name = 0);
-    ~UseDialog();
-	
-	/**
-	 * Open use flags dialog.
-	 * @param newPackage	selected package
-	 */
-	void			edit( const QString& package );
-	
-private slots:
-	void			slotUseDescription( QListBoxItem* item );
-	void			slotApply();
+	UninstallInspector( QWidget *parent = 0 );
+    ~UninstallInspector();
 
-private:
-	QStringList		useList;
-	UseBase		*dialog;
-	QString		package;
+	void			view( const QStringList& packageList );
+
+private slots:
+	void			slotOk();
 	
+private:
+	UninstallBase* 	dialog;
 };
 
 #endif

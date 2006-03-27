@@ -85,7 +85,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	// Connect menu-icons to the pages
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
-	viewMenu->setSelected( 0, true );
+	viewMenu->setCurrentItem( 0 );
 	
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
@@ -120,6 +120,9 @@ void KurooView::slotShowView()
 		packageInspector->hide();
 	
 	int tabIndex = viewMenu->currentItem() + 1;
+	
+	kdDebug() << "tabIndex=" << tabIndex << endl;
+	
 	viewStack->raiseWidget( tabIndex );
 }
 

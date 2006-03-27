@@ -281,7 +281,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
 		            "(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
 		while ( ( pos = rx.search(line) ) != -1 )
-			line.replace( pos, rx.matchedLength(), "" );
+			line.replace( pos, rx.matchedLength(), QString::null );
 		
 		if ( line.isEmpty() )
 			continue;

@@ -39,7 +39,7 @@ class ScanHistoryJob : public ThreadWeaver::DependentJob
 {
 Q_OBJECT
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = "" );
+	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = QStringList::QStringList() );
 	~ScanHistoryJob();
 
 private:

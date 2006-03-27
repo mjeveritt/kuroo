@@ -120,10 +120,9 @@ void KurooView::slotShowView()
 		packageInspector->hide();
 	
 	int tabIndex = viewMenu->currentItem() + 1;
-	
-	kdDebug() << "tabIndex=" << tabIndex << endl;
-	
 	viewStack->raiseWidget( tabIndex );
+	
+	kdDebug() << k_funcinfo << "...done!" << endl;
 }
 
 /**
@@ -142,7 +141,7 @@ void KurooView::slotInit()
 		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
 		                                      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
 		                                      "Next, package information in Portage will be collected.</qt>"), 
-		                                      i18n("Initialiazing Kuroo") );
+		                                i18n( "Initialiazing Kuroo") );
 		HistorySingleton::Instance()->slotRefresh();
 	}
 	else {

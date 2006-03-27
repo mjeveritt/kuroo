@@ -116,7 +116,9 @@ void KurooView::slotShowView()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	packageInspector->hide();
+	if ( packageInspector->isVisible() )
+		packageInspector->hide();
+	
 	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
 }

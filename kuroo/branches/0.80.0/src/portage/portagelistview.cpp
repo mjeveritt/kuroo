@@ -76,12 +76,12 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 150 );
-	addColumn( QString::null );
-	addColumn( QString::null, 25 );
-	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), QString::null );
+	addColumn( "" );
+	addColumn( "", 25 );
+	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
 	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( QString::null, 25 );
-	header()->setLabel( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), QString::null );
+	header()->setLabel( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
 	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( i18n( "Update" ), 80 );
 	addColumn( i18n( "Description" ), 200 );
@@ -99,7 +99,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setFullWidth( true );
 	
 	if ( KurooConfig::installedColumn() ) {
-		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), QString::null );
+		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
 		setColumnAlignment( 1, Qt::AlignHCenter );
 		setColumnWidth( 1, 25 );
 	}

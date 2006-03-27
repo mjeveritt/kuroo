@@ -166,8 +166,8 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
-	addColumn( QString::null );
-	addColumn( QString::null, 25 );
+	addColumn( "" );
+	addColumn( "", 25 );
 	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
 	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( i18n( "Version" ), 100 );

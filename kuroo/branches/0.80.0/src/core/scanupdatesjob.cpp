@@ -38,14 +38,14 @@
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), m_aborted( true )
 {
 }
 
 ScanUpdatesJob::~ScanUpdatesJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-	if ( aborted )
+	if ( m_aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }
 
@@ -57,7 +57,7 @@ void ScanUpdatesJob::completeJob()
 	kdDebug() << k_funcinfo << endl;
 	
 	SignalistSingleton::Instance()->loadUpdatesComplete();
-	aborted = false;
+	m_aborted = false;
 }
 
 /**
@@ -163,8 +163,6 @@ bool ScanUpdatesJob::doJob()
 
 void ScanUpdatesJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else

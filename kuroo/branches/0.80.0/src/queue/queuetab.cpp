@@ -46,7 +46,7 @@
  * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
-	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), initialQueueTime( QString::null )
+	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null )
 {
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
@@ -194,7 +194,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	// Enable the gui
 	slotBusy();
 	
-	initialQueueTime = queueView->totalTimeFormatted();
+	m_initialQueueTime = queueView->totalTimeFormatted();
 	slotQueueSummary();
 }
 
@@ -206,7 +206,7 @@ void QueueTab::slotQueueSummary()
 	queueBrowser->clear();
 	QString queueBrowserLines( i18n(   "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( initialQueueTime );
+			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( m_initialQueueTime );
 			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" ).arg( queueView->totalTimeFormatted() );
 	queueBrowser->setText( queueBrowserLines );
 }
@@ -390,7 +390,11 @@ void QueueTab::slotPretend()
  */
 void QueueTab::slotRemove()
 {
-	m_packageInspector->hide();
+	kdDebug() << k_funcinfo << endl;
+	
+	if ( isVisible() )
+		m_packageInspector->hide();
+	
 	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 }
 
@@ -399,7 +403,11 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotClear()
 {
-	m_packageInspector->hide();
+	kdDebug() << k_funcinfo << endl;
+	
+	if ( isVisible() )
+		m_packageInspector->hide();
+	
 	QueueSingleton::Instance()->reset();
 }
 

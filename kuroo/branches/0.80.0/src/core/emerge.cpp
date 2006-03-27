@@ -79,7 +79,7 @@ bool Emerge::isRunning()
  */
 EmergePackageList Emerge::packageList()
 {
-	return emergePackageList;
+	return m_emergePackageList;
 }
 
 /**
@@ -89,13 +89,13 @@ EmergePackageList Emerge::packageList()
  */
 bool Emerge::queue( const QStringList& packageList )
 {
-	blocks.clear();
+	m_blocks.clear();
 	importantMessage = QString::null;
-	unmasked = QString::null;
-	lastEmergeList = packageList;
-	etcUpdateCount = 0;
+	m_unmasked = QString::null;
+	m_lastEmergeList = packageList;
+	m_etcUpdateCount = 0;
 	
-	emergePackageList.clear();
+	m_emergePackageList.clear();
 	eProc->resetAll();
 	*eProc << "emerge" << "--nospinner" << "--nocolor";
 	
@@ -128,13 +128,13 @@ bool Emerge::queue( const QStringList& packageList )
  */
 bool Emerge::pretend( const QStringList& packageList )
 {
-	blocks.clear();
+	m_blocks.clear();
 	importantMessage = QString::null;
-	unmasked = QString::null;
-	lastEmergeList = packageList;
-	etcUpdateCount = 0;
+	m_unmasked = QString::null;
+	m_lastEmergeList = packageList;
+	m_etcUpdateCount = 0;
 	
-	emergePackageList.clear();
+	m_emergePackageList.clear();
 	eProc->resetAll();
 	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
 	
@@ -165,10 +165,10 @@ bool Emerge::pretend( const QStringList& packageList )
  */
 bool Emerge::unmerge( const QStringList& packageList )
 {
-	blocks.clear();
+	m_blocks.clear();
 	importantMessage = QString::null;
-	etcUpdateCount = 0;
-	emergePackageList.clear();
+	m_etcUpdateCount = 0;
+	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--unmerge" << "--nocolor" << "--nospinner";
@@ -198,10 +198,10 @@ bool Emerge::unmerge( const QStringList& packageList )
  */
 bool Emerge::sync()
 {
-	blocks.clear();
+	m_blocks.clear();
 	importantMessage = QString::null;
-	etcUpdateCount = 0;
-	emergePackageList.clear();
+	m_etcUpdateCount = 0;
+	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
@@ -227,10 +227,10 @@ bool Emerge::sync()
  */
 bool Emerge::checkUpdates()
 {
-	blocks.clear();
+	m_blocks.clear();
 	importantMessage = QString::null;
-	etcUpdateCount = 0;
-	emergePackageList.clear();
+	m_etcUpdateCount = 0;
+	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner";
@@ -302,7 +302,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			if ( rxPortageVersion.search( packageVersion ) != -1 ) {
 				emergePackage.name = packageVersion.section( rxPortageVersion.cap( 1 ), 0, 0 );
 				emergePackage.version = packageVersion.section( ( emergePackage.name + "-" ), 1, 1 );
-				emergePackageList.prepend( emergePackage );
+				m_emergePackageList.prepend( emergePackage );
 			}
 			else {
 				kdDebug() << i18n("Collecting emerge output. Can not parse: ") << packageVersion << endl;
@@ -366,9 +366,9 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					}
 					else
 						if ( lineLower.contains( " (masked by: " ) )
-							unmasked = line.section( "- ", 1 ).section( ")", 0 );
+							m_unmasked = line.section( "- ", 1 ).section( ")", 0 );
 						else
-							if ( !unmasked.isEmpty() && line.startsWith("# ") )
+							if ( !m_unmasked.isEmpty() && line.startsWith("# ") )
 								importantMessage += line.section( "# ", 1, 1 ) + "<br>";
 	
 		//////////////////////////////////////////////////////////////
@@ -406,7 +406,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		
 		// Collect blocking lines
 		if ( line.contains( "is blocking" ) )
-			blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
+			m_blocks += line.section( "[m_blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
@@ -442,14 +442,14 @@ void Emerge::cleanup()
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );
-	ResultsSingleton::Instance()->addPackageList( emergePackageList );
+	ResultsSingleton::Instance()->addPackageList( m_emergePackageList );
 	
-	if ( !blocks.isEmpty() )
-		importantMessage += "<br>" + blocks.join("<br>");
+	if ( !m_blocks.isEmpty() )
+		importantMessage += "<br>" + m_blocks.join("<br>");
 	
-	if ( !unmasked.isEmpty() ) {
+	if ( !m_unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
-			askUnmaskPackage( unmasked );
+			askUnmaskPackage( m_unmasked );
 		else
 			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), NULL );
 	}
@@ -457,8 +457,8 @@ void Emerge::cleanup()
 		if ( !importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), importantMessage ); 
 	
-	if ( etcUpdateCount != 0 )
-		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
+	if ( m_etcUpdateCount != 0 )
+		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
 }
 
 /**
@@ -520,8 +520,8 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
-	if ( !blocks.isEmpty() )
-		importantMessage += "<br>" + blocks.join("<br>");
+	if ( !m_blocks.isEmpty() )
+		importantMessage += "<br>" + m_blocks.join("<br>");
 	
 	if ( !importantMessage.isEmpty() )
 		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
@@ -583,11 +583,11 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 }
 
 /**
- * After package is auto-unmasked try remerging the list again to find next package to unmask.
+ * After package is auto-m_unmasked try remerging the list again to find next package to unmask.
  */
 void Emerge::slotTryEmerge()
 {
-	pretend( lastEmergeList );
+	pretend( m_lastEmergeList );
 	disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 }
 
@@ -604,7 +604,7 @@ bool Emerge::countEtcUpdates( const QString& line )
 		QRegExp rx("^\\d+\\)");
 		int pos = rx.search(tmp);
 		if ( pos > -1 )
-			etcUpdateCount += ( rx.cap(1) ).toInt();
+			m_etcUpdateCount += ( rx.cap(1) ).toInt();
 		
 		return true;
 	}

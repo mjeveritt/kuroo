@@ -52,7 +52,7 @@ private:
 	}
 	
 private:
-	bool						aborted;
+	bool						m_aborted;
 	DbConnection* const			m_db;
 	QStringList 				m_logLines;
 	

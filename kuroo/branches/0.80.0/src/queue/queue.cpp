@@ -106,8 +106,8 @@ Queue::Queue( QObject* m_parent )
 	: QObject( m_parent ), m_removeInstalled( false )
 {
 	// Clock timer for showing progress when emerging
-	internalTimer = new QTimer( this );
-	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
+	m_internalTimer = new QTimer( this );
+	connect( m_internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotClearQueue() ) );
@@ -154,8 +154,8 @@ void Queue::reset()
  */
 bool Queue::isQueued( const QString& id )
 {
-	QMap<QString, bool>::iterator itMap = queueCache.find( id );
-	if ( itMap == queueCache.end() )
+	QMap<QString, bool>::iterator itMap = m_queueCache.find( id );
+	if ( itMap == m_queueCache.end() )
 		return false;
 	else
 		return true;
@@ -167,7 +167,7 @@ bool Queue::isQueued( const QString& id )
  */
 void Queue::clearCache()
 {
-	queueCache.clear();
+	m_queueCache.clear();
 }
 
 /**
@@ -182,7 +182,7 @@ void Queue::insertInCache( const QString& id )
 		return;
 	}
 	
-	queueCache[ id ] = false;
+	m_queueCache[ id ] = false;
 }
 
 /**
@@ -197,7 +197,7 @@ void Queue::deleteFromCache( const QString& id )
 		return;
 	}
 	
-	queueCache.remove( id );
+	m_queueCache.remove( id );
 }
 
 
@@ -213,9 +213,9 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
 {
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
-		queueCache[ id ] = false;
+		m_queueCache[ id ] = false;
 	
-	internalTimer->start( 1000 );
+	m_internalTimer->start( 1000 );
 	emit signalPackageStart( id );
 }
 
@@ -225,10 +225,10 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
  */
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
-	internalTimer->stop();
+	m_internalTimer->stop();
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
-		queueCache[ id ] = true;
+		m_queueCache[ id ] = true;
 	
 	emit signalPackageComplete( id );
 }
@@ -244,7 +244,7 @@ void Queue::slotOneStep()
 
 void Queue::stopTimer()
 {
-	internalTimer->stop();
+	m_internalTimer->stop();
 }
 
 
@@ -297,7 +297,7 @@ void Queue::slotClearQueue()
 		
 		// Collect only 100% complete packages
 		QStringList idList;
-		for ( QMap<QString, bool>::iterator itMap = queueCache.begin(), itMapEnd = queueCache.end(); itMap != itMapEnd; ++itMap )
+		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap )
 			if ( itMap.data() )
 				idList += itMap.key();
 	

@@ -1202,7 +1202,7 @@ QStringList SqliteConnection::query( const QString& statement )
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );
 	
 	if ( error != SQLITE_OK ) {
-		kdDebug() << k_funcinfo << " sqlite3_compile error:" << endl;
+		kdDebug() << " sqlite3_compile error:" << endl;
 		kdDebug() << sqlite3_errmsg( m_db ) << endl;
 		kdDebug() << "on query: " << statement << endl;
 		values = QStringList();
@@ -1240,7 +1240,7 @@ QStringList SqliteConnection::query( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
+			kdDebug() << "sqlite_step error." << endl;
 			kdDebug() << sqlite3_errmsg( m_db ) << endl;
 			kdDebug() << "on query: " << statement << endl;
 			values = QStringList();
@@ -1261,7 +1261,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );
 	
 	if ( error != SQLITE_OK ) {
-		kdDebug() << k_funcinfo << " sqlite3_compile error:" << endl;
+		kdDebug() << " sqlite3_compile error:" << endl;
 		kdDebug() << sqlite3_errmsg(m_db) << endl;
 		kdDebug() << "on query: " << statement << endl;
 	}
@@ -1295,7 +1295,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
+			kdDebug() << "sqlite_step error." << endl;
 			kdDebug() << sqlite3_errmsg( m_db ) << endl;
 			kdDebug() << "on query: " << statement << endl;
 			value = QString::null;
@@ -1315,7 +1315,7 @@ int SqliteConnection::insert( const QString& statement )
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );
 	
 	if ( error != SQLITE_OK ) {
-		kdDebug() << k_funcinfo << " sqlite3_compile error:" << endl;
+		kdDebug() << " sqlite3_compile error:" << endl;
 		kdDebug() << sqlite3_errmsg( m_db ) << endl;
 		kdDebug() << "on insert: " << statement << endl;
 	}
@@ -1347,7 +1347,7 @@ int SqliteConnection::insert( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-			kdDebug() << k_funcinfo << "sqlite_step error." << endl;
+			kdDebug() << "sqlite_step error." << endl;
 			kdDebug() << sqlite3_errmsg( m_db ) << endl;
 			kdDebug() << "on insert: " << statement << endl;
 			return 0;

@@ -75,7 +75,7 @@ private:
 	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
 	
 	// True if history needs to be recreated from scratch
-	bool				hasHistoryRestored;
+	bool				m_isHistoryRestored;
 };
 
 class KurooView::IconListItem : public QListBoxItem

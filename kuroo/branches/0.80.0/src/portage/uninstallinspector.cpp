@@ -31,9 +31,9 @@
 UninstallInspector::UninstallInspector( QWidget *parent )
 	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false )
 {
-	dialog = new UninstallBase( this );
-	setMainWidget( dialog );
-	dialog->setMinimumSize( 300, 280 );
+	m_dialog = new UninstallBase( this );
+	setMainWidget( m_dialog );
+	m_dialog->setMinimumSize( 300, 280 );
 }
 
 UninstallInspector::~UninstallInspector()
@@ -46,13 +46,13 @@ UninstallInspector::~UninstallInspector()
  */
 void UninstallInspector::view( const QStringList& packageList )
 {
-	dialog->uninstallView->clear();
+	m_dialog->uninstallView->clear();
 	
 	for ( QStringList::ConstIterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 		QString id = *itPackage++;
 		QString package = *itPackage;
 		
-		QCheckListItem* itemPackage = new QCheckListItem( dialog->uninstallView, package, QCheckListItem::CheckBoxController );
+		QCheckListItem* itemPackage = new QCheckListItem( m_dialog->uninstallView, package, QCheckListItem::CheckBoxController );
 		itemPackage->setOpen( true );
 		itemPackage->setOn( true );
 		
@@ -75,7 +75,7 @@ void UninstallInspector::slotOk()
 {
 	QStringList packageList;
 	
-	QListViewItemIterator it( dialog->uninstallView );
+	QListViewItemIterator it( m_dialog->uninstallView );
 	while ( it.current() ) {
 		
 		if ( dynamic_cast<QCheckListItem*>( it.current() )->state() == QCheckListItem::On )

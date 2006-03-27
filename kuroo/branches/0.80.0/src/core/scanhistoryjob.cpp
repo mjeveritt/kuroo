@@ -35,14 +35,14 @@
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines ), aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines ), m_aborted( true )
 {
 }
 
 ScanHistoryJob::~ScanHistoryJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-	if ( aborted )
+	if ( m_aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }
 
@@ -54,7 +54,7 @@ void ScanHistoryJob::completeJob()
 	kdDebug() << k_funcinfo << endl;
 	
 	SignalistSingleton::Instance()->scanHistoryComplete();
-	aborted = false;
+	m_aborted = false;
 }
 
 /** 
@@ -172,8 +172,6 @@ bool ScanHistoryJob::doJob()
 
 void ScanHistoryJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else

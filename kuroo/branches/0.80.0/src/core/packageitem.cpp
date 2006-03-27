@@ -35,7 +35,7 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 	: KListViewItem( parent, name ),
 	m_parent( parent ), m_index( 0 ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
-	hasDetailedInfo( false )
+	m_isInitialized( false )
 {
 }
 
@@ -43,7 +43,7 @@ PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString
 	: KListViewItem( parent, name ),
 	m_parent( parent->listView() ), m_index( 0 ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
-	hasDetailedInfo( false )
+	m_isInitialized( false )
 {
 }
 
@@ -228,7 +228,7 @@ QString PackageItem::category()
 
 void PackageItem::resetDetailedInfo()
 {
-	hasDetailedInfo = false;
+	m_isInitialized = false;
 }
 
 /**
@@ -236,7 +236,7 @@ void PackageItem::resetDetailedInfo()
  */
 void PackageItem::initVersions()
 {
-	if ( hasDetailedInfo )
+	if ( m_isInitialized )
 		return;
 	
 	m_versions.clear();
@@ -338,7 +338,7 @@ void PackageItem::initVersions()
 // 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;
 	
 	// This package has collected all it's data
-	hasDetailedInfo = true;
+	m_isInitialized = true;
 }
 
 /**

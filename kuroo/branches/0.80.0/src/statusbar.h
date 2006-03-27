@@ -61,7 +61,7 @@ private:
 	QMap<QString, QString> 	messageMap;
 	KProgress 				*statusBarProgress;
 	QLabel 					*statusBarLabel;
-	QTimer 					*internalTimer, *diffTimer;
+	QTimer 					*m_internalTimer, *diffTimer;
 	int						timerSteps;
 };
 

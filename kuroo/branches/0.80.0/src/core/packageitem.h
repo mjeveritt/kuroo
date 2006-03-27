@@ -94,7 +94,7 @@ private:
 	bool							m_inWorld;
 	
 	// True if package and its versions has been initialized with all data
-	bool							hasDetailedInfo;
+	bool							m_isInitialized;
 	
 	// Valuelist with all versions and their data
 	QValueList<PackageVersion*>		m_versions;

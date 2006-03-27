@@ -380,14 +380,14 @@ void Portage::loadWorld()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	mapWorld.clear();
+	m_mapWorld.clear();
 	
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
 			QString package = stream.readLine();
-			mapWorld[ package.stripWhiteSpace() ] = QString::null;
+			m_mapWorld[ package.stripWhiteSpace() ] = QString::null;
 		}
 	}
 	else {
@@ -427,7 +427,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
  */
 bool Portage::isInWorld( const QString& package )
 {
-	if ( mapWorld.contains( package ) )
+	if ( m_mapWorld.contains( package ) )
 		return true;
 	else
 		return false;
@@ -439,12 +439,12 @@ bool Portage::isInWorld( const QString& package )
  */
 void Portage::appendWorld( const QString& package )
 {
-	QMap<QString, QString> map = mapWorld;
+	QMap<QString, QString> map = m_mapWorld;
 	map[ package ] = QString::null;
 	
 	// Try saving changes first
 	if ( saveWorld( map ) ) {
-		mapWorld = map;
+		m_mapWorld = map;
 		emit signalWorldChanged();
 	}
 }
@@ -455,12 +455,12 @@ void Portage::appendWorld( const QString& package )
  */
 void Portage::removeFromWorld( const QString& package )
 {
-	QMap<QString, QString> map = mapWorld;
+	QMap<QString, QString> map = m_mapWorld;
 	map.remove( package );
 	
 	// Try saving changes first
 	if ( saveWorld( map ) ) {
-		mapWorld = map;
+		m_mapWorld = map;
 		emit signalWorldChanged();
 	}
 }

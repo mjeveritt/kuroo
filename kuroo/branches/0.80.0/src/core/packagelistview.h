@@ -62,7 +62,7 @@ protected slots:
 	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
 protected:
-	QDict<PackageItem>		packageIndex;
+	QDict<PackageItem>		m_packageIndex;
 	
 signals:
 	void					signalPackageChanged();

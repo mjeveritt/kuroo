@@ -54,8 +54,9 @@ protected:
 	QString									m_focus;
 	
 	// Index of categoris in listview
-	QDict<CategoryItem>						categoryIndex;
-	
+	QDict<CategoryItem>						m_categoryIndex;
+
+	// Vector containing all categories
 	typedef QValueVector<CategoryItem*>		Categories;
 	Categories			 					categories;
 	
@@ -93,6 +94,8 @@ public:
 	void 									loadCategories( const QStringList& categoriesList );
 	
 private:
+	
+	// Vector containing all sub-categories
 	typedef std::map<int, QString>			SubCategory;
 	typedef std::vector<SubCategory>		AllSubCategories;
 	AllSubCategories			 			allSubCategories;

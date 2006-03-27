@@ -53,7 +53,7 @@ QString MergeListView::MergeItem::destination()
  * @short Specialized listview for emerge history.
  */
 MergeListView::MergeListView( QWidget *parent, const char *name )
-	: KListView( parent, name ), loc( KGlobal::locale() )
+	: KListView( parent, name ), m_loc( KGlobal::locale() )
 {
 	addColumn( i18n("Configuration file") );
 	
@@ -80,7 +80,7 @@ MergeListView::~MergeListView()
 void MergeListView::loadFromDB()
 {
 	clear();
-	itemMap.clear();
+	m_itemMap.clear();
 	
 	const QStringList historyList = HistorySingleton::Instance()->allMergeHistory();
 	foreach ( historyList ) {
@@ -90,15 +90,15 @@ void MergeListView::loadFromDB()
 		
 		QDateTime dt;
 		dt.setTime_t( timeStamp.toUInt() );
-		QString date = loc->formatDate( dt.date() );
+		QString date = m_loc->formatDate( dt.date() );
 		
-		if ( !itemMap.contains( date ) ) {
+		if ( !m_itemMap.contains( date ) ) {
 			MergeItem *item = new MergeItem( this, date );
-			itemMap[ date ] = item;
+			m_itemMap[ date ] = item;
 			item->setOpen( true );
 		}
 
-		new MergeItem( itemMap[ date ], source, destination );
+		new MergeItem( m_itemMap[ date ], source, destination );
 	}
 	
 	emit signalHistoryLoaded();

@@ -46,7 +46,7 @@
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), aborted( true ),
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_aborted( true ),
 	rxAtom(
 			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
 			"-("           								// start of the version part
@@ -61,7 +61,7 @@ ScanPortageJob::ScanPortageJob( QObject* parent )
 ScanPortageJob::~ScanPortageJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-	if ( aborted )
+	if ( m_aborted )
 		SignalistSingleton::Instance()->scanAborted();
 }
 
@@ -72,9 +72,9 @@ void ScanPortageJob::completeJob()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	mapCache.clear();
+	m_mapCache.clear();
 	SignalistSingleton::Instance()->scanPortageComplete();
-	aborted = false;
+	m_aborted = false;
 }
 
 
@@ -240,30 +240,30 @@ bool ScanPortageJob::doJob()
 						Info info( scanInfo( KurooConfig::dirEdbDep() + *itPath, *itCategory, name, version ) );
 						
 						// Insert category and db id's in portage
-						if ( !categories.contains( *itCategory ) ) {
-							categories[ *itCategory ].idCategory = QString::number( idCategory );
-							categories[ *itCategory ].idSubCategory = QString::number( idSubCategory );
-							categories[ *itCategory ].idCatSubCategory = QString::number( idCatSubCategory );
+						if ( !m_categories.contains( *itCategory ) ) {
+							m_categories[ *itCategory ].idCategory = QString::number( idCategory );
+							m_categories[ *itCategory ].idSubCategory = QString::number( idSubCategory );
+							m_categories[ *itCategory ].idCatSubCategory = QString::number( idCatSubCategory );
 						}
 						
 						// Insert package in portage
-						if ( !categories[ *itCategory ].packages.contains( name ) ) {
-							categories[ *itCategory ].packages[ name ];
-							categories[ *itCategory ].packages[ name ].status = FILTER_ALL_STRING;
-							categories[ *itCategory ].packages[ name ].description = info.description;
+						if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
+							m_categories[ *itCategory ].packages[ name ];
+							m_categories[ *itCategory ].packages[ name ].status = FILTER_ALL_STRING;
+							m_categories[ *itCategory ].packages[ name ].description = info.description;
 						}
 						
 						// Insert version in portage
-						if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
-							categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
-							categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
-							categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_ALL_STRING;
-							categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
-							categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
-							categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
-							categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
-							categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
-							categories[ *itCategory ].packages[ name ].versions[ version ].path = *itPath;
+						if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_ALL_STRING;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].path = *itPath;
 						}
 					
 					}
@@ -290,8 +290,8 @@ bool ScanPortageJob::doJob()
 	scanInstalledPackages();
 	
 	// Iterate through portage map and insert everything in db
-	PortageCategories::iterator itCategoryEnd = categories.end();
-	for ( PortageCategories::iterator itCategory = categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+	PortageCategories::iterator itCategoryEnd = m_categories.end();
+	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
 	
 		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
 		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
@@ -343,7 +343,7 @@ bool ScanPortageJob::doJob()
 			}
 		}
 	}
-	categories.clear();
+	m_categories.clear();
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
 	setKurooDbMeta( "packageCount", QString::number( count ) );
 	
@@ -379,7 +379,7 @@ void ScanPortageJob::scanInstalledPackages()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	installedMap.clear();
+// 	installedMap.clear();
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
@@ -418,23 +418,23 @@ void ScanPortageJob::scanInstalledPackages()
 					QString version = rxAtom.cap( POS_VERSION );
 				
 					// Insert category if not found in portage
-					if ( !categories.contains( *itCategory ) )
-						categories[ *itCategory ];
+					if ( !m_categories.contains( *itCategory ) )
+						m_categories[ *itCategory ];
 					
 					// Insert and/or mark package as installed (old is package not in portage anymore)
-					if ( !categories[ *itCategory ].packages.contains( name ) ) {
-						categories[ *itCategory ].packages[ name ];
-						categories[ *itCategory ].packages[ name ].status = FILTER_OLD_STRING;
+					if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
+						m_categories[ *itCategory ].packages[ name ];
+						m_categories[ *itCategory ].packages[ name ].status = FILTER_OLD_STRING;
 					}
 					else
-						categories[ *itCategory ].packages[ name ].status = FILTER_INSTALLED_STRING;
+						m_categories[ *itCategory ].packages[ name ].status = FILTER_INSTALLED_STRING;
 					
 					// Insert old version in portage
-					if ( !categories[ *itCategory ].packages[ name ].versions.contains( version ) )
-						categories[ *itCategory ].packages[ name ].versions[ version ];
+					if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) )
+						m_categories[ *itCategory ].packages[ name ].versions[ version ];
 					
 					// Mark version as installed
-					categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_INSTALLED_STRING;
+					m_categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_INSTALLED_STRING;
 					
 				}
 				else {
@@ -600,8 +600,6 @@ QString ScanPortageJob::formatSize( const QString& size )
 
 void ScanPortageJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else
@@ -609,19 +607,19 @@ void ScanPortageJob::setKurooDbMeta( const QString& meta, const QString& data )
 }
 
 /**
- * Load mapCache with items from DB.
+ * Load m_mapCache with items from DB.
  */
 void ScanPortageJob::loadCache()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	mapCache.clear();
+	m_mapCache.clear();
 	
 	const QStringList cacheList = KurooDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
 	foreach ( cacheList ) {
 		QString package = *it++;
 		QString size = *it;
-		mapCache.insert( package, size );
+		m_mapCache.insert( package, size );
 	}
 }
 
@@ -632,8 +630,8 @@ void ScanPortageJob::loadCache()
  */
 QString ScanPortageJob::cacheFind( const QString& package )
 {
-	QMap<QString, QString>::iterator it = mapCache.find( package ) ;
-	if ( it != mapCache.end() )
+	QMap<QString, QString>::iterator it = m_mapCache.find( package ) ;
+	if ( it != m_mapCache.end() )
 		return it.data();
 	else
 		return QString::null;

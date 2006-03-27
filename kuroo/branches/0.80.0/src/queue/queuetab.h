@@ -24,7 +24,6 @@
 
 class KListView;
 class QListViewItem;
-class PretendInspector;
 class PackageInspector;
 
 /**
@@ -59,8 +58,14 @@ private slots:
 	void				slotAdvanced();
 	
 private:
+	
+	// Packages loaded in Queue are a pretend result
 	bool				m_hasCheckedQueue;
-	QString				initialQueueTime;
+	
+	// Remember the initial emerge duration before installation started
+	QString				m_initialQueueTime;
+	
+	// The package inspector
 	PackageInspector	*m_packageInspector;
 };
 

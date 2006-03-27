@@ -53,7 +53,7 @@ PackageListView::~PackageListView()
 void PackageListView::resetListView()
 {
 	clear();
-	packageIndex.clear();
+	m_packageIndex.clear();
 }
 
 /**
@@ -71,10 +71,10 @@ QString PackageListView::currentItemStatus()
  */
 PackageItem* PackageListView::packageItemById( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] )
+	if ( id.isEmpty() || !m_packageIndex[id] )
 		return NULL;
 	else
-		return packageIndex[id];
+		return m_packageIndex[id];
 }
 
 /**
@@ -169,12 +169,12 @@ QStringList PackageListView::allPackages()
  */
 void PackageListView::setPackageFocus( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] ) {
+	if ( id.isEmpty() || !m_packageIndex[id] ) {
 		setCurrentItem( firstChild() );
 		setSelected( firstChild(), true );
 	}
 	else {
-		PackageItem* item = packageIndex[id];
+		PackageItem* item = m_packageIndex[id];
 		setCurrentItem( item );
 		setSelected( item, true );
 		ensureItemVisible( item );
@@ -191,8 +191,8 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 	if ( id.isEmpty() )
 		return;
 	
-	packageIndex.insert( id, item );
-	packageIndex[id]->setPackageIndex( packageIndex.count() );
+	m_packageIndex.insert( id, item );
+	m_packageIndex[id]->setPackageIndex( m_packageIndex.count() );
 }
 
 /**
@@ -201,7 +201,7 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  */
 QString PackageListView::count()
 {
-	return QString::number( packageIndex.count() );
+	return QString::number( m_packageIndex.count() );
 }
 
 /**

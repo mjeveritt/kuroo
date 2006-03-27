@@ -71,7 +71,7 @@ private:
 	EmergeTimeMap	m_statisticsMap;
 	
 	// The emerge.log
-	QFile 			log;
+	QFile 			m_log;
 	
 	// Stream for emerge.log
 	QTextStream 	stream;

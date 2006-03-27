@@ -79,19 +79,19 @@ private:
 	QString				m_packageMessage;
 	
 	// The parsed package emerge says need unmasking
-	QString				unmasked;
+	QString				m_unmasked;
 	
 	// Collect all blocking packages
-	QStringList 		blocks;
+	QStringList 		m_blocks;
 	
 	// Remember packages emerge started with, used when auto-unmasking
-	QStringList			lastEmergeList;
+	QStringList			m_lastEmergeList;
 	
 	// List of parsed packages
-	EmergePackageList	emergePackageList;
+	EmergePackageList	m_emergePackageList;
 	
 	// Count of etc-updates files to merge
-	int					etcUpdateCount;
+	int					m_etcUpdateCount;
 };
 
 #endif

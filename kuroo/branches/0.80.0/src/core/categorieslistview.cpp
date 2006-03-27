@@ -123,7 +123,7 @@ void CategoriesView::storeFocus( QListViewItem* item )
  */
 void CategoriesView::restoreFocus( bool isFiltered )
 {
-	CategoryItem* focusCategory = categoryIndex.find( m_focus );
+	CategoryItem* focusCategory = m_categoryIndex.find( m_focus );
 	if ( !focusCategory )
 		focusCategory = dynamic_cast<CategoryItem*>( firstChild() );
 	
@@ -186,17 +186,17 @@ void CategoriesListView::init()
 	
 	// Insert categories in reverse order to get them in alfabetical order
 	CategoryItem* item;
-	categoryIndex.clear();
+	m_categoryIndex.clear();
 	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
 		item = new CategoryItem( this, *it, QString::number( i ) );
 		categories[i] = item;
-		categoryIndex.insert( *it, item );
+		m_categoryIndex.insert( *it, item );
 		i--;
 	}
 	
 	// Insert the meta-category All on top as id = 0
 	item = new CategoryItem( this, i18n("All"), "0" );
-	categoryIndex.insert( i18n("All"), item );
+	m_categoryIndex.insert( i18n("All"), item );
 	item->setOn( true );
 	categories[0] = item;
 }
@@ -275,7 +275,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 // 	item = new CategoryItem( this, QString::null, "0" ); // Insert empty item to get focus to work on last before last item
 	
 	// When meta-category is selected skip to show only meta-subcategory
-	categoryIndex.clear();
+	m_categoryIndex.clear();
 	if ( idCategory != 0 ) {
 	
 		// Insert all subcategories in reverse order to get them alfabetically listed, and set them off = empty
@@ -287,13 +287,13 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 			if ( !name.isEmpty() ) {
 				item = new CategoryItem( this, name, id );
 				categories[(*it).first] = item;
-				categoryIndex.insert( name, item );
+				m_categoryIndex.insert( name, item );
 			}
 		}
 		
 		// Insert meta-subcategory
 		item = new CategoryItem( this, i18n("All"), "0" );
-		categoryIndex.insert( i18n("All"), item );
+		m_categoryIndex.insert( i18n("All"), item );
 		categories[0] = item;
 		
 		// Enable subcategories from query. Skip first which is the category
@@ -309,7 +309,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	
 		// Insert meta-subcategory
 		item = new CategoryItem( this, i18n("All"), "0" );
-		categoryIndex.insert( i18n("All"), item );
+		m_categoryIndex.insert( i18n("All"), item );
 		item->setOn( true );
 		
 		// After all categories are loaded try restoring last known focus-category

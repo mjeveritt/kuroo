@@ -69,14 +69,14 @@ private slots:
 	void							slotParseTempUse( KProcess* eProc );
 	
 private:
-	bool							hasVersionSettingsChanged, hasUseSettingsChanged, isVirginState, isAvailableBefore;
-	QString							m_id, category, package, hardMaskComment;
-	QMap<QString, QString>			useMap;
+	bool							m_versionSettingsChanged, m_useSettingsChanged, m_isVirginState, m_isAvailableBefore;
+	QString							m_id, m_category, m_package, m_hardMaskComment;
+	QMap<QString, QString>			m_useMap;
 	PackageItem* 					m_portagePackage;
-	int								stabilityBefore;
-	QString							versionBefore;
+	int								m_stabilityBefore;
+	QString							m_versionBefore;
 	QStringList						pretendUseLines;
-	QStringList 					globalUseList;
+	QStringList 					m_useList;
 	
 signals:
 	void							signalNextPackage( bool up );

@@ -48,9 +48,9 @@ public slots:
 	
 private:
 	QObject*		m_parent;
-	QCheckBox 		*verboseLog, *saveLog;
-	KTextBrowser 	*logBrowser;
-	QFile 			logFile;
+	QCheckBox 		*m_verboseLog, *m_saveLog;
+	KTextBrowser 	*m_logBrowser;
+	QFile 			m_logFile;
 	
 signals:
 	void			signalLogChanged();

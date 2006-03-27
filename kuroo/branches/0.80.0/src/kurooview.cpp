@@ -51,7 +51,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
 	viewPortage( 0 ), viewQueue( 0 ), viewHistory( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
-	hasHistoryRestored( false )
+	m_isHistoryRestored( false )
 {
 	setMinimumSize( QSize(750, 550) );
 	
@@ -114,6 +114,8 @@ KurooView::~KurooView()
  */
 void KurooView::slotShowView()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	packageInspector->hide();
 	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
@@ -130,7 +132,7 @@ void KurooView::slotInit()
 	
 	// Check is history is empty, then maybe this is also a fresh install with empty db
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
-		hasHistoryRestored = true;
+		m_isHistoryRestored = true;
 		
 		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
 		                                      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
@@ -177,10 +179,10 @@ void KurooView::slotCheckPortage()
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Restore backup after db is recreated because of new version
-	if ( hasHistoryRestored ) {
+	if ( m_isHistoryRestored ) {
 		KurooDBSingleton::Instance()->restoreBackup();
 		HistorySingleton::Instance()->updateStatistics();
-		hasHistoryRestored = false;
+		m_isHistoryRestored = false;
 	}
 	
 	if ( KurooDBSingleton::Instance()->isPackagesEmpty() )

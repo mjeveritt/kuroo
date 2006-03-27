@@ -65,7 +65,7 @@ History::History( QObject *m_parent )
 
 History::~History()
 {
-	log.close();
+	m_log.close();
 	
 	delete logWatcher;
 	logWatcher = 0;
@@ -74,12 +74,12 @@ History::~History()
 void History::init( QObject *parent )
 {
 	m_parent = parent;
-	if ( !log.open(IO_ReadOnly) ) {
+	if ( !m_log.open(IO_ReadOnly) ) {
 		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
 		kdDebug() << "Error reading /var/log/emerge.log" << endl;
 	}
 	else
-		stream.setDevice( &log );
+		stream.setDevice( &m_log );
 }
 
 /**
@@ -90,7 +90,7 @@ void History::slotInit()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	log.setName( "/var/log/emerge.log" );
+	m_log.setName( "/var/log/emerge.log" );
 	loadTimeStatistics();
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );

@@ -63,8 +63,14 @@ signals:
 	
 private:
 	QObject					*m_parent;
-	QMap<QString, bool>		queueCache;
-	QTimer*					internalTimer;
+	
+	// Cache contaning packages in Queue
+	QMap<QString, bool>		m_queueCache;
+	
+	// Timer for installation progress
+	QTimer*					m_internalTimer;
+	
+	// Clear queue after installation?
 	bool					m_removeInstalled;
 };
 

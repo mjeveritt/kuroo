@@ -64,11 +64,21 @@ private slots:
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
 private:
+	
+	// When starting kuroo remember if package summary is empty or not
 	bool				m_isInitialized;
-	int					queuedFilters;
+	
+	// Delay package view untill all text in entered in the text-filter
+	int					m_delayFilters;
+	
+	// rmb
 	KPopupMenu 			*menu;
+	
+	// The package inspector
 	PackageInspector	*m_packageInspector;
-	UninstallInspector	*uninstallInspector;
+	
+	// Lists all package versions for uninstalling
+	UninstallInspector	*m_uninstallInspector;
 	
 signals:
 	void				signalChanged();

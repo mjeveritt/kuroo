@@ -45,7 +45,7 @@ private:
 	
 private:
 	DbConnection* const 		m_db;
-	bool						aborted;
+	bool						m_aborted;
 	EmergePackageList 			m_packageList;
 };
 

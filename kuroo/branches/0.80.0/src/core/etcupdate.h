@@ -57,19 +57,19 @@ private:
 	KProcIO*			eProc;
 	
 	// Keep track of current etc-file position in the total
-	int 				count, totalEtcCount;
+	int 				m_count, m_totalEtcCount;
 	
 	// Collected output from etc-update
-	QStringList			etcUpdateLines;
+	QStringList			m_etcUpdateLines;
 	
 	// List of etc-files for merging
-	QStringList			etcFilesList;
+	QStringList			m_etcFilesList;
 	
 	// Remember last source file when iterating
-	QString				diffSource;
+	QString				m_diffSource;
 	
 	// True if etc-update didn't find any files for merging
-	bool				noFiles;
+	bool				m_noFiles;
 	
 };
 

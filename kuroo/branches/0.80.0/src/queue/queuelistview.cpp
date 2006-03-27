@@ -39,29 +39,29 @@ const int diffTime( 10 );
 QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& status, int duration )
 	: PackageItem( parent, name, id, category, QString::null, status ),
 	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
-	bar( 0 )
+	m_bar( 0 )
 {
 	setQueued( true );
 	setText( 0, category + "/" + name );
-	bar = new KProgress( duration, parent->viewport() );
-	bar->hide();
+	m_bar = new KProgress( duration, parent->viewport() );
+	m_bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration )
 	: PackageItem( parent, name, id, category, QString::null, status ),
 	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
-	bar( 0 )
+	m_bar( 0 )
 {
 	setQueued( true );
 	setText( 0, category + "/" + name );
-	bar = new KProgress( duration, parent->listView()->viewport() );
-	bar->hide();
+	m_bar = new KProgress( duration, parent->listView()->viewport() );
+	m_bar->hide();
 }
 
 QueueListView::QueueItem::~QueueItem()
 {
-	delete bar;
-	bar = 0;
+	delete m_bar;
+	m_bar = 0;
 }
 
 /**
@@ -81,9 +81,9 @@ void QueueListView::QueueItem::setComplete()
 {
 	m_progress = m_duration;
 	m_isComplete = true;
-	bar->setTextEnabled( true );
-	bar->setTotalSteps( 100 );
-	bar->setProgress( 100 );
+	m_bar->setTextEnabled( true );
+	m_bar->setTotalSteps( 100 );
+	m_bar->setProgress( 100 );
 	setInstalled();
 	repaint();
 }
@@ -115,14 +115,14 @@ int QueueListView::QueueItem::remainingDuration()
 void QueueListView::QueueItem::oneStep()
 {
 	if ( m_progress < m_duration )
-		bar->setProgress( m_progress++ );
+		m_bar->setProgress( m_progress++ );
 	else
 		if ( m_progress++ == m_duration ) {
-			bar->setTotalSteps( 0 );
-			bar->setTextEnabled( false );
+			m_bar->setTotalSteps( 0 );
+			m_bar->setTextEnabled( false );
 		}
 		else
-			bar->advance( 3 );
+			m_bar->advance( 3 );
 }
 
 /**
@@ -136,7 +136,7 @@ void QueueListView::QueueItem::setChecked( bool isChecked )
 
 void QueueListView::QueueItem::hideBar()
 {
-	bar->hide();
+	m_bar->hide();
 }
 
 /**
@@ -149,8 +149,8 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 		QHeader *head = listView()->header();
 		rect.setLeft( head->sectionPos( 6 ) - head->offset() );
 		rect.setWidth( head->sectionSize( 6 ) );
-		bar->setGeometry( rect );
-		bar->show();
+		m_bar->setGeometry( rect );
+		m_bar->show();
 	}
 
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
@@ -162,7 +162,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), 
-	loc( KGlobal::locale() ), m_id( QString::null )
+	m_loc( KGlobal::locale() ), m_id( QString::null )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
@@ -267,7 +267,7 @@ QStringList QueueListView::allEndUserPackages()
 void QueueListView::insertPackageList( bool hasCheckedQueue )
 {
 	QueueItem* item;
-	sumSize = 0;
+	m_sumSize = 0;
 	
 	resetListView();
 	
@@ -371,7 +371,7 @@ QString QueueListView::formatTime( int time )
 {
 	QTime emergeTime(0, 0, 0);
 	emergeTime = emergeTime.addSecs( time );
-	return loc->formatTime( emergeTime, true, true );
+	return m_loc->formatTime( emergeTime, true, true );
 }
 
 /**
@@ -417,7 +417,7 @@ void QueueListView::addSize( const QString& size )
 {
 	QString packageSize( size );
 	packageSize = packageSize.remove( QRegExp("\\D") );
-	sumSize += packageSize.toInt() * 1024;
+	m_sumSize += packageSize.toInt() * 1024;
 }
 
 /**
@@ -426,7 +426,7 @@ void QueueListView::addSize( const QString& size )
  */
 QString QueueListView::totalSize()
 {
-	return formatSize( QString::number( sumSize ) );
+	return formatSize( QString::number( m_sumSize ) );
 }
 
 /**
@@ -443,7 +443,7 @@ QString QueueListView::formatSize( const QString& sizeString )
 	if ( size == 0 )
 		total = "0 kB ";
 	else
-		total = loc->formatNumber( (double)size, 0 ) + " kB ";
+		total = m_loc->formatNumber( (double)size, 0 ) + " kB ";
 	
 	return total;
 }
@@ -454,12 +454,12 @@ QString QueueListView::formatSize( const QString& sizeString )
  */
 void QueueListView::slotPackageStart( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] ) {
+	if ( id.isEmpty() || !m_packageIndex[id] ) {
 		m_id = QString::null;
 		return;
 	}
 	else
-		dynamic_cast<QueueItem*>( packageIndex[id] )->setStart();
+		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setStart();
 	
 	m_id = id;
 	
@@ -473,12 +473,12 @@ void QueueListView::slotPackageStart( const QString& id )
  */
 void QueueListView::slotPackageComplete( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] ) {
+	if ( id.isEmpty() || !m_packageIndex[id] ) {
 		m_id = QString::null;
 		return;
 	}
 	else {
-		dynamic_cast<QueueItem*>( packageIndex[id] )->setComplete();
+		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setComplete();
 	}
 	
 	m_id = QString::null;
@@ -489,10 +489,10 @@ void QueueListView::slotPackageComplete( const QString& id )
  */
 void QueueListView::slotPackageProgress()
 {
-	if ( m_id.isEmpty() || !packageIndex[m_id] )
+	if ( m_id.isEmpty() || !m_packageIndex[m_id] )
 		return;
 	else
-		dynamic_cast<QueueItem*>( packageIndex[m_id] )->oneStep();
+		dynamic_cast<QueueItem*>( m_packageIndex[m_id] )->oneStep();
 }
 
 /**

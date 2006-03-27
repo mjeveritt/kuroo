@@ -67,7 +67,7 @@ signals:
 private:
 	QObject*					m_parent;
 	
-	QMap<QString, QString>		mapWorld;
+	QMap<QString, QString>		m_mapWorld;
 };
 
 #endif

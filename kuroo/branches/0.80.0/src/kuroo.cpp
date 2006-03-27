@@ -241,7 +241,6 @@ bool Kuroo::queryClose()
  */
 bool Kuroo::queryExit()
 {
-	kdDebug() << k_funcinfo << endl;
 	return true;
 }
 
@@ -250,8 +249,6 @@ bool Kuroo::queryExit()
  */
 void Kuroo::slotQuit()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
 		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
@@ -266,8 +263,6 @@ void Kuroo::slotQuit()
  */
 void Kuroo::slotWait()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		switch( KMessageBox::questionYesNo( this, 
 			i18n("<qt>Kuroo is busy<br><br>"
@@ -290,8 +285,6 @@ void Kuroo::slotWait()
  */
 void Kuroo::slotTerminate()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	m_shuttingDown = true;
 	qApp->exit();
 }

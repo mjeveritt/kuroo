@@ -55,12 +55,11 @@ private:
 	
 private:
 	QRegExp								rxAtom;
-	InstalledMap						installedMap;
-	int									totalPackages;
-	bool								aborted;
+
+	bool								m_aborted;
 	DbConnection* const 				m_db;
 	
-	QMap<QString, QString> 				mapCache;
+	QMap<QString, QString> 				m_mapCache;
 	
 	struct Data {
 		QString							description;
@@ -87,7 +86,7 @@ private:
 		PortagePackages					packages;
 	};
 	typedef QMap<QString, Categories>	PortageCategories;
-	PortageCategories					categories;
+	PortageCategories					m_categories;
 };
 
 #endif

@@ -51,7 +51,7 @@
  */
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	: PortageBase( parent ), 
-	m_packageInspector( packageInspector ), uninstallInspector( 0 ), queuedFilters( 0 ), m_isInitialized( false )
+	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 ), m_isInitialized( false )
 {
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
@@ -91,8 +91,8 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 
 PortageTab::~PortageTab()
 {
-	delete uninstallInspector;
-	uninstallInspector = 0;
+	delete m_uninstallInspector;
+	m_uninstallInspector = 0;
 }
 
 /**
@@ -103,7 +103,7 @@ void PortageTab::slotInit()
 	portageFrame->setPaletteBackgroundColor( colorGroup().base() );
 	
 	// Initialize the uninstall dialog
-	uninstallInspector = new UninstallInspector( this );
+	m_uninstallInspector = new UninstallInspector( this );
 	
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
 	
@@ -230,7 +230,7 @@ void PortageTab::slotReload()
  */
 void PortageTab::slotFilters()
 {
-	queuedFilters++;
+	m_delayFilters++;
 	QTimer::singleShot( 250, this, SLOT( slotActivateFilters() ) );
 }
 
@@ -239,8 +239,8 @@ void PortageTab::slotFilters()
  */
 void PortageTab::slotActivateFilters()
 {
-	--queuedFilters;
-	if ( queuedFilters == 0 )
+	--m_delayFilters;
+	if ( m_delayFilters == 0 )
 		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ),
 		                              true );
 }
@@ -259,6 +259,8 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
@@ -299,8 +301,6 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotRefresh()
 {
-// 	kdDebug() << "PortageTab::slotRefresh" << endl;
-	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
@@ -340,7 +340,7 @@ void PortageTab::slotUninstall()
 			}
 		}
 		
-		uninstallInspector->view( packageList );
+		m_uninstallInspector->view( packageList );
 	}
 }
 
@@ -369,7 +369,7 @@ void PortageTab::slotPackage()
 	kdDebug() << k_funcinfo << endl;
 	
 	// Packages view is hidden don't update
-	// We may get signal to update from Queue since it share same Inspector
+	// We may get signal to update from since Queue shares same Inspector
 	if ( !isVisible() && m_isInitialized )
 		return;
 	else

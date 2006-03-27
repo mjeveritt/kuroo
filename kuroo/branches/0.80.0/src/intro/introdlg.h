@@ -35,7 +35,6 @@ public:
 	~IntroDlg();
 
 private slots:
-	void 	help();
 	void 	back();
 	void 	next();
 	void 	reject();

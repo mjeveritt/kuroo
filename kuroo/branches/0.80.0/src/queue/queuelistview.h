@@ -67,8 +67,8 @@ signals:
 	void					signalPackageEmerged();
 	
 private:
-	KLocale 				*loc;
-	int 					sumSize, m_order;
+	KLocale 				*m_loc;
+	int 					m_sumSize, m_order;
 	QString					m_id;
 };
 
@@ -95,7 +95,7 @@ protected:
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
-	KProgress* 		bar;
+	KProgress* 		m_bar;
 	int				m_progress, m_duration;
 	bool			m_isChecked, m_isComplete;
 };

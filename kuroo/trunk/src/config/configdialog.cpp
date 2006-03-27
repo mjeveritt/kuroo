@@ -19,66 +19,45 @@
 ***************************************************************************/
 
 #include "common.h"
+#include "systemtray.h"
 #include "configdialog.h"
 #include "options1.h"
 #include "options2.h"
-#include "options3.h"
-#include "options4.h"
-#include "options5.h"
-#include "options6.h"
 #include "options7.h"
 
-#include <qregexp.h>
 #include <qtextstream.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qpushbutton.h>
+#include <qcheckbox.h>
 
 #include <kconfigdialog.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <ktextedit.h>
 #include <kuser.h>
-#include <kstringhandler.h>
 
 /**
- * Kuroo preferences widget.
+ * @class ConfigDialog
+ * @short Kuroo preferences.
  */
 ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *config )
 	: KConfigDialog( parent, name, config )
 {
 	setWFlags( WDestructiveClose );
 	
-	Options1* opt1 = new Options1( this );
-	Options2* opt2 = new Options2( this );
-	Options5* opt5 = new Options5( this );
-	Options4* opt4 = new Options4( this );
-	Options3* opt3 = new Options3( this );
-	Options6* opt6 = new Options6( this );
-	Options7* opt7 = new Options7( this );
+	Options1* opt1 = new Options1( this, i18n("General") );
+	Options2* opt2 = new Options2( this, i18n("make.conf") );
+	Options7* opt7 = new Options7( this, i18n("Etc-update warnings") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
-	addPage( opt2, i18n("Portage make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt5, i18n("Testing packages"), "kuroo_portagefiles", i18n("Edit your package.keywords file") );
-	addPage( opt4, i18n("Unstable packages"), "kuroo_portagefiles", i18n("Edit your package.unmask file") );
-	addPage( opt3, i18n("Protected packages"), "kuroo_portagefiles", i18n("Edit your package.mask file") );
-	addPage( opt6, i18n("World"), "kuroo_portagefiles", i18n("Edit your world file") );
-	addPage( opt7, i18n("Etc warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
+	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
+	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
 	
-	if ( KUser().isSuperUser() )
-		connect( opt6->pbExportToWorld, SIGNAL( clicked() ), this, SLOT( exportWorld() ) );
-	else
-		opt6->pbExportToWorld->setEnabled(false);
-		
 	readMakeConf();
-	readPackageUnmask();
-	readPackageMask();
-	readPackageKeywords();
-	readWorldFile();
 }
 
 ConfigDialog::~ConfigDialog()
@@ -88,91 +67,58 @@ ConfigDialog::~ConfigDialog()
 void ConfigDialog::slotDefault()
 {
 	readMakeConf();
-	readPackageUnmask();
-	readPackageMask();
-	readPackageKeywords();
-	readWorldFile();
 	show();
 }
 
-/**
- * Load list of user-unmasked hardmasked packages.
- */
-void ConfigDialog::readPackageUnmask()
+QStringList ConfigDialog::parseMakeConf()
 {
-	QFile file( KurooConfig::filePackageUnmask() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
+	kdDebug() << k_funcinfo << endl;
+	
+	QStringList linesConcatenated;
+	QFile makeconf( KurooConfig::fileMakeConf() );
+	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
+	
+	if ( makeconf.open( IO_ReadOnly ) ) {
+		QTextStream stream( &makeconf );
+		QStringList lines;
+		
+		// Collect all lines except comments
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
-		lines.sort();
-		KurooConfig::setPackageUnmask( lines.join("\n") );
+		makeconf.close();
+		
+		// Concatenate extended lines
+		QString extendedLine;
+		QStringList linesCommented;
+		foreach ( lines ) {
+			
+			// Skip comment lines
+			if ( (*it).isEmpty() || (*it).contains( QRegExp("^\\s*#") ) ) {
+				linesCommented += *it;
+				continue;
+			}
+			
+			QString line = (*it).simplifyWhiteSpace();
+			if ( line.contains( "=" ) ) {
+				
+				linesConcatenated += extendedLine;
+				extendedLine = line.section("\\", 0, 0).simplifyWhiteSpace();
+				
+				linesConcatenated += linesCommented;
+				linesCommented.clear();
+			}
+			else
+				extendedLine += " " + line.section("\\", 0, 0).simplifyWhiteSpace();
+		}
+		
+		linesConcatenated += extendedLine;
 	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageUnmask() << endl;
-	
-	file.close();
-}
-
-/**
- * Load list of user-masked packages.
- */
-void ConfigDialog::readPackageMask()
-{
-	QFile file( KurooConfig::filePackageMask() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		lines.sort();
-		KurooConfig::setPackageMask( lines.join("\n") );
+	else {
+		kdDebug() << i18n("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+		kdDebug() << QString("Error reading: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageMask() << endl;
 	
-	file.close();
-}
-
-/**
- * Load list of user-unmasked testing packages.
- */
-void ConfigDialog::readPackageKeywords()
-{
-	QFile file( KurooConfig::filePackageKeywords() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		lines.sort();
-		KurooConfig::setPackageKeywords( lines.join("\n") );
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::filePackageKeywords() << endl;
-	
-	file.close();
-}
-
-/**
- * Load list of packages in world file.
- */
-void ConfigDialog::readWorldFile()
-{
-	QFile file( KurooConfig::fileWorld() );
-	QStringList lines;
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		lines.sort();
-		KurooConfig::setWorld( lines.join("\n") );
-	}
-	else
-		kdDebug() << i18n("Error reading: ") << KurooConfig::fileWorld() << endl;
-	
-	file.close();
+	return linesConcatenated;
 }
 
 /**
@@ -180,147 +126,331 @@ void ConfigDialog::readWorldFile()
  */
 void ConfigDialog::readMakeConf()
 {
-	QFile makeconf( "/etc/make.conf" );
+	kdDebug() << k_funcinfo << endl;
 	
-	if ( makeconf.open( IO_ReadOnly ) ) {
-		QTextStream stream( &makeconf );
-		KStringHandler kstr;
+	QStringList linesConcatenated = parseMakeConf();
+	if ( linesConcatenated.isEmpty() )
+		return;
+	
+	// Parse the lines
+	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
+	foreach ( linesConcatenated ) {
 		
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			line = line.simplifyWhiteSpace();
-			
-			if ( line.contains(QRegExp("^ACCEPT_KEYWORDS=")) )
-				KurooConfig::setAcceptKeywords( kstr.word( line.section("ACCEPT_KEYWORDS=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^AUTOCLEAN=")) )
-				KurooConfig::setAutoClean( kstr.word( line.section("AUTOCLEAN=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^BUILD_PREFIX=\"")) )
-				KurooConfig::setBuildPrefix( kstr.word( line.section("BUILD_PREFIX=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^CBUILD=\"")) )
-				KurooConfig::setCBuild( kstr.word( line.section("CBUILD=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^CCACHE_SIZE=\"")) )
-				KurooConfig::setCCacheSize( kstr.word( line.section("CCACHE_SIZE=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^CFLAGS=\"")) ) 
-				KurooConfig::setCFlags( kstr.word( line.section("CFLAGS=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^CXXFLAGS=\"")) )
-				KurooConfig::setCXXFlags( kstr.word( line.section("CXXFLAGS=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^CHOST=\"")) )
-				KurooConfig::setChost( kstr.word( line.section("CHOST=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^CLEAN_DELAY=\"")) )
-				KurooConfig::setCleanDelay( kstr.word( line.section("CLEAN_DELAY=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^CONFIG_PROTECT=\"")) )
-				KurooConfig::setConfigProtect( kstr.word( line.section("CONFIG_PROTECT=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^CONFIG_PROTECT_MASK=\"")) )
-				KurooConfig::setConfigProtectMask( kstr.word( line.section("CONFIG_PROTECT_MASK=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^DEBUGBUILD=\"")) )
-				KurooConfig::setDebugBuild( kstr.word( line.section("DEBUGBUILD=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^DISTDIR=\"")) )
-				KurooConfig::setDirDist( kstr.word( line.section("DISTDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^FEATURES=\"")) )
-				KurooConfig::setFeatures( kstr.word( line.section("FEATURES=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^FETCHCOMMAND=\"")) )
-				KurooConfig::setFetchCommand( kstr.word( line.section("FETCHCOMMAND=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^GENTOO_MIRRORS=\"")) )
-				KurooConfig::setGentooMirrors( kstr.word( line.section("GENTOO_MIRRORS=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^HTTP_PROXY FTP_PROXY=\"")) )
-				KurooConfig::setProxy( kstr.word( line.section("HTTP_PROXY=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^MAKEOPTS=\"")) )
-				KurooConfig::setMakeOpts( kstr.word( line.section("MAKEOPTS=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^NOCOLOR=\"")) )
-				KurooConfig::setNoColor( kstr.word( line.section("NOCOLOR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^PKG_TMPDIR=\"")) )
-				KurooConfig::setDirPkgTmp( kstr.word( line.section("PKG_TMPDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^PKGDIR=\"")) )
-				KurooConfig::setDirPkg( kstr.word( line.section("PKGDIR=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^PORT_LOGDIR =\"")) )
-				KurooConfig::setDirPortLog( kstr.word( line.section("PORT_LOGDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^PORTAGE_BINHOST=\"")) )
-				KurooConfig::setPortageBinHost( kstr.word( line.section("PORTAGE_BINHOST=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^PORTAGE_NICENESS=\"")) )
-				KurooConfig::setPortageNiceness( kstr.word( line.section("PORTAGE_NICENESS=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^PORTAGE_TMPDIR=\"")) )
-				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^PORTDIR=\"")) )
-				KurooConfig::setDirPortage( kstr.word( line.section("PORTDIR=", 1, 1) .remove("\""), "0" ) );
-			
-			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=\"")) ) {
-				KurooConfig::setDirPortageOverlayAll( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0:" ) );
-				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
-			}
-			
-			if ( line.contains(QRegExp("^RESUMECOMMAND=\"")) )
-				KurooConfig::setResumeCommand( kstr.word( line.section("RESUMECOMMAND=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^ROOT=\"")) )
-				KurooConfig::setRoot( kstr.word( line.section("ROOT=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^RSYNC_EXCLUDEFROM=\"")) )
-				KurooConfig::setRsyncExcludeFrom( kstr.word( line.section("RSYNC_EXCLUDEFROM=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^RSYNC_PROXY=\"")) )
-				KurooConfig::setRsyncProxy( kstr.word( line.section("RSYNC_PROXY=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^RSYNC_RETRIES=\"")) )
-				KurooConfig::setRsyncRetries( kstr.word( line.section("RSYNC_RETRIES=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^RSYNC_RATELIMIT=\"")) )
-				KurooConfig::setRsyncRateLimit( kstr.word( line.section("RSYNC_RATELIMIT=", 1, 1) , "0" ) );
-			
-			if ( line.contains(QRegExp("^RSYNC_TIMEOUT=\"")) )
-				KurooConfig::setRsyncTimeOut( kstr.word( line.section("RSYNC_TIMEOUT=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^RPMDIR=\"")) )
-				KurooConfig::setDirRpm( kstr.word( line.section("RPMDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("^SYNC=\"")) )
-				KurooConfig::setSync( kstr.word( line.section("SYNC=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^USE=\"")) ) {
-				if ( !line.endsWith("\"") )
-					do {
-						line += stream.readLine();
-					} while ( !line.endsWith("\"") );
-			
-				line.replace('\\', ' ');
-				line = line.simplifyWhiteSpace();
-				KurooConfig::setUse( kstr.word( line.section("USE=", 1, 1).remove("\"") , "0:" ) );
-			}
-			if ( line.contains(QRegExp("^USE_ORDER=\"")) )
-				KurooConfig::setUseOrder( kstr.word( line.section("USE_ORDER=", 1, 1).remove("\"") , "0:" ) );
-			
-			if ( line.contains(QRegExp("^NOCOLOR=\"")) )
-				KurooConfig::setNoColor( kstr.word( line.section("NOCOLOR=", 1, 1).remove("\"") , "0" ) );
-			
+		// Skip comment lines
+		if ( (*it).isEmpty() || (*it).contains( QRegExp("^\\s*#") ) )
+			continue;
+		
+		if ( (*it).contains( QRegExp("\\bACCEPT_KEYWORDS\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setAcceptKeywords( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS.") << endl;
+			continue;
 		}
-		makeconf.close();
+		
+		if ( (*it).contains( QRegExp("\\bAUTOCLEAN\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setAutoClean( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse AUTOCLEAN.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bBUILD_PREFIX\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setBuildPrefix( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse BUILD_PREFIX.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCBUILD\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setCBuild( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CBUILD.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCCACHE_SIZE\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setCCacheSize( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CCACHE_SIZE.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCFLAGS\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setCFlags( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CFLAGS.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCXXFLAGS\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setCXXFlags( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CXXFLAGS.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCHOST\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setChost( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CHOST.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCLEAN_DELAY\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setCleanDelay( rx.cap(4) );
+			else	
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CLEAN_DELAY.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCONFIG_PROTECT\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setConfigProtect( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse CONFIG_PROTECT.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bCONFIG_PROTECT_MASK\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setConfigProtectMask( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse BUILD_PREFIX.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bDEBUGBUILD\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDebugBuild( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse DEBUGBUILD.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bDISTDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirDist( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse DISTDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bFEATURES\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setFeatures( rx.cap(4) );
+		else
+			kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FEATURES.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bFETCHCOMMAND\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setFetchCommand( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FETCHCOMMAND.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bGENTOO_MIRRORS\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setGentooMirrors( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse GENTOO_MIRRORS.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bHTTP_PROXY FTP_PROXY\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setProxy( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FTP_PROXY FTP_PROXY.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bMAKEOPTS\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setMakeOpts( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse MAKEOPTS.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bNOCOLOR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setNoColor( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse NOCOLOR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPKG_TMPDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirPkgTmp( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PKG_TMPDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPKGDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirPkg( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PKGDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPORT_LOGDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirPortLog( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORT_LOGDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPORTAGE_BINHOST\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setPortageBinHost( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTAGE_BINHOST.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPORTAGE_NICENESS\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setPortageNiceness( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTAGE_NICENESS.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPORTAGE_TMPDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirPortageTmp( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTAGE_TMPDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPORTDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirPortage( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bPORTDIR_OVERLAY\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirPortageOverlay( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRESUMECOMMAND\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setResumeCommand( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RESUMECOMMAND.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bROOT\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setRoot( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse ROOT.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRSYNC_EXCLUDEFROM\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setRsyncExcludeFrom( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRSYNC_PROXY\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setRsyncProxy( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_PROXY.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRSYNC_RETRIES\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setRsyncRetries( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_RETRIES.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRSYNC_RATELIMIT\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setRsyncRateLimit( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRSYNC_TIMEOUT\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setRsyncTimeOut(rx.cap(4)  );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bRPMDIR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setDirRpm( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse RPMDIR.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bSYNC\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setSync( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse SYNC.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bUSE\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setUse( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse USE.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bUSE_ORDER\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setUseOrder( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse USE_ORDER.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bNOCOLOR\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setNoColor( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse NOCOLOR.") << endl;
+		}
 	}
-	else
-		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
 }
 
 /**
@@ -329,125 +459,22 @@ void ConfigDialog::readMakeConf()
 void ConfigDialog::saveAll()
 {
 	switch( activePageIndex() ) {
+		
+		// Activate the systray directly (not needing restarting kuroo)
 		case 0:
+			if ( KurooConfig::isSystrayEnabled() )
+				SystemTray::instance()->activate();
+			else
+				SystemTray::instance()->inactivate();
 			break;
-		case 1: {
+		
+		case 1:
 			if ( !saveMakeConf() ) {
 				readMakeConf();
 				show();
-				KMessageBox::error( this, i18n("Failed to save makeconf. Please run as root."), i18n("Saving"));
+				KMessageBox::error( this, i18n("Failed to save %1. Please run as root.").arg( KurooConfig::fileMakeConf() ), i18n("Saving"));
 			}
-			break;
-		}
-		case 3: {
-			if ( !savePackageUnmask() ) {
-				readPackageUnmask();
-				show();
-				KMessageBox::error( this, i18n("Failed to save package.unmask. Please run as root."), i18n("Saving"));
-			}
-			break;
-		}
-		case 4: {
-			if ( !savePackageMask() ) {
-				readPackageMask();
-				show();
-				KMessageBox::error( this, i18n("Failed to save package.mask. Please run as root."), i18n("Saving"));
-			}
-			break;
-		}
-		case 2: {
-			if ( !savePackageKeywords() ) {
-				readPackageKeywords();
-				show();
-				KMessageBox::error( this, i18n("Failed to save package.keywords. Please run as root."), i18n("Saving"));
-			}
-			else
-				PortageSingleton::Instance()->loadUnmaskedList();
-			break;
-		}
-		case 5: {
-			if ( !saveWorldFile() ) {
-				readWorldFile();
-				show();
-				KMessageBox::error( this, i18n("Failed to save world file. Please run as root."), i18n("Saving"));
-			}
-		}
-	}
-}
-
-/**
- * Save to /etc/portage/package.unmask.
- * @return success
- */
-bool ConfigDialog::savePackageUnmask()
-{
-	QFile file( KurooConfig::filePackageUnmask() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::packageUnmask();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageUnmask() << endl;
-		return false;
-	}
-}
-
-/**
- * Save to /etc/portage/package.keywords.
- * @return success
- */
-bool ConfigDialog::savePackageKeywords()
-{
-	QFile file( KurooConfig::filePackageKeywords() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::packageKeywords();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageKeywords() << endl;
-		return false;
-	}
-}
-
-/**
- * Save to /etc/portage/package.mask.
- * @return success
- */
-bool ConfigDialog::savePackageMask()
-{
-	QFile file( KurooConfig::filePackageMask() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::packageMask();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::filePackageMask() << endl;
-		return false;
-	}
-}
-
-/**
- * Save to /var/lib/portage/world.
- * @return success
- */
-bool ConfigDialog::saveWorldFile()
-{
-	QFile file( KurooConfig::fileWorld() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		stream << KurooConfig::world();
-		file.close();
-		return true;
-	}
-	else {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::fileWorld() << endl;
-		return false;
+		
 	}
 }
 
@@ -455,126 +482,150 @@ bool ConfigDialog::saveWorldFile()
  * Save back /etc/make.conf.
  * @return success
  */
-bool ConfigDialog::saveMakeConf() 
+bool ConfigDialog::saveMakeConf()
 {
-	QString line = "";
-	QFile file( "/etc/make.conf" );
+	kdDebug() << k_funcinfo << endl;
 	
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
+	QStringList linesConcatenated = parseMakeConf();
+	if ( linesConcatenated.isEmpty() )
+		false;
+	
+	QString line;
+	QStringList lines;
+	QFile file( KurooConfig::fileMakeConf() );
+	QMap<QString, QString> keywords;
+	QRegExp rxLine( "^\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
+	
+	// Collect all keywords
+	foreach ( linesConcatenated ) {
 		
-		while ( !stream.atEnd() ) {
-			QString eString = "";
-			do {
-				eString += stream.readLine();
+		if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
+										"DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
+										"CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
+										"PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
+										"RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
+											
+			if ( rxLine.search( *it ) > -1 )
+				keywords[ rxLine.cap(1) ] = rxLine.cap(4);
+			else {
+				kdDebug() << i18n("Parsing %1: can not match keyword %2.").arg( KurooConfig::fileMakeConf() ).arg( rxLine.cap(1) ) << endl;
+				kdDebug() << QString("Parsing %1: can not match keyword %2.").arg( KurooConfig::fileMakeConf() ).arg( rxLine.cap(1) ) << endl;
 			}
-			while ( eString.endsWith("\\") );
-
-			// Remove old lines to avoid duplicates
-			if ( !eString.contains(QRegExp("^CHOST|^CFLAGS|^CXXFLAGS|^MAKEOPTS|^USE|^GENTOO_MIRRORS|^PORTDIR_OVERLAY|^FEATURES|^PORTDIR|^PORTAGE_TMPDIR|^DISTDIR|^ACCEPT_KEYWORDS|^AUTOCLEAN|^BUILD_PREFIX|^CBUILD|^CCACHE_SIZE|^CLEAN_DELAY|^CONFIG_PROTECT|^CONFIG_PROTECT_MASK|^DEBUGBUILD|^FETCHCOMMAND|^HTTP_PROXY FTP_PROXY|^PKG_TMPDIR|^PKGDIR|^PORT_LOGDIR|^PORTAGE_BINHOST|^PORTAGE_NICENESS|^RESUMECOMMAND|^ROOT|^RSYNC_EXCLUDEFROM|^RSYNC_PROXY|^RSYNC_RETRIES|^RSYNC_RATELIMIT|^RSYNC_TIMEOUT|^RPMDIR|^SYNC|^USE_ORDER|^NOCOLOR")) )
-			line += eString + "\n";
 		}
-		file.close();
 	}
-	else
-		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
 	
+	// Update keywords from settings
+	keywords[ "ACCEPT_KEYWORDS" ] = KurooConfig::acceptKeywords();
+	
+	keywords[ "CHOST" ] = KurooConfig::chost();
+	
+	keywords[ "CFLAGS" ] = KurooConfig::cFlags();
+	
+	keywords[ "CXXFLAGS" ] = KurooConfig::cXXFlags();
+	
+	keywords[ "MAKEOPTS" ] = KurooConfig::makeOpts();
+
+	keywords[ "USE" ] = KurooConfig::use();
+
+	keywords[ "CONFIG_PROTECT" ] = KurooConfig::configProtect();
+
+	keywords[ "CONFIG_PROTECT_MASK" ] = KurooConfig::configProtectMask();
+
+	keywords[ "FEATURES" ] = KurooConfig::features();
+
+	keywords[ "USE_ORDER" ] = KurooConfig::useOrder();
+
+	keywords[ "NOCOLOR" ] = KurooConfig::noColor();
+
+	keywords[ "ROOT" ] = KurooConfig::root();
+
+	keywords[ "PORTDIR" ] = KurooConfig::dirPortage();
+
+	keywords[ "PORTDIR_OVERLAY" ] = KurooConfig::dirPortageOverlay();
+
+	keywords[ "DISTDIR" ] = KurooConfig::dirDist();
+
+	keywords[ "RPMDIR" ] = KurooConfig::dirRpm();
+
+	keywords[ "PKG_TMPDIR" ] = KurooConfig::dirPkgTmp();
+
+	keywords[ "PKGDIR" ] = KurooConfig::dirPkg();
+
+	keywords[ "PORT_LOGDIR" ] = KurooConfig::dirPortLog();
+
+	keywords[ "PORTAGE_BINHOST" ] = KurooConfig::portageBinHost();
+
+	keywords[ "PORTAGE_NICENESS" ] = KurooConfig::portageNiceness();
+
+	keywords[ "PORTAGE_TMPDIR" ] = KurooConfig::dirPortageTmp();
+
+	keywords[ "AUTOCLEAN" ] = KurooConfig::autoClean();
+
+	keywords[ "BUILD_PREFIX" ] = KurooConfig::buildPrefix();
+
+	keywords[ "CBUILD" ] = KurooConfig::cBuild();
+
+	keywords[ "CCACHE_SIZE" ] = KurooConfig::cCacheSize();
+
+	keywords[ "CLEAN_DELAY" ] = KurooConfig::cleanDelay();
+
+	keywords[ "DEBUGBUILD" ] = KurooConfig::debugBuild();
+
+	keywords[ "FETCHCOMMAND" ] = KurooConfig::fetchCommand();
+
+	keywords[ "RESUMECOMMAND" ] = KurooConfig::resumeCommand();
+
+	keywords[ "RSYNC_EXCLUDEFROM" ] = KurooConfig::rsyncExcludeFrom();
+
+	keywords[ "HTTP_PROXY" ] = KurooConfig::proxy();
+
+	keywords[ "GENTOO_MIRRORS" ] = KurooConfig::gentooMirrors();
+
+	keywords[ "RSYNC_PROXY" ] = KurooConfig::rsyncProxy();
+
+	keywords[ "RSYNC_RETRIES" ] = KurooConfig::rsyncRetries();
+
+	keywords[ "RSYNC_RATELIMIT" ] = KurooConfig::rsyncRateLimit();
+
+	keywords[ "RSYNC_TIMEOUT" ] = KurooConfig::rsyncTimeOut();
+
+	keywords[ "SYNC" ] = KurooConfig::sync();
+	
+	// Write back everything
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
-		stream << line;
 		
-		if( KurooConfig::acceptKeywords() != "" ) stream << "ACCEPT_KEYWORDS=\"" << KurooConfig::acceptKeywords() << "\"\n";
-		if( KurooConfig::chost() != "" ) stream << "CHOST=\"" << KurooConfig::chost() << "\"\n";
-		if( KurooConfig::cFlags() != "" ) stream << "CFLAGS=\"" << KurooConfig::cFlags() << "\"\n";
-		if( KurooConfig::cXXFlags() != "" ) stream << "CXXFLAGS=\"" << KurooConfig::cXXFlags() << "\"\n";
-		if( KurooConfig::makeOpts() != "" ) stream << "MAKEOPTS=\"" << KurooConfig::makeOpts() << "\"\n";
-		if( KurooConfig::use() != "" ) stream << "USE=\"" << KurooConfig::use() << "\"\n";
-		if( KurooConfig::configProtect() != "" ) stream << "CONFIG_PROTECT=\"" << KurooConfig::configProtect() << "\"\n";
-		if( KurooConfig::configProtectMask() != "" ) stream << "CONFIG_PROTECT_MASK=\"" << KurooConfig::configProtectMask() << "\"\n";
-		if( KurooConfig::features() != "" ) stream << "FEATURES=\"" << KurooConfig::features() << "\"\n";
-		if( KurooConfig::useOrder() != "" ) stream << "USE_ORDER=\"" << KurooConfig::useOrder() << "\"\n";
-		if( KurooConfig::noColor() != "" ) stream << "NOCOLOR=\"" << KurooConfig::noColor() << "\"\n";
-		
-		if( KurooConfig::root() != "" ) stream << "ROOT=\"" << KurooConfig::root() << "\"\n";
-		if( KurooConfig::dirPortage() != "" ) stream << "PORTDIR=\"" << KurooConfig::dirPortage() << "\"\n";
-		if( KurooConfig::dirPortageOverlay() != "" ) stream << "PORTDIR_OVERLAY=\"" << KurooConfig::dirPortageOverlay() << "\"\n";
-		if( KurooConfig::dirDist() != "" ) stream << "DISTDIR=\"" << KurooConfig::dirDist() << "\"\n";
-		if( KurooConfig::dirRpm() != "" ) stream << "RPMDIR=\"" << KurooConfig::dirRpm() << "\"\n";
-		if( KurooConfig::dirPkgTmp() != "" ) stream << "PKG_TMPDIR=\"" << KurooConfig::dirPkgTmp() << "\"\n";
-		if( KurooConfig::dirPkg() != "" ) stream << "PKGDIR=\"" << KurooConfig::dirPkg() << "\"\n";
-		if( KurooConfig::dirPortLog() != "" ) stream << "PORT_LOGDIR =\"" << KurooConfig::dirPortLog() << "\"\n";
-		if( KurooConfig::portageBinHost() != "" ) stream << "PORTAGE_BINHOST=\"" << KurooConfig::portageBinHost() << "\"\n";
-		if( KurooConfig::portageNiceness() != "" ) stream << "PORTAGE_NICENESS=\"" << KurooConfig::portageNiceness() << "\"\n";
-		if( KurooConfig::dirPortageTmp() != "" ) stream << "PORTAGE_TMPDIR=\"" << KurooConfig::dirPortageTmp() << "\"\n";
-		
-		if( KurooConfig::autoClean() != "" ) stream << "AUTOCLEAN=\"" << KurooConfig::autoClean() << "\"\n";
-		if( KurooConfig::buildPrefix() != "" ) stream << "BUILD_PREFIX=\"" << KurooConfig::buildPrefix() << "\"\n";
-		if( KurooConfig::cBuild() != "" ) stream << "CBUILD=\"" << KurooConfig::cBuild() << "\"\n";
-		if( KurooConfig::cCacheSize() != "" ) stream << "CCACHE_SIZE=\"" << KurooConfig::cCacheSize() << "\"\n";
-		if( KurooConfig::cleanDelay() != "" ) stream << "CLEAN_DELAY=\"" << KurooConfig::cleanDelay() << "\"\n";
-		
-		if( KurooConfig::debugBuild() != "" ) stream << "DEBUGBUILD=\"" << KurooConfig::debugBuild() << "\"\n";
-		if( KurooConfig::fetchCommand() != "" ) stream << "FETCHCOMMAND=\"" << KurooConfig::fetchCommand() << "\"\n";
-		
-		if( KurooConfig::resumeCommand() != "" ) stream << "RESUMECOMMAND=\"" << KurooConfig::resumeCommand() << "\"\n";
-		if( KurooConfig::rsyncExcludeFrom() != "" ) stream << "RSYNC_EXCLUDEFROM=\"" << KurooConfig::rsyncExcludeFrom() << "\"\n";
-		
-		if( KurooConfig::proxy() != "" ) stream << "HTTP_PROXY FTP_PROXY=\"" << KurooConfig::proxy() << "\"\n";
-		if( KurooConfig::gentooMirrors() != "" ) stream << "GENTOO_MIRRORS=\"" << KurooConfig::gentooMirrors() << "\"\n";
-		if( KurooConfig::rsyncProxy() != "" ) stream << "RSYNC_PROXY=\"" << KurooConfig::rsyncProxy() << "\"\n";
-		if( KurooConfig::rsyncRetries() != "" ) stream << "RSYNC_RETRIES=\"" << KurooConfig::rsyncRetries() << "\"\n";
-		if( KurooConfig::rsyncRateLimit() != "" ) stream << "RSYNC_RATELIMIT=\"" << KurooConfig::rsyncRateLimit() << "\"\n";
-		if( KurooConfig::rsyncTimeOut() != "" ) stream << "RSYNC_TIMEOUT=\"" << KurooConfig::rsyncTimeOut() << "\"\n";
-		if( KurooConfig::sync() != "" ) stream << "SYNC=\"" << KurooConfig::sync() << "\"\n";
+		foreach ( linesConcatenated ) {
+			
+			if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
+			                              "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
+			                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
+			                              "PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|"
+			                              "RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
+				                              
+				if ( rxLine.search( *it ) > -1 ) {
+					QString keyword = rxLine.cap(1);
+					if ( !keywords[ keyword ].isEmpty() )
+						stream << keyword << "=\"" << keywords[ keyword ] << "\"" << endl;
+					keywords.erase( keyword );
+				}
+			}
+			else
+				stream << *it << endl;
+		}
+
+		// Add the rest (new) entries into make.conf
+		for ( QMap<QString, QString>::Iterator it = keywords.begin(), end = keywords.end(); it != end; ++it )
+			if ( !it.data().isEmpty() )
+				stream << it.key() << "=\"" << it.data() << "\"" << endl;
 		
 		file.close();
 		return true;
 	}
 	else {
-		kdDebug() << i18n("Error writing: /etc/make.conf") << endl;
+		kdDebug() << i18n("Error writing: %1").arg( KurooConfig::fileMakeConf() ) << endl;
+		kdDebug() << QString("Error writing: %1").arg( KurooConfig::fileMakeConf() ) << endl;
 		return false;
-	}
-}
-
-/**
- * Export all installed packages in database into world file.
- */
-void ConfigDialog::exportWorld()
-{
-	switch ( KMessageBox::warningYesNo( this, i18n("Do you want export all Installed packages to the world file?"), i18n("Kuroo")) ) {
-		case KMessageBox::Yes : {
-			if ( exportToWorld() )
-				KMessageBox::information( this, i18n("Export to world file completed."), i18n("Kuroo") );
-		}
-	}
-}
-
-/**
- * Slot to save all installed packages into the world file.
- * @return success
- */
-bool ConfigDialog::exportToWorld()
-{
-	QFile file( KurooConfig::fileWorld() );
-
-	if( !file.open( IO_WriteOnly ) ) {
-		kdDebug() << i18n("Error writing: ") << KurooConfig::fileWorld() << endl;
-		file.close();
-		KMessageBox::error( this, i18n("Please run kuroo as root for exporting to %1." ).arg(KurooConfig::fileWorld()), i18n("Saving"));
-		return false;
-	}
-	else {
-		QTextStream stream( &file );
-		
-		// Collect installed package version
-		const QStringList installedPackageList = KurooDBSingleton::Instance()->installedPackages();
-		foreach ( installedPackageList ) {
-			QString category = *it++;
-			QString name = *it;
-			stream << category + "/" + name << endl;
-		}
-		file.close();
-		return true;
 	}
 }
 

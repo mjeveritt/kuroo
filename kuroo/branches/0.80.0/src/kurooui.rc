@@ -10,7 +10,7 @@
 	</Menu>
 	<Menu name="custom2">
 		<text>&amp;View</text>
-		<Action name="wizard" />
+		<Action name="information" />
 		<Action name="emergeLog" />
 	</Menu>
 </MenuBar>

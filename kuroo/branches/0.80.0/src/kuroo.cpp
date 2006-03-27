@@ -102,8 +102,8 @@ void Kuroo::setupActions()
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
-	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
-	                    				this, SLOT( introWizard() ), actionCollection(), "wizard" );
+	(void) new KAction( i18n("&Information"), 0, KShortcut( CTRL + Key_W ),
+	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 	
 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );

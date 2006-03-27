@@ -76,7 +76,7 @@ bool ScanHistoryJob::doJob()
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
-	QString timeStamp;
+	QString timeStamp, syncTimeStamp;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
@@ -161,17 +161,22 @@ bool ScanHistoryJob::doJob()
 				}
 				else
 					if ( emergeLine.contains( "=== Sync completed" ) )
-						setKurooDbMeta( "syncTimeStamp", timeStamp );
+						syncTimeStamp = timeStamp;
 			}
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
-
+	
+	if ( !syncTimeStamp.isEmpty() )
+		setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
+	
 	return true;
 }
 
 void ScanHistoryJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
 		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
 	else

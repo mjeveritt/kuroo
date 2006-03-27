@@ -121,8 +121,6 @@ void KurooView::slotShowView()
 	
 	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
-	
-	kdDebug() << k_funcinfo << "...done!" << endl;
 }
 
 /**

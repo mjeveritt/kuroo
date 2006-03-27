@@ -77,7 +77,7 @@ bool ScanUpdatesJob::doJob()
 	if ( m_packageList.isEmpty() ) {
 		kdDebug() << i18n("Scanning updates. No update package found") << endl;
 		kdDebug() << "Scanning updates. No update package found" << endl;
-		return false;
+// 		return false;
 	}
 	
 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );

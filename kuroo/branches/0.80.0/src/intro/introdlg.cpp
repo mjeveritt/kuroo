@@ -45,6 +45,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	setCaption( "Kuroo-" + KurooConfig::hardVersion() );
 	QWizard::backButton()->hide();
 	QWizard::cancelButton()->hide();
+	QWizard::finishButton()->setText( i18n("Ok") );
 	QWizard::showPage( page1 );
 	QWizard::setHelpEnabled( page1, false );
 	setFinishEnabled( page1, true );
@@ -59,8 +60,6 @@ void IntroDlg::back()
 	QWizard::back();
 }
 
-/**
- */
 void IntroDlg::next()
 {
 // 	if ( QWizard::indexOf(this->currentPage()) == 0 )

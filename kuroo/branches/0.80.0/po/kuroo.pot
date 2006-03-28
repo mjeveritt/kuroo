@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-27 21:14+0200\n"
+"POT-Creation-Date: 2006-03-28 16:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "Error writing %1kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:60 config/configdialog.cpp:475
+#: logs/log.cpp:60 config/configdialog.cpp:483
 msgid "Saving"
 msgstr ""
 
@@ -1108,102 +1108,106 @@ msgid "Error parsing /etc/make.conf: can not parse GENTOO_MIRRORS."
 msgstr ""
 
 #: config/configdialog.cpp:275
-msgid "Error parsing /etc/make.conf: can not parse FTP_PROXY FTP_PROXY."
+msgid "Error parsing /etc/make.conf: can not parse FTP_PROXY."
 msgstr ""
 
 #: config/configdialog.cpp:283
+msgid "Error parsing /etc/make.conf: can not parse HTTP_PROXY."
+msgstr ""
+
+#: config/configdialog.cpp:291
 msgid "Error parsing /etc/make.conf: can not parse MAKEOPTS."
 msgstr ""
 
-#: config/configdialog.cpp:291 config/configdialog.cpp:451
+#: config/configdialog.cpp:299 config/configdialog.cpp:459
 msgid "Error parsing /etc/make.conf: can not parse NOCOLOR."
 msgstr ""
 
-#: config/configdialog.cpp:299
+#: config/configdialog.cpp:307
 msgid "Error parsing /etc/make.conf: can not parse PKG_TMPDIR."
 msgstr ""
 
-#: config/configdialog.cpp:307
+#: config/configdialog.cpp:315
 msgid "Error parsing /etc/make.conf: can not parse PKGDIR."
 msgstr ""
 
-#: config/configdialog.cpp:315
+#: config/configdialog.cpp:323
 msgid "Error parsing /etc/make.conf: can not parse PORT_LOGDIR."
 msgstr ""
 
-#: config/configdialog.cpp:323
+#: config/configdialog.cpp:331
 msgid "Error parsing /etc/make.conf: can not parse PORTAGE_BINHOST."
 msgstr ""
 
-#: config/configdialog.cpp:331
+#: config/configdialog.cpp:339
 msgid "Error parsing /etc/make.conf: can not parse PORTAGE_NICENESS."
 msgstr ""
 
-#: config/configdialog.cpp:339
+#: config/configdialog.cpp:347
 msgid "Error parsing /etc/make.conf: can not parse PORTAGE_TMPDIR."
 msgstr ""
 
-#: config/configdialog.cpp:347
+#: config/configdialog.cpp:355
 msgid "Error parsing /etc/make.conf: can not parse PORTDIR."
 msgstr ""
 
-#: config/configdialog.cpp:355
+#: config/configdialog.cpp:363
 msgid "Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY."
 msgstr ""
 
-#: config/configdialog.cpp:363
+#: config/configdialog.cpp:371
 msgid "Error parsing /etc/make.conf: can not parse RESUMECOMMAND."
 msgstr ""
 
-#: config/configdialog.cpp:371
+#: config/configdialog.cpp:379
 msgid "Error parsing /etc/make.conf: can not parse ROOT."
 msgstr ""
 
-#: config/configdialog.cpp:379
+#: config/configdialog.cpp:387
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
 msgstr ""
 
-#: config/configdialog.cpp:387
+#: config/configdialog.cpp:395
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
 msgstr ""
 
-#: config/configdialog.cpp:395
+#: config/configdialog.cpp:403
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_RETRIES."
 msgstr ""
 
-#: config/configdialog.cpp:403
+#: config/configdialog.cpp:411
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT."
 msgstr ""
 
-#: config/configdialog.cpp:411
+#: config/configdialog.cpp:419
 msgid "Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT."
 msgstr ""
 
-#: config/configdialog.cpp:419
+#: config/configdialog.cpp:427
 msgid "Error parsing /etc/make.conf: can not parse RPMDIR."
 msgstr ""
 
-#: config/configdialog.cpp:427
+#: config/configdialog.cpp:435
 msgid "Error parsing /etc/make.conf: can not parse SYNC."
 msgstr ""
 
-#: config/configdialog.cpp:435
+#: config/configdialog.cpp:443
 msgid "Error parsing /etc/make.conf: can not parse USE."
 msgstr ""
 
-#: config/configdialog.cpp:443
+#: config/configdialog.cpp:451
 msgid "Error parsing /etc/make.conf: can not parse USE_ORDER."
 msgstr ""
 
-#: config/configdialog.cpp:475
+#: config/configdialog.cpp:483
 msgid "Failed to save %1. Please run as root."
 msgstr ""
 
-#: config/configdialog.cpp:511
+#: config/configdialog.cpp:519
 msgid "Parsing %1: can not match keyword %2."
 msgstr ""
 
-#: config/configdialog.cpp:626
+#: config/configdialog.cpp:636
 msgid "Error writing: %1"
 msgstr ""
 
@@ -1401,8 +1405,8 @@ msgstr ""
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
-#: rc.cpp:3 rc.cpp:81 rc.cpp:267 rc.cpp:350 rc.cpp:438 rc.cpp:636 rc.cpp:639
-#: rc.cpp:651
+#: rc.cpp:3 rc.cpp:81 rc.cpp:267 rc.cpp:350 rc.cpp:438 rc.cpp:639 rc.cpp:642
+#: rc.cpp:654
 #, no-c-format
 msgid "Form1"
 msgstr ""
@@ -2191,70 +2195,75 @@ msgstr ""
 
 #: rc.cpp:600
 #, no-c-format
-msgid "Download"
+msgid "Sync"
 msgstr ""
 
 #: rc.cpp:603
 #, no-c-format
-msgid "RESUMECOMMAND"
+msgid "RSYNC_PROXY"
 msgstr ""
 
 #: rc.cpp:606
 #, no-c-format
-msgid "HTTP_PROXY FTP_PROXY"
+msgid "RSYNC_TIMEOUT"
 msgstr ""
 
 #: rc.cpp:609
 #, no-c-format
-msgid "FETCHCOMMAND"
+msgid "SYNC"
 msgstr ""
 
 #: rc.cpp:612
 #, no-c-format
-msgid "GENTOO_MIRRORS"
+msgid "RSYNC_RETRIES"
 msgstr ""
 
 #: rc.cpp:615
 #, no-c-format
-msgid "Sync"
+msgid "RSYNC_EXCLUDEFROM"
 msgstr ""
 
 #: rc.cpp:618
 #, no-c-format
-msgid "RSYNC_PROXY"
+msgid "RSYNC_RATELIMIT"
 msgstr ""
 
 #: rc.cpp:621
 #, no-c-format
-msgid "RSYNC_TIMEOUT"
+msgid "Download"
 msgstr ""
 
 #: rc.cpp:624
 #, no-c-format
-msgid "SYNC"
+msgid "RESUMECOMMAND"
 msgstr ""
 
 #: rc.cpp:627
 #, no-c-format
-msgid "RSYNC_RETRIES"
+msgid "FETCHCOMMAND"
 msgstr ""
 
 #: rc.cpp:630
 #, no-c-format
-msgid "RSYNC_EXCLUDEFROM"
+msgid "GENTOO_MIRRORS"
 msgstr ""
 
 #: rc.cpp:633
 #, no-c-format
-msgid "RSYNC_RATELIMIT"
+msgid "HTTP_PROXY"
 msgstr ""
 
-#: rc.cpp:642
+#: rc.cpp:636
+#, no-c-format
+msgid "FTP_PROXY"
+msgstr ""
+
+#: rc.cpp:645
 #, no-c-format
 msgid "Warning!"
 msgstr ""
 
-#: rc.cpp:645
+#: rc.cpp:648
 #, no-c-format
 msgid "&Portage"
 msgstr ""

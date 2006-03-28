@@ -4,25 +4,25 @@
 	<kcfgfile name="kuroorc"/> 
 	<group name="general">
 		<entry name="portageVersion21" type="Bool">
-		<default>false</default>
+			<default>false</default>
 		</entry>
 		<entry name="saveLog" type="Bool">
 		</entry>
 		<entry name="verboseLog" type="Bool">
 		</entry>
 		<entry name="updateDeep" type="Bool">
-		<default>true</default>
+			<default>true</default>
 		</entry>
 		<entry name="updateDependency" type="Bool">
-		<default>true</default>
+			<default>true</default>
 		</entry>
 		<entry name="updateTree" type="Bool">
 		</entry>
 		<entry name="installedColumn" type="Bool">
-		<default>false</default>
+			<default>false</default>
 		</entry>
 		<entry name="isSystrayEnabled" type="Bool">
-		<default>true</default>
+			<default>true</default>
 		</entry>
 		<entry name="init" type="Bool">
 		</entry>
@@ -35,50 +35,50 @@
 		<entry name="hardVersion" type="String">
 		</entry>
 		<entry name="databas" type="String">
-		<default>portage.db</default>
+			<default>portage.db</default>
 		</entry>
 		<entry name="FileHistoryBackup" type="String">
-		<default>history.bak</default>
+			<default>history.bak</default>
 		</entry>
 		<entry name="FileMergeBackup" type="String">
-		<default>merge.bak</default>
+			<default>merge.bak</default>
 		</entry>
 		<entry name="DirDbPkg" type="String">
-		<default>/var/db/pkg</default>
+			<default>/var/db/pkg</default>
 		</entry>
 		<entry name="DirEdbDep" type="String">
-		<default>/var/cache/edb/dep</default>
+			<default>/var/cache/edb/dep</default>
 		</entry>
 		<entry name="Arch" type="String">
 		</entry>
 		<entry name="worldFile" type="String">
 		</entry>
 		<entry name="DirWorldFile" type="String">
-		<default>/var/lib/portage/world</default>
+			<default>/var/lib/portage/world</default>
 		</entry>
 		<entry name="FileMakeConf" type="String">
-		<default>/etc/make.conf</default>
+			<default>/etc/make.conf</default>
 		</entry>
 		<entry name="FilePackageUserUnMask" type="String">
-		<default>/etc/portage/package.unmask</default>
+			<default>/etc/portage/package.unmask</default>
 		</entry>
 		<entry name="FilePackageKeywords" type="String">
-		<default>/etc/portage/package.keywords</default>
+			<default>/etc/portage/package.keywords</default>
 		</entry>
 		<entry name="FilePackageUserMask" type="String">
-		<default>/etc/portage/package.mask</default>
+			<default>/etc/portage/package.mask</default>
 		</entry>
 		<entry name="FilePackageHardMask" type="String">
-		<default>/usr/portage/profiles/package.mask</default>
+			<default>/usr/portage/profiles/package.mask</default>
 		</entry>
 		<entry name="FilePackageUse" type="String">
-		<default>/etc/portage/package.use</default>
+			<default>/etc/portage/package.use</default>
 		</entry>
 		<entry name="etcUpdateTool" type="String">
-		<default>kdiff3</default>
+			<default>kdiff3</default>
 		</entry>
 		<entry name="matchColor" type="Color">
-		<default>126, 255, 112</default>
+			<default>126, 255, 112</default>
 		</entry>
 		<entry name="noMatchColor" type="Color">
 		<default>255, 159, 144</default>
@@ -89,13 +89,13 @@
 		<default>false</default>
 		</entry>
 		<entry name="download" type="Bool">
-		<default>false</default>
+			<default>false</default>
 		</entry>
 		<entry name="noWorld" type="Bool">
-		<default>true</default>
+			<default>true</default>
 		</entry>
 		<entry name="remove" type="Bool">
-		<default>false</default>
+			<default>false</default>
 		</entry>
 	</group>
 	<group name="make.conf">
@@ -131,7 +131,9 @@
 		</entry>
 		<entry name="GentooMirrors" type="String">
 		</entry>
-		<entry name="Proxy" type="String">
+		<entry name="HttpProxy" type="String">
+		</entry>
+		<entry name="FtpProxy" type="String">
 		</entry>
 		<entry name="MakeOpts" type="String">
 		</entry>

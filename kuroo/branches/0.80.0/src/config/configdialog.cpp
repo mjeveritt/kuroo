@@ -268,11 +268,19 @@ void ConfigDialog::readMakeConf()
 			continue;
 		}
 		
-		if ( (*it).contains( QRegExp("\\bHTTP_PROXY FTP_PROXY\\b") ) ) {
+		if ( (*it).contains( QRegExp("\\bFTP_PROXY\\b") ) ) {
 			if ( rx.search( *it ) > -1 )
-				KurooConfig::setProxy( rx.cap(4) );
+				KurooConfig::setFtpProxy( rx.cap(4) );
 			else
-				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FTP_PROXY FTP_PROXY.") << endl;
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse FTP_PROXY.") << endl;
+			continue;
+		}
+		
+		if ( (*it).contains( QRegExp("\\bHTTP_PROXY\\b") ) ) {
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setHttpProxy( rx.cap(4) );
+			else
+				kdDebug() << i18n("Error parsing /etc/make.conf: can not parse HTTP_PROXY.") << endl;
 			continue;
 		}
 		
@@ -501,7 +509,7 @@ bool ConfigDialog::saveMakeConf()
 		
 		if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
 										"DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-										"CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
+		                                "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
 										"PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
 										"RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
 											
@@ -577,7 +585,9 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "RSYNC_EXCLUDEFROM" ] = KurooConfig::rsyncExcludeFrom();
 
-	keywords[ "HTTP_PROXY" ] = KurooConfig::proxy();
+	keywords[ "HTTP_PROXY" ] = KurooConfig::httpProxy();
+	
+	keywords[ "FTP_PROXY" ] = KurooConfig::ftpProxy();
 
 	keywords[ "GENTOO_MIRRORS" ] = KurooConfig::gentooMirrors();
 
@@ -599,7 +609,7 @@ bool ConfigDialog::saveMakeConf()
 			
 			if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
 			                              "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-			                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
+			                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
 			                              "PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|"
 			                              "RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
 				                              

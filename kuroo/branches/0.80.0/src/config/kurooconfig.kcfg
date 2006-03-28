@@ -11,7 +11,7 @@
 		<entry name="verboseLog" type="Bool">
 		</entry>
 		<entry name="updateDeep" type="Bool">
-			<default>true</default>
+			<default>false</default>
 		</entry>
 		<entry name="updateDependency" type="Bool">
 			<default>true</default>

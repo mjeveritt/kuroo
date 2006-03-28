@@ -128,8 +128,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	QString database = KUROODIR + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 	
-	kdDebug() << "dbVersion=" << dbVersion << endl;
-	
 	// Old db structure, must delete it and backup history 
 	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
 		KurooDBSingleton::Instance()->backupDb();
@@ -183,18 +181,18 @@ bool KurooInit::getEnvironment()
 		while (!stream.atEnd()) {
 			line = stream.readLine();
 			
-			if ( line.contains(QRegExp("^DISTDIR=")) )
+			if ( line.contains(QRegExp("DISTDIR=")) )
 				KurooConfig::setDirDist( kstr.word( line.section("DISTDIR=", 1, 1).remove("\"") , "0" ) );
 			
-			if ( line.contains(QRegExp("^PORTDIR=")) )
+			if ( line.contains(QRegExp("PORTDIR=")) )
 				KurooConfig::setDirPortage( kstr.word( line.section("PORTDIR=", 1, 1).remove("\"") , "0" ) );
 			else
 				KurooConfig::setDirPortage("/usr/portage");
 			
-			if ( line.contains(QRegExp("^PORTAGE_TMPDIR=")) )
+			if ( line.contains(QRegExp("PORTAGE_TMPDIR=")) )
 				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
 			
-			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) )
+			if ( line.contains(QRegExp("PORTDIR_OVERLAY=")) )
 				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
 			
 			success = true;

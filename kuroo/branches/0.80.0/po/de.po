@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-28 16:24+0200\n"
-"PO-Revision-Date: 2006-03-28 17:01+0200\n"
+"PO-Revision-Date: 2006-03-28 17:07+0200\n"
 "Last-Translator: Karim Ryde <karim@bredband.net>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -816,36 +816,32 @@ msgid "Loading changelog. Error reading: "
 msgstr "Lade Changelog. Fehler beim Lesen: "
 
 #: core/packageinspector.cpp:668
-#, fuzzy
 msgid "<font color=darkRed><b>No ChangeLog found.</b></font>"
-msgstr "<font color=darkGrey><b>Changelog nicht gefunden.</b></font>"
+msgstr "<font color=darkRed><b>Changelog nicht gefunden.</b></font>"
 
 #: core/packageinspector.cpp:694
 msgid "Loading ebuild. Error reading: "
 msgstr "Lade ebuild. Fehler beim Lesen: "
 
 #: core/packageinspector.cpp:696
-#, fuzzy
 msgid "<font color=darkRed><b>No ebuild found.</b></font>"
-msgstr "<font color=darkGrey><b>Ebuild nicht gefunden.</b></font>"
+msgstr "<font color=darkRed><b>Ebuild nicht gefunden.</b></font>"
 
 #: core/packageinspector.cpp:731
 msgid "Load dependencies. Error reading: "
 msgstr "Lade Abhängigkeiten. Fehler beim Lesen: "
 
 #: core/packageinspector.cpp:733
-#, fuzzy
 msgid "<font color=darkRed><b>No dependencies found.</b></font>"
-msgstr "<font color=darkGrey><b>Abhängigkeiten nicht gefunden.</b></font>"
+msgstr "<font color=darkRed><b>Abhängigkeiten nicht gefunden.</b></font>"
 
 #: core/packageinspector.cpp:760
 msgid "Loading installed files list. Error reading: "
 msgstr "Lade Liste der installierten Dateien. Fehler beim Lesen: "
 
 #: core/packageinspector.cpp:762
-#, fuzzy
 msgid "<font color=darkRed><b>No installed files found.</b></font>"
-msgstr "<font color=darkGrey><b>Keine installierten Dateien gefunden.</b></font>"
+msgstr "<font color=darkRed><b>Keine installierten Dateien gefunden.</b></font>"
 
 #: core/packageinspector.cpp:834 core/packageinspector.cpp:898
 msgid "Use flags could not be calculated. Please check log for more information"
@@ -2101,12 +2097,13 @@ msgid "Emerge check update options"
 msgstr "Emerge Aktualisierungsoptionen"
 
 #: rc.cpp:371
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "<i>Forces emerge to consider the entire dependency tree of packages.<br>\n"
 "Refresh Updates for changes to take effect.</i>"
 msgstr ""
-"<i>Zwingt Emerge dazu den gesamten Abhängigkeitsbaum der Pakete zu "
+"<i>Aktualisieren sie die Update-Liste um die Änderungen wirksam werden zu lassen.<br>\n"
+"Zwingt Emerge dazu den gesamten Abhängigkeitsbaum der Pakete zu "
 "berücksichtigen.</i>"
 
 #: rc.cpp:375

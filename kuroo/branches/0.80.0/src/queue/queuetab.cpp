@@ -69,7 +69,6 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
-	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotClear() ) );
 	
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
@@ -435,8 +434,6 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Queue view is hidden don't update
 	if ( !isVisible() )
 		return;

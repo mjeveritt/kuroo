@@ -129,6 +129,7 @@ public:
 				                                     .arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
 			
 				// Remove package completely if "old" = not in official Portage anymore
+				// @fixme: what to do if package is in Queue?
 				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE status = '%1' AND id = '%2';" )
 				                                     .arg( FILTER_OLD_STRING ).arg( id ), m_db );
 			}
@@ -378,8 +379,6 @@ void Portage::slotScanCompleted()
  */
 void Portage::loadWorld()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	m_mapWorld.clear();
 	
 	QFile file( KurooConfig::dirWorldFile() );
@@ -401,8 +400,6 @@ void Portage::loadWorld()
  */
 bool Portage::saveWorld( const QMap<QString, QString>& map )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	QFile file( KurooConfig::dirWorldFile() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
@@ -550,6 +547,8 @@ bool Portage::slotLoadUpdates()
  */
 void Portage::removeUpdatePackage( const QString& package )
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
 }
 

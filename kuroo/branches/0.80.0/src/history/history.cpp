@@ -144,8 +144,6 @@ bool History::slotRefresh()
  */
 void History::slotScanHistory( const QStringList& lines )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
 }

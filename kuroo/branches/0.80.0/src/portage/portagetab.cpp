@@ -259,8 +259,6 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
@@ -366,8 +364,6 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Packages view is hidden don't update
 	// We may get signal to update from since Queue shares same Inspector
 	if ( !isVisible() && m_isInitialized )

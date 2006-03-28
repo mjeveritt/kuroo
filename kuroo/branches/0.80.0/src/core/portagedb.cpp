@@ -755,8 +755,6 @@ QString KurooDB::category( const QString& id )
  */
 QString KurooDB::packageId( const QString& package )
 {
-	kdDebug() << "package=" << package << endl;
-	
 	QString category = package.section( "/", 0, 0 );
 	QString packageString = package.section( "/", 1, 1 );
 	

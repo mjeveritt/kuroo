@@ -114,8 +114,6 @@ KurooView::~KurooView()
  */
 void KurooView::slotShowView()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( packageInspector->isVisible() )
 		packageInspector->hide();
 	

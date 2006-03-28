@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-28 16:24+0200\n"
-"PO-Revision-Date: 2006-03-28 16:37+0200\n"
+"PO-Revision-Date: 2006-03-28 17:15+0200\n"
 "Last-Translator: Karim Ryde <karim@bredband.net>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -797,9 +797,8 @@ msgid "Loading changelog. Error reading: "
 msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
 
 #: core/packageinspector.cpp:668
-#, fuzzy
 msgid "<font color=darkRed><b>No ChangeLog found.</b></font>"
-msgstr "<font color=darkGrey><b>Nie znaleziono rejestru zmian.</b></font>"
+msgstr "<font color=darkRed><b>Nie znaleziono rejestru zmian.</b></font>"
 
 #: core/packageinspector.cpp:694
 #, fuzzy
@@ -807,9 +806,8 @@ msgid "Loading ebuild. Error reading: "
 msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
 
 #: core/packageinspector.cpp:696
-#, fuzzy
 msgid "<font color=darkRed><b>No ebuild found.</b></font>"
-msgstr "<font color=darkGrey><b>Nie znaleziono ebuilda.</b></font>"
+msgstr "<font color=darkRed><b>Nie znaleziono ebuilda.</b></font>"
 
 #: core/packageinspector.cpp:731
 #, fuzzy
@@ -817,9 +815,8 @@ msgid "Load dependencies. Error reading: "
 msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
 
 #: core/packageinspector.cpp:733
-#, fuzzy
 msgid "<font color=darkRed><b>No dependencies found.</b></font>"
-msgstr "<font color=darkGrey><b>Nie znaleziono zależności.</b></font>"
+msgstr "<font color=darkRed><b>Nie znaleziono zależności.</b></font>"
 
 #: core/packageinspector.cpp:760
 #, fuzzy
@@ -827,9 +824,8 @@ msgid "Loading installed files list. Error reading: "
 msgstr "Skanowanie zainstalowanych pakietów: Błąd odczytu: "
 
 #: core/packageinspector.cpp:762
-#, fuzzy
 msgid "<font color=darkRed><b>No installed files found.</b></font>"
-msgstr "<font color=darkGrey><b>Nie znaleziono zainstalowanych plików.</b></font>"
+msgstr "<font color=darkRed><b>Nie znaleziono zainstalowanych plików.</b></font>"
 
 #: core/packageinspector.cpp:834 core/packageinspector.cpp:898
 #, fuzzy
@@ -1013,14 +1009,13 @@ msgid "Remove from Queue"
 msgstr "Usuń z kolejki"
 
 #: portage/portagetab.cpp:271
-#, fuzzy
 msgid ""
 "<font color=darkRed size=+1><b>No package found with these filter settings</"
 "font><br><font color=darkRed>Please modify the filter settings you have "
 "chosen!<br>Try to use more general filter options, so kuroo can find "
 "matching packages.</b></font>"
 msgstr ""
-"<font color=darkGray size=+1><b>Brak dostępnych pakietów z tymi ustawieniami "
+"<font color=darkRed size=+1><b>Brak dostępnych pakietów z tymi ustawieniami "
 "filtrowania</font><br><font color=darkGray>Zmodyfikuj ustawienia filtrowania!"
 "<br>Użyj bardziej ogólnych opcji filtrowania, aby program Kuroo mógł znaleźć "
 "odpowiednie pakiety.</b></font>"
@@ -1048,25 +1043,24 @@ msgstr ""
 "drzewie Portage!</b></font></td></tr>"
 
 #: portage/portagetab.cpp:488
-#, fuzzy
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%"
 "1</td></tr>"
-msgstr "<tr><td width=10%><b>Zainstalowane wersje:</b></font></td><td width=90%>"
+msgstr ""
+"<tr><td width=10%><b>Zainstalowane&nbsp;wersje:</b></font></td><td width=90%>%"
+"1</td></tr>"
 
 #: portage/portagetab.cpp:491
-#, fuzzy
 msgid ""
 "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%"
 ">Not installed</td></tr>"
 msgstr ""
-"<tr><td width=10%><b>Zainstalowane wersje:</b></font></td><td width=90%>Nie "
+"<tr><td width=10%><b>Zainstalowane&nbsp;wersje:</b></font></td><td width=90%>Nie "
 "zainstalowane</td></tr>"
 
 #: portage/portagetab.cpp:504
-#, fuzzy
 msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
-msgstr "<tr><td width=10%><b>Wersja&nbsp;emerge:</b></td><td width=90%>"
+msgstr "<tr><td width=10%><b>Wersja&nbsp;emerge:</b></td><td width=90%>%1</td></tr>"
 
 #: portage/portagetab.cpp:509
 msgid ""
@@ -1087,11 +1081,12 @@ msgstr ""
 "pakiecie</font></b></td></tr>"
 
 #: portage/portagetab.cpp:520
-#, fuzzy
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></"
 "td></tr>"
-msgstr "<tr><td width=10%><b>Dostępne&nbsp;wersje:</b></td><td width=90%>"
+msgstr ""
+"<tr><td width=10%><b>Dostępne&nbsp;wersje:</b></td><td width=90%>%1</b></"
+"td></tr>"
 
 #: portage/portagetab.cpp:523
 #, fuzzy
@@ -1249,18 +1244,16 @@ msgstr ""
 "zmiennej GENTOO_MIRRORS."
 
 #: config/configdialog.cpp:275
-#, fuzzy
 msgid "Error parsing /etc/make.conf: can not parse FTP_PROXY."
 msgstr ""
 "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-"zmiennej RSYNC_PROXY."
+"zmiennej FTP_PROXY."
 
 #: config/configdialog.cpp:283
-#, fuzzy
 msgid "Error parsing /etc/make.conf: can not parse HTTP_PROXY."
 msgstr ""
 "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-"zmiennej RSYNC_PROXY."
+"zmiennej HTTP_PROXY."
 
 #: config/configdialog.cpp:291
 msgid "Error parsing /etc/make.conf: can not parse MAKEOPTS."
@@ -2482,14 +2475,14 @@ msgid "GENTOO_MIRRORS"
 msgstr "GENTOO_MIRRORS"
 
 #: rc.cpp:633
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "HTTP_PROXY"
-msgstr "HTTP_PROXY FTP_PROXY"
+msgstr "HTTP_PROXY"
 
 #: rc.cpp:636
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FTP_PROXY"
-msgstr "HTTP_PROXY FTP_PROXY"
+msgstr "FTP_PROXY"
 
 #: rc.cpp:645
 #, no-c-format

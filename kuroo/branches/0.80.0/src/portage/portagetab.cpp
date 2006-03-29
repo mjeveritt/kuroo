@@ -474,11 +474,6 @@ void PortageTab::slotPackage()
 	summaryPalette.setDisabled( summaryColorGroup );
 	summaryBrowser->setPalette( summaryPalette );
 	
-// 	QColorGroup c = this->pbBackColor->palette().color( QPalette::Button );
-// 	QPalette p = summaryBrowser->palette();
-// 	p.setColor( QPalette::Window, c );
-// 	summaryBrowser->setPalette( p );
-	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
 	lines += "<tr><td bgcolor=#" + bgColor + " colspan=2><b><font color=#" + fgColor + "><font size=\"+1\">" + package + "</font> ";
 	lines += "(" + category.section( "-", 0, 0 ) + "/";

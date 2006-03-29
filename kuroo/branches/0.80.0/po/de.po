@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-28 16:24+0200\n"
-"PO-Revision-Date: 2006-03-28 17:47+0200\n"
+"PO-Revision-Date: 2006-03-29 22:21+0200\n"
 "Last-Translator: Karim Ryde <karim@bredband.net>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1082,9 +1082,7 @@ msgstr ""
 
 #: portage/portagetab.cpp:504
 msgid "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>"
-msgstr ""
-"<tr><td width=10%><b>Installierbare&nbsp;Version:</b></td><td width=90%>%1</"
-"td></tr>"
+msgstr "<tr><td width=10%><b>Installierbare&nbsp;Version:</b></td><td width=90%>%1</td></tr>"
 
 #: portage/portagetab.cpp:509
 msgid ""
@@ -1092,7 +1090,7 @@ msgid ""
 "color=darkRed>No version available on %1</b></td></tr>"
 msgstr ""
 "<tr><td width=10%><b>Installierbare&nbsp;Version: <font color=darkRed>Keine "
-"Version installierbar auf %1</font></b></td></tr>"
+"Version installierbar auf %1</b></td></tr>"
 
 #: portage/portagetab.cpp:513
 msgid ""
@@ -1108,17 +1106,16 @@ msgstr ""
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></"
 "td></tr>"
-msgstr ""
-"<tr><td width=10%><b>Verfügbare&nbsp;Versionen:</b></td><td width=90%>%1</"
-"b></td></tr>"
+msgstr "<tr><td width=10%><b>Verfügbare&nbsp;Versionen:</b></td><td width=90%>%1</b></td></tr>"
 
 #: portage/portagetab.cpp:523
 msgid ""
 "<tr><td width=10%><b>Available&nbsp;versions:</td><td width=90%><font "
 "color=darkRed>No versions available on %1</font></b></td></tr>"
 msgstr ""
-"<b>Verfügbare&nbsp;Versionen: <font color=darkRed>Keine Versionen verfügbar "
-"auf %1</font></b><br>"
+"<tr><td width=10%><b>Verfügbare&nbsp;Versionen:</td><td width=90%><font "
+"color=darkRed>Keine Versionen verfügbar "
+"auf %1</font></b></td></tr>"
 
 #: portage/portagetab.cpp:553
 msgid "&Add to queue"

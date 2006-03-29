@@ -301,8 +301,6 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
  */
 void PackageInspector::edit( PackageItem* portagePackage )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	m_portagePackage = portagePackage;
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
@@ -333,11 +331,11 @@ void PackageInspector::edit( PackageItem* portagePackage )
 		m_isVirginState = false;
 
 	// Construct header text
-	QString fgColor = QString::number( colorGroup().text().red(), 16 )
-					+ QString::number( colorGroup().text().green(), 16 ) 
-					+ QString::number( colorGroup().text().blue(), 16 );
+	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
+					+ QString::number( colorGroup().highlightedText().green(), 16 ) 
+					+ QString::number( colorGroup().highlightedText().blue(), 16 );
 	
-	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().button() );
+	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
 	dialog->package->setText( "<b><font color=#" + fgColor + "><font size=+1>" + m_package + "</font> " +
 	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->description->setText( m_portagePackage->description() );

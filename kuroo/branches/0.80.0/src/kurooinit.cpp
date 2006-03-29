@@ -160,7 +160,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 
 KurooInit::~KurooInit()
 {
-	KurooConfig::setInit(false);
+	KurooConfig::setInit( false );
 }
 
 /**

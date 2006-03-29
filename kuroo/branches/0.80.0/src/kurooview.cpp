@@ -101,12 +101,8 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
 
-/**
- * Backup emerge and merge history entries to text file.
- */
 KurooView::~KurooView()
 {
-	KurooDBSingleton::Instance()->backupDb();
 }
 
 /**
@@ -201,9 +197,9 @@ void KurooView::slotCheckPortage()
 /**
  * Action when user click in close button
  */
-void KurooView::quit()
-{
-}
+// void KurooView::quit()
+// {
+// }
 
 /**
  * Dcop interface to emerge pretend process 

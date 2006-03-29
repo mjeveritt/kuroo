@@ -41,21 +41,21 @@ public:
 		                                    " use VARCHAR(255), "
 		                                    " size VARCHAR(32), "
 		                                    " version VARCHAR(32) "
-		                                    " );", m_db);
-		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
-		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
+		                                    " );", m_db );
+		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db );
+		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db );
 		
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
+			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db );
 		
-		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
+		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
-		KurooDBSingleton::Instance()->insert("INSERT INTO queue SELECT * FROM queue_temp;", m_db);
-		KurooDBSingleton::Instance()->query("DROP TABLE queue_temp;", m_db);
+		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db );
+		KurooDBSingleton::Instance()->insert("INSERT INTO queue SELECT * FROM queue_temp;", m_db );
+		KurooDBSingleton::Instance()->query("DROP TABLE queue_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
@@ -81,7 +81,7 @@ public:
 		foreach ( m_packageIdList )
 			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue "
 			                                              "WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it), m_db );
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	

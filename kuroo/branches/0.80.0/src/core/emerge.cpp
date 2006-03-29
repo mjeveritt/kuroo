@@ -58,7 +58,7 @@ bool Emerge::stop()
 {
 	if ( eProc->isRunning() && eProc->kill(9) ) {
 		kdDebug() << i18n("Emerge process killed!") << endl;
-		kdDebug() << QString("Emerge process killed!") << endl;
+		kdDebug() << "Emerge process killed!" << endl;
 		return true;
 	}
 	else
@@ -90,7 +90,7 @@ EmergePackageList Emerge::packageList()
 bool Emerge::queue( const QStringList& packageList )
 {
 	m_blocks.clear();
-	importantMessage = QString::null;
+	m_importantMessage = QString::null;
 	m_unmasked = QString::null;
 	m_lastEmergeList = packageList;
 	m_etcUpdateCount = 0;
@@ -129,7 +129,7 @@ bool Emerge::queue( const QStringList& packageList )
 bool Emerge::pretend( const QStringList& packageList )
 {
 	m_blocks.clear();
-	importantMessage = QString::null;
+	m_importantMessage = QString::null;
 	m_unmasked = QString::null;
 	m_lastEmergeList = packageList;
 	m_etcUpdateCount = 0;
@@ -166,7 +166,7 @@ bool Emerge::pretend( const QStringList& packageList )
 bool Emerge::unmerge( const QStringList& packageList )
 {
 	m_blocks.clear();
-	importantMessage = QString::null;
+	m_importantMessage = QString::null;
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
@@ -199,7 +199,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 bool Emerge::sync()
 {
 	m_blocks.clear();
-	importantMessage = QString::null;
+	m_importantMessage = QString::null;
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
@@ -228,7 +228,7 @@ bool Emerge::sync()
 bool Emerge::checkUpdates()
 {
 	m_blocks.clear();
-	importantMessage = QString::null;
+	m_importantMessage = QString::null;
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
@@ -306,7 +306,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			}
 			else {
 				kdDebug() << i18n("Collecting emerge output. Can not parse: ") << packageVersion << endl;
-				kdDebug() << QString("Collecting emerge output. Can not parse: ") << packageVersion << endl;
+				kdDebug() << "Collecting emerge output. Can not parse: " << packageVersion << endl;
 			}
 		}
 		
@@ -336,7 +336,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				else
 					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
-						importantMessage += line + "<br>";
+						m_importantMessage += line + "<br>";
 						logDone++;
 					}
 					else
@@ -369,7 +369,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 							m_unmasked = line.section( "- ", 1 ).section( ")", 0 );
 						else
 							if ( !m_unmasked.isEmpty() && line.startsWith("# ") )
-								importantMessage += line.section( "# ", 1, 1 ) + "<br>";
+								m_importantMessage += line.section( "# ", 1, 1 ) + "<br>";
 	
 		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
@@ -386,16 +386,16 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					
 					// Append package einfo
 					if ( !importantMessagePackage.isEmpty() ) {
-						if ( importantMessage.isEmpty() )
-							importantMessage += "<b>" + importantMessagePackage + "</b>" + eMessage;
+						if ( m_importantMessage.isEmpty() )
+							m_importantMessage += "<b>" + importantMessagePackage + "</b>" + eMessage;
 						else
-							importantMessage += "<br><b>" + importantMessagePackage + "</b>" + eMessage;
+							m_importantMessage += "<br><b>" + importantMessagePackage + "</b>" + eMessage;
 						m_packageMessage = eMessage;
 						importantMessagePackage = QString::null;
 					}
 					else {
 						m_packageMessage += eMessage;
-						importantMessage += eMessage;
+						m_importantMessage += eMessage;
 					}
 				}
 			}
@@ -406,7 +406,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		
 		// Collect blocking lines
 		if ( line.contains( "is blocking" ) )
-			m_blocks += line.section( "[m_blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
+			m_blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
@@ -445,7 +445,7 @@ void Emerge::cleanup()
 	ResultsSingleton::Instance()->addPackageList( m_emergePackageList );
 	
 	if ( !m_blocks.isEmpty() )
-		importantMessage += "<br>" + m_blocks.join("<br>");
+		m_importantMessage += "<br>" + m_blocks.join("<br>");
 	
 	if ( !m_unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
@@ -454,8 +454,8 @@ void Emerge::cleanup()
 			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), NULL );
 	}
 	else
-		if ( !importantMessage.isEmpty() )
-			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), importantMessage ); 
+		if ( !m_importantMessage.isEmpty() )
+			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
 	
 	if ( m_etcUpdateCount != 0 )
 		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
@@ -521,10 +521,10 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !m_blocks.isEmpty() )
-		importantMessage += "<br>" + m_blocks.join("<br>");
+		m_importantMessage += "<br>" + m_blocks.join("<br>");
 	
-	if ( !importantMessage.isEmpty() )
-		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
+	if ( !m_importantMessage.isEmpty() )
+		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );
 }
 
 /**
@@ -537,18 +537,18 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString keyword = ( packageKeyword.section("(masked by: ", 1, 1) ).section(" keyword", 0, 0);
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
-		importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-		importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
+		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+		m_importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
 		                         "Ask the architecture porting team to test the package or test it for them and report your "
 		                         "findings on Gentoo bugzilla website.");
-		KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n( "Missing Keyword" ) , NULL );
+		KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "Missing Keyword" ) , NULL );
 	}
 	else {
 		if ( keyword.contains( "-*" ) ) {
-			importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
+			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+			m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
 			                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
-			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n( "-* Keyword" ) , NULL );
+			KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "-* Keyword" ) , NULL );
 		}
 		else {
 			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {

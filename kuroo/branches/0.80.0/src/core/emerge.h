@@ -73,7 +73,7 @@ private:
 	KProcIO*			eProc;
 	
 	// Collects messages from emerge, like masked errors, ewarn and einfos
-	QString 			importantMessage;
+	QString 			m_importantMessage;
 	
 	// The current package
 	QString				m_packageMessage;

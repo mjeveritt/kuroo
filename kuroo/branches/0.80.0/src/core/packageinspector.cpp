@@ -333,11 +333,11 @@ void PackageInspector::edit( PackageItem* portagePackage )
 		m_isVirginState = false;
 
 	// Construct header text
-	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
-		+ QString::number( colorGroup().highlightedText().green(), 16 ) 
-		+ QString::number( colorGroup().highlightedText().blue(), 16 );
+	QString fgColor = QString::number( colorGroup().brightText().red(), 16 )
+					+ QString::number( colorGroup().brightText().green(), 16 ) 
+					+ QString::number( colorGroup().brightText().blue(), 16 );
 	
-	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
+	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().dark() );
 	dialog->package->setText( "<b><font color=#" + fgColor + "><font size=+1>" + m_package + "</font> " +
 	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->description->setText( m_portagePackage->description() );

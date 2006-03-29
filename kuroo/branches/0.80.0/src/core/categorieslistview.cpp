@@ -272,7 +272,10 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	
 	clear(); // @warning: categoryItem cannot be used anymore
 	CategoryItem* item;
-// 	item = new CategoryItem( this, QString::null, "0" ); // Insert empty item to get focus to work on last before last item
+	
+	// Insert empty item to get focus to work on last before last item
+	// @fixme: find better solution
+	item = new CategoryItem( this, QString::null, "0" );
 	
 	// When meta-category is selected skip to show only meta-subcategory
 	m_categoryIndex.clear();

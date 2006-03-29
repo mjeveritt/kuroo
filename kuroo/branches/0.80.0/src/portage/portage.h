@@ -49,6 +49,7 @@ public slots:
 	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
+	void						clearPackageFromWorld( const QString& package );
 	
 	void						pretendPackageList( const QStringList& packageIdList );
 	void						uninstallInstalledPackageList( const QStringList& packageIdList );

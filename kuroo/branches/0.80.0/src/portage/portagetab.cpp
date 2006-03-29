@@ -458,13 +458,13 @@ void PortageTab::slotPackage()
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
 	// Build summary html-view
-	QString bgColor = QString::number( colorGroup().highlight().red(), 16 )
-		+ QString::number( colorGroup().highlight().green(), 16 ) 
-		+ QString::number( colorGroup().highlight().blue(), 16 );
+	QString bgColor = QString::number( colorGroup().dark().red(), 16 )
+					+ QString::number( colorGroup().dark().green(), 16 ) 
+					+ QString::number( colorGroup().dark().blue(), 16 );
 	
-	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
-		+ QString::number( colorGroup().highlightedText().green(), 16 ) 
-		+ QString::number( colorGroup().highlightedText().blue(), 16 );
+	QString fgColor = QString::number( colorGroup().brightText().red(), 16 )
+					+ QString::number( colorGroup().brightText().green(), 16 ) 
+					+ QString::number( colorGroup().brightText().blue(), 16 );
 	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
 	lines += "<tr><td bgcolor=#" + bgColor + " colspan=2><b><font color=#" + fgColor + "><font size=\"+1\">" + package + "</font> ";

@@ -37,7 +37,7 @@ public:
 	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" ); // @fixme: is this correct?
 		QString category, name, version;
 		
 		if ( rxPackage.search( m_package ) > -1 ) {
@@ -90,12 +90,13 @@ public:
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" ); // @fixme: is this correct?
 		QString category, name, version;
 		
 		if ( rxPackage.search( m_package ) > -1 ) {
 			category = rxPackage.cap(1);
 			name = rxPackage.cap(2);
+			packageString = category + "/" + name;
 			version = m_package.section( name + "-", 1, 1 ).remove(' ');
 		}
 		else {
@@ -105,7 +106,7 @@ public:
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery( 
 			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 		
 		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Removing unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -137,17 +138,19 @@ public:
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
 			                                     .arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
 			
-			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
 		}
 	}
 	
 	virtual void completeJob() {
+		PortageSingleton::Instance()->clearPackageFromWorld( packageString );
 		PortageSingleton::Instance()->slotChanged();
 	}
 	
 private:
 	const QString m_package;
+	QString packageString;
 };
 
 /**
@@ -161,7 +164,7 @@ public:
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" );
+		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" ); // @fixme: is this correct?
 		QString category, name, version;
 		
 		if ( rxPackage.search( m_package ) > -1 ) {
@@ -462,6 +465,10 @@ void Portage::removeFromWorld( const QString& package )
 	}
 }
 
+void Portage::clearPackageFromWorld( const QString& package )
+{
+	m_mapWorld.remove( package );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Package handlling...

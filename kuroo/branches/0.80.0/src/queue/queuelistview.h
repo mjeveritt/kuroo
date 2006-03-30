@@ -79,8 +79,8 @@ private:
 class QueueListView::QueueItem : public PackageItem
 {
 public:
-	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration );
-	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration );
+	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
+	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	~QueueItem();
 	
 	void			setComplete();

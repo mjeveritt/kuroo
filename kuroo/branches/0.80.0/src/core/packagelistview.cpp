@@ -61,7 +61,7 @@ void PackageListView::resetListView()
  * Current package status.
  * @return status
  */
-QString PackageListView::currentItemStatus()
+int PackageListView::currentItemStatus()
 {
 	return currentPackage()->status();
 }

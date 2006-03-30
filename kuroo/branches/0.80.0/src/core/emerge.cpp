@@ -299,8 +299,8 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.size = rxPackage.cap(7);
 			
 			QString packageVersion = rxPackage.cap(4);
-			if ( rxPortageVersion.search( packageVersion ) != -1 ) {
-				emergePackage.name = packageVersion.section( rxPortageVersion.cap( 1 ), 0, 0 );
+			if ( GlobalSingleton::Instance()->rxPortageVersion().search( packageVersion ) != -1 ) {
+				emergePackage.name = packageVersion.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 0, 0 );
 				emergePackage.version = packageVersion.section( ( emergePackage.name + "-" ), 1, 1 );
 				m_emergePackageList.prepend( emergePackage );
 			}
@@ -451,7 +451,8 @@ void Emerge::cleanup()
 		if ( KUser().isSuperUser() )
 			askUnmaskPackage( m_unmasked );
 		else
-			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), NULL );
+			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroo as root to unmask packages!"),
+			                             i18n("Auto-unmasking packages"), NULL );
 	}
 	else
 		if ( !m_importantMessage.isEmpty() )
@@ -541,20 +542,20 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 		m_importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
 		                         "Ask the architecture porting team to test the package or test it for them and report your "
 		                         "findings on Gentoo bugzilla website.");
-		KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "Missing Keyword" ) , NULL );
+		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), "<qt>" + m_importantMessage + "</qt>", i18n( "Missing Keyword" ) , NULL );
 	}
 	else {
 		if ( keyword.contains( "-*" ) ) {
 			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
 			m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
 			                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
-			KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "-* Keyword" ) , NULL );
+			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), "<qt>" + m_importantMessage + "</qt>", i18n( "-* Keyword" ) , NULL );
 		}
 		else {
 			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
+				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
 				                                     .arg( package ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")),
 				                                     KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes :
@@ -568,7 +569,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			else {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
+				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
 				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes :
 						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );

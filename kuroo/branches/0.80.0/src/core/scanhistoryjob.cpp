@@ -120,8 +120,8 @@ bool ScanHistoryJob::doJob()
 						int secTime = timeStamp.toUInt() - itLogMap.data();
 						logMap.erase( itLogMap );
 						
-						if ( rxPortageVersion.search( package ) != -1 ) {
-							QString packageNoVersion = package.section( rxPortageVersion.cap( 1 ), 0, 0 );
+						if ( GlobalSingleton::Instance()->rxPortageVersion().search( package ) != -1 ) {
+							QString packageNoVersion = package.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 0, 0 );
 			
 							// Update emerge time and increment count for packageNoVersion
 							EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );

@@ -85,8 +85,8 @@ void MergeTab::slotClearFilter()
 void MergeTab::slotViewFile( QListViewItem *item )
 {
 	if ( item->parent() ) {
-		QString source = KUROODIR + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->source();
-		QString destination = KUROODIR + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->destination();
+		QString source = GlobalSingleton::Instance()->kurooDir() + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->source();
+		QString destination = GlobalSingleton::Instance()->kurooDir() + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->destination();
 
 		KProcIO* eProc = new KProcIO();
 		*eProc << KurooConfig::etcUpdateTool() << source << destination;

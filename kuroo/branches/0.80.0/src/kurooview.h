@@ -52,7 +52,6 @@ public:
 	MergeTab*			viewMerge;
 	PackageInspector	*packageInspector;
 	
-// 	void 				quit();
 	void 				slotEmergePretend( QString package );
 	
 public:

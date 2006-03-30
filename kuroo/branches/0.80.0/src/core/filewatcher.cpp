@@ -65,7 +65,7 @@ void FileWatcher::slotChanged( const QString& path )
 		
 		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
 			KurooConfig::setPortageVersion21( true );
-			KMessageBox::sorry( 0, i18n("Portage version is upgraded to 2.1. "
+			KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n("Portage version is upgraded to 2.1. "
 										"Please refresh package view."), i18n("Portage version") );
 		}
 	}

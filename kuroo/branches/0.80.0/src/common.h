@@ -36,6 +36,7 @@
 #include "history.h"
 #include "portagefiles.h"
 #include "filewatcher.h"
+#include "global.h"
 #include "singleton.h"
 
 #include <qregexp.h>
@@ -57,18 +58,25 @@ typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
+typedef Singleton<Global> GlobalSingleton;
 
 // The package states used by the filters
-enum packageFilters {
-		FILTER_ALL,
-		FILTER_INSTALLED,
-		FILTER_UPDATES,
-		FILTER_OLD
+enum packageStates {
+		PACKAGE_DELETED = 0,
+		PACKAGE_AVAILABLE = 1,
+		PACKAGE_INSTALLED = 2,
+		PACKAGE_UPDATES = 4,
+		PACKAGE_OLD = 8
 };
 
-static const QString FILTER_ALL_STRING( QString::number( FILTER_ALL ) );
-static const QString FILTER_INSTALLED_STRING( QString::number( FILTER_INSTALLED ) );
-static const QString FILTER_OLD_STRING( QString::number( FILTER_OLD ) );
+static const QString PACKAGE_ALL_STRING( QString::number( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_OLD ) );
+static const QString PACKAGE_AVAILABLE_STRING( QString::number( PACKAGE_AVAILABLE ) );
+static const QString PACKAGE_INSTALLED_STRING( QString::number( PACKAGE_INSTALLED ) );
+static const QString PACKAGE_OLD_STRING( QString::number( PACKAGE_OLD ) );
+static const QString PACKAGE_INSTALLED_OLD_STRING( QString::number( PACKAGE_INSTALLED | PACKAGE_OLD ) );
+static const QString PACKAGE_UPDATES_STRING( QString::number( PACKAGE_UPDATES ) );
+static const QString PACKAGE_INSTALLED_UPDATES_OLD_STRING( QString::number( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
+static const QString PACKAGE_DELETED_STRING( QString::number( PACKAGE_DELETED ) );
 
 // Log output states
 enum LogActions {
@@ -120,14 +128,14 @@ static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 
 // Kuroo home directory
-static const QString KUROODIR = "/var/cache/kuroo/";
+// static const QString KUROODIR = "/var/cache/kuroo/";
 
 // Max rows in queries
-static const int ROWLIMIT = 1000;
+// static const int ROWLIMIT = 1000;
 
 // Regexp from Portage
 // static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
-static QRegExp rxPortageVersion("(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)");
+// static QRegExp rxPortageVersion("(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)");
 
 typedef struct Info {
 	QString slot;

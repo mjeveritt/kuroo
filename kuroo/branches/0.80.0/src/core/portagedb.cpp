@@ -71,7 +71,7 @@ QString KurooDB::init( QObject *parent )
 	
 	m_dbConnPool->createDbConnections();
 	
-	return KUROODIR + KurooConfig::databas();
+	return GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
 }
 
 DbConnection *KurooDB::getStaticDbConnection()
@@ -343,7 +343,7 @@ void KurooDB::backupDb()
 	kdDebug() << k_funcinfo << endl;
 	
 	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
-	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
+	QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		foreach ( historyData ) {
@@ -359,7 +359,7 @@ void KurooDB::backupDb()
 	}
 	
 	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory;" );
-	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
+	file.setName( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		foreach ( mergeData ) {
@@ -384,7 +384,7 @@ void KurooDB::restoreBackup()
 	kdDebug() << k_funcinfo << endl;
 	
 	// Restore einfo into table history
-	QFile file( KUROODIR + KurooConfig::fileHistoryBackup() );
+	QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
 	QTextStream stream( &file );
 	QStringList lines;
 	if ( !file.open( IO_ReadOnly ) ) {
@@ -407,7 +407,7 @@ void KurooDB::restoreBackup()
 	}
 	
 	// Restore source and destination into table mergeHistory
-	file.setName( KUROODIR + KurooConfig::fileMergeBackup() );
+	file.setName( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
 	stream.setDevice( &file );
 	lines.clear();
 	if ( !file.open( IO_ReadOnly ) ) {
@@ -498,7 +498,7 @@ QStringList KurooDB::allSubCategories()
 
 /**
  * Return all categories which have packages matching the filter and the text.
- * @param filter	packages status as FILTER_ALL, FILTER_INSTALLED or FILTER_UPDATES
+ * @param filter	packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text		search string
  */
 QStringList KurooDB::portageCategories( int filter, const QString& text )
@@ -521,18 +521,16 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 	}
 	
 	switch ( filter ) {
-		case FILTER_ALL:
-			filterQuery = QString::null;
-			if ( !text.isEmpty() )
-				textQuery = " WHERE ( " + textQuery.right( len - 1 );
+		case PACKAGE_AVAILABLE:
+			filterQuery = " WHERE package.status & " + PACKAGE_ALL_STRING;
 			break;
 			
-		case FILTER_INSTALLED:
-			filterQuery = " WHERE package.status != " + FILTER_ALL_STRING;
+		case PACKAGE_INSTALLED:
+			filterQuery = " WHERE package.status & " + PACKAGE_INSTALLED_UPDATES_OLD_STRING;
 			break;
 			
-		case FILTER_UPDATES:
-			filterQuery = " WHERE package.updateVersion != '' ";
+		case PACKAGE_UPDATES:
+			filterQuery = " WHERE package.status & " + PACKAGE_UPDATES_STRING;
 	}
 	
 	return query( "SELECT DISTINCT idCategory FROM package "
@@ -542,7 +540,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
 /**
  * Return all subcategories which have packages matching the filter and the text in this category.
  * @param categoryId 	category id
- * @param filter		packages status as FILTER_ALL, FILTER_INSTALLED or FILTER_UPDATES
+ * @param filter		packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text			search string
  */
 QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )
@@ -568,16 +566,16 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
 	if ( categoryId != "0" ) {
 
 		switch ( filter ) {
-			case FILTER_ALL:
-				filterQuery = QString::null;
+			case PACKAGE_AVAILABLE:
+				filterQuery = " AND package.status & " + PACKAGE_ALL_STRING;
 				break;
 				
-			case FILTER_INSTALLED:
-				filterQuery = " AND package.status != " + FILTER_ALL_STRING;
+			case PACKAGE_INSTALLED:
+				filterQuery = " AND package.status & " + PACKAGE_INSTALLED_UPDATES_OLD_STRING;
 				break;
 				
-			case FILTER_UPDATES:
-				filterQuery = " AND package.updateVersion != '' ";
+			case PACKAGE_UPDATES:
+				filterQuery = " AND package.status & " + PACKAGE_UPDATES_STRING;
 		}
 		
 		resultList += query( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '"
@@ -595,7 +593,7 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
  * Return all packages which are matching the filter and the text in this category-subcategory.
  * @param categoryId 	category id
  * @param subCategoryId subcategory id
- * @param filter		packages status as FILTER_ALL, FILTER_INSTALLED or FILTER_UPDATES
+ * @param filter		packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text			search string
  */
 QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
@@ -617,22 +615,34 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 		textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
 	}
 	
+	switch ( filter ) {
+		case PACKAGE_AVAILABLE:
+			filterQuery = " AND package.status & " + PACKAGE_ALL_STRING;
+			break;
+			
+		case PACKAGE_INSTALLED:
+			filterQuery = " AND package.status & " + PACKAGE_INSTALLED_UPDATES_OLD_STRING;
+			break;
+			
+		case PACKAGE_UPDATES:
+			filterQuery = " AND package.status & " + PACKAGE_UPDATES_STRING;
+	}
+	
 	if ( categoryId == "0" ) {
 		
 		if ( subCategoryId == "0" ) {
+			
 			switch ( filter ) {
-				case FILTER_ALL:
-					filterQuery = QString::null;
-					if ( !text.isEmpty() )
-						textQuery = " WHERE ( " + textQuery.right( len - 1 );
+				case PACKAGE_AVAILABLE:
+					filterQuery = " WHERE package.status & " + PACKAGE_ALL_STRING;
 					break;
 					
-				case FILTER_INSTALLED:
-					filterQuery = " WHERE status != " + FILTER_ALL_STRING;
+				case PACKAGE_INSTALLED:
+					filterQuery = " WHERE package.status & " + PACKAGE_INSTALLED_UPDATES_OLD_STRING;
 					break;
 					
-				case FILTER_UPDATES:
-					filterQuery = " WHERE updateVersion != '' ";
+				case PACKAGE_UPDATES:
+					filterQuery = " WHERE package.status & " + PACKAGE_UPDATES_STRING;
 			}
 			
 			return query( " SELECT id, name, category, description, status, updateVersion "
@@ -640,19 +650,6 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
 		else {
-			
-			switch ( filter ) {
-				case FILTER_ALL:
-					filterQuery = QString::null;
-					break;
-					
-				case FILTER_INSTALLED:
-					filterQuery = " AND status != " + FILTER_ALL_STRING;
-					break;
-					
-				case FILTER_UPDATES:
-					filterQuery = " AND updateVersion != '' ";
-			}
 			
 			return query( " SELECT id, name, category, description, status, updateVersion "
 			              " FROM package "
@@ -663,38 +660,12 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
 	else {
 		if ( subCategoryId == "0" ) {
 			
-			switch ( filter ) {
-				case FILTER_ALL:
-					filterQuery = QString::null;
-					break;
-					
-				case FILTER_INSTALLED:
-					filterQuery = " AND status != " + FILTER_ALL_STRING;
-					break;
-					
-				case FILTER_UPDATES:
-					filterQuery = " AND updateVersion != '' ";
-			}
-			
 			return query( " SELECT id, name, category, description, status, updateVersion "
 						  " FROM package "
 						  " WHERE idCategory = '" + categoryId + "'"
 			              + filterQuery + textQuery + " ORDER BY name DESC;");
 		}
 		else {
-		
-			switch ( filter ) {
-				case FILTER_ALL:
-					filterQuery = QString::null;
-					break;
-					
-				case FILTER_INSTALLED:
-					filterQuery = " AND status != " + FILTER_ALL_STRING;
-					break;
-					
-				case FILTER_UPDATES:
-					filterQuery = " AND updateVersion != '' ";
-			}
 			
 			return query( " SELECT id, name, category, description, status, updateVersion "
 					      " FROM package "
@@ -758,8 +729,8 @@ QString KurooDB::packageId( const QString& package )
 	QString category = package.section( "/", 0, 0 );
 	QString packageString = package.section( "/", 1, 1 );
 	
-	if ( rxPortageVersion.search( packageString ) != -1 ) {
-		QString name = packageString.section( rxPortageVersion.cap( 1 ), 0, 0 );
+	if ( GlobalSingleton::Instance()->rxPortageVersion().search( packageString ) != -1 ) {
+		QString name = packageString.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 0, 0 );
 		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 	                          " ( SELECT id from catSubCategory WHERE name = '" + category + "' ); " );
 	
@@ -785,7 +756,7 @@ QString KurooDB::packageId( const QString& package )
 QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
 {
 	return query( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
-	              " AND status = '" + FILTER_INSTALLED_STRING + "'"
+	              " AND status = '" + PACKAGE_INSTALLED_STRING + "'"
 	              " ORDER BY version.name;");
 }
 
@@ -1095,7 +1066,7 @@ void KurooDB::resetUpdates()
  */
 void KurooDB::resetInstalled()
 {
-	query( "UPDATE package set installed = '" + FILTER_ALL_STRING + "';" );
+	query( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
 }
 
 void KurooDB::addEmergeInfo( const QString& einfo )
@@ -1145,7 +1116,7 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection( SqliteConfig* config )
 	: DbConnection( config )
 {
-	const QCString path = QString( KUROODIR + KurooConfig::databas() ).local8Bit();
+	const QCString path = QString( GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas() ).local8Bit();
 	
     // Open database file and check for correctness
 	m_initialized = false;

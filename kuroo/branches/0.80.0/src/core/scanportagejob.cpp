@@ -249,7 +249,7 @@ bool ScanPortageJob::doJob()
 						// Insert package in portage
 						if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
 							m_categories[ *itCategory ].packages[ name ];
-							m_categories[ *itCategory ].packages[ name ].status = FILTER_ALL_STRING;
+							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
 						}
 						
@@ -257,7 +257,7 @@ bool ScanPortageJob::doJob()
 						if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_ALL_STRING;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
@@ -424,17 +424,17 @@ void ScanPortageJob::scanInstalledPackages()
 					// Insert and/or mark package as installed (old is package not in portage anymore)
 					if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
 						m_categories[ *itCategory ].packages[ name ];
-						m_categories[ *itCategory ].packages[ name ].status = FILTER_OLD_STRING;
+						m_categories[ *itCategory ].packages[ name ].status = PACKAGE_OLD_STRING;
 					}
 					else
-						m_categories[ *itCategory ].packages[ name ].status = FILTER_INSTALLED_STRING;
+						m_categories[ *itCategory ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
 					
 					// Insert old version in portage
 					if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) )
 						m_categories[ *itCategory ].packages[ name ].versions[ version ];
 					
 					// Mark version as installed
-					m_categories[ *itCategory ].packages[ name ].versions[ version ].status = FILTER_INSTALLED_STRING;
+					m_categories[ *itCategory ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
 					
 				}
 				else {

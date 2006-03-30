@@ -331,12 +331,9 @@ void PackageInspector::edit( PackageItem* portagePackage )
 		m_isVirginState = false;
 
 	// Construct header text
-	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
-					+ QString::number( colorGroup().highlightedText().green(), 16 ) 
-					+ QString::number( colorGroup().highlightedText().blue(), 16 );
-	
 	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
-	dialog->package->setText( "<b><font color=#" + fgColor + "><font size=+1>" + m_package + "</font> " +
+	dialog->package->setText( "<b><font color=#" + GlobalSingleton::Instance()->fgHexColor() 
+	                          + "><font size=+1>" + m_package + "</font> " +
 	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->description->setText( m_portagePackage->description() );
 	
@@ -370,8 +367,8 @@ void PackageInspector::showSettings()
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
-		if ( rxPortageVersion.search( userMaskVersion ) != -1 ) {
-			userMaskVersion = rxPortageVersion.cap( 1 ).remove( 0, 1 ) + userMaskVersion.section( rxPortageVersion.cap( 1 ), 1, 1 );
+		if ( GlobalSingleton::Instance()->rxPortageVersion().search( userMaskVersion ) != -1 ) {
+			userMaskVersion = GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ).remove( 0, 1 ) + userMaskVersion.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 1, 1 );
 			dialog->rbVersionsSpecific->setChecked( true );
 			dialog->cbVersionsSpecific->setDisabled( false );
 			dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
@@ -663,7 +660,8 @@ void PackageInspector::loadChangeLog()
 		else {
 			kdDebug() << i18n("Loading changelog. Error reading: ") << fileName << endl;
 			kdDebug() << "Loading changelog. Error reading: " << fileName << endl;
-			dialog->changelogBrowser->setText( i18n("<font color=darkRed><b>No ChangeLog found.</b></font>") );
+			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2")
+			                                   .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -691,7 +689,8 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 		else {
 			kdDebug() << i18n("Loading ebuild. Error reading: ") << fileName << endl;
 			kdDebug() << "Loading ebuild. Error reading: " << fileName << endl;
-			dialog->ebuildBrowser->setText( i18n("<font color=darkRed><b>No ebuild found.</b></font>") );
+			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2")
+			                                .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -726,9 +725,10 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			dialog->dependencyBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Load dependencies. Error reading: ") << fileName << endl;
-			kdDebug() << "Load dependencies. Error reading: " << fileName << endl;
-			dialog->dependencyBrowser->setText( i18n("<font color=darkRed><b>No dependencies found.</b></font>") );
+			kdDebug() << i18n("Loading dependencies. Error reading: ") << fileName << endl;
+			kdDebug() << "Loading dependencies. Error reading: " << fileName << endl;
+			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
+			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -757,7 +757,8 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		else {
 			kdDebug() << i18n( "Loading installed files list. Error reading: " ) << filename << endl;
 			kdDebug() <<  "Loading installed files list. Error reading: "  << filename << endl;
-			dialog->installedFilesBrowser->setText( i18n("<font color=darkRed><b>No installed files found.</b></font>") );
+			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2")
+			                                        .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }

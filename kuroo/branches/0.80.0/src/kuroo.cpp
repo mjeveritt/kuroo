@@ -59,6 +59,9 @@ Kuroo::Kuroo()
 	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
+	// Get pointer so MessageBox's can be made modal to kuroo windown and more...
+	GlobalSingleton::Instance()->setKurooView( m_view );
+	
 	setCentralWidget( m_view );
 	setupActions();
 	statusBar();

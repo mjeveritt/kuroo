@@ -133,6 +133,7 @@ void CategoriesView::restoreFocus( bool isFiltered )
 	// Emit manually 'currentChanged' if triggered by filter
 	if ( isFiltered )
 		emit currentChanged( focusCategory );
+
 }
 
 CategoriesView::CategoryItem* CategoriesView::currentCategory()
@@ -316,7 +317,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 		item->setOn( true );
 		
 		// After all categories are loaded try restoring last known focus-category
-		restoreFocus( true );
+		restoreFocus( false );
 	}
 }
 

@@ -38,7 +38,7 @@ static int packageCount( 0 );
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
  */
-PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status )
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
 }
@@ -164,7 +164,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString status = *it++;
 		QString update = *it;
 
-		PortageItem* item = new PortageItem( this, name, id, category, description, status );
+		PortageItem* item = new PortageItem( this, name, id, category, description, status.toInt() );
 		item->setText( 4, update );
 		item->setText( 5, description );
 		

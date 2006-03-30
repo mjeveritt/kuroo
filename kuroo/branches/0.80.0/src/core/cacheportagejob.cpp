@@ -128,8 +128,8 @@ bool CachePortageJob::doJob()
 					}
 					QString package = *itCategory + "/" + *itPackage;
 					
-					if ( rxPortageVersion.search( *itPackage ) != -1 ) {
-						QString packageName = (*itPackage).section( rxPortageVersion.cap( 1 ), 0, 0 );
+					if ( GlobalSingleton::Instance()->rxPortageVersion().search( *itPackage ) != -1 ) {
+						QString packageName = (*itPackage).section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 0, 0 );
 						
 						// Get package size
 						QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;

@@ -62,10 +62,10 @@ public:
 			return false;
 		}
 		else {
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%2'"
-			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3'"
-			                                              ";" ).arg( FILTER_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%2';" )
+			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( id ), m_db );
+			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
+			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}
@@ -119,24 +119,24 @@ public:
 			// Check how many version are installed
 			QString installedVersionCount = KurooDBSingleton::Instance()->singleQuery( 
 				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status != '%2' LIMIT 1;")
-				.arg( id ).arg( FILTER_ALL_STRING ), m_db );
+				.arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
 			
 			// Mark package as uninstalled only when one version is found
 			if ( installedVersionCount == "1" ) {
 			
 				// Mark package as uninstalled
 				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%2' AND id = '%3'")
-				                                     .arg( FILTER_ALL_STRING )
-				                                     .arg( FILTER_INSTALLED_STRING ).arg( id ), m_db );
+				                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( PACKAGE_INSTALLED_STRING ).arg( id ), m_db );
 			
-				// Remove package completely if "old" = not in official Portage anymore
+				// Delete package if "old" = not in official Portage anymore
 				// @fixme: what to do if package is in Queue?
-				KurooDBSingleton::Instance()->query( QString( "DELETE FROM package WHERE status = '%1' AND id = '%2';" )
-				                                     .arg( FILTER_OLD_STRING ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%1' AND id = '%2';" )
+				                                     .arg( PACKAGE_DELETED_STRING ).arg( PACKAGE_OLD_STRING ).arg( id ), m_db );
 			}
 			
+			// And now mark as not installed
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
-			                                     .arg( FILTER_ALL_STRING ).arg( id ).arg( version ), m_db );
+			                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( version ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
@@ -188,8 +188,9 @@ public:
 			return false;
 		}
 		else {
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
-			                                              "WHERE name = '%1' AND ( updateVersion = '%2' OR updateVersion = '%3' );" )
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1', updateVersion = '' "
+			                                              "WHERE name = '%2' AND ( updateVersion = '%3' OR updateVersion = '%4' );" )
+			                                     .arg( PACKAGE_AVAILABLE_STRING )
 			                                     .arg( name ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;

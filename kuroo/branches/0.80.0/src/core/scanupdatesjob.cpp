@@ -140,8 +140,9 @@ bool ScanUpdatesJob::doJob()
 				else
 					updateVersion = (*it).version + " (U)";
 				
-				KurooDBSingleton::Instance()->query( QString( "UPDATE package_temp SET updateVersion = '%1' WHERE id = '%2';")
-				                                     .arg( updateVersion ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package_temp SET updateVersion = '%1', status = '%2' "
+				                                              " WHERE id = '%3';" )
+				                                     .arg( updateVersion ).arg( PACKAGE_UPDATES_STRING ).arg( id ), m_db );
 				
 				updatesCount++;
 			}

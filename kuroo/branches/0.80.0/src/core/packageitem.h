@@ -35,11 +35,11 @@ class DependAtom;
 class PackageItem : public KListViewItem
 {
 public:
-	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status );
-	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status );
+	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
+	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
 	~PackageItem();
 	
-	QString							status();
+	int								status();
 	QString 						id();
 	QString							name();
 	QString							description();
@@ -79,7 +79,7 @@ private:
 	QString							m_name;
 	
 	// Is package INSTALLED or OLD ( INSTALLED but not in Portage anymore )
-	QString							m_status;
+	int								m_status;
 	
 	// Package description
 	QString							m_description;

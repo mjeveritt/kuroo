@@ -45,7 +45,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
 	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( KUROODIR );
+	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		getEnvironment();
 		firstTimeWizard();
@@ -85,21 +85,21 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
-			if ( !d.mkdir(KUROODIR) ) {
+			if ( !d.mkdir(GlobalSingleton::Instance()->kurooDir()) ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
 				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
 				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
-				chmod( KUROODIR, 0770 );
-				chown( KUROODIR, portageGid->gr_gid, portageUid->pw_uid );
+				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
+				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
 			}
-			d.setCurrent(KUROODIR);
+			d.setCurrent(GlobalSingleton::Instance()->kurooDir());
 		}
 	}
 	
 	// Check that backup directory exists and set correct permissions
-	QString backupDir = KUROODIR + "backup";
+	QString backupDir = GlobalSingleton::Instance()->kurooDir() + "backup";
 	if ( !d.cd(backupDir) ) {
 		if ( !d.mkdir(backupDir) ) {
 			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
@@ -125,7 +125,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-	QString database = KUROODIR + KurooConfig::databas();
+	QString database = GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 	
 	// Old db structure, must delete it and backup history 
@@ -146,6 +146,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
 	
 	// Initialize singletons objects
+	GlobalSingleton::Instance()->init( this );
 	ImagesSingleton::Instance()->init( this );
 	SignalistSingleton::Instance()->init( this );
 	EmergeSingleton::Instance()->init( this );

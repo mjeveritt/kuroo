@@ -36,7 +36,7 @@ const int diffTime( 10 );
  * @class QueueListView::QueueItem
  * @short Package item with progressbar
  */
-QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const QString& status, int duration )
+QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const int status, int duration )
 	: PackageItem( parent, name, id, category, QString::null, status ),
 	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	m_bar( 0 )
@@ -47,7 +47,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 	m_bar->hide();
 }
 
-QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration )
+QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration )
 	: PackageItem( parent, name, id, category, QString::null, status ),
 	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	m_bar( 0 )
@@ -292,13 +292,13 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			size = formatSize( size );
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
-			item = new QueueItem( this, category, name, id, status, duration );
+			item = new QueueItem( this, category, name, id, status.toInt(), duration );
 			item->setOpen( true );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->packageItemById( idDepend ) );
 			if ( itemDepend )
-				item = new QueueItem( itemDepend, category, name, id, status, duration );
+				item = new QueueItem( itemDepend, category, name, id, status.toInt(), duration );
 		}
 		
 		// Add package info

@@ -222,7 +222,7 @@ void PortageTab::slotReload()
 	connect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
 	
-	slotFilters();
+	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), false );
 }
 
 /**
@@ -241,8 +241,7 @@ void PortageTab::slotActivateFilters()
 {
 	--m_delayFilters;
 	if ( m_delayFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ),
-		                              true );
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), true );
 }
 
 /**
@@ -259,6 +258,8 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
@@ -364,6 +365,8 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	// Packages view is hidden don't update
 	// We may get signal to update from since Queue shares same Inspector
 	if ( !isVisible() && m_isInitialized )
@@ -420,7 +423,7 @@ void PortageTab::slotPackage()
 					else
 						stability = i18n("Not available");
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " stability=" << stability<< endl;
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << endl;
 		
 		// Insert version in Inspector version view
 		m_packageInspector->dialog->versionsView->insertItem( 
@@ -458,14 +461,6 @@ void PortageTab::slotPackage()
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
 	// Build summary html-view
-	QString bgColor = QString::number( colorGroup().highlight().red(), 16 )
-		+ QString::number( colorGroup().highlight().green(), 16 ) 
-		+ QString::number( colorGroup().highlight().blue(), 16 );
-	
-	QString fgColor = QString::number( colorGroup().highlightedText().red(), 16 )
-		+ QString::number( colorGroup().highlightedText().green(), 16 ) 
-		+ QString::number( colorGroup().highlightedText().blue(), 16 );
-	
 	QPalette summaryPalette;
 	QColorGroup summaryColorGroup( colorGroup() );
 	summaryColorGroup.setColor( QColorGroup::HighlightedText, colorGroup().dark() );
@@ -475,7 +470,8 @@ void PortageTab::slotPackage()
 	summaryBrowser->setPalette( summaryPalette );
 	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
-	lines += "<tr><td bgcolor=#" + bgColor + " colspan=2><b><font color=#" + fgColor + "><font size=\"+1\">" + package + "</font> ";
+	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#"
+		+ GlobalSingleton::Instance()->fgHexColor() + "><font size=\"+1\">" + package + "</font> ";
 	lines += "(" + category.section( "-", 0, 0 ) + "/";
 	lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
 	
@@ -485,15 +481,23 @@ void PortageTab::slotPackage()
 		lines += "\">" + homepage + "</a></td></tr>";
 	}
 	else
-		lines += i18n("<tr><td colspan=2><font color=darkRed><b>Package not available in Portage tree anymore!</b></font></td></tr>");
+		lines += i18n("%1Package not available in Portage tree anymore!%2")
+					.arg("<tr><td colspan=2><font color=darkRed><b>")
+					.arg("</b></font></td></tr>");
 	
 	// Construct installed verions line
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>%1</td></tr>")
-		.arg( linesInstalled );
+		linesInstalled = i18n("%1Installed&nbsp;version:%2%3%4")
+						.arg("<tr><td width=10%><b>")
+						.arg("</b></font></td><td width=90%>")
+						.arg( linesInstalled )
+						.arg("</td></tr>");
 	else
-		linesInstalled = i18n("<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>Not installed</td></tr>");
-	
+		linesInstalled = i18n("%1Installed&nbsp;version:%2%3%4")
+						.arg("<tr><td width=10%><b>")
+						.arg("</b></font></td><td width=90%>")
+						.arg("Not installed")
+						.arg("</td></tr>");
 	if ( packagesView->currentPackage()->isInPortage() ) {
 	
 		// Construct emerge version line
@@ -505,28 +509,39 @@ void PortageTab::slotPackage()
 			m_packageInspector->dialog->cbVersionsUse->setCurrentText( emergeVersion );
 			m_packageInspector->dialog->versionsView->usedForInstallation( emergeVersion );
 			
-			linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></tr>")
-				.arg( linesEmergeVersion );
+			linesEmergeVersion = i18n("%1Emerge&nbsp;version:%2%3%4")
+				.arg("<tr><td width=10%><b>")
+				.arg("</b></td><td width=90%>")
+				.arg( linesEmergeVersion )
+				.arg("</td></tr>");
 		}
 		else {
 			if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-				linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</font></td>"
-				                          "<td width=90%><font color=darkRed>No version available on %1</b></td></tr>")
-				.arg( KurooConfig::arch() );
+				linesEmergeVersion = i18n("%1Emerge&nbsp;version:%2No version available on %3%4")
+				.arg("<tr><td width=10%><b>")
+				.arg("</font></td><td width=90%><font color=darkRed>")
+				.arg( KurooConfig::arch() )
+				.arg("</b></td></tr>");
 			else
-				linesEmergeVersion = i18n("<tr><td width=10%><b>Emerge&nbsp;version:</font></td>"
-				                          "<td width=90%><font color=darkRed>No version available - "
-				                          "please check package details</font></b></td></tr>");
+				linesEmergeVersion = i18n("%1Emerge&nbsp;version:%2No version available - please check package details%3")
+				.arg("<tr><td width=10%><b>")
+				.arg("</font></td><td width=90%><font color=darkRed>")
+				.arg("</font></b></td></tr>");
 		}
 		
 		// Construct available versions line
 		if ( !linesAvailable.isEmpty() )
-			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</b></td></tr>")
-			.arg( linesAvailable );
+			linesAvailable = i18n("%1Available&nbsp;versions:%2%3%4")
+			.arg("<tr><td width=10%><b>")
+			.arg("</b></td><td width=90%>")
+			.arg( linesAvailable )
+			.arg("</b></td></tr>");
 		else
-			linesAvailable = i18n("<tr><td width=10%><b>Available&nbsp;versions:</td>"
-			                      "<td width=90%><font color=darkRed>No versions available on %1</font></b></td></tr>")
-			.arg( KurooConfig::arch() );
+			linesAvailable = i18n("%1Available&nbsp;versions:%2No versions available on %3%4")
+			.arg("<tr><td width=10%><b>")
+			.arg("</td><td width=90%><font color=darkRed>")
+			.arg( KurooConfig::arch() )
+			.arg("</font></b></td></tr>");
 		
 		summaryBrowser->setText( lines + linesInstalled + linesEmergeVersion + linesAvailable + "</table>");
 	}

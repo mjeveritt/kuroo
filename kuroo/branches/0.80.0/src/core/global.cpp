@@ -18,57 +18,76 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef PACKAGELISTVIEW_H
-#define PACKAGELISTVIEW_H
+#include "global.h"
 
-#include <klistview.h>
-
-#include <qdict.h>
-
-class PackageItem;
+#include <qregexp.h>
+#include <qwidget.h>
+#include <qpalette.h>
 
 /**
- * @class PackageListView
- * @short Base class for packages listviews.
+ * @class Global
+ * @short To keep global variables
  */
-class PackageListView : public KListView
+Global::Global( QObject *parent )
+	: QObject( parent )
 {
-Q_OBJECT
-public:
-    PackageListView( QWidget *parent = 0, const char *name = 0 );
-    ~PackageListView();
+}
 
-public:
-	virtual	void			resetListView();
-	virtual	PackageItem* 	packageItemById( const QString& id );
-	
-	virtual QString			currentId();
-	int						currentItemStatus();
-	virtual PackageItem* 	currentPackage();
-	
-	virtual QStringList		selectedId();
-	virtual QStringList		selectedPackages();
-	
-	virtual QStringList		allId();
-	virtual QStringList		allPackages();
-	
-	virtual QString			count();
-	
-public slots:
-	void					slotNextPackage( bool isPrevious );
-	
-protected slots:
-	void					setPackageFocus( const QString& id );
-	virtual void 			indexPackage( const QString& id, PackageItem *item );
-	
-protected:
-	QDict<PackageItem>		m_packageIndex;
-	
-signals:
-	void					signalPackageChanged();
-	
-private:
-	
-};
+Global::~Global()
+{
+}
 
-#endif
+void Global::init( QObject *parent )
+{
+	m_parent = parent;
+}
+
+/**
+ * Kuroo home directory
+ */
+QString Global::kurooDir()
+{
+	return "/var/cache/kuroo/";
+}
+
+/**
+ * Regexp from Portage.
+ */
+QRegExp Global::rxPortageVersion()
+{
+	return QRegExp("(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)");
+}
+
+/**
+ * Kuroo widget.
+ */
+void Global::setKurooView( QWidget* view )
+{
+	m_wId = view->winId();
+	
+	QColor c = view->colorGroup().highlight();
+	m_bgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
+	
+	c = view->colorGroup().highlightedText();
+	m_fgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
+}
+
+/**
+ * Kuroo widget id so MessageBox's can be made modal.
+ */
+long Global::kurooViewId()
+{
+	return	m_wId;
+}
+
+QString Global::bgHexColor()
+{
+	return m_bgColor;
+}
+
+QString Global::fgHexColor()
+{
+	return m_fgColor;
+}
+
+#include "global.moc"

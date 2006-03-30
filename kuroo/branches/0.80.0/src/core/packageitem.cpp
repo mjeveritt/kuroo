@@ -31,7 +31,7 @@
  * @class PackageItem
  * @short Base class for package.
  */
-PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
+PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
 	m_parent( parent ), m_index( 0 ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
@@ -39,7 +39,7 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 {
 }
 
-PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
+PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
 	m_parent( parent->listView() ), m_index( 0 ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
@@ -89,7 +89,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 		switch ( column ) {
 			
 			case 0 : {
-				if ( m_status == FILTER_ALL_STRING )
+				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 				else {
 					if ( KurooConfig::installedColumn() ) {
@@ -99,7 +99,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 					else
 						setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 					
-					if ( m_status == FILTER_OLD_STRING ) {
+					if ( m_status & PACKAGE_OLD ) {
 						QFont font( painter->font() );
 						font.setItalic( true );
 						painter->setFont( font );
@@ -158,7 +158,7 @@ QString PackageItem::description()
  * Package status describing if this package is installed or not.
  * @return status
  */
-QString PackageItem::status()
+int PackageItem::status()
 {
 	return m_status;
 }
@@ -169,7 +169,7 @@ QString PackageItem::status()
  */
 bool PackageItem::isInstalled()
 {
-	return ( m_status == FILTER_INSTALLED_STRING || m_status == FILTER_OLD_STRING );
+	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_OLD ) );
 }
 
 /**
@@ -178,7 +178,7 @@ bool PackageItem::isInstalled()
  */
 bool PackageItem::isInPortage()
 {
-	return ( m_status != FILTER_OLD_STRING );
+	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
 }
 
 /**
@@ -202,7 +202,7 @@ void PackageItem::setDescription( const QString& description )
 
 void PackageItem::setInstalled()
 {
-	m_status = FILTER_INSTALLED_STRING;
+	m_status = PACKAGE_INSTALLED;
 }
 
 /**
@@ -269,7 +269,7 @@ void PackageItem::initVersions()
 		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
 		
-		if ( status == FILTER_INSTALLED_STRING )
+		if ( status == PACKAGE_INSTALLED_STRING )
 			version->setInstalled( true );
 		
 		m_versions.append( version );

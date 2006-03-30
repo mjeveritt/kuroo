@@ -18,57 +18,44 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef PACKAGELISTVIEW_H
-#define PACKAGELISTVIEW_H
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
-#include <klistview.h>
+#include <qobject.h>
 
-#include <qdict.h>
-
-class PackageItem;
+class QRegExp;
+class QWidget;
 
 /**
- * @class PackageListView
- * @short Base class for packages listviews.
+ * @class Global
+ * @short To keep global variables
  */
-class PackageListView : public KListView
+class Global : public QObject
 {
 Q_OBJECT
 public:
-    PackageListView( QWidget *parent = 0, const char *name = 0 );
-    ~PackageListView();
-
-public:
-	virtual	void			resetListView();
-	virtual	PackageItem* 	packageItemById( const QString& id );
+    Global( QObject *parent = 0 );
+    ~Global();
 	
-	virtual QString			currentId();
-	int						currentItemStatus();
-	virtual PackageItem* 	currentPackage();
+	void 		init( QObject *parent = 0 );
 	
-	virtual QStringList		selectedId();
-	virtual QStringList		selectedPackages();
+	QString		kurooDir();
+	QRegExp		rxPortageVersion();
 	
-	virtual QStringList		allId();
-	virtual QStringList		allPackages();
-	
-	virtual QString			count();
-	
-public slots:
-	void					slotNextPackage( bool isPrevious );
-	
-protected slots:
-	void					setPackageFocus( const QString& id );
-	virtual void 			indexPackage( const QString& id, PackageItem *item );
-	
-protected:
-	QDict<PackageItem>		m_packageIndex;
-	
-signals:
-	void					signalPackageChanged();
+	void		setKurooView( QWidget* view );
+	long		kurooViewId();
+	QString		bgHexColor();
+	QString		fgHexColor();
 	
 private:
+	QObject*	m_parent;
 	
+	// Kuroo widget id so MessageBox's can be made modal
+	long		m_wId;
+	
+	QString		m_bgColor;
+	
+	QString		m_fgColor;
 };
 
 #endif

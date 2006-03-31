@@ -54,8 +54,9 @@ void EtcUpdate::init( QObject *parent )
  */
 void EtcUpdate::askUpdate( const int& count )
 {
-	switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
-	                                     .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
+	switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
+	                                        i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
+	                                        .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
 		
 		case KMessageBox::Yes :
 			etcUpdate();
@@ -128,7 +129,8 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 	
 	if ( m_noFiles ) {
 		SignalistSingleton::Instance()->setKurooBusy( false );
-		KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
+		KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), 
+		                       i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
 	}
 	else {
 		
@@ -162,7 +164,8 @@ void EtcUpdate::runDiff()
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
 		
 		// Ask user what to do with this etc-file
-		switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), 
+		switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>%1Do you want to merge changes in %2?</qt>")
+		                                        .arg( etcWarning, destination ), 
 		                                     i18n("etc-update (%1 of %2)").arg( m_count++ ).arg( m_totalEtcCount ) ) ) {
 			
 			// Merge this etc-file
@@ -177,7 +180,8 @@ void EtcUpdate::runDiff()
 				
 				if ( !eProc->isRunning() ) {
 					LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
-					KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" ).arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
+					KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
+					                       .arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
 					SignalistSingleton::Instance()->setKurooBusy( false );
 				}
 				else {
@@ -210,7 +214,8 @@ void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
 {
 	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
 	KIO::file_delete( m_diffSource );
-	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource ).arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
+	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource )
+	                                    .arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
 	m_diffSource = QString::null;
 	
 	// Move to next etc-file

@@ -32,10 +32,6 @@
 
 #include <kglobal.h>
 
-// capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
-#define POS_PACKAGE     1
-#define POS_VERSION     2
-
 /**
  * @class ScanPortageJob
  * @short Thread for scanning local portage tree for available packages.
@@ -46,15 +42,7 @@
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_aborted( true ),
-	rxAtom(
-			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-			"-("           								// start of the version part
-			"(?:\\d+(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-	       	"(?:-r\\d*)?"  								// revision
-	       	"(?:\\*$)?)?"          						// end of the (optional) version part and the atom string
-		  )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_aborted( true )
 {
 }
 
@@ -231,11 +219,10 @@ bool ScanPortageJob::doJob()
 						return false;
 					}
 					
-					if ( rxAtom.exactMatch( *itPackage ) ) {
-						
-						// Get the captured strings
-						QString name = rxAtom.cap( POS_PACKAGE );
-						QString version = rxAtom.cap( POS_VERSION );
+					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+					if ( !parts.isEmpty() ) {
+						QString name = parts[1];
+						QString version = parts[2];
 						
 						Info info( scanInfo( KurooConfig::dirEdbDep() + *itPath, *itCategory, name, version ) );
 						
@@ -411,12 +398,11 @@ void ScanPortageJob::scanInstalledPackages()
 				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
 					continue;
 				
-				if ( rxAtom.exactMatch( *itPackage ) ) {
-					
-					// Get the captured strings
-					QString name = rxAtom.cap( POS_PACKAGE );
-					QString version = rxAtom.cap( POS_VERSION );
-				
+				QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+				if ( !parts.isEmpty() ) {
+					QString name = parts[1];
+					QString version = parts[2];
+
 					// Insert category if not found in portage
 					if ( !m_categories.contains( *itCategory ) )
 						m_categories[ *itCategory ];
@@ -462,7 +448,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	Info info;
 	QFile file( path + "/" + category + "/" + name + "-" + version );
 	
-	if( !file.open( IO_ReadOnly ) ) {
+	if ( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << i18n("Scanning Portage cache. Error reading: ") << path << "/" << category << "/" << name << "-" << version << endl;
 		kdDebug() << "Scanning Portage cache. Error reading: " << path << "/" << category << "/" << name << "-" << version << endl;
 		

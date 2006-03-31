@@ -24,6 +24,8 @@
 #include <qwidget.h>
 #include <qpalette.h>
 
+#include <kdebug.h>
+
 /**
  * @class Global
  * @short Some useful global methods.
@@ -51,19 +53,38 @@ QString Global::kurooDir()
 }
 
 /**
- * Parse out version part from package.
+ * Parse out category, package name and version parts from package.
  */
-QString Global::getPackageVersion( const QString& packageString )
+const QStringList Global::parsePackage( const QString& packageString )
 {
 	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)" );
-	if  ( rx.search( packageString ) != -1 )
-		return rx.cap( 1 );
-	else
-		QString::null;
+	QStringList list;
+	QString nameVersion;
+	
+	// Parse out the category first
+	if ( packageString.contains( '/' ) ) {
+		list << packageString.section( "/", 0, 0 );
+		nameVersion = packageString.section( "/", 1, 1 );
+	}
+	else {
+		list << QString::null;
+		nameVersion = packageString;
+	}
+
+	// Now package name and version
+	if ( rx.search( nameVersion ) != -1 ) {
+		QString name = nameVersion.section( rx.cap( 1 ), 0, 0 );
+		list << name;
+		list << nameVersion.section( name + "-", 1 );
+		return list;
+	}
+	else {
+		return QStringList::QStringList();
+	}
 }
 
 /**
- * Kuroo widget.
+ * Kuroo widget parameters.
  */
 void Global::setKurooView( QWidget* view )
 {

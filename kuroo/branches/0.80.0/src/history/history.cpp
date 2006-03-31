@@ -221,7 +221,6 @@ void History::slotParse()
 					QString package = rxPackage.cap(6);
 					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
 					PortageSingleton::Instance()->addInstalledPackage( package );
-					PortageSingleton::Instance()->removeUpdatePackage( package );
 					emit signalHistoryChanged();
 				}
 				else {

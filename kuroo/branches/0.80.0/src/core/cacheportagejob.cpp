@@ -128,9 +128,9 @@ bool CachePortageJob::doJob()
 					}
 					QString package = *itCategory + "/" + *itPackage;
 					
-					QString versionString = GlobalSingleton::Instance()->getPackageVersion( *itPackage );
-					if ( !versionString.isEmpty() ) {
-						QString packageName = (*itPackage).section( versionString, 0, 0 );
+					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+					if ( !parts.isEmpty() ) {
+						QString packageName = parts[1];
 						
 						// Get package size
 						QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;

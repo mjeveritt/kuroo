@@ -37,25 +37,25 @@ public:
     Global( QObject *parent = 0 );
     ~Global();
 	
-	void 		init( QObject *parent = 0 );
+	void 				init( QObject *parent = 0 );
 	
-	QString		kurooDir();
-	QString		getPackageVersion( const QString& packageString );
+	QString 			kurooDir();
+	const QStringList 	parsePackage( const QString& packageString );
 	
-	void		setKurooView( QWidget* view );
-	long		kurooViewId();
-	QString		bgHexColor();
-	QString		fgHexColor();
+	void 				setKurooView( QWidget* view );
+	long 				kurooViewId();
+	QString				bgHexColor();
+	QString				fgHexColor();
 	
 private:
-	QObject*	m_parent;
+	QObject*			m_parent;
 	
 	// Kuroo widget id so MessageBox's can be made modal
-	long		m_wId;
+	long				m_wId;
 	
-	QString		m_bgColor;
+	QString				m_bgColor;
 	
-	QString		m_fgColor;
+	QString				m_fgColor;
 };
 
 #endif

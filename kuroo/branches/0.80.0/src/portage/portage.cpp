@@ -37,28 +37,31 @@ public:
 	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
 	
 	virtual bool doJob() {
-		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" ); // @fixme: is this correct?
-		QString category, name, version;
 		
-		if ( rxPackage.search( m_package ) > -1 ) {
-			category = rxPackage.cap(1);
-			name = rxPackage.cap(2);
-			version = m_package.section( name + "-", 1, 1 ).remove(' ');
-		}
-		else {
+		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
+		if ( parts.isEmpty() ) {
 			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
 			kdDebug() << QString("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+			return false;
 		}
+		QString category = parts[0];
+		QString name = parts[1];
+		QString version = parts[2];
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QString id = KurooDBSingleton::Instance()->singleQuery( 
-			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package "
+			"WHERE name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")
+			.arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
-			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-			kdDebug() << QString("Inserting emerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			
+			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.")
+				.arg( category ).arg( name ) << endl;
+			
+			kdDebug() << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
+				.arg( category ).arg( name ) << endl;
+			
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return false;
 		}
 		else {
@@ -68,7 +71,12 @@ public:
 			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
 			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
 			
-			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			// Clean out the update string if this version was installed
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '' "
+			                                              "WHERE id = '%1' AND ( updateVersion = '%2' OR updateVersion = '%3' );" )
+			                                     .arg( id ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
+			
+			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
 		}
 	}
@@ -92,23 +100,20 @@ public:
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" ); // @fixme: is this correct?
-		QString category, name, version;
 		
-		if ( rxPackage.search( m_package ) > -1 ) {
-			category = rxPackage.cap(1);
-			name = rxPackage.cap(2);
-			packageString = category + "/" + name;
-			version = m_package.section( name + "-", 1, 1 ).remove(' ');
-		}
-		else {
+		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
+		if ( parts.isEmpty() ) {
 			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
 			kdDebug() << QString("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+			return false;
 		}
+		QString category = parts[0];
+		QString name = parts[1];
+		QString version = parts[2];
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery( 
-			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+			"SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
+			"( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 		
 		if ( id.isEmpty() ) {
 			kdDebug() << i18n("Removing unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
@@ -127,17 +132,17 @@ public:
 			if ( installedVersionCount == "1" ) {
 			
 				// Mark package as uninstalled
-				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%2' AND id = '%3'")
-				                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( PACKAGE_INSTALLED_STRING ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%3'")
+				                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ), m_db );
 			
 				// Delete package if "old" = not in official Portage anymore
 				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%1' AND id = '%2';" )
 				                                     .arg( PACKAGE_DELETED_STRING ).arg( PACKAGE_OLD_STRING ).arg( id ), m_db );
 			}
 			
-			// And now mark as not installed
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND status = '%3';" )
-			                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
+			// And now mark this specific version as not installed
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
+			                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( version ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
@@ -152,58 +157,6 @@ public:
 private:
 	const QString m_package;
 	QString packageString;
-};
-
-/**
- * @class RemoveUpdatesPackageJob
- * @short Thread for removing single package from updates.
- */
-class RemoveUpdatesPackageJob : public ThreadWeaver::DependentJob
-{
-public:
-	RemoveUpdatesPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
-	
-	virtual bool doJob() {
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QRegExp rxPackage( "(\\S+)/((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)(-(?:\\d+\\.)*\\d+[a-z]?)" ); // @fixme: is this correct?
-		QString category, name, version;
-		
-		if ( rxPackage.search( m_package ) > -1 ) {
-			category = rxPackage.cap(1);
-			name = rxPackage.cap(2);
-			version = m_package.section( name + "-", 1, 1 ).remove(' ');
-		}
-		else {
-			kdDebug() << i18n("Removing update package: can not match package %1.").arg( m_package ) << endl;
-			kdDebug() << QString("Removing update package: can not match package %1.").arg( m_package ) << endl;
-		}
-		
-		QString id = KurooDBSingleton::Instance()->singleQuery(
-			" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-			" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
-		
-		if ( id.isEmpty() ) {
-			kdDebug() << i18n("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-			kdDebug() << QString("Removing update package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-			return false;
-		}
-		else {
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1', updateVersion = '' "
-			                                              "WHERE name = '%2' AND ( updateVersion = '%3' OR updateVersion = '%4' );" )
-			                                     .arg( PACKAGE_AVAILABLE_STRING )
-			                                     .arg( name ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
-			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-			return true;
-		}
-	}
-	
-	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged();
-	}
-	
-private:
-	const QString m_package;
 };
 
 /**
@@ -511,7 +464,7 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
  */
 void Portage::addInstalledPackage( const QString& package )
 {
-	kdDebug() << k_funcinfo << endl;
+	kdDebug() << k_funcinfo << " " << package << endl;
 	
 	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
 }
@@ -523,7 +476,7 @@ void Portage::addInstalledPackage( const QString& package )
  */
 void Portage::removeInstalledPackage( const QString& package )
 {
-	kdDebug() << k_funcinfo << endl;
+	kdDebug() << k_funcinfo << " " << package << endl;
 	
 	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
 }
@@ -547,18 +500,6 @@ bool Portage::slotLoadUpdates()
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
 	return true;
-}
-
-/**
- * @fixme: Check for failure.
- * Remove packages from db.
- * @param packageIdList
- */
-void Portage::removeUpdatePackage( const QString& package )
-{
-	kdDebug() << k_funcinfo << endl;
-	
-	ThreadWeaver::instance()->queueJob( new RemoveUpdatesPackageJob( this, package ) );
 }
 
 /**

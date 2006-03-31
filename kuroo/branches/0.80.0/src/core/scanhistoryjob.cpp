@@ -51,8 +51,6 @@ ScanHistoryJob::~ScanHistoryJob()
  */
 void ScanHistoryJob::completeJob()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	SignalistSingleton::Instance()->scanHistoryComplete();
 	m_aborted = false;
 }
@@ -64,8 +62,6 @@ void ScanHistoryJob::completeJob()
  */
 bool ScanHistoryJob::doJob()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( !m_db->isConnected() ) {
 		kdDebug() << i18n("Parsing emerge.log. Can not connect to database") << endl;
 		kdDebug() << "Parsing emerge.log. Can not connect to database" << endl;
@@ -80,6 +76,7 @@ bool ScanHistoryJob::doJob()
 	QRegExp rxTimeStamp( "\\d+:\\s" );
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
+	bool statisticsUpdated( false );
 	
 	foreach ( m_logLines ) {
 		
@@ -120,15 +117,16 @@ bool ScanHistoryJob::doJob()
 						int secTime = timeStamp.toUInt() - itLogMap.data();
 						logMap.erase( itLogMap );
 						
-						QString versionString = GlobalSingleton::Instance()->getPackageVersion( package );
-						if ( !versionString.isEmpty() ) {
-							QString packageNoVersion = package.section( versionString, 0, 0 );
-			
+						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
+						if ( !parts.isEmpty() ) {
+							QString packageName = parts[1];
+
 							// Update emerge time and increment count for packageNoVersion
-							EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageNoVersion );
+							EmergeTimeMap::iterator itMap = emergeTimeMap.find( packageName );
 							if ( itMap == emergeTimeMap.end() ) {
 								PackageEmergeTime pItem( secTime, 1 );
-								emergeTimeMap.insert( packageNoVersion, pItem );
+								emergeTimeMap.insert( packageName, pItem );
+								statisticsUpdated = true;
 							}
 							else {
 								itMap.data().add(secTime);
@@ -139,8 +137,8 @@ bool ScanHistoryJob::doJob()
 							
 							KurooDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO history (package, timestamp, time, einfo, emerge) "
-								"VALUES ('%1', '%2', '%3', '%4','true')"
-								";" ).arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
+								"VALUES ('%1', '%2', '%3', '%4','true');" )
+							    .arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
 						}
 						else {
 							kdDebug() << i18n("Parsing emerge.log. Can not parse: ") << package << endl;
@@ -157,8 +155,8 @@ bool ScanHistoryJob::doJob()
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {
 					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
 					KurooDBSingleton::Instance()->insert( QString( 
-						"INSERT INTO history (package, timestamp, emerge) "
-						"VALUES ('%1', '%2', 'false');" ).arg( package ).arg( timeStamp ), m_db );
+						"INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" )
+					                                      .arg( package ).arg( timeStamp ), m_db );
 				}
 				else
 					if ( emergeLine.contains( "=== Sync completed" ) )
@@ -166,7 +164,9 @@ bool ScanHistoryJob::doJob()
 			}
 	}
 	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-	HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
+	
+	if ( statisticsUpdated )
+		HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	
 	if ( !syncTimeStamp.isEmpty() )
 		setKurooDbMeta( "syncTimeStamp", syncTimeStamp );
@@ -176,12 +176,13 @@ bool ScanHistoryJob::doJob()
 
 void ScanHistoryJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	kdDebug() << k_funcinfo << endl;
-	
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
+	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;")
+	                                                .arg( meta ), m_db ) == "0" )
+		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;")
+		                                     .arg( meta ).arg( data ), m_db );
 	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';")
+		                                     .arg( meta ).arg( data ), m_db );
 }
 
 #include "scanhistoryjob.moc"

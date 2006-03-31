@@ -77,7 +77,6 @@ bool ScanUpdatesJob::doJob()
 	if ( m_packageList.isEmpty() ) {
 		kdDebug() << i18n("Scanning updates. No update package found") << endl;
 		kdDebug() << "Scanning updates. No update package found" << endl;
-// 		return false;
 	}
 	
 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
@@ -141,7 +140,7 @@ bool ScanUpdatesJob::doJob()
 					updateVersion = (*it).version + " (U)";
 				
 				KurooDBSingleton::Instance()->query( QString( "UPDATE package_temp SET updateVersion = '%1', status = '%2' "
-				                                              " WHERE id = '%3';" )
+				                                              "WHERE id = '%3';" )
 				                                     .arg( updateVersion ).arg( PACKAGE_UPDATES_STRING ).arg( id ), m_db );
 				
 				updatesCount++;
@@ -164,10 +163,13 @@ bool ScanUpdatesJob::doJob()
 
 void ScanUpdatesJob::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ), m_db );
+	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;")
+	                                                .arg( meta ), m_db ) == "0" )
+		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;")
+		                                     .arg( meta ).arg( data ), m_db );
 	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ), m_db );
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';")
+		                                     .arg( meta ).arg( data ), m_db );
 }
 
 #include "scanupdatesjob.moc"

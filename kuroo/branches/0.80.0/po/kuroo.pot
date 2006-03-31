@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-31 11:48+0200\n"
+"POT-Creation-Date: 2006-03-31 19:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,11 +116,11 @@ msgid "Do you want to abort the running installation?"
 msgstr ""
 
 #: queue/queuetab.cpp:385 core/emerge.cpp:444 core/emerge.cpp:522
-#: core/cacheportagejob.cpp:178 core/etcupdate.cpp:124
-#: core/scanportagejob.cpp:370 core/scanportagejob.cpp:451
-#: core/scanupdatesjob.cpp:160 core/portagefiles.cpp:145
+#: core/cacheportagejob.cpp:178 core/etcupdate.cpp:125
+#: core/scanportagejob.cpp:357 core/scanportagejob.cpp:437
+#: core/scanupdatesjob.cpp:159 core/portagefiles.cpp:145
 #: core/portagefiles.cpp:243 core/portagefiles.cpp:339
-#: core/portagefiles.cpp:439 history/history.cpp:257 history/history.cpp:258
+#: core/portagefiles.cpp:439 history/history.cpp:256 history/history.cpp:257
 #: statusbar.cpp:93
 msgid "Done."
 msgstr ""
@@ -256,7 +256,7 @@ msgstr ""
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:542 core/emerge.cpp:550
+#: core/emerge.cpp:542 core/emerge.cpp:551
 msgid "%1 is not available on your architecture %2!<br><br>"
 msgstr ""
 
@@ -268,39 +268,39 @@ msgid ""
 "website."
 msgstr ""
 
-#: core/emerge.cpp:546
+#: core/emerge.cpp:547
 msgid "Missing Keyword"
 msgstr ""
 
-#: core/emerge.cpp:551
+#: core/emerge.cpp:552
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:553
+#: core/emerge.cpp:555
 msgid "-* Keyword"
 msgstr ""
 
-#: core/emerge.cpp:557
+#: core/emerge.cpp:559
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:559
+#: core/emerge.cpp:562
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:560 core/emerge.cpp:574
+#: core/emerge.cpp:563 core/emerge.cpp:578
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:571
+#: core/emerge.cpp:574
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:573
+#: core/emerge.cpp:577
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
@@ -333,79 +333,79 @@ msgstr ""
 msgid "Creating cache. Can not parse: "
 msgstr ""
 
-#: core/etcupdate.cpp:57
+#: core/etcupdate.cpp:58
 msgid ""
 "<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to "
 "merge changes?</qt>"
 msgstr ""
 
-#: core/etcupdate.cpp:58 core/etcupdate.cpp:72 core/etcupdate.cpp:180
+#: core/etcupdate.cpp:59 core/etcupdate.cpp:73 core/etcupdate.cpp:184
 #: main.cpp:43 rc.cpp:203
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
 
-#: core/etcupdate.cpp:72
+#: core/etcupdate.cpp:73
 msgid "Please specify merge tool in settings!"
 msgstr ""
 
-#: core/etcupdate.cpp:84
+#: core/etcupdate.cpp:85
 msgid ""
 "\n"
 "etc-update didn't start. "
 msgstr ""
 
-#: core/etcupdate.cpp:90
+#: core/etcupdate.cpp:91
 msgid ""
 "\n"
 "Running etc-update..."
 msgstr ""
 
-#: core/etcupdate.cpp:91
+#: core/etcupdate.cpp:92
 msgid "Checking for configuration file updates..."
 msgstr ""
 
-#: core/etcupdate.cpp:131
+#: core/etcupdate.cpp:133
 msgid "There are no files that need to be updated through etc-update."
 msgstr ""
 
-#: core/etcupdate.cpp:131 kurooview.cpp:83
+#: core/etcupdate.cpp:133 kurooview.cpp:83
 msgid "Etc-update"
 msgstr ""
 
-#: core/etcupdate.cpp:162
+#: core/etcupdate.cpp:164
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr ""
 
-#: core/etcupdate.cpp:165
+#: core/etcupdate.cpp:167
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
 msgstr ""
 
-#: core/etcupdate.cpp:166
+#: core/etcupdate.cpp:169
 msgid "etc-update (%1 of %2)"
 msgstr ""
 
-#: core/etcupdate.cpp:179
+#: core/etcupdate.cpp:182
 msgid "%1 didn't start."
 msgstr ""
 
-#: core/etcupdate.cpp:180
+#: core/etcupdate.cpp:183
 msgid "%1 could not start!"
 msgstr ""
 
-#: core/etcupdate.cpp:184
+#: core/etcupdate.cpp:188
 msgid "Merging changes in '%1'."
 msgstr ""
 
-#: core/etcupdate.cpp:193
+#: core/etcupdate.cpp:197
 msgid "Skipping '%1'. etc-update will ask again next time."
 msgstr ""
 
-#: core/etcupdate.cpp:200
+#: core/etcupdate.cpp:204
 msgid "etc-update completed."
 msgstr ""
 
-#: core/etcupdate.cpp:213
+#: core/etcupdate.cpp:217
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr ""
 
@@ -424,59 +424,59 @@ msgstr ""
 msgid "Subcategory"
 msgstr ""
 
-#: core/scanportagejob.cpp:96
+#: core/scanportagejob.cpp:84
 msgid "Scanning Portage. Can not connect to database"
 msgstr ""
 
-#: core/scanportagejob.cpp:108
+#: core/scanportagejob.cpp:96
 msgid "Refreshing Portage packages view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:176 core/scanportagejob.cpp:281
+#: core/scanportagejob.cpp:164 core/scanportagejob.cpp:268
 msgid "Scanning Portage. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:192 core/scanportagejob.cpp:228
+#: core/scanportagejob.cpp:180 core/scanportagejob.cpp:216
 msgid "Scanning Portage. Portage scan aborted"
 msgstr ""
 
-#: core/scanportagejob.cpp:271
+#: core/scanportagejob.cpp:258
 msgid "Scanning Portage. Scanning Portage cache: can not match package %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:388 core/scanportagejob.cpp:447
+#: core/scanportagejob.cpp:375 core/scanportagejob.cpp:433
 msgid "Scanning installed packages. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:392
+#: core/scanportagejob.cpp:379
 msgid "Collecting installed packages..."
 msgstr ""
 
-#: core/scanportagejob.cpp:441
+#: core/scanportagejob.cpp:427
 msgid "Scanning installed packages. Can not match %1."
 msgstr ""
 
-#: core/scanportagejob.cpp:466
+#: core/scanportagejob.cpp:452
 msgid "Scanning Portage cache. Error reading: "
 msgstr ""
 
-#: core/scanportagejob.cpp:573
+#: core/scanportagejob.cpp:559
 msgid "Scanning installed packages. Error reading: "
 msgstr ""
 
-#: core/scanhistoryjob.cpp:70
+#: core/scanhistoryjob.cpp:66
 msgid "Parsing emerge.log. Can not connect to database"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:88
+#: core/scanhistoryjob.cpp:85
 msgid "Parsing emerge.log. History scan aborted"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:107 core/scanhistoryjob.cpp:152
+#: core/scanhistoryjob.cpp:104 core/scanhistoryjob.cpp:150
 msgid "Parsing emerge.log. No package found!"
 msgstr ""
 
-#: core/scanhistoryjob.cpp:146
+#: core/scanhistoryjob.cpp:144
 msgid "Parsing emerge.log. Can not parse: "
 msgstr ""
 
@@ -488,15 +488,15 @@ msgstr ""
 msgid "Scanning updates. No update package found"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:83
+#: core/scanupdatesjob.cpp:82
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:113
+#: core/scanupdatesjob.cpp:112
 msgid "Scanning updates. Scan aborted!"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:128
+#: core/scanupdatesjob.cpp:127
 msgid "Scanning updates. Can not find id in database for package %1/%2."
 msgstr ""
 
@@ -516,19 +516,19 @@ msgstr ""
 msgid "Can not find category in database for id %1."
 msgstr ""
 
-#: core/portagedb.cpp:741
+#: core/portagedb.cpp:745
 msgid "Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagedb.cpp:746
+#: core/portagedb.cpp:750
 msgid "Querying for package id. Can not parse: "
 msgstr ""
 
-#: core/portagedb.cpp:1130
+#: core/portagedb.cpp:1134
 msgid "Database versions incompatible. Removing and rebuilding database.\n"
 msgstr ""
 
-#: core/portagedb.cpp:1134
+#: core/portagedb.cpp:1138
 msgid "Database file corrupt. Removing and rebuilding database.\n"
 msgstr ""
 
@@ -696,7 +696,7 @@ msgstr ""
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:272 core/packageinspector.cpp:798
+#: core/packageinspector.cpp:272 core/packageinspector.cpp:802
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -710,47 +710,47 @@ msgstr ""
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:388
+#: core/packageinspector.cpp:392
 msgid "Marking user masked version. Can not parse: "
 msgstr ""
 
-#: core/packageinspector.cpp:591
+#: core/packageinspector.cpp:595
 msgid "Loading use flag description. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:672
+#: core/packageinspector.cpp:676
 msgid "Loading changelog. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:674
+#: core/packageinspector.cpp:678
 msgid "%1No ChangeLog found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:701
+#: core/packageinspector.cpp:705
 msgid "Loading ebuild. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:703
+#: core/packageinspector.cpp:707
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:739
+#: core/packageinspector.cpp:743
 msgid "Loading dependencies. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:741
+#: core/packageinspector.cpp:745
 msgid "%1No dependencies found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:769
+#: core/packageinspector.cpp:773
 msgid "Loading installed files list. Error reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:771
+#: core/packageinspector.cpp:775
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:844 core/packageinspector.cpp:908
+#: core/packageinspector.cpp:848 core/packageinspector.cpp:912
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -807,44 +807,44 @@ msgstr ""
 msgid "Can not parse package emerge start in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:228
+#: history/history.cpp:227
 msgid "Can not parse package emerge complete in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:232
+#: history/history.cpp:231
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:239
+#: history/history.cpp:238
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:245 history/history.cpp:246
+#: history/history.cpp:244 history/history.cpp:245
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:251 history/history.cpp:252
+#: history/history.cpp:250 history/history.cpp:251
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:269 rc.cpp:507
+#: history/history.cpp:268 rc.cpp:507
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:272
+#: history/history.cpp:271
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:273
+#: history/history.cpp:272
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:274
+#: history/history.cpp:273
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:275
+#: history/history.cpp:274
 msgid "terminating"
 msgstr ""
 
@@ -864,43 +864,35 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: portage/portage.cpp:49
+#: portage/portage.cpp:43
 msgid "Inserting emerged package: can not match %1."
 msgstr ""
 
-#: portage/portage.cpp:59
+#: portage/portage.cpp:58
 msgid ""
 "Inserting emerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:105
+#: portage/portage.cpp:106
 msgid "Removing unmerged package: can not match %1."
 msgstr ""
 
-#: portage/portage.cpp:114
+#: portage/portage.cpp:119
 msgid ""
 "Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:177
-msgid "Removing update package: can not match package %1."
-msgstr ""
-
-#: portage/portage.cpp:186
-msgid "Removing update package: Can not find id in database for package %1/%2."
-msgstr ""
-
-#: portage/portage.cpp:344
+#: portage/portage.cpp:297
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
 msgstr ""
 
-#: portage/portage.cpp:398
+#: portage/portage.cpp:351
 msgid "Loading packages in world. Error reading: "
 msgstr ""
 
-#: portage/portage.cpp:418
+#: portage/portage.cpp:371
 msgid "Adding to world. Error writing: "
 msgstr ""
 

@@ -58,7 +58,7 @@ public slots:
 	
 	bool						slotRefreshUpdates();
 	bool						slotLoadUpdates();
-	void						removeUpdatePackage( const QString& package );
+// 	void						removeUpdatePackage( const QString& package );
 	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
 	
 signals:

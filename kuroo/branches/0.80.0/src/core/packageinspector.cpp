@@ -377,12 +377,16 @@ void PackageInspector::showSettings()
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
-		QString versionString = GlobalSingleton::Instance()->getPackageVersion( userMaskVersion );
-		if ( !versionString.isEmpty() ) {
-			userMaskVersion = versionString.remove( 0, 1 ) + userMaskVersion.section( versionString, 1, 1 );
+		QStringList parts = GlobalSingleton::Instance()->parsePackage( userMaskVersion );
+		if ( !parts.isEmpty() ) {
+			QString version = parts[2];
+			
+// 		QString versionString = GlobalSingleton::Instance()->getPackageVersion( userMaskVersion );
+// 		if ( !versionString.isEmpty() ) {
+// 			userMaskVersion = versionString.remove( 0, 1 ) + userMaskVersion.section( versionString, 1, 1 );
 			dialog->rbVersionsSpecific->setChecked( true );
 			dialog->cbVersionsSpecific->setDisabled( false );
-			dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );
+			dialog->cbVersionsSpecific->setCurrentText( version );
 		}
 		else {
 			kdDebug() << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << endl;

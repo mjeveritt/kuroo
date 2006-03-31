@@ -37,7 +37,8 @@ public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 	
-	void							edit( PackageItem* portagePackage );
+	void							edit( PackageItem* portagePackage, int view );
+	bool							isParentView( int view );
 	void							showHardMaskInfo();
 	
 	InspectorBase					*dialog;
@@ -69,6 +70,9 @@ private slots:
 	void							slotParseTempUse( KProcess* eProc );
 	
 private:
+	// Which view called the Inspector
+	int								m_view;
+	
 	bool							m_versionSettingsChanged, m_useSettingsChanged, m_isVirginState, m_isAvailableBefore;
 	QString							m_id, m_category, m_package, m_hardMaskComment;
 	QMap<QString, QString>			m_useMap;

@@ -46,7 +46,8 @@ public:
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db );
 		
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db );
+			KurooDBSingleton::Instance()->insert( QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" )
+			                                      .arg(*it), m_db );
 		
 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 		
@@ -79,8 +80,8 @@ public:
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue "
-			                                              "WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it), m_db );
+			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
+			                                     .arg(*it).arg(*it), m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}

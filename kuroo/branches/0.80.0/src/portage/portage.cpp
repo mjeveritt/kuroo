@@ -64,8 +64,10 @@ public:
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%2';" )
 			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( id ), m_db );
-			KurooDBSingleton::Instance()->query( QString( " UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
+			
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
 			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( id ).arg( version ), m_db );
+			
 			KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
 			return true;
 		}
@@ -118,7 +120,7 @@ public:
 			
 			// Check how many version are installed
 			QString installedVersionCount = KurooDBSingleton::Instance()->singleQuery( 
-				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status != '%2' LIMIT 1;")
+				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status = '%2' LIMIT 1;")
 				.arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
 			
 			// Mark package as uninstalled only when one version is found
@@ -129,14 +131,13 @@ public:
 				                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( PACKAGE_INSTALLED_STRING ).arg( id ), m_db );
 			
 				// Delete package if "old" = not in official Portage anymore
-				// @fixme: what to do if package is in Queue?
 				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%1' AND id = '%2';" )
 				                                     .arg( PACKAGE_DELETED_STRING ).arg( PACKAGE_OLD_STRING ).arg( id ), m_db );
 			}
 			
 			// And now mark as not installed
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
-			                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND status = '%3';" )
+			                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
@@ -330,12 +331,12 @@ bool Portage::slotScan()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	int maxLoops(99);
+	int maxLoops( 99 );
 	
 	// Wait for cache job to finish before launching the scan.
 	while ( true ) {
 		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
-			::usleep(100000); // Sleep 100 msec
+			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
 		

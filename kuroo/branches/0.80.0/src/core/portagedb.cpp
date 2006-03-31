@@ -729,8 +729,9 @@ QString KurooDB::packageId( const QString& package )
 	QString category = package.section( "/", 0, 0 );
 	QString packageString = package.section( "/", 1, 1 );
 	
-	if ( GlobalSingleton::Instance()->rxPortageVersion().search( packageString ) != -1 ) {
-		QString name = packageString.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 0, 0 );
+	QString versionString = GlobalSingleton::Instance()->getPackageVersion( packageString );
+	if ( !versionString.isEmpty() ) {
+		QString name = packageString.section( versionString, 0, 0 );
 		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
 	                          " ( SELECT id from catSubCategory WHERE name = '" + category + "' ); " );
 	

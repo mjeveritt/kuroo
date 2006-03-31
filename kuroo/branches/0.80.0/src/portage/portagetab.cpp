@@ -51,7 +51,7 @@
  */
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	: PortageBase( parent ), 
-	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 ), m_isInitialized( false )
+	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
 {
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
@@ -100,7 +100,17 @@ PortageTab::~PortageTab()
  */
 void PortageTab::slotInit()
 {
+	// Get color theme
 	portageFrame->setPaletteBackgroundColor( colorGroup().base() );
+	
+	// Change select-color in summaryBrowser to get contrast
+	QPalette summaryPalette;
+	QColorGroup summaryColorGroup( colorGroup() );
+	summaryColorGroup.setColor( QColorGroup::HighlightedText, colorGroup().dark() );
+	summaryPalette.setActive( summaryColorGroup );
+	summaryPalette.setInactive( summaryColorGroup );
+	summaryPalette.setDisabled( summaryColorGroup );
+	summaryBrowser->setPalette( summaryPalette );
 	
 	// Initialize the uninstall dialog
 	m_uninstallInspector = new UninstallInspector( this );
@@ -116,7 +126,7 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotNextPackage( bool isNext )
 {
-	if ( !isVisible() )
+	if ( !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	
 	packagesView->slotNextPackage( isNext );
@@ -207,9 +217,8 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << k_funcinfo << endl;
+	kdDebug() << k_funcinfo << __LINE__ << endl;
 	
-	m_isInitialized = false;
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
@@ -355,7 +364,7 @@ void PortageTab::slotAdvanced()
 {
 	if ( packagesView->currentPackage() ) {
 		slotPackage();
-		m_packageInspector->edit( packagesView->currentPackage() );
+		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
 	}
 }
 
@@ -367,12 +376,8 @@ void PortageTab::slotPackage()
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	// Packages view is hidden don't update
-	// We may get signal to update from since Queue shares same Inspector
-	if ( !isVisible() && m_isInitialized )
+	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
-	else
-		m_isInitialized = true;
 	
 	// Clear summary and Inspector text browsers and dropdown menus
 	summaryBrowser->clear();
@@ -461,14 +466,6 @@ void PortageTab::slotPackage()
 	linesAvailable.truncate( linesAvailable.length() - 2 );
 	
 	// Build summary html-view
-	QPalette summaryPalette;
-	QColorGroup summaryColorGroup( colorGroup() );
-	summaryColorGroup.setColor( QColorGroup::HighlightedText, colorGroup().dark() );
-	summaryPalette.setActive( summaryColorGroup );
-	summaryPalette.setInactive( summaryColorGroup );
-	summaryPalette.setDisabled( summaryColorGroup );
-	summaryBrowser->setPalette( summaryPalette );
-	
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
 	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#"
 		+ GlobalSingleton::Instance()->fgHexColor() + "><font size=\"+1\">" + package + "</font> ";
@@ -550,7 +547,7 @@ void PortageTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		m_packageInspector->edit( packagesView->currentPackage() );
+		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
 }
 
 /**

@@ -110,6 +110,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 2 );
 	header()->setResizeEnabled( false, 3 );
 	
+	// Refresh packages when packages are added/removed to Queue or get installed 
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
 }
 

@@ -195,13 +195,6 @@ void KurooView::slotCheckPortage()
 }
 
 /**
- * Action when user click in close button
- */
-// void KurooView::quit()
-// {
-// }
-
-/**
  * Dcop interface to emerge pretend process 
  * @param packageList	list of packages to emerge
  */

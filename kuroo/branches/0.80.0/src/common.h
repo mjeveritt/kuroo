@@ -127,16 +127,6 @@ static const QString TESTING_STRING( QString::number( TESTING ) );
 static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 
-// Kuroo home directory
-// static const QString KUROODIR = "/var/cache/kuroo/";
-
-// Max rows in queries
-// static const int ROWLIMIT = 1000;
-
-// Regexp from Portage
-// static const QRegExp rxPortageVersion("(-(?:\\d+\\.)*\\d+[a-z]?)");
-// static QRegExp rxPortageVersion("(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)");
-
 typedef struct Info {
 	QString slot;
 	QString homepage;

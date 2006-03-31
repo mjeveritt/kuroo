@@ -42,6 +42,7 @@ public slots:
 	void				slotQueueSummary();
 	
 private slots:
+	void				slotRefresh();
 	void				slotInit();
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();

@@ -26,7 +26,7 @@
 
 /**
  * @class Global
- * @short To keep global variables
+ * @short Some useful global methods.
  */
 Global::Global( QObject *parent )
 	: QObject( parent )
@@ -51,11 +51,15 @@ QString Global::kurooDir()
 }
 
 /**
- * Regexp from Portage.
+ * Parse out version part from package.
  */
-QRegExp Global::rxPortageVersion()
+QString Global::getPackageVersion( const QString& packageString )
 {
-	return QRegExp("(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)");
+	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)" );
+	if  ( rx.search( packageString ) != -1 )
+		return rx.cap( 1 );
+	else
+		QString::null;
 }
 
 /**

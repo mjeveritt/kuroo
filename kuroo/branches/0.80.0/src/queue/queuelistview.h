@@ -63,7 +63,7 @@ private slots:
 	QString 				formatTime( int time );
 	
 signals:
-	void					signalQueueLoaded();
+// 	void					signalQueueLoaded();
 	void					signalPackageEmerged();
 	
 private:

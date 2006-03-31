@@ -299,8 +299,9 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.size = rxPackage.cap(7);
 			
 			QString packageVersion = rxPackage.cap(4);
-			if ( GlobalSingleton::Instance()->rxPortageVersion().search( packageVersion ) != -1 ) {
-				emergePackage.name = packageVersion.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 0, 0 );
+			QString versionString = GlobalSingleton::Instance()->getPackageVersion( packageVersion );
+			if ( !versionString.isEmpty() ) {
+				emergePackage.name = packageVersion.section( versionString, 0, 0 );
 				emergePackage.version = packageVersion.section( ( emergePackage.name + "-" ), 1, 1 );
 				m_emergePackageList.prepend( emergePackage );
 			}

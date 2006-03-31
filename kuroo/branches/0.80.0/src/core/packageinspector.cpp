@@ -92,6 +92,75 @@ PackageInspector::~PackageInspector()
 {
 }
 
+/**
+ * Return the caller.
+ */
+bool PackageInspector::isParentView( int view )
+{
+	return m_view == view;
+}
+
+/**
+ * Activate Inspector with current package.
+ * @param portagePackage
+ */
+void PackageInspector::edit( PackageItem* portagePackage, int view )
+{
+	kdDebug() << k_funcinfo << " view=" << view << endl;
+	
+	m_view = view;
+	m_portagePackage = portagePackage;
+	m_package = m_portagePackage->name();
+	m_category = m_portagePackage->category();
+	
+	if ( !KUser().isSuperUser() ) {
+		enableButtonApply( false );
+		dialog->groupSelectStability->setDisabled( true );
+		dialog->useView->setDisabled( true );
+		dialog->groupArchitecture->setDisabled( true );
+	}
+	
+	// Disabled editing when package is in Queue and kuroo is emerging
+	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
+		dialog->inspectorTabs->page(0)->setDisabled( true );
+		dialog->inspectorTabs->page(1)->setDisabled( true );
+	}
+	else {
+		dialog->inspectorTabs->page(0)->setDisabled( false );
+		dialog->inspectorTabs->page(1)->setDisabled( false );
+	}
+	
+	// Is it first time we load this package
+	if ( m_id != m_portagePackage->id() ) {
+		m_id = m_portagePackage->id();
+		m_isVirginState = true;
+	}
+	else
+		m_isVirginState = false;
+	
+	// Construct header text
+	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
+	dialog->package->setText( "<b><font color=#" + GlobalSingleton::Instance()->fgHexColor() 
+	                          + "><font size=+1>" + m_package + "</font> " +
+	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
+	dialog->description->setText( m_portagePackage->description() );
+	
+	showSettings();
+	slotRefreshTabs();
+	
+	// Enable/disable shortcuts buttons if first or last package
+	if ( m_portagePackage->isFirstPackage() )
+		dialog->pbPrevious->setDisabled( true );
+	else
+		dialog->pbPrevious->setDisabled( false );
+	
+	if ( m_portagePackage->isLastPackage() )
+		dialog->pbNext->setDisabled( true );
+	else
+		dialog->pbNext->setDisabled( false );
+	
+	show();
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Buttons slots
@@ -296,65 +365,6 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
 }
 
 /**
- * Activate Inspector with current package.
- * @param portagePackage
- */
-void PackageInspector::edit( PackageItem* portagePackage )
-{
-	m_portagePackage = portagePackage;
-	m_package = m_portagePackage->name();
-	m_category = m_portagePackage->category();
-	
-	if ( !KUser().isSuperUser() ) {
-		enableButtonApply( false );
-		dialog->groupSelectStability->setDisabled( true );
-		dialog->useView->setDisabled( true );
-		dialog->groupArchitecture->setDisabled( true );
-	}
-	
-	// Disabled editing when package is in Queue and kuroo is emerging
-	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
-		dialog->inspectorTabs->page(0)->setDisabled( true );
-		dialog->inspectorTabs->page(1)->setDisabled( true );
-	}
-	else {
-		dialog->inspectorTabs->page(0)->setDisabled( false );
-		dialog->inspectorTabs->page(1)->setDisabled( false );
-	}
-	
-	// Is it first time we load this package
-	if ( m_id != m_portagePackage->id() ) {
-		m_id = m_portagePackage->id();
-		m_isVirginState = true;
-	}
-	else
-		m_isVirginState = false;
-
-	// Construct header text
-	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
-	dialog->package->setText( "<b><font color=#" + GlobalSingleton::Instance()->fgHexColor() 
-	                          + "><font size=+1>" + m_package + "</font> " +
-	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
-	dialog->description->setText( m_portagePackage->description() );
-	
-	showSettings();
-	slotRefreshTabs();
-	
-	// Enable/disable shortcuts buttons if first or last package
-	if ( m_portagePackage->isFirstPackage() )
-		dialog->pbPrevious->setDisabled( true );
-	else
-		dialog->pbPrevious->setDisabled( false );
-		
-	if ( m_portagePackage->isLastPackage() )
-		dialog->pbNext->setDisabled( true );
-	else
-		dialog->pbNext->setDisabled( false );
-	
-	show();
-}
-
-/**
  * Stability choice for versions - enable the right radiobutton.
  * Priority is: specific version >> unmask package >> untest package >> stable package.
  */
@@ -367,8 +377,9 @@ void PackageInspector::showSettings()
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
-		if ( GlobalSingleton::Instance()->rxPortageVersion().search( userMaskVersion ) != -1 ) {
-			userMaskVersion = GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ).remove( 0, 1 ) + userMaskVersion.section( GlobalSingleton::Instance()->rxPortageVersion().cap( 1 ), 1, 1 );
+		QString versionString = GlobalSingleton::Instance()->getPackageVersion( userMaskVersion );
+		if ( !versionString.isEmpty() ) {
+			userMaskVersion = versionString.remove( 0, 1 ) + userMaskVersion.section( versionString, 1, 1 );
 			dialog->rbVersionsSpecific->setChecked( true );
 			dialog->cbVersionsSpecific->setDisabled( false );
 			dialog->cbVersionsSpecific->setCurrentText( userMaskVersion );

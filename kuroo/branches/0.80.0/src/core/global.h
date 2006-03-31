@@ -28,7 +28,7 @@ class QWidget;
 
 /**
  * @class Global
- * @short To keep global variables
+ * @short Some useful global methods.
  */
 class Global : public QObject
 {
@@ -40,7 +40,7 @@ public:
 	void 		init( QObject *parent = 0 );
 	
 	QString		kurooDir();
-	QRegExp		rxPortageVersion();
+	QString		getPackageVersion( const QString& packageString );
 	
 	void		setKurooView( QWidget* view );
 	long		kurooViewId();

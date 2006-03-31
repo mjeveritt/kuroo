@@ -69,6 +69,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
+	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotRefresh() ) );
 	
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
@@ -161,7 +162,7 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotNextPackage( bool isNext )
 {
-	if ( !isVisible() )
+	if ( !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
 	queueView->slotNextPackage( isNext );
@@ -170,6 +171,16 @@ void QueueTab::slotNextPackage( bool isNext )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue view slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Reload queue when package view is changed, fex when package is installed/removed.
+ */
+void QueueTab::slotRefresh()
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	queueView->insertPackageList( m_hasCheckedQueue );
+}
 
 /**
  * Load Queue packages.
@@ -188,7 +199,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 		m_hasCheckedQueue = false;
 	
 	// Load all packages
-	queueView->insertPackageList( m_hasCheckedQueue );
+	slotRefresh();
 	
 	// Enable the gui
 	slotBusy();
@@ -425,7 +436,7 @@ void QueueTab::slotAdvanced()
 {
 	if ( queueView->currentPackage() ) {
 		slotPackage();
-		m_packageInspector->edit( queueView->currentPackage() );
+		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
 	}
 }
 
@@ -435,7 +446,7 @@ void QueueTab::slotAdvanced()
 void QueueTab::slotPackage()
 {
 	// Queue view is hidden don't update
-	if ( !isVisible() )
+	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
 	// clear text browsers and dropdown menus
@@ -503,7 +514,7 @@ void QueueTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		m_packageInspector->edit( queueView->currentPackage() );
+		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
 }
 
 /**

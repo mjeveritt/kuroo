@@ -328,7 +328,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	}
 	setPackageFocus( QString::null );
 	
-	emit( signalQueueLoaded() );
+// 	emit( signalQueueLoaded() );
 }
 
 /**

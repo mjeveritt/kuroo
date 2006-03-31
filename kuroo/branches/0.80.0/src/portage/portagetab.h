@@ -65,9 +65,6 @@ private slots:
 	
 private:
 	
-	// When starting kuroo remember if package summary is empty or not
-	bool				m_isInitialized;
-	
 	// Delay package view untill all text in entered in the text-filter
 	int					m_delayFilters;
 	

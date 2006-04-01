@@ -50,6 +50,7 @@ public:
 	virtual bool					isQueued();
 	virtual bool					isInWorld();
 	
+	void							setRollOver( bool isMouseOver );
 	void							setInstalled();
 	void							setDescription( const QString& description );
 	void							setQueued( bool isQueued );
@@ -68,6 +69,9 @@ protected:
 	
 private:
 	QListView						*m_parent;
+	
+	// Is the mouse pointer over this package
+	bool							m_isMouseOver;
 	
 	// Keep track of package's index in parent listview
 	int								m_index;

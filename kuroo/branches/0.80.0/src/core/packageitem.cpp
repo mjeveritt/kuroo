@@ -33,7 +33,7 @@
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), m_index( 0 ),
+	m_parent( parent ), m_index( 0 ), m_isMouseOver( false ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
@@ -41,7 +41,7 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
-	m_parent( parent->listView() ), m_index( 0 ),
+	m_parent( parent->listView() ), m_index( 0 ), m_isMouseOver( false ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
@@ -77,6 +77,11 @@ bool PackageItem::isLastPackage()
 	return ( m_index == 1 );
 }
 
+void PackageItem::setRollOver( bool isMouseOver )
+{
+	m_isMouseOver = isMouseOver;
+	repaint();
+}
 /**
  * Set icons when package is visible.
  */
@@ -84,11 +89,20 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 {
 	if ( this->isVisible() ) {
 		QColorGroup m_colorgroup( colorgroup );
+		QFont font( painter->font() );
+		
+		if ( m_isMouseOver ) {
+			font.setBold( true );
+			painter->setFont( font );
+// 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
+// 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
+		}
 		
 		// Optimizing - do not check for not relevant columns
 		switch ( column ) {
 			
 			case 0 : {
+				
 				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 				else {
@@ -100,7 +114,6 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 						setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 					
 					if ( m_status & PACKAGE_OLD ) {
-						QFont font( painter->font() );
 						font.setItalic( true );
 						painter->setFont( font );
 						m_colorgroup.setColor( QColorGroup::Text, m_colorgroup.dark() );
@@ -120,9 +133,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 				}
 				break;
 			}
-			
 		}
-		
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }

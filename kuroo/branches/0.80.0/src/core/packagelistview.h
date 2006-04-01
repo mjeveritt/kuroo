@@ -58,6 +58,7 @@ public slots:
 	void					slotNextPackage( bool isPrevious );
 	
 protected slots:
+	void					rollOver( QListViewItem* item );
 	void					setPackageFocus( const QString& id );
 	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
@@ -68,7 +69,7 @@ signals:
 	void					signalPackageChanged();
 	
 private:
-	
+	QListViewItem* 			lastItem;
 };
 
 #endif

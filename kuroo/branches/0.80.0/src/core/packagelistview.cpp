@@ -31,7 +31,7 @@
  * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
-	: KListView( parent, name )
+	: KListView( parent, name ), lastItem( 0 )
 {
 	setFrameShape( QFrame::NoFrame );
 	setSelectionModeExt( FileManager );
@@ -41,11 +41,24 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( triggerUpdate() ) );
 	
+	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
+	
 	new ToolTip( this );
 }
 
 PackageListView::~PackageListView()
 {
+}
+
+/**
+ * Create mouse-over effect.
+ */
+void PackageListView::rollOver( QListViewItem* item )
+{
+	dynamic_cast<PackageItem*>( item )->setRollOver( true );
+	if ( lastItem )
+		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
+	lastItem = item;
 }
 
 /**
@@ -55,6 +68,7 @@ void PackageListView::resetListView()
 {
 	clear();
 	m_packageIndex.clear();
+	lastItem = 0;
 }
 
 /**

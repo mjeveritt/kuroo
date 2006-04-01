@@ -327,8 +327,6 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QueueSingleton::Instance()->insertInCache( id );
 	}
 	setPackageFocus( QString::null );
-	
-// 	emit( signalQueueLoaded() );
 }
 
 /**
@@ -464,7 +462,7 @@ void QueueListView::slotPackageStart( const QString& id )
 	m_id = id;
 	
 	// Update kuroo statusbar with remaining emerge duration
-	KurooStatusBar::instance()->setTotalSteps( sumTime() );
+	KurooStatusBar::instance()->updateTotalSteps( sumTime() );
 }
 
 /**

@@ -44,6 +44,7 @@ public:
 	
 	void 					setProgressStatus( const QString& id, const QString& text );
 	void					setTotalSteps( int total );
+	void					updateTotalSteps( int total );
 	void					setThreadTotalSteps( int total );
 	void 					setProgress( int steps );
 	void					startTimer();

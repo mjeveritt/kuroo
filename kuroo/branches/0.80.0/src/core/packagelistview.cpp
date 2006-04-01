@@ -41,7 +41,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( triggerUpdate() ) );
 	
-	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
+// 	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
 	
 	new ToolTip( this );
 }

@@ -157,7 +157,7 @@ void QueueTab::slotInit()
 }
 
 /**
- * Forward signal from next-buttons only if this tab is visible for user.
+ * Forward signal from next-buttons.
  * @param isNext
  */
 void QueueTab::slotNextPackage( bool isNext )
@@ -167,6 +167,7 @@ void QueueTab::slotNextPackage( bool isNext )
 	
 	queueView->slotNextPackage( isNext );
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue view slots
@@ -347,7 +348,6 @@ void QueueTab::slotGo()
 					packageList.prepend( "--fetch-all-uri" );
 					QueueSingleton::Instance()->installQueue( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-			
 			}
 	}
 	else {
@@ -492,7 +492,8 @@ void QueueTab::slotPackage()
 						stability = i18n("Not available");
 		
 		// Insert version in Inspector version view
-		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
+		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, 
+			(*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
 		// Mark installed version
 		if ( (*sortedVersionIterator)->isInstalled() )

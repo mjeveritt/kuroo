@@ -69,7 +69,7 @@ enum packageStates {
 		PACKAGE_OLD = 8
 };
 
-static const QString PACKAGE_ALL_STRING( QString::number( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_OLD ) );
+static const QString PACKAGE_ALL_STRING( QString::number( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
 static const QString PACKAGE_AVAILABLE_STRING( QString::number( PACKAGE_AVAILABLE ) );
 static const QString PACKAGE_INSTALLED_STRING( QString::number( PACKAGE_INSTALLED ) );
 static const QString PACKAGE_OLD_STRING( QString::number( PACKAGE_OLD ) );
@@ -147,5 +147,9 @@ typedef struct Info {
  */
 #define foreach( x ) \
 for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
+
+/// Announce a line
+#define LINE_INFO " ( " << k_funcinfo << "Line: " << __LINE__ << " )" << endl
+#define DEBUG_LINE_INFO kdDebug() << LINE_INFO
 
 #endif

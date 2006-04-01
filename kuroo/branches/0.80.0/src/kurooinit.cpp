@@ -133,8 +133,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		KurooDBSingleton::Instance()->backupDb();
 		KurooDBSingleton::Instance()->destroy();
 		remove( database );
-		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
-		kdDebug() << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		kdWarning(0) << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
+		kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 		
 		// and recreate with new structure
 		KurooDBSingleton::Instance()->init( this );
@@ -201,8 +201,8 @@ bool KurooInit::getEnvironment()
 		makeconf.close();
 	}
 	else {
-		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
-		kdDebug() << "Error reading: /etc/make.conf" << endl;
+		kdError(0) << i18n("Reading: /etc/make.conf") << LINE_INFO;
+		kdWarning(0) << "Reading: /etc/make.conf" << LINE_INFO;
 		success = false;
 	}
 	
@@ -221,8 +221,8 @@ bool KurooInit::getEnvironment()
 		f.close();
 	}
 	else {
-		kdDebug() << i18n("Error reading: /etc/make.profile") << endl;
-		kdDebug() << "Error reading: /etc/make.profile" << endl;
+		kdError(0) << i18n("Reading: /etc/make.profile") << LINE_INFO;
+		kdWarning(0) << "Reading: /etc/make.profile" << LINE_INFO;
 	}
 	
 	// Add default etc-files warnings

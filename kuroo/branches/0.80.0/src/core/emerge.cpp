@@ -57,8 +57,8 @@ void Emerge::init( QObject *parent )
 bool Emerge::stop()
 {
 	if ( eProc->isRunning() && eProc->kill(9) ) {
-		kdDebug() << i18n("Emerge process killed!") << endl;
-		kdDebug() << "Emerge process killed!" << endl;
+		kdDebug() << i18n("Emerge process killed!") << LINE_INFO;
+		kdWarning(0) << "Emerge process killed!" << LINE_INFO;
 		return true;
 	}
 	else
@@ -305,10 +305,9 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				emergePackage.version = parts[2];
 				m_emergePackageList.prepend( emergePackage );
 			}
-			else {
-				kdDebug() << i18n("Collecting emerge output. Can not parse: ") << packageVersion << endl;
-				kdDebug() << "Collecting emerge output. Can not parse: " << packageVersion << endl;
-			}
+			else
+				kdWarning(0) << i18n("Collecting emerge output. Can not parse: ") << packageVersion << LINE_INFO;
+
 		}
 		
 		////////////////////////////////////////////////////////////////////////

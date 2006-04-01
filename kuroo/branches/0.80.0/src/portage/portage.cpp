@@ -40,8 +40,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdDebug() << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
-			kdDebug() << QString("Inserting emerged package: can not match %1.").arg( m_package ) << endl;
+			kdWarning(0) << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -55,11 +54,8 @@ public:
 		
 		if ( id.isEmpty() ) {
 			
-			kdDebug() << i18n("Inserting emerged package: Can not find id in database for package %1/%2.")
-				.arg( category ).arg( name ) << endl;
-			
-			kdDebug() << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
-				.arg( category ).arg( name ) << endl;
+			kdWarning(0) << i18n("Inserting emerged package: Can not find id in database for package %1/%2.")
+				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return false;
@@ -103,8 +99,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdDebug() << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
-			kdDebug() << QString("Removing unmerged package: can not match %1.").arg( m_package ) << endl;
+			kdWarning(0) << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -116,8 +111,8 @@ public:
 			"( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 		
 		if ( id.isEmpty() ) {
-			kdDebug() << i18n("Removing unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
-			kdDebug() << QString("Removing unmerged package: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << endl;
+			kdWarning(0) << i18n("Removing unmerged package: Can not find id in database for package %1/%2.")
+				.arg( category ).arg( name ) << LINE_INFO;
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return false;
 		}
@@ -232,7 +227,7 @@ void Portage::init( QObject *parent )
  */
 void Portage::slotChanged()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// Register in db so we can check at next start if user has emerged any packages outside kuroo
 	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
@@ -251,7 +246,7 @@ void Portage::slotChanged()
  */
 bool Portage::slotRefresh()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
@@ -270,7 +265,7 @@ bool Portage::slotRefresh()
  */
 bool Portage::slotSync()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	EmergeSingleton::Instance()->sync();
 	return true;
@@ -282,7 +277,7 @@ bool Portage::slotSync()
  */
 bool Portage::slotScan()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	int maxLoops( 99 );
 	
@@ -294,8 +289,7 @@ bool Portage::slotScan()
 			break;
 		
 		if ( maxLoops-- == 0 ) {
-			kdDebug() << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << endl;
-			kdDebug() << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << endl;
+			kdWarning(0) << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << LINE_INFO;
 			break;
 		}
 	}
@@ -310,7 +304,7 @@ bool Portage::slotScan()
  */
 void Portage::slotScanCompleted()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();
@@ -323,7 +317,7 @@ void Portage::slotScanCompleted()
 	slotChanged();
 	
 	// Go on with checking for updates
-	if ( KurooDBSingleton::Instance()->getKurooDbMeta( "updatesCount" ) == "0" )
+	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
 		slotRefreshUpdates();
 }
 
@@ -347,10 +341,8 @@ void Portage::loadWorld()
 			m_mapWorld[ package.stripWhiteSpace() ] = QString::null;
 		}
 	}
-	else {
-		kdDebug() << i18n("Loading packages in world. Error reading: ") << KurooConfig::dirWorldFile() << endl;
-		kdDebug() << "Loading packages in world. Error reading: " << KurooConfig::dirWorldFile() << endl;
-	}
+	else
+		kdError(0) << i18n("Loading packages in world. Reading: ") << KurooConfig::dirWorldFile() << LINE_INFO;
 }
 
 /**
@@ -362,15 +354,13 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
-			stream << it.key() << endl;
+			stream << it.key() << LINE_INFO;
 		file.close();
 		
 		return true;
 	}
-	else {
-		kdDebug() << i18n("Adding to world. Error writing: ") << KurooConfig::dirWorldFile() << endl;
-		kdDebug() << "Adding to world. Error writing: " << KurooConfig::dirWorldFile() << endl;
-	}
+	else
+		kdError(0) << i18n("Adding to world. Writing: ") << KurooConfig::dirWorldFile() << LINE_INFO;
 	
 	return false;
 }
@@ -464,7 +454,7 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
  */
 void Portage::addInstalledPackage( const QString& package )
 {
-	kdDebug() << k_funcinfo << " " << package << endl;
+	DEBUG_LINE_INFO;
 	
 	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
 }
@@ -476,7 +466,7 @@ void Portage::addInstalledPackage( const QString& package )
  */
 void Portage::removeInstalledPackage( const QString& package )
 {
-	kdDebug() << k_funcinfo << " " << package << endl;
+	DEBUG_LINE_INFO;
 	
 	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
 }

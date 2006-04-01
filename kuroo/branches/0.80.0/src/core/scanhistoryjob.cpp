@@ -63,8 +63,7 @@ void ScanHistoryJob::completeJob()
 bool ScanHistoryJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Parsing emerge.log. Can not connect to database") << endl;
-		kdDebug() << "Parsing emerge.log. Can not connect to database" << endl;
+		kdError(0) << i18n("Parsing emerge.log. Can not connect to database") << LINE_INFO;
 		return false;
 	}
 	
@@ -82,8 +81,7 @@ bool ScanHistoryJob::doJob()
 		
 		// Abort the scan
 		if ( isAborted() ) {
-			kdDebug() << i18n("Parsing emerge.log. History scan aborted") << endl;
-			kdDebug() << "Parsing emerge.log. History scan aborted" << endl;
+			kdWarning(0) << i18n("Parsing emerge.log. History scan aborted") << LINE_INFO;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -100,10 +98,8 @@ bool ScanHistoryJob::doJob()
 				package = rxPackage.cap(2);
 				logMap[ package ] = emergeStart;
 			}
-			else {
-				kdDebug() << i18n("Parsing emerge.log. No package found!") << endl;
-				kdDebug() << "Parsing emerge.log. No package found!" << endl;
-			}
+			else
+				kdWarning(0) << i18n("Parsing emerge.log. No package found!") << LINE_INFO;
 		}
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
@@ -140,16 +136,12 @@ bool ScanHistoryJob::doJob()
 								"VALUES ('%1', '%2', '%3', '%4','true');" )
 							    .arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
 						}
-						else {
-							kdDebug() << i18n("Parsing emerge.log. Can not parse: ") << package << endl;
-							kdDebug() << "Parsing emerge.log. Can not parse: " << package << endl;
-						}
+						else
+							kdWarning(0) << i18n("Parsing emerge.log. Can not parse: ") << package << LINE_INFO;
 					}
 				}
-				else {
-					kdDebug() << i18n("Parsing emerge.log. No package found!") << endl;
-					kdDebug() << "Parsing emerge.log. No package found!" << endl;
-				}
+				else
+					kdWarning(0) << i18n("Parsing emerge.log. No package found!") << LINE_INFO;
 			}
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {

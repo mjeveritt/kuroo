@@ -53,7 +53,7 @@ public:
 				" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 			
 			if ( id.isEmpty() ) {
-				kdDebug() << i18n("Add result package list: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+				kdWarning(0) << i18n("Add result package list: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 				return false;
 			}
 			
@@ -108,7 +108,7 @@ void Results::init( QObject *parent )
  */
 void Results::refresh()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	QueueSingleton::Instance()->refresh( true );
 }

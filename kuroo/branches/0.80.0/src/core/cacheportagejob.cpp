@@ -46,7 +46,7 @@ CachePortageJob::~CachePortageJob()
 
 void CachePortageJob::completeJob()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	SignalistSingleton::Instance()->cachePortageComplete();
 }
@@ -57,11 +57,10 @@ void CachePortageJob::completeJob()
  */
 bool CachePortageJob::doJob()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Creating cache. Can not connect to database") << endl;
-		kdDebug() << "Creating cache. Can not connect to database" << endl;
+		kdError(0) << i18n("Creating cache. Can not connect to database") << LINE_INFO;
 		return false;
 	}
 	
@@ -88,8 +87,7 @@ bool CachePortageJob::doJob()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
-			kdDebug() << i18n("Creating cache. Can not access ") << *itPath << endl;
-			kdDebug() << "Creating cache. Can not access " << *itPath << endl;
+			kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << LINE_INFO;
 			continue;
 		}
 		
@@ -102,8 +100,7 @@ bool CachePortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
-				kdDebug() << "Creating cache. Caching aborted." << endl;
+				kdWarning(0) << i18n("Creating cache. Caching aborted.") << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -121,8 +118,7 @@ bool CachePortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
-						kdDebug() << "Creating cache. Caching aborted." << endl;
+						kdWarning(0) << i18n("Creating cache. Caching aborted.") << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}
@@ -142,15 +138,11 @@ bool CachePortageJob::doJob()
 							mapCache.insert( package, word );
 							file.close();
 						}
-						else {
-							kdDebug() << i18n("Creating cache. Error reading: ") << path << endl;
-							kdDebug() << "Creating cache. Error reading: " << path << endl;
-						}
+						else
+							kdWarning(0) << i18n("Creating cache. Reading: ") << path << LINE_INFO;
 					}
-					else {
-						kdDebug() << i18n("Creating cache. Can not parse: ") << *itPackage << endl;
-						kdDebug() << "Creating cache. Can not parse: " << *itPackage << endl;
-					}
+					else
+						kdWarning(0) << i18n("Creating cache. Can not parse: ") << *itPackage << LINE_INFO;
 					
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
@@ -158,8 +150,8 @@ bool CachePortageJob::doJob()
 				}
 			}
 			else {
-				kdDebug() << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << endl;
-				kdDebug() << "Creating cache. Can not access " << *itPath << "/" << *itCategory << endl;
+				kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << LINE_INFO;
+				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/" << *itCategory << LINE_INFO;
 			}
 		}
 	}

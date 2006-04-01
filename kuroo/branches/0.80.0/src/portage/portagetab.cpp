@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#define DEBUG_PREFIX "PortageTab"
+
 #include "common.h"
 #include "search.h"
 #include "categorieslistview.h"
@@ -217,7 +219,7 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	kdDebug() << k_funcinfo << __LINE__ << endl;
+	DEBUG_LINE_INFO;
 	
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
@@ -267,7 +269,7 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
@@ -374,7 +376,7 @@ void PortageTab::slotAdvanced()
  */
 void PortageTab::slotPackage()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;

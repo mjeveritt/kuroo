@@ -173,13 +173,15 @@ void QueueTab::slotNextPackage( bool isNext )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Reload queue when package view is changed, fex when package is installed/removed.
+ * Reload queue when package view is changed, fex when package is removed.
+ * But not when installing packages since this will clear packages progressbar.
  */
 void QueueTab::slotRefresh()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
-	queueView->insertPackageList( m_hasCheckedQueue );
+	if ( !EmergeSingleton::Instance()->isRunning() )
+		queueView->insertPackageList( m_hasCheckedQueue );
 }
 
 /**
@@ -187,7 +189,7 @@ void QueueTab::slotRefresh()
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// Reenable the inspector after queue changes
 	m_packageInspector->setDisabled( true );
@@ -232,7 +234,7 @@ void QueueTab::slotQueueSummary()
 void QueueTab::slotBusy()
 {
 	// No db or queue is empty - no fun!
-	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
+	if ( !SignalistSingleton::Instance()->isKurooReady() || KurooDBSingleton::Instance()->isQueueEmpty() ) {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 		pbClear->setDisabled( true );
@@ -325,7 +327,7 @@ void QueueTab::slotCheck()
  */
 void QueueTab::slotGo()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
@@ -400,7 +402,7 @@ void QueueTab::slotPretend()
  */
 void QueueTab::slotRemove()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( isVisible() )
 		m_packageInspector->hide();
@@ -413,7 +415,7 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotClear()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( isVisible() )
 		m_packageInspector->hide();

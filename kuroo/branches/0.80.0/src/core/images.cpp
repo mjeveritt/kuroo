@@ -78,7 +78,7 @@ void Images::init( QObject *parent )
  * Deliver icons.
  * @return pointer to pixmap
  */
-QPixmap& Images::icon( int image )
+const QPixmap& Images::icon( int image )
 {
 	switch ( image ) {
 		

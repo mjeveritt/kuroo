@@ -151,7 +151,10 @@ public:
 	int 			insert( const QString& statement, DbConnection *conn = NULL );
 	
 	//table management methods
+	bool			isCacheEmpty();
 	bool 			isPortageEmpty();
+	bool			isQueueEmpty();
+	bool			isUpdatesEmpty();
 	bool 			isHistoryEmpty();
 	bool 			isValid();
 	void 			createTables( DbConnection *conn = NULL );
@@ -181,8 +184,6 @@ public:
 	QStringList 	packageVersionsInfo( const QString& idPackage );
 	QString 		versionSize( const QString& idPackage, const QString& version );
 	QStringList		packageHardMaskInfo( const QString& id );
-	bool			isPackagesEmpty();
-	bool			isQueueEmpty();
 	QString		 	package( const QString& id );
 	QString		 	category( const QString& id );
 	
@@ -226,7 +227,6 @@ public:
 	void			addEmergeInfo( const QString& einfo );
 	void			addBackup( const QString& source, const QString& destination );
 	QStringList 	allStatistic();
-	bool			isCacheEmpty();
 	
 private:
 	QObject*		m_parent;

@@ -35,14 +35,14 @@ public:
 	Images( QObject *m_parent = 0 );
     ~Images();
 
-	void 		init( QObject *parent = 0 );
-	QPixmap&	icon( int image );
+	void 			init( QObject *parent = 0 );
+	const QPixmap&	icon( int image );
 	
 private:
-	QObject*	m_parent;
-	QPixmap		pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxWorld;
-	QPixmap		pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
-	QPixmap		pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
+	QObject*		m_parent;
+	QPixmap			pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxWorld;
+	QPixmap			pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
+	QPixmap			pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
 };
 
 #endif

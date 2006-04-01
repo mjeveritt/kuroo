@@ -49,6 +49,18 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	QWizard::showPage( page1 );
 	QWizard::setHelpEnabled( page1, false );
 	setFinishEnabled( page1, true );
+	
+	introText->setText( "<h2>Kuroo-" + KurooConfig::version().section( "_", 0, 0 ) + "</h2><p>" +
+	                    i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "
+	                          "software maintenance tasks on gentoo systems</p>"
+		                      "New features:<br>"
+		                      "Unified package view: fast package browsing and searching with filters.<br>"
+		                      "Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor,"
+		                      "Emerge and Configuration History, Emerge Queue.<br>"
+		                      "<br>"
+		                      "<b><font color=red>Warning!<br>"
+		                      "Please take backup of all files in /etc/portage, /etc/make.conf and<br>"
+		                      "/var/lib/portage/world.</font></b>" ) );
 }
 
 IntroDlg::~IntroDlg()

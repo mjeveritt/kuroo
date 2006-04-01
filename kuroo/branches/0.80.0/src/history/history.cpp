@@ -74,10 +74,8 @@ History::~History()
 void History::init( QObject *parent )
 {
 	m_parent = parent;
-	if ( !m_log.open(IO_ReadOnly) ) {
-		kdDebug() << i18n("Error reading /var/log/emerge.log") << endl;
-		kdDebug() << "Error reading /var/log/emerge.log" << endl;
-	}
+	if ( !m_log.open(IO_ReadOnly) )
+		kdError(0) << i18n("Reading /var/log/emerge.log") << LINE_INFO;
 	else
 		stream.setDevice( &m_log );
 }
@@ -88,7 +86,7 @@ void History::init( QObject *parent )
  */
 void History::slotInit()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	m_log.setName( "/var/log/emerge.log" );
 	loadTimeStatistics();
@@ -111,7 +109,7 @@ void History::slotScanHistoryCompleted()
  */
 bool History::slotRefresh()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	QString lastDate = KurooDBSingleton::Instance()->getKurooDbMeta( "scanTimeStamp" );
 	if ( lastDate.isEmpty() )
@@ -154,7 +152,7 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	static bool syncDone( false );
 	QStringList emergeLines;
@@ -208,10 +206,8 @@ void History::slotParse()
 					QString package = rxPackage.cap(6);
 					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
-				else {
-					kdDebug() << i18n("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << endl;
-					kdDebug() << QString("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << endl;
-				}
+				else
+					kdWarning(0) << i18n("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
 			}
 			else // Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
@@ -223,10 +219,8 @@ void History::slotParse()
 					PortageSingleton::Instance()->addInstalledPackage( package );
 					emit signalHistoryChanged();
 				}
-				else {
-					kdDebug() << i18n("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << endl;
-					kdDebug() << QString("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << endl;
-				}
+				else
+					kdWarning(0) << i18n("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
@@ -287,7 +281,7 @@ void History::slotParse()
  */
 void History::updateStatistics()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
 }
@@ -297,7 +291,7 @@ void History::updateStatistics()
  */
 void History::appendEmergeInfo()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
 	if ( !einfo.isEmpty() )
@@ -318,7 +312,7 @@ QStringList History::allMergeHistory()
  */
 void History::loadTimeStatistics()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	m_statisticsMap.clear();
 	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
@@ -346,7 +340,7 @@ EmergeTimeMap History::getStatisticsMap()
  */
 void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	m_statisticsMap = statisticsMap;
 }

@@ -47,7 +47,7 @@ void Global::init( QObject *parent )
 /**
  * Kuroo home directory
  */
-QString Global::kurooDir()
+const QString Global::kurooDir()
 {
 	return "/var/cache/kuroo/";
 }
@@ -100,17 +100,17 @@ void Global::setKurooView( QWidget* view )
 /**
  * Kuroo widget id so MessageBox's can be made modal.
  */
-long Global::kurooViewId()
+const long Global::kurooViewId()
 {
 	return	m_wId;
 }
 
-QString Global::bgHexColor()
+const QString Global::bgHexColor()
 {
 	return m_bgColor;
 }
 
-QString Global::fgHexColor()
+const QString Global::fgHexColor()
 {
 	return m_fgColor;
 }

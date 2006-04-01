@@ -137,7 +137,7 @@ void Queue::refresh( bool hasCheckedQueue )
  */
 void Queue::reset()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
 	refresh( false );
@@ -178,8 +178,7 @@ void Queue::clearCache()
 void Queue::insertInCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
-		kdDebug() << "Package id is empty, skipping!" << endl;
+		kdWarning(0) << i18n("Package id is empty, skipping!") << LINE_INFO;
 		return;
 	}
 	
@@ -193,8 +192,7 @@ void Queue::insertInCache( const QString& id )
 void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
-		kdDebug() << "Package id is empty, skipping!" << endl;
+		kdWarning(0) << i18n("Package id is empty, skipping!") << LINE_INFO;
 		return;
 	}
 	

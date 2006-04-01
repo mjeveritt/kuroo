@@ -55,9 +55,8 @@ QString Log::init( QObject *parent )
 	QString logName = GlobalSingleton::Instance()->kurooDir() + "kuroo.log";
 	m_logFile.setName( logName );
 	if( !m_logFile.open( IO_WriteOnly ) ) {
-		kdDebug() << i18n("Error writing: ") << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << endl;
-		kdDebug() << "Error writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << endl;
-		KMessageBox::error(0, i18n("Error writing %1kuroo.log.").arg(GlobalSingleton::Instance()->kurooDir()), i18n("Saving"));
+		kdError(0) << i18n("Writing: ") << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
+		KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg(GlobalSingleton::Instance()->kurooDir()), i18n("Saving"));
 		return QString::null;
 	}
 	else
@@ -125,7 +124,7 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case TOLOG: {
 			QTextStream st( &m_logFile );
-			st << line << endl;
+			st << line << LINE_INFO;
 			m_logFile.flush();
 			break;
 		}

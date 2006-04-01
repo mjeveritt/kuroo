@@ -106,7 +106,7 @@ bool PackageInspector::isParentView( int view )
  */
 void PackageInspector::edit( PackageItem* portagePackage, int view )
 {
-	kdDebug() << k_funcinfo << " view=" << view << endl;
+	DEBUG_LINE_INFO;
 	
 	m_view = view;
 	m_portagePackage = portagePackage;
@@ -222,7 +222,7 @@ void PackageInspector::slotNextPackage()
  */
 void PackageInspector::slotApply()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( m_versionSettingsChanged ) {
 			PortageFilesSingleton::Instance()->savePackageKeywords();
@@ -286,7 +286,7 @@ void PackageInspector::slotApply()
  */
 void PackageInspector::slotCancel()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	rollbackSettings();
 	m_versionSettingsChanged = false;
@@ -295,7 +295,7 @@ void PackageInspector::slotCancel()
 
 void PackageInspector::slotOk()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	slotApply();
 	accept();
@@ -388,10 +388,8 @@ void PackageInspector::showSettings()
 			dialog->cbVersionsSpecific->setDisabled( false );
 			dialog->cbVersionsSpecific->setCurrentText( version );
 		}
-		else {
-			kdDebug() << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << endl;
-			kdDebug() << "Marking user masked version. Can not parse: " << userMaskVersion << endl;
-		}
+		else
+			kdWarning(0) << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << LINE_INFO;
 	}
 	else {
 		dialog->ckbAvailable->setChecked( false );
@@ -591,10 +589,8 @@ void PackageInspector::loadUseFlagDescription()
 		}
 		f.close();
 	}
-	else {
-		kdDebug() << i18n( "Loading use flag description. Error reading: " ) << useFile << endl;
-		kdDebug() << "Loading use flag description. Error reading: " << useFile << endl;
-	}
+	else
+		kdError(0) << i18n( "Loading use flag description. Reading: " ) << useFile << LINE_INFO;
 }
 
 /**
@@ -673,8 +669,7 @@ void PackageInspector::loadChangeLog()
 			dialog->changelogBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Loading changelog. Error reading: ") << fileName << endl;
-			kdDebug() << "Loading changelog. Error reading: " << fileName << endl;
+			kdError(0) << i18n("Loading changelog. Reading: ") << fileName << LINE_INFO;
 			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2")
 			                                   .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
@@ -702,8 +697,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 			dialog->ebuildBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Loading ebuild. Error reading: ") << fileName << endl;
-			kdDebug() << "Loading ebuild. Error reading: " << fileName << endl;
+			kdError() << i18n("Loading ebuild. Reading: ") << fileName << LINE_INFO;
 			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2")
 			                                .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
@@ -740,8 +734,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			dialog->dependencyBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n("Loading dependencies. Error reading: ") << fileName << endl;
-			kdDebug() << "Loading dependencies. Error reading: " << fileName << endl;
+			kdError(0) << i18n("Loading dependencies. Reading: ") << fileName << LINE_INFO;
 			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
 			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
@@ -770,8 +763,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 			dialog->installedFilesBrowser->setText( textLines );
 		}
 		else {
-			kdDebug() << i18n( "Loading installed files list. Error reading: " ) << filename << endl;
-			kdDebug() <<  "Loading installed files list. Error reading: "  << filename << endl;
+			kdError(0) << i18n( "Loading installed files list. Reading: " ) << filename << LINE_INFO;
 			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2")
 			                                        .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
@@ -824,7 +816,7 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
  */
 void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
@@ -841,7 +833,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 			tmpUseList = QStringList::split( " ", use );
 		}
 	}
-	kdDebug() << "tmpUseList=" << tmpUseList << endl;
+	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( tmpUseList.isEmpty() ) {
@@ -867,15 +859,13 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 		}
 	}
 	//end of better
-	kdDebug() << "useList=" << useList << endl;
+	kdDebug() << "useList=" << useList << LINE_INFO;
 	
 	QString checkUse = useList.join(", ");
 	if ( !checkUse.remove(", ").remove(" ").isEmpty() ) {
 		KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
 		PortageFilesSingleton::Instance()->savePackageUse();
 	}
-	
-	kdDebug() << "use=" << KurooDBSingleton::Instance()->packageUse( m_id ) << endl;
 }
 
 /**
@@ -884,7 +874,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
  */
 void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	dialog->setDisabled( false );
 	
@@ -905,7 +895,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		}
 	}
 	
-	kdDebug() << "pretendUseList=" << pretendUseList << endl;
+	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {

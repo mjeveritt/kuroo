@@ -7,6 +7,7 @@
 #define QT_FATAL_ASSERT
 #define DEBUG_PREFIX "ThreadWeaver"
 
+#include "common.h"
 #include "statusbar.h"
 #include "threadweaver.h"
 
@@ -15,8 +16,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-typedef kndbgstream DebugStream;
-static inline kndbgstream debug()   { return kndbgstream(); }
 
 /**
  * @class ThreadWeaver
@@ -24,16 +23,16 @@ static inline kndbgstream debug()   { return kndbgstream(); }
  */
 ThreadWeaver::ThreadWeaver()
 {
-// 	kdDebug() << "ThreadWeaver::ThreadWeaver " << endl;
+// 	kdDebug() << "ThreadWeaver::ThreadWeaver " << LINE_INFO;
     startTimer( 60 * 1000 ); // prunes the thread pool every 5 minutes
 }
 
 ThreadWeaver::~ThreadWeaver()
 {
 	for ( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it ) {
-// 		kdDebug() << "ThreadWeaver::~ThreadWeaver Waiting on thread..." << endl;
+// 		kdDebug() << "ThreadWeaver::~ThreadWeaver Waiting on thread..." << LINE_INFO;
 		(*it)->wait();
-// 		kdDebug() << "ThreadWeaver::~ThreadWeaver finished" << endl;
+// 		kdDebug() << "ThreadWeaver::~ThreadWeaver finished" << LINE_INFO;
 	}
 }
 
@@ -136,14 +135,14 @@ bool ThreadWeaver::event( QEvent *e )
 				new QCustomEvent( ThreadWeaver::RestoreOverrideCursorEvent ) );
 
 		if ( !job->isAborted() ) {
-// 			kdDebug() << "Job completed" << ": " << name << endl;
+// 			kdDebug() << "Job completed" << ": " << name << LINE_INFO;
 			job->completeJob();
 		}
 		else 
-			kdDebug() << "Job aborted" << ": " << name << endl;
+			kdWarning(0) << "Job aborted" << ": " << name << LINE_INFO;
 
 		m_jobs.remove( job );
-// 		kdDebug() << "Jobs pending: " << jobCount( name ) << endl;
+// 		kdDebug() << "Jobs pending: " << jobCount( name ) << LINE_INFO;
 
 		for( JobList::ConstIterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 			if ( name == (*it)->name() ) {
@@ -158,7 +157,7 @@ bool ThreadWeaver::event( QEvent *e )
 	}
 
 	case QEvent::Timer:
-// 		kdDebug() << "Threads in pool: " << m_threads.count() << endl;
+// 		kdDebug() << "Threads in pool: " << m_threads.count() << LINE_INFO;
 
 // 		for( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
 // 			if ( (*it)->readyForTrash() ) {
@@ -253,13 +252,13 @@ ThreadWeaver::Job::Job( const char *name )
 ThreadWeaver::Job::~Job()
 {
 	if ( m_thread->running() && m_thread->job() == this )
-		kdDebug() << "Deleting a job before its thread has finished with it!\n";
+		kdWarning(0) << "Deleting a job before its thread has finished with it!" << LINE_INFO;
 }
 
 void ThreadWeaver::Job::setProgressTotalSteps( uint steps )
 {
 	if ( steps == 0 ) {
-		kdDebug() << "You can't set steps to 0!\n";
+		kdWarning(0) << "You can't set steps to 0!" << LINE_INFO;
 		QApplication::postEvent( this, new ProgressEvent( -2 ) );
 		steps = 1;
 	}

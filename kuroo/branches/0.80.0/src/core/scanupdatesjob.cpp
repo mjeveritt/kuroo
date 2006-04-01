@@ -54,7 +54,7 @@ ScanUpdatesJob::~ScanUpdatesJob()
  */
 void ScanUpdatesJob::completeJob()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	SignalistSingleton::Instance()->loadUpdatesComplete();
 	m_aborted = false;
@@ -66,22 +66,19 @@ void ScanUpdatesJob::completeJob()
  */
 bool ScanUpdatesJob::doJob()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Scanning updates. Can not connect to database") << endl;
-		kdDebug() << "Scanning updates. Can not connect to database" << endl;
+		kdError(0) << i18n("Scanning updates. Can not connect to database") << LINE_INFO;
 		return false;
 	}
 	
-	if ( m_packageList.isEmpty() ) {
-		kdDebug() << i18n("Scanning updates. No update package found") << endl;
-		kdDebug() << "Scanning updates. No update package found" << endl;
-	}
+	if ( m_packageList.isEmpty() )
+		kdWarning(0) << i18n("Scanning updates. No update package found") << LINE_INFO;
 	
 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );
-	int count( 0 );
+	int count(0);
 
 	// Temporary tables to avoid locking main table
 	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE package_temp ("
@@ -103,14 +100,12 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->query( "UPDATE package_temp SET updateVersion = '';", m_db );
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	
-	int updatesCount( 0 );
 	EmergePackageList::ConstIterator itEnd = m_packageList.end();
 	for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 
 		// Abort the scan
 		if ( isAborted() ) {
-			kdDebug() << i18n("Scanning updates. Scan aborted!") << endl;
-			kdDebug() << "Scanning updates. Scan aborted!" << endl;
+			kdWarning(0) << i18n("Scanning updates. Scan aborted!") << LINE_INFO;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -124,8 +119,8 @@ bool ScanUpdatesJob::doJob()
 			" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 		
 		if ( id.isEmpty() ) {
-			kdDebug() << i18n("Scanning updates. Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
-			kdDebug() << QString("Scanning updates. Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << endl;
+			kdWarning(0) << i18n("Scanning updates. Can not find id in database for package %1/%2.")
+				.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 		}
 		else {
 			
@@ -143,7 +138,6 @@ bool ScanUpdatesJob::doJob()
 				                                              "WHERE id = '%3';" )
 				                                     .arg( updateVersion ).arg( PACKAGE_UPDATES_STRING ).arg( id ), m_db );
 				
-				updatesCount++;
 			}
 		}
 	}
@@ -154,22 +148,9 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db );
 	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db );
 	
-	setKurooDbMeta( "updatesCount", QString::number( updatesCount ) );
-	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );
 	return true;
-}
-
-void ScanUpdatesJob::setKurooDbMeta( const QString& meta, const QString& data )
-{
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;")
-	                                                .arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;")
-		                                     .arg( meta ).arg( data ), m_db );
-	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';")
-		                                     .arg( meta ).arg( data ), m_db );
 }
 
 #include "scanupdatesjob.moc"

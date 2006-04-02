@@ -65,7 +65,7 @@ private slots:
 	
 private:
 	
-	// Delay package view untill all text in entered in the text-filter
+	// Delay package view until all text in entered in the text-filter
 	int					m_delayFilters;
 	
 	// rmb

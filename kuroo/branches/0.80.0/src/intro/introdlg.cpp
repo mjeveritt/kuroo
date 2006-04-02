@@ -1,6 +1,6 @@
 /***************************************************************************
-*   Copyright (C) 2004 by shiva                                           *
-*   shiva@Katmandu                                                        *
+*   Copyright (C) 2004 by Karye                                           *
+*   karye@users.sourceforge.net                                                      *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -50,17 +50,20 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	QWizard::setHelpEnabled( page1, false );
 	setFinishEnabled( page1, true );
 	
-	introText->setText( "<h2>Kuroo-" + KurooConfig::version().section( "_", 0, 0 ) + "</h2><p>" +
-	                    i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "
-	                          "software maintenance tasks on gentoo systems</p>"
-		                      "New features:<br>"
-		                      "Unified package view: fast package browsing and searching with filters.<br>"
-		                      "Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor,"
-		                      "Emerge and Configuration History, Emerge Queue.<br>"
-		                      "<br>"
-		                      "<b><font color=red>Warning!<br>"
-		                      "Please take backup of all files in /etc/portage, /etc/make.conf and<br>"
-		                      "/var/lib/portage/world.</font></b>" ) );
+	introText->setText(   	"<h2>Kuroo-" + KurooConfig::version().section( "_", 0, 0 ) + "</h2><p>" +
+					  i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "
+							"software maintenance tasks on gentoo systems</p>"
+							"New features:<br>"
+							"Unified package view: fast package browsing and searching with filters.<br>"
+							"Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor,"
+							"Emerge and Configuration History, Emerge Queue.<br>"
+							"<br>"
+					      	"We would be happy to know how many of you are using Kuroo: "
+					      	"<a href=http://kuroo.org/letusknow.html>Let us know!</a><br>"
+					      	"<br>"
+							"<b><font color=red>Warning!<br>"
+							"Please take backup of all files in /etc/portage, /etc/make.conf and<br>"
+							"/var/lib/portage/world.</font></b>" ) );
 }
 
 IntroDlg::~IntroDlg()

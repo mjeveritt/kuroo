@@ -475,9 +475,8 @@ void QueueListView::slotPackageComplete( const QString& id )
 		m_id = QString::null;
 		return;
 	}
-	else {
+	else
 		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setComplete();
-	}
 	
 	m_id = QString::null;
 }

@@ -63,12 +63,15 @@ private slots:
 	QString 				formatTime( int time );
 	
 signals:
-// 	void					signalQueueLoaded();
 	void					signalPackageEmerged();
 	
 private:
 	KLocale 				*m_loc;
-	int 					m_sumSize, m_order;
+	
+	// Total sum of all package emerge duration 
+	int 					m_sumSize;
+	
+	// Current emerging package
 	QString					m_id;
 };
 
@@ -95,9 +98,21 @@ protected:
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
+	
+	// Individual package progressbar
 	KProgress* 		m_bar;
-	int				m_progress, m_duration;
-	bool			m_isChecked, m_isComplete;
+	
+	// Current emerge progress in seconds
+	int				m_progress;
+	
+	// Total emerge duration
+	int				m_duration;
+	
+	// Is this package ok by "emerge --pretend"
+	bool			m_isChecked;
+	
+	// Is this package progress = 100% eg completed
+	bool			m_isComplete;
 };
 
 #endif

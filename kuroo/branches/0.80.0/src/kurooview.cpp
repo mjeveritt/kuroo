@@ -210,7 +210,7 @@ void KurooView::slotEmergePretend( QString package )
  */
 void KurooView::slotPortageUpdated()
 {
-	if ( !iconPackages->isChanged() ) {
+	if ( !iconPackages->isChanged() && !iconPackages->isSelected() ) {
 		iconPackages->setChanged( true );
 		viewMenu->triggerUpdate( true );
 	}
@@ -221,7 +221,7 @@ void KurooView::slotPortageUpdated()
  */
 void KurooView::slotQueueUpdated()
 {
-	if ( !iconQueue->isChanged() ) {
+	if ( !iconQueue->isChanged() && !iconQueue->isSelected() ) {
 		iconQueue->setChanged( true );
 		viewMenu->triggerUpdate( true );
 	}
@@ -232,7 +232,7 @@ void KurooView::slotQueueUpdated()
  */
 void KurooView::slotHistoryUpdated()
 {
-	if ( !iconHistory->isChanged() ) {
+	if ( !iconHistory->isChanged() && !iconHistory->isSelected() ) {
 		iconHistory->setChanged( true );
 		viewMenu->triggerUpdate( true );
 	}
@@ -243,7 +243,7 @@ void KurooView::slotHistoryUpdated()
  */
 void KurooView::slotMergeUpdated()
 {
-	if ( !iconMerge->isChanged() ) {
+	if ( !iconMerge->isChanged() && !iconMerge->isSelected() ) {
 		iconMerge->setChanged( true );
 		viewMenu->triggerUpdate( true );
 	}
@@ -254,7 +254,7 @@ void KurooView::slotMergeUpdated()
  */
 void KurooView::slotLogUpdated()
 {
-	if ( !iconLog->isChanged() ) {
+	if ( !iconLog->isChanged() && !iconLog->isSelected() ) {
 		iconLog->setChanged( true );
 		viewMenu->triggerUpdate( true );
 	}

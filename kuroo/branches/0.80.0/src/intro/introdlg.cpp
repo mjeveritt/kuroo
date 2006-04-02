@@ -18,22 +18,22 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include "singleton.h"
+#include "global.h"
 #include "introdlg.h"
 #include "settings.h"
 
-#include <qfile.h> 
-#include <qtextbrowser.h>
 #include <qwizard.h>
-#include <qdir.h>
-#include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <klineedit.h>
 #include <kactivelabel.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <kurlrequester.h>
+#include <kio/job.h>
+
+typedef Singleton<Global> GlobalSingleton;
 
 /**
  * @class IntroDlg
@@ -59,11 +59,8 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 							"Emerge and Configuration History, Emerge Queue.<br>"
 							"<br>"
 					      	"We would be happy to know how many of you are using Kuroo: "
-					      	"<a href=http://kuroo.org/letusknow.html>Let us know!</a><br>"
-					      	"<br>"
-							"<b><font color=red>Warning!<br>"
-							"Please take backup of all files in /etc/portage, /etc/make.conf and<br>"
-							"/var/lib/portage/world.</font></b>" ) );
+					      	"<a href=http://kuroo.org/letusknow.html>Click!</a><br>"
+					      	) );
 }
 
 IntroDlg::~IntroDlg()
@@ -78,7 +75,7 @@ void IntroDlg::back()
 void IntroDlg::next()
 {
 // 	if ( QWizard::indexOf(this->currentPage()) == 0 )
-		KMessageBox::enableAllMessages();
+// 		KMessageBox::enableAllMessages();
 }
 
 void IntroDlg::reject()
@@ -88,6 +85,26 @@ void IntroDlg::reject()
 
 void IntroDlg::accept()
 {
+	kdDebug() << k_funcinfo << endl;
+	
+	// Backup all portage files changeable by kuroo
+	if ( cbBackup->isOn() ) {
+		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
+		QString filePackageKeywords( KurooConfig::filePackageKeywords() );
+		KIO::file_copy( filePackageKeywords, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt );
+		QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
+		KIO::file_copy( filePackageUserUnMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt );
+		QString filePackageUserMask( KurooConfig::filePackageUserMask() );
+		KIO::file_copy( filePackageUserMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt );
+		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
+		KIO::file_copy( filePackageUserUse, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt );
+		QString dirWorldFile( KurooConfig::dirWorldFile() );
+		KIO::file_copy( dirWorldFile, GlobalSingleton::Instance()->kurooDir() + "backup/" + dirWorldFile.section( "/", -1 ) + dt );
+		QString fileMakeConf( KurooConfig::fileMakeConf() );
+		KIO::file_copy( fileMakeConf, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt );
+	}
+	
+	KMessageBox::enableAllMessages();
 	QWizard::accept();
 }
 

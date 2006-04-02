@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-02 11:08+0200\n"
+"POT-Creation-Date: 2006-04-02 14:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,9 +118,9 @@ msgstr ""
 #: queue/queuetab.cpp:385 core/emerge.cpp:443 core/emerge.cpp:521
 #: core/cacheportagejob.cpp:171 core/etcupdate.cpp:125
 #: core/scanportagejob.cpp:349 core/scanportagejob.cpp:423
-#: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:140
-#: core/portagefiles.cpp:233 core/portagefiles.cpp:324
-#: core/portagefiles.cpp:416 history/history.cpp:250 history/history.cpp:251
+#: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:138
+#: core/portagefiles.cpp:230 core/portagefiles.cpp:322
+#: core/portagefiles.cpp:414 history/history.cpp:250 history/history.cpp:251
 #: statusbar.cpp:91
 msgid "Done."
 msgstr ""
@@ -544,87 +544,87 @@ msgstr ""
 msgid "Load package keywords: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagefiles.cpp:127
+#: core/portagefiles.cpp:125
 msgid "Parsing package.keywords. Can not match package %1 in %2."
 msgstr ""
 
-#: core/portagefiles.cpp:165
+#: core/portagefiles.cpp:163
 msgid "Parsing package.unmask. Reading: %1."
 msgstr ""
 
-#: core/portagefiles.cpp:176
+#: core/portagefiles.cpp:174
 msgid "Collecting user unmasked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:210
+#: core/portagefiles.cpp:208
 msgid ""
 "Load user package unmask: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagefiles.cpp:219
+#: core/portagefiles.cpp:216
 msgid "Parsing package.unmask. Can not match package %1 in %2."
 msgstr ""
 
-#: core/portagefiles.cpp:258
+#: core/portagefiles.cpp:255
 msgid "Parsing package.mask. Reading: %1."
 msgstr ""
 
-#: core/portagefiles.cpp:269
+#: core/portagefiles.cpp:266
 msgid "Collecting hardmasked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:303
+#: core/portagefiles.cpp:300
 msgid "Parsing package.mask. Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagefiles.cpp:310
+#: core/portagefiles.cpp:308
 msgid "Parsing package.mask. Can not match package %1 in %2."
 msgstr ""
 
-#: core/portagefiles.cpp:349
+#: core/portagefiles.cpp:347
 msgid "Parsing user package.mask. Reading: %1."
 msgstr ""
 
-#: core/portagefiles.cpp:360
+#: core/portagefiles.cpp:358
 msgid "Collecting user masked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:394
+#: core/portagefiles.cpp:392
 msgid ""
 "Parsing user package.mask. Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagefiles.cpp:402
+#: core/portagefiles.cpp:400
 msgid "Parsing user package.mask. Can not match package %1 in %2."
 msgstr ""
 
-#: core/portagefiles.cpp:440
+#: core/portagefiles.cpp:438
 msgid "Parsing user package.use. Reading: %1."
 msgstr ""
 
-#: core/portagefiles.cpp:471
+#: core/portagefiles.cpp:469
 msgid ""
 "Parsing user package.use. Can not find id in database for package %1/%2."
 msgstr ""
 
-#: core/portagefiles.cpp:512
+#: core/portagefiles.cpp:510
 msgid "No package keywords found. Saving to %1 aborted!"
 msgstr ""
 
-#: core/portagefiles.cpp:519 core/portagefiles.cpp:560
-#: core/portagefiles.cpp:596 core/portagefiles.cpp:636
+#: core/portagefiles.cpp:517 core/portagefiles.cpp:558
+#: core/portagefiles.cpp:594 core/portagefiles.cpp:634
 msgid "Writing: %1."
 msgstr ""
 
-#: core/portagefiles.cpp:553
+#: core/portagefiles.cpp:551
 msgid "No user mask depend atom found. Saving to %1 aborted!"
 msgstr ""
 
-#: core/portagefiles.cpp:589
+#: core/portagefiles.cpp:587
 msgid "No user unmask depend atom found. Saving to %1 aborted!"
 msgstr ""
 
-#: core/portagefiles.cpp:629
+#: core/portagefiles.cpp:627
 msgid "No package use found. Saving to %1 aborted!"
 msgstr ""
 
@@ -731,7 +731,7 @@ msgstr ""
 msgid "Portage version is upgraded to 2.1. Please refresh package view."
 msgstr ""
 
-#: core/filewatcher.cpp:69 kurooinit.cpp:65
+#: core/filewatcher.cpp:69 kurooinit.cpp:80
 msgid "Portage version"
 msgstr ""
 
@@ -745,9 +745,9 @@ msgid ""
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
 "view: fast package browsing and searching with filters.<br>Two Column "
 "Selector, Package Inspector, Progress bars, Use-Flag Editor,Emerge and "
-"Configuration History, Emerge Queue.<br><br><b><font color=red>Warning!"
-"<br>Please take backup of all files in /etc/portage, /etc/make.conf and<br>/"
-"var/lib/portage/world.</font></b>"
+"Configuration History, Emerge Queue.<br><br>We would be happy to know how "
+"many of you are using Kuroo: <a href=http://kuroo.org/letusknow.html>Click!</"
+"a><br><br><b>Kuroo will now backup your portage files.</b>"
 msgstr ""
 
 #: history/history.cpp:78
@@ -1199,48 +1199,48 @@ msgid ""
 "qt>"
 msgstr ""
 
-#: kurooinit.cpp:63
+#: kurooinit.cpp:78
 msgid ""
 "Can not identify portage version!\n"
 "Kuroo can not correctly parse package information.\n"
 "You can select portage version in settings."
 msgstr ""
 
-#: kurooinit.cpp:89
+#: kurooinit.cpp:104
 msgid ""
 "<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:91 kurooinit.cpp:107
+#: kurooinit.cpp:106 kurooinit.cpp:122
 msgid "Initialization"
 msgstr ""
 
-#: kurooinit.cpp:105
+#: kurooinit.cpp:120
 msgid ""
 "<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:140
+#: kurooinit.cpp:155
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:207
+#: kurooinit.cpp:222
 msgid "Reading: /etc/make.conf"
 msgstr ""
 
-#: kurooinit.cpp:227
+#: kurooinit.cpp:242
 msgid "Reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:269
+#: kurooinit.cpp:284
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:270
+#: kurooinit.cpp:285
 msgid "User permissions"
 msgstr ""
 

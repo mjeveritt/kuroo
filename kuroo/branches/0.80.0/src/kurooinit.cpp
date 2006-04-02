@@ -100,8 +100,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Check that backup directory exists and set correct permissions
 	QString backupDir = GlobalSingleton::Instance()->kurooDir() + "backup";
-	if ( !d.cd(backupDir) ) {
-		if ( !d.mkdir(backupDir) ) {
+	if ( !d.cd( backupDir ) ) {
+		if ( !d.mkdir( backupDir ) ) {
 			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
 			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
 			                            "Please try again!</qt>"), i18n("Initialization") );
@@ -250,9 +250,9 @@ void KurooInit::firstTimeWizard()
 	if ( wizardDialog.exec() != QDialog::Accepted )
 		exit(0);
 	else
-		KurooConfig::setWizard(false);
+		KurooConfig::setWizard( false );
 	
-	KurooConfig::setInit(true);
+	KurooConfig::setInit( true );
 }
 
 /**

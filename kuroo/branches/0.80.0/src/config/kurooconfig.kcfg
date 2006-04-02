@@ -71,7 +71,7 @@
 		<entry name="FilePackageHardMask" type="String">
 			<default>/usr/portage/profiles/package.mask</default>
 		</entry>
-		<entry name="FilePackageUse" type="String">
+		<entry name="FilePackageUserUse" type="String">
 			<default>/etc/portage/package.use</default>
 		</entry>
 		<entry name="etcUpdateTool" type="String">

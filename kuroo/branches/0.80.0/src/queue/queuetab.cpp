@@ -345,7 +345,7 @@ void QueueTab::slotGo()
 				case KMessageBox::Yes:
 					packageList.prepend( "--fetch-all-uri" );
 					QueueSingleton::Instance()->installQueue( packageList );
-					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 			}
 	}
 	else {
@@ -364,7 +364,7 @@ void QueueTab::slotGo()
 						packageList.prepend( "--oneshot" );
 						
 					QueueSingleton::Instance()->installQueue( packageList );
-					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 				}
 				
 			}

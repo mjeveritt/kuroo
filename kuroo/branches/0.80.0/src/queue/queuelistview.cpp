@@ -129,7 +129,7 @@ void QueueListView::QueueItem::oneStep()
  * Show progressbar after emerge pretend.
  * @param isChecked
  */
-void QueueListView::QueueItem::setChecked( bool isChecked )
+void QueueListView::QueueItem::setPretended( bool isChecked )
 {
 	m_isChecked = isChecked;
 }
@@ -319,7 +319,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			addSize( size );
 		}
 		
-		item->setChecked( hasCheckedQueue );
+		item->setPretended( hasCheckedQueue );
 		
 		indexPackage( id, item );
 		
@@ -361,47 +361,46 @@ void QueueListView::clearQueuePackageUse()
 /////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Convert emerge duration from seconds to format hh:mm:ss.
- * @param time
- * @return emergeTime
- */
-QString QueueListView::formatTime( int time )
-{
-	QTime emergeTime(0, 0, 0);
-	emergeTime = emergeTime.addSecs( time );
-	return m_loc->formatTime( emergeTime, true, true );
-}
-
-/**
  * Get total emerge duration in format hh:mm:ss.
  * @return totalDuration 
  */
-QTime QueueListView::totalTime()
+long QueueListView::totalDuration()
 {
-	QTime totalDuration = QTime(0, 0, 0);
+	long totalSeconds(0);
 	QListViewItemIterator it( this );
 	while ( it.current() ) {
 		if ( !dynamic_cast<QueueItem*>( it.current() )->isComplete() )
-			totalDuration = totalDuration.addSecs( dynamic_cast<QueueItem*>( it.current() )->remainingDuration() );
+			totalSeconds += dynamic_cast<QueueItem*>( it.current() )->remainingDuration();
 		++it;
 	}
-	return totalDuration;
-}
-
-/**
- * Get total emerge duration in seconds.
- * @return int 
- */
-int QueueListView::sumTime()
-{
-	return abs( totalTime().secsTo( QTime(0, 0, 0) ) );
+	return totalSeconds;
 }
 
 QString QueueListView::totalTimeFormatted()
 {
-	return formatTime( sumTime() );
+	return formatTime( totalDuration() );
 }
 
+/**
+ * Convert emerge duration from seconds to format hh:mm:ss.
+ * @param time
+ * @return emergeTime
+ */
+QString QueueListView::formatTime( long duration )
+{
+	QString totalDays;
+	unsigned durationDays, totalSeconds;
+	
+	durationDays = duration / 86400;
+	totalSeconds = duration % 86400;
+	
+	if ( durationDays > 0 )
+		totalDays = i18n( "%1d " ).arg( QString::number( durationDays ) );
+	
+	QTime emergeTime(0, 0, 0);
+	emergeTime = emergeTime.addSecs( totalSeconds );
+	return totalDays + m_loc->formatTime( emergeTime, true, true );
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 // 
@@ -462,7 +461,7 @@ void QueueListView::slotPackageStart( const QString& id )
 	m_id = id;
 	
 	// Update kuroo statusbar with remaining emerge duration
-	KurooStatusBar::instance()->updateTotalSteps( sumTime() );
+	KurooStatusBar::instance()->updateTotalSteps( totalDuration() );
 }
 
 /**

@@ -47,9 +47,10 @@ public slots:
 	QStringList				allEndUserPackages();
 	void 					insertPackageList( bool hasCheckedQueue );
 	void					clearQueuePackageUse();
-	QTime			 		totalTime();
-	int						sumTime();
+	
+	long			 		totalDuration();
 	QString					totalTimeFormatted();
+	
 	QString		 			totalSize();
 	void					slotPackageComplete( const QString& id );
 	void					slotPackageStart( const QString& id );
@@ -60,7 +61,7 @@ private slots:
 	void					slotHideBars( QListViewItem* item );
 	QString		 			formatSize( const QString& sizeString );
 	void 					addSize( const QString& size );
-	QString 				formatTime( int time );
+	QString 				formatTime( long time );
 	
 signals:
 	void					signalPackageEmerged();
@@ -91,7 +92,7 @@ public:
 	int				remainingDuration();
 	void			setStart();
 	void			oneStep();
-	void			setChecked( bool isChecked );
+	void			setPretended( bool isChecked );
 	void			hideBar();
 	
 protected:

@@ -78,9 +78,8 @@ const QStringList Global::parsePackage( const QString& packageString )
 		list << nameVersion.section( name + "-", 1 );
 		return list;
 	}
-	else {
+	else
 		return QStringList::QStringList();
-	}
 }
 
 /**

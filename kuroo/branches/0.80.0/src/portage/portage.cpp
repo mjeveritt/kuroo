@@ -78,7 +78,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged();
+		PortageSingleton::Instance()->slotPackageChanged();
 	}
 	
 private:
@@ -156,7 +156,7 @@ private:
 
 /**
  * @class CheckUpdatesPackageJob
- * @short Thread for marking packages as updates or donwgrades.
+ * @short Thread for marking packages as updates or downgrades.
  */
 class CheckUpdatesPackageJob : public ThreadWeaver::DependentJob
 {
@@ -202,7 +202,9 @@ private:
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )
 {
+	// When cache scan is done go one scanning portage for all packages
 	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
+	// Then portage scan is completed
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotScanCompleted() ) );
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
@@ -229,12 +231,18 @@ void Portage::slotChanged()
 {
 	DEBUG_LINE_INFO;
 	
-	// Register in db so we can check at next start if user has emerged any packages outside kuroo
-	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
-	
 	emit signalPortageChanged();
 }
 
+/**
+ * Emit signal when package status is changed to installed.
+ */
+void Portage::slotPackageChanged()
+{
+	DEBUG_LINE_INFO;
+	
+	emit signalPackageChanged();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Portage handling...
@@ -300,11 +308,14 @@ bool Portage::slotScan()
 }
 
 /**
- * Forward signal after a new portage scan.
+ * After portage has completed scanning for all packages, check for updates.
  */
 void Portage::slotScanCompleted()
 {
 	DEBUG_LINE_INFO;
+	
+	// Register in db so we can check at next start if user has emerged any packages outside kuroo
+	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();

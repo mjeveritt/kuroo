@@ -175,14 +175,12 @@ void QueueTab::slotNextPackage( bool isNext )
 
 /**
  * Reload queue when package view is changed, fex when package is removed.
- * But not when installing packages since this will clear packages progressbar.
  */
 void QueueTab::slotRefresh()
 {
 	DEBUG_LINE_INFO;
 	
-	if ( !EmergeSingleton::Instance()->isRunning() )
-		queueView->insertPackageList( m_hasCheckedQueue );
+	queueView->insertPackageList( m_hasCheckedQueue );
 }
 
 /**

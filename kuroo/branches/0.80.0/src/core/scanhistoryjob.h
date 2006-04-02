@@ -45,7 +45,6 @@ public:
 private:
 	bool 						doJob();
 	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
 	
 	QString escapeString( QString string ) {
 		return string.replace('\'', "''");

@@ -72,7 +72,7 @@ bool CachePortageJob::doJob()
 	
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
-	if ( packageCount.isEmpty() )
+	if ( packageCount == "0" )
 		setProgressTotalSteps( 35000 );
 	else
 		setProgressTotalSteps( packageCount.toInt() );
@@ -155,7 +155,8 @@ bool CachePortageJob::doJob()
 			}
 		}
 	}
-	setKurooDbMeta( "packageCount", QString::number( count ) );
+	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")
+	                                     .arg( count ), m_db );
 	
 	// Store cache in DB
 	KurooDBSingleton::Instance()->query( "DELETE FROM cache;", m_db );
@@ -170,17 +171,6 @@ bool CachePortageJob::doJob()
 	setStatus( "CachePortage", i18n("Done.") );
 	setProgress( 0 );
 	return true;
-}
-
-void CachePortageJob::setKurooDbMeta( const QString& meta, const QString& data )
-{
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").
-	                                                arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").
-		                                     arg( meta ).arg( data ), m_db );
-	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").
-		                                     arg( meta ).arg( data ), m_db );
 }
 
 #include "cacheportagejob.moc"

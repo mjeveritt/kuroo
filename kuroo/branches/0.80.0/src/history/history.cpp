@@ -42,7 +42,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
 		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
 			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" )
-			                                      .arg(itMap.data().emergeTime()).arg(itMap.data().count()).arg(itMap.key()), m_db );
+			                                      .arg( itMap.data().emergeTime() ).arg( itMap.data().count() ).arg( itMap.key() ), m_db );
 		}
 		
 		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );

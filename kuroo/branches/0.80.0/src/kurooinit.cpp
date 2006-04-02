@@ -130,11 +130,14 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Old db structure, must delete it and backup history 
 	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
-		KurooDBSingleton::Instance()->backupDb();
+		
+		// Backup history if there's old db version
+		if ( !dbVersion.isEmpty() )
+			KurooDBSingleton::Instance()->backupDb();
+		
 		KurooDBSingleton::Instance()->destroy();
 		remove( database );
 		kdWarning(0) << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
-		kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 		
 		// and recreate with new structure
 		KurooDBSingleton::Instance()->init( this );

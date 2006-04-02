@@ -87,7 +87,7 @@ bool ScanPortageJob::doJob()
 	
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
-	if ( packageCount.isEmpty() )
+	if ( packageCount == "0" )
 		setProgressTotalSteps( 25000 );
 	else
 		setProgressTotalSteps( packageCount.toInt() );
@@ -324,7 +324,8 @@ bool ScanPortageJob::doJob()
 	}
 	m_categories.clear();
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
-	setKurooDbMeta( "packageCount", QString::number( count ) );
+	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")
+	                                     .arg( count ), m_db );
 	
 	// Move content from temporary table 
 	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db);
@@ -536,8 +537,8 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			info.size = formatSize( word );
 			
 			// Add new value into cache.
-			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) "
-			                                              "VALUES ('%1', '%2');").arg( name + "-" + version ).arg( word ), m_db );
+			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');")
+			                                      .arg( name + "-" + version ).arg( word ), m_db );
 		}
 		else
 			kdError(0) << i18n("Scanning installed packages. Reading: ") << path << LINE_INFO;
@@ -565,17 +566,6 @@ QString ScanPortageJob::formatSize( const QString& size )
 		total = loc->formatNumber((double)(num / 1024), 0) + " kB ";
 	
 	return total;
-}
-
-void ScanPortageJob::setKurooDbMeta( const QString& meta, const QString& data )
-{
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;")
-	                                                .arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;")
-		                                     .arg( meta ).arg( data ), m_db );
-	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';")
-		                                     .arg( meta ).arg( data ), m_db );
 }
 
 /**

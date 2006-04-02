@@ -36,7 +36,6 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	s_instance = this;
 	statusBarProgress = new KProgress( 0, "statusBarProgress" );
 	statusBarLabel = new QLabel( 0, "statusBarLabel" );
-// 	statusBarLabel->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)5, 0, 0, statusBarLabel->sizePolicy().hasHeightForWidth() ) );
 	addWidget( statusBarLabel, 1, 1 );
 	addWidget( statusBarProgress, 0, true );
 	

@@ -76,6 +76,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
+	connect( PortageSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotReload() ) );
 	
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );

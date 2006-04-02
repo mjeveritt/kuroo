@@ -40,6 +40,7 @@ public:
 public slots:
 	void						init( QObject *parent = 0 );
 	void						slotChanged();
+	void						slotPackageChanged();
 	bool						slotRefresh();
 	
 	bool						slotScan();
@@ -58,11 +59,11 @@ public slots:
 	
 	bool						slotRefreshUpdates();
 	bool						slotLoadUpdates();
-// 	void						removeUpdatePackage( const QString& package );
 	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
 	
 signals:
 	void						signalPortageChanged();
+	void						signalPackageChanged();
 	void						signalWorldChanged();
 	
 private:

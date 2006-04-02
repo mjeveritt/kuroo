@@ -80,7 +80,7 @@ DbConnection *KurooDB::getStaticDbConnection()
 	return m_dbConnPool->getDbConnection();
 }
 
-void KurooDB::returnStaticDbConnection(DbConnection *conn)
+void KurooDB::returnStaticDbConnection( DbConnection *conn )
 {
 // 	kdDebug() << "--------------KurooDB::returnStaticDbConnection " << LINE_INFO;
 	m_dbConnPool->putDbConnection(conn);
@@ -224,6 +224,9 @@ void KurooDB::createTables( DbConnection *conn )
 	      " data VARCHAR(64) "
 		  " );", conn);
 	
+	query(" INSERT INTO dbInfo (meta, data) VALUES ('syncTimeStamp', '0');", conn);
+	query(" INSERT INTO dbInfo (meta, data) VALUES ('packageCount', '0');", conn);
+	
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32) UNIQUE ); "
@@ -304,7 +307,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " ;", conn);
 	
 	query(" CREATE TABLE statistic ("
-	      " id INTEGER UNIQUE, "
+	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " package VARCHAR(32), "
 	      " time INTEGER, "
 	      " count INTEGER)"
@@ -363,36 +366,36 @@ void KurooDB::backupDb()
 	DEBUG_LINE_INFO;
 	
 	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
-	QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		foreach ( historyData ) {
-			QString timestamp = *it++;
-			QString einfo = *it;
-			stream << timestamp << ":" << einfo << "\n";
+	if ( !historyData.isEmpty() ) {
+		QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
+		if ( file.open( IO_WriteOnly ) ) {
+			QTextStream stream( &file );
+			foreach ( historyData ) {
+				QString timestamp = *it++;
+				QString einfo = *it;
+				stream << timestamp << ":" << einfo << "\n";
+			}
+			file.close();
 		}
-		file.close();
-	}
-	else {
-		kdDebug() << i18n("Creating backup of history. Writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
-		kdDebug() << QString("Creating backup of history. Writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
+		else
+			kdError(0) << i18n("Creating backup of history. Writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
 	}
 	
 	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory;" );
-	file.setName( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		foreach ( mergeData ) {
-			QString timestamp = *it++;
-			QString source = *it++;
-			QString destination = *it;
-			stream << timestamp << ":" << source << ":" << destination << "\n";
+	if ( !mergeData.isEmpty() ) {
+		QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
+		if ( file.open( IO_WriteOnly ) ) {
+			QTextStream stream( &file );
+			foreach ( mergeData ) {
+				QString timestamp = *it++;
+				QString source = *it++;
+				QString destination = *it;
+				stream << timestamp << ":" << source << ":" << destination << "\n";
+			}
+			file.close();
 		}
-		file.close();
-	}
-	else {
-		kdDebug() << i18n("Creating backup of history. Writing: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
-		kdDebug() << QString("Creating backup of history. Writing: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
+		else
+			kdError(0) << i18n("Creating backup of history. Writing: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
 	}
 }
 
@@ -407,10 +410,8 @@ void KurooDB::restoreBackup()
 	QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
 	QTextStream stream( &file );
 	QStringList lines;
-	if ( !file.open( IO_ReadOnly ) ) {
-		kdDebug() << i18n("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
-		kdDebug() << QString("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
-	}
+	if ( !file.open( IO_ReadOnly ) )
+		kdError(0) << i18n("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -430,10 +431,8 @@ void KurooDB::restoreBackup()
 	file.setName( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
 	stream.setDevice( &file );
 	lines.clear();
-	if ( !file.open( IO_ReadOnly ) ) {
-		kdDebug() << i18n("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
-		kdDebug() << QString("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
-	}
+	if ( !file.open( IO_ReadOnly ) )
+		kdError(0) << i18n("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -1136,9 +1135,9 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 			m_initialized = true;
 	}
 	else {
-		if ( sqlite3_create_function(m_db, "rand", 0, SQLITE_UTF8, NULL, sqlite_rand, NULL, NULL) != SQLITE_OK )
+		if ( sqlite3_create_function( m_db, "rand", 0, SQLITE_UTF8, NULL, sqlite_rand, NULL, NULL ) != SQLITE_OK )
 			m_initialized = false;
-		if ( sqlite3_create_function(m_db, "power", 2, SQLITE_UTF8, NULL, sqlite_power, NULL, NULL) != SQLITE_OK )
+		if ( sqlite3_create_function( m_db, "power", 2, SQLITE_UTF8, NULL, sqlite_power, NULL, NULL ) != SQLITE_OK )
 			m_initialized = false;
 	}
 	
@@ -1162,7 +1161,7 @@ QStringList SqliteConnection::query( const QString& statement )
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );
 	
 	if ( error != SQLITE_OK ) {
-		kdWarning(0) << " sqlite3_compile error: " << sqlite3_errmsg( m_db ) << "on query: " << statement << LINE_INFO;
+		kdWarning(0) << " sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 		values = QStringList();
 	}
 	else {
@@ -1217,7 +1216,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 	error = sqlite3_prepare( m_db, statement.utf8(), statement.length(), &stmt, &tail );
 	
 	if ( error != SQLITE_OK )
-		kdWarning(0) << "sqlite3_compile error: " << sqlite3_errmsg(m_db) << " on query: " << statement << LINE_INFO;
+		kdWarning(0) << "sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 	else {
 		int busyCnt(0);
 		
@@ -1248,7 +1247,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-		kdWarning(0) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
+			kdWarning(0) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 			value = QString::null;
 		}
 	}

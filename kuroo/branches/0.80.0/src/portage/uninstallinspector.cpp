@@ -33,7 +33,6 @@ UninstallInspector::UninstallInspector( QWidget *parent )
 {
 	m_dialog = new UninstallBase( this );
 	setMainWidget( m_dialog );
-	m_dialog->setMinimumSize( 300, 280 );
 }
 
 UninstallInspector::~UninstallInspector()
@@ -60,14 +59,11 @@ void UninstallInspector::view( const QStringList& packageList )
 		itemPackage->setOn( true );
 		
 		// Warn if package is included in gentoo base system profile
-		foreach ( systemFilesList ) {
+		foreach ( systemFilesList )
 			if ( *it == package ) {
 				itemPackage->setPixmap( 0, ImagesSingleton::Instance()->icon( WARNING ) );
 				isPartOfSystem = true;
 			}
-			else
-				itemPackage->setPixmap( 0, ImagesSingleton::Instance()->icon( EMPTY ) );
-		}
 		
 		// List all versions if more that one installed version is found
 		const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInstalled( id );
@@ -78,13 +74,14 @@ void UninstallInspector::view( const QStringList& packageList )
 			}
 	}
 	
-	if ( isPartOfSystem )
+	if ( isPartOfSystem ) {
 		m_dialog->uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
 		                                          "This may be damaging to your system!</b></font>") );
+		m_dialog->uninstallWarning->show();
+	}
 	else
 		m_dialog->uninstallWarning->hide();
 	
-	m_dialog->adjustSize();
 	show();
 }
 

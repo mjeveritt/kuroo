@@ -234,7 +234,7 @@ bool KurooInit::getEnvironment()
 	KurooConfig::setSystemFiles("app-arch/bzip2\napp-arch/cpio\napp-arch/tar\napp-shells/bash\ndev-lang/perl\ndev-lang/python\nnet-misc/iputils\n"
 	                            "net-misc/rsync\nnet-misc/wget\nsys-apps/coreutils\nsys-apps/debianutils\nsys-apps/diffutils\n"
 	                            "sys-apps/file\nsys-apps/findutils\nsys-apps/gawk\nsys-apps/grep\nsys-apps/groff\nsys-apps/kbd\n"
-	                            "sys-apps/net-tools\nys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"
+	                            "sys-apps/net-tools\nsys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"
 	                            "sys-apps/shadow\nsys-apps/texinfo\nsys-apps/which\nsys-devel/autoconf\nsys-devel/autoconf-wrapper\n"
 	                            "sys-devel/automake\nsys-devel/automake-wrapper\nsys-devel/binutils\nsys-devel/bison\nsys-devel/flex\n"
 	                            "sys-devel/gcc\nsys-devel/gnuconfig\nsys-devel/libtool\nsys-devel/m4\nsys-devel/mak\nsys-devel/patch\n"

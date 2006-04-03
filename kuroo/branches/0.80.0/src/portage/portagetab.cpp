@@ -203,7 +203,7 @@ void PortageTab::slotButtons()
 		pbQueue->setDisabled( false );
 
 	// If user is su enable uninstall
-	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
+	if ( packagesView->currentPackage()->isInstalled() /*&& KUser().isSuperUser()*/ )
 		pbUninstall->setDisabled( false );
 	else
 		pbUninstall->setDisabled( true );

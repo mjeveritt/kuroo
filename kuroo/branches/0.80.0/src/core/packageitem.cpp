@@ -180,7 +180,7 @@ int PackageItem::status()
  */
 bool PackageItem::isInstalled()
 {
-	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_OLD ) );
+	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
 }
 
 /**

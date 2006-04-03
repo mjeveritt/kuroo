@@ -159,6 +159,7 @@ void KurooView::slotInit()
 					break;
 
 				default:
+					KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 					slotCheckPortage();
 			}
 		}

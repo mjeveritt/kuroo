@@ -237,6 +237,9 @@ void Portage::slotChanged()
 {
 	DEBUG_LINE_INFO;
 	
+	// Register in db so we can check at next start if user has emerged any packages outside kuroo
+	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
+	
 	emit signalPortageChanged();
 }
 
@@ -309,9 +312,6 @@ bool Portage::slotScan()
 void Portage::slotScanCompleted()
 {
 	DEBUG_LINE_INFO;
-	
-	// Register in db so we can check at next start if user has emerged any packages outside kuroo
-	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();

@@ -48,6 +48,9 @@ void UninstallInspector::view( const QStringList& packageList )
 {
 	m_dialog->uninstallView->clear();
 	
+	const QStringList systemFilesList = QStringList::split( "\n", KurooConfig::systemFiles() );
+	bool isPartOfSystem( false );
+	
 	for ( QStringList::ConstIterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 		QString id = *itPackage++;
 		QString package = *itPackage;
@@ -55,6 +58,16 @@ void UninstallInspector::view( const QStringList& packageList )
 		QCheckListItem* itemPackage = new QCheckListItem( m_dialog->uninstallView, package, QCheckListItem::CheckBoxController );
 		itemPackage->setOpen( true );
 		itemPackage->setOn( true );
+		
+		// Warn if package is included in gentoo base system profile
+		foreach ( systemFilesList ) {
+			if ( *it == package ) {
+				itemPackage->setPixmap( 0, ImagesSingleton::Instance()->icon( WARNING ) );
+				isPartOfSystem = true;
+			}
+			else
+				itemPackage->setPixmap( 0, ImagesSingleton::Instance()->icon( EMPTY ) );
+		}
 		
 		// List all versions if more that one installed version is found
 		const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInstalled( id );
@@ -65,6 +78,13 @@ void UninstallInspector::view( const QStringList& packageList )
 			}
 	}
 	
+	if ( isPartOfSystem )
+		m_dialog->uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
+		                                          "This may be damaging to your system!</b></font>") );
+	else
+		m_dialog->uninstallWarning->hide();
+	
+	m_dialog->adjustSize();
 	show();
 }
 

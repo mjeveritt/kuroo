@@ -178,8 +178,10 @@
 		<entry name="UseOrder" type="String">
 		</entry>
 	</group>
-	<group name="etcUpdateWarnings"> 
+	<group name="warnings"> 
 		<entry name="etcFiles" type="String">
+		</entry>
+		<entry name="systemFiles" type="String">
 		</entry>
 	</group>
 </kcfg>

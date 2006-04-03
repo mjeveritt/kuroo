@@ -142,12 +142,12 @@ void QueueTab::slotInit()
 	
 	slotRemoveInstalled();
 	
-	QToolTip::add( cbDownload, i18n( "<qt><table width=300><tr><td>Instead of doing any package building, "
-	                                 "just perform fetches for all packages (the main package as well as all dependencies), "
-	                                 "grabbing all potential files.</td></tr></table></qt>" ) );
+	QToolTip::add( cbDownload, i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
+	                                  "just perform fetches for all packages (the main package as well as all dependencies), "
+	                                  "grabbing all potential files.</td></tr></table></qt>" ) );
 	
-	QToolTip::add( cbNoWorld, i18n(  "<qt><table width=300><tr><td>Emerge as normal, "
-	                                 "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+	QToolTip::add( cbNoWorld, i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+	                                  "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
 	
 	QToolTip::add( cbForceConf, i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
 	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
@@ -180,7 +180,8 @@ void QueueTab::slotRefresh()
 {
 	DEBUG_LINE_INFO;
 	
-	queueView->insertPackageList( m_hasCheckedQueue );
+	if ( !QueueSingleton::Instance()->isQueueBusy() )
+		queueView->insertPackageList( m_hasCheckedQueue );
 }
 
 /**

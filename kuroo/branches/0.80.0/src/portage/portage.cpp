@@ -47,6 +47,8 @@ public:
 		QString name = parts[1];
 		QString version = parts[2];
 		
+		kdDebug() << "category=" << category << ". name=" << name << ". version=" << version << "." << LINE_INFO;
+		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package "
 			"WHERE name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")
@@ -78,7 +80,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotPackageChanged();
+		PortageSingleton::Instance()->slotChanged();
 	}
 	
 private:
@@ -106,9 +108,11 @@ public:
 		QString name = parts[1];
 		QString version = parts[2];
 		
-		QString id = KurooDBSingleton::Instance()->singleQuery( 
-			"SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-			"( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+		kdDebug() << "category=" << category << ". name=" << name << ". version=" << version << "." << LINE_INFO;
+		
+		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package WHERE "
+			"name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")
+			.arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
 			kdWarning(0) << i18n("Removing unmerged package: Can not find id in database for package %1/%2.")
@@ -122,6 +126,8 @@ public:
 			QString installedVersionCount = KurooDBSingleton::Instance()->singleQuery( 
 				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status = '%2' LIMIT 1;")
 				.arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
+			
+			kdDebug() << "installedVersionCount=" << installedVersionCount << LINE_INFO;
 			
 			// Mark package as uninstalled only when one version is found
 			if ( installedVersionCount == "1" ) {
@@ -232,16 +238,6 @@ void Portage::slotChanged()
 	DEBUG_LINE_INFO;
 	
 	emit signalPortageChanged();
-}
-
-/**
- * Emit signal when package status is changed to installed.
- */
-void Portage::slotPackageChanged()
-{
-	DEBUG_LINE_INFO;
-	
-	emit signalPackageChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

@@ -85,6 +85,8 @@ void IntroDlg::reject()
 
 void IntroDlg::accept()
 {
+	kdDebug() << k_funcinfo << endl;
+	
 	// Backup all portage files changeable by kuroo
 	if ( cbBackup->isOn() ) {
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );

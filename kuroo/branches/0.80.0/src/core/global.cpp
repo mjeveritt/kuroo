@@ -60,15 +60,17 @@ const QStringList Global::parsePackage( const QString& packageString )
 	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*((-(?:\\d+\\.)*\\d+[a-z]?)(?:_(?=alpha|beta|pre|rc|p)\\d*)?(?:-r\\d*)?)" );
 	QStringList list;
 	QString nameVersion;
-	
+	QString package( packageString );
+	package.remove( ' ' );
+		
 	// Parse out the category first
-	if ( packageString.contains( '/' ) ) {
-		list << packageString.section( "/", 0, 0 );
-		nameVersion = packageString.section( "/", 1, 1 );
+	if ( package.contains( '/' ) ) {
+		list << package.section( "/", 0, 0 );
+		nameVersion = package.section( "/", 1, 1 );
 	}
 	else {
 		list << QString::null;
-		nameVersion = packageString;
+		nameVersion = package;
 	}
 
 	// Now package name and version

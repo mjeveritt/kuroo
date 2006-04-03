@@ -39,21 +39,26 @@ public:
 	
 public slots:
 	void					init( QObject *parent = 0 );
+	
 	void					emergePackageStart( const QString& package, int order, int total );
 	void					emergePackageComplete( const QString& package, int order, int total );
 	void					slotOneStep();
 	void					stopTimer();
+	bool					isQueueBusy();
+	
 	void					clearCache();
 	void					insertInCache( const QString& id );
 	void					deleteFromCache( const QString& id );
+	
 	bool					isQueued( const QString& id );
 	void					reset();
 	void					refresh( bool hasCheckedQueue );
+	void					slotClearQueue();
+	
 	void					removePackageIdList( const QStringList& packageIdList );
     void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
 	void					setRemoveInstalled( bool removeInstalled );
-	void					slotClearQueue();
 	
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );
@@ -63,6 +68,9 @@ signals:
 	
 private:
 	QObject					*m_parent;
+	
+	// Queue is busy emerging
+	bool					m_isQueueBusy;
 	
 	// Cache contaning packages in Queue
 	QMap<QString, bool>		m_queueCache;

@@ -152,8 +152,6 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
-	DEBUG_LINE_INFO;
-	
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -227,6 +225,8 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains("unmerge success") ) {
+				DEBUG_LINE_INFO;
+				
 				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
 				PortageSingleton::Instance()->removeInstalledPackage( package );
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );
@@ -246,6 +246,8 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains( "terminating." ) ) {
+				DEBUG_LINE_INFO;
+				
 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
@@ -260,7 +262,7 @@ void History::slotParse()
 				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
 				
 				emergeLine.replace( "AUTOCLEAN", i18n( "AUTOCLEAN" ) );
-				continue;
+// 				continue;
 				
 				emergeLine.replace( "Unmerging", i18n( "Unmerging" ) );
 				emergeLine.replace( "Finished. Cleaning up", i18n( "Finished. Cleaning up" ) );

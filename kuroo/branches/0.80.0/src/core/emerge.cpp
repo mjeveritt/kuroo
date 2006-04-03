@@ -37,6 +37,7 @@ Emerge::Emerge( QObject* m_parent )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
+	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
 }
 
 Emerge::~Emerge()
@@ -57,7 +58,6 @@ void Emerge::init( QObject *parent )
 bool Emerge::stop()
 {
 	if ( eProc->isRunning() && eProc->kill(9) ) {
-		kdDebug() << i18n("Emerge process killed!") << LINE_INFO;
 		kdWarning(0) << "Emerge process killed!" << LINE_INFO;
 		return true;
 	}

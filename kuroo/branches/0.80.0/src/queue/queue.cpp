@@ -104,7 +104,7 @@ private:
  * @short Object for packages to be emerged = installation queue.
  */
 Queue::Queue( QObject* m_parent )
-	: QObject( m_parent ), m_removeInstalled( false )
+	: QObject( m_parent ), m_removeInstalled( false ), m_isQueueBusy( false )
 {
 	// Clock timer for showing progress when emerging
 	m_internalTimer = new QTimer( this );
@@ -216,6 +216,7 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
 	
 	m_internalTimer->start( 1000 );
 	emit signalPackageStart( id );
+	m_isQueueBusy = true;
 }
 
 /**
@@ -243,9 +244,15 @@ void Queue::slotOneStep()
 
 void Queue::stopTimer()
 {
+	DEBUG_LINE_INFO;
+	m_isQueueBusy = false;
 	m_internalTimer->stop();
 }
 
+bool Queue::isQueueBusy()
+{
+	return m_isQueueBusy;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Package handling

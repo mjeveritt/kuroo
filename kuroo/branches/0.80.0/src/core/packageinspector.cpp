@@ -719,16 +719,12 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
 			QString textLines;
-			int lineCount( 0 );
 			while ( !stream.atEnd() ) {
 				QString line = stream.readLine();
-				if ( line.isEmpty() )
-					continue;
-				
-				if ( lineCount++ > 1 || line == "0" )
+				if ( line.startsWith( "DEPEND=" ) ) {
+					textLines = line.section( "DEPEND=", 1, 1 );
 					break;
-				else
-					textLines += line + "<br>";
+				}
 			}
 			file.close();
 			dialog->dependencyBrowser->setText( textLines );

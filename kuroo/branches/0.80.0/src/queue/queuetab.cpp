@@ -382,7 +382,7 @@ void QueueTab::slotStop()
 			
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
-				QueueSingleton::Instance()->stopTimer();
+// 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
 		
 		}

@@ -138,7 +138,6 @@ void Queue::refresh( bool hasCheckedQueue )
 void Queue::reset()
 {
 	DEBUG_LINE_INFO;
-	
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
 	refresh( false );
 }
@@ -242,12 +241,11 @@ void Queue::slotOneStep()
 	emit signalPackageAdvance();
 }
 
-void Queue::stopTimer()
-{
-	DEBUG_LINE_INFO;
-	m_isQueueBusy = false;
-	m_internalTimer->stop();
-}
+// void Queue::stopTimer()
+// {
+// 	DEBUG_LINE_INFO;
+// 	m_internalTimer->stop();
+// }
 
 bool Queue::isQueueBusy()
 {
@@ -299,14 +297,22 @@ void Queue::setRemoveInstalled( bool removeInstalled )
  */
 void Queue::slotClearQueue()
 {
+	DEBUG_LINE_INFO;
+	
+	// Queue is not busy anymore - off course
+	m_isQueueBusy = false;
+	
+	// Make sure the timer is stopped
+	m_internalTimer->stop();
+	
 	if ( m_removeInstalled ) {
 		
 		// Collect only 100% complete packages
 		QStringList idList;
-		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap )
+		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap ) {
 			if ( itMap.data() )
 				idList += itMap.key();
-	
+		}
 		if ( !idList.isEmpty() )
 			removePackageIdList( idList );
 	}

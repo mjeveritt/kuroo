@@ -152,6 +152,8 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
+	DEBUG_LINE_INFO;
+	
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );

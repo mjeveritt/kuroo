@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-04 14:58+0200\n"
+"POT-Creation-Date: 2006-04-04 16:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,11 +42,6 @@ msgstr ""
 #: queue/queuelistview.cpp:306 queue/queuelistview.cpp:311
 #: queue/queuelistview.cpp:316
 msgid "na"
-msgstr ""
-
-#: queue/queuelistview.cpp:398
-#, c-format
-msgid "%1d "
 msgstr ""
 
 #: queue/results.cpp:56
@@ -88,78 +83,82 @@ msgid "Number of packages: %1<br>"
 msgstr ""
 
 #: queue/queuetab.cpp:221
-msgid "Estimated time for installation: %1<br>"
+msgid "Initial estimated time for installation: %1<br>"
 msgstr ""
 
 #: queue/queuetab.cpp:222
+msgid "Elapsed time for installation: %1<br>"
+msgstr ""
+
+#: queue/queuetab.cpp:224
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:259
+#: queue/queuetab.cpp:262
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:265 rc.cpp:68
+#: queue/queuetab.cpp:268 rc.cpp:68
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:343
+#: queue/queuetab.cpp:346
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:343 queue/queuetab.cpp:354
+#: queue/queuetab.cpp:346 queue/queuetab.cpp:357
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:354
+#: queue/queuetab.cpp:357
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:381
+#: queue/queuetab.cpp:384
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:386 core/emerge.cpp:443 core/emerge.cpp:521
+#: queue/queuetab.cpp:388 core/emerge.cpp:443 core/emerge.cpp:521
 #: core/cacheportagejob.cpp:171 core/etcupdate.cpp:125
 #: core/scanportagejob.cpp:349 core/scanportagejob.cpp:423
 #: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:138
 #: core/portagefiles.cpp:230 core/portagefiles.cpp:322
-#: core/portagefiles.cpp:414 history/history.cpp:254 history/history.cpp:255
+#: core/portagefiles.cpp:414 history/history.cpp:253 history/history.cpp:254
 #: statusbar.cpp:98
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:480 core/versionview.cpp:111 portage/portagetab.cpp:416
+#: queue/queuetab.cpp:482 core/versionview.cpp:111 portage/portagetab.cpp:416
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:483 core/versionview.cpp:108 portage/portagetab.cpp:421
+#: queue/queuetab.cpp:485 core/versionview.cpp:108 portage/portagetab.cpp:421
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:486 portage/portagetab.cpp:426
+#: queue/queuetab.cpp:488 portage/portagetab.cpp:426
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:489 portage/portagetab.cpp:429
+#: queue/queuetab.cpp:491 portage/portagetab.cpp:429
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:491 portage/portagetab.cpp:431
+#: queue/queuetab.cpp:493 portage/portagetab.cpp:431
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:536 portage/portagetab.cpp:575 rc.cpp:25 rc.cpp:292
+#: queue/queuetab.cpp:538 portage/portagetab.cpp:575 rc.cpp:25 rc.cpp:292
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:540 portage/portagetab.cpp:579
+#: queue/queuetab.cpp:542 portage/portagetab.cpp:579
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:542 portage/portagetab.cpp:581
+#: queue/queuetab.cpp:544 portage/portagetab.cpp:581
 msgid "Remove from world"
 msgstr ""
 
@@ -736,6 +735,11 @@ msgstr ""
 msgid "Portage version"
 msgstr ""
 
+#: core/global.cpp:141
+#, c-format
+msgid "%1d "
+msgstr ""
+
 #: intro/introdlg.cpp:49
 msgid "Ok"
 msgstr ""
@@ -809,25 +813,25 @@ msgstr ""
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:266 rc.cpp:503
+#: history/history.cpp:263 rc.cpp:503
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:269
+#: history/history.cpp:264
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:270
+#: history/history.cpp:265
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:271
-msgid "exiting successfully"
+#: history/history.cpp:266
+msgid "Exiting successfully"
 msgstr ""
 
-#: history/history.cpp:272
-msgid "terminating"
+#: history/history.cpp:267
+msgid "Terminating"
 msgstr ""
 
 #: history/mergelistview.cpp:58
@@ -850,31 +854,31 @@ msgstr ""
 msgid "Inserting emerged package: can not match %1."
 msgstr ""
 
-#: portage/portage.cpp:59
+#: portage/portage.cpp:57
 msgid ""
 "Inserting emerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:104
+#: portage/portage.cpp:102
 msgid "Removing unmerged package: can not match %1."
 msgstr ""
 
-#: portage/portage.cpp:118
+#: portage/portage.cpp:114
 msgid ""
 "Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:299
+#: portage/portage.cpp:295
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
 msgstr ""
 
-#: portage/portage.cpp:352
+#: portage/portage.cpp:348
 msgid "Loading packages in world. Reading: "
 msgstr ""
 
-#: portage/portage.cpp:370
+#: portage/portage.cpp:366
 msgid "Adding to world. Writing: "
 msgstr ""
 
@@ -1414,12 +1418,12 @@ msgstr ""
 
 #: rc.cpp:38
 #, no-c-format
-msgid "Download all packa&ges before installing them (--fetch-all-uri)"
+msgid "Download all packages &before installing them (--fetch-all-uri)"
 msgstr ""
 
-#: rc.cpp:41 rc.cpp:213
+#: rc.cpp:41 rc.cpp:334
 #, no-c-format
-msgid "Alt+G"
+msgid "Alt+B"
 msgstr ""
 
 #: rc.cpp:44
@@ -1639,6 +1643,11 @@ msgstr ""
 msgid "Backup all user editable porta&ge files before proceeding."
 msgstr ""
 
+#: rc.cpp:213
+#, no-c-format
+msgid "Alt+G"
+msgstr ""
+
 #: rc.cpp:216 rc.cpp:251 rc.cpp:328
 #, no-c-format
 msgid "Form3"
@@ -1764,11 +1773,6 @@ msgstr ""
 #: rc.cpp:331
 #, no-c-format
 msgid "Ver&bose"
-msgstr ""
-
-#: rc.cpp:334
-#, no-c-format
-msgid "Alt+B"
 msgstr ""
 
 #: rc.cpp:337

@@ -250,7 +250,6 @@ void History::slotParse()
 			if ( emergeLine.contains( "terminating." ) ) {
 				DEBUG_LINE_INFO;
 				
-// 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
 				
@@ -261,15 +260,13 @@ void History::slotParse()
 				
 			}
 			else {
-				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
-				
 				emergeLine.replace( "AUTOCLEAN", i18n( "AUTOCLEAN" ) );
-// 				continue;
-				
 				emergeLine.replace( "Unmerging", i18n( "Unmerging" ) );
 				emergeLine.replace( "Finished. Cleaning up", i18n( "Finished. Cleaning up" ) );
-				emergeLine.replace( "exiting successfully", i18n( "exiting successfully" ) );
-				emergeLine.replace( "terminating", i18n( "terminating" ) );
+				emergeLine.replace( "exiting successfully", i18n( "Exiting successfully" ) );
+				emergeLine.replace( "terminating", i18n( "Terminating" ) );
+				
+				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
 		}

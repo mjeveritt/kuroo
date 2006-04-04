@@ -49,7 +49,6 @@ public slots:
 	void					clearQueuePackageUse();
 	
 	long			 		totalDuration();
-	QString					totalTimeFormatted();
 	
 	QString		 			totalSize();
 	void					slotPackageComplete( const QString& id );
@@ -61,14 +60,12 @@ private slots:
 	void					slotHideBars( QListViewItem* item );
 	QString		 			formatSize( const QString& sizeString );
 	void 					addSize( const QString& size );
-	QString 				formatTime( long time );
 	
 signals:
 	void					signalPackageEmerged();
 	
 private:
-	KLocale 				*m_loc;
-	
+
 	// Total sum of all package emerge duration 
 	int 					m_sumSize;
 	

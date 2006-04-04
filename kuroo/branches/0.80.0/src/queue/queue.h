@@ -43,7 +43,6 @@ public slots:
 	void					emergePackageStart( const QString& package, int order, int total );
 	void					emergePackageComplete( const QString& package, int order, int total );
 	void					slotOneStep();
-// 	void					stopTimer();
 	bool					isQueueBusy();
 	
 	void					clearCache();

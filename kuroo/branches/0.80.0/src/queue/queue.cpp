@@ -241,12 +241,6 @@ void Queue::slotOneStep()
 	emit signalPackageAdvance();
 }
 
-// void Queue::stopTimer()
-// {
-// 	DEBUG_LINE_INFO;
-// 	m_internalTimer->stop();
-// }
-
 bool Queue::isQueueBusy()
 {
 	return m_isQueueBusy;

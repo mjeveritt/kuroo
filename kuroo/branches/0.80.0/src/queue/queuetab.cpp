@@ -206,7 +206,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	// Enable the gui
 	slotBusy();
 	
-	m_initialQueueTime = queueView->totalTimeFormatted();
+	m_initialQueueTime = GlobalSingleton::Instance()->formatTime( queueView->totalDuration() );
 	slotQueueSummary();
 }
 
@@ -216,10 +216,13 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
-	QString queueBrowserLines( i18n(   "<b>Summary</b><br>" ) );
+	QString queueBrowserLines(   i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" ).arg( queueView->totalTimeFormatted() );
+			queueBrowserLines += i18n( "Initial estimated time for installation: %1<br>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "Elapsed time for installation: %1<br>" )
+		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
+			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" )
+		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
 
@@ -382,7 +385,6 @@ void QueueTab::slotStop()
 			
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
-// 				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
 		
 		}

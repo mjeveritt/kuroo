@@ -162,7 +162,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), 
-	m_loc( KGlobal::locale() ), m_id( QString::null )
+	/*m_loc( KGlobal::locale() ), */m_id( QString::null )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
@@ -310,7 +310,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		if ( duration == diffTime )
 			item->setText( 4, i18n("na") );
 		else
-			item->setText( 4, formatTime( duration ) );
+			item->setText( 4, GlobalSingleton::Instance()->formatTime( duration ) );
 		
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
@@ -376,31 +376,6 @@ long QueueListView::totalDuration()
 	return totalSeconds;
 }
 
-QString QueueListView::totalTimeFormatted()
-{
-	return formatTime( totalDuration() );
-}
-
-/**
- * Convert emerge duration from seconds to format hh:mm:ss.
- * @param time
- * @return emergeTime
- */
-QString QueueListView::formatTime( long duration )
-{
-	QString totalDays;
-	unsigned durationDays, totalSeconds;
-	
-	durationDays = duration / 86400;
-	totalSeconds = duration % 86400;
-	
-	if ( durationDays > 0 )
-		totalDays = i18n( "%1d " ).arg( QString::number( durationDays ) );
-	
-	QTime emergeTime(0, 0, 0);
-	emergeTime = emergeTime.addSecs( totalSeconds );
-	return totalDays + m_loc->formatTime( emergeTime, true, true );
-}
 
 /////////////////////////////////////////////////////////////////////////////////////
 // 
@@ -433,6 +408,7 @@ QString QueueListView::totalSize()
  */
 QString QueueListView::formatSize( const QString& sizeString )
 {
+	KLocale *loc = KGlobal::locale();
 	QString total;
 	QString tmp ( sizeString );
 	int size = tmp.remove(',').toInt();
@@ -440,7 +416,7 @@ QString QueueListView::formatSize( const QString& sizeString )
 	if ( size == 0 )
 		total = "0 kB ";
 	else
-		total = m_loc->formatNumber( (double)size, 0 ) + " kB ";
+		total = loc->formatNumber( (double)size, 0 ) + " kB ";
 	
 	return total;
 }

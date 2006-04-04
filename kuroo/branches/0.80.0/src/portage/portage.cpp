@@ -47,8 +47,6 @@ public:
 		QString name = parts[1];
 		QString version = parts[2];
 		
-		kdDebug() << "category=" << category << ". name=" << name << ". version=" << version << "." << LINE_INFO;
-		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package "
 			"WHERE name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")
@@ -107,8 +105,6 @@ public:
 		QString category = parts[0];
 		QString name = parts[1];
 		QString version = parts[2];
-		
-		kdDebug() << "category=" << category << ". name=" << name << ". version=" << version << "." << LINE_INFO;
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package WHERE "
 			"name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")

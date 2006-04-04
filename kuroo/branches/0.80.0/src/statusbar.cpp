@@ -54,8 +54,8 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	connect( m_internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
 	// Progress timer for activities when total duration is not specified.
-	diffTimer = new QTimer( this );
-	connect( diffTimer, SIGNAL( timeout() ), SLOT( slotAdvance() ) );
+	m_diffTimer = new QTimer( this );
+	connect( m_diffTimer, SIGNAL( timeout() ), SLOT( slotAdvance() ) );
 }
 
 KurooStatusBar::~KurooStatusBar()
@@ -73,12 +73,12 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 		return;
 	}
 	
-	if ( !messageMap.contains( id ) ) {
-		messageMap.insert( id, message );
+	if ( !m_messageMap.contains( id ) ) {
+		m_messageMap.insert( id, message );
 		statusBarLabel->setText( message );
 	}
 	else {
-		messageMap.erase( id );
+		m_messageMap.erase( id );
 		statusBarLabel->setText( message );
 		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 	}
@@ -89,8 +89,8 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
  */
 void KurooStatusBar::slotLastMessage()
 {
-	QMap<QString, QString>::Iterator it = messageMap.end();
-	if ( messageMap.size() > 0 ) {
+	QMap<QString, QString>::Iterator it = m_messageMap.end();
+	if ( m_messageMap.size() > 0 ) {
 		it--;
 		statusBarLabel->setText( it.data() );
 	}
@@ -159,8 +159,9 @@ void KurooStatusBar::startTimer()
  */
 void KurooStatusBar::stopTimer()
 {
+	m_timerSteps = 0;
 	m_internalTimer->stop();
-	diffTimer->stop();
+	m_diffTimer->stop();
 	statusBarProgress->setProgress( 0 );
 	statusBarProgress->setTotalSteps( 100 );
 	statusBarProgress->setTextEnabled( true );
@@ -179,6 +180,11 @@ void KurooStatusBar::slotOneStep()
 	}
 }
 
+long KurooStatusBar::elapsedTime()
+{
+	return m_timerSteps;
+}
+
 /**
  * Start relative advance.
  */
@@ -187,7 +193,7 @@ void KurooStatusBar::startProgress()
 	statusBarProgress->show();
 	statusBarProgress->setTotalSteps( 0 );
 	statusBarProgress->setTextEnabled( false );
-	diffTimer->start( 1000 );
+	m_diffTimer->start( 1000 );
 }
 
 /**

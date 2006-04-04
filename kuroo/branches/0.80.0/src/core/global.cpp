@@ -23,8 +23,11 @@
 #include <qregexp.h>
 #include <qwidget.h>
 #include <qpalette.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
+#include <klocale.h>
+#include <kglobal.h>
 
 /**
  * @class Global
@@ -106,14 +109,40 @@ const long Global::kurooViewId()
 	return	m_wId;
 }
 
+/**
+ * Return KDE background color-theme.
+ */
 const QString Global::bgHexColor()
 {
 	return m_bgColor;
 }
 
+/**
+ * Return KDE foreground color-theme.
+ */
 const QString Global::fgHexColor()
 {
 	return m_fgColor;
+}
+
+/**
+ * Return duration in seconds formated as "d hh.mm.ss".
+ */
+const QString Global::formatTime( long duration )
+{
+	KLocale *loc = KGlobal::locale();
+	QString totalDays;
+	unsigned durationDays, totalSeconds;
+	
+	durationDays = duration / 86400;
+	totalSeconds = duration % 86400;
+	
+	if ( durationDays > 0 )
+		totalDays = i18n( "%1d " ).arg( QString::number( durationDays ) );
+	
+	QTime emergeTime( 0, 0, 0 );
+	emergeTime = emergeTime.addSecs( totalSeconds );
+	return totalDays + loc->formatTime( emergeTime, true, true );
 }
 
 #include "global.moc"

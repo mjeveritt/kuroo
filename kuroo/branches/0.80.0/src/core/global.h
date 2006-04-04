@@ -39,13 +39,15 @@ public:
 	
 	void 				init( QObject *parent = 0 );
 	
-	const QString 			kurooDir();
+	const QString 		kurooDir();
 	const QStringList 	parsePackage( const QString& packageString );
 	
 	void 				setKurooView( QWidget* view );
-	const long 				kurooViewId();
-	const QString				bgHexColor();
-	const QString				fgHexColor();
+	const long 			kurooViewId();
+	const QString		bgHexColor();
+	const QString		fgHexColor();
+	
+	const QString 		formatTime( long duration );
 	
 private:
 	QObject*			m_parent;

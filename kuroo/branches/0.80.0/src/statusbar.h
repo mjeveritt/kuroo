@@ -49,6 +49,7 @@ public:
 	void 					setProgress( int steps );
 	void					startTimer();
 	void					stopTimer();
+	long						elapsedTime();
 	void					startProgress();
 	
 public slots:
@@ -59,11 +60,11 @@ private slots:
 	void					slotLastMessage();
 	
 private:
-	QMap<QString, QString> 	messageMap;
+	QMap<QString, QString> 	m_messageMap;
 	KProgress 				*statusBarProgress;
 	QLabel 					*statusBarLabel;
-	QTimer 					*m_internalTimer, *diffTimer;
-	int						m_timerSteps;
+	QTimer 					*m_internalTimer, *m_diffTimer;
+	long						m_timerSteps;
 };
 
 #endif

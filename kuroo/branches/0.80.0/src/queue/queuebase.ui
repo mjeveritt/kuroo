@@ -361,10 +361,10 @@
                                     <cstring>cbDownload</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Download all packa&amp;ges before installing them (--fetch-all-uri)</string>
+                                    <string>Download all packages &amp;before installing them (--fetch-all-uri)</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+G</string>
+                                    <string>Alt+B</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0">
@@ -495,7 +495,7 @@
                                 <property name="minimumSize">
                                     <size>
                                         <width>200</width>
-                                        <height>64</height>
+                                        <height>55</height>
                                     </size>
                                 </property>
                                 <property name="backgroundOrigin">

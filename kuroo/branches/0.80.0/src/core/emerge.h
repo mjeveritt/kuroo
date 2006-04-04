@@ -44,13 +44,15 @@ public:
 public slots:
 	void				init( QObject *parent = 0 );
 	bool				stop();
+	bool 				isRunning();
+	
 	bool 				pretend( const QStringList& packageList );
 	bool 				queue( const QStringList& packageList );
 	bool 				unmerge( const QStringList& packageList );
 	bool				sync();
 	bool				checkUpdates();
+	
 	EmergePackageList	packageList();
-	bool 				isRunning();
 	QString				packageMessage();
 	
 private slots:

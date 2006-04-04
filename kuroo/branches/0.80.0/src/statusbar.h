@@ -63,7 +63,7 @@ private:
 	KProgress 				*statusBarProgress;
 	QLabel 					*statusBarLabel;
 	QTimer 					*m_internalTimer, *diffTimer;
-	int						timerSteps;
+	int						m_timerSteps;
 };
 
 #endif

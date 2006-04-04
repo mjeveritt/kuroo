@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>610</width>
-            <height>488</height>
+            <width>614</width>
+            <height>519</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -321,7 +321,7 @@
                 <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>5</hsizetype>
-                        <vsizetype>1</vsizetype>
+                        <vsizetype>2</vsizetype>
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
@@ -329,7 +329,7 @@
                 <property name="minimumSize">
                     <size>
                         <width>0</width>
-                        <height>100</height>
+                        <height>160</height>
                     </size>
                 </property>
                 <property name="frameShape">
@@ -487,7 +487,7 @@
                                 <property name="sizePolicy">
                                     <sizepolicy>
                                         <hsizetype>1</hsizetype>
-                                        <vsizetype>5</vsizetype>
+                                        <vsizetype>2</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
@@ -495,7 +495,7 @@
                                 <property name="minimumSize">
                                     <size>
                                         <width>200</width>
-                                        <height>50</height>
+                                        <height>64</height>
                                     </size>
                                 </property>
                                 <property name="backgroundOrigin">

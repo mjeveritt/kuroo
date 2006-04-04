@@ -34,8 +34,15 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
 {
 	s_instance = this;
-	statusBarProgress = new KProgress( 0, "statusBarProgress" );
-	statusBarLabel = new QLabel( 0, "statusBarLabel" );
+
+	statusBarProgress = new KProgress( this, "statusBarProgress" );
+	statusBarProgress->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 
+	                                               0, 0, statusBarProgress->sizePolicy().hasHeightForWidth() ) );
+	
+	statusBarLabel = new QLabel( this, "statusBarLabel" );
+	statusBarLabel->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)5, 
+	                                            0, 0, statusBarLabel->sizePolicy().hasHeightForWidth() ) );
+	
 	addWidget( statusBarLabel, 1, 1 );
 	addWidget( statusBarProgress, 0, true );
 	
@@ -111,7 +118,7 @@ void KurooStatusBar::setTotalSteps( int total )
 
 void KurooStatusBar::updateTotalSteps( int total )
 {
-	statusBarProgress->setTotalSteps( timerSteps + total );
+	statusBarProgress->setTotalSteps( m_timerSteps + total );
 }
 
 /**
@@ -144,7 +151,7 @@ void KurooStatusBar::setProgress( int steps )
 void KurooStatusBar::startTimer()
 {
 	m_internalTimer->start( 1000 );
-	timerSteps = 0;
+	m_timerSteps = 0;
 }
 
 /**
@@ -165,8 +172,8 @@ void KurooStatusBar::stopTimer()
  */
 void KurooStatusBar::slotOneStep()
 {
-	setProgress( timerSteps++ );
-	if ( timerSteps > statusBarProgress->totalSteps() ) {
+	setProgress( m_timerSteps++ );
+	if ( m_timerSteps > statusBarProgress->totalSteps() ) {
 		stopTimer();
 		startProgress();
 	}

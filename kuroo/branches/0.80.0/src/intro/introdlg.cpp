@@ -26,6 +26,7 @@
 #include <qwizard.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -49,6 +50,16 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	QWizard::showPage( page1 );
 	QWizard::setHelpEnabled( page1, false );
 	setFinishEnabled( page1, true );
+	
+	QToolTip::add( cbBackup, i18n( "<qt><table width=300><tr><td>Make backup copies in %1 of following files:</td></tr>" )
+	               .arg( GlobalSingleton::Instance()->kurooDir() + "backup/" ) + 
+	               "<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
+	               "<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
+	               "<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
+	               "<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
+	               "<tr><td>" + KurooConfig::dirWorldFile() + "</td></tr>" +
+	               "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" 
+	               );
 	
 	introText->setText(   	"<h2>Kuroo-" + KurooConfig::version().section( "_", 0, 0 ) + "</h2><p>" +
 					  i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "

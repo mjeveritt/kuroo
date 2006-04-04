@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-03 18:31+0200\n"
+"POT-Creation-Date: 2006-04-04 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: queue/queuelistview.cpp:168 portage/portagelistview.cpp:78
 #: portage/portagelistview.cpp:137 portage/portagelistview.cpp:139 rc.cpp:183
-#: rc.cpp:269
+#: rc.cpp:266
 #, no-c-format
 msgid "Package"
 msgstr ""
@@ -53,7 +53,7 @@ msgstr ""
 msgid "Add result package list: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: queue/queue.cpp:181 queue/queue.cpp:195
+#: queue/queue.cpp:180 queue/queue.cpp:194
 msgid "Package id is empty, skipping!"
 msgstr ""
 
@@ -125,8 +125,8 @@ msgstr ""
 #: core/scanportagejob.cpp:349 core/scanportagejob.cpp:423
 #: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:138
 #: core/portagefiles.cpp:230 core/portagefiles.cpp:322
-#: core/portagefiles.cpp:414 history/history.cpp:252 history/history.cpp:253
-#: statusbar.cpp:91
+#: core/portagefiles.cpp:414 history/history.cpp:254 history/history.cpp:255
+#: statusbar.cpp:98
 msgid "Done."
 msgstr ""
 
@@ -661,7 +661,7 @@ msgstr ""
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:272 core/packageinspector.cpp:794
+#: core/packageinspector.cpp:272 core/packageinspector.cpp:788
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -699,23 +699,23 @@ msgstr ""
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:737
+#: core/packageinspector.cpp:731
 msgid "Loading dependencies. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:738
+#: core/packageinspector.cpp:732
 msgid "%1No dependencies found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:766
+#: core/packageinspector.cpp:760
 msgid "Loading installed files list. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:767
+#: core/packageinspector.cpp:761
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:840 core/packageinspector.cpp:902
+#: core/packageinspector.cpp:834 core/packageinspector.cpp:896
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -736,11 +736,17 @@ msgstr ""
 msgid "Portage version"
 msgstr ""
 
-#: intro/introdlg.cpp:48
+#: intro/introdlg.cpp:49
 msgid "Ok"
 msgstr ""
 
 #: intro/introdlg.cpp:54
+msgid ""
+"<qt><table width=300><tr><td>Make backup copies in %1 of following files:</"
+"td></tr>"
+msgstr ""
+
+#: intro/introdlg.cpp:65
 msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
@@ -755,72 +761,72 @@ msgstr ""
 msgid "Reading /var/log/emerge.log"
 msgstr ""
 
-#: history/history.cpp:171
+#: history/history.cpp:173
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:172
+#: history/history.cpp:174
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:187
+#: history/history.cpp:189
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:188
+#: history/history.cpp:190
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:189
+#: history/history.cpp:191
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:196
+#: history/history.cpp:198
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:208
+#: history/history.cpp:210
 msgid "Can not parse package emerge start in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:221
+#: history/history.cpp:223
 msgid "Can not parse package emerge complete in /var/log/emerge.log: %1"
 msgstr ""
 
-#: history/history.cpp:223
+#: history/history.cpp:225
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:232
+#: history/history.cpp:234
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:238 history/history.cpp:239
+#: history/history.cpp:240 history/history.cpp:241
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:244 history/history.cpp:245
+#: history/history.cpp:246 history/history.cpp:247
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:264 rc.cpp:503
+#: history/history.cpp:266 rc.cpp:503
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
 
-#: history/history.cpp:267
+#: history/history.cpp:269
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:268
+#: history/history.cpp:270
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:269
+#: history/history.cpp:271
 msgid "exiting successfully"
 msgstr ""
 
-#: history/history.cpp:270
+#: history/history.cpp:272
 msgid "terminating"
 msgstr ""
 
@@ -858,7 +864,7 @@ msgid ""
 "Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:296
+#: portage/portage.cpp:299
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
@@ -956,7 +962,7 @@ msgstr ""
 msgid "Uninstall Packages"
 msgstr ""
 
-#: portage/uninstallinspector.cpp:82
+#: portage/uninstallinspector.cpp:78
 msgid ""
 "<font color=red><b>You are uninstalling packages part of your system profile!"
 "<br>This may be damaging to your system!</b></font>"
@@ -1356,7 +1362,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:191
+#: kurooview.cpp:192
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 
@@ -1692,7 +1698,7 @@ msgid ""
 "<i>Click on configuration file to view changes...</i>"
 msgstr ""
 
-#: rc.cpp:265
+#: rc.cpp:269
 #, no-c-format
 msgid ""
 "Portage will not check if the package you want to remove is required by "

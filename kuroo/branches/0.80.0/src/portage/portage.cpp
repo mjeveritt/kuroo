@@ -357,7 +357,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
-			stream << it.key() << LINE_INFO;
+			stream << it.key() << endl;
 		file.close();
 		
 		return true;

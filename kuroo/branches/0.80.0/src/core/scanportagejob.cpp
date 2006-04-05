@@ -188,12 +188,12 @@ bool ScanPortageJob::doJob()
 					"INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 			
 			int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
-				"INSERT INTO subCategory_temp (name, idCategory) "
-				"VALUES ('%1', '%2');").arg(subCategory).arg(QString::number(idCategory)), m_db);
+				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
+    			.arg(subCategory).arg(QString::number(idCategory)), m_db);
 			
 			int idCatSubCategory = KurooDBSingleton::Instance()->insert( QString( 
-				"INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) "
-				"VALUES ('%1', '%2', '%3');").arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
+				"INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');")
+    			.arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
 			
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -576,7 +576,6 @@ void ScanPortageJob::loadCache()
 	DEBUG_LINE_INFO;
 	
 	m_mapCache.clear();
-	
 	const QStringList cacheList = KurooDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
 	foreach ( cacheList ) {
 		QString package = *it++;

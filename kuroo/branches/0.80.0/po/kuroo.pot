@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-04 16:38+0200\n"
+"POT-Creation-Date: 2006-04-05 18:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,7 +119,7 @@ msgstr ""
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:388 core/emerge.cpp:443 core/emerge.cpp:521
+#: queue/queuetab.cpp:388 core/emerge.cpp:447 core/emerge.cpp:525
 #: core/cacheportagejob.cpp:171 core/etcupdate.cpp:125
 #: core/scanportagejob.cpp:349 core/scanportagejob.cpp:423
 #: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:138
@@ -162,105 +162,105 @@ msgstr ""
 msgid "Remove from world"
 msgstr ""
 
-#: core/emerge.cpp:112 core/emerge.cpp:146
+#: core/emerge.cpp:116 core/emerge.cpp:150
 msgid ""
 "\n"
 "Error: Emerge didn't start. "
 msgstr ""
 
-#: core/emerge.cpp:117
+#: core/emerge.cpp:121
 msgid ""
 "\n"
 "Emerge %1 started..."
 msgstr ""
 
-#: core/emerge.cpp:118
+#: core/emerge.cpp:122
 msgid "Installing packages in queue..."
 msgstr ""
 
-#: core/emerge.cpp:153
+#: core/emerge.cpp:157
 msgid ""
 "\n"
 "Emerge pretend %1 started..."
 msgstr ""
 
-#: core/emerge.cpp:154
+#: core/emerge.cpp:158
 msgid "Checking installation queue..."
 msgstr ""
 
-#: core/emerge.cpp:181 core/emerge.cpp:210 core/emerge.cpp:245
+#: core/emerge.cpp:185 core/emerge.cpp:214 core/emerge.cpp:249
 msgid ""
 "\n"
 "Error: Emerge didn't start."
 msgstr ""
 
-#: core/emerge.cpp:188
+#: core/emerge.cpp:192
 msgid ""
 "\n"
 "Unmerge %1 started..."
 msgstr ""
 
-#: core/emerge.cpp:189
+#: core/emerge.cpp:193
 msgid "Uninstalling packages..."
 msgstr ""
 
-#: core/emerge.cpp:217
+#: core/emerge.cpp:221
 msgid ""
 "\n"
 "Emerge synchronize Portage Tree started..."
 msgstr ""
 
-#: core/emerge.cpp:218
+#: core/emerge.cpp:222
 msgid "Synchronizing portage tree..."
 msgstr ""
 
-#: core/emerge.cpp:252
+#: core/emerge.cpp:256
 msgid ""
 "\n"
 "Emerge check package updates started..."
 msgstr ""
 
-#: core/emerge.cpp:253
+#: core/emerge.cpp:257
 msgid "Checking for package updates..."
 msgstr ""
 
-#: core/emerge.cpp:309
+#: core/emerge.cpp:313
 msgid "Collecting emerge output. Can not parse: "
 msgstr ""
 
-#: core/emerge.cpp:358
+#: core/emerge.cpp:362
 msgid "Root access required!"
 msgstr ""
 
-#: core/emerge.cpp:364
+#: core/emerge.cpp:368
 msgid "There is no ebuilds to satisfy %1"
 msgstr ""
 
-#: core/emerge.cpp:454
+#: core/emerge.cpp:458
 msgid "You must run Kuroo as root to unmask packages!"
 msgstr ""
 
-#: core/emerge.cpp:455
+#: core/emerge.cpp:459
 msgid "Auto-unmasking packages"
 msgstr ""
 
-#: core/emerge.cpp:459
+#: core/emerge.cpp:463
 msgid "Emerge messages"
 msgstr ""
 
-#: core/emerge.cpp:459 core/emerge.cpp:528
+#: core/emerge.cpp:463 core/emerge.cpp:532
 msgid "Please check log for more information!"
 msgstr ""
 
-#: core/emerge.cpp:528
+#: core/emerge.cpp:532
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:541 core/emerge.cpp:550
+#: core/emerge.cpp:545 core/emerge.cpp:554
 msgid "%1 is not available on your architecture %2!<br><br>"
 msgstr ""
 
-#: core/emerge.cpp:542
+#: core/emerge.cpp:546
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet.<br>Ask the architecture porting team to test the "
@@ -268,39 +268,39 @@ msgid ""
 "website."
 msgstr ""
 
-#: core/emerge.cpp:546
+#: core/emerge.cpp:550
 msgid "Missing Keyword"
 msgstr ""
 
-#: core/emerge.cpp:551
+#: core/emerge.cpp:555
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:554
+#: core/emerge.cpp:558
 msgid "-* Keyword"
 msgstr ""
 
-#: core/emerge.cpp:558
+#: core/emerge.cpp:562
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:561
+#: core/emerge.cpp:565
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:562 core/emerge.cpp:577
+#: core/emerge.cpp:566 core/emerge.cpp:581
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:573
+#: core/emerge.cpp:577
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:576
+#: core/emerge.cpp:580
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
@@ -756,9 +756,8 @@ msgid ""
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
 "view: fast package browsing and searching with filters.<br>Two Column "
 "Selector, Package Inspector, Progress bars, Use-Flag Editor,Emerge and "
-"Configuration History, Emerge Queue.<br><br>We would be happy to know how "
-"many of you are using Kuroo: <a href=http://kuroo.org/letusknow.html>Click!</"
-"a><br>"
+"Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
+"wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
 msgstr ""
 
 #: history/history.cpp:78

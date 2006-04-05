@@ -162,7 +162,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), 
-	/*m_loc( KGlobal::locale() ), */m_id( QString::null )
+	m_id( QString::null )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );

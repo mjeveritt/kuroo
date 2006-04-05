@@ -69,8 +69,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 							"Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor,"
 							"Emerge and Configuration History, Emerge Queue.<br>"
 							"<br>"
-					      	"We would be happy to know how many of you are using Kuroo: "
-					      	"<a href=http://kuroo.org/letusknow.html>Click!</a><br>"
+					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
 					      	) );
 }
 

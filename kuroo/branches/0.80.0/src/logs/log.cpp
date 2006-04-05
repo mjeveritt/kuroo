@@ -124,7 +124,7 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case TOLOG: {
 			QTextStream st( &m_logFile );
-			st << line << LINE_INFO;
+    		st << line << "\n";
 			m_logFile.flush();
 			break;
 		}

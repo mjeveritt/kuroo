@@ -27,6 +27,7 @@
 #include <kprocio.h>
 #include <kmessagebox.h>
 #include <kuser.h>
+#include <kdeversion.h>
 
 /**
  * @class Emerge
@@ -37,7 +38,10 @@ Emerge::Emerge( QObject* m_parent )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
+  
+	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
 	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
+	#endif
 }
 
 Emerge::~Emerge()

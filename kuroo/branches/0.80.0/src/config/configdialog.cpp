@@ -612,7 +612,7 @@ bool ConfigDialog::saveMakeConf()
 				if ( rxLine.search( *it ) > -1 ) {
 					QString keyword = rxLine.cap(1);
 					if ( !keywords[ keyword ].isEmpty() )
-						stream << keyword << "=\"" << keywords[ keyword ] << "\"" << endl;
+    					stream << keyword << "=\"" << keywords[ keyword ] << "\"\n";
 					keywords.erase( keyword );
 				}
 			}
@@ -623,7 +623,7 @@ bool ConfigDialog::saveMakeConf()
 		// Add the rest (new) entries into make.conf
 		for ( QMap<QString, QString>::Iterator it = keywords.begin(), end = keywords.end(); it != end; ++it )
 			if ( !it.data().isEmpty() )
-				stream << it.key() << "=\"" << it.data() << "\"" << endl;
+    			stream << it.key() << "=\"" << it.data() << "\"\n";
 		
 		file.close();
 		return true;

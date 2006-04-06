@@ -3,7 +3,7 @@
   <general>
     <author>karye</author>
     <email>karye@users.sourceforge.net</email>
-    <version>$VERSION$</version>
+    <version>0.80.0</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -122,7 +122,7 @@
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
-      <activetarget>src/logs/liblogs.la</activetarget>
+      <activetarget>src/core/libcore.la</activetarget>
     </general>
     <configurations>
       <default>
@@ -195,4 +195,28 @@
       <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
+  <dist>
+    <custom>false</custom>
+    <bzip>false</bzip>
+    <archname/>
+    <appname>kuroo8.kdevelop</appname>
+    <version>0.80.0_050206_db19</version>
+    <release/>
+    <vendor/>
+    <licence/>
+    <summary/>
+    <group/>
+    <packager/>
+    <description/>
+    <changelog/>
+    <devpackage>false</devpackage>
+    <docspackage>false</docspackage>
+    <appicon>false</appicon>
+    <arch>0</arch>
+    <genHTML>false</genHTML>
+    <useRPM>false</useRPM>
+    <ftpkde>false</ftpkde>
+    <appskde>false</appskde>
+    <url/>
+  </dist>
 </kdevelop>

@@ -22,7 +22,6 @@
 #include "statusbar.h"
 
 #include <qlabel.h>
-
 #include <qtimer.h>
 
 KurooStatusBar* KurooStatusBar::s_instance = 0;
@@ -35,9 +34,15 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
 {
 	s_instance = this;
-	statusBarProgress = new KProgress( 0, "statusBarProgress" );
-	statusBarLabel = new QLabel( 0, "statusBarLabel" );
-	statusBarLabel->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)5, 0, 0, statusBarLabel->sizePolicy().hasHeightForWidth() ) );
+
+	statusBarProgress = new KProgress( this, "statusBarProgress" );
+	statusBarProgress->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 
+	                                               0, 0, statusBarProgress->sizePolicy().hasHeightForWidth() ) );
+	
+	statusBarLabel = new QLabel( this, "statusBarLabel" );
+	statusBarLabel->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)5, 
+	                                            0, 0, statusBarLabel->sizePolicy().hasHeightForWidth() ) );
+	
 	addWidget( statusBarLabel, 1, 1 );
 	addWidget( statusBarProgress, 0, true );
 	
@@ -45,12 +50,12 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	statusBarProgress->hide();
 	
 	// Clock timer for showing progress when emerging packages.
-	internalTimer = new QTimer( this );
-	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
-	
+	m_internalTimer = new QTimer( this );
+    connect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotUpdateTime() ) );
+    
 	// Progress timer for activities when total duration is not specified.
-	diffTimer = new QTimer( this );
-	connect( diffTimer, SIGNAL( timeout() ), SLOT( slotAdvance() ) );
+	m_diffTimer = new QTimer( this );
+    connect( m_diffTimer, SIGNAL( timeout() ), this, SLOT( slotAdvance() ) );
 }
 
 KurooStatusBar::~KurooStatusBar()
@@ -68,12 +73,12 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 		return;
 	}
 	
-	if ( !messageMap.contains( id ) ) {
-		messageMap.insert( id, message );
+	if ( !m_messageMap.contains( id ) ) {
+		m_messageMap.insert( id, message );
 		statusBarLabel->setText( message );
 	}
 	else {
-		messageMap.erase( id );
+		m_messageMap.erase( id );
 		statusBarLabel->setText( message );
 		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 	}
@@ -84,8 +89,8 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
  */
 void KurooStatusBar::slotLastMessage()
 {
-	QMap<QString, QString>::Iterator it = messageMap.end();
-	if ( messageMap.size() > 0 ) {
+	QMap<QString, QString>::Iterator it = m_messageMap.end();
+	if ( m_messageMap.size() > 0 ) {
 		it--;
 		statusBarLabel->setText( it.data() );
 	}
@@ -98,7 +103,7 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
-	stopTimer();
+    stopTimer();
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
 	
@@ -107,8 +112,18 @@ void KurooStatusBar::setTotalSteps( int total )
 	else
 		if ( !statusBarProgress->isVisible() ) {
 			statusBarProgress->show();
+    		m_internalTimer->start( 1000 );
 			startTimer();
 		}
+}
+
+void KurooStatusBar::updateTotalSteps( int total )
+{
+    statusBarProgress->setTotalSteps( m_timerSteps + total );
+    m_diffTimer->stop();
+    statusBarProgress->setTextEnabled( true );
+    disconnect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
+    connect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
 }
 
 /**
@@ -140,8 +155,8 @@ void KurooStatusBar::setProgress( int steps )
  */
 void KurooStatusBar::startTimer()
 {
-	internalTimer->start( 1000 );
-	timerSteps = 0;
+    connect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
+	m_timerSteps = 0;
 }
 
 /**
@@ -149,8 +164,8 @@ void KurooStatusBar::startTimer()
  */
 void KurooStatusBar::stopTimer()
 {
-	internalTimer->stop();
-	diffTimer->stop();
+    disconnect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
+	m_diffTimer->stop();
 	statusBarProgress->setProgress( 0 );
 	statusBarProgress->setTotalSteps( 100 );
 	statusBarProgress->setTextEnabled( true );
@@ -162,12 +177,28 @@ void KurooStatusBar::stopTimer()
  */
 void KurooStatusBar::slotOneStep()
 {
-	setProgress( timerSteps++ );
-	
-	if ( timerSteps > statusBarProgress->totalSteps() ) {
+    setProgress( m_timerSteps );
+	if ( m_timerSteps > statusBarProgress->totalSteps() ) {
 		stopTimer();
 		startProgress();
 	}
+}
+
+void KurooStatusBar::slotUpdateTime()
+{
+    m_timerSteps++;
+}
+
+long KurooStatusBar::elapsedTime()
+{
+	return m_timerSteps;
+}
+
+void KurooStatusBar::clearElapsedTime()
+{
+    m_diffTimer->stop();
+    m_internalTimer->stop();
+    m_timerSteps = 0;
 }
 
 /**
@@ -175,10 +206,10 @@ void KurooStatusBar::slotOneStep()
  */
 void KurooStatusBar::startProgress()
 {
-	statusBarProgress->show();
+    statusBarProgress->show();
 	statusBarProgress->setTotalSteps( 0 );
 	statusBarProgress->setTextEnabled( false );
-	diffTimer->start( 1000 );
+	m_diffTimer->start( 1000 );
 }
 
 /**
@@ -186,6 +217,7 @@ void KurooStatusBar::startProgress()
  */
 void KurooStatusBar::slotAdvance()
 {
+    m_timerSteps++;
 	statusBarProgress->advance( 2 );
 }
 

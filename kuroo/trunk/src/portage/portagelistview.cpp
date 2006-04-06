@@ -38,7 +38,7 @@ static int packageCount( 0 );
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
  */
-PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const QString& status )
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
 }
@@ -80,7 +80,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	addColumn( "", 25 );
 	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
 	setColumnAlignment( 2, Qt::AlignHCenter );
-	addColumn( "", 25 );
+	addColumn( QString::null, 25 );
 	header()->setLabel( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
 	setColumnAlignment( 2, Qt::AlignHCenter );
 	addColumn( i18n( "Update" ), 80 );
@@ -110,6 +110,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 2 );
 	header()->setResizeEnabled( false, 3 );
 	
+	// Refresh packages when packages are added/removed to Queue or get installed 
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
 }
 
@@ -164,7 +165,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString status = *it++;
 		QString update = *it;
 
-		PortageItem* item = new PortageItem( this, name, id, category, description, status );
+		PortageItem* item = new PortageItem( this, name, id, category, description, status.toInt() );
 		item->setText( 4, update );
 		item->setText( 5, description );
 		

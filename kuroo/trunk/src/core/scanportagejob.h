@@ -48,19 +48,17 @@ private:
 	void 								completeJob();
 	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
 	QString								formatSize( const QString& size );
-	void								setKurooDbMeta( const QString& meta, const QString& data );
 	
 	void								loadCache();
 	QString								cacheFind( const QString& package );
 	
 private:
 	QRegExp								rxAtom;
-	InstalledMap						installedMap;
-	int									totalPackages;
-	bool								aborted;
+
+	bool								m_aborted;
 	DbConnection* const 				m_db;
 	
-	QMap<QString, QString> 				mapCache;
+	QMap<QString, QString> 				m_mapCache;
 	
 	struct Data {
 		QString							description;
@@ -87,7 +85,7 @@ private:
 		PortagePackages					packages;
 	};
 	typedef QMap<QString, Categories>	PortageCategories;
-	PortageCategories					categories;
+	PortageCategories					m_categories;
 };
 
 #endif

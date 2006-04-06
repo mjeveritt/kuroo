@@ -8,9 +8,23 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>373</width>
-            <height>300</height>
+            <width>400</width>
+            <height>350</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>400</width>
+            <height>350</height>
+        </size>
     </property>
     <property name="caption">
         <string>Form1</string>
@@ -19,33 +33,67 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>layout3</cstring>
             </property>
-            <property name="text">
-                <string>Portage will not check if the package you want to remove is required by another package.&lt;br&gt;
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>uninstallWarning</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KListView" row="1" column="0">
+                    <column>
+                        <property name="text">
+                            <string>Package</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>uninstallView</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="resizeMode">
+                        <enum>LastColumn</enum>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>uninstallText</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Portage will not check if the package you want to remove is required by another package.&lt;br&gt;
 Do you want to uninstall following packages?</string>
-            </property>
-        </widget>
-        <widget class="KListView" row="1" column="0">
-            <column>
-                <property name="text">
-                    <string>Package</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>uninstallView</cstring>
-            </property>
-            <property name="resizeMode">
-                <enum>LastColumn</enum>
-            </property>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>

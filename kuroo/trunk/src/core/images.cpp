@@ -63,6 +63,7 @@ void Images::init( QObject *parent )
 	pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIcon::Small );
 	
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
+	pxWarning = ldr->loadIcon( "kuroo_warning", KIcon::Small );
 	
 	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
 	pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIcon::Small );
@@ -78,7 +79,7 @@ void Images::init( QObject *parent )
  * Deliver icons.
  * @return pointer to pixmap
  */
-QPixmap& Images::icon( int image )
+const QPixmap& Images::icon( int image )
 {
 	switch ( image ) {
 		
@@ -92,6 +93,10 @@ QPixmap& Images::icon( int image )
 	
 		case EMPTY:
 			return pxEmpty;
+			break;
+		
+		case WARNING:
+			return pxWarning;
 			break;
 			
 		case INSTALLED:

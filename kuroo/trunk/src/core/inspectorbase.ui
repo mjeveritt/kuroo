@@ -738,6 +738,14 @@ and do not update further</string>
                     <property name="name">
                         <cstring>description</cstring>
                     </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                     <property name="minimumSize">
                         <size>
                             <width>100</width>
@@ -819,7 +827,7 @@ and do not update further</string>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
-                                    <hsizetype>3</hsizetype>
+                                    <hsizetype>2</hsizetype>
                                     <vsizetype>5</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>

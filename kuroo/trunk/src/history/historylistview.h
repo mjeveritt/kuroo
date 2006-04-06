@@ -48,10 +48,10 @@ public:
 	void 			loadFromDB( int days );
 	
 private:
-	KLocale 		*loc;
+	KLocale 		*m_loc;
 	
 	typedef QMap<QString, HistoryItem*> ItemMap;
-	ItemMap			itemMap;
+	ItemMap			m_itemMap;
 	
 signals:
 	void    		signalHistoryLoaded();

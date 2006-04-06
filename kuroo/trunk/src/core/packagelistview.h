@@ -43,7 +43,7 @@ public:
 	virtual	PackageItem* 	packageItemById( const QString& id );
 	
 	virtual QString			currentId();
-	QString					currentItemStatus();
+	int						currentItemStatus();
 	virtual PackageItem* 	currentPackage();
 	
 	virtual QStringList		selectedId();
@@ -58,17 +58,18 @@ public slots:
 	void					slotNextPackage( bool isPrevious );
 	
 protected slots:
+	void					rollOver( QListViewItem* item );
 	void					setPackageFocus( const QString& id );
 	virtual void 			indexPackage( const QString& id, PackageItem *item );
 	
 protected:
-	QDict<PackageItem>		packageIndex;
+	QDict<PackageItem>		m_packageIndex;
 	
 signals:
 	void					signalPackageChanged();
 	
 private:
-	
+	QListViewItem* 			lastItem;
 };
 
 #endif

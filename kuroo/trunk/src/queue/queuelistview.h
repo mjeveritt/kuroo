@@ -47,9 +47,9 @@ public slots:
 	QStringList				allEndUserPackages();
 	void 					insertPackageList( bool hasCheckedQueue );
 	void					clearQueuePackageUse();
-	QTime			 		totalTime();
-	int						sumTime();
-	QString					totalTimeFormatted();
+	
+	long			 		totalDuration();
+	
 	QString		 			totalSize();
 	void					slotPackageComplete( const QString& id );
 	void					slotPackageStart( const QString& id );
@@ -60,15 +60,16 @@ private slots:
 	void					slotHideBars( QListViewItem* item );
 	QString		 			formatSize( const QString& sizeString );
 	void 					addSize( const QString& size );
-	QString 				formatTime( int time );
 	
 signals:
-	void					signalQueueLoaded();
 	void					signalPackageEmerged();
 	
 private:
-	KLocale 				*loc;
-	int 					sumSize, m_order;
+
+	// Total sum of all package emerge duration 
+	int 					m_sumSize;
+	
+	// Current emerging package
 	QString					m_id;
 };
 
@@ -79,8 +80,8 @@ private:
 class QueueListView::QueueItem : public PackageItem
 {
 public:
-	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration );
-	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const QString& status, int duration );
+	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
+	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	~QueueItem();
 	
 	void			setComplete();
@@ -88,16 +89,28 @@ public:
 	int				remainingDuration();
 	void			setStart();
 	void			oneStep();
-	void			setChecked( bool isChecked );
+	void			setPretended( bool isChecked );
 	void			hideBar();
 	
 protected:
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
-	KProgress* 		bar;
-	int				m_progress, m_duration;
-	bool			m_isChecked, m_isComplete;
+	
+	// Individual package progressbar
+	KProgress* 		m_bar;
+	
+	// Current emerge progress in seconds
+	int				m_progress;
+	
+	// Total emerge duration
+	int				m_duration;
+	
+	// Is this package ok by "emerge --pretend"
+	bool			m_isChecked;
+	
+	// Is this package progress = 100% eg completed
+	bool			m_isComplete;
 };
 
 #endif

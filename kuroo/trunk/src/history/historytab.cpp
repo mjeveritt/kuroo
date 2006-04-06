@@ -87,8 +87,6 @@ void HistoryTab::slotInit()
  */
 void HistoryTab::slotReload()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	slotReload( cbDays->currentItem() );
 }
 

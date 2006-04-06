@@ -46,7 +46,7 @@
  * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
-	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), initialQueueTime( QString::null )
+	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null )
 {
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
@@ -69,7 +69,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
-	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotClear() ) );
+	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotRefresh() ) );
 	
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
@@ -142,12 +142,12 @@ void QueueTab::slotInit()
 	
 	slotRemoveInstalled();
 	
-	QToolTip::add( cbDownload, i18n( "<qt><table width=300><tr><td>Instead of doing any package building, "
-	                                 "just perform fetches for all packages (the main package as well as all dependencies), "
-	                                 "grabbing all potential files.</td></tr></table></qt>" ) );
+	QToolTip::add( cbDownload, i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
+	                                  "just perform fetches for all packages (the main package as well as all dependencies), "
+	                                  "grabbing all potential files.</td></tr></table></qt>" ) );
 	
-	QToolTip::add( cbNoWorld, i18n(  "<qt><table width=300><tr><td>Emerge as normal, "
-	                                 "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+	QToolTip::add( cbNoWorld, i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+	                                  "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
 	
 	QToolTip::add( cbForceConf, i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
 	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
@@ -157,28 +157,36 @@ void QueueTab::slotInit()
 }
 
 /**
- * Forward signal from next-buttons only if this tab is visible for user.
+ * Forward signal from next-buttons.
  * @param isNext
  */
 void QueueTab::slotNextPackage( bool isNext )
 {
-	if ( !isVisible() )
+	if ( !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
 	queueView->slotNextPackage( isNext );
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue view slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Reload queue when package view is changed, fex when package is removed.
+ */
+void QueueTab::slotRefresh()
+{
+	if ( !QueueSingleton::Instance()->isQueueBusy() )
+		queueView->insertPackageList( m_hasCheckedQueue );
+}
+
+/**
  * Load Queue packages.
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Reenable the inspector after queue changes
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
@@ -189,12 +197,13 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 		m_hasCheckedQueue = false;
 	
 	// Load all packages
-	queueView->insertPackageList( m_hasCheckedQueue );
+	slotRefresh();
 	
 	// Enable the gui
 	slotBusy();
 	
-	initialQueueTime = queueView->totalTimeFormatted();
+	m_initialQueueTime = GlobalSingleton::Instance()->formatTime( queueView->totalDuration() );
+    KurooStatusBar::instance()->clearElapsedTime();
 	slotQueueSummary();
 }
 
@@ -204,10 +213,13 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
-	QString queueBrowserLines( i18n(   "<b>Summary</b><br>" ) );
+	QString queueBrowserLines(   i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Estimated time for installation: %1<br>" ).arg( initialQueueTime );
-			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" ).arg( queueView->totalTimeFormatted() );
+			queueBrowserLines += i18n( "Initial estimated time for installation: %1<br>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "Elapsed time for installation: %1<br>" )
+		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
+			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" )
+		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
 
@@ -222,7 +234,7 @@ void QueueTab::slotQueueSummary()
 void QueueTab::slotBusy()
 {
 	// No db or queue is empty - no fun!
-	if ( !SignalistSingleton::Instance()->isKurooReady() || queueView->count() == "0" ) {
+	if ( !SignalistSingleton::Instance()->isKurooReady() || KurooDBSingleton::Instance()->isQueueEmpty() ) {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 		pbClear->setDisabled( true );
@@ -315,7 +327,7 @@ void QueueTab::slotCheck()
  */
 void QueueTab::slotGo()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
@@ -334,8 +346,7 @@ void QueueTab::slotGo()
 				case KMessageBox::Yes:
 					packageList.prepend( "--fetch-all-uri" );
 					QueueSingleton::Instance()->installQueue( packageList );
-					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
-			
+					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 			}
 	}
 	else {
@@ -354,7 +365,7 @@ void QueueTab::slotGo()
 						packageList.prepend( "--oneshot" );
 						
 					QueueSingleton::Instance()->installQueue( packageList );
-					KurooStatusBar::instance()->setTotalSteps( queueView->sumTime() );
+					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 				}
 				
 			}
@@ -371,7 +382,6 @@ void QueueTab::slotStop()
 			
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
-				QueueSingleton::Instance()->stopTimer();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
 		
 		}
@@ -390,7 +400,11 @@ void QueueTab::slotPretend()
  */
 void QueueTab::slotRemove()
 {
-	m_packageInspector->hide();
+	DEBUG_LINE_INFO;
+	
+	if ( isVisible() )
+		m_packageInspector->hide();
+	
 	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 }
 
@@ -399,7 +413,11 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotClear()
 {
-	m_packageInspector->hide();
+	DEBUG_LINE_INFO;
+	
+	if ( isVisible() )
+		m_packageInspector->hide();
+	
 	QueueSingleton::Instance()->reset();
 }
 
@@ -418,7 +436,7 @@ void QueueTab::slotAdvanced()
 {
 	if ( queueView->currentPackage() ) {
 		slotPackage();
-		m_packageInspector->edit( queueView->currentPackage() );
+		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
 	}
 }
 
@@ -427,10 +445,8 @@ void QueueTab::slotAdvanced()
  */
 void QueueTab::slotPackage()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Queue view is hidden don't update
-	if ( !isVisible() )
+	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
 	// clear text browsers and dropdown menus
@@ -474,7 +490,8 @@ void QueueTab::slotPackage()
 						stability = i18n("Not available");
 		
 		// Insert version in Inspector version view
-		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
+		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, 
+			(*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
 		
 		// Mark installed version
 		if ( (*sortedVersionIterator)->isInstalled() )
@@ -498,7 +515,7 @@ void QueueTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		m_packageInspector->edit( queueView->currentPackage() );
+		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
 }
 
 /**

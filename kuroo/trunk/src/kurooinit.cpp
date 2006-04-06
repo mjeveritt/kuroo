@@ -45,7 +45,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
 	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( KUROODIR );
+	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		getEnvironment();
 		firstTimeWizard();
@@ -85,23 +85,23 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
-			if ( !d.mkdir(KUROODIR) ) {
+			if ( !d.mkdir(GlobalSingleton::Instance()->kurooDir()) ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
 				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
 				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
-				chmod( KUROODIR, 0770 );
-				chown( KUROODIR, portageGid->gr_gid, portageUid->pw_uid );
+				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
+				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
 			}
-			d.setCurrent(KUROODIR);
+			d.setCurrent(GlobalSingleton::Instance()->kurooDir());
 		}
 	}
 	
 	// Check that backup directory exists and set correct permissions
-	QString backupDir = KUROODIR + "backup";
-	if ( !d.cd(backupDir) ) {
-		if ( !d.mkdir(backupDir) ) {
+	QString backupDir = GlobalSingleton::Instance()->kurooDir() + "backup";
+	if ( !d.cd( backupDir ) ) {
+		if ( !d.mkdir( backupDir ) ) {
 			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
 			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
 			                            "Please try again!</qt>"), i18n("Initialization") );
@@ -125,18 +125,19 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-	QString database = KUROODIR + KurooConfig::databas();
+	QString database = GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
-	
-	kdDebug() << "dbVersion=" << dbVersion << endl;
 	
 	// Old db structure, must delete it and backup history 
 	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
-		KurooDBSingleton::Instance()->backupDb();
+		
+		// Backup history if there's old db version
+		if ( !dbVersion.isEmpty() )
+			KurooDBSingleton::Instance()->backupDb();
+		
 		KurooDBSingleton::Instance()->destroy();
 		remove( database );
-		kdDebug() << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
-		kdDebug() << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << endl;
+		kdWarning(0) << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 		
 		// and recreate with new structure
 		KurooDBSingleton::Instance()->init( this );
@@ -148,6 +149,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
 	
 	// Initialize singletons objects
+	GlobalSingleton::Instance()->init( this );
 	ImagesSingleton::Instance()->init( this );
 	SignalistSingleton::Instance()->init( this );
 	EmergeSingleton::Instance()->init( this );
@@ -162,7 +164,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 
 KurooInit::~KurooInit()
 {
-	KurooConfig::setInit(false);
+	KurooConfig::setInit( false );
 }
 
 /**
@@ -183,18 +185,18 @@ bool KurooInit::getEnvironment()
 		while (!stream.atEnd()) {
 			line = stream.readLine();
 			
-			if ( line.contains(QRegExp("^DISTDIR=")) )
+			if ( line.contains(QRegExp("DISTDIR=")) )
 				KurooConfig::setDirDist( kstr.word( line.section("DISTDIR=", 1, 1).remove("\"") , "0" ) );
 			
-			if ( line.contains(QRegExp("^PORTDIR=")) )
+			if ( line.contains(QRegExp("PORTDIR=")) )
 				KurooConfig::setDirPortage( kstr.word( line.section("PORTDIR=", 1, 1).remove("\"") , "0" ) );
 			else
 				KurooConfig::setDirPortage("/usr/portage");
 			
-			if ( line.contains(QRegExp("^PORTAGE_TMPDIR=")) )
+			if ( line.contains(QRegExp("PORTAGE_TMPDIR=")) )
 				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
 			
-			if ( line.contains(QRegExp("^PORTDIR_OVERLAY=")) )
+			if ( line.contains(QRegExp("PORTDIR_OVERLAY=")) )
 				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
 			
 			success = true;
@@ -202,8 +204,7 @@ bool KurooInit::getEnvironment()
 		makeconf.close();
 	}
 	else {
-		kdDebug() << i18n("Error reading: /etc/make.conf") << endl;
-		kdDebug() << "Error reading: /etc/make.conf" << endl;
+		kdError(0) << i18n("Reading: /etc/make.conf") << LINE_INFO;
 		success = false;
 	}
 	
@@ -221,15 +222,25 @@ bool KurooInit::getEnvironment()
 		}
 		f.close();
 	}
-	else {
-		kdDebug() << i18n("Error reading: /etc/make.profile") << endl;
-		kdDebug() << "Error reading: /etc/make.profile" << endl;
-	}
+	else
+		kdError(0) << i18n("Reading: /etc/make.profile") << LINE_INFO;
 	
 	// Add default etc-files warnings
 	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
 	                         "/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n"
 	                         "/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
+	
+	// Add default Gentoo Base Profile
+	KurooConfig::setSystemFiles("app-arch/bzip2\napp-arch/cpio\napp-arch/tar\napp-shells/bash\ndev-lang/perl\ndev-lang/python\nnet-misc/iputils\n"
+	                            "net-misc/rsync\nnet-misc/wget\nsys-apps/coreutils\nsys-apps/debianutils\nsys-apps/diffutils\n"
+	                            "sys-apps/file\nsys-apps/findutils\nsys-apps/gawk\nsys-apps/grep\nsys-apps/groff\nsys-apps/kbd\n"
+	                            "sys-apps/net-tools\nsys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"
+	                            "sys-apps/shadow\nsys-apps/texinfo\nsys-apps/which\nsys-devel/autoconf\nsys-devel/autoconf-wrapper\n"
+	                            "sys-devel/automake\nsys-devel/automake-wrapper\nsys-devel/binutils\nsys-devel/bison\nsys-devel/flex\n"
+	                            "sys-devel/gcc\nsys-devel/gnuconfig\nsys-devel/libtool\nsys-devel/m4\nsys-devel/mak\nsys-devel/patch\n"
+	                            "sys-fs/e2fsprogs\nsys-libs/cracklib\nsys-libs/ncurses\nsys-libs/readline\nsys-libs/zlib\n"
+	                            "virtual/dev-manager\nvirtual/editor\nvirtual/gzip\nvirtual/libc\nvirtual/man\nvirtual/modutils\n"
+	                            "virtual/os-headers\nvirtual/pager\nvirtual/ssh");
 	
 	KurooConfig::writeConfig();
 	return success;
@@ -248,9 +259,9 @@ void KurooInit::firstTimeWizard()
 	if ( wizardDialog.exec() != QDialog::Accepted )
 		exit(0);
 	else
-		KurooConfig::setWizard(false);
+		KurooConfig::setWizard( false );
 	
-	KurooConfig::setInit(true);
+	KurooConfig::setInit( true );
 }
 
 /**

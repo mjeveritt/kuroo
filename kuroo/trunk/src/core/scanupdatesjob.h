@@ -41,11 +41,10 @@ public:
 private:
 	bool 						doJob();
 	void 						completeJob();
-	void						setKurooDbMeta( const QString& meta, const QString& data );
 	
 private:
 	DbConnection* const 		m_db;
-	bool						aborted;
+	bool						m_aborted;
 	EmergePackageList 			m_packageList;
 };
 

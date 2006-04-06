@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>523</height>
+            <height>531</height>
         </rect>
     </property>
     <property name="caption">
@@ -160,7 +160,8 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;i&gt;Forces emerge to consider the entire dependency tree of packages.&lt;/i&gt;</string>
+                        <string>&lt;i&gt;Forces emerge to consider the entire dependency tree of packages.&lt;br&gt;
+Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="0" column="0">
@@ -424,10 +425,10 @@
                         <cstring>kcfg_installedColumn</cstring>
                     </property>
                     <property name="text">
-                        <string>Show i&amp;nstalled packages in separate column</string>
+                        <string>Show installed pac&amp;kages in separate column</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+N</string>
+                        <string>Alt+K</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -455,10 +456,10 @@
                         <cstring>kcfg_portageVersion21</cstring>
                     </property>
                     <property name="text">
-                        <string>Port&amp;age version &gt;= 2.1</string>
+                        <string>Portage version &gt;= &amp;2.1</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+A</string>
+                        <string>Alt+2</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>

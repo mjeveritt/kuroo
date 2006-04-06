@@ -27,6 +27,7 @@
 #include <kprocio.h>
 #include <kmessagebox.h>
 #include <kuser.h>
+#include <kdeversion.h>
 
 /**
  * @class Emerge
@@ -37,6 +38,10 @@ Emerge::Emerge( QObject* m_parent )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
+  
+	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
+	#endif
 }
 
 Emerge::~Emerge()
@@ -57,8 +62,7 @@ void Emerge::init( QObject *parent )
 bool Emerge::stop()
 {
 	if ( eProc->isRunning() && eProc->kill(9) ) {
-		kdDebug() << i18n("Emerge process killed!") << endl;
-		kdDebug() << QString("Emerge process killed!") << endl;
+		kdWarning(0) << "Emerge process killed!" << LINE_INFO;
 		return true;
 	}
 	else
@@ -79,7 +83,7 @@ bool Emerge::isRunning()
  */
 EmergePackageList Emerge::packageList()
 {
-	return emergePackageList;
+	return m_emergePackageList;
 }
 
 /**
@@ -89,13 +93,13 @@ EmergePackageList Emerge::packageList()
  */
 bool Emerge::queue( const QStringList& packageList )
 {
-	blocks.clear();
-	importantMessage = QString::null;
-	unmasked = QString::null;
-	lastEmergeList = packageList;
-	etcUpdateCount = 0;
+	m_blocks.clear();
+	m_importantMessage = QString::null;
+	m_unmasked = QString::null;
+	m_lastEmergeList = packageList;
+	m_etcUpdateCount = 0;
 	
-	emergePackageList.clear();
+	m_emergePackageList.clear();
 	eProc->resetAll();
 	*eProc << "emerge" << "--nospinner" << "--nocolor";
 	
@@ -128,13 +132,13 @@ bool Emerge::queue( const QStringList& packageList )
  */
 bool Emerge::pretend( const QStringList& packageList )
 {
-	blocks.clear();
-	importantMessage = QString::null;
-	unmasked = QString::null;
-	lastEmergeList = packageList;
-	etcUpdateCount = 0;
+	m_blocks.clear();
+	m_importantMessage = QString::null;
+	m_unmasked = QString::null;
+	m_lastEmergeList = packageList;
+	m_etcUpdateCount = 0;
 	
-	emergePackageList.clear();
+	m_emergePackageList.clear();
 	eProc->resetAll();
 	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
 	
@@ -165,10 +169,10 @@ bool Emerge::pretend( const QStringList& packageList )
  */
 bool Emerge::unmerge( const QStringList& packageList )
 {
-	blocks.clear();
-	importantMessage = QString::null;
-	etcUpdateCount = 0;
-	emergePackageList.clear();
+	m_blocks.clear();
+	m_importantMessage = QString::null;
+	m_etcUpdateCount = 0;
+	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--unmerge" << "--nocolor" << "--nospinner";
@@ -198,10 +202,10 @@ bool Emerge::unmerge( const QStringList& packageList )
  */
 bool Emerge::sync()
 {
-	blocks.clear();
-	importantMessage = QString::null;
-	etcUpdateCount = 0;
-	emergePackageList.clear();
+	m_blocks.clear();
+	m_importantMessage = QString::null;
+	m_etcUpdateCount = 0;
+	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
@@ -227,10 +231,10 @@ bool Emerge::sync()
  */
 bool Emerge::checkUpdates()
 {
-	blocks.clear();
-	importantMessage = QString::null;
-	etcUpdateCount = 0;
-	emergePackageList.clear();
+	m_blocks.clear();
+	m_importantMessage = QString::null;
+	m_etcUpdateCount = 0;
+	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner";
@@ -281,7 +285,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
 		            "(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
 		while ( ( pos = rx.search(line) ) != -1 )
-			line.replace( pos, rx.matchedLength(), "" );
+			line.replace( pos, rx.matchedLength(), QString::null );
 		
 		if ( line.isEmpty() )
 			continue;
@@ -299,15 +303,15 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.size = rxPackage.cap(7);
 			
 			QString packageVersion = rxPackage.cap(4);
-			if ( rxPortageVersion.search( packageVersion ) != -1 ) {
-				emergePackage.name = packageVersion.section( rxPortageVersion.cap( 1 ), 0, 0 );
-				emergePackage.version = packageVersion.section( ( emergePackage.name + "-" ), 1, 1 );
-				emergePackageList.prepend( emergePackage );
+			QStringList parts = GlobalSingleton::Instance()->parsePackage( packageVersion );
+			if ( !parts.isEmpty() ) {
+				emergePackage.name = parts[1];
+				emergePackage.version = parts[2];
+				m_emergePackageList.prepend( emergePackage );
 			}
-			else {
-				kdDebug() << i18n("Collecting emerge output. Can not parse: ") << packageVersion << endl;
-				kdDebug() << QString("Collecting emerge output. Can not parse: ") << packageVersion << endl;
-			}
+			else
+				kdWarning(0) << i18n("Collecting emerge output. Can not parse: ") << packageVersion << LINE_INFO;
+
 		}
 		
 		////////////////////////////////////////////////////////////////////////
@@ -336,7 +340,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				else
 					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
-						importantMessage += line + "<br>";
+						m_importantMessage += line + "<br>";
 						logDone++;
 					}
 					else
@@ -366,10 +370,10 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					}
 					else
 						if ( lineLower.contains( " (masked by: " ) )
-							unmasked = line.section( "- ", 1 ).section( ")", 0 );
+							m_unmasked = line.section( "- ", 1 ).section( ")", 0 );
 						else
-							if ( !unmasked.isEmpty() && line.startsWith("# ") )
-								importantMessage += line.section( "# ", 1, 1 ) + "<br>";
+							if ( !m_unmasked.isEmpty() && line.startsWith("# ") )
+								m_importantMessage += line.section( "# ", 1, 1 ) + "<br>";
 	
 		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
@@ -386,16 +390,16 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					
 					// Append package einfo
 					if ( !importantMessagePackage.isEmpty() ) {
-						if ( importantMessage.isEmpty() )
-							importantMessage += "<b>" + importantMessagePackage + "</b>" + eMessage;
+						if ( m_importantMessage.isEmpty() )
+							m_importantMessage += "<b>" + importantMessagePackage + "</b>" + eMessage;
 						else
-							importantMessage += "<br><b>" + importantMessagePackage + "</b>" + eMessage;
+							m_importantMessage += "<br><b>" + importantMessagePackage + "</b>" + eMessage;
 						m_packageMessage = eMessage;
 						importantMessagePackage = QString::null;
 					}
 					else {
 						m_packageMessage += eMessage;
-						importantMessage += eMessage;
+						m_importantMessage += eMessage;
 					}
 				}
 			}
@@ -406,7 +410,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		
 		// Collect blocking lines
 		if ( line.contains( "is blocking" ) )
-			blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
+			m_blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
 		
 		// Collect output line if user want full log verbose
 		if ( logDone == 0 )
@@ -442,23 +446,24 @@ void Emerge::cleanup()
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );
-	ResultsSingleton::Instance()->addPackageList( emergePackageList );
+	ResultsSingleton::Instance()->addPackageList( m_emergePackageList );
 	
-	if ( !blocks.isEmpty() )
-		importantMessage += "<br>" + blocks.join("<br>");
+	if ( !m_blocks.isEmpty() )
+		m_importantMessage += "<br>" + m_blocks.join("<br>");
 	
-	if ( !unmasked.isEmpty() ) {
+	if ( !m_unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
-			askUnmaskPackage( unmasked );
+			askUnmaskPackage( m_unmasked );
 		else
-			KMessageBox::information( 0, i18n("You must run Kuroo as root to unmask packages!"), i18n("Auto-unmasking packages"), NULL );
+			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroo as root to unmask packages!"),
+			                             i18n("Auto-unmasking packages"), NULL );
 	}
 	else
-		if ( !importantMessage.isEmpty() )
-			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), importantMessage ); 
+		if ( !m_importantMessage.isEmpty() )
+			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
 	
-	if ( etcUpdateCount != 0 )
-		EtcUpdateSingleton::Instance()->askUpdate( etcUpdateCount );
+	if ( m_etcUpdateCount != 0 )
+		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
 }
 
 /**
@@ -520,11 +525,11 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
-	if ( !blocks.isEmpty() )
-		importantMessage += "<br>" + blocks.join("<br>");
+	if ( !m_blocks.isEmpty() )
+		m_importantMessage += "<br>" + m_blocks.join("<br>");
 	
-	if ( !importantMessage.isEmpty() )
-		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), importantMessage );
+	if ( !m_importantMessage.isEmpty() )
+		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );
 }
 
 /**
@@ -537,24 +542,27 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString keyword = ( packageKeyword.section("(masked by: ", 1, 1) ).section(" keyword", 0, 0);
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
-		importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-		importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
+		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+		m_importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
 		                         "Ask the architecture porting team to test the package or test it for them and report your "
 		                         "findings on Gentoo bugzilla website.");
-		KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n( "Missing Keyword" ) , NULL );
+		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), "<qt>" + m_importantMessage + "</qt>", 
+		                             i18n( "Missing Keyword" ) , NULL );
 	}
 	else {
 		if ( keyword.contains( "-*" ) ) {
-			importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-			importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
+			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+			m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
 			                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
-			KMessageBox::information( 0, "<qt>" + importantMessage + "</qt>", i18n( "-* Keyword" ) , NULL );
+			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), "<qt>" + m_importantMessage + "</qt>", 
+			                             i18n( "-* Keyword" ) , NULL );
 		}
 		else {
 			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
+				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
+				                                        i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
 				                                     .arg( package ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")),
 				                                     KGuiItem::KGuiItem(i18n("Cancel"))) ) {
 					case KMessageBox::Yes :
@@ -568,7 +576,8 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 			else {
 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
 				
-				switch ( KMessageBox::questionYesNo( 0, i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
+				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
+				                                        i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
 				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
 					case KMessageBox::Yes :
 						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
@@ -583,11 +592,11 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 }
 
 /**
- * After package is auto-unmasked try remerging the list again to find next package to unmask.
+ * After package is auto-m_unmasked try remerging the list again to find next package to unmask.
  */
 void Emerge::slotTryEmerge()
 {
-	pretend( lastEmergeList );
+	pretend( m_lastEmergeList );
 	disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 }
 
@@ -604,7 +613,7 @@ bool Emerge::countEtcUpdates( const QString& line )
 		QRegExp rx("^\\d+\\)");
 		int pos = rx.search(tmp);
 		if ( pos > -1 )
-			etcUpdateCount += ( rx.cap(1) ).toInt();
+			m_etcUpdateCount += ( rx.cap(1) ).toInt();
 		
 		return true;
 	}

@@ -46,7 +46,7 @@ CachePortageJob::~CachePortageJob()
 
 void CachePortageJob::completeJob()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	SignalistSingleton::Instance()->cachePortageComplete();
 }
@@ -57,11 +57,10 @@ void CachePortageJob::completeJob()
  */
 bool CachePortageJob::doJob()
 {
-	kdDebug() << k_funcinfo << endl;
+	DEBUG_LINE_INFO;
 	
 	if ( !m_db->isConnected() ) {
-		kdDebug() << i18n("Creating cache. Can not connect to database") << endl;
-		kdDebug() << "Creating cache. Can not connect to database" << endl;
+		kdError(0) << i18n("Creating cache. Can not connect to database") << LINE_INFO;
 		return false;
 	}
 	
@@ -73,7 +72,7 @@ bool CachePortageJob::doJob()
 	
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
-	if ( packageCount.isEmpty() )
+	if ( packageCount == "0" )
 		setProgressTotalSteps( 35000 );
 	else
 		setProgressTotalSteps( packageCount.toInt() );
@@ -88,8 +87,7 @@ bool CachePortageJob::doJob()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
-			kdDebug() << i18n("Creating cache. Can not access ") << *itPath << endl;
-			kdDebug() << "Creating cache. Can not access " << *itPath << endl;
+			kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << LINE_INFO;
 			continue;
 		}
 		
@@ -102,8 +100,7 @@ bool CachePortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
-				kdDebug() << "Creating cache. Caching aborted." << endl;
+				kdWarning(0) << i18n("Creating cache. Caching aborted.") << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -121,15 +118,15 @@ bool CachePortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdDebug() << i18n("Creating cache. Caching aborted.") << endl;
-						kdDebug() << "Creating cache. Caching aborted." << endl;
+						kdWarning(0) << i18n("Creating cache. Caching aborted.") << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}
 					QString package = *itCategory + "/" + *itPackage;
 					
-					if ( rxPortageVersion.search( *itPackage ) != -1 ) {
-						QString packageName = (*itPackage).section( rxPortageVersion.cap( 1 ), 0, 0 );
+					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+					if ( !parts.isEmpty() ) {
+						QString packageName = parts[1];
 						
 						// Get package size
 						QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;
@@ -141,15 +138,11 @@ bool CachePortageJob::doJob()
 							mapCache.insert( package, word );
 							file.close();
 						}
-						else {
-							kdDebug() << i18n("Creating cache. Error reading: ") << path << endl;
-							kdDebug() << "Creating cache. Error reading: " << path << endl;
-						}
+						else
+							kdWarning(0) << i18n("Creating cache. Reading: ") << path << LINE_INFO;
 					}
-					else {
-						kdDebug() << i18n("Creating cache. Can not parse: ") << *itPackage << endl;
-						kdDebug() << "Creating cache. Can not parse: " << *itPackage << endl;
-					}
+					else
+						kdWarning(0) << i18n("Creating cache. Can not parse: ") << *itPackage << LINE_INFO;
 					
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
@@ -157,12 +150,13 @@ bool CachePortageJob::doJob()
 				}
 			}
 			else {
-				kdDebug() << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << endl;
-				kdDebug() << "Creating cache. Can not access " << *itPath << "/" << *itCategory << endl;
+				kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << LINE_INFO;
+				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/" << *itCategory << LINE_INFO;
 			}
 		}
 	}
-	setKurooDbMeta( "packageCount", QString::number( count ) );
+	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")
+	                                     .arg( count ), m_db );
 	
 	// Store cache in DB
 	KurooDBSingleton::Instance()->query( "DELETE FROM cache;", m_db );
@@ -177,19 +171,6 @@ bool CachePortageJob::doJob()
 	setStatus( "CachePortage", i18n("Done.") );
 	setProgress( 0 );
 	return true;
-}
-
-void CachePortageJob::setKurooDbMeta( const QString& meta, const QString& data )
-{
-	kdDebug() << k_funcinfo << endl;
-	
-	if ( KurooDBSingleton::Instance()->singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").
-	                                                arg( meta ), m_db ) == "0" )
-		KurooDBSingleton::Instance()->query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").
-		                                     arg( meta ).arg( data ), m_db );
-	else
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").
-		                                     arg( meta ).arg( data ), m_db );
 }
 
 #include "cacheportagejob.moc"

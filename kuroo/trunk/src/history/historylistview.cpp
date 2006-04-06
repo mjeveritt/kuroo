@@ -54,7 +54,7 @@ QString HistoryListView::HistoryItem::einfo()
  * @short Specialized listview for emerge history.
  */
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
-	: KListView( parent, name ), loc( KGlobal::locale() )
+	: KListView( parent, name ), m_loc( KGlobal::locale() )
 {
 	addColumn( i18n("Date") );
 	addColumn( i18n("Duration") );
@@ -114,7 +114,7 @@ QStringList HistoryListView::selected()
 void HistoryListView::loadFromDB( int days )
 {
 	clear();
-	itemMap.clear();
+	m_itemMap.clear();
 	
 	QDateTime dtLimit = QDateTime::currentDateTime();
 	dtLimit = dtLimit.addDays( -days );
@@ -130,24 +130,24 @@ void HistoryListView::loadFromDB( int days )
 		// Convert emerge date to local date format
 		QDateTime dt;
 		dt.setTime_t( timeStamp.toUInt() );
-		QString emergeDate = loc->formatDate( dt.date() );
+		QString emergeDate = m_loc->formatDate( dt.date() );
 		
 		if ( dt >= dtLimit ) {
 		
 			// Convert emerge duration (in seconds) to local time format
 			QTime t( 0, 0, 0 );
 			t = t.addSecs( duration.toUInt() );
-			QString emergeDuration = loc->formatTime( t, true, true );
+			QString emergeDuration = m_loc->formatTime( t, true, true );
 			
 			if ( !duration.isEmpty() || KurooConfig::viewUnmerges() && !package.isEmpty() ) {
 				
-				if ( !itemMap.contains( emergeDate ) ) {
+				if ( !m_itemMap.contains( emergeDate ) ) {
 					HistoryItem *item = new HistoryItem( this, emergeDate );
 					item->setOpen( true );
-					itemMap[ emergeDate ] = item;
+					m_itemMap[ emergeDate ] = item;
 				}
 				
-				HistoryItem *item = new HistoryItem( itemMap[ emergeDate ], package );
+				HistoryItem *item = new HistoryItem( m_itemMap[ emergeDate ], package );
 				if ( duration.isEmpty() )
 					item->setPixmap( 0, ImagesSingleton::Instance()->icon( UNMERGED ) );
 				else {

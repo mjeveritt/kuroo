@@ -38,7 +38,7 @@ private slots:
 	void			slotOk();
 	
 private:
-	UninstallBase* 	dialog;
+	UninstallBase* 	m_dialog;
 };
 
 #endif

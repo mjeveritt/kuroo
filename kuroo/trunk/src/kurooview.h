@@ -52,7 +52,6 @@ public:
 	MergeTab*			viewMerge;
 	PackageInspector	*packageInspector;
 	
-	void 				quit();
 	void 				slotEmergePretend( QString package );
 	
 public:
@@ -75,7 +74,7 @@ private:
 	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
 	
 	// True if history needs to be recreated from scratch
-	bool				hasHistoryRestored;
+	bool				m_isHistoryRestored;
 };
 
 class KurooView::IconListItem : public QListBoxItem

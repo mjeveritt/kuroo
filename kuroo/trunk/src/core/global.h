@@ -18,67 +18,46 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
 #include <qobject.h>
 
-class QTimer;
+class QRegExp;
+class QWidget;
 
 /**
- * @class Queue
- * @short Object for packages to be emerged = installation queue.
+ * @class Global
+ * @short Some useful global methods.
  */
-class Queue : public QObject
+class Global : public QObject
 {
 Q_OBJECT
-	
 public:
-	Queue( QObject *m_parent = 0 );
-	~Queue();
+    Global( QObject *parent = 0 );
+    ~Global();
 	
-public slots:
-	void					init( QObject *parent = 0 );
+	void 				init( QObject *parent = 0 );
 	
-	void					emergePackageStart( const QString& package, int order, int total );
-	void					emergePackageComplete( const QString& package, int order, int total );
-	void					slotOneStep();
-	bool					isQueueBusy();
+	const QString 		kurooDir();
+	const QStringList 	parsePackage( const QString& packageString );
 	
-	void					clearCache();
-	void					insertInCache( const QString& id );
-	void					deleteFromCache( const QString& id );
+	void 				setKurooView( QWidget* view );
+	const long 			kurooViewId();
+	const QString		bgHexColor();
+	const QString		fgHexColor();
 	
-	bool					isQueued( const QString& id );
-	void					reset();
-	void					refresh( bool hasCheckedQueue );
-	void					slotClearQueue();
-	
-	void					removePackageIdList( const QStringList& packageIdList );
-    void 					addPackageIdList( const QStringList& packageIdList );
-	void					installQueue( const QStringList& packageList );
-	void					setRemoveInstalled( bool removeInstalled );
-	
-signals:
-	void					signalQueueChanged( bool hasCheckedQueue );
-	void					signalPackageAdvance();
-	void					signalPackageStart( const QString& id );
-	void					signalPackageComplete( const QString& id );
+	const QString 		formatTime( long duration );
 	
 private:
-	QObject					*m_parent;
+	QObject*			m_parent;
 	
-	// Queue is busy emerging
-	bool					m_isQueueBusy;
+	// Kuroo widget id so MessageBox's can be made modal
+	long				m_wId;
 	
-	// Cache contaning packages in Queue
-	QMap<QString, bool>		m_queueCache;
+	QString				m_bgColor;
 	
-	// Timer for installation progress
-	QTimer*					m_internalTimer;
-	
-	// Clear queue after installation?
-	bool					m_removeInstalled;
+	QString				m_fgColor;
 };
 
 #endif

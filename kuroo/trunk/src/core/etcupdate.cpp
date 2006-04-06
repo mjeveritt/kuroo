@@ -32,7 +32,7 @@
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
 	: QObject( m_parent, name ), 
-	noFiles( true ), count( 0 ), totalEtcCount( 0 )
+	m_noFiles( true ), m_count( 0 ), m_totalEtcCount( 0 )
 {
 	eProc = new KProcIO();
 }
@@ -54,8 +54,9 @@ void EtcUpdate::init( QObject *parent )
  */
 void EtcUpdate::askUpdate( const int& count )
 {
-	switch ( KMessageBox::questionYesNo( 0, i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
-	                                     .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
+	switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
+	                                        i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
+	                                        .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
 		
 		case KMessageBox::Yes :
 			etcUpdate();
@@ -69,13 +70,13 @@ void EtcUpdate::askUpdate( const int& count )
 bool EtcUpdate::etcUpdate()
 {
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
-		KMessageBox::information( 0, i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
+		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
-		etcUpdateLines.clear();
-		diffSource = QString::null;
-		noFiles = true;
-		count = 1;
-		totalEtcCount = 0;
+		m_etcUpdateLines.clear();
+		m_diffSource = QString::null;
+		m_noFiles = true;
+		m_count = 1;
+		m_totalEtcCount = 0;
 		
 		eProc->resetAll();
 		*eProc << "etc-update" ;
@@ -104,11 +105,11 @@ void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
 	QString line;
 	
 	while ( proc->readln( line, true ) != -1 ) {
-		etcUpdateLines += line;
+		m_etcUpdateLines += line;
 		LogSingleton::Instance()->writeLog( line, EMERGE );
 
 		if ( line.contains("Please select a file") ) {
-			noFiles = false;
+			m_noFiles = false;
 			proc->writeStdin( (QString)"-1", true );
 			proc->closeWhenDone();
 		}
@@ -126,17 +127,18 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
 	
-	if ( noFiles ) {
+	if ( m_noFiles ) {
 		SignalistSingleton::Instance()->setKurooBusy( false );
-		KMessageBox::sorry( 0, i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
+		KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), 
+		                       i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
 	}
 	else {
 		
 		// Parse out etc-files list
 		QRegExp rxEtcFiles( "(?:^\\d+\\)\\s+){0,1}(/\\S*)" );
-		foreach( etcUpdateLines )
+		foreach( m_etcUpdateLines )
 			if ( rxEtcFiles.search( *it ) > -1 )
-				etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
+				m_etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
 		
 		runDiff();
 	}
@@ -147,12 +149,12 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
  */
 void EtcUpdate::runDiff()
 {
-	totalEtcCount = etcFilesList.size() / 2;
-	if ( totalEtcCount > 0 ) {
-		QString destination = etcFilesList.first();
-		etcFilesList.pop_front();
-		QString source = etcFilesList.first();
-		etcFilesList.pop_front();
+	m_totalEtcCount = m_etcFilesList.size() / 2;
+	if ( m_totalEtcCount > 0 ) {
+		QString destination = m_etcFilesList.first();
+		m_etcFilesList.pop_front();
+		QString source = m_etcFilesList.first();
+		m_etcFilesList.pop_front();
 		
 		// Check for etc-files warnings
 		QString etcWarning;
@@ -162,8 +164,9 @@ void EtcUpdate::runDiff()
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
 		
 		// Ask user what to do with this etc-file
-		switch ( KMessageBox::questionYesNo( 0, i18n("<qt>%1Do you want to merge changes in %2?</qt>").arg( etcWarning, destination ), 
-		                                     i18n("etc-update (%1 of %2)").arg( count++ ).arg( totalEtcCount ) ) ) {
+		switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>%1Do you want to merge changes in %2?</qt>")
+		                                        .arg( etcWarning, destination ), 
+		                                     i18n("etc-update (%1 of %2)").arg( m_count++ ).arg( m_totalEtcCount ) ) ) {
 			
 			// Merge this etc-file
 			case KMessageBox::Yes : {
@@ -172,12 +175,13 @@ void EtcUpdate::runDiff()
 				*eProc << KurooConfig::etcUpdateTool() << source << destination;
 				eProc->start( KProcess::NotifyOnExit, true );
 				
-				diffSource = source;
+				m_diffSource = source;
 				connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
 				
 				if ( !eProc->isRunning() ) {
 					LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
-					KMessageBox::sorry( 0, i18n( "%1 could not start!" ).arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
+					KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
+					                       .arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
 					SignalistSingleton::Instance()->setKurooBusy( false );
 				}
 				else {
@@ -209,9 +213,10 @@ void EtcUpdate::runDiff()
 void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
 {
 	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
-	KIO::file_delete( diffSource );
-	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( diffSource ).arg( KUROODIR + "backup" ), KUROO );
-	diffSource = QString::null;
+	KIO::file_delete( m_diffSource );
+	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource )
+	                                    .arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
+	m_diffSource = QString::null;
 	
 	// Move to next etc-file
 	runDiff();
@@ -228,8 +233,8 @@ void EtcUpdate::backup( const QString& source, const QString& destination )
 	QString backupSource = source.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
 	QString backupDestination = destination.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
 	
-	KIO::file_copy( source, KUROODIR + "backup/" + backupSource );
-	KIO::file_copy( destination, KUROODIR + "backup/" + backupDestination );
+	KIO::file_copy( source, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupSource );
+	KIO::file_copy( destination, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupDestination );
 	
 	KurooDBSingleton::Instance()->addBackup( backupSource, backupDestination );
 	

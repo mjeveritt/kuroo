@@ -31,19 +31,19 @@
  * @class PackageItem
  * @short Base class for package.
  */
-PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
+PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), m_index( 0 ),
+	m_parent( parent ), m_index( 0 ), m_isMouseOver( false ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
-	hasDetailedInfo( false )
+	m_isInitialized( false )
 {
 }
 
-PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const QString& status )
+PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
-	m_parent( parent->listView() ), m_index( 0 ),
+	m_parent( parent->listView() ), m_index( 0 ), m_isMouseOver( false ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
-	hasDetailedInfo( false )
+	m_isInitialized( false )
 {
 }
 
@@ -77,6 +77,11 @@ bool PackageItem::isLastPackage()
 	return ( m_index == 1 );
 }
 
+void PackageItem::setRollOver( bool isMouseOver )
+{
+	m_isMouseOver = isMouseOver;
+	repaint();
+}
 /**
  * Set icons when package is visible.
  */
@@ -84,12 +89,21 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 {
 	if ( this->isVisible() ) {
 		QColorGroup m_colorgroup( colorgroup );
+		QFont font( painter->font() );
+		
+		if ( m_isMouseOver ) {
+			font.setBold( true );
+			painter->setFont( font );
+// 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
+// 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
+		}
 		
 		// Optimizing - do not check for not relevant columns
 		switch ( column ) {
 			
 			case 0 : {
-				if ( m_status == FILTER_ALL_STRING )
+				
+				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 				else {
 					if ( KurooConfig::installedColumn() ) {
@@ -99,8 +113,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 					else
 						setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
 					
-					if ( m_status == FILTER_OLD_STRING ) {
-						QFont font( painter->font() );
+					if ( m_status & PACKAGE_OLD ) {
 						font.setItalic( true );
 						painter->setFont( font );
 						m_colorgroup.setColor( QColorGroup::Text, m_colorgroup.dark() );
@@ -120,9 +133,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 				}
 				break;
 			}
-			
 		}
-		
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }
@@ -158,7 +169,7 @@ QString PackageItem::description()
  * Package status describing if this package is installed or not.
  * @return status
  */
-QString PackageItem::status()
+int PackageItem::status()
 {
 	return m_status;
 }
@@ -169,7 +180,7 @@ QString PackageItem::status()
  */
 bool PackageItem::isInstalled()
 {
-	return ( m_status == FILTER_INSTALLED_STRING || m_status == FILTER_OLD_STRING );
+	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
 }
 
 /**
@@ -178,7 +189,7 @@ bool PackageItem::isInstalled()
  */
 bool PackageItem::isInPortage()
 {
-	return ( m_status != FILTER_OLD_STRING );
+	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
 }
 
 /**
@@ -202,7 +213,7 @@ void PackageItem::setDescription( const QString& description )
 
 void PackageItem::setInstalled()
 {
-	m_status = FILTER_INSTALLED_STRING;
+	m_status = PACKAGE_INSTALLED;
 }
 
 /**
@@ -228,7 +239,7 @@ QString PackageItem::category()
 
 void PackageItem::resetDetailedInfo()
 {
-	hasDetailedInfo = false;
+	m_isInitialized = false;
 }
 
 /**
@@ -236,7 +247,7 @@ void PackageItem::resetDetailedInfo()
  */
 void PackageItem::initVersions()
 {
-	if ( hasDetailedInfo )
+	if ( m_isInitialized )
 		return;
 	
 	m_versions.clear();
@@ -269,7 +280,7 @@ void PackageItem::initVersions()
 		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
 		
-		if ( status == FILTER_INSTALLED_STRING )
+		if ( status == PACKAGE_INSTALLED_STRING )
 			version->setInstalled( true );
 		
 		m_versions.append( version );
@@ -338,7 +349,7 @@ void PackageItem::initVersions()
 // 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;
 	
 	// This package has collected all it's data
-	hasDetailedInfo = true;
+	m_isInitialized = true;
 }
 
 /**

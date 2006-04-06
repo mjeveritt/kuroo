@@ -31,7 +31,7 @@
  * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
-	: KListView( parent, name )
+	: KListView( parent, name ), lastItem( 0 )
 {
 	setFrameShape( QFrame::NoFrame );
 	setSelectionModeExt( FileManager );
@@ -39,6 +39,8 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	
 	// Update visible items when world is changed
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
+	
+// 	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
 	
 	new ToolTip( this );
 }
@@ -48,19 +50,31 @@ PackageListView::~PackageListView()
 }
 
 /**
+ * Create mouse-over effect.
+ */
+void PackageListView::rollOver( QListViewItem* item )
+{
+	dynamic_cast<PackageItem*>( item )->setRollOver( true );
+	if ( lastItem )
+		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
+	lastItem = item;
+}
+
+/**
  * Clear this listView and package index.
  */
 void PackageListView::resetListView()
 {
 	clear();
-	packageIndex.clear();
+	m_packageIndex.clear();
+	lastItem = 0;
 }
 
 /**
  * Current package status.
  * @return status
  */
-QString PackageListView::currentItemStatus()
+int PackageListView::currentItemStatus()
 {
 	return currentPackage()->status();
 }
@@ -71,10 +85,10 @@ QString PackageListView::currentItemStatus()
  */
 PackageItem* PackageListView::packageItemById( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] )
+	if ( id.isEmpty() || !m_packageIndex[id] )
 		return NULL;
 	else
-		return packageIndex[id];
+		return m_packageIndex[id];
 }
 
 /**
@@ -169,12 +183,12 @@ QStringList PackageListView::allPackages()
  */
 void PackageListView::setPackageFocus( const QString& id )
 {
-	if ( id.isEmpty() || !packageIndex[id] ) {
+	if ( id.isEmpty() || !m_packageIndex[id] ) {
 		setCurrentItem( firstChild() );
 		setSelected( firstChild(), true );
 	}
 	else {
-		PackageItem* item = packageIndex[id];
+		PackageItem* item = m_packageIndex[id];
 		setCurrentItem( item );
 		setSelected( item, true );
 		ensureItemVisible( item );
@@ -191,8 +205,8 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 	if ( id.isEmpty() )
 		return;
 	
-	packageIndex.insert( id, item );
-	packageIndex[id]->setPackageIndex( packageIndex.count() );
+	m_packageIndex.insert( id, item );
+	m_packageIndex[id]->setPackageIndex( m_packageIndex.count() );
 }
 
 /**
@@ -201,7 +215,7 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  */
 QString PackageListView::count()
 {
-	return QString::number( packageIndex.count() );
+	return QString::number( m_packageIndex.count() );
 }
 
 /**

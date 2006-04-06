@@ -43,12 +43,19 @@ public:
 	static 					KurooStatusBar* instance() { return s_instance; }
 	
 	void 					setProgressStatus( const QString& id, const QString& text );
+    
 	void					setTotalSteps( int total );
-	void					setThreadTotalSteps( int total );
-	void 					setProgress( int steps );
+	void					updateTotalSteps( int total );
+    
 	void					startTimer();
 	void					stopTimer();
-	void					startProgress();
+	long					elapsedTime();
+    void					clearElapsedTime();
+    
+    void					startProgress();
+    
+    void					setThreadTotalSteps( int total );
+    void 					setProgress( int steps );
 	
 public slots:
 	void					slotOneStep();
@@ -56,13 +63,14 @@ public slots:
 
 private slots:
 	void					slotLastMessage();
-	
+    void					slotUpdateTime();
+    
 private:
-	QMap<QString, QString> 	messageMap;
+	QMap<QString, QString> 	m_messageMap;
 	KProgress 				*statusBarProgress;
 	QLabel 					*statusBarLabel;
-	QTimer 					*internalTimer, *diffTimer;
-	int						timerSteps;
+	QTimer 					*m_internalTimer, *m_diffTimer;
+	long						m_timerSteps;
 };
 
 #endif

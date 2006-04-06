@@ -23,16 +23,16 @@ class PackageEmergeTime
 public:
 	PackageEmergeTime() { }
 	PackageEmergeTime( int emergeTime, int count )
-		: eTime( emergeTime ), eCount( count )
+		: m_eTime( emergeTime ), m_eCount( count )
 	{ }
 	
-	int emergeTime() const { return eTime; }
-	int count() const { return eCount; }
- 	void add( int emergeTime ) { eTime += emergeTime; }
-	void inc() { eCount++; }
+	int emergeTime() const { return m_eTime; }
+	int count() const { return m_eCount; }
+	void add( int emergeTime ) { m_eTime += emergeTime; }
+	void inc() { m_eCount++; }
 	
 private:
-	int eTime;
-	int eCount;
+	int m_eTime;
+	int m_eCount;
 };
 

@@ -44,10 +44,10 @@ signals:
 	void    		signalHistoryLoaded();
 	
 private:
-	KLocale 		*loc;
+	KLocale 		*m_loc;
 	
 	typedef QMap< QString, MergeItem* > ItemMap;
-	ItemMap			itemMap;
+	ItemMap			m_itemMap;
 };
 
 /**

@@ -59,6 +59,9 @@ Kuroo::Kuroo()
 	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
+	// Get pointer so MessageBox's can be made modal to kuroo windown and more...
+	GlobalSingleton::Instance()->setKurooView( m_view );
+	
 	setCentralWidget( m_view );
 	setupActions();
 	statusBar();
@@ -75,7 +78,7 @@ Kuroo::Kuroo()
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// when the last window is closed, the application should quit
-	connect( qApp, SIGNAL( lastWindowClosed() ), qApp, SLOT( quit() ) );
+	connect( kapp, SIGNAL( lastWindowClosed() ), kapp, SLOT( quit() ) );
 	
 	// Kuroo must initialize with db first
 	SignalistSingleton::Instance()->setKurooReady( false );
@@ -89,9 +92,12 @@ Kuroo::Kuroo()
 	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
 }
 
+/**
+ * Backup emerge and merge history entries to text file.
+ */
 Kuroo::~Kuroo()
 {
-	kdDebug() << k_funcinfo << endl;
+	KurooDBSingleton::Instance()->backupDb();
 }
 
 /**
@@ -102,8 +108,8 @@ void Kuroo::setupActions()
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
-	(void) new KAction( i18n("&Wizard"), 0, KShortcut( CTRL + Key_W ),
-	                    				this, SLOT( introWizard() ), actionCollection(), "wizard" );
+	(void) new KAction( i18n("&Information"), 0, KShortcut( CTRL + Key_W ),
+	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 	
 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
@@ -205,24 +211,6 @@ void Kuroo::introWizard()
  */
 bool Kuroo::queryClose()
 {
-	kdDebug() << k_funcinfo << endl;
-	
-// 	if ( !m_shuttingDown && KurooConfig::isSystrayEnabled() ) {
-// 		switch( KMessageBox::questionYesNoCancel( this, 
-// 			i18n("<qt>Closing the main window will keep Kuroo running in the System Tray.<br>"
-// 				"Use Quit from the File menu to exit Kuroo.</qt>"),
-// 		    i18n("Docking in System Tray"), i18n("Exit"), i18n("Dock in System Tray"), i18n("Cancel"), "hideOnCloseInfo" ) ) {
-// 		
-// 			case KMessageBox::Yes :
-// 			    return true;
-// 				break;
-// 				
-// 		    case KMessageBox::No :
-// 				hide();
-// 				return false;
-// 		}
-// 	}
-	
 	if ( !m_shuttingDown ) {
 		if ( !KurooConfig::isSystrayEnabled() ) {
 			slotQuit();
@@ -241,7 +229,6 @@ bool Kuroo::queryClose()
  */
 bool Kuroo::queryExit()
 {
-	kdDebug() << k_funcinfo << endl;
 	return true;
 }
 
@@ -250,8 +237,6 @@ bool Kuroo::queryExit()
  */
 void Kuroo::slotQuit()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
 		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
@@ -266,8 +251,6 @@ void Kuroo::slotQuit()
  */
 void Kuroo::slotWait()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		switch( KMessageBox::questionYesNo( this, 
 			i18n("<qt>Kuroo is busy<br><br>"
@@ -290,10 +273,8 @@ void Kuroo::slotWait()
  */
 void Kuroo::slotTerminate()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	m_shuttingDown = true;
-	qApp->exit();
+	close();
 }
 
 #include "kuroo.moc"

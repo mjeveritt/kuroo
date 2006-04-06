@@ -41,21 +41,22 @@ public:
 		                                    " use VARCHAR(255), "
 		                                    " size VARCHAR(32), "
 		                                    " version VARCHAR(32) "
-		                                    " );", m_db);
-		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db);
-		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
+		                                    " );", m_db );
+		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db );
+		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db );
 		
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->insert(QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');").arg(*it), m_db);
+			KurooDBSingleton::Instance()->insert( QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" )
+			                                      .arg(*it), m_db );
 		
-		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
+		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
-		KurooDBSingleton::Instance()->insert("INSERT INTO queue SELECT * FROM queue_temp;", m_db);
-		KurooDBSingleton::Instance()->query("DROP TABLE queue_temp;", m_db);
+		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db );
+		KurooDBSingleton::Instance()->insert("INSERT INTO queue SELECT * FROM queue_temp;", m_db );
+		KurooDBSingleton::Instance()->query("DROP TABLE queue_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
@@ -79,9 +80,9 @@ public:
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue "
-			                                              "WHERE ( idPackage = '%1' OR idDepend = '%2' );" ).arg(*it).arg(*it), m_db );
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
+			                                     .arg(*it).arg(*it), m_db );
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
@@ -103,11 +104,11 @@ private:
  * @short Object for packages to be emerged = installation queue.
  */
 Queue::Queue( QObject* m_parent )
-	: QObject( m_parent ), m_removeInstalled( false )
+	: QObject( m_parent ), m_removeInstalled( false ), m_isQueueBusy( false )
 {
 	// Clock timer for showing progress when emerging
-	internalTimer = new QTimer( this );
-	connect( internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
+	m_internalTimer = new QTimer( this );
+	connect( m_internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
 	
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotClearQueue() ) );
@@ -136,8 +137,7 @@ void Queue::refresh( bool hasCheckedQueue )
  */
 void Queue::reset()
 {
-	kdDebug() << k_funcinfo << endl;
-	
+	DEBUG_LINE_INFO;
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
 	refresh( false );
 }
@@ -154,8 +154,8 @@ void Queue::reset()
  */
 bool Queue::isQueued( const QString& id )
 {
-	QMap<QString, bool>::iterator itMap = queueCache.find( id );
-	if ( itMap == queueCache.end() )
+	QMap<QString, bool>::iterator itMap = m_queueCache.find( id );
+	if ( itMap == m_queueCache.end() )
 		return false;
 	else
 		return true;
@@ -167,7 +167,7 @@ bool Queue::isQueued( const QString& id )
  */
 void Queue::clearCache()
 {
-	queueCache.clear();
+	m_queueCache.clear();
 }
 
 /**
@@ -177,12 +177,11 @@ void Queue::clearCache()
 void Queue::insertInCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
-		kdDebug() << "Package id is empty, skipping!" << endl;
+		kdWarning(0) << i18n("Package id is empty, skipping!") << LINE_INFO;
 		return;
 	}
 	
-	queueCache[ id ] = false;
+	m_queueCache[ id ] = false;
 }
 
 /**
@@ -192,12 +191,11 @@ void Queue::insertInCache( const QString& id )
 void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdDebug() << i18n("Package id is empty, skipping!") << endl;
-		kdDebug() << "Package id is empty, skipping!" << endl;
+		kdWarning(0) << i18n("Package id is empty, skipping!") << LINE_INFO;
 		return;
 	}
 	
-	queueCache.remove( id );
+	m_queueCache.remove( id );
 }
 
 
@@ -213,10 +211,11 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
 {
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
-		queueCache[ id ] = false;
+		m_queueCache[ id ] = false;
 	
-	internalTimer->start( 1000 );
+	m_internalTimer->start( 1000 );
 	emit signalPackageStart( id );
+	m_isQueueBusy = true;
 }
 
 /**
@@ -225,10 +224,10 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
  */
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
-	internalTimer->stop();
+	m_internalTimer->stop();
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
-		queueCache[ id ] = true;
+		m_queueCache[ id ] = true;
 	
 	emit signalPackageComplete( id );
 }
@@ -242,11 +241,10 @@ void Queue::slotOneStep()
 	emit signalPackageAdvance();
 }
 
-void Queue::stopTimer()
+bool Queue::isQueueBusy()
 {
-	internalTimer->stop();
+	return m_isQueueBusy;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Package handling
@@ -293,14 +291,22 @@ void Queue::setRemoveInstalled( bool removeInstalled )
  */
 void Queue::slotClearQueue()
 {
+	DEBUG_LINE_INFO;
+	
+	// Queue is not busy anymore - off course
+	m_isQueueBusy = false;
+	
+	// Make sure the timer is stopped
+	m_internalTimer->stop();
+	
 	if ( m_removeInstalled ) {
 		
 		// Collect only 100% complete packages
 		QStringList idList;
-		for ( QMap<QString, bool>::iterator itMap = queueCache.begin(), itMapEnd = queueCache.end(); itMap != itMapEnd; ++itMap )
+		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap ) {
 			if ( itMap.data() )
 				idList += itMap.key();
-	
+		}
 		if ( !idList.isEmpty() )
 			removePackageIdList( idList );
 	}

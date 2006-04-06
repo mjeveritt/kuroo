@@ -66,7 +66,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 							"software maintenance tasks on gentoo systems</p>"
 							"New features:<br>"
 							"Unified package view: fast package browsing and searching with filters.<br>"
-							"Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor,"
+							"Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor, "
 							"Emerge and Configuration History, Emerge Queue.<br>"
 							"<br>"
 					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>Tell us what you think of Kuroo!</a><br>"

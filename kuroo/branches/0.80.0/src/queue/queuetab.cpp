@@ -178,8 +178,6 @@ void QueueTab::slotNextPackage( bool isNext )
  */
 void QueueTab::slotRefresh()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( !QueueSingleton::Instance()->isQueueBusy() )
 		queueView->insertPackageList( m_hasCheckedQueue );
 }
@@ -189,8 +187,6 @@ void QueueTab::slotRefresh()
  */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
-	DEBUG_LINE_INFO;
-	
 	// Reenable the inspector after queue changes
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
@@ -207,6 +203,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	slotBusy();
 	
 	m_initialQueueTime = GlobalSingleton::Instance()->formatTime( queueView->totalDuration() );
+    KurooStatusBar::instance()->clearElapsedTime();
 	slotQueueSummary();
 }
 

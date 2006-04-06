@@ -366,7 +366,7 @@ void QueueListView::clearQueuePackageUse()
  */
 long QueueListView::totalDuration()
 {
-	long totalSeconds(0);
+	long totalSeconds( 0 );
 	QListViewItemIterator it( this );
 	while ( it.current() ) {
 		if ( !dynamic_cast<QueueItem*>( it.current() )->isComplete() )

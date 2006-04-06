@@ -1,0 +1,38 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>Options7</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Options7</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>408</width>
+            <height>340</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <widget class="KTextEdit" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>kcfg_etcFiles</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>

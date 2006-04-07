@@ -252,15 +252,14 @@ bool Portage::slotRefresh()
 {
 	DEBUG_LINE_INFO;
 	
-	ThreadWeaver::instance()->queueJob( new LoadPortageJob( this ) );
-	
 	// Update cache if empty
 // 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 // 		SignalistSingleton::Instance()->scanStarted();
 // 		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
 // 	}
 // 	else
-// 		slotScan();
+	
+	slotScan();
 	
 	return true;
 }
@@ -300,9 +299,10 @@ bool Portage::slotScan()
 // 		}
 // 	}
 // 	
-// 	SignalistSingleton::Instance()->scanStarted();
-// 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
-// 	return true;
+	
+	SignalistSingleton::Instance()->scanStarted();
+	ThreadWeaver::instance()->queueJob( new LoadPortageJob( this ) );
+	return true;
 }
 
 /**
@@ -316,7 +316,7 @@ void Portage::slotScanCompleted()
 	QueueSingleton::Instance()->reset();
 	
 	// Now all Portage files
-	PortageFilesSingleton::Instance()->loadPackageFiles();
+// 	PortageFilesSingleton::Instance()->loadPackageFiles();
 	
 	// Ready to roll!
 	SignalistSingleton::Instance()->setKurooReady( true );

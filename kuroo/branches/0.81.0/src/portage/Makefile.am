@@ -13,3 +13,4 @@ libportage_la_SOURCES = portagebase.ui portagelistview.cpp portagetab.cpp \
 noinst_HEADERS = portagelistview.h portagetab.h portage.h uninstallinspector.h
 
 libportage_la_LIBADD = $(top_builddir)/src/core/libcore.la
+

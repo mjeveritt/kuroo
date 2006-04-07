@@ -39,3 +39,6 @@ AC_DEFINE(SQLITE_PTR_SZ, SIZEOF_CHAR_P, [Determine pointer size for SQLite])
 ###############################################################################
 # END SQLITE CHECK
 ###############################################################################
+
+KDE_CHECK_PYTHON(1.5)
+

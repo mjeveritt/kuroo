@@ -184,16 +184,16 @@ bool ScanPortageJob::doJob()
 			QString subCategory = ( *itCategory ).section( "-", 1, 1 );
 			
 			if ( lastCategory != category )
-				idCategory = KurooDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				idCategory = KurooDBSingleton::Instance()->insert( 
+					QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 			
-			int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
-				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-    			.arg(subCategory).arg(QString::number(idCategory)), m_db);
+			int idSubCategory = KurooDBSingleton::Instance()->insert(
+				QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
+    			.arg( subCategory ).arg( QString::number( idCategory) ), m_db );
 			
-			int idCatSubCategory = KurooDBSingleton::Instance()->insert( QString( 
-				"INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');")
-    			.arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
+			int idCatSubCategory = KurooDBSingleton::Instance()->insert( 
+				QString( "INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');")
+    			.arg( *itCategory ).arg( QString::number( idCategory ) ).arg( QString::number( idSubCategory ) ), m_db );
 			
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );

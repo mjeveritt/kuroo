@@ -22,6 +22,7 @@
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
 #include "scanupdatesjob.h"
+#include "loadportagejob.h"
 
 #include <kmessagebox.h>
 
@@ -251,13 +252,15 @@ bool Portage::slotRefresh()
 {
 	DEBUG_LINE_INFO;
 	
+	ThreadWeaver::instance()->queueJob( new LoadPortageJob( this ) );
+	
 	// Update cache if empty
-	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
-		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
-	}
-	else
-		slotScan();
+// 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
+// 		SignalistSingleton::Instance()->scanStarted();
+// 		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+// 	}
+// 	else
+// 		slotScan();
 	
 	return true;
 }
@@ -282,24 +285,24 @@ bool Portage::slotScan()
 {
 	DEBUG_LINE_INFO;
 	
-	int maxLoops( 99 );
-	
-	// Wait for cache job to finish before launching the scan.
-	while ( true ) {
-		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
-			::usleep( 100000 ); // Sleep 100 msec
-		else
-			break;
-		
-		if ( maxLoops-- == 0 ) {
-			kdWarning(0) << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << LINE_INFO;
-			break;
-		}
-	}
-	
-	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
-	return true;
+// 	int maxLoops( 99 );
+// 	
+// 	// Wait for cache job to finish before launching the scan.
+// 	while ( true ) {
+// 		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
+// 			::usleep( 100000 ); // Sleep 100 msec
+// 		else
+// 			break;
+// 		
+// 		if ( maxLoops-- == 0 ) {
+// 			kdWarning(0) << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << LINE_INFO;
+// 			break;
+// 		}
+// 	}
+// 	
+// 	SignalistSingleton::Instance()->scanStarted();
+// 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
+// 	return true;
 }
 
 /**

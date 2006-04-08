@@ -50,7 +50,7 @@
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), 
-	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ),
+	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ), m_emergeVersion( QString::null ),
 	m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
 	m_isVirginState( true ), m_stabilityBefore ( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
 	m_hardMaskComment( QString::null )
@@ -104,7 +104,7 @@ bool PackageInspector::isParentView( int view )
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PackageItem* portagePackage, int view )
+void PackageInspector::edit( PackageItem* portagePackage, const QString& emergeVersion, int view )
 {
 	DEBUG_LINE_INFO;
 	
@@ -112,6 +112,7 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	m_portagePackage = portagePackage;
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
+	m_emergeVersion = emergeVersion;
 	
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
@@ -377,19 +378,9 @@ void PackageInspector::showSettings()
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
-		QStringList parts = GlobalSingleton::Instance()->parsePackage( userMaskVersion );
-		if ( !parts.isEmpty() ) {
-			QString version = parts[2];
-			
-// 		QString versionString = GlobalSingleton::Instance()->getPackageVersion( userMaskVersion );
-// 		if ( !versionString.isEmpty() ) {
-// 			userMaskVersion = versionString.remove( 0, 1 ) + userMaskVersion.section( versionString, 1, 1 );
-			dialog->rbVersionsSpecific->setChecked( true );
-			dialog->cbVersionsSpecific->setDisabled( false );
-			dialog->cbVersionsSpecific->setCurrentText( version );
-		}
-		else
-			kdWarning(0) << i18n("Marking user masked version. Can not parse: ") << userMaskVersion << LINE_INFO;
+		dialog->rbVersionsSpecific->setChecked( true );
+		dialog->cbVersionsSpecific->setDisabled( false );
+		dialog->cbVersionsSpecific->setCurrentText( m_emergeVersion );
 	}
 	else {
 		dialog->ckbAvailable->setChecked( false );

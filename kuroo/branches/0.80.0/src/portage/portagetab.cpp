@@ -184,14 +184,6 @@ void PortageTab::slotButtons()
 	
 	m_packageInspector->setDisabled( false );
 	pbAdvanced->setDisabled( false );
-	
-	// Toggle queue button between add/remove
-	if ( packagesView->currentPackage()->isInPortage() ) {
-		if ( packagesView->currentPackage()->isQueued() )
-			pbQueue->setText( i18n("Remove from Queue") );
-		else
-			pbQueue->setText( i18n("Add to Queue") );
-	}
 
 	// When kuroo is busy disable queue and uninstall button
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
@@ -202,8 +194,21 @@ void PortageTab::slotButtons()
 	else
 		pbQueue->setDisabled( false );
 
+	// Toggle queue button between add/remove
+	if ( packagesView->currentPackage()->isInPortage() ) {
+		pbQueue->setDisabled( false );
+		if ( packagesView->currentPackage()->isQueued() )
+			pbQueue->setText( i18n("Remove from Queue") );
+		else
+			pbQueue->setText( i18n("Add to Queue") );
+	}
+	else {
+		pbQueue->setText( i18n("Add to Queue") );
+		pbQueue->setDisabled( true );
+	}
+	
 	// If user is su enable uninstall
-	if ( packagesView->currentPackage()->isInstalled() /*&& KUser().isSuperUser()*/ )
+	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
 		pbUninstall->setDisabled( false );
 	else
 		pbUninstall->setDisabled( true );
@@ -321,15 +326,21 @@ void PortageTab::slotRefresh()
 }
 
 /**
- * Append or remove package to the queue. @fixme: What if package not in portage is in list?
+ * Append or remove package to the queue.
  */
 void PortageTab::slotQueue()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
 		if ( packagesView->currentPackage()->isQueued() )
 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
-		else
-			QueueSingleton::Instance()->addPackageIdList( packagesView->selectedId() );
+		else {
+			const QStringList selectedIdList = packagesView->selectedId();
+			QStringList packageIdList;
+			foreach( selectedIdList )
+				if ( packagesView->packageItemById( *it )->isInPortage() )
+					packageIdList += *it;
+			QueueSingleton::Instance()->addPackageIdList( packageIdList );
+		}
 	}
 }
 
@@ -339,11 +350,11 @@ void PortageTab::slotQueue()
 void PortageTab::slotUninstall()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		const QStringList selectedList = packagesView->selectedId();
+		const QStringList selectedIdList = packagesView->selectedId();
 		
 		// Pick only installed packages
 		QStringList packageList;
-		foreach ( selectedList ) {
+		foreach ( selectedIdList ) {
 			if ( packagesView->packageItemById( *it )->isInstalled() ) {
 				packageList += *it;
 				packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + packagesView->packageItemById( *it )->name();
@@ -366,7 +377,7 @@ void PortageTab::slotAdvanced()
 {
 	if ( packagesView->currentPackage() ) {
 		slotPackage();
-		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
+		m_packageInspector->edit( packagesView->currentPackage(), QString::null, VIEW_PORTAGE );
 	}
 }
 
@@ -549,7 +560,7 @@ void PortageTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
+		m_packageInspector->edit( packagesView->currentPackage(), emergeVersion, VIEW_PORTAGE );
 }
 
 /**

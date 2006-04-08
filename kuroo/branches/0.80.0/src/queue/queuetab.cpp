@@ -436,7 +436,7 @@ void QueueTab::slotAdvanced()
 {
 	if ( queueView->currentPackage() ) {
 		slotPackage();
-		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
+		m_packageInspector->edit( queueView->currentPackage(), QString::null, VIEW_QUEUE );
 	}
 }
 
@@ -515,7 +515,7 @@ void QueueTab::slotPackage()
 	
 	// Refresh inspector if visible
 	if ( m_packageInspector->isVisible() )
-		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
+		m_packageInspector->edit( queueView->currentPackage(), latestVersion, VIEW_QUEUE );
 }
 
 /**

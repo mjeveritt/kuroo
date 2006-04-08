@@ -37,7 +37,7 @@ public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 	
-	void							edit( PackageItem* portagePackage, int view );
+	void							edit( PackageItem* portagePackage, const QString& emergeVersion, int view );
 	bool							isParentView( int view );
 	void							showHardMaskInfo();
 	
@@ -72,6 +72,9 @@ private slots:
 private:
 	// Which view called the Inspector
 	int								m_view;
+	
+	// Version which will be used by emerge
+	QString							m_emergeVersion;
 	
 	bool							m_versionSettingsChanged, m_useSettingsChanged, m_isVirginState, m_isAvailableBefore;
 	QString							m_id, m_category, m_package, m_hardMaskComment;

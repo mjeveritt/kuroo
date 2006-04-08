@@ -907,6 +907,8 @@ void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
  */
 void KurooDB::setPackageUserMasked( const QString& id )
 {
+	DEBUG_LINE_INFO;
+	
 	insert( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
 	        "'" + category( id ) + "/" + package( id ) + "');" );
 }

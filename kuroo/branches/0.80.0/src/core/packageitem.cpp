@@ -287,10 +287,10 @@ void PackageItem::initVersions()
 		m_versionMap.insert( versionString, version );
 	}
 	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
+	// Now that we have all available versions, sort out masked ones and leaving unmasked.
 	
 	// Check if any of this package versions are hardmasked
+	atom = new DependAtom( this );
 	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 // 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
@@ -306,29 +306,8 @@ void PackageItem::initVersions()
 	}
 	delete atom;
 	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
-	// Check if any of this package versions are unmasked
-	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
-// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
-	foreach ( atomUnmaskedList ) {
-		
-		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
-		// and get the matching versions
-		if ( atom->parse( *it ) ) {
-			QValueList<PackageVersion*> versions = atom->matchingVersions();
-			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
-				( *versionIterator )->setUnMasked( true );
-		}
-	}
-	delete atom;
-	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
 	// Check if any of this package versions are user-masked
+	atom = new DependAtom( this );
 	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 // 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
@@ -340,6 +319,23 @@ void PackageItem::initVersions()
 			QValueList<PackageVersion*>::iterator versionIterator;
 			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 				( *versionIterator )->setUserMasked( true );
+		}
+	}
+	delete atom;
+	
+	// Check if any of this package versions are unmasked
+	atom = new DependAtom( this );
+	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
+// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
+	foreach ( atomUnmaskedList ) {
+		
+		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
+		// and get the matching versions
+		if ( atom->parse( *it ) ) {
+			QValueList<PackageVersion*> versions = atom->matchingVersions();
+			QValueList<PackageVersion*>::iterator versionIterator;
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				( *versionIterator )->setUnMasked( true );
 		}
 	}
 	delete atom;

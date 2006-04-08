@@ -43,10 +43,10 @@ rxAtom(
        	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   						// category and subcategory
        	"((?:[a-z]|[A-Z]|[0-9]|-(?=\\d+dpi)|-(?!\\d)|\\+|_)+)" 			// package name
        	"("           													// start of the version part
-       	"(?:-\\d+(?:\\.\\d+)*[a-z]?)" 									// base version number, including wildcard version matching (*)
+       	"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 									// base version number, including wildcard version matching (*)
        	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 							// version suffix
        	"(?:-r\\d*)?"  													// revision
-       	"(?:\\*)?)?$"          											// end of the (optional) version part and the atom string
+       	"?:\\*?)?$"          											// end of the (optional) version part and the atom string
       );
 
 /**

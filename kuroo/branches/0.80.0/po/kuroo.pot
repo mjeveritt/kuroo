@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-08 16:37+0200\n"
+"POT-Creation-Date: 2006-04-08 19:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,43 +122,43 @@ msgstr ""
 #: queue/queuetab.cpp:385 core/emerge.cpp:447 core/emerge.cpp:525
 #: core/cacheportagejob.cpp:171 core/etcupdate.cpp:125
 #: core/scanportagejob.cpp:349 core/scanportagejob.cpp:423
-#: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:138
+#: core/scanupdatesjob.cpp:152 core/portagefiles.cpp:138
 #: core/portagefiles.cpp:230 core/portagefiles.cpp:322
 #: core/portagefiles.cpp:414 history/history.cpp:253 history/history.cpp:254
 #: statusbar.cpp:98
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:479 core/versionview.cpp:111 portage/portagetab.cpp:427
+#: queue/queuetab.cpp:485 core/versionview.cpp:111 portage/portagetab.cpp:439
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:482 core/versionview.cpp:108 portage/portagetab.cpp:432
+#: queue/queuetab.cpp:488 core/versionview.cpp:108 portage/portagetab.cpp:444
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:485 portage/portagetab.cpp:437
+#: queue/queuetab.cpp:491 portage/portagetab.cpp:449
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:488 portage/portagetab.cpp:440
+#: queue/queuetab.cpp:494 portage/portagetab.cpp:452
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:490 portage/portagetab.cpp:442
+#: queue/queuetab.cpp:496 portage/portagetab.cpp:454
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:535 portage/portagetab.cpp:586 rc.cpp:25 rc.cpp:292
+#: queue/queuetab.cpp:541 portage/portagetab.cpp:598 rc.cpp:25 rc.cpp:292
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:539 portage/portagetab.cpp:590
+#: queue/queuetab.cpp:545 portage/portagetab.cpp:602
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:541 portage/portagetab.cpp:592
+#: queue/queuetab.cpp:547 portage/portagetab.cpp:604
 msgid "Remove from world"
 msgstr ""
 
@@ -492,11 +492,11 @@ msgstr ""
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanupdatesjob.cpp:108
+#: core/scanupdatesjob.cpp:109
 msgid "Scanning updates. Scan aborted!"
 msgstr ""
 
-#: core/scanupdatesjob.cpp:122
+#: core/scanupdatesjob.cpp:123
 msgid "Scanning updates. Can not find id in database for package %1/%2."
 msgstr ""
 
@@ -664,89 +664,89 @@ msgstr ""
 msgid "Completed saving user package use in %1."
 msgstr ""
 
-#: core/tooltip.cpp:69 core/tooltip.cpp:81
-msgid "Package is installed"
+#: core/tooltip.cpp:70 core/tooltip.cpp:82
+msgid "%1 is installed"
 msgstr ""
 
-#: core/tooltip.cpp:72
-msgid "Package is not installed"
+#: core/tooltip.cpp:73
+msgid "%1 is not installed"
 msgstr ""
 
-#: core/tooltip.cpp:74
-msgid "Package not in Portage"
+#: core/tooltip.cpp:75
+msgid "%1 not in Portage"
 msgstr ""
 
-#: core/tooltip.cpp:86
-msgid "Package present in World profile"
+#: core/tooltip.cpp:87
+msgid "%1 is present in World profile"
 msgstr ""
 
-#: core/tooltip.cpp:91
-msgid "Package present in Queue"
+#: core/tooltip.cpp:92
+msgid "%1 is present in Queue"
 msgstr ""
 
 #: core/packageinspector.cpp:51
 msgid "Package details"
 msgstr ""
 
-#: core/packageinspector.cpp:179 core/packageinspector.cpp:204
+#: core/packageinspector.cpp:181 core/packageinspector.cpp:206
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr ""
 
-#: core/packageinspector.cpp:180 core/packageinspector.cpp:205
+#: core/packageinspector.cpp:182 core/packageinspector.cpp:207
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:273 core/packageinspector.cpp:779
+#: core/packageinspector.cpp:275 core/packageinspector.cpp:781
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:338
+#: core/packageinspector.cpp:340
 msgid "Click for hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:356
+#: core/packageinspector.cpp:358
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:584
+#: core/packageinspector.cpp:586
 msgid "Loading use flag description. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:663
+#: core/packageinspector.cpp:665
 msgid "Loading changelog. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:664
+#: core/packageinspector.cpp:666
 msgid "%1No ChangeLog found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:691
+#: core/packageinspector.cpp:693
 msgid "Loading ebuild. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:692
+#: core/packageinspector.cpp:694
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:722
+#: core/packageinspector.cpp:724
 msgid "Loading dependencies. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:723
+#: core/packageinspector.cpp:725
 msgid "%1No dependencies found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:751
+#: core/packageinspector.cpp:753
 msgid "Loading installed files list. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:752
+#: core/packageinspector.cpp:754
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:825 core/packageinspector.cpp:887
+#: core/packageinspector.cpp:827 core/packageinspector.cpp:889
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -899,17 +899,17 @@ msgid ""
 "Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:295
+#: portage/portage.cpp:299
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
 msgstr ""
 
-#: portage/portage.cpp:348
+#: portage/portage.cpp:352
 msgid "Loading packages in world. Reading: "
 msgstr ""
 
-#: portage/portage.cpp:366
+#: portage/portage.cpp:370
 msgid "Adding to world. Writing: "
 msgstr ""
 
@@ -939,58 +939,58 @@ msgid ""
 "matching packages.</b></font>"
 msgstr ""
 
-#: portage/portagetab.cpp:320
+#: portage/portagetab.cpp:322
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:321
+#: portage/portagetab.cpp:323
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:490
+#: portage/portagetab.cpp:502
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:494
+#: portage/portagetab.cpp:506
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:500 portage/portagetab.cpp:506
+#: portage/portagetab.cpp:512 portage/portagetab.cpp:518
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:522
+#: portage/portagetab.cpp:534
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:530
+#: portage/portagetab.cpp:542
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:536
+#: portage/portagetab.cpp:548
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:544
+#: portage/portagetab.cpp:556
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:550
+#: portage/portagetab.cpp:562
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:582
+#: portage/portagetab.cpp:594
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:584
+#: portage/portagetab.cpp:596
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:595
+#: portage/portagetab.cpp:607
 msgid "&Uninstall"
 msgstr ""
 

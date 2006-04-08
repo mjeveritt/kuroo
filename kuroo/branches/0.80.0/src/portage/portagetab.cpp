@@ -316,6 +316,8 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotRefresh()
 {
+	DEBUG_LINE_INFO;
+	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
@@ -375,17 +377,27 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
-	if ( packagesView->currentPackage() ) {
-		slotPackage();
-		m_packageInspector->edit( packagesView->currentPackage(), QString::null, VIEW_PORTAGE );
-	}
+	DEBUG_LINE_INFO;
+	
+	if ( packagesView->currentPackage() )
+		processPackage( true );
+}
+
+void PortageTab::slotPackage()
+{
+	DEBUG_LINE_INFO;
+	
+	if ( m_packageInspector->isVisible() )
+		processPackage( true );
+	else	
+		processPackage( false );
 }
 
 /**
  * Process package and all it's versions.
  * Update summary and Inspector.
  */
-void PortageTab::slotPackage()
+void PortageTab::processPackage( bool viewInspector )
 {
 	DEBUG_LINE_INFO;
 	
@@ -559,7 +571,7 @@ void PortageTab::slotPackage()
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
 	// Refresh inspector if visible
-	if ( m_packageInspector->isVisible() )
+	if ( viewInspector )
 		m_packageInspector->edit( packagesView->currentPackage(), emergeVersion, VIEW_PORTAGE );
 }
 
@@ -631,3 +643,4 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 }
 
 #include "portagetab.moc"
+

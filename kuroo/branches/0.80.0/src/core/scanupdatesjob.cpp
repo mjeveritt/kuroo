@@ -97,7 +97,8 @@ bool ScanUpdatesJob::doJob()
 	                                    " );", m_db);
 	
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
-	KurooDBSingleton::Instance()->query( "UPDATE package_temp SET updateVersion = '';", m_db );
+	KurooDBSingleton::Instance()->query( QString("UPDATE package_temp SET updateVersion = '', status = '%1' WHERE status = '%2';")
+	                                     .arg( PACKAGE_INSTALLED_STRING ).arg( PACKAGE_UPDATES_STRING ), m_db );
 	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
 	
 	EmergePackageList::ConstIterator itEnd = m_packageList.end();

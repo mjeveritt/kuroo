@@ -114,6 +114,8 @@ void PackageInspector::edit( PackageItem* portagePackage, const QString& emergeV
 	m_category = m_portagePackage->category();
 	m_emergeVersion = emergeVersion;
 	
+	dialog->cbVersionsSpecific->setCurrentText( m_emergeVersion );
+	
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
 		dialog->groupSelectStability->setDisabled( true );

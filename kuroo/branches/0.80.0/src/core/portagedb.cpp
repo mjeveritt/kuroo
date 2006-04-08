@@ -1372,14 +1372,12 @@ void DbConnectionPool::createDbConnections()
 DbConnection *DbConnectionPool::getDbConnection()
 {
 	m_semaphore++;
-	kdDebug() << "Get: Available db connections: " << m_semaphore.available() << LINE_INFO;
 	return dequeue();
 }
 
 void DbConnectionPool::putDbConnection( const DbConnection *conn )
 {
 	enqueue( conn );
-	kdDebug() << "Put: Available db connections: " << m_semaphore.available() << LINE_INFO;
 	m_semaphore--;
 }
 

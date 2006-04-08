@@ -123,8 +123,6 @@ public:
 				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status = '%2' LIMIT 1;")
 				.arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
 			
-			kdDebug() << "installedVersionCount=" << installedVersionCount << LINE_INFO;
-			
 			// Mark package as uninstalled only when one version is found
 			if ( installedVersionCount == "1" ) {
 			
@@ -169,15 +167,21 @@ public:
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
-		QString updateString;
-		if ( m_hasUpdate > 0 )
-			updateString = m_updateVersion + " (U)";
-		else
-			if ( m_hasUpdate < 0 )
-				updateString = m_updateVersion + " (D)";
-		
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';" )
-		                                     .arg( updateString ).arg( m_id ), m_db );
+		if ( m_hasUpdate == 0 ) {
+			KurooDBSingleton::Instance()->query( QString("UPDATE package SET updateVersion = '', status = '%1' WHERE id = '%2';")
+			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( m_id ), m_db );
+		}
+		else {
+			QString updateString;
+			if ( m_hasUpdate > 0 )
+				updateString = m_updateVersion + " (U)";
+			else
+				if ( m_hasUpdate < 0 )
+					updateString = m_updateVersion + " (D)";
+			
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
+			                                     .arg( updateString ).arg( PACKAGE_UPDATES_STRING ).arg( m_id ), m_db );
+		}
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;

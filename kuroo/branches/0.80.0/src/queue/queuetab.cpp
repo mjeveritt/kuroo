@@ -434,16 +434,22 @@ void QueueTab::slotRemoveInstalled()
  */
 void QueueTab::slotAdvanced()
 {
-	if ( queueView->currentPackage() ) {
-		slotPackage();
-		m_packageInspector->edit( queueView->currentPackage(), QString::null, VIEW_QUEUE );
-	}
+	if ( queueView->currentPackage() )
+	     processPackage( true );
+}
+
+void QueueTab::slotPackage()
+{
+	if ( m_packageInspector->isVisible() )
+		processPackage( true );
+	else	
+		processPackage( false );
 }
 
 /**
  * Process package and view in Inspector.
  */
-void QueueTab::slotPackage()
+void QueueTab::processPackage( bool viewInspector )
 {
 	// Queue view is hidden don't update
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
@@ -514,7 +520,7 @@ void QueueTab::slotPackage()
 	}
 	
 	// Refresh inspector if visible
-	if ( m_packageInspector->isVisible() )
+	if ( viewInspector )
 		m_packageInspector->edit( queueView->currentPackage(), latestVersion, VIEW_QUEUE );
 }
 

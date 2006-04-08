@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-08 13:08+0200\n"
+"POT-Creation-Date: 2006-04-08 16:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,36 +129,36 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:479 core/versionview.cpp:111 portage/portagetab.cpp:416
+#: queue/queuetab.cpp:479 core/versionview.cpp:111 portage/portagetab.cpp:427
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:482 core/versionview.cpp:108 portage/portagetab.cpp:421
+#: queue/queuetab.cpp:482 core/versionview.cpp:108 portage/portagetab.cpp:432
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:485 portage/portagetab.cpp:426
+#: queue/queuetab.cpp:485 portage/portagetab.cpp:437
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:488 portage/portagetab.cpp:429
+#: queue/queuetab.cpp:488 portage/portagetab.cpp:440
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:490 portage/portagetab.cpp:431
+#: queue/queuetab.cpp:490 portage/portagetab.cpp:442
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:535 portage/portagetab.cpp:575 rc.cpp:25 rc.cpp:292
+#: queue/queuetab.cpp:535 portage/portagetab.cpp:586 rc.cpp:25 rc.cpp:292
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:539 portage/portagetab.cpp:579
+#: queue/queuetab.cpp:539 portage/portagetab.cpp:590
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:541 portage/portagetab.cpp:581
+#: queue/queuetab.cpp:541 portage/portagetab.cpp:592
 msgid "Remove from world"
 msgstr ""
 
@@ -524,11 +524,11 @@ msgstr ""
 msgid "Querying for package id. Can not parse: "
 msgstr ""
 
-#: core/portagedb.cpp:1119
+#: core/portagedb.cpp:1121
 msgid "Database versions incompatible. Removing and rebuilding database."
 msgstr ""
 
-#: core/portagedb.cpp:1123
+#: core/portagedb.cpp:1125
 msgid "Database file corrupt. Removing and rebuilding database."
 msgstr ""
 
@@ -628,6 +628,42 @@ msgstr ""
 msgid "No package use found. Saving to %1 aborted!"
 msgstr ""
 
+#: core/portagefiles.cpp:680
+msgid "Completed scanning for package keywords in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:684
+msgid "Completed scanning for unmasked packages in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:688
+msgid "Completed scanning for hardmasked packages in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:692
+msgid "Completed scanning for user masked packages in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:696
+msgid "Completed saving package keywords in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:701
+msgid "Completed saving user masked packages in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:706
+msgid "Completed saving user unmasked packages in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:710
+msgid "Completed scanning user package use flags in %1."
+msgstr ""
+
+#: core/portagefiles.cpp:714
+msgid "Completed saving user package use in %1."
+msgstr ""
+
 #: core/tooltip.cpp:69 core/tooltip.cpp:81
 msgid "Package is installed"
 msgstr ""
@@ -652,69 +688,65 @@ msgstr ""
 msgid "Package details"
 msgstr ""
 
-#: core/packageinspector.cpp:178 core/packageinspector.cpp:203
+#: core/packageinspector.cpp:179 core/packageinspector.cpp:204
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr ""
 
-#: core/packageinspector.cpp:179 core/packageinspector.cpp:204
+#: core/packageinspector.cpp:180 core/packageinspector.cpp:205
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:272 core/packageinspector.cpp:788
+#: core/packageinspector.cpp:273 core/packageinspector.cpp:779
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:337
+#: core/packageinspector.cpp:338
 msgid "Click for hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:355
+#: core/packageinspector.cpp:356
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:392
-msgid "Marking user masked version. Can not parse: "
-msgstr ""
-
-#: core/packageinspector.cpp:593
+#: core/packageinspector.cpp:584
 msgid "Loading use flag description. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:672
+#: core/packageinspector.cpp:663
 msgid "Loading changelog. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:673
+#: core/packageinspector.cpp:664
 msgid "%1No ChangeLog found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:700
+#: core/packageinspector.cpp:691
 msgid "Loading ebuild. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:701
+#: core/packageinspector.cpp:692
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:731
+#: core/packageinspector.cpp:722
 msgid "Loading dependencies. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:732
+#: core/packageinspector.cpp:723
 msgid "%1No dependencies found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:760
+#: core/packageinspector.cpp:751
 msgid "Loading installed files list. Reading: "
 msgstr ""
 
-#: core/packageinspector.cpp:761
+#: core/packageinspector.cpp:752
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:834 core/packageinspector.cpp:896
+#: core/packageinspector.cpp:825 core/packageinspector.cpp:887
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -890,15 +922,16 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: portage/portagetab.cpp:147 portage/portagetab.cpp:193
+#: portage/portagetab.cpp:147 portage/portagetab.cpp:203
+#: portage/portagetab.cpp:206
 msgid "Add to Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:191
+#: portage/portagetab.cpp:201
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:281
+#: portage/portagetab.cpp:286
 msgid ""
 "<font color=darkRed size=+1><b>No package found with these filter settings</"
 "font><br><font color=darkRed>Please modify the filter settings you have "
@@ -906,58 +939,58 @@ msgid ""
 "matching packages.</b></font>"
 msgstr ""
 
-#: portage/portagetab.cpp:315
+#: portage/portagetab.cpp:320
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:316
+#: portage/portagetab.cpp:321
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:479
+#: portage/portagetab.cpp:490
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:483
+#: portage/portagetab.cpp:494
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:489 portage/portagetab.cpp:495
+#: portage/portagetab.cpp:500 portage/portagetab.cpp:506
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:511
+#: portage/portagetab.cpp:522
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:519
+#: portage/portagetab.cpp:530
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:525
+#: portage/portagetab.cpp:536
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:533
+#: portage/portagetab.cpp:544
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:539
+#: portage/portagetab.cpp:550
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:571
+#: portage/portagetab.cpp:582
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:573
+#: portage/portagetab.cpp:584
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:584
+#: portage/portagetab.cpp:595
 msgid "&Uninstall"
 msgstr ""
 
@@ -979,7 +1012,7 @@ msgstr ""
 msgid "Writing %1kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:59 config/configdialog.cpp:481
+#: logs/log.cpp:59 config/configdialog.cpp:477
 msgid "Saving"
 msgstr ""
 
@@ -1007,171 +1040,171 @@ msgstr ""
 msgid "Edit your etc-update warning file list"
 msgstr ""
 
-#: config/configdialog.cpp:117
+#: config/configdialog.cpp:115
 msgid "Reading: %1"
 msgstr ""
 
-#: config/configdialog.cpp:145
+#: config/configdialog.cpp:141
 msgid "Parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS."
 msgstr ""
 
-#: config/configdialog.cpp:153
+#: config/configdialog.cpp:149
 msgid "Parsing /etc/make.conf: can not parse AUTOCLEAN."
 msgstr ""
 
-#: config/configdialog.cpp:161 config/configdialog.cpp:225
+#: config/configdialog.cpp:157 config/configdialog.cpp:221
 msgid "Parsing /etc/make.conf: can not parse BUILD_PREFIX."
 msgstr ""
 
-#: config/configdialog.cpp:169
+#: config/configdialog.cpp:165
 msgid "Parsing /etc/make.conf: can not parse CBUILD."
 msgstr ""
 
-#: config/configdialog.cpp:177
+#: config/configdialog.cpp:173
 msgid "Parsing /etc/make.conf: can not parse CCACHE_SIZE."
 msgstr ""
 
-#: config/configdialog.cpp:185
+#: config/configdialog.cpp:181
 msgid "Parsing /etc/make.conf: can not parse CFLAGS."
 msgstr ""
 
-#: config/configdialog.cpp:193
+#: config/configdialog.cpp:189
 msgid "Parsing /etc/make.conf: can not parse CXXFLAGS."
 msgstr ""
 
-#: config/configdialog.cpp:201
+#: config/configdialog.cpp:197
 msgid "Parsing /etc/make.conf: can not parse CHOST."
 msgstr ""
 
-#: config/configdialog.cpp:209
+#: config/configdialog.cpp:205
 msgid "Parsing /etc/make.conf: can not parse CLEAN_DELAY."
 msgstr ""
 
-#: config/configdialog.cpp:217
+#: config/configdialog.cpp:213
 msgid "Parsing /etc/make.conf: can not parse CONFIG_PROTECT."
 msgstr ""
 
-#: config/configdialog.cpp:233
+#: config/configdialog.cpp:229
 msgid "Parsing /etc/make.conf: can not parse DEBUGBUILD."
 msgstr ""
 
-#: config/configdialog.cpp:241
+#: config/configdialog.cpp:237
 msgid "Parsing /etc/make.conf: can not parse DISTDIR."
 msgstr ""
 
-#: config/configdialog.cpp:249
+#: config/configdialog.cpp:245
 msgid "Parsing /etc/make.conf: can not parse FEATURES."
 msgstr ""
 
-#: config/configdialog.cpp:257
+#: config/configdialog.cpp:253
 msgid "Parsing /etc/make.conf: can not parse FETCHCOMMAND."
 msgstr ""
 
-#: config/configdialog.cpp:265
+#: config/configdialog.cpp:261
 msgid "Parsing /etc/make.conf: can not parse GENTOO_MIRRORS."
 msgstr ""
 
-#: config/configdialog.cpp:273
+#: config/configdialog.cpp:269
 msgid "Parsing /etc/make.conf: can not parse FTP_PROXY."
 msgstr ""
 
-#: config/configdialog.cpp:281
+#: config/configdialog.cpp:277
 msgid "Parsing /etc/make.conf: can not parse HTTP_PROXY."
 msgstr ""
 
-#: config/configdialog.cpp:289
+#: config/configdialog.cpp:285
 msgid "Parsing /etc/make.conf: can not parse MAKEOPTS."
 msgstr ""
 
-#: config/configdialog.cpp:297 config/configdialog.cpp:457
+#: config/configdialog.cpp:293 config/configdialog.cpp:453
 msgid "Parsing /etc/make.conf: can not parse NOCOLOR."
 msgstr ""
 
-#: config/configdialog.cpp:305
+#: config/configdialog.cpp:301
 msgid "Parsing /etc/make.conf: can not parse PKG_TMPDIR."
 msgstr ""
 
-#: config/configdialog.cpp:313
+#: config/configdialog.cpp:309
 msgid "Parsing /etc/make.conf: can not parse PKGDIR."
 msgstr ""
 
-#: config/configdialog.cpp:321
+#: config/configdialog.cpp:317
 msgid "Parsing /etc/make.conf: can not parse PORT_LOGDIR."
 msgstr ""
 
-#: config/configdialog.cpp:329
+#: config/configdialog.cpp:325
 msgid "Parsing /etc/make.conf: can not parse PORTAGE_BINHOST."
 msgstr ""
 
-#: config/configdialog.cpp:337
+#: config/configdialog.cpp:333
 msgid "Parsing /etc/make.conf: can not parse PORTAGE_NICENESS."
 msgstr ""
 
-#: config/configdialog.cpp:345
+#: config/configdialog.cpp:341
 msgid "Parsing /etc/make.conf: can not parse PORTAGE_TMPDIR."
 msgstr ""
 
-#: config/configdialog.cpp:353
+#: config/configdialog.cpp:349
 msgid "Parsing /etc/make.conf: can not parse PORTDIR."
 msgstr ""
 
-#: config/configdialog.cpp:361
+#: config/configdialog.cpp:357
 msgid "Parsing /etc/make.conf: can not parse PORTDIR_OVERLAY."
 msgstr ""
 
-#: config/configdialog.cpp:369
+#: config/configdialog.cpp:365
 msgid "Parsing /etc/make.conf: can not parse RESUMECOMMAND."
 msgstr ""
 
-#: config/configdialog.cpp:377
+#: config/configdialog.cpp:373
 msgid "Parsing /etc/make.conf: can not parse ROOT."
 msgstr ""
 
-#: config/configdialog.cpp:385
+#: config/configdialog.cpp:381
 msgid "Parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
 msgstr ""
 
-#: config/configdialog.cpp:393
+#: config/configdialog.cpp:389
 msgid "Parsing /etc/make.conf: can not parse RSYNC_PROXY."
 msgstr ""
 
-#: config/configdialog.cpp:401
+#: config/configdialog.cpp:397
 msgid "Parsing /etc/make.conf: can not parse RSYNC_RETRIES."
 msgstr ""
 
-#: config/configdialog.cpp:409
+#: config/configdialog.cpp:405
 msgid "Parsing /etc/make.conf: can not parse RSYNC_RATELIMIT."
 msgstr ""
 
-#: config/configdialog.cpp:417
+#: config/configdialog.cpp:413
 msgid "Parsing /etc/make.conf: can not parse RSYNC_TIMEOUT."
 msgstr ""
 
-#: config/configdialog.cpp:425
+#: config/configdialog.cpp:421
 msgid "Parsing /etc/make.conf: can not parse RPMDIR."
 msgstr ""
 
-#: config/configdialog.cpp:433
+#: config/configdialog.cpp:429
 msgid "Parsing /etc/make.conf: can not parse SYNC."
 msgstr ""
 
-#: config/configdialog.cpp:441
+#: config/configdialog.cpp:437
 msgid "Parsing /etc/make.conf: can not parse USE."
 msgstr ""
 
-#: config/configdialog.cpp:449
+#: config/configdialog.cpp:445
 msgid "Parsing /etc/make.conf: can not parse USE_ORDER."
 msgstr ""
 
-#: config/configdialog.cpp:481
+#: config/configdialog.cpp:477
 msgid "Failed to save %1. Please run as root."
 msgstr ""
 
-#: config/configdialog.cpp:517
+#: config/configdialog.cpp:511
 msgid "Parsing %1: can not match keyword %2."
 msgstr ""
 
-#: config/configdialog.cpp:632
+#: config/configdialog.cpp:626
 msgid "Writing: %1"
 msgstr ""
 

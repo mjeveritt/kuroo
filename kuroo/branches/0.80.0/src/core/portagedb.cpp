@@ -1351,7 +1351,7 @@ DbConnectionPool::~DbConnectionPool()
 		if ( vacuum ) {
 			vacuum = false;
 			kdDebug() << "Running VACUUM" << LINE_INFO;
-			conn->query("VACUUM; ");
+			conn->query("VACUUM;");
 		}
 		delete conn;
 	}
@@ -1372,12 +1372,14 @@ void DbConnectionPool::createDbConnections()
 DbConnection *DbConnectionPool::getDbConnection()
 {
 	m_semaphore++;
+	kdDebug() << "Get: Available db connections: " << m_semaphore.available() << LINE_INFO;
 	return dequeue();
 }
 
 void DbConnectionPool::putDbConnection( const DbConnection *conn )
 {
 	enqueue( conn );
+	kdDebug() << "Put: Available db connections: " << m_semaphore.available() << LINE_INFO;
 	m_semaphore--;
 }
 

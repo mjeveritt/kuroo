@@ -72,8 +72,6 @@ void ConfigDialog::slotDefault()
 
 QStringList ConfigDialog::parseMakeConf()
 {
-	DEBUG_LINE_INFO;
-	
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
@@ -124,8 +122,6 @@ QStringList ConfigDialog::parseMakeConf()
  */
 void ConfigDialog::readMakeConf()
 {
-	DEBUG_LINE_INFO;
-	
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return;
@@ -490,8 +486,6 @@ void ConfigDialog::saveAll()
  */
 bool ConfigDialog::saveMakeConf()
 {
-	DEBUG_LINE_INFO;
-	
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		false;

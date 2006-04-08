@@ -37,16 +37,16 @@
 
 QRegExp
 rxAtom(	
-       	"^"    // Start of the string
-       	"(!)?" // "Block these packages" flag, only occurring in ebuilds
-       	"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
+       	"^"    															// Start of the string
+       	"(!)?" 															// "Block these packages" flag, only occurring in ebuilds
+       	"(~|(?:<|>|=|<=|>=))?" 											// greater-than/less-than/equal, or "all revisions" prefix
        	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   						// category and subcategory
        	"((?:[a-z]|[A-Z]|[0-9]|-(?=\\d+dpi)|-(?!\\d)|\\+|_)+)" 			// package name
        	"("           													// start of the version part
        	"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 									// base version number, including wildcard version matching (*)
        	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 							// version suffix
        	"(?:-r\\d*)?"  													// revision
-       	"?:\\*?)?$"          											// end of the (optional) version part and the atom string
+       	"\\*?)?$"          												// end of the (optional) version part and the atom string
       );
 
 /**
@@ -118,8 +118,8 @@ public:
 					kdWarning(0) << i18n("Load package keywords: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << LINE_INFO;
 				else
 					KurooDBSingleton::Instance()->insert( QString( 
-						"INSERT INTO packageKeywords_temp (idPackage, keywords) "
-						"VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
+						"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
+					                                      .arg( id ).arg( keywords ), m_db );
 			}
 			else
 				kdWarning(0) << i18n("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
@@ -677,34 +677,42 @@ void PortageFiles::refresh( int mask )
 {
 	switch ( mask ) {
 		case 0:
-// 			kdWarning(0) << i18n("Completed scanning for package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
+			                                    .arg( KurooConfig::filePackageKeywords() ), KUROO );
 			break;
 		case 1:
-// 			kdWarning(0) << i18n("Completed scanning for unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
+												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
 			break;
 		case 2:
-// 			kdWarning(0) << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
+												.arg( KurooConfig::filePackageHardMask() ), KUROO );
 			break;
 		case 3:
-// 			kdWarning(0) << i18n("Completed scanning for user masked packages in %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
+												.arg( KurooConfig::filePackageUserMask() ), KUROO );
 			break;
 		case 4:
-// 			kdWarning(0) << i18n("Completed saving package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
+												.arg( KurooConfig::filePackageKeywords() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
 		case 5:
-// 			kdWarning(0) << i18n("Completed saving user masked packages in %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
+												.arg( KurooConfig::filePackageUserMask() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
 		case 6:
-// 			kdWarning(0) << i18n("Completed saving user unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
+												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
 			break;
 		case 7:
-// 			kdWarning(0) << i18n("Completed scanning user package use flags in %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
+												.arg( KurooConfig::filePackageUserUse() ), KUROO );
 			break;
 		case 8:
-			break;
-// 			kdWarning(0) << i18n("Completed saving user package use in %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
+												.arg( KurooConfig::filePackageUserUse() ), KUROO );
 	}
 }
 

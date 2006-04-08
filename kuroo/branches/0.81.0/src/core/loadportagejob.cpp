@@ -55,8 +55,10 @@ void LoadPortageJob::completeJob()
  */
 bool LoadPortageJob::doJob()
 {
+	DEBUG_LINE_INFO;
+	
 	if ( !m_db->isConnected() ) {
-		kdError(0) << i18n("Scanning Portage. Can not connect to database") << LINE_INFO;
+		kdError(0) << i18n("Scanning Portage. Can not connect to database.") << LINE_INFO;
 		return false;
 	}
 	
@@ -116,8 +118,10 @@ bool LoadPortageJob::doJob()
 	
 	// Connect to portage api and request portage packages.
 	int packageCount = loadPackages();
-	if ( packageCount == 0 )
+	if ( packageCount == 0 ) {
+		kdError(0) << i18n("Package list from Portage is empty. Aborting!") << LINE_INFO;
 		return false;
+	}
 	setProgressTotalSteps( packageCount );
 	
 	// Iterate the portage map and insert categories in db.

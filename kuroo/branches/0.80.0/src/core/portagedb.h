@@ -205,7 +205,7 @@ public:
 	void			setPackageUnTesting( const QString& id );
 	void			setPackageUnMasked( const QString& id );
 	void			setPackageUnMasked( const QString& id, const QString& version );
-	void			setPackageUserMasked( const QString& id, const QString& version );
+	void			setPackageUserMasked( const QString& id );
 	void			setPackageAvailable( const QString& id );
 	
 	void			clearPackageUnTesting( const QString& id );

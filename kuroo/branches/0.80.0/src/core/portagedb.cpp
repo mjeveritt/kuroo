@@ -898,17 +898,17 @@ void KurooDB::setPackageUnMasked( const QString& id )
 void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
 {
 	insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-		    "'<=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
+		    "'=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**
  * Add package in package.mask. @fixme: check category and package?
  * @param id
  */
-void KurooDB::setPackageUserMasked( const QString& id, const QString& version )
+void KurooDB::setPackageUserMasked( const QString& id )
 {
 	insert( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
-	        "'>" + category( id ) + "/" + package( id ) + "-" + version + "');" );
+	        "'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**

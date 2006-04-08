@@ -494,8 +494,8 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 	m_versionSettingsChanged = true;
 	
 	KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
-	KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
-	KurooDBSingleton::Instance()->setPackageUserMasked( m_id, version );
+	KurooDBSingleton::Instance()->setPackageUserMasked( m_id );
+	KurooDBSingleton::Instance()->setPackageUnMasked( m_id, version );
 	
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();

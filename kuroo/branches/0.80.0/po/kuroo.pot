@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-05 18:34+0200\n"
+"POT-Creation-Date: 2006-04-08 13:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,52 +74,52 @@ msgid ""
 "cause the file to always be merged.</td></tr></table></qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:219
+#: queue/queuetab.cpp:216
 msgid "<b>Summary</b><br>"
 msgstr ""
 
-#: queue/queuetab.cpp:220
+#: queue/queuetab.cpp:217
 msgid "Number of packages: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:221
+#: queue/queuetab.cpp:218
 msgid "Initial estimated time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:222
+#: queue/queuetab.cpp:219
 msgid "Elapsed time for installation: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:224
+#: queue/queuetab.cpp:221
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:262
+#: queue/queuetab.cpp:259
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:268 rc.cpp:68
+#: queue/queuetab.cpp:265 rc.cpp:68
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:346
+#: queue/queuetab.cpp:343
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:346 queue/queuetab.cpp:357
+#: queue/queuetab.cpp:343 queue/queuetab.cpp:354
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:357
+#: queue/queuetab.cpp:354
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:384
+#: queue/queuetab.cpp:381
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
-#: queue/queuetab.cpp:388 core/emerge.cpp:447 core/emerge.cpp:525
+#: queue/queuetab.cpp:385 core/emerge.cpp:447 core/emerge.cpp:525
 #: core/cacheportagejob.cpp:171 core/etcupdate.cpp:125
 #: core/scanportagejob.cpp:349 core/scanportagejob.cpp:423
 #: core/scanupdatesjob.cpp:151 core/portagefiles.cpp:138
@@ -129,36 +129,36 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: queue/queuetab.cpp:482 core/versionview.cpp:111 portage/portagetab.cpp:416
+#: queue/queuetab.cpp:479 core/versionview.cpp:111 portage/portagetab.cpp:416
 msgid "Hardmasked"
 msgstr ""
 
-#: queue/queuetab.cpp:485 core/versionview.cpp:108 portage/portagetab.cpp:421
+#: queue/queuetab.cpp:482 core/versionview.cpp:108 portage/portagetab.cpp:421
 msgid "Testing"
 msgstr ""
 
-#: queue/queuetab.cpp:488 portage/portagetab.cpp:426
+#: queue/queuetab.cpp:485 portage/portagetab.cpp:426
 msgid "Stable"
 msgstr ""
 
-#: queue/queuetab.cpp:491 portage/portagetab.cpp:429
+#: queue/queuetab.cpp:488 portage/portagetab.cpp:429
 msgid "Not on %1"
 msgstr ""
 
-#: queue/queuetab.cpp:493 portage/portagetab.cpp:431
+#: queue/queuetab.cpp:490 portage/portagetab.cpp:431
 msgid "Not available"
 msgstr ""
 
-#: queue/queuetab.cpp:538 portage/portagetab.cpp:575 rc.cpp:25 rc.cpp:292
+#: queue/queuetab.cpp:535 portage/portagetab.cpp:575 rc.cpp:25 rc.cpp:292
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: queue/queuetab.cpp:542 portage/portagetab.cpp:579
+#: queue/queuetab.cpp:539 portage/portagetab.cpp:579
 msgid "Add to world"
 msgstr ""
 
-#: queue/queuetab.cpp:544 portage/portagetab.cpp:581
+#: queue/queuetab.cpp:541 portage/portagetab.cpp:581
 msgid "Remove from world"
 msgstr ""
 
@@ -755,7 +755,7 @@ msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
 "view: fast package browsing and searching with filters.<br>Two Column "
-"Selector, Package Inspector, Progress bars, Use-Flag Editor,Emerge and "
+"Selector, Package Inspector, Progress bars, Use-Flag Editor, Emerge and "
 "Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
 "wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-08 19:37+0200\n"
+"POT-Creation-Date: 2006-04-09 12:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -763,7 +763,7 @@ msgstr ""
 msgid "Portage version is upgraded to 2.1. Please refresh package view."
 msgstr ""
 
-#: core/filewatcher.cpp:69 kurooinit.cpp:65
+#: core/filewatcher.cpp:69 kurooinit.cpp:66
 msgid "Portage version"
 msgstr ""
 
@@ -772,17 +772,17 @@ msgstr ""
 msgid "%1d "
 msgstr ""
 
-#: intro/introdlg.cpp:49
+#: intro/introdlg.cpp:48
 msgid "Ok"
 msgstr ""
 
-#: intro/introdlg.cpp:54
+#: intro/introdlg.cpp:53
 msgid ""
 "<qt><table width=300><tr><td>Make backup copies in %1 of following files:</"
 "td></tr>"
 msgstr ""
 
-#: intro/introdlg.cpp:65
+#: intro/introdlg.cpp:64
 msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
@@ -899,17 +899,17 @@ msgid ""
 "Removing unmerged package: Can not find id in database for package %1/%2."
 msgstr ""
 
-#: portage/portage.cpp:299
+#: portage/portage.cpp:308
 msgid ""
 "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
 "Portage."
 msgstr ""
 
-#: portage/portage.cpp:352
+#: portage/portage.cpp:361
 msgid "Loading packages in world. Reading: "
 msgstr ""
 
-#: portage/portage.cpp:370
+#: portage/portage.cpp:379
 msgid "Adding to world. Writing: "
 msgstr ""
 
@@ -1248,48 +1248,59 @@ msgid ""
 "qt>"
 msgstr ""
 
-#: kurooinit.cpp:63
+#: kurooinit.cpp:64
 msgid ""
 "Can not identify portage version!\n"
 "Kuroo can not correctly parse package information.\n"
 "You can select portage version in settings."
 msgstr ""
 
-#: kurooinit.cpp:89
+#: kurooinit.cpp:87
 msgid ""
 "<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:91 kurooinit.cpp:107
+#: kurooinit.cpp:89 kurooinit.cpp:105 kurooinit.cpp:237
 msgid "Initialization"
 msgstr ""
 
-#: kurooinit.cpp:105
+#: kurooinit.cpp:103
 msgid ""
 "<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:140
+#: kurooinit.cpp:138
 msgid "Database structure is changed. Deleting old version of database %1"
 msgstr ""
 
-#: kurooinit.cpp:207
+#: kurooinit.cpp:205
 msgid "Reading: /etc/make.conf"
 msgstr ""
 
-#: kurooinit.cpp:226
+#: kurooinit.cpp:223
 msgid "Reading: /etc/make.profile"
 msgstr ""
 
-#: kurooinit.cpp:278
+#: kurooinit.cpp:238
+msgid ""
+"Kuroo can not detect your architecture!\n"
+"You must select appropriate architecture to proceed.\n"
+"Please select:"
+msgstr ""
+
+#: kurooinit.cpp:242
+msgid "No architecture selected, quitting!"
+msgstr ""
+
+#: kurooinit.cpp:304
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:279
+#: kurooinit.cpp:305
 msgid "User permissions"
 msgstr ""
 

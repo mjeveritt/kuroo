@@ -40,6 +40,7 @@ public:
 public slots:
 	void						init( QObject *parent = 0 );
 	void						slotChanged();
+	void						slotPackageChanged();
 	bool						slotRefresh();
 	
 	bool						slotScan();

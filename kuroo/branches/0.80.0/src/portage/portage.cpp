@@ -78,7 +78,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged();
+		PortageSingleton::Instance()->slotPackageChanged();
 	}
 	
 private:
@@ -241,6 +241,15 @@ void Portage::slotChanged()
 	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	emit signalPortageChanged();
+}
+
+/**
+ * Reload world when new package is installed in case user not using --oneshot.
+ */
+void Portage::slotPackageChanged()
+{
+	loadWorld();
+	slotChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

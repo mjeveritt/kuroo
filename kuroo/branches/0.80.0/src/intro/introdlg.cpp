@@ -45,7 +45,6 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 {
 	setCaption( "Kuroo-" + KurooConfig::hardVersion() );
 	QWizard::backButton()->hide();
-	QWizard::cancelButton()->hide();
 	QWizard::finishButton()->setText( i18n("Ok") );
 	QWizard::showPage( page1 );
 	QWizard::setHelpEnabled( page1, false );
@@ -61,7 +60,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	               "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" 
 	               );
 	
-	introText->setText(   	"<h2>Kuroo-" + KurooConfig::version().section( "_", 0, 0 ) + "</h2><p>" +
+	introText->setText(   	"<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
 					  i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "
 							"software maintenance tasks on gentoo systems</p>"
 							"New features:<br>"

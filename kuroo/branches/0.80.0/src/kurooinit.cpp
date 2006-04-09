@@ -32,6 +32,7 @@
 #include <kstringhandler.h>
 #include <kuser.h>
 #include <kmessagebox.h>
+#include <kinputdialog.h>
 
 /**
  * @class kurooInit
@@ -79,9 +80,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
 		KurooConfig::setSaveLog( false );
-		
-		if ( !KurooConfig::wizard() )
-			getEnvironment();
 		
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
@@ -172,17 +170,17 @@ KurooInit::~KurooInit()
  * arch is found in /etc/make.profile/make.defaults.
  * @return bool			@fixme
  */
-bool KurooInit::getEnvironment()
+void KurooInit::getEnvironment()
 {
 	QString line;
 	bool success( false );
+	KStringHandler kstr;
 	
 	QFile makeconf("/etc/make.conf");
 	if ( makeconf.open(IO_ReadOnly) ) {
 		QTextStream stream(&makeconf);
-		KStringHandler kstr;
 		
-		while (!stream.atEnd()) {
+		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 			
 			if ( line.contains(QRegExp("DISTDIR=")) )
@@ -203,27 +201,53 @@ bool KurooInit::getEnvironment()
 		}
 		makeconf.close();
 	}
-	else {
+	else
 		kdError(0) << i18n("Reading: /etc/make.conf") << LINE_INFO;
-		success = false;
-	}
 	
 	QDir d("/etc/make.profile");
-	QFile f(d.canonicalPath() + "/../make.defaults");
-	
+	QFile f( d.canonicalPath() + "/../make.defaults" );
+	QString arch;
 	if ( f.open(IO_ReadOnly) ) {
 		QTextStream stream(&f);
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
-			if ( line.contains("ARCH=\"") > 0 ) {
-				line = line.section("ARCH=\"", 1, 1);
-				KurooConfig::setArch(line.section("\"", 0, 0));
+			if ( line.contains("ARCH=") > 0 ) {
+				arch = kstr.word( line.section("ARCH=", 1, 1).remove("\"") , "0" );
+				success = true;
+				break;
 			}
 		}
 		f.close();
 	}
-	else
+	else {
 		kdError(0) << i18n("Reading: /etc/make.profile") << LINE_INFO;
+		success = false;
+	}
+	
+	if ( arch.isEmpty() ){
+		QStringList archList;
+		
+		f.setName( "/usr/portage/profiles/arch.list" );
+		if ( f.open(IO_ReadOnly) ) {
+			QTextStream stream(&f);
+			while ( !stream.atEnd() )
+				archList << stream.readLine();
+			f.close();
+			
+			arch = KInputDialog::getItemList( i18n("Initialization"), 
+											i18n("Kuroo can not detect your architecture!\n"
+											     "You must select appropriate architecture to proceed.\n"
+												 "Please select:"), archList, QStringList::QStringList() ).first();
+			if ( arch.isEmpty() ) {
+				kdError(0) << i18n("No architecture selected, quitting!") << LINE_INFO;
+				success = false;
+			}
+			else
+				success = true;
+		}
+	}
+	
+	KurooConfig::setArch( arch );
 	
 	// Add default etc-files warnings
 	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
@@ -242,8 +266,10 @@ bool KurooInit::getEnvironment()
 	                            "virtual/dev-manager\nvirtual/editor\nvirtual/gzip\nvirtual/libc\nvirtual/man\nvirtual/modutils\n"
 	                            "virtual/os-headers\nvirtual/pager\nvirtual/ssh");
 	
+	if ( !success )
+		exit(0);
+	
 	KurooConfig::writeConfig();
-	return success;
 }
 
 

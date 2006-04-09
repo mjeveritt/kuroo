@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.1_080406_db33";
+static const char version[] = "0.80.1_090406a_db33";
 
 static KCmdLineOptions options[] =
 {

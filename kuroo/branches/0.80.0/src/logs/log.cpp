@@ -71,7 +71,9 @@ KIO::Job* Log::backupLog()
 {
 	if ( m_saveLog && m_saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
-		KIO::Job *cpjob = KIO::file_copy( GlobalSingleton::Instance()->kurooDir() + "kuroo.log", GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
+		KIO::Job *cpjob = KIO::file_copy( GlobalSingleton::Instance()->kurooDir() + "kuroo.log", 
+		                                  GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", 
+		                                  -1, true, false, false );
 		return cpjob;
 	}
 	else

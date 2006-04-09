@@ -250,8 +250,6 @@ void PackageInspector::slotApply()
 			myChild = myChild->nextSibling();
 		}
 		
-// 		kdDebug() << "useList=" << useList << endl;
-		
 		// Store in db and save to file
 		if ( !useList.isEmpty() ) {
 			
@@ -820,7 +818,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 			tmpUseList = QStringList::split( " ", use );
 		}
 	}
-	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
+// 	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( tmpUseList.isEmpty() ) {
@@ -846,7 +844,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 		}
 	}
 	//end of better
-	kdDebug() << "useList=" << useList << LINE_INFO;
+// 	kdDebug() << "useList=" << useList << LINE_INFO;
 	
 	QString checkUse = useList.join(", ");
 	if ( !checkUse.remove(", ").remove(" ").isEmpty() ) {
@@ -882,7 +880,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		}
 	}
 	
-	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
+// 	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {

@@ -149,10 +149,9 @@ bool CachePortageJob::doJob()
 						setProgress( count );
 				}
 			}
-			else {
+			else
 				kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << LINE_INFO;
-				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/" << *itCategory << LINE_INFO;
-			}
+			
 		}
 	}
 	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")

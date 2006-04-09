@@ -168,7 +168,6 @@ KurooInit::~KurooInit()
 /**
  * Parse /etc/make.conf for location of Portage directories.
  * arch is found in /etc/make.profile/make.defaults.
- * @return bool			@fixme
  */
 void KurooInit::getEnvironment()
 {
@@ -238,14 +237,19 @@ void KurooInit::getEnvironment()
 											i18n("Kuroo can not detect your architecture!\n"
 											     "You must select appropriate architecture to proceed.\n"
 												 "Please select:"), archList, QStringList::QStringList() ).first();
-			if ( arch.isEmpty() ) {
-				kdError(0) << i18n("No architecture selected, quitting!") << LINE_INFO;
-				success = false;
-			}
-			else
-				success = true;
+		}
+		else {
+			kdError(0) << i18n("Reading: /usr/portage/profiles/arch.list") << LINE_INFO;
+			success = false;
 		}
 	}
+	
+	if ( arch.isEmpty() ) {
+		kdError(0) << i18n("No architecture selected, quitting!") << LINE_INFO;
+		success = false;
+	}
+	else
+		success = true;
 	
 	KurooConfig::setArch( arch );
 	
@@ -271,7 +275,6 @@ void KurooInit::getEnvironment()
 	
 	KurooConfig::writeConfig();
 }
-
 
 /**
  * Run wizard to inform user of latest changes and collect user settings like kuroo DirHome directory,
@@ -301,7 +304,8 @@ void KurooInit::checkUser()
 			return;
 	}
 	
-	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"), 
+	KMessageBox::error( 0, 
+	                    i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
 	                    i18n("User permissions") );
 	exit(0);
 }

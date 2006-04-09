@@ -72,7 +72,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
+	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );

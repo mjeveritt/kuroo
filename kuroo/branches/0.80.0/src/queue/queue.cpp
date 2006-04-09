@@ -61,7 +61,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false );
+		QueueSingleton::Instance()->refresh( false ); // @fixme: Use signal instead?
 	}
 	
 private:
@@ -87,7 +87,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false );
+		QueueSingleton::Instance()->refresh( false ); // @fixme: Use signal instead?
 	}
 	
 private:

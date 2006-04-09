@@ -78,7 +78,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotPackageChanged();
+		SignalistSingleton::Instance()->packageChanged();
 	}
 	
 private:
@@ -113,6 +113,7 @@ public:
 		if ( id.isEmpty() ) {
 			kdWarning(0) << i18n("Removing unmerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
+			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return false;
 		}
@@ -145,13 +146,11 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->clearPackageFromWorld( packageString );
-		PortageSingleton::Instance()->slotChanged();
+		SignalistSingleton::Instance()->packageChanged();
 	}
 	
 private:
 	const QString m_package;
-	QString packageString;
 };
 
 /**
@@ -188,7 +187,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged();
+		PortageSingleton::Instance()->slotChanged(); // @fixme: Use signal instead?
 	}
 	
 private:
@@ -215,6 +214,8 @@ Portage::Portage( QObject *m_parent )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
+	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotPackageChanged() ) );
 	
 	// Start refresh directly after emerge sync
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotRefresh() ) );
@@ -244,7 +245,7 @@ void Portage::slotChanged()
 }
 
 /**
- * Reload world when new package is installed in case user not using --oneshot.
+ * Reload world when new package is installed/removed in case user not using --oneshot.
  */
 void Portage::slotPackageChanged()
 {
@@ -356,6 +357,7 @@ void Portage::loadWorld()
 			QString package = stream.readLine();
 			m_mapWorld[ package.stripWhiteSpace() ] = QString::null;
 		}
+		emit signalWorldChanged();
 	}
 	else
 		kdError(0) << i18n("Loading packages in world. Reading: ") << KurooConfig::dirWorldFile() << LINE_INFO;
@@ -424,11 +426,6 @@ void Portage::removeFromWorld( const QString& package )
 		m_mapWorld = map;
 		emit signalWorldChanged();
 	}
-}
-
-void Portage::clearPackageFromWorld( const QString& package )
-{
-	m_mapWorld.remove( package );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

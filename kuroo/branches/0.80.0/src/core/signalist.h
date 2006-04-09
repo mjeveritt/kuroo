@@ -61,7 +61,6 @@ signals:
 	void 		signalEmergeQueue();
 	void		signalSyncDone();
 	void 		signalScanHistoryComplete();
-	void		signalInstalledChanged();
 	void		signalPackageChanged();
 
 private:

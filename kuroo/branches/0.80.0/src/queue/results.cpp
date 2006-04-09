@@ -78,7 +78,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		ResultsSingleton::Instance()->refresh();
+		ResultsSingleton::Instance()->refresh(); // @fixme: Use signal instead?
 	}
 	
 private:

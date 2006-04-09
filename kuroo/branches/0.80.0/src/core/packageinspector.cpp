@@ -106,8 +106,6 @@ bool PackageInspector::isParentView( int view )
  */
 void PackageInspector::edit( PackageItem* portagePackage, const QString& emergeVersion, int view )
 {
-	DEBUG_LINE_INFO;
-	
 	m_view = view;
 	m_portagePackage = portagePackage;
 	m_package = m_portagePackage->name();

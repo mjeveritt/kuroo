@@ -1,0 +1,10 @@
+11-04-2006
+Fixed tickets:
+76	24h limit in queue
+95	Improved estimated time remaining	
+132	installing specific version doesn't always work
+172	Take backup of user's portage files when running first time
+173	Warn user if attempting to uninstall system packages!
+174	Kuroo "freezes"
+175	can't emerge	
+142	Queue and statusbar

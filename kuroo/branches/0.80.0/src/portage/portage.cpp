@@ -78,7 +78,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		SignalistSingleton::Instance()->packageChanged();
+		PortageSingleton::Instance()->slotPackageChanged();
 	}
 	
 private:
@@ -146,7 +146,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		SignalistSingleton::Instance()->packageChanged();
+		PortageSingleton::Instance()->slotPackageChanged();
 	}
 	
 private:
@@ -214,9 +214,7 @@ Portage::Portage( QObject *m_parent )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
-	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotPackageChanged() ) );
-	
+
 	// Start refresh directly after emerge sync
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotRefresh() ) );
 }
@@ -249,6 +247,8 @@ void Portage::slotChanged()
  */
 void Portage::slotPackageChanged()
 {
+	DEBUG_LINE_INFO;
+	
 	loadWorld();
 	slotChanged();
 }

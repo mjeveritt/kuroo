@@ -564,6 +564,8 @@ void PortageTab::processPackage( bool viewInspector )
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
+	kdDebug() << "viewInspector=" << viewInspector << LINE_INFO;
+	
 	// Refresh inspector if visible
 	if ( viewInspector )
 		m_packageInspector->edit( packagesView->currentPackage(), emergeVersion, VIEW_PORTAGE );

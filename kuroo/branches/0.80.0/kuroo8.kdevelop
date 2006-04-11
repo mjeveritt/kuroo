@@ -146,8 +146,8 @@
   </kdevautoproject>
   <kdevcppsupport>
     <references>
-      <pcs>Qt</pcs>
       <pcs>KDElibs</pcs>
+      <pcs>Qt</pcs>
     </references>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>

@@ -4,6 +4,7 @@
 # Translation of kuroo.po to German
 # This file is distributed under the same license as the Kuroo package.
 # Copyright (C) 2005 karye.
+#
 # Eagle <eagle@eagle-cage.de>, 2005.
 # German Language-Pack <eagle@eagle-cage.de>, 2005.
 # Reiterer Alexander <areitere@pop.tuwien.ac.at>, 2006.
@@ -12,19 +13,18 @@
 # Jan Schnackenberg <yehaa@gmx.de>, 2006.
 # Jan Schnackenberg <YeHaa@gmx.de>, 2006.
 # Karim Ryde <karim@bredband.net>, 2006.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: new-de\n"
+"Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-11 16:39+0200\n"
-"PO-Revision-Date: 2006-04-11 17:37+0200\n"
-"Last-Translator: Jan Schnackenberg <yehaa@gmx.de>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2006-04-11 18:20+0200\n"
+"Last-Translator: Karim Ryde <karim@bredband.net>\n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: portage/uninstallinspector.cpp:32
@@ -501,7 +501,7 @@ msgstr "<font size=\"+1\">Pakete in der Warteschlange</font>"
 #: rc.cpp:246
 #, no-c-format
 msgid "Remove &All"
-msgstr "Alle &löschen"
+msgstr "&Alle entfernen"
 
 #: rc.cpp:252
 #, no-c-format
@@ -1071,12 +1071,12 @@ msgstr "Kuroo"
 #: rc.cpp:643
 #, no-c-format
 msgid "Release information"
-msgstr "&Hinweise zur Veröffentlichung"
+msgstr "Hinweise zur Veröffentlichung"
 
 #: rc.cpp:647
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
-msgstr ""
+msgstr "Sichere alle vom Benutzer veränderbaren Portage-Dateien bevor Kuroo startet."
 
 #: rc.cpp:650
 #, no-c-format

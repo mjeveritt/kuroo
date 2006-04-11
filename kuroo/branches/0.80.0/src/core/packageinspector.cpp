@@ -686,7 +686,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 			dialog->ebuildBrowser->setText( textLines );
 		}
 		else {
-			kdError() << i18n("Loading ebuild. Reading: ") << fileName << LINE_INFO;
+			kdError(0) << "Loading ebuild. Reading: " << fileName << LINE_INFO;
 			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2")
 			                                .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}

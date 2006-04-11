@@ -65,7 +65,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesPackage;
 		if ( !file.open( IO_ReadOnly ) )
-			kdWarning(0) << i18n("Parsing package.keywords. Reading: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdWarning(0) << QString("Parsing package.keywords. Reading: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -115,7 +115,7 @@ public:
 					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 				
 				if ( id.isEmpty() )
-					kdWarning(0) << i18n("Load package keywords: Can not find id in database for package %1/%2.")
+					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
 					.arg( category ).arg( name ) << LINE_INFO;
 				else
 					KurooDBSingleton::Instance()->insert( QString( 
@@ -123,7 +123,7 @@ public:
 					                                      .arg( id ).arg( keywords ), m_db );
 			}
 			else
-				kdWarning(0) << i18n("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+				kdWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
 					.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			
 		}
@@ -161,7 +161,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing package.unmask. Reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdError(0) << QString("Parsing package.unmask. Reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -206,7 +206,7 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << i18n("Load user package unmask: Can not find id in database for package %1/%2.")
+							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KurooDBSingleton::Instance()->insert( QString( 
@@ -215,7 +215,7 @@ public:
 						
 					}
 					else
-						kdWarning(0) << i18n("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
+						kdWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 				}
 			}
@@ -254,7 +254,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing package.mask. Reading: %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+			kdError(0) << QString("Parsing package.mask. Reading: %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -299,7 +299,7 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << i18n("Parsing package.mask. Can not find id in database for package %1/%2.")
+							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KurooDBSingleton::Instance()->insert( QString( 
@@ -308,7 +308,7 @@ public:
 
 					}
 					else
-						kdWarning(0) << i18n("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+						kdWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
 				}
 			}
@@ -347,7 +347,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing user package.mask. Reading: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdError(0) << QString("Parsing user package.mask. Reading: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -392,7 +392,7 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << i18n("Parsing user package.mask. Can not find id in database for package %1/%2.")
+							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
 								.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KurooDBSingleton::Instance()->insert( QString( 
@@ -401,7 +401,7 @@ public:
 						
 					}
 					else
-						kdWarning(0) << i18n("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
+						kdWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 				}
 			}
@@ -439,7 +439,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesUse;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing user package.use. Reading: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdError(0) << QString("Parsing user package.use. Reading: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
@@ -470,7 +470,7 @@ public:
 				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 			
 			if ( id.isEmpty() )
-				kdWarning(0) << i18n("Parsing user package.use. Can not find id in database for package %1/%2.")
+				kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
 					.arg( category ).arg( name ) << LINE_INFO;
 			else
 				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )
@@ -511,7 +511,7 @@ public:
 			" AND package.id = packageKeywords.idPackage "
 			";" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No package keywords found. Saving to %1 aborted!")
+			kdWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
@@ -519,7 +519,7 @@ public:
 		QFile file( KurooConfig::filePackageKeywords() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -553,7 +553,7 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask ;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No user mask depend atom found. Saving to %1 aborted!")
+			kdWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
@@ -561,7 +561,7 @@ public:
 		QFile file( KurooConfig::filePackageUserMask() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -590,7 +590,7 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No user unmask depend atom found. Saving to %1 aborted!")
+			kdWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
@@ -598,7 +598,7 @@ public:
 		QFile file( KurooConfig::filePackageUserUnMask() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -631,14 +631,14 @@ public:
 			" AND package.id = packageUse.idPackage "
 			";" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserUse() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		

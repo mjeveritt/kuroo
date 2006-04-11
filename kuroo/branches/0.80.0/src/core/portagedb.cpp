@@ -229,24 +229,24 @@ void KurooDB::createTables( DbConnection *conn )
 	
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " name VARCHAR(32) UNIQUE ); "
-	      " CREATE INDEX index_name_category ON category (name)"
-	      " ;", conn);
+	      " name VARCHAR(32) UNIQUE );"
+// 	      " CREATE INDEX index_name_category ON category (name)"
+	      , conn);
 	
 	query(" CREATE TABLE subCategory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32), "
-	      " idCategory INTEGER); "
-	      " CREATE INDEX index_name_subCategory ON subCategory (name)"
-	      " ;", conn);
+	      " idCategory INTEGER );"
+// 	      " CREATE INDEX index_name_subCategory ON subCategory (name)"
+	      , conn);
 	
 	query(" CREATE TABLE catSubCategory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32) UNIQUE, "
 	      " idCategory INTEGER, "
-	      " idSubCategory INTEGER);"
-	      " CREATE INDEX index_name_catSubCategory ON catSubCategory (name)"
-	      " ;", conn);
+	      " idSubCategory INTEGER );"
+// 	      " CREATE INDEX index_name_catSubCategory ON catSubCategory (name)"
+	      , conn);
 	
 	query(" CREATE TABLE package ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -260,10 +260,9 @@ void KurooDB::createTables( DbConnection *conn )
 	      " date VARCHAR(32), "
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
-	      " updateVersion VARCHAR(32) "
-	      " ); "
+	      " updateVersion VARCHAR(32) ); "
 	      " CREATE INDEX index_name_package ON package (name);"
-	      " CREATE INDEX index_description ON package (description);"
+// 	      " CREATE INDEX index_description ON package (description);"
 	      , conn);
 	
 	query(" CREATE TABLE version ("
@@ -278,8 +277,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " size VARCHAR(32), "
 	      " status INTEGER, "
 	      " path VARCHAR(64), "
-	      " branch VARCHAR(32)"
-	      " );", conn);
+	      " branch VARCHAR(32) );"
+	      , conn);
 	
 	query(" CREATE TABLE queue ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -287,8 +286,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idDepend INTEGER, "
 	      " use VARCHAR(255), "
 	      " size VARCHAR(32), "
-	      " version VARCHAR(32) "
-	      " );", conn);
+	      " version VARCHAR(32) );"
+	      , conn);
 	
 	query(" CREATE TABLE history ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -296,61 +295,61 @@ void KurooDB::createTables( DbConnection *conn )
 	      " timestamp VARCHAR(10), "
 	      " time INTEGER, "
 	      " einfo BLOB, "
-	      " emerge BOOL)"
-	      " ;", conn);
+	      " emerge BOOL );"
+	      , conn);
 	
 	query(" CREATE TABLE mergeHistory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " timestamp VARCHAR(10), "
 	      " source VARCHAR(255), "
-	      " destination VARCHAR(255))"
-	      " ;", conn);
+	      " destination VARCHAR(255) );"
+	      , conn);
 	
 	query(" CREATE TABLE statistic ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " package VARCHAR(32), "
 	      " time INTEGER, "
-	      " count INTEGER)"
-	      " ;", conn);
+	      " count INTEGER );"
+	      , conn);
 	
 	query(" CREATE TABLE cache ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " package VARCHAR(32), "
-	      " size VARCHAR(10))"
-	      " ;", conn);
+	      " size VARCHAR(10) );"
+	      , conn);
 	
 	query(" CREATE TABLE packageHardMask ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " dependAtom VARCHAR(255), "
-	      " comment BLOB )"
-	      " ;", conn);
+	      " comment BLOB );"
+	      , conn);
 	
 	query(" CREATE TABLE packageUserMask ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
-	      " comment BLOB )"
-	      " ;", conn);
+	      " comment BLOB );"
+	      , conn);
 	
 	query(" CREATE TABLE packageUnmask ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
-	      " comment BLOB )"
-	      " ;", conn);
+	      " comment BLOB );"
+	      , conn);
 	
 	query(" CREATE TABLE packageKeywords ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
-	      " keywords VARCHAR(255) )"
-	      " ;", conn);
+	      " keywords VARCHAR(255) );"
+	      , conn);
 	
 	query(" CREATE TABLE packageUse ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
-	      " use VARCHAR(255) )"
-	      " ;", conn);
+	      " use VARCHAR(255) );"
+	      , conn);
 }
 
 
@@ -378,7 +377,7 @@ void KurooDB::backupDb()
 			file.close();
 		}
 		else
-			kdError(0) << i18n("Creating backup of history. Writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
+			kdError(0) << QString("Creating backup of history. Writing: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
 	}
 	
 	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory;" );
@@ -395,7 +394,7 @@ void KurooDB::backupDb()
 			file.close();
 		}
 		else
-			kdError(0) << i18n("Creating backup of history. Writing: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
+			kdError(0) << QString("Creating backup of history. Writing: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
 	}
 }
 
@@ -411,7 +410,7 @@ void KurooDB::restoreBackup()
 	QTextStream stream( &file );
 	QStringList lines;
 	if ( !file.open( IO_ReadOnly ) )
-		kdError(0) << i18n("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
+		kdError(0) << QString("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -432,7 +431,7 @@ void KurooDB::restoreBackup()
 	stream.setDevice( &file );
 	lines.clear();
 	if ( !file.open( IO_ReadOnly ) )
-		kdError(0) << i18n("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
+		kdError(0) << QString("Restoring backup of history. Reading: %1.").arg( KurooConfig::fileMergeBackup() ) << LINE_INFO;
 	else {
 		while ( !stream.atEnd() )
 			lines += stream.readLine();
@@ -695,7 +694,7 @@ QString KurooDB::package( const QString& id )
 	if ( !name.isEmpty() )
 		return name;
 	else
-		kdWarning(0) << i18n("Can not find package in database for id %1.").arg( id ) << LINE_INFO;
+		kdWarning(0) << QString("Can not find package in database for id %1.").arg( id ) << LINE_INFO;
 	
 	return QString::null;
 }
@@ -713,7 +712,7 @@ QString KurooDB::category( const QString& id )
 	if ( !category.isEmpty() )
 		return category;
 	else
-		kdWarning(0) << i18n("Can not find category in database for id %1.").arg( id ) << LINE_INFO;
+		kdWarning(0) << QString("Can not find category in database for id %1.").arg( id ) << LINE_INFO;
 	
 	return QString::null;
 }
@@ -738,11 +737,11 @@ QString KurooDB::packageId( const QString& package )
 		if ( !id.isEmpty() )
 			return id;
 		else
-			kdWarning(0) << i18n("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << LINE_INFO;
+			kdWarning(0) << QString("Can not find id in database for package %1/%2.").arg( category ).arg( name ) << LINE_INFO;
 
 	}
 	else
-		kdWarning(0) << i18n("Querying for package id. Can not parse: ") << packageString << LINE_INFO;
+		kdWarning(0) << "Querying for package id. Can not parse: " << packageString << LINE_INFO;
 
 	
 	return QString::null;
@@ -1118,11 +1117,11 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 		file.readLine(format, 50);
 		
 		if ( !format.startsWith( "SQLite format 3" ) )
-			kdWarning(0) << i18n("Database versions incompatible. Removing and rebuilding database.") << LINE_INFO;
+			kdWarning(0) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
 
 		else
 			if ( sqlite3_open( path, &m_db ) != SQLITE_OK ) {
-				kdWarning(0) << i18n("Database file corrupt. Removing and rebuilding database.") << LINE_INFO;
+				kdWarning(0) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
 				sqlite3_close(m_db);
 			}
 			else

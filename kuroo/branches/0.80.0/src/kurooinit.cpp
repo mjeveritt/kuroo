@@ -135,7 +135,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		
 		KurooDBSingleton::Instance()->destroy();
 		remove( database );
-		kdWarning(0) << i18n("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
+		kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 		
 		// and recreate with new structure
 		KurooDBSingleton::Instance()->init( this );
@@ -201,7 +201,7 @@ void KurooInit::getEnvironment()
 		makeconf.close();
 	}
 	else
-		kdError(0) << i18n("Reading: /etc/make.conf") << LINE_INFO;
+		kdError(0) << "Reading: /etc/make.conf" << LINE_INFO;
 	
 	QDir d("/etc/make.profile");
 	QFile f( d.canonicalPath() + "/../make.defaults" );
@@ -219,7 +219,7 @@ void KurooInit::getEnvironment()
 		f.close();
 	}
 	else {
-		kdError(0) << i18n("Reading: /etc/make.profile") << LINE_INFO;
+		kdError(0) << "Reading: /etc/make.profile" << LINE_INFO;
 		success = false;
 	}
 	
@@ -239,13 +239,13 @@ void KurooInit::getEnvironment()
 												 "Please select:"), archList, QStringList::QStringList() ).first();
 		}
 		else {
-			kdError(0) << i18n("Reading: /usr/portage/profiles/arch.list") << LINE_INFO;
+			kdError(0) << "Reading: /usr/portage/profiles/arch.list" << LINE_INFO;
 			success = false;
 		}
 	}
 	
 	if ( arch.isEmpty() ) {
-		kdError(0) << i18n("No architecture selected, quitting!") << LINE_INFO;
+		kdError(0) << "No architecture selected, quitting!" << LINE_INFO;
 		success = false;
 	}
 	else

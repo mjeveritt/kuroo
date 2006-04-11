@@ -69,12 +69,12 @@ bool ScanUpdatesJob::doJob()
 	DEBUG_LINE_INFO;
 	
 	if ( !m_db->isConnected() ) {
-		kdError(0) << i18n("Scanning updates. Can not connect to database") << LINE_INFO;
+		kdError(0) << "Scanning updates. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 	
 	if ( m_packageList.isEmpty() )
-		kdWarning(0) << i18n("Scanning updates. No update package found") << LINE_INFO;
+		kdWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
 	
 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );
@@ -106,7 +106,7 @@ bool ScanUpdatesJob::doJob()
 
 		// Abort the scan
 		if ( isAborted() ) {
-			kdWarning(0) << i18n("Scanning updates. Scan aborted!") << LINE_INFO;
+			kdWarning(0) << "Scanning updates. Scan aborted!" << LINE_INFO;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -120,7 +120,7 @@ bool ScanUpdatesJob::doJob()
 			" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 		
 		if ( id.isEmpty() ) {
-			kdWarning(0) << i18n("Scanning updates. Can not find id in database for package %1/%2.")
+			kdWarning(0) << QString("Scanning updates. Can not find id in database for package %1/%2.")
 				.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 		}
 		else {

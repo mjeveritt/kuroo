@@ -40,7 +40,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdWarning(0) << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			kdWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -54,7 +54,7 @@ public:
 		
 		if ( id.isEmpty() ) {
 			
-			kdWarning(0) << i18n("Inserting emerged package: Can not find id in database for package %1/%2.")
+			kdWarning(0) << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
@@ -99,7 +99,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdWarning(0) << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			kdWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -111,7 +111,7 @@ public:
 			.arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
-			kdWarning(0) << i18n("Removing unmerged package: Can not find id in database for package %1/%2.")
+			kdWarning(0) << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
@@ -306,7 +306,7 @@ bool Portage::slotScan()
 			break;
 		
 		if ( maxLoops-- == 0 ) {
-			kdWarning(0) << i18n("Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.") << LINE_INFO;
+			kdWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
 			break;
 		}
 	}
@@ -360,7 +360,7 @@ void Portage::loadWorld()
 		emit signalWorldChanged();
 	}
 	else
-		kdError(0) << i18n("Loading packages in world. Reading: ") << KurooConfig::dirWorldFile() << LINE_INFO;
+		kdError(0) << "Loading packages in world. Reading: " << KurooConfig::dirWorldFile() << LINE_INFO;
 }
 
 /**
@@ -378,7 +378,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 		return true;
 	}
 	else
-		kdError(0) << i18n("Adding to world. Writing: ") << KurooConfig::dirWorldFile() << LINE_INFO;
+		kdError(0) << "Adding to world. Writing: " << KurooConfig::dirWorldFile() << LINE_INFO;
 	
 	return false;
 }

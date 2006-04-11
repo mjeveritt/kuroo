@@ -310,7 +310,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				m_emergePackageList.prepend( emergePackage );
 			}
 			else
-				kdWarning(0) << i18n("Collecting emerge output. Can not parse: ") << packageVersion << LINE_INFO;
+				kdWarning(0) << "Collecting emerge output. Can not parse: " << packageVersion << LINE_INFO;
 
 		}
 		

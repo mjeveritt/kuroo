@@ -579,7 +579,7 @@ void PackageInspector::loadUseFlagDescription()
 		f.close();
 	}
 	else
-		kdError(0) << i18n( "Loading use flag description. Reading: " ) << useFile << LINE_INFO;
+		kdError(0) << "Loading use flag description. Reading: " << useFile << LINE_INFO;
 }
 
 /**
@@ -658,7 +658,7 @@ void PackageInspector::loadChangeLog()
 			dialog->changelogBrowser->setText( textLines );
 		}
 		else {
-			kdError(0) << i18n("Loading changelog. Reading: ") << fileName << LINE_INFO;
+			kdError(0) << "Loading changelog. Reading: " << fileName << LINE_INFO;
 			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2")
 			                                   .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
@@ -717,7 +717,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			dialog->dependencyBrowser->setText( textLines );
 		}
 		else {
-			kdError(0) << i18n("Loading dependencies. Reading: ") << fileName << LINE_INFO;
+			kdError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;
 			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
 			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
@@ -746,7 +746,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 			dialog->installedFilesBrowser->setText( textLines );
 		}
 		else {
-			kdError(0) << i18n( "Loading installed files list. Reading: " ) << filename << LINE_INFO;
+			kdError(0) << "Loading installed files list. Reading: " << filename << LINE_INFO;
 			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2")
 			                                        .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}

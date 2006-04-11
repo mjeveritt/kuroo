@@ -53,7 +53,7 @@ public:
 				" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 			
 			if ( id.isEmpty() ) {
-				kdWarning(0) << i18n("Add result package list: Can not find id in database for package %1/%2.")
+				kdWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
 					.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 				return false;
 			}

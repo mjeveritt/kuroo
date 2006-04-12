@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#define DEBUG_PREFIX "PortageTab"
-
 #include "common.h"
 #include "search.h"
 #include "categorieslistview.h"
@@ -72,7 +70,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
-	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
@@ -152,6 +150,8 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
+	DEBUG_LINE_INFO;
+	
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		pbUninstall->setDisabled( true );
@@ -197,6 +197,7 @@ void PortageTab::slotButtons()
 	// Toggle queue button between add/remove
 	if ( packagesView->currentPackage()->isInPortage() ) {
 		pbQueue->setDisabled( false );
+		
 		if ( packagesView->currentPackage()->isQueued() )
 			pbQueue->setText( i18n("Remove from Queue") );
 		else

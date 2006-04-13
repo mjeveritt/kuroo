@@ -101,7 +101,7 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 	setFrameShape( QFrame::NoFrame );
 	setSorting( -1 );
 	
-	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( storeFocus( QListViewItem* ) ) );
+	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotStoreFocus( QListViewItem* ) ) );
 }
 
 CategoriesView::~CategoriesView()
@@ -112,7 +112,7 @@ CategoriesView::~CategoriesView()
  * Retreive focus category when a new category is made current.
  * @categoryItem*
  */
-void CategoriesView::storeFocus( QListViewItem* item )
+void CategoriesView::slotStoreFocus( QListViewItem* item )
 {
 	m_focus = item->text(0);
 }

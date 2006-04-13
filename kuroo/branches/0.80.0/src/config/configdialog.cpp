@@ -55,7 +55,7 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
 	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
-	connect( this, SIGNAL( settingsChanged() ), this, SLOT( saveAll() ) );
+	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
 	
 	readMakeConf();
 }
@@ -70,7 +70,7 @@ void ConfigDialog::slotDefault()
 	show();
 }
 
-QStringList ConfigDialog::parseMakeConf()
+const QStringList ConfigDialog::parseMakeConf()
 {
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );
@@ -458,7 +458,7 @@ void ConfigDialog::readMakeConf()
 /**
  * Save settings when user press "Apply".
  */
-void ConfigDialog::saveAll()
+void ConfigDialog::slotSaveAll()
 {
 	switch( activePageIndex() ) {
 		

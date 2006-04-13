@@ -42,7 +42,7 @@ public:
 	const QString							currentCategoryId();
 	
 protected slots:
-	void									storeFocus( QListViewItem* item );
+	void									slotStoreFocus( QListViewItem* item );
 	
 protected:
 	void									restoreFocus( bool isFiltered );

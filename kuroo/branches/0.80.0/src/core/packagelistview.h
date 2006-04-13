@@ -41,21 +41,15 @@ public:
 public:
 	virtual	void				resetListView();
 	virtual	PackageItem* 		packageItemById( const QString& id );
-	
 	virtual const QString		currentId();
 	int							currentItemStatus();
 	virtual PackageItem* 		currentPackage();
-	
 	virtual const QStringList	selectedId();
 	virtual const QStringList	selectedPackages();
-	
 	virtual const QStringList	allId();
 	virtual const QStringList	allPackages();
-	
 	virtual const QString		count();
-	
-public slots:
-	void						slotNextPackage( bool isPrevious );
+	void						nextPackage( bool isPrevious );
 	
 protected slots:
 	void						rollOver( QListViewItem* item );

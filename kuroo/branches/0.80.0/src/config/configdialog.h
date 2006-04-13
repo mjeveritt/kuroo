@@ -18,7 +18,7 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef CONFIGDIALOG_H 
+#ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
 #include <kconfigdialog.h>
@@ -39,12 +39,14 @@ public:
 	ConfigDialog( QWidget *parent, const char *name, KConfigSkeleton *config );
 	~ConfigDialog();
 	
+private:
+	const QStringList 	parseMakeConf();
+	void 				readMakeConf();
+	bool 				saveMakeConf();
+	
 private slots:
-	QStringList parseMakeConf();
-	void readMakeConf();
-	bool saveMakeConf();
-	void saveAll();
-	void slotDefault();
+	void 				slotSaveAll();
+	void 				slotDefault();
 };
 
 #endif

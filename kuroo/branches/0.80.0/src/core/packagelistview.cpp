@@ -222,7 +222,7 @@ const QString PackageListView::count()
  * Move to next package in listview.
  * @param isUp true is previous, false is next
  */
-void PackageListView::slotNextPackage( bool isPrevious )
+void PackageListView::nextPackage( bool isPrevious )
 {
 	if ( isVisible() ) {
 		QListViewItem* item = currentItem();

@@ -54,7 +54,7 @@ Pythonizer::~Pythonizer()
 
 QStringList Pythonizer::getPackages( char *pyModule )
 {
-	PyObject *pName, *pModule, *pDict, *pFunc, *pValue, *pArgs, *pClass, *pInstance;
+	PyObject *pName, *pModule, *pDict, *pValue, *pClass, *pInstance;
 	
 	// Initialize the Python Interpreter
 	Py_Initialize();
@@ -84,12 +84,14 @@ QStringList Pythonizer::getPackages( char *pyModule )
 	
 	if ( PyErr_Occurred() ) {
 		PyErr_Print();
+		PyErr_Clear();
 		return QStringList::QStringList();
 	}
 	
 	PyObject *iterator = PyObject_GetIter( pValue );
 	if ( iterator == NULL ) {
 		PyErr_Print();
+		PyErr_Clear();
 		return QStringList::QStringList();
 	}
 	
@@ -104,11 +106,17 @@ QStringList Pythonizer::getPackages( char *pyModule )
 	Py_DECREF( iterator );
 	
     // Clean up
+	Py_DECREF( pValue );
+	Py_DECREF( pInstance );
+	Py_DECREF( pClass );
+// 	Py_DECREF( pDict );
 	Py_DECREF( pModule );
 	Py_DECREF( pName );
 	
+// 	PyErr_Clear();
+	
 	// Finish the Python Interpreter
 	Py_Finalize();
-	
+		
 	return packageList;
 }

@@ -24,7 +24,6 @@
 #include <qobject.h>
 
 #include "portagebase.h"
-#include "scanportagejob.h"
 
 class CategoriesListView;
 class KPopupMenu;

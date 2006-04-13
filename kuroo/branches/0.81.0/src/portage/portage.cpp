@@ -19,8 +19,6 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "scanportagejob.h"
-#include "cacheportagejob.h"
 #include "scanupdatesjob.h"
 #include "loadportagejob.h"
 
@@ -210,8 +208,7 @@ private:
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )
 {
-	// When cache scan is done go one scanning portage for all packages
-	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
+
 	// Then portage scan is completed
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotScanCompleted() ) );
 	
@@ -339,8 +336,8 @@ void Portage::slotScanCompleted()
 	slotChanged();
 	
 	// Go on with checking for updates
-	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
-		slotRefreshUpdates();
+// 	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
+// 		slotRefreshUpdates();
 }
 
 

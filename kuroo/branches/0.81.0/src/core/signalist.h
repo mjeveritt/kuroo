@@ -43,7 +43,6 @@ public:
 	bool		isKurooBusy();
 	void		scanStarted();
 	void		syncDone();
-	void		cachePortageComplete();
 	void 		scanPortageComplete();
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
@@ -52,9 +51,7 @@ public:
 	
 signals:
 	void		signalKurooBusy( bool b );
-	void		signalCachePortageComplete();
 	void 		signalScanPortageComplete();
-	void 		signalScanInstalledComplete();
 	void 		signalScanUpdatesComplete();
 	void 		signalLoadUpdatesComplete();
 	void 		signalEmergeQueue();

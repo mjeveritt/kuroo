@@ -76,6 +76,8 @@ bool Signalist::isKurooBusy()
  */
 void Signalist::setKurooBusy( bool busy )
 {
+	DEBUG_LINE_INFO;
+	
 	static int busySession(0);
 	
 	if ( !busy ) {
@@ -121,15 +123,6 @@ void Signalist::syncDone()
 void Signalist::scanStarted()
 {
 	setKurooBusy( true );
-}
-
-/**
- * Portage scan thread completed.
- */
-void Signalist::cachePortageComplete()
-{
-	emit signalCachePortageComplete();
-	setKurooBusy( false );
 }
 
 /**

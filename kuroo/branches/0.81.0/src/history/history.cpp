@@ -21,7 +21,6 @@
 #include "common.h"
 #include "packageemergetime.h"
 #include "scanhistoryjob.h"
-#include "cacheportagejob.h"
 
 #include <qdatetime.h>
 

@@ -39,9 +39,9 @@ Emerge::Emerge( QObject* m_parent )
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
   
-	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
-	#endif
+// 	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+// 	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
+// 	#endif
 }
 
 Emerge::~Emerge()
@@ -518,6 +518,8 @@ void Emerge::slotCleanupSync( KProcess* proc )
  */
 void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 {
+	DEBUG_LINE_INFO;
+	
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 	

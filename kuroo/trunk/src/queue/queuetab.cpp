@@ -165,7 +165,7 @@ void QueueTab::slotNextPackage( bool isNext )
 	if ( !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
-	queueView->slotNextPackage( isNext );
+	queueView->nextPackage( isNext );
 }
 
 

@@ -129,7 +129,7 @@ void PortageTab::slotNextPackage( bool isNext )
 	if ( !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	
-	packagesView->slotNextPackage( isNext );
+	packagesView->nextPackage( isNext );
 }
 
 

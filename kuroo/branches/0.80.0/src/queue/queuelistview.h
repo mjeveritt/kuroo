@@ -40,26 +40,26 @@ public:
 
 	class					QueueItem;
 	
+	const QStringList		allPackagesNoChildren();
+	const QStringList		allEndUserPackages();
+	void 					insertPackageList( bool hasCheckedQueue );
+	long			 		totalDuration();
+	const QString		 	totalSize();
+	
 public slots:
 	void					slotPackageUp();
 	void					slotPackageDown();
-	QStringList				allPackagesNoChildren();
-	QStringList				allEndUserPackages();
-	void 					insertPackageList( bool hasCheckedQueue );
-	void					clearQueuePackageUse();
-	
-	long			 		totalDuration();
-	
-	QString		 			totalSize();
 	void					slotPackageComplete( const QString& id );
 	void					slotPackageStart( const QString& id );
 	void					slotPackageProgress();
 	
-private slots:
-	void					viewportResizeEvent(QResizeEvent *e);
-	void					slotHideBars( QListViewItem* item );
-	QString		 			formatSize( const QString& sizeString );
+private:
+	void					viewportResizeEvent( QResizeEvent* );
+	const QString		 	formatSize( const QString& sizeString );
 	void 					addSize( const QString& size );
+	
+private slots:
+	void					slotHideBars( QListViewItem* item );
 	
 signals:
 	void					signalPackageEmerged();

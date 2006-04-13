@@ -45,6 +45,8 @@
 KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
+	DEBUG_LINE_INFO;
+	
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
@@ -92,7 +94,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
 				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
 			}
-			d.setCurrent(GlobalSingleton::Instance()->kurooDir());
+			
+			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
 		}
 	}
 	

@@ -50,7 +50,7 @@
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), 
-	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ), m_emergeVersion( QString::null ),
+	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ),
 	m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
 	m_isVirginState( true ), m_stabilityBefore ( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
 	m_hardMaskComment( QString::null )
@@ -101,18 +101,55 @@ bool PackageInspector::isParentView( int view )
 }
 
 /**
+ * Update the Inspector gui with new version data.
+ */
+void PackageInspector::updateVersionData()
+{
+	// Clear text browsers and dropdown menus
+	dialog->versionsView->clear();
+	dialog->cbVersionsEbuild->clear();
+	dialog->cbVersionsDependencies->clear();
+	dialog->cbVersionsInstalled->clear();
+	dialog->cbVersionsUse->clear();
+	dialog->cbVersionsSpecific->clear();
+	
+	foreach ( m_portagePackage->versionDataList() ) {
+		QString version = *it++;
+		QString stability = *it++;
+		QString size = *it++;
+		bool isInstalled = ( *it == "1" );
+		
+		dialog->cbVersionsEbuild->insertItem( version );
+		dialog->cbVersionsDependencies->insertItem( version );
+		dialog->cbVersionsUse->insertItem( version );
+		dialog->cbVersionsSpecific->insertItem( version );
+		
+		dialog->versionsView->insertItem( version, stability, size, isInstalled );
+		
+		if ( isInstalled )
+			dialog->cbVersionsInstalled->insertItem( version );
+	}
+	
+	// Set active version in Inspector dropdown menus
+	dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
+	dialog->cbVersionsEbuild->setCurrentText( m_portagePackage->emergeVersion() );
+	dialog->cbVersionsDependencies->setCurrentText( m_portagePackage->emergeVersion() );
+	dialog->cbVersionsUse->setCurrentText( m_portagePackage->emergeVersion() );
+	dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
+}
+
+/**
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PackageItem* portagePackage, const QString& emergeVersion, int view )
+void PackageInspector::edit( PackageItem* portagePackage, int view )
 {
 	m_view = view;
 	m_portagePackage = portagePackage;
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
-	m_emergeVersion = emergeVersion;
 	
-	dialog->cbVersionsSpecific->setCurrentText( m_emergeVersion );
+	updateVersionData();
 	
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
@@ -378,7 +415,7 @@ void PackageInspector::showSettings()
 	if ( !userMaskVersion.isEmpty() ) {
 		dialog->rbVersionsSpecific->setChecked( true );
 		dialog->cbVersionsSpecific->setDisabled( false );
-		dialog->cbVersionsSpecific->setCurrentText( m_emergeVersion );
+		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
 	}
 	else {
 		dialog->ckbAvailable->setChecked( false );
@@ -532,6 +569,8 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 			if ( !useItem->text(0).startsWith( "+" ) )
 				useItem->setText( 0, use.insert(0, "+") );
 
+		case ( QCheckListItem::NoChange ) :
+		;
 	}
 	
 	enableButtonApply( true );

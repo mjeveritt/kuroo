@@ -104,7 +104,7 @@ void Global::setKurooView( QWidget* view )
 /**
  * Kuroo widget id so MessageBox's can be made modal.
  */
-const long Global::kurooViewId()
+const long& Global::kurooViewId()
 {
 	return	m_wId;
 }
@@ -112,7 +112,7 @@ const long Global::kurooViewId()
 /**
  * Return KDE background color-theme.
  */
-const QString Global::bgHexColor()
+const QString& Global::bgHexColor()
 {
 	return m_bgColor;
 }
@@ -120,7 +120,7 @@ const QString Global::bgHexColor()
 /**
  * Return KDE foreground color-theme.
  */
-const QString Global::fgHexColor()
+const QString& Global::fgHexColor()
 {
 	return m_fgColor;
 }

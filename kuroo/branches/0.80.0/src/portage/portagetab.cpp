@@ -70,7 +70,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageChanged() ), this, SLOT( slotButtons() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageQueueChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
@@ -394,108 +394,28 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
-	DEBUG_LINE_INFO;
-	
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	
-	// Clear summary and Inspector text browsers and dropdown menus
 	summaryBrowser->clear();
-	m_packageInspector->dialog->versionsView->clear();
-	m_packageInspector->dialog->cbVersionsEbuild->clear();
-	m_packageInspector->dialog->cbVersionsDependencies->clear();
-	m_packageInspector->dialog->cbVersionsInstalled->clear();
-	m_packageInspector->dialog->cbVersionsUse->clear();
-	m_packageInspector->dialog->cbVersionsSpecific->clear();
 	
 	// Initialize the portage package object with the current package and it's versions data
-	packagesView->currentPackage()->initVersions();
-	QString package( packagesView->currentPackage()->name() );
-	QString category( packagesView->currentPackage()->category() );
-	
-	// Now parse sorted list of versions for current package
-	QString version, emergeVersion, linesAvailable, linesInstalled, linesEmergeVersion, description, homepage;
-	QValueList<PackageVersion*> sortedVersions = packagesView->currentPackage()->sortedVersionList();
-	bool versionNotInArchitecture( false );
-	QValueList<PackageVersion*>::iterator sortedVersionIterator;
-	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		
-		// Load all dropdown menus in the inspector with relevant versions
-		m_packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
-		m_packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
-		m_packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
-		m_packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
-		
-		version = (*sortedVersionIterator)->version();
-		
-		// Mark official version stability for version listview
-		QString stability;
-		if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
-			stability = i18n("Hardmasked");
-			version = "<font color=darkRed><i>" + version + "</i></font>";
-		}
-		else
-			if ( (*sortedVersionIterator)->isOriginalTesting() ) {
-				stability = i18n("Testing");
-				version = "<i>" + version + "</i>";
-			}
-			else
-				if ( (*sortedVersionIterator)->isAvailable() )
-					stability = i18n("Stable");
-				else
-					if ( (*sortedVersionIterator)->isNotArch() )
-						stability = i18n("Not on %1").arg( KurooConfig::arch() );
-					else
-						stability = i18n("Not available");
-		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << endl;
-		
-		// Insert version in Inspector version view
-		m_packageInspector->dialog->versionsView->insertItem( 
-			(*sortedVersionIterator)->version(), stability, (*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
-		
-		// Create nice summary showing installed packages
-		if ( (*sortedVersionIterator)->isInstalled() ) {
-			version = "<b>" + version + "</b>";
-			linesInstalled.prepend( version + " (" + stability + "), " );
-			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
-		}
-		
-		// Collect all available packages except those not in users arch
-		if ( (*sortedVersionIterator)->isAvailable() ) {
-			emergeVersion = (*sortedVersionIterator)->version();
-			linesEmergeVersion = version + " (" + stability + ")";
-			linesAvailable.prepend( version + ", " );
-		}
-		else {
-			if ( (*sortedVersionIterator)->isNotArch() )
-				versionNotInArchitecture = true;
-			else
-				linesAvailable.prepend( version + ", " );
-		}
-		
-		description = (*sortedVersionIterator)->description();
-		homepage = (*sortedVersionIterator)->homepage();
-	}
-	
-	// Update current package with description from latest version
-	packagesView->currentPackage()->setDescription( description );
-
-	// Remove trailing commas
-	linesInstalled.truncate( linesInstalled.length() - 2 );
-	linesAvailable.truncate( linesAvailable.length() - 2 );
+	packagesView->currentPackage()->parsePackageVersions();
+	QString linesInstalled = packagesView->currentPackage()->linesInstalled();
+	QString linesAvailable = packagesView->currentPackage()->linesAvailable();
+	QString linesEmerge = packagesView->currentPackage()->linesEmerge();
 	
 	// Build summary html-view
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
-	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#"
-		+ GlobalSingleton::Instance()->fgHexColor() + "><font size=\"+1\">" + package + "</font> ";
-	lines += "(" + category.section( "-", 0, 0 ) + "/";
-	lines += category.section( "-", 1, 1 ) + ")</b></font></td></tr>";
+	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#";
+	lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=\"+1\">" + packagesView->currentPackage()->name() + "</font> ";
+	lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
+	lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</b></font></td></tr>";
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
-		lines += "<tr><td colspan=2>" + description + "</td></tr>";
-		lines += "<tr><td colspan=2>" + i18n("<b>Homepage: </b>") + "<a href=\"" + homepage;
-		lines += "\">" + homepage + "</a></td></tr>";
+		lines += "<tr><td colspan=2>" + packagesView->currentPackage()->description() + "</td></tr>";
+		lines += "<tr><td colspan=2>" + i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPackage()->homepage();
+		lines += "\">" + packagesView->currentPackage()->homepage() + "</a></td></tr>";
 	}
 	else
 		lines += i18n("%1Package not available in Portage tree anymore!%2")
@@ -515,32 +435,26 @@ void PortageTab::processPackage( bool viewInspector )
 						.arg("</b></font></td><td width=90%>")
 						.arg("Not installed")
 						.arg("</td></tr>");
+	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 	
 		// Construct emerge version line
-		if ( !linesEmergeVersion.isEmpty() ) {
-			
-			// Set active version in Inspector dropdown menus
-			m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( emergeVersion );
-			m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( emergeVersion );
-			m_packageInspector->dialog->cbVersionsUse->setCurrentText( emergeVersion );
-			m_packageInspector->dialog->versionsView->usedForInstallation( emergeVersion );
-			
-			linesEmergeVersion = i18n("%1Emerge&nbsp;version:%2%3%4")
+		if ( !linesEmerge.isEmpty() ) {
+			linesEmerge = i18n("%1Emerge&nbsp;version:%2%3%4")
 				.arg("<tr><td width=10%><b>")
 				.arg("</b></td><td width=90%>")
-				.arg( linesEmergeVersion )
+				.arg( linesEmerge )
 				.arg("</td></tr>");
 		}
 		else {
-			if ( versionNotInArchitecture && linesAvailable.isEmpty() )
-				linesEmergeVersion = i18n("%1Emerge&nbsp;version:%2No version available on %3%4")
+			if ( packagesView->currentPackage()->isInArch() && linesAvailable.isEmpty() )
+				linesEmerge = i18n("%1Emerge&nbsp;version:%2No version available on %3%4")
 				.arg("<tr><td width=10%><b>")
 				.arg("</font></td><td width=90%><font color=darkRed>")
 				.arg( KurooConfig::arch() )
 				.arg("</b></td></tr>");
 			else
-				linesEmergeVersion = i18n("%1Emerge&nbsp;version:%2No version available - please check package details%3")
+				linesEmerge = i18n("%1Emerge&nbsp;version:%2No version available - please check package details%3")
 				.arg("<tr><td width=10%><b>")
 				.arg("</font></td><td width=90%><font color=darkRed>")
 				.arg("</font></b></td></tr>");
@@ -560,16 +474,14 @@ void PortageTab::processPackage( bool viewInspector )
 			.arg( KurooConfig::arch() )
 			.arg("</font></b></td></tr>");
 		
-		summaryBrowser->setText( lines + linesInstalled + linesEmergeVersion + linesAvailable + "</table>");
+		summaryBrowser->setText( lines + linesInstalled + linesEmerge + linesAvailable + "</table>");
 	}
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
-	kdDebug() << "viewInspector=" << viewInspector << LINE_INFO;
-	
 	// Refresh inspector if visible
 	if ( viewInspector )
-		m_packageInspector->edit( packagesView->currentPackage(), emergeVersion, VIEW_PORTAGE );
+		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
 }
 
 /**

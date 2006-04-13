@@ -81,7 +81,7 @@ bool Emerge::isRunning()
 /**
  * @return list of packages parsed out from emerge output.
  */
-EmergePackageList Emerge::packageList()
+const EmergePackageList Emerge::packageList()
 {
 	return m_emergePackageList;
 }
@@ -424,7 +424,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
  * Return einfo and ewarnings collected during emerge of the package.
  * @return message
  */
-QString Emerge::packageMessage()
+const QString Emerge::packageMessage()
 {
 	QString message = m_packageMessage;
 	m_packageMessage = QString::null;

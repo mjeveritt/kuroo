@@ -59,12 +59,12 @@ private slots:
 	void				slotListPackages();
 	void				slotQueue();
 	void				slotUninstall();
-	
 	void				slotAdvanced();
 	void				slotPackage();
-	void				processPackage( bool viewInspector );
-	
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
+	
+private:
+	void				processPackage( bool viewInspector );
 	
 private:
 	

@@ -488,7 +488,7 @@ bool ConfigDialog::saveMakeConf()
 {
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
-		false;
+		return false;
 	
 	QString line;
 	QStringList lines;

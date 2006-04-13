@@ -168,34 +168,34 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
 	//////////////////////////////////////////////////////////////////////////////
-	QStringList		allCategories();
-	QStringList		allSubCategories();
-	QStringList 	portageCategories( int filter, const QString& text );
-	QStringList 	portageSubCategories( const QString& categoryId, int filter, const QString& text );
-	QStringList 	portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
-	QString		 	packageId( const QString& package );
+	const QStringList		allCategories();
+	const QStringList		allSubCategories();
+	const QStringList 		portageCategories( int filter, const QString& text );
+	const QStringList 		portageSubCategories( const QString& categoryId, int filter, const QString& text );
+	const QStringList 		portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
+	const QString		 	packageId( const QString& package );
 
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-	QString 		packagePath( const QString& idPackage, const QString& version );
-	QStringList 	packageVersionsInstalled( const QString& idPackage );
-	QStringList 	packageVersionsInfo( const QString& idPackage );
-	QString 		versionSize( const QString& idPackage, const QString& version );
-	QStringList		packageHardMaskInfo( const QString& id );
-	QString		 	package( const QString& id );
-	QString		 	category( const QString& id );
+	const QString 			packagePath( const QString& idPackage, const QString& version );
+	const QStringList 		packageVersionsInstalled( const QString& idPackage );
+	const QStringList 		packageVersionsInfo( const QString& idPackage );
+	const QString			versionSize( const QString& idPackage, const QString& version );
+	const QStringList		packageHardMaskInfo( const QString& id );
+	const QString		 	package( const QString& id );
+	const QString		 	category( const QString& id );
 	
 	
 	///////////////////////////////////////////////////////////////////////////////
 	// Queries for portage files
 	///////////////////////////////////////////////////////////////////////////////
-	QString		 	packageHardMaskAtom( const QString& id );
-	QString		 	packageUserMaskAtom( const QString& id );
-	QString		 	packageUnMaskAtom( const QString& id );
-	QString			packageKeywordsAtom( const QString& id );
-	QString			packageUse( const QString& id );
+	const QString		 	packageHardMaskAtom( const QString& id );
+	const QString		 	packageUserMaskAtom( const QString& id );
+	const QString		 	packageUnMaskAtom( const QString& id );
+	const QString			packageKeywordsAtom( const QString& id );
+	const QString			packageUse( const QString& id );
 	
 	bool 			isPackageUnMasked( const QString& id );
 	bool 			isPackageUnTesting( const QString& id );
@@ -217,16 +217,16 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Miscellanious queries
 	//////////////////////////////////////////////////////////////////////////////
-	void			clearQueuePackageUse();
-	QStringList 	allQueuePackages();
-	QStringList		allQueueId();
-	QStringList 	allHistory();
-	QStringList 	allMergeHistory();
+	const QStringList 		allQueuePackages();
+	const QStringList		allQueueId();
+	const QStringList 		allHistory();
+	const QStringList 		allMergeHistory();
+	const QStringList 		allStatistic();
+	
 	void			resetUpdates();
 	void			resetInstalled();
 	void			addEmergeInfo( const QString& einfo );
 	void			addBackup( const QString& source, const QString& destination );
-	QStringList 	allStatistic();
 	
 private:
 	QObject*		m_parent;

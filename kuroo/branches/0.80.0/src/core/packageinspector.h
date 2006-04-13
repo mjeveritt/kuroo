@@ -37,11 +37,17 @@ public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 	
-	void							edit( PackageItem* portagePackage, const QString& emergeVersion, int view );
+	void							edit( PackageItem* portagePackage, int view );
 	bool							isParentView( int view );
 	void							showHardMaskInfo();
 	
 	InspectorBase					*dialog;
+	
+private:
+	void							updateVersionData();
+	void							rollbackSettings();
+	void							loadUseFlagDescription();
+	void							loadChangeLog();
 	
 private slots:
 	void							slotHardMaskInfo();
@@ -54,14 +60,11 @@ private slots:
 	void							slotApply();
 	void							slotCancel();
 	void							slotOk();
-	void							rollbackSettings();
 	void							slotSetStability( int rbStability );
 	void							slotSetSpecificVersion( const QString& version );
 	void							slotSetAvailable( bool isAvailable );
 	void							slotSetUseFlags( QListViewItem* useItem );
-	void							loadUseFlagDescription();
 	void							slotLoadEbuild( const QString& version );
-	void							loadChangeLog();
 	void							slotLoadDependencies( const QString& version );
 	void							slotLoadUseFlags( const QString& version );
 	void							slotCalculateUse();
@@ -70,11 +73,8 @@ private slots:
 	void							slotParseTempUse( KProcess* eProc );
 	
 private:
-	// Which view called the Inspector
+	// Wiew that called the Inspector
 	int								m_view;
-	
-	// Version which will be used by emerge
-	QString							m_emergeVersion;
 	
 	bool							m_versionSettingsChanged, m_useSettingsChanged, m_isVirginState, m_isAvailableBefore;
 	QString							m_id, m_category, m_package, m_hardMaskComment;

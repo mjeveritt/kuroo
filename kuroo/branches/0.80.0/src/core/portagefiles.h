@@ -33,8 +33,7 @@ Q_OBJECT
 public:
 	PortageFiles( QObject *m_parent = 0 );
     ~PortageFiles();
-	
-public slots:
+
 	void			init( QObject *parent = 0 );
 	void			refresh( int mask );
 	

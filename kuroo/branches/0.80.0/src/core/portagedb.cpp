@@ -483,7 +483,7 @@ void KurooDB::setKurooDbMeta( const QString& meta, const QString& data )
  * Return all categories, eg app in app-portage/kuroo.
  * "0" is appended in front of the list so as not to miss the first category when categories are entered in reverse order in listview.
  */
-QStringList KurooDB::allCategories()
+const QStringList KurooDB::allCategories()
 {
 	QStringList resultList( "0" );
 	resultList += query( "SELECT name FROM category; " );
@@ -493,7 +493,7 @@ QStringList KurooDB::allCategories()
 /**
  * Return all subcategories, eg portage in app-portage/kuroo.
  */
-QStringList KurooDB::allSubCategories()
+const QStringList KurooDB::allSubCategories()
 {
 	return query( "SELECT idCategory, id, name FROM subCategory ORDER BY name; " );
 }
@@ -503,7 +503,7 @@ QStringList KurooDB::allSubCategories()
  * @param filter	packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text		search string
  */
-QStringList KurooDB::portageCategories( int filter, const QString& text )
+const QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	int len;
@@ -545,7 +545,7 @@ QStringList KurooDB::portageCategories( int filter, const QString& text )
  * @param filter		packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text			search string
  */
-QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )
+const QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	QStringList resultList( categoryId );
@@ -598,7 +598,7 @@ QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter
  * @param filter		packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text			search string
  */
-QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
+const QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	int len;
@@ -687,7 +687,7 @@ QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, co
  * Return package name, eg kuroo in app-portage/kuroo.
  * @param id
  */
-QString KurooDB::package( const QString& id )
+const QString KurooDB::package( const QString& id )
 {
 	QString name = singleQuery( "SELECT name FROM package WHERE id = '" + id + "';" );
 	
@@ -703,7 +703,7 @@ QString KurooDB::package( const QString& id )
  * Return category name, eg app-portage in app-portage/kuroo.
  * @param id
  */
-QString KurooDB::category( const QString& id )
+const QString KurooDB::category( const QString& id )
 {
 	QString category = singleQuery( " SELECT catSubCategory.name FROM package, catSubCategory "
 	                                " WHERE package.id = '" + id + "' "
@@ -722,7 +722,7 @@ QString KurooDB::category( const QString& id )
  * @param category 		category-subcategory
  * @param name
  */
-QString KurooDB::packageId( const QString& package )
+const QString KurooDB::packageId( const QString& package )
 {
 	QString category = package.section( "/", 0, 0 );
 	QString packageString = package.section( "/", 1, 1 );
@@ -751,7 +751,7 @@ QString KurooDB::packageId( const QString& package )
  * Return all versions for this package.
  * @param id
  */
-QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
+const QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
 {
 	return query( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
 	              " AND status = '" + PACKAGE_INSTALLED_STRING + "'"
@@ -762,7 +762,7 @@ QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
  * Return all versions and their info for this package.
  * @param id
  */
-QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
+const QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
 	return query( " SELECT name, description, homepage, status, licenses, useFlags, slot, branch, size "
 	              " FROM version WHERE idPackage = '" + idPackage + "'"
@@ -774,7 +774,7 @@ QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
  * @param idPackage
  * @param version
  */
-QString KurooDB::versionSize( const QString& idPackage, const QString& version )
+const QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
 	return singleQuery( " SELECT size, status FROM version WHERE idPackage = '" + idPackage + "'"
 	                    " AND name = '" + version + "' ;");
@@ -784,7 +784,7 @@ QString KurooDB::versionSize( const QString& idPackage, const QString& version )
  * Return hardmask dependAtom and the gentoo dev comment.
  * @param id
  */
-QStringList KurooDB::packageHardMaskInfo( const QString& id )
+const QStringList KurooDB::packageHardMaskInfo( const QString& id )
 {
 	return query( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
@@ -794,7 +794,7 @@ QStringList KurooDB::packageHardMaskInfo( const QString& id )
  * @param idPackage
  * @param version
  */
-QString KurooDB::packagePath( const QString& idPackage, const QString& version )
+const QString KurooDB::packagePath( const QString& idPackage, const QString& version )
 {
 	return singleQuery( "SELECT path FROM version WHERE idPackage = '" + idPackage + "' AND name = '" + version + "';" );
 }
@@ -803,7 +803,7 @@ QString KurooDB::packagePath( const QString& idPackage, const QString& version )
  * Return package hardmask depend atom.
  * @param id
  */
-QString KurooDB::packageHardMaskAtom( const QString& id )
+const QString KurooDB::packageHardMaskAtom( const QString& id )
 {
 	return singleQuery( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
 }
@@ -812,7 +812,7 @@ QString KurooDB::packageHardMaskAtom( const QString& id )
  * Return package user-mask depend atom.
  * @param id
  */
-QString KurooDB::packageUserMaskAtom( const QString& id )
+const QString KurooDB::packageUserMaskAtom( const QString& id )
 {
 	return singleQuery( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
@@ -821,7 +821,7 @@ QString KurooDB::packageUserMaskAtom( const QString& id )
  * Return package unmask depend atom.
  * @param id
  */
-QString KurooDB::packageUnMaskAtom( const QString& id )
+const QString KurooDB::packageUnMaskAtom( const QString& id )
 {
 	return singleQuery( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
@@ -830,12 +830,12 @@ QString KurooDB::packageUnMaskAtom( const QString& id )
  * Return package keyword atom.
  * @param id
  */
-QString KurooDB::packageKeywordsAtom( const QString& id )
+const QString KurooDB::packageKeywordsAtom( const QString& id )
 {
 	return singleQuery( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "';" );
 }
 
-QString KurooDB::packageUse( const QString& id )
+const QString KurooDB::packageUse( const QString& id )
 {
 	return singleQuery( "SELECT use FROM packageUse where idPackage = '" + id + "';" );
 }
@@ -1001,17 +1001,9 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 //////////////////////////////////////////////////////////////////////////////
 
 /**
- * Clear the use field for package in the Queue.
- */
-void KurooDB::clearQueuePackageUse()
-{
-	query( "UPDATE queue SET use = '';" );
-}
-
-/**
  * Return all packages in the queue.
  */
-QStringList KurooDB::allQueuePackages()
+const QStringList KurooDB::allQueuePackages()
 {
 	return query( " SELECT package.id, catSubCategory.name, package.name, "
 	              " package.status, queue.idDepend, queue.size, queue.version "
@@ -1024,7 +1016,7 @@ QStringList KurooDB::allQueuePackages()
 /**
  * Return all packages in the queue.
  */
-QStringList KurooDB::allQueueId()
+const QStringList KurooDB::allQueueId()
 {
 	return query( "SELECT idPackage FROM queue;" );
 }
@@ -1032,7 +1024,7 @@ QStringList KurooDB::allQueueId()
 /**
  * Return all history.
  */
-QStringList KurooDB::allHistory()
+const QStringList KurooDB::allHistory()
 {
 	return query( "SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;");
 }
@@ -1040,7 +1032,7 @@ QStringList KurooDB::allHistory()
 /**
  * Return all etc-update history.
  */
-QStringList KurooDB::allMergeHistory()
+const QStringList KurooDB::allMergeHistory()
 {
 	return query( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;");
 }
@@ -1048,7 +1040,7 @@ QStringList KurooDB::allMergeHistory()
 /**
  * Return all package statistics.
  */
-QStringList KurooDB::allStatistic()
+const QStringList KurooDB::allStatistic()
 {
 	return query( " SELECT package, time, count FROM statistic ORDER BY id ASC;");
 }

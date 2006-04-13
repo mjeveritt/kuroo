@@ -41,7 +41,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdWarning(0) << i18n("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			kdWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -55,7 +55,7 @@ public:
 		
 		if ( id.isEmpty() ) {
 			
-			kdWarning(0) << i18n("Inserting emerged package: Can not find id in database for package %1/%2.")
+			kdWarning(0) << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
@@ -79,7 +79,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged();
+		PortageSingleton::Instance()->slotPackageChanged();
 	}
 	
 private:
@@ -100,7 +100,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdWarning(0) << i18n("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			kdWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -112,8 +112,9 @@ public:
 			.arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
-			kdWarning(0) << i18n("Removing unmerged package: Can not find id in database for package %1/%2.")
+			kdWarning(0) << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
+			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return false;
 		}
@@ -124,8 +125,7 @@ public:
 				QString( "SELECT COUNT(id) FROM version WHERE idPackage = '%1' AND status = '%2' LIMIT 1;")
 				.arg( id ).arg( PACKAGE_INSTALLED_STRING ), m_db );
 			
-			kdDebug() << "installedVersionCount=" << installedVersionCount << LINE_INFO;
-			
+
 			// Mark package as uninstalled only when one version is found
 			if ( installedVersionCount == "1" ) {
 			
@@ -148,13 +148,12 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->clearPackageFromWorld( packageString );
-		PortageSingleton::Instance()->slotChanged();
+		PortageSingleton::Instance()->slotPackageChanged();
 	}
 	
 private:
 	const QString m_package;
-	QString packageString;
+
 };
 
 /**
@@ -170,22 +169,28 @@ public:
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
-		QString updateString;
-		if ( m_hasUpdate > 0 )
-			updateString = m_updateVersion + " (U)";
-		else
-			if ( m_hasUpdate < 0 )
-				updateString = m_updateVersion + " (D)";
-		
-		KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1' WHERE id = '%2';" )
-		                                     .arg( updateString ).arg( m_id ), m_db );
+		if ( m_hasUpdate == 0 ) {
+			KurooDBSingleton::Instance()->query( QString("UPDATE package SET updateVersion = '', status = '%1' WHERE id = '%2';")
+			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( m_id ), m_db );
+		}
+		else {
+			QString updateString;
+			if ( m_hasUpdate > 0 )
+				updateString = m_updateVersion + " (U)";
+			else
+				if ( m_hasUpdate < 0 )
+					updateString = m_updateVersion + " (D)";
+			
+			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
+			                                     .arg( updateString ).arg( PACKAGE_UPDATES_STRING ).arg( m_id ), m_db );
+		}
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged();
+		PortageSingleton::Instance()->slotChanged(); // @fixme: Use signal instead?
 	}
 	
 private:
@@ -212,7 +217,7 @@ Portage::Portage( QObject *m_parent )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
-	
+
 	// Start refresh directly after emerge sync
 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotRefresh() ) );
 }
@@ -238,6 +243,17 @@ void Portage::slotChanged()
 	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	emit signalPortageChanged();
+}
+
+/**
+ * Reload world when new package is installed/removed in case user not using --oneshot.
+ */
+void Portage::slotPackageChanged()
+{
+	DEBUG_LINE_INFO;
+	
+	loadWorld();
+	slotChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -346,9 +362,10 @@ void Portage::loadWorld()
 			QString package = stream.readLine();
 			m_mapWorld[ package.stripWhiteSpace() ] = QString::null;
 		}
+		emit signalWorldChanged();
 	}
 	else
-		kdError(0) << i18n("Loading packages in world. Reading: ") << KurooConfig::dirWorldFile() << LINE_INFO;
+		kdError(0) << "Loading packages in world. Reading: " << KurooConfig::dirWorldFile() << LINE_INFO;
 }
 
 /**
@@ -366,7 +383,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 		return true;
 	}
 	else
-		kdError(0) << i18n("Adding to world. Writing: ") << KurooConfig::dirWorldFile() << LINE_INFO;
+		kdError(0) << "Adding to world. Writing: " << KurooConfig::dirWorldFile() << LINE_INFO;
 	
 	return false;
 }
@@ -416,10 +433,6 @@ void Portage::removeFromWorld( const QString& package )
 	}
 }
 
-void Portage::clearPackageFromWorld( const QString& package )
-{
-	m_mapWorld.remove( package );
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Package handlling...

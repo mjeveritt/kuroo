@@ -3,7 +3,7 @@
   <general>
     <author>karye</author>
     <email>karye@users.sourceforge.net</email>
-    <version>0.80.0</version>
+    <version>0.80</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -146,8 +146,8 @@
   </kdevautoproject>
   <kdevcppsupport>
     <references>
-      <pcs>Qt</pcs>
       <pcs>KDElibs</pcs>
+      <pcs>Qt</pcs>
     </references>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
@@ -199,8 +199,8 @@
     <custom>false</custom>
     <bzip>false</bzip>
     <archname/>
-    <appname>kuroo8.kdevelop</appname>
-    <version>0.80.0_050206_db19</version>
+    <appname>kuroo.kdevelop</appname>
+    <version/>
     <release/>
     <vendor/>
     <licence/>

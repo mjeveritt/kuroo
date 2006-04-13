@@ -34,8 +34,8 @@ public:
     LogsTab( QWidget *parent = 0 );
     ~LogsTab();
 	
-private slots:
-	void 		slotInit();
+private:
+	void 		init();
 	
 };
 

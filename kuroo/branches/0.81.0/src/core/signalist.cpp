@@ -168,9 +168,9 @@ void Signalist::scanHistoryComplete()
 	setKurooBusy( false );
 }
 
-void Signalist::packageChanged()
+void Signalist::packageQueueChanged()
 {
-	emit signalPackageChanged();
+	emit signalPackageQueueChanged();
 }
 
 #include "signalist.moc"

@@ -60,7 +60,7 @@ bool CachePortageJob::doJob()
 	DEBUG_LINE_INFO;
 	
 	if ( !m_db->isConnected() ) {
-		kdError(0) << i18n("Creating cache. Can not connect to database") << LINE_INFO;
+		kdError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 	
@@ -87,7 +87,7 @@ bool CachePortageJob::doJob()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
-			kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << LINE_INFO;
+			kdWarning(0) << "Creating cache. Can not access " << *itPath << LINE_INFO;
 			continue;
 		}
 		
@@ -100,7 +100,7 @@ bool CachePortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdWarning(0) << i18n("Creating cache. Caching aborted.") << LINE_INFO;
+				kdWarning(0) << "Creating cache. Caching aborted." << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -118,7 +118,7 @@ bool CachePortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdWarning(0) << i18n("Creating cache. Caching aborted.") << LINE_INFO;
+						kdWarning(0) << "Creating cache. Caching aborted." << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}
@@ -139,20 +139,19 @@ bool CachePortageJob::doJob()
 							file.close();
 						}
 						else
-							kdWarning(0) << i18n("Creating cache. Reading: ") << path << LINE_INFO;
+							kdWarning(0) << "Creating cache. Reading: " << path << LINE_INFO;
 					}
 					else
-						kdWarning(0) << i18n("Creating cache. Can not parse: ") << *itPackage << LINE_INFO;
+						kdWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
 					
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
 						setProgress( count );
 				}
 			}
-			else {
-				kdWarning(0) << i18n("Creating cache. Can not access ") << *itPath << "/" << *itCategory << LINE_INFO;
+			else
 				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/" << *itCategory << LINE_INFO;
-			}
+			
 		}
 	}
 	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")

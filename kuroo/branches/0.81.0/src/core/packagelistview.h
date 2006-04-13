@@ -39,37 +39,31 @@ public:
     ~PackageListView();
 
 public:
-	virtual	void			resetListView();
-	virtual	PackageItem* 	packageItemById( const QString& id );
-	
-	virtual QString			currentId();
-	int						currentItemStatus();
-	virtual PackageItem* 	currentPackage();
-	
-	virtual QStringList		selectedId();
-	virtual QStringList		selectedPackages();
-	
-	virtual QStringList		allId();
-	virtual QStringList		allPackages();
-	
-	virtual QString			count();
-	
-public slots:
-	void					slotNextPackage( bool isPrevious );
+	virtual	void				resetListView();
+	virtual	PackageItem* 		packageItemById( const QString& id );
+	virtual const QString		currentId();
+	int							currentItemStatus();
+	virtual PackageItem* 		currentPackage();
+	virtual const QStringList	selectedId();
+	virtual const QStringList	selectedPackages();
+	virtual const QStringList	allId();
+	virtual const QStringList	allPackages();
+	virtual const QString		count();
+	void						nextPackage( bool isPrevious );
 	
 protected slots:
-	void					rollOver( QListViewItem* item );
-	void					setPackageFocus( const QString& id );
-	virtual void 			indexPackage( const QString& id, PackageItem *item );
+	void						rollOver( QListViewItem* item );
+	void						setPackageFocus( const QString& id );
+	virtual void 				indexPackage( const QString& id, PackageItem *item );
 	
 protected:
-	QDict<PackageItem>		m_packageIndex;
+	QDict<PackageItem>			m_packageIndex;
 	
 signals:
-	void					signalPackageChanged();
+	void						signalPackageChanged();
 	
 private:
-	QListViewItem* 			lastItem;
+	QListViewItem* 				lastItem;
 };
 
 #endif

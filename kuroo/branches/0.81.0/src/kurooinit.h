@@ -38,7 +38,7 @@ public:
 	
 private slots:
 	void 			firstTimeWizard();
-	bool 			getEnvironment();
+	void 			getEnvironment();
 	void			checkUser();
 	
 private:

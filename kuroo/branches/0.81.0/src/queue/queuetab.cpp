@@ -165,7 +165,7 @@ void QueueTab::slotNextPackage( bool isNext )
 	if ( !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
-	queueView->slotNextPackage( isNext );
+	queueView->nextPackage( isNext );
 }
 
 
@@ -434,87 +434,32 @@ void QueueTab::slotRemoveInstalled()
  */
 void QueueTab::slotAdvanced()
 {
-	if ( queueView->currentPackage() ) {
-		slotPackage();
-		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
-	}
+	if ( queueView->currentPackage() )
+	     processPackage( true );
+}
+
+void QueueTab::slotPackage()
+{
+	if ( m_packageInspector->isVisible() )
+		processPackage( true );
+	else	
+		processPackage( false );
 }
 
 /**
  * Process package and view in Inspector.
  */
-void QueueTab::slotPackage()
+void QueueTab::processPackage( bool viewInspector )
 {
 	// Queue view is hidden don't update
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 	
-	// clear text browsers and dropdown menus
-	m_packageInspector->dialog->versionsView->clear();
-	m_packageInspector->dialog->cbVersionsEbuild->clear();
-	m_packageInspector->dialog->cbVersionsDependencies->clear();
-	m_packageInspector->dialog->cbVersionsInstalled->clear();
-	m_packageInspector->dialog->cbVersionsUse->clear();
-	m_packageInspector->dialog->cbVersionsSpecific->clear();
-	
 	// Initialize the portage package object with package and it's versions data
-	queueView->currentPackage()->initVersions();
+	queueView->currentPackage()->parsePackageVersions();
 
-	// Now parse sorted list of versions for current package
-	QValueList<PackageVersion*> sortedVersions = queueView->currentPackage()->sortedVersionList();
-	bool versionNotInArchitecture = false;
-	QValueList<PackageVersion*>::iterator sortedVersionIterator;
-	QString latestVersion;
-	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		
-		// Load all dropdown menus in the inspector with relevant versions
-		m_packageInspector->dialog->cbVersionsEbuild->insertItem( (*sortedVersionIterator)->version() );
-		m_packageInspector->dialog->cbVersionsDependencies->insertItem( (*sortedVersionIterator)->version() );
-		m_packageInspector->dialog->cbVersionsUse->insertItem( (*sortedVersionIterator)->version() );
-		m_packageInspector->dialog->cbVersionsSpecific->insertItem( (*sortedVersionIterator)->version() );
-		
-		// Mark official version stability for version listview
-		QString stability;
-		if ( (*sortedVersionIterator)->isOriginalHardMasked() )
-			stability = i18n("Hardmasked");
-		else
-			if ( (*sortedVersionIterator)->isOriginalTesting() )
-				stability = i18n("Testing");
-			else
-				if ( (*sortedVersionIterator)->isAvailable() )
-					stability = i18n("Stable");
-				else
-					if ( (*sortedVersionIterator)->isNotArch() )
-						stability = i18n("Not on %1").arg( KurooConfig::arch() );
-					else
-						stability = i18n("Not available");
-		
-		// Insert version in Inspector version view
-		m_packageInspector->dialog->versionsView->insertItem( (*sortedVersionIterator)->version(), stability, 
-			(*sortedVersionIterator)->size(), (*sortedVersionIterator)->isInstalled() );
-		
-		// Mark installed version
-		if ( (*sortedVersionIterator)->isInstalled() )
-			m_packageInspector->dialog->cbVersionsInstalled->insertItem( (*sortedVersionIterator)->version() );
-		
-		// Collect latest available version
-		if ( (*sortedVersionIterator)->isAvailable() )
-			latestVersion = (*sortedVersionIterator)->version();
-		
-		// Update current package with description from latest version
-		queueView->currentPackage()->setDescription( (*sortedVersionIterator)->description() );
-	}
-	
-	// Set active version in Inspector dropdown menus
-	if ( !latestVersion.isEmpty() ) {
-		m_packageInspector->dialog->cbVersionsEbuild->setCurrentText( latestVersion );
-		m_packageInspector->dialog->cbVersionsDependencies->setCurrentText( latestVersion );
-		m_packageInspector->dialog->cbVersionsUse->setCurrentText( latestVersion );
-		m_packageInspector->dialog->versionsView->usedForInstallation( latestVersion );
-	}
-	
 	// Refresh inspector if visible
-	if ( m_packageInspector->isVisible() )
+	if ( viewInspector )
 		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
 }
 

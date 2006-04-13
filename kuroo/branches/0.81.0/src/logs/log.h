@@ -41,9 +41,8 @@ public:
 	
 	void 			setGui( KTextBrowser *logBrowserGui, QCheckBox *verboseLogGui, QCheckBox *saveLogGui );
 	void 			writeLog( const QString& output, int logType );
-
-public slots:
-	QString			init( QObject *parent = 0 );
+	
+	const QString	init( QObject *parent = 0 );
 	KIO::Job*		backupLog();
 	
 private:

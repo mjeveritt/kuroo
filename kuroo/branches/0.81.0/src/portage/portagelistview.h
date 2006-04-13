@@ -41,8 +41,6 @@ public:
 	class 							PortageItem;
 	
 	PortageListView::PortageItem* 	currentPortagePackage();
-	
-public slots:
 	void							setHeader( const QString& text );
 	int 							addSubCategoryPackages( const QStringList& packageList );
 };

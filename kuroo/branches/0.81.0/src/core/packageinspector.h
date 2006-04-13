@@ -43,6 +43,12 @@ public:
 	
 	InspectorBase					*dialog;
 	
+private:
+	void							updateVersionData();
+	void							rollbackSettings();
+	void							loadUseFlagDescription();
+	void							loadChangeLog();
+	
 private slots:
 	void							slotHardMaskInfo();
 	void							slotPreviousPackage();
@@ -54,14 +60,11 @@ private slots:
 	void							slotApply();
 	void							slotCancel();
 	void							slotOk();
-	void							rollbackSettings();
 	void							slotSetStability( int rbStability );
 	void							slotSetSpecificVersion( const QString& version );
 	void							slotSetAvailable( bool isAvailable );
 	void							slotSetUseFlags( QListViewItem* useItem );
-	void							loadUseFlagDescription();
 	void							slotLoadEbuild( const QString& version );
-	void							loadChangeLog();
 	void							slotLoadDependencies( const QString& version );
 	void							slotLoadUseFlags( const QString& version );
 	void							slotCalculateUse();
@@ -70,7 +73,7 @@ private slots:
 	void							slotParseTempUse( KProcess* eProc );
 	
 private:
-	// Which view called the Inspector
+	// Wiew that called the Inspector
 	int								m_view;
 	
 	bool							m_versionSettingsChanged, m_useSettingsChanged, m_isVirginState, m_isAvailableBefore;

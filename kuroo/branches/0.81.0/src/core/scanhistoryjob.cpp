@@ -63,7 +63,7 @@ void ScanHistoryJob::completeJob()
 bool ScanHistoryJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
-		kdError(0) << i18n("Parsing emerge.log. Can not connect to database") << LINE_INFO;
+		kdError(0) << "Parsing emerge.log. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 	
@@ -81,7 +81,7 @@ bool ScanHistoryJob::doJob()
 		
 		// Abort the scan
 		if ( isAborted() ) {
-			kdWarning(0) << i18n("Parsing emerge.log. History scan aborted") << LINE_INFO;
+			kdWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
 			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -99,7 +99,7 @@ bool ScanHistoryJob::doJob()
 				logMap[ package ] = emergeStart;
 			}
 			else
-				kdWarning(0) << i18n("Parsing emerge.log. No package found!") << LINE_INFO;
+				kdWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
 		}
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
@@ -136,11 +136,11 @@ bool ScanHistoryJob::doJob()
 							    .arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
 						}
 						else
-							kdWarning(0) << i18n("Parsing emerge.log. Can not parse: ") << package << LINE_INFO;
+							kdWarning(0) << "Parsing emerge.log. Can not parse: " << package << LINE_INFO;
 					}
 				}
 				else
-					kdWarning(0) << i18n("Parsing emerge.log. No package found!") << LINE_INFO;
+					kdWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
 			}
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {

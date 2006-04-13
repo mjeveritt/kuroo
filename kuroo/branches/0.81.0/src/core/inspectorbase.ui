@@ -8,9 +8,15 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>607</width>
-            <height>468</height>
+            <width>650</width>
+            <height>501</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>650</width>
+            <height>500</height>
+        </size>
     </property>
     <property name="maximumSize">
         <size>
@@ -135,12 +141,6 @@ in the official portage tree.</string>
                                             <cstring>versionsView</cstring>
                                         </property>
                                         <property name="minimumSize">
-                                            <size>
-                                                <width>350</width>
-                                                <height>200</height>
-                                            </size>
-                                        </property>
-                                        <property name="maximumSize">
                                             <size>
                                                 <width>350</width>
                                                 <height>200</height>
@@ -413,12 +413,6 @@ and do not update further</string>
                                     <cstring>useView</cstring>
                                 </property>
                                 <property name="minimumSize">
-                                    <size>
-                                        <width>570</width>
-                                        <height>270</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
                                     <size>
                                         <width>570</width>
                                         <height>270</height>

@@ -336,7 +336,7 @@ public:
      * This Job type is dependent on a QObject instance, if that instance is
      * deleted, this Job will be aborted and safely deleted.
      *
-     * ThreadWeaver::DependentJob (and Job, the baseclass) isa QCustomEvent,
+     * ThreadWeaver::DependentJob (and Job, the baseclass) is a QCustomEvent,
      * and completeJob() is reimplemented to send the job to the dependent.
      * Of course you can still reimplement completeJob() yourself.
      *

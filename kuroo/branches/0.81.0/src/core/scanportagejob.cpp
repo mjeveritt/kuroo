@@ -81,7 +81,7 @@ bool ScanPortageJob::doJob()
 	dCategory.setSorting( QDir::Name );
 	
 	if ( !m_db->isConnected() ) {
-		kdError(0) << i18n("Scanning Portage. Can not connect to database") << LINE_INFO;
+		kdError(0) << "Scanning Portage. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 	
@@ -160,7 +160,7 @@ bool ScanPortageJob::doJob()
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 	
 		if ( !dCategory.cd( KurooConfig::dirEdbDep() + *itPath ) ) {
-			kdWarning(0) << i18n("Scanning Portage. Can not access ") << KurooConfig::dirEdbDep() + *itPath  << LINE_INFO;
+			kdWarning(0) << "Scanning Portage. Can not access " << KurooConfig::dirEdbDep() + *itPath  << LINE_INFO;
 			continue;
 		}
 		
@@ -175,7 +175,7 @@ bool ScanPortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdWarning(0) << i18n("Scanning Portage. Portage scan aborted") << LINE_INFO;
+				kdWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
 				KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 				return false;
 			}
@@ -184,16 +184,16 @@ bool ScanPortageJob::doJob()
 			QString subCategory = ( *itCategory ).section( "-", 1, 1 );
 			
 			if ( lastCategory != category )
-				idCategory = KurooDBSingleton::Instance()->insert( 
-					QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				idCategory = KurooDBSingleton::Instance()->insert( QString( 
+					"INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 			
-			int idSubCategory = KurooDBSingleton::Instance()->insert(
-				QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-    			.arg( subCategory ).arg( QString::number( idCategory) ), m_db );
+			int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
+				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
+    			.arg(subCategory).arg(QString::number(idCategory)), m_db);
 			
-			int idCatSubCategory = KurooDBSingleton::Instance()->insert( 
-				QString( "INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');")
-    			.arg( *itCategory ).arg( QString::number( idCategory ) ).arg( QString::number( idSubCategory ) ), m_db );
+			int idCatSubCategory = KurooDBSingleton::Instance()->insert( QString( 
+				"INSERT INTO catSubCategory_temp (name, idCategory, idSubCategory) VALUES ('%1', '%2', '%3');")
+    			.arg(*itCategory).arg(QString::number(idCategory)).arg(QString::number(idSubCategory)), m_db);
 			
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -210,7 +210,7 @@ bool ScanPortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdWarning(0) << i18n( "Scanning Portage. Portage scan aborted" ) << LINE_INFO;
+						kdWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
 						KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
 						return false;
 					}
@@ -251,7 +251,7 @@ bool ScanPortageJob::doJob()
 					
 					}
 					else
-						kdWarning(0) << i18n("Scanning Portage. Scanning Portage cache: can not match package %1.").arg( *itPackage ) << LINE_INFO;
+						kdWarning(0) << QString("Scanning Portage. Scanning Portage cache: can not match package %1.").arg( *itPackage ) << LINE_INFO;
 					
 					// Post scan count progress
 					if ( ( ++count % 100 ) == 0 )
@@ -363,7 +363,7 @@ void ScanPortageJob::scanInstalledPackages()
 	dCategory.setSorting( QDir::Name );
 	
 	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) ) {
-		kdWarning(0) << i18n( "Scanning installed packages. Can not access " ) << KurooConfig::dirDbPkg() << LINE_INFO;
+		kdWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << LINE_INFO;
 	}
 	
 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
@@ -414,11 +414,11 @@ void ScanPortageJob::scanInstalledPackages()
 					
 				}
 				else
-					kdWarning(0) << i18n("Scanning installed packages. Can not match %1.").arg( *itPackage ) << LINE_INFO;
+					kdWarning(0) << QString("Scanning installed packages. Can not match %1.").arg( *itPackage ) << LINE_INFO;
 			}
 		}
 		else
-			kdWarning(0) << i18n( "Scanning installed packages. Can not access " ) << KurooConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
+			kdWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
 	}
 	setStatus( "ScanInstalled", i18n("Done.") );
 }
@@ -435,7 +435,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QFile file( path + "/" + category + "/" + name + "-" + version );
 	
 	if ( !file.open( IO_ReadOnly ) ) {
-		kdWarning(0) << i18n("Scanning Portage cache. Reading: ") << path << "/" << category << "/" << name << "-" << version << LINE_INFO;
+		kdWarning(0) << "Scanning Portage cache. Reading: " << path << "/" << category << "/" << name << "-" << version << LINE_INFO;
 		
 		info.slot = "0";
 		info.homepage = "0";
@@ -541,7 +541,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			                                      .arg( name + "-" + version ).arg( word ), m_db );
 		}
 		else
-			kdError(0) << i18n("Scanning installed packages. Reading: ") << path << LINE_INFO;
+			kdError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
 
 	}
 	

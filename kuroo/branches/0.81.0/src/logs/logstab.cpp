@@ -37,7 +37,7 @@ LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
 	logBrowser->setTextFormat( Qt::LogText );
-	slotInit();
+	init();
 }
 
 /**
@@ -61,7 +61,7 @@ LogsTab::~LogsTab()
 /**
  * Restore checkboxes state
  */
-void LogsTab::slotInit()
+void LogsTab::init()
 {
 	if ( KurooConfig::saveLog() )
 		saveLog->setChecked( true );

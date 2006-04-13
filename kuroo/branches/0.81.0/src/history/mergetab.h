@@ -34,7 +34,6 @@ public:
     MergeTab( QWidget *parent = 0 );
     ~MergeTab();
 
-	
 private slots:
 	void 		slotInit();
 	void		slotReload();

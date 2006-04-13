@@ -37,16 +37,16 @@
 
 QRegExp
 rxAtom(	
-       	"^"    // Start of the string
-       	"(!)?" // "Block these packages" flag, only occurring in ebuilds
-       	"(~|(?:<|>|=|<=|>=))?" // greater-than/less-than/equal, or "all revisions" prefix
+       	"^"    															// Start of the string
+       	"(!)?" 															// "Block these packages" flag, only occurring in ebuilds
+       	"(~|(?:<|>|=|<=|>=))?" 											// greater-than/less-than/equal, or "all revisions" prefix
        	"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   						// category and subcategory
        	"((?:[a-z]|[A-Z]|[0-9]|-(?=\\d+dpi)|-(?!\\d)|\\+|_)+)" 			// package name
        	"("           													// start of the version part
-       	"(?:-\\d+(?:\\.\\d+)*[a-z]?)" 									// base version number, including wildcard version matching (*)
+       	"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 									// base version number, including wildcard version matching (*)
        	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 							// version suffix
        	"(?:-r\\d*)?"  													// revision
-       	"(?:\\*)?)?$"          											// end of the (optional) version part and the atom string
+       	"\\*?)?$"          												// end of the (optional) version part and the atom string
       );
 
 /**
@@ -65,7 +65,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesPackage;
 		if ( !file.open( IO_ReadOnly ) )
-			kdWarning(0) << i18n("Parsing package.keywords. Reading: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdWarning(0) << QString("Parsing package.keywords. Reading: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -115,14 +115,15 @@ public:
 					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 				
 				if ( id.isEmpty() )
-					kdWarning(0) << i18n("Load package keywords: Can not find id in database for package %1/%2.").arg( category ).arg( name ) << LINE_INFO;
+					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
+					.arg( category ).arg( name ) << LINE_INFO;
 				else
 					KurooDBSingleton::Instance()->insert( QString( 
-						"INSERT INTO packageKeywords_temp (idPackage, keywords) "
-						"VALUES ('%1', '%2');" ).arg( id ).arg( keywords ), m_db );
+						"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
+					                                      .arg( id ).arg( keywords ), m_db );
 			}
 			else
-				kdWarning(0) << i18n("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+				kdWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
 					.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			
 		}
@@ -140,7 +141,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 0 );
+		PortageFilesSingleton::Instance()->refresh( 0 ); // Use signal instead?
 	}
 };
 
@@ -160,7 +161,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing package.unmask. Reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdError(0) << QString("Parsing package.unmask. Reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -205,15 +206,16 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << i18n("Load user package unmask: Can not find id in database for package %1/%2.")
+							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
+							KurooDBSingleton::Instance()->insert( QString( 
+								"INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 					else
-						kdWarning(0) << i18n("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
+						kdWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 				}
 			}
@@ -232,7 +234,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 1 );
+		PortageFilesSingleton::Instance()->refresh( 1 ); // Use signal instead?
 	}
 };
 
@@ -252,7 +254,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing package.mask. Reading: %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+			kdError(0) << QString("Parsing package.mask. Reading: %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -297,15 +299,16 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << i18n("Parsing package.mask. Can not find id in database for package %1/%2.")
+							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
+							KurooDBSingleton::Instance()->insert( QString( 
+								"INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
 
 					}
 					else
-						kdWarning(0) << i18n("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+						kdWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
 				}
 			}
@@ -324,7 +327,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 2 );
+		PortageFilesSingleton::Instance()->refresh( 2 ); // Use signal instead?
 	}
 };
 
@@ -344,7 +347,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing user package.mask. Reading: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdError(0) << QString("Parsing user package.mask. Reading: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -389,15 +392,16 @@ public:
 							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << i18n("Parsing user package.mask. Can not find id in database for package %1/%2.")
+							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
 								.arg( category ).arg( name ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
+							KurooDBSingleton::Instance()->insert( QString( 
+								"INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 					else
-						kdWarning(0) << i18n("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
+						kdWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 				}
 			}
@@ -416,7 +420,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 3 );
+		PortageFilesSingleton::Instance()->refresh( 3 ); // Use signal instead?
 	}
 };
 
@@ -435,7 +439,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesUse;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << i18n("Parsing user package.use. Reading: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdError(0) << QString("Parsing user package.use. Reading: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
@@ -466,7 +470,7 @@ public:
 				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
 			
 			if ( id.isEmpty() )
-				kdWarning(0) << i18n("Parsing user package.use. Can not find id in database for package %1/%2.")
+				kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
 					.arg( category ).arg( name ) << LINE_INFO;
 			else
 				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )
@@ -486,7 +490,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 7 );
+		PortageFilesSingleton::Instance()->refresh( 7 ); // Use signal instead?
 	}
 };
 
@@ -507,14 +511,15 @@ public:
 			" AND package.id = packageKeywords.idPackage "
 			";" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No package keywords found. Saving to %1 aborted!").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
+				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageKeywords() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -531,7 +536,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 4 );
+		PortageFilesSingleton::Instance()->refresh( 4 ); // Use signal instead?
 	}
 };
 
@@ -548,14 +553,15 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask ;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No user mask depend atom found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
+				.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserMask() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -567,7 +573,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 5 );
+		PortageFilesSingleton::Instance()->refresh( 5 ); // Use signal instead?
 	}
 };
 
@@ -584,14 +590,15 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No user unmask depend atom found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
+				.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserUnMask() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -603,7 +610,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 6 );
+		PortageFilesSingleton::Instance()->refresh( 6 ); // Use signal instead?
 	}
 };
 
@@ -624,14 +631,14 @@ public:
 			" AND package.id = packageUse.idPackage "
 			";" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << i18n("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserUse() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << i18n("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -649,7 +656,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 8 );
+		PortageFilesSingleton::Instance()->refresh( 8 ); // Use signal instead?
 	}
 };
 
@@ -677,34 +684,42 @@ void PortageFiles::refresh( int mask )
 {
 	switch ( mask ) {
 		case 0:
-// 			kdWarning(0) << i18n("Completed scanning for package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
+			                                    .arg( KurooConfig::filePackageKeywords() ), KUROO );
 			break;
 		case 1:
-// 			kdWarning(0) << i18n("Completed scanning for unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
+												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
 			break;
 		case 2:
-// 			kdWarning(0) << i18n("Completed scanning for hardmasked packages in %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
+												.arg( KurooConfig::filePackageHardMask() ), KUROO );
 			break;
 		case 3:
-// 			kdWarning(0) << i18n("Completed scanning for user masked packages in %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
+												.arg( KurooConfig::filePackageUserMask() ), KUROO );
 			break;
 		case 4:
-// 			kdWarning(0) << i18n("Completed saving package keywords in %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
+												.arg( KurooConfig::filePackageKeywords() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
 		case 5:
-// 			kdWarning(0) << i18n("Completed saving user masked packages in %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
+												.arg( KurooConfig::filePackageUserMask() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
 		case 6:
-// 			kdWarning(0) << i18n("Completed saving user unmasked packages in %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
+												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
 			break;
 		case 7:
-// 			kdWarning(0) << i18n("Completed scanning user package use flags in %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
+												.arg( KurooConfig::filePackageUserUse() ), KUROO );
 			break;
 		case 8:
-			break;
-// 			kdWarning(0) << i18n("Completed saving user package use in %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
+												.arg( KurooConfig::filePackageUserUse() ), KUROO );
 	}
 }
 

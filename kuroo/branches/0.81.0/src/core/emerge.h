@@ -41,59 +41,60 @@ public:
 	Emerge( QObject *m_parent = 0 );
     ~Emerge();
 
-public slots:
-	void				init( QObject *parent = 0 );
-	bool				stop();
-	bool 				isRunning();
+	void						init( QObject *parent = 0 );
+	bool						stop();
+	bool 						isRunning();
 	
-	bool 				pretend( const QStringList& packageList );
-	bool 				queue( const QStringList& packageList );
-	bool 				unmerge( const QStringList& packageList );
-	bool				sync();
-	bool				checkUpdates();
+	bool 						pretend( const QStringList& packageList );
+	bool 						queue( const QStringList& packageList );
+	bool 						unmerge( const QStringList& packageList );
+	bool						sync();
+	bool						checkUpdates();
 	
-	EmergePackageList	packageList();
-	QString				packageMessage();
-	
-private slots:
-	void 				slotEmergeOutput( KProcIO *proc );
-	void				cleanup();
-	void 				slotCleanupQueue( KProcess *proc );
-	void 				slotCleanupPretend( KProcess *proc );
-	void 				slotCleanupUnmerge( KProcess *proc );
-	void 				slotCleanupSync( KProcess *proc );
-	void 				slotCleanupCheckUpdates( KProcess *proc );
-	bool				countEtcUpdates( const QString& line );
-	void				askUnmaskPackage( const QString& packageKeyword );
-	void				slotTryEmerge();
-	
-signals:
-	void				signalEmergeComplete();
+	const EmergePackageList		packageList();
+	const QString				packageMessage();
 	
 private:
-	QObject*			m_parent;
-	KProcIO*			eProc;
+	void						cleanup();
+	bool						countEtcUpdates( const QString& line );
+	void						askUnmaskPackage( const QString& packageKeyword );
+	
+private slots:
+	void 						slotEmergeOutput( KProcIO *proc );
+	void 						slotCleanupQueue( KProcess *proc );
+	void 						slotCleanupPretend( KProcess *proc );
+	void 						slotCleanupUnmerge( KProcess *proc );
+	void 						slotCleanupSync( KProcess *proc );
+	void 						slotCleanupCheckUpdates( KProcess *proc );
+	void						slotTryEmerge();
+	
+signals:
+	void						signalEmergeComplete();
+	
+private:
+	QObject*					m_parent;
+	KProcIO*					eProc;
 	
 	// Collects messages from emerge, like masked errors, ewarn and einfos
-	QString 			m_importantMessage;
+	QString 					m_importantMessage;
 	
 	// The current package
-	QString				m_packageMessage;
+	QString						m_packageMessage;
 	
 	// The parsed package emerge says need unmasking
-	QString				m_unmasked;
+	QString						m_unmasked;
 	
 	// Collect all blocking packages
-	QStringList 		m_blocks;
+	QStringList 				m_blocks;
 	
 	// Remember packages emerge started with, used when auto-unmasking
-	QStringList			m_lastEmergeList;
+	QStringList					m_lastEmergeList;
 	
 	// List of parsed packages
-	EmergePackageList	m_emergePackageList;
+	EmergePackageList			m_emergePackageList;
 	
 	// Count of etc-updates files to merge
-	int					m_etcUpdateCount;
+	int							m_etcUpdateCount;
 };
 
 #endif

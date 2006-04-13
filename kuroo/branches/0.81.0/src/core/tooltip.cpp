@@ -47,6 +47,7 @@ void ToolTip::maybeTip( const QPoint& pos )
 	PackageItem* packageItem = dynamic_cast<PackageItem*>( m_pParent->itemAt( pos ) );
 	
 	if ( packageItem ) {
+		QString package = packageItem->text( 0 );
 		
       	// Get the section the mouse is in
 		int section = m_pParent->header()->sectionAt( pos.x() );
@@ -66,29 +67,29 @@ void ToolTip::maybeTip( const QPoint& pos )
 		
 			case 0 : {
 				if ( packageItem->isInstalled() )
-					tipText = i18n( "Package is installed" );
+					tipText = i18n( "%1 is installed" ).arg( package );
 				else {
 						if ( packageItem->isInPortage() )
-							tipText = i18n( "Package is not installed" );
+							tipText = i18n( "%1 is not installed" ).arg( package );
 						else
-							tipText = i18n( "Package not in Portage" );
+							tipText = i18n( "%1 not in Portage" ).arg( package );
 				}
 				break;
 			}
 			
 			case 1 :
 				if ( packageItem->isInstalled() )
-					tipText = i18n( "Package is installed" );
+					tipText = i18n( "%1 is installed" ).arg( package );
 				break;
 				
 			case 2 :
 				if ( packageItem->isInWorld() )
-					tipText = i18n( "Package present in World profile" );
+					tipText = i18n( "%1 is present in World profile" ).arg( package );
 				break;
 		
 			case 3 :
 				if ( packageItem->isQueued() )
-					tipText = i18n( "Package present in Queue" );
+					tipText = i18n( "%1 is present in Queue" ).arg( package );
 		}
 		
 		tip( destRect, tipText );

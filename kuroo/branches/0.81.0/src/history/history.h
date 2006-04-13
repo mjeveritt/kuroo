@@ -43,45 +43,45 @@ public:
 	History( QObject *m_parent = 0 );
     ~History();
 
-	void			init( QObject *parent = 0 );
+	void					init( QObject *parent = 0 );
+	void					loadTimeStatistics();
+	const EmergeTimeMap 	getStatisticsMap();
+	void 					setStatisticsMap( const EmergeTimeMap& statisticsMap );
+	const QString 			packageTime( const QString& packageNoversion );
+	void					appendEmergeInfo();
+	void					updateStatistics();
+	const QStringList		allMergeHistory();
 	
 public slots:
-	void			slotInit();
-	void			slotScanHistoryCompleted();
-	bool			slotRefresh();
-	void			loadTimeStatistics();
-	EmergeTimeMap 	getStatisticsMap();
-	void 			setStatisticsMap( const EmergeTimeMap& statisticsMap );
-	QString 		packageTime( const QString& packageNoversion );
-	void			appendEmergeInfo();
-	void			updateStatistics();
-	QStringList		allMergeHistory();
+	void					slotInit();
+	void					slotScanHistoryCompleted();
+	bool					slotRefresh();
 	
 private slots:
-	void			slotScanHistory( const QStringList& lines );
-	void			slotParse();
+	void					slotScanHistory( const QStringList& lines );
+	void					slotParse();
 
 private:
-	QObject*		m_parent;
+	QObject*				m_parent;
 	
 	// Watches the emerge.log file
-	KDirWatch		*logWatcher;
+	KDirWatch				*logWatcher;
 	
 	// Map with packages emerge duration
-	EmergeTimeMap	m_statisticsMap;
+	EmergeTimeMap			m_statisticsMap;
 	
 	// The emerge.log
-	QFile 			m_log;
+	QFile 					m_log;
 	
 	// Stream for emerge.log
-	QTextStream 	stream;
+	QTextStream 			stream;
 	
 	// Is kuroo emerging or just downloading the package
-	bool			isEmerging;
+	bool					isEmerging;
 	
 signals:
-	void			signalScanHistoryCompleted();
-	void			signalHistoryChanged();
+	void					signalScanHistoryCompleted();
+	void					signalHistoryChanged();
 };
 
 #endif

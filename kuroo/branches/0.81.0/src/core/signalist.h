@@ -35,7 +35,6 @@ public:
 	Signalist( QObject *m_parent = 0 );
     ~Signalist();
 
-public slots:
 	void		init( QObject *parent = 0 );
 	void		setKurooReady( bool isReady );
 	bool		isKurooReady();
@@ -49,7 +48,7 @@ public slots:
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
-	void		packageChanged();
+	void		packageQueueChanged();
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -61,8 +60,7 @@ signals:
 	void 		signalEmergeQueue();
 	void		signalSyncDone();
 	void 		signalScanHistoryComplete();
-	void		signalInstalledChanged();
-	void		signalPackageChanged();
+	void		signalPackageQueueChanged();
 
 private:
 	QObject*	m_parent;

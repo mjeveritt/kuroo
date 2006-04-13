@@ -53,7 +53,8 @@ public:
 				" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "' ); ", m_db );
 			
 			if ( id.isEmpty() ) {
-				kdWarning(0) << i18n("Add result package list: Can not find id in database for package %1/%2.").arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
+				kdWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
+					.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 				return false;
 			}
 			
@@ -61,15 +62,15 @@ public:
 			if ( !endUserPackageMap.contains( id ) ) {
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
-					"VALUES ('%1', '%2', '%3', '%4', '%5')"
-					";" ).arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
+					"VALUES ('%1', '%2', '%3', '%4', '%5');" )
+				    .arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
 			}
 			else {
 				idPackage = id;
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) "
-					"VALUES ('%1', '0', '%2', '%3', '%4')"
-					";" ).arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
+					"VALUES ('%1', '0', '%2', '%3', '%4');" )
+				    .arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
 			}
 		}
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
@@ -77,7 +78,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		ResultsSingleton::Instance()->refresh();
+		ResultsSingleton::Instance()->refresh(); // @fixme: Use signal instead?
 	}
 	
 private:

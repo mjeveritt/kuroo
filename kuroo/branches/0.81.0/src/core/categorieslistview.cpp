@@ -36,14 +36,14 @@ class CategoriesView::CategoryItem : public QListViewItem
 public:
 	CategoryItem( QListView* parent, const char* name, const QString &id );
 	
-	void 	setOn( bool on );
-	QString id();
-	QString name();
+	void 			setOn( bool on );
+	const QString& 	id();
+	const QString& 	name();
 	
 protected:
-	QString	m_id, m_name;
-	bool 	m_on;
-	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+	QString			m_id, m_name;
+	bool 			m_on;
+	void 			paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 };
 
 
@@ -80,12 +80,12 @@ void CategoriesView::CategoryItem::setOn( bool on )
 	repaint();
 }
 
-QString CategoriesView::CategoryItem::id()
+const QString& CategoriesView::CategoryItem::id()
 {
 	return m_id;
 }
 
-QString CategoriesView::CategoryItem::name()
+const QString& CategoriesView::CategoryItem::name()
 {
 	return m_name;
 }
@@ -101,7 +101,7 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 	setFrameShape( QFrame::NoFrame );
 	setSorting( -1 );
 	
-	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( storeFocus( QListViewItem* ) ) );
+	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotStoreFocus( QListViewItem* ) ) );
 }
 
 CategoriesView::~CategoriesView()
@@ -112,7 +112,7 @@ CategoriesView::~CategoriesView()
  * Retreive focus category when a new category is made current.
  * @categoryItem*
  */
-void CategoriesView::storeFocus( QListViewItem* item )
+void CategoriesView::slotStoreFocus( QListViewItem* item )
 {
 	m_focus = item->text(0);
 }
@@ -145,7 +145,7 @@ CategoriesView::CategoryItem* CategoriesView::currentCategory()
  * Get current category idDB.
  * @return category
  */
-QString CategoriesView::currentCategoryId()
+const QString CategoriesView::currentCategoryId()
 {
 	CategoryItem* item = dynamic_cast<CategoryItem*>( this->currentItem() );
 	if ( item )

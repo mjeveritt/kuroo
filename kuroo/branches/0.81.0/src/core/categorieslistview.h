@@ -38,12 +38,11 @@ public:
 
 	class CategoryItem;
 	
-public slots:
 	CategoryItem*							currentCategory();
-	QString									currentCategoryId();
+	const QString							currentCategoryId();
 	
 protected slots:
-	void									storeFocus( QListViewItem* item );
+	void									slotStoreFocus( QListViewItem* item );
 	
 protected:
 	void									restoreFocus( bool isFiltered );

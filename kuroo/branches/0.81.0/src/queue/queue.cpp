@@ -61,7 +61,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false );
+		QueueSingleton::Instance()->refresh( false ); // @fixme: Use signal instead?
 	}
 	
 private:
@@ -87,7 +87,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false );
+		QueueSingleton::Instance()->refresh( false ); // @fixme: Use signal instead?
 	}
 	
 private:
@@ -137,7 +137,6 @@ void Queue::refresh( bool hasCheckedQueue )
  */
 void Queue::reset()
 {
-	DEBUG_LINE_INFO;
 	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
 	refresh( false );
 }
@@ -177,11 +176,10 @@ void Queue::clearCache()
 void Queue::insertInCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdWarning(0) << i18n("Package id is empty, skipping!") << LINE_INFO;
+		kdWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
 		return;
 	}
-	
-	m_queueCache[ id ] = false;
+	m_queueCache.insert( id, false );
 }
 
 /**
@@ -191,10 +189,9 @@ void Queue::insertInCache( const QString& id )
 void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdWarning(0) << i18n("Package id is empty, skipping!") << LINE_INFO;
+		kdWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
 		return;
 	}
-	
 	m_queueCache.remove( id );
 }
 

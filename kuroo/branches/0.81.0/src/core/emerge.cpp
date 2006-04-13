@@ -39,9 +39,9 @@ Emerge::Emerge( QObject* m_parent )
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
   
-// 	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-// 	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
-// 	#endif
+	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
+	#endif
 }
 
 Emerge::~Emerge()
@@ -81,7 +81,7 @@ bool Emerge::isRunning()
 /**
  * @return list of packages parsed out from emerge output.
  */
-EmergePackageList Emerge::packageList()
+const EmergePackageList Emerge::packageList()
 {
 	return m_emergePackageList;
 }
@@ -310,7 +310,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				m_emergePackageList.prepend( emergePackage );
 			}
 			else
-				kdWarning(0) << i18n("Collecting emerge output. Can not parse: ") << packageVersion << LINE_INFO;
+				kdWarning(0) << "Collecting emerge output. Can not parse: " << packageVersion << LINE_INFO;
 
 		}
 		
@@ -424,7 +424,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
  * Return einfo and ewarnings collected during emerge of the package.
  * @return message
  */
-QString Emerge::packageMessage()
+const QString Emerge::packageMessage()
 {
 	QString message = m_packageMessage;
 	m_packageMessage = QString::null;
@@ -518,8 +518,6 @@ void Emerge::slotCleanupSync( KProcess* proc )
  */
 void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 {
-	DEBUG_LINE_INFO;
-	
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 	

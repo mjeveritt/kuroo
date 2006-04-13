@@ -39,10 +39,11 @@ public:
 	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
 	~PackageItem();
 	
-	int								status();
-	QString 						id();
-	QString							name();
-	QString							description();
+	const int						status() const;
+	const QString& 					id() const;
+	const QString&					name() const;
+	const QString& 					category() const;
+	const QString&					description() const;
 	
 	virtual void					setPackageIndex( int index );	
 	virtual bool					isInstalled();
@@ -57,13 +58,21 @@ public:
 	bool							isFirstPackage();
 	bool							isLastPackage();
 	
-	QString 						category();
 	void 							initVersions();
 	QValueList<PackageVersion*> 	versionList();
 	QMap<QString,PackageVersion*> 	versionMap();
 	QValueList<PackageVersion*> 	sortedVersionList();
 	void							resetDetailedInfo();
 
+	void							parsePackageVersions();
+	const QStringList&				versionDataList() const;
+	const QString&					emergeVersion() const;
+	const QString&					homepage() const;
+	const QString&					linesInstalled() const;
+	const QString&					linesAvailable() const;
+	const QString&					linesEmerge() const;
+	const bool						isInArch() const;
+	
 protected:
 	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
@@ -109,6 +118,20 @@ private:
 	// Atom object needed for versions stability
 	DependAtom* 					atom;
 
+	// Formatted string
+	QString							m_linesInstalled, m_linesAvailable, m_linesEmerge;
+	
+	// Version used by emerge
+	QString							m_emergeVersion;
+	
+	// Latest versions homepage supposed to be most current
+	QString							m_homepage;
+	
+	// Versions list together with stability info etc...
+	QStringList						m_versionsDataList;
+	
+	// Is this package available in this arch?
+	bool							m_isInArch;
 };
 
 #endif

@@ -75,7 +75,7 @@ void History::init( QObject *parent )
 {
 	m_parent = parent;
 	if ( !m_log.open(IO_ReadOnly) )
-		kdError(0) << i18n("Reading /var/log/emerge.log") << LINE_INFO;
+		kdError(0) << "Reading /var/log/emerge.log" << LINE_INFO;
 	else
 		stream.setDevice( &m_log );
 }
@@ -207,7 +207,7 @@ void History::slotParse()
 					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
 				else
-					kdWarning(0) << i18n("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
+					kdWarning(0) << QString("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
 			}
 			else // Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
@@ -220,7 +220,7 @@ void History::slotParse()
 					emit signalHistoryChanged();
 				}
 				else
-					kdWarning(0) << i18n("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
+					kdWarning(0) << QString("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
@@ -303,7 +303,7 @@ void History::appendEmergeInfo()
  * Return all etc-file merge history.
  * @return QStringList
  */
-QStringList History::allMergeHistory()
+const QStringList History::allMergeHistory()
 {
 	return KurooDBSingleton::Instance()->allMergeHistory();
 }
@@ -330,7 +330,7 @@ void History::loadTimeStatistics()
  * Return statistics map.
  * @return m_statisticsMap
  */
-EmergeTimeMap History::getStatisticsMap()
+const EmergeTimeMap History::getStatisticsMap()
 {
 	return m_statisticsMap;
 }
@@ -351,7 +351,7 @@ void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
  * @param package
  * @return emergeTime		time or na
  */
-QString History::packageTime( const QString& packageNoversion )
+const QString History::packageTime( const QString& packageNoversion )
 {
 	EmergeTimeMap::iterator itMap = m_statisticsMap.find( packageNoversion );
 	if ( itMap != m_statisticsMap.end() )

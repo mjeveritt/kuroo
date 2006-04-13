@@ -139,42 +139,6 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 }
 
 /**
- * Package db id.
- * @return id
- */
-QString PackageItem::id()
-{
-	return m_id;
-}
-
-/**
- * Package name as kuroo in app-portage/kuroo.
- * @return name
- */
-QString PackageItem::name()
-{
-	return m_name;
-}
-
-/**
- * Package description.
- * @return description
- */
-QString PackageItem::description()
-{
-	return m_description;
-}
-
-/**
- * Package status describing if this package is installed or not.
- * @return status
- */
-int PackageItem::status()
-{
-	return m_status;
-}
-
-/**
  * Is this package installed.
  * @return true if yes
  */
@@ -224,17 +188,8 @@ void PackageItem::setQueued( bool isQueued )
 {
 	if ( m_isQueued != isQueued ) {
 		m_isQueued = isQueued;
-		SignalistSingleton::Instance()->packageChanged();
+		SignalistSingleton::Instance()->packageQueueChanged();
 	}
-}
-
-/**
- * Accessor for category.
- * @return the package category.
- */
-QString PackageItem::category()
-{
-	return m_category;
 }
 
 void PackageItem::resetDetailedInfo()
@@ -287,10 +242,10 @@ void PackageItem::initVersions()
 		m_versionMap.insert( versionString, version );
 	}
 	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
+	// Now that we have all available versions, sort out masked ones and leaving unmasked.
 	
 	// Check if any of this package versions are hardmasked
+	atom = new DependAtom( this );
 	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 // 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
@@ -306,29 +261,8 @@ void PackageItem::initVersions()
 	}
 	delete atom;
 	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
-	// Check if any of this package versions are unmasked
-	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
-// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
-	foreach ( atomUnmaskedList ) {
-		
-		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
-		// and get the matching versions
-		if ( atom->parse( *it ) ) {
-			QValueList<PackageVersion*> versions = atom->matchingVersions();
-			QValueList<PackageVersion*>::iterator versionIterator;
-			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
-				( *versionIterator )->setUnMasked( true );
-		}
-	}
-	delete atom;
-	
-	// Initialize the 'atom' member variable
-	atom = new DependAtom( this );
-	
 	// Check if any of this package versions are user-masked
+	atom = new DependAtom( this );
 	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 // 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
@@ -340,6 +274,23 @@ void PackageItem::initVersions()
 			QValueList<PackageVersion*>::iterator versionIterator;
 			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 				( *versionIterator )->setUserMasked( true );
+		}
+	}
+	delete atom;
+	
+	// Check if any of this package versions are unmasked
+	atom = new DependAtom( this );
+	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
+// 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
+	foreach ( atomUnmaskedList ) {
+		
+		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
+		// and get the matching versions
+		if ( atom->parse( *it ) ) {
+			QValueList<PackageVersion*> versions = atom->matchingVersions();
+			QValueList<PackageVersion*>::iterator versionIterator;
+			for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				( *versionIterator )->setUnMasked( true );
 		}
 	}
 	delete atom;
@@ -406,3 +357,164 @@ QValueList<PackageVersion*> PackageItem::sortedVersionList()
 	return sortedVersions;
 }
 
+/**
+ * Parse sorted list of versions for stability, installed, emerge versions ...
+ */
+void PackageItem::parsePackageVersions()
+{
+	if ( !m_isInitialized )
+		initVersions();
+	
+	QString version;
+	QValueList<PackageVersion*> sortedVersions = sortedVersionList();
+	QValueList<PackageVersion*>::iterator sortedVersionIterator;
+	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
+		
+		version = (*sortedVersionIterator)->version();
+		
+		// Mark official version stability for version listview
+		QString stability;
+		if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
+			stability = i18n("Hardmasked");
+			version = "<font color=darkRed><i>" + version + "</i></font>";
+		}
+		else
+			if ( (*sortedVersionIterator)->isOriginalTesting() ) {
+				stability = i18n("Testing");
+				version = "<i>" + version + "</i>";
+			}
+			else
+				if ( (*sortedVersionIterator)->isAvailable() )
+					stability = i18n("Stable");
+				else
+					if ( (*sortedVersionIterator)->isNotArch() )
+						stability = i18n("Not on %1").arg( KurooConfig::arch() );
+					else
+						stability = i18n("Not available");
+		
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << endl;
+		
+		// Versions data
+		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();
+		
+		// Create nice summary showing installed packages
+		if ( (*sortedVersionIterator)->isInstalled() ) {
+			m_versionsDataList << "1";
+			version = "<b>" + version + "</b>";
+			m_linesInstalled.prepend( version + " (" + stability + "), " );
+		}
+		else
+			m_versionsDataList << "0";
+		
+		// Collect all available packages except those not in users arch
+		if ( (*sortedVersionIterator)->isAvailable() ) {
+			m_emergeVersion = (*sortedVersionIterator)->version();
+			m_linesEmerge = version + " (" + stability + ")";
+			m_linesAvailable.prepend( version + ", " );
+		}
+		else {
+			if ( (*sortedVersionIterator)->isNotArch() )
+				m_isInArch = true;
+			else
+				m_linesAvailable.prepend( version + ", " );
+		}
+		
+		m_description = (*sortedVersionIterator)->description();
+		m_homepage = (*sortedVersionIterator)->homepage();
+	}
+	
+	// Remove trailing commas
+	m_linesInstalled.truncate( m_linesInstalled.length() - 2 );
+	m_linesAvailable.truncate( m_linesAvailable.length() - 2 );
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Accessors
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Package db id.
+ * @return id
+ */
+const QString& PackageItem::id() const
+{
+	return m_id;
+}
+
+/**
+ * Package name as kuroo in app-portage/kuroo.
+ * @return name
+ */
+const QString& PackageItem::name() const
+{
+	return m_name;
+}
+
+/**
+ * Accessor for category.
+ * @return the package category.
+ */
+const QString& PackageItem::category() const
+{
+	return m_category;
+}
+
+/**
+ * Package description.
+ * @return description
+ */
+const QString& PackageItem::description() const
+{
+	return m_description;
+}
+
+/**
+ * Package status describing if this package is installed or not.
+ * @return status
+ */
+const int PackageItem::status() const
+{
+	return m_status;
+}
+
+const QString& PackageItem::homepage() const
+{
+	return m_homepage;
+}
+
+const QString& PackageItem::linesInstalled() const
+{
+	return m_linesInstalled;
+}
+
+const QString& PackageItem::linesAvailable() const
+{
+	return m_linesAvailable;
+}
+
+const QString& PackageItem::linesEmerge() const
+{
+	return m_linesEmerge;
+}
+
+const bool PackageItem::isInArch() const
+{
+	return m_isInArch;
+}
+
+/**
+ * Return versions list together with stability info etc...
+ */
+const QStringList& PackageItem::versionDataList() const
+{
+	return m_versionsDataList;
+}
+
+/**
+ * Return version used by emerge.
+ */
+const QString& PackageItem::emergeVersion() const
+{
+	return m_emergeVersion;
+}

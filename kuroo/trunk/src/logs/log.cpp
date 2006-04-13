@@ -48,14 +48,14 @@ Log::~Log()
  * Open persistent log.
  * @return log file name
  */
-QString Log::init( QObject *parent )
+const QString Log::init( QObject *parent )
 {
 	m_parent = parent;
 	
 	QString logName = GlobalSingleton::Instance()->kurooDir() + "kuroo.log";
 	m_logFile.setName( logName );
 	if( !m_logFile.open( IO_WriteOnly ) ) {
-		kdError(0) << i18n("Writing: ") << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
+		kdError(0) << "Writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
 		KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg(GlobalSingleton::Instance()->kurooDir()), i18n("Saving"));
 		return QString::null;
 	}
@@ -71,7 +71,9 @@ KIO::Job* Log::backupLog()
 {
 	if ( m_saveLog && m_saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
-		KIO::Job *cpjob = KIO::file_copy( GlobalSingleton::Instance()->kurooDir() + "kuroo.log", GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", -1, true, false, false );
+		KIO::Job *cpjob = KIO::file_copy( GlobalSingleton::Instance()->kurooDir() + "kuroo.log", 
+		                                  GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", 
+		                                  -1, true, false, false );
 		return cpjob;
 	}
 	else

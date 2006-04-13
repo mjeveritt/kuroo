@@ -33,8 +33,7 @@ Q_OBJECT
 public:
 	Results( QObject *m_parent = 0 );
     ~Results();
-	
-public slots:
+
 	void			init( QObject *parent = 0 );
 	void			refresh();
 	void 			addPackageList( const EmergePackageList &packageList );

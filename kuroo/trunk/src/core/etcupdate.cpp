@@ -59,7 +59,7 @@ void EtcUpdate::askUpdate( const int& count )
 	                                        .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
 		
 		case KMessageBox::Yes :
-			etcUpdate();
+			slotEtcUpdate();
 	}
 }
 
@@ -67,7 +67,7 @@ void EtcUpdate::askUpdate( const int& count )
  * Run etc-update.
  * @return success
  */
-bool EtcUpdate::etcUpdate()
+void EtcUpdate::slotEtcUpdate()
 {
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
 		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
@@ -83,7 +83,7 @@ bool EtcUpdate::etcUpdate()
 
 		if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
 			LogSingleton::Instance()->writeLog( i18n("\netc-update didn't start. "), ERROR );
-			return false;
+			return;
 		}
 		else {
 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
@@ -91,7 +91,7 @@ bool EtcUpdate::etcUpdate()
 			LogSingleton::Instance()->writeLog( i18n( "\nRunning etc-update..." ), KUROO );
 			KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Checking for configuration file updates...") );
 			SignalistSingleton::Instance()->setKurooBusy( true );
-			return true;
+			return;
 		}
 	}
 }

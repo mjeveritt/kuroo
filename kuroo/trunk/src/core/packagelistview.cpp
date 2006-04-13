@@ -95,7 +95,7 @@ PackageItem* PackageListView::packageItemById( const QString& id )
  * Current package id.
  * @return id
  */
-QString PackageListView::currentId()
+const QString PackageListView::currentId()
 {
 	PackageItem* item = currentPackage();
 	if ( item )
@@ -117,7 +117,7 @@ PackageItem* PackageListView::currentPackage()
  * All selected packages by id.
  * @return idList
  */
-QStringList PackageListView::selectedId()
+const QStringList PackageListView::selectedId()
 {
 	QStringList idList;
 	QListViewItemIterator it( this );
@@ -134,7 +134,7 @@ QStringList PackageListView::selectedId()
  * All selected packages by name.
  * @return packageList
  */
-QStringList PackageListView::selectedPackages()
+const QStringList PackageListView::selectedPackages()
 {
 	QStringList packageList;
 	QListViewItemIterator it( this );
@@ -151,7 +151,7 @@ QStringList PackageListView::selectedPackages()
  * All packages in listview by id.
  * @return idList
  */
-QStringList PackageListView::allId()
+const QStringList PackageListView::allId()
 {
 	QStringList idList;
 	QListViewItemIterator it( this );
@@ -166,7 +166,7 @@ QStringList PackageListView::allId()
  * All packages in listview by name.
  * @return packageList
  */
-QStringList PackageListView::allPackages()
+const QStringList PackageListView::allPackages()
 {
 	QStringList packageList;
 	QListViewItemIterator it( this );
@@ -213,7 +213,7 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
  * Total number of packages in listview.
  * @return QString
  */
-QString PackageListView::count()
+const QString PackageListView::count()
 {
 	return QString::number( m_packageIndex.count() );
 }

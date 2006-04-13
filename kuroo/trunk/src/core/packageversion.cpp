@@ -99,7 +99,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	thisRevision = PackageVersion::revisionNumber( m_version, &revisionPos );
 	thisSuffix = PackageVersion::suffixNumber( m_version, &suffixPos );
 	thisTrailingChar = PackageVersion::trailingCharNumber( m_version, &trailingCharPos );
-		
+	
 	// determine the first non-base-version character
 	if ( trailingCharPos != -1 )
 		pos = trailingCharPos;
@@ -144,15 +144,25 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 		rxNumber.search( otherVersion, pos );
 		thatNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
 		
+		// Fix so '0.1.0 > 0.09.0' as '0.10.0 > 0.09.0'
+		if ( thisNum.length() > thatNum.length() ) {
+			if ( thisNum.startsWith( "0" ) )
+				thatNum = thatNum.leftJustify( thisNum.length(), '0' );
+		}
+		else {
+			if ( thatNum.startsWith( "0" ) )
+				thisNum = thisNum.leftJustify( thatNum.length(), '0' );
+		}
+		
 		if ( thisNum.isEmpty() || thatNum.isEmpty() )
 			return false; // should not happen, just to make sure
 		
 		// the current version number parts differ
 		if ( thisNum != thatNum ) {
-		if ( thisNum.toInt() > thatNum.toInt() ) // this->version is newer:
-			return true;
-			else // well, the otherVersion is newer.
-				return false;
+			if ( thisNum.toInt() > thatNum.toInt() ) // this->version is newer:
+				return true;
+				else // well, the otherVersion is newer.
+					return false;
 		}
 		else {
 			// thisNum == thatNum 

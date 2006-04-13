@@ -64,6 +64,9 @@ private slots:
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
 private:
+	void				processPackage( bool viewInspector );
+	
+private:
 	
 	// Delay package view until all text in entered in the text-filter
 	int					m_delayFilters;

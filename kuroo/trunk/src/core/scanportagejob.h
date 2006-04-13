@@ -42,8 +42,6 @@ public:
 
 private:
 	void								scanInstalledPackages();
-	
-private:
 	bool 								doJob();
 	void 								completeJob();
 	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );

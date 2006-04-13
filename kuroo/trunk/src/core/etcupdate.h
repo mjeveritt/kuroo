@@ -37,17 +37,20 @@ public:
     EtcUpdate( QObject *m_parent = 0, const char *name = 0 );
     ~EtcUpdate();
 
-public slots:
 	void				init( QObject *parent = 0 );
 	void				askUpdate( const int &count );
 
+public slots:
+	void				slotEtcUpdate();
+	
+private:
+	void				runDiff();
+	void				backup( const QString& source, const QString& destination );
+	
 private slots:
-	bool				etcUpdate();
 	void 				slotEtcUpdateOutput( KProcIO *proc );
 	void				slotCleanupEtcUpdate( KProcess* );
-	void				runDiff();
 	void				slotCleanupEtcUpdateDiff( KProcess* );
-	void				backup( const QString& source, const QString& destination );
 
 signals:
 	void				signalEtcFileMerged();

@@ -495,7 +495,7 @@
                                 <property name="minimumSize">
                                     <size>
                                         <width>200</width>
-                                        <height>55</height>
+                                        <height>90</height>
                                     </size>
                                 </property>
                                 <property name="backgroundOrigin">

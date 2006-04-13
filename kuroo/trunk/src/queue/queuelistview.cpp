@@ -234,7 +234,7 @@ void QueueListView::slotPackageDown()
  * All packages in listview by name - no children
  * @return packageList
  */
-QStringList QueueListView::allPackagesNoChildren()
+const QStringList QueueListView::allPackagesNoChildren()
 {
 	QStringList packageList;
 	QListViewItem* myChild = firstChild();
@@ -249,7 +249,7 @@ QStringList QueueListView::allPackagesNoChildren()
  * All packages in listview by name - no children
  * @return packageList
  */
-QStringList QueueListView::allEndUserPackages()
+const QStringList QueueListView::allEndUserPackages()
 {
 	QStringList packageList;
 	QListViewItem* myChild = firstChild();
@@ -332,7 +332,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 /**
  * Resize package column only when resizing widget.
  */
-void QueueListView::viewportResizeEvent( QResizeEvent *e )
+void QueueListView::viewportResizeEvent( QResizeEvent* )
 {
 	setColumnWidth( 6, 70 );
 	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + columnWidth(5) + 70;
@@ -341,18 +341,6 @@ void QueueListView::viewportResizeEvent( QResizeEvent *e )
 		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );
 	else
 		setColumnWidth( 0, this->visibleWidth() - totalWidth );
-}
-
-/**
- * Clear use column after user changed use flag settings.
- */
-void QueueListView::clearQueuePackageUse()
-{
-	QListViewItem* myChild = firstChild();
-	while ( myChild ) {
-		myChild->setText( 4, QString::null );
-		myChild = myChild->nextSibling();
-	}
 }
 
 
@@ -396,7 +384,7 @@ void QueueListView::addSize( const QString& size )
  * Get sum of packages sizes.
  * @return sumSize 
  */
-QString QueueListView::totalSize()
+const QString QueueListView::totalSize()
 {
 	return formatSize( QString::number( m_sumSize ) );
 }
@@ -406,7 +394,7 @@ QString QueueListView::totalSize()
  * @param size 
  * @return total		as "xxx kB"
  */
-QString QueueListView::formatSize( const QString& sizeString )
+const QString QueueListView::formatSize( const QString& sizeString )
 {
 	KLocale *loc = KGlobal::locale();
 	QString total;

@@ -41,6 +41,9 @@ public slots:
 	void				slotReload( bool hasCheckedQueue );
 	void				slotQueueSummary();
 	
+private:
+	void				processPackage( bool viewInspector );
+	
 private slots:
 	void				slotRefresh();
 	void				slotInit();
@@ -54,9 +57,9 @@ private slots:
 	void				slotRemove();
 	void				slotClear();
 	void				slotRemoveInstalled();
-	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
-	void				slotPackage();
 	void				slotAdvanced();
+	void				slotPackage();
+	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
 	
 private:
 	

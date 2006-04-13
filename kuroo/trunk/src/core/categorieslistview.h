@@ -38,9 +38,8 @@ public:
 
 	class CategoryItem;
 	
-public slots:
 	CategoryItem*							currentCategory();
-	QString									currentCategoryId();
+	const QString							currentCategoryId();
 	
 protected slots:
 	void									storeFocus( QListViewItem* item );

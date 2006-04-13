@@ -36,9 +36,9 @@ public:
 	MergeListView(QWidget *parent = 0, const char *name = 0);
 	~MergeListView();
 	
-	void 			loadFromDB();
-	
 	class			MergeItem;
+	
+	void 			loadFromDB();
 	
 signals:
 	void    		signalHistoryLoaded();

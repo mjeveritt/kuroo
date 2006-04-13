@@ -34,31 +34,34 @@ public:
 	Portage( QObject *m_parent = 0 );
     ~Portage();
 	
+	void						init( QObject *parent = 0 );
+	
 	void						loadWorld();
 	bool						isInWorld( const QString& package );
-	
-public slots:
-	void						init( QObject *parent = 0 );
-	void						slotChanged();
-	bool						slotRefresh();
-	
-	bool						slotScan();
-	void						slotScanCompleted();
-	bool						slotSync();
 	
 	bool						saveWorld( const QMap<QString, QString>& map );
 	void						appendWorld( const QString& package );
 	void						removeFromWorld( const QString& package );
-	void						clearPackageFromWorld( const QString& package );
 	
 	void						pretendPackageList( const QStringList& packageIdList );
 	void						uninstallInstalledPackageList( const QStringList& packageIdList );
 	void						addInstalledPackage( const QString& package );
 	void						removeInstalledPackage( const QString& package );
 	
+	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
+	
+	
+public slots:
+	void						slotChanged();
+	void						slotPackageChanged();
+	bool						slotRefresh();
+	
+	bool						slotScan();
+	void						slotScanCompleted();
+	bool						slotSync();
+	
 	bool						slotRefreshUpdates();
 	bool						slotLoadUpdates();
-	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
 	
 signals:
 	void						signalPortageChanged();

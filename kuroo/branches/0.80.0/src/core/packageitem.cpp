@@ -398,7 +398,7 @@ void PackageItem::parsePackageVersions()
 					else
 						stability = i18n("Not available");
 		
-		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << LINE_INFO;
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << LINE_INFO;
 		
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();

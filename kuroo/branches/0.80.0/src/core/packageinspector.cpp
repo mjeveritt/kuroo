@@ -105,37 +105,88 @@ bool PackageInspector::isParentView( int view )
  */
 void PackageInspector::updateVersionData()
 {
-	// Clear text browsers and dropdown menus
+	kdDebug() << "m_package=" << m_package << LINE_INFO;
+	
+	// Clear dropdown menus
 	dialog->versionsView->clear();
 	dialog->cbVersionsEbuild->clear();
 	dialog->cbVersionsDependencies->clear();
 	dialog->cbVersionsInstalled->clear();
 	dialog->cbVersionsUse->clear();
 	dialog->cbVersionsSpecific->clear();
-	
+
+	// Iterate sorted version list
+	QString installedVersion;
+	QStringList versionList, versionInstalledList;
 	foreach ( m_portagePackage->versionDataList() ) {
+		
+		// Parse out version and data
 		QString version = *it++;
 		QString stability = *it++;
 		QString size = *it++;
-		bool isInstalled = ( *it == "1" );
 		
-		dialog->cbVersionsEbuild->insertItem( version );
-		dialog->cbVersionsDependencies->insertItem( version );
-		dialog->cbVersionsUse->insertItem( version );
-		dialog->cbVersionsSpecific->insertItem( version );
+		// Collect installed version in "Installed files" tab
+		bool isInstalled;
+		if ( *it == "1" ) {
+			isInstalled = true;
+			installedVersion = version;
+			versionInstalledList.prepend( version );
+		}
+		else
+			isInstalled = false;
 		
+		// Collect in inverse order to fill dropdown menus correctly
+		versionList.prepend( version );
+		
+		kdDebug() << "version=" << version << LINE_INFO;
+		
+		// Insert version in versionview
 		dialog->versionsView->insertItem( version, stability, size, isInstalled );
-		
-		if ( isInstalled )
-			dialog->cbVersionsInstalled->insertItem( version );
 	}
 	
+	// Insert all versions in dropdown-menus
+	dialog->cbVersionsEbuild->insertStringList( versionList );
+	dialog->cbVersionsDependencies->insertStringList( versionList );
+	dialog->cbVersionsUse->insertStringList( versionList );
+	dialog->cbVersionsSpecific->insertStringList( versionList );
+	
 	// Set active version in Inspector dropdown menus
-	dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->cbVersionsEbuild->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->cbVersionsDependencies->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->cbVersionsUse->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
+	if ( !versionInstalledList.isEmpty() ) {
+		
+		// Enable installed tab
+		dialog->inspectorTabs->page(5)->setDisabled( false );
+		
+		dialog->cbVersionsInstalled->insertStringList( versionInstalledList );
+		dialog->cbVersionsEbuild->setCurrentText( installedVersion );
+		dialog->cbVersionsDependencies->setCurrentText( installedVersion );
+		dialog->cbVersionsUse->setCurrentText( installedVersion );
+		dialog->cbVersionsInstalled->setCurrentText( installedVersion );
+	}
+	else {
+		
+		// Disable installed tab
+		dialog->inspectorTabs->page(5)->setDisabled( true );
+		
+		if ( !m_portagePackage->emergeVersion().isEmpty() ) {
+			dialog->cbVersionsEbuild->setCurrentText( m_portagePackage->emergeVersion() );
+			dialog->cbVersionsDependencies->setCurrentText( m_portagePackage->emergeVersion() );
+			dialog->cbVersionsUse->setCurrentText( m_portagePackage->emergeVersion() );
+		}
+	}
+	
+	if ( !m_portagePackage->emergeVersion().isEmpty() ) {
+		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
+		dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
+	}
+	
+	// View icons if package in World and Queue
+	dialog->pixmapInstalled->clear();
+	if ( m_portagePackage->isInWorld() )
+		dialog->pixmapInstalled->setPixmap( ImagesSingleton::Instance()->icon( WORLD ) );
+	
+	dialog->pixmapQueued->clear();
+	if ( m_portagePackage->isQueued() )
+		dialog->pixmapQueued->setPixmap( ImagesSingleton::Instance()->icon( QUEUED ) );
 	
 	DEBUG_LINE_INFO;
 }
@@ -157,7 +208,6 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 		enableButtonApply( false );
 		dialog->groupSelectStability->setDisabled( true );
 		dialog->useView->setDisabled( true );
-		dialog->groupArchitecture->setDisabled( true );
 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging
@@ -181,7 +231,7 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	// Construct header text
 	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
 	dialog->package->setText( "<b><font color=#" + GlobalSingleton::Instance()->fgHexColor() 
-	                          + "><font size=+1>" + m_package + "</font> " +
+	                          + "><font size=+1>" + m_package + "</font>&nbsp;" +
 	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->description->setText( m_portagePackage->description() );
 	
@@ -349,9 +399,6 @@ void PackageInspector::rollbackSettings()
 		
 		if ( m_stabilityBefore == 3 )
 			slotSetSpecificVersion( m_versionBefore );
-		
-		if ( m_isAvailableBefore )
-			slotSetAvailable( true );
 	}
 }
 
@@ -394,22 +441,11 @@ void PackageInspector::slotHardMaskInfo()
 }
 
 /**
- * Activate advanced groupBox.
- * @param isOn
- */
-void PackageInspector::slotAdvancedToggle( bool isOn )
-{
-	dialog->groupArchitecture->setDisabled( !isOn );
-}
-
-/**
  * Stability choice for versions - enable the right radiobutton.
  * Priority is: specific version >> unmask package >> untest package >> stable package.
  */
 void PackageInspector::showSettings()
 {
-	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
-	
 	// Get user mask specific version
 	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
 	
@@ -420,8 +456,6 @@ void PackageInspector::showSettings()
 		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
 	}
 	else {
-		dialog->ckbAvailable->setChecked( false );
-		
 		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
 			dialog->rbMasked->setChecked( true );
 		else
@@ -431,18 +465,10 @@ void PackageInspector::showSettings()
 				dialog->rbStable->setChecked( true );
 	}
 	
-	// Enable available radiobutton
-	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_id ) )
-		dialog->ckbAvailable->setChecked( true );
-	else
-		dialog->ckbAvailable->setChecked( false );
-	
 	// Stability settings before user has changed it
 	if ( m_isVirginState ) {
 		m_stabilityBefore = dialog->groupSelectStability->selectedId();
 		m_versionBefore = userMaskVersion;
-		m_isAvailableBefore = dialog->ckbAvailable->isChecked();
-		dialog->groupArchitecture->setChecked( false );
 	}
 	
 	showHardMaskInfo();
@@ -450,8 +476,6 @@ void PackageInspector::showSettings()
 	// Reset the apply button for new package
 	if ( !m_versionSettingsChanged )
 		enableButtonApply( false );
-	
-	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
 }
 
 /**
@@ -530,23 +554,6 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 }
 
 /**
- * Make this package available on users arch.
- * @param isAvailable
- */
-void PackageInspector::slotSetAvailable( bool isAvailable )
-{
-	if ( isAvailable )
-		KurooDBSingleton::Instance()->setPackageAvailable( m_id );
-	else
-		KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
-	
-	enableButtonApply( true );
-	m_versionSettingsChanged = true;
-	m_portagePackage->resetDetailedInfo();
-	emit signalPackageChanged();
-}
-
-/**
  * Toggle use flag state to add or remove.
  * @param: useItem
  */
@@ -594,7 +601,6 @@ void PackageInspector::slotRefreshTabs()
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
 	slotLoadInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	loadChangeLog();
-	adjustSize();
 }
 
 /**

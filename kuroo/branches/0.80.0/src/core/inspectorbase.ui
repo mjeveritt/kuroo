@@ -8,14 +8,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>650</width>
-            <height>501</height>
+            <width>609</width>
+            <height>450</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
-            <width>650</width>
-            <height>500</height>
+            <width>600</width>
+            <height>450</height>
         </size>
     </property>
     <property name="maximumSize">
@@ -57,48 +57,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>groupArchitecture</cstring>
-                                </property>
-                                <property name="title">
-                                    <string>I know what I do and want to continue</string>
-                                </property>
-                                <property name="checkable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                                <grid>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>5</number>
-                                    </property>
-                                    <widget class="QCheckBox" row="0" column="0">
-                                        <property name="name">
-                                            <cstring>ckbAvailable</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Make this package available on your architecture though it is not activated
-in the official portage tree.</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+M</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel" row="1" column="0">
-                                        <property name="name">
-                                            <cstring>textLabel3</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&lt;b&gt;Please note: this may harm your machine!&lt;/b&gt;</string>
-                                        </property>
-                                    </widget>
-                                </grid>
-                            </widget>
                             <widget class="QGroupBox" row="0" column="0">
                                 <property name="name">
                                     <cstring>groupVersionsView</cstring>
@@ -124,7 +82,7 @@ in the official portage tree.</string>
                                     </property>
                                     <widget class="QLabel" row="1" column="0">
                                         <property name="name">
-                                            <cstring>pixmapLabel1</cstring>
+                                            <cstring>pixmapEmerge</cstring>
                                         </property>
                                         <property name="text">
                                             <string></string>
@@ -147,12 +105,6 @@ in the official portage tree.</string>
                                                 <horstretch>0</horstretch>
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
-                                        </property>
-                                        <property name="minimumSize">
-                                            <size>
-                                                <width>350</width>
-                                                <height>200</height>
-                                            </size>
                                         </property>
                                     </widget>
                                     <widget class="QLabel" row="1" column="1">
@@ -260,6 +212,9 @@ in the official portage tree.</string>
                                                 <property name="enabled">
                                                     <bool>false</bool>
                                                 </property>
+                                                <property name="insertionPolicy">
+                                                    <enum>AtTop</enum>
+                                                </property>
                                             </widget>
                                             <spacer row="2" column="0">
                                                 <property name="name">
@@ -350,6 +305,9 @@ and do not update further</string>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>5</number>
+                    </property>
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
                             <cstring>layout11</cstring>
@@ -428,12 +386,6 @@ and do not update further</string>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>570</width>
-                                        <height>270</height>
-                                    </size>
-                                </property>
                                 <property name="resizeMode">
                                     <enum>LastColumn</enum>
                                 </property>
@@ -464,6 +416,9 @@ and do not update further</string>
                                         <width>100</width>
                                         <height>0</height>
                                     </size>
+                                </property>
+                                <property name="insertionPolicy">
+                                    <enum>AtTop</enum>
                                 </property>
                             </widget>
                             <spacer row="0" column="2" rowspan="1" colspan="2">
@@ -506,6 +461,9 @@ and do not update further</string>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>5</number>
+                    </property>
                     <widget class="KTextBrowser" row="0" column="0">
                         <property name="name">
                             <cstring>changelogBrowser</cstring>
@@ -523,6 +481,9 @@ and do not update further</string>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>5</number>
                     </property>
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
@@ -588,6 +549,9 @@ and do not update further</string>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>5</number>
+                    </property>
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
                             <cstring>layout20</cstring>
@@ -636,6 +600,9 @@ and do not update further</string>
                                         <height>0</height>
                                     </size>
                                 </property>
+                                <property name="insertionPolicy">
+                                    <enum>AtTop</enum>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -651,6 +618,9 @@ and do not update further</string>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>5</number>
                     </property>
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
@@ -700,6 +670,9 @@ and do not update further</string>
                                         <height>0</height>
                                     </size>
                                 </property>
+                                <property name="insertionPolicy">
+                                    <enum>AtTop</enum>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -712,7 +685,7 @@ and do not update further</string>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>5</hsizetype>
+                    <hsizetype>2</hsizetype>
                     <vsizetype>1</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
@@ -778,7 +751,7 @@ and do not update further</string>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>5</hsizetype>
+                            <hsizetype>2</hsizetype>
                             <vsizetype>1</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
@@ -803,52 +776,101 @@ and do not update further</string>
                         <property name="spacing">
                             <number>2</number>
                         </property>
-                        <widget class="QPushButton" row="0" column="1">
+                        <widget class="QLayoutWidget" row="0" column="0">
                             <property name="name">
-                                <cstring>pbPrevious</cstring>
+                                <cstring>layout14</cstring>
                             </property>
-                            <property name="text">
-                                <string>&lt;&lt;</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Previous Package</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="0" column="2">
-                            <property name="name">
-                                <cstring>pbNext</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&gt;&gt;</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Next Package</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>package</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>2</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="margin">
-                                <number>2</number>
-                            </property>
-                            <property name="text">
-                                <string>textLabel1</string>
-                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>package</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="margin">
+                                        <number>2</number>
+                                    </property>
+                                    <property name="text">
+                                        <string>textLabel1</string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton" row="0" column="5">
+                                    <property name="name">
+                                        <cstring>pbNext</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&gt;&gt;</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Next Package</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>pixmapInstalled</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="scaledContents">
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="2">
+                                    <property name="name">
+                                        <cstring>pixmapQueued</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="scaledContents">
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton" row="0" column="4">
+                                    <property name="name">
+                                        <cstring>pbPrevious</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;&lt;</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Previous Package</string>
+                                    </property>
+                                </widget>
+                                <spacer row="0" column="3">
+                                    <property name="name">
+                                        <cstring>spacer17</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>MinimumExpanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </grid>
                         </widget>
                     </grid>
                 </widget>

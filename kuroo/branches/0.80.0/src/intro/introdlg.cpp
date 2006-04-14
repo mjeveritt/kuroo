@@ -70,6 +70,8 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 							"<br>"
 					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
 					      	) );
+	
+	adjustSize();
 }
 
 IntroDlg::~IntroDlg()

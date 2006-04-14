@@ -365,6 +365,12 @@ void PackageItem::parsePackageVersions()
 	if ( !m_isInitialized )
 		initVersions();
 	
+	m_versionsDataList.clear();
+	m_linesAvailable = QString::null;
+	m_linesEmerge = QString::null;
+	m_linesInstalled = QString::null;
+	
+	// Iterate sorted versions list
 	QString version;
 	QValueList<PackageVersion*> sortedVersions = sortedVersionList();
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
@@ -392,9 +398,9 @@ void PackageItem::parsePackageVersions()
 					else
 						stability = i18n("Not available");
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << endl;
+		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << LINE_INFO;
 		
-		// Versions data
+		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();
 		
 		// Create nice summary showing installed packages
@@ -414,11 +420,12 @@ void PackageItem::parsePackageVersions()
 		}
 		else {
 			if ( (*sortedVersionIterator)->isNotArch() )
-				m_isInArch = true;
+				m_isInArch = false;
 			else
 				m_linesAvailable.prepend( version + ", " );
 		}
 		
+		// Get description and homepage from most recent version = assuming most correct
 		m_description = (*sortedVersionIterator)->description();
 		m_homepage = (*sortedVersionIterator)->homepage();
 	}
@@ -426,6 +433,8 @@ void PackageItem::parsePackageVersions()
 	// Remove trailing commas
 	m_linesInstalled.truncate( m_linesInstalled.length() - 2 );
 	m_linesAvailable.truncate( m_linesAvailable.length() - 2 );
+	
+	DEBUG_LINE_INFO;
 }
 
 

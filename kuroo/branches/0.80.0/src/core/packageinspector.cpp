@@ -101,7 +101,7 @@ bool PackageInspector::isParentView( int view )
 }
 
 /**
- * Update the Inspector gui with new version data.
+ * Update the Inspector gui with new versions and data.
  */
 void PackageInspector::updateVersionData()
 {
@@ -136,6 +136,8 @@ void PackageInspector::updateVersionData()
 	dialog->cbVersionsDependencies->setCurrentText( m_portagePackage->emergeVersion() );
 	dialog->cbVersionsUse->setCurrentText( m_portagePackage->emergeVersion() );
 	dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
+	
+	DEBUG_LINE_INFO;
 }
 
 /**
@@ -387,7 +389,7 @@ void PackageInspector::showHardMaskInfo()
  */
 void PackageInspector::slotHardMaskInfo()
 {
-	KMessageBox::messageBox( 0, KMessageBox::Information, m_hardMaskComment, 
+	KMessageBox::messageBox( this, KMessageBox::Information, m_hardMaskComment, 
 	                         i18n("%1/%2 hardmask info!").arg( m_category ).arg( m_package ), i18n("Yes"), i18n("No"), 0 );
 }
 

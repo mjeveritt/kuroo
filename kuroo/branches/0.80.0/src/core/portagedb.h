@@ -179,7 +179,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-	const QString 			packagePath( const QString& idPackage, const QString& version );
+	const QString 			packagePath( const QString& id /*, const QString& version */);
 	const QStringList 		packageVersionsInstalled( const QString& idPackage );
 	const QStringList 		packageVersionsInfo( const QString& idPackage );
 	const QString			versionSize( const QString& idPackage, const QString& version );

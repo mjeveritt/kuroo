@@ -37,6 +37,8 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
+	if ( this->isVisible() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+		m_inWorld = true;
 }
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
@@ -45,6 +47,8 @@ PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
+	if ( this->isVisible() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+		m_inWorld = true;
 }
 
 PackageItem::~PackageItem()
@@ -82,6 +86,7 @@ void PackageItem::setRollOver( bool isMouseOver )
 	m_isMouseOver = isMouseOver;
 	repaint();
 }
+
 /**
  * Set icons when package is visible.
  */
@@ -98,7 +103,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 // 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 		}
 		
-		// Optimizing - do not check for not relevant columns
+		// Optimizing - check only relevant columns
 		switch ( column ) {
 			
 			case 0 : {
@@ -131,9 +136,9 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 					m_inWorld = false;
 					setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
 				}
-				break;
 			}
 		}
+		
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }
@@ -433,8 +438,6 @@ void PackageItem::parsePackageVersions()
 	// Remove trailing commas
 	m_linesInstalled.truncate( m_linesInstalled.length() - 2 );
 	m_linesAvailable.truncate( m_linesAvailable.length() - 2 );
-	
-	DEBUG_LINE_INFO;
 }
 
 

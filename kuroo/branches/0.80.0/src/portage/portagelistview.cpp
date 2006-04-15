@@ -41,6 +41,8 @@ static int packageCount( 0 );
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
+	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
+		setQueued( true );
 }
 
 /**

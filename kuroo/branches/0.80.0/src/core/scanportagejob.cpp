@@ -126,7 +126,8 @@ bool ScanPortageJob::doJob()
 	                                    " category VARCHAR(32), "
 	                                    " name VARCHAR(32), "
 	                                    " description VARCHAR(255), "
-	                                    " latest VARCHAR(32), "
+// 	                                    " latest VARCHAR(32), "
+	                                    " path VARCHAR(64), "
 	                                    " date VARCHAR(32), "
 	                                    " status INTEGER, "
 	                                    " meta VARCHAR(255), "
@@ -145,7 +146,7 @@ bool ScanPortageJob::doJob()
 	                                    " slot VARCHAR(32),"
 	                                    " size VARCHAR(32), "
 	                                    " status INTEGER, "
-	                                    " path VARCHAR(64), "
+// 	                                    " path VARCHAR(64), "
 	                                    " branch VARCHAR(32)"
 	                                    " );", m_db);
 	
@@ -234,6 +235,7 @@ bool ScanPortageJob::doJob()
 							m_categories[ *itCategory ].packages[ name ];
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
+							m_categories[ *itCategory ].packages[ name ].path = *itPath;
 						}
 						
 						// Insert version in portage
@@ -246,7 +248,7 @@ bool ScanPortageJob::doJob()
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].path = *itPath;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].path = *itPath;
 						}
 					
 					}
@@ -284,15 +286,16 @@ bool ScanPortageJob::doJob()
 			QString package = itPackage.key();
 			QString status = itPackage.data().status;
 			QString description = itPackage.data().description;
+			QString path = itPackage.data().path;
 			
 			// Create meta tag containing all text of interest for searching
 			QString meta = category + " " + package + " " + description;
 			
 			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, idCatSubCategory, category, "
-			                       "name, description, status, meta) "
-			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');")
+			                       "name, description, status, path, meta) "
+			                       "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');")
 				.arg( idCategory ).arg( idSubCategory ).arg( idCatSubCategory ).arg( category ).arg( package )
-				.arg( description ).arg( status ).arg( meta );
+				.arg( description ).arg( status ).arg( path ).arg( meta );
 			
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
 			
@@ -308,16 +311,16 @@ bool ScanPortageJob::doJob()
 				QString slot = itVersion.data().slot;
 				QString size = itVersion.data().size;
 				QString keywords = itVersion.data().keywords;
-				QString path = itVersion.data().path;
+// 				QString path = itVersion.data().path;
 				
 				QString sqlVersion = QString( "INSERT INTO version_temp "
 				                              "(idPackage, name, description, homepage, size, branch, status, "
-				                              "licenses, useFlags, slot, path) "
-				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9'," )
+				                              "licenses, useFlags, slot) "
+				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
 					.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )
 					.arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );
 				
-				sqlVersion += QString( "'%1', '%2');" ).arg( slot ).arg( path );
+				sqlVersion += QString( "'%1');" ).arg( slot );
 				KurooDBSingleton::Instance()->insert( sqlVersion, m_db );
 			}
 		}

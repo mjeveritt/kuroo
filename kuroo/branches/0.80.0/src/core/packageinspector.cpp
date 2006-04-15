@@ -105,8 +105,6 @@ bool PackageInspector::isParentView( int view )
  */
 void PackageInspector::updateVersionData()
 {
-	kdDebug() << "m_package=" << m_package << LINE_INFO;
-	
 	// Clear dropdown menus
 	dialog->versionsView->clear();
 	dialog->cbVersionsEbuild->clear();
@@ -138,7 +136,7 @@ void PackageInspector::updateVersionData()
 		// Collect in inverse order to fill dropdown menus correctly
 		versionList.prepend( version );
 		
-		kdDebug() << "version=" << version << LINE_INFO;
+// 		kdDebug() << "version=" << version << " isInstalled=" << isInstalled << LINE_INFO;
 		
 		// Insert version in versionview
 		dialog->versionsView->insertItem( version, stability, size, isInstalled );
@@ -187,8 +185,6 @@ void PackageInspector::updateVersionData()
 	dialog->pixmapQueued->clear();
 	if ( m_portagePackage->isQueued() )
 		dialog->pixmapQueued->setPixmap( ImagesSingleton::Instance()->icon( QUEUED ) );
-	
-	DEBUG_LINE_INFO;
 }
 
 /**
@@ -691,8 +687,8 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 void PackageInspector::loadChangeLog()
 {
 	dialog->changelogBrowser->clear();
-	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, dialog->cbVersionsEbuild->currentText() ) + 
+	if ( dialog->inspectorTabs->currentPageIndex() == 2 ) {
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id/*, dialog->cbVersionsEbuild->currentText()*/ ) + 
 			"/" + m_category + "/" + m_package + "/ChangeLog";
 		QFile file( fileName );
 		
@@ -719,8 +715,8 @@ void PackageInspector::loadChangeLog()
 void PackageInspector::slotLoadEbuild( const QString& version )
 {
 	dialog->ebuildBrowser->clear();
-	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + 
+	if ( dialog->inspectorTabs->currentPageIndex() == 3 ) {
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id/*, version*/ ) + 
 			"/" + m_category + "/" + m_package + "/" + m_package + "-" + version + ".ebuild";
 		QFile file( fileName );
 		
@@ -734,8 +730,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 		}
 		else {
 			kdError(0) << "Loading ebuild. Reading: " << fileName << LINE_INFO;
-			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2")
-			                                .arg("<font color=darkRed><b>").arg("</b></font>") );
+			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2").arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -747,8 +742,8 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
 	dialog->dependencyBrowser->clear();
-	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id, version ) + 
+	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
+		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id/*, version*/ ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
 		QFile file( fileName );
 		

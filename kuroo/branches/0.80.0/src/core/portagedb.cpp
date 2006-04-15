@@ -256,7 +256,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " category VARCHAR(32), "
 	      " name VARCHAR(32), "
 	      " description VARCHAR(255), "
-	      " latest VARCHAR(32), "
+	      " path VARCHAR(64), "
+// 	      " latest VARCHAR(32), "
 	      " date VARCHAR(32), "
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
@@ -276,7 +277,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " slot VARCHAR(32),"
 	      " size VARCHAR(32), "
 	      " status INTEGER, "
-	      " path VARCHAR(64), "
+// 	      " path VARCHAR(64), "
 	      " branch VARCHAR(32) );"
 	      , conn);
 	
@@ -794,9 +795,10 @@ const QStringList KurooDB::packageHardMaskInfo( const QString& id )
  * @param idPackage
  * @param version
  */
-const QString KurooDB::packagePath( const QString& idPackage, const QString& version )
+const QString KurooDB::packagePath( const QString& id /*, const QString& version*/ )
 {
-	return singleQuery( "SELECT path FROM version WHERE idPackage = '" + idPackage + "' AND name = '" + version + "';" );
+// 	return singleQuery( "SELECT path FROM version WHERE idPackage = '" + idPackage + "' AND name = '" + version + "';" );
+	return singleQuery( "SELECT path FROM package WHERE id = '" + id + "';" );
 }
 
 /**

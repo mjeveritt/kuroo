@@ -446,7 +446,7 @@ void Emerge::cleanup()
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );
-	ResultsSingleton::Instance()->addPackageList( m_emergePackageList );
+	QueueSingleton::Instance()->addPackageList( m_emergePackageList );
 	
 	if ( !m_blocks.isEmpty() )
 		m_importantMessage += "<br>" + m_blocks.join("<br>");

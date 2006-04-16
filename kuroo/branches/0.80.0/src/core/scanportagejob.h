@@ -79,7 +79,6 @@ private:
 	struct Categories {
 		QString							idCategory;
 		QString							idSubCategory;
-		QString							idCatSubCategory;
 		PortagePackages					packages;
 	};
 	typedef QMap<QString, Categories>	PortageCategories;

@@ -360,7 +360,7 @@ void PortageTab::slotUninstall()
 		foreach ( selectedIdList ) {
 			if ( packagesView->packageItemById( *it )->isInstalled() ) {
 				packageList += *it;
-				packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + packagesView->packageItemById( *it )->name();
+				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
 			}
 		}
 		
@@ -411,9 +411,10 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><font color=#";
 		lines += GlobalSingleton::Instance()->fgHexColor() + " size=+1><b>";
 		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
-		lines += "<tr><td width=10%><b>" + i18n("Select&nbsp;action:") + "</b></td>";
-		lines += "<td width=90%>" + i18n("Add selected packages to queue") + "</td></tr>";
-		lines += "<tr><td></td><td>" + i18n("Deinstall selected packages") + "</td></tr>";
+		lines += "<tr><td>";
+		foreach ( selectedIdList )
+			lines += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name() + " ";
+		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		
 		return;
@@ -514,11 +515,13 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	if ( !item )
 		return;
 	
+	const QStringList selectedIdList = packagesView->selectedId();
+	
 	enum Actions { APPEND, UNINSTALL, OPTIONS, ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
-	int menuItem1;
 	
+	int menuItem1;
 	if ( !packagesView->currentPackage()->isQueued() )
 		menuItem1 = menu.insertItem( i18n("&Add to queue"), APPEND );
 	else
@@ -561,13 +564,20 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			slotAdvanced();
 			break;
 		
-		case ADDWORLD:
-			PortageSingleton::Instance()->appendWorld( packagesView->currentPackage()->category() + "/" + packagesView->currentPackage()->name() );
+		case ADDWORLD: {
+			QStringList packageList;
+			foreach ( selectedIdList )
+				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
+			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
-			
-		case DELWORLD:
-			PortageSingleton::Instance()->removeFromWorld( packagesView->currentPackage()->category() + "/" + packagesView->currentPackage()->name() );
+		}
 		
+		case DELWORLD: {
+			QStringList packageList;
+			foreach ( selectedIdList )
+				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
+			PortageSingleton::Instance()->removeFromWorld( packageList );
+		}
 	}
 }
 

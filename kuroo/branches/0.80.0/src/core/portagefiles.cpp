@@ -30,6 +30,18 @@
 #define POS_PACKAGE     5
 #define POS_VERSION     6
 
+enum PortageFilesAction {
+		PACKAGE_KEYWORDS_SCANNED,
+		PACKAGE_HARDMASK_SCANNED,
+		PACKAGE_USER_MASK_SCANNED,
+		PACKAGE_USER_UNMASK_SCANNED,
+		PACKAGE_USER_USE_SCANNED,
+		PACKAGE_KEYWORDS_SAVED,
+		PACKAGE_USER_MASK_SAVED,
+		PACKAGE_USER_UNMASK_SAVED,
+		PACKAGE_USER_USE_SAVED
+};
+
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
 // The complete atom regexp in non-escaped form (for testing, or similar):
@@ -82,8 +94,8 @@ public:
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageKeywords_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
-		                                    " keywords VARCHAR(255) )"
-		                                    " ;", m_db);
+		                                    " keywords VARCHAR(255) );"
+		                                    , m_db);
 		
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
@@ -111,8 +123,7 @@ public:
     				keywords = "~" + KurooConfig::arch();
 
 				QString id = KurooDBSingleton::Instance()->singleQuery( 
-					" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-					" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
+					" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 				
 				if ( id.isEmpty() )
 					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
@@ -141,7 +152,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 0 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_KEYWORDS_SCANNED );
 	}
 };
 
@@ -179,8 +190,8 @@ public:
 											" id INTEGER PRIMARY KEY AUTOINCREMENT, "
 											" idPackage INTEGER UNIQUE, "
 											" dependAtom VARCHAR(255), "
-											" comment BLOB )"
-											" ;", m_db);
+		                                    " comment BLOB );"
+											, m_db);
 		
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
@@ -202,8 +213,7 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
+							" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
@@ -234,7 +244,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 1 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_UNMASK_SCANNED );
 	}
 };
 
@@ -272,8 +282,8 @@ public:
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER, "
 		                                    " dependAtom VARCHAR(255), "
-		                                    " comment BLOB )"
-		                                    " ;", m_db);
+		                                    " comment BLOB );"
+		                                    , m_db);
 		
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
@@ -295,8 +305,7 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db);
+							" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
@@ -327,7 +336,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 2 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_HARDMASK_SCANNED );
 	}
 };
 
@@ -365,8 +374,8 @@ public:
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " dependAtom VARCHAR(255), "
-		                                    " comment BLOB )"
-		                                    " ;", m_db);
+		                                    " comment BLOB );"
+		                                    , m_db);
 		
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
@@ -388,8 +397,7 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
+							" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
@@ -420,13 +428,13 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 3 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_MASK_SCANNED );
 	}
 };
 
 /**
- * @class: LoadPackageMaskJob
- * @short: Thread for loading masked packages into db.
+ * @class: LoadPackageUseJob
+ * @short: Thread for loading packages use into db.
  */
 class LoadPackageUseJob : public ThreadWeaver::DependentJob
 {
@@ -454,8 +462,8 @@ public:
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
-		                                    " use VARCHAR(255) "
-		                                    " );", m_db);
+		                                    " use VARCHAR(255) );"
+		                                    , m_db);
 		
 		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 		
@@ -466,8 +474,7 @@ public:
 			use.simplifyWhiteSpace();
 			
 			QString id = KurooDBSingleton::Instance()->singleQuery( 
-				" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-				" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
+				" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 			
 			if ( id.isEmpty() )
 				kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
@@ -490,7 +497,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 7 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_USE_SCANNED );
 	}
 };
 
@@ -506,10 +513,8 @@ public:
 	virtual bool doJob() {
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( 
-			"SELECT catSubCategory.name, package.name, packageKeywords.keywords FROM package, catSubCategory, packageKeywords "
-			" WHERE catSubCategory.id = package.idCatSubCategory"
-			" AND package.id = packageKeywords.idPackage "
-			";" );
+			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
+			" WHERE package.id = packageKeywords.idPackage;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
@@ -536,7 +541,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 4 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_KEYWORDS_SAVED );
 	}
 };
 
@@ -573,7 +578,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 5 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_MASK_SAVED );
 	}
 };
 
@@ -610,12 +615,12 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 6 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_UNMASK_SAVED );
 	}
 };
 
 /**
- * @class: SavePackageUserMaskJob
+ * @class: SavePackageUseJob
  * @short: Thread for saving packages use-setting by user.
  */
 class SavePackageUseJob : public ThreadWeaver::DependentJob
@@ -626,10 +631,8 @@ public:
 	virtual bool doJob() {
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( 
-			"SELECT catSubCategory.name, package.name, packageUse.use FROM package, catSubCategory, packageUse "
-			" WHERE catSubCategory.id = package.idCatSubCategory"
-			" AND package.id = packageUse.idPackage "
-			";" );
+			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
+			" WHERE package.id = packageUse.idPackage;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
@@ -656,7 +659,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( 8 ); // Use signal instead?
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_USE_SAVED );
 	}
 };
 
@@ -683,41 +686,41 @@ void PortageFiles::init( QObject *parent )
 void PortageFiles::refresh( int mask )
 {
 	switch ( mask ) {
-		case 0:
+		case PACKAGE_KEYWORDS_SCANNED:
 			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
 			                                    .arg( KurooConfig::filePackageKeywords() ), KUROO );
 			break;
-		case 1:
+		case PACKAGE_USER_UNMASK_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
 												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
 			break;
-		case 2:
+		case PACKAGE_HARDMASK_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
 												.arg( KurooConfig::filePackageHardMask() ), KUROO );
 			break;
-		case 3:
+		case PACKAGE_USER_MASK_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
 												.arg( KurooConfig::filePackageUserMask() ), KUROO );
 			break;
-		case 4:
+		case PACKAGE_KEYWORDS_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
 												.arg( KurooConfig::filePackageKeywords() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
-		case 5:
+		case PACKAGE_USER_MASK_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
 												.arg( KurooConfig::filePackageUserMask() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
-		case 6:
+		case PACKAGE_USER_UNMASK_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
 												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
 			break;
-		case 7:
+		case PACKAGE_USER_USE_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
 												.arg( KurooConfig::filePackageUserUse() ), KUROO );
 			break;
-		case 8:
+		case PACKAGE_USER_USE_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
 												.arg( KurooConfig::filePackageUserUse() ), KUROO );
 	}

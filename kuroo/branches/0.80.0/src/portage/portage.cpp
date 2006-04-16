@@ -48,9 +48,8 @@ public:
 		QString version = parts[2];
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package "
-			"WHERE name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2') LIMIT 1; ")
-			.arg( name ).arg( category ), m_db );
+		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package WHERE "
+			"name = '%1' AND category = '%2' LIMIT 1;").arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
 			
@@ -107,8 +106,7 @@ public:
 		QString version = parts[2];
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package WHERE "
-			"name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2') LIMIT 1; ")
-			.arg( name ).arg( category ), m_db );
+			"name = '%1' AND category = '%2' LIMIT 1;").arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
 			kdWarning(0) << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
@@ -187,7 +185,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		PortageSingleton::Instance()->slotChanged(); // @fixme: Use signal instead?
+		PortageSingleton::Instance()->slotChanged();
 	}
 	
 private:
@@ -364,26 +362,6 @@ void Portage::loadWorld()
 }
 
 /**
- * Save back content of map to world file.
- */
-bool Portage::saveWorld( const QMap<QString, QString>& map )
-{
-	QFile file( KurooConfig::fileWorld() );
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream( &file );
-		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
-    		stream << it.key() << "\n";
-		file.close();
-		
-		return true;
-	}
-	else
-		kdError(0) << "Adding to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
-	
-	return false;
-}
-
-/**
  * Check if this package in is world file.
  * @param package
  * @return true/false
@@ -400,32 +378,55 @@ bool Portage::isInWorld( const QString& package )
  * Add package to world file.
  * @param package
  */
-void Portage::appendWorld( const QString& package )
+void Portage::appendWorld( const QStringList& packageList )
 {
-	QMap<QString, QString> map = m_mapWorld;
-	map[ package ] = QString::null;
-	
-	// Try saving changes first
-	if ( saveWorld( map ) ) {
-		m_mapWorld = map;
-		emit signalWorldChanged();
+	// Check is world is writable
+	QFile file( KurooConfig::fileWorld() );
+	if ( !file.open( IO_WriteOnly ) ) {
+		kdError(0) << "Adding packages to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		return;
 	}
+	
+	// Make a copy of world map
+	QMap<QString, QString> map = m_mapWorld;
+	
+	// Add/update package into world map
+	foreach ( packageList )
+		m_mapWorld.insert( *it, QString::null );
+	
+	// Update world file
+	QTextStream stream( &file );
+	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
+		stream << it.key() << "\n";
+	file.close();
+	
+	emit signalWorldChanged();
 }
 
 /**
  * Remove package from world file.
  * @param package
  */
-void Portage::removeFromWorld( const QString& package )
+void Portage::removeFromWorld( const QStringList& packageList )
 {
-	QMap<QString, QString> map = m_mapWorld;
-	map.remove( package );
-	
-	// Try saving changes first
-	if ( saveWorld( map ) ) {
-		m_mapWorld = map;
-		emit signalWorldChanged();
+	// Check is world is writable
+	QFile file( KurooConfig::fileWorld() );
+	if ( !file.open( IO_WriteOnly ) ) {
+		kdError(0) << "Removing packages from world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		return;
 	}
+	
+	// Make a copy of world map
+	foreach ( packageList )
+		m_mapWorld.remove( *it );
+	
+	// Update world file
+	QTextStream stream( &file );
+	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
+		stream << it.key() << "\n";
+	file.close();
+	
+	emit signalWorldChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -467,8 +468,6 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
  */
 void Portage::addInstalledPackage( const QString& package )
 {
-	DEBUG_LINE_INFO;
-	
 	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
 }
 
@@ -479,8 +478,6 @@ void Portage::addInstalledPackage( const QString& package )
  */
 void Portage::removeInstalledPackage( const QString& package )
 {
-	DEBUG_LINE_INFO;
-	
 	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
 }
 

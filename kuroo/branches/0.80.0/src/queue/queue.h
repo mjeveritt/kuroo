@@ -48,6 +48,7 @@ public:
 	void					reset();
 	void					refresh( bool hasCheckedQueue );
 	void					removePackageIdList( const QStringList& packageIdList );
+	void 					addPackageList( const EmergePackageList &packageList );
 	void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
 	void					setRemoveInstalled( bool removeInstalled );

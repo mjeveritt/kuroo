@@ -238,18 +238,10 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idCategory INTEGER );"
 	      , conn);
 	
-	query(" CREATE TABLE catSubCategory ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " name VARCHAR(32) UNIQUE, "
-	      " idCategory INTEGER, "
-	      " idSubCategory INTEGER );"
-	      , conn);
-	
 	query(" CREATE TABLE package ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " idCategory INTEGER, "
 	      " idSubCategory INTEGER, "
-	      " idCatSubCategory INTEGER, "
 	      " category VARCHAR(32), "
 	      " name VARCHAR(32), "
 	      " description VARCHAR(255), "
@@ -258,7 +250,8 @@ void KurooDB::createTables( DbConnection *conn )
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
 	      " updateVersion VARCHAR(32) ); "
-	      " CREATE INDEX index_name_package ON package (name);"
+// 	      " CREATE INDEX index_name_package ON package (name);"
+// 	      " CREATE INDEX index_category_package ON package (category);"
 	      , conn);
 	
 	query(" CREATE TABLE version ("
@@ -345,6 +338,9 @@ void KurooDB::createTables( DbConnection *conn )
 	      " idPackage INTEGER UNIQUE, "
 	      " use VARCHAR(255) );"
 	      , conn);
+	
+	query("CREATE INDEX index_name_package ON package(name);", conn);
+	query("CREATE INDEX index_category_package ON package(category);", conn);
 }
 
 
@@ -700,9 +696,7 @@ const QString KurooDB::package( const QString& id )
  */
 const QString KurooDB::category( const QString& id )
 {
-	QString category = singleQuery( " SELECT catSubCategory.name FROM package, catSubCategory "
-	                                " WHERE package.id = '" + id + "' "
-	                                " AND catSubCategory.id = package.idCatSubCategory LIMIT 1;" );
+	QString category = singleQuery( "SELECT category FROM package WHERE id = '" + id + "' LIMIT 1;" );
 	
 	if ( !category.isEmpty() )
 		return category;
@@ -726,8 +720,7 @@ const QString KurooDB::packageId( const QString& package )
 	if ( !parts.isEmpty() ) {
 		QString category = parts[0];
 		QString name = parts[1];
-		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-		                          " (SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; " );
+		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;" );
 	
 		if ( !id.isEmpty() )
 			return id;
@@ -998,11 +991,10 @@ void KurooDB::clearPackageUserMasked( const QString& id )
  */
 const QStringList KurooDB::allQueuePackages()
 {
-	return query( " SELECT package.id, catSubCategory.name, package.name, "
+	return query( " SELECT package.id, package.category, package.name, "
 	              " package.status, queue.idDepend, queue.size, queue.version "
-	              " FROM queue, catSubCategory, package "
+	              " FROM queue, package "
 	              " WHERE queue.idPackage = package.id "
-	              " AND catSubCategory.id = package.idCatSubCategory "
 	              " ORDER BY queue.idDepend;" );
 }
 

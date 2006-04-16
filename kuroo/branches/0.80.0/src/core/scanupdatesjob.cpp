@@ -85,7 +85,6 @@ bool ScanUpdatesJob::doJob()
 	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	                                    " idCategory INTEGER, "
 	                                    " idSubCategory INTEGER, "
-	                                    " idCatSubCategory INTEGER, "
 	                                    " category VARCHAR(32), "
 	                                    " name VARCHAR(32), "
 	                                    " description VARCHAR(255), "
@@ -93,8 +92,8 @@ bool ScanUpdatesJob::doJob()
 	                                    " date VARCHAR(32), "
 	                                    " status INTEGER, "
 	                                    " meta VARCHAR(255), "
-	                                    " updateVersion VARCHAR(32) "
-	                                    " );", m_db);
+	                                    " updateVersion VARCHAR(32) );"
+	                                    , m_db);
 	
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
 	KurooDBSingleton::Instance()->query( QString("UPDATE package_temp SET updateVersion = '', status = '%1' WHERE status = '%2';")
@@ -116,8 +115,7 @@ bool ScanUpdatesJob::doJob()
 		
 		// Find id for this category in db
 		QString id = KurooDBSingleton::Instance()->singleQuery( 
-			" SELECT id FROM package WHERE name = '" + (*it).name + "' AND idCatSubCategory = "
-			" ( SELECT id from catSubCategory WHERE name = '" + (*it).category + "') LIMIT 1; ", m_db );
+			" SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 		
 		if ( id.isEmpty() ) {
 			kdWarning(0) << QString("Scanning updates. Can not find id in database for package %1/%2.")

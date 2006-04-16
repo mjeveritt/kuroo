@@ -158,7 +158,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	HistorySingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
 	QueueSingleton::Instance()->init( this );
-	ResultsSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
 	FileWatcherSingleton::Instance()->init( this );
 }

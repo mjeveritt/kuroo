@@ -215,8 +215,8 @@ void QueueTab::slotQueueSummary()
 	queueBrowser->clear();
 	QString queueBrowserLines(   i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Initial estimated time for installation: %1<br>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "Elapsed time for installation: %1<br>" )
+			queueBrowserLines += i18n( "Initial estimated time: %1<br>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "Elapsed time: %1<br>" )
 		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
 			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" )
 		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
@@ -473,9 +473,12 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	if ( !item )
 		return;
 	
+	const QStringList selectedIdList = queueView->selectedId();
+	
 	enum Actions { REMOVE, OPTIONS, ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
+	
 	int menuItem1 = menu.insertItem( i18n( "Remove" ), REMOVE );
 	int menuItem2 = menu.insertItem( i18n( "Details..." ), OPTIONS );
 	
@@ -502,13 +505,20 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 			slotAdvanced();
 			break;
 		
-		case ADDWORLD:
-			PortageSingleton::Instance()->appendWorld( queueView->currentPackage()->category() + "/" + queueView->currentPackage()->name() );
+		case ADDWORLD: {
+			QStringList packageList;
+			foreach ( selectedIdList )
+				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
+			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
+		}
 		
-		case DELWORLD:
-			PortageSingleton::Instance()->removeFromWorld( queueView->currentPackage()->category() + "/" + queueView->currentPackage()->name() );
-		
+		case DELWORLD: {
+			QStringList packageList;
+			foreach ( selectedIdList )
+				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
+			PortageSingleton::Instance()->removeFromWorld( packageList );
+		}
 	}
 }
 

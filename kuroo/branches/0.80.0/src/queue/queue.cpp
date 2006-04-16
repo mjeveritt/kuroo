@@ -40,14 +40,13 @@ public:
 		                                    " idDepend INTEGER, "
 		                                    " use VARCHAR(255), "
 		                                    " size VARCHAR(32), "
-		                                    " version VARCHAR(32) "
-		                                    " );", m_db );
+		                                    " version VARCHAR(32) );"
+		                                    , m_db );
 		KurooDBSingleton::Instance()->insert("INSERT INTO queue_temp SELECT * FROM queue;", m_db );
 		KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db );
 		
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->insert( QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" )
-			                                      .arg(*it), m_db );
+			KurooDBSingleton::Instance()->insert( QString("INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" ).arg(*it), m_db );
 		
 		KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 		
@@ -61,7 +60,7 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false ); // @fixme: Use signal instead?
+		QueueSingleton::Instance()->refresh( false );
 	}
 	
 private:
@@ -87,13 +86,74 @@ public:
 	}
 	
 	virtual void completeJob() {
-		QueueSingleton::Instance()->refresh( false ); // @fixme: Use signal instead?
+		QueueSingleton::Instance()->refresh( false );
 	}
 	
 private:
 	const QStringList m_packageIdList;
 };
 
+/**
+ * @class AddResultsPackageListJob
+ * @short Thread for adding packages to results in db. Used by emerge.
+ */
+class AddResultsPackageListJob : public ThreadWeaver::DependentJob
+{
+public:
+	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), m_packageList( packageList ) {}
+	
+	virtual bool doJob() {
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		
+		// Collect end-user packages
+		QMap<QString, int> endUserPackageMap;
+		const QStringList endUserPackageList = KurooDBSingleton::Instance()->query( 
+			" SELECT idPackage FROM queue WHERE idDepend = '0';", m_db );
+		
+		foreach ( endUserPackageList )
+			endUserPackageMap.insert( *it, 0 );
+		
+		KurooDBSingleton::Instance()->query("DELETE FROM queue;");
+		
+		// Iterate the emerge pretend package list
+		QString idPackage;
+		EmergePackageList::ConstIterator itEnd = m_packageList.end();
+		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
+			
+			QString id = KurooDBSingleton::Instance()->singleQuery( 
+				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
+			
+			if ( id.isEmpty() ) {
+			kdWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
+					.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
+				return false;
+			}
+			
+			// We found a dependency, add it
+			if ( !endUserPackageMap.contains( id ) ) {
+				KurooDBSingleton::Instance()->insert( QString( 
+					"INSERT INTO queue (idPackage, idDepend, use, size, version) VALUES ('%1', '%2', '%3', '%4', '%5');" )
+				                                      .arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
+			}
+			else {
+				idPackage = id;
+				KurooDBSingleton::Instance()->insert( QString( 
+					"INSERT INTO queue (idPackage, idDepend, use, size, version) VALUES ('%1', '0', '%2', '%3', '%4');" )
+				                                      .arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
+			}
+		}
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		return true;
+	}
+	
+	virtual void completeJob() {
+		QueueSingleton::Instance()->refresh( true );
+	}
+	
+private:
+	const EmergePackageList m_packageList;
+	
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue
@@ -246,6 +306,16 @@ bool Queue::isQueueBusy()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Package handling
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Add packages to the results table in the db
+ * @param packageList
+ */
+void Queue::addPackageList( const EmergePackageList &packageList )
+{
+	if ( !packageList.isEmpty() )
+		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
+}
 
 /**
  * Remove packages from queue.

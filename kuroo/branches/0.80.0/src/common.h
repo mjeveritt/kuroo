@@ -30,7 +30,6 @@
 #include "statusbar.h"
 #include "log.h"
 #include "queue.h"
-#include "results.h"
 #include "portage.h"
 #include "portagedb.h"
 #include "history.h"
@@ -51,7 +50,6 @@ typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
 typedef Singleton<Queue> QueueSingleton;
-typedef Singleton<Results> ResultsSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;

@@ -56,7 +56,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	               "<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
 	               "<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
 	               "<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
-	               "<tr><td>" + KurooConfig::dirWorldFile() + "</td></tr>" +
+	               "<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
 	               "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" 
 	               );
 	
@@ -109,8 +109,8 @@ void IntroDlg::accept()
 		KIO::file_copy( filePackageUserMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt );
 		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
 		KIO::file_copy( filePackageUserUse, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt );
-		QString dirWorldFile( KurooConfig::dirWorldFile() );
-		KIO::file_copy( dirWorldFile, GlobalSingleton::Instance()->kurooDir() + "backup/" + dirWorldFile.section( "/", -1 ) + dt );
+		QString fileWorld( KurooConfig::fileWorld() );
+		KIO::file_copy( fileWorld, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileWorld.section( "/", -1 ) + dt );
 		QString fileMakeConf( KurooConfig::fileMakeConf() );
 		KIO::file_copy( fileMakeConf, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt );
 	}

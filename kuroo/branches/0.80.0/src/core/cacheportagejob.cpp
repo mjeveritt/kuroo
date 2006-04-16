@@ -71,7 +71,7 @@ bool CachePortageJob::doJob()
 	dCategory.setSorting( QDir::Name );
 	
 	// Get a count of total packages for proper progress
-	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
+	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
 	if ( packageCount == "0" )
 		setProgressTotalSteps( 35000 );
 	else

@@ -49,7 +49,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package "
-			"WHERE name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")
+			"WHERE name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2') LIMIT 1; ")
 			.arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
@@ -107,7 +107,7 @@ public:
 		QString version = parts[2];
 		
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package WHERE "
-			"name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2' ); ")
+			"name = '%1' AND idCatSubCategory = ( SELECT id from catSubCategory WHERE name = '%2') LIMIT 1; ")
 			.arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
@@ -350,7 +350,7 @@ void Portage::loadWorld()
 {
 	m_mapWorld.clear();
 	
-	QFile file( KurooConfig::dirWorldFile() );
+	QFile file( KurooConfig::fileWorld() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
@@ -360,7 +360,7 @@ void Portage::loadWorld()
 		emit signalWorldChanged();
 	}
 	else
-		kdError(0) << "Loading packages in world. Reading: " << KurooConfig::dirWorldFile() << LINE_INFO;
+		kdError(0) << "Loading packages in world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
 }
 
 /**
@@ -368,7 +368,7 @@ void Portage::loadWorld()
  */
 bool Portage::saveWorld( const QMap<QString, QString>& map )
 {
-	QFile file( KurooConfig::dirWorldFile() );
+	QFile file( KurooConfig::fileWorld() );
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		for ( QMap<QString, QString>::ConstIterator it = map.begin(); it != map.end(); ++it )
@@ -378,7 +378,7 @@ bool Portage::saveWorld( const QMap<QString, QString>& map )
 		return true;
 	}
 	else
-		kdError(0) << "Adding to world. Writing: " << KurooConfig::dirWorldFile() << LINE_INFO;
+		kdError(0) << "Adding to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
 	
 	return false;
 }

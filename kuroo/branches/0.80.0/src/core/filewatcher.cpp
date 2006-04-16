@@ -46,7 +46,7 @@ void FileWatcher::init( QObject *parent )
 	
 // 	watcher->addDir( KurooConfig::dirDbPkg() + "/sys-apps" );
 	
-// 	watcher->addFile( KurooConfig::dirWorldFile() );
+// 	watcher->addFile( KurooConfig::fileWorld() );
 	
 	connect( watcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged( const QString& ) ) );
 }
@@ -70,7 +70,7 @@ void FileWatcher::slotChanged( const QString& path )
 		}
 	}
 // 	else
-// 	if ( path == KurooConfig::dirWorldFile() )
+// 	if ( path == KurooConfig::fileWorld() )
 // 		PortageSingleton::Instance()->loadWorld();
 }
 

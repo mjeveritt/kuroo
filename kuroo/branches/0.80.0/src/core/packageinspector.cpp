@@ -688,7 +688,7 @@ void PackageInspector::loadChangeLog()
 {
 	dialog->changelogBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 2 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id/*, dialog->cbVersionsEbuild->currentText()*/ ) + 
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "/ChangeLog";
 		QFile file( fileName );
 		
@@ -716,7 +716,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 {
 	dialog->ebuildBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 3 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id/*, version*/ ) + 
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "/" + m_package + "-" + version + ".ebuild";
 		QFile file( fileName );
 		
@@ -743,7 +743,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 {
 	dialog->dependencyBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id/*, version*/ ) + 
+		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
 		QFile file( fileName );
 		

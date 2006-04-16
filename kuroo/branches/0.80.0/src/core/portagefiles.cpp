@@ -112,7 +112,7 @@ public:
 
 				QString id = KurooDBSingleton::Instance()->singleQuery( 
 					" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-					" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+					" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
 				
 				if ( id.isEmpty() )
 					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
@@ -203,7 +203,7 @@ public:
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
 							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
@@ -296,7 +296,7 @@ public:
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
 							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db);
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db);
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
@@ -389,7 +389,7 @@ public:
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
 							" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-							" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+							" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
@@ -467,7 +467,7 @@ public:
 			
 			QString id = KurooDBSingleton::Instance()->singleQuery( 
 				" SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-				" ( SELECT id from catSubCategory WHERE name = '" + category + "' ); ", m_db );
+				" ( SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; ", m_db );
 			
 			if ( id.isEmpty() )
 				kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")

@@ -121,13 +121,13 @@ public:
 	KurooDB( QObject *m_parent = 0 );
 	~KurooDB();
 	
-	void 			destroy();
+	void 					destroy();
 	
 	/**
 	 * Check db integrity and create new db if necessary.
 	 */
-	QString 		init( QObject *parent = 0 );
-	QString 		escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
+	QString 				init( QObject *parent = 0 );
+	QString 				escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
 	
 	/**
 	* This method returns a static DbConnection for components that want to use
@@ -136,34 +136,34 @@ public:
 	*
 	* @return static DbConnection
 	*/
-	DbConnection 	*getStaticDbConnection();
+	DbConnection 			*getStaticDbConnection();
 	
 	/**
 	* Returns the DbConnection back to connection pool.
 	*
 	* @param conn DbConnection to be returned
 	*/
-	void 			returnStaticDbConnection( DbConnection *conn );
+	void 					returnStaticDbConnection( DbConnection *conn );
 	
 	//sql helper methods
-	QStringList 	query( const QString& statement, DbConnection *conn = NULL );
-	QString		 	singleQuery( const QString& statement, DbConnection *conn = NULL );
-	int 			insert( const QString& statement, DbConnection *conn = NULL );
+	QStringList 			query( const QString& statement, DbConnection *conn = NULL );
+	QString		 			singleQuery( const QString& statement, DbConnection *conn = NULL );
+	int 					insert( const QString& statement, DbConnection *conn = NULL );
 	
 	//table management methods
-	bool			isCacheEmpty();
-	bool 			isPortageEmpty();
-	bool			isQueueEmpty();
-	bool			isUpdatesEmpty();
-	bool 			isHistoryEmpty();
-	bool 			isValid();
-	void 			createTables( DbConnection *conn = NULL );
+	bool					isCacheEmpty();
+	bool 					isPortageEmpty();
+	bool					isQueueEmpty();
+	bool					isUpdatesEmpty();
+	bool 					isHistoryEmpty();
+	bool 					isValid();
+	void 					createTables( DbConnection *conn = NULL );
 	
 	// Kuroo main
-	QString			getKurooDbMeta( const QString& meta );
-	void			setKurooDbMeta( const QString& meta, const QString& data );
-	void			backupDb();
-	void			restoreBackup();
+	QString					getKurooDbMeta( const QString& meta );
+	void					setKurooDbMeta( const QString& meta, const QString& data );
+	void					backupDb();
+	void					restoreBackup();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
@@ -179,7 +179,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for allPackages
 	//////////////////////////////////////////////////////////////////////////////
-	const QString 			packagePath( const QString& id /*, const QString& version */);
+	const QString 			packagePath( const QString& id );
 	const QStringList 		packageVersionsInstalled( const QString& idPackage );
 	const QStringList 		packageVersionsInfo( const QString& idPackage );
 	const QString			versionSize( const QString& idPackage, const QString& version );
@@ -197,21 +197,21 @@ public:
 	const QString			packageKeywordsAtom( const QString& id );
 	const QString			packageUse( const QString& id );
 	
-	bool 			isPackageUnMasked( const QString& id );
-	bool 			isPackageUnTesting( const QString& id );
-	bool 			isPackageAvailable( const QString& id );
+	bool 					isPackageUnMasked( const QString& id );
+	bool 					isPackageUnTesting( const QString& id );
+	bool 					isPackageAvailable( const QString& id );
 	
-	void			setPackageUse( const QString& id, const QString& useFlags );
-	void			setPackageUnTesting( const QString& id );
-	void			setPackageUnMasked( const QString& id );
-	void			setPackageUnMasked( const QString& id, const QString& version );
-	void			setPackageUserMasked( const QString& id );
-	void			setPackageAvailable( const QString& id );
+	void					setPackageUse( const QString& id, const QString& useFlags );
+	void					setPackageUnTesting( const QString& id );
+	void					setPackageUnMasked( const QString& id );
+	void					setPackageUnMasked( const QString& id, const QString& version );
+	void					setPackageUserMasked( const QString& id );
+	void					setPackageAvailable( const QString& id );
 	
-	void			clearPackageUnTesting( const QString& id );
-	void			clearPackageUnMasked( const QString& id );
-	void			clearPackageUserMasked( const QString& id );
-	void			clearPackageAvailable( const QString& id );
+	void					clearPackageUnTesting( const QString& id );
+	void					clearPackageUnMasked( const QString& id );
+	void					clearPackageUserMasked( const QString& id );
+	void					clearPackageAvailable( const QString& id );
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
@@ -223,16 +223,16 @@ public:
 	const QStringList 		allMergeHistory();
 	const QStringList 		allStatistic();
 	
-	void			resetUpdates();
-	void			resetInstalled();
-	void			addEmergeInfo( const QString& einfo );
-	void			addBackup( const QString& source, const QString& destination );
+	void					resetUpdates();
+	void					resetInstalled();
+	void					addEmergeInfo( const QString& einfo );
+	void					addBackup( const QString& source, const QString& destination );
 	
 private:
-	QObject*		m_parent;
+	QObject*				m_parent;
 
 	DbConnectionPool *m_dbConnPool;
-	bool 			m_monitor;
+	bool 					m_monitor;
 };
 
 #endif /* KUROODB_H */

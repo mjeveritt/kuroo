@@ -230,14 +230,12 @@ void KurooDB::createTables( DbConnection *conn )
 	query(" CREATE TABLE category ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32) UNIQUE );"
-// 	      " CREATE INDEX index_name_category ON category (name)"
 	      , conn);
 	
 	query(" CREATE TABLE subCategory ("
 	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 	      " name VARCHAR(32), "
 	      " idCategory INTEGER );"
-// 	      " CREATE INDEX index_name_subCategory ON subCategory (name)"
 	      , conn);
 	
 	query(" CREATE TABLE catSubCategory ("
@@ -245,7 +243,6 @@ void KurooDB::createTables( DbConnection *conn )
 	      " name VARCHAR(32) UNIQUE, "
 	      " idCategory INTEGER, "
 	      " idSubCategory INTEGER );"
-// 	      " CREATE INDEX index_name_catSubCategory ON catSubCategory (name)"
 	      , conn);
 	
 	query(" CREATE TABLE package ("
@@ -257,13 +254,11 @@ void KurooDB::createTables( DbConnection *conn )
 	      " name VARCHAR(32), "
 	      " description VARCHAR(255), "
 	      " path VARCHAR(64), "
-// 	      " latest VARCHAR(32), "
 	      " date VARCHAR(32), "
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
 	      " updateVersion VARCHAR(32) ); "
 	      " CREATE INDEX index_name_package ON package (name);"
-// 	      " CREATE INDEX index_description ON package (description);"
 	      , conn);
 	
 	query(" CREATE TABLE version ("
@@ -277,8 +272,7 @@ void KurooDB::createTables( DbConnection *conn )
 	      " slot VARCHAR(32),"
 	      " size VARCHAR(32), "
 	      " status INTEGER, "
-// 	      " path VARCHAR(64), "
-	      " branch VARCHAR(32) );"
+	      " keywords VARCHAR(32) );"
 	      , conn);
 	
 	query(" CREATE TABLE queue ("
@@ -461,7 +455,7 @@ void KurooDB::restoreBackup()
  */
 QString KurooDB::getKurooDbMeta( const QString& meta )
 {
-	return singleQuery( QString("SELECT data FROM dbInfo WHERE meta = '%1';").arg( meta ) );
+	return singleQuery( "SELECT data FROM dbInfo WHERE meta = '" + meta + "' LIMIT 1;" );
 }
 
 /**
@@ -470,10 +464,10 @@ QString KurooDB::getKurooDbMeta( const QString& meta )
  */
 void KurooDB::setKurooDbMeta( const QString& meta, const QString& data )
 {
-	if ( singleQuery( QString("SELECT COUNT(meta) FROM dbInfo WHERE meta = '%1' LIMIT 1;").arg( meta ) ) == "0" )
-		query( QString("INSERT INTO dbInfo (meta, data) VALUES ('%1', '%2') ;").arg( meta ).arg( data ) );
+	if ( singleQuery( "SELECT COUNT(meta) FROM dbInfo WHERE meta = '" + meta + "' LIMIT 1;" ) == "0" )
+		query( "INSERT INTO dbInfo (meta, data) VALUES ('" + meta + "', '"+ data + "');" );
 	else
-		query( QString("UPDATE dbInfo SET data = '%2' WHERE meta = '%1';").arg( meta ).arg( data ) );
+		query( "UPDATE dbInfo SET data = '" + data + "' WHERE meta = '" + meta + "';" );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -690,7 +684,7 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
  */
 const QString KurooDB::package( const QString& id )
 {
-	QString name = singleQuery( "SELECT name FROM package WHERE id = '" + id + "';" );
+	QString name = singleQuery( "SELECT name FROM package WHERE id = '" + id + "' LIMIT 1;" );
 	
 	if ( !name.isEmpty() )
 		return name;
@@ -708,7 +702,7 @@ const QString KurooDB::category( const QString& id )
 {
 	QString category = singleQuery( " SELECT catSubCategory.name FROM package, catSubCategory "
 	                                " WHERE package.id = '" + id + "' "
-	                                " AND catSubCategory.id = package.idCatSubCategory ;" );
+	                                " AND catSubCategory.id = package.idCatSubCategory LIMIT 1;" );
 	
 	if ( !category.isEmpty() )
 		return category;
@@ -733,7 +727,7 @@ const QString KurooDB::packageId( const QString& package )
 		QString category = parts[0];
 		QString name = parts[1];
 		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND idCatSubCategory = "
-	                          " ( SELECT id from catSubCategory WHERE name = '" + category + "' ); " );
+		                          " (SELECT id from catSubCategory WHERE name = '" + category + "') LIMIT 1; " );
 	
 		if ( !id.isEmpty() )
 			return id;
@@ -765,7 +759,7 @@ const QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
  */
 const QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
-	return query( " SELECT name, description, homepage, status, licenses, useFlags, slot, branch, size "
+	return query( " SELECT name, description, homepage, status, licenses, useFlags, slot, keywords, size "
 	              " FROM version WHERE idPackage = '" + idPackage + "'"
 	              " ORDER BY version.name;");
 }
@@ -778,7 +772,7 @@ const QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 const QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
 	return singleQuery( " SELECT size, status FROM version WHERE idPackage = '" + idPackage + "'"
-	                    " AND name = '" + version + "' ;");
+	                    " AND name = '" + version + "' LIMIT 1;");
 }
 
 /**
@@ -795,10 +789,9 @@ const QStringList KurooDB::packageHardMaskInfo( const QString& id )
  * @param idPackage
  * @param version
  */
-const QString KurooDB::packagePath( const QString& id /*, const QString& version*/ )
+const QString KurooDB::packagePath( const QString& id )
 {
-// 	return singleQuery( "SELECT path FROM version WHERE idPackage = '" + idPackage + "' AND name = '" + version + "';" );
-	return singleQuery( "SELECT path FROM package WHERE id = '" + id + "';" );
+	return singleQuery( "SELECT path FROM package WHERE id = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -807,7 +800,7 @@ const QString KurooDB::packagePath( const QString& id /*, const QString& version
  */
 const QString KurooDB::packageHardMaskAtom( const QString& id )
 {
-	return singleQuery( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
+	return singleQuery( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -816,7 +809,7 @@ const QString KurooDB::packageHardMaskAtom( const QString& id )
  */
 const QString KurooDB::packageUserMaskAtom( const QString& id )
 {
-	return singleQuery( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
+	return singleQuery( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -825,7 +818,7 @@ const QString KurooDB::packageUserMaskAtom( const QString& id )
  */
 const QString KurooDB::packageUnMaskAtom( const QString& id )
 {
-	return singleQuery( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
+	return singleQuery( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -834,12 +827,12 @@ const QString KurooDB::packageUnMaskAtom( const QString& id )
  */
 const QString KurooDB::packageKeywordsAtom( const QString& id )
 {
-	return singleQuery( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	return singleQuery( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
 const QString KurooDB::packageUse( const QString& id )
 {
-	return singleQuery( "SELECT use FROM packageUse where idPackage = '" + id + "';" );
+	return singleQuery( "SELECT use FROM packageUse where idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -848,7 +841,7 @@ const QString KurooDB::packageUse( const QString& id )
  */
 bool KurooDB::isPackageUnTesting( const QString& id )
 {
-	QString keywords = singleQuery( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "';" );
+	QString keywords = singleQuery( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "' LIMIT 1;" );
 	if ( keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
 		return true;
 	else
@@ -861,7 +854,7 @@ bool KurooDB::isPackageUnTesting( const QString& id )
  */
 bool KurooDB::isPackageAvailable( const QString& id )
 {
-	QString keywords = singleQuery( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "';" );
+	QString keywords = singleQuery( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "' LIMIT 1;" );
 	if ( keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
 		return true;
 	else
@@ -908,8 +901,6 @@ void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
  */
 void KurooDB::setPackageUserMasked( const QString& id )
 {
-	DEBUG_LINE_INFO;
-	
 	insert( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
 	        "'" + category( id ) + "/" + package( id ) + "');" );
 }

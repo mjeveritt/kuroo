@@ -67,7 +67,6 @@ private:
 		QString							slot;
 		QString							size;
 		QString							keywords;
-// 		QString							path;
 	};
 	typedef QMap<QString, Data>			PortageVersions;
 	struct Versions {

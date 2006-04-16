@@ -51,9 +51,7 @@
 		</entry>
 		<entry name="Arch" type="String">
 		</entry>
-		<entry name="worldFile" type="String">
-		</entry>
-		<entry name="DirWorldFile" type="String">
+		<entry name="FileWorld" type="String">
 			<default>/var/lib/portage/world</default>
 		</entry>
 		<entry name="FileMakeConf" type="String">
@@ -73,6 +71,9 @@
 		</entry>
 		<entry name="FilePackageUserUse" type="String">
 			<default>/etc/portage/package.use</default>
+		</entry>
+		<entry name="FileEmergeLog" type="String">
+			<default>/var/log/emerge.log</default>
 		</entry>
 		<entry name="etcUpdateTool" type="String">
 			<default>kdiff3</default>

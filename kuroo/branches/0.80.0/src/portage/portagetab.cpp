@@ -79,7 +79,9 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
+	connect( packagesView, SIGNAL( selectionChanged() /*currentChanged( QListViewItem* )*/ ), this, SLOT( slotPackage() ) );
+	
+	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Connect changes made in Inspector to this view so it gets updated
@@ -399,6 +401,24 @@ void PortageTab::processPackage( bool viewInspector )
 	
 	summaryBrowser->clear();
 	
+	// Multiple packages selected
+	const QStringList selectedIdList = packagesView->selectedId();
+	int count = selectedIdList.size();
+	if ( count > 1 ) {
+		
+		// Build summary html-view
+		QString lines = "<table width=100% border=0 cellpadding=0>";
+		lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><font color=#";
+		lines += GlobalSingleton::Instance()->fgHexColor() + " size=+1><b>";
+		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
+		lines += "<tr><td width=10%><b>" + i18n("Select&nbsp;action:") + "</b></td>";
+		lines += "<td width=90%>" + i18n("Add selected packages to queue") + "</td></tr>";
+		lines += "<tr><td></td><td>" + i18n("Deinstall selected packages") + "</td></tr>";
+		summaryBrowser->setText( lines + "</table>");
+		
+		return;
+	}
+	
 	// Initialize the portage package object with the current package and it's versions data
 	packagesView->currentPackage()->parsePackageVersions();
 	QString linesInstalled = packagesView->currentPackage()->linesInstalled();
@@ -408,9 +428,9 @@ void PortageTab::processPackage( bool viewInspector )
 	// Build summary html-view
 	QString lines =  "<table width=100% border=0 cellpadding=0>";
 	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#";
-	lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=\"+1\">" + packagesView->currentPackage()->name() + "</font> ";
+	lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
 	lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
-	lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</b></font></td></tr>";
+	lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 		lines += "<tr><td colspan=2>" + packagesView->currentPackage()->description() + "</td></tr>";

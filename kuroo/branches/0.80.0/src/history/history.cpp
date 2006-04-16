@@ -75,7 +75,7 @@ void History::init( QObject *parent )
 {
 	m_parent = parent;
 	if ( !m_log.open(IO_ReadOnly) )
-		kdError(0) << "Reading /var/log/emerge.log" << LINE_INFO;
+		kdError(0) << "Reading " << KurooConfig::fileEmergeLog() << LINE_INFO;
 	else
 		stream.setDevice( &m_log );
 }
@@ -88,13 +88,13 @@ void History::slotInit()
 {
 	DEBUG_LINE_INFO;
 	
-	m_log.setName( "/var/log/emerge.log" );
+	m_log.setName( KurooConfig::fileEmergeLog() );
 	loadTimeStatistics();
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
 	
 	logWatcher = new KDirWatch( this );
-	logWatcher->addFile( "/var/log/emerge.log" );
+	logWatcher->addFile( KurooConfig::fileEmergeLog() );
 	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
 }
 
@@ -207,7 +207,8 @@ void History::slotParse()
 					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
 				else
-					kdWarning(0) << QString("Can not parse package emerge start in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
+					kdWarning(0) << QString("Can not parse package emerge start in %1: %2")
+					.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
 			}
 			else // Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
@@ -220,7 +221,8 @@ void History::slotParse()
 					emit signalHistoryChanged();
 				}
 				else
-					kdWarning(0) << QString("Can not parse package emerge complete in /var/log/emerge.log: %1").arg( line ) << LINE_INFO;
+					kdWarning(0) << QString("Can not parse package emerge complete in %1: %2")
+					.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );

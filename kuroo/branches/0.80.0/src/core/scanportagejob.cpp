@@ -86,7 +86,7 @@ bool ScanPortageJob::doJob()
 	}
 	
 	// Get a count of total packages for proper progress
-	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
+	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
 	if ( packageCount == "0" )
 		setProgressTotalSteps( 25000 );
 	else
@@ -126,7 +126,6 @@ bool ScanPortageJob::doJob()
 	                                    " category VARCHAR(32), "
 	                                    " name VARCHAR(32), "
 	                                    " description VARCHAR(255), "
-// 	                                    " latest VARCHAR(32), "
 	                                    " path VARCHAR(64), "
 	                                    " date VARCHAR(32), "
 	                                    " status INTEGER, "
@@ -146,8 +145,7 @@ bool ScanPortageJob::doJob()
 	                                    " slot VARCHAR(32),"
 	                                    " size VARCHAR(32), "
 	                                    " status INTEGER, "
-// 	                                    " path VARCHAR(64), "
-	                                    " branch VARCHAR(32)"
+	                                    " keywords VARCHAR(32)"
 	                                    " );", m_db);
 	
 	
@@ -248,7 +246,6 @@ bool ScanPortageJob::doJob()
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].path = *itPath;
 						}
 					
 					}
@@ -311,10 +308,9 @@ bool ScanPortageJob::doJob()
 				QString slot = itVersion.data().slot;
 				QString size = itVersion.data().size;
 				QString keywords = itVersion.data().keywords;
-// 				QString path = itVersion.data().path;
 				
 				QString sqlVersion = QString( "INSERT INTO version_temp "
-				                              "(idPackage, name, description, homepage, size, branch, status, "
+				                              "(idPackage, name, description, homepage, size, keywords, status, "
 				                              "licenses, useFlags, slot) "
 				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
 					.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )

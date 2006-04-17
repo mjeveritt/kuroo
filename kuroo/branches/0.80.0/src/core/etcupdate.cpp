@@ -233,11 +233,12 @@ void EtcUpdate::backup( const QString& source, const QString& destination )
 	QString backupSource = source.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
 	QString backupDestination = destination.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
 	
-	KIO::file_copy( source, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupSource );
-	KIO::file_copy( destination, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupDestination );
+	KIO::file_copy( source, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupSource,
+	                -1, true, false, false );
+	KIO::file_copy( destination, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupDestination,
+	                -1, true, false, false );
 	
 	KurooDBSingleton::Instance()->addBackup( backupSource, backupDestination );
-	
 	emit signalEtcFileMerged();
 }
 

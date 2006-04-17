@@ -53,7 +53,6 @@ private:
 private:
 	QRegExp								rxAtom;
 
-	bool								m_aborted;
 	DbConnection* const 				m_db;
 	
 	QMap<QString, QString> 				m_mapCache;

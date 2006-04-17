@@ -318,7 +318,6 @@ void QueueTab::slotCheck()
 {
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
-	
 	EmergeSingleton::Instance()->pretend( packageList );
 }
 
@@ -383,7 +382,6 @@ void QueueTab::slotStop()
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
-		
 		}
 }
 

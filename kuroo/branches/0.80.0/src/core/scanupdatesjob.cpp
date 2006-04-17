@@ -38,14 +38,15 @@
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList ), m_aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList )
 {
 }
 
 ScanUpdatesJob::~ScanUpdatesJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-	if ( m_aborted )
+
+	if ( isAborted() )
 		SignalistSingleton::Instance()->scanAborted();
 }
 
@@ -57,7 +58,6 @@ void ScanUpdatesJob::completeJob()
 	DEBUG_LINE_INFO;
 	
 	SignalistSingleton::Instance()->loadUpdatesComplete();
-	m_aborted = false;
 }
 
 /**

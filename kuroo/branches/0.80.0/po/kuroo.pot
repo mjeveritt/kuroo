@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-16 16:00+0200\n"
+"POT-Creation-Date: 2006-04-17 09:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,16 +98,16 @@ msgstr ""
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:530 rc.cpp:22 rc.cpp:251 queue/queuetab.cpp:483
+#: portage/portagetab.cpp:530 rc.cpp:22 rc.cpp:251 queue/queuetab.cpp:481
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:534 queue/queuetab.cpp:487
+#: portage/portagetab.cpp:534 queue/queuetab.cpp:485
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:536 queue/queuetab.cpp:489
+#: portage/portagetab.cpp:536 queue/queuetab.cpp:487
 msgid "Remove from world"
 msgstr ""
 
@@ -131,13 +131,13 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: statusbar.cpp:98 history/history.cpp:255 history/history.cpp:256
+#: statusbar.cpp:98 history/history.cpp:256 history/history.cpp:257
 #: core/etcupdate.cpp:125 core/cacheportagejob.cpp:170
-#: core/portagefiles.cpp:138 core/portagefiles.cpp:230
-#: core/portagefiles.cpp:322 core/portagefiles.cpp:414
-#: core/scanupdatesjob.cpp:153 core/scanportagejob.cpp:350
-#: core/scanportagejob.cpp:424 core/emerge.cpp:447 core/emerge.cpp:525
-#: queue/queuetab.cpp:385
+#: core/portagefiles.cpp:150 core/portagefiles.cpp:242
+#: core/portagefiles.cpp:334 core/portagefiles.cpp:426
+#: core/scanupdatesjob.cpp:150 core/scanportagejob.cpp:329
+#: core/scanportagejob.cpp:403 core/emerge.cpp:447 core/emerge.cpp:525
+#: queue/queuetab.cpp:384
 msgid "Done."
 msgstr ""
 
@@ -648,7 +648,7 @@ msgstr ""
 msgid "Advanced build options"
 msgstr ""
 
-#: rc.cpp:409 history/history.cpp:265
+#: rc.cpp:409 history/history.cpp:270
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
@@ -1037,27 +1037,27 @@ msgstr ""
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:242 history/history.cpp:243
+#: history/history.cpp:243 history/history.cpp:244
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:248 history/history.cpp:249
+#: history/history.cpp:250 history/history.cpp:251
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:266
+#: history/history.cpp:271
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:267
+#: history/history.cpp:272
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:268
+#: history/history.cpp:273
 msgid "Exiting successfully"
 msgstr ""
 
-#: history/history.cpp:269
+#: history/history.cpp:274 kuroo.cpp:109
 msgid "Terminating"
 msgstr ""
 
@@ -1077,41 +1077,45 @@ msgstr ""
 msgid "Installation message for %1:"
 msgstr ""
 
-#: kuroo.cpp:88 kuroo.cpp:90 kuroo.cpp:191 kuroo.cpp:193
+#: kuroo.cpp:88 kuroo.cpp:90 kuroo.cpp:206 kuroo.cpp:208
 msgid "settings"
 msgstr ""
 
-#: kuroo.cpp:112
+#: kuroo.cpp:109
+msgid "Kuroo is not responding. Attempting to terminate kuroo!"
+msgstr ""
+
+#: kuroo.cpp:123
 msgid "&Information"
 msgstr ""
 
-#: kuroo.cpp:115
+#: kuroo.cpp:126
 msgid "&Refresh Packages"
 msgstr ""
 
-#: kuroo.cpp:118
+#: kuroo.cpp:129
 msgid "&Refresh Updates"
 msgstr ""
 
-#: kuroo.cpp:121
+#: kuroo.cpp:132
 msgid "&Sync Portage"
 msgstr ""
 
-#: kuroo.cpp:124
+#: kuroo.cpp:135
 msgid "&Run etc-update"
 msgstr ""
 
-#: kuroo.cpp:178
+#: kuroo.cpp:193
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: kuroo.cpp:179
+#: kuroo.cpp:194
 msgid "Last sync: %1"
 msgstr ""
 
-#: kuroo.cpp:257
+#: kuroo.cpp:274
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1310,55 +1314,55 @@ msgstr ""
 msgid "%1d "
 msgstr ""
 
-#: core/portagefiles.cpp:79
+#: core/portagefiles.cpp:91
 msgid "Collecting user package keywords..."
 msgstr ""
 
-#: core/portagefiles.cpp:174
+#: core/portagefiles.cpp:186
 msgid "Collecting user unmasked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:266
+#: core/portagefiles.cpp:278
 msgid "Collecting hardmasked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:358
+#: core/portagefiles.cpp:370
 msgid "Collecting user masked packages..."
 msgstr ""
 
-#: core/portagefiles.cpp:682
+#: core/portagefiles.cpp:690
 msgid "Completed scanning for package keywords in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:686
+#: core/portagefiles.cpp:694
 msgid "Completed scanning for unmasked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:690
+#: core/portagefiles.cpp:698
 msgid "Completed scanning for hardmasked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:694
+#: core/portagefiles.cpp:702
 msgid "Completed scanning for user masked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:698
+#: core/portagefiles.cpp:706
 msgid "Completed saving package keywords in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:703
+#: core/portagefiles.cpp:711
 msgid "Completed saving user masked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:708
+#: core/portagefiles.cpp:716
 msgid "Completed saving user unmasked packages in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:712
+#: core/portagefiles.cpp:720
 msgid "Completed scanning user package use flags in %1."
 msgstr ""
 
-#: core/portagefiles.cpp:716
+#: core/portagefiles.cpp:724
 msgid "Completed saving user package use in %1."
 msgstr ""
 
@@ -1370,11 +1374,11 @@ msgstr ""
 msgid "Refreshing Portage packages view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:263
+#: core/scanportagejob.cpp:248
 msgid "Scanning Portage. Can not access "
 msgstr ""
 
-#: core/scanportagejob.cpp:370
+#: core/scanportagejob.cpp:349
 msgid "Collecting installed packages..."
 msgstr ""
 
@@ -1644,19 +1648,19 @@ msgstr ""
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:343
+#: queue/queuetab.cpp:342
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:343 queue/queuetab.cpp:354
+#: queue/queuetab.cpp:342 queue/queuetab.cpp:353
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:354
+#: queue/queuetab.cpp:353
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:381
+#: queue/queuetab.cpp:380
 msgid "Do you want to abort the running installation?"
 msgstr ""
 
@@ -1761,7 +1765,8 @@ msgid ""
 "view: fast package browsing and searching with filters.<br>Two Column "
 "Selector, Package Inspector, Progress bars, Use-Flag Editor, Emerge and "
 "Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
-"wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
+"wiki/TellUs>We love to hear from you. Tell us what you think of Kuroo!</"
+"a><br>"
 msgstr ""
 
 #: kurooview.cpp:80
@@ -1805,7 +1810,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:192
+#: kurooview.cpp:195
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 

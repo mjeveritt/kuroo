@@ -79,6 +79,9 @@ private:
 	// Is kuroo emerging or just downloading the package
 	bool					isEmerging;
 	
+	// To keep track of sync time
+	QDateTime				m_syncTime;
+	
 signals:
 	void					signalScanHistoryCompleted();
 	void					signalHistoryChanged();

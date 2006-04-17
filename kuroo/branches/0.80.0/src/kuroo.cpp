@@ -94,11 +94,22 @@ Kuroo::Kuroo()
 }
 
 /**
- * Backup emerge and merge history entries to text file.
+ * If necessary wait for job to finish before terminating.
  */
 Kuroo::~Kuroo()
 {
-	KurooDBSingleton::Instance()->backupDb();
+	int maxLoops( 99 );
+	while ( true ) {
+		if ( ThreadWeaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::instance()->isJobPending( "CachePortageJob" ) )
+			::usleep( 100000 ); // Sleep 100 msec
+		else
+			break;
+		
+		if ( maxLoops-- == 0 ) {
+			KMessageBox::error( 0, i18n("Kuroo is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
+			break;
+		}
+	}
 }
 
 /**
@@ -139,6 +150,10 @@ void Kuroo::slotBusy()
 	else {
 		actionRefreshPortage->setEnabled( true );
 		actionRefreshUpdates->setEnabled( true );
+		
+		// Make sure progressbar is stopped!
+		DEBUG_LINE_INFO;
+		KurooStatusBar::instance()->setTotalSteps( 0 );
 	}
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
@@ -234,10 +249,12 @@ bool Kuroo::queryExit()
 }
 
 /**
+ * Backup emerge and merge history entries to text file.
  * Wait for the backup of the log is completed before terminating.
  */
 void Kuroo::slotQuit()
 {
+	KurooDBSingleton::Instance()->backupDb();
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
 		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );

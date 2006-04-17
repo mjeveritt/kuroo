@@ -42,14 +42,15 @@
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
 }
 
 ScanPortageJob::~ScanPortageJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-	if ( m_aborted )
+	
+	if ( isAborted() )
 		SignalistSingleton::Instance()->scanAborted();
 }
 
@@ -62,7 +63,6 @@ void ScanPortageJob::completeJob()
 	
 	m_mapCache.clear();
 	SignalistSingleton::Instance()->scanPortageComplete();
-	m_aborted = false;
 }
 
 
@@ -296,8 +296,7 @@ bool ScanPortageJob::doJob()
 				QString keywords = itVersion.data().keywords;
 				
 				QString sqlVersion = QString( "INSERT INTO version_temp "
-				                              "(idPackage, name, description, homepage, size, keywords, status, "
-				                              "licenses, useFlags, slot) "
+				                              "(idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
 				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
 					.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )
 					.arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );

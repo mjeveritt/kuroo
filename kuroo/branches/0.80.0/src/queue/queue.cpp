@@ -133,13 +133,13 @@ public:
 			if ( !endUserPackageMap.contains( id ) ) {
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) VALUES ('%1', '%2', '%3', '%4', '%5');" )
-				                                      .arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
+				    .arg( id ).arg( idPackage ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
 			}
 			else {
 				idPackage = id;
 				KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO queue (idPackage, idDepend, use, size, version) VALUES ('%1', '0', '%2', '%3', '%4');" )
-				                                      .arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
+				    .arg( id ).arg( (*it).useFlags ).arg( (*it).size ).arg( (*it).version ), m_db );
 			}
 		}
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );

@@ -68,7 +68,8 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 							"Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor, "
 							"Emerge and Configuration History, Emerge Queue.<br>"
 							"<br>"
-					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
+					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
+					        "Tell us what you think of Kuroo!</a><br>"
 					      	) );
 	
 	adjustSize();
@@ -102,17 +103,23 @@ void IntroDlg::accept()
 	if ( cbBackup->isOn() ) {
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
 		QString filePackageKeywords( KurooConfig::filePackageKeywords() );
-		KIO::file_copy( filePackageKeywords, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt );
+		KIO::file_copy( filePackageKeywords, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
+		              -1, true, false, false );
 		QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
-		KIO::file_copy( filePackageUserUnMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt );
+		KIO::file_copy( filePackageUserUnMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
+		                -1, true, false, false );
 		QString filePackageUserMask( KurooConfig::filePackageUserMask() );
-		KIO::file_copy( filePackageUserMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt );
+		KIO::file_copy( filePackageUserMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
+		                -1, true, false, false );
 		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
-		KIO::file_copy( filePackageUserUse, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt );
+		KIO::file_copy( filePackageUserUse, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
+		                -1, true, false, false );
 		QString fileWorld( KurooConfig::fileWorld() );
-		KIO::file_copy( fileWorld, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileWorld.section( "/", -1 ) + dt );
+		KIO::file_copy( fileWorld, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileWorld.section( "/", -1 ) + dt,
+		                -1, true, false, false );
 		QString fileMakeConf( KurooConfig::fileMakeConf() );
-		KIO::file_copy( fileMakeConf, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt );
+		KIO::file_copy( fileMakeConf, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
+		                -1, true, false, false );
 	}
 	
 	KMessageBox::enableAllMessages();

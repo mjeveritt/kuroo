@@ -214,7 +214,7 @@ Portage::Portage( QObject *m_parent )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
 
 	// Start refresh directly after emerge sync
-	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotRefresh() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotSyncCompleted() ) );
 }
 
 Portage::~Portage()
@@ -283,7 +283,17 @@ bool Portage::slotSync()
 	DEBUG_LINE_INFO;
 	
 	EmergeSingleton::Instance()->sync();
+	KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
 	return true;
+}
+
+/**
+ * Stop progressbar.
+ */
+void Portage::slotSyncCompleted()
+{
+	KurooStatusBar::instance()->setTotalSteps( 0 );
+	slotRefresh();
 }
 
 /**
@@ -294,9 +304,8 @@ bool Portage::slotScan()
 {
 	DEBUG_LINE_INFO;
 	
-	int maxLoops( 99 );
-	
 	// Wait for cache job to finish before launching the scan.
+	int maxLoops( 99 );
 	while ( true ) {
 		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
 			::usleep( 100000 ); // Sleep 100 msec

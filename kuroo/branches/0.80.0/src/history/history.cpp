@@ -46,7 +46,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 		}
 		
 		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-		KurooDBSingleton::Instance()->returnStaticDbConnection(m_db);
+		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
@@ -239,8 +239,10 @@ void History::slotParse()
 			}
 			else
 			if ( emergeLine.contains( "starting rsync" ) ) {
+				DEBUG_LINE_INFO;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Synchronizing Portage..." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Synchronizing Portage..." ), EMERGELOG );
+				m_syncTime = QDateTime::currentDateTime();
 			}
 			else
 			if ( emergeLine.contains( "Sync completed" ) ) {
@@ -251,13 +253,16 @@ void History::slotParse()
 			else
 			if ( emergeLine.contains( "terminating." ) ) {
 				DEBUG_LINE_INFO;
-				
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
 				
 				if ( syncDone ) {
 					syncDone = false;
 					SignalistSingleton::Instance()->syncDone();
+					
+					// Store this sync duration for progressbar estimate
+					KurooDBSingleton::Instance()->setKurooDbMeta( "scanDuration", 
+						QString::number( m_syncTime.secsTo( QDateTime::currentDateTime() ) ) );
 				}
 				
 			}

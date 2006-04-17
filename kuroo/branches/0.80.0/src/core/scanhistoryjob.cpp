@@ -35,14 +35,15 @@
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines ), m_aborted( true )
+	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines )
 {
 }
 
 ScanHistoryJob::~ScanHistoryJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-	if ( m_aborted )
+
+	if ( isAborted() )
 		SignalistSingleton::Instance()->scanAborted();
 }
 
@@ -52,7 +53,6 @@ ScanHistoryJob::~ScanHistoryJob()
 void ScanHistoryJob::completeJob()
 {
 	SignalistSingleton::Instance()->scanHistoryComplete();
-	m_aborted = false;
 }
 
 /** 

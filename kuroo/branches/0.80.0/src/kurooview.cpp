@@ -186,14 +186,13 @@ void KurooView::slotCheckPortage()
 	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-		
-		// Warn user that emerge need root permissions - many rmb actions are disabled
-		if ( !KUser().isSuperUser() )
-			KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
-		
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );
 	}
+	
+	// Warn user that emerge need root permissions - many rmb actions are disabled
+	if ( !KUser().isSuperUser() )
+		KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
 }
 
 /**

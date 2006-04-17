@@ -80,7 +80,7 @@ private:
 	bool					isEmerging;
 	
 	// To keep track of sync time
-	QDateTime				m_syncTime;
+	QTime					m_syncTime;
 	
 signals:
 	void					signalScanHistoryCompleted();

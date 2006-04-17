@@ -281,9 +281,7 @@ bool Portage::slotRefresh()
 bool Portage::slotSync()
 {
 	DEBUG_LINE_INFO;
-	
 	EmergeSingleton::Instance()->sync();
-	KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
 	return true;
 }
 
@@ -292,7 +290,6 @@ bool Portage::slotSync()
  */
 void Portage::slotSyncCompleted()
 {
-	KurooStatusBar::instance()->setTotalSteps( 0 );
 	slotRefresh();
 }
 

@@ -153,7 +153,7 @@ void Kuroo::slotBusy()
 		
 		// Make sure progressbar is stopped!
 		DEBUG_LINE_INFO;
-		KurooStatusBar::instance()->setTotalSteps( 0 );
+		KurooStatusBar::instance()->stopTimer();
 	}
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 

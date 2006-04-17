@@ -103,6 +103,7 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
+	kdDebug() << "total=" << total << LINE_INFO;
     stopTimer();
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );

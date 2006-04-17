@@ -194,11 +194,15 @@ void History::slotParse()
 				LogSingleton::Instance()->writeLog( logLine, EMERGELOG );
 			}
 			else
+				
+			// Catch emerge session start
 			if ( line.contains( "Started emerge on" ) ) {
 				line.replace( "Started emerge on", i18n( "Started emerge on" ) );
 				LogSingleton::Instance()->writeLog( line.section( rxTimeStamp, 1, 1 ), EMERGELOG );
 			}
-			else // Emerge has started, signal queue to launch progressbar for this package
+			else
+				
+			// Emerge has started, signal queue to launch progressbar for this package
 			if ( line.contains( ">>> emerge" ) && isEmerging ) {
 				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
@@ -210,7 +214,9 @@ void History::slotParse()
 					kdWarning(0) << QString("Can not parse package emerge start in %1: %2")
 					.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
 			}
-			else // Emerge has completed, signal queue to mark package as installed
+			else 
+
+			// Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
 				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
@@ -228,9 +234,10 @@ void History::slotParse()
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
 			else
+
+			// Catch package unmerge completion
 			if ( emergeLine.contains("unmerge success") ) {
 				DEBUG_LINE_INFO;
-				
 				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
 				PortageSingleton::Instance()->removeInstalledPackage( package );
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );
@@ -238,19 +245,25 @@ void History::slotParse()
 				emit signalHistoryChanged();
 			}
 			else
+
+			// Catch sync session start
 			if ( emergeLine.contains( "starting rsync" ) ) {
 				DEBUG_LINE_INFO;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Synchronizing Portage..." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Synchronizing Portage..." ), EMERGELOG );
-				m_syncTime = QDateTime::currentDateTime();
+				m_syncTime = QTime::currentTime();
 			}
 			else
+
+			// Catch sync session complete
 			if ( emergeLine.contains( "Sync completed" ) ) {
 				syncDone = true;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Sync completed." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Sync completed." ), EMERGELOG );
 			}
 			else
+
+			// Catch emerge termination
 			if ( emergeLine.contains( "terminating." ) ) {
 				DEBUG_LINE_INFO;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
@@ -261,10 +274,8 @@ void History::slotParse()
 					SignalistSingleton::Instance()->syncDone();
 					
 					// Store this sync duration for progressbar estimate
-					KurooDBSingleton::Instance()->setKurooDbMeta( "scanDuration", 
-						QString::number( m_syncTime.secsTo( QDateTime::currentDateTime() ) ) );
+					KurooDBSingleton::Instance()->setKurooDbMeta( "syncDuration", QString::number( m_syncTime.secsTo( QTime::currentTime() ) ) );
 				}
-				
 			}
 			else {
 				emergeLine.replace( "AUTOCLEAN", i18n( "AUTOCLEAN" ) );

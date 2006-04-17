@@ -220,7 +220,7 @@ bool Emerge::sync()
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
-		KurooStatusBar::instance()->startProgress();
+		KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
 		return true;
 	}
 }

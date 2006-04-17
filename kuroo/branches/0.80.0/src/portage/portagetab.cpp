@@ -44,13 +44,20 @@
 #include <kuser.h>
 #include <klineedit.h>
 #include <kiconloader.h>
+#include <kaccel.h>
+
+enum focus {
+		CATEGORYLIST,
+		SUBCATEGORYLIST,
+		PACKAGELIST
+};
 
 /**
  * @class PortageTab
  * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
-	: PortageBase( parent ), 
+	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
 {
 	// Connect the filters
@@ -79,7 +86,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( selectionChanged() /*currentChanged( QListViewItem* )*/ ), this, SLOT( slotPackage() ) );
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
@@ -114,6 +121,13 @@ void PortageTab::slotInit()
 	summaryPalette.setDisabled( summaryColorGroup );
 	summaryBrowser->setPalette( summaryPalette );
 	
+	// Keyboard shortcuts
+	KAccel* pAccel = new KAccel( this );
+	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."), 
+	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
+// 	pAccel->insert( "Focus left", i18n("Toggle left"), i18n("Toggle left"), Qt::Key_Left, this, SLOT( slotFocusLeft() ) );
+// 	pAccel->insert( "Focus Right", i18n("Focus Right"), i18n("Focus Right"), Qt::Key_Right, this, SLOT( slotFocusRight() ) );
+	
 	// Initialize the uninstall dialog
 	m_uninstallInspector = new UninstallInspector( this );
 	
@@ -121,6 +135,48 @@ void PortageTab::slotInit()
 	
 	slotBusy();
 }
+
+// void PortageTab::slotFocusLeft()
+// {
+// 	DEBUG_LINE_INFO;
+// 	switch ( m_focusWidget ) {
+// 		
+// 		case CATEGORYLIST:
+// 			m_focusWidget = PACKAGELIST;
+// 			packagesView->setFocus();
+// 			break;
+// 			
+// 		case SUBCATEGORYLIST:
+// 			m_focusWidget = CATEGORYLIST;
+// 			categoriesView->setFocus();
+// 			break;
+// 			
+// 		case PACKAGELIST:
+// 			m_focusWidget = SUBCATEGORYLIST;
+// 			subcategoriesView->setFocus();
+// 	}
+// }
+
+// void PortageTab::slotFocusRight()
+// {
+// 	DEBUG_LINE_INFO;
+// 	switch ( m_focusWidget ) {
+// 		
+// 		case CATEGORYLIST:
+// 			m_focusWidget = CATEGORYLIST;
+// 			subcategoriesView->setFocus();
+// 			break;
+// 			
+// 		case SUBCATEGORYLIST:
+// 			m_focusWidget = PACKAGELIST;
+// 			packagesView->setFocus();
+// 			break;
+// 			
+// 		case PACKAGELIST:
+// 			m_focusWidget = SUBCATEGORYLIST;
+// 			subcategoriesView->setFocus();
+// 	}
+// }
 
 /**
  * Forward signal from next-buttons only if this tab is visible for user.
@@ -378,12 +434,14 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
+	DEBUG_LINE_INFO;
 	if ( packagesView->currentPackage() )
 		processPackage( true );
 }
 
 void PortageTab::slotPackage()
 {
+	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
 	else	
@@ -527,7 +585,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	else
 		menuItem1 = menu.insertItem( i18n("&Remove from queue"), APPEND );
 	
-	int menuItem3 = menu.insertItem( i18n( "Details..." ), OPTIONS );
+	menu.insertItem( i18n( "Details..." ), OPTIONS );
 	
 	int menuItem4;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )

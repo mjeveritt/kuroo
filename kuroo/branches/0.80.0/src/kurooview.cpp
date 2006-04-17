@@ -93,12 +93,10 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	// Confirm changes in views with bleue text menu
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
-	
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
-	
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
 
@@ -116,6 +114,19 @@ void KurooView::slotShowView()
 	
 	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
+	
+	switch ( tabIndex ) {
+		
+		// Default focus to package listview
+		case VIEW_PORTAGE:
+			viewPortage->packagesView->setFocus();
+			break;
+			
+		// Default focus to package listview
+		case VIEW_QUEUE:
+			viewQueue->queueView->setFocus();
+		
+	}
 }
 
 /**

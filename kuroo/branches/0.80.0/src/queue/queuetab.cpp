@@ -40,6 +40,7 @@
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kuser.h>
+#include <kaccel.h>
 
 /**
  * @class QueueTab
@@ -154,6 +155,11 @@ void QueueTab::slotInit()
 	                                  "Portage will normally merge those files only once to prevent the user"
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+	
+	// Keyboard shortcuts
+	KAccel* pAccel = new KAccel( this );
+	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
+	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
 }
 
 /**

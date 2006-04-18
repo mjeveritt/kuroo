@@ -198,7 +198,7 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
 	
-	kdDebug() << "m_portagePackage=" << m_portagePackage << LINE_INFO;
+	kdDebug() << "m_package=" << m_package << LINE_INFO;
 	
 	updateVersionData();
 	
@@ -718,8 +718,6 @@ void PackageInspector::loadChangeLog()
  */
 void PackageInspector::slotLoadEbuild( const QString& version )
 {
-	kdDebug() << "version=" << version << LINE_INFO;
-	
 	dialog->ebuildBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 3 ) {
 		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
@@ -742,16 +740,13 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 }
 
 /**
- * Get dependencies for selected version.
+ * Get dependencies for selected version. @fixme: does not work for portage < 2.1
  * @param version
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
-	kdDebug() << "version=" << version << LINE_INFO;
-	
 	dialog->dependencyBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		DEBUG_LINE_INFO;
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
 		QFile file( fileName );
@@ -759,11 +754,23 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
 			QString textLines;
-			while ( !stream.atEnd() ) {
-				QString line = stream.readLine();
-				if ( line.contains( "DEPEND=" ) )
-					textLines += line + "\n";
-			}
+			int lineCount( 0 );
+			if ( KurooConfig::portageVersion21() ) 
+				while ( !stream.atEnd() ) {
+					QString line = stream.readLine();
+					if ( line.contains( "DEPEND=" ) )
+						textLines += line + "\n";
+				}
+			else
+				while ( !stream.atEnd() ) {
+					QString line = stream.readLine();
+					if ( line.isEmpty() )
+						continue;
+					if ( lineCount++ > 1 || line == "0" )
+						break;
+					else
+						textLines += line + "\n";
+				}
 			file.close();
 			dialog->dependencyBrowser->setText( textLines );
 		}
@@ -773,7 +780,6 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
-	DEBUG_LINE_INFO;
 }
 
 /**
@@ -782,8 +788,6 @@ void PackageInspector::slotLoadDependencies( const QString& version )
  */
 void PackageInspector::slotLoadInstalledFiles( const QString& version )
 {
-	kdDebug() << "version=" << version << LINE_INFO;
-	
 	dialog->installedFilesBrowser->clear();
 	if ( !version.isEmpty() && dialog->inspectorTabs->currentPageIndex() == 5 ) {
 		QString filename = KurooConfig::dirDbPkg() + "/" + m_category + "/" + m_package + "-" + version + "/CONTENTS";

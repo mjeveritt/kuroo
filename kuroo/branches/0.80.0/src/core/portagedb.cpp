@@ -1311,7 +1311,7 @@ DbConnectionPool::DbConnectionPool() : m_semaphore( POOL_SIZE )
 	m_semaphore += POOL_SIZE;
 	DbConnection *dbConn;
 	m_dbConfig = new SqliteConfig( KurooConfig::databas() );
-	dbConn = new SqliteConnection( static_cast<SqliteConfig*> (m_dbConfig) );
+	dbConn = new SqliteConnection( static_cast<SqliteConfig*>(m_dbConfig) );
 
 	enqueue( dbConn );
 	m_semaphore--;
@@ -1338,7 +1338,7 @@ void DbConnectionPool::createDbConnections()
 {
 	for ( int i = 0; i < POOL_SIZE - 1; i++ ) {
 		DbConnection *dbConn;
-		dbConn = new SqliteConnection( static_cast<SqliteConfig*> (m_dbConfig) );
+		dbConn = new SqliteConnection( static_cast<SqliteConfig*>(m_dbConfig) );
 		enqueue( dbConn );
 		m_semaphore--;
 	}

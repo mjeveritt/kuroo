@@ -310,84 +310,84 @@ bool ScanPortageJob::doJob()
 	m_categories.clear();
 	
 	// Testing prepare-bind sqlite3
-// 	sqlite3_stmt *stmtPackage( NULL ), *stmtVersion( NULL );
-// 	QString statementPackage = 
-// 		"INSERT INTO package_temp (idCategory, idSubCategory, category, name, description, status, path, meta) "
-// 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-// 	QString statementVersion =
-// 		"INSERT INTO package_temp (idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
-// 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-// 	
-// 	int result1 = sqlite3_prepare( (sqlite3*)m_db, statementPackage.utf8(), -1, &stmtPackage, NULL );
-// 	int result2 = sqlite3_prepare( (sqlite3*)m_db, statementVersion.utf8(), -1, &stmtVersion, NULL );
-// 	
-// 	kdDebug() << "result1=" << result1 << LINE_INFO;
-// 	kdDebug() << "result2=" << result2 << LINE_INFO;
-// 	
-// 	PortageCategories::iterator itCategoryEnd = m_categories.end();
-// 	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-// 	
-// 		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
-// 		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
-// 			
-// 			QString idPackage;
-// 			QString idCategory = itCategory.data().idCategory;
-// 			QString idSubCategory = itCategory.data().idSubCategory;
-// 			
-// 			QString category = itCategory.key();
-// 			QString package = itPackage.key();
-// 			QString status = itPackage.data().status;
-// 			QString description = itPackage.data().description;
-// 			QString path = itPackage.data().path;
-// 			
-// 			// Create meta tag containing all text of interest for searching
-// 			QString meta = category + " " + package + " " + description;
-// 			
-// 			sqlite3_bind_text( stmtPackage, 1, idCategory, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, idSubCategory, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, category, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, package, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, description, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, status, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, path, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text( stmtPackage, 1, meta, -1, SQLITE_STATIC );
-// 			idPackage = QString::number( sqlite3_step( stmtPackage ) );
-// 			sqlite3_reset( stmtPackage );
-// 			
-// 			kdDebug() << "idPackage=" << idPackage << LINE_INFO;
-// 			
-// 			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
-// 			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
-// 				
-// 				QString version = itVersion.key();
-// 				description = itVersion.data().description;
-// 				QString homepage = itVersion.data().homepage;
-// 				QString status = itVersion.data().status;
-// 				QString licenses = itVersion.data().licenses;
-// 				QString useFlags = itVersion.data().useFlags;
-// 				QString slot = itVersion.data().slot;
-// 				QString size = itVersion.data().size;
-// 				QString keywords = itVersion.data().keywords;
-// 				
-// 				sqlite3_bind_text( stmtVersion, 1, idPackage, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, version, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, description, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, homepage, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, size, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, keywords, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, status, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, licenses, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, useFlags, -1, SQLITE_STATIC );
-// 				sqlite3_bind_text( stmtVersion, 1, slot, -1, SQLITE_STATIC );
-// 				idPackage = QString::number( sqlite3_step( stmtVersion ) );
-// 				sqlite3_reset( stmtVersion );
-// 				
-// 			}
-// 		}
-// 	}
-// 	sqlite3_finalize( stmtPackage );
-// 	sqlite3_finalize( stmtVersion );
-// 	m_categories.clear();
+/*	sqlite3_stmt *stmtPackage( NULL ), *stmtVersion( NULL );
+	const char *sqlPackage = 
+		"INSERT INTO package_temp (idCategory, idSubCategory, category, name, description, status, path, meta) "
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+	const char *sqlVersion =
+		"INSERT INTO version_temp (idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	
+	int result1 = sqlite3_prepare( static_cast<sqlite3*>(m_db), sqlPackage, -1, &stmtPackage, NULL );
+	int result2 = sqlite3_prepare( static_cast<sqlite3*>(m_db), sqlVersion, -1, &stmtVersion, NULL );
+	
+	kdDebug() << "result1=" << result1 << LINE_INFO;
+	kdDebug() << "result2=" << result2 << LINE_INFO;
+	
+	PortageCategories::iterator itCategoryEnd = m_categories.end();
+	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+	
+		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
+		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
+			
+			QString idPackage;
+			QString idCategory = itCategory.data().idCategory;
+			QString idSubCategory = itCategory.data().idSubCategory;
+			
+			QString category = itCategory.key();
+			QString package = itPackage.key();
+			QString status = itPackage.data().status;
+			QString description = itPackage.data().description;
+			QString path = itPackage.data().path;
+			
+			// Create meta tag containing all text of interest for searching
+			QString meta = category + " " + package + " " + description;
+			
+			sqlite3_bind_text( stmtPackage, 1, idCategory, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, idSubCategory, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, category, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, package, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, description, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, status, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, path, -1, SQLITE_STATIC );
+			sqlite3_bind_text( stmtPackage, 1, meta, -1, SQLITE_STATIC );
+			idPackage = QString::number( sqlite3_step( stmtPackage ) );
+			sqlite3_reset( stmtPackage );
+			
+			kdDebug() << "idPackage=" << idPackage << LINE_INFO;
+			
+			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
+			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
+				
+				QString version = itVersion.key();
+				description = itVersion.data().description;
+				QString homepage = itVersion.data().homepage;
+				QString status = itVersion.data().status;
+				QString licenses = itVersion.data().licenses;
+				QString useFlags = itVersion.data().useFlags;
+				QString slot = itVersion.data().slot;
+				QString size = itVersion.data().size;
+				QString keywords = itVersion.data().keywords;
+				
+				sqlite3_bind_text( stmtVersion, 1, idPackage, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, version, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, description, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, homepage, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, size, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, keywords, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, status, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, licenses, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, useFlags, -1, SQLITE_STATIC );
+				sqlite3_bind_text( stmtVersion, 1, slot, -1, SQLITE_STATIC );
+				idPackage = QString::number( sqlite3_step( stmtVersion ) );
+				sqlite3_reset( stmtVersion );
+				
+			}
+		}
+	}
+	sqlite3_finalize( stmtPackage );
+	sqlite3_finalize( stmtVersion );
+	m_categories.clear();*/
 	
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );

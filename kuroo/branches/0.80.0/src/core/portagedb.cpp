@@ -1098,7 +1098,7 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 		else
 			if ( sqlite3_open( path, &m_db ) != SQLITE_OK ) {
 				kdWarning(0) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
-				sqlite3_close(m_db);
+				sqlite3_close( m_db );
 			}
 			else
 				m_initialized = true;
@@ -1144,11 +1144,11 @@ QStringList SqliteConnection::query( const QString& statement )
 	}
 	else {
 		int busyCnt(0);
-		int number = sqlite3_column_count(stmt);
+		int number = sqlite3_column_count( stmt );
 		
         //execute virtual machine by iterating over rows
 		while ( true ) {
-			error = sqlite3_step(stmt);
+			error = sqlite3_step( stmt );
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
@@ -1200,7 +1200,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 		
         //execute virtual machine
 		while ( true ) {
-			error = sqlite3_step(stmt);
+			error = sqlite3_step( stmt );
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
@@ -1218,7 +1218,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 			
-			value = QString::fromUtf8( (const char*) sqlite3_column_text(stmt, 0) );
+			value = QString::fromUtf8( (const char*) sqlite3_column_text( stmt, 0 ) );
 		}
 		
         //deallocate vm ressources

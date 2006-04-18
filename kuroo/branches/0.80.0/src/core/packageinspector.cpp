@@ -198,6 +198,8 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
 	
+	kdDebug() << "m_portagePackage=" << m_portagePackage << LINE_INFO;
+	
 	updateVersionData();
 	
 	if ( !KUser().isSuperUser() ) {
@@ -749,6 +751,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 	
 	dialog->dependencyBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
+		DEBUG_LINE_INFO;
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
 		QFile file( fileName );
@@ -770,6 +773,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
+	DEBUG_LINE_INFO;
 }
 
 /**

@@ -310,7 +310,7 @@ bool ScanPortageJob::doJob()
 	m_categories.clear();
 	
 	// Testing prepare-bind sqlite3
-// 	sqlite3_stmt* stmt;
+// 	sqlite3_stmt *stmtPackage( NULL ), *stmtVersion( NULL );
 // 	QString statementPackage = 
 // 		"INSERT INTO package_temp (idCategory, idSubCategory, category, name, description, status, path, meta) "
 // 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
@@ -318,7 +318,11 @@ bool ScanPortageJob::doJob()
 // 		"INSERT INTO package_temp (idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
 // 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 // 	
-// 	int result = sqlite3_prepare( m_db, statementPackage.utf8(), statementPackage.length(), &stmt, NULL );
+// 	int result1 = sqlite3_prepare( (sqlite3*)m_db, statementPackage.utf8(), -1, &stmtPackage, NULL );
+// 	int result2 = sqlite3_prepare( (sqlite3*)m_db, statementVersion.utf8(), -1, &stmtVersion, NULL );
+// 	
+// 	kdDebug() << "result1=" << result1 << LINE_INFO;
+// 	kdDebug() << "result2=" << result2 << LINE_INFO;
 // 	
 // 	PortageCategories::iterator itCategoryEnd = m_categories.end();
 // 	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
@@ -339,14 +343,18 @@ bool ScanPortageJob::doJob()
 // 			// Create meta tag containing all text of interest for searching
 // 			QString meta = category + " " + package + " " + description;
 // 			
-// 			sqlite3_bind_text ( statementPackage, 1, idCategory, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, idSubCategory, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, category, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, package, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, description, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, status, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, path, -1, SQLITE_STATIC );
-// 			sqlite3_bind_text ( statementPackage, 1, meta, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, idCategory, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, idSubCategory, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, category, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, package, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, description, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, status, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, path, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text( stmtPackage, 1, meta, -1, SQLITE_STATIC );
+// 			idPackage = QString::number( sqlite3_step( stmtPackage ) );
+// 			sqlite3_reset( stmtPackage );
+// 			
+// 			kdDebug() << "idPackage=" << idPackage << LINE_INFO;
 // 			
 // 			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
 // 			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
@@ -361,17 +369,24 @@ bool ScanPortageJob::doJob()
 // 				QString size = itVersion.data().size;
 // 				QString keywords = itVersion.data().keywords;
 // 				
-// 				QString sqlVersion = QString( "INSERT INTO version_temp "
-// 				                              "(idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
-// 				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
-// 					.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )
-// 					.arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );
+// 				sqlite3_bind_text( stmtVersion, 1, idPackage, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, version, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, description, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, homepage, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, size, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, keywords, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, status, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, licenses, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, useFlags, -1, SQLITE_STATIC );
+// 				sqlite3_bind_text( stmtVersion, 1, slot, -1, SQLITE_STATIC );
+// 				idPackage = QString::number( sqlite3_step( stmtVersion ) );
+// 				sqlite3_reset( stmtVersion );
 // 				
-// 				sqlVersion += QString( "'%1');" ).arg( slot );
-// 				KurooDBSingleton::Instance()->insert( sqlVersion, m_db );
 // 			}
 // 		}
 // 	}
+// 	sqlite3_finalize( stmtPackage );
+// 	sqlite3_finalize( stmtVersion );
 // 	m_categories.clear();
 	
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );

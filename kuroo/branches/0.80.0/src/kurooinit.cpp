@@ -35,7 +35,7 @@
 #include <kinputdialog.h>
 
 /**
- * @class kurooInit
+ * @class KurooInit
  * @short KurooInit checks that kuroo environment is correctly setup.
  * 
  * And launch intro wizard whenever a new version of kuroo is installed.

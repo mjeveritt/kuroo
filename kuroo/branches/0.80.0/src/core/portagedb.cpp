@@ -1087,10 +1087,10 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 	
     // Open database file and check for correctness
 	m_initialized = false;
-	QFile file(path);
-	if ( file.open(IO_ReadOnly) ) {
+	QFile file( path );
+	if ( file.open( IO_ReadOnly ) ) {
 		QString format;
-		file.readLine(format, 50);
+		file.readLine( format, 50 );
 		
 		if ( !format.startsWith( "SQLite format 3" ) )
 			kdWarning(0) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
@@ -1107,8 +1107,8 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 	if ( !m_initialized ) {
 		
         // Remove old db file; create new
-		QFile::remove(path);
-		if ( sqlite3_open(path, &m_db) == SQLITE_OK )
+		QFile::remove( path );
+		if ( sqlite3_open( path, &m_db ) == SQLITE_OK )
 			m_initialized = true;
 	}
 	else {
@@ -1124,7 +1124,8 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 
 SqliteConnection::~SqliteConnection()
 {
-	if (m_db) sqlite3_close(m_db);
+	if ( m_db )
+		sqlite3_close( m_db );
 }
 
 QStringList SqliteConnection::query( const QString& statement )
@@ -1174,7 +1175,7 @@ QStringList SqliteConnection::query( const QString& statement )
 		sqlite3_finalize(stmt);
 		
 		if ( error != SQLITE_DONE ) {
-		kdWarning(0) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
+			kdWarning(0) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 			values = QStringList();
 		}
 	}
@@ -1247,8 +1248,8 @@ int SqliteConnection::insert( const QString& statement )
 		int busyCnt(0);
 		
         //execute virtual machine by iterating over rows
-		while (true) {
-			error = sqlite3_step(stmt);
+		while ( true ) {
+			error = sqlite3_step( stmt );
 			
 			if ( error == SQLITE_BUSY ) {
 				if ( busyCnt++ > 99 ) {
@@ -1268,7 +1269,7 @@ int SqliteConnection::insert( const QString& statement )
 		}
 		
         //deallocate vm ressources
-		sqlite3_finalize(stmt);
+		sqlite3_finalize( stmt );
 		
 		if ( error != SQLITE_DONE ) {
 			kdWarning(0) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on insert: " << statement << LINE_INFO;

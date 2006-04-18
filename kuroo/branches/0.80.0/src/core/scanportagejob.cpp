@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "scanportagejob.h"
+#include "../sqlite/sqlite3.h"
 
 #include <fstream>
 #include <string>
@@ -307,24 +308,90 @@ bool ScanPortageJob::doJob()
 		}
 	}
 	m_categories.clear();
-	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db);
+	
+	// Testing prepare-bind sqlite3
+// 	sqlite3_stmt* stmt;
+// 	QString statementPackage = 
+// 		"INSERT INTO package_temp (idCategory, idSubCategory, category, name, description, status, path, meta) "
+// 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+// 	QString statementVersion =
+// 		"INSERT INTO package_temp (idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
+// 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+// 	
+// 	int result = sqlite3_prepare( m_db, statementPackage.utf8(), statementPackage.length(), &stmt, NULL );
+// 	
+// 	PortageCategories::iterator itCategoryEnd = m_categories.end();
+// 	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+// 	
+// 		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
+// 		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
+// 			
+// 			QString idPackage;
+// 			QString idCategory = itCategory.data().idCategory;
+// 			QString idSubCategory = itCategory.data().idSubCategory;
+// 			
+// 			QString category = itCategory.key();
+// 			QString package = itPackage.key();
+// 			QString status = itPackage.data().status;
+// 			QString description = itPackage.data().description;
+// 			QString path = itPackage.data().path;
+// 			
+// 			// Create meta tag containing all text of interest for searching
+// 			QString meta = category + " " + package + " " + description;
+// 			
+// 			sqlite3_bind_text ( statementPackage, 1, idCategory, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, idSubCategory, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, category, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, package, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, description, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, status, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, path, -1, SQLITE_STATIC );
+// 			sqlite3_bind_text ( statementPackage, 1, meta, -1, SQLITE_STATIC );
+// 			
+// 			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
+// 			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
+// 				
+// 				QString version = itVersion.key();
+// 				description = itVersion.data().description;
+// 				QString homepage = itVersion.data().homepage;
+// 				QString status = itVersion.data().status;
+// 				QString licenses = itVersion.data().licenses;
+// 				QString useFlags = itVersion.data().useFlags;
+// 				QString slot = itVersion.data().slot;
+// 				QString size = itVersion.data().size;
+// 				QString keywords = itVersion.data().keywords;
+// 				
+// 				QString sqlVersion = QString( "INSERT INTO version_temp "
+// 				                              "(idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
+// 				                              "VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
+// 					.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )
+// 					.arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );
+// 				
+// 				sqlVersion += QString( "'%1');" ).arg( slot );
+// 				KurooDBSingleton::Instance()->insert( sqlVersion, m_db );
+// 			}
+// 		}
+// 	}
+// 	m_categories.clear();
+	
+	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );
 	
 	// Move content from temporary table 
-	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db);
-	KurooDBSingleton::Instance()->query("DELETE FROM subCategory;", m_db);
-	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db);
-	KurooDBSingleton::Instance()->query("DELETE FROM version;", m_db);
+	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db );
+	KurooDBSingleton::Instance()->query("DELETE FROM subCategory;", m_db );
+	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db );
+	KurooDBSingleton::Instance()->query("DELETE FROM version;", m_db );
 
-	KurooDBSingleton::Instance()->insert("INSERT INTO category SELECT * FROM category_temp;", m_db);
-	KurooDBSingleton::Instance()->insert("INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db);
-	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db);
-	KurooDBSingleton::Instance()->insert("INSERT INTO version SELECT * FROM version_temp;", m_db);
+	KurooDBSingleton::Instance()->insert("INSERT INTO category SELECT * FROM category_temp;", m_db );
+	KurooDBSingleton::Instance()->insert("INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db );
+	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db );
+	KurooDBSingleton::Instance()->insert("INSERT INTO version SELECT * FROM version_temp;", m_db );
 	
-	KurooDBSingleton::Instance()->query("DROP TABLE category_temp;", m_db);
-	KurooDBSingleton::Instance()->query("DROP TABLE subCategory_temp;", m_db);
-	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db);
-	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db);
+	KurooDBSingleton::Instance()->query("DROP TABLE category_temp;", m_db );
+	KurooDBSingleton::Instance()->query("DROP TABLE subCategory_temp;", m_db );
+	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db );
+	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db );
 	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );

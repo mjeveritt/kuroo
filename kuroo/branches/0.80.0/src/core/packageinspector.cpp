@@ -592,6 +592,8 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
  */
 void PackageInspector::slotRefreshTabs()
 {
+	DEBUG_LINE_INFO;
+	
 	slotLoadUseFlags( dialog->cbVersionsUse->currentText() );
 	slotLoadEbuild( dialog->cbVersionsEbuild->currentText() );
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
@@ -714,6 +716,8 @@ void PackageInspector::loadChangeLog()
  */
 void PackageInspector::slotLoadEbuild( const QString& version )
 {
+	kdDebug() << "version=" << version << LINE_INFO;
+	
 	dialog->ebuildBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 3 ) {
 		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
@@ -741,6 +745,8 @@ void PackageInspector::slotLoadEbuild( const QString& version )
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
+	kdDebug() << "version=" << version << LINE_INFO;
+	
 	dialog->dependencyBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
@@ -772,6 +778,8 @@ void PackageInspector::slotLoadDependencies( const QString& version )
  */
 void PackageInspector::slotLoadInstalledFiles( const QString& version )
 {
+	kdDebug() << "version=" << version << LINE_INFO;
+	
 	dialog->installedFilesBrowser->clear();
 	if ( !version.isEmpty() && dialog->inspectorTabs->currentPageIndex() == 5 ) {
 		QString filename = KurooConfig::dirDbPkg() + "/" + m_category + "/" + m_package + "-" + version + "/CONTENTS";

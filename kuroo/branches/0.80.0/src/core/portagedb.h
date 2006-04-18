@@ -39,7 +39,7 @@ class DbConfig
 class SqliteConfig : public DbConfig
 {
 public:
-	SqliteConfig(const QString& /* dbfile */);
+	SqliteConfig( const QString& /* dbfile */ );
 	
 	const 				QString dbFile() const { return m_dbfile; }
 	
@@ -52,7 +52,7 @@ class DbConnection
 public:
 	enum DbConnectionType { sqlite = 0, mysql = 1 };
 	
-	DbConnection(DbConfig* /* config */);
+	DbConnection( DbConfig* /* config */ );
 	virtual ~DbConnection() = 0;
 	
 	virtual QStringList query( const QString& /* statement */) = 0;
@@ -63,14 +63,14 @@ public:
 	virtual const 		QString lastError() const { return "None"; }
 	
 protected:
-	bool m_initialized;
-	DbConfig *m_config;
+	bool 				m_initialized;
+	DbConfig*			m_config;
 };
 
 class SqliteConnection : public DbConnection
 {
 public:
-	SqliteConnection(SqliteConfig* /* config */);
+	SqliteConnection( SqliteConfig* /* config */ );
 	~SqliteConnection();
 	
 	QStringList 		query( const QString& /* statement */ );
@@ -82,7 +82,7 @@ private:
 	static void 		sqlite_rand( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ );
 	static void 		sqlite_power( sqlite3_context *context, int argc, sqlite3_value **argv );
 	
-	sqlite3* m_db;
+	sqlite3* 			m_db;
 };
 
 class DbConnectionPool : QPtrQueue<DbConnection>

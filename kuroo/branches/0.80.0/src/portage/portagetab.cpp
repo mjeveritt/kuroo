@@ -208,8 +208,6 @@ void PortageTab::slotInitButtons()
  */
 void PortageTab::slotBusy()
 {
-	DEBUG_LINE_INFO;
-	
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		pbUninstall->setDisabled( true );
@@ -283,8 +281,6 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	DEBUG_LINE_INFO;
-	
 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
@@ -373,8 +369,6 @@ void PortageTab::slotClearFilter()
  */
 void PortageTab::slotRefresh()
 {
-	DEBUG_LINE_INFO;
-	
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
@@ -434,14 +428,12 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
-	DEBUG_LINE_INFO;
 	if ( packagesView->currentPackage() )
 		processPackage( true );
 }
 
 void PortageTab::slotPackage()
 {
-	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
 	else	

@@ -352,8 +352,6 @@ void KurooDB::createTables( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
-	DEBUG_LINE_INFO;
-	
 	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	if ( !historyData.isEmpty() ) {
 		QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
@@ -393,8 +391,6 @@ void KurooDB::backupDb()
  */
 void KurooDB::restoreBackup()
 {
-	DEBUG_LINE_INFO;
-	
 	// Restore einfo into table history
 	QFile file( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
 	QTextStream stream( &file );

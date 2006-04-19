@@ -152,7 +152,6 @@ void Kuroo::slotBusy()
 		actionRefreshUpdates->setEnabled( true );
 		
 		// Make sure progressbar is stopped!
-		DEBUG_LINE_INFO;
 		KurooStatusBar::instance()->stopTimer();
 	}
 	

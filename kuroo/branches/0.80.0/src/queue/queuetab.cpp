@@ -332,8 +332,6 @@ void QueueTab::slotCheck()
  */
 void QueueTab::slotGo()
 {
-	DEBUG_LINE_INFO;
-	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
@@ -404,8 +402,6 @@ void QueueTab::slotPretend()
  */
 void QueueTab::slotRemove()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( isVisible() )
 		m_packageInspector->hide();
 	

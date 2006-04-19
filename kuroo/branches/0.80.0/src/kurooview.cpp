@@ -134,8 +134,6 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
-	DEBUG_LINE_INFO;
-	
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Check is history is empty, then maybe this is also a fresh install with empty db

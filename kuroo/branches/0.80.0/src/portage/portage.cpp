@@ -317,6 +317,7 @@ bool Portage::slotScan()
 	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
+	
 	return true;
 }
 

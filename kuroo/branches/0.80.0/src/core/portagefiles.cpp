@@ -92,7 +92,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageKeywords_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " keywords VARCHAR(255) );"
 		                                    , m_db);
@@ -187,7 +187,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUnmask_temp ("
-											" id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 											" id INTEGER PRIMARY KEY AUTOINCREMENT, "
 											" idPackage INTEGER UNIQUE, "
 											" dependAtom VARCHAR(255), "
 		                                    " comment BLOB );"
@@ -279,7 +279,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageHardMask_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER, "
 		                                    " dependAtom VARCHAR(255), "
 		                                    " comment BLOB );"
@@ -371,7 +371,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUserMask_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " dependAtom VARCHAR(255), "
 		                                    " comment BLOB );"
@@ -460,7 +460,7 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " use VARCHAR(255) );"
 		                                    , m_db);

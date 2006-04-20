@@ -198,8 +198,6 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
 	
-	kdDebug() << "m_package=" << m_package << LINE_INFO;
-	
 	updateVersionData();
 	
 	if ( !KUser().isSuperUser() ) {
@@ -445,7 +443,7 @@ void PackageInspector::slotHardMaskInfo()
 void PackageInspector::showSettings()
 {
 	// Get user mask specific version
-	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
+	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id ).first();
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
@@ -594,8 +592,6 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
  */
 void PackageInspector::slotRefreshTabs()
 {
-	DEBUG_LINE_INFO;
-	
 	slotLoadUseFlags( dialog->cbVersionsUse->currentText() );
 	slotLoadEbuild( dialog->cbVersionsEbuild->currentText() );
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );

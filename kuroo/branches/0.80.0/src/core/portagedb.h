@@ -191,9 +191,9 @@ public:
 	///////////////////////////////////////////////////////////////////////////////
 	// Queries for portage files
 	///////////////////////////////////////////////////////////////////////////////
-	const QString		 	packageHardMaskAtom( const QString& id );
-	const QString		 	packageUserMaskAtom( const QString& id );
-	const QString		 	packageUnMaskAtom( const QString& id );
+	const QStringList	 	packageHardMaskAtom( const QString& id );
+	const QStringList		packageUserMaskAtom( const QString& id );
+	const QStringList	 	packageUnMaskAtom( const QString& id );
 	const QString			packageKeywordsAtom( const QString& id );
 	const QString			packageUse( const QString& id );
 	

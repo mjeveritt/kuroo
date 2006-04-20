@@ -306,34 +306,34 @@ void KurooDB::createTables( DbConnection *conn )
 	      , conn);
 	
 	query(" CREATE TABLE packageHardMask ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB );"
 	      , conn);
 	
 	query(" CREATE TABLE packageUserMask ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB );"
 	      , conn);
 	
 	query(" CREATE TABLE packageUnmask ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB );"
 	      , conn);
 	
 	query(" CREATE TABLE packageKeywords ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " keywords VARCHAR(255) );"
 	      , conn);
 	
 	query(" CREATE TABLE packageUse ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " use VARCHAR(255) );"
 	      , conn);
@@ -786,27 +786,27 @@ const QString KurooDB::packagePath( const QString& id )
  * Return package hardmask depend atom.
  * @param id
  */
-const QString KurooDB::packageHardMaskAtom( const QString& id )
+const QStringList KurooDB::packageHardMaskAtom( const QString& id )
 {
-	return singleQuery( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
+	return query( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Return package user-mask depend atom.
  * @param id
  */
-const QString KurooDB::packageUserMaskAtom( const QString& id )
+const QStringList KurooDB::packageUserMaskAtom( const QString& id )
 {
-	return singleQuery( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "' LIMIT 1;" );
+	return query( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Return package unmask depend atom.
  * @param id
  */
-const QString KurooDB::packageUnMaskAtom( const QString& id )
+const QStringList KurooDB::packageUnMaskAtom( const QString& id )
 {
-	return singleQuery( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "' LIMIT 1;" );
+	return query( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -850,12 +850,12 @@ bool KurooDB::isPackageAvailable( const QString& id )
 }
 
 /**
- * Is the package in package.unmask?
+ * Is the package in package.unmask? @fixme: better way to check for existens.
  * @param id
  */
 bool KurooDB::isPackageUnMasked( const QString& id )
 {
-	return !query( "SELECT id FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
+	return !query( "SELECT dependAtom FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
 }
 
 /**

@@ -217,7 +217,6 @@ void PackageItem::initVersions()
 	
 	// Get list of accepted keywords, eg if package is "untesting"
 	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
-	
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
@@ -233,7 +232,7 @@ void PackageItem::initVersions()
 		PackageVersion* version = new PackageVersion( this, versionString );
 		version->setDescription( description );
 		version->setHomepage( homepage );
-		version->setLicenses( QStringList::split( " ", licenses ) );
+		version->setLicenses( QStringList::split( " ", licenses ) ); // @fixme
 		version->setUseflags( QStringList::split( " ", useFlags ) );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
@@ -385,25 +384,29 @@ void PackageItem::parsePackageVersions()
 		
 		// Mark official version stability for version listview
 		QString stability;
-		if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
-			stability = i18n("Hardmasked");
-			version = "<font color=darkRed><i>" + version + "</i></font>";
-		}
-		else
-			if ( (*sortedVersionIterator)->isOriginalTesting() ) {
-				stability = i18n("Testing");
-				version = "<i>" + version + "</i>";
+		if ( (*sortedVersionIterator)->isNotArch() )
+			stability = i18n("Not on %1").arg( KurooConfig::arch() );
+		else {
+			if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
+				stability = i18n("Hardmasked");
+				version = "<font color=darkRed><i>" + version + "</i></font>";
 			}
-			else
-				if ( (*sortedVersionIterator)->isAvailable() )
-					stability = i18n("Stable");
-				else
-					if ( (*sortedVersionIterator)->isNotArch() )
-						stability = i18n("Not on %1").arg( KurooConfig::arch() );
+			else {
+				if ( (*sortedVersionIterator)->isOriginalTesting() ) {
+					stability = i18n("Testing");
+					version = "<i>" + version + "</i>";
+				}
+				else {
+					if ( (*sortedVersionIterator)->isAvailable() )
+						stability = i18n("Stable");
 					else
 						stability = i18n("Not available");
+				}
+			}
+		}
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << LINE_INFO;
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << 
+// 			" stability=" << stability << LINE_INFO;
 		
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();

@@ -79,7 +79,7 @@ DependAtom::~DependAtom()
  */
 bool DependAtom::parse( const QString& atom )
 {
-	kdDebug() << "atom=" << atom << LINE_INFO;
+// 	kdDebug() << "atom=" << atom << LINE_INFO;
 	
 	// Do the regexp match, which also prepares for text capture
 	if ( rxAtom.exactMatch( atom ) == false ) {
@@ -156,13 +156,13 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	
 	QValueList<PackageVersion*> versions = m_portagePackage->versionList();
 
-	kdDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan << endl;
+// 	kdDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan << endl;
 	
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 		
-		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
-			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
+// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
+// 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
 		
 		if (
 		    ( matchAllVersions ) ||
@@ -173,7 +173,6 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 		    ( !matchEqual        && !matchGreaterThan && (*versionIterator)->isOlderThan( m_version ) )
 		  )
 		{
-			DEBUG_LINE_INFO;
 			matchingVersions.append( (PackageVersion*) *versionIterator );
 			continue;
 		}

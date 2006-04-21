@@ -756,7 +756,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			if ( KurooConfig::portageVersion21() )
 				while ( !stream.atEnd() ) {
 					QString line = stream.readLine();
-					if ( line.contains( "DEPEND=" ) )
+					if ( line.contains( "DEPEND=" ) && !line.endsWith( "DEPEND=" ) )
 						textLines += line + " ";
 				}
 			else
@@ -781,39 +781,59 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			dialog->dependencyView->clear();
 			QListViewItem *parent, *lastDepend;
 			foreach ( dependAtoms ) {
+				QString word( *it );
 				
-				kdDebug() << "*it=" << *it << "." << LINE_INFO;
+				kdDebug() << "word=" << word << "." << LINE_INFO;
 				
-				if ( (*it).contains( "DEPEND=" ) ) {
+				// Insert Depend-header
+				if ( word.contains( "DEPEND=" ) ) {
 					DEBUG_LINE_INFO;
-					parent = new QListViewItem( dialog->dependencyView, *it );
+					word.remove( '=' );
+					parent = new QListViewItem( dialog->dependencyView, word );
 					parent->setOpen( true );
 					continue;
 				}
 				
-				if ( *it == "(" ) {
+				// Indent one step 
+				if ( word == "(" ) {
 					DEBUG_LINE_INFO;
 					parent = lastDepend;
 					parent->setOpen( true );
 					continue;
 				}
 				
-				if ( *it == ")" ) {
+				// Remove one indent step
+				if ( word == ")" ) {
 					DEBUG_LINE_INFO;
 					if ( parent->parent() )
 						parent = parent->parent();
 					continue;
 				}
 
-				if ( *it == "||" ) {
+				// OR-header
+				if ( word == "||" ) {
 					DEBUG_LINE_INFO;
-					lastDepend = new QListViewItem( parent, "Either" );
+				lastDepend = new QListViewItem( parent, i18n("Depend on either:") );
 					lastDepend->setOpen( true );
 					continue;
 				}
 				
-				kdDebug() << "*it=" << *it << "." << LINE_INFO;
-				lastDepend = new QListViewItem( parent, *it );
+				kdDebug() << "word=" << word << "." << LINE_INFO;
+				
+				// Insert package
+				if ( word.contains( "/" ) ) {
+					lastDepend = new QListViewItem( parent, word );
+					continue;
+				}
+				
+				// Insert use
+				word.remove( '?' );
+				if ( word.startsWith("!") ) {
+					word.remove( '!' );
+					lastDepend = new QListViewItem( parent, i18n("When not USE ") + word );
+				}
+				else
+					lastDepend = new QListViewItem( parent, i18n("When USE ") + word );
 			}
 		}
 		else {

@@ -52,12 +52,14 @@ PackageInspector::PackageInspector( QWidget *parent )
                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), 
 	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ),
 	m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
-	m_isVirginState( true ), m_stabilityBefore ( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
+	m_isVirginState( true ), m_stabilityBefore( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
 	m_hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
 	adjustSize();
+	
+	dialog->dependencyView->setSorting( -1 );
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
@@ -741,7 +743,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
-	dialog->dependencyBrowser->clear();
+// 	dialog->dependencyBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
@@ -751,11 +753,11 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			QTextStream stream( &file );
 			QString textLines;
 			int lineCount( 0 );
-			if ( KurooConfig::portageVersion21() ) 
+			if ( KurooConfig::portageVersion21() )
 				while ( !stream.atEnd() ) {
 					QString line = stream.readLine();
 					if ( line.contains( "DEPEND=" ) )
-						textLines += line + "\n";
+						textLines += line + " ";
 				}
 			else
 				while ( !stream.atEnd() ) {
@@ -765,15 +767,59 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 					if ( lineCount++ > 1 || line == "0" )
 						break;
 					else
-						textLines += line + "\n";
+						textLines += line + " ";
 				}
 			file.close();
-			dialog->dependencyBrowser->setText( textLines );
+// 			dialog->dependencyBrowser->setText( textLines );
+
+			textLines.replace( "DEPEND=", "DEPEND= " );
+			textLines.simplifyWhiteSpace();
+			
+			kdDebug() << "\ntextLines=" << textLines << LINE_INFO;
+			
+			const QStringList dependAtoms = QStringList::split( " ", textLines );
+			dialog->dependencyView->clear();
+			QListViewItem *parent, *lastDepend;
+			foreach ( dependAtoms ) {
+				
+				kdDebug() << "*it=" << *it << "." << LINE_INFO;
+				
+				if ( (*it).contains( "DEPEND=" ) ) {
+					DEBUG_LINE_INFO;
+					parent = new QListViewItem( dialog->dependencyView, *it );
+					parent->setOpen( true );
+					continue;
+				}
+				
+				if ( *it == "(" ) {
+					DEBUG_LINE_INFO;
+					parent = lastDepend;
+					parent->setOpen( true );
+					continue;
+				}
+				
+				if ( *it == ")" ) {
+					DEBUG_LINE_INFO;
+					if ( parent->parent() )
+						parent = parent->parent();
+					continue;
+				}
+
+				if ( *it == "||" ) {
+					DEBUG_LINE_INFO;
+					lastDepend = new QListViewItem( parent, "Either" );
+					lastDepend->setOpen( true );
+					continue;
+				}
+				
+				kdDebug() << "*it=" << *it << "." << LINE_INFO;
+				lastDepend = new QListViewItem( parent, *it );
+			}
 		}
 		else {
 			kdError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;
-			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
-			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
+// 			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
+// 			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }

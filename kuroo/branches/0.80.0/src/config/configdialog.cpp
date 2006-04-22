@@ -637,7 +637,14 @@ bool ConfigDialog::saveMakeConf()
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		
+		bool top( true );
 		foreach ( linesConcatenated ) {
+			
+			// Skip first empty lines
+			if ( top && (*it).isEmpty() ) {
+				top = false;
+				continue;
+			}
 			
 			if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
 			                              "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"

@@ -181,7 +181,7 @@ void KurooInit::getEnvironment()
 	bool success( false );
 	KStringHandler kstr;
 	
-	QFile makeconf( "/etc/make.conf" );
+	QFile makeconf( KurooConfig::fileMakeConf() );
 	if ( makeconf.open( IO_ReadOnly ) ) {
 		QTextStream stream( &makeconf );
 		
@@ -207,7 +207,7 @@ void KurooInit::getEnvironment()
 		makeconf.close();
 	}
 	else
-		kdError(0) << "Reading: /etc/make.conf" << LINE_INFO;
+		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
 	
 	QDir d( "/etc/make.profile" );
 	QFile f( d.canonicalPath() + "/../make.defaults" );

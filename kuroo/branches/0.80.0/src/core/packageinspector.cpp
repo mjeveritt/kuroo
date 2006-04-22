@@ -23,6 +23,7 @@
 #include "portagelistview.h"
 #include "packageversion.h"
 #include "versionview.h"
+#include "dependencyview.h"
 
 #include <qcombobox.h>
 #include <qcheckbox.h>
@@ -58,8 +59,6 @@ PackageInspector::PackageInspector( QWidget *parent )
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
 	adjustSize();
-	
-	dialog->dependencyView->setSorting( -1 );
 	
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
@@ -783,7 +782,9 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			const QStringList dependAtoms = QStringList::split( " ", textLines );
 			dialog->dependencyView->clear();
 			QListViewItem *parent, *lastDepend;
+			int order( 0 );
 			foreach ( dependAtoms ) {
+				order++;
 				QString word( *it );
 				
 				kdDebug() << "word=" << word << "." << LINE_INFO;
@@ -792,7 +793,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 				if ( word.contains( "DEPEND=" ) ) {
 					DEBUG_LINE_INFO;
 					word.remove( '=' );
-					parent = new QListViewItem( dialog->dependencyView, word );
+					parent = new QListViewItem( dialog->dependencyView, word, QString::number( order ) );
 					parent->setOpen( true );
 					continue;
 				}
@@ -816,7 +817,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 				// OR-header
 				if ( word == "||" ) {
 					DEBUG_LINE_INFO;
-					lastDepend = new QListViewItem( parent, i18n("Depend on either:") );
+					lastDepend = new QListViewItem( parent, i18n("Depend on either:"), QString::number( order ) );
 					lastDepend->setOpen( true );
 					continue;
 				}
@@ -825,7 +826,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 				
 				// Insert package
 				if ( word.contains( "/" ) ) {
-					lastDepend = new QListViewItem( parent, word );
+					lastDepend = new QListViewItem( parent, word, QString::number( order ) );
 					continue;
 				}
 				
@@ -833,10 +834,10 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 				word.remove( '?' );
 				if ( word.startsWith("!") ) {
 					word.remove( '!' );
-					lastDepend = new QListViewItem( parent, i18n("When not USE ") + word );
+					lastDepend = new QListViewItem( parent, i18n("When not USE ") + word, QString::number( order ) );
 				}
 				else
-					lastDepend = new QListViewItem( parent, i18n("When USE ") + word );
+					lastDepend = new QListViewItem( parent, i18n("When USE ") + word, QString::number( order ) );
 			}
 		}
 		else {

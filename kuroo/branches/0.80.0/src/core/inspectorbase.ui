@@ -769,18 +769,7 @@ and do not update further</string>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="KListView" row="1" column="0" rowspan="1" colspan="3">
-                                <column>
-                                    <property name="text">
-                                        <string>Package</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
+                            <widget class="DependencyView" row="1" column="0" rowspan="1" colspan="3">
                                 <property name="name">
                                     <cstring>dependencyView</cstring>
                                 </property>
@@ -791,12 +780,6 @@ and do not update further</string>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
-                                </property>
-                                <property name="rootIsDecorated">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
                                 </property>
                             </widget>
                             <widget class="QComboBox" row="0" column="1">
@@ -933,6 +916,23 @@ and do not update further</string>
         <pixmap>image1</pixmap>
         <property type="String">name</property>
     </customwidget>
+	<customwidget>
+		<class>DependencyView</class>
+		<header location="local">dependencyview.h</header>
+		<sizehint>
+			<width>100</width>
+			<height>100</height>
+		</sizehint>
+		<container>1</container>
+		<sizepolicy>
+			<hordata>5</hordata>
+			<verdata>5</verdata>
+			<horstretch>0</horstretch>
+			<verstretch>0</verstretch>
+		</sizepolicy>
+		<pixmap>image1</pixmap>
+		<property type="String">name</property>
+    </customwidget>
 </customwidgets>
 <images>
     <image name="image0">
@@ -945,6 +945,7 @@ and do not update further</string>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>versionview.h</includehint>
+	<includehint>dependencyview.h</includehint>
     <includehint>kurllabel.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>ktextbrowser.h</includehint>

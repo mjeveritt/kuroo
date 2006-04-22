@@ -126,8 +126,6 @@ void ConfigDialog::readMakeConf()
 	if ( linesConcatenated.isEmpty() )
 		return;
 	
-// 	KGlobal::config()->deleteGroup( "make.conf" );
-	
 	// Clear old entries
 	KurooConfig::setAcceptKeywords( QString::null );
 	KurooConfig::setAutoClean( QString::null );

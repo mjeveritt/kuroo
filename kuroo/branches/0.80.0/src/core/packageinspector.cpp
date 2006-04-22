@@ -775,8 +775,12 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 				}
 			file.close();
 
+			// Make sure all words are space-separated
 			textLines.replace( "DEPEND=", "DEPEND= " );
 			textLines.simplifyWhiteSpace();
+			
+			// Remove bootstrap and all it's duplicate
+			textLines.remove( "!bootstrap? ( sys-devel/patch )" );
 			
 			kdDebug() << "\ntextLines=" << textLines << LINE_INFO;
 			

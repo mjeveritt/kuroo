@@ -100,6 +100,11 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 			font.setItalic( true );
 			m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 			break;
+		
+		case ( DEPENDENCY_PACKAGE ) :
+			font.setUnderline( true );
+			m_cg.setColor( QColorGroup::Text, m_cg.link() );
+			break;
 	}
 	
 	p->setFont( font );

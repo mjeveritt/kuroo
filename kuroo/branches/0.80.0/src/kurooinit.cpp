@@ -181,26 +181,26 @@ void KurooInit::getEnvironment()
 	bool success( false );
 	KStringHandler kstr;
 	
-	QFile makeconf("/etc/make.conf");
-	if ( makeconf.open(IO_ReadOnly) ) {
-		QTextStream stream(&makeconf);
+	QFile makeconf( "/etc/make.conf" );
+	if ( makeconf.open( IO_ReadOnly ) ) {
+		QTextStream stream( &makeconf );
 		
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 			
-			if ( line.contains(QRegExp("DISTDIR=")) )
-				KurooConfig::setDirDist( kstr.word( line.section("DISTDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( line.contains( QRegExp("DISTDIR=") ) )
+				KurooConfig::setDirDist( kstr.word( line.section( "DISTDIR=", 1, 1 ).remove("\"") , "0" ) );
 			
-			if ( line.contains(QRegExp("PORTDIR=")) )
-				KurooConfig::setDirPortage( kstr.word( line.section("PORTDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( line.contains( QRegExp("PORTDIR=") ) )
+				KurooConfig::setDirPortage( kstr.word( line.section( "PORTDIR=", 1, 1 ).remove("\"") , "0" ) );
 			else
 				KurooConfig::setDirPortage("/usr/portage");
 			
-			if ( line.contains(QRegExp("PORTAGE_TMPDIR=")) )
-				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
+			if ( line.contains( QRegExp("PORTAGE_TMPDIR=") ) )
+				KurooConfig::setDirPortageTmp( kstr.word( line.section( "PORTAGE_TMPDIR=", 1, 1 ).remove("\"") , "0" ) );
 			
-			if ( line.contains(QRegExp("PORTDIR_OVERLAY=")) )
-				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
+			if ( line.contains( QRegExp("PORTDIR_OVERLAY=") ) )
+				KurooConfig::setDirPortageOverlay( kstr.word( line.section( "PORTDIR_OVERLAY=", 1, 1 ).remove("\"") , "0" ) );
 			
 			success = true;
 		}
@@ -209,15 +209,15 @@ void KurooInit::getEnvironment()
 	else
 		kdError(0) << "Reading: /etc/make.conf" << LINE_INFO;
 	
-	QDir d("/etc/make.profile");
+	QDir d( "/etc/make.profile" );
 	QFile f( d.canonicalPath() + "/../make.defaults" );
 	QString arch;
-	if ( f.open(IO_ReadOnly) ) {
-		QTextStream stream(&f);
+	if ( f.open( IO_ReadOnly ) ) {
+		QTextStream stream( &f );
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
-			if ( line.contains("ARCH=") > 0 ) {
-				arch = kstr.word( line.section("ARCH=", 1, 1).remove("\"") , "0" );
+			if ( line.contains( "ARCH=" ) > 0 ) {
+				arch = kstr.word( line.section( "ARCH=", 1, 1 ).remove( "\"" ) , "0" );
 				success = true;
 				break;
 			}
@@ -260,21 +260,21 @@ void KurooInit::getEnvironment()
 	KurooConfig::setArch( arch );
 	
 	// Add default etc-files warnings
-	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
-	                         "/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n"
-	                         "/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
+// 	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
+// 	                         "/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n"
+// 	                         "/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
 	
 	// Add default Gentoo Base Profile
-	KurooConfig::setSystemFiles("app-arch/bzip2\napp-arch/cpio\napp-arch/tar\napp-shells/bash\ndev-lang/perl\ndev-lang/python\nnet-misc/iputils\n"
-	                            "net-misc/rsync\nnet-misc/wget\nsys-apps/coreutils\nsys-apps/debianutils\nsys-apps/diffutils\n"
-	                            "sys-apps/file\nsys-apps/findutils\nsys-apps/gawk\nsys-apps/grep\nsys-apps/groff\nsys-apps/kbd\n"
-	                            "sys-apps/net-tools\nsys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"
-	                            "sys-apps/shadow\nsys-apps/texinfo\nsys-apps/which\nsys-devel/autoconf\nsys-devel/autoconf-wrapper\n"
-	                            "sys-devel/automake\nsys-devel/automake-wrapper\nsys-devel/binutils\nsys-devel/bison\nsys-devel/flex\n"
-	                            "sys-devel/gcc\nsys-devel/gnuconfig\nsys-devel/libtool\nsys-devel/m4\nsys-devel/mak\nsys-devel/patch\n"
-	                            "sys-fs/e2fsprogs\nsys-libs/cracklib\nsys-libs/ncurses\nsys-libs/readline\nsys-libs/zlib\n"
-	                            "virtual/dev-manager\nvirtual/editor\nvirtual/gzip\nvirtual/libc\nvirtual/man\nvirtual/modutils\n"
-	                            "virtual/os-headers\nvirtual/pager\nvirtual/ssh");
+// 	KurooConfig::setSystemFiles("app-arch/bzip2\napp-arch/cpio\napp-arch/tar\napp-shells/bash\ndev-lang/perl\ndev-lang/python\nnet-misc/iputils\n"
+// 	                            "net-misc/rsync\nnet-misc/wget\nsys-apps/coreutils\nsys-apps/debianutils\nsys-apps/diffutils\n"
+// 	                            "sys-apps/file\nsys-apps/findutils\nsys-apps/gawk\nsys-apps/grep\nsys-apps/groff\nsys-apps/kbd\n"
+// 	                            "sys-apps/net-tools\nsys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"
+// 	                            "sys-apps/shadow\nsys-apps/texinfo\nsys-apps/which\nsys-devel/autoconf\nsys-devel/autoconf-wrapper\n"
+// 	                            "sys-devel/automake\nsys-devel/automake-wrapper\nsys-devel/binutils\nsys-devel/bison\nsys-devel/flex\n"
+// 	                            "sys-devel/gcc\nsys-devel/gnuconfig\nsys-devel/libtool\nsys-devel/m4\nsys-devel/mak\nsys-devel/patch\n"
+// 	                            "sys-fs/e2fsprogs\nsys-libs/cracklib\nsys-libs/ncurses\nsys-libs/readline\nsys-libs/zlib\n"
+// 	                            "virtual/dev-manager\nvirtual/editor\nvirtual/gzip\nvirtual/libc\nvirtual/man\nvirtual/modutils\n"
+// 	                            "virtual/os-headers\nvirtual/pager\nvirtual/ssh");
 	
 	if ( !success )
 		exit(0);

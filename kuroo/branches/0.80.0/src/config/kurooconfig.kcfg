@@ -82,12 +82,12 @@
 			<default>126, 255, 112</default>
 		</entry>
 		<entry name="noMatchColor" type="Color">
-		<default>255, 159, 144</default>
+			<default>255, 159, 144</default>
 		</entry>
 	</group>
 	<group name="queue">
 		<entry name="forceConf" type="Bool">
-		<default>false</default>
+			<default>false</default>
 		</entry>
 		<entry name="download" type="Bool">
 			<default>false</default>
@@ -97,6 +97,14 @@
 		</entry>
 		<entry name="remove" type="Bool">
 			<default>false</default>
+		</entry>
+	</group>
+	<group name="warnings">
+		<entry name="etcFiles" type="String">
+			<default>/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc</default>
+		</entry>
+		<entry name="systemFiles" type="String">
+			<default>app-arch/bzip2\napp-arch/cpio\napp-arch/tar\napp-shells/bash\ndev-lang/perl\ndev-lang/python\nnet-misc/iputils\nnet-misc/rsync\nnet-misc/wget\nsys-apps/coreutils\nsys-apps/debianutils\nsys-apps/diffutils\nsys-apps/file\nsys-apps/findutils\nsys-apps/gawk\nsys-apps/grep\nsys-apps/groff\nsys-apps/kbd\nsys-apps/net-tools\nsys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"sys-apps/shadow\nsys-apps/texinfo\nsys-apps/which\nsys-devel/autoconf\nsys-devel/autoconf-wrapper\nsys-devel/automake\nsys-devel/automake-wrapper\nsys-devel/binutils\nsys-devel/bison\nsys-devel/flex\nsys-devel/gcc\nsys-devel/gnuconfig\nsys-devel/libtool\nsys-devel/m4\nsys-devel/mak\nsys-devel/patch\nsys-fs/e2fsprogs\nsys-libs/cracklib\nsys-libs/ncurses\nsys-libs/readline\nsys-libs/zlib\nvirtual/dev-manager\nvirtual/editor\nvirtual/gzip\nvirtual/libc\nvirtual/man\nvirtual/modutils\nvirtual/os-headers\nvirtual/pager\nvirtual/ssh</default>
 		</entry>
 	</group>
 	<group name="make.conf">
@@ -177,12 +185,6 @@
 		<entry name="Use" type="String">
 		</entry>
 		<entry name="UseOrder" type="String">
-		</entry>
-	</group>
-	<group name="warnings"> 
-		<entry name="etcFiles" type="String">
-		</entry>
-		<entry name="systemFiles" type="String">
 		</entry>
 	</group>
 </kcfg>

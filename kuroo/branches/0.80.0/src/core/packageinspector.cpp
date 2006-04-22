@@ -738,12 +738,11 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 }
 
 /**
- * Get dependencies for selected version. @fixme: does not work for portage < 2.1
+ * Get dependencies for selected version.
  * @param version
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
-// 	dialog->dependencyBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
@@ -775,7 +774,6 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 					}
 				}
 			file.close();
-// 			dialog->dependencyBrowser->setText( textLines );
 
 			textLines.replace( "DEPEND=", "DEPEND= " );
 			textLines.simplifyWhiteSpace();

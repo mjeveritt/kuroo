@@ -126,7 +126,49 @@ void ConfigDialog::readMakeConf()
 	if ( linesConcatenated.isEmpty() )
 		return;
 	
-// 	KurooConfig::self()->setCurrentGroup( "make.conf" );
+// 	KGlobal::config()->deleteGroup( "make.conf" );
+	
+	// Clear old entries
+	KurooConfig::setAcceptKeywords( QString::null );
+	KurooConfig::setAutoClean( QString::null );
+	KurooConfig::setBuildPrefix( QString::null );
+	KurooConfig::setCBuild( QString::null );
+	KurooConfig::setCCacheSize( QString::null );
+	KurooConfig::setCFlags( QString::null );
+	KurooConfig::setCXXFlags( QString::null );
+	KurooConfig::setChost( QString::null );
+	KurooConfig::setCleanDelay( QString::null );
+	KurooConfig::setConfigProtect( QString::null );
+	KurooConfig::setConfigProtectMask( QString::null );
+	KurooConfig::setDebugBuild( QString::null );
+	KurooConfig::setDirDist( QString::null );
+	KurooConfig::setFeatures( QString::null );
+	KurooConfig::setFetchCommand( QString::null );
+	KurooConfig::setGentooMirrors( QString::null );
+	KurooConfig::setFtpProxy( QString::null );
+	KurooConfig::setHttpProxy( QString::null );
+	KurooConfig::setMakeOpts( QString::null );
+	KurooConfig::setNoColor( QString::null );
+	KurooConfig::setDirPkgTmp( QString::null );
+	KurooConfig::setDirPkg( QString::null );
+	KurooConfig::setDirPortLog( QString::null );
+	KurooConfig::setPortageBinHost( QString::null );
+	KurooConfig::setPortageNiceness( QString::null );
+	KurooConfig::setDirPortageTmp( QString::null );
+	KurooConfig::setDirPortage( QString::null );
+	KurooConfig::setDirPortageOverlay( QString::null );
+	KurooConfig::setResumeCommand( QString::null );
+	KurooConfig::setRoot( QString::null );
+	KurooConfig::setRsyncExcludeFrom( QString::null );
+	KurooConfig::setRsyncProxy( QString::null );
+	KurooConfig::setRsyncRetries( QString::null );
+	KurooConfig::setRsyncRateLimit( QString::null );
+	KurooConfig::setRsyncTimeOut( QString::null );
+	KurooConfig::setDirRpm( QString::null );
+	KurooConfig::setSync( QString::null );
+	KurooConfig::setUse( QString::null );
+	KurooConfig::setUseOrder( QString::null );
+	KurooConfig::setNoColor( QString::null );
 	
 	// Parse the lines
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
@@ -410,7 +452,7 @@ void ConfigDialog::readMakeConf()
 		
 		if ( (*it).contains( QRegExp("RSYNC_TIMEOUT=") ) ) {
 			if ( rx.search( *it ) > -1 )
-				KurooConfig::setRsyncTimeOut(rx.cap(4)  );
+				KurooConfig::setRsyncTimeOut( rx.cap(4)  );
 			else
 				kdWarning(0) << "Parsing /etc/make.conf: can not parse RSYNC_TIMEOUT." << LINE_INFO;
 			continue;

@@ -30,12 +30,14 @@ public:
 	DependencyView( QWidget *parent = 0, const char *name = 0 );
     ~DependencyView();
 
-	class 		DependencyItem;
+	class 			DependencyItem;
 	
-	void 		insertItem( const char* name );
+	void			clear();
+	void 			insertItem( const char* name );
 	
 private:
-	int			m_index;
+	int				m_index;
+	DependencyItem	*m_parent, *m_lastDepend;
 };
 
 #endif

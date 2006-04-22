@@ -105,8 +105,7 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 }
 
 CategoriesView::~CategoriesView()
-{
-}
+{}
 
 /**
  * Retreive focus category when a new category is made current.

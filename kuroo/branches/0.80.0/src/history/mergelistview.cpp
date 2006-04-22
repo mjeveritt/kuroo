@@ -71,8 +71,7 @@ MergeListView::MergeListView( QWidget *parent, const char *name )
 }
 
 MergeListView::~MergeListView()
-{
-}
+{}
 
 /**
  * Populate listview with log entries

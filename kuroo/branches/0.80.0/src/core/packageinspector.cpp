@@ -742,6 +742,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
+	dialog->dependencyView->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
 		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
@@ -780,65 +781,11 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			kdDebug() << "\ntextLines=" << textLines << LINE_INFO;
 			
 			const QStringList dependAtoms = QStringList::split( " ", textLines );
-			dialog->dependencyView->clear();
-			QListViewItem *parent, *lastDepend;
-			int order( 0 );
-			foreach ( dependAtoms ) {
-				order++;
-				QString word( *it );
-				
-				kdDebug() << "word=" << word << "." << LINE_INFO;
-				
-				// Insert Depend-header
-				if ( word.contains( "DEPEND=" ) ) {
-					DEBUG_LINE_INFO;
-					word.remove( '=' );
-					parent = new QListViewItem( dialog->dependencyView, word, QString::number( order ) );
-					parent->setOpen( true );
-					continue;
-				}
-				
-				// Indent one step 
-				if ( word == "(" ) {
-					DEBUG_LINE_INFO;
-					parent = lastDepend;
-					parent->setOpen( true );
-					continue;
-				}
-				
-				// Remove one indent step
-				if ( word == ")" ) {
-					DEBUG_LINE_INFO;
-					if ( parent->parent() )
-						parent = parent->parent();
-					continue;
-				}
-
-				// OR-header
-				if ( word == "||" ) {
-					DEBUG_LINE_INFO;
-					lastDepend = new QListViewItem( parent, i18n("Depend on either:"), QString::number( order ) );
-					lastDepend->setOpen( true );
-					continue;
-				}
-				
-				kdDebug() << "word=" << word << "." << LINE_INFO;
-				
-				// Insert package
-				if ( word.contains( "/" ) ) {
-					lastDepend = new QListViewItem( parent, word, QString::number( order ) );
-					continue;
-				}
-				
-				// Insert use
-				word.remove( '?' );
-				if ( word.startsWith("!") ) {
-					word.remove( '!' );
-					lastDepend = new QListViewItem( parent, i18n("When not USE ") + word, QString::number( order ) );
-				}
-				else
-					lastDepend = new QListViewItem( parent, i18n("When USE ") + word, QString::number( order ) );
-			}
+			foreach ( dependAtoms )
+				dialog->dependencyView->insertItem( *it );
+			
+			dialog->dependencyView->setSorting( 0, Qt::Descending );
+			dialog->dependencyView->sort();
 		}
 		else {
 			kdError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;

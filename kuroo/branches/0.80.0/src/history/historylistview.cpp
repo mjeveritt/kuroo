@@ -77,8 +77,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 }
 
 HistoryListView::~HistoryListView()
-{
-}
+{}
 
 /**
  * @return current entry.

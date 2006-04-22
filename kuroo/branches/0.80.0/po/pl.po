@@ -1,17 +1,16 @@
-# translation of pl.po to
+# translation of pl.po to Polish
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Konrad Mantorski <konrad@mantorski.com>, 2006.
-# Karim Ryde <karim@bredband.net>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-11 16:39+0200\n"
-"PO-Revision-Date: 2006-03-28 17:15+0200\n"
-"Last-Translator: Karim Ryde <karim@bredband.net>\n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2006-04-16 13:22+0200\n"
+"Last-Translator: Konrad Mantorski <konrad@mantorski.com>\n"
+"Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,6 +25,8 @@ msgid ""
 "<font color=red><b>You are uninstalling packages part of your system profile!"
 "<br>This may be damaging to your system!</b></font>"
 msgstr ""
+"<font color=red><b>Usuwasz pakiety wchodzące w skład profilu systemowego!"
+"<br>To może spowodować uszkodzenie systemu!</b></font>"
 
 #: portage/portagetab.cpp:147 portage/portagetab.cpp:203
 #: portage/portagetab.cpp:206
@@ -52,8 +53,7 @@ msgstr ""
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
-msgstr ""
-"<qt>Odświeżyć widok Portage?<br>Operacja może potrwać kilka minut...</qt>"
+msgstr "<qt>Odświeżyć widok Portage?<br>Operacja może potrwać kilka minut...</qt>"
 
 #: portage/portagetab.cpp:321
 msgid "Refreshing Packages"
@@ -84,39 +84,32 @@ msgid "<b>Homepage: </b>"
 msgstr "<b>Strona domowa: </b>"
 
 #: portage/portagetab.cpp:500
-#, fuzzy
 msgid "%1Package not available in Portage tree anymore!%2"
-msgstr "Pakietu nie ma w Portage"
+msgstr "%1Pakietu nie ma już w drzewie Portage%2"
 
 #: portage/portagetab.cpp:506 portage/portagetab.cpp:512
 msgid "%1Installed&nbsp;version:%2%3%4"
-msgstr ""
+msgstr "%1Zainstalowana&nbsp;wersja:%2%3%4"
 
 #: portage/portagetab.cpp:528
-#, fuzzy
 msgid "%1Emerge&nbsp;version:%2%3%4"
-msgstr "Wersja narzędzia emerge"
+msgstr "%1Wersja&nbsp;emerge%2%3%4"
 
 #: portage/portagetab.cpp:536
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
-msgstr ""
+msgstr "%1Wersja&nbsp;emerge:%2brak dostępnych wersji %3%4"
 
 #: portage/portagetab.cpp:542
-#, fuzzy
-msgid ""
-"%1Emerge&nbsp;version:%2No version available - please check package details%3"
-msgstr ""
-"<tr><td width=10%><b>Wersja&nbsp;emerge:</font></td><td width=90%><font "
-"color=darkRed>Brak dostępnej wersji - sprawdź szczegółowe informacje o "
-"pakiecie</font></b></td></tr>"
+msgid "%1Emerge&nbsp;version:%2No version available - please check package details%3"
+msgstr "%1Wersja&nbsp;emerge:%2wersja niedostępna - zapoznaj się ze szczegółowymi informacjami o pakiecie%3"
 
 #: portage/portagetab.cpp:550
 msgid "%1Available&nbsp;versions:%2%3%4"
-msgstr ""
+msgstr "%1Dostępne&nbsp;wersje:%2%3%4"
 
 #: portage/portagetab.cpp:556
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
-msgstr ""
+msgstr "%1Dostępne&nbsp;wersje:%2brak dostępnych wersji %3%4"
 
 #: portage/portagetab.cpp:588
 msgid "&Add to queue"
@@ -180,7 +173,7 @@ msgid "Uninstall"
 msgstr "Odinstaluj"
 
 #: rc.cpp:10
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Uninstall selected packages..."
 msgstr "Usuwanie pakietów..."
 
@@ -195,12 +188,12 @@ msgid "Alt+Q"
 msgstr "Alt+K"
 
 #: rc.cpp:19
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Add/Remove selected packages to the Installation Queue"
 msgstr "Usuń pakiet z &kolejki po zainstalowaniu"
 
 #: rc.cpp:26 rc.cpp:266
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show package details..."
 msgstr "Szczegółowe informacje o pakiecie"
 
@@ -232,7 +225,7 @@ msgstr "&Aktualizacje"
 #: rc.cpp:45 rc.cpp:89 rc.cpp:272
 #, no-c-format
 msgid "Alt+U"
-msgstr "Alt+K"
+msgstr "Alt+A"
 
 #: rc.cpp:48
 #, no-c-format
@@ -272,7 +265,7 @@ msgid "Form3"
 msgstr "Formularz3"
 
 #: rc.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "<font size=\"+1\">Etc-update History</font><br>\n"
 "<i>Click on configuration file to view changes...</i>"
@@ -282,7 +275,7 @@ msgstr ""
 "porównywania różnic</i>"
 
 #: rc.cpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show &unmerges"
 msgstr "Wyświetl usunię&cia"
 
@@ -299,7 +292,7 @@ msgstr "ten miesiąc"
 #: rc.cpp:98
 #, no-c-format
 msgid "last 6 months"
-msgstr "ostatnie 6 miesięcy"
+msgstr "ostatnie pół roku"
 
 #: rc.cpp:101
 #, no-c-format
@@ -307,9 +300,9 @@ msgid "last year"
 msgstr "ten rok "
 
 #: rc.cpp:104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "all"
-msgstr "Wszystkie"
+msgstr "wszystkie"
 
 #: rc.cpp:111
 #, no-c-format
@@ -321,9 +314,9 @@ msgstr ""
 "<i>Kliknij pakiet, aby wyświetlić wszystkie informacje</i>"
 
 #: rc.cpp:115
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show:"
-msgstr "Wyświetl ostatnie:"
+msgstr "Wyświetl:"
 
 #: rc.cpp:121
 #, no-c-format
@@ -364,7 +357,7 @@ msgstr "Dostępne wersje tego pakietu:"
 #: rc.cpp:141
 #, no-c-format
 msgid "Emerge version"
-msgstr "Wersja narzędzia emerge"
+msgstr "Wersja emerge"
 
 #: rc.cpp:144
 #, no-c-format
@@ -394,7 +387,7 @@ msgstr "wersję &zamaskowaną"
 #: rc.cpp:162 rc.cpp:287 rc.cpp:631
 #, no-c-format
 msgid "Alt+K"
-msgstr "Alt+K"
+msgstr "Alt+Z"
 
 #: rc.cpp:165
 #, no-c-format
@@ -496,12 +489,12 @@ msgid "Remove &All"
 msgstr "Usuń &wszystko"
 
 #: rc.cpp:252
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Remove all packages in Queue"
 msgstr "Instalowanie pakietów z kolejki..."
 
 #: rc.cpp:259
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Remove selected package from Queue"
 msgstr "Usuń z kolejki"
 
@@ -511,14 +504,14 @@ msgid "Remove package from Q&ueue after installation"
 msgstr "Usuń pakiet z &kolejki po zainstalowaniu"
 
 #: rc.cpp:275
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Download all packages &before installing them (--fetch-all-uri)"
 msgstr "&Pobierz wszystkie pakiety przed zainstalowaniem (--fetch-all-uri)"
 
 #: rc.cpp:278 rc.cpp:330
 #, no-c-format
 msgid "Alt+B"
-msgstr "Alt+B"
+msgstr "Alt+P"
 
 #: rc.cpp:281
 #, no-c-format
@@ -548,7 +541,7 @@ msgstr "Alt+1"
 #: rc.cpp:302
 #, no-c-format
 msgid "Check packages in Queue with emerge pretend"
-msgstr "Sprawdź pakiety w kolejce za pomocą emerge pretend"
+msgstr "Sprawdź pakiety w kolejce za pomocą emerge --pretend"
 
 #: rc.cpp:305 queue/queuetab.cpp:265
 #, no-c-format
@@ -561,7 +554,7 @@ msgid "Alt+2"
 msgstr "Alt+2"
 
 #: rc.cpp:311
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start emerge of all packages in Queue"
 msgstr "Instalowanie pakietów z kolejki..."
 
@@ -742,12 +735,12 @@ msgstr "USE_ORDER"
 #: rc.cpp:435
 #, no-c-format
 msgid "yes"
-msgstr ""
+msgstr "yes"
 
 #: rc.cpp:438
 #, no-c-format
 msgid "no"
-msgstr ""
+msgstr "no"
 
 #: rc.cpp:441
 #, no-c-format
@@ -942,12 +935,12 @@ msgstr "Ścieżki"
 #: rc.cpp:558
 #, no-c-format
 msgid "Installed repository"
-msgstr "Repozytorium"
+msgstr "Repozytorium zainstalowanych"
 
 #: rc.cpp:561
 #, no-c-format
 msgid "Portage cache"
-msgstr "Pamięć podręczna"
+msgstr "Pamięć podręczna Portage"
 
 #: rc.cpp:564
 #, no-c-format
@@ -965,11 +958,13 @@ msgid "Emerge check update options"
 msgstr "Opcje sprawdzania aktualizacji"
 
 #: rc.cpp:573
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "<i>Forces emerge to consider the entire dependency tree of packages.<br>\n"
 "Refresh Updates for changes to take effect.</i>"
-msgstr "<i>Wymusza sprawdzanie całego drzewa zależności pakietu.</i>"
+msgstr ""
+"<i>Wymusza sprawdzanie całego drzewa zależności pakietu.<br>\n"
+"Odśwież widok aktualizacji, aby uwzględnić zmiany.<i>"
 
 #: rc.cpp:577
 #, no-c-format
@@ -1024,10 +1019,10 @@ msgstr "Opcje programu Kuroo"
 #: rc.cpp:616
 #, no-c-format
 msgid "Dock kuroo in s&ystem tray (close does not exit kuroo)"
-msgstr "Za&dokuj program (nie zostanie zamknięty po kliknięciu krzyżyka)"
+msgstr "Za&dokuj program (nie zostanie zamknięty po kliknięciu ikony krzyżyka)"
 
 #: rc.cpp:622
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Package options"
 msgstr "Opcje filtrowania pakietów"
 
@@ -1037,7 +1032,7 @@ msgid "<i>Restart for changes to take effect.</i>"
 msgstr "<i>Uruchom program ponownie, aby wprowadzić zmiany.</i>"
 
 #: rc.cpp:628
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show installed pac&kages in separate column"
 msgstr "Wyświetlaj zai&nstalowane pakiety w oddzielnej kolumnie"
 
@@ -1053,19 +1048,19 @@ msgid "Kuroo"
 msgstr "Kuroo"
 
 #: rc.cpp:643
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Release information"
-msgstr "&Informacje "
+msgstr "Informacje o wydaniu"
 
 #: rc.cpp:647
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
-msgstr ""
+msgstr "Najpierw utwórz kopie zapasowe wszystkich plików związanych z Porga&ge, które może edytować użytkownik."
 
 #: rc.cpp:650
 #, no-c-format
 msgid "Alt+G"
-msgstr "Alt+P"
+msgstr "Alt+G"
 
 #: history/mergelistview.cpp:58
 msgid "Configuration file"
@@ -1085,11 +1080,11 @@ msgstr "Kompilowanie/scalanie"
 
 #: history/history.cpp:190
 msgid "Post-Build Cleaning"
-msgstr "Sprzątanie po kompilacji"
+msgstr "Zamiatanie po kompilacji"
 
 #: history/history.cpp:191
 msgid "Cleaning"
-msgstr "Sprzątanie"
+msgstr "Zamiatanie"
 
 #: history/history.cpp:198
 msgid "Started emerge on"
@@ -1117,17 +1112,15 @@ msgstr "Usuwanie"
 
 #: history/history.cpp:265
 msgid "Finished. Cleaning up"
-msgstr "Zakończono. Sprzątanie..."
+msgstr "Zakończono. Zamiatanie..."
 
 #: history/history.cpp:266
-#, fuzzy
 msgid "Exiting successfully"
-msgstr "wyjście powiodło się"
+msgstr "Wyjście powiodło się"
 
 #: history/history.cpp:267
-#, fuzzy
 msgid "Terminating"
-msgstr "kończenie"
+msgstr "Kończenie"
 
 #: history/historylistview.cpp:59
 msgid "Date"
@@ -1135,7 +1128,7 @@ msgstr "Data"
 
 #: history/historylistview.cpp:60 queue/queuelistview.cpp:174
 msgid "Duration"
-msgstr "Czas"
+msgstr "Czas trwania"
 
 #: history/historylistview.cpp:61 history/historytab.cpp:138
 msgid "Emerge info"
@@ -1155,7 +1148,7 @@ msgstr "&Informacje "
 
 #: kuroo.cpp:114
 msgid "&Refresh Packages"
-msgstr "&Odśwież widok Pakiety"
+msgstr "Odśwież widok &Pakiety"
 
 #: kuroo.cpp:117
 msgid "&Refresh Updates"
@@ -1167,14 +1160,13 @@ msgstr "&Synchronizuj Portage"
 
 #: kuroo.cpp:123
 msgid "&Run etc-update"
-msgstr "&Uruchom etc-update"
+msgstr "Uruchom &etc-update"
 
 #: kuroo.cpp:177
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
-msgstr ""
-"<qt>Zsynchronizować Portage?<br>Operacja może potrwać kilka minut...</qt>"
+msgstr "<qt>Zsynchronizować Portage?<br>Operacja może potrwać kilka minut...</qt>"
 
 #: kuroo.cpp:178
 msgid "Last sync: %1"
@@ -1206,7 +1198,7 @@ msgid ""
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 "\n"
-"Błąd: nie można ustalić flag USE dotyczących pakietu %1/%2."
+"Błąd: nie można ustalić flag USE dla pakietu %1/%2."
 
 #: core/packageinspector.cpp:336
 msgid "Click for hardmask info!"
@@ -1218,30 +1210,27 @@ msgstr "%1/%2 - informacje o maskowaniu na sztywno!"
 
 #: core/packageinspector.cpp:662
 msgid "%1No ChangeLog found.%2"
-msgstr ""
+msgstr "%1Nie znaleziono rejestru zmian.%2"
 
 #: core/packageinspector.cpp:689
-#, fuzzy
 msgid "Loading ebuild. Reading: "
-msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
+msgstr "Ładowanie ebuilda. Odczytywanie: "
 
 #: core/packageinspector.cpp:690
 msgid "%1No ebuild found.%2"
-msgstr ""
+msgstr "%1Nie znaleziono ebuilda.%2"
 
 #: core/packageinspector.cpp:721
 msgid "%1No dependencies found.%2"
-msgstr ""
+msgstr "%1Nie znaleziono zależności.%2"
 
 #: core/packageinspector.cpp:750
 msgid "%1No installed files found.%2"
-msgstr ""
+msgstr "%1Nie znaleziono zainstalowanych plików.%2"
 
 #: core/packageinspector.cpp:823 core/packageinspector.cpp:885
-#, fuzzy
-msgid ""
-"Use flags could not be calculated. Please check log for more information"
-msgstr "Więcej informacji w dzienniku!"
+msgid "Use flags could not be calculated. Please check log for more information"
+msgstr "Nie można pobrać flag USE. Więcej informacji w dzienniku."
 
 #: core/etcupdate.cpp:58
 msgid ""
@@ -1285,9 +1274,7 @@ msgstr "Etc-update"
 
 #: core/etcupdate.cpp:164
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
-msgstr ""
-"<font color=red>Ostrzeżenie!<br>Element %1 był edytowany przez użytkownika.</"
-"font><br>"
+msgstr "<font color=red>Ostrzeżenie!<br>Element %1 był edytowany przez użytkownika.</font><br>"
 
 #: core/etcupdate.cpp:167
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
@@ -1311,8 +1298,7 @@ msgstr "Scalanie zmian w pliku '%1'."
 
 #: core/etcupdate.cpp:197
 msgid "Skipping '%1'. etc-update will ask again next time."
-msgstr ""
-"Pominięto plik %1. Monit zostanie wyświetlony przy następnym etc-update."
+msgstr "Pominięto plik %1. Monit zostanie wyświetlony przy następnym etc-update."
 
 #: core/etcupdate.cpp:204
 msgid "etc-update completed."
@@ -1320,7 +1306,7 @@ msgstr "Zakończono proces etc-update."
 
 #: core/etcupdate.cpp:217
 msgid "Deleting '%1'. Backup saved in %2."
-msgstr "Usuwanie kopii zapasowej elementu %1 z lokalizacji %2."
+msgstr "Usuwanie elementu %1. Kopię zapasową zapisano w %2."
 
 #: core/categorieslistview.cpp:98 core/categorieslistview.cpp:199
 #: core/categorieslistview.cpp:200 core/categorieslistview.cpp:252
@@ -1338,29 +1324,24 @@ msgid "Subcategory"
 msgstr "Podkategoria"
 
 #: core/tooltip.cpp:70 core/tooltip.cpp:82
-#, fuzzy
 msgid "%1 is installed"
-msgstr "Pakiet jest zainstalowany"
+msgstr "%1 jest zainstalowany"
 
 #: core/tooltip.cpp:73
-#, fuzzy
 msgid "%1 is not installed"
-msgstr "Pakiet nie jest zainstalowany"
+msgstr "%1 nie jest zainstalowany"
 
 #: core/tooltip.cpp:75
-#, fuzzy
 msgid "%1 not in Portage"
-msgstr "Pakietu nie ma w Portage"
+msgstr "%1 nie ma w Portage"
 
 #: core/tooltip.cpp:87
-#, fuzzy
 msgid "%1 is present in World profile"
-msgstr "Pakiet figuruje w profilu World"
+msgstr "%1 figuruje w profilu World"
 
 #: core/tooltip.cpp:92
-#, fuzzy
 msgid "%1 is present in Queue"
-msgstr "Pakiet w kolejce"
+msgstr "%1 w kolejce"
 
 #: core/filewatcher.cpp:68
 msgid "Portage version is upgraded to 2.1. Please refresh package view."
@@ -1372,16 +1353,16 @@ msgstr "Wersja Portage"
 
 #: core/cacheportagejob.cpp:79
 msgid "Collecting package information..."
-msgstr "Zbieranie informacji o pakiecie..."
+msgstr "Zbieranie informacji o pakietach..."
 
 #: core/cacheportagejob.cpp:104 core/cacheportagejob.cpp:122
 msgid "Caching aborted."
-msgstr "Anulowano zapisywanie w pamięci podręcznej"
+msgstr "Anulowano zapisywanie w pamięci podręcznej."
 
 #: core/global.cpp:141
 #, c-format
 msgid "%1d "
-msgstr ""
+msgstr "%1d "
 
 #: core/portagefiles.cpp:79
 msgid "Collecting user package keywords..."
@@ -1409,8 +1390,7 @@ msgstr "Zakończono skanowanie w poszukiwaniu odmaskowanych pakietów w %1."
 
 #: core/portagefiles.cpp:695
 msgid "Completed scanning for hardmasked packages in %1."
-msgstr ""
-"Zakończono skanowanie w poszukiwaniu pakietów zamaskowanych na sztywno w %1."
+msgstr "Zakończono skanowanie w poszukiwaniu pakietów zamaskowanych na sztywno w %1."
 
 #: core/portagefiles.cpp:699
 msgid "Completed scanning for user masked packages in %1."
@@ -1541,19 +1521,16 @@ msgid "There is no ebuilds to satisfy %1"
 msgstr "Brak ebuildów odpowiadających żądaniu %1"
 
 #: core/emerge.cpp:458
-#, fuzzy
 msgid "You must run Kuroo as root to unmask packages!"
 msgstr "Aby emergować pakiety, należy uruchomić program Kuroo jako root!"
 
 #: core/emerge.cpp:459
-#, fuzzy
 msgid "Auto-unmasking packages"
-msgstr "Nie znaleziono pasujących pakietów"
+msgstr "Automatyczne odmaskowanie pakietów"
 
 #: core/emerge.cpp:463
-#, fuzzy
 msgid "Emerge messages"
-msgstr "Wersja narzędzia emerge"
+msgstr "Komunikaty emergowania"
 
 #: core/emerge.cpp:463 core/emerge.cpp:532
 msgid "Please check log for more information!"
@@ -1564,12 +1541,10 @@ msgid "Important"
 msgstr "Ważne"
 
 #: core/emerge.cpp:545 core/emerge.cpp:554
-#, fuzzy
 msgid "%1 is not available on your architecture %2!<br><br>"
-msgstr "Pakiet <b>%1</b> nie jest dostępny dla tej architektury %2!"
+msgstr "Pakiet %1 nie jest dostępny dla architektury %2!<br><br>"
 
 #: core/emerge.cpp:546
-#, fuzzy
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet.<br>Ask the architecture porting team to test the "
@@ -1586,14 +1561,13 @@ msgid "Missing Keyword"
 msgstr "Brakujące słowo kluczowe "
 
 #: core/emerge.cpp:555
-#, fuzzy
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 "<br>Oznaczenie <b>-* słowo kluczowe</b> oznacza, że ta aplikacja jeszcze nie "
-"działa na wybranej architekturze. Jeśli uważasz, że z programu można "
+"działa na wybranej architekturze.<br>Jeśli uważasz, że z programu można "
 "korzystać, zgłoś błąd w bugzilli systemu Gentoo."
 
 #: core/emerge.cpp:558
@@ -1605,8 +1579,7 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Dopisz pakiet do pliku \"package.unmask\"."
 
 #: core/emerge.cpp:565
-msgid ""
-"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Nie można zemergować zamaskowanego pakietu!<br>Czy chcesz odmaskować "
 "pakiet <b>%1</b>?</qt>"
@@ -1620,8 +1593,7 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Dopisz pakiet do pliku \"package.keywords\"."
 
 #: core/emerge.cpp:580
-msgid ""
-"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Nie można zemergować pakietu testowego!<br>Czy chcesz odmaskować pakiet "
 "<b>%1</b>?</qt>"
@@ -1648,7 +1620,7 @@ msgstr "Konrad Mantorski"
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr "konrad@mantorski.com JID: KonMan@kdetalk.net"
+msgstr "konrad@mantorski.com"
 
 #: kurooinit.cpp:64
 msgid ""
@@ -1657,7 +1629,7 @@ msgid ""
 "You can select portage version in settings."
 msgstr ""
 "Nie można rozpoznać wersji Portage!\n"
-"Program Kuroo nie może prawidłowo przetworzyć informacji o pakiecie.\n"
+"Program Kuroo nie może prawidłowo przetworzyć informacji o pakietach.\n"
 "Wersję Portage można określić w ustawieniach."
 
 #: kurooinit.cpp:87
@@ -1688,6 +1660,9 @@ msgid ""
 "You must select appropriate architecture to proceed.\n"
 "Please select:"
 msgstr ""
+"Kuroo nie może rozpoznać używanej architektury!\n"
+"Musisz wybrać odpowiednią architekturę, aby kontynuować.\n"
+"Wybierz:"
 
 #: kurooinit.cpp:308
 msgid ""
@@ -1716,7 +1691,7 @@ msgstr "Postęp"
 #: queue/queuelistview.cpp:306 queue/queuelistview.cpp:311
 #: queue/queuelistview.cpp:316
 msgid "na"
-msgstr "brak danych"
+msgstr "nd"
 
 #: queue/queuetab.cpp:145
 msgid ""
@@ -1733,7 +1708,7 @@ msgid ""
 "to the world profile for later updating.</td></tr></table></qt>"
 msgstr ""
 "<qt><table width=300><tr><td>Normalne emergowanie, ale bez dodawania "
-"pakietów do profilu world do późniejszej aktualizacji.</td></tr></table></qt>"
+"pakietów do profilu world w celu późniejszej aktualizacji.</td></tr></table></qt>"
 
 #: queue/queuetab.cpp:152
 msgid ""
@@ -1759,14 +1734,12 @@ msgid "Number of packages: %1<br>"
 msgstr "Liczba pakietów: %1<br>"
 
 #: queue/queuetab.cpp:218
-#, fuzzy
 msgid "Initial estimated time for installation: %1<br>"
 msgstr "Szacowany czas instalacji: %1<br>"
 
 #: queue/queuetab.cpp:219
-#, fuzzy
 msgid "Elapsed time for installation: %1<br>"
-msgstr "Szacowany czas instalacji: %1<br>"
+msgstr "Dotychczasowy czas instalacji: %1<br>"
 
 #: queue/queuetab.cpp:221
 msgid "Estimated time remaining: %1<br>"
@@ -1790,7 +1763,7 @@ msgstr "Czy chcesz zainstalować następujące pakiety?"
 
 #: queue/queuetab.cpp:381
 msgid "Do you want to abort the running installation?"
-msgstr "Czy chcesz anulować instalację?"
+msgstr "Czy chcesz anulować trwającą instalację?"
 
 #: main.cpp:31
 msgid "Frontend to Gentoo Portage"
@@ -1813,9 +1786,8 @@ msgid "German translation"
 msgstr "Tłumaczenie na niemiecki"
 
 #: main.cpp:49
-#, fuzzy
 msgid "Italian translation"
-msgstr "Tłumaczenie na niemiecki"
+msgstr "Tłumaczenie na włoski"
 
 #: main.cpp:50
 msgid "Norwegian translation"
@@ -1842,9 +1814,8 @@ msgid "Kuroo is already running!"
 msgstr "Program Kuroo został już uruchomiony!"
 
 #: logs/log.cpp:59
-#, fuzzy
 msgid "Writing %1kuroo.log."
-msgstr "Błąd podczas zapisywanie pliku %1kuroo.log"
+msgstr "Zapisywanie pliku %1kuroo.log"
 
 #: logs/log.cpp:59 config/configdialog.cpp:477
 msgid "Saving"
@@ -1880,16 +1851,17 @@ msgstr "Nie można zapisać %1. Uruchom program jako root."
 
 #: intro/introdlg.cpp:48
 msgid "Ok"
-msgstr "OK "
+msgstr "OK"
 
 #: intro/introdlg.cpp:53
 msgid ""
 "<qt><table width=300><tr><td>Make backup copies in %1 of following files:</"
 "td></tr>"
 msgstr ""
+"<qt><table width=300><tr><td>W katalogu %1 zapisz kopie zapasowe następujących plików:</"
+"td></tr>"
 
 #: intro/introdlg.cpp:64
-#, fuzzy
 msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
@@ -1898,17 +1870,12 @@ msgid ""
 "Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
 "wiki/TellUs>Tell us what you think of Kuroo!</a><br>"
 msgstr ""
-"<h2>Kuroo-0.80.0</h2>\n"
-"<p>Kuroo  - nakładka graficzna na Portage dla środowiska KDE, która ułatwia "
-"zarządzanie oprogramowaniem w systemach Gentoo</p>\n"
-"Nowe funkcje:<br>\n"
-"Selektor dwóch kolumn, Inspektor pakietów, paski postępu, edytor flag USE, \n"
-"Historia emergowania i konfiguracji, kolejka emergowania.Mbr >\n"
-"<br>\n"
-"<b><font color=\"red\">Uwaga!<br>\n"
-"Proszę zrobić kopie zapasowe wszystkich plików w katalogu /etc/portage oraz "
-"plików /etc/make.conf i<br>\n"
-"/var/lib/portage/world.</font></b>"
+"Kuroo  - nakładka graficzna na Portage dla środowiska KDE, która ułatwia zarządzanie oprogramowaniem w systemach z rodziny Gentoo</p><b>Nowe "
+"funkcje</b><br>jednolity widok "
+"pakietów, szybkie przeglądanie i wyszukiwanie przy "
+"użyciu filtrów,<br>dwukolumnowy selektor, inspektor pakietów, paski postępu, edytor flag USE, historia emergowania i konfiguracji, kolejka emergowania.<br ><br>"
+"<a href=http://kuroo.org/kuroo/"
+"wiki/TellUs>Podziel się opinią o programie Kuroo!</a><br>"
 
 #: kurooview.cpp:80
 msgid "Packages"
@@ -1968,541 +1935,3 @@ msgstr "Kuroo - nakładka graficzna na Portage"
 msgid "&Configure Kuroo..."
 msgstr "&Konfiguruj Kuroo..."
 
-#~ msgid ""
-#~ "Add result package list: Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Dodawanie wynikowej listy pakietów. W bazie danych nie można znaleźć "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Package id is empty, skipping!"
-#~ msgstr "Brak identyfikatora pakietu - pomijanie!"
-
-#~ msgid "Emerge process killed!"
-#~ msgstr "Zabito proces emergowania!"
-
-#~ msgid "Collecting emerge output. Can not parse: "
-#~ msgstr "Zbieranie informacji z emergowania. Nie można przetworzyć:"
-
-#~ msgid "Creating cache. Can not connect to database"
-#~ msgstr "Tworzenie pamięci podręcznej. Nie można połączyć z bazą danych"
-
-#~ msgid "Creating cache. Can not access "
-#~ msgstr "Tworzenie pamięci podręcznej. Brak dostępu"
-
-#~ msgid "Creating cache. Caching aborted."
-#~ msgstr ""
-#~ "Tworzenie pamięci podręcznej. Anulowano zapisywanie w pamięci podręcznej."
-
-#~ msgid "Creating cache. Error reading: "
-#~ msgstr "Tworzenie pamięci podręcznej. Błąd odczytu: "
-
-#, fuzzy
-#~ msgid "Creating cache. Can not parse: "
-#~ msgstr "Tworzenie pamięci podręcznej. Brak dostępu"
-
-#~ msgid "Scanning Portage. Can not connect to database"
-#~ msgstr "Skanowanie Portage. Nie można połączyć z bazą danych"
-
-#~ msgid "Scanning Portage. Portage scan aborted"
-#~ msgstr "Skanowanie Portage. Przerwano skanowanie"
-
-#~ msgid "Scanning Portage. Scanning Portage cache: can not match package %1."
-#~ msgstr ""
-#~ "Skanowanie Portage. Skanowanie pamięci podręcznej Portage: brak dopasowań "
-#~ "do pakietu %1."
-
-#~ msgid "Scanning installed packages. Can not access "
-#~ msgstr "Skanowanie zainstalowanych pakietów. Brak dostępu "
-
-#~ msgid "Scanning installed packages. Can not match %1."
-#~ msgstr "Skanowanie zainstalowanych pakietów. Brak dopasowań do pakietu %1."
-
-#~ msgid "Scanning Portage cache. Error reading: "
-#~ msgstr "Skanowanie pamięci podręcznej Portage. Błąd odczytu: "
-
-#~ msgid "Scanning installed packages. Error reading: "
-#~ msgstr "Skanowanie zainstalowanych pakietów: Błąd odczytu: "
-
-#~ msgid "Parsing emerge.log. Can not connect to database"
-#~ msgstr "Przetwarzanie pliku emerge.log. Nie można połączyć z bazą danych"
-
-#~ msgid "Parsing emerge.log. History scan aborted"
-#~ msgstr "Przetwarzanie pliku emerge.log. Anulowano skanowanie historii"
-
-#~ msgid "Parsing emerge.log. No package found!"
-#~ msgstr "Przetwarzanie pliku emerge.log. Nie znaleziono pakietów!"
-
-#, fuzzy
-#~ msgid "Parsing emerge.log. Can not parse: "
-#~ msgstr "Przetwarzanie pliku emerge.log. Nie można połączyć z bazą danych"
-
-#~ msgid "Scanning updates. Can not connect to database"
-#~ msgstr ""
-#~ "Skanowanie w poszukiwaniu aktualizacji. Nie można połączyć z bazą danych"
-
-#~ msgid "Scanning updates. No update package found"
-#~ msgstr "Skanowanie w poszukiwaniu aktualizacji. Nie znaleziono aktualizacji"
-
-#~ msgid "Scanning updates. Scan aborted!"
-#~ msgstr "Skanowanie w poszukiwaniu aktualizacji. Anulowano!"
-
-#~ msgid "Scanning updates. Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Skanowanie w poszukiwaniu aktualizacji. Nie można znaleźć identyfikatora "
-#~ "pakietu %1/%2 w bazie danych."
-
-#~ msgid "Creating backup of history. Error writing: %1."
-#~ msgstr "Tworzenie kopii zapasowej historii. Błąd zapisu: %1."
-
-#~ msgid "Restoring backup of history. Error reading: %1."
-#~ msgstr "Przywracanie historii z kopii zapasowej. Błąd odczytu: %1."
-
-#~ msgid "Can not find package in database for id %1."
-#~ msgstr "Nie można znaleźć w bazie danych identyfikatora pakietu %1."
-
-#~ msgid "Can not find category in database for id %1."
-#~ msgstr "Nie można znaleźć w bazie danych identyfikatora kategorii %1."
-
-#~ msgid "Can not find id in database for package %1/%2."
-#~ msgstr "Nie można znaleźć w bazie danych identyfikatora pakietu %1/%2."
-
-#, fuzzy
-#~ msgid "Querying for package id. Can not parse: "
-#~ msgstr "Skanowanie Portage. Brak dostępu "
-
-#~ msgid "Database versions incompatible. Removing and rebuilding database.\n"
-#~ msgstr "Niezgodne wersje baz danych. Usuwanie i przebudowa bazy danych.\n"
-
-#~ msgid "Database file corrupt. Removing and rebuilding database.\n"
-#~ msgstr "Uszkodzona baza danych. Usuwanie i przebudowa bazy danych.\n"
-
-#~ msgid "Parsing package.keywords. Error reading: %1."
-#~ msgstr "Przetwarzanie pliku package.keywords. Błąd odczytu: %1."
-
-#~ msgid ""
-#~ "Load package keywords: Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Ładowanie pliku package.keywords. Nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Parsing package.keywords. Can not match package %1 in %2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.keywords. Nie można dopasować pliku %1 w %2."
-
-#~ msgid "Parsing package.unmask. Error reading: %1."
-#~ msgstr "Przetwarzanie pliku package.unmask. Błąd odczytu: %1."
-
-#~ msgid ""
-#~ "Load user package unmask: Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Ładowanie pliku package.unmask. Nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Parsing package.unmask. Can not match package %1 in %2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.unmask. Nie można dopasować pakietu %1 w %2."
-
-#~ msgid "Parsing package.mask. Error reading: %1."
-#~ msgstr "Przetwarzanie pakietu package.mask. Błąd odczytu: %1."
-
-#~ msgid "Parsing package.mask. Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.mask. Nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Parsing package.mask. Can not match package %1 in %2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.mask. Nie można dopasować pakietu %1 w %2."
-
-#~ msgid "Parsing user package.mask. Error reading: %1."
-#~ msgstr "Przetwarzanie pliku package.mask użytkownika. Błąd odczytu: %1."
-
-#~ msgid ""
-#~ "Parsing user package.mask. Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.mask. Nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Parsing user package.mask. Can not match package %1 in %2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.mask użytkownika. Nie można dopasować pakietu "
-#~ "%1 w %2."
-
-#~ msgid "Parsing user package.use. Error reading: %1."
-#~ msgstr "Przetwarzanie pliku package.use użytkownika. Błąd odczytu: %1."
-
-#~ msgid ""
-#~ "Parsing user package.use. Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Przetwarzanie pliku package.use użytkownika. Nie można znaleźć w bazie "
-#~ "danych identyfikatora pakietu %1/%2."
-
-#~ msgid "No package keywords found. Saving to %1 aborted!"
-#~ msgstr "Nie znaleziono pliku package.keywords. Anulowano zapisywanie w %1!"
-
-#~ msgid "Error writing: %1."
-#~ msgstr "Błąd zapisu: %1."
-
-#~ msgid "No user mask depend atom found. Saving to %1 aborted!"
-#~ msgstr ""
-#~ "Nie znaleziono [mask depend atom] użytkownika. Anulowano zapisywanie w %1."
-
-#~ msgid "No user unmask depend atom found. Saving to %1 aborted!"
-#~ msgstr ""
-#~ "Nie znaleziono [unmask depend atom] użytkownika. Anulowano zapisywanie w %"
-#~ "1."
-
-#~ msgid "No package use found. Saving to %1 aborted!"
-#~ msgstr "Nie znaleziono pliku package.use. Anulowano zapisywanie w %1!"
-
-#~ msgid "Marking user masked version. Can not parse: "
-#~ msgstr ""
-#~ "Oznaczenie wersji zamaskowanej przez użytkownika. Nie można przetworzyć: "
-
-#, fuzzy
-#~ msgid "Loading use flag description. Error reading: "
-#~ msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
-
-#, fuzzy
-#~ msgid "Loading changelog. Error reading: "
-#~ msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
-
-#~ msgid "<font color=darkRed><b>No ChangeLog found.</b></font>"
-#~ msgstr "<font color=darkRed><b>Nie znaleziono rejestru zmian.</b></font>"
-
-#~ msgid "<font color=darkRed><b>No ebuild found.</b></font>"
-#~ msgstr "<font color=darkRed><b>Nie znaleziono ebuilda.</b></font>"
-
-#, fuzzy
-#~ msgid "Load dependencies. Error reading: "
-#~ msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
-
-#~ msgid "<font color=darkRed><b>No dependencies found.</b></font>"
-#~ msgstr "<font color=darkRed><b>Nie znaleziono zależności.</b></font>"
-
-#, fuzzy
-#~ msgid "Loading installed files list. Error reading: "
-#~ msgstr "Skanowanie zainstalowanych pakietów: Błąd odczytu: "
-
-#~ msgid "<font color=darkRed><b>No installed files found.</b></font>"
-#~ msgstr ""
-#~ "<font color=darkRed><b>Nie znaleziono zainstalowanych plików.</b></font>"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "Error reading /var/log/emerge.log"
-#~ msgstr "Błąd odczytu pliku /var/log/emerge.log"
-
-#~ msgid "Can not parse package emerge start in /var/log/emerge.log: %1"
-#~ msgstr ""
-#~ "Nie można przetworzyć czasu uruchomienia emergowania pakietu w pliku /var/"
-#~ "log/emerge.log: %1"
-
-#~ msgid "Can not parse package emerge complete in /var/log/emerge.log: %1"
-#~ msgstr ""
-#~ "Nie można przetworzyć czasu zakończenia emergowania pakietu w pliku /var/"
-#~ "log/emerge.log: %1"
-
-#~ msgid "Inserting emerged package: can not match %1."
-#~ msgstr "Wstawianie zemergowanego pakietu: nie można dopasować %1."
-
-#~ msgid ""
-#~ "Inserting emerged package: Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Wstawianie zemergowanego pakietu: nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Removing unmerged package: can not match %1."
-#~ msgstr "Usuwanie odemergowanego pakietu: nie można dopasować %1."
-
-#, fuzzy
-#~ msgid ""
-#~ "Removing unmerged package: Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Usuwanie odemergowanego pakietu. Nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#~ msgid "Removing update package: can not match package %1."
-#~ msgstr "Usuwanie pakietu aktualizacji: nie można dopasować pakietu %1."
-
-#~ msgid ""
-#~ "Removing update package: Can not find id in database for package %1/%2."
-#~ msgstr ""
-#~ "Usuwanie pakietu aktualizacji: nie można znaleźć w bazie danych "
-#~ "identyfikatora pakietu %1/%2."
-
-#, fuzzy
-#~ msgid ""
-#~ "Scanning Portage. Wait-counter has reached maximum. Attempting to scan "
-#~ "Portage."
-#~ msgstr ""
-#~ "Licznik oczekiwania osiągnął wartość maksymalną. Próba skanowania Portage."
-
-#~ msgid "Loading packages in world. Error reading: "
-#~ msgstr "Ładowanie pakietów w pliku world. Błąd odczytu: "
-
-#~ msgid "Adding to world. Error writing: "
-#~ msgstr "Dodawanie do pliku world. Błąd zapisu: "
-
-#~ msgid ""
-#~ "<tr><td colspan=2><font color=darkRed><b>Package not available in Portage "
-#~ "tree anymore!</b></font></td></tr>"
-#~ msgstr ""
-#~ "<tr><td colspan=2><font color=darkRed><b>Pakiet nie jest już dostępny w "
-#~ "drzewie Portage!</b></font></td></tr>"
-
-#~ msgid ""
-#~ "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%>"
-#~ "%1</td></tr>"
-#~ msgstr ""
-#~ "<tr><td width=10%><b>Zainstalowane&nbsp;wersje:</b></font></td><td "
-#~ "width=90%>%1</td></tr>"
-
-#~ msgid ""
-#~ "<tr><td width=10%><b>Installed&nbsp;version:</b></font></td><td width=90%"
-#~ ">Not installed</td></tr>"
-#~ msgstr ""
-#~ "<tr><td width=10%><b>Zainstalowane&nbsp;wersje:</b></font></td><td "
-#~ "width=90%>Nie zainstalowane</td></tr>"
-
-#~ msgid ""
-#~ "<tr><td width=10%><b>Emerge&nbsp;version:</b></td><td width=90%>%1</td></"
-#~ "tr>"
-#~ msgstr ""
-#~ "<tr><td width=10%><b>Wersja&nbsp;emerge:</b></td><td width=90%>%1</td></"
-#~ "tr>"
-
-#~ msgid ""
-#~ "<tr><td width=10%><b>Emerge&nbsp;version:</font></td><td width=90%><font "
-#~ "color=darkRed>No version available on %1</b></td></tr>"
-#~ msgstr ""
-#~ "<tr><td width=10%><b>Wersja&nbsp;emerge:</font></td><td width=90%><font "
-#~ "color=darkRed>Brak dostępnej wersji w %1</b></td></tr>"
-
-#~ msgid ""
-#~ "<tr><td width=10%><b>Available&nbsp;versions:</b></td><td width=90%>%1</"
-#~ "b></td></tr>"
-#~ msgstr ""
-#~ "<tr><td width=10%><b>Dostępne&nbsp;wersje:</b></td><td width=90%>%1</b></"
-#~ "td></tr>"
-
-#, fuzzy
-#~ msgid ""
-#~ "<tr><td width=10%><b>Available&nbsp;versions:</td><td width=90%><font "
-#~ "color=darkRed>No versions available on %1</font></b></td></tr>"
-#~ msgstr ""
-#~ "<tr><td width=10%><b>Dostępne&nbsp;wersje:</td><td width=90%><font "
-#~ "color=darkRed>Brak dostępnej wersji w %1</font></b></td></tr>"
-
-#~ msgid "Error writing: "
-#~ msgstr "Błąd zapisu: "
-
-#~ msgid "Error reading: %1"
-#~ msgstr "Błąd odczytu: %1"
-
-#~ msgid "Error parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej ACCEPT_KEYWORDS."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse AUTOCLEAN."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej AUTOCLEAN."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse BUILD_PREFIX."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej BUILD_PREFIX."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CBUILD."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CBUILD."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CCACHE_SIZE."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CCACHE_SIZE."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CFLAGS."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CFLAGS."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CXXFLAGS."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CXXFLAGS."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CHOST."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CHOST."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CLEAN_DELAY."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CLEAN_DELAY."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse CONFIG_PROTECT."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej CONFIG_PROTECT."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse DEBUGBUILD."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej DEBUGBUILD."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse DISTDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej DISTDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse FEATURES."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej FEATURES."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse FETCHCOMMAND."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej FETCHCOMMAND."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse GENTOO_MIRRORS."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej GENTOO_MIRRORS."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse FTP_PROXY."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej FTP_PROXY."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse HTTP_PROXY."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej HTTP_PROXY."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse MAKEOPTS."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej MAKEOPTS."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse NOCOLOR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej NOCOLOR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PKG_TMPDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PKG_TMPDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PKGDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PKGDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PORT_LOGDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PORT_LOGDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PORTAGE_BINHOST."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PORTAGE_BINHOST."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PORTAGE_NICENESS."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PORTAGE_NICENESS."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PORTAGE_TMPDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PORTAGE_TMPDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PORTDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PORTDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse PORTDIR_OVERLAY."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej PORTDIR_OVERLAY."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RESUMECOMMAND."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RESUMECOMMAND."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse ROOT."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej ROOT."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RSYNC_EXCLUDEFROM."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RSYNC_PROXY."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RSYNC_PROXY."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RSYNC_RETRIES."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RSYNC_RETRIES."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RSYNC_RATELIMIT."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RSYNC_RATELIMIT."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RSYNC_TIMEOUT."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RSYNC_TIMEOUT."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse RPMDIR."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej RPMDIR."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse SYNC."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej SYNC."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse USE."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej USE."
-
-#~ msgid "Error parsing /etc/make.conf: can not parse USE_ORDER."
-#~ msgstr ""
-#~ "Błąd podczas przetwarzania pliku /etc/make.conf: nie można przetworzyć "
-#~ "zmiennej USE_ORDER."
-
-#~ msgid "Parsing %1: can not match keyword %2."
-#~ msgstr "Przetwarzanie %1: nie można dopasować słowa kluczowego %2."
-
-#~ msgid "Error writing: %1"
-#~ msgstr "Błąd zapisu: %1"
-
-#~ msgid "Database structure is changed. Deleting old version of database %1"
-#~ msgstr ""
-#~ "Struktura bazy danych zmieniła się. Usuwanie starej wersji bazy danych %1"
-
-#~ msgid "Error reading: /etc/make.conf"
-#~ msgstr "Błąd odczytu pliku /etc/make.conf"
-
-#~ msgid "Error reading: /etc/make.profile"
-#~ msgstr "Błąd odczytu pliku /etc/make.profile"

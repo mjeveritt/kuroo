@@ -100,13 +100,13 @@ const QStringList ConfigDialog::parseMakeConf()
 			if ( line.contains( "=" ) ) {
 				
 				linesConcatenated += extendedLine;
-				extendedLine = line.section("\\", 0, 0).simplifyWhiteSpace();
+				extendedLine = line.section( QRegExp("\\\\s*$"), 0, 0 ).simplifyWhiteSpace();
 				
 				linesConcatenated += linesCommented;
 				linesCommented.clear();
 			}
 			else
-				extendedLine += " " + line.section("\\", 0, 0).simplifyWhiteSpace();
+				extendedLine += " " + line.section( QRegExp("\\\\s*$"), 0, 0 ).simplifyWhiteSpace();
 		}
 		
 		linesConcatenated += extendedLine;
@@ -125,6 +125,8 @@ void ConfigDialog::readMakeConf()
 	QStringList linesConcatenated = parseMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return;
+	
+// 	KurooConfig::self()->setCurrentGroup( "make.conf" );
 	
 	// Parse the lines
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );

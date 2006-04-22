@@ -764,10 +764,15 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 					QString line = stream.readLine();
 					if ( line.isEmpty() )
 						continue;
+					
 					if ( lineCount++ > 1 || line == "0" )
 						break;
-					else
-						textLines += line + " ";
+					else {
+						if ( lineCount == 1 )
+							textLines += "PDEPEND= " + line + " ";
+						else
+							textLines += "RDEPEND= " + line + " ";
+					}
 				}
 			file.close();
 // 			dialog->dependencyBrowser->setText( textLines );
@@ -813,7 +818,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 				// OR-header
 				if ( word == "||" ) {
 					DEBUG_LINE_INFO;
-				lastDepend = new QListViewItem( parent, i18n("Depend on either:") );
+					lastDepend = new QListViewItem( parent, i18n("Depend on either:") );
 					lastDepend->setOpen( true );
 					continue;
 				}

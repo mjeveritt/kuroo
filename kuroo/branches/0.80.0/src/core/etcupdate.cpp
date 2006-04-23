@@ -150,7 +150,7 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
  */
 void EtcUpdate::runDiff()
 {
-	if ( m_totalEtcCount > 0 ) {
+	if ( m_totalEtcCount > m_count ) {
 		QString destination = m_etcFilesList.first();
 		m_etcFilesList.pop_front();
 		QString source = m_etcFilesList.first();

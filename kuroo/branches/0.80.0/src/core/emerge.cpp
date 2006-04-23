@@ -61,8 +61,10 @@ void Emerge::init( QObject *parent )
  */
 void Emerge::inputText( const QString& text )
 {
-	if ( eProc->isRunning() )
+	if ( eProc->isRunning() ) {
 		eProc->writeStdin( text, true );
+		LogSingleton::Instance()->writeLog( text, KUROO );
+	}
 	else
 		LogSingleton::Instance()->writeLog( i18n("Can not process input! Emerge is not running."), ERROR );
 }

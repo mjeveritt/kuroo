@@ -156,6 +156,9 @@
             <property name="margin">
                 <number>0</number>
             </property>
+            <property name="wordWrap">
+                <enum>WidgetWidth</enum>
+            </property>
             <property name="wrapPolicy">
                 <enum>AtWordOrDocumentBoundary</enum>
             </property>

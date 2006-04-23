@@ -85,9 +85,6 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
-	// Load Inspector with current package info
-// 	connect( packagesView, SIGNAL( signalCurrentChanged() ), this, SLOT( slotPackage() ) );
-	
 	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
@@ -105,10 +102,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 }
 
 PortageTab::~PortageTab()
-{
-	delete m_uninstallInspector;
-	m_uninstallInspector = 0;
-}
+{}
 
 /**
  * Initialize Portage view.
@@ -192,8 +186,6 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	DEBUG_LINE_INFO;
-	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
 		pbQueue->setDisabled( true );
@@ -438,6 +430,7 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		
+		pbAdvanced->setDisabled( true );
 		return;
 	}
 	

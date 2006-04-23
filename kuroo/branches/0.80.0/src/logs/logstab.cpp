@@ -40,6 +40,9 @@ LogsTab::LogsTab( QWidget* parent )
 {
 	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
 	
+	// Enable/disable this view and buttons when kuroo is busy
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
+	
 // 	logBrowser->setTextFormat( Qt::LogText ); // Text doesn't wrap in log mode!
 	init();
 }
@@ -85,6 +88,17 @@ void LogsTab::slotUserInput()
 {
 	QString input = KInputDialog::getText( i18n("User Input"), i18n("Enter text:"), QString::null, 0, this, 0, 0, QString::null );
 	EmergeSingleton::Instance()->inputText( input );
+}
+
+/**
+ * Disable/enable buttons when kuroo is busy.
+ */
+void LogsTab::slotBusy()
+{
+	if ( SignalistSingleton::Instance()->isKurooBusy() )
+		pbEnter->setDisabled( true );
+	else
+		pbEnter->setDisabled( false );
 }
 
 #include "logstab.moc"

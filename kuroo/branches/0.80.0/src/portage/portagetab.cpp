@@ -86,7 +86,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
+	connect( packagesView, SIGNAL( signalCurrentChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
@@ -141,7 +141,6 @@ void PortageTab::slotInit()
 
 // void PortageTab::slotFocusLeft()
 // {
-// 	DEBUG_LINE_INFO;
 // 	switch ( m_focusWidget ) {
 // 		
 // 		case CATEGORYLIST:
@@ -162,7 +161,6 @@ void PortageTab::slotInit()
 
 // void PortageTab::slotFocusRight()
 // {
-// 	DEBUG_LINE_INFO;
 // 	switch ( m_focusWidget ) {
 // 		
 // 		case CATEGORYLIST:
@@ -233,6 +231,8 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
+	DEBUG_LINE_INFO;
+	
 	// No package selected, disable all buttons
 	if ( packagesView->selectedId().isEmpty() ) {
 		pbQueue->setDisabled( true );
@@ -243,7 +243,8 @@ void PortageTab::slotButtons()
 	
 	m_packageInspector->setDisabled( false );
 	pbAdvanced->setDisabled( false );
-
+	slotPackage();
+	
 	// When kuroo is busy disable queue and uninstall button
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		pbQueue->setDisabled( true );
@@ -442,8 +443,10 @@ void PortageTab::slotAdvanced()
 
 void PortageTab::slotPackage()
 {
-	if ( m_packageInspector->isVisible() )
-		processPackage( true );
+	if ( m_packageInspector->isVisible() ) {
+		if ( packagesView->currentPackage() )
+			processPackage( true );
+	}
 	else	
 		processPackage( false );
 }
@@ -454,6 +457,7 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
+	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	

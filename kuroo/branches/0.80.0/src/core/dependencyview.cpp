@@ -90,7 +90,7 @@ int DependencyView::DependencyItem::compare( QListViewItem* item, int col, bool 
 }
 
 /**
- * 
+ * Format dependency-items nicely.
  */
 void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
 {
@@ -122,6 +122,10 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
 
+/**
+ * @class DependencyView
+ * @short Listview to build dependency-tree view.
+ */
 DependencyView::DependencyView( QWidget *parent, const char *name )
 	: KListView( parent, name ), m_index( 0 ), m_parent( 0 ), m_lastDepend( 0 ),
 	rxAtom(	

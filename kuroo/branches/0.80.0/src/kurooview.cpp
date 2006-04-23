@@ -181,8 +181,6 @@ void KurooView::slotInit()
  */
 void KurooView::slotCheckPortage()
 {
-	DEBUG_LINE_INFO;
-	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Restore backup after db is recreated because of new version

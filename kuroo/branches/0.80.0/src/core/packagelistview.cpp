@@ -224,6 +224,7 @@ const QString PackageListView::count()
  */
 void PackageListView::nextPackage( bool isPrevious )
 {
+	DEBUG_LINE_INFO;
 	if ( isVisible() ) {
 		QListViewItem* item = currentItem();
 		if ( isPrevious ) {
@@ -232,7 +233,11 @@ void PackageListView::nextPackage( bool isPrevious )
 				item = item->itemAbove();
 				ensureItemVisible( item );
 				setCurrentItem( item );
-				setSelected( item, true );
+				
+				kdDebug() << "item->text(0)=" << item->text(0) << LINE_INFO;
+				
+				item->setSelected( true );
+// 				setSelected( item, true );
 			}
 		}
 		else {
@@ -241,9 +246,14 @@ void PackageListView::nextPackage( bool isPrevious )
 				item = item->itemBelow();
 				ensureItemVisible( item );
 				setCurrentItem( item );
-				setSelected( item, true );
+				
+				kdDebug() << "item->text(0)=" << item->text(0) << LINE_INFO;
+				
+				item->setSelected( true );
+// 				setSelected( item, true );
 			}
 		}
+		emit signalCurrentChanged();
 	}
 }
 

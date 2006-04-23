@@ -593,6 +593,7 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
  */
 void PackageInspector::slotRefreshTabs()
 {
+	DEBUG_LINE_INFO;
 	slotLoadUseFlags( dialog->cbVersionsUse->currentText() );
 	slotLoadEbuild( dialog->cbVersionsEbuild->currentText() );
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
@@ -874,8 +875,6 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
  */
 void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
-	DEBUG_LINE_INFO;
-	
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
 	eProc = 0;	
@@ -932,8 +931,6 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
  */
 void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
-	DEBUG_LINE_INFO;
-	
 	dialog->setDisabled( false );
 	
 	SignalistSingleton::Instance()->setKurooBusy( false );

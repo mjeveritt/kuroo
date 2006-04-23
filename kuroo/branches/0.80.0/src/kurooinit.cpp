@@ -45,8 +45,6 @@
 KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
-	DEBUG_LINE_INFO;
-	
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {

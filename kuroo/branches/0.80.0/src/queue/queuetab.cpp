@@ -413,8 +413,6 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotClear()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( isVisible() )
 		m_packageInspector->hide();
 	

@@ -21,6 +21,8 @@
 #ifndef DEPENDENCYVIEW_H
 #define DEPENDENCYVIEW_H
 
+#include <qregexp.h>
+
 #include <klistview.h>
 
 class DependencyView : public KListView

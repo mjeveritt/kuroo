@@ -60,7 +60,7 @@ protected:
 	QDict<PackageItem>			m_packageIndex;
 	
 signals:
-	void						signalPackageChanged();
+	void						signalCurrentChanged();
 	
 private:
 	QListViewItem* 				lastItem;

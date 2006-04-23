@@ -231,8 +231,6 @@ void Portage::init( QObject *parent )
  */
 void Portage::slotChanged()
 {
-	DEBUG_LINE_INFO;
-	
 	// Register in db so we can check at next start if user has emerged any packages outside kuroo
 	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
@@ -244,8 +242,6 @@ void Portage::slotChanged()
  */
 void Portage::slotPackageChanged()
 {
-	DEBUG_LINE_INFO;
-	
 	loadWorld();
 	slotChanged();
 }
@@ -260,8 +256,6 @@ void Portage::slotPackageChanged()
  */
 bool Portage::slotRefresh()
 {
-	DEBUG_LINE_INFO;
-	
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();

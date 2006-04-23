@@ -18,15 +18,13 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include "common.h"
 #include "global.h"
 
-#include <qregexp.h>
 #include <qwidget.h>
 #include <qpalette.h>
 #include <qdatetime.h>
 
-#include <kdebug.h>
-#include <klocale.h>
 #include <kglobal.h>
 
 /**
@@ -35,11 +33,11 @@
  */
 Global::Global( QObject *parent )
 	: QObject( parent )
-{
-}
+{}
 
 Global::~Global()
 {
+	DEBUG_LINE_INFO;
 }
 
 void Global::init( QObject *parent )

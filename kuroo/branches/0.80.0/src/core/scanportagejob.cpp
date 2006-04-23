@@ -60,8 +60,6 @@ ScanPortageJob::~ScanPortageJob()
  */
 void ScanPortageJob::completeJob()
 {
-	DEBUG_LINE_INFO;
-	
 	m_mapCache.clear();
 	SignalistSingleton::Instance()->scanPortageComplete();
 }

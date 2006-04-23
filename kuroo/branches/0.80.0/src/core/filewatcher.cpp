@@ -28,7 +28,7 @@
  * @class FileWatcher.
  * @short Check important portage files for changes.
  */
-FileWatcher::FileWatcher( QObject *parent )
+FileWatcher::FileWatcher( QObject *m_parent )
 	: QObject( m_parent ), watcher( 0 )
 {
 }

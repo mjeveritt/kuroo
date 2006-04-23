@@ -66,7 +66,6 @@ History::History( QObject *m_parent )
 History::~History()
 {
 	m_log.close();
-	
 	delete logWatcher;
 	logWatcher = 0;
 }
@@ -86,8 +85,6 @@ void History::init( QObject *parent )
  */
 void History::slotInit()
 {
-	DEBUG_LINE_INFO;
-	
 	m_log.setName( KurooConfig::fileEmergeLog() );
 	loadTimeStatistics();
 	

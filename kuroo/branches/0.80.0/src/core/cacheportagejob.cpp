@@ -46,8 +46,6 @@ CachePortageJob::~CachePortageJob()
 
 void CachePortageJob::completeJob()
 {
-	DEBUG_LINE_INFO;
-	
 	SignalistSingleton::Instance()->cachePortageComplete();
 }
 
@@ -57,8 +55,6 @@ void CachePortageJob::completeJob()
  */
 bool CachePortageJob::doJob()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( !m_db->isConnected() ) {
 		kdError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
 		return false;

@@ -49,7 +49,7 @@ public:
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
 	void		packageQueueChanged();
-	void		packageClicked( const QString& id );
+	void		packageClicked( const QString& package );
 	
 signals:
 	void		signalKurooBusy( bool b );

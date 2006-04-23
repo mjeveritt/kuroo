@@ -96,9 +96,9 @@ void LogsTab::slotUserInput()
 void LogsTab::slotBusy()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() )
-		pbEnter->setDisabled( true );
-	else
 		pbEnter->setDisabled( false );
+	else
+		pbEnter->setDisabled( true );
 }
 
 #include "logstab.moc"

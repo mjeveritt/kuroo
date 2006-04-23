@@ -26,12 +26,14 @@
 #include "packageitem.h"
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
-#define POS_CALLSIGN    1
-#define POS_PREFIX      2
-#define POS_CATEGORY    3
-#define POS_SUBCATEGORY 4
-#define POS_PACKAGE     5
-#define POS_VERSION     6
+enum Positions {
+		POS_CALLSIGN = 1,
+		POS_PREFIX,
+		POS_CATEGORY,
+		POS_SUBCATEGORY,
+		POS_PACKAGE,
+		POS_VERSION
+};
 
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
@@ -82,7 +84,7 @@ bool DependAtom::parse( const QString& atom )
 // 	kdDebug() << "atom=" << atom << LINE_INFO;
 	
 	// Do the regexp match, which also prepares for text capture
-	if ( rxAtom.exactMatch( atom ) == false ) {
+	if ( !rxAtom.exactMatch( atom ) ) {
 		m_matches = false;
 		return false;
 	}
@@ -119,7 +121,7 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 {
 	QValueList<PackageVersion*> matchingVersions;
 	
-	if ( m_package == NULL || m_matches == false )
+	if ( m_package == NULL || !m_matches )
 		return matchingVersions; // return an empty list
 	
 	if ( m_portagePackage->category() != m_category || m_portagePackage->name() != m_package )
@@ -164,14 +166,12 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 // 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
 		
-		if (
-		    ( matchAllVersions ) ||
-		    ( matchBaseVersion   && (*versionIterator)->version().startsWith( m_version ) ) ||
-		    ( matchEqual         && (*versionIterator)->version() == m_version ) ||
-		    ( matchAllRevisions  && (*versionIterator)->version().startsWith( m_version + "-r" ) ) ||
-		    ( matchGreaterThan   && (*versionIterator)->isNewerThan( m_version ) ) ||
-		    ( !matchEqual        && !matchGreaterThan && (*versionIterator)->isOlderThan( m_version ) )
-		  )
+		if ( ( matchAllVersions ) ||
+		     ( matchBaseVersion   && (*versionIterator)->version().startsWith( m_version ) ) ||
+		     ( matchEqual         && (*versionIterator)->version() == m_version ) ||
+		     ( matchAllRevisions  && (*versionIterator)->version().startsWith( m_version + "-r" ) ) ||
+		     ( matchGreaterThan   && (*versionIterator)->isNewerThan( m_version ) ) ||
+		     ( !matchEqual        && !matchGreaterThan && (*versionIterator)->isOlderThan( m_version ) ) )
 		{
 			matchingVersions.append( (PackageVersion*) *versionIterator );
 			continue;

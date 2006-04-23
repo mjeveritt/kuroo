@@ -30,6 +30,17 @@ enum Format {
 		DEPENDENCY_EITHER
 };
 
+// capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
+enum Positions {
+		POS_CALLSIGN = 1,
+		POS_PREFIX,
+		POS_CATEGORY,
+		POS_SUBCATEGORY,
+		POS_PACKAGE,
+		POS_VERSION
+};
+
+
 /**
  * @class DependencyItem
  * @short Subclass for formating text.
@@ -112,12 +123,25 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 }
 
 DependencyView::DependencyView( QWidget *parent, const char *name )
-	: KListView( parent, name ), m_index( 0 ), m_parent( 0 ), m_lastDepend( 0 )
+	: KListView( parent, name ), m_index( 0 ), m_parent( 0 ), m_lastDepend( 0 ),
+	rxAtom(	
+			"^"    										// Start of the string
+			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
+			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
+			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory
+			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+			"("           								// start of the version part
+			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+			"(?:-r\\d*)?"  								// revision
+			"\\*?)?$"          							// end of the (optional) version part and the atom string
+		)
 {
-// 	setShowSortIndicator( true );
 	addColumn( i18n( "Dependency" ) );
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );
+	
+	connect( this, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotPackageClicked( QListViewItem* ) ) );
 }
 
 DependencyView::~DependencyView()
@@ -130,6 +154,30 @@ void DependencyView::clear()
 	KListView::clear();
 }
 
+/**
+ * Forward signal when user click on package.
+ */
+void DependencyView::slotPackageClicked( QListViewItem* item )
+{
+	QString atom( item->text(0) );
+	
+	kdDebug() << "atom=" << atom << LINE_INFO;
+	
+	// Do the regexp match, which also prepares for text capture
+	if ( !rxAtom.exactMatch( atom ) )
+		return;
+	
+	QString package	= rxAtom.cap( POS_PACKAGE );
+	QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+	
+	kdDebug() << "package=" << package << LINE_INFO;
+	
+	SignalistSingleton::Instance()->packageClicked( category + " " + package );
+}
+
+/**
+ * Build dependency tree-view.
+ */
 void DependencyView::insertItem( const char* name )
 {
 	QString word( name );

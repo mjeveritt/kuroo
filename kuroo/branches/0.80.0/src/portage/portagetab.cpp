@@ -46,7 +46,7 @@
 #include <kiconloader.h>
 #include <kaccel.h>
 
-enum focus {
+enum Focus {
 		CATEGORYLIST,
 		SUBCATEGORYLIST,
 		PACKAGELIST
@@ -62,7 +62,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 {
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
-	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ));
+	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
 	
 	// Rmb actions.
 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -94,6 +94,9 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	
+	// Shortcut to enter filter with package name
+	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
 	
 	slotInit();
 }
@@ -294,6 +297,11 @@ void PortageTab::slotReload()
 	connect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
 	
 	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), false );
+}
+
+void PortageTab::slotFillFilter( const QString& text )
+{
+	searchFilter->setText( text );
 }
 
 /**

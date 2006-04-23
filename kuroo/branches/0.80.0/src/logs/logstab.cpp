@@ -40,7 +40,7 @@ LogsTab::LogsTab( QWidget* parent )
 {
 	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
 	
-// 	logBrowser->setTextFormat( Qt::LogText );
+// 	logBrowser->setTextFormat( Qt::LogText ); // Text doesn't wrap in log mode!
 	init();
 }
 

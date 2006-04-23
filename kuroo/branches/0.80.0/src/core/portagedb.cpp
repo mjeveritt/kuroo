@@ -702,14 +702,11 @@ const QString KurooDB::category( const QString& id )
  */
 const QString KurooDB::packageId( const QString& package )
 {
-	QString category = package.section( "/", 0, 0 );
-	QString packageString = package.section( "/", 1, 1 );
-	
 	QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
 	if ( !parts.isEmpty() ) {
 		QString category = parts[0];
 		QString name = parts[1];
-		QString id = singleQuery( " SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;" );
+		QString id = singleQuery( "SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;" );
 	
 		if ( !id.isEmpty() )
 			return id;
@@ -718,9 +715,8 @@ const QString KurooDB::packageId( const QString& package )
 
 	}
 	else
-		kdWarning(0) << "Querying for package id. Can not parse: " << packageString << LINE_INFO;
+		kdWarning(0) << "Querying for package id. Can not parse: " << package << LINE_INFO;
 
-	
 	return QString::null;
 }
 

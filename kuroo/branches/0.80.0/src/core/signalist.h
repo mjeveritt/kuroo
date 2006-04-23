@@ -49,6 +49,7 @@ public:
 	void		loadUpdatesComplete();
 	void		scanHistoryComplete();
 	void		packageQueueChanged();
+	void		packageClicked( const QString& id );
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -61,7 +62,8 @@ signals:
 	void		signalSyncDone();
 	void 		signalScanHistoryComplete();
 	void		signalPackageQueueChanged();
-
+	void		signalPackageClicked( const QString& package );
+	
 private:
 	QObject*	m_parent;
 	bool		m_busy, m_isReady;

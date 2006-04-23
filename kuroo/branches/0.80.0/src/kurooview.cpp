@@ -115,18 +115,18 @@ void KurooView::slotShowView()
 	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
 	
-	switch ( tabIndex ) {
-		
-		// Default focus to package listview
-		case VIEW_PORTAGE:
-			viewPortage->packagesView->setFocus();
-			break;
-			
-		// Default focus to package listview
-		case VIEW_QUEUE:
-			viewQueue->queueView->setFocus();
-		
-	}
+// 	switch ( tabIndex ) {
+// 		
+// 		// Default focus to package listview
+// 		case VIEW_PORTAGE:
+// 			viewPortage->packagesView->setFocus();
+// 			break;
+// 			
+// 		// Default focus to package listview
+// 		case VIEW_QUEUE:
+// 			viewQueue->queueView->setFocus();
+// 		
+// 	}
 }
 
 /**

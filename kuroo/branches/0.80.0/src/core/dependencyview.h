@@ -35,9 +35,15 @@ public:
 	void			clear();
 	void 			insertItem( const char* name );
 	
+private slots:
+	void			slotPackageClicked( QListViewItem* item );
+	
 private:
 	int				m_index;
 	DependencyItem	*m_parent, *m_lastDepend;
+
+	// The regular expression for the whole atom.
+	QRegExp rxAtom;
 };
 
 #endif

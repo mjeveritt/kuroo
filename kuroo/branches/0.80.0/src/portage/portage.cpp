@@ -173,8 +173,7 @@ public:
 			if ( m_hasUpdate > 0 )
 				updateString = m_updateVersion + " (U)";
 			else
-				if ( m_hasUpdate < 0 )
-					updateString = m_updateVersion + " (D)";
+				updateString = m_updateVersion + " (D)";
 			
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
 			                                     .arg( updateString ).arg( PACKAGE_UPDATES_STRING ).arg( m_id ), m_db );
@@ -280,7 +279,6 @@ bool Portage::slotRefresh()
  */
 bool Portage::slotSync()
 {
-	DEBUG_LINE_INFO;
 	EmergeSingleton::Instance()->sync();
 	return true;
 }
@@ -299,8 +297,6 @@ void Portage::slotSyncCompleted()
  */
 bool Portage::slotScan()
 {
-	DEBUG_LINE_INFO;
-	
 	// Wait for cache job to finish before launching the scan.
 	int maxLoops( 99 );
 	while ( true ) {
@@ -326,8 +322,6 @@ bool Portage::slotScan()
  */
 void Portage::slotScanCompleted()
 {
-	DEBUG_LINE_INFO;
-	
 	// Reset Queue with it's own cache
 	QueueSingleton::Instance()->reset();
 	

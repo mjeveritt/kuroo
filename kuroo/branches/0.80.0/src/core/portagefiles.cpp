@@ -23,12 +23,14 @@
 #include "threadweaver.h"
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
-#define POS_CALLSIGN    1
-#define POS_PREFIX      2
-#define POS_CATEGORY    3
-#define POS_SUBCATEGORY 4
-#define POS_PACKAGE     5
-#define POS_VERSION     6
+enum Positions {
+		POS_CALLSIGN = 1,
+		POS_PREFIX,
+		POS_CATEGORY,
+		POS_SUBCATEGORY,
+		POS_PACKAGE,
+		POS_VERSION
+};
 
 enum PortageFilesAction {
 		PACKAGE_KEYWORDS_SCANNED,

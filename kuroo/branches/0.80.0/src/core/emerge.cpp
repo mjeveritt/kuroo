@@ -325,7 +325,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			}
 			else
 				kdWarning(0) << "Collecting emerge output. Can not parse: " << packageVersion << LINE_INFO;
-
 		}
 		
 		////////////////////////////////////////////////////////////////////////

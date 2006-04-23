@@ -57,6 +57,7 @@ private slots:
 	void				slotButtons();
 	
 	void				slotListSubCategories();
+	void				slotFillFilter( const QString& text );
 	void				slotFilters();
 	void				slotActivateFilters();
 	void				slotClearFilter();

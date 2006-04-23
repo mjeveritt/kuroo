@@ -49,30 +49,30 @@ public:
 	bool isBlocking();
 	
 private:
-	//! A pointer to the portage tree from which the packages are retrieved.
+	// A pointer to the portage tree from which the packages are retrieved.
 	PackageItem* m_portagePackage;
 	
-	//! The regular expression for the whole atom.
+	// The regular expression for the whole atom.
 	QRegExp rxAtom;
 	
-	//! This is set to the result of parse().
+	// This is set to the result of parse().
 	bool m_matches;
 	
 	// These are the extracted parts of the atom.
 	
-	//! true if the callsign prefix ("blocked by this package" in ebuild dependencies) is there.
+	// true if the callsign prefix ("blocked by this package" in ebuild dependencies) is there.
 	bool m_callsign;
 	
-	//! A compare sign (greater than / less than / equal) or the "all revisions" prefix ("~").
+	// A compare sign (greater than / less than / equal) or the "all revisions" prefix ("~").
 	QString m_prefix;
 	
-	//! The main category of the package.
+	// The main category of the package.
 	QString m_category;
 	
-	//! The package name.
+	// The package name.
 	QString m_package;
 	
-	//! The complete version string.
+	// The complete version string.
 	QString m_version;
 };
 

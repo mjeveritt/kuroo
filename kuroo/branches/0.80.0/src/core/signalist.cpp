@@ -173,4 +173,9 @@ void Signalist::packageQueueChanged()
 	emit signalPackageQueueChanged();
 }
 
+void Signalist::packageClicked( const QString& package )
+{
+	emit signalPackageClicked( package );
+}
+
 #include "signalist.moc"

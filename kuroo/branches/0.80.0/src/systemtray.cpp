@@ -47,16 +47,12 @@ SystemTray::~SystemTray()
 
 void SystemTray::activate()
 {
-	DEBUG_LINE_INFO;
-	
 	slotBusy( false );
 	show();
 }
 
 void SystemTray::inactivate()
 {
-	DEBUG_LINE_INFO;
-	
 	hide();
 }
 

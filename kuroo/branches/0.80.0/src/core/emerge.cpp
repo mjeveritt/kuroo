@@ -56,6 +56,18 @@ void Emerge::init( QObject *parent )
 }
 
 /**
+ * Send text to stdIn.
+ * @param text
+ */
+void Emerge::inputText( const QString& text )
+{
+	if ( eProc->isRunning() )
+		eProc->writeStdin( text, true );
+	else
+		LogSingleton::Instance()->writeLog( i18n("Can not process input! Emerge is not running."), ERROR );
+}
+
+/**
  * Abort the emerge process.
  * @return success
  */

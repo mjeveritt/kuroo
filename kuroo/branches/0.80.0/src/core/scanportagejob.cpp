@@ -120,7 +120,6 @@ bool ScanPortageJob::doJob()
 	                                    " name VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " path VARCHAR(64), "
-	                                    " date VARCHAR(32), "
 	                                    " status INTEGER, "
 	                                    " meta VARCHAR(255), "
 	                                    " updateVersion VARCHAR(32) );"
@@ -181,7 +180,7 @@ bool ScanPortageJob::doJob()
 			
 			int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
 				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-    			.arg(subCategory).arg(QString::number(idCategory)), m_db);
+    			.arg( subCategory ).arg( QString::number(idCategory) ), m_db);
 			
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -635,8 +634,6 @@ QString ScanPortageJob::formatSize( const QString& size )
  */
 void ScanPortageJob::loadCache()
 {
-	DEBUG_LINE_INFO;
-	
 	m_mapCache.clear();
 	const QStringList cacheList = KurooDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
 	foreach ( cacheList ) {

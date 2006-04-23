@@ -92,7 +92,6 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageKeywords_temp ("
-// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " keywords VARCHAR(255) );"
 		                                    , m_db);
@@ -187,7 +186,6 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUnmask_temp ("
-// 											" id INTEGER PRIMARY KEY AUTOINCREMENT, "
 											" idPackage INTEGER UNIQUE, "
 											" dependAtom VARCHAR(255), "
 		                                    " comment BLOB );"
@@ -279,7 +277,6 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageHardMask_temp ("
-// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER, "
 		                                    " dependAtom VARCHAR(255), "
 		                                    " comment BLOB );"
@@ -371,7 +368,6 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUserMask_temp ("
-// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " dependAtom VARCHAR(255), "
 		                                    " comment BLOB );"
@@ -460,7 +456,6 @@ public:
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
-// 		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		                                    " idPackage INTEGER UNIQUE, "
 		                                    " use VARCHAR(255) );"
 		                                    , m_db);
@@ -556,7 +551,7 @@ public:
 	
 	virtual bool doJob() {
 		
-		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask ;" );
+		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
@@ -780,6 +775,5 @@ void PortageFiles::savePackageUse()
 {
 	ThreadWeaver::instance()->queueJob( new SavePackageUseJob( this ) );
 }
-
 
 #include "portagefiles.moc"

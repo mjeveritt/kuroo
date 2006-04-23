@@ -42,6 +42,7 @@ public:
     ~Emerge();
 
 	void						init( QObject *parent = 0 );
+	void						inputText( const QString& text );
 	bool						stop();
 	bool 						isRunning();
 	

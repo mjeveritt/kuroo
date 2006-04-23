@@ -37,6 +37,8 @@ public:
 private:
 	void 		init();
 	
+private slots:
+	void		slotUserInput();
 };
 
 #endif

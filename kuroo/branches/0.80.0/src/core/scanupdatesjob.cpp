@@ -89,11 +89,10 @@ bool ScanUpdatesJob::doJob()
 	                                    " name VARCHAR(32), "
 	                                    " description VARCHAR(255), "
 	                                    " path VARCHAR(64), "
-	                                    " date VARCHAR(32), "
 	                                    " status INTEGER, "
 	                                    " meta VARCHAR(255), "
 	                                    " updateVersion VARCHAR(32) );"
-	                                    , m_db);
+	                                    , m_db );
 	
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
 	KurooDBSingleton::Instance()->query( QString("UPDATE package_temp SET updateVersion = '', status = '%1' WHERE status = '%2';")
@@ -133,8 +132,7 @@ bool ScanUpdatesJob::doJob()
 				else
 					updateVersion = (*it).version + " (U)";
 				
-				KurooDBSingleton::Instance()->query( QString( "UPDATE package_temp SET updateVersion = '%1', status = '%2' "
-				                                              "WHERE id = '%3';" )
+				KurooDBSingleton::Instance()->query( QString( "UPDATE package_temp SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
 				                                     .arg( updateVersion ).arg( PACKAGE_UPDATES_STRING ).arg( id ), m_db );
 				
 			}
@@ -143,9 +141,9 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 	
 	// Move content from temporary table
-	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db );
-	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db );
-	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db );
+	KurooDBSingleton::Instance()->query( "DELETE FROM package;", m_db );
+	KurooDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
+	KurooDBSingleton::Instance()->query( "DROP TABLE package_temp;", m_db );
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );

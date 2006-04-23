@@ -65,11 +65,6 @@ bool PackageVersion::isNotArch() const
 		return false;
 	else
 		return true;
-	
-// 	if ( KurooConfig::acceptKeywords().startsWith("~") )
-// 		return ( stability( "~" + KurooConfig::arch() ) == NOTARCH );
-// 	else
-// 		return ( stability( KurooConfig::arch() ) == NOTARCH );
 }
 
 /**

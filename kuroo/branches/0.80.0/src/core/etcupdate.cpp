@@ -158,7 +158,7 @@ void EtcUpdate::runDiff()
 		
 		// Check for etc-files warnings
 		QString etcWarning;
-		const QStringList etcFilesWarningsList = QStringList::split( "\n", KurooConfig::etcFiles() );
+		const QStringList etcFilesWarningsList = QStringList::split( " ", KurooConfig::etcFiles() );
 		foreach ( etcFilesWarningsList )
 			if ( *it == destination )
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );

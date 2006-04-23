@@ -247,7 +247,6 @@ void KurooDB::createTables( DbConnection *conn )
 	      " name VARCHAR(32), "
 	      " description VARCHAR(255), "
 	      " path VARCHAR(64), "
-	      " date VARCHAR(32), "
 	      " status INTEGER, "
 	      " meta VARCHAR(255), "
 	      " updateVersion VARCHAR(32) ); "
@@ -306,34 +305,29 @@ void KurooDB::createTables( DbConnection *conn )
 	      , conn);
 	
 	query(" CREATE TABLE packageHardMask ("
-// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB );"
 	      , conn);
 	
 	query(" CREATE TABLE packageUserMask ("
-// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB );"
 	      , conn);
 	
 	query(" CREATE TABLE packageUnmask ("
-// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " dependAtom VARCHAR(255), "
 	      " comment BLOB );"
 	      , conn);
 	
 	query(" CREATE TABLE packageKeywords ("
-// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " keywords VARCHAR(255) );"
 	      , conn);
 	
 	query(" CREATE TABLE packageUse ("
-// 	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      " idPackage INTEGER UNIQUE, "
 	      " use VARCHAR(255) );"
 	      , conn);

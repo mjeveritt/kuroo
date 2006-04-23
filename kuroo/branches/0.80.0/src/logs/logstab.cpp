@@ -28,6 +28,8 @@
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
+#include <kinputdialog.h>
+
 
 /**
  * @class LogsTab
@@ -36,6 +38,8 @@
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
+	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
+	
 	logBrowser->setTextFormat( Qt::LogText );
 	init();
 }
@@ -72,6 +76,15 @@ void LogsTab::init()
 		verboseLog->setChecked( true );
 	else
 		verboseLog->setChecked( false );
+}
+
+/**
+ * Open dialog for manually sending text to running emerge process.
+ */
+void LogsTab::slotUserInput()
+{
+	QString input = KInputDialog::getText( i18n("User Input"), i18n("Enter text:"), QString::null, 0, this, 0, 0, QString::null );
+	EmergeSingleton::Instance()->inputText( input );
 }
 
 #include "logstab.moc"

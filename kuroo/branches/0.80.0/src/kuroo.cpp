@@ -59,7 +59,6 @@ Kuroo::Kuroo()
 	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-	
 	// Get pointer so MessageBox's can be made modal to kuroo windown and more...
 	GlobalSingleton::Instance()->setKurooView( m_view );
 	
@@ -227,9 +226,8 @@ void Kuroo::introWizard()
 bool Kuroo::queryClose()
 {
 	if ( !m_shuttingDown ) {
-		if ( !KurooConfig::isSystrayEnabled() ) {
+		if ( !KurooConfig::isSystrayEnabled() )
 			slotQuit();
-		}
 		else {
 			hide();
 			return false;
@@ -262,9 +260,7 @@ void Kuroo::slotQuit()
 }
 
 /**
- * Aborted any running threads.
- * Allow time to abort before db connection is closed.
- * @fixme Wait for threads to terminate.
+ * Abort any running threads.
  */
 void Kuroo::slotWait()
 {

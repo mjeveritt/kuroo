@@ -359,8 +359,6 @@ const EmergeTimeMap History::getStatisticsMap()
  */
 void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
 {
-	DEBUG_LINE_INFO;
-	
 	m_statisticsMap = statisticsMap;
 }
 

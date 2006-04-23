@@ -48,9 +48,7 @@ public slots:
 	
 private slots:
 	void 				slotInit();
-// 	void				slotFocusLeft();
-// 	void				slotFocusRight();
-	
+
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();
 	void				slotInitButtons();

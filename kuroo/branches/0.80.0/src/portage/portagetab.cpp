@@ -86,10 +86,13 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( signalCurrentChanged() ), this, SLOT( slotPackage() ) );
+// 	connect( packagesView, SIGNAL( signalCurrentChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
+	
+	// Load Inspector with current package info
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -128,9 +131,7 @@ void PortageTab::slotInit()
 	KAccel* pAccel = new KAccel( this );
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."), 
 	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
-// 	pAccel->insert( "Focus left", i18n("Toggle left"), i18n("Toggle left"), Qt::Key_Left, this, SLOT( slotFocusLeft() ) );
-// 	pAccel->insert( "Focus Right", i18n("Focus Right"), i18n("Focus Right"), Qt::Key_Right, this, SLOT( slotFocusRight() ) );
-	
+
 	// Initialize the uninstall dialog
 	m_uninstallInspector = new UninstallInspector( this );
 	
@@ -138,46 +139,6 @@ void PortageTab::slotInit()
 	
 	slotBusy();
 }
-
-// void PortageTab::slotFocusLeft()
-// {
-// 	switch ( m_focusWidget ) {
-// 		
-// 		case CATEGORYLIST:
-// 			m_focusWidget = PACKAGELIST;
-// 			packagesView->setFocus();
-// 			break;
-// 			
-// 		case SUBCATEGORYLIST:
-// 			m_focusWidget = CATEGORYLIST;
-// 			categoriesView->setFocus();
-// 			break;
-// 			
-// 		case PACKAGELIST:
-// 			m_focusWidget = SUBCATEGORYLIST;
-// 			subcategoriesView->setFocus();
-// 	}
-// }
-
-// void PortageTab::slotFocusRight()
-// {
-// 	switch ( m_focusWidget ) {
-// 		
-// 		case CATEGORYLIST:
-// 			m_focusWidget = CATEGORYLIST;
-// 			subcategoriesView->setFocus();
-// 			break;
-// 			
-// 		case SUBCATEGORYLIST:
-// 			m_focusWidget = PACKAGELIST;
-// 			packagesView->setFocus();
-// 			break;
-// 			
-// 		case PACKAGELIST:
-// 			m_focusWidget = SUBCATEGORYLIST;
-// 			subcategoriesView->setFocus();
-// 	}
-// }
 
 /**
  * Forward signal from next-buttons only if this tab is visible for user.
@@ -233,8 +194,8 @@ void PortageTab::slotButtons()
 {
 	DEBUG_LINE_INFO;
 	
-	// No package selected, disable all buttons
-	if ( packagesView->selectedId().isEmpty() ) {
+	// No current package, disable all buttons
+	if ( !packagesView->currentPackage() ) {
 		pbQueue->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 		pbUninstall->setDisabled( true );
@@ -243,7 +204,6 @@ void PortageTab::slotButtons()
 	
 	m_packageInspector->setDisabled( false );
 	pbAdvanced->setDisabled( false );
-	slotPackage();
 	
 	// When kuroo is busy disable queue and uninstall button
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
@@ -444,8 +404,7 @@ void PortageTab::slotAdvanced()
 void PortageTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() ) {
-		if ( packagesView->currentPackage() )
-			processPackage( true );
+		processPackage( true );
 	}
 	else	
 		processPackage( false );

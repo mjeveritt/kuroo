@@ -36,9 +36,7 @@ Global::Global( QObject *parent )
 {}
 
 Global::~Global()
-{
-	DEBUG_LINE_INFO;
-}
+{}
 
 void Global::init( QObject *parent )
 {

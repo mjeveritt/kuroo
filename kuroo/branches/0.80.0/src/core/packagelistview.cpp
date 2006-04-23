@@ -224,36 +224,27 @@ const QString PackageListView::count()
  */
 void PackageListView::nextPackage( bool isPrevious )
 {
-	DEBUG_LINE_INFO;
 	if ( isVisible() ) {
 		QListViewItem* item = currentItem();
 		if ( isPrevious ) {
 			if ( item->itemAbove() ) {
-				selectAll( false );
 				item = item->itemAbove();
 				ensureItemVisible( item );
 				setCurrentItem( item );
-				
-				kdDebug() << "item->text(0)=" << item->text(0) << LINE_INFO;
-				
+				selectAll( false );
 				item->setSelected( true );
-// 				setSelected( item, true );
 			}
 		}
 		else {
 			if ( item->itemBelow() ) {
-				selectAll( false );
 				item = item->itemBelow();
 				ensureItemVisible( item );
 				setCurrentItem( item );
-				
-				kdDebug() << "item->text(0)=" << item->text(0) << LINE_INFO;
-				
+				selectAll( false );
 				item->setSelected( true );
-// 				setSelected( item, true );
 			}
 		}
-		emit signalCurrentChanged();
+// // 		emit signalCurrentChanged();
 	}
 }
 

@@ -40,7 +40,7 @@ Emerge::Emerge( QObject* m_parent )
 	eProc = new KProcIO( codec );
   
 	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr ) );
+	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
 	#endif
 }
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-23 16:15+0200\n"
+"POT-Creation-Date: 2006-04-25 17:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,20 +26,20 @@ msgid ""
 "<br>This may be damaging to your system!</b></font>"
 msgstr ""
 
-#: portage/portagetab.cpp:132 queue/queuetab.cpp:161
+#: portage/portagetab.cpp:126 queue/queuetab.cpp:161
 msgid "View package details..."
 msgstr ""
 
-#: portage/portagetab.cpp:165 portage/portagetab.cpp:224
-#: portage/portagetab.cpp:227
+#: portage/portagetab.cpp:159 portage/portagetab.cpp:216
+#: portage/portagetab.cpp:219
 msgid "Add to Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:222
+#: portage/portagetab.cpp:214
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:308
+#: portage/portagetab.cpp:300
 msgid ""
 "<font color=darkRed size=+1><b>No package found with these filter settings</"
 "font><br><font color=darkRed>Please modify the filter settings you have "
@@ -47,75 +47,75 @@ msgid ""
 "matching packages.</b></font>"
 msgstr ""
 
-#: portage/portagetab.cpp:342
+#: portage/portagetab.cpp:334
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:343
+#: portage/portagetab.cpp:335
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:434
+#: portage/portagetab.cpp:426
 msgid " packages selected"
 msgstr ""
 
-#: portage/portagetab.cpp:459
+#: portage/portagetab.cpp:452
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:463
+#: portage/portagetab.cpp:456
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:469 portage/portagetab.cpp:475
+#: portage/portagetab.cpp:462 portage/portagetab.cpp:468
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:485
+#: portage/portagetab.cpp:478
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:493
+#: portage/portagetab.cpp:486
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:499
+#: portage/portagetab.cpp:492
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:507
+#: portage/portagetab.cpp:500
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:513
+#: portage/portagetab.cpp:506
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:547
+#: portage/portagetab.cpp:540
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:549
+#: portage/portagetab.cpp:542
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:551 rc.cpp:22 rc.cpp:253 queue/queuetab.cpp:481
+#: portage/portagetab.cpp:544 rc.cpp:22 rc.cpp:253 queue/queuetab.cpp:481
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:555 queue/queuetab.cpp:485
+#: portage/portagetab.cpp:548 queue/queuetab.cpp:485
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:557 queue/queuetab.cpp:487
+#: portage/portagetab.cpp:550 queue/queuetab.cpp:487
 msgid "Remove from world"
 msgstr ""
 
-#: portage/portagetab.cpp:560
+#: portage/portagetab.cpp:553
 msgid "&Uninstall"
 msgstr ""
 
@@ -1154,11 +1154,11 @@ msgstr ""
 msgid "Not on %1"
 msgstr ""
 
-#: core/packageitem.cpp:391 core/versionview.cpp:114
+#: core/packageitem.cpp:391 core/versionview.cpp:115
 msgid "Hardmasked"
 msgstr ""
 
-#: core/packageitem.cpp:396 core/versionview.cpp:111
+#: core/packageitem.cpp:396 core/versionview.cpp:112
 msgid "Testing"
 msgstr ""
 
@@ -1182,7 +1182,7 @@ msgstr ""
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:357 core/packageinspector.cpp:853
+#: core/packageinspector.cpp:357 core/packageinspector.cpp:846
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -1204,11 +1204,11 @@ msgstr ""
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:826
+#: core/packageinspector.cpp:819
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:897 core/packageinspector.cpp:957
+#: core/packageinspector.cpp:890 core/packageinspector.cpp:950
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -1411,15 +1411,15 @@ msgstr ""
 msgid "Dependency"
 msgstr ""
 
-#: core/dependencyview.cpp:216
+#: core/dependencyview.cpp:220
 msgid "Depend on either:"
 msgstr ""
 
-#: core/dependencyview.cpp:231
+#: core/dependencyview.cpp:235
 msgid "With Use %1 unset:"
 msgstr ""
 
-#: core/dependencyview.cpp:234
+#: core/dependencyview.cpp:238
 msgid "With Use %1 set:"
 msgstr ""
 
@@ -1757,11 +1757,11 @@ msgstr ""
 msgid "Kuroo is already running!"
 msgstr ""
 
-#: logs/logstab.cpp:86
+#: logs/logstab.cpp:89
 msgid "User Input"
 msgstr ""
 
-#: logs/logstab.cpp:86
+#: logs/logstab.cpp:89
 msgid "Enter text:"
 msgstr ""
 
@@ -1838,32 +1838,32 @@ msgstr ""
 msgid "Log"
 msgstr ""
 
-#: kurooview.cpp:143
+#: kurooview.cpp:130
 msgid ""
 "<qt>Kuroo database is empty!<br>Kuroo will now first scan your emerge log to "
 "create the emerge history.<br>Next, package information in Portage will be "
 "collected.</qt>"
 msgstr ""
 
-#: kurooview.cpp:146 kurooview.cpp:163
+#: kurooview.cpp:133 kurooview.cpp:150
 msgid "Initialiazing Kuroo"
 msgstr ""
 
-#: kurooview.cpp:162
+#: kurooview.cpp:149
 msgid ""
 "<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
 "has changed.</qt>"
 msgstr ""
 
-#: kurooview.cpp:163
+#: kurooview.cpp:150
 msgid "Refresh"
 msgstr ""
 
-#: kurooview.cpp:163
+#: kurooview.cpp:150
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:202
+#: kurooview.cpp:189
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 

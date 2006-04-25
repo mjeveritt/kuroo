@@ -782,15 +782,8 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			
 			// Remove bootstrap and all it's duplicate
 			textLines.remove( "!bootstrap? ( sys-devel/patch )" );
-			
-			kdDebug() << "\ntextLines=" << textLines << LINE_INFO;
-			
-			const QStringList dependAtoms = QStringList::split( " ", textLines );
-			foreach ( dependAtoms )
-				dialog->dependencyView->insertItem( *it );
-			
-			dialog->dependencyView->setSorting( 0, Qt::Descending );
-			dialog->dependencyView->sort();
+		
+			dialog->dependencyView->insertDependAtoms( QStringList::split( " ", textLines ) );
 		}
 		else {
 			kdError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;

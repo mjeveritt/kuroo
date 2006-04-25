@@ -112,10 +112,10 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 			m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 			break;
 		
-		case ( DEPENDENCY_PACKAGE ) :
-			font.setUnderline( true );
-			m_cg.setColor( QColorGroup::Text, m_cg.link() );
-			break;
+// 		case ( DEPENDENCY_PACKAGE ) :
+// 			font.setUnderline( true );
+// 			m_cg.setColor( QColorGroup::Text, m_cg.link() );
+// 			break;
 	}
 	
 	p->setFont( font );
@@ -127,7 +127,7 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
  * @short Listview to build dependency-tree view.
  */
 DependencyView::DependencyView( QWidget *parent, const char *name )
-	: KListView( parent, name ), m_index( 0 ), m_parent( 0 ), m_lastDepend( 0 ),
+	: KListView( parent, name ),
 	rxAtom(	
 			"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
@@ -145,17 +145,11 @@ DependencyView::DependencyView( QWidget *parent, const char *name )
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );
 	
-	connect( this, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotPackageClicked( QListViewItem* ) ) );
+// 	connect( this, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotPackageClicked( QListViewItem* ) ) );
 }
 
 DependencyView::~DependencyView()
 {
-}
-
-void DependencyView::clear()
-{
-	m_index = 0;
-	KListView::clear();
 }
 
 /**
@@ -180,58 +174,72 @@ void DependencyView::slotPackageClicked( QListViewItem* item )
 }
 
 /**
- * Build dependency tree-view.
+ * Populate the tree with all dependencies.
+ * @param	list of depend atoms
  */
-void DependencyView::insertItem( const char* name )
+void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 {
-	QString word( name );
-	m_index++;
+	int index( 0 );
+	DependencyItem	*parent, *lastDepend;
+	QString lastWord;
 	
-// 	kdDebug() << "word=" << word << "." << LINE_INFO;
-	
-	// Insert Depend-header
-	if ( word.contains( "DEPEND=" ) ) {
-		word.remove( '=' );
-		m_parent = new DependencyItem( this, word, m_index, DEPENDENCY_HEADER );
-		m_parent->setOpen( true );
-		return;
+	foreach ( dependAtomsList ) {
+		QString word( *it );
+		index++;
+		
+		// Insert Depend-header
+		if ( word.contains( "DEPEND=" ) ) {
+			word.remove( '=' );
+			parent = new DependencyItem( this, word, index, DEPENDENCY_HEADER );
+			parent->setOpen( true );
+			continue;
+		}
+		
+		// Indent one step 
+		if ( word == "(" ) {
+			if ( word != lastWord )
+				parent = lastDepend;
+			else
+				parent = new DependencyItem( parent, parent->text(0), index, DEPENDENCY_EITHER );
+			
+			parent->setOpen( true );
+			lastWord = word;
+			continue;
+		}
+		lastWord = word;
+		
+		// Remove one indent step
+		if ( word == ")" ) {
+			if ( parent->parent() )
+				parent = dynamic_cast<DependencyItem*>( parent->parent() );
+			continue;
+		}
+		
+		// OR-header
+		if ( word == "||" ) {
+			lastDepend = new DependencyItem( parent, i18n("Depend on either:"), index, DEPENDENCY_EITHER );
+			lastDepend->setOpen( true );
+			continue;
+		}
+		
+		// Insert package
+		if ( word.contains( "/" ) ) {
+			lastDepend = new DependencyItem( parent, word, index, DEPENDENCY_PACKAGE );
+			continue;
+		}
+		
+		// Insert use
+		word.remove( '?' );
+		if ( word.startsWith("!") ) {
+			word.remove( '!' );
+			lastDepend = new DependencyItem( parent, i18n("With Use %1 unset:").arg( word ), index, DEPENDENCY_USE );
+		}
+		else
+			lastDepend = new DependencyItem( parent, i18n("With Use %1 set:").arg( word ), index, DEPENDENCY_USE );
 	}
 	
-	// Indent one step 
-	if ( word == "(" ) {
-		m_parent = m_lastDepend;
-		m_parent->setOpen( true );
-		return;
-	}
-	
-	// Remove one indent step
-	if ( word == ")" ) {
-		if ( m_parent->parent() )
-			m_parent = dynamic_cast<DependencyItem*>( m_parent->parent() );
-		return;
-	}
-	
-	// OR-header
-	if ( word == "||" ) {
-		m_lastDepend = new DependencyItem( m_parent, i18n("Depend on either:"), m_index, DEPENDENCY_EITHER );
-		m_lastDepend->setOpen( true );
-		return;
-	}
-	
-	// Insert package
-	if ( word.contains( "/" ) ) {
-		m_lastDepend = new DependencyItem( m_parent, word, m_index, DEPENDENCY_PACKAGE );
-		return;
-	}
-	
-	// Insert use
-	word.remove( '?' );
-	if ( word.startsWith("!") ) {
-		word.remove( '!' );
-		m_lastDepend = new DependencyItem( m_parent, i18n("With Use %1 unset:").arg( word ), m_index, DEPENDENCY_USE );
-	}
-	else
-		m_lastDepend = new DependencyItem( m_parent, i18n("With Use %1 set:").arg( word ), m_index, DEPENDENCY_USE );
+	setSorting( 0, Qt::Descending );
+	sort();
 }
 
 #include "dependencyview.moc"

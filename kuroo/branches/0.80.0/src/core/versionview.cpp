@@ -99,6 +99,7 @@ VersionView::VersionView( QWidget *parent, const char *name )
 	setColumnAlignment( 3, Qt::AlignRight );
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );
+	setSelectionMode( QListView::NoSelection );
 }
 
 VersionView::~VersionView()

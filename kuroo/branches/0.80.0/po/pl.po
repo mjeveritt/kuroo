@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-23 16:15+0200\n"
-"PO-Revision-Date: 2006-04-16 13:22+0200\n"
+"PO-Revision-Date: 2006-04-25 19:45+0200\n"
 "Last-Translator: Konrad Mantorski <konrad@mantorski.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,9 +29,8 @@ msgstr ""
 "<br>To może spowodować uszkodzenie systemu!</b></font>"
 
 #: portage/portagetab.cpp:132 queue/queuetab.cpp:161
-#, fuzzy
 msgid "View package details..."
-msgstr "Szczegółowe informacje o pakiecie"
+msgstr "Szczegółowe informacje o pakiecie..."
 
 #: portage/portagetab.cpp:165 portage/portagetab.cpp:224
 #: portage/portagetab.cpp:227
@@ -58,8 +57,7 @@ msgstr ""
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
-msgstr ""
-"<qt>Odświeżyć widok Portage?<br>Operacja może potrwać kilka minut...</qt>"
+msgstr "<qt>Odświeżyć widok Portage?<br>Operacja może potrwać kilka minut...</qt>"
 
 #: portage/portagetab.cpp:343
 msgid "Refreshing Packages"
@@ -67,7 +65,7 @@ msgstr "Odświeżanie pakietów"
 
 #: portage/portagetab.cpp:434
 msgid " packages selected"
-msgstr ""
+msgstr " wybrane pakiety"
 
 #: portage/portagetab.cpp:459
 msgid "<b>Homepage: </b>"
@@ -90,8 +88,7 @@ msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr "%1Wersja&nbsp;emerge:%2brak dostępnych wersji %3%4"
 
 #: portage/portagetab.cpp:499
-msgid ""
-"%1Emerge&nbsp;version:%2No version available - please check package details%3"
+msgid "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 "%1Wersja&nbsp;emerge:%2wersja niedostępna - zapoznaj się ze szczegółowymi "
 "informacjami o pakiecie%3"
@@ -183,17 +180,17 @@ msgstr "Alt+K"
 #: rc.cpp:19
 #, no-c-format
 msgid "Add/Remove selected packages to the Installation Queue"
-msgstr "Usuń pakiet z &kolejki po zainstalowaniu"
+msgstr "Dodaj/Usuń wybrane pakiety do/z kolejki"
 
 #: rc.cpp:25
 #, no-c-format
 msgid "Return"
-msgstr ""
+msgstr "Wróć"
 
 #: rc.cpp:28 rc.cpp:259
 #, no-c-format
 msgid "Show package details..."
-msgstr "Szczegółowe informacje o pakiecie"
+msgstr "Szczegółowe informacje o pakiecie..."
 
 #: rc.cpp:31
 #, no-c-format
@@ -473,7 +470,7 @@ msgstr "Usuń z kolejki"
 #: rc.cpp:256
 #, no-c-format
 msgid "Return, Ctrl+S"
-msgstr ""
+msgstr "Wróć, Ctrl+S"
 
 #: rc.cpp:262
 #, no-c-format
@@ -572,7 +569,7 @@ msgstr "<font size=\"+1\">Dziennik aktywności</font>"
 #: rc.cpp:335
 #, no-c-format
 msgid "E&nter"
-msgstr ""
+msgstr "E&nter"
 
 #: rc.cpp:344
 #, no-c-format
@@ -765,9 +762,9 @@ msgid "FEATURES"
 msgstr "FEATURES"
 
 #: rc.cpp:464
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Directories"
-msgstr "Katalogi i pliki"
+msgstr "Katalogi"
 
 #: rc.cpp:467
 #, no-c-format
@@ -825,9 +822,9 @@ msgid "PKG_TMPDIR"
 msgstr "PKG_TMPDIR"
 
 #: rc.cpp:500
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Confi&gurations"
-msgstr "Plik konfiguracyjny"
+msgstr "Pliki konfi&guracyjne"
 
 #: rc.cpp:503
 #, no-c-format
@@ -880,9 +877,9 @@ msgid "GENTOO_MIRRORS"
 msgstr "GENTOO_MIRRORS"
 
 #: rc.cpp:533
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "S&ync"
-msgstr "Synchronizacja"
+msgstr "S&ynchronizacja"
 
 #: rc.cpp:536
 #, no-c-format
@@ -1024,7 +1021,7 @@ msgid "<i>Restart for changes to take effect.</i>"
 msgstr "<i>Uruchom program ponownie, aby wprowadzić zmiany.</i>"
 
 #: rc.cpp:633
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show inst&alled packages in separate column"
 msgstr "Wyświetlaj zai&nstalowane pakiety w oddzielnej kolumnie"
 
@@ -1138,7 +1135,7 @@ msgstr "ustawienia"
 
 #: kuroo.cpp:108
 msgid "Kuroo is not responding. Attempting to terminate kuroo!"
-msgstr ""
+msgstr "Kuroo nie odpowiada. Ubij gada!"
 
 #: kuroo.cpp:122
 msgid "&Information"
@@ -1164,8 +1161,7 @@ msgstr "Uruchom &etc-update"
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
-msgstr ""
-"<qt>Zsynchronizować Portage?<br>Operacja może potrwać kilka minut...</qt>"
+msgstr "<qt>Zsynchronizować Portage?<br>Operacja może potrwać kilka minut...</qt>"
 
 #: kuroo.cpp:192
 msgid "Last sync: %1"
@@ -1240,8 +1236,7 @@ msgid "%1No installed files found.%2"
 msgstr "%1Nie znaleziono zainstalowanych plików.%2"
 
 #: core/packageinspector.cpp:897 core/packageinspector.cpp:957
-msgid ""
-"Use flags could not be calculated. Please check log for more information"
+msgid "Use flags could not be calculated. Please check log for more information"
 msgstr "Nie można pobrać flag USE. Więcej informacji w dzienniku."
 
 #: core/etcupdate.cpp:58
@@ -1312,8 +1307,7 @@ msgstr "Scalanie zmian w pliku '%1'."
 
 #: core/etcupdate.cpp:197
 msgid "Skipping '%1'. etc-update will ask again next time."
-msgstr ""
-"Pominięto plik %1. Monit zostanie wyświetlony przy następnym etc-update."
+msgstr "Pominięto plik %1. Monit zostanie wyświetlony przy następnym etc-update."
 
 #: core/etcupdate.cpp:204
 msgid "etc-update completed."
@@ -1405,8 +1399,7 @@ msgstr "Zakończono skanowanie w poszukiwaniu odmaskowanych pakietów w %1."
 
 #: core/portagefiles.cpp:695
 msgid "Completed scanning for hardmasked packages in %1."
-msgstr ""
-"Zakończono skanowanie w poszukiwaniu pakietów zamaskowanych na sztywno w %1."
+msgstr "Zakończono skanowanie w poszukiwaniu pakietów zamaskowanych na sztywno w %1."
 
 #: core/portagefiles.cpp:699
 msgid "Completed scanning for user masked packages in %1."
@@ -1453,26 +1446,24 @@ msgid "Collecting installed packages..."
 msgstr "Zbieranie informacji o zainstalowanych pakietach..."
 
 #: core/dependencyview.cpp:144
-#, fuzzy
 msgid "Dependency"
 msgstr "Zależności"
 
 #: core/dependencyview.cpp:216
-#, fuzzy
 msgid "Depend on either:"
-msgstr "Zależności"
+msgstr "Zależy od:"
 
 #: core/dependencyview.cpp:231
 msgid "With Use %1 unset:"
-msgstr ""
+msgstr "Z nieustawioną flagą USE %1:"
 
 #: core/dependencyview.cpp:234
 msgid "With Use %1 set:"
-msgstr ""
+msgstr "Z ustawioną flagą USE %1:"
 
 #: core/emerge.cpp:69
 msgid "Can not process input! Emerge is not running."
-msgstr ""
+msgstr "Nie możne przetworzyć danych wejściowych! Emergowanie nie jest uruchomione."
 
 #: core/emerge.cpp:130 core/emerge.cpp:164
 msgid ""
@@ -1617,8 +1608,7 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Dopisz pakiet do pliku \"package.unmask\"."
 
 #: core/emerge.cpp:578
-msgid ""
-"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Nie można zemergować zamaskowanego pakietu!<br>Czy chcesz odmaskować "
 "pakiet <b>%1</b>?</qt>"
@@ -1632,8 +1622,7 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Dopisz pakiet do pliku \"package.keywords\"."
 
 #: core/emerge.cpp:593
-msgid ""
-"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Nie można zemergować pakietu testowego!<br>Czy chcesz odmaskować pakiet "
 "<b>%1</b>?</qt>"
@@ -1775,12 +1764,10 @@ msgid "Number of packages: %1<br>"
 msgstr "Liczba pakietów: %1<br>"
 
 #: queue/queuetab.cpp:224
-#, fuzzy
 msgid "Initial estimated time: %1<br>"
-msgstr "Szacowany czas instalacji: %1<br>"
+msgstr "Wstępnie szacowany czas instalacji: %1<br>"
 
 #: queue/queuetab.cpp:225
-#, fuzzy
 msgid "Elapsed time: %1<br>"
 msgstr "Dotychczasowy czas instalacji: %1<br>"
 
@@ -1858,11 +1845,11 @@ msgstr "Program Kuroo został już uruchomiony!"
 
 #: logs/logstab.cpp:86
 msgid "User Input"
-msgstr ""
+msgstr "Dane użytkownika"
 
 #: logs/logstab.cpp:86
 msgid "Enter text:"
-msgstr ""
+msgstr "Wprowadź tekst"
 
 #: logs/log.cpp:59
 msgid "Writing %1kuroo.log."
@@ -1913,7 +1900,6 @@ msgstr ""
 "następujących plików:</td></tr>"
 
 #: intro/introdlg.cpp:64
-#, fuzzy
 msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
@@ -1989,26 +1975,3 @@ msgstr "Kuroo - nakładka graficzna na Portage"
 msgid "&Configure Kuroo..."
 msgstr "&Konfiguruj Kuroo..."
 
-#~ msgid "I know what I do and want to continue"
-#~ msgstr "Wiem, co robię i chcę kontynuować"
-
-#~ msgid ""
-#~ "&Make this package available on your architecture though it is not "
-#~ "activated\n"
-#~ "in the official portage tree."
-#~ msgstr ""
-#~ "&Udostępnij ten pakiet w używanej architekturze, mimo że nie został on "
-#~ "włączony w\n"
-#~ "oficjalnym drzewie Portage."
-
-#~ msgid "Alt+M"
-#~ msgstr "Alt+U"
-
-#~ msgid "<b>Please note: this may harm your machine!</b>"
-#~ msgstr "<b>Uwaga: to może uszkodzić system!</b>"
-
-#~ msgid "Loading ebuild. Reading: "
-#~ msgstr "Ładowanie ebuilda. Odczytywanie: "
-
-#~ msgid "%1No dependencies found.%2"
-#~ msgstr "%1Nie znaleziono zależności.%2"

@@ -153,7 +153,7 @@ void ConfigDialog::readMakeConf()
 	KurooConfig::setPortageBinHost( QString::null );
 	KurooConfig::setPortageNiceness( QString::null );
 	KurooConfig::setDirPortageTmp( QString::null );
-	KurooConfig::setDirPortage( QString::null );
+// 	KurooConfig::setDirPortage( QString::null );
 	KurooConfig::setDirPortageOverlay( QString::null );
 	KurooConfig::setResumeCommand( QString::null );
 	KurooConfig::setRoot( QString::null );

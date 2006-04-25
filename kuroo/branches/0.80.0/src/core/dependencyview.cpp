@@ -188,9 +188,14 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		index++;
 		
 		// Insert Depend-header
-		if ( word.contains( "DEPEND=" ) ) {
-			word.remove( '=' );
-			parent = new DependencyItem( this, word, index, DEPENDENCY_HEADER );
+		if ( word == "DEPEND=" ) {
+			parent = new DependencyItem( this, i18n("Compile-time dependencies"), index, DEPENDENCY_HEADER );
+			parent->setOpen( true );
+			continue;
+		}
+		
+		if ( word == "RDEPEND=" ) {
+			parent = new DependencyItem( this, i18n("Runtime dependencies"), index, DEPENDENCY_HEADER );
 			parent->setOpen( true );
 			continue;
 		}

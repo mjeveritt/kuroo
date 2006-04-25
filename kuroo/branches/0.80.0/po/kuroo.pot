@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-25 17:15+0200\n"
+"POT-Creation-Date: 2006-04-25 20:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1411,15 +1411,23 @@ msgstr ""
 msgid "Dependency"
 msgstr ""
 
-#: core/dependencyview.cpp:220
+#: core/dependencyview.cpp:192
+msgid "Compile-time dependencies"
+msgstr ""
+
+#: core/dependencyview.cpp:198
+msgid "Runtime dependencies"
+msgstr ""
+
+#: core/dependencyview.cpp:225
 msgid "Depend on either:"
 msgstr ""
 
-#: core/dependencyview.cpp:235
+#: core/dependencyview.cpp:240
 msgid "With Use %1 unset:"
 msgstr ""
 
-#: core/dependencyview.cpp:238
+#: core/dependencyview.cpp:243
 msgid "With Use %1 set:"
 msgstr ""
 

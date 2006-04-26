@@ -172,36 +172,36 @@ KurooInit::~KurooInit()
 void KurooInit::getEnvironment()
 {
 	bool isSetupOk( false );
-	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
+// 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
 	
 	QFile f( KurooConfig::fileMakeConf() );
-	if ( f.open( IO_ReadOnly ) ) {
-		QTextStream stream( &f );
-		
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			
-			if ( line.contains( QRegExp("PORTDIR=") ) ) {
-				if ( rx.search( line ) > -1 )
-					KurooConfig::setDirPortage( rx.cap(4) );
-				else {
-					kdWarning(0) << "Parsing /etc/make.conf: can not parse PORTDIR." << LINE_INFO;
-					KurooConfig::setDirPortage( "/usr/portage" );
-				}
-			}
-			
-			if ( line.contains( QRegExp("PORTDIR_OVERLAY=") ) ) {
-				if ( rx.search( line ) > -1 )
-					KurooConfig::setDirPortageOverlay( rx.cap(4) );
-				else
-					kdWarning(0) << "Parsing /etc/make.conf: can not parse PORTDIR_OVERLAY." << LINE_INFO;
-			}
-			isSetupOk = true;
-		}
-		f.close();
-	}
-	else
-		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
+// 	if ( f.open( IO_ReadOnly ) ) {
+// 		QTextStream stream( &f );
+// 		
+// 		while ( !stream.atEnd() ) {
+// 			QString line = stream.readLine();
+// 			
+// 			if ( line.contains( QRegExp("PORTDIR=") ) ) {
+// 				if ( rx.search( line ) > -1 )
+// 					KurooConfig::setDirPortage( rx.cap(4) );
+// 				else {
+// 					kdWarning(0) << "Parsing /etc/make.conf: can not parse PORTDIR." << LINE_INFO;
+// 					KurooConfig::setDirPortage( "/usr/portage" );
+// 				}
+// 			}
+// 			
+// 			if ( line.contains( QRegExp("PORTDIR_OVERLAY=") ) ) {
+// 				if ( rx.search( line ) > -1 )
+// 					KurooConfig::setDirPortageOverlay( rx.cap(4) );
+// 				else
+// 					kdWarning(0) << "Parsing /etc/make.conf: can not parse PORTDIR_OVERLAY." << LINE_INFO;
+// 			}
+// 			isSetupOk = true;
+// 		}
+// 		f.close();
+// 	}
+// 	else
+// 		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
 	
 	// Now determine architecture
 	QDir d( "/etc/make.profile" );

@@ -690,22 +690,28 @@ void PackageInspector::loadChangeLog()
 {
 	dialog->changelogBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 2 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
-			"/" + m_category + "/" + m_package + "/ChangeLog";
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + "/" + m_category + "/" + m_package + "/ChangeLog";
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
 			QString textLines;
-			while ( !stream.atEnd() )
-				textLines += stream.readLine() + "<br>";
+			QRegExp rx("#(\\d*)\\b");
+			while ( !stream.atEnd() ) {
+				QString line = stream.readLine();
+				
+				// Make bugs links to http://bugs.gentoo.org
+				if ( rx.search( line ) > -1 )
+					line.replace( rx.cap(0) , "<a href=\"http://bugs.gentoo.org/show_bug.cgi?id=" + rx.cap(1) + "\">" + rx.cap(0) + "</a>" );
+				
+				textLines += line + "<br>";
+			}
 			file.close();
 			dialog->changelogBrowser->setText( textLines );
 		}
 		else {
 			kdError(0) << "Loading changelog. Reading: " << fileName << LINE_INFO;
-			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2")
-			                                   .arg("<font color=darkRed><b>").arg("</b></font>") );
+			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2").arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }

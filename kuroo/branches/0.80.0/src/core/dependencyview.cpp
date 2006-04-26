@@ -200,6 +200,10 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 			continue;
 		}
 		
+		// Safety check
+		if ( !parent )
+			continue;
+			
 		// Indent one step 
 		if ( word == "(" ) {
 			if ( word != lastWord )

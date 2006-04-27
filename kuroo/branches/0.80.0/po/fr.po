@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kuroo\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-25 20:15+0200\n"
-"PO-Revision-Date: 2006-04-26 12:25+0200\n"
+"PO-Revision-Date: 2006-04-27 11:42+0200\n"
 "Last-Translator: Gombault Damien <desintegr@gmail.com>\n"
 "Language-Team:  <kde-francophone@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -1401,19 +1401,19 @@ msgstr "Récupération des paquets masqués par l'utilisateur..."
 
 #: core/portagefiles.cpp:687
 msgid "Completed scanning for package keywords in %1."
-msgstr "Scan terminé pour les mot-clefs de paquet dans %1."
+msgstr "Analyse terminée pour les mot-clefs de paquet dans %1."
 
 #: core/portagefiles.cpp:691
 msgid "Completed scanning for unmasked packages in %1."
-msgstr "Scan terminé pour les paquet démasqué dans %1."
+msgstr "Analyse terminée pour les paquets démasqués dans %1."
 
 #: core/portagefiles.cpp:695
 msgid "Completed scanning for hardmasked packages in %1."
-msgstr "Scan terminé pour les paquet masqués dans %1."
+msgstr "Analyse terminée pour les paquets masqués dans %1."
 
 #: core/portagefiles.cpp:699
 msgid "Completed scanning for user masked packages in %1."
-msgstr "Scan terminé pour les paquet masqué par l'utilisateur dans %1."
+msgstr "Analyse terminée pour les paquets masqués par l'utilisateur dans %1."
 
 #: core/portagefiles.cpp:703
 msgid "Completed saving package keywords in %1."
@@ -1429,7 +1429,7 @@ msgstr "Enregistrement terminé pour les paquets démasqués par l'utilisateur d
 
 #: core/portagefiles.cpp:717
 msgid "Completed scanning user package use flags in %1."
-msgstr "Scan terminé pour les use flags de paquet de l'utilisateur dans %1."
+msgstr "Analyse terminée pour les use flags de paquet de l'utilisateur dans %1."
 
 #: core/portagefiles.cpp:721
 msgid "Completed saving user package use in %1."

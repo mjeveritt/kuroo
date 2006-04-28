@@ -25,6 +25,10 @@
 
 #include <klistview.h>
 
+/**
+ * @class DependencyView
+ * @short Listview to build dependency-tree view.
+ */
 class DependencyView : public KListView
 {
 Q_OBJECT

@@ -27,7 +27,7 @@ enum Format {
 		DEPENDENCY_PACKAGE,
 		DEPENDENCY_USE,
 		DEPENDENCY_HEADER,
-		DEPENDENCY_EITHER
+		DEPENDENCY_OPERATOR
 };
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
@@ -102,7 +102,7 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 			font.setBold( true );
 			break;
 		
-		case ( DEPENDENCY_EITHER ) :
+		case ( DEPENDENCY_OPERATOR ) :
 			font.setItalic( true );
 			m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 			break;
@@ -179,6 +179,7 @@ void DependencyView::slotPackageClicked( QListViewItem* item )
  */
 void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 {
+	kdDebug() << "dependAtomsList=" << dependAtomsList << LINE_INFO;
 	int index( 0 );
 	DependencyItem	*parent, *lastDepend;
 	QString lastWord;
@@ -186,6 +187,8 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 	foreach ( dependAtomsList ) {
 		QString word( *it );
 		index++;
+		
+		kdDebug() << "word=" << word << LINE_INFO;
 		
 		// Insert Depend-header
 		if ( word == "DEPEND=" ) {
@@ -209,7 +212,7 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 			if ( word != lastWord )
 				parent = lastDepend;
 			else
-				parent = new DependencyItem( parent, parent->text(0), index, DEPENDENCY_EITHER );
+				parent = new DependencyItem( parent, parent->text(0), index, DEPENDENCY_OPERATOR );
 			
 			parent->setOpen( true );
 			lastWord = word;
@@ -226,7 +229,7 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		
 		// OR-header
 		if ( word == "||" ) {
-			lastDepend = new DependencyItem( parent, i18n("Depend on either:"), index, DEPENDENCY_EITHER );
+			lastDepend = new DependencyItem( parent, i18n("Depend on either:"), index, DEPENDENCY_OPERATOR );
 			lastDepend->setOpen( true );
 			continue;
 		}
@@ -246,7 +249,7 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		else
 			lastDepend = new DependencyItem( parent, i18n("With Use %1 set:").arg( word ), index, DEPENDENCY_USE );
 	}
-	
+	DEBUG_LINE_INFO;
 	setSorting( 0, Qt::Descending );
 	sort();
 }

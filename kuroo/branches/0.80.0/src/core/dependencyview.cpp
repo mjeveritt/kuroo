@@ -203,6 +203,12 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 			continue;
 		}
 		
+		if ( word == "PDEPEND=" ) {
+			parent = new DependencyItem( this, i18n("Post-merge dependencies"), index, DEPENDENCY_HEADER );
+			parent->setOpen( true );
+			continue;
+		}
+		
 		// Safety check
 		if ( !parent )
 			continue;

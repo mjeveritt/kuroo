@@ -51,6 +51,12 @@
 		</entry>
 		<entry name="Arch" type="String">
 		</entry>
+		<entry name="DirMakeProfile" type="String">
+			<default>/etc/make.profile</default>
+		</entry>
+		<entry name="FileArchList" type="String">
+			<default>/usr/portage/profiles/arch.list</default>
+		</entry>
 		<entry name="FileWorld" type="String">
 			<default>/var/lib/portage/world</default>
 		</entry>

@@ -1,3 +1,4 @@
+# translation of de.po to Deutsch
 # translation of new-de.po to
 # translation of _de.po to
 # translation of de.po to
@@ -18,9 +19,9 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-23 16:15+0200\n"
-"PO-Revision-Date: 2006-04-12 14:23+0200\n"
-"Last-Translator: Jan Schnackenberg <yehaa@gmx.de>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2006-04-27 23:55+0200\n"
+"Last-Translator: Jan Schnackenberg <YeHaa@gmx.de>\n"
+"Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +30,7 @@ msgstr ""
 
 #: portage/uninstallinspector.cpp:32
 msgid "Uninstall Packages"
-msgstr "Pakte deinstallieren"
+msgstr "Pakete deinstallieren"
 
 #: portage/uninstallinspector.cpp:78
 msgid ""
@@ -40,7 +41,6 @@ msgstr ""
 "System-Profils ist!<br>Dies kann ihr System unbrauchbar machen!</b></font>"
 
 #: portage/portagetab.cpp:132 queue/queuetab.cpp:161
-#, fuzzy
 msgid "View package details..."
 msgstr "Zeige Paket-Details..."
 
@@ -80,7 +80,7 @@ msgstr "Aktualisierung der Pakete"
 
 #: portage/portagetab.cpp:434
 msgid " packages selected"
-msgstr ""
+msgstr " Pakete ausgewählt"
 
 #: portage/portagetab.cpp:459
 msgid "<b>Homepage: </b>"
@@ -103,8 +103,7 @@ msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr "%1Installierbare&nbsp;Version:%2Keine Version verfügbar für  %3%4"
 
 #: portage/portagetab.cpp:499
-msgid ""
-"%1Emerge&nbsp;version:%2No version available - please check package details%3"
+msgid "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 "%1Installierbare&nbsp;Version:%2Keine Version verfügbar - bitte überprüfen "
 "Sie die Paket Details%3"
@@ -586,7 +585,7 @@ msgstr "<font size=\"+1\">Protokoll der Aktivitäten</font>"
 #: rc.cpp:335
 #, no-c-format
 msgid "E&nter"
-msgstr ""
+msgstr "Kommando ei&ngeben"
 
 #: rc.cpp:344
 #, no-c-format
@@ -779,9 +778,9 @@ msgid "FEATURES"
 msgstr "FEATURES"
 
 #: rc.cpp:464
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Directories"
-msgstr "Dateien und Ordner"
+msgstr "Ordner"
 
 #: rc.cpp:467
 #, no-c-format
@@ -839,9 +838,9 @@ msgid "PKG_TMPDIR"
 msgstr "PKG_TMPDIR"
 
 #: rc.cpp:500
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Confi&gurations"
-msgstr "Konfigurationsdatei"
+msgstr "Einstellun&gen"
 
 #: rc.cpp:503
 #, no-c-format
@@ -894,9 +893,9 @@ msgid "GENTOO_MIRRORS"
 msgstr "GENTOO_MIRRORS"
 
 #: rc.cpp:533
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "S&ync"
-msgstr "Synchronisierung"
+msgstr "S&ynchronisierung"
 
 #: rc.cpp:536
 #, no-c-format
@@ -1044,9 +1043,9 @@ msgstr ""
 "werden.</i>"
 
 #: rc.cpp:633
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show inst&alled packages in separate column"
-msgstr "Installierte Pa&kete in separater Spalte anzeigen"
+msgstr "Inst&allierte Pakete in separater Spalte anzeigen"
 
 #: rc.cpp:639
 #, no-c-format
@@ -1067,8 +1066,7 @@ msgstr "Hinweise zur Veröffentlichung"
 #: rc.cpp:651
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
-msgstr ""
-"Sichere alle vom Benutzer veränderbaren Portage-Dateien bevor Kuroo startet."
+msgstr "Sichere alle vom Benutzer veränderbaren Portage-Dateien bevor Kuroo startet."
 
 #: rc.cpp:654
 #, no-c-format
@@ -1157,7 +1155,7 @@ msgstr "Einstellungen"
 
 #: kuroo.cpp:108
 msgid "Kuroo is not responding. Attempting to terminate kuroo!"
-msgstr ""
+msgstr "Kuroo reagiert nicht. Versuche Kuroo zu beenden!"
 
 #: kuroo.cpp:122
 msgid "&Information"
@@ -1262,8 +1260,7 @@ msgid "%1No installed files found.%2"
 msgstr "%1Keine installierten Dateien gefunden.%2"
 
 #: core/packageinspector.cpp:897 core/packageinspector.cpp:957
-msgid ""
-"Use flags could not be calculated. Please check log for more information"
+msgid "Use flags could not be calculated. Please check log for more information"
 msgstr ""
 "\"use flags\" konnten nicht berechnet werden. Bitte die Protokolldatei für "
 "weitere Informationen lesen!"
@@ -1278,8 +1275,7 @@ msgstr ""
 
 #: core/etcupdate.cpp:73
 msgid "Please specify merge tool in settings!"
-msgstr ""
-"Bitte in den Einstellungen ein Vergleichsprogramm (z. B. Kompare) angeben!"
+msgstr "Bitte in den Einstellungen ein Vergleichsprogramm (z. B. Kompare) angeben!"
 
 #: core/etcupdate.cpp:85
 msgid ""
@@ -1337,8 +1333,7 @@ msgstr "Abgleichen der Veränderungen in '%1'."
 
 #: core/etcupdate.cpp:197
 msgid "Skipping '%1'. etc-update will ask again next time."
-msgstr ""
-"'%1' übersprungen. \"etc-update\" wird beim nächsten Mal erneut nachfragen."
+msgstr "'%1' übersprungen. \"etc-update\" wird beim nächsten Mal erneut nachfragen."
 
 #: core/etcupdate.cpp:204
 msgid "etc-update completed."
@@ -1452,8 +1447,7 @@ msgstr "Speichern der vom Benutzer demaskierten Pakete in %1 abgeschlossen."
 
 #: core/portagefiles.cpp:717
 msgid "Completed scanning user package use flags in %1."
-msgstr ""
-"Auswertung von benutzerdefinierten \"package use flags\" in %1 beendet."
+msgstr "Auswertung von benutzerdefinierten \"package use flags\" in %1 beendet."
 
 #: core/portagefiles.cpp:721
 msgid "Completed saving user package use in %1."
@@ -1476,26 +1470,24 @@ msgid "Collecting installed packages..."
 msgstr "Installierte Pakete werden gesammelt..."
 
 #: core/dependencyview.cpp:144
-#, fuzzy
 msgid "Dependency"
-msgstr "Abhängigkeiten"
+msgstr "Abhängigkeit"
 
 #: core/dependencyview.cpp:216
-#, fuzzy
 msgid "Depend on either:"
-msgstr "Abhängigkeiten"
+msgstr "Benötigt eines von: "
 
 #: core/dependencyview.cpp:231
 msgid "With Use %1 unset:"
-msgstr ""
+msgstr "Ohne Use %1 gesetzt:"
 
 #: core/dependencyview.cpp:234
 msgid "With Use %1 set:"
-msgstr ""
+msgstr "Mit Use %1 gesetzt:"
 
 #: core/emerge.cpp:69
 msgid "Can not process input! Emerge is not running."
-msgstr ""
+msgstr "Kann Eingabe nicht verarbeiten. Emerge läuft nicht."
 
 #: core/emerge.cpp:130 core/emerge.cpp:164
 msgid ""
@@ -1583,8 +1575,7 @@ msgstr "Es gibt kein Ebuild für %1"
 
 #: core/emerge.cpp:471
 msgid "You must run Kuroo as root to unmask packages!"
-msgstr ""
-"Kuroo muss vom Benutzer \"root\" ausgeführt werden um Pakete zu demaskieren!"
+msgstr "Kuroo muss vom Benutzer \"root\" ausgeführt werden um Pakete zu demaskieren!"
 
 #: core/emerge.cpp:472
 msgid "Auto-unmasking packages"
@@ -1643,8 +1634,7 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Bitte tragen sie das Paket in die Datei \"package.unmask\" ein."
 
 #: core/emerge.cpp:578
-msgid ""
-"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Emerge kann für maskierte Pakete nicht ausgeführt werden!<br>Soll die "
 "Maskierung für %1 aufgehoben werden?</qt>"
@@ -1658,8 +1648,7 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Bitte das Paket in die Datei \"package.keywords\" eintragen."
 
 #: core/emerge.cpp:593
-msgid ""
-"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>Emerge kann für \"testing\" Pakete nicht ausgeführt werden!<br>Soll die "
 "Maskierung für %1 aufgehoben werden?</qt>"
@@ -1680,19 +1669,13 @@ msgstr "Größe"
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
-msgstr ""
-"Namen der Übersetzer\n"
-"\n"
-"Alexander Reiterer"
+msgstr "Alexander Reiterer,Jan Schnackenberg"
 
 #: _translatorinfo.cpp:3
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr ""
-"Emailadressen der Übersetzer\n"
-"\n"
-"alexander.reiterer@tuwien.ac.at"
+msgstr "alexander.reiterer@tuwien.ac.at,jan@schnackenberg.org"
 
 #: kurooinit.cpp:64
 msgid ""
@@ -1809,14 +1792,12 @@ msgid "Number of packages: %1<br>"
 msgstr "Anzahl der Pakete: %1<br>"
 
 #: queue/queuetab.cpp:224
-#, fuzzy
 msgid "Initial estimated time: %1<br>"
-msgstr "Ursprünglich geschätzte Installationszeit: %1<br>"
+msgstr "Ursprünglich geschätzte Dauer: %1<br>"
 
 #: queue/queuetab.cpp:225
-#, fuzzy
 msgid "Elapsed time: %1<br>"
-msgstr "Verstrichene Installationszeit: %1<br>"
+msgstr "Verstrichene Zeit: %1<br>"
 
 #: queue/queuetab.cpp:227
 msgid "Estimated time remaining: %1<br>"
@@ -1892,11 +1873,11 @@ msgstr "Kuroo läuft bereits!"
 
 #: logs/logstab.cpp:86
 msgid "User Input"
-msgstr ""
+msgstr "Benutzereingabe"
 
 #: logs/logstab.cpp:86
 msgid "Enter text:"
-msgstr ""
+msgstr "Text eingeben:"
 
 #: logs/log.cpp:59
 msgid "Writing %1kuroo.log."
@@ -1951,7 +1932,6 @@ msgstr ""
 "td></tr>"
 
 #: intro/introdlg.cpp:64
-#, fuzzy
 msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
 "maintenance tasks on gentoo systems</p>New features:<br>Unified package "
@@ -1964,14 +1944,11 @@ msgstr ""
 "Kuroo - Ein KDE Portage-Frontend das es erlaubt die meisten normalen "
 "Software-Wartungsaufgaben eines Gentoo-Systems zu erledigen.</p>\n"
 "Neue Funktionen:<br>\n"
-"Vereinheitlichte Paketansicht mit übersichtlicher Suche über eine "
-"zweispaltige Gruppen-Auswahl und zusätzliches Filterfeld.<br>Neue "
-"detaillierte Paketansicht für erweiterte Einstellungs-Möglichkeiten. "
+"Vereinheitlichte Paketansicht: Schnelle Übersicht und Suche über Filter.<br>Zweispaltige Gruppen-Auswahl, Paket Inspektor für erweiterte Einstellungs-Möglichkeiten."
 "Außerdem Fortschrittsbalken, ein Use-Flag Editor, eine Verlaufs-Übersicht "
 "für Emerge und Konfigurationsdateien und eine Warteschlange für anstehende "
 "Emerge-Vorgänge.<br>\n"
-"<br> <a href=http://kuroo.org/kuroo/wiki/TellUs>Sagen sie uns, was sie von "
-"Kuroo halten!</a><br>"
+"<br> <a href=http://kuroo.org/kuroo/wiki/TellUs>Wir freuen uns von ihnen zu hören. Sagen sie uns, was sie von Kuroo halten!</a><br>"
 
 #: kurooview.cpp:80
 msgid "Packages"
@@ -2021,8 +1998,7 @@ msgstr "Überspringen"
 
 #: kurooview.cpp:202
 msgid "You must run Kuroo as root to emerge packages!"
-msgstr ""
-"Kuroo muss vom Benutzer \"root\" ausgeführt werden um Pakete zu installieren!"
+msgstr "Kuroo muss vom Benutzer \"root\" ausgeführt werden um Pakete zu installieren!"
 
 #: systemtray.cpp:38
 msgid "Kuroo - Portage frontend"
@@ -2032,28 +2008,3 @@ msgstr "Kuroo - Ein Portage Frontend"
 msgid "&Configure Kuroo..."
 msgstr "Kuroo &einrichten..."
 
-#~ msgid "I know what I do and want to continue"
-#~ msgstr "Ich weiß was zu tun ist und möchte gerne weitermachen"
-
-#~ msgid ""
-#~ "&Make this package available on your architecture though it is not "
-#~ "activated\n"
-#~ "in the official portage tree."
-#~ msgstr ""
-#~ "&Dieses Paket für die vorhandene Architektur auf verfügbar setzen, obwohl "
-#~ "es nicht im\n"
-#~ "offiziellen Portage für diese Architektur als verfügbar gekennzeichnet "
-#~ "ist."
-
-#~ msgid "Alt+M"
-#~ msgstr "Alt+D"
-
-#~ msgid "<b>Please note: this may harm your machine!</b>"
-#~ msgstr "<b>Bitte beachten: diese Funktion kann ihr System beschädigen!</b>"
-
-#, fuzzy
-#~ msgid "Loading ebuild. Reading: "
-#~ msgstr "Lade ebuild. Fehler beim Lesen: "
-
-#~ msgid "%1No dependencies found.%2"
-#~ msgstr "%1Keine Abhängigkeiten gefunden.%2"

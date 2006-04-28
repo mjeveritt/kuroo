@@ -34,7 +34,8 @@
  * @short All Gentoo emerge command.
  */
 Emerge::Emerge( QObject* m_parent )
-	: QObject( m_parent ), m_packageMessage( QString::null )
+	: QObject( m_parent ), m_packageMessage( QString::null ), m_completedFlag( false ), m_importantMessagePackage( QString::null )
+
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
@@ -251,7 +252,7 @@ bool Emerge::checkUpdates()
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner";
+	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner" << "--columns";
 	
 	// Add deep if checked in gui
 	if ( KurooConfig::updateDeep() )
@@ -280,13 +281,24 @@ bool Emerge::checkUpdates()
  */
 void Emerge::slotEmergeOutput( KProcIO *proc )
 {
-	QString line;
-	static bool completedFlag = false;
-	static QString importantMessagePackage;
-	QRegExp rxPackage( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
-	                   "\\s+([\\d,]*)\\s+kB" );
+	QString line;	
+	QRegExp rxPackage;
+	
+	if ( KurooConfig::portageVersion21() )
+		rxPackage = QRegExp( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
+		                     "((\\S+)/(\\S+))"
+		                     "(?:\\s*\\[(\\S*)\\])?"
+		                     "(?:\\s*\\[(\\S*)\\])?"
+		                     "(?:\\s*USE=\"([\\s|\\S]*)\")?"
+							 "(?:\\s*LINGUAS=\"[\\s|\\S]*\")?"
+		                     "(?:\\s(\\d*,?\\d*)\\skB)?" );
+	else
+		rxPackage = QRegExp( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
+		                     "((\\S+)/(\\S+))"
+		                     "(?:\\s*\\[(\\S*)\\])?"
+		                     "(?:\\s*\\[(\\S*)\\])?"
+		                     "([\\%\\-\\+\\w\\s\\(\\)\\*@]*)"
+		                     "(?:\\s(\\d*,?\\d*)\\skB)?" );
 	
 	while ( proc->readln( line, true ) >= 0 ) {
 		int logDone( 0 );
@@ -312,20 +324,26 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.updateFlags = rxPackage.cap(1);
 			emergePackage.package = rxPackage.cap(2);
 			emergePackage.category = rxPackage.cap(3);
-			emergePackage.installedVersion = rxPackage.cap(5);
-			emergePackage.useFlags = rxPackage.cap(6).simplifyWhiteSpace();
-			emergePackage.size = rxPackage.cap(7);
+			emergePackage.name = rxPackage.cap(4);
+			emergePackage.version = rxPackage.cap(5);
+			emergePackage.installedVersion = rxPackage.cap(6);
+			emergePackage.useFlags = rxPackage.cap(7).simplifyWhiteSpace();
+			emergePackage.size = rxPackage.cap(8);
+			m_emergePackageList.prepend( emergePackage );
 			
-			QString packageVersion = rxPackage.cap(4);
-			QStringList parts = GlobalSingleton::Instance()->parsePackage( packageVersion );
-			if ( !parts.isEmpty() ) {
-				emergePackage.name = parts[1];
-				emergePackage.version = parts[2];
-				m_emergePackageList.prepend( emergePackage );
-			}
-			else
-				kdWarning(0) << "Collecting emerge output. Can not parse: " << packageVersion << LINE_INFO;
+			kdDebug() << "emergePackage.package=" << emergePackage.package << LINE_INFO;
+			
+// 			QString packageVersion = rxPackage.cap(4);
+// 			QStringList parts = GlobalSingleton::Instance()->parsePackage( packageVersion );
+// 			if ( !parts.isEmpty() ) {
+// 				emergePackage.name = parts[1];
+// 				emergePackage.version = parts[2];
+// 				m_emergePackageList.prepend( emergePackage );
+// 			}
+// 			else
+// 				kdWarning(0) << "Collecting emerge output. Can not parse: " << packageVersion << LINE_INFO;
 		}
+		kdDebug() << "line=" << line << LINE_INFO;
 		
 		////////////////////////////////////////////////////////////////////////
 		// Parse emerge output for correct log output
@@ -334,12 +352,12 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		if ( lineLower.contains( QRegExp("^>>>|^!!!") ) ) {
 			
 			if ( lineLower.contains( QRegExp("^>>> completed installing") ) ) {
-				completedFlag = true;
-				importantMessagePackage = line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + ":<br>";
+				m_completedFlag = true;
+				m_importantMessagePackage = line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + ":<br>";
 			}
 			else
 				if ( lineLower.contains( QRegExp("^>>> regenerating") ) )
-					completedFlag = false;
+					m_completedFlag = false;
 			
 			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
@@ -391,7 +409,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
 		//////////////////////////////////////////////////////////////
-		if ( completedFlag ) {
+		if ( m_completedFlag ) {
 			
 			QString eMessage = line.section( " * ", 1, 1 ) + line.section( "*** ", 1, 1 );
 			if ( !eMessage.isEmpty() ) {
@@ -402,13 +420,13 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				if ( !eMessage.isEmpty() ) {
 					
 					// Append package einfo
-					if ( !importantMessagePackage.isEmpty() ) {
+					if ( !m_importantMessagePackage.isEmpty() ) {
 						if ( m_importantMessage.isEmpty() )
-							m_importantMessage += "<b>" + importantMessagePackage + "</b>" + eMessage;
+							m_importantMessage += "<b>" + m_importantMessagePackage + "</b>" + eMessage;
 						else
-							m_importantMessage += "<br><b>" + importantMessagePackage + "</b>" + eMessage;
+							m_importantMessage += "<br><b>" + m_importantMessagePackage + "</b>" + eMessage;
 						m_packageMessage = eMessage;
-						importantMessagePackage = QString::null;
+						m_importantMessagePackage = QString::null;
 					}
 					else {
 						m_packageMessage += eMessage;

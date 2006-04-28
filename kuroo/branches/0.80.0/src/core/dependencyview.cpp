@@ -187,7 +187,7 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		QString word( *it );
 		index++;
 		
-		// Insert Depend-header
+		// Insert Depend-headers
 		if ( word == "DEPEND=" ) {
 			parent = new DependencyItem( this, i18n("Compile-time dependencies"), index, DEPENDENCY_HEADER );
 			parent->setOpen( true );

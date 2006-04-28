@@ -927,6 +927,23 @@
                     <property name="margin">
                         <number>5</number>
                     </property>
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>spacer19</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Minimum</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>41</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
                             <cstring>groupBox10</cstring>
@@ -1019,7 +1036,7 @@
                                 <property name="sizePolicy">
                                     <sizepolicy>
                                         <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
+                                        <vsizetype>3</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
@@ -1041,7 +1058,7 @@
                                 <property name="sizePolicy">
                                     <sizepolicy>
                                         <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
+                                        <vsizetype>3</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
@@ -1058,23 +1075,6 @@
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>spacer19</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>41</height>
-                            </size>
-                        </property>
-                    </spacer>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -1099,7 +1099,7 @@
                             <enum>Vertical</enum>
                         </property>
                         <property name="sizeType">
-                            <enum>Expanding</enum>
+                            <enum>Minimum</enum>
                         </property>
                         <property name="sizeHint">
                             <size>

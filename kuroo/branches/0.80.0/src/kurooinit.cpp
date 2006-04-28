@@ -66,7 +66,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		                            "You can select portage version in settings."), i18n("Portage version") );
 	}
 	else {
-		if ( portage.section( "portage-", 1, 1).startsWith( "2.1" ) )
+		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) )
 			KurooConfig::setPortageVersion21( true );
 		else
 			KurooConfig::setPortageVersion21( false );
@@ -174,7 +174,7 @@ void KurooInit::getEnvironment()
 	bool isSetupOk( false );
 // 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
 	
-	QFile f( KurooConfig::fileMakeConf() );
+// 	QFile f( KurooConfig::fileMakeConf() );
 // 	if ( f.open( IO_ReadOnly ) ) {
 // 		QTextStream stream( &f );
 // 		
@@ -204,8 +204,8 @@ void KurooInit::getEnvironment()
 // 		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
 	
 	// Now determine architecture
-	QDir d( "/etc/make.profile" );
-	f.setName( d.canonicalPath() + "/../make.defaults" );
+	QDir d( KurooConfig::dirMakeProfile() );
+	QFile  f( d.canonicalPath() + "/../make.defaults" );
 	QString arch;
 	if ( f.open( IO_ReadOnly ) ) {
 		QTextStream stream( &f );
@@ -220,7 +220,7 @@ void KurooInit::getEnvironment()
 		f.close();
 	}
 	else {
-		kdError(0) << "Reading: /etc/make.profile" << LINE_INFO;
+		kdError(0) << "Opening: " << KurooConfig::dirMakeProfile() << LINE_INFO;
 		isSetupOk = false;
 	}
 	
@@ -229,7 +229,7 @@ void KurooInit::getEnvironment()
 	if ( arch.isEmpty() ){
 		QStringList archList;
 		
-		f.setName( "/usr/portage/profiles/arch.list" );
+		f.setName( KurooConfig::fileArchList() );
 		if ( f.open(IO_ReadOnly) ) {
 			QTextStream stream(&f);
 			while ( !stream.atEnd() )
@@ -242,7 +242,7 @@ void KurooInit::getEnvironment()
 											       "Please select:"), archList, QStringList::QStringList() ).first();
 		}
 		else {
-			kdError(0) << "Reading: /usr/portage/profiles/arch.list" << LINE_INFO;
+			kdError(0) << "Reading: " << KurooConfig::fileArchList() << LINE_INFO;
 			isSetupOk = false;
 		}
 	}
@@ -254,12 +254,12 @@ void KurooInit::getEnvironment()
 	}
 	else
 		isSetupOk = true;
-	
-	KurooConfig::setArch( arch );
 
+	// No arch, kuroo quitting
 	if ( !isSetupOk )
 		exit(0);
 	
+	KurooConfig::setArch( arch );
 	KurooConfig::writeConfig();
 }
 

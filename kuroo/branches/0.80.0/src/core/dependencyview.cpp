@@ -179,7 +179,6 @@ void DependencyView::slotPackageClicked( QListViewItem* item )
  */
 void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 {
-	kdDebug() << "dependAtomsList=" << dependAtomsList << LINE_INFO;
 	int index( 0 );
 	DependencyItem	*parent, *lastDepend;
 	QString lastWord;
@@ -187,8 +186,6 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 	foreach ( dependAtomsList ) {
 		QString word( *it );
 		index++;
-		
-		kdDebug() << "word=" << word << LINE_INFO;
 		
 		// Insert Depend-header
 		if ( word == "DEPEND=" ) {
@@ -250,12 +247,12 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		word.remove( '?' );
 		if ( word.startsWith("!") ) {
 			word.remove( '!' );
-			lastDepend = new DependencyItem( parent, i18n("With Use %1 unset:").arg( word ), index, DEPENDENCY_USE );
+			lastDepend = new DependencyItem( parent, i18n("With USE-flag %1 unset:").arg( word ), index, DEPENDENCY_USE );
 		}
 		else
-			lastDepend = new DependencyItem( parent, i18n("With Use %1 set:").arg( word ), index, DEPENDENCY_USE );
+			lastDepend = new DependencyItem( parent, i18n("With USE-flag %1 set:").arg( word ), index, DEPENDENCY_USE );
 	}
-	DEBUG_LINE_INFO;
+	
 	setSorting( 0, Qt::Descending );
 	sort();
 }

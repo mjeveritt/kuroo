@@ -116,7 +116,7 @@ bool Emerge::queue( const QStringList& packageList )
 	
 	m_emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--nocolor";
+	*eProc << "emerge" << "--nospinner" << "--columns" << "--nocolor";
 	
 	// Add emerge options and packages
 	foreach( packageList )
@@ -155,7 +155,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	
 	m_emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv";
+	*eProc << "emerge" << "--nospinner" << "--nocolor" << "--columns" << "-pv";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList )
@@ -332,16 +332,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			m_emergePackageList.prepend( emergePackage );
 			
 			kdDebug() << "emergePackage.package=" << emergePackage.package << LINE_INFO;
-			
-// 			QString packageVersion = rxPackage.cap(4);
-// 			QStringList parts = GlobalSingleton::Instance()->parsePackage( packageVersion );
-// 			if ( !parts.isEmpty() ) {
-// 				emergePackage.name = parts[1];
-// 				emergePackage.version = parts[2];
-// 				m_emergePackageList.prepend( emergePackage );
-// 			}
-// 			else
-// 				kdWarning(0) << "Collecting emerge output. Can not parse: " << packageVersion << LINE_INFO;
 		}
 		kdDebug() << "line=" << line << LINE_INFO;
 		

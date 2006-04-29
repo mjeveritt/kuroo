@@ -244,7 +244,6 @@ void PackageListView::nextPackage( bool isPrevious )
 				item->setSelected( true );
 			}
 		}
-// // 		emit signalCurrentChanged();
 	}
 }
 

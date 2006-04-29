@@ -879,7 +879,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	
 	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
 	
-	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
+// 	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
 	
 	QStringList tmpUseList;
 	foreach ( pretendUseLines ) {
@@ -888,7 +888,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 			tmpUseList = QStringList::split( " ", use );
 		}
 	}
-	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
+// 	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( tmpUseList.isEmpty() ) {
@@ -937,7 +937,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	
 	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
 	
-	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
+// 	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
 	
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
@@ -947,7 +947,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		}
 	}
 	
-	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
+// 	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {

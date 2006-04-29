@@ -52,7 +52,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		firstTimeWizard();
 		
 		// Ping kuroo.org
-		KIO::get( KURL("http://files.kuroo.org/files/" +  KurooConfig::hardVersion() ), false, false );
+		KIO::get( KURL("http://files.kuroo.org/stat/" +  KurooConfig::hardVersion() ), false, false );
 	}
 	else
 		if ( !KUser().isSuperUser() )

@@ -39,6 +39,7 @@ public:
 	
 	void 					init( QObject *parent = 0 );
 	const QString 			kurooDir();
+	const QRegExp			rxEmerge();
 	const QStringList 		parsePackage( const QString& packageString );
 	void 					setKurooView( QWidget* view );
 	const long&				kurooViewId();

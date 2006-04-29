@@ -247,10 +247,10 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		word.remove( '?' );
 		if ( word.startsWith("!") ) {
 			word.remove( '!' );
-			lastDepend = new DependencyItem( parent, i18n("With USE-flag %1 unset:").arg( word ), index, DEPENDENCY_USE );
+			lastDepend = new DependencyItem( parent, i18n("Without USE-flag %1:").arg( word ), index, DEPENDENCY_USE );
 		}
 		else
-			lastDepend = new DependencyItem( parent, i18n("With USE-flag %1 set:").arg( word ), index, DEPENDENCY_USE );
+			lastDepend = new DependencyItem( parent, i18n("With USE-flag %1:").arg( word ), index, DEPENDENCY_USE );
 	}
 	
 	setSorting( 0, Qt::Descending );

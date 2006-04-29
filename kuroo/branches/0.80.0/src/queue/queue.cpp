@@ -124,8 +124,8 @@ public:
 				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 			
 			if ( id.isEmpty() ) {
-			kdWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
-					.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
+				kdWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
+								.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 				return false;
 			}
 			
@@ -213,11 +213,7 @@ void Queue::reset()
  */
 bool Queue::isQueued( const QString& id )
 {
-	QMap<QString, bool>::iterator itMap = m_queueCache.find( id );
-	if ( itMap == m_queueCache.end() )
-		return false;
-	else
-		return true;
+	return m_queueCache.contains( id );
 }
 
 /**

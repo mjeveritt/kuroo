@@ -145,8 +145,7 @@ bool ScanHistoryJob::doJob()
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {
 					QString package = emergeLine.section( ">>> unmerge success: ", 1, 1 );
-					KurooDBSingleton::Instance()->insert( QString( 
-						"INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" )
+					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO history (package, timestamp, emerge) VALUES ('%1', '%2', 'false');" )
 					    .arg( package ).arg( timeStamp ), m_db );
 				}
 				else
@@ -160,8 +159,7 @@ bool ScanHistoryJob::doJob()
 		HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	
 	if ( !syncTimeStamp.isEmpty() )
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';")
-		                                     .arg( syncTimeStamp ), m_db );
+		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
 	
 	return true;
 }

@@ -601,7 +601,6 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 		}
 		else
 			kdError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
-
 	}
 	
 	return info;

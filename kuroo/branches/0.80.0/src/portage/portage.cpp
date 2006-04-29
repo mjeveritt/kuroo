@@ -363,10 +363,7 @@ void Portage::loadWorld()
  */
 bool Portage::isInWorld( const QString& package )
 {
-	if ( m_mapWorld.contains( package ) )
-		return true;
-	else
-		return false;
+	return m_mapWorld.contains( package );
 }
 
 /**

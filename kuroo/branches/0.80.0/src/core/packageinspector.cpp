@@ -345,7 +345,7 @@ void PackageInspector::slotApply()
 			pretendUseLines.clear();
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
-			*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+			*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
 			m_useList = useList;
 
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );
@@ -602,7 +602,7 @@ void PackageInspector::slotRefreshTabs()
 }
 
 /**
- * Load internal map with use flag description. @fixme: not complete yet!
+ * Load internal map with use flag description. @todo: /usr/portage/profiles/use.local.desc
  */
 void PackageInspector::loadUseFlagDescription()
 {
@@ -822,8 +822,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		}
 		else {
 			kdError(0) << "Loading installed files list. Reading: " << filename << LINE_INFO;
-			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2")
-			                                        .arg("<font color=darkRed><b>").arg("</b></font>") );
+			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2").arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -841,7 +840,7 @@ void PackageInspector::slotCalculateUse()
 	pretendUseLines.clear();
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
-	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+	*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
 	
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParsePackageUse( KProcess* ) ) );
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
@@ -876,20 +875,20 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
-	eProc = 0;	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-                       "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
-	                   "\\s+([\\d,]*)\\s+kB" );
+	eProc = 0;
+	
+	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
+	
+	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
 	
 	QStringList tmpUseList;
 	foreach ( pretendUseLines ) {
-		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(6).simplifyWhiteSpace();
+		if ( (*it).contains( m_category + "/" + m_package ) && rxPretend.search( *it ) > -1 ) {
+			QString use = rxPretend.cap(7).simplifyWhiteSpace();
 			tmpUseList = QStringList::split( " ", use );
 		}
 	}
-// 	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
+	kdDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( tmpUseList.isEmpty() ) {
@@ -936,20 +935,19 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	delete eProc;
 	eProc = 0;
 	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
-	                   "\\s+([\\d,]*)\\s+kB" );
+	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
+	
+	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
 	
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
-		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(6).simplifyWhiteSpace();
+		if ( (*it).contains( m_category + "/" + m_package ) && rxPretend.search( *it ) > -1 ) {
+			QString use = rxPretend.cap(7).simplifyWhiteSpace();
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}
 	
-// 	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
+	kdDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
 	
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {

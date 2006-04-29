@@ -286,12 +286,12 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		
 		// If version get size
-		if ( size == "0" )
+		if ( size.isEmpty() || size == "0" )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
 		else
 			size = formatSize( size );
 
-		if ( idDepend.isEmpty() || idDepend == "0" ) {
+		if ( idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, status.toInt(), duration );
 			item->setOpen( true );
 		}

@@ -282,23 +282,7 @@ bool Emerge::checkUpdates()
 void Emerge::slotEmergeOutput( KProcIO *proc )
 {
 	QString line;	
-	QRegExp rxPackage;
-	
-	if ( KurooConfig::portageVersion21() )
-		rxPackage = QRegExp( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-		                     "((\\S+)/(\\S+))"
-		                     "(?:\\s*\\[(\\S*)\\])?"
-		                     "(?:\\s*\\[(\\S*)\\])?"
-		                     "(?:\\s*USE=\"([\\s|\\S]*)\")?"
-							 "(?:\\s*LINGUAS=\"[\\s|\\S]*\")?"
-		                     "(?:\\s(\\d*,?\\d*)\\skB)?" );
-	else
-		rxPackage = QRegExp( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-		                     "((\\S+)/(\\S+))"
-		                     "(?:\\s*\\[(\\S*)\\])?"
-		                     "(?:\\s*\\[(\\S*)\\])?"
-		                     "([\\%\\-\\+\\w\\s\\(\\)\\*@]*)"
-		                     "(?:\\s(\\d*,?\\d*)\\skB)?" );
+	QRegExp rxPackage = GlobalSingleton::Instance()->rxEmerge();
 	
 	while ( proc->readln( line, true ) >= 0 ) {
 		int logDone( 0 );
@@ -330,10 +314,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.useFlags = rxPackage.cap(7).simplifyWhiteSpace();
 			emergePackage.size = rxPackage.cap(8);
 			m_emergePackageList.prepend( emergePackage );
-			
-			kdDebug() << "emergePackage.package=" << emergePackage.package << LINE_INFO;
 		}
-		kdDebug() << "line=" << line << LINE_INFO;
 		
 		////////////////////////////////////////////////////////////////////////
 		// Parse emerge output for correct log output
@@ -366,8 +347,8 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					}
 					else
 						if ( logDone == 0 && lineLower.contains( QRegExp( 
-							"(^>>> (merging|unmerge|unmerging|clean|unpacking source|"
-							"extracting|completed|regenerating))|(^ \\* important)|(^>>> unmerging in)")) ) {
+							"(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
+							"(^ \\* important)|(^>>> unmerging in)")) ) {
 							LogSingleton::Instance()->writeLog( line, EMERGE );
 							logDone++;
 						}
@@ -469,8 +450,11 @@ void Emerge::cleanup()
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	QueueSingleton::Instance()->addPackageList( m_emergePackageList );
 	
-	if ( !m_blocks.isEmpty() )
-		m_importantMessage += "<br>" + m_blocks.join("<br>");
+	if ( !m_blocks.isEmpty() ) {
+		if ( !m_importantMessage.isEmpty() )
+			m_importantMessage += "<br>";
+		m_importantMessage += m_blocks.join("<br>");
+	}
 	
 	if ( !m_unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
@@ -546,8 +530,11 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
-	if ( !m_blocks.isEmpty() )
-		m_importantMessage += "<br>" + m_blocks.join("<br>");
+	if ( !m_blocks.isEmpty() ) {
+		if ( !m_importantMessage.isEmpty() )
+			m_importantMessage += "<br>";
+		m_importantMessage += m_blocks.join("<br>");
+	}
 	
 	if ( !m_importantMessage.isEmpty() )
 		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );

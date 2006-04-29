@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2004 by Karye                                           *
-*   karye@users.sourceforge.net                                                      *
+*   karye@users.sourceforge.net                                           *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -97,8 +97,6 @@ void IntroDlg::reject()
 
 void IntroDlg::accept()
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	// Backup all portage files changeable by kuroo
 	if ( cbBackup->isOn() ) {
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
@@ -121,6 +119,9 @@ void IntroDlg::accept()
 		KIO::file_copy( fileMakeConf, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
 		                -1, true, false, false );
 	}
+	
+	// 
+	KIO::get( KURL("http://files.kuroo.org/files/IMG_0904.JPG"), false, false );
 	
 	KMessageBox::enableAllMessages();
 	QWizard::accept();

@@ -120,9 +120,6 @@ void IntroDlg::accept()
 		                -1, true, false, false );
 	}
 	
-	// 
-	KIO::get( KURL("http://files.kuroo.org/files/IMG_0904.JPG"), false, false );
-	
 	KMessageBox::enableAllMessages();
 	QWizard::accept();
 }

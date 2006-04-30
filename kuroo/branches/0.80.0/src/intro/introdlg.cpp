@@ -76,8 +76,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 }
 
 IntroDlg::~IntroDlg()
-{
-}
+{}
 
 void IntroDlg::back()
 {

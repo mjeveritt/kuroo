@@ -46,9 +46,7 @@
 
 /**
  * @class PackageInspector
- * @short The package Inspector dialog for all advanced settings.
- * 
- * 
+ * @short The package Inspector dialog for viewing and editing all advanced package settings.
  */
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
@@ -476,7 +474,7 @@ void PackageInspector::showSettings()
 }
 
 /**
- * Apply stability settings from radiobuttons. @fixme: use enum
+ * Apply stability settings from radiobuttons.
  * @param the selected radiobutton
  */
 void PackageInspector::slotSetStability( int rbStability )
@@ -593,7 +591,6 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
  */
 void PackageInspector::slotRefreshTabs()
 {
-	DEBUG_LINE_INFO;
 	slotLoadUseFlags( dialog->cbVersionsUse->currentText() );
 	slotLoadEbuild( dialog->cbVersionsEbuild->currentText() );
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );

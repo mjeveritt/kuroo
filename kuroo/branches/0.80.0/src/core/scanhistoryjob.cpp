@@ -36,8 +36,7 @@
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines )
-{
-}
+{}
 
 ScanHistoryJob::~ScanHistoryJob()
 {

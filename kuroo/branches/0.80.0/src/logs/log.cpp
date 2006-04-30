@@ -33,11 +33,12 @@
 /**
  * @class Log
  * @short Log output from all actions as emerge, scanning... to log window and to file.
+ * 
+ * @todo: save all output to log file
  */
 Log::Log( QObject* m_parent )
 	: QObject( m_parent ), m_logBrowser( 0 ), m_verboseLog( 0 ), m_saveLog( 0 )
-{
-}
+{}
 
 Log::~Log()
 {
@@ -56,7 +57,7 @@ const QString Log::init( QObject *parent )
 	m_logFile.setName( logName );
 	if( !m_logFile.open( IO_WriteOnly ) ) {
 		kdError(0) << "Writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
-		KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg(GlobalSingleton::Instance()->kurooDir()), i18n("Saving"));
+		KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg( GlobalSingleton::Instance()->kurooDir() ), i18n("Saving"));
 		return QString::null;
 	}
 	else
@@ -135,7 +136,6 @@ void Log::writeLog( const QString& output, int logType )
 			line = "<font color=BlueViolet>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
 			m_logBrowser->append( line );
 		}
-		
 	}
 }
 

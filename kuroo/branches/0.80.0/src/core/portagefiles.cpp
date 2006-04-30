@@ -44,11 +44,6 @@ enum PortageFilesAction {
 		PACKAGE_USER_USE_SAVED
 };
 
-// For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
-
-// The complete atom regexp in non-escaped form (for testing, or similar):
-// ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
-
 QRegExp
 rxAtom(	
        	"^"    															// Start of the string
@@ -665,12 +660,10 @@ public:
  */
 PortageFiles::PortageFiles( QObject *m_parent )
 	: QObject( m_parent )
-{
-}
+{}
 
 PortageFiles::~PortageFiles()
-{
-}
+{}
 
 void PortageFiles::init( QObject *parent )
 {

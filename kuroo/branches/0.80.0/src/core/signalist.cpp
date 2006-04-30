@@ -31,12 +31,10 @@
  */
 Signalist::Signalist( QObject* m_parent )
 	: QObject( m_parent ), m_busy( false ), m_isReady( false )
-{
-}
+{}
 
 Signalist::~Signalist()
-{
-}
+{}
 
 void Signalist::init( QObject* parent )
 {

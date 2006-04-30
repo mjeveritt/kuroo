@@ -200,6 +200,8 @@ private:
 /**
  * @class Portage
  * @short Object handling the Portage tree.
+ * 
+ * @todo: Register world packages in db.
  */
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )
@@ -217,8 +219,7 @@ Portage::Portage( QObject *m_parent )
 }
 
 Portage::~Portage()
-{
-}
+{}
 
 void Portage::init( QObject *parent )
 {
@@ -245,6 +246,7 @@ void Portage::slotPackageChanged()
 	loadWorld();
 	slotChanged();
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Portage handling...
@@ -464,8 +466,7 @@ void Portage::addInstalledPackage( const QString& package )
 }
 
 /**
- * @fixme: Check for failure.
- * Remove packages from db.
+ * Remove packages from db. @todo: Check for failure.
  * @param packageIdList
  */
 void Portage::removeInstalledPackage( const QString& package )

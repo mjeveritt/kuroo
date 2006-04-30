@@ -34,6 +34,8 @@
 /**
  * @class LogsTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * 
+ * @todo: view log-file content instead, let user select how many lines to view.
  */
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )

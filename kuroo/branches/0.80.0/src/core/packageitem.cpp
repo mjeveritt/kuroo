@@ -232,7 +232,7 @@ void PackageItem::initVersions()
 		PackageVersion* version = new PackageVersion( this, versionString );
 		version->setDescription( description );
 		version->setHomepage( homepage );
-		version->setLicenses( QStringList::split( " ", licenses ) ); // @fixme
+		version->setLicenses( licenses );
 		version->setUseflags( QStringList::split( " ", useFlags ) );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
@@ -317,7 +317,7 @@ QValueList<PackageVersion*> PackageItem::versionList()
 }
 
 /**
- * Return list of versions.
+ * Return map of versions - faster find.
  * @return QMap<QString, PackageVersion*>
  */
 QMap<QString, PackageVersion*> PackageItem::versionMap()

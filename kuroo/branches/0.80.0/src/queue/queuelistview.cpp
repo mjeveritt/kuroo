@@ -30,7 +30,7 @@
 #include <kprogress.h>
 
 // Tweak for time taken unpacking and installing single package.
-const int diffTime( 10 );
+const int diffTime = 10;
 
 /**
  * @class QueueListView::QueueItem
@@ -207,8 +207,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 }
 
 QueueListView::~QueueListView()
-{
-}
+{}
 
 /**
  * Move the package up in the list.
@@ -262,7 +261,8 @@ const QStringList QueueListView::allEndUserPackages()
 }
 
 /**
- * Populate queue with packages from db
+ * Populate queue with packages from db.
+ * @param bool hasCheckedQueue: whether packageList is the result of emerge pretend or just added by user manually.
  */
 void QueueListView::insertPackageList( bool hasCheckedQueue )
 {
@@ -301,17 +301,19 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 				item = new QueueItem( itemDepend, category, name, id, status.toInt(), duration );
 		}
 		
-		// Add package info
+		// Add version to be emerged
 		if ( version.isEmpty() )
 			item->setText( 3, i18n("na") );
 		else
 			item->setText( 3, version );
 		
+		// Add emerge duration
 		if ( duration == diffTime )
 			item->setText( 4, i18n("na") );
 		else
 			item->setText( 4, GlobalSingleton::Instance()->formatTime( duration ) );
 		
+		// Add download size = tarball size
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
 		else {

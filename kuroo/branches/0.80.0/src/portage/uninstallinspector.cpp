@@ -36,8 +36,7 @@ UninstallInspector::UninstallInspector( QWidget *parent )
 }
 
 UninstallInspector::~UninstallInspector()
-{
-}
+{}
 
 /**
  * Open dialog and list package and versions installed.

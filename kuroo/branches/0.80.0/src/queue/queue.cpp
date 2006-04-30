@@ -175,8 +175,7 @@ Queue::Queue( QObject* m_parent )
 }
 
 Queue::~Queue()
-{
-}
+{}
 
 void Queue::init( QObject *parent )
 {

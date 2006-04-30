@@ -46,8 +46,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 }
 
 PackageListView::~PackageListView()
-{
-}
+{}
 
 /**
  * Create mouse-over effect.

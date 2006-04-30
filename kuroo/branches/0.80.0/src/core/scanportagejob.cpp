@@ -44,8 +44,7 @@
 ScanPortageJob::ScanPortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
-{
-}
+{}
 
 ScanPortageJob::~ScanPortageJob()
 {
@@ -386,24 +385,24 @@ bool ScanPortageJob::doJob()
 	sqlite3_finalize( stmtVersion );
 	m_categories.clear();*/
 	
-	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
 	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );
 	
 	// Move content from temporary table 
-	KurooDBSingleton::Instance()->query("DELETE FROM category;", m_db );
-	KurooDBSingleton::Instance()->query("DELETE FROM subCategory;", m_db );
-	KurooDBSingleton::Instance()->query("DELETE FROM package;", m_db );
-	KurooDBSingleton::Instance()->query("DELETE FROM version;", m_db );
+	KurooDBSingleton::Instance()->query( "DELETE FROM category;", m_db );
+	KurooDBSingleton::Instance()->query( "DELETE FROM subCategory;", m_db );
+	KurooDBSingleton::Instance()->query( "DELETE FROM package;", m_db );
+	KurooDBSingleton::Instance()->query( "DELETE FROM version;", m_db );
 
-	KurooDBSingleton::Instance()->insert("INSERT INTO category SELECT * FROM category_temp;", m_db );
-	KurooDBSingleton::Instance()->insert("INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db );
-	KurooDBSingleton::Instance()->insert("INSERT INTO package SELECT * FROM package_temp;", m_db );
-	KurooDBSingleton::Instance()->insert("INSERT INTO version SELECT * FROM version_temp;", m_db );
+	KurooDBSingleton::Instance()->insert( "INSERT INTO category SELECT * FROM category_temp;", m_db );
+	KurooDBSingleton::Instance()->insert( "INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db );
+	KurooDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
+	KurooDBSingleton::Instance()->insert( "INSERT INTO version SELECT * FROM version_temp;", m_db );
 	
-	KurooDBSingleton::Instance()->query("DROP TABLE category_temp;", m_db );
-	KurooDBSingleton::Instance()->query("DROP TABLE subCategory_temp;", m_db );
-	KurooDBSingleton::Instance()->query("DROP TABLE package_temp;", m_db );
-	KurooDBSingleton::Instance()->query("DROP TABLE version_temp;", m_db );
+	KurooDBSingleton::Instance()->query( "DROP TABLE category_temp;", m_db );
+	KurooDBSingleton::Instance()->query( "DROP TABLE subCategory_temp;", m_db );
+	KurooDBSingleton::Instance()->query( "DROP TABLE package_temp;", m_db );
+	KurooDBSingleton::Instance()->query( "DROP TABLE version_temp;", m_db );
 	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );

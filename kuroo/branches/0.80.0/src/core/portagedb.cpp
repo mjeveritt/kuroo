@@ -45,8 +45,7 @@
  */
 KurooDB::KurooDB( QObject *m_parent )
 	: QObject( m_parent )
-{
-}
+{}
 
 KurooDB::~KurooDB()
 {

@@ -25,6 +25,10 @@
 
 class UninstallBase;
 
+/**
+ * @class UninstallInspector
+ * @short Dialog for selected package and version to uninstall.
+ */
 class UninstallInspector : public KDialogBase
 {
 Q_OBJECT

@@ -50,8 +50,6 @@ private:
 class DbConnection
 {
 public:
-	enum DbConnectionType { sqlite = 0, mysql = 1 };
-	
 	DbConnection( DbConfig* /* config */ );
 	virtual ~DbConnection() = 0;
 	
@@ -91,22 +89,18 @@ public:
 	DbConnectionPool();
 	~DbConnectionPool();
 	
-	const 				DbConnection::DbConnectionType getDbConnectionType() const { return m_dbConnType; }
 	const 				DbConfig *getDbConfig() const { return m_dbConfig; }
 	void 				createDbConnections();
 	
-	DbConnection 		*getDbConnection();
+	DbConnection*		getDbConnection();
 	void 				putDbConnection( const DbConnection* /* conn */ );
 	
-	QString escapeString( QString string ) {
-		return string.replace('\'', "''");
-	}
+	QString escapeString( QString string ) { return string.replace('\'', "''"); }
 	
 private:
-	static const int POOL_SIZE = 10;
-	QSemaphore m_semaphore;
-	DbConnection::DbConnectionType m_dbConnType;
-	DbConfig *m_dbConfig;
+	static const int 	POOL_SIZE = 10;
+	QSemaphore 			m_semaphore;
+	DbConfig*			m_dbConfig;
 };
 
 /**

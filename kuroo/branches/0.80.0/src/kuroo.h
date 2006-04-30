@@ -45,7 +45,7 @@ class SystemTray;
 
 /**
  * @class Kuroo
- * @short Main window with menus, system tray icon and statusbar.
+ * @short Main kde window with menus, system tray icon and statusbar.
  */
 class Kuroo : public MainWindow
 {

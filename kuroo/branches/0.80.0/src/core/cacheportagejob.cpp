@@ -96,7 +96,7 @@ bool CachePortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdWarning(0) << "Creating cache. Caching aborted." << LINE_INFO;
+				kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -114,7 +114,7 @@ bool CachePortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdWarning(0) << "Creating cache. Caching aborted." << LINE_INFO;
+						kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}

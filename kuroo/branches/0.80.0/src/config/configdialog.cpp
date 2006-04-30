@@ -41,6 +41,9 @@
 /**
  * @class ConfigDialog
  * @short Kuroo preferences.
+ * 
+ * Build settings widget for kuroo and make.conf.
+ * Parses make.conf and tries to keep user-format when saving back settings.
  */
 ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *config )
 	: KConfigDialog( parent, name, config )
@@ -64,13 +67,20 @@ ConfigDialog::~ConfigDialog()
 {
 }
 
+/**
+ * Reset to defaults.
+ */
 void ConfigDialog::slotDefault()
 {
 	readMakeConf();
 	show();
 }
 
-const QStringList ConfigDialog::parseMakeConf()
+/**
+ * Read '/etc/make.conf' into stringList by taking into account the different kind of extended lines.
+ * @return linesConcatenated
+ */
+const QStringList ConfigDialog::readMakeConf()
 {
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );
@@ -112,7 +122,7 @@ const QStringList ConfigDialog::parseMakeConf()
 		linesConcatenated += extendedLine;
 	}
 	else
-		kdError(0) << QString("Reading: %1").arg( KurooConfig::fileMakeConf() ) << LINE_INFO;
+		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
 	
 	return linesConcatenated;
 }
@@ -120,10 +130,10 @@ const QStringList ConfigDialog::parseMakeConf()
 /**
  * Parse /etc/make.conf.
  */
-void ConfigDialog::readMakeConf()
+void ConfigDialog::parseMakeConf()
 {
 	DEBUG_LINE_INFO;
-	QStringList linesConcatenated = parseMakeConf();
+	QStringList linesConcatenated = readMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return;
 	
@@ -529,7 +539,7 @@ void ConfigDialog::slotSaveAll()
  */
 bool ConfigDialog::saveMakeConf()
 {
-	QStringList linesConcatenated = parseMakeConf();
+	QStringList linesConcatenated = readMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return false;
 	

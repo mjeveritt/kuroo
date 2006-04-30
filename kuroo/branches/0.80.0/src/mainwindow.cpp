@@ -30,7 +30,7 @@
  * @short Subclassed KMainWindow to accomodate statusBar containing progressbar.
  */
 MainWindow::MainWindow( QWidget *parent, const char *name )
-	: KMainWindow( parent, name ), sb(0)
+	: KMainWindow( parent, name ), sb( 0 )
 {
 }
 

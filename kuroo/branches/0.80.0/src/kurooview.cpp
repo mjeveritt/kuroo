@@ -45,7 +45,10 @@
 
 /**
  * @class KurooView
- * @short Main gui with icon-menu and corresponding pages (tabs).
+ * @short Gui content with icon-menu and pages.
+ * 
+ * Insert all 5 pages in a widgetStack, connects icon-menu buttons to corresponding pages (tabs).
+ * Highlights icon-texts when changes are mades in the page.
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),

@@ -50,7 +50,7 @@
 
 /**
  * @class Kuroo
- * @short Main window with menus, system tray icon and statusbar.
+ * @short Main kde window with menus, system tray icon and statusbar.
  */
 Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),

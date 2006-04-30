@@ -28,7 +28,8 @@
 /**
  * @class EtcUpdate
  * @short Handles etc-updates.
- * The external diff tool is launched for merging changes in etc config files.
+ * 
+ * The external diff tool is used for merging changes in etc config files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
 	: QObject( m_parent, name ), 

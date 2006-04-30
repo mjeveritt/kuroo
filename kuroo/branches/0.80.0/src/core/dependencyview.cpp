@@ -122,6 +122,11 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// Listview stuff
+///////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * @class DependencyView
  * @short Listview to build dependency-tree view.

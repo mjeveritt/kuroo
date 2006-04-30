@@ -47,6 +47,8 @@
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
+ * 
+ * 
  */
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
@@ -90,8 +92,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 }
 
 PackageInspector::~PackageInspector()
-{
-}
+{}
 
 /**
  * Return the caller.
@@ -136,8 +137,6 @@ void PackageInspector::updateVersionData()
 		
 		// Collect in inverse order to fill dropdown menus correctly
 		versionList.prepend( version );
-		
-// 		kdDebug() << "version=" << version << " isInstalled=" << isInstalled << LINE_INFO;
 		
 		// Insert version in versionview
 		dialog->versionsView->insertItem( version, stability, size, isInstalled );
@@ -248,6 +247,7 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	
 	show();
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Buttons slots
@@ -401,7 +401,7 @@ void PackageInspector::rollbackSettings()
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+// Package masking editing
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -585,7 +585,7 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-// Load files
+// Viewing package files
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 /**

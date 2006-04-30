@@ -30,12 +30,10 @@
  */
 Images::Images( QObject* m_parent )
 	: QObject( m_parent )
-{
-}
+{}
 
 Images::~Images()
-{
-}
+{}
 
 /**
  * Load icons.

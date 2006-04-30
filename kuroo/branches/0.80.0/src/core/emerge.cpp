@@ -32,6 +32,8 @@
 /**
  * @class Emerge
  * @short All Gentoo emerge command.
+ * 
+ * Handles emerge, unmerge, check-for-updates, sync...
  */
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent ), m_packageMessage( QString::null ), m_completedFlag( false ), m_importantMessagePackage( QString::null )

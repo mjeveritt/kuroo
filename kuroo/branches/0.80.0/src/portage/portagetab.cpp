@@ -395,9 +395,8 @@ void PortageTab::slotAdvanced()
 
 void PortageTab::slotPackage()
 {
-	if ( m_packageInspector->isVisible() ) {
+	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	}
 	else	
 		processPackage( false );
 }

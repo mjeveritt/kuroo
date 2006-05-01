@@ -57,7 +57,7 @@ public:
 	virtual QString		singleQuery( const QString& /* statement */) = 0;
 	virtual int 		insert( const QString& /* statement */) = 0;
 	const bool 			isInitialized() const { return m_initialized; }
-	virtual bool 		isConnected()const = 0;
+	virtual bool 		isConnected() const = 0;
 	virtual const 		QString lastError() const { return "None"; }
 	
 protected:
@@ -95,7 +95,7 @@ public:
 	DbConnection*		getDbConnection();
 	void 				putDbConnection( const DbConnection* /* conn */ );
 	
-	QString escapeString( QString string ) { return string.replace('\'', "''"); }
+	QString 			escapeString( QString string ) { return string.replace('\'', "''"); }
 	
 private:
 	static const int 	POOL_SIZE = 10;
@@ -219,6 +219,7 @@ public:
 	
 	void					resetUpdates();
 	void					resetInstalled();
+	void					resetQueue();
 	void					addEmergeInfo( const QString& einfo );
 	void					addBackup( const QString& source, const QString& destination );
 	

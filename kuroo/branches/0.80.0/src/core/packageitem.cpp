@@ -81,11 +81,11 @@ bool PackageItem::isLastPackage()
 	return ( m_index == 1 );
 }
 
-void PackageItem::setRollOver( bool isMouseOver )
-{
-	m_isMouseOver = isMouseOver;
-	repaint();
-}
+// void PackageItem::setRollOver( bool isMouseOver )
+// {
+// 	m_isMouseOver = isMouseOver;
+// 	repaint();
+// }
 
 /**
  * Set icons when package is visible.
@@ -96,18 +96,17 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 		QColorGroup m_colorgroup( colorgroup );
 		QFont font( painter->font() );
 		
-		if ( m_isMouseOver ) {
-			font.setBold( true );
-			painter->setFont( font );
+// 		if ( m_isMouseOver ) {
+// 			font.setBold( true );
+// 			painter->setFont( font );
 // 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
 // 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
-		}
+// 		}
 		
 		// Optimizing - check only relevant columns
 		switch ( column ) {
 			
 			case 0 : {
-				
 				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 				else {
@@ -498,16 +497,25 @@ const QString& PackageItem::homepage() const
 	return m_homepage;
 }
 
+/**
+ * Returns list of installed versions in html-format.
+ */
 const QString& PackageItem::linesInstalled() const
 {
 	return m_linesInstalled;
 }
 
+/**
+ * Returns list of available versions in html-format.
+ */
 const QString& PackageItem::linesAvailable() const
 {
 	return m_linesAvailable;
 }
 
+/**
+ * Returns list emergeable versions in html-format.
+ */
 const QString& PackageItem::linesEmerge() const
 {
 	return m_linesEmerge;

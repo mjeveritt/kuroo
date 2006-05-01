@@ -126,17 +126,17 @@ public:
 			if ( installedVersionCount == "1" ) {
 			
 				// Mark package as uninstalled
-				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%3'")
-				                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET status = '%1' WHERE id = '%3'")
+				                                     		.arg( PACKAGE_AVAILABLE_STRING ).arg( id ), m_db );
 			
 				// Delete package if "old" = not in official Portage anymore
-				KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE status = '%1' AND id = '%2';" )
-				                                     .arg( PACKAGE_DELETED_STRING ).arg( PACKAGE_OLD_STRING ).arg( id ), m_db );
+				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET status = '%1' WHERE status = '%1' AND id = '%2';" )
+				                                     		.arg( PACKAGE_DELETED_STRING ).arg( PACKAGE_OLD_STRING ).arg( id ), m_db );
 			}
 			
 			// And now mark this specific version as not installed
-			KurooDBSingleton::Instance()->query( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
-			                                     .arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( version ), m_db );
+			KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE version SET status = '%1' WHERE idPackage = '%2' AND name = '%3';" )
+			                                     		.arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( version ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 			return true;
@@ -165,8 +165,8 @@ public:
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
 		if ( m_hasUpdate == 0 ) {
-			KurooDBSingleton::Instance()->query( QString("UPDATE package SET updateVersion = '', status = '%1' WHERE id = '%2';")
-			                                     .arg( PACKAGE_INSTALLED_STRING ).arg( m_id ), m_db );
+			KurooDBSingleton::Instance()->singleQuery( QString("UPDATE package SET updateVersion = '', status = '%1' WHERE id = '%2';")
+			                                     		.arg( PACKAGE_INSTALLED_STRING ).arg( m_id ), m_db );
 		}
 		else {
 			QString updateString;
@@ -175,8 +175,8 @@ public:
 			else
 				updateString = m_updateVersion + " (D)";
 			
-			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
-			                                     .arg( updateString ).arg( PACKAGE_UPDATES_STRING ).arg( m_id ), m_db );
+			KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
+			                                     		.arg( updateString ).arg( PACKAGE_UPDATES_STRING ).arg( m_id ), m_db );
 		}
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );

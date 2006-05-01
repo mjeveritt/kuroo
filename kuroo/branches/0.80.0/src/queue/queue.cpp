@@ -30,30 +30,31 @@
 class AddQueuePackageIdListJob : public ThreadWeaver::DependentJob
 {
 public:
-	AddQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), m_packageIdList( packageIdList ) {}
+	AddQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), 
+		m_packageIdList( packageIdList ) {}
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE queue_temp ("
-		                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    " idPackage INTEGER, "
-		                                    " idDepend INTEGER, "
-		                                    " use VARCHAR(255), "
-		                                    " size VARCHAR(32), "
-		                                    " version VARCHAR(32) );"
-		                                    , m_db );
+		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE queue_temp ("
+		                                    		" id INTEGER PRIMARY KEY AUTOINCREMENT, "
+		                                    		" idPackage INTEGER, "
+		                                    		" idDepend INTEGER, "
+		                                    		" use VARCHAR(255), "
+		                                    		" size VARCHAR(32), "
+		                                    		" version VARCHAR(32) );"
+		                                    		, m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO queue_temp SELECT * FROM queue;", m_db );
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		foreach ( m_packageIdList )
 			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" ).arg(*it), m_db );
 		
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM queue;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM queue;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO queue SELECT * FROM queue_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE queue_temp;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE queue_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
@@ -74,13 +75,14 @@ private:
 class RemoveQueuePackageIdListJob : public ThreadWeaver::DependentJob
 {
 public:
-	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), m_packageIdList( packageIdList ) {}
+	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), 
+		m_packageIdList( packageIdList ) {}
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->query( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
-			                                     .arg(*it).arg(*it), m_db );
+			KurooDBSingleton::Instance()->singleQuery( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
+			                                     		.arg(*it).arg(*it), m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
@@ -100,15 +102,15 @@ private:
 class AddResultsPackageListJob : public ThreadWeaver::DependentJob
 {
 public:
-	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), m_packageList( packageList ) {}
+	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), 
+		m_packageList( packageList ) {}
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
 		// Collect end-user packages
 		QMap<QString, int> endUserPackageMap;
-		const QStringList endUserPackageList = KurooDBSingleton::Instance()->query( 
-			" SELECT idPackage FROM queue WHERE idDepend = '0';", m_db );
+		const QStringList endUserPackageList = KurooDBSingleton::Instance()->query( "SELECT idPackage FROM queue WHERE idDepend = '0';", m_db );
 		
 		foreach ( endUserPackageList )
 			endUserPackageMap.insert( *it, 0 );
@@ -196,7 +198,7 @@ void Queue::refresh( bool hasCheckedQueue )
  */
 void Queue::reset()
 {
-	KurooDBSingleton::Instance()->query("DELETE FROM queue;");
+	KurooDBSingleton::Instance()->resetQueue();
 	refresh( false );
 }
 

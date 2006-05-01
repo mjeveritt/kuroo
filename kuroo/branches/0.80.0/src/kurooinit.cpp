@@ -50,9 +50,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		getEnvironment();
 		firstTimeWizard();
-		
-		// Ping kuroo.org
-		KIO::get( KURL("http://files.kuroo.org/stat/" +  KurooConfig::hardVersion() ), false, false );
 	}
 	else
 		if ( !KUser().isSuperUser() )

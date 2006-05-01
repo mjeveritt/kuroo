@@ -67,7 +67,7 @@ bool ScanHistoryJob::doJob()
 	}
 	
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
-	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
 	QString timeStamp, syncTimeStamp;
@@ -81,7 +81,7 @@ bool ScanHistoryJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
-			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
+			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
 		
@@ -152,7 +152,7 @@ bool ScanHistoryJob::doJob()
 						syncTimeStamp = timeStamp;
 			}
 	}
-	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 	
 	if ( isStatisticUpdated )
 		HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );

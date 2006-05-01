@@ -155,7 +155,7 @@ int KurooDB::insert( const QString& statement, DbConnection *conn )
 {
 // 	kdDebug() << "insert-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
-		
+	
 	DbConnection *dbConn;
 	if ( conn != NULL )
 		dbConn = conn;
@@ -897,7 +897,7 @@ void KurooDB::setPackageUnTesting( const QString& id )
 	if ( keywords.isEmpty() )
 		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -914,7 +914,7 @@ void KurooDB::setPackageAvailable( const QString& id )
 	if ( keywords.isEmpty() )
 		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '-* -" + KurooConfig::arch() + "');" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -927,9 +927,9 @@ void KurooDB::clearPackageUnTesting( const QString& id )
 	
 	// If only testing keywords - remove it, else set only available keywords
 	if ( !keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
-		query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+		singleQuery( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -942,9 +942,9 @@ void KurooDB::clearPackageAvailable( const QString& id )
 	
 	// If only available keywords - remove it, else set only testing keyword
 	if ( !keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
-		query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+		singleQuery( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
+		singleQuery( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
 }
 
 /**
@@ -953,7 +953,7 @@ void KurooDB::clearPackageAvailable( const QString& id )
  */
 void KurooDB::clearPackageUnMasked( const QString& id )
 {
-	query( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
+	singleQuery( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -962,7 +962,7 @@ void KurooDB::clearPackageUnMasked( const QString& id )
  */
 void KurooDB::clearPackageUserMasked( const QString& id )
 {
-	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
+	singleQuery( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 
@@ -1019,7 +1019,7 @@ const QStringList KurooDB::allStatistic()
  */
 void KurooDB::resetUpdates()
 {
-	query( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
+	singleQuery( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
 }
 
 /**
@@ -1027,13 +1027,17 @@ void KurooDB::resetUpdates()
  */
 void KurooDB::resetInstalled()
 {
-	query( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
+	singleQuery( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
+}
+
+void KurooDB::resetQueue()
+{
+	singleQuery( "DELETE FROM queue;" );
 }
 
 void KurooDB::addEmergeInfo( const QString& einfo )
 {
-	query( QString("UPDATE history SET einfo = '%1' "
-	               "WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
+	singleQuery( QString("UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
 }
 
 /**
@@ -1285,8 +1289,7 @@ void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3
 
 SqliteConfig::SqliteConfig( const QString& dbfile )
 	: m_dbfile( dbfile )
-{
-}
+{}
 
 /** 
  * Connections pool with thread support

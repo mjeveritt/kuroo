@@ -35,8 +35,8 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM statistic;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
 		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
@@ -45,7 +45,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 			                                      .arg( itMap.data().emergeTime() ).arg( itMap.data().count() ).arg( itMap.key() ), m_db );
 		}
 		
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}

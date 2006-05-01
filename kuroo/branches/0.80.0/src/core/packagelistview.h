@@ -52,7 +52,7 @@ public:
 	void						nextPackage( bool isPrevious );
 	
 protected slots:
-	void						rollOver( QListViewItem* item );
+// 	void						rollOver( QListViewItem* item );
 	void						setPackageFocus( const QString& id );
 	virtual void 				indexPackage( const QString& id, PackageItem *item );
 	

@@ -74,7 +74,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesPackage;
 		if ( !file.open( IO_ReadOnly ) )
-			kdWarning(0) << QString("Parsing package.keywords. Reading: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::filePackageKeywords() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -88,12 +88,12 @@ public:
 		setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageKeywords_temp ("
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " keywords VARCHAR(255) );"
-		                                    , m_db);
+		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageKeywords_temp ("
+		                                    		" idPackage INTEGER UNIQUE, "
+		                                    		" keywords VARCHAR(255) );"
+		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		for ( QStringList::Iterator it = linesPackage.begin(), end = linesPackage.end(); it != end; ++it ) {
 			
@@ -135,12 +135,12 @@ public:
 			
 		}
 		file.close();
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageKeywords;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageKeywords;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageKeywords SELECT * FROM packageKeywords_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageKeywords_temp;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageKeywords_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageKeywords", i18n("Done.") );
@@ -168,7 +168,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << QString("Parsing package.unmask. Reading: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdError(0) << "Parsing package.unmask. Reading: " << KurooConfig::filePackageUserUnMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -182,13 +182,13 @@ public:
 		setStatus( "PackageUserUnMask", i18n("Collecting user unmasked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUnmask_temp ("
-											" idPackage INTEGER UNIQUE, "
-											" dependAtom VARCHAR(255), "
-		                                    " comment BLOB );"
-											, m_db);
+		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageUnmask_temp ("
+													" idPackage INTEGER UNIQUE, "
+													" dependAtom VARCHAR(255), "
+		                                    		" comment BLOB );"
+													, m_db);
 		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
@@ -226,12 +226,12 @@ public:
 			}
 		}
 		file.close();
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageUnmask;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUnmask;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUnmask SELECT * FROM packageUnmask_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageUnmask_temp;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUnmask_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageUserUnMask", i18n("Done.") );
@@ -259,7 +259,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << QString("Parsing package.mask. Reading: %1.").arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+			kdError(0) << "Parsing package.mask. Reading: " << KurooConfig::filePackageHardMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -273,13 +273,13 @@ public:
 		setStatus( "PackageHardMask", i18n("Collecting hardmasked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageHardMask_temp ("
-		                                    " idPackage INTEGER, "
-		                                    " dependAtom VARCHAR(255), "
-		                                    " comment BLOB );"
-		                                    , m_db);
+		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageHardMask_temp ("
+		                                    		" idPackage INTEGER, "
+		                                    		" dependAtom VARCHAR(255), "
+		                                    		" comment BLOB );"
+		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
@@ -317,12 +317,12 @@ public:
 			}
 		}
 		file.close();
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageHardMask;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageHardMask;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageHardMask SELECT * FROM packageHardMask_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageHardMask_temp;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageHardMask_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageHardMask", i18n("Done.") );
@@ -350,7 +350,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << QString("Parsing user package.mask. Reading: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdError(0) << "Parsing user package.mask. Reading: " << KurooConfig::filePackageUserMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -364,13 +364,13 @@ public:
 		setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUserMask_temp ("
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " dependAtom VARCHAR(255), "
-		                                    " comment BLOB );"
-		                                    , m_db);
+		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageUserMask_temp ("
+		                                    		" idPackage INTEGER UNIQUE, "
+		                                    		" dependAtom VARCHAR(255), "
+		                                    		" comment BLOB );"
+		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
@@ -408,12 +408,12 @@ public:
 			}
 		}
 		file.close();
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageUserMask;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUserMask;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUserMask SELECT * FROM packageUserMask_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageUserMask_temp;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUserMask_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageUserMask", i18n("Done.") );
@@ -440,7 +440,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesUse;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << QString("Parsing user package.use. Reading: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::filePackageUserUse() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
@@ -452,12 +452,12 @@ public:
 			return false;
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE packageUse_temp ("
-		                                    " idPackage INTEGER UNIQUE, "
-		                                    " use VARCHAR(255) );"
-		                                    , m_db);
+		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageUse_temp ("
+		                                    		" idPackage INTEGER UNIQUE, "
+		                                    		" use VARCHAR(255) );"
+		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		for ( QStringList::Iterator it = linesUse.begin(), end = linesUse.end(); it != end; ++it ) {
 			QString category = (*it).section( '/', 0, 0 );
@@ -477,12 +477,12 @@ public:
 			
 		}
 		file.close();
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->query( "DELETE FROM packageUse;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUse;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUse SELECT * FROM packageUse_temp;", m_db );
-		KurooDBSingleton::Instance()->query( "DROP TABLE packageUse_temp;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUse_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;

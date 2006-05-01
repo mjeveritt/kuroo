@@ -184,7 +184,7 @@
                                             <string>Details...</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Return, Ctrl+S</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Show package details...</string>

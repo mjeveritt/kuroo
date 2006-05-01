@@ -18,28 +18,35 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef RESULTS_H
-#define RESULTS_H
+#ifndef DEPENDENCYVIEW_H
+#define DEPENDENCYVIEW_H
 
-#include <qobject.h>
+#include <qregexp.h>
+
+#include <klistview.h>
 
 /**
- * @class Results
- * @short Object for the resulting list of packages from emerge actions.
+ * @class DependencyView
+ * @short Listview to build dependency-tree view.
  */
-class Results : public QObject
+class DependencyView : public KListView
 {
-Q_OBJECT	
+Q_OBJECT
 public:
-	Results( QObject *m_parent = 0 );
-    ~Results();
+	DependencyView( QWidget *parent = 0, const char *name = 0 );
+    ~DependencyView();
 
-	void			init( QObject *parent = 0 );
-	void			refresh();
-	void 			addPackageList( const EmergePackageList &packageList );
-
+	class 			DependencyItem;
+	
+	void			insertDependAtoms( const QStringList& dependAtomsList );
+	
+private slots:
+	void			slotPackageClicked( QListViewItem* item );
+	
 private:
-	QObject			*m_parent;
+	
+	// The regular expression for the whole atom.
+	QRegExp rxAtom;
 };
 
 #endif

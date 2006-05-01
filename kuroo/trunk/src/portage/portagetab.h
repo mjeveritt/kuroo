@@ -48,17 +48,22 @@ public slots:
 	
 private slots:
 	void 				slotInit();
+
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();
 	void				slotInitButtons();
 	void				slotButtons();
+	
 	void				slotListSubCategories();
+	void				slotFillFilter( const QString& text );
 	void				slotFilters();
 	void				slotActivateFilters();
 	void				slotClearFilter();
 	void				slotListPackages();
+	
 	void				slotQueue();
 	void				slotUninstall();
+	
 	void				slotAdvanced();
 	void				slotPackage();
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
@@ -67,6 +72,9 @@ private:
 	void				processPackage( bool viewInspector );
 	
 private:
+	
+	// Listview which has focus
+	int					m_focusWidget;
 	
 	// Delay package view until all text in entered in the text-filter
 	int					m_delayFilters;

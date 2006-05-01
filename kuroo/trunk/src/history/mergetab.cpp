@@ -54,8 +54,7 @@ MergeTab::MergeTab( QWidget* parent )
  * Save splitters and listview geometry.
  */
 MergeTab::~MergeTab()
-{
-}
+{}
 
 /**
  * Initialize geometry and content.

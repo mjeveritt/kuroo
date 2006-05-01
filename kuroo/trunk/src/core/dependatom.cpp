@@ -26,12 +26,14 @@
 #include "packageitem.h"
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
-#define POS_CALLSIGN    1
-#define POS_PREFIX      2
-#define POS_CATEGORY    3
-#define POS_SUBCATEGORY 4
-#define POS_PACKAGE     5
-#define POS_VERSION     6
+enum Positions {
+		POS_CALLSIGN = 1,
+		POS_PREFIX,
+		POS_CATEGORY,
+		POS_SUBCATEGORY,
+		POS_PACKAGE,
+		POS_VERSION
+};
 
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
@@ -79,8 +81,10 @@ DependAtom::~DependAtom()
  */
 bool DependAtom::parse( const QString& atom )
 {
+// 	kdDebug() << "atom=" << atom << LINE_INFO;
+	
 	// Do the regexp match, which also prepares for text capture
-	if ( rxAtom.exactMatch( atom ) == false ) {
+	if ( !rxAtom.exactMatch( atom ) ) {
 		m_matches = false;
 		return false;
 	}
@@ -117,26 +121,23 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 {
 	QValueList<PackageVersion*> matchingVersions;
 	
-	if ( m_package == NULL || m_matches == false )
+	if ( m_package == NULL || !m_matches )
 		return matchingVersions; // return an empty list
 	
 	if ( m_portagePackage->category() != m_category || m_portagePackage->name() != m_package )
 		return matchingVersions; // return an empty list
 
-	bool matchAllVersions;
+	bool matchAllVersions( false );
 	if ( m_version.isEmpty() || m_version == "*" )
 		matchAllVersions = true;
-	else
-		matchAllVersions = false;
 	
-	bool matchBaseVersion;
+	bool matchBaseVersion( false );
 	if ( m_version.endsWith("*") ) {
+		
 		// remove the trailing star
 		m_version = m_version.left( m_version.length() - 1 );
 		matchBaseVersion = true;
 	}
-	else
-		matchBaseVersion = false;
 	
 	// When this is set true, it will match all versions
 	// with exactly the same version string as the parsed one.
@@ -148,6 +149,13 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	// (but not equalling, too) the parsed version.
 	bool matchGreaterThan = m_prefix.startsWith(">");
 	
+	// Match '~' prefix for this exact version and all its revisions
+	bool matchAllRevisions( false );
+	if ( m_prefix.startsWith("~") ) {
+		matchEqual = true;
+		matchAllRevisions = true;
+	}
+	
 	QValueList<PackageVersion*> versions = m_portagePackage->versionList();
 
 // 	kdDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan << endl;
@@ -155,15 +163,15 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 		
-// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() << endl;
+// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
+// 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
 		
-		if (
-		    ( matchAllVersions == true ) ||
-		    ( matchBaseVersion == true && (*versionIterator)->version().startsWith( m_version ) ) ||
-		    ( matchEqual       == true && (*versionIterator)->version() == m_version ) ||
-		    ( /*matchEqual == false &&*/ matchGreaterThan == true && (*versionIterator)->isNewerThan( m_version ) ) ||
-		    ( matchEqual == false && matchGreaterThan == false && (*versionIterator)->isOlderThan( m_version ) )
-		  )
+		if ( ( matchAllVersions ) ||
+		     ( matchBaseVersion   && (*versionIterator)->version().startsWith( m_version ) ) ||
+		     ( matchEqual         && (*versionIterator)->version() == m_version ) ||
+		     ( matchAllRevisions  && (*versionIterator)->version().startsWith( m_version + "-r" ) ) ||
+		     ( matchGreaterThan   && (*versionIterator)->isNewerThan( m_version ) ) ||
+		     ( !matchEqual        && !matchGreaterThan && (*versionIterator)->isOlderThan( m_version ) ) )
 		{
 			matchingVersions.append( (PackageVersion*) *versionIterator );
 			continue;

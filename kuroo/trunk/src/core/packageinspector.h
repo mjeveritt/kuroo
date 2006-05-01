@@ -55,14 +55,12 @@ private slots:
 	void							slotNextPackage();
 	void							showSettings();
 	void							slotRefreshTabs();
-	void							slotAdvancedToggle( bool isOn );
 	void							slotLoadInstalledFiles( const QString& version );
 	void							slotApply();
 	void							slotCancel();
 	void							slotOk();
 	void							slotSetStability( int rbStability );
 	void							slotSetSpecificVersion( const QString& version );
-	void							slotSetAvailable( bool isAvailable );
 	void							slotSetUseFlags( QListViewItem* useItem );
 	void							slotLoadEbuild( const QString& version );
 	void							slotLoadDependencies( const QString& version );

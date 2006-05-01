@@ -15,6 +15,9 @@
     <property name="caption">
         <string>Form2</string>
     </property>
+    <property name="focusPolicy">
+        <enum>StrongFocus</enum>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -290,7 +293,7 @@
                                                 <string>Details...</string>
                                             </property>
                                             <property name="accel">
-                                                <string></string>
+                                                <string>Return</string>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Show package details...</string>

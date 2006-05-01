@@ -49,8 +49,7 @@ protected:
 
 CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
 	: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
-{
-}
+{}
 
 /**
  * Paint empty categories in italic and grey when empty.
@@ -105,8 +104,7 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 }
 
 CategoriesView::~CategoriesView()
-{
-}
+{}
 
 /**
  * Retreive focus category when a new category is made current.
@@ -147,7 +145,7 @@ CategoriesView::CategoryItem* CategoriesView::currentCategory()
  */
 const QString CategoriesView::currentCategoryId()
 {
-	CategoryItem* item = dynamic_cast<CategoryItem*>( this->currentItem() );
+	CategoryItem* item = currentCategory();
 	if ( item )
 		return item->id();
 	else
@@ -156,10 +154,16 @@ const QString CategoriesView::currentCategoryId()
 
 
 /////////////////////////////////////////////////////////////////////////////////
+// ListView stuff
+/////////////////////////////////////////////////////////////////////////////////
 
 /**
  * @class CategoriesListView
  * @short Categories listview.
+ * 
+ * Specialized listview for viewing categories.
+ * First all available categories are inserted.
+ * When a category has no subcategory it is marked in gray and italic = off.
  */
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
@@ -169,8 +173,7 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 }
 
 CategoriesListView::~CategoriesListView()
-{
-}
+{}
 
 /**
  * Create index of all categories name by db id.
@@ -181,6 +184,7 @@ void CategoriesListView::init()
 	categories.clear();
 	clear();
 	
+	// Get all available categories
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
 	int i = allCategoriesList.size() - 1;
 	categories.resize( i + 1 );
@@ -195,7 +199,7 @@ void CategoriesListView::init()
 		i--;
 	}
 	
-	// Insert the meta-category All on top as id = 0
+	// Insert the meta-category All first as id = 0
 	item = new CategoryItem( this, i18n("All"), "0" );
 	m_categoryIndex.insert( i18n("All"), item );
 	item->setOn( true );
@@ -223,6 +227,8 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 /**
  * @class SubCategoriesListView
  * @short Subcategories listview.
+ * 
+ * Specialized listview to view available subcategories and marking empty as off.
  */
 SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
@@ -232,8 +238,7 @@ SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name 
 }
 
 SubCategoriesListView::~SubCategoriesListView()
-{
-}
+{}
 
 /**
  * Create index of all subcategories name by db id.

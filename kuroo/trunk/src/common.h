@@ -30,7 +30,6 @@
 #include "statusbar.h"
 #include "log.h"
 #include "queue.h"
-#include "results.h"
 #include "portage.h"
 #include "portagedb.h"
 #include "history.h"
@@ -51,7 +50,6 @@ typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<EtcUpdate> EtcUpdateSingleton;
 typedef Singleton<Queue> QueueSingleton;
-typedef Singleton<Results> ResultsSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;
@@ -60,8 +58,8 @@ typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;
 
-// The package states used by the filters
-enum packageStates {
+// The package status
+enum PackageStatus {
 		PACKAGE_DELETED = 0,
 		PACKAGE_AVAILABLE = 1,
 		PACKAGE_INSTALLED = 2,
@@ -87,8 +85,8 @@ enum LogActions {
 		EMERGELOG
 };
 
-// Package and icons
-enum status {
+// Icons
+enum Icons {
 		VIEW_PORTAGE = 1,
 		VIEW_QUEUE,
 		VIEW_HISTORY,
@@ -110,9 +108,6 @@ enum status {
 		INSTALLED_COLUMN,
 		WORLD_COLUMN
 };
-
-static const QString PACKAGE_STRING( QString::number( PACKAGE ) );
-static const QString INSTALLED_STRING( QString::number( INSTALLED ) );
 
 // The "maskedness" of a package version.
 enum Stability {

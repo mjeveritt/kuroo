@@ -61,10 +61,10 @@ bool PackageVersion::isAvailable() const
 
 bool PackageVersion::isNotArch() const
 {
-	if ( KurooConfig::acceptKeywords().startsWith("~") )
-		return ( stability( "~" + KurooConfig::arch() ) == NOTARCH );
+	if ( m_keywords.contains( KurooConfig::arch() ) || m_keywords.contains( "~" + KurooConfig::arch() ) )
+		return false;
 	else
-		return ( stability( KurooConfig::arch() ) == NOTARCH );
+		return true;
 }
 
 /**
@@ -240,7 +240,8 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 int PackageVersion::stability( const QString& arch ) const
 {
 // 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << endl;
-	
+// 	kdDebug() << "m_keywords=" << m_keywords << LINE_INFO;
+
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
 	
@@ -254,6 +255,7 @@ int PackageVersion::stability( const QString& arch ) const
 		// for normal use though, as people are not supposed to add anything
 		// but ~arch or -arch to ACCEPT_KEYWORDS/package.keywords.
 		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin(); keywordIterator != m_acceptedKeywords.end(); keywordIterator++ ) {
+			
 			// Accept masked and stable packages
 			// when the accepted keyword is ~arch or ~*
 			if ( ( *keywordIterator == "~*" || *keywordIterator == "~" + arch ) && ( m_keywords.contains( "~" + pureArch ) || m_keywords.contains( pureArch ) ) ) {

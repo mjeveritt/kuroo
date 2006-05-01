@@ -36,8 +36,7 @@ UninstallInspector::UninstallInspector( QWidget *parent )
 }
 
 UninstallInspector::~UninstallInspector()
-{
-}
+{}
 
 /**
  * Open dialog and list package and versions installed.
@@ -47,7 +46,7 @@ void UninstallInspector::view( const QStringList& packageList )
 {
 	m_dialog->uninstallView->clear();
 	
-	const QStringList systemFilesList = QStringList::split( "\n", KurooConfig::systemFiles() );
+	const QStringList systemFilesList = QStringList::split( " ", KurooConfig::systemFiles() );
 	bool isPartOfSystem( false );
 	
 	for ( QStringList::ConstIterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {

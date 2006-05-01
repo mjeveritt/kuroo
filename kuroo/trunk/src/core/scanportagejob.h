@@ -53,7 +53,6 @@ private:
 private:
 	QRegExp								rxAtom;
 
-	bool								m_aborted;
 	DbConnection* const 				m_db;
 	
 	QMap<QString, QString> 				m_mapCache;
@@ -67,19 +66,18 @@ private:
 		QString							slot;
 		QString							size;
 		QString							keywords;
-		QString							path;
 	};
 	typedef QMap<QString, Data>			PortageVersions;
 	struct Versions {
 		QString							status;
 		QString							description;
+		QString							path;
 		PortageVersions					versions;
 	};
 	typedef QMap<QString, Versions>		PortagePackages;
 	struct Categories {
 		QString							idCategory;
 		QString							idSubCategory;
-		QString							idCatSubCategory;
 		PortagePackages					packages;
 	};
 	typedef QMap<QString, Categories>	PortageCategories;

@@ -45,7 +45,10 @@
 
 /**
  * @class KurooView
- * @short Main gui with icon-menu and corresponding pages (tabs).
+ * @short Gui content with icon-menu and pages.
+ * 
+ * Insert all 5 pages in a widgetStack, connects icon-menu buttons to corresponding pages (tabs).
+ * Highlights icon-texts when changes are mades in the page.
  */
 KurooView::KurooView( QWidget *parent, const char *name )
 	: KurooViewBase( parent, name ),
@@ -93,12 +96,10 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	
 	// Confirm changes in views with bleue text menu
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
-	
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
-	
 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
 
@@ -123,8 +124,6 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
-	DEBUG_LINE_INFO;
-	
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Check is history is empty, then maybe this is also a fresh install with empty db
@@ -172,8 +171,6 @@ void KurooView::slotInit()
  */
 void KurooView::slotCheckPortage()
 {
-	DEBUG_LINE_INFO;
-	
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Restore backup after db is recreated because of new version
@@ -186,14 +183,13 @@ void KurooView::slotCheckPortage()
 	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-		
-		// Warn user that emerge need root permissions - many rmb actions are disabled
-		if ( !KUser().isSuperUser() )
-			KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
-		
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );
 	}
+	
+	// Warn user that emerge need root permissions - many rmb actions are disabled
+	if ( !KUser().isSuperUser() )
+		KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
 }
 
 /**

@@ -32,8 +32,7 @@
  */
 ToolTip::ToolTip( KListView* pWidget, QToolTipGroup* group )
 	: QToolTip( pWidget->viewport(), group ), m_pParent( pWidget )
-{
-}
+{}
 
 ToolTip::~ToolTip()
 {}

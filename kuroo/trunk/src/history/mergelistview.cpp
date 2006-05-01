@@ -29,8 +29,7 @@
  */
 MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
-{
-}
+{}
 
 MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
 	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
@@ -71,8 +70,7 @@ MergeListView::MergeListView( QWidget *parent, const char *name )
 }
 
 MergeListView::~MergeListView()
-{
-}
+{}
 
 /**
  * Populate listview with log entries

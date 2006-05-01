@@ -26,6 +26,12 @@
             <property name="name">
                 <cstring>kcfg_etcFiles</cstring>
             </property>
+            <property name="textFormat">
+                <enum>PlainText</enum>
+            </property>
+            <property name="wrapPolicy">
+                <enum>AtWordOrDocumentBoundary</enum>
+            </property>
         </widget>
     </grid>
 </widget>

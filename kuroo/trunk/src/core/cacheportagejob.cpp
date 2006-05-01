@@ -46,8 +46,6 @@ CachePortageJob::~CachePortageJob()
 
 void CachePortageJob::completeJob()
 {
-	DEBUG_LINE_INFO;
-	
 	SignalistSingleton::Instance()->cachePortageComplete();
 }
 
@@ -57,8 +55,6 @@ void CachePortageJob::completeJob()
  */
 bool CachePortageJob::doJob()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( !m_db->isConnected() ) {
 		kdError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
 		return false;
@@ -71,7 +67,7 @@ bool CachePortageJob::doJob()
 	dCategory.setSorting( QDir::Name );
 	
 	// Get a count of total packages for proper progress
-	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount';", m_db );
+	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
 	if ( packageCount == "0" )
 		setProgressTotalSteps( 35000 );
 	else
@@ -100,7 +96,7 @@ bool CachePortageJob::doJob()
 			
 			// Abort the scan
 			if ( isAborted() ) {
-				kdWarning(0) << "Creating cache. Caching aborted." << LINE_INFO;
+				kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -118,7 +114,7 @@ bool CachePortageJob::doJob()
 					
 					// Abort the scan
 					if ( isAborted() ) {
-						kdWarning(0) << "Creating cache. Caching aborted." << LINE_INFO;
+						kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}

@@ -31,12 +31,10 @@
  */
 Signalist::Signalist( QObject* m_parent )
 	: QObject( m_parent ), m_busy( false ), m_isReady( false )
-{
-}
+{}
 
 Signalist::~Signalist()
-{
-}
+{}
 
 void Signalist::init( QObject* parent )
 {
@@ -171,6 +169,11 @@ void Signalist::scanHistoryComplete()
 void Signalist::packageQueueChanged()
 {
 	emit signalPackageQueueChanged();
+}
+
+void Signalist::packageClicked( const QString& package )
+{
+	emit signalPackageClicked( package );
 }
 
 #include "signalist.moc"

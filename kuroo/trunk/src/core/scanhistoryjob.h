@@ -51,10 +51,10 @@ private:
 	}
 	
 private:
-	bool						m_aborted;
 	DbConnection* const			m_db;
-	QStringList 				m_logLines;
 	
+	// Log lines to parse
+	QStringList 				m_logLines;
 };
 
 #endif

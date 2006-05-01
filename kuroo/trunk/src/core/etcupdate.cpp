@@ -28,7 +28,8 @@
 /**
  * @class EtcUpdate
  * @short Handles etc-updates.
- * The external diff tool is launched for merging changes in etc config files.
+ * 
+ * The external diff tool is used for merging changes in etc config files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
 	: QObject( m_parent, name ), 
@@ -140,6 +141,7 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 			if ( rxEtcFiles.search( *it ) > -1 )
 				m_etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
 		
+		m_totalEtcCount = m_etcFilesList.size() / 2;
 		runDiff();
 	}
 }
@@ -149,8 +151,7 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
  */
 void EtcUpdate::runDiff()
 {
-	m_totalEtcCount = m_etcFilesList.size() / 2;
-	if ( m_totalEtcCount > 0 ) {
+	if ( m_totalEtcCount >= m_count ) {
 		QString destination = m_etcFilesList.first();
 		m_etcFilesList.pop_front();
 		QString source = m_etcFilesList.first();
@@ -158,7 +159,7 @@ void EtcUpdate::runDiff()
 		
 		// Check for etc-files warnings
 		QString etcWarning;
-		const QStringList etcFilesWarningsList = QStringList::split( "\n", KurooConfig::etcFiles() );
+		const QStringList etcFilesWarningsList = QStringList::split( " ", KurooConfig::etcFiles() );
 		foreach ( etcFilesWarningsList )
 			if ( *it == destination )
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
@@ -233,11 +234,12 @@ void EtcUpdate::backup( const QString& source, const QString& destination )
 	QString backupSource = source.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
 	QString backupDestination = destination.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
 	
-	KIO::file_copy( source, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupSource );
-	KIO::file_copy( destination, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupDestination );
+	KIO::file_copy( source, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupSource,
+	                -1, true, false, false );
+	KIO::file_copy( destination, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupDestination,
+	                -1, true, false, false );
 	
 	KurooDBSingleton::Instance()->addBackup( backupSource, backupDestination );
-	
 	emit signalEtcFileMerged();
 }
 

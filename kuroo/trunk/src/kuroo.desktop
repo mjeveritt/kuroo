@@ -1,10 +1,12 @@
 [Desktop Entry]
 Comment=KDE frontend to Gentoo portage
 Comment[en_US]=KDE frontend to Gentoo portage
+Comment[nb]=KDE-grensesnitt for Gentoo Portage
 Encoding=UTF-8
 Exec=kdesu -t -d --nonewdcop -u root -c kuroo -caption "%c" %i %m
 GenericName=KDE frontend to Gentoo portage
 GenericName[en_US]=KDE frontend to Gentoo portage
+GenericName[nb]=KDE-grensesnitt for Gentoo Portage
 Icon=kuroo
 MimeType=
 Name=Kuroo

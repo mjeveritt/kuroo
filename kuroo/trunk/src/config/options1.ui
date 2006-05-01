@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>531</height>
+            <height>519</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,6 +18,9 @@
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>5</number>
         </property>
         <widget class="QGroupBox" row="0" column="0">
             <property name="name">
@@ -425,10 +428,10 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                         <cstring>kcfg_installedColumn</cstring>
                     </property>
                     <property name="text">
-                        <string>Show installed pac&amp;kages in separate column</string>
+                        <string>Show inst&amp;alled packages in separate column</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+K</string>
+                        <string>Alt+A</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>

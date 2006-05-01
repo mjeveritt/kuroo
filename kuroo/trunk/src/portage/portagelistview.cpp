@@ -32,8 +32,6 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-static int packageCount( 0 );
-
 /**
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
@@ -41,6 +39,8 @@ static int packageCount( 0 );
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
+	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
+		setQueued( true );
 }
 
 /**
@@ -156,7 +156,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	setHeader( QString::null );
 	
 	// Don't load all packages, only first ROWLIMIT
-	packageCount = packageList.size() / 6;
+	int packageCount = packageList.size() / 6;
 	foreach ( packageList ) {
 		QString id = *it++;
 		QString name = *it++;

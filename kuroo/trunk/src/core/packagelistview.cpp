@@ -46,8 +46,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 }
 
 PackageListView::~PackageListView()
-{
-}
+{}
 
 /**
  * Create mouse-over effect.
@@ -228,20 +227,20 @@ void PackageListView::nextPackage( bool isPrevious )
 		QListViewItem* item = currentItem();
 		if ( isPrevious ) {
 			if ( item->itemAbove() ) {
-				selectAll( false );
 				item = item->itemAbove();
 				ensureItemVisible( item );
 				setCurrentItem( item );
-				setSelected( item, true );
+				selectAll( false );
+				item->setSelected( true );
 			}
 		}
 		else {
 			if ( item->itemBelow() ) {
-				selectAll( false );
 				item = item->itemBelow();
 				ensureItemVisible( item );
 				setCurrentItem( item );
-				setSelected( item, true );
+				selectAll( false );
+				item->setSelected( true );
 			}
 		}
 	}

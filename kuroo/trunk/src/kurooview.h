@@ -36,7 +36,7 @@ class PackageInspector;
 
 /**
  * @class KurooView
- * @short Create the gui 
+ * @short Create the gui content with icon-menu and pages.
  */
 class KurooView : public KurooViewBase, public kurooIface
 {

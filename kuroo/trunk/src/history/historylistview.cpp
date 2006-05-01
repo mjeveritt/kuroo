@@ -30,8 +30,7 @@
  */
 HistoryListView::HistoryItem::HistoryItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
-{
-}
+{}
 
 HistoryListView::HistoryItem::HistoryItem( HistoryItem* parent, const char* package )
 	: KListViewItem( parent, package ), m_einfo( QString::null )
@@ -77,8 +76,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 }
 
 HistoryListView::~HistoryListView()
-{
-}
+{}
 
 /**
  * @return current entry.

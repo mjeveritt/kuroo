@@ -29,7 +29,7 @@ class QVBox;
 
 /**
  * @class ConfigDialog
- * @short Kuroo preferences widget.
+ * @short Kuroo preferences.
  */
 class ConfigDialog : public KConfigDialog
 {
@@ -40,8 +40,8 @@ public:
 	~ConfigDialog();
 	
 private:
-	const QStringList 	parseMakeConf();
-	void 				readMakeConf();
+	const QStringList 	readMakeConf();
+	void 				parseMakeConf();
 	bool 				saveMakeConf();
 	
 private slots:

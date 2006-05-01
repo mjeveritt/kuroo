@@ -23,6 +23,7 @@
 #include "portagelistview.h"
 #include "packageversion.h"
 #include "versionview.h"
+#include "dependencyview.h"
 
 #include <qcombobox.h>
 #include <qcheckbox.h>
@@ -45,14 +46,14 @@
 
 /**
  * @class PackageInspector
- * @short The package Inspector dialog for all advanced settings.
+ * @short The package Inspector dialog for viewing and editing all advanced package settings.
  */
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), 
 	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ),
 	m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
-	m_isVirginState( true ), m_stabilityBefore ( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
+	m_isVirginState( true ), m_stabilityBefore( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
 	m_hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
@@ -89,8 +90,7 @@ PackageInspector::PackageInspector( QWidget *parent )
 }
 
 PackageInspector::~PackageInspector()
-{
-}
+{}
 
 /**
  * Return the caller.
@@ -101,41 +101,88 @@ bool PackageInspector::isParentView( int view )
 }
 
 /**
- * Update the Inspector gui with new version data.
+ * Update the Inspector gui with new versions and data.
  */
 void PackageInspector::updateVersionData()
 {
-	// Clear text browsers and dropdown menus
+	// Clear dropdown menus
 	dialog->versionsView->clear();
 	dialog->cbVersionsEbuild->clear();
 	dialog->cbVersionsDependencies->clear();
 	dialog->cbVersionsInstalled->clear();
 	dialog->cbVersionsUse->clear();
 	dialog->cbVersionsSpecific->clear();
-	
+
+	// Iterate sorted version list
+	QString installedVersion;
+	QStringList versionList, versionInstalledList;
 	foreach ( m_portagePackage->versionDataList() ) {
+		
+		// Parse out version and data
 		QString version = *it++;
 		QString stability = *it++;
 		QString size = *it++;
-		bool isInstalled = ( *it == "1" );
 		
-		dialog->cbVersionsEbuild->insertItem( version );
-		dialog->cbVersionsDependencies->insertItem( version );
-		dialog->cbVersionsUse->insertItem( version );
-		dialog->cbVersionsSpecific->insertItem( version );
+		// Collect installed version in "Installed files" tab
+		bool isInstalled;
+		if ( *it == "1" ) {
+			isInstalled = true;
+			installedVersion = version;
+			versionInstalledList.prepend( version );
+		}
+		else
+			isInstalled = false;
 		
+		// Collect in inverse order to fill dropdown menus correctly
+		versionList.prepend( version );
+		
+		// Insert version in versionview
 		dialog->versionsView->insertItem( version, stability, size, isInstalled );
-		
-		if ( isInstalled )
-			dialog->cbVersionsInstalled->insertItem( version );
 	}
 	
+	// Insert all versions in dropdown-menus
+	dialog->cbVersionsEbuild->insertStringList( versionList );
+	dialog->cbVersionsDependencies->insertStringList( versionList );
+	dialog->cbVersionsUse->insertStringList( versionList );
+	dialog->cbVersionsSpecific->insertStringList( versionList );
+	
 	// Set active version in Inspector dropdown menus
-	dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->cbVersionsEbuild->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->cbVersionsDependencies->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->cbVersionsUse->setCurrentText( m_portagePackage->emergeVersion() );
-	dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
+	if ( !versionInstalledList.isEmpty() ) {
+		
+		// Enable installed tab
+		dialog->inspectorTabs->page(5)->setDisabled( false );
+		
+		dialog->cbVersionsInstalled->insertStringList( versionInstalledList );
+		dialog->cbVersionsEbuild->setCurrentText( installedVersion );
+		dialog->cbVersionsDependencies->setCurrentText( installedVersion );
+		dialog->cbVersionsUse->setCurrentText( installedVersion );
+		dialog->cbVersionsInstalled->setCurrentText( installedVersion );
+	}
+	else {
+		
+		// Disable installed tab
+		dialog->inspectorTabs->page(5)->setDisabled( true );
+		
+		if ( !m_portagePackage->emergeVersion().isEmpty() ) {
+			dialog->cbVersionsEbuild->setCurrentText( m_portagePackage->emergeVersion() );
+			dialog->cbVersionsDependencies->setCurrentText( m_portagePackage->emergeVersion() );
+			dialog->cbVersionsUse->setCurrentText( m_portagePackage->emergeVersion() );
+		}
+	}
+	
+	if ( !m_portagePackage->emergeVersion().isEmpty() ) {
+		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
+		dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
+	}
+	
+	// View icons if package in World and Queue
+	dialog->pixmapInstalled->clear();
+	if ( m_portagePackage->isInWorld() )
+		dialog->pixmapInstalled->setPixmap( ImagesSingleton::Instance()->icon( WORLD ) );
+	
+	dialog->pixmapQueued->clear();
+	if ( m_portagePackage->isQueued() )
+		dialog->pixmapQueued->setPixmap( ImagesSingleton::Instance()->icon( QUEUED ) );
 }
 
 /**
@@ -155,7 +202,6 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 		enableButtonApply( false );
 		dialog->groupSelectStability->setDisabled( true );
 		dialog->useView->setDisabled( true );
-		dialog->groupArchitecture->setDisabled( true );
 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging
@@ -179,7 +225,7 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	// Construct header text
 	dialog->headerFrame->setPaletteBackgroundColor( colorGroup().highlight() );
 	dialog->package->setText( "<b><font color=#" + GlobalSingleton::Instance()->fgHexColor() 
-	                          + "><font size=+1>" + m_package + "</font> " +
+	                          + "><font size=+1>" + m_package + "</font>&nbsp;" +
 	                          "(" + m_category.section( "-", 0, 0 ) + "/" + m_category.section( "-", 1, 1 ) + ")</b></font>" );
 	dialog->description->setText( m_portagePackage->description() );
 	
@@ -199,6 +245,7 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	
 	show();
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Buttons slots
@@ -296,7 +343,7 @@ void PackageInspector::slotApply()
 			pretendUseLines.clear();
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
-			*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+			*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
 			m_useList = useList;
 
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );
@@ -347,15 +394,12 @@ void PackageInspector::rollbackSettings()
 		
 		if ( m_stabilityBefore == 3 )
 			slotSetSpecificVersion( m_versionBefore );
-		
-		if ( m_isAvailableBefore )
-			slotSetAvailable( true );
 	}
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+// Package masking editing
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -387,17 +431,8 @@ void PackageInspector::showHardMaskInfo()
  */
 void PackageInspector::slotHardMaskInfo()
 {
-	KMessageBox::messageBox( 0, KMessageBox::Information, m_hardMaskComment, 
+	KMessageBox::messageBox( this, KMessageBox::Information, m_hardMaskComment, 
 	                         i18n("%1/%2 hardmask info!").arg( m_category ).arg( m_package ), i18n("Yes"), i18n("No"), 0 );
-}
-
-/**
- * Activate advanced groupBox.
- * @param isOn
- */
-void PackageInspector::slotAdvancedToggle( bool isOn )
-{
-	dialog->groupArchitecture->setDisabled( !isOn );
 }
 
 /**
@@ -406,10 +441,8 @@ void PackageInspector::slotAdvancedToggle( bool isOn )
  */
 void PackageInspector::showSettings()
 {
-	disconnect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
-	
 	// Get user mask specific version
-	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
+	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id ).first();
 	
 	// Enable stability radiobutton
 	if ( !userMaskVersion.isEmpty() ) {
@@ -418,8 +451,6 @@ void PackageInspector::showSettings()
 		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
 	}
 	else {
-		dialog->ckbAvailable->setChecked( false );
-		
 		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
 			dialog->rbMasked->setChecked( true );
 		else
@@ -429,18 +460,10 @@ void PackageInspector::showSettings()
 				dialog->rbStable->setChecked( true );
 	}
 	
-	// Enable available radiobutton
-	if ( KurooDBSingleton::Instance()->isPackageAvailable( m_id ) )
-		dialog->ckbAvailable->setChecked( true );
-	else
-		dialog->ckbAvailable->setChecked( false );
-	
 	// Stability settings before user has changed it
 	if ( m_isVirginState ) {
 		m_stabilityBefore = dialog->groupSelectStability->selectedId();
 		m_versionBefore = userMaskVersion;
-		m_isAvailableBefore = dialog->ckbAvailable->isChecked();
-		dialog->groupArchitecture->setChecked( false );
 	}
 	
 	showHardMaskInfo();
@@ -448,12 +471,10 @@ void PackageInspector::showSettings()
 	// Reset the apply button for new package
 	if ( !m_versionSettingsChanged )
 		enableButtonApply( false );
-	
-	connect( dialog->ckbAvailable, SIGNAL( toggled( bool ) ), this, SLOT( slotSetAvailable( bool ) ) );
 }
 
 /**
- * Apply stability settings from radiobuttons. @fixme: use enum
+ * Apply stability settings from radiobuttons.
  * @param the selected radiobutton
  */
 void PackageInspector::slotSetStability( int rbStability )
@@ -528,23 +549,6 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 }
 
 /**
- * Make this package available on users arch.
- * @param isAvailable
- */
-void PackageInspector::slotSetAvailable( bool isAvailable )
-{
-	if ( isAvailable )
-		KurooDBSingleton::Instance()->setPackageAvailable( m_id );
-	else
-		KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
-	
-	enableButtonApply( true );
-	m_versionSettingsChanged = true;
-	m_portagePackage->resetDetailedInfo();
-	emit signalPackageChanged();
-}
-
-/**
  * Toggle use flag state to add or remove.
  * @param: useItem
  */
@@ -579,7 +583,7 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-// Load files
+// Viewing package files
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -592,11 +596,10 @@ void PackageInspector::slotRefreshTabs()
 	slotLoadDependencies( dialog->cbVersionsDependencies->currentText() );
 	slotLoadInstalledFiles( dialog->cbVersionsInstalled->currentText() );
 	loadChangeLog();
-	adjustSize();
 }
 
 /**
- * Load internal map with use flag description. @fixme: not complete yet!
+ * Load internal map with use flag description. @todo: /usr/portage/profiles/use.local.desc
  */
 void PackageInspector::loadUseFlagDescription()
 {
@@ -683,23 +686,29 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 void PackageInspector::loadChangeLog()
 {
 	dialog->changelogBrowser->clear();
-	if (  dialog->inspectorTabs->currentPageIndex() == 2 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, dialog->cbVersionsEbuild->currentText() ) + 
-			"/" + m_category + "/" + m_package + "/ChangeLog";
+	if ( dialog->inspectorTabs->currentPageIndex() == 2 ) {
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + "/" + m_category + "/" + m_package + "/ChangeLog";
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
 			QString textLines;
-			while ( !stream.atEnd() )
-				textLines += stream.readLine() + "<br>";
+			QRegExp rx("#(\\d*)\\b");
+			while ( !stream.atEnd() ) {
+				QString line = stream.readLine();
+				
+				// Make bugs links to http://bugs.gentoo.org
+				if ( rx.search( line ) > -1 )
+					line.replace( rx.cap(0) , "<a href=\"http://bugs.gentoo.org/show_bug.cgi?id=" + rx.cap(1) + "\">" + rx.cap(0) + "</a>" );
+				
+				textLines += line + "<br>";
+			}
 			file.close();
 			dialog->changelogBrowser->setText( textLines );
 		}
 		else {
 			kdError(0) << "Loading changelog. Reading: " << fileName << LINE_INFO;
-			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2")
-			                                   .arg("<font color=darkRed><b>").arg("</b></font>") );
+			dialog->changelogBrowser->setText( i18n("%1No ChangeLog found.%2").arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -711,8 +720,8 @@ void PackageInspector::loadChangeLog()
 void PackageInspector::slotLoadEbuild( const QString& version )
 {
 	dialog->ebuildBrowser->clear();
-	if (  dialog->inspectorTabs->currentPageIndex() == 3 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id, version ) + 
+	if ( dialog->inspectorTabs->currentPageIndex() == 3 ) {
+		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "/" + m_package + "-" + version + ".ebuild";
 		QFile file( fileName );
 		
@@ -726,8 +735,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 		}
 		else {
 			kdError(0) << "Loading ebuild. Reading: " << fileName << LINE_INFO;
-			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2")
-			                                .arg("<font color=darkRed><b>").arg("</b></font>") );
+			dialog->ebuildBrowser->setText( i18n("%1No ebuild found.%2").arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -738,27 +746,52 @@ void PackageInspector::slotLoadEbuild( const QString& version )
  */
 void PackageInspector::slotLoadDependencies( const QString& version )
 {
-	dialog->dependencyBrowser->clear();
-	if (  dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id, version ) + 
+	dialog->dependencyView->clear();
+	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
+		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {
 			QTextStream stream( &file );
 			QString textLines;
-			while ( !stream.atEnd() ) {
-				QString line = stream.readLine();
-				if ( line.contains( "DEPEND=" ) )
-					textLines += line + "\n";
-			}
+			int lineCount( 0 );
+			if ( KurooConfig::portageVersion21() )
+				while ( !stream.atEnd() ) {
+					QString line = stream.readLine();
+					if ( line.contains( "DEPEND=" ) && !line.endsWith( "DEPEND=" ) )
+						textLines += line + " ";
+				}
+			else
+				while ( !stream.atEnd() ) {
+					QString line = stream.readLine();
+					if ( line.isEmpty() )
+						continue;
+					
+					if ( lineCount++ > 1 || line == "0" )
+						break;
+					else {
+						if ( lineCount == 1 )
+							textLines += "PDEPEND= " + line + " ";
+						else
+							textLines += "RDEPEND= " + line + " ";
+					}
+				}
 			file.close();
-			dialog->dependencyBrowser->setText( textLines );
+
+			// Make sure all words are space-separated
+			textLines.replace( "DEPEND=", "DEPEND= " );
+			textLines.simplifyWhiteSpace();
+			
+			// Remove bootstrap and all it's duplicate
+			textLines.remove( "!bootstrap? ( sys-devel/patch )" );
+		
+			dialog->dependencyView->insertDependAtoms( QStringList::split( " ", textLines ) );
 		}
 		else {
 			kdError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;
-			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
-			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
+// 			dialog->dependencyBrowser->setText( i18n("%1No dependencies found.%2")
+// 			                                    .arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -786,8 +819,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		}
 		else {
 			kdError(0) << "Loading installed files list. Reading: " << filename << LINE_INFO;
-			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2")
-			                                        .arg("<font color=darkRed><b>").arg("</b></font>") );
+			dialog->installedFilesBrowser->setText( i18n("%1No installed files found.%2").arg("<font color=darkRed><b>").arg("</b></font>") );
 		}
 	}
 }
@@ -805,7 +837,7 @@ void PackageInspector::slotCalculateUse()
 	pretendUseLines.clear();
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
-	*eProc << "emerge" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+	*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
 	
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParsePackageUse( KProcess* ) ) );
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
@@ -838,20 +870,18 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
  */
 void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
-	DEBUG_LINE_INFO;
-	
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
-	eProc = 0;	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-                       "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
-	                   "\\s+([\\d,]*)\\s+kB" );
+	eProc = 0;
+	
+	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
+	
+// 	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
 	
 	QStringList tmpUseList;
 	foreach ( pretendUseLines ) {
-		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(6).simplifyWhiteSpace();
+		if ( (*it).contains( m_category + "/" + m_package ) && rxPretend.search( *it ) > -1 ) {
+			QString use = rxPretend.cap(7).simplifyWhiteSpace();
 			tmpUseList = QStringList::split( " ", use );
 		}
 	}
@@ -896,23 +926,20 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
  */
 void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
-	DEBUG_LINE_INFO;
-	
 	dialog->setDisabled( false );
 	
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	delete eProc;
 	eProc = 0;
 	
-	QRegExp rxPretend( "^\\[ebuild([\\s|\\w]*)\\]\\s+"
-	                   "((\\S+)/(\\S+))\\s*(?:\\[(\\S*)\\])*\\s*"
-	                   "(?:USE=\")?([\\%\\-\\+\\w\\s\\(\\)\\*]*)\"?"
-	                   "\\s+([\\d,]*)\\s+kB" );
+	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
+	
+// 	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
 	
 	QStringList pretendUseList;
 	foreach ( pretendUseLines ) {
-		if ( !(*it).isEmpty() && rxPretend.search( *it ) > -1 ) {
-			QString use = rxPretend.cap(6).simplifyWhiteSpace();
+		if ( (*it).contains( m_category + "/" + m_package ) && rxPretend.search( *it ) > -1 ) {
+			QString use = rxPretend.cap(7).simplifyWhiteSpace();
 			pretendUseList = QStringList::split( " ", use );
 		}
 	}

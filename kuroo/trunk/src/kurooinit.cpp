@@ -35,7 +35,7 @@
 #include <kinputdialog.h>
 
 /**
- * @class kurooInit
+ * @class KurooInit
  * @short KurooInit checks that kuroo environment is correctly setup.
  * 
  * And launch intro wizard whenever a new version of kuroo is installed.
@@ -45,13 +45,14 @@
 KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
-	DEBUG_LINE_INFO;
-	
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		getEnvironment();
 		firstTimeWizard();
+		
+		// Ping kuroo.org
+		KIO::get( KURL("http://files.kuroo.org/stat/" +  KurooConfig::hardVersion() ), false, false );
 	}
 	else
 		if ( !KUser().isSuperUser() )
@@ -68,7 +69,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		                            "You can select portage version in settings."), i18n("Portage version") );
 	}
 	else {
-		if ( portage.section( "portage-", 1, 1).startsWith( "2.1" ) )
+		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) )
 			KurooConfig::setPortageVersion21( true );
 		else
 			KurooConfig::setPortageVersion21( false );
@@ -129,19 +130,19 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	QString database = GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 	
-	// Old db structure, must delete it and backup history 
+	// Check for conflicting db design or new install
 	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
 		
 		// Backup history if there's old db version
-		if ( !dbVersion.isEmpty() )
+		if ( !dbVersion.isEmpty() ) {
 			KurooDBSingleton::Instance()->backupDb();
+			remove( database );
+			kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
+			
+			// and recreate with new structure
+			KurooDBSingleton::Instance()->init( this );
+		}
 		
-		KurooDBSingleton::Instance()->destroy();
-		remove( database );
-		kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
-		
-		// and recreate with new structure
-		KurooDBSingleton::Instance()->init( this );
 		KurooDBSingleton::Instance()->setKurooDbMeta( "kurooVersion", KurooConfig::version().section( "_db", 1, 1 ) );
 	}
 	
@@ -158,7 +159,6 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	HistorySingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
 	QueueSingleton::Instance()->init( this );
-	ResultsSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
 	FileWatcherSingleton::Instance()->init( this );
 }
@@ -174,62 +174,35 @@ KurooInit::~KurooInit()
  */
 void KurooInit::getEnvironment()
 {
-	QString line;
-	bool success( false );
-	KStringHandler kstr;
+	bool isSetupOk( false );
 	
-	QFile makeconf("/etc/make.conf");
-	if ( makeconf.open(IO_ReadOnly) ) {
-		QTextStream stream(&makeconf);
-		
-		while ( !stream.atEnd() ) {
-			line = stream.readLine();
-			
-			if ( line.contains(QRegExp("DISTDIR=")) )
-				KurooConfig::setDirDist( kstr.word( line.section("DISTDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("PORTDIR=")) )
-				KurooConfig::setDirPortage( kstr.word( line.section("PORTDIR=", 1, 1).remove("\"") , "0" ) );
-			else
-				KurooConfig::setDirPortage("/usr/portage");
-			
-			if ( line.contains(QRegExp("PORTAGE_TMPDIR=")) )
-				KurooConfig::setDirPortageTmp( kstr.word( line.section("PORTAGE_TMPDIR=", 1, 1).remove("\"") , "0" ) );
-			
-			if ( line.contains(QRegExp("PORTDIR_OVERLAY=")) )
-				KurooConfig::setDirPortageOverlay( kstr.word( line.section("PORTDIR_OVERLAY=", 1, 1).remove("\"") , "0" ) );
-			
-			success = true;
-		}
-		makeconf.close();
-	}
-	else
-		kdError(0) << "Reading: /etc/make.conf" << LINE_INFO;
-	
-	QDir d("/etc/make.profile");
-	QFile f( d.canonicalPath() + "/../make.defaults" );
+	// Now determine architecture
+	QDir d( KurooConfig::dirMakeProfile() );
+	QFile  f( d.canonicalPath() + "/../make.defaults" );
 	QString arch;
-	if ( f.open(IO_ReadOnly) ) {
-		QTextStream stream(&f);
+	if ( f.open( IO_ReadOnly ) ) {
+		QTextStream stream( &f );
 		while ( !stream.atEnd() ) {
-			line = stream.readLine();
-			if ( line.contains("ARCH=") > 0 ) {
-				arch = kstr.word( line.section("ARCH=", 1, 1).remove("\"") , "0" );
-				success = true;
+			QString line = stream.readLine();
+			if ( line.contains( "ARCH=" ) > 0 ) {
+				arch = line.section( "ARCH=", 1, 1 ).remove( "\"" );
+				isSetupOk = true;
 				break;
 			}
 		}
 		f.close();
 	}
 	else {
-		kdError(0) << "Reading: /etc/make.profile" << LINE_INFO;
-		success = false;
+		kdError(0) << "Opening: " << KurooConfig::dirMakeProfile() << LINE_INFO;
+		isSetupOk = false;
 	}
 	
+	// Architecture not found
+	// Offer dialog for user to manually select architecture
 	if ( arch.isEmpty() ){
 		QStringList archList;
 		
-		f.setName( "/usr/portage/profiles/arch.list" );
+		f.setName( KurooConfig::fileArchList() );
 		if ( f.open(IO_ReadOnly) ) {
 			QTextStream stream(&f);
 			while ( !stream.atEnd() )
@@ -237,45 +210,29 @@ void KurooInit::getEnvironment()
 			f.close();
 			
 			arch = KInputDialog::getItemList( i18n("Initialization"), 
-											i18n("Kuroo can not detect your architecture!\n"
-											     "You must select appropriate architecture to proceed.\n"
-												 "Please select:"), archList, QStringList::QStringList() ).first();
+											  i18n("Kuroo can not detect your architecture!\n"
+											       "You must select appropriate architecture to proceed.\n"
+											       "Please select:"), archList, QStringList::QStringList() ).first();
 		}
 		else {
-			kdError(0) << "Reading: /usr/portage/profiles/arch.list" << LINE_INFO;
-			success = false;
+			kdError(0) << "Reading: " << KurooConfig::fileArchList() << LINE_INFO;
+			isSetupOk = false;
 		}
 	}
 	
+	// Boring user - we quit!
 	if ( arch.isEmpty() ) {
 		kdError(0) << "No architecture selected, quitting!" << LINE_INFO;
-		success = false;
+		isSetupOk = false;
 	}
 	else
-		success = true;
-	
-	KurooConfig::setArch( arch );
-	
-	// Add default etc-files warnings
-	KurooConfig::setEtcFiles("/etc/make.conf\n/etc/securetty\n/etc/rc.conf\n/etc/fstab\n/etc/hosts\n/etc/conf.d/hostname\n"
-	                         "/etc/conf.d/domainname\n/etc/conf.d/net\n/etc/X11/XF86Config\n/etc/X11/xorg.conf\n/etc/modules.conf\n"
-	                         "/boot/grub/grub.conf\n/boot/lilo/lilo.conf\n~/.xinitrc");
-	
-	// Add default Gentoo Base Profile
-	KurooConfig::setSystemFiles("app-arch/bzip2\napp-arch/cpio\napp-arch/tar\napp-shells/bash\ndev-lang/perl\ndev-lang/python\nnet-misc/iputils\n"
-	                            "net-misc/rsync\nnet-misc/wget\nsys-apps/coreutils\nsys-apps/debianutils\nsys-apps/diffutils\n"
-	                            "sys-apps/file\nsys-apps/findutils\nsys-apps/gawk\nsys-apps/grep\nsys-apps/groff\nsys-apps/kbd\n"
-	                            "sys-apps/net-tools\nsys-apps/portage\nsys-process/procps\nsys-process/psmisc\nsys-apps/sed\n"
-	                            "sys-apps/shadow\nsys-apps/texinfo\nsys-apps/which\nsys-devel/autoconf\nsys-devel/autoconf-wrapper\n"
-	                            "sys-devel/automake\nsys-devel/automake-wrapper\nsys-devel/binutils\nsys-devel/bison\nsys-devel/flex\n"
-	                            "sys-devel/gcc\nsys-devel/gnuconfig\nsys-devel/libtool\nsys-devel/m4\nsys-devel/mak\nsys-devel/patch\n"
-	                            "sys-fs/e2fsprogs\nsys-libs/cracklib\nsys-libs/ncurses\nsys-libs/readline\nsys-libs/zlib\n"
-	                            "virtual/dev-manager\nvirtual/editor\nvirtual/gzip\nvirtual/libc\nvirtual/man\nvirtual/modutils\n"
-	                            "virtual/os-headers\nvirtual/pager\nvirtual/ssh");
-	
-	if ( !success )
+		isSetupOk = true;
+
+	// No arch, kuroo quitting
+	if ( !isSetupOk )
 		exit(0);
 	
+	KurooConfig::setArch( arch );
 	KurooConfig::writeConfig();
 }
 
@@ -297,7 +254,7 @@ void KurooInit::firstTimeWizard()
 }
 
 /**
- * Control that user is in portage group.
+ * Control if user is in portage group.
  */
 void KurooInit::checkUser()
 {
@@ -307,9 +264,8 @@ void KurooInit::checkUser()
 			return;
 	}
 	
-	KMessageBox::error( 0, 
-	                    i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
-	                    i18n("User permissions") );
+	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
+	                       i18n("User permissions") );
 	exit(0);
 }
 

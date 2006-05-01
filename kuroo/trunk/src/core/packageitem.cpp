@@ -37,6 +37,8 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
+	if ( this->isVisible() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+		m_inWorld = true;
 }
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
@@ -45,6 +47,8 @@ PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
+	if ( this->isVisible() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+		m_inWorld = true;
 }
 
 PackageItem::~PackageItem()
@@ -82,6 +86,7 @@ void PackageItem::setRollOver( bool isMouseOver )
 	m_isMouseOver = isMouseOver;
 	repaint();
 }
+
 /**
  * Set icons when package is visible.
  */
@@ -98,7 +103,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 // 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 		}
 		
-		// Optimizing - do not check for not relevant columns
+		// Optimizing - check only relevant columns
 		switch ( column ) {
 			
 			case 0 : {
@@ -131,9 +136,9 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 					m_inWorld = false;
 					setPixmap( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
 				}
-				break;
 			}
 		}
+		
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }
@@ -212,7 +217,6 @@ void PackageItem::initVersions()
 	
 	// Get list of accepted keywords, eg if package is "untesting"
 	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
-	
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
@@ -228,7 +232,7 @@ void PackageItem::initVersions()
 		PackageVersion* version = new PackageVersion( this, versionString );
 		version->setDescription( description );
 		version->setHomepage( homepage );
-		version->setLicenses( QStringList::split( " ", licenses ) );
+		version->setLicenses( licenses );
 		version->setUseflags( QStringList::split( " ", useFlags ) );
 		version->setSlot( slot );
 		version->setKeywords( QStringList::split( " ", keywords ) );
@@ -313,7 +317,7 @@ QValueList<PackageVersion*> PackageItem::versionList()
 }
 
 /**
- * Return list of versions.
+ * Return map of versions - faster find.
  * @return QMap<QString, PackageVersion*>
  */
 QMap<QString, PackageVersion*> PackageItem::versionMap()
@@ -365,6 +369,12 @@ void PackageItem::parsePackageVersions()
 	if ( !m_isInitialized )
 		initVersions();
 	
+	m_versionsDataList.clear();
+	m_linesAvailable = QString::null;
+	m_linesEmerge = QString::null;
+	m_linesInstalled = QString::null;
+	
+	// Iterate sorted versions list
 	QString version;
 	QValueList<PackageVersion*> sortedVersions = sortedVersionList();
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
@@ -374,27 +384,31 @@ void PackageItem::parsePackageVersions()
 		
 		// Mark official version stability for version listview
 		QString stability;
-		if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
-			stability = i18n("Hardmasked");
-			version = "<font color=darkRed><i>" + version + "</i></font>";
-		}
-		else
-			if ( (*sortedVersionIterator)->isOriginalTesting() ) {
-				stability = i18n("Testing");
-				version = "<i>" + version + "</i>";
+		if ( (*sortedVersionIterator)->isNotArch() )
+			stability = i18n("Not on %1").arg( KurooConfig::arch() );
+		else {
+			if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
+				stability = i18n("Hardmasked");
+				version = "<font color=darkRed><i>" + version + "</i></font>";
 			}
-			else
-				if ( (*sortedVersionIterator)->isAvailable() )
-					stability = i18n("Stable");
-				else
-					if ( (*sortedVersionIterator)->isNotArch() )
-						stability = i18n("Not on %1").arg( KurooConfig::arch() );
+			else {
+				if ( (*sortedVersionIterator)->isOriginalTesting() ) {
+					stability = i18n("Testing");
+					version = "<i>" + version + "</i>";
+				}
+				else {
+					if ( (*sortedVersionIterator)->isAvailable() )
+						stability = i18n("Stable");
 					else
 						stability = i18n("Not available");
+				}
+			}
+		}
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << endl;
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << 
+// 			" stability=" << stability << LINE_INFO;
 		
-		// Versions data
+		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();
 		
 		// Create nice summary showing installed packages
@@ -414,11 +428,12 @@ void PackageItem::parsePackageVersions()
 		}
 		else {
 			if ( (*sortedVersionIterator)->isNotArch() )
-				m_isInArch = true;
+				m_isInArch = false;
 			else
 				m_linesAvailable.prepend( version + ", " );
 		}
 		
+		// Get description and homepage from most recent version = assuming most correct
 		m_description = (*sortedVersionIterator)->description();
 		m_homepage = (*sortedVersionIterator)->homepage();
 	}

@@ -28,7 +28,12 @@ KurooStatusBar* KurooStatusBar::s_instance = 0;
 
 /**
  * @class KurooStatusBar
- * @short Singleton object to build statusbar with progressbar in right corner.
+ * @short Singleton object to build statusbar with label and progressbar.
+ * 
+ * The progressbar is either updated by a timer (eg when emerging packages) or by updated by count (eg when scanning packages).
+ * The progressbar is hidden when inactive.
+ * The messages in the label can be constant or transient. The label displays transient messages for 2 sec then returns to
+ * last constant message if any. The message stack is fifo.
  */
 KurooStatusBar::KurooStatusBar( QWidget *parent )
 	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )

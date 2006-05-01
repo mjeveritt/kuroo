@@ -40,6 +40,7 @@
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kuser.h>
+#include <kaccel.h>
 
 /**
  * @class QueueTab
@@ -154,6 +155,11 @@ void QueueTab::slotInit()
 	                                  "Portage will normally merge those files only once to prevent the user"
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+	
+	// Keyboard shortcuts
+	KAccel* pAccel = new KAccel( this );
+	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
+	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
 }
 
 /**
@@ -215,8 +221,8 @@ void QueueTab::slotQueueSummary()
 	queueBrowser->clear();
 	QString queueBrowserLines(   i18n( "<b>Summary</b><br>" ) );
 			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Initial estimated time for installation: %1<br>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "Elapsed time for installation: %1<br>" )
+			queueBrowserLines += i18n( "Initial estimated time: %1<br>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "Elapsed time: %1<br>" )
 		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
 			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" )
 		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
@@ -318,7 +324,6 @@ void QueueTab::slotCheck()
 {
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
-	
 	EmergeSingleton::Instance()->pretend( packageList );
 }
 
@@ -327,8 +332,6 @@ void QueueTab::slotCheck()
  */
 void QueueTab::slotGo()
 {
-	DEBUG_LINE_INFO;
-	
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
@@ -383,7 +386,6 @@ void QueueTab::slotStop()
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
-		
 		}
 }
 
@@ -400,8 +402,6 @@ void QueueTab::slotPretend()
  */
 void QueueTab::slotRemove()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( isVisible() )
 		m_packageInspector->hide();
 	
@@ -413,8 +413,6 @@ void QueueTab::slotRemove()
  */
 void QueueTab::slotClear()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( isVisible() )
 		m_packageInspector->hide();
 	
@@ -473,9 +471,12 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	if ( !item )
 		return;
 	
+	const QStringList selectedIdList = queueView->selectedId();
+	
 	enum Actions { REMOVE, OPTIONS, ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
+	
 	int menuItem1 = menu.insertItem( i18n( "Remove" ), REMOVE );
 	int menuItem2 = menu.insertItem( i18n( "Details..." ), OPTIONS );
 	
@@ -502,13 +503,20 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 			slotAdvanced();
 			break;
 		
-		case ADDWORLD:
-			PortageSingleton::Instance()->appendWorld( queueView->currentPackage()->category() + "/" + queueView->currentPackage()->name() );
+		case ADDWORLD: {
+			QStringList packageList;
+			foreach ( selectedIdList )
+				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
+			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
+		}
 		
-		case DELWORLD:
-			PortageSingleton::Instance()->removeFromWorld( queueView->currentPackage()->category() + "/" + queueView->currentPackage()->name() );
-		
+		case DELWORLD: {
+			QStringList packageList;
+			foreach ( selectedIdList )
+				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
+			PortageSingleton::Instance()->removeFromWorld( packageList );
+		}
 	}
 }
 

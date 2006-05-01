@@ -33,6 +33,7 @@ class VersionView::VersionItem : public KListViewItem
 {
 public:
 	VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
+	~VersionItem();
 	
 	bool	isInstalled();
 	
@@ -46,8 +47,10 @@ private:
 
 VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, int stability )
 	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_stability( stability )
-{
-}
+{}
+
+VersionView::VersionItem::~VersionItem()
+{}
 
 bool VersionView::VersionItem::isInstalled()
 {
@@ -96,6 +99,7 @@ VersionView::VersionView( QWidget *parent, const char *name )
 	setColumnAlignment( 3, Qt::AlignRight );
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );
+	setSelectionMode( QListView::NoSelection );
 }
 
 VersionView::~VersionView()

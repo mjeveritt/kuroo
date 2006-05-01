@@ -50,7 +50,7 @@
 
 /**
  * @class Kuroo
- * @short Main window with menus, system tray icon and statusbar.
+ * @short Main kde window with menus, system tray icon and statusbar.
  */
 Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
@@ -59,7 +59,6 @@ Kuroo::Kuroo()
 	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-	
 	// Get pointer so MessageBox's can be made modal to kuroo windown and more...
 	GlobalSingleton::Instance()->setKurooView( m_view );
 	
@@ -94,11 +93,22 @@ Kuroo::Kuroo()
 }
 
 /**
- * Backup emerge and merge history entries to text file.
+ * If necessary wait for job to finish before terminating.
  */
 Kuroo::~Kuroo()
 {
-	KurooDBSingleton::Instance()->backupDb();
+	int maxLoops( 99 );
+	while ( true ) {
+		if ( ThreadWeaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::instance()->isJobPending( "CachePortageJob" ) )
+			::usleep( 100000 ); // Sleep 100 msec
+		else
+			break;
+		
+		if ( maxLoops-- == 0 ) {
+			KMessageBox::error( 0, i18n("Kuroo is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
+			break;
+		}
+	}
 }
 
 /**
@@ -123,7 +133,7 @@ void Kuroo::setupActions()
 	
 	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
 	                               		EtcUpdateSingleton::Instance(), SLOT( slotEtcUpdate() ), actionCollection(), "etc_update" );
-	
+
 	createGUI();
 }
 
@@ -139,6 +149,9 @@ void Kuroo::slotBusy()
 	else {
 		actionRefreshPortage->setEnabled( true );
 		actionRefreshUpdates->setEnabled( true );
+		
+		// Make sure progressbar is stopped!
+		KurooStatusBar::instance()->stopTimer();
 	}
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
@@ -213,9 +226,8 @@ void Kuroo::introWizard()
 bool Kuroo::queryClose()
 {
 	if ( !m_shuttingDown ) {
-		if ( !KurooConfig::isSystrayEnabled() ) {
+		if ( !KurooConfig::isSystrayEnabled() )
 			slotQuit();
-		}
 		else {
 			hide();
 			return false;
@@ -234,10 +246,12 @@ bool Kuroo::queryExit()
 }
 
 /**
+ * Backup emerge and merge history entries to text file.
  * Wait for the backup of the log is completed before terminating.
  */
 void Kuroo::slotQuit()
 {
+	KurooDBSingleton::Instance()->backupDb();
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
 		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
@@ -246,9 +260,7 @@ void Kuroo::slotQuit()
 }
 
 /**
- * Aborted any running threads.
- * Allow time to abort before db connection is closed.
- * @fixme Wait for threads to terminate.
+ * Abort any running threads.
  */
 void Kuroo::slotWait()
 {

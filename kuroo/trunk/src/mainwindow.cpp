@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "common.h"
 #include "mainwindow.h"
 
 #include <qobjectlist.h>
@@ -29,7 +30,7 @@
  * @short Subclassed KMainWindow to accomodate statusBar containing progressbar.
  */
 MainWindow::MainWindow( QWidget *parent, const char *name )
-	: KMainWindow( parent, name ), sb(0)
+	: KMainWindow( parent, name ), sb( 0 )
 {
 }
 

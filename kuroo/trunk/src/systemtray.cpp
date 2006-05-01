@@ -30,6 +30,9 @@ SystemTray* SystemTray::s_instance = 0;
 /**
  * @class SystemTray
  * @short Singleton object that creates the kuroo systemtray icon and actions.
+ * 
+ * Displays kuroo icon in systemtray and switches to "busy" icon when kuroo is busy.
+ * The user can disable the systemtray icon in settings.
  */
 SystemTray::SystemTray( QWidget *parent )
 	: KSystemTray( parent )
@@ -37,8 +40,8 @@ SystemTray::SystemTray( QWidget *parent )
 	s_instance = this;
 	QToolTip::add( this, i18n("Kuroo - Portage frontend") );
 	contextMenu()->insertItem( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 }
 
 SystemTray::~SystemTray()
@@ -47,16 +50,12 @@ SystemTray::~SystemTray()
 
 void SystemTray::activate()
 {
-	DEBUG_LINE_INFO;
-	
 	slotBusy( false );
 	show();
 }
 
 void SystemTray::inactivate()
 {
-	DEBUG_LINE_INFO;
-	
 	hide();
 }
 

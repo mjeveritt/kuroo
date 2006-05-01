@@ -28,15 +28,24 @@
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
+#include <kinputdialog.h>
+
 
 /**
  * @class LogsTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
+ * 
+ * @todo: view log-file content instead, let user select how many lines to view.
  */
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
-	logBrowser->setTextFormat( Qt::LogText );
+	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
+	
+	// Enable/disable this view and buttons when kuroo is busy
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
+	
+// 	logBrowser->setTextFormat( Qt::LogText ); // Text doesn't wrap in log mode!
 	init();
 }
 
@@ -72,6 +81,26 @@ void LogsTab::init()
 		verboseLog->setChecked( true );
 	else
 		verboseLog->setChecked( false );
+}
+
+/**
+ * Open dialog for manually sending text to running emerge process.
+ */
+void LogsTab::slotUserInput()
+{
+	QString input = KInputDialog::getText( i18n("User Input"), i18n("Enter text:"), QString::null, 0, this, 0, 0, QString::null );
+	EmergeSingleton::Instance()->inputText( input );
+}
+
+/**
+ * Disable/enable buttons when kuroo is busy.
+ */
+void LogsTab::slotBusy()
+{
+	if ( SignalistSingleton::Instance()->isKurooBusy() )
+		pbEnter->setDisabled( false );
+	else
+		pbEnter->setDisabled( true );
 }
 
 #include "logstab.moc"

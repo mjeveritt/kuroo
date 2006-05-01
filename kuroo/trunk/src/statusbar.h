@@ -29,7 +29,7 @@ class QTimer;
 
 /**
  * @class KurooStatusBar
- * @short Singleton statusbar with progressbar in right corner.
+ * @short Singleton statusbar with label and progressbar.
  */
 class KurooStatusBar : public KStatusBar
 {

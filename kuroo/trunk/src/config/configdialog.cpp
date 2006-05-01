@@ -41,6 +41,9 @@
 /**
  * @class ConfigDialog
  * @short Kuroo preferences.
+ * 
+ * Build settings widget for kuroo and make.conf.
+ * Parses make.conf and tries to keep user-format when saving back settings.
  */
 ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *config )
 	: KConfigDialog( parent, name, config )
@@ -64,13 +67,20 @@ ConfigDialog::~ConfigDialog()
 {
 }
 
+/**
+ * Reset to defaults.
+ */
 void ConfigDialog::slotDefault()
 {
 	readMakeConf();
 	show();
 }
 
-const QStringList ConfigDialog::parseMakeConf()
+/**
+ * Read '/etc/make.conf' into stringList by taking into account the different kind of extended lines.
+ * @return linesConcatenated
+ */
+const QStringList ConfigDialog::readMakeConf()
 {
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );
@@ -100,19 +110,19 @@ const QStringList ConfigDialog::parseMakeConf()
 			if ( line.contains( "=" ) ) {
 				
 				linesConcatenated += extendedLine;
-				extendedLine = line.section("\\", 0, 0).simplifyWhiteSpace();
+				extendedLine = line.section( QRegExp("\\\\s*$"), 0, 0 ).simplifyWhiteSpace();
 				
 				linesConcatenated += linesCommented;
 				linesCommented.clear();
 			}
 			else
-				extendedLine += " " + line.section("\\", 0, 0).simplifyWhiteSpace();
+				extendedLine += " " + line.section( QRegExp("\\\\s*$"), 0, 0 ).simplifyWhiteSpace();
 		}
 		
 		linesConcatenated += extendedLine;
 	}
 	else
-		kdError(0) << QString("Reading: %1").arg( KurooConfig::fileMakeConf() ) << LINE_INFO;
+		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
 	
 	return linesConcatenated;
 }
@@ -120,11 +130,54 @@ const QStringList ConfigDialog::parseMakeConf()
 /**
  * Parse /etc/make.conf.
  */
-void ConfigDialog::readMakeConf()
+void ConfigDialog::parseMakeConf()
 {
-	QStringList linesConcatenated = parseMakeConf();
+	DEBUG_LINE_INFO;
+	QStringList linesConcatenated = readMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return;
+	
+	// Clear old entries
+	KurooConfig::setAcceptKeywords( QString::null );
+	KurooConfig::setAutoClean( QString::null );
+	KurooConfig::setBuildPrefix( QString::null );
+	KurooConfig::setCBuild( QString::null );
+	KurooConfig::setCCacheSize( QString::null );
+	KurooConfig::setCFlags( QString::null );
+	KurooConfig::setCXXFlags( QString::null );
+	KurooConfig::setChost( QString::null );
+	KurooConfig::setCleanDelay( QString::null );
+	KurooConfig::setConfigProtect( QString::null );
+	KurooConfig::setConfigProtectMask( QString::null );
+	KurooConfig::setDebugBuild( QString::null );
+	KurooConfig::setDirDist( QString::null );
+	KurooConfig::setFeatures( QString::null );
+	KurooConfig::setFetchCommand( QString::null );
+	KurooConfig::setGentooMirrors( QString::null );
+	KurooConfig::setFtpProxy( QString::null );
+	KurooConfig::setHttpProxy( QString::null );
+	KurooConfig::setMakeOpts( QString::null );
+	KurooConfig::setNoColor( QString::null );
+	KurooConfig::setDirPkgTmp( QString::null );
+	KurooConfig::setDirPkg( QString::null );
+	KurooConfig::setDirPortLog( QString::null );
+	KurooConfig::setPortageBinHost( QString::null );
+	KurooConfig::setPortageNiceness( QString::null );
+	KurooConfig::setDirPortageTmp( QString::null );
+	KurooConfig::setDirPortage( "/usr/portage" );
+	KurooConfig::setDirPortageOverlay( QString::null );
+	KurooConfig::setResumeCommand( QString::null );
+	KurooConfig::setRoot( QString::null );
+	KurooConfig::setRsyncExcludeFrom( QString::null );
+	KurooConfig::setRsyncProxy( QString::null );
+	KurooConfig::setRsyncRetries( QString::null );
+	KurooConfig::setRsyncRateLimit( QString::null );
+	KurooConfig::setRsyncTimeOut( QString::null );
+	KurooConfig::setDirRpm( QString::null );
+	KurooConfig::setSync( QString::null );
+	KurooConfig::setUse( QString::null );
+	KurooConfig::setUseOrder( QString::null );
+	KurooConfig::setNoColor( QString::null );
 	
 	// Parse the lines
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
@@ -408,7 +461,7 @@ void ConfigDialog::readMakeConf()
 		
 		if ( (*it).contains( QRegExp("RSYNC_TIMEOUT=") ) ) {
 			if ( rx.search( *it ) > -1 )
-				KurooConfig::setRsyncTimeOut(rx.cap(4)  );
+				KurooConfig::setRsyncTimeOut( rx.cap(4)  );
 			else
 				kdWarning(0) << "Parsing /etc/make.conf: can not parse RSYNC_TIMEOUT." << LINE_INFO;
 			continue;
@@ -486,7 +539,7 @@ void ConfigDialog::slotSaveAll()
  */
 bool ConfigDialog::saveMakeConf()
 {
-	QStringList linesConcatenated = parseMakeConf();
+	QStringList linesConcatenated = readMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return false;
 	
@@ -595,7 +648,14 @@ bool ConfigDialog::saveMakeConf()
 	if ( file.open( IO_WriteOnly ) ) {
 		QTextStream stream( &file );
 		
+		bool top( true );
 		foreach ( linesConcatenated ) {
+			
+			// Skip first empty lines
+			if ( top && (*it).isEmpty() )
+				continue;
+			else
+				top = false;
 			
 			if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
 			                              "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"

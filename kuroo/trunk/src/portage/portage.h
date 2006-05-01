@@ -39,9 +39,8 @@ public:
 	void						loadWorld();
 	bool						isInWorld( const QString& package );
 	
-	bool						saveWorld( const QMap<QString, QString>& map );
-	void						appendWorld( const QString& package );
-	void						removeFromWorld( const QString& package );
+	void						appendWorld( const QStringList& packageList );
+	void						removeFromWorld( const QStringList& packageList );
 	
 	void						pretendPackageList( const QStringList& packageIdList );
 	void						uninstallInstalledPackageList( const QStringList& packageIdList );
@@ -59,6 +58,7 @@ public slots:
 	bool						slotScan();
 	void						slotScanCompleted();
 	bool						slotSync();
+	void						slotSyncCompleted();
 	
 	bool						slotRefreshUpdates();
 	bool						slotLoadUpdates();

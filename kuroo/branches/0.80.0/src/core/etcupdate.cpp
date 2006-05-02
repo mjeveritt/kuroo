@@ -29,7 +29,8 @@
  * @class EtcUpdate
  * @short Handles etc-updates.
  * 
- * The external diff tool is used for merging changes in etc config files.
+ * Runs etc-update to collect the list of etc-files that needs merging.
+ * Launches the exernal diff-tool for selected files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
 	: QObject( m_parent, name ), 
@@ -163,7 +164,7 @@ void EtcUpdate::runDiff()
 		foreach ( etcFilesWarningsList )
 			if ( *it == destination )
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
-		
+
 		// Ask user what to do with this etc-file
 		switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>%1Do you want to merge changes in %2?</qt>")
 		                                        .arg( etcWarning, destination ), 

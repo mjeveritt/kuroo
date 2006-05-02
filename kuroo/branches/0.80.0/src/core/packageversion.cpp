@@ -26,6 +26,7 @@
 /**
  * @class PackageVersion
  * @short Class for comparing versions.
+ * 
 * Initialize the version with its version string.
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
@@ -239,9 +240,6 @@ bool PackageVersion::isOlderThan( const QString& otherVersion ) const
 */
 int PackageVersion::stability( const QString& arch ) const
 {
-// 	kdDebug() << "PackageVersion::stability m_keywords=" << m_keywords << " m_version=" << m_version << " m_isHardMasked=" << m_isHardMasked << endl;
-// 	kdDebug() << "m_keywords=" << m_keywords << LINE_INFO;
-
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
 	

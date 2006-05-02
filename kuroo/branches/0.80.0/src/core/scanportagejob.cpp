@@ -38,8 +38,7 @@
  * @short Thread for scanning local portage tree for available packages.
  * 
  * The packages are counted first, this to get a correct refresh progress in the gui.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
- * first the portage overlay cache the official portage cache.
+ * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages.
  * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
@@ -60,13 +59,11 @@ ScanPortageJob::~ScanPortageJob()
  */
 void ScanPortageJob::completeJob()
 {
-	m_mapCache.clear();
 	SignalistSingleton::Instance()->scanPortageComplete();
 }
 
 /**
- * Scan Portage cache for packages in portage tree.
- * Inserting found packages in db.
+ * Scan Portage cache for packages in portage tree. Inserting found packages in db.
  * @return success
  */
 bool ScanPortageJob::doJob()
@@ -95,44 +92,44 @@ bool ScanPortageJob::doJob()
 	
 	// Temporary table for all categories
 	KurooDBSingleton::Instance()->singleQuery(	"BEGIN TRANSACTION;", m_db );
-	KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE category_temp ("
-	                                    		" id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                    		" name VARCHAR(32) UNIQUE );"
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE category_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    		"name VARCHAR(32) UNIQUE );"
 	                                    		, m_db );
 	
-	KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE subCategory_temp ("
-	                                    		" id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                    		" name VARCHAR(32), "
-	                                    		" idCategory INTEGER );"
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE subCategory_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    		"name VARCHAR(32), "
+	                                    		"idCategory INTEGER );"
 	                                    		, m_db );
 	
 	// Temporary table for all packages
-	KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE package_temp ("
-	                                    		" id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                    		" idCategory INTEGER, "
-	                                          	" idSubCategory INTEGER, "
-	                                          	" category VARCHAR(32), "
-	                                          	" name VARCHAR(32), "
-	                                          	" description VARCHAR(255), "
-	                                          	" path VARCHAR(64), "
-	                                          	" status INTEGER, "
-	                                          	" meta VARCHAR(255), "
-	                                          	" updateVersion VARCHAR(32) );"
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    		"idCategory INTEGER, "
+	                                          	"idSubCategory INTEGER, "
+	                                          	"category VARCHAR(32), "
+	                                          	"name VARCHAR(32), "
+	                                          	"description VARCHAR(255), "
+	                                          	"path VARCHAR(64), "
+	                                          	"status INTEGER, "
+	                                          	"meta VARCHAR(255), "
+	                                          	"updateVersion VARCHAR(32) );"
 	                                          	, m_db );
 	
 	// Temporary table for all versions
-	KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE version_temp ("
-	                                          	" id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	                                          	" idPackage INTEGER, "
-	                                          	" name VARCHAR(32),"
-	                                          	" description VARCHAR(255), "
-	                                          	" homepage VARCHAR(128), "
-	                                          	" licenses VARCHAR(64), "
-	                                          	" useFlags VARCHAR(255),"
-	                                          	" slot VARCHAR(32),"
-	                                          	" size VARCHAR(32), "
-	                                          	" status INTEGER, "
-	                                          	" keywords VARCHAR(32) );"
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE version_temp ( "
+	                                          	"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                          	"idPackage INTEGER, "
+	                                          	"name VARCHAR(32),"
+	                                          	"description VARCHAR(255), "
+	                                          	"homepage VARCHAR(128), "
+	                                          	"licenses VARCHAR(64), "
+	                                          	"useFlags VARCHAR(255),"
+	                                          	"slot VARCHAR(32),"
+	                                          	"size VARCHAR(32), "
+	                                          	"status INTEGER, "
+	                                          	"keywords VARCHAR(32) );"
 	                                          	, m_db );
 	
 	// Gather all path = portage and overlays

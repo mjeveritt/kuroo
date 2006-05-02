@@ -35,13 +35,13 @@ public:
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE queue_temp ("
-		                                    		" id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		                                    		" idPackage INTEGER, "
-		                                    		" idDepend INTEGER, "
-		                                    		" use VARCHAR(255), "
-		                                    		" size VARCHAR(32), "
-		                                    		" version VARCHAR(32) );"
+		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE queue_temp ( "
+		                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+		                                    		"idPackage INTEGER, "
+		                                    		"idDepend INTEGER, "
+		                                    		"use VARCHAR(255), "
+		                                    		"size VARCHAR(32), "
+		                                    		"version VARCHAR(32) );"
 		                                    		, m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO queue_temp SELECT * FROM queue;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );

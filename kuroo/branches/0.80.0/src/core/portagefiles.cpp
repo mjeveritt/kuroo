@@ -88,9 +88,9 @@ public:
 		setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageKeywords_temp ("
-		                                    		" idPackage INTEGER UNIQUE, "
-		                                    		" keywords VARCHAR(255) );"
+		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageKeywords_temp ( "
+		                                    		"idPackage INTEGER UNIQUE, "
+		                                    		"keywords VARCHAR(255) );"
 		                                    		, m_db);
 		
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -182,10 +182,10 @@ public:
 		setStatus( "PackageUserUnMask", i18n("Collecting user unmasked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageUnmask_temp ("
-													" idPackage INTEGER UNIQUE, "
-													" dependAtom VARCHAR(255), "
-		                                    		" comment BLOB );"
+		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUnmask_temp ( "
+													"idPackage INTEGER UNIQUE, "
+													"dependAtom VARCHAR(255), "
+		                                    		"comment BLOB );"
 													, m_db);
 		
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -273,10 +273,10 @@ public:
 		setStatus( "PackageHardMask", i18n("Collecting hardmasked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageHardMask_temp ("
-		                                    		" idPackage INTEGER, "
-		                                    		" dependAtom VARCHAR(255), "
-		                                    		" comment BLOB );"
+		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageHardMask_temp ( "
+		                                    		"idPackage INTEGER, "
+		                                    		"dependAtom VARCHAR(255), "
+		                                    		"comment BLOB );"
 		                                    		, m_db);
 		
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -364,10 +364,10 @@ public:
 		setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageUserMask_temp ("
-		                                    		" idPackage INTEGER UNIQUE, "
-		                                    		" dependAtom VARCHAR(255), "
-		                                    		" comment BLOB );"
+		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUserMask_temp ( "
+		                                    		"idPackage INTEGER UNIQUE, "
+		                                    		"dependAtom VARCHAR(255), "
+		                                    		"comment BLOB );"
 		                                    		, m_db);
 		
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -452,9 +452,9 @@ public:
 			return false;
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE packageUse_temp ("
-		                                    		" idPackage INTEGER UNIQUE, "
-		                                    		" use VARCHAR(255) );"
+		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUse_temp ( "
+		                                    		"idPackage INTEGER UNIQUE, "
+		                                    		"use VARCHAR(255) );"
 		                                    		, m_db);
 		
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );

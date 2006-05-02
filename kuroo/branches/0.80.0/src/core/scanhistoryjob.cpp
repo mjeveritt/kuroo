@@ -31,7 +31,7 @@
 
 /**
  * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @short Thread for parsing emerge/unmerge/sync entries found in emerge.log.
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
@@ -158,7 +158,7 @@ bool ScanHistoryJob::doJob()
 		HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	
 	if ( !syncTimeStamp.isEmpty() )
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
+		KurooDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
 	
 	return true;
 }

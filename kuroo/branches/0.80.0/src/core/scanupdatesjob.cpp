@@ -34,7 +34,7 @@
 
 /**
  * @class ScanUpdatesJob
- * @short Thread for loading 'emerge -uDrxv World' output into db.
+ * @short Thread for loading 'emerge -uDpv World' output into db.
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
@@ -54,8 +54,6 @@ ScanUpdatesJob::~ScanUpdatesJob()
  */
 void ScanUpdatesJob::completeJob()
 {
-	DEBUG_LINE_INFO;
-	
 	SignalistSingleton::Instance()->loadUpdatesComplete();
 }
 
@@ -65,8 +63,6 @@ void ScanUpdatesJob::completeJob()
  */
 bool ScanUpdatesJob::doJob()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( !m_db->isConnected() ) {
 		kdError(0) << "Scanning updates. Can not connect to database" << LINE_INFO;
 		return false;
@@ -80,17 +76,17 @@ bool ScanUpdatesJob::doJob()
 	int count(0);
 
 	// Temporary tables to avoid locking main table
-	KurooDBSingleton::Instance()->singleQuery(	" CREATE TEMP TABLE package_temp ("
-	                                    		" id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                          	" idCategory INTEGER, "
-	                                          	" idSubCategory INTEGER, "
-	                                          	" category VARCHAR(32), "
-	                                          	" name VARCHAR(32), "
-	                                          	" description VARCHAR(255), "
-	                                          	" path VARCHAR(64), "
-	                                          	" status INTEGER, "
-	                                          	" meta VARCHAR(255), "
-	                                          	" updateVersion VARCHAR(32) );"
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                          	"idCategory INTEGER, "
+	                                          	"idSubCategory INTEGER, "
+	                                          	"category VARCHAR(32), "
+	                                          	"name VARCHAR(32), "
+	                                          	"description VARCHAR(255), "
+	                                          	"path VARCHAR(64), "
+	                                          	"status INTEGER, "
+	                                          	"meta VARCHAR(255), "
+	                                          	"updateVersion VARCHAR(32) );"
 	                                          	, m_db );
 	
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );

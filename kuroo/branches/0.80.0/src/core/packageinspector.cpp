@@ -47,14 +47,16 @@
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for viewing and editing all advanced package settings.
+ * 
+ * Builds a tabbed-dialog to view all relevant info for current package.
+ * This dialog is used both in Packages view and Queue view.
  */
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), 
 	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ),
 	m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
-	m_isVirginState( true ), m_stabilityBefore( 0 ), m_versionBefore( QString::null ), m_isAvailableBefore( false ),
-	m_hardMaskComment( QString::null )
+	m_isVirginState( true ), m_stabilityBefore( 0 ), m_versionBefore( QString::null ), m_hardMaskComment( QString::null )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
@@ -340,7 +342,7 @@ void PackageInspector::slotApply()
 			PortageFilesSingleton::Instance()->savePackageUse();
 
 			//recalculate use flags
-			pretendUseLines.clear();
+			m_pretendUseLines.clear();
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
 			*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
@@ -834,7 +836,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
  */
 void PackageInspector::slotCalculateUse()
 {
-	pretendUseLines.clear();
+	m_pretendUseLines.clear();
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
 	*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
@@ -854,14 +856,14 @@ void PackageInspector::slotCalculateUse()
 }
 
 /**
- * Collect emerge pretend output in pretendUseLines.
+ * Collect emerge pretend output in m_pretendUseLines.
  * @param eProc
  */
 void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
 {
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 )
-		pretendUseLines += line;
+		m_pretendUseLines += line;
 }
 
 /**
@@ -876,10 +878,10 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	
 	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
 	
-// 	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
+// 	kdDebug() << "m_pretendUseLines=" << m_pretendUseLines << LINE_INFO;
 	
 	QStringList tmpUseList;
-	foreach ( pretendUseLines ) {
+	foreach ( m_pretendUseLines ) {
 		if ( (*it).contains( m_category + "/" + m_package ) && rxPretend.search( *it ) > -1 ) {
 			QString use = rxPretend.cap(7).simplifyWhiteSpace();
 			tmpUseList = QStringList::split( " ", use );
@@ -890,7 +892,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	dialog->useView->clear();
 	if ( tmpUseList.isEmpty() ) {
 		new QListViewItem( dialog->useView, i18n("Use flags could not be calculated. Please check log for more information") );
-		foreach ( pretendUseLines )
+		foreach ( m_pretendUseLines )
 			LogSingleton::Instance()->writeLog( *it, ERROR );
 		return;
 	}
@@ -934,10 +936,10 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	
 	QRegExp rxPretend = GlobalSingleton::Instance()->rxEmerge();
 	
-// 	kdDebug() << "pretendUseLines=" << pretendUseLines << LINE_INFO;
+// 	kdDebug() << "m_pretendUseLines=" << m_pretendUseLines << LINE_INFO;
 	
 	QStringList pretendUseList;
-	foreach ( pretendUseLines ) {
+	foreach ( m_pretendUseLines ) {
 		if ( (*it).contains( m_category + "/" + m_package ) && rxPretend.search( *it ) > -1 ) {
 			QString use = rxPretend.cap(7).simplifyWhiteSpace();
 			pretendUseList = QStringList::split( " ", use );
@@ -949,7 +951,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {
 		new QListViewItem( dialog->useView, i18n("Use flags could not be calculated. Please check log for more information") );
-		foreach ( pretendUseLines )
+		foreach ( m_pretendUseLines )
 			LogSingleton::Instance()->writeLog( *it, ERROR );
 		return;
 	}

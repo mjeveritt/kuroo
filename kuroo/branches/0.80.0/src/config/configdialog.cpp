@@ -60,20 +60,19 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
 	
-	readMakeConf();
+	parseMakeConf();
 }
 
 ConfigDialog::~ConfigDialog()
-{
-}
+{}
 
 /**
  * Reset to defaults.
  */
-void ConfigDialog::slotDefault()
+void ConfigDialog::updateWidgetsDefault()
 {
-	readMakeConf();
-	show();
+	DEBUG_LINE_INFO;
+	parseMakeConf();
 }
 
 /**
@@ -525,7 +524,7 @@ void ConfigDialog::slotSaveAll()
 		
 		case 1:
 			if ( !saveMakeConf() ) {
-				readMakeConf();
+				parseMakeConf();
 				show();
 				KMessageBox::error( this, i18n("Failed to save %1. Please run as root.").arg( KurooConfig::fileMakeConf() ), i18n("Saving"));
 			}

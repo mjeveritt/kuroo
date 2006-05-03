@@ -46,7 +46,7 @@ private:
 	
 private slots:
 	void 				slotSaveAll();
-	void 				slotDefault();
+	void 				updateWidgetsDefault();
 };
 
 #endif

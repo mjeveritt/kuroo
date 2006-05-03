@@ -337,11 +337,11 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				logDone++;
 			}
 			else
-				if ( lineLower.contains( "etc-update" ) ) {
-					LogSingleton::Instance()->writeLog( line, ERROR );
-					logDone++;
-				}
-				else
+// 				if ( lineLower.contains( "etc-update" ) ) {
+// 					LogSingleton::Instance()->writeLog( line, ERROR );
+// 					logDone++;
+// 				}
+// 				else
 					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
 						m_importantMessage += line + "<br>";
@@ -350,7 +350,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					else
 						if ( logDone == 0 && lineLower.contains( QRegExp( 
 							"(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
-							"(^ \\* important)|(^>>> unmerging in)")) ) {
+							"(^ \\* IMPORTANT)|(^>>> unmerging in)")) ) {
 							LogSingleton::Instance()->writeLog( line, EMERGE );
 							logDone++;
 						}

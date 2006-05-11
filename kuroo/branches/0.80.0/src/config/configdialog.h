@@ -26,6 +26,7 @@
 class QComboBox;
 class QGroupBox;
 class QVBox;
+class Options2;
 
 /**
  * @class ConfigDialog
@@ -46,7 +47,10 @@ private:
 	
 private slots:
 	void 				slotSaveAll();
-	void 				updateWidgetsDefault();
+	void				slotDefaults();
+	
+private:
+	bool				m_isDefault;
 };
 
 #endif

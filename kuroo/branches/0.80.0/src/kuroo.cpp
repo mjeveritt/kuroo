@@ -133,7 +133,7 @@ void Kuroo::setupActions()
 	
 	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
 	                               		EtcUpdateSingleton::Instance(), SLOT( slotEtcUpdate() ), actionCollection(), "etc_update" );
-
+	
 	createGUI();
 }
 

@@ -1,3 +1,15 @@
+13-05-2006
+Settings: Fixed resetting to default all settings.
+LogsTab: text is wrapped at widget boundary.
+Emerge: added Stdin.
+Inspector: New DependencyView class to build tree-view with correct ordering.
+Settings: Fixed make.conf settings: delete all old entries from kuroorc.
+Package summary: Fixed bug in stability check: Not available packages were marked hardmasked.
+Package summary: Added support for depend-atom operator '~'.
+Fixed Ticket #127: Enter should open Inspector.
+Fixed Ticket #123: Package inspector dialog doesn't resize properly when process is running.
+Fixed Ticket #169: resizing package Inspector: fixed resize the grids.
+
 11-04-2006
 Fixed tickets:
 76	24h limit in queue

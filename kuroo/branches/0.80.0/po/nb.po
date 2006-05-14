@@ -1,21 +1,21 @@
 # translation of nb.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2005.
-#
 # Alexander Nicolaysen Sørnes <alex@thehandofagony.com>, 2005, 2006.
 # Karim Ryde <karim@bredband.net>, 2006.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-11 08:45+0200\n"
-"PO-Revision-Date: 2006-05-12 16:38+0200\n"
-"Last-Translator: Karim Ryde <karim@bredband.net>\n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2006-05-14 22:46+0200\n"
+"Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
+"Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.10.2\n"
 
 #: portage/uninstallinspector.cpp:32
 msgid "Uninstall Packages"
@@ -764,9 +764,9 @@ msgid "FEATURES"
 msgstr "FEATURES"
 
 #: rc.cpp:464
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Directories"
-msgstr "Kataloger og filer"
+msgstr "Kataloger"
 
 #: rc.cpp:467
 #, no-c-format
@@ -824,9 +824,9 @@ msgid "PKG_TMPDIR"
 msgstr "PKG_TMPDIR"
 
 #: rc.cpp:500
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Confi&gurations"
-msgstr "Oppsettsfil"
+msgstr "&Oppsett"
 
 #: rc.cpp:503
 #, no-c-format
@@ -879,9 +879,9 @@ msgid "GENTOO_MIRRORS"
 msgstr "GENTOO_MIRRORS"
 
 #: rc.cpp:533
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "S&ync"
-msgstr "Synkroniser"
+msgstr "S&ynkroniser"
 
 #: rc.cpp:536
 #, no-c-format
@@ -1433,14 +1433,12 @@ msgid "Compile-time dependencies"
 msgstr "Avhengigheter"
 
 #: core/dependencyview.cpp:203
-#, fuzzy
 msgid "Runtime dependencies"
-msgstr "Avhengigheter"
+msgstr "Avhengigheter for kjøring"
 
 #: core/dependencyview.cpp:209
-#, fuzzy
 msgid "Post-merge dependencies"
-msgstr "Avhengigheter"
+msgstr "Avhengigheter etter installasjon"
 
 #: core/dependencyview.cpp:240
 msgid "Depend on either:"
@@ -1448,12 +1446,11 @@ msgstr "Trenger enten:"
 
 #: core/dependencyview.cpp:255
 msgid "Without USE-flag %1:"
-msgstr ""
+msgstr "Uten bruk-flagg «%1»:"
 
 #: core/dependencyview.cpp:258
-#, fuzzy
 msgid "With USE-flag %1:"
-msgstr "Med bruk-flagg «%1» slått på:"
+msgstr "Med bruk-flagg «%1»:"
 
 #: core/emerge.cpp:72
 msgid "Can not process input! Emerge is not running."

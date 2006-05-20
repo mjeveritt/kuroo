@@ -108,6 +108,8 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
+	kdDebug() << "total=" << total << LINE_INFO;
+	
     stopTimer();
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
@@ -116,6 +118,7 @@ void KurooStatusBar::setTotalSteps( int total )
 		statusBarProgress->hide();
 	else
 		if ( !statusBarProgress->isVisible() ) {
+			DEBUG_LINE_INFO;
 			statusBarProgress->show();
     		m_internalTimer->start( 1000 );
 			startTimer();

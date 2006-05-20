@@ -560,23 +560,26 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 		return;
 	
 	QString use = useItem->text( 0 );
+	
+	// Break if no checkbox
+	if ( use.contains("(") )
+		return;
+	
 	switch ( dynamic_cast<QCheckListItem*>(useItem)->state() ) {
 	
 		case ( QCheckListItem::Off ) :
 			if ( useItem->text(0).startsWith( "+" ) )
-				useItem->setText( 0, use.replace( QRegExp("^\\+"), "-") );
+				useItem->setText( 0, use.replace( QRegExp("^\\+"), "-" ) );
 			if ( !useItem->text(0).startsWith( "-" ) )
-				useItem->setText( 0, use.insert(0, "-") );
+				useItem->setText( 0, use.insert( 0, "-" ) );
 			break;
 		
 		case ( QCheckListItem::On ) :
 			if ( useItem->text(0).startsWith( "-" ) )
-			useItem->setText( 0, use.replace( QRegExp("^\\-"), "+") );
+			useItem->setText( 0, use.replace( QRegExp("^\\-"), "+" ) );
 			if ( !useItem->text(0).startsWith( "+" ) )
-				useItem->setText( 0, use.insert(0, "+") );
-
-		case ( QCheckListItem::NoChange ) :
-		;
+				useItem->setText( 0, use.insert( 0, "+" ) );
+		
 	}
 	
 	enableButtonApply( true );
@@ -632,7 +635,7 @@ void PackageInspector::loadUseFlagDescription()
  */
 void PackageInspector::slotLoadUseFlags( const QString& version )
 {
-	dialog->useView->setDisabled( true );
+// 	dialog->useView->setDisabled( true );
 	dialog->useView->setColumnWidth( 0, 20 );
 	
 	if ( dialog->inspectorTabs->currentPageIndex() == 1 ) {

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-11 16:39+0200\n"
-"PO-Revision-Date: 2006-05-16 08:41+0300\n"
+"PO-Revision-Date: 2006-05-21 17:11+0300\n"
 "Last-Translator: B@RT <bart@hitline.net.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -181,7 +181,7 @@ msgstr "Добавить/Удалить выбранные пакеты в оч�
 #: rc.cpp:25
 #, no-c-format
 msgid "Return"
-msgstr ""
+msgstr "Возврат"
 
 #: rc.cpp:28 rc.cpp:259
 #, no-c-format
@@ -191,7 +191,7 @@ msgstr "Показать информацию о пакете..."
 #: rc.cpp:31
 #, no-c-format
 msgid "<font size=\"+1\">Packages in Portage</font>"
-msgstr "<font size=\"+1\">Пакетов в Portage</font>"
+msgstr "<font size=\"+1\">Пакеты в Portage</font>"
 
 #: rc.cpp:34
 #, no-c-format
@@ -246,6 +246,8 @@ msgid ""
 "another package.<br>\n"
 "Do you want to uninstall following packages?"
 msgstr ""
+"Portage не может проверить,что пакет, который вы хотите удалить требуется другому пакету.<br>\n"
+"Вы действительно хотите удалить текущий пакет?"
 
 #: rc.cpp:74 rc.cpp:85 rc.cpp:317
 #, no-c-format
@@ -492,7 +494,7 @@ msgstr "Не добавлять п&акет в world профайл (--oneshot)"
 #: rc.cpp:283
 #, no-c-format
 msgid "Force reinstall of config files (--&noconfmem)"
-msgstr ""
+msgstr "Переустановка конфигурационных файлов (--&noconfmem)"
 
 #: rc.cpp:289
 #, no-c-format
@@ -507,7 +509,7 @@ msgstr "Alt+1"
 #: rc.cpp:295
 #, no-c-format
 msgid "Check packages in Queue with emerge pretend"
-msgstr ""
+msgstr "Проверить пакеты в очереди с помощью emerge pretend"
 
 #: rc.cpp:298 queue/queuetab.cpp:271
 #, no-c-format
@@ -671,12 +673,12 @@ msgstr "USE"
 #: rc.cpp:413
 #, no-c-format
 msgid "&Advanced build"
-msgstr "&Advanced build"
+msgstr "&Расширенная сборка"
 
 #: rc.cpp:416
 #, no-c-format
 msgid "Advanced build options"
-msgstr "Advanced build options"
+msgstr "Опции расширенной сборки"
 
 #: rc.cpp:419
 #, no-c-format
@@ -911,7 +913,7 @@ msgstr "RSYNC_RATELIMIT"
 #: rc.cpp:560
 #, no-c-format
 msgid "Etc-update merging frontend"
-msgstr ""
+msgstr "Etc-update merging frontend"
 
 #: rc.cpp:563
 #, no-c-format
@@ -929,6 +931,8 @@ msgid ""
 "<i>Forces emerge to consider the entire dependency tree of packages.<br>\n"
 "Refresh Updates for changes to take effect.</i>"
 msgstr ""
+"<i>Углубленная проверка дерева пакетов на зависимости.<br>\n"
+"Чтобы изменения вступили в силу, необходимо обновить обновления.</i>"
 
 #: rc.cpp:573
 #, no-c-format
@@ -998,7 +1002,7 @@ msgstr "<i>Необходимо перезапустить программу, �
 #: rc.cpp:624
 #, no-c-format
 msgid "Show inst&alled packages in separate column"
-msgstr ""
+msgstr "Показать установл&енные пакеры в отдельной колонке"
 
 #: rc.cpp:630
 #, no-c-format
@@ -1019,7 +1023,7 @@ msgstr "Информация о релизе"
 #: rc.cpp:642
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
-msgstr "Архивирование всех пользовательских редактируемых файлов porta&ge перед наяалом."
+msgstr "Архивирование всех пользовательских редактируемых файлов porta&ge перед началом."
 
 #: rc.cpp:645
 #, no-c-format
@@ -1056,7 +1060,7 @@ msgstr "Запуск emerge в"
 
 #: history/history.cpp:230
 msgid "completed emerge"
-msgstr ""
+msgstr "завершение emerge"
 
 #: history/history.cpp:240
 msgid "unmerge success"
@@ -1108,11 +1112,11 @@ msgstr "настройки"
 
 #: kuroo.cpp:108
 msgid "Kuroo is not responding. Attempting to terminate kuroo!"
-msgstr ""
+msgstr "Kuroo не отвечает. Попытка остановить kuroo!"
 
 #: kuroo.cpp:122
 msgid "&Information"
-msgstr "&информация"
+msgstr "&Информация"
 
 #: kuroo.cpp:125
 msgid "&Refresh Packages"
@@ -1134,7 +1138,7 @@ msgstr "&Запустить etc-update"
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
-msgstr ""
+msgstr "<qt>Вы уверены, что хотите синхронизировать portage?<br>Это может занять несколько минут...</qt>"
 
 #: kuroo.cpp:192
 msgid "Last sync: %1"
@@ -1145,6 +1149,8 @@ msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
 msgstr ""
+"<qt>Kuroo занят<br><br>Вы действительно хотите выйти?<br>Все задания будут отменены.</"
+"qt>"
 
 #: core/packageitem.cpp:295
 msgid "Not on %1"
@@ -1152,15 +1158,15 @@ msgstr "Не в %1"
 
 #: core/packageitem.cpp:298 core/versionview.cpp:115
 msgid "Hardmasked"
-msgstr "Жесткая маска"
+msgstr "Hardmasked"
 
 #: core/packageitem.cpp:303 core/versionview.cpp:112
 msgid "Testing"
-msgstr "Тестируемое"
+msgstr "Testing"
 
 #: core/packageitem.cpp:308
 msgid "Stable"
-msgstr "Стабильное"
+msgstr "Stable"
 
 #: core/packageitem.cpp:310
 msgid "Not available"
@@ -1183,14 +1189,16 @@ msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
+"\n"
+"Ошибка: Невозможно просчитать используемые флаги для пакета %1/%2."
 
 #: core/packageinspector.cpp:419
 msgid "Click for hardmask info!"
-msgstr ""
+msgstr "Нажмите, для получении информации о жесткой маске!"
 
 #: core/packageinspector.cpp:437
 msgid "%1/%2 hardmask info!"
-msgstr ""
+msgstr "%1/%2 информация о жесткой маске!"
 
 #: core/packageinspector.cpp:713
 msgid "%1No ChangeLog found.%2"
@@ -1206,17 +1214,17 @@ msgstr "%1Установленные файлы не найдены.%2"
 
 #: core/packageinspector.cpp:894 core/packageinspector.cpp:953
 msgid "Use flags could not be calculated. Please check log for more information"
-msgstr ""
+msgstr "Невозможно просчитать используемые флаги. Пожалуйста, проверьте лог для более подробной информации"
 
 #: core/etcupdate.cpp:60
 msgid ""
 "<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to "
 "merge changes?</qt>"
-msgstr ""
+msgstr "<qt>ВАЖНО: %1 файлы конфигурации в /etc необходимо обновить.<br>Обьединить изменения с текущими настройками?</qt>"
 
 #: core/etcupdate.cpp:75
 msgid "Please specify merge tool in settings!"
-msgstr ""
+msgstr "Пожалуйста, выберите инструменты обьединения в настройках!"
 
 #: core/etcupdate.cpp:87
 msgid ""
@@ -1224,7 +1232,7 @@ msgid ""
 "etc-update didn't start. "
 msgstr ""
 "\n"
-"etc-update не запущено. "
+"Невозможно запустить etc-update. "
 
 #: core/etcupdate.cpp:93
 msgid ""
@@ -1236,11 +1244,11 @@ msgstr ""
 
 #: core/etcupdate.cpp:94
 msgid "Checking for configuration file updates..."
-msgstr ""
+msgstr "Проверка обновлений конфигурационных файлов..."
 
 #: core/etcupdate.cpp:135
 msgid "There are no files that need to be updated through etc-update."
-msgstr ""
+msgstr "Нет файлов, которые необходимо обновить через etc-update."
 
 #: core/etcupdate.cpp:135 kurooview.cpp:86
 msgid "Etc-update"
@@ -1248,11 +1256,11 @@ msgstr "Etc-update"
 
 #: core/etcupdate.cpp:166
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
-msgstr ""
+msgstr "<font color=red>Предупреждение!<br>%1 был вами изменен.</font><br>"
 
 #: core/etcupdate.cpp:169
 msgid "<qt>%1Do you want to merge changes in %2?</qt>"
-msgstr ""
+msgstr "<qt>%1Вы действительно хотите объединить изменения в %2?</qt>"
 
 #: core/etcupdate.cpp:171
 msgid "etc-update (%1 of %2)"
@@ -1272,7 +1280,7 @@ msgstr "Объединение изменений в '%1'."
 
 #: core/etcupdate.cpp:199
 msgid "Skipping '%1'. etc-update will ask again next time."
-msgstr ""
+msgstr "Пропуск '%1'. etc-update будет запрошен сново в следующий раз."
 
 #: core/etcupdate.cpp:206
 msgid "etc-update completed."
@@ -1280,7 +1288,7 @@ msgstr "etc-update завершено."
 
 #: core/etcupdate.cpp:219
 msgid "Deleting '%1'. Backup saved in %2."
-msgstr ""
+msgstr "Удаление'%1'. Резервная копия сохранена в %2."
 
 #: core/categorieslistview.cpp:97 core/categorieslistview.cpp:203
 #: core/categorieslistview.cpp:204 core/categorieslistview.cpp:257
@@ -1311,15 +1319,15 @@ msgstr "%1 не в Portage"
 
 #: core/tooltip.cpp:86
 msgid "%1 is present in World profile"
-msgstr ""
+msgstr "%1 уже имеется в World профайле"
 
 #: core/tooltip.cpp:91
 msgid "%1 is present in Queue"
-msgstr ""
+msgstr "%1 уже имеется в очереди"
 
 #: core/filewatcher.cpp:68
 msgid "Portage version is upgraded to 2.1. Please refresh package view."
-msgstr ""
+msgstr "Portage обновлен до 2.1. Пожалуйста, обновите просмотр пакетов."
 
 #: core/filewatcher.cpp:69 kurooinit.cpp:66
 msgid "Portage version"
@@ -1327,11 +1335,11 @@ msgstr "Portage версия"
 
 #: core/cacheportagejob.cpp:75
 msgid "Collecting package information..."
-msgstr ""
+msgstr "Сбор информации о пакетах"
 
 #: core/cacheportagejob.cpp:100 core/cacheportagejob.cpp:118
 msgid "Caching aborted."
-msgstr ""
+msgstr "Кэширование отменено."
 
 #: core/global.cpp:165
 #, c-format
@@ -1340,87 +1348,87 @@ msgstr "%1d "
 
 #: core/portagefiles.cpp:88
 msgid "Collecting user package keywords..."
-msgstr ""
+msgstr "Получение информации о ключевых словах пакета пользователя..."
 
 #: core/portagefiles.cpp:182
 msgid "Collecting user unmasked packages..."
-msgstr ""
+msgstr "Получение информации о разрешенных пакетах пользователя..."
 
 #: core/portagefiles.cpp:273
 msgid "Collecting hardmasked packages..."
-msgstr ""
+msgstr "Получение информации о жестко маскированных пакетах..."
 
 #: core/portagefiles.cpp:364
 msgid "Collecting user masked packages..."
-msgstr ""
+msgstr "Получение информации о маскированных пакетах пользователя..."
 
 #: core/portagefiles.cpp:680
 msgid "Completed scanning for package keywords in %1."
-msgstr ""
+msgstr "Завершение сканирования ключевых слов пакета в %1."
 
 #: core/portagefiles.cpp:684
 msgid "Completed scanning for unmasked packages in %1."
-msgstr ""
+msgstr "Завершение сканирования разрешенных пакетов в %1."
 
 #: core/portagefiles.cpp:688
 msgid "Completed scanning for hardmasked packages in %1."
-msgstr ""
+msgstr "Завершение сканирования жестко маскированных пакетов в %1."
 
 #: core/portagefiles.cpp:692
 msgid "Completed scanning for user masked packages in %1."
-msgstr ""
+msgstr "Завершение сканирования маскированных пакетов пользователя в %1."
 
 #: core/portagefiles.cpp:696
 msgid "Completed saving package keywords in %1."
-msgstr ""
+msgstr "Завершение сохранения ключевых слов пакета в %1."
 
 #: core/portagefiles.cpp:701
 msgid "Completed saving user masked packages in %1."
-msgstr ""
+msgstr "Завершение сохранения маскированных пакетов пользователя в %1."
 
 #: core/portagefiles.cpp:706
 msgid "Completed saving user unmasked packages in %1."
-msgstr ""
+msgstr "Завершение сохранения разрешенных пакетов пользователя в %1."
 
 #: core/portagefiles.cpp:710
 msgid "Completed scanning user package use flags in %1."
-msgstr ""
+msgstr "Завершение сканирования используемых флагов пакетов пользователя в %1."
 
 #: core/portagefiles.cpp:714
 msgid "Completed saving user package use in %1."
-msgstr ""
+msgstr "Завершение сохранения используемых пакетов пользователя в %1."
 
 #: core/scanupdatesjob.cpp:74
 msgid "Refreshing updates view..."
-msgstr ""
+msgstr "Обновление просмотра обновлений..."
 
 #: core/scanportagejob.cpp:88
 msgid "Refreshing Portage packages view..."
-msgstr ""
+msgstr "Обновление просмотра пакеов Portage..."
 
 #: core/scanportagejob.cpp:340
 msgid "Collecting installed packages..."
-msgstr ""
+msgstr "Сбор информации о установленных пакетах..."
 
 #: core/dependencyview.cpp:149
 msgid "Dependency"
-msgstr ""
+msgstr "Зависимости"
 
 #: core/dependencyview.cpp:197
 msgid "Compile-time dependencies"
-msgstr ""
+msgstr "Compile-time зависимости"
 
 #: core/dependencyview.cpp:203
 msgid "Runtime dependencies"
-msgstr ""
+msgstr "Runtime зависимости"
 
 #: core/dependencyview.cpp:209
 msgid "Post-merge dependencies"
-msgstr ""
+msgstr "Post-merge зависимости"
 
 #: core/dependencyview.cpp:240
 msgid "Depend on either:"
-msgstr ""
+msgstr "Также зависит от:"
 
 #: core/dependencyview.cpp:255
 msgid "Without USE-flag %1:"
@@ -1432,7 +1440,7 @@ msgstr "С использованием USE-flag %1:"
 
 #: core/emerge.cpp:72
 msgid "Can not process input! Emerge is not running."
-msgstr ""
+msgstr "Невозможно ввод процесса! Emerge не запущен."
 
 #: core/emerge.cpp:133 core/emerge.cpp:167
 msgid ""
@@ -1448,7 +1456,7 @@ msgid ""
 "Emerge %1 started..."
 msgstr ""
 "\n"
-"Emerge %1 запущен..."
+"Старт Emerge %1..."
 
 #: core/emerge.cpp:139
 msgid "Installing packages in queue..."
@@ -1459,6 +1467,8 @@ msgid ""
 "\n"
 "Emerge pretend %1 started..."
 msgstr ""
+"\n"
+"Старт Emerge pretend %1 ..."
 
 #: core/emerge.cpp:175
 msgid "Checking installation queue..."
@@ -1477,6 +1487,8 @@ msgid ""
 "\n"
 "Unmerge %1 started..."
 msgstr ""
+"\n"
+"Старт Unmerge %1 ..."
 
 #: core/emerge.cpp:210
 msgid "Uninstalling packages..."
@@ -1487,6 +1499,8 @@ msgid ""
 "\n"
 "Emerge synchronize Portage Tree started..."
 msgstr ""
+"\n"
+"Старт Emerge синхронизации дерева Portage..."
 
 #: core/emerge.cpp:239
 msgid "Synchronizing portage tree..."
@@ -1497,6 +1511,8 @@ msgid ""
 "\n"
 "Emerge check package updates started..."
 msgstr ""
+"\n"
+"Старт Emerge проверки обновления пакетов..."
 
 #: core/emerge.cpp:274
 msgid "Checking for package updates..."
@@ -1504,11 +1520,11 @@ msgstr "Поиск обновленных пакетов..."
 
 #: core/emerge.cpp:366
 msgid "Root access required!"
-msgstr ""
+msgstr "Необходим доступ root!"
 
 #: core/emerge.cpp:372
 msgid "There is no ebuilds to satisfy %1"
-msgstr ""
+msgstr "Это не удовлетворяет ebuilds %1"
 
 #: core/emerge.cpp:465
 msgid "You must run Kuroo as root to unmask packages!"
@@ -1516,7 +1532,7 @@ msgstr "Вы должны запустить Kuroo от имени root для �
 
 #: core/emerge.cpp:466
 msgid "Auto-unmasking packages"
-msgstr ""
+msgstr "Автоматическое снятие маскировки пакетов"
 
 #: core/emerge.cpp:470
 msgid "Emerge messages"
@@ -1528,11 +1544,11 @@ msgstr "Пожалуйста, просмотрите лог для более п
 
 #: core/emerge.cpp:542
 msgid "Important"
-msgstr ""
+msgstr "Важно"
 
 #: core/emerge.cpp:555 core/emerge.cpp:564
 msgid "%1 is not available on your architecture %2!<br><br>"
-msgstr ""
+msgstr "%1 не доступно для вашей архетиктуры %2!<br><br>"
 
 #: core/emerge.cpp:556
 msgid ""
@@ -1544,7 +1560,7 @@ msgstr ""
 
 #: core/emerge.cpp:560
 msgid "Missing Keyword"
-msgstr ""
+msgstr "Отсутствеют ключевые слова"
 
 #: core/emerge.cpp:565
 msgid ""
@@ -1563,7 +1579,7 @@ msgstr "Пожалуйста, добавьте пакет в \"package.unmask\".
 
 #: core/emerge.cpp:575
 msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
+msgstr "<qt>Невозможно утсановить маскированый пакет!<br>Вы действительно хотите снять маску <b>%1</b>?</qt>"
 
 #: core/emerge.cpp:576 core/emerge.cpp:591
 msgid "Unmask"
@@ -1575,7 +1591,7 @@ msgstr "Пожалуйста, добавьте пакет в \"package.keywords\
 
 #: core/emerge.cpp:590
 msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
+msgstr "<qt>Невозможно установить тестируемый пакет!<br>Вы действительно хотите снять маску <b>%1</b>?</qt>"
 
 #: core/versionview.cpp:93 queue/queuelistview.cpp:173
 msgid "Version"
@@ -1613,6 +1629,8 @@ msgid ""
 "<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
+"<qt>Невозможно создать папку для kuroo.<br>Первый раз, вы должны запустить Kuroo с помощью "
+"kdesu для безопастной установки.<br>Повторите попытку!</qt>"
 
 #: kurooinit.cpp:89 kurooinit.cpp:106 kurooinit.cpp:209
 msgid "Initialization"
@@ -1623,6 +1641,8 @@ msgid ""
 "<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
+"<qt>Невозможно создать папку kuroo для резервных копий.<br>Первый раз, вы должны запустить Kuroo с помощью "
+"kdesu для безопастной установки.<br>Повторите попытку!</qt>"
 
 #: kurooinit.cpp:210
 msgid ""
@@ -1630,12 +1650,17 @@ msgid ""
 "You must select appropriate architecture to proceed.\n"
 "Please select:"
 msgstr ""
+"Kuroo не смог определить вашу архитектуру!\n"
+"Вы должны выбрать соответствующую архитектуру для продолжения.\n"
+"Выберите:"
 
 #: kurooinit.cpp:264
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
+"Вы не имеете достаточно прав для запуска kuroo.\n"
+"Пожалуйста, добавьте себя в группу portage!"
 
 #: kurooinit.cpp:265
 msgid "User permissions"
@@ -1669,7 +1694,7 @@ msgstr ""
 msgid ""
 "<qt><table width=300><tr><td>Emerge as normal, but do not add the packages "
 "to the world profile for later updating.</td></tr></table></qt>"
-msgstr ""
+msgstr "<qt><table width=300><tr><td>Нормальная установка, но пакеты не добавляются в world профайл для дальнейшего обновления.</td></tr></table></qt>"
 
 #: queue/queuetab.cpp:153
 msgid ""
@@ -1690,11 +1715,11 @@ msgstr "Количество  пакетов: %1<br>"
 
 #: queue/queuetab.cpp:224
 msgid "Initial estimated time: %1<br>"
-msgstr ""
+msgstr "Оценочное время установки: %1<br>"
 
 #: queue/queuetab.cpp:225
 msgid "Elapsed time: %1<br>"
-msgstr ""
+msgstr "Прошло времени: %1<br>"
 
 #: queue/queuetab.cpp:227
 msgid "Estimated time remaining: %1<br>"
@@ -1722,11 +1747,11 @@ msgstr "Вы уверены, что хотите отменить запущен
 
 #: main.cpp:31
 msgid "Frontend to Gentoo Portage"
-msgstr ""
+msgstr "Frontend to Gentoo Portage"
 
 #: main.cpp:36
 msgid "Initialize Kuroo with init"
-msgstr ""
+msgstr "Инициализация Kuroo с помощтью init"
 
 #: main.cpp:45
 msgid "Original author and maintainer"
@@ -1770,7 +1795,7 @@ msgstr "Kuroo уже запушен!"
 
 #: logs/logstab.cpp:91
 msgid "User Input"
-msgstr ""
+msgstr "Пользовательский ввод"
 
 #: logs/logstab.cpp:91
 msgid "Enter text:"

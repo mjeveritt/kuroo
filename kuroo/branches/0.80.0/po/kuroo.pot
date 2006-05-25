@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 08:45+0200\n"
+"POT-Creation-Date: 2006-05-25 12:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,16 +102,16 @@ msgstr ""
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:542 rc.cpp:22 rc.cpp:253 queue/queuetab.cpp:481
+#: portage/portagetab.cpp:542 rc.cpp:22 rc.cpp:253 queue/queuetab.cpp:485
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:546 queue/queuetab.cpp:485
+#: portage/portagetab.cpp:546 queue/queuetab.cpp:489
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:548 queue/queuetab.cpp:487
+#: portage/portagetab.cpp:548 queue/queuetab.cpp:491
 msgid "Remove from world"
 msgstr ""
 
@@ -135,13 +135,13 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: statusbar.cpp:103 history/history.cpp:266 history/history.cpp:267
+#: statusbar.cpp:102 history/history.cpp:261 history/history.cpp:262
 #: core/etcupdate.cpp:127 core/cacheportagejob.cpp:166
 #: core/portagefiles.cpp:146 core/portagefiles.cpp:237
 #: core/portagefiles.cpp:328 core/portagefiles.cpp:419
 #: core/scanupdatesjob.cpp:143 core/scanportagejob.cpp:323
 #: core/scanportagejob.cpp:394 core/emerge.cpp:451 core/emerge.cpp:532
-#: queue/queuetab.cpp:388
+#: queue/queuetab.cpp:392
 msgid "Done."
 msgstr ""
 
@@ -500,7 +500,7 @@ msgstr ""
 msgid "Check packages in Queue with emerge pretend"
 msgstr ""
 
-#: rc.cpp:298 queue/queuetab.cpp:271
+#: rc.cpp:298 queue/queuetab.cpp:273
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
@@ -722,7 +722,7 @@ msgstr ""
 msgid "false"
 msgstr ""
 
-#: rc.cpp:452 history/history.cpp:278
+#: rc.cpp:452 history/history.cpp:273
 #, no-c-format
 msgid "AUTOCLEAN"
 msgstr ""
@@ -1019,59 +1019,59 @@ msgstr ""
 msgid "Configuration file"
 msgstr ""
 
-#: history/history.cpp:170
+#: history/history.cpp:168
 msgid " to "
 msgstr ""
 
-#: history/history.cpp:171
+#: history/history.cpp:169
 msgid " of "
 msgstr ""
 
-#: history/history.cpp:186
+#: history/history.cpp:184
 msgid "Compiling/Merging"
 msgstr ""
 
-#: history/history.cpp:187
+#: history/history.cpp:185
 msgid "Post-Build Cleaning"
 msgstr ""
 
-#: history/history.cpp:188
+#: history/history.cpp:186
 msgid "Cleaning"
 msgstr ""
 
-#: history/history.cpp:197
+#: history/history.cpp:195
 msgid "Started emerge on"
 msgstr ""
 
-#: history/history.cpp:230
+#: history/history.cpp:228
 msgid "completed emerge"
 msgstr ""
 
-#: history/history.cpp:240
+#: history/history.cpp:237
 msgid "unmerge success"
 msgstr ""
 
-#: history/history.cpp:249 history/history.cpp:250
+#: history/history.cpp:245 history/history.cpp:246
 msgid "Synchronizing Portage..."
 msgstr ""
 
-#: history/history.cpp:258 history/history.cpp:259
+#: history/history.cpp:254 history/history.cpp:255
 msgid "Sync completed."
 msgstr ""
 
-#: history/history.cpp:279
+#: history/history.cpp:274
 msgid "Unmerging"
 msgstr ""
 
-#: history/history.cpp:280
+#: history/history.cpp:275
 msgid "Finished. Cleaning up"
 msgstr ""
 
-#: history/history.cpp:281
+#: history/history.cpp:276
 msgid "Exiting successfully"
 msgstr ""
 
-#: history/history.cpp:282 kuroo.cpp:108
+#: history/history.cpp:277 kuroo.cpp:108
 msgid "Terminating"
 msgstr ""
 
@@ -1167,7 +1167,7 @@ msgstr ""
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:357 core/packageinspector.cpp:850
+#: core/packageinspector.cpp:357 core/packageinspector.cpp:853
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -1181,19 +1181,19 @@ msgstr ""
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:713
+#: core/packageinspector.cpp:716
 msgid "%1No ChangeLog found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:740
+#: core/packageinspector.cpp:743
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:824
+#: core/packageinspector.cpp:827
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:894 core/packageinspector.cpp:953
+#: core/packageinspector.cpp:897 core/packageinspector.cpp:956
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -1682,23 +1682,23 @@ msgstr ""
 msgid "Estimated time remaining: %1<br>"
 msgstr ""
 
-#: queue/queuetab.cpp:265
+#: queue/queuetab.cpp:267
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:346
+#: queue/queuetab.cpp:350
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:346 queue/queuetab.cpp:357
+#: queue/queuetab.cpp:350 queue/queuetab.cpp:361
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:357
+#: queue/queuetab.cpp:361
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:384
+#: queue/queuetab.cpp:388
 msgid "Do you want to abort the running installation?"
 msgstr ""
 

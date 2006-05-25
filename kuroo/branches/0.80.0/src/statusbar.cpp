@@ -64,8 +64,7 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 }
 
 KurooStatusBar::~KurooStatusBar()
-{
-}
+{}
 
 /**
  * Set label text in statusbar.

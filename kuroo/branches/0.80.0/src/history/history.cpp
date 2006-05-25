@@ -149,8 +149,6 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
-	DEBUG_LINE_INFO;
-	
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -234,7 +232,6 @@ void History::slotParse()
 
 			// Catch package unmerge completion
 			if ( emergeLine.contains("unmerge success") ) {
-				DEBUG_LINE_INFO;
 				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
 				PortageSingleton::Instance()->removeInstalledPackage( package );
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );
@@ -245,7 +242,6 @@ void History::slotParse()
 
 			// Catch sync session start
 			if ( emergeLine.contains( "starting rsync" ) ) {
-				DEBUG_LINE_INFO;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Synchronizing Portage..." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Synchronizing Portage..." ), EMERGELOG );
 				m_syncTime = QTime::currentTime();
@@ -262,7 +258,6 @@ void History::slotParse()
 
 			// Catch emerge termination
 			if ( emergeLine.contains( "terminating." ) ) {
-				DEBUG_LINE_INFO;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
 				

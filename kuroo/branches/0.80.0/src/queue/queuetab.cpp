@@ -260,6 +260,8 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
+	DEBUG_LINE_INFO;
+	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );
@@ -282,16 +284,18 @@ void QueueTab::slotButtons()
 	}
 	
 	// Queue is not empty - enable button "Remove all" and "Check Installation"
-	pbRemove->setDisabled( false );
-	pbClear->setDisabled( false );
-	pbCheck->setDisabled( false );
 	cbDownload->setDisabled( false );
 	
 	// When emerging packages do not allow user to change the queue
-	if ( EmergeSingleton::Instance()->isRunning() ) {
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		pbRemove->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbCheck->setDisabled( true );
+	}
+	else {
+		pbRemove->setDisabled( false );
+		pbClear->setDisabled( false );
+		pbCheck->setDisabled( false );
 	}
 	
 	// User is su and packages in queue are "checked" - enable checkboxes
@@ -477,14 +481,14 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	KPopupMenu menu( this );
 	
-	int menuItem1 = menu.insertItem( i18n( "Remove" ), REMOVE );
-	int menuItem2 = menu.insertItem( i18n( "Details..." ), OPTIONS );
+	int menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n( "Remove" ), REMOVE );
+	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( OPTIONS ), i18n( "Details..." ), OPTIONS );
 	
 	int menuItem3;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem3 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
 	else
-		menuItem3 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem3, false );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )

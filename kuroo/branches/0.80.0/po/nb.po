@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-25 15:30+0200\n"
-"PO-Revision-Date: 2006-05-14 22:46+0200\n"
+"PO-Revision-Date: 2006-05-25 19:11+0200\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -91,8 +91,7 @@ msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr "%1Vil&nbsp;installere:%2Ingen verjson tilgjengelig på %3%4"
 
 #: portage/portagetab.cpp:493
-msgid ""
-"%1Emerge&nbsp;version:%2No version available - please check package details%3"
+msgid "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 "%1Vil&nbsp;installere:%2Ingen versjon tilgjengelig - kontroller pakkedetaljer"
 "%3"
@@ -174,7 +173,7 @@ msgstr "Filtrer pakker her . . ."
 #: rc.cpp:12 rc.cpp:84 rc.cpp:126
 #, no-c-format
 msgid "Filter:"
-msgstr ""
+msgstr "Filter:"
 
 #: rc.cpp:16
 #, no-c-format
@@ -486,7 +485,7 @@ msgid "Remove package from Q&ueue after installation"
 msgstr "&Fjern pakke fra køen etter installasjon"
 
 #: rc.cpp:277
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Download all packa&ges before installing them (--fetch-all-uri)"
 msgstr "&Last ned alle pakker før de installeres (--fetch-all-uri)"
 
@@ -580,9 +579,9 @@ msgid "<font size=\"+1\">Activity Log</font>"
 msgstr "<font size=\"+1\">Aktivitetslogg</font>"
 
 #: rc.cpp:344
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Termi&nal input"
-msgstr "Avbryter"
+msgstr "Termi&nalinndata"
 
 #: rc.cpp:353
 #, no-c-format
@@ -1042,8 +1041,7 @@ msgstr "Utgivelsesinformasjon"
 #: rc.cpp:651
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
-msgstr ""
-"Sikkerhetskopier alle bruker-redigerbare Porta&ge-filer før du fortsetter."
+msgstr "Sikkerhetskopier alle bruker-redigerbare Porta&ge-filer før du fortsetter."
 
 #: history/mergelistview.cpp:57
 msgid "Configuration file"
@@ -1228,8 +1226,7 @@ msgid "%1No installed files found.%2"
 msgstr "%1Ingen installerte filer funnet.%2"
 
 #: core/packageinspector.cpp:897 core/packageinspector.cpp:956
-msgid ""
-"Use flags could not be calculated. Please check log for more information"
+msgid "Use flags could not be calculated. Please check log for more information"
 msgstr "Klarte ikke regne ut bruk-flagg. Se i loggen for mer informasjon"
 
 #: core/etcupdate.cpp:60
@@ -1606,10 +1603,8 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Legg pakken til i «package.unmask»."
 
 #: core/emerge.cpp:575
-msgid ""
-"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
-"<qt>Klarte ikke installere maskert pakke?<br>Vil du avmaskere <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr "<qt>Klarte ikke installere maskert pakke?<br>Vil du avmaskere <b>%1</b>?</qt>"
 
 #: core/emerge.cpp:576 core/emerge.cpp:591
 msgid "Unmask"
@@ -1620,10 +1615,8 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Legg pakken til i «package.keywords»."
 
 #: core/emerge.cpp:590
-msgid ""
-"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
-"<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>%1</b>?</qt>"
+msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr "<qt>Klarte ikke installere testpakke.<br>Vil du avmaskere <b>%1</b>?</qt>"
 
 #: core/versionview.cpp:93 queue/queuelistview.cpp:173
 msgid "Version"
@@ -1971,5 +1964,3 @@ msgstr "Kuroo - grafisk grensesnitt for Portage"
 msgid "&Configure Kuroo..."
 msgstr "Konfigurer Kuroo . . ."
 
-#~ msgid "E&nter"
-#~ msgstr "E&nter"

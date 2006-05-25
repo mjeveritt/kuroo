@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>542</width>
+            <width>547</width>
             <height>374</height>
         </rect>
     </property>
@@ -130,7 +130,7 @@
                         <cstring>pbEnter</cstring>
                     </property>
                     <property name="text">
-                        <string>E&amp;nter</string>
+                        <string>Termi&amp;nal input</string>
                     </property>
                     <property name="accel">
                         <string>Alt+N</string>

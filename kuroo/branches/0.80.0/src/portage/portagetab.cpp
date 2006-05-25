@@ -130,6 +130,9 @@ void PortageTab::slotInit()
 	m_uninstallInspector = new UninstallInspector( this );
 	
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
+	pbUninstall->setIconSet( SmallIconSet("remove") );
+	pbAdvanced->setIconSet( SmallIconSet("options") );
 	
 	slotBusy();
 }

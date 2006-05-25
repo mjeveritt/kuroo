@@ -86,20 +86,23 @@ void ConfigDialog::slotSaveAll()
 	DEBUG_LINE_INFO;
 	switch( activePageIndex() ) {
 		
-	// Activate the systray directly (not needing restarting kuroo)
-	case 0:
-		if ( KurooConfig::isSystrayEnabled() )
-			SystemTray::instance()->activate();
-		else
-			SystemTray::instance()->inactivate();
-		break;
-		
-	case 1:
-		if ( !saveMakeConf() ) {
-			parseMakeConf();
-			show();
-			KMessageBox::error( this, i18n("Failed to save %1. Please run as root.").arg( KurooConfig::fileMakeConf() ), i18n("Saving"));
+		// Activate the systray directly (not needing restarting kuroo)
+		case 0: {
+			if ( KurooConfig::isSystrayEnabled() )
+				SystemTray::instance()->activate();
+			else
+				SystemTray::instance()->inactivate();
+			
+			SignalistSingleton::Instance()->fontChanged();
+			break;
 		}
+		
+		case 1:
+			if ( !saveMakeConf() ) {
+				parseMakeConf();
+				show();
+				KMessageBox::error( this, i18n("Failed to save %1. Please run as root.").arg( KurooConfig::fileMakeConf() ), i18n("Saving"));
+			}
 	}
 }
 

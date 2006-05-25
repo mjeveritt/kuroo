@@ -45,6 +45,8 @@ LogsTab::LogsTab( QWidget* parent )
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalFontChanged() ), this, SLOT( slotSetFont() ) );
+	
 // 	logBrowser->setTextFormat( Qt::LogText ); // Text doesn't wrap in log mode!
 	init();
 }
@@ -81,6 +83,8 @@ void LogsTab::init()
 		verboseLog->setChecked( true );
 	else
 		verboseLog->setChecked( false );
+	
+	slotSetFont();
 }
 
 /**
@@ -101,6 +105,11 @@ void LogsTab::slotBusy()
 		pbEnter->setDisabled( false );
 	else
 		pbEnter->setDisabled( true );
+}
+
+void LogsTab::slotSetFont()
+{
+	logBrowser->setCurrentFont( KurooConfig::logFont() );
 }
 
 #include "logstab.moc"

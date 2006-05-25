@@ -940,7 +940,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>41</height>
+                                <height>5</height>
                             </size>
                         </property>
                     </spacer>
@@ -1427,7 +1427,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>21</width>
-                                <height>91</height>
+                                <height>5</height>
                             </size>
                         </property>
                     </spacer>

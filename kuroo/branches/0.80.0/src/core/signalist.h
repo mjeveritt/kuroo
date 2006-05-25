@@ -50,6 +50,7 @@ public:
 	void		scanHistoryComplete();
 	void		packageQueueChanged();
 	void		packageClicked( const QString& package );
+	void		fontChanged();
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -63,6 +64,7 @@ signals:
 	void 		signalScanHistoryComplete();
 	void		signalPackageQueueChanged();
 	void		signalPackageClicked( const QString& package );
+	void		signalFontChanged();
 	
 private:
 	QObject*	m_parent;

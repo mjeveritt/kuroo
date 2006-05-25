@@ -40,6 +40,7 @@ private:
 private slots:
 	void		slotUserInput();
 	void		slotBusy();
+	void		slotSetFont();
 	
 };
 

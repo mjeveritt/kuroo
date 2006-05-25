@@ -529,7 +529,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	const QStringList selectedIdList = packagesView->selectedId();
 	
-	enum Actions { APPEND, UNINSTALL, OPTIONS, ADDWORLD, DELWORLD };
+	enum Actions { APPEND, UNINSTALL, ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
 	
@@ -539,7 +539,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	else
 		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Remove from queue"), APPEND );
 	
-	menu.insertItem( ImagesSingleton::Instance()->icon( OPTIONS ), i18n( "Details..." ), OPTIONS );
+	menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
 	
 	int menuItem4;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
@@ -548,7 +548,9 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem4, false );
 	
-	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
+	int menuItem2;
+	if ( packagesView->currentPackage()->isInstalled() )
+		menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
 	
 	// No access when kuroo is busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
@@ -572,7 +574,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			slotUninstall();
 			break;
 		
-		case OPTIONS:
+		case DETAILS:
 			slotAdvanced();
 			break;
 		

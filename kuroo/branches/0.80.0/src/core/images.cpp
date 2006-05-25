@@ -60,7 +60,7 @@ void Images::init( QObject *parent )
 	pxWorld = ldr->loadIcon( "kuroo_world", KIcon::Small );
 	pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIcon::Small );
 	
-	pxOptions = ldr->loadIcon( "options", KIcon::Small );
+	pxDetails = ldr->loadIcon( "options", KIcon::Small );
 	pxRemove = ldr->loadIcon( "remove", KIcon::Small );
 	
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
@@ -116,8 +116,8 @@ const QPixmap& Images::icon( int image )
 			return pxUnmerged;
 			break;
 		
-		case OPTIONS:
-			return pxOptions;
+		case DETAILS:
+			return pxDetails;
 			break;
 		
 		case REMOVE:

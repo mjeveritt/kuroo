@@ -477,12 +477,12 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	const QStringList selectedIdList = queueView->selectedId();
 	
-	enum Actions { REMOVE, OPTIONS, ADDWORLD, DELWORLD };
+	enum Actions { ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
 	
 	int menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n( "Remove" ), REMOVE );
-	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( OPTIONS ), i18n( "Details..." ), OPTIONS );
+	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
 	
 	int menuItem3;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
@@ -503,7 +503,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 			break;
 		
-		case OPTIONS:
+		case DETAILS:
 			slotAdvanced();
 			break;
 		

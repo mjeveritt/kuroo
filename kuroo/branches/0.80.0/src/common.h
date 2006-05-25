@@ -98,7 +98,7 @@ enum Icons {
 		WORLD,
 		NOTQUEUED,
 		UNMERGED,
-		OPTIONS,
+		DETAILS,
 		REMOVE,
 		NEW,
 		EMPTY,

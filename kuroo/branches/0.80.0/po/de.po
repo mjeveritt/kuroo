@@ -1,30 +1,26 @@
-# translation of new-de.po to
-# translation of _de.po to
-# translation of de.po to
-# Translation of kuroo.po to German
+# translation of de.po to German
 # This file is distributed under the same license as the Kuroo package.
 # Copyright (C) 2005 karye.
-#
 # Eagle <eagle@eagle-cage.de>, 2005.
 # German Language-Pack <eagle@eagle-cage.de>, 2005.
 # Reiterer Alexander <areitere@pop.tuwien.ac.at>, 2006.
 # Bernd Eichelberg <Bernd.Eichelberg@web.de>, 2006.
 # Martin Stromberger <fabiolla@aon.at>, 2006.
-# Jan Schnackenberg <yehaa@gmx.de>, 2006.
-# Jan Schnackenberg <YeHaa@gmx.de>, 2006.
 # Karim Ryde <karim@bredband.net>, 2006.
+# Jan Schnackenberg <YeHaa@gmx.de>, 2006.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-25 15:30+0200\n"
-"PO-Revision-Date: 2006-05-12 16:28+0200\n"
-"Last-Translator: Karim Ryde <karim@bredband.net>\n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2006-05-26 21:00+0200\n"
+"Last-Translator: Jan Schnackenberg <YeHaa@gmx.de>\n"
+"Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.10.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: portage/uninstallinspector.cpp:32
@@ -185,7 +181,7 @@ msgstr "Suchbegriff zum Filter den Pakete hier eingeben..."
 #: rc.cpp:12 rc.cpp:84 rc.cpp:126
 #, no-c-format
 msgid "Filter:"
-msgstr ""
+msgstr "Filter:"
 
 #: rc.cpp:16
 #, no-c-format
@@ -327,7 +323,7 @@ msgid ""
 "<i>Click on package with info to view all information</i>"
 msgstr ""
 "<font size=\"+1\">Installationsverlauf</font><br>\n"
-"<i>Für ausführliche Informationen auf das Paket mit Info klicken.</i>"
+"<i>Für ausführliche Informationen auf den Paketnamen klicken.</i>"
 
 #: rc.cpp:123
 #, no-c-format
@@ -426,17 +422,17 @@ msgstr "Alt+S"
 #: rc.cpp:195
 #, no-c-format
 msgid "&Use Flags"
-msgstr "&Useflags"
+msgstr "&USE-Flags"
 
 #: rc.cpp:198
 #, no-c-format
 msgid "Add or Remove Use Flags support:"
-msgstr "Hinzufügen oder Entfernen von Useflags:"
+msgstr "Hinzufügen oder Entfernen von USE-Flags:"
 
 #: rc.cpp:201
 #, no-c-format
 msgid "C&alculate Use Flags"
-msgstr "Useflags &bestimmen"
+msgstr "USE-Flags &bestimmen"
 
 #: rc.cpp:210
 #, no-c-format
@@ -499,7 +495,7 @@ msgid "Remove package from Q&ueue after installation"
 msgstr "Alle Pakete nach der Installation aus der &Warteschlange entfernen"
 
 #: rc.cpp:277
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Download all packa&ges before installing them (--fetch-all-uri)"
 msgstr "Vor der Installation alle Pakete &herunterladen ( --fetch-all-uri)"
 
@@ -575,7 +571,7 @@ msgstr "&Ausführliches Protokoll"
 #: rc.cpp:332
 #, no-c-format
 msgid "Alt+B"
-msgstr "Alt+B"
+msgstr "Alt+A"
 
 #: rc.cpp:335
 #, no-c-format
@@ -593,9 +589,9 @@ msgid "<font size=\"+1\">Activity Log</font>"
 msgstr "<font size=\"+1\">Protokoll der Aktivitäten</font>"
 
 #: rc.cpp:344
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Termi&nal input"
-msgstr "Beende"
+msgstr "Benutzer Ei&ngabe"
 
 #: rc.cpp:353
 #, no-c-format
@@ -1228,15 +1224,15 @@ msgid ""
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 "\n"
-"Fehler: Konnte keine Useflags für die folgenden Pakete bestimmen: %1/%2."
+"Fehler: Konnte keine USE-Flags für die folgenden Pakete bestimmen: %1/%2."
 
 #: core/packageinspector.cpp:419
 msgid "Click for hardmask info!"
-msgstr "Klicken für Info zum Thema \"hartmaskiert\"!"
+msgstr "Was heißt \"hartmaskiert\"?"
 
 #: core/packageinspector.cpp:437
 msgid "%1/%2 hardmask info!"
-msgstr "%1/%2 \"Hardmask Information\"!"
+msgstr "Info zur Hartmaskierung von %1/%2"
 
 #: core/packageinspector.cpp:716
 msgid "%1No ChangeLog found.%2"
@@ -1254,7 +1250,7 @@ msgstr "%1Keine installierten Dateien gefunden.%2"
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
-"\"use flags\" konnten nicht berechnet werden. Bitte die Protokolldatei für "
+"USE-Flags konnten nicht berechnet werden. Bitte die Protokolldatei für "
 "weitere Informationen lesen!"
 
 #: core/etcupdate.cpp:60
@@ -1442,11 +1438,12 @@ msgstr "Speichern der vom Benutzer demaskierten Pakete in %1 abgeschlossen."
 #: core/portagefiles.cpp:710
 msgid "Completed scanning user package use flags in %1."
 msgstr ""
-"Auswertung von benutzerdefinierten \"package use flags\" in %1 beendet."
+"Auswertung von benutzerdefinierten paketspezifischen USE-Flags in %1 beendet."
 
 #: core/portagefiles.cpp:714
 msgid "Completed saving user package use in %1."
-msgstr "Speichern von benutzerdefinierten \"package use\" in %1 beendet."
+msgstr ""
+"Speichern von benutzerdefinierten paketspezifischen USE-Flags in %1 beendet."
 
 #: core/scanupdatesjob.cpp:74
 msgid "Refreshing updates view..."
@@ -1482,11 +1479,11 @@ msgstr "Benötigt eines von: "
 
 #: core/dependencyview.cpp:255
 msgid "Without USE-flag %1:"
-msgstr "Ohne USE-flag %1:"
+msgstr "Ohne USE-Flag %1:"
 
 #: core/dependencyview.cpp:258
 msgid "With USE-flag %1:"
-msgstr "Mit USE-flag %1:"
+msgstr "Mit USE-Flag %1:"
 
 #: core/emerge.cpp:72
 msgid "Can not process input! Emerge is not running."
@@ -1952,7 +1949,7 @@ msgstr ""
 "Neue Funktionen:<br>\n"
 "Vereinheitlichte Paketansicht: Schnelle Übersicht und Suche über Filter."
 "<br>Zweispaltige Gruppen-Auswahl, Paket Inspektor für erweiterte "
-"Einstellungs-Möglichkeiten.Außerdem Fortschrittsbalken, ein Use-Flag Editor, "
+"Einstellungs-Möglichkeiten.Außerdem Fortschrittsbalken, ein USE-Flag Editor, "
 "eine Verlaufs-Übersicht für Emerge und Konfigurationsdateien und eine "
 "Warteschlange für anstehende Emerge-Vorgänge.<br>\n"
 "<br> <a href=http://kuroo.org/kuroo/wiki/TellUs>Wir freuen uns von ihnen zu "
@@ -2016,6 +2013,3 @@ msgstr "Kuroo - Ein Portage Frontend"
 #: systemtray.cpp:42
 msgid "&Configure Kuroo..."
 msgstr "Kuroo &einrichten..."
-
-#~ msgid "E&nter"
-#~ msgstr "Kommando ei&ngeben"

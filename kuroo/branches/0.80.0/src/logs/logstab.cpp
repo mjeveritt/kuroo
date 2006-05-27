@@ -30,7 +30,6 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
-
 /**
  * @class LogsTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
@@ -109,7 +108,7 @@ void LogsTab::slotBusy()
 
 void LogsTab::slotSetFont()
 {
-	logBrowser->setCurrentFont( KurooConfig::logFont() );
+	logBrowser->setFont( KurooConfig::logFont() );
 }
 
 #include "logstab.moc"

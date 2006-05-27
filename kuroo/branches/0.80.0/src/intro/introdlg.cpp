@@ -70,7 +70,14 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 							"<br>"
 					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
 					        "Tell us what you think of Kuroo!</a><br>"
-					      	) );
+					        "<table width=300><tr><td>Make backup copies in %1 of following files:</td></tr>"
+	                      	"<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>"
+	                      	"<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>"
+	                      	"<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>"
+	                      	"<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>"
+	                      	"<tr><td>" + KurooConfig::fileWorld() + "</td></tr>"
+	                      	"<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table>"
+					      ).arg( GlobalSingleton::Instance()->kurooDir() + "backup/" ) );
 	
 	adjustSize();
 }

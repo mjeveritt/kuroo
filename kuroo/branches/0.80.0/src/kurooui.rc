@@ -9,7 +9,6 @@
 		<Action name="etc_update" />
 	</Menu>
 	<Menu name="Help">
-		<text>&amp;View</text>
 		<Action name="information" />
 	</Menu>
 </MenuBar>

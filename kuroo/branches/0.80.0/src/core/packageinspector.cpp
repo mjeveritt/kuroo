@@ -761,6 +761,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			QTextStream stream( &file );
 			QString textLines;
 			int lineCount( 0 );
+			
 			if ( KurooConfig::portageVersion21() )
 				while ( !stream.atEnd() ) {
 					QString line = stream.readLine();

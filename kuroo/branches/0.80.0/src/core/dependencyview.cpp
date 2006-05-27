@@ -185,7 +185,7 @@ void DependencyView::slotPackageClicked( QListViewItem* item )
 void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 {
 	int index( 0 );
-	DependencyItem	*parent, *lastDepend;
+	DependencyItem *parent, *lastDepend;
 	QString lastWord;
 	
 	foreach ( dependAtomsList ) {

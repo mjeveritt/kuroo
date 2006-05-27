@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-25 15:30+0200\n"
+"POT-Creation-Date: 2006-05-27 12:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,7 +170,7 @@ msgstr ""
 msgid "&All Packages"
 msgstr ""
 
-#: rc.cpp:19 rc.cpp:204 rc.cpp:249 rc.cpp:636
+#: rc.cpp:19 rc.cpp:204 rc.cpp:249
 #, no-c-format
 msgid "Alt+A"
 msgstr ""
@@ -368,7 +368,7 @@ msgstr ""
 msgid "Mas&ked Version"
 msgstr ""
 
-#: rc.cpp:182 rc.cpp:289
+#: rc.cpp:182 rc.cpp:289 rc.cpp:606
 #, no-c-format
 msgid "Alt+K"
 msgstr ""
@@ -385,7 +385,7 @@ msgid ""
 "and do not update further"
 msgstr ""
 
-#: rc.cpp:192 rc.cpp:624
+#: rc.cpp:192
 #, no-c-format
 msgid "Alt+Y"
 msgstr ""
@@ -470,7 +470,7 @@ msgstr ""
 msgid "Download all packa&ges before installing them (--fetch-all-uri)"
 msgstr ""
 
-#: rc.cpp:280 rc.cpp:654
+#: rc.cpp:280 rc.cpp:655
 #, no-c-format
 msgid "Alt+G"
 msgstr ""
@@ -510,7 +510,7 @@ msgstr ""
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: rc.cpp:310 rc.cpp:642
+#: rc.cpp:310 rc.cpp:612
 #, no-c-format
 msgid "Alt+2"
 msgstr ""
@@ -547,7 +547,7 @@ msgstr ""
 msgid "Save log on e&xit"
 msgstr ""
 
-#: rc.cpp:338
+#: rc.cpp:338 rc.cpp:594
 #, no-c-format
 msgid "Alt+X"
 msgstr ""
@@ -941,67 +941,67 @@ msgstr ""
 
 #: rc.cpp:588
 #, no-c-format
-msgid "Package filter options"
-msgstr ""
-
-#: rc.cpp:593
-#, no-c-format
-msgid "Click to select the background color of the OSD."
-msgstr ""
-
-#: rc.cpp:596 rc.cpp:615
-#, no-c-format
-msgid "The color of the OSD background."
-msgstr ""
-
-#: rc.cpp:600
-#, no-c-format
-msgid "Click to select the color of the OSD text."
-msgstr ""
-
-#: rc.cpp:603 rc.cpp:609
-#, no-c-format
-msgid "The color of the OSD text."
-msgstr ""
-
-#: rc.cpp:606
-#, no-c-format
-msgid "No matching packages found"
-msgstr ""
-
-#: rc.cpp:612
-#, no-c-format
-msgid "Matching packages found"
-msgstr ""
-
-#: rc.cpp:618
-#, no-c-format
 msgid "Kuroo options"
 msgstr ""
 
-#: rc.cpp:621
+#: rc.cpp:591
 #, no-c-format
-msgid "Dock kuroo in s&ystem tray (close does not exit kuroo)"
+msgid "Dock kuroo in system tray (close does not e&xit kuroo)"
 msgstr ""
 
-#: rc.cpp:627
+#: rc.cpp:597
 #, no-c-format
 msgid "Package options"
 msgstr ""
 
-#: rc.cpp:630
+#: rc.cpp:600
 #, no-c-format
 msgid "<i>Restart for changes to take effect.</i>"
 msgstr ""
 
+#: rc.cpp:603
+#, no-c-format
+msgid "Show installed pac&kages in separate column"
+msgstr ""
+
+#: rc.cpp:609
+#, no-c-format
+msgid "Portage version >= &2.1"
+msgstr ""
+
+#: rc.cpp:615
+#, no-c-format
+msgid "Package filter options"
+msgstr ""
+
+#: rc.cpp:620
+#, no-c-format
+msgid "Click to select the background color of the OSD."
+msgstr ""
+
+#: rc.cpp:623 rc.cpp:642
+#, no-c-format
+msgid "The color of the OSD background."
+msgstr ""
+
+#: rc.cpp:627
+#, no-c-format
+msgid "Click to select the color of the OSD text."
+msgstr ""
+
+#: rc.cpp:630 rc.cpp:636
+#, no-c-format
+msgid "The color of the OSD text."
+msgstr ""
+
 #: rc.cpp:633
 #, no-c-format
-msgid "Show inst&alled packages in separate column"
+msgid "No matching packages found"
 msgstr ""
 
 #: rc.cpp:639
 #, no-c-format
-msgid "Portage version >= &2.1"
+msgid "Matching packages found"
 msgstr ""
 
 #: rc.cpp:645 core/etcupdate.cpp:61 core/etcupdate.cpp:75
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "Release information"
 msgstr ""
 
-#: rc.cpp:651
+#: rc.cpp:652
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
 msgstr ""
@@ -1105,7 +1105,7 @@ msgid "Kuroo is not responding. Attempting to terminate kuroo!"
 msgstr ""
 
 #: kuroo.cpp:121
-msgid "&Information"
+msgid "&Release information"
 msgstr ""
 
 #: kuroo.cpp:124
@@ -1172,7 +1172,7 @@ msgstr ""
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:357 core/packageinspector.cpp:853
+#: core/packageinspector.cpp:357 core/packageinspector.cpp:854
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -1194,11 +1194,11 @@ msgstr ""
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:827
+#: core/packageinspector.cpp:828
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:897 core/packageinspector.cpp:956
+#: core/packageinspector.cpp:898 core/packageinspector.cpp:957
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -1755,11 +1755,11 @@ msgstr ""
 msgid "Kuroo is already running!"
 msgstr ""
 
-#: logs/logstab.cpp:91
+#: logs/logstab.cpp:94
 msgid "User Input"
 msgstr ""
 
-#: logs/logstab.cpp:91
+#: logs/logstab.cpp:94
 msgid "Enter text:"
 msgstr ""
 
@@ -1767,7 +1767,7 @@ msgstr ""
 msgid "Writing %1kuroo.log."
 msgstr ""
 
-#: logs/log.cpp:60 config/configdialog.cpp:101
+#: logs/log.cpp:60 config/configdialog.cpp:104
 msgid "Saving"
 msgstr ""
 
@@ -1795,7 +1795,7 @@ msgstr ""
 msgid "Edit your etc-update warning file list"
 msgstr ""
 
-#: config/configdialog.cpp:101
+#: config/configdialog.cpp:104
 msgid "Failed to save %1. Please run as root."
 msgstr ""
 
@@ -1818,6 +1818,12 @@ msgid ""
 "Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
 "wiki/TellUs>We love to hear from you. Tell us what you think of Kuroo!</"
 "a><br>"
+msgstr ""
+
+#: intro/introdlg.cpp:75
+msgid ""
+"<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></"
+"tr>"
 msgstr ""
 
 #: kurooview.cpp:83

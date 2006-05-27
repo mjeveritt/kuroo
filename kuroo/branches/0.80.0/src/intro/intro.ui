@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>658</width>
-            <height>396</height>
+            <width>682</width>
+            <height>578</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -32,7 +32,7 @@
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
-            <property name="margin">
+            <property name="spacing">
                 <number>0</number>
             </property>
             <widget class="QFrame" row="0" column="0" rowspan="3" colspan="1">
@@ -118,6 +118,139 @@
                     </widget>
                 </grid>
             </widget>
+            <spacer row="1" column="1">
+                <property name="name">
+                    <cstring>spacer27_3_2_2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Minimum</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>16</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QLayoutWidget" row="0" column="2" rowspan="2" colspan="1">
+                <property name="name">
+                    <cstring>layout21</cstring>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QFrame" row="2" column="0">
+                        <property name="name">
+                            <cstring>frame17</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>StyledPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Raised</enum>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                            <widget class="KActiveLabel" row="1" column="1">
+                                <property name="name">
+                                    <cstring>backupFiles</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>450</width>
+                                        <height>150</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="0">
+                                <property name="name">
+                                    <cstring>spacer25</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Minimum</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>8</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>cbBackup</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Backup all user editable porta&amp;ge files before proceeding.</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="KActiveLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>introText</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>3</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>450</width>
+                                <height>200</height>
+                            </size>
+                        </property>
+                        <property name="margin">
+                            <number>-4</number>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                    </widget>
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>spacer6</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
             <spacer row="2" column="2">
                 <property name="name">
                     <cstring>spacer19_4_2_2</cstring>
@@ -152,84 +285,6 @@
                     </size>
                 </property>
             </spacer>
-            <widget class="QLayoutWidget" row="0" column="2" rowspan="2" colspan="1">
-                <property name="name">
-                    <cstring>layout3</cstring>
-                </property>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>5</number>
-                    </property>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>spacer6</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>5</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QCheckBox" row="2" column="0">
-                        <property name="name">
-                            <cstring>cbBackup</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Backup all user editable porta&amp;ge files before proceeding.</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+G</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="KActiveLabel" row="0" column="0">
-                        <property name="name">
-                            <cstring>introText</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>450</width>
-                                <height>200</height>
-                            </size>
-                        </property>
-                        <property name="margin">
-                            <number>-4</number>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                    </widget>
-                </grid>
-            </widget>
-            <spacer row="1" column="1">
-                <property name="name">
-                    <cstring>spacer27_3_2_2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Minimum</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>16</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
         </grid>
     </widget>
 </widget>
@@ -242,6 +297,7 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kactivelabel.h</includehint>
     <includehint>kactivelabel.h</includehint>
 </includehints>
 </UI>

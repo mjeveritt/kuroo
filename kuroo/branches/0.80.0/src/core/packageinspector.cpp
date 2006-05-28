@@ -771,16 +771,19 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			else
 				while ( !stream.atEnd() ) {
 					QString line = stream.readLine();
-					if ( line.isEmpty() )
-						continue;
-					
-					if ( lineCount++ > 1 || line == "0" )
+					if ( lineCount++ > 13 )
 						break;
 					else {
-						if ( lineCount == 1 )
-							textLines += "PDEPEND= " + line + " ";
-						else
-							textLines += "RDEPEND= " + line + " ";
+						if ( !line.isEmpty() ) {
+							switch (lineCount) {
+							case 1:  textLines += "DEPEND= " + line + " ";
+								break;
+							case 2:  textLines += "RDEPEND= " + line + " ";
+								break;
+							case 13: textLines += "PDEPEND= " + line + " ";
+								break;
+							}
+						}
 					}
 				}
 			file.close();

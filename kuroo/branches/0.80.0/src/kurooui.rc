@@ -8,7 +8,7 @@
 		<Action name="refresh_updates" />
 		<Action name="etc_update" />
 	</Menu>
-	<Menu name="Help">
+	<Menu name="help">
 		<Action name="information" />
 	</Menu>
 </MenuBar>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-28 12:45+0200\n"
+"POT-Creation-Date: 2006-05-28 15:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,100 +39,100 @@ msgstr ""
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:303
-msgid ""
-"<font color=darkRed size=+1><b>No package found with these filter settings</"
-"font><br><font color=darkRed>Please modify the filter settings you have "
-"chosen!<br>Try to use more general filter options, so kuroo can find "
-"matching packages.</b></font>"
-msgstr ""
-
-#: portage/portagetab.cpp:337
+#: portage/portagetab.cpp:340
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:338
+#: portage/portagetab.cpp:341
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:427
+#: portage/portagetab.cpp:430
 msgid " packages selected"
 msgstr ""
 
-#: portage/portagetab.cpp:453
+#: portage/portagetab.cpp:456
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:457
+#: portage/portagetab.cpp:460
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:463 portage/portagetab.cpp:469
+#: portage/portagetab.cpp:466 portage/portagetab.cpp:472
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:479
+#: portage/portagetab.cpp:482
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:487
+#: portage/portagetab.cpp:490
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:493
+#: portage/portagetab.cpp:496
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:501
+#: portage/portagetab.cpp:504
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:507
+#: portage/portagetab.cpp:510
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:541
+#: portage/portagetab.cpp:544
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:543
+#: portage/portagetab.cpp:546
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:545 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:492
+#: portage/portagetab.cpp:548 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:492
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:549 queue/queuetab.cpp:496
+#: portage/portagetab.cpp:552 queue/queuetab.cpp:496
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:551 queue/queuetab.cpp:498
+#: portage/portagetab.cpp:554 queue/queuetab.cpp:498
 msgid "Remove from world"
 msgstr ""
 
-#: portage/portagetab.cpp:556
+#: portage/portagetab.cpp:559
 msgid "&Uninstall"
 msgstr ""
 
-#: portage/portagelistview.cpp:79 portage/portagelistview.cpp:138
-#: portage/portagelistview.cpp:140 rc.cpp:67 rc.cpp:132
+#: portage/portagelistview.cpp:80 portage/portagelistview.cpp:153
+#: portage/portagelistview.cpp:155 rc.cpp:67 rc.cpp:132
 #: queue/queuelistview.cpp:168
 #, no-c-format
 msgid "Package"
 msgstr ""
 
-#: portage/portagelistview.cpp:87
+#: portage/portagelistview.cpp:88
 msgid "Update"
 msgstr ""
 
-#: portage/portagelistview.cpp:88 rc.cpp:213
+#: portage/portagelistview.cpp:89 rc.cpp:213
 #, no-c-format
 msgid "Description"
+msgstr ""
+
+#: portage/portagelistview.cpp:121
+msgid ""
+"<font color=darkRed size=+1><b>No packages found with these filter settings</"
+"font><br><font color=darkRed>Please modify the filter settings you have "
+"chosen!<br>Try to use more general filter options, so kuroo can find "
+"matching packages.</b></font>"
 msgstr ""
 
 #: statusbar.cpp:102 history/history.cpp:261 history/history.cpp:262
@@ -470,7 +470,7 @@ msgstr ""
 msgid "Download all packa&ges before installing them (--fetch-all-uri)"
 msgstr ""
 
-#: rc.cpp:280 rc.cpp:652
+#: rc.cpp:280 rc.cpp:658
 #, no-c-format
 msgid "Alt+G"
 msgstr ""
@@ -989,7 +989,7 @@ msgstr ""
 msgid "Click to select the color of the OSD text."
 msgstr ""
 
-#: rc.cpp:627 rc.cpp:633
+#: rc.cpp:627 rc.cpp:633 rc.cpp:645
 #, no-c-format
 msgid "The color of the OSD text."
 msgstr ""
@@ -1004,18 +1004,23 @@ msgstr ""
 msgid "Matching packages found"
 msgstr ""
 
-#: rc.cpp:642 core/etcupdate.cpp:61 core/etcupdate.cpp:75
+#: rc.cpp:642
+#, no-c-format
+msgid "Log browser text font"
+msgstr ""
+
+#: rc.cpp:648 core/etcupdate.cpp:61 core/etcupdate.cpp:75
 #: core/etcupdate.cpp:186 main.cpp:43
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
 
-#: rc.cpp:645
+#: rc.cpp:651
 #, no-c-format
 msgid "Release information"
 msgstr ""
 
-#: rc.cpp:649
+#: rc.cpp:655
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
 msgstr ""
@@ -1668,23 +1673,26 @@ msgid ""
 msgstr ""
 
 #: queue/queuetab.cpp:229
-msgid "<b>Summary</b><br>"
+msgid ""
+"<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></"
+"td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:230
-msgid "Number of packages: %1<br>"
+msgid "<tr><td width=10%>Number of packages:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:231
-msgid "Initial estimated time: %1<br>"
+msgid "<tr><td width=10%>Initial estimated time:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:232
-msgid "Elapsed time: %1<br>"
+msgid "<tr><td width=10%>Elapsed time:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:234
-msgid "Estimated time remaining: %1<br>"
+msgid ""
+"<tr><td width=10%>Estimated time remaining:</td><td> %1</td></tr></table>"
 msgstr ""
 
 #: queue/queuetab.cpp:274

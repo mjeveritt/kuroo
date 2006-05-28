@@ -300,9 +300,11 @@ void PortageTab::slotListPackages()
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
-		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No package found with these filter settings</font><br>"
-		                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
-		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
+		packagesView->showNoHitsWarning( true );
+			
+// 		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No package found with these filter settings</font><br>"
+// 		                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
+// 		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
 		
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
@@ -311,6 +313,7 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
 	else {
+		packagesView->showNoHitsWarning( false );
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
@@ -442,11 +445,11 @@ void PortageTab::processPackage( bool viewInspector )
 	QString linesEmerge = packagesView->currentPackage()->linesEmerge();
 	
 	// Build summary html-view
-	QString lines =  "<table width=100% border=0 cellpadding=0>";
-	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#";
-	lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
-	lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
-	lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
+	QString lines = "<table width=100% border=0 cellpadding=0>";
+			lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#";
+			lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
+			lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
+			lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 		lines += "<tr><td colspan=2>" + packagesView->currentPackage()->description() + "</td></tr>";

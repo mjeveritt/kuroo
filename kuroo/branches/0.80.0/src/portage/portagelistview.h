@@ -26,6 +26,7 @@
 
 class PackageVersion;
 class DependAtom;
+class KTextBrowser;
 
 /**
  * @class PortageListView
@@ -40,9 +41,13 @@ public:
 	
 	class 							PortageItem;
 	
+	void							showNoHitsWarning( bool noHits );
 	PortageListView::PortageItem* 	currentPortagePackage();
 	void							setHeader( const QString& text );
 	int 							addSubCategoryPackages( const QStringList& packageList );
+	
+protected:
+	KTextBrowser 					*noHitsWarning;
 };
 
 /**

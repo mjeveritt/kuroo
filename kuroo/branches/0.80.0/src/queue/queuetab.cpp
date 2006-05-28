@@ -226,12 +226,12 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
-	QString queueBrowserLines(   i18n( "<b>Summary</b><br>" ) );
-			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Initial estimated time: %1<br>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "Elapsed time: %1<br>" )
+	QString queueBrowserLines(   i18n( "<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></td></tr>" ) );
+			queueBrowserLines += i18n( "<tr><td width=10%>Number of packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
+			queueBrowserLines += i18n( "<tr><td width=10%>Initial estimated time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed time:</td><td> %1</td></tr>" )
 		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
-			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" )
+			queueBrowserLines += i18n( "<tr><td width=10%>Estimated time remaining:</td><td> %1</td></tr></table>" )
 		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }

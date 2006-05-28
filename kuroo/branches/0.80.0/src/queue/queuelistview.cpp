@@ -37,7 +37,7 @@ const int diffTime = 10;
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const int status, int duration )
-	: PackageItem( parent, name, id, category, QString::null, status ),
+	: PackageItem( parent, name, id, category, QString::null, status ), m_package( category + "/" + name ),
 	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	m_bar( 0 )
 {
@@ -48,7 +48,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration )
-	: PackageItem( parent, name, id, category, QString::null, status ),
+	: PackageItem( parent, name, id, category, QString::null, status ), m_package( category + "/" + name ),
 	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
 	m_bar( 0 )
 {
@@ -62,6 +62,11 @@ QueueListView::QueueItem::~QueueItem()
 {
 	delete m_bar;
 	m_bar = 0;
+}
+
+QString QueueListView::QueueItem::package()
+{
+	return m_package;
 }
 
 /**
@@ -238,7 +243,7 @@ const QStringList QueueListView::allPackagesNoChildren()
 	QStringList packageList;
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
-		packageList += myChild->text(0);
+		packageList += dynamic_cast<QueueItem*>(myChild)->package();
 		myChild = myChild->nextSibling();
 	}
 	return packageList;
@@ -253,7 +258,7 @@ const QStringList QueueListView::allEndUserPackages()
 	QStringList packageList;
 	QListViewItem* myChild = firstChild();
 	while ( myChild ) {
-		packageList += myChild->text(0);
+		packageList += dynamic_cast<QueueItem*>(myChild)->package();
 		packageList += myChild->text(3);
 		myChild = myChild->nextSibling();
 	}

@@ -84,6 +84,7 @@ public:
 	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	~QueueItem();
 	
+	QString			package();
 	void			setComplete();
 	bool			isComplete();
 	int				remainingDuration();
@@ -111,6 +112,8 @@ private:
 	
 	// Is this package progress = 100% eg completed
 	bool			m_isComplete;
+	
+	QString			m_package;
 };
 
 #endif

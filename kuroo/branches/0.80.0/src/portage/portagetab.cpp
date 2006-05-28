@@ -301,11 +301,7 @@ void PortageTab::slotListPackages()
 		slotButtons();
 		summaryBrowser->clear();
 		packagesView->showNoHitsWarning( true );
-			
-// 		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No package found with these filter settings</font><br>"
-// 		                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
-// 		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
-		
+
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );

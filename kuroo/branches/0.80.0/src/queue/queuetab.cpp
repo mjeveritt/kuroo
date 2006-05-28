@@ -227,11 +227,11 @@ void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
 	QString queueBrowserLines(   i18n( "<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></td></tr>" ) );
-			queueBrowserLines += i18n( "<tr><td width=10%>Number of packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "<tr><td width=10%>Initial estimated time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed time:</td><td> %1</td></tr>" )
+			queueBrowserLines += i18n( "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
+			queueBrowserLines += i18n( "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>" )
 		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
-			queueBrowserLines += i18n( "<tr><td width=10%>Estimated time remaining:</td><td> %1</td></tr></table>" )
+			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>" )
 		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
@@ -267,8 +267,6 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
-	DEBUG_LINE_INFO;
-	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );

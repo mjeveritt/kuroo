@@ -42,7 +42,7 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 	m_bar( 0 )
 {
 	setQueued( true );
-	setText( 0, category + "/" + name );
+	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
 	m_bar = new KProgress( duration, parent->viewport() );
 	m_bar->hide();
 }
@@ -53,7 +53,7 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 	m_bar( 0 )
 {
 	setQueued( true );
-	setText( 0, category + "/" + name );
+	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
 	m_bar = new KProgress( duration, parent->listView()->viewport() );
 	m_bar->hide();
 }
@@ -281,7 +281,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString idDepend = *it++;
 		QString size = *it++;
 		QString version = *it;
-
+		
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
 		

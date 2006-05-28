@@ -112,9 +112,10 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 2 );
 	header()->setResizeEnabled( false, 3 );
 	
-	// Refresh packages when packages are added/removed to Queue or get installed 
+	// Refresh packages when packages are added/removed to Queue or get installed
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
 	
+	// Create text-widget warning for "No packages found.."
 	noHitsWarning = new KTextBrowser( viewport() );
 	noHitsWarning->setGeometry( QRect( 20, 20, 400, 300 ) );
 	noHitsWarning->setFrameShape( QFrame::NoFrame );
@@ -126,6 +127,10 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 PortageListView::~PortageListView()
 {}
 
+/**
+ * Show warning text when package view is empty.
+ * @param show/hide
+ */
 void PortageListView::showNoHitsWarning( bool noHits )
 {
 	if ( noHits )

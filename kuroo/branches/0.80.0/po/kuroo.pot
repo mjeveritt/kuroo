@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-28 15:54+0200\n"
+"POT-Creation-Date: 2006-05-28 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,80 +39,80 @@ msgstr ""
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:340
+#: portage/portagetab.cpp:336
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:341
+#: portage/portagetab.cpp:337
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:430
+#: portage/portagetab.cpp:426
 msgid " packages selected"
 msgstr ""
 
-#: portage/portagetab.cpp:456
+#: portage/portagetab.cpp:452
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:460
+#: portage/portagetab.cpp:456
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:466 portage/portagetab.cpp:472
+#: portage/portagetab.cpp:462 portage/portagetab.cpp:468
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:482
+#: portage/portagetab.cpp:478
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:490
+#: portage/portagetab.cpp:486
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:496
+#: portage/portagetab.cpp:492
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:504
+#: portage/portagetab.cpp:500
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:510
+#: portage/portagetab.cpp:506
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:544
+#: portage/portagetab.cpp:540
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:546
+#: portage/portagetab.cpp:542
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:548 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:492
+#: portage/portagetab.cpp:544 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:490
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:552 queue/queuetab.cpp:496
+#: portage/portagetab.cpp:548 queue/queuetab.cpp:494
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:554 queue/queuetab.cpp:498
+#: portage/portagetab.cpp:550 queue/queuetab.cpp:496
 msgid "Remove from world"
 msgstr ""
 
-#: portage/portagetab.cpp:559
+#: portage/portagetab.cpp:555
 msgid "&Uninstall"
 msgstr ""
 
-#: portage/portagelistview.cpp:80 portage/portagelistview.cpp:153
-#: portage/portagelistview.cpp:155 rc.cpp:67 rc.cpp:132
+#: portage/portagelistview.cpp:80 portage/portagelistview.cpp:158
+#: portage/portagelistview.cpp:160 rc.cpp:67 rc.cpp:132
 #: queue/queuelistview.cpp:168
 #, no-c-format
 msgid "Package"
@@ -127,7 +127,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: portage/portagelistview.cpp:121
+#: portage/portagelistview.cpp:122
 msgid ""
 "<font color=darkRed size=+1><b>No packages found with these filter settings</"
 "font><br><font color=darkRed>Please modify the filter settings you have "
@@ -141,7 +141,7 @@ msgstr ""
 #: core/portagefiles.cpp:328 core/portagefiles.cpp:419
 #: core/scanupdatesjob.cpp:143 core/scanportagejob.cpp:323
 #: core/scanportagejob.cpp:394 core/emerge.cpp:451 core/emerge.cpp:532
-#: queue/queuetab.cpp:399
+#: queue/queuetab.cpp:397
 msgid "Done."
 msgstr ""
 
@@ -505,7 +505,7 @@ msgstr ""
 msgid "Check packages in Queue with emerge pretend"
 msgstr ""
 
-#: rc.cpp:307 queue/queuetab.cpp:280
+#: rc.cpp:307 queue/queuetab.cpp:278
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
@@ -1679,39 +1679,41 @@ msgid ""
 msgstr ""
 
 #: queue/queuetab.cpp:230
-msgid "<tr><td width=10%>Number of packages:</td><td> %1</td></tr>"
+msgid "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:231
-msgid "<tr><td width=10%>Initial estimated time:</td><td> %1</td></tr>"
+msgid ""
+"<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:232
-msgid "<tr><td width=10%>Elapsed time:</td><td> %1</td></tr>"
+msgid "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:234
 msgid ""
-"<tr><td width=10%>Estimated time remaining:</td><td> %1</td></tr></table>"
+"<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></"
+"table>"
 msgstr ""
 
-#: queue/queuetab.cpp:274
+#: queue/queuetab.cpp:272
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:357
+#: queue/queuetab.cpp:355
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:357 queue/queuetab.cpp:368
+#: queue/queuetab.cpp:355 queue/queuetab.cpp:366
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:368
+#: queue/queuetab.cpp:366
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:395
+#: queue/queuetab.cpp:393
 msgid "Do you want to abort the running installation?"
 msgstr ""
 

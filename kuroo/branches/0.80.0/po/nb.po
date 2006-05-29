@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-28 16:52+0200\n"
-"PO-Revision-Date: 2006-05-29 16:45+0200\n"
+"PO-Revision-Date: 2006-05-29 16:47+0200\n"
 "Last-Translator: Alexander Nicolaysen Sørnes <alex@thehandofagony.com>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1806,7 +1806,7 @@ msgstr "Opprinnelig forfatter og vedlikeholder"
 
 #: main.cpp:46
 msgid "French translation"
-msgstr "Fransk oversetting"
+msgstr "Fransk oversettelse"
 
 #: main.cpp:47 main.cpp:48 main.cpp:49
 msgid "German translation"
@@ -1822,7 +1822,7 @@ msgstr "Norsk (bokmål) oversettelse"
 
 #: main.cpp:52
 msgid "Polish translation"
-msgstr "Polsk oversetting"
+msgstr "Polsk oversettelse"
 
 #: main.cpp:53
 msgid "Kuroo icons"

@@ -31,11 +31,15 @@ LoadPortageJob::LoadPortageJob( QObject *parent )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_aborted( true )
 {
+	// Initialize the python module
+	pythonizer = new Pythonizer( "kuroo_portage_api", "PortageInterface" );
 }
 
 LoadPortageJob::~LoadPortageJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+	delete pythonizer;
+	pythonizer = 0;
 }
 
 /**
@@ -254,9 +258,6 @@ bool LoadPortageJob::insertCategories()
  */
 int LoadPortageJob::loadPackages()
 {
-	// Initialize the python module
-	Pythonizer* pythonizer = new Pythonizer( "kuroo_portage_api", "PortageInterface" );
-	
 	// Collect all portage packages list
 	const QStringList allPackagesList = pythonizer->getPackages( "allPackagesData" );
 	kdDebug() << "allPackagesData.size()=" << allPackagesList.size() << LINE_INFO;
@@ -316,43 +317,42 @@ int LoadPortageJob::loadPackages()
 	}
 	
 	// Collect installed packages list
-	const QStringList installedPackagesList = pythonizer->getPackages( "installedPackagesVersion" );
-	kdDebug() << "installedPackagesList.size()=" << installedPackagesList.size() << LINE_INFO;
+// 	const QStringList installedPackagesList = pythonizer->getPackages( "installedPackagesVersion" );
+// 	kdDebug() << "installedPackagesList.size()=" << installedPackagesList.size() << LINE_INFO;
+// 	
+// 	// Parse the list of packages which has the format:
+// 	// ...(category-subCategory/name/version)...
+// 	foreach ( installedPackagesList ) {
+// 		
+// 		// Parse out package parts
+// 		QString categorySubCategory = (*it).section( "/", 0, 0 );
+// 		QString category = categorySubCategory.section( "-", 0, 0 );
+// 		QString subCategory = categorySubCategory.section( "-", 1, 1 );
+// 		QString name = (*it).section( "/", 1, 1 );
+// 		QString version = (*it).section( "/", 2, 2 );
+// 		
+// 		// Insert category if not found in portage
+// 		if ( !m_categories.contains( categorySubCategory ) ) {
+// 			m_categories[ categorySubCategory ].category = category;
+// 			m_categories[ categorySubCategory ].subCategory = subCategory;
+// 		}
+// 		
+// 		// Insert and/or mark package as installed (old is package not in portage anymore)
+// 		if ( !m_categories[ categorySubCategory ].packages.contains( name ) ) {
+// 			m_categories[ categorySubCategory ].packages[ name ];
+// 			m_categories[ categorySubCategory ].packages[ name ].status = PACKAGE_OLD_STRING;
+// 		}
+// 		else
+// 			m_categories[ categorySubCategory ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
+// 		
+// 		// Insert old version in portage
+// 		if ( !m_categories[ categorySubCategory ].packages[ name ].versions.contains( version ) )
+// 			m_categories[ categorySubCategory ].packages[ name ].versions[ version ];
+// 		
+// 		// Mark version as installed
+// 		m_categories[ categorySubCategory ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
+// 	}
 	
-	// Parse the list of packages which has the format:
-	// ...(category-subCategory/name/version)...
-	foreach ( installedPackagesList ) {
-		
-		// Parse out package parts
-		QString categorySubCategory = (*it).section( "/", 0, 0 );
-		QString category = categorySubCategory.section( "-", 0, 0 );
-		QString subCategory = categorySubCategory.section( "-", 1, 1 );
-		QString name = (*it).section( "/", 1, 1 );
-		QString version = (*it).section( "/", 2, 2 );
-		
-		// Insert category if not found in portage
-		if ( !m_categories.contains( categorySubCategory ) ) {
-			m_categories[ categorySubCategory ].category = category;
-			m_categories[ categorySubCategory ].subCategory = subCategory;
-		}
-		
-		// Insert and/or mark package as installed (old is package not in portage anymore)
-		if ( !m_categories[ categorySubCategory ].packages.contains( name ) ) {
-			m_categories[ categorySubCategory ].packages[ name ];
-			m_categories[ categorySubCategory ].packages[ name ].status = PACKAGE_OLD_STRING;
-		}
-		else
-			m_categories[ categorySubCategory ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
-		
-		// Insert old version in portage
-		if ( !m_categories[ categorySubCategory ].packages[ name ].versions.contains( version ) )
-			m_categories[ categorySubCategory ].packages[ name ].versions[ version ];
-		
-		// Mark version as installed
-		m_categories[ categorySubCategory ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
-	}
-	
-	delete pythonizer;
 	return allPackagesList.size() / 7;
 }
 

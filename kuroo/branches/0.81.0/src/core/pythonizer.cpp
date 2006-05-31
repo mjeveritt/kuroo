@@ -54,26 +54,64 @@ Pythonizer::~Pythonizer()
 
 QStringList Pythonizer::getPackages( char *pyModule )
 {
-	PyObject *pName, *pModule, *pDict, *pValue, *pClass, *pInstance;
+	DEBUG_LINE_INFO;
 	
 	// Initialize the Python Interpreter
 	Py_Initialize();
 	
+	PyObject *pName, *pModule, *pDict, *pValue, *pClass, *pInstance;
+	
     // Build the name object
 	pName = PyString_FromString( m_file );
+	
+	DEBUG_LINE_INFO;
+	if ( PyErr_Occurred() ) {
+		PyErr_Print();
+		PyErr_Clear();
+		return QStringList::QStringList();
+	}
 	
     // Load the module object
 	pModule = PyImport_Import( pName );
 	
+	DEBUG_LINE_INFO;
+	if ( PyErr_Occurred() ) {
+		PyErr_Print();
+		PyErr_Clear();
+		return QStringList::QStringList();
+	}
+	
     // pDict is a borrowed reference 
 	pDict = PyModule_GetDict( pModule );
+	
+	DEBUG_LINE_INFO;
+	if ( PyErr_Occurred() ) {
+		PyErr_Print();
+		PyErr_Clear();
+		return QStringList::QStringList();
+	}
 	
 	// Build the name of a callable class 
 	pClass = PyDict_GetItemString( pDict, m_pyClass );
 	
+	DEBUG_LINE_INFO;
+	if ( PyErr_Occurred() ) {
+		PyErr_Print();
+		PyErr_Clear();
+		return QStringList::QStringList();
+	}
+	
     // Create an instance of the class
-	if ( PyCallable_Check( pClass ) )
+	if ( PyCallable_Check( pClass ) ) {
 		pInstance = PyObject_CallObject( pClass, NULL );
+		
+		DEBUG_LINE_INFO;
+		if ( PyErr_Occurred() ) {
+			PyErr_Print();
+			PyErr_Clear();
+			return QStringList::QStringList();
+		}
+	}
 	else {
 		kdDebug() << "Can not create python class instance." << endl;
 		return QStringList::QStringList();
@@ -113,10 +151,12 @@ QStringList Pythonizer::getPackages( char *pyModule )
 	Py_DECREF( pModule );
 	Py_DECREF( pName );
 	
-// 	PyErr_Clear();
+	PyErr_Clear();
+	
+	DEBUG_LINE_INFO;
 	
 	// Finish the Python Interpreter
 	Py_Finalize();
-		
+	
 	return packageList;
 }

@@ -27,6 +27,7 @@
 #include <qobject.h>
 
 class DbConnection;
+class Pythonizer;
 
 /**
  * @class LoadPortageJob
@@ -43,7 +44,7 @@ private:
 	bool 								doJob();
 	void 								completeJob();
 	bool								insertCategories();
-	int								loadPackages();
+	int									loadPackages();
 	
 	QString escapeString( QString string ) {
 		return string.replace('\'', "''").replace('%', "&#37;");
@@ -84,6 +85,8 @@ private:
 	
 	typedef QMap<QString, Categories>	PortageCategories;
 	PortageCategories					m_categories;
+	
+	Pythonizer* 						pythonizer;
 };
 
 #endif

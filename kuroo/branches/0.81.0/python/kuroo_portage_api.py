@@ -1,5 +1,4 @@
 import portage
-import sys,os
 
 class PortageInterface:
 	def __init__(self):

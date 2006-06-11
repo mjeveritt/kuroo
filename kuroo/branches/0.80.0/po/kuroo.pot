@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-28 16:52+0200\n"
+"POT-Creation-Date: 2006-06-11 10:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,16 +94,16 @@ msgstr ""
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:544 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:490
+#: portage/portagetab.cpp:544 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:489
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:548 queue/queuetab.cpp:494
+#: portage/portagetab.cpp:548 queue/queuetab.cpp:493
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:550 queue/queuetab.cpp:496
+#: portage/portagetab.cpp:550 queue/queuetab.cpp:495
 msgid "Remove from world"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 
 #: portage/portagelistview.cpp:80 portage/portagelistview.cpp:158
 #: portage/portagelistview.cpp:160 rc.cpp:67 rc.cpp:132
-#: queue/queuelistview.cpp:168
+#: queue/queuelistview.cpp:173
 #, no-c-format
 msgid "Package"
 msgstr ""
@@ -140,8 +140,8 @@ msgstr ""
 #: core/portagefiles.cpp:146 core/portagefiles.cpp:237
 #: core/portagefiles.cpp:328 core/portagefiles.cpp:419
 #: core/scanupdatesjob.cpp:143 core/scanportagejob.cpp:323
-#: core/scanportagejob.cpp:394 core/emerge.cpp:451 core/emerge.cpp:532
-#: queue/queuetab.cpp:397
+#: core/scanportagejob.cpp:394 core/emerge.cpp:454 core/emerge.cpp:536
+#: queue/queuetab.cpp:396
 msgid "Done."
 msgstr ""
 
@@ -505,7 +505,7 @@ msgstr ""
 msgid "Check packages in Queue with emerge pretend"
 msgstr ""
 
-#: rc.cpp:307 queue/queuetab.cpp:278
+#: rc.cpp:307 queue/queuetab.cpp:277
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
@@ -1089,7 +1089,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: history/historylistview.cpp:59 queue/queuelistview.cpp:174
+#: history/historylistview.cpp:59 queue/queuelistview.cpp:179
 msgid "Duration"
 msgstr ""
 
@@ -1426,105 +1426,105 @@ msgstr ""
 msgid "With USE-flag %1:"
 msgstr ""
 
-#: core/emerge.cpp:72
+#: core/emerge.cpp:73
 msgid "Can not process input! Emerge is not running."
 msgstr ""
 
-#: core/emerge.cpp:133 core/emerge.cpp:167
+#: core/emerge.cpp:134 core/emerge.cpp:168
 msgid ""
 "\n"
 "Error: Emerge didn't start. "
 msgstr ""
 
-#: core/emerge.cpp:138
+#: core/emerge.cpp:139
 msgid ""
 "\n"
 "Emerge %1 started..."
 msgstr ""
 
-#: core/emerge.cpp:139
+#: core/emerge.cpp:140
 msgid "Installing packages in queue..."
 msgstr ""
 
-#: core/emerge.cpp:174
+#: core/emerge.cpp:175
 msgid ""
 "\n"
 "Emerge pretend %1 started..."
 msgstr ""
 
-#: core/emerge.cpp:175
+#: core/emerge.cpp:176
 msgid "Checking installation queue..."
 msgstr ""
 
-#: core/emerge.cpp:202 core/emerge.cpp:231 core/emerge.cpp:266
+#: core/emerge.cpp:203 core/emerge.cpp:232 core/emerge.cpp:267
 msgid ""
 "\n"
 "Error: Emerge didn't start."
 msgstr ""
 
-#: core/emerge.cpp:209
+#: core/emerge.cpp:210
 msgid ""
 "\n"
 "Unmerge %1 started..."
 msgstr ""
 
-#: core/emerge.cpp:210
+#: core/emerge.cpp:211
 msgid "Uninstalling packages..."
 msgstr ""
 
-#: core/emerge.cpp:238
+#: core/emerge.cpp:239
 msgid ""
 "\n"
 "Emerge synchronize Portage Tree started..."
 msgstr ""
 
-#: core/emerge.cpp:239
+#: core/emerge.cpp:240
 msgid "Synchronizing portage tree..."
 msgstr ""
 
-#: core/emerge.cpp:273
+#: core/emerge.cpp:274
 msgid ""
 "\n"
 "Emerge check package updates started..."
 msgstr ""
 
-#: core/emerge.cpp:274
+#: core/emerge.cpp:275
 msgid "Checking for package updates..."
 msgstr ""
 
-#: core/emerge.cpp:366
+#: core/emerge.cpp:369
 msgid "Root access required!"
 msgstr ""
 
-#: core/emerge.cpp:372
+#: core/emerge.cpp:375
 msgid "There is no ebuilds to satisfy %1"
 msgstr ""
 
-#: core/emerge.cpp:465
+#: core/emerge.cpp:468
 msgid "You must run Kuroo as root to unmask packages!"
 msgstr ""
 
-#: core/emerge.cpp:466
+#: core/emerge.cpp:469
 msgid "Auto-unmasking packages"
 msgstr ""
 
-#: core/emerge.cpp:470
+#: core/emerge.cpp:473
 msgid "Emerge messages"
 msgstr ""
 
-#: core/emerge.cpp:470 core/emerge.cpp:542
+#: core/emerge.cpp:473 core/emerge.cpp:546
 msgid "Please check log for more information!"
 msgstr ""
 
-#: core/emerge.cpp:542
+#: core/emerge.cpp:546
 msgid "Important"
 msgstr ""
 
-#: core/emerge.cpp:555 core/emerge.cpp:564
+#: core/emerge.cpp:559 core/emerge.cpp:568
 msgid "%1 is not available on your architecture %2!<br><br>"
 msgstr ""
 
-#: core/emerge.cpp:556
+#: core/emerge.cpp:560
 msgid ""
 "<b>missing keyword</b> means that the application has not been tested on "
 "your architecture yet.<br>Ask the architecture porting team to test the "
@@ -1532,44 +1532,44 @@ msgid ""
 "website."
 msgstr ""
 
-#: core/emerge.cpp:560
+#: core/emerge.cpp:564
 msgid "Missing Keyword"
 msgstr ""
 
-#: core/emerge.cpp:565
+#: core/emerge.cpp:569
 msgid ""
 "<br><b>-* keyword</b> means that the application does not work on your "
 "architecture.<br>If you believe the package does work file a bug at Gentoo "
 "bugzilla website."
 msgstr ""
 
-#: core/emerge.cpp:568
+#: core/emerge.cpp:572
 msgid "-* Keyword"
 msgstr ""
 
-#: core/emerge.cpp:572
+#: core/emerge.cpp:576
 msgid "Please add package to \"package.unmask\"."
 msgstr ""
 
-#: core/emerge.cpp:575
+#: core/emerge.cpp:579
 msgid ""
 "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/emerge.cpp:576 core/emerge.cpp:591
+#: core/emerge.cpp:580 core/emerge.cpp:594
 msgid "Unmask"
 msgstr ""
 
-#: core/emerge.cpp:587
+#: core/emerge.cpp:590
 msgid "Please add package to \"package.keywords\"."
 msgstr ""
 
-#: core/emerge.cpp:590
+#: core/emerge.cpp:593
 msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/versionview.cpp:93 queue/queuelistview.cpp:173
+#: core/versionview.cpp:93 queue/queuelistview.cpp:178
 msgid "Version"
 msgstr ""
 
@@ -1577,7 +1577,7 @@ msgstr ""
 msgid "Stability"
 msgstr ""
 
-#: core/versionview.cpp:95 queue/queuelistview.cpp:175
+#: core/versionview.cpp:95 queue/queuelistview.cpp:180
 msgid "Size"
 msgstr ""
 
@@ -1641,12 +1641,12 @@ msgstr ""
 msgid "Copy text to clipboard"
 msgstr ""
 
-#: queue/queuelistview.cpp:176
+#: queue/queuelistview.cpp:181
 msgid "Progress"
 msgstr ""
 
-#: queue/queuelistview.cpp:306 queue/queuelistview.cpp:312
-#: queue/queuelistview.cpp:318
+#: queue/queuelistview.cpp:311 queue/queuelistview.cpp:317
+#: queue/queuelistview.cpp:323
 msgid "na"
 msgstr ""
 
@@ -1697,23 +1697,23 @@ msgid ""
 "table>"
 msgstr ""
 
-#: queue/queuetab.cpp:272
+#: queue/queuetab.cpp:271
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:355
+#: queue/queuetab.cpp:354
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:355 queue/queuetab.cpp:366
+#: queue/queuetab.cpp:354 queue/queuetab.cpp:365
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:366
+#: queue/queuetab.cpp:365
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:393
+#: queue/queuetab.cpp:392
 msgid "Do you want to abort the running installation?"
 msgstr ""
 

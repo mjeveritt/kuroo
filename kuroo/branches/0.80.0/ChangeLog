@@ -1,3 +1,12 @@
+View-menu is removed, "Release Information" moved to Help-menu.
+KDE-settings "Show icons on buttons" is now respected.
+Empty package list warning moved up, reformated package name as name (cat/subcat) in queue and history.
+Customizable font for log.
+Added russian translation by Bart.
+Added icons in all rmb's.
+Fixed Ticket #203: Crash On Click Use Flag for portage < 2.1.
+Patch by Schnacki: Dependencies incorrect for portage < 2.1.
+
 13-05-2006
 Settings: Fixed resetting to default all settings.
 LogsTab: text is wrapped at widget boundary.

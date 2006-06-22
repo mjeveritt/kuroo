@@ -303,7 +303,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		if ( line.isEmpty() )
 			continue;
 		
-		kdDebug() << "line=" << line << LINE_INFO;
+// 		kdDebug() << "line=" << line << LINE_INFO;
 		
 		////////////////////////////////////////////////////////////////////////////
 		// Parse out package and info

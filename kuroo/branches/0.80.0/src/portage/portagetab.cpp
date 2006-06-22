@@ -293,6 +293,7 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
+	DEBUG_LINE_INFO;
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
@@ -409,6 +410,7 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
+	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	

@@ -171,6 +171,7 @@ void KurooView::slotInit()
  */
 void KurooView::slotCheckPortage()
 {
+	DEBUG_LINE_INFO;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Restore backup after db is recreated because of new version
@@ -179,14 +180,14 @@ void KurooView::slotCheckPortage()
 		HistorySingleton::Instance()->updateStatistics();
 		m_isHistoryRestored = false;
 	}
-	
+	DEBUG_LINE_INFO;
 	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );
 	}
-	
+	DEBUG_LINE_INFO;
 	// Warn user that emerge need root permissions - many rmb actions are disabled
 	if ( !KUser().isSuperUser() )
 		KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );

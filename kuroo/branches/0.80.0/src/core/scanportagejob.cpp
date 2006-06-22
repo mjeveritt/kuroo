@@ -68,6 +68,7 @@ void ScanPortageJob::completeJob()
  */
 bool ScanPortageJob::doJob()
 {
+	DEBUG_LINE_INFO;
 	int count( 0 );
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );

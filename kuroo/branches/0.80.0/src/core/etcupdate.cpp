@@ -142,7 +142,7 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
 			if ( rxEtcFiles.search( *it ) > -1 )
 				m_etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
 		
-		m_totalEtcCount = m_etcFilesList.size() / 2;
+		m_totalEtcCount = m_etcFilesList.size();
 		runDiff();
 	}
 }
@@ -156,7 +156,6 @@ void EtcUpdate::runDiff()
 		QString destination = m_etcFilesList.first();
 		m_etcFilesList.pop_front();
 		QString source = m_etcFilesList.first();
-		m_etcFilesList.pop_front();
 		
 		// Check for etc-files warnings
 		QString etcWarning;

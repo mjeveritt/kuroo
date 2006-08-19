@@ -1,1 +1,29 @@
 Visit http://kuroo.org/installation.html
+
+For CMake visit :
+http://www.cmake.org
+http://wiki.kde.org/tiki-index.php?page=KDECMakeIntro
+http://lwn.net/Articles/188693/ (interesting)
+
+
+I have problem to build with cmake but i don't know why, it should work.
+
+To build with CMake :
+
+mkdir build
+cd build
+cmake ..
+make
+
+
+To build with KDevelop3 with CMake :
+
+mkdir kdevelop
+cd kdevelop
+cmake -GKDevelop3 ..
+
+
+You can tweak debug output in ./CMakeLists.txt bye changing to OFF
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+SET(CMAKE_COLOR_MAKEFILE ON)
+

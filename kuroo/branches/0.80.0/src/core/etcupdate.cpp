@@ -74,27 +74,32 @@ void EtcUpdate::slotEtcUpdate()
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
 		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
-		m_etcUpdateLines.clear();
+// 		m_etcUpdateLines.clear();
 		m_diffSource = QString::null;
 		m_noFiles = true;
 		m_count = 1;
 		m_totalEtcCount = 0;
 		
-		eProc->resetAll();
-		*eProc << "etc-update" ;
-
-		if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
-			LogSingleton::Instance()->writeLog( i18n("\netc-update didn't start. "), ERROR );
-			return;
-		}
-		else {
-			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
-			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
-			LogSingleton::Instance()->writeLog( i18n( "\nRunning etc-update..." ), KUROO );
-			KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Checking for configuration file updates...") );
-			SignalistSingleton::Instance()->setKurooBusy( true );
-			return;
-		}
+		DEBUG_LINE_INFO;
+		m_configProtectList = QStringList::split( " ", KurooConfig::configProtectList() );
+		KurooStatusBar::instance()->setProgressStatus( "EtcUpdate", i18n("Searching config files...") );
+		slotFinished();
+		
+// 		eProc->resetAll();
+// 		*eProc << "etc-update" ;
+// 
+// 		if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+// 			LogSingleton::Instance()->writeLog( i18n("\netc-update didn't start. "), ERROR );
+// 			return;
+// 		}
+// 		else {
+// 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
+// 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
+// 			LogSingleton::Instance()->writeLog( i18n( "\nRunning etc-update..." ), KUROO );
+// 			KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Checking for configuration file updates...") );
+// 			SignalistSingleton::Instance()->setKurooBusy( true );
+// 			return;
+// 		}
 	}
 }
 
@@ -102,48 +107,80 @@ void EtcUpdate::slotEtcUpdate()
  * Collect output from etc-update and terminate it.
  * @param process
  */
-void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
-{
-	QString line;
-	
-	while ( proc->readln( line, true ) != -1 ) {
-		m_etcUpdateLines += line;
-		LogSingleton::Instance()->writeLog( line, EMERGE );
-
-		if ( line.contains("Please select a file") ) {
-			m_noFiles = false;
-			proc->writeStdin( (QString)"-1", true );
-			proc->closeWhenDone();
-		}
-	}
-}
+// void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
+// {
+// 	QString line;
+// 	
+// 	while ( proc->readln( line, true ) != -1 ) {
+// 		m_etcUpdateLines += line;
+// 		LogSingleton::Instance()->writeLog( line, EMERGE );
+// 
+// 		if ( line.contains("Please select a file") ) {
+// 			m_noFiles = false;
+// 			proc->writeStdin( (QString)"-1", true );
+// 			proc->closeWhenDone();
+// 		}
+// 	}
+// }
 
 /**
  * Terminate.
  * @param process
  */
-void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
+// void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
+// {
+// 	KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Done.") );
+// 	
+// 	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
+// 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
+// 	
+// 	if ( m_noFiles ) {
+// 		SignalistSingleton::Instance()->setKurooBusy( false );
+// 		KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), 
+// 		                       i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
+// 	}
+// 	else {
+// 		
+// 		// Parse out etc-files list
+// 		QRegExp rxEtcFiles( "(?:^\\d+\\)\\s+){0,1}(/\\S*)" );
+// 		foreach( m_etcUpdateLines )
+// 			if ( rxEtcFiles.search( *it ) > -1 )
+// 				m_etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
+// 		
+// 		m_totalEtcCount = m_etcFilesList.size();
+// 		runDiff();
+// 	}
+// }
+
+void EtcUpdate::slotFinished()
 {
-	KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Done.") );
+	kdDebug() << "m_configProtectList.count()=" << m_configProtectList.count() << endl;
 	
-	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
-	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
-	
-	if ( m_noFiles ) {
-		SignalistSingleton::Instance()->setKurooBusy( false );
-		KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), 
-		                       i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
+	if ( m_configProtectList.count() > 0 ) {
+		m_configProtectDir = m_configProtectList.first();
+		kdDebug() << "m_configProtectList.first()=" << m_configProtectDir << endl;
+		KIO::ListJob* job = KIO::listRecursive( KURL( m_configProtectDir ), false );
+		connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
+		connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
+		m_configProtectList.pop_front();
 	}
-	else {
-		
-		// Parse out etc-files list
-		QRegExp rxEtcFiles( "(?:^\\d+\\)\\s+){0,1}(/\\S*)" );
-		foreach( m_etcUpdateLines )
-			if ( rxEtcFiles.search( *it ) > -1 )
-				m_etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
-		
-		m_totalEtcCount = m_etcFilesList.size();
+	else
 		runDiff();
+}
+
+void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
+{
+	QString configFile;
+	for ( KIO::UDSEntryList::ConstIterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt) {
+		for ( KIO::UDSEntry::ConstIterator it = (*entryIt).begin(); it != (*entryIt).end(); it++ ) {
+			if ( (*it).m_uds == KIO::UDS_NAME )
+				configFile = (*it).m_str;
+		}
+		
+		if ( configFile.contains( "._cfg" ) ) {
+			m_etcFilesList += m_configProtectDir + "/" + configFile;
+			m_totalEtcCount++;
+		}
 	}
 }
 
@@ -152,6 +189,9 @@ void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
  */
 void EtcUpdate::runDiff()
 {
+	KurooStatusBar::instance()->setProgressStatus( "EtcUpdate", i18n("Done.") );
+	
+	kdDebug() << "m_totalEtcCount=" << m_totalEtcCount << endl;
 	if ( m_totalEtcCount >= m_count ) {
 		QString destination = m_etcFilesList.first();
 		m_etcFilesList.pop_front();

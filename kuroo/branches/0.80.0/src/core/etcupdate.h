@@ -24,6 +24,8 @@
 
 #include <qobject.h>
 
+#include <kio/job.h>
+
 class KProcIO;
 
 /**
@@ -48,8 +50,10 @@ private:
 	void				backup( const QString& source, const QString& destination );
 	
 private slots:
-	void 				slotEtcUpdateOutput( KProcIO *proc );
-	void				slotCleanupEtcUpdate( KProcess* );
+	void				slotFinished();
+	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
+// 	void 				slotEtcUpdateOutput( KProcIO *proc );
+// 	void				slotCleanupEtcUpdate( KProcess* );
 	void				slotCleanupEtcUpdateDiff( KProcess* );
 
 signals:
@@ -63,7 +67,10 @@ private:
 	int 				m_count, m_totalEtcCount;
 	
 	// Collected output from etc-update
-	QStringList			m_etcUpdateLines;
+// 	QStringList			m_etcUpdateLines;
+	
+	QStringList 		m_configProtectList;
+	QString				m_configProtectDir;
 	
 	// List of etc-files for merging
 	QStringList			m_etcFilesList;

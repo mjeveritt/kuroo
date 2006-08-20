@@ -24,6 +24,7 @@
 #include <kprocio.h>
 #include <kmessagebox.h>
 #include <kio/job.h>
+#include <kinputdialog.h>
 
 /**
  * @class EtcUpdate
@@ -74,7 +75,7 @@ void EtcUpdate::slotEtcUpdate()
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
 		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
-// 		m_etcUpdateLines.clear();
+		m_etcFilesList.clear();
 		m_diffSource = QString::null;
 		m_noFiles = true;
 		m_count = 1;
@@ -84,73 +85,8 @@ void EtcUpdate::slotEtcUpdate()
 		m_configProtectList = QStringList::split( " ", KurooConfig::configProtectList() );
 		KurooStatusBar::instance()->setProgressStatus( "EtcUpdate", i18n("Searching config files...") );
 		slotFinished();
-		
-// 		eProc->resetAll();
-// 		*eProc << "etc-update" ;
-// 
-// 		if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
-// 			LogSingleton::Instance()->writeLog( i18n("\netc-update didn't start. "), ERROR );
-// 			return;
-// 		}
-// 		else {
-// 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
-// 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
-// 			LogSingleton::Instance()->writeLog( i18n( "\nRunning etc-update..." ), KUROO );
-// 			KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Checking for configuration file updates...") );
-// 			SignalistSingleton::Instance()->setKurooBusy( true );
-// 			return;
-// 		}
 	}
 }
-
-/**
- * Collect output from etc-update and terminate it.
- * @param process
- */
-// void  EtcUpdate::slotEtcUpdateOutput( KProcIO* proc )
-// {
-// 	QString line;
-// 	
-// 	while ( proc->readln( line, true ) != -1 ) {
-// 		m_etcUpdateLines += line;
-// 		LogSingleton::Instance()->writeLog( line, EMERGE );
-// 
-// 		if ( line.contains("Please select a file") ) {
-// 			m_noFiles = false;
-// 			proc->writeStdin( (QString)"-1", true );
-// 			proc->closeWhenDone();
-// 		}
-// 	}
-// }
-
-/**
- * Terminate.
- * @param process
- */
-// void EtcUpdate::slotCleanupEtcUpdate( KProcess* )
-// {
-// 	KurooStatusBar::instance()->setProgressStatus( "Etc-update", i18n("Done.") );
-// 	
-// 	disconnect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotEtcUpdateOutput( KProcIO* ) ) );
-// 	disconnect( eProc, SIGNAL( processExited( KProcess*) ), this, SLOT( slotCleanupEtcUpdate( KProcess* ) ) );
-// 	
-// 	if ( m_noFiles ) {
-// 		SignalistSingleton::Instance()->setKurooBusy( false );
-// 		KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), 
-// 		                       i18n("There are no files that need to be updated through etc-update."), i18n("Etc-update") );
-// 	}
-// 	else {
-// 		
-// 		// Parse out etc-files list
-// 		QRegExp rxEtcFiles( "(?:^\\d+\\)\\s+){0,1}(/\\S*)" );
-// 		foreach( m_etcUpdateLines )
-// 			if ( rxEtcFiles.search( *it ) > -1 )
-// 				m_etcFilesList += rxEtcFiles.cap(1).stripWhiteSpace();
-// 		
-// 		m_totalEtcCount = m_etcFilesList.size();
-// 		runDiff();
-// 	}
-// }
 
 void EtcUpdate::slotFinished()
 {
@@ -193,9 +129,9 @@ void EtcUpdate::runDiff()
 	
 	kdDebug() << "m_totalEtcCount=" << m_totalEtcCount << endl;
 	if ( m_totalEtcCount >= m_count ) {
-		QString destination = m_etcFilesList.first();
-		m_etcFilesList.pop_front();
+
 		QString source = m_etcFilesList.first();
+		QString destination = m_etcFilesList.first().remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
 		
 		// Check for etc-files warnings
 		QString etcWarning;
@@ -205,38 +141,29 @@ void EtcUpdate::runDiff()
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
 
 		// Ask user what to do with this etc-file
-		switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), i18n("<qt>%1Do you want to merge changes in %2?</qt>")
-		                                        .arg( etcWarning, destination ), 
-		                                     i18n("etc-update (%1 of %2)").arg( m_count++ ).arg( m_totalEtcCount ) ) ) {
+		QString configFile = KInputDialog::getItemList( i18n("Merge config changes"),
+		                                                i18n("Select config file to merge"),
+		                                                m_etcFilesList, m_etcFilesList.first() ).first();
+		m_etcFilesList.pop_front();
+
+		// Merge this etc-file
+		if ( !configFile.isEmpty() ) {
+			eProc->resetAll();
+			*eProc << KurooConfig::etcUpdateTool() << source << destination;
+			eProc->start( KProcess::NotifyOnExit, true );
 			
-			// Merge this etc-file
-			case KMessageBox::Yes : {
-				
-				eProc->resetAll();
-				*eProc << KurooConfig::etcUpdateTool() << source << destination;
-				eProc->start( KProcess::NotifyOnExit, true );
-				
-				m_diffSource = source;
-				connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
-				
-				if ( !eProc->isRunning() ) {
-					LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
-					KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
-					                       .arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
-					SignalistSingleton::Instance()->setKurooBusy( false );
-				}
-				else {
-					LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( destination ), KUROO );
-					backup( source, destination );
-				}
+			m_diffSource = source;
+			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
 			
-				break;
+			if ( !eProc->isRunning() ) {
+				LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
+				KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
+										.arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
+				SignalistSingleton::Instance()->setKurooBusy( false );
 			}
-			
-			// Move to next etc-file
-			case KMessageBox::No : {
-				LogSingleton::Instance()->writeLog( i18n( "Skipping \'%1\'. etc-update will ask again next time." ).arg( destination ), KUROO );
-				runDiff();
+			else {
+				LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( destination ), KUROO );
+				backup( source, destination );
 			}
 		}
 	}

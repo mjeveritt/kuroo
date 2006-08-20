@@ -52,8 +52,6 @@ private:
 private slots:
 	void				slotFinished();
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
-// 	void 				slotEtcUpdateOutput( KProcIO *proc );
-// 	void				slotCleanupEtcUpdate( KProcess* );
 	void				slotCleanupEtcUpdateDiff( KProcess* );
 
 signals:
@@ -65,9 +63,6 @@ private:
 	
 	// Keep track of current etc-file position in the total
 	int 				m_count, m_totalEtcCount;
-	
-	// Collected output from etc-update
-// 	QStringList			m_etcUpdateLines;
 	
 	QStringList 		m_configProtectList;
 	QString				m_configProtectDir;

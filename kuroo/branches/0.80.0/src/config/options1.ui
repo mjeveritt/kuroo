@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>482</height>
+            <height>457</height>
         </rect>
     </property>
     <property name="caption">
@@ -159,23 +159,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2_3_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>106</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>textLabel1_3</cstring>
@@ -215,20 +198,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>kcfg_portageVersion21</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Portage version &gt;= &amp;2.1</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+2</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
             </grid>
         </widget>
         <spacer row="5" column="0">

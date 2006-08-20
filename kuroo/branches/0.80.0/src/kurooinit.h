@@ -36,13 +36,17 @@ public:
 	KurooInit( QObject *parent = 0, const char *name = 0 );
     ~KurooInit();
 	
-private slots:
 	void 			firstTimeWizard();
 	void 			getEnvironment();
 	void			checkUser();
 	
+private slots:
+	void			slotCollectOutput( KProcIO* eProc );
+	void			slotEmergeInfo( KProcess* );
+	
 private:
 	IntroDlg 		*wizardDialog;
+	QStringList		m_emergeInfoLines;
 };
 
 #endif

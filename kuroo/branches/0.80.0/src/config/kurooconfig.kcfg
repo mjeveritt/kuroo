@@ -51,6 +51,8 @@
 		</entry>
 		<entry name="Arch" type="String">
 		</entry>
+		<entry name="ConfigProtectList" type="String">
+		</entry>
 		<entry name="DirMakeProfile" type="String">
 			<default>/etc/make.profile</default>
 		</entry>

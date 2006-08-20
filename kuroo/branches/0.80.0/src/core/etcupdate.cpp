@@ -34,8 +34,7 @@
  * Launches the exernal diff-tool for selected files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
-	: QObject( m_parent, name ), 
-	m_noFiles( true ), m_count( 0 ), m_totalEtcCount( 0 )
+	: QObject( m_parent, name )
 {
 	eProc = new KProcIO();
 }

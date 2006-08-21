@@ -296,7 +296,6 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-		DEBUG_LINE_INFO;
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
@@ -310,7 +309,7 @@ void PortageTab::slotListPackages()
 	}
 	else {
 		packagesView->showNoHitsWarning( false );
-		DEBUG_LINE_INFO;
+		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );

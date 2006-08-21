@@ -116,8 +116,8 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
 	
 	// Create text-widget warning for "No packages found.."
-	noHitsWarning = new KTextBrowser( viewport() );
-	noHitsWarning->setGeometry( QRect( 20, 20, 400, 300 ) );
+	noHitsWarning = new KTextBrowser( this );
+	noHitsWarning->setGeometry( QRect( 20, 50, 400, 300 ) );
 	noHitsWarning->setFrameShape( QFrame::NoFrame );
 	noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
 	                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"

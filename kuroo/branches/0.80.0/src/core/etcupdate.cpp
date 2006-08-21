@@ -127,7 +127,7 @@ void EtcUpdate::runDiff()
 	KurooStatusBar::instance()->setProgressStatus( "EtcUpdate", i18n("Done.") );
 	
 	kdDebug() << "m_totalEtcCount=" << m_totalEtcCount << endl;
-	if ( m_totalEtcCount >= m_count ) {
+	if ( m_totalEtcCount > 0 ) {
 
 		QString source = m_etcFilesList.first();
 		QString destination = m_etcFilesList.first().remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );

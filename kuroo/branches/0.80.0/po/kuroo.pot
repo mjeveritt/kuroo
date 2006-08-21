@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-11 10:57+0200\n"
+"POT-Creation-Date: 2006-08-21 19:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,13 +39,13 @@ msgstr ""
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:336
+#: portage/portagetab.cpp:335
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:337
+#: portage/portagetab.cpp:336
 msgid "Refreshing Packages"
 msgstr ""
 
@@ -136,11 +136,11 @@ msgid ""
 msgstr ""
 
 #: statusbar.cpp:102 history/history.cpp:261 history/history.cpp:262
-#: core/etcupdate.cpp:127 core/cacheportagejob.cpp:166
+#: core/etcupdate.cpp:127 core/cacheportagejob.cpp:167
 #: core/portagefiles.cpp:146 core/portagefiles.cpp:237
 #: core/portagefiles.cpp:328 core/portagefiles.cpp:419
-#: core/scanupdatesjob.cpp:143 core/scanportagejob.cpp:323
-#: core/scanportagejob.cpp:394 core/emerge.cpp:454 core/emerge.cpp:536
+#: core/scanupdatesjob.cpp:143 core/scanportagejob.cpp:324
+#: core/scanportagejob.cpp:395 core/emerge.cpp:454 core/emerge.cpp:536
 #: queue/queuetab.cpp:396
 msgid "Done."
 msgstr ""
@@ -470,7 +470,7 @@ msgstr ""
 msgid "Download all packa&ges before installing them (--fetch-all-uri)"
 msgstr ""
 
-#: rc.cpp:280 rc.cpp:658
+#: rc.cpp:280 rc.cpp:652
 #, no-c-format
 msgid "Alt+G"
 msgstr ""
@@ -510,7 +510,7 @@ msgstr ""
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: rc.cpp:310 rc.cpp:609
+#: rc.cpp:310
 #, no-c-format
 msgid "Alt+2"
 msgstr ""
@@ -966,61 +966,56 @@ msgstr ""
 
 #: rc.cpp:606
 #, no-c-format
-msgid "Portage version >= &2.1"
-msgstr ""
-
-#: rc.cpp:612
-#, no-c-format
 msgid "Package filter options"
 msgstr ""
 
-#: rc.cpp:617
+#: rc.cpp:611
 #, no-c-format
 msgid "Click to select the background color of the OSD."
 msgstr ""
 
-#: rc.cpp:620 rc.cpp:639
+#: rc.cpp:614 rc.cpp:633
 #, no-c-format
 msgid "The color of the OSD background."
 msgstr ""
 
-#: rc.cpp:624
+#: rc.cpp:618
 #, no-c-format
 msgid "Click to select the color of the OSD text."
 msgstr ""
 
-#: rc.cpp:627 rc.cpp:633 rc.cpp:645
+#: rc.cpp:621 rc.cpp:627 rc.cpp:639
 #, no-c-format
 msgid "The color of the OSD text."
 msgstr ""
 
-#: rc.cpp:630
+#: rc.cpp:624
 #, no-c-format
 msgid "No matching packages found"
 msgstr ""
 
-#: rc.cpp:636
+#: rc.cpp:630
 #, no-c-format
 msgid "Matching packages found"
 msgstr ""
 
-#: rc.cpp:642
+#: rc.cpp:636
 #, no-c-format
 msgid "Log browser text font"
 msgstr ""
 
-#: rc.cpp:648 core/etcupdate.cpp:61 core/etcupdate.cpp:75
-#: core/etcupdate.cpp:186 main.cpp:43
+#: rc.cpp:642 core/etcupdate.cpp:61 core/etcupdate.cpp:75
+#: core/etcupdate.cpp:160 main.cpp:43
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
 
-#: rc.cpp:651
+#: rc.cpp:645
 #, no-c-format
 msgid "Release information"
 msgstr ""
 
-#: rc.cpp:655
+#: rc.cpp:649
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
 msgstr ""
@@ -1218,63 +1213,39 @@ msgstr ""
 msgid "Please specify merge tool in settings!"
 msgstr ""
 
-#: core/etcupdate.cpp:87
-msgid ""
-"\n"
-"etc-update didn't start. "
+#: core/etcupdate.cpp:85
+msgid "Searching config files..."
 msgstr ""
 
-#: core/etcupdate.cpp:93
-msgid ""
-"\n"
-"Running etc-update..."
-msgstr ""
-
-#: core/etcupdate.cpp:94
-msgid "Checking for configuration file updates..."
-msgstr ""
-
-#: core/etcupdate.cpp:135
-msgid "There are no files that need to be updated through etc-update."
-msgstr ""
-
-#: core/etcupdate.cpp:135 kurooview.cpp:86
-msgid "Etc-update"
-msgstr ""
-
-#: core/etcupdate.cpp:166
+#: core/etcupdate.cpp:140
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr ""
 
-#: core/etcupdate.cpp:169
-msgid "<qt>%1Do you want to merge changes in %2?</qt>"
+#: core/etcupdate.cpp:143
+msgid "Merge config changes"
 msgstr ""
 
-#: core/etcupdate.cpp:171
-msgid "etc-update (%1 of %2)"
+#: core/etcupdate.cpp:144
+msgid "Select config file to merge"
 msgstr ""
 
-#: core/etcupdate.cpp:184
+#: core/etcupdate.cpp:158
 msgid "%1 didn't start."
 msgstr ""
 
-#: core/etcupdate.cpp:185
+#: core/etcupdate.cpp:159
 msgid "%1 could not start!"
 msgstr ""
 
-#: core/etcupdate.cpp:190
+#: core/etcupdate.cpp:164
 msgid "Merging changes in '%1'."
 msgstr ""
 
-#: core/etcupdate.cpp:199
-msgid "Skipping '%1'. etc-update will ask again next time."
-msgstr ""
-
-#: core/etcupdate.cpp:206
+#: core/etcupdate.cpp:171
 msgid "etc-update completed."
 msgstr ""
 
-#: core/etcupdate.cpp:219
+#: core/etcupdate.cpp:184
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr ""
 
@@ -1317,15 +1288,15 @@ msgstr ""
 msgid "Portage version is upgraded to 2.1. Please refresh package view."
 msgstr ""
 
-#: core/filewatcher.cpp:69 kurooinit.cpp:66
+#: core/filewatcher.cpp:69
 msgid "Portage version"
 msgstr ""
 
-#: core/cacheportagejob.cpp:75
+#: core/cacheportagejob.cpp:76
 msgid "Collecting package information..."
 msgstr ""
 
-#: core/cacheportagejob.cpp:100 core/cacheportagejob.cpp:118
+#: core/cacheportagejob.cpp:101 core/cacheportagejob.cpp:119
 msgid "Caching aborted."
 msgstr ""
 
@@ -1390,11 +1361,11 @@ msgstr ""
 msgid "Refreshing updates view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:88
+#: core/scanportagejob.cpp:89
 msgid "Refreshing Portage packages view..."
 msgstr ""
 
-#: core/scanportagejob.cpp:340
+#: core/scanportagejob.cpp:341
 msgid "Collecting installed packages..."
 msgstr ""
 
@@ -1593,43 +1564,29 @@ msgid ""
 "Your emails"
 msgstr ""
 
-#: kurooinit.cpp:64
-msgid ""
-"Can not identify portage version!\n"
-"Kuroo can not correctly parse package information.\n"
-"You can select portage version in settings."
-msgstr ""
-
-#: kurooinit.cpp:87
+#: kurooinit.cpp:72
 msgid ""
 "<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:89 kurooinit.cpp:106 kurooinit.cpp:209
+#: kurooinit.cpp:74 kurooinit.cpp:91
 msgid "Initialization"
 msgstr ""
 
-#: kurooinit.cpp:104
+#: kurooinit.cpp:89
 msgid ""
 "<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:210
-msgid ""
-"Kuroo can not detect your architecture!\n"
-"You must select appropriate architecture to proceed.\n"
-"Please select:"
-msgstr ""
-
-#: kurooinit.cpp:264
+#: kurooinit.cpp:229
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:265
+#: kurooinit.cpp:230
 msgid "User permissions"
 msgstr ""
 
@@ -1842,6 +1799,10 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+#: kurooview.cpp:86
+msgid "Etc-update"
+msgstr ""
+
 #: kurooview.cpp:87
 msgid "Log"
 msgstr ""
@@ -1871,7 +1832,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: kurooview.cpp:192
+#: kurooview.cpp:193
 msgid "You must run Kuroo as root to emerge packages!"
 msgstr ""
 

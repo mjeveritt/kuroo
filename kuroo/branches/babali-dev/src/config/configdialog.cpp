@@ -516,7 +516,7 @@ void ConfigDialog::parseMakeConf()
 		if ( (*it).contains( QRegExp("USE=") ) ) {
 			if ( rx.search( *it ) > -1 ) {
 				QString s = KurooConfig::use();
-				if(s.isEmpty())
+				if(!s.isEmpty())
 					s += " ";
 				s += rx.cap(4).remove("${USE}").remove("$(USE)").remove("$USE");
 				KurooConfig::setUse( s );

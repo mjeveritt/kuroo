@@ -69,6 +69,8 @@ private slots:
 	void							slotCollectPretendOutput( KProcIO* eProc );
 	void							slotParsePackageUse( KProcess* eProc );
 	void							slotParseTempUse( KProcess* eProc );
+	void							slotQueue();
+	void							slotWorld();
 	
 private:
 	

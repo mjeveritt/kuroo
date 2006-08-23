@@ -1,0 +1,23 @@
+Vision
+
+Kuroo is a graphical frontend to Portage, a package management system that allows great flexibility while installing and maintaining software on Gentoo Linux. Kuroo integrates into the K-Desktop-Environment and covers most common maintenance tasks on Portage based systems.
+Our project vision in detail:
+
+    * Kuroo is easy to use
+      The main functions of Kuroo are easily understandable and must work out-of-the-box without any further reading or third-party help.
+    * Kuroo is supportive
+      The interface guides the user to manage all basic portage maintenance tasks.
+    * Kuroo is stable
+      Kuroo is a solid application that can be trusted. It is well known for its reliability.
+
+To ensure the best user experience there is, Kuroo cooperates closely with usability specialists from OpenUsability.org.
+Key Features
+
+    * Two Column Selector
+    * Filter Mechanism
+    * Package Inspector
+    * Progress bars
+    * Use-Flag Editor
+    * Emerge History
+    * Etc-update History
+    * Emerge Queue

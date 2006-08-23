@@ -174,6 +174,7 @@ Queue::Queue( QObject* m_parent )
 	
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotClearQueue() ) );
+	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotShutdownComputer() ) );
 }
 
 Queue::~Queue()

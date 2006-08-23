@@ -60,7 +60,7 @@ int main( int argc, char **argv )
 	KCmdLineArgs::addCmdLineOptions( options );
 	KApplication app;
 	
-    // register ourselves as a dcop client
+   // register ourselves as a dcop client
 	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
 		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
 		exit(0);

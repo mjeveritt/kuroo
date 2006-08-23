@@ -177,14 +177,16 @@ void PackageInspector::updateVersionData()
 		dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
 	}
 	
-	// View icons if package in World and Queue
-	dialog->pixmapInstalled->clear();
+	// Toggle checkboxes if package in World and Queue
 	if ( m_portagePackage->isInWorld() )
-		dialog->pixmapInstalled->setPixmap( ImagesSingleton::Instance()->icon( WORLD ) );
+		dialog->cbWorld->setChecked( true );
+	else
+		dialog->cbWorld->setChecked( false );
 	
-	dialog->pixmapQueued->clear();
 	if ( m_portagePackage->isQueued() )
-		dialog->pixmapQueued->setPixmap( ImagesSingleton::Instance()->icon( QUEUED ) );
+		dialog->cbQueue->setChecked( true );
+	else
+		dialog->cbQueue->setChecked( false );
 }
 
 /**

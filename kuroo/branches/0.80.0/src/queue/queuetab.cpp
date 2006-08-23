@@ -85,6 +85,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	// Recalculate package when user change settings in Inspector
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	slotInit();
 }
@@ -266,6 +267,9 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
+	if ( m_packageInspector->isVisible() )
+		return;
+	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );
@@ -440,6 +444,13 @@ void QueueTab::slotRemoveInstalled()
  */
 void QueueTab::slotAdvanced()
 {
+	DEBUG_LINE_INFO;
+	pbRemove->setDisabled( true );
+	pbClear->setDisabled( true );
+	pbCheck->setDisabled( true );
+	pbAdvanced->setDisabled( true );
+	pbGo->setDisabled( true );
+	
 	if ( queueView->currentPackage() )
 	     processPackage( true );
 }

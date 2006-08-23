@@ -55,39 +55,6 @@ PackageItem::~PackageItem()
 {}
 
 /**
- * Register package index in parent listView.
- * @param index
- */
-void PackageItem::setPackageIndex( int index )
-{
-	m_index = index;
-}
-
-/**
- * Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
- * @return true if first
- */
-bool PackageItem::isFirstPackage()
-{
-	return ( m_index == m_parent->childCount() );
-}
-
-/**
- * Is this the last package?
- * @return true if last
- */
-bool PackageItem::isLastPackage()
-{
-	return ( m_index == 1 );
-}
-
-void PackageItem::setRollOver( bool isMouseOver )
-{
-	m_isMouseOver = isMouseOver;
-	repaint();
-}
-
-/**
  * Set icons when package is visible.
  */
 void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
@@ -96,18 +63,17 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 		QColorGroup m_colorgroup( colorgroup );
 		QFont font( painter->font() );
 		
-		if ( m_isMouseOver ) {
-			font.setBold( true );
-			painter->setFont( font );
+// 		if ( m_isMouseOver ) {
+// 			font.setBold( true );
+// 			painter->setFont( font );
 // 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
 // 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
-		}
+// 		}
 		
 		// Optimizing - check only relevant columns
 		switch ( column ) {
 			
 			case 0 : {
-				
 				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 				else {
@@ -143,59 +109,6 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 	}
 }
 
-/**
- * Is this package installed.
- * @return true if yes
- */
-bool PackageItem::isInstalled()
-{
-	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
-}
-
-/**
- * Is this package available in Portage tree?
- * @return true if yes
- */
-bool PackageItem::isInPortage()
-{
-	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
-}
-
-/**
- * Is this package is in the emerge queue?
- * @return true/false
- */
-bool PackageItem::isQueued()
-{
-	return m_isQueued;
-}
-
-bool PackageItem::isInWorld()
-{
-	return m_inWorld;
-}
-
-void PackageItem::setDescription( const QString& description )
-{
-	m_description = description;
-}
-
-void PackageItem::setInstalled()
-{
-	m_status = PACKAGE_INSTALLED;
-}
-
-/**
- * Mark package as queued. Emit signal only if status is changed.
- * @param isQueued
- */
-void PackageItem::setQueued( bool isQueued )
-{
-	if ( m_isQueued != isQueued ) {
-		m_isQueued = isQueued;
-		SignalistSingleton::Instance()->packageQueueChanged();
-	}
-}
 
 void PackageItem::resetDetailedInfo()
 {
@@ -212,9 +125,7 @@ void PackageItem::initVersions()
 	
 	m_versions.clear();
 	m_versionMap.clear();
-	
-// 	clock_t start = clock();
-	
+
 	// Get list of accepted keywords, eg if package is "untesting"
 	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
 	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
@@ -298,11 +209,7 @@ void PackageItem::initVersions()
 		}
 	}
 	delete atom;
-	
-// 	clock_t finish = clock();
-// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kdDebug() << "PortageListView::PortageItem::initVersions SQL-query (" << duration << "s): " << endl;
-	
+
 	// This package has collected all it's data
 	m_isInitialized = true;
 }
@@ -448,6 +355,93 @@ void PackageItem::parsePackageVersions()
 // Accessors
 ///////////////////////////////////////////////////////////////////////////////
 
+// void PackageItem::setRollOver( bool isMouseOver )
+// {
+// 	m_isMouseOver = isMouseOver;
+// 	repaint();
+// }
+
+/**
+ * Register package index in parent listView.
+ * @param index
+ */
+void PackageItem::setPackageIndex( int index )
+{
+	m_index = index;
+}
+
+void PackageItem::setDescription( const QString& description )
+{
+	m_description = description;
+}
+
+void PackageItem::setInstalled()
+{
+	m_status = PACKAGE_INSTALLED;
+}
+
+/**
+ * Mark package as queued. Emit signal only if status is changed.
+ * @param isQueued
+ */
+void PackageItem::setQueued( bool isQueued )
+{
+	if ( m_isQueued != isQueued ) {
+		m_isQueued = isQueued;
+		SignalistSingleton::Instance()->packageQueueChanged();
+	}
+}
+
+/**
+ * Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
+ * @return true if first
+ */
+bool PackageItem::isFirstPackage()
+{
+	return ( m_index == m_parent->childCount() );
+}
+
+/**
+ * Is this the last package?
+ * @return true if last
+ */
+bool PackageItem::isLastPackage()
+{
+	return ( m_index == 1 );
+}
+
+/**
+ * Is this package installed.
+ * @return true if yes
+ */
+bool PackageItem::isInstalled()
+{
+	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
+}
+
+/**
+ * Is this package available in Portage tree?
+ * @return true if yes
+ */
+bool PackageItem::isInPortage()
+{
+	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
+}
+
+/**
+ * Is this package is in the emerge queue?
+ * @return true/false
+ */
+bool PackageItem::isQueued()
+{
+	return m_isQueued;
+}
+
+bool PackageItem::isInWorld()
+{
+	return m_inWorld;
+}
+
 /**
  * Package db id.
  * @return id
@@ -498,16 +492,25 @@ const QString& PackageItem::homepage() const
 	return m_homepage;
 }
 
+/**
+ * Returns list of installed versions in html-format.
+ */
 const QString& PackageItem::linesInstalled() const
 {
 	return m_linesInstalled;
 }
 
+/**
+ * Returns list of available versions in html-format.
+ */
 const QString& PackageItem::linesAvailable() const
 {
 	return m_linesAvailable;
 }
 
+/**
+ * Returns list emergeable versions in html-format.
+ */
 const QString& PackageItem::linesEmerge() const
 {
 	return m_linesEmerge;

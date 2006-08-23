@@ -130,6 +130,9 @@ void PortageTab::slotInit()
 	m_uninstallInspector = new UninstallInspector( this );
 	
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
+	pbUninstall->setIconSet( SmallIconSet("remove") );
+	pbAdvanced->setIconSet( SmallIconSet("options") );
 	
 	slotBusy();
 }
@@ -293,14 +296,11 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-		
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
-		summaryBrowser->setText( i18n("<font color=darkRed size=+1><b>No package found with these filter settings</font><br>"
-		                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
-		                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
-		
+		packagesView->showNoHitsWarning( true );
+
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
@@ -308,6 +308,7 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
 	else {
+		packagesView->showNoHitsWarning( false );
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
@@ -407,6 +408,7 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
+	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	
@@ -439,11 +441,11 @@ void PortageTab::processPackage( bool viewInspector )
 	QString linesEmerge = packagesView->currentPackage()->linesEmerge();
 	
 	// Build summary html-view
-	QString lines =  "<table width=100% border=0 cellpadding=0>";
-	lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#";
-	lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
-	lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
-	lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
+	QString lines = "<table width=100% border=0 cellpadding=0>";
+			lines += "<tr><td bgcolor=#" + GlobalSingleton::Instance()->bgHexColor() + " colspan=2><b><font color=#";
+			lines += GlobalSingleton::Instance()->fgHexColor() + "><font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
+			lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
+			lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
 	
 	if ( packagesView->currentPackage()->isInPortage() ) {
 		lines += "<tr><td colspan=2>" + packagesView->currentPackage()->description() + "</td></tr>";
@@ -529,26 +531,28 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	const QStringList selectedIdList = packagesView->selectedId();
 	
-	enum Actions { APPEND, UNINSTALL, OPTIONS, ADDWORLD, DELWORLD };
+	enum Actions { APPEND, UNINSTALL, ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
 	
 	int menuItem1;
 	if ( !packagesView->currentPackage()->isQueued() )
-		menuItem1 = menu.insertItem( i18n("&Add to queue"), APPEND );
+		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Add to queue"), APPEND );
 	else
-		menuItem1 = menu.insertItem( i18n("&Remove from queue"), APPEND );
+		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Remove from queue"), APPEND );
 	
-	menu.insertItem( i18n( "Details..." ), OPTIONS );
+	menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
 	
 	int menuItem4;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem4 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
+		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
 	else
-		menuItem4 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
+		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem4, false );
 	
-	int menuItem2 = menu.insertItem( i18n("&Uninstall"), UNINSTALL );
+	int menuItem2;
+	if ( packagesView->currentPackage()->isInstalled() )
+		menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
 	
 	// No access when kuroo is busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
@@ -572,7 +576,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			slotUninstall();
 			break;
 		
-		case OPTIONS:
+		case DETAILS:
 			slotAdvanced();
 			break;
 		

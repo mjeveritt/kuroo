@@ -26,7 +26,6 @@
 #include "versionview.h"
 #include "packageversion.h"
 
-#include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
@@ -34,6 +33,7 @@
 #include <qgroupbox.h>
 #include <qtooltip.h>
 
+#include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kdialogbase.h>
 #include <klineedit.h>
@@ -41,6 +41,7 @@
 #include <kpopupmenu.h>
 #include <kuser.h>
 #include <kaccel.h>
+#include <kiconloader.h>
 
 /**
  * @class QueueTab
@@ -160,6 +161,12 @@ void QueueTab::slotInit()
 	KAccel* pAccel = new KAccel( this );
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
 	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
+	
+	pbRemove->setIconSet( SmallIconSet("remove") );
+	pbClear->setIconSet( SmallIconSet("remove_all") );
+	pbAdvanced->setIconSet( SmallIconSet("options") );
+	pbCheck->setIconSet( SmallIconSet("gear") );
+	pbGo->setIconSet( SmallIconSet("launch") );
 }
 
 /**
@@ -219,12 +226,12 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
-	QString queueBrowserLines(   i18n( "<b>Summary</b><br>" ) );
-			queueBrowserLines += i18n( "Number of packages: %1<br>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "Initial estimated time: %1<br>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "Elapsed time: %1<br>" )
+	QString queueBrowserLines(   i18n( "<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></td></tr>" ) );
+			queueBrowserLines += i18n( "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
+			queueBrowserLines += i18n( "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
+			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>" )
 		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
-			queueBrowserLines += i18n( "Estimated time remaining: %1<br>" )
+			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>" )
 		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
@@ -247,7 +254,6 @@ void QueueTab::slotBusy()
 		cbDownload->setDisabled( true );
 		cbForceConf->setDisabled( true );
 		cbNoWorld->setDisabled( true );
-		cbRemove->setDisabled( true );
 		pbCheck->setDisabled( true );
 		pbGo->setDisabled( true );
 	}
@@ -282,16 +288,18 @@ void QueueTab::slotButtons()
 	}
 	
 	// Queue is not empty - enable button "Remove all" and "Check Installation"
-	pbRemove->setDisabled( false );
-	pbClear->setDisabled( false );
-	pbCheck->setDisabled( false );
 	cbDownload->setDisabled( false );
 	
 	// When emerging packages do not allow user to change the queue
-	if ( EmergeSingleton::Instance()->isRunning() ) {
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
 		pbRemove->setDisabled( true );
 		pbClear->setDisabled( true );
 		pbCheck->setDisabled( true );
+	}
+	else {
+		pbRemove->setDisabled( false );
+		pbClear->setDisabled( false );
+		pbCheck->setDisabled( false );
 	}
 	
 	// User is su and packages in queue are "checked" - enable checkboxes
@@ -473,18 +481,18 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	
 	const QStringList selectedIdList = queueView->selectedId();
 	
-	enum Actions { REMOVE, OPTIONS, ADDWORLD, DELWORLD };
+	enum Actions { ADDWORLD, DELWORLD };
 	
 	KPopupMenu menu( this );
 	
-	int menuItem1 = menu.insertItem( i18n( "Remove" ), REMOVE );
-	int menuItem2 = menu.insertItem( i18n( "Details..." ), OPTIONS );
+	int menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n( "Remove" ), REMOVE );
+	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
 	
 	int menuItem3;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem3 = menu.insertItem( i18n( "Add to world" ), ADDWORLD );
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
 	else
-		menuItem3 = menu.insertItem( i18n( "Remove from world" ), DELWORLD );
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem3, false );
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
@@ -499,7 +507,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
 			break;
 		
-		case OPTIONS:
+		case DETAILS:
 			slotAdvanced();
 			break;
 		

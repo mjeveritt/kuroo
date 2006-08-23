@@ -155,7 +155,7 @@ int KurooDB::insert( const QString& statement, DbConnection *conn )
 {
 // 	kdDebug() << "insert-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
-		
+	
 	DbConnection *dbConn;
 	if ( conn != NULL )
 		dbConn = conn;
@@ -218,117 +218,117 @@ bool KurooDB::isValid()
  */
 void KurooDB::createTables( DbConnection *conn )
 {
-	query(" CREATE TABLE dbInfo ("
-	      " meta VARCHAR(64), "
-	      " data VARCHAR(64) );"
+	query("CREATE TABLE dbInfo ( "
+	      "meta VARCHAR(64), "
+	      "data VARCHAR(64) );"
 		  , conn);
 	
 	query(" INSERT INTO dbInfo (meta, data) VALUES ('syncTimeStamp', '0');", conn);
 	query(" INSERT INTO dbInfo (meta, data) VALUES ('packageCount', '0');", conn);
 	query(" INSERT INTO dbInfo (meta, data) VALUES ('scanDuration', '100');", conn);
 	
-	query(" CREATE TABLE category ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " name VARCHAR(32) UNIQUE );"
+	query("CREATE TABLE category ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "name VARCHAR(32) UNIQUE );"
 	      , conn);
 	
-	query(" CREATE TABLE subCategory ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " name VARCHAR(32), "
-	      " idCategory INTEGER );"
+	query("CREATE TABLE subCategory ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "name VARCHAR(32), "
+	      "idCategory INTEGER );"
 	      , conn);
 	
-	query(" CREATE TABLE package ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	      " idCategory INTEGER, "
-	      " idSubCategory INTEGER, "
-	      " category VARCHAR(32), "
-	      " name VARCHAR(32), "
-	      " description VARCHAR(255), "
-	      " path VARCHAR(64), "
-	      " status INTEGER, "
-	      " meta VARCHAR(255), "
-	      " updateVersion VARCHAR(32) ); "
+	query("CREATE TABLE package ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "idCategory INTEGER, "
+	      "idSubCategory INTEGER, "
+	      "category VARCHAR(32), "
+	      "name VARCHAR(32), "
+	      "description VARCHAR(255), "
+	      "path VARCHAR(64), "
+	      "status INTEGER, "
+	      "meta VARCHAR(255), "
+	      "updateVersion VARCHAR(32) ); "
 	      , conn);
 	
-	query(" CREATE TABLE version ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER, "
-	      " name VARCHAR(32),"
-	      " description VARCHAR(255), "
-	      " homepage VARCHAR(128), "
-	      " licenses VARCHAR(64), "
-	      " useFlags VARCHAR(255),"
-	      " slot VARCHAR(32),"
-	      " size VARCHAR(32), "
-	      " status INTEGER, "
-	      " keywords VARCHAR(32) );"
+	query("CREATE TABLE version ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "idPackage INTEGER, "
+	      "name VARCHAR(32), "
+	      "description VARCHAR(255), "
+	      "homepage VARCHAR(128), "
+	      "licenses VARCHAR(64), "
+	      "useFlags VARCHAR(255), "
+	      "slot VARCHAR(32), "
+	      "size VARCHAR(32), "
+	      "status INTEGER, "
+	      "keywords VARCHAR(32) );"
 	      , conn);
 	
-	query(" CREATE TABLE queue ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " idPackage INTEGER, "
-	      " idDepend INTEGER, "
-	      " use VARCHAR(255), "
-	      " size VARCHAR(32), "
-	      " version VARCHAR(32) );"
+	query("CREATE TABLE queue ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "idPackage INTEGER, "
+	      "idDepend INTEGER, "
+	      "use VARCHAR(255), "
+	      "size VARCHAR(32), "
+	      "version VARCHAR(32) );"
 	      , conn);
 	
-	query(" CREATE TABLE history ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " package VARCHAR(32), "
-	      " timestamp VARCHAR(10), "
-	      " time INTEGER, "
-	      " einfo BLOB, "
-	      " emerge BOOL );"
+	query("CREATE TABLE history ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "package VARCHAR(32), "
+	      "timestamp VARCHAR(10), "
+	      "time INTEGER, "
+	      "einfo BLOB, "
+	      "emerge BOOL );"
 	      , conn);
 	
-	query(" CREATE TABLE mergeHistory ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " timestamp VARCHAR(10), "
-	      " source VARCHAR(255), "
-	      " destination VARCHAR(255) );"
+	query("CREATE TABLE mergeHistory ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "timestamp VARCHAR(10), "
+	      "source VARCHAR(255), "
+	      "destination VARCHAR(255) );"
 	      , conn);
 	
-	query(" CREATE TABLE statistic ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " package VARCHAR(32), "
-	      " time INTEGER, "
-	      " count INTEGER );"
+	query(" CREATE TABLE statistic ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "package VARCHAR(32), "
+	      "time INTEGER, "
+	      "count INTEGER );"
 	      , conn);
 	
-	query(" CREATE TABLE cache ("
-	      " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      " package VARCHAR(32), "
-	      " size VARCHAR(10) );"
+	query("CREATE TABLE cache ( "
+	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	      "package VARCHAR(32), "
+	      "size VARCHAR(10) );"
 	      , conn);
 	
-	query(" CREATE TABLE packageHardMask ("
-	      " idPackage INTEGER, "
-	      " dependAtom VARCHAR(255), "
-	      " comment BLOB );"
+	query("CREATE TABLE packageHardMask ( "
+	      "idPackage INTEGER, "
+	      "dependAtom VARCHAR(255), "
+	      "comment BLOB );"
 	      , conn);
 	
-	query(" CREATE TABLE packageUserMask ("
-	      " idPackage INTEGER UNIQUE, "
-	      " dependAtom VARCHAR(255), "
-	      " comment BLOB );"
+	query("CREATE TABLE packageUserMask ( "
+	      "idPackage INTEGER UNIQUE, "
+	      "dependAtom VARCHAR(255), "
+	      "comment BLOB );"
 	      , conn);
 	
-	query(" CREATE TABLE packageUnmask ("
-	      " idPackage INTEGER UNIQUE, "
-	      " dependAtom VARCHAR(255), "
-	      " comment BLOB );"
+	query("CREATE TABLE packageUnmask ( "
+	      "idPackage INTEGER UNIQUE, "
+	      "dependAtom VARCHAR(255), "
+	      "comment BLOB );"
 	      , conn);
 	
-	query(" CREATE TABLE packageKeywords ("
-	      " idPackage INTEGER UNIQUE, "
-	      " keywords VARCHAR(255) );"
+	query("CREATE TABLE packageKeywords ( "
+	      "idPackage INTEGER UNIQUE, "
+	      "keywords VARCHAR(255) );"
 	      , conn);
 	
-	query(" CREATE TABLE packageUse ("
-	      " idPackage INTEGER UNIQUE, "
-	      " use VARCHAR(255) );"
+	query("CREATE TABLE packageUse ( "
+	      "idPackage INTEGER UNIQUE, "
+	      "use VARCHAR(255) );"
 	      , conn);
 	
 	query("CREATE INDEX index_name_package ON package(name);", conn);
@@ -401,7 +401,7 @@ void KurooDB::restoreBackup()
 		if ( !(*it).isEmpty() && rxHistoryLine.exactMatch( *it ) ) {
 			QString timestamp = rxHistoryLine.cap(1);
 			QString einfo = rxHistoryLine.cap(2);
-			query( "UPDATE history SET einfo = '" + escapeString( einfo ) + "' WHERE timestamp = '" + timestamp + "';" );
+			singleQuery( "UPDATE history SET einfo = '" + escapeString( einfo ) + "' WHERE timestamp = '" + timestamp + "';" );
 		}
 	}
 	
@@ -423,7 +423,7 @@ void KurooDB::restoreBackup()
 			QString timestamp = rxMergeLine.cap(1);
 			QString source = rxMergeLine.cap(2);
 			QString destination = rxMergeLine.cap(3);
-			query( "INSERT INTO mergeHistory (timestamp, source, destination) "
+			singleQuery( "INSERT INTO mergeHistory (timestamp, source, destination) "
 			       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
 		}
 	}
@@ -449,9 +449,9 @@ QString KurooDB::getKurooDbMeta( const QString& meta )
 void KurooDB::setKurooDbMeta( const QString& meta, const QString& data )
 {
 	if ( singleQuery( "SELECT COUNT(meta) FROM dbInfo WHERE meta = '" + meta + "' LIMIT 1;" ) == "0" )
-		query( "INSERT INTO dbInfo (meta, data) VALUES ('" + meta + "', '"+ data + "');" );
+		insert( "INSERT INTO dbInfo (meta, data) VALUES ('" + meta + "', '"+ data + "');" );
 	else
-		query( "UPDATE dbInfo SET data = '" + data + "' WHERE meta = '" + meta + "';" );
+		singleQuery( "UPDATE dbInfo SET data = '" + data + "' WHERE meta = '" + meta + "';" );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -514,8 +514,7 @@ const QStringList KurooDB::portageCategories( int filter, const QString& text )
 			filterQuery = " WHERE package.status & " + PACKAGE_UPDATES_STRING;
 	}
 	
-	return query( "SELECT DISTINCT idCategory FROM package "
-	              + filterQuery + textQuery + " ; " );
+	return query( "SELECT DISTINCT idCategory FROM package " + filterQuery + textQuery + " ; " );
 }
 
 /**
@@ -853,13 +852,13 @@ bool KurooDB::isPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 {
-	insert( "REPLACE INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
+	singleQuery( "REPLACE INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
 }
 
 void KurooDB::setPackageUnMasked( const QString& id )
 {
-	insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-		    "'" + category( id ) + "/" + package( id ) + "');" );
+	singleQuery( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+		    	"'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
@@ -868,8 +867,8 @@ void KurooDB::setPackageUnMasked( const QString& id )
  */
 void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
 {
-	insert( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-		    "'=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
+	singleQuery( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+		    	"'=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**
@@ -878,8 +877,8 @@ void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
  */
 void KurooDB::setPackageUserMasked( const QString& id )
 {
-	insert( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
-	        "'" + category( id ) + "/" + package( id ) + "');" );
+	singleQuery( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
+	       	 	"'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
@@ -897,7 +896,7 @@ void KurooDB::setPackageUnTesting( const QString& id )
 	if ( keywords.isEmpty() )
 		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -914,7 +913,7 @@ void KurooDB::setPackageAvailable( const QString& id )
 	if ( keywords.isEmpty() )
 		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '-* -" + KurooConfig::arch() + "');" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -927,9 +926,9 @@ void KurooDB::clearPackageUnTesting( const QString& id )
 	
 	// If only testing keywords - remove it, else set only available keywords
 	if ( !keywords.contains( QRegExp("(\\-\\*)|(\\-" + KurooConfig::arch() + ")") ) )
-		query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+		singleQuery( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -942,9 +941,9 @@ void KurooDB::clearPackageAvailable( const QString& id )
 	
 	// If only available keywords - remove it, else set only testing keyword
 	if ( !keywords.contains( QRegExp("(~\\*)|(~" + KurooConfig::arch() + ")") ) )
-		query( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+		singleQuery( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		query( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
+		singleQuery( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
 }
 
 /**
@@ -953,7 +952,7 @@ void KurooDB::clearPackageAvailable( const QString& id )
  */
 void KurooDB::clearPackageUnMasked( const QString& id )
 {
-	query( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
+	singleQuery( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 /**
@@ -962,7 +961,7 @@ void KurooDB::clearPackageUnMasked( const QString& id )
  */
 void KurooDB::clearPackageUserMasked( const QString& id )
 {
-	query( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
+	singleQuery( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 
@@ -1019,7 +1018,7 @@ const QStringList KurooDB::allStatistic()
  */
 void KurooDB::resetUpdates()
 {
-	query( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
+	singleQuery( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
 }
 
 /**
@@ -1027,13 +1026,17 @@ void KurooDB::resetUpdates()
  */
 void KurooDB::resetInstalled()
 {
-	query( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
+	singleQuery( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
+}
+
+void KurooDB::resetQueue()
+{
+	singleQuery( "DELETE FROM queue;" );
 }
 
 void KurooDB::addEmergeInfo( const QString& einfo )
 {
-	query( QString("UPDATE history SET einfo = '%1' "
-	               "WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
+	singleQuery( QString("UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
 }
 
 /**
@@ -1285,8 +1288,7 @@ void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3
 
 SqliteConfig::SqliteConfig( const QString& dbfile )
 	: m_dbfile( dbfile )
-{
-}
+{}
 
 /** 
  * Connections pool with thread support

@@ -35,8 +35,8 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->query( "DELETE FROM statistic;", m_db );
-		KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM statistic;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
 		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
@@ -45,7 +45,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 			                                      .arg( itMap.data().emergeTime() ).arg( itMap.data().count() ).arg( itMap.key() ), m_db );
 		}
 		
-		KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
@@ -149,8 +149,6 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
-	DEBUG_LINE_INFO;
-	
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -234,7 +232,6 @@ void History::slotParse()
 
 			// Catch package unmerge completion
 			if ( emergeLine.contains("unmerge success") ) {
-				DEBUG_LINE_INFO;
 				QString package = emergeLine.section( "unmerge success: ", 1, 1 );
 				PortageSingleton::Instance()->removeInstalledPackage( package );
 				emergeLine.replace( "unmerge success", i18n( "unmerge success" ) );
@@ -244,8 +241,7 @@ void History::slotParse()
 			else
 
 			// Catch sync session start
-			if ( emergeLine.contains( "starting rsync" ) ) {
-				DEBUG_LINE_INFO;
+			if ( emergeLine.contains( "Starting rsync" ) ) {
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Synchronizing Portage..." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Synchronizing Portage..." ), EMERGELOG );
 				m_syncTime = QTime::currentTime();
@@ -262,7 +258,6 @@ void History::slotParse()
 
 			// Catch emerge termination
 			if ( emergeLine.contains( "terminating." ) ) {
-				DEBUG_LINE_INFO;
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
 				

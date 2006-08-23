@@ -8,10 +8,8 @@
 		<Action name="refresh_updates" />
 		<Action name="etc_update" />
 	</Menu>
-	<Menu name="custom2">
-		<text>&amp;View</text>
+	<Menu name="help">
 		<Action name="information" />
-		<Action name="emergeLog" />
 	</Menu>
 </MenuBar>
 </kpartgui>

@@ -114,14 +114,12 @@ const QStringList Global::parsePackage( const QString& packageString )
 /**
  * Kuroo widget parameters.
  */
-void Global::setKurooView( QWidget* view )
+void Global::setColorTheme()
 {
-	m_wId = view->winId();
-	
-	QColor c = view->colorGroup().highlight();
+	QColor c = KGlobalSettings::highlightColor();
 	m_bgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
 	
-	c = view->colorGroup().highlightedText();
+	c = KGlobalSettings::highlightedTextColor();
 	m_fgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
 }
 

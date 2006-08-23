@@ -176,4 +176,9 @@ void Signalist::packageClicked( const QString& package )
 	emit signalPackageClicked( package );
 }
 
+void Signalist::fontChanged()
+{
+	emit signalFontChanged();
+}
+
 #include "signalist.moc"

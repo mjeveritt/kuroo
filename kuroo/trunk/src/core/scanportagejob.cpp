@@ -36,9 +36,9 @@
 /**
  * @class ScanPortageJob
  * @short Thread for scanning local portage tree for available packages.
+ * 
  * The packages are counted first, this to get a correct refresh progress in the gui.
- * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages,
- * first the portage overlay cache the official portage cache.
+ * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages.
  * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
@@ -59,20 +59,16 @@ ScanPortageJob::~ScanPortageJob()
  */
 void ScanPortageJob::completeJob()
 {
-	m_mapCache.clear();
 	SignalistSingleton::Instance()->scanPortageComplete();
 }
 
-
 /**
- * Scan Portage cache for packages in portage tree.
- * Inserting found packages in db.
+ * Scan Portage cache for packages in portage tree. Inserting found packages in db.
  * @return success
  */
 bool ScanPortageJob::doJob()
 {
 	DEBUG_LINE_INFO;
-	
 	int count( 0 );
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -96,47 +92,46 @@ bool ScanPortageJob::doJob()
 	loadCache();
 	
 	// Temporary table for all categories
-	KurooDBSingleton::Instance()->query("BEGIN TRANSACTION;", m_db);
-	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE category_temp ("
-	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                    " name VARCHAR(32) UNIQUE );"
-	                                    , m_db);
+	KurooDBSingleton::Instance()->singleQuery(	"BEGIN TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE category_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    		"name VARCHAR(32) UNIQUE );"
+	                                    		, m_db );
 	
-	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE subCategory_temp ("
-	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                    " name VARCHAR(32), "
-	                                    " idCategory INTEGER );"
-	                                    , m_db);
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE subCategory_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    		"name VARCHAR(32), "
+	                                    		"idCategory INTEGER );"
+	                                    		, m_db );
 	
 	// Temporary table for all packages
-	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE package_temp ("
-	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                                    " idCategory INTEGER, "
-	                                    " idSubCategory INTEGER, "
-	                                    " category VARCHAR(32), "
-	                                    " name VARCHAR(32), "
-	                                    " description VARCHAR(255), "
-	                                    " path VARCHAR(64), "
-	                                    " status INTEGER, "
-	                                    " meta VARCHAR(255), "
-	                                    " updateVersion VARCHAR(32) );"
-	                                    , m_db);
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
+	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                    		"idCategory INTEGER, "
+	                                          	"idSubCategory INTEGER, "
+	                                          	"category VARCHAR(32), "
+	                                          	"name VARCHAR(32), "
+	                                          	"description VARCHAR(255), "
+	                                          	"path VARCHAR(64), "
+	                                          	"status INTEGER, "
+	                                          	"meta VARCHAR(255), "
+	                                          	"updateVersion VARCHAR(32) );"
+	                                          	, m_db );
 	
 	// Temporary table for all versions
-	KurooDBSingleton::Instance()->query(" CREATE TEMP TABLE version_temp ("
-	                                    " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	                                    " idPackage INTEGER, "
-	                                    " name VARCHAR(32),"
-	                                    " description VARCHAR(255), "
-	                                    " homepage VARCHAR(128), "
-	                                    " licenses VARCHAR(64), "
-	                                    " useFlags VARCHAR(255),"
-	                                    " slot VARCHAR(32),"
-	                                    " size VARCHAR(32), "
-	                                    " status INTEGER, "
-	                                    " keywords VARCHAR(32) );"
-	                                    , m_db);
-	
+	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE version_temp ( "
+	                                          	"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+	                                          	"idPackage INTEGER, "
+	                                          	"name VARCHAR(32),"
+	                                          	"description VARCHAR(255), "
+	                                          	"homepage VARCHAR(128), "
+	                                          	"licenses VARCHAR(64), "
+	                                          	"useFlags VARCHAR(255),"
+	                                          	"slot VARCHAR(32),"
+	                                          	"size VARCHAR(32), "
+	                                          	"status INTEGER, "
+	                                          	"keywords VARCHAR(32) );"
+	                                          	, m_db );
 	
 	// Gather all path = portage and overlays
 	QStringList pathList = KurooConfig::dirPortage();
@@ -164,7 +159,7 @@ bool ScanPortageJob::doJob()
 			// Abort the scan
 			if ( isAborted() ) {
 				kdWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
-				KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
+				KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 				return false;
 			}
 			
@@ -177,7 +172,7 @@ bool ScanPortageJob::doJob()
 			
 			int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
 				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-    			.arg( subCategory ).arg( QString::number(idCategory) ), m_db);
+    			.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -195,7 +190,7 @@ bool ScanPortageJob::doJob()
 					// Abort the scan
 					if ( isAborted() ) {
 						kdWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
-						KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
+						KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 						return false;
 					}
 					
@@ -234,7 +229,7 @@ bool ScanPortageJob::doJob()
 					
 					}
 					else
-						kdWarning(0) << QString("Scanning Portage. Scanning Portage cache: can not match package %1.").arg( *itPackage ) << LINE_INFO;
+						kdWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << *itPackage << LINE_INFO;
 					
 					// Post scan count progress
 					if ( ( ++count % 100 ) == 0 )
@@ -242,7 +237,7 @@ bool ScanPortageJob::doJob()
 				}
 			}
 			else
-				kdWarning(0) << i18n( "Scanning Portage. Can not access " ) << KurooConfig::dirEdbDep() << *itPath << *itCategory << LINE_INFO;
+				kdWarning(0) << "Scanning Portage. Can not access " << KurooConfig::dirEdbDep() << *itPath << *itCategory << LINE_INFO;
 			
 			lastCategory = category;
 		}
@@ -305,104 +300,26 @@ bool ScanPortageJob::doJob()
 	}
 	m_categories.clear();
 	
-	// Testing prepare-bind sqlite3
-/*	sqlite3_stmt *stmtPackage( NULL ), *stmtVersion( NULL );
-	const char *sqlPackage = 
-		"INSERT INTO package_temp (idCategory, idSubCategory, category, name, description, status, path, meta) "
-		"VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-	const char *sqlVersion =
-		"INSERT INTO version_temp (idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
-		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-	
-	int result1 = sqlite3_prepare( static_cast<sqlite3*>(m_db), sqlPackage, -1, &stmtPackage, NULL );
-	int result2 = sqlite3_prepare( static_cast<sqlite3*>(m_db), sqlVersion, -1, &stmtVersion, NULL );
-	
-	kdDebug() << "result1=" << result1 << LINE_INFO;
-	kdDebug() << "result2=" << result2 << LINE_INFO;
-	
-	PortageCategories::iterator itCategoryEnd = m_categories.end();
-	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-	
-		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
-		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
-			
-			QString idPackage;
-			QString idCategory = itCategory.data().idCategory;
-			QString idSubCategory = itCategory.data().idSubCategory;
-			
-			QString category = itCategory.key();
-			QString package = itPackage.key();
-			QString status = itPackage.data().status;
-			QString description = itPackage.data().description;
-			QString path = itPackage.data().path;
-			
-			// Create meta tag containing all text of interest for searching
-			QString meta = category + " " + package + " " + description;
-			
-			sqlite3_bind_text( stmtPackage, 1, idCategory, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, idSubCategory, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, category, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, package, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, description, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, status, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, path, -1, SQLITE_STATIC );
-			sqlite3_bind_text( stmtPackage, 1, meta, -1, SQLITE_STATIC );
-			idPackage = QString::number( sqlite3_step( stmtPackage ) );
-			sqlite3_reset( stmtPackage );
-			
-			kdDebug() << "idPackage=" << idPackage << LINE_INFO;
-			
-			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
-			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
-				
-				QString version = itVersion.key();
-				description = itVersion.data().description;
-				QString homepage = itVersion.data().homepage;
-				QString status = itVersion.data().status;
-				QString licenses = itVersion.data().licenses;
-				QString useFlags = itVersion.data().useFlags;
-				QString slot = itVersion.data().slot;
-				QString size = itVersion.data().size;
-				QString keywords = itVersion.data().keywords;
-				
-				sqlite3_bind_text( stmtVersion, 1, idPackage, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, version, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, description, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, homepage, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, size, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, keywords, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, status, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, licenses, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, useFlags, -1, SQLITE_STATIC );
-				sqlite3_bind_text( stmtVersion, 1, slot, -1, SQLITE_STATIC );
-				idPackage = QString::number( sqlite3_step( stmtVersion ) );
-				sqlite3_reset( stmtVersion );
-				
-			}
-		}
-	}
-	sqlite3_finalize( stmtPackage );
-	sqlite3_finalize( stmtVersion );
-	m_categories.clear();*/
-	
-	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
-	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );
+	KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );
 	
 	// Move content from temporary table 
-	KurooDBSingleton::Instance()->query( "DELETE FROM category;", m_db );
-	KurooDBSingleton::Instance()->query( "DELETE FROM subCategory;", m_db );
-	KurooDBSingleton::Instance()->query( "DELETE FROM package;", m_db );
-	KurooDBSingleton::Instance()->query( "DELETE FROM version;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DELETE FROM category;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DELETE FROM subCategory;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DELETE FROM package;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DELETE FROM version;", m_db );
 
+	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 	KurooDBSingleton::Instance()->insert( "INSERT INTO category SELECT * FROM category_temp;", m_db );
 	KurooDBSingleton::Instance()->insert( "INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db );
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
 	KurooDBSingleton::Instance()->insert( "INSERT INTO version SELECT * FROM version_temp;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 	
-	KurooDBSingleton::Instance()->query( "DROP TABLE category_temp;", m_db );
-	KurooDBSingleton::Instance()->query( "DROP TABLE subCategory_temp;", m_db );
-	KurooDBSingleton::Instance()->query( "DROP TABLE package_temp;", m_db );
-	KurooDBSingleton::Instance()->query( "DROP TABLE version_temp;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE category_temp;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE subCategory_temp;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE version_temp;", m_db );
 	
 	setStatus( "ScanPortage", i18n("Done.") );
 	setProgressTotalSteps( 0 );
@@ -414,15 +331,12 @@ bool ScanPortageJob::doJob()
  */
 void ScanPortageJob::scanInstalledPackages()
 {
-	DEBUG_LINE_INFO;
-	
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
 	
-	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) ) {
+	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) )
 		kdWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << LINE_INFO;
-	}
 	
 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
 	
@@ -472,7 +386,7 @@ void ScanPortageJob::scanInstalledPackages()
 					
 				}
 				else
-					kdWarning(0) << QString("Scanning installed packages. Can not match %1.").arg( *itPackage ) << LINE_INFO;
+					kdWarning(0) << "Scanning installed packages. Can not match " << *itPackage << LINE_INFO;
 			}
 		}
 		else

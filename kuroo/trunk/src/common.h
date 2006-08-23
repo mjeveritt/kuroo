@@ -98,6 +98,8 @@ enum Icons {
 		WORLD,
 		NOTQUEUED,
 		UNMERGED,
+		DETAILS,
+		REMOVE,
 		NEW,
 		EMPTY,
 		WARNING,
@@ -149,3 +151,4 @@ for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 #define DEBUG_LINE_INFO kdDebug() << LINE_INFO
 
 #endif
+

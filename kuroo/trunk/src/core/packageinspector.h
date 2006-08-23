@@ -71,16 +71,25 @@ private slots:
 	void							slotParseTempUse( KProcess* eProc );
 	
 private:
+	
 	// Wiew that called the Inspector
 	int								m_view;
 	
-	bool							m_versionSettingsChanged, m_useSettingsChanged, m_isVirginState, m_isAvailableBefore;
+	// Keep track when user changes any version masking settings
+	bool							m_versionSettingsChanged;
+	
+	// Keep track when user changes use settings
+	bool							m_useSettingsChanged;
+	
+	// Is this package settings untouched
+	bool							m_isVirginState;
+	
 	QString							m_id, m_category, m_package, m_hardMaskComment;
 	QMap<QString, QString>			m_useMap;
 	PackageItem* 					m_portagePackage;
 	int								m_stabilityBefore;
 	QString							m_versionBefore;
-	QStringList						pretendUseLines;
+	QStringList						m_pretendUseLines;
 	QStringList 					m_useList;
 	
 signals:

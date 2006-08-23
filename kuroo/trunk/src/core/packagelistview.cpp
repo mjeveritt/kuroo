@@ -51,13 +51,13 @@ PackageListView::~PackageListView()
 /**
  * Create mouse-over effect.
  */
-void PackageListView::rollOver( QListViewItem* item )
-{
-	dynamic_cast<PackageItem*>( item )->setRollOver( true );
-	if ( lastItem )
-		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
-	lastItem = item;
-}
+// void PackageListView::rollOver( QListViewItem* item )
+// {
+// 	dynamic_cast<PackageItem*>( item )->setRollOver( true );
+// 	if ( lastItem )
+// 		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
+// 	lastItem = item;
+// }
 
 /**
  * Clear this listView and package index.

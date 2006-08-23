@@ -31,12 +31,14 @@
 
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <ktextbrowser.h>
 
 /**
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
  */
-PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const int status )
+PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, 
+                                           const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
 	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
@@ -110,12 +112,31 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 2 );
 	header()->setResizeEnabled( false, 3 );
 	
-	// Refresh packages when packages are added/removed to Queue or get installed 
+	// Refresh packages when packages are added/removed to Queue or get installed
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( triggerUpdate() ) );
+	
+	// Create text-widget warning for "No packages found.."
+	noHitsWarning = new KTextBrowser( this );
+	noHitsWarning->setGeometry( QRect( 20, 50, 400, 300 ) );
+	noHitsWarning->setFrameShape( QFrame::NoFrame );
+	noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
+	                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
+	                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
 }
 
 PortageListView::~PortageListView()
+{}
+
+/**
+ * Show warning text when package view is empty.
+ * @param show/hide
+ */
+void PortageListView::showNoHitsWarning( bool noHits )
 {
+	if ( noHits )
+		noHitsWarning->show();
+	else
+		noHitsWarning->hide();
 }
 
 /**

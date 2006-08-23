@@ -64,8 +64,7 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 }
 
 KurooStatusBar::~KurooStatusBar()
-{
-}
+{}
 
 /**
  * Set label text in statusbar.
@@ -108,6 +107,8 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
+	kdDebug() << "total=" << total << LINE_INFO;
+	
     stopTimer();
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
@@ -175,6 +176,7 @@ void KurooStatusBar::stopTimer()
 	statusBarProgress->setTotalSteps( 100 );
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->hide();
+	DEBUG_LINE_INFO;
 }
 
 /**

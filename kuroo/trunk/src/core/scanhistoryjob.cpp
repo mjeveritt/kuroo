@@ -31,7 +31,7 @@
 
 /**
  * @class ScanHistoryJob
- * @short Thread for parsing emerge/unmerge entries found in emerge.log.
+ * @short Thread for parsing emerge/unmerge/sync entries found in emerge.log.
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
@@ -67,7 +67,7 @@ bool ScanHistoryJob::doJob()
 	}
 	
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
-	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
 	QString timeStamp, syncTimeStamp;
@@ -81,7 +81,7 @@ bool ScanHistoryJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
-			KurooDBSingleton::Instance()->query( "ROLLBACK TRANSACTION;", m_db );
+			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
 		
@@ -152,13 +152,13 @@ bool ScanHistoryJob::doJob()
 						syncTimeStamp = timeStamp;
 			}
 	}
-	KurooDBSingleton::Instance()->query( "COMMIT TRANSACTION;", m_db );
+	KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 	
 	if ( isStatisticUpdated )
 		HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
 	
 	if ( !syncTimeStamp.isEmpty() )
-		KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
+		KurooDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
 	
 	return true;
 }

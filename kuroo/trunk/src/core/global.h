@@ -41,7 +41,7 @@ public:
 	const QString 			kurooDir();
 	const QRegExp			rxEmerge();
 	const QStringList 		parsePackage( const QString& packageString );
-	void 					setKurooView( QWidget* view );
+	void 					setColorTheme();
 	const long&				kurooViewId();
 	const QString&			bgHexColor();
 	const QString&			fgHexColor();

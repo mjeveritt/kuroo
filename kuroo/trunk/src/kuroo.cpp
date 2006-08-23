@@ -59,8 +59,7 @@ Kuroo::Kuroo()
 	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-	// Get pointer so MessageBox's can be made modal to kuroo windown and more...
-	GlobalSingleton::Instance()->setKurooView( m_view );
+	GlobalSingleton::Instance()->setColorTheme();
 	
 	setCentralWidget( m_view );
 	setupActions();
@@ -119,7 +118,7 @@ void Kuroo::setupActions()
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
-	(void) new KAction( i18n("&Information"), 0, KShortcut( CTRL + Key_W ),
+	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 	
 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
@@ -133,7 +132,7 @@ void Kuroo::setupActions()
 	
 	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
 	                               		EtcUpdateSingleton::Instance(), SLOT( slotEtcUpdate() ), actionCollection(), "etc_update" );
-
+	
 	createGUI();
 }
 
@@ -157,7 +156,7 @@ void Kuroo::slotBusy()
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
 	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
-		actionEtcUpdate->setEnabled( false );
+// 		actionEtcUpdate->setEnabled( false );
 	}
 	else {
 		actionSyncPortage->setEnabled( true );

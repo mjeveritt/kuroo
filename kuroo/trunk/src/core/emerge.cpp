@@ -41,7 +41,8 @@ Emerge::Emerge( QObject* m_parent )
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
-  
+	eProc->setUseShell( true, "/bin/bash" );
+	
 	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
 	eProc->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
 	#endif
@@ -302,6 +303,8 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		if ( line.isEmpty() )
 			continue;
 		
+// 		kdDebug() << "line=" << line << LINE_INFO;
+		
 		////////////////////////////////////////////////////////////////////////////
 		// Parse out package and info
 		////////////////////////////////////////////////////////////////////////////
@@ -337,11 +340,11 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 				logDone++;
 			}
 			else
-				if ( lineLower.contains( "etc-update" ) ) {
-					LogSingleton::Instance()->writeLog( line, ERROR );
-					logDone++;
-				}
-				else
+// 				if ( lineLower.contains( "etc-update" ) ) {
+// 					LogSingleton::Instance()->writeLog( line, ERROR );
+// 					logDone++;
+// 				}
+// 				else
 					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
 						m_importantMessage += line + "<br>";
@@ -350,7 +353,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 					else
 						if ( logDone == 0 && lineLower.contains( QRegExp( 
 							"(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
-							"(^ \\* important)|(^>>> unmerging in)")) ) {
+							"(^ \\* IMPORTANT)|(^>>> unmerging in)")) ) {
 							LogSingleton::Instance()->writeLog( line, EMERGE );
 							logDone++;
 						}
@@ -465,9 +468,10 @@ void Emerge::cleanup()
 			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroo as root to unmask packages!"),
 			                             i18n("Auto-unmasking packages"), NULL );
 	}
-	else
+	else {
 		if ( !m_importantMessage.isEmpty() )
 			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
+	}
 	
 	if ( m_etcUpdateCount != 0 )
 		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
@@ -548,8 +552,8 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
  */
 void Emerge::askUnmaskPackage( const QString& packageKeyword )
 {
-	QString package = packageKeyword.section( "(masked by: ", 0, 0);
-	QString keyword = ( packageKeyword.section("(masked by: ", 1, 1) ).section(" keyword", 0, 0);
+	QString package = packageKeyword.section( "(masked by: ", 0, 0 );
+	QString keyword = ( packageKeyword.section( "(masked by: ", 1, 1) ).section( " keyword", 0, 0 );
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
 		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
@@ -573,8 +577,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
 				                                        i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
-				                                     .arg( package ), i18n("Information"), KGuiItem::KGuiItem(i18n("Unmask")),
-				                                     KGuiItem::KGuiItem(i18n("Cancel"))) ) {
+				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel") ) ) {
 					case KMessageBox::Yes :
 						KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
 						PortageFilesSingleton::Instance()->savePackageUserUnMask();
@@ -588,7 +591,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				
 				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
 				                                        i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
-				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel")) ) {
+				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel") ) ) {
 					case KMessageBox::Yes :
 						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
 						PortageFilesSingleton::Instance()->savePackageKeywords();
@@ -602,7 +605,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 }
 
 /**
- * After package is auto-m_unmasked try remerging the list again to find next package to unmask.
+ * After package is auto-unmasked try remerging the list again to find next package to unmask.
  */
 void Emerge::slotTryEmerge()
 {

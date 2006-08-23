@@ -425,6 +425,17 @@
                                     <string>Alt+N</string>
                                 </property>
                             </widget>
+			    <widget class="QCheckBox" row="5" column="0">
+				    <property name="name">
+					    <cstring>cbShutdown</cstring>
+				    </property>
+				    <property name="text">
+					    <string>Shutdown after emerge complete</string>
+				    </property>
+				    <property name="accel">
+					    <string>Alt+S</string>
+				    </property>
+                            </widget>
                         </grid>
                     </widget>
                     <widget class="QLayoutWidget" row="0" column="0">

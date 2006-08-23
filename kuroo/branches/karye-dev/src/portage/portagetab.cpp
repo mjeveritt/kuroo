@@ -94,6 +94,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -189,6 +190,16 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
+	DEBUG_LINE_INFO;
+	
+	if ( m_packageInspector->isVisible() )
+		return;
+	else {
+		filterGroup->setDisabled( false );
+		searchFilter->setDisabled( false );
+		pbClearFilter->setDisabled( false );
+	}
+	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
 		pbQueue->setDisabled( true );
@@ -390,6 +401,14 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
+	DEBUG_LINE_INFO;
+	pbUninstall->setDisabled( true );
+	pbAdvanced->setDisabled( true );
+	pbQueue->setDisabled( true );
+	filterGroup->setDisabled( true );
+	searchFilter->setDisabled( true );
+	pbClearFilter->setDisabled( true );
+	
 	if ( packagesView->currentPackage() )
 		processPackage( true );
 }
@@ -398,7 +417,7 @@ void PortageTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else	
+	else
 		processPackage( false );
 }
 
@@ -514,6 +533,7 @@ void PortageTab::processPackage( bool viewInspector )
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
+	DEBUG_LINE_INFO;
 	// Refresh inspector if visible
 	if ( viewInspector )
 		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );

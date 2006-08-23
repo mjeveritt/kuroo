@@ -180,7 +180,7 @@
                                         <cstring>cbQueue</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>in Install Queue</string>
+                                        <string>In Install Queue</string>
                                     </property>
                                     <property name="checked">
                                         <bool>false</bool>

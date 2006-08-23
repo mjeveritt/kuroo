@@ -202,7 +202,7 @@ void QueueTab::slotRefresh()
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	// Reenable the inspector after queue changes
-	m_packageInspector->setDisabled( true );
+// 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
 	// If user is not su emerge pretend will not set packages as checked
@@ -506,11 +506,19 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem3, false );
 	
+	// No change to Queue when busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
 	
+	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() )
 		menu.setItemEnabled( menuItem3, true );
+	
+	if ( m_packageInspector->isVisible() ) {
+		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+		menu.setItemEnabled( menuItem3, false );
+	}
 	
 	switch( menu.exec( point ) ) {
 			

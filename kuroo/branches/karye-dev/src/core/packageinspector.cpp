@@ -89,6 +89,10 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->useView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotSetUseFlags( QListViewItem* ) ) );
 	
 	connect( dialog->pbUse, SIGNAL( clicked() ), this, SLOT( slotCalculateUse() ) );
+	
+	// Listen to Queue and World checkboxes
+	connect( dialog->cbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
+	connect( dialog->cbWorld, SIGNAL( clicked() ), this, SLOT( slotWorld() ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -190,6 +194,29 @@ void PackageInspector::updateVersionData()
 }
 
 /**
+ * Add/remove package in World profile.
+ */
+void PackageInspector::slotWorld()
+{
+	DEBUG_LINE_INFO;
+	if ( dialog->cbWorld->isChecked() )
+		PortageSingleton::Instance()->appendWorld( QStringList( m_category + "/" + m_package ) );
+	else
+		PortageSingleton::Instance()->removeFromWorld( QStringList( m_category + "/" + m_package ) );
+}
+
+/**
+ * Add/remove package in Queue.
+ */
+void PackageInspector::slotQueue()
+{
+	if ( dialog->cbQueue->isChecked() )
+		QueueSingleton::Instance()->addPackageIdList( QStringList( m_portagePackage->id() ) );
+	else
+		QueueSingleton::Instance()->removePackageIdList( QStringList( m_portagePackage->id() ) );
+}
+
+/**
  * Activate Inspector with current package.
  * @param portagePackage
  */
@@ -202,10 +229,12 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	
 	updateVersionData();
 	
+	// Actions that superuser privileges
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
 		dialog->groupSelectStability->setDisabled( true );
 		dialog->useView->setDisabled( true );
+		dialog->cbWorld->setDisabled( true );
 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging

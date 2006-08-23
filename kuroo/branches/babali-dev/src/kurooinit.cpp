@@ -27,12 +27,14 @@
 #include <pwd.h>
 
 #include <qdir.h>
+#include <qtextcodec.h>
 
 #include <kcmdlineargs.h>
 #include <kstringhandler.h>
 #include <kuser.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
+#include <kprocio.h>
 
 /**
  * @class KurooInit
@@ -45,32 +47,15 @@
 KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
+	getEnvironment();
+	
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
-	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
-		getEnvironment();
+	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() )
 		firstTimeWizard();
-	}
 	else
 		if ( !KUser().isSuperUser() )
 			checkUser();
-	
-	// Get portage version
-	QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
-	dPortageApp.setNameFilter( "portage-*" );
-	dPortageApp.setSorting( QDir::Time );
-	QString portage = dPortageApp.entryList().first();
-	if ( portage.isEmpty() ) {
-		KMessageBox::error( 0, i18n("Can not identify portage version!\n"
-		                            "Kuroo can not correctly parse package information.\n"
-		                            "You can select portage version in settings."), i18n("Portage version") );
-	}
-	else {
-		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) )
-			KurooConfig::setPortageVersion21( true );
-		else
-			KurooConfig::setPortageVersion21( false );
-	}
 	
 	// Get portage groupid to set directories and files owned by portage
 	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
@@ -171,66 +156,46 @@ KurooInit::~KurooInit()
  */
 void KurooInit::getEnvironment()
 {
-	bool isSetupOk( false );
+	DEBUG_LINE_INFO;
+	QTextCodec *codec = QTextCodec::codecForName("utf8");
+	KProcIO* eProc = new KProcIO( codec );
+	*eProc << "emerge" << "--info";
 	
-	// Now determine architecture
-	QDir d( KurooConfig::dirMakeProfile() );
-	QFile  f( d.canonicalPath() + "/../make.defaults" );
-	QString arch;
-	if ( f.open( IO_ReadOnly ) ) {
-		QTextStream stream( &f );
-		while ( !stream.atEnd() ) {
-			QString line = stream.readLine();
-			if ( line.contains( "ARCH=" ) > 0 ) {
-				arch = line.section( "ARCH=", 1, 1 ).remove( "\"" );
-				isSetupOk = true;
-				break;
-			}
-		}
-		f.close();
-	}
-	else {
-		kdError(0) << "Opening: " << KurooConfig::dirMakeProfile() << LINE_INFO;
-		isSetupOk = false;
-	}
-	
-	// Architecture not found
-	// Offer dialog for user to manually select architecture
-	if ( arch.isEmpty() ){
-		QStringList archList;
-		
-		f.setName( KurooConfig::fileArchList() );
-		if ( f.open(IO_ReadOnly) ) {
-			QTextStream stream(&f);
-			while ( !stream.atEnd() )
-				archList << stream.readLine();
-			f.close();
-			
-			arch = KInputDialog::getItemList( i18n("Initialization"), 
-											  i18n("Kuroo can not detect your architecture!\n"
-											       "You must select appropriate architecture to proceed.\n"
-											       "Please select:"), archList, QStringList::QStringList() ).first();
-		}
-		else {
-			kdError(0) << "Reading: " << KurooConfig::fileArchList() << LINE_INFO;
-			isSetupOk = false;
-		}
-	}
-	
-	// Boring user - we quit!
-	if ( arch.isEmpty() ) {
-		kdError(0) << "No architecture selected, quitting!" << LINE_INFO;
-		isSetupOk = false;
-	}
-	else
-		isSetupOk = true;
-
-	// No arch, kuroo quitting
-	if ( !isSetupOk )
+	if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+		kdError(0) << "Cannot run emerge --info, quitting!" << LINE_INFO;
 		exit(0);
-	
-	KurooConfig::setArch( arch );
+	}
+	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotEmergeInfo( KProcess* ) ) );
+	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput( KProcIO* ) ) );
+}
+
+void KurooInit::slotCollectOutput( KProcIO* eProc )
+{
+	QString line;
+	while ( eProc->readln( line, true ) >= 0 )
+		m_emergeInfoLines += line;
+}
+
+void KurooInit::slotEmergeInfo( KProcess* )
+{
+	foreach ( m_emergeInfoLines ) {
+		
+		if ( (*it).startsWith( "Portage 2.0" ) )
+			KurooConfig::setPortageVersion21( false );
+		else
+			KurooConfig::setPortageVersion21( true );
+		
+		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) )
+			KurooConfig::setArch( (*it).section( "\"", 1, 1 ) );
+
+		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
+			KurooConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
+		
+// 		if ( (*it).startsWith( "USE=" ) )
+// 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
+	}
 	KurooConfig::writeConfig();
+	DEBUG_LINE_INFO;
 }
 
 /**

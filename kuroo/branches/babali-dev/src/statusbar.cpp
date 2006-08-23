@@ -117,7 +117,6 @@ void KurooStatusBar::setTotalSteps( int total )
 		statusBarProgress->hide();
 	else
 		if ( !statusBarProgress->isVisible() ) {
-			DEBUG_LINE_INFO;
 			statusBarProgress->show();
     		m_internalTimer->start( 1000 );
 			startTimer();
@@ -177,6 +176,7 @@ void KurooStatusBar::stopTimer()
 	statusBarProgress->setTotalSteps( 100 );
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->hide();
+	DEBUG_LINE_INFO;
 }
 
 /**

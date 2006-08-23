@@ -94,6 +94,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -189,6 +190,16 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
+	DEBUG_LINE_INFO;
+	
+	if ( m_packageInspector->isVisible() )
+		return;
+	else {
+		filterGroup->setDisabled( false );
+		searchFilter->setDisabled( false );
+		pbClearFilter->setDisabled( false );
+	}
+	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
 		pbQueue->setDisabled( true );
@@ -240,7 +251,7 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	m_packageInspector->setDisabled( true );
+// 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
 	disconnect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
@@ -293,11 +304,9 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	DEBUG_LINE_INFO;
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-		
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
@@ -392,6 +401,14 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
+	DEBUG_LINE_INFO;
+	pbUninstall->setDisabled( true );
+	pbAdvanced->setDisabled( true );
+	pbQueue->setDisabled( true );
+	filterGroup->setDisabled( true );
+	searchFilter->setDisabled( true );
+	pbClearFilter->setDisabled( true );
+	
 	if ( packagesView->currentPackage() )
 		processPackage( true );
 }
@@ -400,7 +417,7 @@ void PortageTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else	
+	else
 		processPackage( false );
 }
 
@@ -516,6 +533,7 @@ void PortageTab::processPackage( bool viewInspector )
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
+	DEBUG_LINE_INFO;
 	// Refresh inspector if visible
 	if ( viewInspector )
 		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
@@ -528,6 +546,7 @@ void PortageTab::processPackage( bool viewInspector )
  */
 void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
 {
+	DEBUG_LINE_INFO;
 	if ( !item )
 		return;
 	
@@ -543,30 +562,43 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	else
 		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Remove from queue"), APPEND );
 	
-	menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
+	int menuItem2;
+	menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
+	
+	int menuItem3;
+	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
+	else
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
+	menu.setItemEnabled( menuItem3, false );
 	
 	int menuItem4;
-	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
-	else
-		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
-	menu.setItemEnabled( menuItem4, false );
-	
-	int menuItem2;
 	if ( packagesView->currentPackage()->isInstalled() )
-		menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
+		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
 	
-	// No access when kuroo is busy
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
-	     || !packagesView->currentPackage()->isInPortage() )
+	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
+	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
+	kdDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy() << endl;
+	kdDebug() << "packagesView->currentPackage()->isInPortage()=" << packagesView->currentPackage()->isInPortage() << endl;
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+			 || !packagesView->currentPackage()->isInPortage() )
 		menu.setItemEnabled( menuItem1, false );
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
-	     || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
-			menu.setItemEnabled( menuItem2, false );
+	// No uninstall when emerging or no privileges
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+			|| !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
+		menu.setItemEnabled( menuItem4, false );
 	
+	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem4, true );
+		menu.setItemEnabled( menuItem3, true );
+	
+	if ( m_packageInspector->isVisible() ) {
+		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+		menu.setItemEnabled( menuItem3, false );
+		menu.setItemEnabled( menuItem4, false );
+	}
 	
 	switch( menu.exec( point ) ) {
 

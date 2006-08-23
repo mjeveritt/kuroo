@@ -156,7 +156,7 @@ void Kuroo::slotBusy()
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
 	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
-		actionEtcUpdate->setEnabled( false );
+// 		actionEtcUpdate->setEnabled( false );
 	}
 	else {
 		actionSyncPortage->setEnabled( true );

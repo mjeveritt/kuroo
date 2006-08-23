@@ -241,7 +241,7 @@ void History::slotParse()
 			else
 
 			// Catch sync session start
-			if ( emergeLine.contains( "starting rsync" ) ) {
+			if ( emergeLine.contains( "Starting rsync" ) ) {
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Synchronizing Portage..." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Synchronizing Portage..." ), EMERGELOG );
 				m_syncTime = QTime::currentTime();

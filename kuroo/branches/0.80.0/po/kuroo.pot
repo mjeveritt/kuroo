@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-23 15:22+0200\n"
+"POT-Creation-Date: 2006-08-25 11:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,90 +30,90 @@ msgstr ""
 msgid "View package details..."
 msgstr ""
 
-#: portage/portagetab.cpp:163 portage/portagetab.cpp:230
-#: portage/portagetab.cpp:233
+#: portage/portagetab.cpp:163 portage/portagetab.cpp:228
+#: portage/portagetab.cpp:231
 msgid "Add to Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:228
+#: portage/portagetab.cpp:226
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:346
+#: portage/portagetab.cpp:344
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:347
+#: portage/portagetab.cpp:345
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:445
+#: portage/portagetab.cpp:443
 msgid " packages selected"
 msgstr ""
 
-#: portage/portagetab.cpp:471
+#: portage/portagetab.cpp:473
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:475
+#: portage/portagetab.cpp:477
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:481 portage/portagetab.cpp:487
+#: portage/portagetab.cpp:483 portage/portagetab.cpp:489
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:497
+#: portage/portagetab.cpp:499
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:505
+#: portage/portagetab.cpp:507
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:511
+#: portage/portagetab.cpp:513
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:519
+#: portage/portagetab.cpp:521
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:525
+#: portage/portagetab.cpp:527
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:560
+#: portage/portagetab.cpp:563
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:562
+#: portage/portagetab.cpp:565
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:564 rc.cpp:54 rc.cpp:266 queue/queuetab.cpp:500
+#: portage/portagetab.cpp:568 rc.cpp:54 rc.cpp:266 queue/queuetab.cpp:501
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:568 queue/queuetab.cpp:504
+#: portage/portagetab.cpp:572 queue/queuetab.cpp:505
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:570 queue/queuetab.cpp:506
+#: portage/portagetab.cpp:574 queue/queuetab.cpp:507
 msgid "Remove from world"
 msgstr ""
 
-#: portage/portagetab.cpp:575
+#: portage/portagetab.cpp:579
 msgid "&Uninstall"
 msgstr ""
 
 #: portage/portagelistview.cpp:80 portage/portagelistview.cpp:158
 #: portage/portagelistview.cpp:160 rc.cpp:67 rc.cpp:132
-#: queue/queuelistview.cpp:173
+#: queue/queuelistview.cpp:172
 #, no-c-format
 msgid "Package"
 msgstr ""
@@ -257,7 +257,7 @@ msgstr ""
 #: rc.cpp:87
 #, no-c-format
 msgid ""
-"<font size=\"+1\">Etc-update History</font><br>\n"
+"<font size=\"+1\">Configuration Files</font><br>\n"
 "<i>Click on configuration file to view changes...</i>"
 msgstr ""
 
@@ -310,7 +310,7 @@ msgstr ""
 
 #: rc.cpp:138
 #, no-c-format
-msgid "in Install Queue"
+msgid "In Install Queue"
 msgstr ""
 
 #: rc.cpp:141
@@ -1015,7 +1015,7 @@ msgid "Log browser text font"
 msgstr ""
 
 #: rc.cpp:646 core/etcupdate.cpp:61 core/etcupdate.cpp:75
-#: core/etcupdate.cpp:160 main.cpp:43
+#: core/etcupdate.cpp:165 main.cpp:43
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: history/historylistview.cpp:59 queue/queuelistview.cpp:179
+#: history/historylistview.cpp:59 queue/queuelistview.cpp:178
 msgid "Duration"
 msgstr ""
 
@@ -1174,41 +1174,41 @@ msgstr ""
 msgid "Package details"
 msgstr ""
 
-#: core/packageinspector.cpp:267 core/packageinspector.cpp:292
+#: core/packageinspector.cpp:306 core/packageinspector.cpp:331
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr ""
 
-#: core/packageinspector.cpp:268 core/packageinspector.cpp:293
+#: core/packageinspector.cpp:307 core/packageinspector.cpp:332
 msgid "Saving settings"
 msgstr ""
 
-#: core/packageinspector.cpp:359 core/packageinspector.cpp:859
+#: core/packageinspector.cpp:398 core/packageinspector.cpp:898
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
 msgstr ""
 
-#: core/packageinspector.cpp:421
+#: core/packageinspector.cpp:460
 msgid "Click for hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:439
+#: core/packageinspector.cpp:478
 msgid "%1/%2 hardmask info!"
 msgstr ""
 
-#: core/packageinspector.cpp:718
+#: core/packageinspector.cpp:757
 msgid "%1No ChangeLog found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:745
+#: core/packageinspector.cpp:784
 msgid "%1No ebuild found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:833
+#: core/packageinspector.cpp:872
 msgid "%1No installed files found.%2"
 msgstr ""
 
-#: core/packageinspector.cpp:903 core/packageinspector.cpp:962
+#: core/packageinspector.cpp:942 core/packageinspector.cpp:1001
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr ""
@@ -1227,35 +1227,35 @@ msgstr ""
 msgid "Searching config files..."
 msgstr ""
 
-#: core/etcupdate.cpp:140
-msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
-msgstr ""
-
-#: core/etcupdate.cpp:143
+#: core/etcupdate.cpp:139
 msgid "Merge config changes"
 msgstr ""
 
-#: core/etcupdate.cpp:144
+#: core/etcupdate.cpp:139
 msgid "Select config file to merge"
 msgstr ""
 
-#: core/etcupdate.cpp:158
+#: core/etcupdate.cpp:151
+msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
+msgstr ""
+
+#: core/etcupdate.cpp:163
 msgid "%1 didn't start."
 msgstr ""
 
-#: core/etcupdate.cpp:159
+#: core/etcupdate.cpp:164
 msgid "%1 could not start!"
 msgstr ""
 
-#: core/etcupdate.cpp:164
+#: core/etcupdate.cpp:169
 msgid "Merging changes in '%1'."
 msgstr ""
 
-#: core/etcupdate.cpp:171
+#: core/etcupdate.cpp:176
 msgid "etc-update completed."
 msgstr ""
 
-#: core/etcupdate.cpp:184
+#: core/etcupdate.cpp:189
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr ""
 
@@ -1550,7 +1550,7 @@ msgid ""
 "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 
-#: core/versionview.cpp:93 queue/queuelistview.cpp:178
+#: core/versionview.cpp:93 queue/queuelistview.cpp:177
 msgid "Version"
 msgstr ""
 
@@ -1558,7 +1558,7 @@ msgstr ""
 msgid "Stability"
 msgstr ""
 
-#: core/versionview.cpp:95 queue/queuelistview.cpp:180
+#: core/versionview.cpp:95 queue/queuelistview.cpp:179
 msgid "Size"
 msgstr ""
 
@@ -1608,7 +1608,7 @@ msgstr ""
 msgid "Copy text to clipboard"
 msgstr ""
 
-#: queue/queuelistview.cpp:181
+#: queue/queuelistview.cpp:180
 msgid "Progress"
 msgstr ""
 
@@ -1807,10 +1807,6 @@ msgstr ""
 
 #: kurooview.cpp:85
 msgid "History"
-msgstr ""
-
-#: kurooview.cpp:86
-msgid "Etc-update"
 msgstr ""
 
 #: kurooview.cpp:87

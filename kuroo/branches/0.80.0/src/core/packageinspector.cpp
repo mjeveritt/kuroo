@@ -194,11 +194,10 @@ void PackageInspector::updateVersionData()
 }
 
 /**
- * Add/remove package in World profile.
+ * Add/remove package in World profile using checkbox.
  */
 void PackageInspector::slotWorld()
 {
-	DEBUG_LINE_INFO;
 	if ( dialog->cbWorld->isChecked() )
 		PortageSingleton::Instance()->appendWorld( QStringList( m_category + "/" + m_package ) );
 	else
@@ -206,7 +205,7 @@ void PackageInspector::slotWorld()
 }
 
 /**
- * Add/remove package in Queue.
+ * Add/remove package in Queue using checkbox.
  */
 void PackageInspector::slotQueue()
 {
@@ -214,6 +213,13 @@ void PackageInspector::slotQueue()
 		QueueSingleton::Instance()->addPackageIdList( QStringList( m_portagePackage->id() ) );
 	else
 		QueueSingleton::Instance()->removePackageIdList( QStringList( m_portagePackage->id() ) );
+	
+	// If user removes last package in Queue, disable the Inspector
+	if ( m_view == VIEW_QUEUE && QueueSingleton::Instance()->size() == 1 ) {
+		dialog->inspectorTabs->setDisabled( true );
+		dialog->cbQueue->setDisabled( true );
+		dialog->cbWorld->setDisabled( true );
+	}
 }
 
 /**
@@ -226,7 +232,6 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	m_portagePackage = portagePackage;
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
-	
 	updateVersionData();
 	
 	// Actions that superuser privileges
@@ -235,6 +240,11 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 		dialog->groupSelectStability->setDisabled( true );
 		dialog->useView->setDisabled( true );
 		dialog->cbWorld->setDisabled( true );
+	}
+	else {
+		dialog->inspectorTabs->setDisabled( false );
+		dialog->cbQueue->setDisabled( false );
+		dialog->cbWorld->setDisabled( false );
 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging

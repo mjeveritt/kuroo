@@ -44,6 +44,7 @@ MergeTab::MergeTab( QWidget* parent )
 	
 	mergeFilter->setListView( mergeView );
 
+	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
 	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
 	
@@ -69,7 +70,19 @@ void MergeTab::slotInit()
  */
 void MergeTab::slotReload()
 {
-	mergeView->loadFromDB();
+// 	mergeView->loadFromDB();
+	EtcUpdateSingleton::Instance()->slotEtcUpdate();
+}
+
+/**
+ * List new configuration files in mergeView.
+ */
+void MergeTab::slotLoadConfFiles()
+{
+	QStringList confFilesList = EtcUpdateSingleton::Instance()->confFilesList();
+	if ( !confFilesList.isEmpty() )
+		mergeView->loadConfFiles( confFilesList );
+	
 	emit signalMergeChanged();
 }
 
@@ -83,21 +96,13 @@ void MergeTab::slotClearFilter()
  */
 void MergeTab::slotViewFile( QListViewItem *item )
 {
-	if ( item->parent() ) {
-		QString source = GlobalSingleton::Instance()->kurooDir() + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->source();
-		QString destination = GlobalSingleton::Instance()->kurooDir() + "backup/" + dynamic_cast<MergeListView::MergeItem*>( item )->destination();
-
-		KProcIO* eProc = new KProcIO();
-		*eProc << KurooConfig::etcUpdateTool() << source << destination;
-		connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupOpenDiff( KProcess* ) ) );
-		eProc->start( KProcess::NotifyOnExit, true );
-	}
-}
-
-void MergeTab::slotCleanupOpenDiff( KProcess* eProc )
-{
-	delete eProc;
-	eProc = 0;
+	if ( item->parent()->text(0) != i18n("New") )
+		;
+	
+	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
+	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
+	
+	EtcUpdateSingleton::Instance()->runDiff( source, destination );
 }
 
 #include "mergetab.moc"

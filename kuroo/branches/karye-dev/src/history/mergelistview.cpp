@@ -77,6 +77,7 @@ MergeListView::~MergeListView()
  */
 void MergeListView::loadFromDB()
 {
+	DEBUG_LINE_INFO;
 	clear();
 	m_itemMap.clear();
 	
@@ -98,8 +99,45 @@ void MergeListView::loadFromDB()
 
 		new MergeItem( m_itemMap[ date ], source, destination );
 	}
-	
 	emit signalHistoryLoaded();
+}
+
+/**
+ * Append the new unmerged configuration files ontop.
+ */
+void MergeListView::loadConfFiles( const QStringList& confFilesList )
+{
+	clear();
+	m_itemMap.clear();
+	
+	foreach ( confFilesList ) {
+		QString source = *it;
+		QString destination = source;
+		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+		
+		if ( source.contains( GlobalSingleton::Instance()->kurooDir() ) ) {
+			
+			QString date = source.section( "/._cfg", 0, 0 ).section( "/", -1, -1 );
+			
+			kdDebug() << "date=" << date << endl;
+			
+			if ( !m_itemMap.contains( date ) ) {
+				MergeItem *item = new MergeItem( this, date );
+				m_itemMap[ date ] = item;
+				item->setOpen( true );
+			}
+			new MergeItem( m_itemMap[ date ], source, destination );
+		}
+		else {
+			
+			if ( !m_itemMap.contains( i18n("New") ) ) {
+				MergeItem *item = new MergeItem( this, i18n("New") );
+				m_itemMap[ i18n("New") ] = item;
+				item->setOpen( true );
+			}
+			new MergeItem( m_itemMap[ i18n("New") ], source, destination );
+		}
+	}
 }
 
 #include "mergelistview.moc"

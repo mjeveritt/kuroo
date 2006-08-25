@@ -75,9 +75,6 @@ void EtcUpdate::slotEtcUpdate()
 	else {
 		m_etcFilesList.clear();
 		m_diffSource = QString::null;
-		m_noFiles = true;
-		m_count = 1;
-		m_totalEtcCount = 0;
 		
 		// First collect old merged files
 		m_configProtectList = GlobalSingleton::Instance()->kurooDir() + "backup/configuration";
@@ -119,9 +116,12 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 				configFile = (*it).m_str;
 		}
 		
-		if ( configFile.contains( "._cfg" ) ) {
-			m_etcFilesList += m_configProtectDir + "/" + configFile;
-			m_totalEtcCount++;
+		if ( configFile.contains( QRegExp( "\\d{8}_\\d{4}/._cfg" ) ) ) {
+			m_backupFilesList += m_configProtectDir + "/" + configFile;
+		}
+		else {
+			if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
+				m_etcFilesList += m_configProtectDir + "/" + configFile;
 		}
 	}
 }
@@ -131,10 +131,15 @@ QStringList EtcUpdate::confFilesList()
 	return m_etcFilesList;
 }
 
+QStringList EtcUpdate::backupFilesList()
+{
+	return m_backupFilesList;
+}
+
 /**
  * Launch diff tool with first etc-file in list.
  */
-void EtcUpdate::runDiff( const QString& source, const QString& destination )
+void EtcUpdate::runDiff( const QString& source, const QString& destination, bool isNew )
 {
 	if ( !source.isEmpty() ) {
 		
@@ -161,8 +166,10 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination )
 			LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( destination ), KUROO );
 			
 			// Backup files if external to backup directory, eg first time merging them
-			if ( !source.contains( "backup" ) )
+			if ( isNew ) {
 				backup( source, destination );
+				emit signalEtcFileMerged();
+			}
 		}
 	}
 }
@@ -173,12 +180,9 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination )
  */
 void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
 {
+	DEBUG_LINE_INFO;
 	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
-	KIO::file_delete( m_diffSource );
-	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource )
-	                                    .arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
 	m_diffSource = QString::null;
-	emit signalEtcFileMerged();
 }
 
 /**
@@ -188,6 +192,7 @@ void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
  */
 void EtcUpdate::backup( const QString& source, const QString& destination )
 {
+	DEBUG_LINE_INFO;
 	QDateTime dt = QDateTime::currentDateTime();
 	QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/" + dt.toString( "yyyyMMdd_hhmm" );
 	QDir d( backupPath );
@@ -196,6 +201,9 @@ void EtcUpdate::backup( const QString& source, const QString& destination )
 	
 	KIO::file_copy( source, backupPath + "/" + source.section( "/", -1, -1 ), -1, true, false, false );
 	KIO::file_copy( destination, backupPath + "/" + destination.section( "/", -1, -1 ), -1, true, false, false );
+	KIO::file_delete( m_diffSource );
+	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource )
+			.arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
 	
 	KurooDBSingleton::Instance()->addBackup( source, destination );
 }

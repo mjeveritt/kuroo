@@ -42,7 +42,8 @@ public:
 	void				init( QObject *parent = 0 );
 	void				askUpdate( const int &count );
 	QStringList			confFilesList();
-	void				runDiff( const QString& source, const QString& destination );
+	QStringList			backupFilesList();
+	void				runDiff( const QString& source, const QString& destination, bool isNew );
 
 public slots:
 	void				slotEtcUpdate();
@@ -63,21 +64,17 @@ private:
 	QObject*			m_parent;
 	KProcIO*			eProc;
 	
-	// Keep track of current etc-file position in the total
-	int 				m_count, m_totalEtcCount;
-	
 	QStringList 		m_configProtectList;
 	QString				m_configProtectDir;
+	
+	// List of etc-files for merging
+	QStringList			m_backupFilesList;
 	
 	// List of etc-files for merging
 	QStringList			m_etcFilesList;
 	
 	// Remember last source file when iterating
 	QString				m_diffSource;
-	
-	// True if etc-update didn't find any files for merging
-	bool				m_noFiles;
-	
 };
 
 #endif

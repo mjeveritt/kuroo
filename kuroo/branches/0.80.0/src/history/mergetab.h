@@ -39,7 +39,8 @@ private slots:
 	void		slotReload();
 	void		slotLoadConfFiles();
 	void		slotClearFilter();
-	void 		slotViewFile( QListViewItem* item );
+	void 		slotViewFile();
+	void		slotMergeFile();
 	
 signals:
 	void		signalMergeChanged();

@@ -114,10 +114,9 @@ void MergeListView::loadConfFiles( const QStringList& confFilesList )
 		QString source = *it;
 		QString destination = source;
 		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
-		
 		if ( source.contains( GlobalSingleton::Instance()->kurooDir() ) ) {
 			
-			QString date = source.section( "/._cfg", 0, 0 ).section( "/", -1, -1 );
+			QString date = source.section( "/", -2, -2 );
 			
 			kdDebug() << "date=" << date << endl;
 			

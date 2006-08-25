@@ -32,6 +32,7 @@
 #include <krun.h>
 #include <kprocio.h>
 #include <kiconloader.h>
+#include <kpushbutton.h>
 
 /**
  * @class MergeTab
@@ -46,7 +47,10 @@ MergeTab::MergeTab( QWidget* parent )
 
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
-	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
+// 	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
+	
+	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
+	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );
 	
 	slotInit();
 }
@@ -81,7 +85,11 @@ void MergeTab::slotLoadConfFiles()
 {
 	QStringList confFilesList = EtcUpdateSingleton::Instance()->confFilesList();
 	if ( !confFilesList.isEmpty() )
-		mergeView->loadConfFiles( confFilesList );
+		unmergeView->loadConfFiles( confFilesList );
+	
+	QStringList backupFilesList = EtcUpdateSingleton::Instance()->backupFilesList();
+	if ( !backupFilesList.isEmpty() )
+		mergeView->loadConfFiles( backupFilesList );
 	
 	emit signalMergeChanged();
 }
@@ -94,15 +102,30 @@ void MergeTab::slotClearFilter()
 /**
  * Open in external browser.
  */
-void MergeTab::slotViewFile( QListViewItem *item )
+void MergeTab::slotViewFile()
 {
-	if ( item->parent()->text(0) != i18n("New") )
-		;
+	DEBUG_LINE_INFO;
+	QListViewItem *item = mergeView->currentItem();
+	if ( !item && item->parent() )
+		return;
 	
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
 	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
 	
-	EtcUpdateSingleton::Instance()->runDiff( source, destination );
+	EtcUpdateSingleton::Instance()->runDiff( source, destination, false );
+}
+
+void MergeTab::slotMergeFile()
+{
+	DEBUG_LINE_INFO;
+	QListViewItem *item = unmergeView->currentItem();
+	if ( !item && item->parent() )
+		return;
+				
+	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
+	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
+	
+	EtcUpdateSingleton::Instance()->runDiff( source, destination, true );
 }
 
 #include "mergetab.moc"

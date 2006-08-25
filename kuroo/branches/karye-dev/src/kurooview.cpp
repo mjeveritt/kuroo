@@ -83,7 +83,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PORTAGE ), i18n("Packages") );
 	iconQueue = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_QUEUE ), i18n("Queue") );
 	iconHistory = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_HISTORY ), i18n("History") );
-	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Etc-update") );
+	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Configuration") );
 	iconLog = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_LOG ), i18n("Log") );
 	
 	// Connect menu-icons to the pages

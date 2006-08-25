@@ -129,24 +129,29 @@ void EtcUpdate::runDiff()
 	kdDebug() << "m_totalEtcCount=" << m_totalEtcCount << endl;
 	if ( m_totalEtcCount > 0 ) {
 
-		QString source = m_etcFilesList.first();
-		QString destination = m_etcFilesList.first().remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+// 		QStringList etcFilesList;
+// 		foreach ( m_etcFilesList ) {
+// 			QString configFile = *it;
+// 			etcFilesList += configFile.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+// 		}
 		
-		// Check for etc-files warnings
-		QString etcWarning;
-		const QStringList etcFilesWarningsList = QStringList::split( " ", KurooConfig::etcFiles() );
-		foreach ( etcFilesWarningsList )
-			if ( *it == destination )
-				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
-
 		// Ask user what to do with this etc-file
-		QString configFile = KInputDialog::getItemList( i18n("Merge config changes"),
-		                                                i18n("Select config file to merge"),
-		                                                m_etcFilesList, m_etcFilesList.first() ).first();
-		m_etcFilesList.pop_front();
+		QString source = KInputDialog::getItemList( i18n("Merge config changes"), i18n("Select config file to merge"),
+				m_etcFilesList, m_etcFilesList.first() ).first();
 
 		// Merge this etc-file
-		if ( !configFile.isEmpty() ) {
+		if ( !source.isEmpty() ) {
+			QString destination = source.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+			
+			// Check for etc-files warnings
+			QString etcWarning;
+			const QStringList etcFilesWarningsList = QStringList::split( " ", KurooConfig::etcFiles() );
+			foreach ( etcFilesWarningsList )
+				if ( *it == destination )
+					etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
+
+			m_etcFilesList.pop_front();
+			
 			eProc->resetAll();
 			*eProc << KurooConfig::etcUpdateTool() << source << destination;
 			eProc->start( KProcess::NotifyOnExit, true );

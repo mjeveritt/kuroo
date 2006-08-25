@@ -202,6 +202,13 @@ void Queue::reset()
 	refresh( false );
 }
 
+/**
+ * Convenience method.
+ */
+int Queue::size()
+{
+	return m_queueCache.size();
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue cache handling

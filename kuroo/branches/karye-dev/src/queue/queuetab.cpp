@@ -459,7 +459,7 @@ void QueueTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else	
+	else
 		processPackage( false );
 }
 
@@ -468,6 +468,7 @@ void QueueTab::slotPackage()
  */
 void QueueTab::processPackage( bool viewInspector )
 {
+	DEBUG_LINE_INFO;
 	// Queue view is hidden don't update
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;

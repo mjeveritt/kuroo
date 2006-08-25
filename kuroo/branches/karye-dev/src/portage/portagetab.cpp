@@ -190,8 +190,6 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( m_packageInspector->isVisible() )
 		return;
 	else {
@@ -444,8 +442,12 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += GlobalSingleton::Instance()->fgHexColor() + " size=+1><b>";
 		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
 		lines += "<tr><td>";
-		foreach ( selectedIdList )
-			lines += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name() + " ";
+		foreach ( selectedIdList ) {
+			lines += packagesView->packageItemById( *it )->name();
+			lines += " (" + packagesView->packageItemById( *it )->category().section( "-", 0, 0 ) + "/";
+			lines += packagesView->packageItemById( *it )->category().section( "-", 1, 1 ) + "), ";
+		}
+		lines = lines.left( lines.length() - 2 );
 		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		

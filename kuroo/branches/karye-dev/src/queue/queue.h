@@ -42,6 +42,7 @@ public:
 	void					emergePackageComplete( const QString& package, int order, int total );
 	bool					isQueueBusy();
 	void					clearCache();
+	int						size();
 	void					insertInCache( const QString& id );
 	void					deleteFromCache( const QString& id );
 	bool					isQueued( const QString& id );

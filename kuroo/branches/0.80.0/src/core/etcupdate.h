@@ -41,12 +41,13 @@ public:
 
 	void				init( QObject *parent = 0 );
 	void				askUpdate( const int &count );
+	QStringList			confFilesList();
+	void				runDiff( const QString& source, const QString& destination );
 
 public slots:
 	void				slotEtcUpdate();
 	
 private:
-	void				runDiff();
 	void				backup( const QString& source, const QString& destination );
 	
 private slots:
@@ -56,6 +57,7 @@ private slots:
 
 signals:
 	void				signalEtcFileMerged();
+	void				signalScanCompleted();
 	
 private:
 	QObject*			m_parent;

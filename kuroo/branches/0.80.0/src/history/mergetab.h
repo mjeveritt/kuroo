@@ -37,9 +37,9 @@ public:
 private slots:
 	void 		slotInit();
 	void		slotReload();
+	void		slotLoadConfFiles();
 	void		slotClearFilter();
 	void 		slotViewFile( QListViewItem* item );
-	void		slotCleanupOpenDiff( KProcess* eProc );
 	
 signals:
 	void		signalMergeChanged();

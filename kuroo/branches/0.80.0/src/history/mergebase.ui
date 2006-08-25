@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>588</width>
-            <height>363</height>
+            <width>593</width>
+            <height>412</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,35 +25,6 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="MergeListView" row="2" column="0">
-            <property name="name">
-                <cstring>mergeView</cstring>
-            </property>
-        </widget>
-        <widget class="Line" row="1" column="0">
-            <property name="name">
-                <cstring>line1</cstring>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>185</red>
-                    <green>185</green>
-                    <blue>185</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout62</cstring>
@@ -206,6 +177,81 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="Line" row="1" column="0">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>185</red>
+                    <green>185</green>
+                    <blue>185</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="MergeListView" row="2" column="0">
+            <property name="name">
+                <cstring>mergeView</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="3" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>5</number>
+                </property>
+                <widget class="KPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>pbView</cstring>
+                    </property>
+                    <property name="text">
+                        <string>View Changes</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>pbMerge</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Merge</string>
+                    </property>
+                </widget>
+                <spacer row="0" column="2">
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>171</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -234,7 +280,9 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>mergelistview.h</includehint>
     <includehint>klistviewsearchline.h</includehint>
+    <includehint>mergelistview.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

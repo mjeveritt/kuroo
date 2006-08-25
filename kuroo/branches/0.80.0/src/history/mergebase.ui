@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>593</width>
-            <height>412</height>
+            <width>660</width>
+            <height>353</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,6 +25,30 @@
         <property name="spacing">
             <number>0</number>
         </property>
+        <widget class="Line" row="1" column="0">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>185</red>
+                    <green>185</green>
+                    <blue>185</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout62</cstring>
@@ -57,7 +81,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>40</height>
+                                    <height>20</height>
                                 </size>
                             </property>
                         </spacer>
@@ -99,23 +123,6 @@
                                 <string>Clear filter</string>
                             </property>
                         </widget>
-                        <spacer row="0" column="1" rowspan="1" colspan="3">
-                            <property name="name">
-                                <cstring>spacer8</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Minimum</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>100</width>
-                                    <height>16</height>
-                                </size>
-                            </property>
-                        </spacer>
                         <widget class="QLabel" row="1" column="2">
                             <property name="name">
                                 <cstring>textLabel1_2</cstring>
@@ -168,8 +175,7 @@
                         <number>0</number>
                     </property>
                     <property name="text">
-                        <string>&lt;font size="+1"&gt;Configuration Files&lt;/font&gt;&lt;br&gt;
-&lt;i&gt;Click on configuration file to view changes...&lt;/i&gt;</string>
+                        <string>&lt;font size="+1"&gt;Configuration Files&lt;/font&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>
@@ -177,80 +183,181 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="Line" row="1" column="0">
+        <widget class="QSplitter" row="2" column="0">
             <property name="name">
-                <cstring>line1</cstring>
+                <cstring>splitter3</cstring>
             </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>185</red>
-                    <green>185</green>
-                    <blue>185</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-        </widget>
-        <widget class="MergeListView" row="2" column="0">
-            <property name="name">
-                <cstring>mergeView</cstring>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget" row="3" column="0">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <grid>
+            <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>layout10</cstring>
                 </property>
-                <property name="margin">
-                    <number>5</number>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>layout8</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer row="0" column="1">
+                                <property name="name">
+                                    <cstring>spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>219</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KPushButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>pbMerge</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Merge</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="MergeListView" row="0" column="0">
+                        <property name="name">
+                            <cstring>unmergeView</cstring>
+                        </property>
+                    </widget>
+                    <widget class="Line" row="1" column="0">
+                        <property name="name">
+                            <cstring>line1_2</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="lineWidth">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout9</cstring>
                 </property>
-                <widget class="KPushButton" row="0" column="1">
+                <grid>
                     <property name="name">
-                        <cstring>pbView</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="text">
-                        <string>View Changes</string>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                </widget>
-                <widget class="KPushButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>pbMerge</cstring>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                    <property name="text">
-                        <string>Merge</string>
-                    </property>
-                </widget>
-                <spacer row="0" column="2">
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>171</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
+                    <widget class="Line" row="1" column="0">
+                        <property name="name">
+                            <cstring>line1_2_2</cstring>
+                        </property>
+                        <property name="paletteForegroundColor">
+                            <color>
+                                <red>185</red>
+                                <green>185</green>
+                                <blue>185</blue>
+                            </color>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="lineWidth">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="2" column="0">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer row="0" column="1">
+                                <property name="name">
+                                    <cstring>spacer3_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>210</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KPushButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>pbView</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>View Changes</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="MergeListView" row="0" column="0">
+                        <property name="name">
+                            <cstring>mergeView</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
         </widget>
     </grid>
 </widget>
@@ -281,8 +388,9 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistviewsearchline.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>mergelistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
+    <includehint>mergelistview.h</includehint>
 </includehints>
 </UI>

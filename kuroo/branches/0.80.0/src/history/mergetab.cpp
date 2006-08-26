@@ -75,6 +75,7 @@ void MergeTab::slotInit()
 void MergeTab::slotReload()
 {
 // 	mergeView->loadFromDB();
+	DEBUG_LINE_INFO;
 	EtcUpdateSingleton::Instance()->slotEtcUpdate();
 }
 
@@ -83,6 +84,7 @@ void MergeTab::slotReload()
  */
 void MergeTab::slotLoadConfFiles()
 {
+	DEBUG_LINE_INFO;
 	QStringList confFilesList = EtcUpdateSingleton::Instance()->confFilesList();
 	if ( !confFilesList.isEmpty() )
 		unmergeView->loadConfFiles( confFilesList );

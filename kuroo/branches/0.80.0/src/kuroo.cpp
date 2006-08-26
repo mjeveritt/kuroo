@@ -160,7 +160,7 @@ void Kuroo::slotBusy()
 	}
 	else {
 		actionSyncPortage->setEnabled( true );
-		actionEtcUpdate->setEnabled( true );
+// 		actionEtcUpdate->setEnabled( true );
 	}
 	
 	// No db no fun!

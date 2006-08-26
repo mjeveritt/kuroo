@@ -179,7 +179,9 @@ void KurooView::slotCheckPortage()
 		HistorySingleton::Instance()->updateStatistics();
 		m_isHistoryRestored = false;
 	}
+	
 	DEBUG_LINE_INFO;
+	
 	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {

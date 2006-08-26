@@ -70,6 +70,7 @@ void EtcUpdate::askUpdate( const int& count )
  */
 void EtcUpdate::slotEtcUpdate()
 {
+	DEBUG_LINE_INFO;
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
 		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {

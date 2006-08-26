@@ -54,16 +54,16 @@ void EtcUpdate::init( QObject *parent )
  * Ask user if to run etc-update.
  * @param count
  */
-void EtcUpdate::askUpdate( const int& count )
-{
-	switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
-	                                        i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
-	                                        .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
-		
-		case KMessageBox::Yes :
-			slotEtcUpdate();
-	}
-}
+// void EtcUpdate::askUpdate( const int& count )
+// {
+// 	switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
+// 	                                        i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
+// 	                                        .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
+// 		
+// 		case KMessageBox::Yes :
+// 			slotEtcUpdate();
+// 	}
+// }
 
 /**
  * Scan for new configuration files.
@@ -75,6 +75,7 @@ void EtcUpdate::slotEtcUpdate()
 		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
 		m_etcFilesList.clear();
+		m_backupFilesList.clear();
 		m_diffSource = QString::null;
 		
 		// First collect old merged files

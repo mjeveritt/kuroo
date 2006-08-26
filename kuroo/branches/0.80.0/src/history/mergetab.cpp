@@ -25,6 +25,7 @@
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
+#include <qheader.h>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -49,6 +50,9 @@ MergeTab::MergeTab( QWidget* parent )
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
 // 	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
 	
+	connect( unmergeView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotButtonMerge() ) );
+	connect( mergeView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotButtonView() ) );
+	
 	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );
 	
@@ -66,6 +70,10 @@ MergeTab::~MergeTab()
  */
 void MergeTab::slotInit()
 {
+	unmergeView->header()->setLabel( 0, i18n("New Configuration file") );
+	mergeView->header()->setLabel( 0, i18n("Merged Configuration file") );
+	pbMerge->setDisabled( true );
+	pbView->setDisabled( true );
 	slotReload();
 }
 
@@ -102,13 +110,47 @@ void MergeTab::slotClearFilter()
 }
 
 /**
- * Open in external browser.
+ * Activate buttons only when any file is selected.
+ */
+void MergeTab::slotButtonView()
+{
+	QListViewItem *item = mergeView->currentItem();
+	if ( item && item->parent() ) {
+		unmergeView->clearSelection();
+		pbView->setDisabled( false );
+		pbMerge->setDisabled( true );
+	}
+	else {
+		pbMerge->setDisabled( true );
+		pbView->setDisabled( true );
+	}
+}
+
+/**
+ * Activate buttons only when any file is selected.
+ */
+void MergeTab::slotButtonMerge()
+{
+	QListViewItem *item = unmergeView->currentItem();
+	if ( item ) {
+		mergeView->clearSelection();
+		pbMerge->setDisabled( false );
+		pbView->setDisabled( true );
+	}
+	else {
+		pbMerge->setDisabled( true );
+		pbView->setDisabled( true );
+	}
+}
+
+/**
+ * View merged changes in diff tool.
  */
 void MergeTab::slotViewFile()
 {
 	DEBUG_LINE_INFO;
 	QListViewItem *item = mergeView->currentItem();
-	if ( !item && item->parent() )
+	if ( !item || !item->parent() )
 		return;
 	
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
@@ -117,6 +159,9 @@ void MergeTab::slotViewFile()
 	EtcUpdateSingleton::Instance()->runDiff( source, destination, false );
 }
 
+/**
+ * Launch diff tool to merge changes.
+ */
 void MergeTab::slotMergeFile()
 {
 	DEBUG_LINE_INFO;

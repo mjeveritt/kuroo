@@ -31,10 +31,16 @@ MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
 {}
 
+MergeListView::MergeItem::MergeItem( QListView* parent, const char* source, const char* destination )
+	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
+{
+	setText( 0 , m_source );
+}
+
 MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
 	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
 {
-	setText( 0 , m_source.section( QRegExp("_\\d*_\\d*"), 0, 0 ) );
+	setText( 0 , m_source.section( QRegExp( "\\d{8}_\\d{4}/" ), 1, 1 ) );
 }
 
 QString MergeListView::MergeItem::source()
@@ -75,32 +81,32 @@ MergeListView::~MergeListView()
 /**
  * Populate listview with log entries
  */
-void MergeListView::loadFromDB()
-{
-	DEBUG_LINE_INFO;
-	clear();
-	m_itemMap.clear();
-	
-	const QStringList historyList = HistorySingleton::Instance()->allMergeHistory();
-	foreach ( historyList ) {
-		QString timeStamp = *it++;
-		QString source = *it++;
-		QString destination = *it;
-		
-		QDateTime dt;
-		dt.setTime_t( timeStamp.toUInt() );
-		QString date = m_loc->formatDate( dt.date() );
-		
-		if ( !m_itemMap.contains( date ) ) {
-			MergeItem *item = new MergeItem( this, date );
-			m_itemMap[ date ] = item;
-			item->setOpen( true );
-		}
-
-		new MergeItem( m_itemMap[ date ], source, destination );
-	}
-	emit signalHistoryLoaded();
-}
+// void MergeListView::loadFromDB()
+// {
+// 	DEBUG_LINE_INFO;
+// 	clear();
+// 	m_itemMap.clear();
+// 	
+// 	const QStringList historyList = HistorySingleton::Instance()->allMergeHistory();
+// 	foreach ( historyList ) {
+// 		QString timeStamp = *it++;
+// 		QString source = *it++;
+// 		QString destination = *it;
+// 		
+// 		QDateTime dt;
+// 		dt.setTime_t( timeStamp.toUInt() );
+// 		QString date = m_loc->formatDate( dt.date() );
+// 		
+// 		if ( !m_itemMap.contains( date ) ) {
+// 			MergeItem *item = new MergeItem( this, date );
+// 			m_itemMap[ date ] = item;
+// 			item->setOpen( true );
+// 		}
+// 
+// 		new MergeItem( m_itemMap[ date ], source, destination );
+// 	}
+// 	emit signalHistoryLoaded();
+// }
 
 /**
  * Append the new unmerged configuration files ontop.
@@ -115,11 +121,8 @@ void MergeListView::loadConfFiles( const QStringList& confFilesList )
 		QString destination = source;
 		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
 		if ( source.contains( GlobalSingleton::Instance()->kurooDir() ) ) {
-			
 			QString date = source.section( "/", -2, -2 );
-			
-			kdDebug() << "date=" << date << endl;
-			
+
 			if ( !m_itemMap.contains( date ) ) {
 				MergeItem *item = new MergeItem( this, date );
 				m_itemMap[ date ] = item;
@@ -127,15 +130,8 @@ void MergeListView::loadConfFiles( const QStringList& confFilesList )
 			}
 			new MergeItem( m_itemMap[ date ], source, destination );
 		}
-		else {
-			
-			if ( !m_itemMap.contains( i18n("New") ) ) {
-				MergeItem *item = new MergeItem( this, i18n("New") );
-				m_itemMap[ i18n("New") ] = item;
-				item->setOpen( true );
-			}
-			new MergeItem( m_itemMap[ i18n("New") ], source, destination );
-		}
+		else
+			new MergeItem( this, source, destination );
 	}
 }
 

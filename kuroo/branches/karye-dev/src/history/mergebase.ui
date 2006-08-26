@@ -245,7 +245,7 @@
                                     <cstring>pbMerge</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Merge</string>
+                                    <string>Merge Changes</string>
                                 </property>
                             </widget>
                         </grid>

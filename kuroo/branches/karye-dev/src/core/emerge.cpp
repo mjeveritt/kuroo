@@ -473,8 +473,8 @@ void Emerge::cleanup()
 			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
 	}
 	
-	if ( m_etcUpdateCount != 0 )
-		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
+// 	if ( m_etcUpdateCount != 0 )
+// 		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
 }
 
 /**

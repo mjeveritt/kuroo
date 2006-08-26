@@ -40,7 +40,7 @@ public:
     ~EtcUpdate();
 
 	void				init( QObject *parent = 0 );
-	void				askUpdate( const int &count );
+// 	void				askUpdate( const int &count );
 	QStringList			confFilesList();
 	QStringList			backupFilesList();
 	void				runDiff( const QString& source, const QString& destination, bool isNew );

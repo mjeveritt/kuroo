@@ -39,6 +39,8 @@ private slots:
 	void		slotReload();
 	void		slotLoadConfFiles();
 	void		slotClearFilter();
+	void		slotButtonView();
+	void		slotButtonMerge();
 	void 		slotViewFile();
 	void		slotMergeFile();
 	

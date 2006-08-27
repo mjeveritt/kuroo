@@ -107,7 +107,6 @@ void History::slotScanHistoryCompleted()
 bool History::slotRefresh()
 {
 	DEBUG_LINE_INFO;
-	
 	QString lastDate = KurooDBSingleton::Instance()->getKurooDbMeta( "scanTimeStamp" );
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
@@ -293,7 +292,6 @@ void History::slotParse()
 void History::updateStatistics()
 {
 	DEBUG_LINE_INFO;
-	
 	ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
 }
 
@@ -303,7 +301,6 @@ void History::updateStatistics()
 void History::appendEmergeInfo()
 {
 	DEBUG_LINE_INFO;
-	
 	QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
 	if ( !einfo.isEmpty() )
 		KurooDBSingleton::Instance()->addEmergeInfo( einfo );
@@ -324,7 +321,6 @@ const QStringList History::allMergeHistory()
 void History::loadTimeStatistics()
 {
 	DEBUG_LINE_INFO;
-	
 	m_statisticsMap.clear();
 	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
 	foreach ( timePackageList ) {
@@ -334,6 +330,7 @@ void History::loadTimeStatistics()
 		PackageEmergeTime p( time.toInt(), count.toInt() );
 		m_statisticsMap.insert( package, p );
 	}
+	DEBUG_LINE_INFO;
 }
 
 /**

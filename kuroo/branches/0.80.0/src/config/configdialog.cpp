@@ -112,6 +112,7 @@ void ConfigDialog::slotSaveAll()
  */
 const QStringList ConfigDialog::readMakeConf()
 {
+	DEBUG_LINE_INFO;
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
@@ -153,7 +154,7 @@ const QStringList ConfigDialog::readMakeConf()
 	}
 	else
 		kdError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
-	
+	DEBUG_LINE_INFO;
 	return linesConcatenated;
 }
 
@@ -536,6 +537,7 @@ void ConfigDialog::parseMakeConf()
 				kdWarning(0) << "Parsing /etc/make.conf: can not parse NOCOLOR." << LINE_INFO;
 		}
 	}
+	DEBUG_LINE_INFO;
 }
 
 /**
@@ -544,6 +546,7 @@ void ConfigDialog::parseMakeConf()
  */
 bool ConfigDialog::saveMakeConf()
 {
+	DEBUG_LINE_INFO;
 	QStringList linesConcatenated = readMakeConf();
 	if ( linesConcatenated.isEmpty() )
 		return false;
@@ -691,6 +694,7 @@ bool ConfigDialog::saveMakeConf()
 		kdError(0) << QString("Writing: %1").arg( KurooConfig::fileMakeConf() ) << LINE_INFO;
 		return false;
 	}
+	DEBUG_LINE_INFO;
 }
 
 #include "configdialog.moc"

@@ -270,6 +270,7 @@ void Queue::deleteFromCache( const QString& id )
  */
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
+	DEBUG_LINE_INFO;
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
 		m_queueCache[ id ] = false;

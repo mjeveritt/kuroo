@@ -67,6 +67,10 @@ bool ScanHistoryJob::doJob()
 	}
 	
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
+	eLogVector eLogs( HistorySingleton::Instance()->getELogs() );
+	
+	kdDebug() << "eLogs.size()=" << eLogs.size() << endl;
+	
 	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
@@ -75,6 +79,8 @@ bool ScanHistoryJob::doJob()
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
 	bool isStatisticUpdated( false );
+	eLog elog;
+	QString einfo;
 	
 	foreach ( m_logLines ) {
 		
@@ -110,8 +116,22 @@ bool ScanHistoryJob::doJob()
 					QMap<QString, uint>::iterator itLogMap = logMap.find( package );
 					if ( itLogMap != logMap.end() ) {
 						isStatisticUpdated = true;
-						int secTime = timeStamp.toUInt() - itLogMap.data();
+						uint emergeStart = itLogMap.data();
+						uint emergeCompleted = timeStamp.toUInt();
+						int secTime = emergeCompleted - emergeStart;
 						logMap.erase( itLogMap );
+						
+						// Find matching elog
+						elog = eLogs.last();
+						while ( eLogs.count() > 0 && elog.timestamp < emergeStart ) {
+							eLogs.pop_back();
+							elog = eLogs.last();
+						}
+						if ( elog.timestamp >= emergeStart && elog.timestamp <= emergeCompleted )
+							einfo = elog.package;
+						else
+							einfo = "";
+// 							kdDebug() << "elog.package=" << elog.package << " emergeCompleted=" << emergeCompleted << endl;
 						
 						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
 						if ( !parts.isEmpty() ) {
@@ -128,7 +148,7 @@ bool ScanHistoryJob::doJob()
 								itMap.data().inc();
 							}
 							
-							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
+// 							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
 							KurooDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO history (package, timestamp, time, einfo, emerge) "
 								"VALUES ('%1', '%2', '%3', '%4','true');" )

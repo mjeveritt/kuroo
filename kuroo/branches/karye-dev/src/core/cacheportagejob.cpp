@@ -166,6 +166,7 @@ bool CachePortageJob::doJob()
 	
 	setStatus( "CachePortage", i18n("Done.") );
 	setProgress( 0 );
+	DEBUG_LINE_INFO;
 	return true;
 }
 

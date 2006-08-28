@@ -48,10 +48,12 @@ MergeTab::MergeTab( QWidget* parent )
 
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
-// 	connect( mergeView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewFile( QListViewItem* ) ) );
 	
-	connect( unmergeView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotButtonMerge() ) );
-	connect( mergeView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotButtonView() ) );
+	// When all packages are emerged...
+	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotReload() ) );
+		
+	connect( unmergeView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotButtonMerge() ) );
+	connect( mergeView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotButtonView() ) );
 	
 	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );

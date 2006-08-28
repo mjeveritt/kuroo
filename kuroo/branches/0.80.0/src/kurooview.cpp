@@ -175,7 +175,7 @@ void KurooView::slotCheckPortage()
 	
 	// Restore backup after db is recreated because of new version
 	if ( m_isHistoryRestored ) {
-		KurooDBSingleton::Instance()->restoreBackup();
+// 		KurooDBSingleton::Instance()->restoreBackup();
 		HistorySingleton::Instance()->updateStatistics();
 		m_isHistoryRestored = false;
 	}

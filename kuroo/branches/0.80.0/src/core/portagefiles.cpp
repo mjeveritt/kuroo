@@ -723,12 +723,12 @@ void PortageFiles::refresh( int mask )
 void PortageFiles::loadPackageFiles()
 {
 	DEBUG_LINE_INFO;
+	
 	ThreadWeaver::instance()->queueJob( new LoadPackageHardMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUserUnMaskJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageKeywordsJob( this ) );
 	ThreadWeaver::instance()->queueJob( new LoadPackageUseJob( this ) );
-	DEBUG_LINE_INFO;
 }
 
 void PortageFiles::loadPackageKeywords()

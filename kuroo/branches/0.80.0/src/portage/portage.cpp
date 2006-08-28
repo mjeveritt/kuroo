@@ -258,6 +258,7 @@ void Portage::slotPackageChanged()
  */
 bool Portage::slotRefresh()
 {
+	DEBUG_LINE_INFO;
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
@@ -293,6 +294,8 @@ void Portage::slotSyncCompleted()
  */
 bool Portage::slotScan()
 {
+	DEBUG_LINE_INFO;
+	
 	// Wait for cache job to finish before launching the scan.
 	int maxLoops( 99 );
 	while ( true ) {

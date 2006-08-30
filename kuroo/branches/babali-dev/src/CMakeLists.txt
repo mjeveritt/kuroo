@@ -39,7 +39,7 @@ KDE3_ADD_DCOP_SKELS(kuroo_SRCS ${kuroo_DCOP_SKEL_SRCS})
 
 KDE3_ADD_EXECUTABLE(kuroo ${kuroo_SRCS})
 
-TARGET_LINK_LIBRARIES(kuroo  ${QT_AND_KDECORE_LIBS} config portage history queue logs intro core kdeprint sqlite)
+TARGET_LINK_LIBRARIES(kuroo  ${QT_AND_KDECORE_LIBS} config core portage history queue logs intro kdeprint sqlite)
 
 INSTALL_TARGETS(/bin kuroo )
 

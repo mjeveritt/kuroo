@@ -316,6 +316,17 @@ void Queue::addPackageList( const EmergePackageList &packageList )
 }
 
 /**
+ * Tells if package is in the queue
+ * @param packageList
+ * @return packageQueued
+ */
+bool
+Queue::isPackageQueued( const QString& package )
+{
+	return m_queueCache[package];
+}
+
+/**
  * Remove packages from queue.
  * @param packageIdList
  */

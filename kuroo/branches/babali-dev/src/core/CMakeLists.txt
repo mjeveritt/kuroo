@@ -8,12 +8,13 @@ scanhistoryjob.h scanupdatesjob.h scanportagejob.h signalist.h
 		threadweaver.h portagedb.h emerge.h cacheportagejob.h etcupdate.h packageitem.h
 		tooltip.h packagelistview.h categorieslistview.h packageversion.h dependatom.h
 		portagefiles.h images.h packageinspector.h versionview.h filewatcher.h global.h
-	dependencyview.h
+	dependencyview.h shutdown.h
 	scanupdatesjob.cpp scanhistoryjob.cpp emerge.cpp
 		scanportagejob.cpp signalist.cpp threadweaver.cpp portagedb.cpp cacheportagejob.cpp
 		etcupdate.cpp packageitem.cpp tooltip.cpp packagelistview.cpp categorieslistview.cpp
 		packageversion.cpp dependatom.cpp portagefiles.cpp images.cpp
 		packageinspector.cpp versionview.cpp filewatcher.cpp global.cpp dependencyview.cpp
+		shutdown.cpp
 )
 
 SET( core_UI

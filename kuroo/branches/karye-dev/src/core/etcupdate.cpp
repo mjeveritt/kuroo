@@ -76,7 +76,6 @@ void EtcUpdate::slotEtcUpdate()
 	else {
 		m_etcFilesList.clear();
 		m_backupFilesList.clear();
-		m_diffSource = QString::null;
 		
 		// First collect old merged files
 		m_configProtectList = GlobalSingleton::Instance()->kurooDir() + "backup/configuration";
@@ -144,6 +143,7 @@ QStringList EtcUpdate::backupFilesList()
 void EtcUpdate::runDiff( const QString& source, const QString& destination, bool isNew )
 {
 	if ( !source.isEmpty() ) {
+		m_isNew = false;
 		
 		// Check for etc-files warnings
 		QString etcWarning;
@@ -156,7 +156,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, bool
 		*eProc << KurooConfig::etcUpdateTool() << source << destination;
 		eProc->start( KProcess::NotifyOnExit, true );
 		
-		m_diffSource = source;
+// 		m_diffSource = source;
 		connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
 		
 		if ( !eProc->isRunning() ) {
@@ -169,9 +169,13 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, bool
 			
 			// Backup files if external to backup directory, eg first time merging them
 			if ( isNew ) {
-				backup( source, destination );
+// 				backup( source, destination );
 				emit signalEtcFileMerged();
 			}
+			
+			m_source = source;
+			m_destination = destination;
+			m_isNew = isNew;
 		}
 	}
 }
@@ -184,7 +188,10 @@ void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
 {
 	DEBUG_LINE_INFO;
 	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
-	m_diffSource = QString::null;
+// 	m_diffSource = QString::null;
+	
+	if ( m_isNew )
+		backup( m_source, m_destination );
 }
 
 /**
@@ -194,7 +201,9 @@ void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
  */
 void EtcUpdate::backup( const QString& source, const QString& destination )
 {
-	DEBUG_LINE_INFO;
+	kdDebug() << "source=" << source << LINE_INFO;
+	kdDebug() << "destination=" << destination << LINE_INFO;
+	
 	QDateTime dt = QDateTime::currentDateTime();
 	QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/" + dt.toString( "yyyyMMdd_hhmm" );
 	QDir d( backupPath );
@@ -203,8 +212,8 @@ void EtcUpdate::backup( const QString& source, const QString& destination )
 	
 	KIO::file_copy( source, backupPath + "/" + source.section( "/", -1, -1 ), -1, true, false, false );
 	KIO::file_copy( destination, backupPath + "/" + destination.section( "/", -1, -1 ), -1, true, false, false );
-	KIO::file_delete( m_diffSource );
-	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource )
+	KIO::file_delete( source );
+	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( source )
 			.arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
 	
 	KurooDBSingleton::Instance()->addBackup( source, destination );

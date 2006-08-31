@@ -73,8 +73,9 @@ private:
 	// List of etc-files for merging
 	QStringList			m_etcFilesList;
 	
-	// Remember last source file when iterating
-	QString				m_diffSource;
+	QString				m_source, m_destination;
+	
+	bool				m_isNew;
 };
 
 #endif

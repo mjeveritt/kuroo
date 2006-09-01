@@ -27,6 +27,7 @@
 #include <kio/job.h>
 
 class KProcIO;
+class KDirWatch;
 
 /**
  * @class EtcUpdate
@@ -40,22 +41,19 @@ public:
     ~EtcUpdate();
 
 	void				init( QObject *parent = 0 );
-// 	void				askUpdate( const int &count );
 	QStringList			confFilesList();
 	QStringList			backupFilesList();
 	void				runDiff( const QString& source, const QString& destination, bool isNew );
-
+	
 public slots:
 	void				slotEtcUpdate();
 	
-private:
-	void				backup( const QString& source, const QString& destination );
-	
 private slots:
+	void				slotChanged();
 	void				slotFinished();
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
-	void				slotCleanupEtcUpdateDiff( KProcess* );
-
+	void				slotCleanupDiff( KProcess* );
+	
 signals:
 	void				signalEtcFileMerged();
 	void				signalScanCompleted();
@@ -75,7 +73,9 @@ private:
 	
 	QString				m_source, m_destination;
 	
-	bool				m_isNew;
+	bool				m_changed;
+	
+	KDirWatch			*m_mergingFile;
 };
 
 #endif

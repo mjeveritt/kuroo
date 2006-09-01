@@ -59,9 +59,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
  */
 History::History( QObject *m_parent )
 	: QObject( m_parent ), isEmerging( false ), logWatcher( 0 )
-{
-// 	slotInit();
-}
+{}
 
 History::~History()
 {

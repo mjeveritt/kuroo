@@ -133,10 +133,10 @@ bool ScanHistoryJob::doJob()
 							else
 								einfo = "";
 							
-							kdDebug() << "elog.package=" << elog.package << endl;
-							kdDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
-							kdDebug() << "emergeStart=" << emergeStart << LINE_INFO;
-							kdDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
+// 							kdDebug() << "elog.package=" << elog.package << endl;
+// 							kdDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
+// 							kdDebug() << "emergeStart=" << emergeStart << LINE_INFO;
+// 							kdDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
 						}
 						
 						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );

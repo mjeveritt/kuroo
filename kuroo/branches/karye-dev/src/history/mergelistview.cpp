@@ -40,6 +40,7 @@ MergeListView::MergeItem::MergeItem( QListView* parent, const char* source, cons
 MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
 	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
 {
+	kdDebug() << "source=" << source << LINE_INFO;
 	setText( 0 , m_source.section( QRegExp( "\\d{8}_\\d{4}/" ), 1, 1 ).replace( ":" , "/" ) );
 }
 
@@ -101,9 +102,9 @@ void MergeListView::loadConfFiles( const QStringList& confFilesList )
 				MergeItem *item = new MergeItem( this, date );
 				m_itemMap[ date ] = item;
 				item->setOpen( true );
-
-				new MergeItem( m_itemMap[ date ], source, source + ".orig" );
 			}
+			
+			new MergeItem( m_itemMap[ date ], source, source + ".orig" );
 		}
 		else
 			new MergeItem( this, source, destination );

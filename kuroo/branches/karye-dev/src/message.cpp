@@ -49,8 +49,7 @@ Message::Message( QWidget *parent )
 }
 
 Message::~Message()
-{
-}
+{}
 
 /**
  * Show dialog with message content.

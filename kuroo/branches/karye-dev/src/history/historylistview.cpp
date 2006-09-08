@@ -57,7 +57,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 {
 	addColumn( i18n("Date") );
 	addColumn( i18n("Duration") );
-	addColumn( i18n("Emerge info") );
+	addColumn( i18n("Emerge messages") );
 	
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );

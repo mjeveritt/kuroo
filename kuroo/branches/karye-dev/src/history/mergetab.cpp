@@ -84,7 +84,6 @@ void MergeTab::slotInit()
  */
 void MergeTab::slotReload()
 {
-// 	mergeView->loadFromDB();
 	DEBUG_LINE_INFO;
 	EtcUpdateSingleton::Instance()->slotEtcUpdate();
 }

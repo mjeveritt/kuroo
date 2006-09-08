@@ -377,7 +377,7 @@ const QString History::packageTime( const QString& packageNoversion )
  */
 void History::scanELog()
 {
-	QDir eLogDir( "/var/log/portage/elog/" );
+	QDir eLogDir( KurooConfig::dirELog() );
 	eLogDir.setFilter( QDir::Files | QDir::NoSymLinks );
 	eLogDir.setSorting( QDir::Time );
 	

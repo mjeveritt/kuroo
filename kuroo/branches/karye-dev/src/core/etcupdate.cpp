@@ -117,11 +117,17 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 	}
 }
 
+/**
+ * Return found configuration files.
+ */
 QStringList EtcUpdate::confFilesList()
 {
 	return m_etcFilesList;
 }
 
+/**
+ * Return backup files found in /var/cache/kuroo/backup/configuration.
+ */
 QStringList EtcUpdate::backupFilesList()
 {
 	return m_backupFilesList;

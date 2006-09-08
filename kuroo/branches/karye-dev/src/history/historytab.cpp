@@ -47,9 +47,6 @@ HistoryTab::HistoryTab( QWidget* parent )
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
-	// Open dialog when user click for info
-// 	connect( historyView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewInfo( QListViewItem* ) ) );
-	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
 	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
@@ -57,7 +54,7 @@ HistoryTab::HistoryTab( QWidget* parent )
 	// Load history view after scan completed
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotReload() ) );
 	
-	connect( historyView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotButtonView() ) );
+	connect( historyView, SIGNAL( selectionChanged() ), this, SLOT( slotButtonView() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewInfo() ) );
 	
 	slotInit();
@@ -136,7 +133,7 @@ void HistoryTab::slotViewUnmerges( bool on )
 }
 
 /**
- * Activate buttons only when any file is selected.
+ * Activate button only when any file is selected.
  */
 void HistoryTab::slotButtonView()
 {
@@ -167,8 +164,7 @@ void HistoryTab::slotViewInfo()
 				logText += stream.readLine() + "<br>";
 			logFile.close();
 		
-			Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:")
-					.arg( item->text(0) ), logText );
+			Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
 		}
 		else
 			kdError(0) << "Reading: " << eLogFile << LINE_INFO;

@@ -118,7 +118,7 @@ bool ScanHistoryJob::doJob()
 						int secTime = emergeCompleted - emergeStart;
 						logMap.erase( itLogMap );
 						
-						// Find matching elog
+						// Find matching elog file
 						eLogVector eLogs = HistorySingleton::Instance()->getELogs();
 						if ( eLogs.size() > 0 ) {
 							

@@ -245,7 +245,7 @@
                                     <cstring>pbMerge</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Merge Changes</string>
+                                    <string>Merge Changes...</string>
                                 </property>
                             </widget>
                         </grid>
@@ -355,7 +355,7 @@
                                     <cstring>pbView</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>View Changes</string>
+                                    <string>View Changes...</string>
                                 </property>
                             </widget>
                         </grid>

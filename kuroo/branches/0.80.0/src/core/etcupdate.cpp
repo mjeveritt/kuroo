@@ -147,8 +147,12 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, bool
 
 		eProc->resetAll();
 		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
-		if ( !isNew )
+		
+		if ( isNew )
+			*eProc << "-o" << m_destination;
+		else
 			*eProc << "-o" << backupPath + "merging";
+		
 		eProc->start( KProcess::NotifyOnExit, true );
 		
 		if ( !eProc->isRunning() ) {

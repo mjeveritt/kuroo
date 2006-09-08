@@ -141,7 +141,6 @@ bool History::slotRefresh()
 void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
-	scanELog();
 	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
 }
 
@@ -151,7 +150,6 @@ void History::slotScanHistory( const QStringList& lines )
  */
 void History::slotParse()
 {
-	DEBUG_LINE_INFO;
 	static bool syncDone( false );
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -218,6 +216,8 @@ void History::slotParse()
 
 			// Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
+				scanELog();
+				
 				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
@@ -298,7 +298,6 @@ void History::slotParse()
 void History::updateStatistics()
 {
 	DEBUG_LINE_INFO;
-	
 	ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
 }
 
@@ -374,11 +373,10 @@ const QString History::packageTime( const QString& packageNoversion )
 }
 
 /**
- * Scan for eLogs files.
+ * Collect all eLogs files.
  */
 void History::scanELog()
 {
-	DEBUG_LINE_INFO;
 	QDir eLogDir( KurooConfig::dirELog() );
 	eLogDir.setFilter( QDir::Files | QDir::NoSymLinks );
 	eLogDir.setSorting( QDir::Time );
@@ -399,6 +397,9 @@ void History::scanELog()
 	DEBUG_LINE_INFO;
 }
 
+/**
+ * Return vector with all eLog files.
+ */
 eLogVector History::getELogs()
 {
 	return m_eLogs;

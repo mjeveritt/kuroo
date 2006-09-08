@@ -141,6 +141,7 @@ bool History::slotRefresh()
 void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
+	scanELog();
 	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
 }
 
@@ -377,6 +378,7 @@ const QString History::packageTime( const QString& packageNoversion )
  */
 void History::scanELog()
 {
+	DEBUG_LINE_INFO;
 	QDir eLogDir( KurooConfig::dirELog() );
 	eLogDir.setFilter( QDir::Files | QDir::NoSymLinks );
 	eLogDir.setSorting( QDir::Time );

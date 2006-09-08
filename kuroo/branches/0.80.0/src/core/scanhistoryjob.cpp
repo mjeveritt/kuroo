@@ -67,9 +67,6 @@ bool ScanHistoryJob::doJob()
 	}
 	
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
-	eLogVector eLogs = HistorySingleton::Instance()->getELogs();
-	
-	kdDebug() << "eLogs.size()=" << eLogs.size() << LINE_INFO;
 	
 	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 	
@@ -122,12 +119,13 @@ bool ScanHistoryJob::doJob()
 						logMap.erase( itLogMap );
 						
 						// Find matching elog
+						eLogVector eLogs = HistorySingleton::Instance()->getELogs();
 						if ( eLogs.size() > 0 ) {
 							
 							elog = eLogs.last();
-							while ( eLogs.size() > 1 && elog.timestamp < emergeStart ) {
-								eLogs.pop_back();
+							while ( eLogs.size() > 0 && elog.timestamp < emergeStart ) {
 								elog = eLogs.last();
+								eLogs.pop_back();
 							}
 							
 							if ( elog.timestamp >= emergeStart && elog.timestamp <= emergeCompleted )
@@ -135,10 +133,10 @@ bool ScanHistoryJob::doJob()
 							else
 								einfo = "";
 							
-							kdDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
-							kdDebug() << "emergeStart=" << emergeStart << LINE_INFO;
-							kdDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
-							kdDebug() << "elog.package=" << elog.package << " emergeCompleted=" << emergeCompleted << endl;
+// 							kdDebug() << "elog.package=" << elog.package << endl;
+// 							kdDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
+// 							kdDebug() << "emergeStart=" << emergeStart << LINE_INFO;
+// 							kdDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
 						}
 						
 						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );

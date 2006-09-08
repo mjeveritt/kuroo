@@ -140,8 +140,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;font size="+1"&gt;Installation History&lt;/font&gt;&lt;br&gt;
-&lt;i&gt;Click on package with info to view all information&lt;/i&gt;</string>
+                        <string>&lt;font size="+1"&gt;Installation History&lt;/font&gt;</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="1">

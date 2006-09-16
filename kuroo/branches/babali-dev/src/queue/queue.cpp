@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "threadweaver.h"
+//#include "Shutdown.h"
 
 #include <qtimer.h>
 
@@ -174,7 +175,6 @@ Queue::Queue( QObject* m_parent )
 	
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotClearQueue() ) );
-	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotShutdownComputer() ) );
 }
 
 Queue::~Queue()
@@ -203,6 +203,13 @@ void Queue::reset()
 	refresh( false );
 }
 
+/**
+ * Convenience method.
+ */
+int Queue::size()
+{
+	return m_queueCache.size();
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue cache handling
@@ -264,6 +271,7 @@ void Queue::deleteFromCache( const QString& id )
  */
 void Queue::emergePackageStart( const QString& package, int order, int total )
 {
+	DEBUG_LINE_INFO;
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
 		m_queueCache[ id ] = false;
@@ -313,17 +321,6 @@ void Queue::addPackageList( const EmergePackageList &packageList )
 {
 	if ( !packageList.isEmpty() )
 		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
-}
-
-/**
- * Tells if package is in the queue
- * @param packageList
- * @return packageQueued
- */
-bool
-Queue::isPackageQueued( const QString& package )
-{
-	return m_queueCache[package];
 }
 
 /**

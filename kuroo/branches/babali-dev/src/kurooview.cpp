@@ -83,7 +83,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PORTAGE ), i18n("Packages") );
 	iconQueue = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_QUEUE ), i18n("Queue") );
 	iconHistory = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_HISTORY ), i18n("History") );
-	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Etc-update") );
+	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Configuration") );
 	iconLog = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_LOG ), i18n("Log") );
 	
 	// Connect menu-icons to the pages
@@ -104,8 +104,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 }
 
 KurooView::~KurooView()
-{
-}
+{}
 
 /**
  * Activate corresponding page when clicking on icon in menu.
@@ -176,18 +175,22 @@ void KurooView::slotCheckPortage()
 	
 	// Restore backup after db is recreated because of new version
 	if ( m_isHistoryRestored ) {
-		KurooDBSingleton::Instance()->restoreBackup();
+// 		KurooDBSingleton::Instance()->restoreBackup();
 		HistorySingleton::Instance()->updateStatistics();
 		m_isHistoryRestored = false;
 	}
+	
 	DEBUG_LINE_INFO;
+	
 	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
+		
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );
 	}
 	DEBUG_LINE_INFO;
+	
 	// Warn user that emerge need root permissions - many rmb actions are disabled
 	if ( !KUser().isSuperUser() )
 		KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );

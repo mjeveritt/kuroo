@@ -31,10 +31,16 @@ MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
 {}
 
+MergeListView::MergeItem::MergeItem( QListView* parent, const char* source, const char* destination )
+	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
+{
+	setText( 0 , m_source );
+}
+
 MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
 	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
 {
-	setText( 0 , m_source.section( QRegExp("_\\d*_\\d*"), 0, 0 ) );
+	setText( 0 , m_source.section( QRegExp( "\\d{8}_\\d{4}/" ), 1, 1 ).replace( ":" , "/" ) );
 }
 
 QString MergeListView::MergeItem::source()
@@ -73,33 +79,35 @@ MergeListView::~MergeListView()
 {}
 
 /**
- * Populate listview with log entries
+ * Append the new unmerged configuration files ontop.
  */
-void MergeListView::loadFromDB()
+void MergeListView::loadConfFiles( const QStringList& confFilesList )
 {
 	clear();
 	m_itemMap.clear();
 	
-	const QStringList historyList = HistorySingleton::Instance()->allMergeHistory();
-	foreach ( historyList ) {
-		QString timeStamp = *it++;
-		QString source = *it++;
-		QString destination = *it;
+	foreach ( confFilesList ) {
+		QString source = *it;
 		
-		QDateTime dt;
-		dt.setTime_t( timeStamp.toUInt() );
-		QString date = m_loc->formatDate( dt.date() );
+// 		kdDebug() << "source=" << source << LINE_INFO;
 		
-		if ( !m_itemMap.contains( date ) ) {
-			MergeItem *item = new MergeItem( this, date );
-			m_itemMap[ date ] = item;
-			item->setOpen( true );
+		QString destination = source;
+		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+		
+		if ( source.contains( GlobalSingleton::Instance()->kurooDir() ) ) {
+			
+			QString date = source.section( "/", -2, -2 );
+			if ( !m_itemMap.contains( date ) ) {
+				MergeItem *item = new MergeItem( this, date );
+				m_itemMap[ date ] = item;
+				item->setOpen( true );
+			}
+			
+			new MergeItem( m_itemMap[ date ], source, source + ".orig" );
 		}
-
-		new MergeItem( m_itemMap[ date ], source, destination );
+		else
+			new MergeItem( this, source, destination );
 	}
-	
-	emit signalHistoryLoaded();
 }
 
 #include "mergelistview.moc"

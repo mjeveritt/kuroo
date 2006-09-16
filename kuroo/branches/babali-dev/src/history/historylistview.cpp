@@ -34,8 +34,7 @@ HistoryListView::HistoryItem::HistoryItem( QListView* parent, const char* date )
 
 HistoryListView::HistoryItem::HistoryItem( HistoryItem* parent, const char* package )
 	: KListViewItem( parent, package ), m_einfo( QString::null )
-{
-}
+{}
 
 void HistoryListView::HistoryItem::setEinfo( const QString& einfo )
 {
@@ -57,7 +56,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 {
 	addColumn( i18n("Date") );
 	addColumn( i18n("Duration") );
-	addColumn( i18n("Emerge info") );
+	addColumn( i18n("Emerge log file") );
 	
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );

@@ -30,6 +30,7 @@
 #include <kmessagebox.h>
 #include <klistviewsearchline.h>
 #include <kiconloader.h>
+#include <kpushbutton.h>
 
 /**
  * @class HistoryTab
@@ -46,15 +47,15 @@ HistoryTab::HistoryTab( QWidget* parent )
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
-	// Open dialog when user click for info
-	connect( historyView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotViewInfo( QListViewItem* ) ) );
-	
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
 	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
 	
 	// Load history view after scan completed
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotReload() ) );
+	
+	connect( historyView, SIGNAL( selectionChanged() ), this, SLOT( slotButtonView() ) );
+	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewInfo() ) );
 	
 	slotInit();
 }
@@ -76,6 +77,8 @@ HistoryTab::~HistoryTab()
  */
 void HistoryTab::slotInit()
 {
+	pbView->setDisabled( true );
+	
 	if ( KurooConfig::viewUnmerges() )
 		viewUnmerges->setChecked( true );
 	else
@@ -130,13 +133,42 @@ void HistoryTab::slotViewUnmerges( bool on )
 }
 
 /**
+ * Activate button only when any file is selected.
+ */
+void HistoryTab::slotButtonView()
+{
+	QListViewItem *item = historyView->currentItem();
+	if ( item && item->parent() )
+		pbView->setDisabled( false );
+	else
+		pbView->setDisabled( true );
+}
+
+/**
  * Open in external browser.
  */
-void HistoryTab::slotViewInfo( QListViewItem *item )
+void HistoryTab::slotViewInfo()
 {
-	if ( !( item->text(2) ).isEmpty() )
-		Message::instance()->prompt( i18n("Emerge info"), i18n("Installation message for %1:")
-		                             .arg( item->text(0) ), dynamic_cast<HistoryListView::HistoryItem*>( item )->einfo() );
+	QListViewItem *item = historyView->currentItem();
+	if ( !item )
+		return;
+	
+	if ( !( item->text(2) ).isEmpty() ) {
+		
+		QString logText;
+		QString eLogFile( KurooConfig::dirELog() + "/" + dynamic_cast<HistoryListView::HistoryItem*>( item )->einfo() );
+		QFile logFile( eLogFile );
+		if ( logFile.open( IO_ReadOnly ) ) {
+			QTextStream stream( &logFile );
+			while ( !stream.atEnd() )
+				logText += stream.readLine() + "<br>";
+			logFile.close();
+		
+			Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
+		}
+		else
+			kdError(0) << "Reading: " << eLogFile << LINE_INFO;
+	}
 }
 
 #include "historytab.moc"

@@ -4,4 +4,3 @@ ClassName=KurooConfig
 Singleton=true
 Mutators=true
 MemberVariables=private
-

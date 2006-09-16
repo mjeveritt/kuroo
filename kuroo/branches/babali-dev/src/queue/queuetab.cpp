@@ -25,6 +25,7 @@
 #include "packageinspector.h"
 #include "versionview.h"
 #include "packageversion.h"
+#include "shutdown.h"
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -146,6 +147,7 @@ void QueueTab::slotInit()
 		cbRemove->setChecked( true );
 	else
 		cbRemove->setChecked( false );
+	
 	cbShutdown->setChecked( false );
 	
 	slotRemoveInstalled();
@@ -317,24 +319,12 @@ void QueueTab::slotButtons()
 		cbForceConf->setDisabled( false );
 		cbNoWorld->setDisabled( false );
 		cbRemove->setDisabled( false );
-		// rebooting without etc-update with baselayout in the queue can break your system
-		if ( QueueSingleton::Instance()->isPackageQueued("sys-apps/baselayout")
-			|| QueueSingleton::Instance()->isPackageQueued("sys-apps/baselayout-darwin")
-			|| QueueSingleton::Instance()->isPackageQueued("sys-apps/baselayout-lite")
-			|| QueueSingleton::Instance()->isPackageQueued("sys-apps/baselayout-vserver")
-			|| QueueSingleton::Instance()->isPackageQueued("sys-freebsd/freebsd-baselayout") ) {
-			cbShutdown->setDisabled( true );
-			cbShutdown->setChecked( false );
-		} else {
-			cbShutdown->setDisabled( false );
-		}
 	}
 	else {
 		pbGo->setDisabled( true );
 		cbForceConf->setDisabled( true );
 		cbNoWorld->setDisabled( true );
 		cbRemove->setDisabled( true );
-		cbShutdown->setDisabled( true );
 	}
 	
 	m_packageInspector->setDisabled( false );
@@ -476,7 +466,7 @@ void QueueTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else	
+	else
 		processPackage( false );
 }
 

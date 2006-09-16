@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.80.3_230806_db47";
+static const char version[] = "0.80.3_010906_db47";
 
 static KCmdLineOptions options[] =
 {
@@ -60,7 +60,7 @@ int main( int argc, char **argv )
 	KCmdLineArgs::addCmdLineOptions( options );
 	KApplication app;
 	
-   // register ourselves as a dcop client
+    // register ourselves as a dcop client
 	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
 		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
 		exit(0);

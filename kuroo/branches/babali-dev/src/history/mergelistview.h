@@ -38,7 +38,7 @@ public:
 	
 	class			MergeItem;
 	
-	void 			loadFromDB();
+	void			loadConfFiles( const QStringList& confFilesList );
 	
 signals:
 	void    		signalHistoryLoaded();
@@ -58,6 +58,7 @@ class MergeListView::MergeItem : public KListViewItem
 {
 public:
 	MergeItem( QListView* parent, const char* date );
+	MergeItem( QListView* parent, const char* source, const char* destination );
 	MergeItem( MergeItem* parent, const char* source, const char* destination );
 	
 	QString			source();

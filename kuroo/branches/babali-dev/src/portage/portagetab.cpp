@@ -190,8 +190,6 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	DEBUG_LINE_INFO;
-	
 	if ( m_packageInspector->isVisible() )
 		return;
 	else {
@@ -427,7 +425,6 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
-	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	
@@ -444,8 +441,12 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += GlobalSingleton::Instance()->fgHexColor() + " size=+1><b>";
 		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
 		lines += "<tr><td>";
-		foreach ( selectedIdList )
-			lines += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name() + " ";
+		foreach ( selectedIdList ) {
+			lines += packagesView->packageItemById( *it )->name();
+			lines += " (" + packagesView->packageItemById( *it )->category().section( "-", 0, 0 ) + "/";
+			lines += packagesView->packageItemById( *it )->category().section( "-", 1, 1 ) + "), ";
+		}
+		lines = lines.left( lines.length() - 2 );
 		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		
@@ -533,7 +534,6 @@ void PortageTab::processPackage( bool viewInspector )
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
-	DEBUG_LINE_INFO;
 	// Refresh inspector if visible
 	if ( viewInspector )
 		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );

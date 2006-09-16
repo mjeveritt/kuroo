@@ -49,6 +49,9 @@
 		<entry name="DirEdbDep" type="String">
 			<default>/var/cache/edb/dep</default>
 		</entry>
+		<entry name="DirELog" type="String">
+			<default>/var/log/portage/elog</default>
+		</entry>
 		<entry name="Arch" type="String">
 		</entry>
 		<entry name="ConfigProtectList" type="String">
@@ -198,4 +201,3 @@
 		</entry>
 	</group>
 </kcfg>
-

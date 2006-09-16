@@ -130,8 +130,8 @@ void Kuroo::setupActions()
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
 	                          			this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
 	
-	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
-	                               		EtcUpdateSingleton::Instance(), SLOT( slotEtcUpdate() ), actionCollection(), "etc_update" );
+// 	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
+// 	                               		EtcUpdateSingleton::Instance(), SLOT( slotEtcUpdate() ), actionCollection(), "etc_update" );
 	
 	createGUI();
 }
@@ -160,7 +160,7 @@ void Kuroo::slotBusy()
 	}
 	else {
 		actionSyncPortage->setEnabled( true );
-		actionEtcUpdate->setEnabled( true );
+// 		actionEtcUpdate->setEnabled( true );
 	}
 	
 	// No db no fun!

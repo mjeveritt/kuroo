@@ -40,9 +40,9 @@ public:
 	void					init( QObject *parent = 0 );
 	void					emergePackageStart( const QString& package, int order, int total );
 	void					emergePackageComplete( const QString& package, int order, int total );
-	bool					isPackageQueued( const QString& package );
 	bool					isQueueBusy();
 	void					clearCache();
+	int						size();
 	void					insertInCache( const QString& id );
 	void					deleteFromCache( const QString& id );
 	bool					isQueued( const QString& id );

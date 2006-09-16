@@ -25,6 +25,7 @@
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kinputdialog.h>
+#include <kdirwatch.h>
 
 /**
  * @class EtcUpdate
@@ -35,9 +36,7 @@
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
 	: QObject( m_parent, name )
-{
-	eProc = new KProcIO();
-}
+{}
 
 EtcUpdate::~EtcUpdate()
 {
@@ -48,61 +47,57 @@ EtcUpdate::~EtcUpdate()
 void EtcUpdate::init( QObject *parent )
 {
 	m_parent = parent;
+	
+	eProc = new KProcIO();
+	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupDiff( KProcess* ) ) );
+	
+	m_mergingFile = new KDirWatch( this );
+	connect( m_mergingFile, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged() ) );
 }
 
 /**
- * Ask user if to run etc-update.
- * @param count
- */
-void EtcUpdate::askUpdate( const int& count )
-{
-	switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
-	                                        i18n("<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to merge changes?</qt>")
-	                                        .arg( QString::number( count ) ), i18n( "Kuroo" ) ) ) {
-		
-		case KMessageBox::Yes :
-			slotEtcUpdate();
-	}
-}
-
-/**
- * Run etc-update.
- * @return success
+ * Scan for new configuration files.
  */
 void EtcUpdate::slotEtcUpdate()
 {
+	DEBUG_LINE_INFO;
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
 		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
 		m_etcFilesList.clear();
-		m_diffSource = QString::null;
-		m_noFiles = true;
-		m_count = 1;
-		m_totalEtcCount = 0;
+		m_backupFilesList.clear();
 		
-		DEBUG_LINE_INFO;
-		m_configProtectList = QStringList::split( " ", KurooConfig::configProtectList() );
-		KurooStatusBar::instance()->setProgressStatus( "EtcUpdate", i18n("Searching config files...") );
+		// First collect old merged files
+		m_configProtectList = GlobalSingleton::Instance()->kurooDir() + "backup/configuration";
+		
+		// Then scan for new unmerged files
+		m_configProtectList += QStringList::split( " ", KurooConfig::configProtectList() );
+		
+		// Launch scan slave
 		slotFinished();
 	}
 }
 
+/**
+ * Scan each confProtect dirs.
+ */
 void EtcUpdate::slotFinished()
 {
-	kdDebug() << "m_configProtectList.count()=" << m_configProtectList.count() << endl;
-	
 	if ( m_configProtectList.count() > 0 ) {
 		m_configProtectDir = m_configProtectList.first();
-		kdDebug() << "m_configProtectList.first()=" << m_configProtectDir << endl;
 		KIO::ListJob* job = KIO::listRecursive( KURL( m_configProtectDir ), false );
 		connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
 		connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
 		m_configProtectList.pop_front();
 	}
-	else
-		runDiff();
+	else {
+		emit signalScanCompleted();
+	}
 }
 
+/**
+ * Collect new configuration files.
+ */
 void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 {
 	QString configFile;
@@ -112,101 +107,112 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 				configFile = (*it).m_str;
 		}
 		
-		if ( configFile.contains( "._cfg" ) ) {
-			m_etcFilesList += m_configProtectDir + "/" + configFile;
-			m_totalEtcCount++;
+		if ( configFile.contains( QRegExp( "\\d{8}_\\d{4}/" ) ) && !configFile.endsWith( ".orig" ) ) {
+			m_backupFilesList += m_configProtectDir + "/" + configFile;
+		}
+		else {
+			if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
+				m_etcFilesList += m_configProtectDir + "/" + configFile;
 		}
 	}
+}
+
+/**
+ * Return found configuration files.
+ */
+QStringList EtcUpdate::confFilesList()
+{
+	return m_etcFilesList;
+}
+
+/**
+ * Return backup files found in /var/cache/kuroo/backup/configuration.
+ */
+QStringList EtcUpdate::backupFilesList()
+{
+	return m_backupFilesList;
 }
 
 /**
  * Launch diff tool with first etc-file in list.
  */
-void EtcUpdate::runDiff()
+void EtcUpdate::runDiff( const QString& source, const QString& destination, bool isNew )
 {
-	KurooStatusBar::instance()->setProgressStatus( "EtcUpdate", i18n("Done.") );
-	
-	kdDebug() << "m_totalEtcCount=" << m_totalEtcCount << endl;
-	if ( m_totalEtcCount > 0 ) {
-
-		QString source = m_etcFilesList.first();
-		QString destination = m_etcFilesList.first().remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+	if ( !source.isEmpty() ) {
+		m_changed = false;
+		m_source = source;
+		m_destination = destination;
+		QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/";
 		
 		// Check for etc-files warnings
 		QString etcWarning;
 		const QStringList etcFilesWarningsList = QStringList::split( " ", KurooConfig::etcFiles() );
 		foreach ( etcFilesWarningsList )
-			if ( *it == destination )
-				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( destination );
+			if ( *it == m_destination )
+				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( m_destination );
 
-		// Ask user what to do with this etc-file
-		QString configFile = KInputDialog::getItemList( i18n("Merge config changes"),
-		                                                i18n("Select config file to merge"),
-		                                                m_etcFilesList, m_etcFilesList.first() ).first();
-		m_etcFilesList.pop_front();
-
-		// Merge this etc-file
-		if ( !configFile.isEmpty() ) {
-			eProc->resetAll();
-			*eProc << KurooConfig::etcUpdateTool() << source << destination;
-			eProc->start( KProcess::NotifyOnExit, true );
+		eProc->resetAll();
+		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
+		
+		if ( isNew )
+			*eProc << "-o" << m_destination;
+		else
+			*eProc << "-o" << backupPath + "merging";
+		
+		eProc->start( KProcess::NotifyOnExit, true );
+		
+		if ( !eProc->isRunning() ) {
+			LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
+			KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
+									.arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
+		}
+		else {
+			LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( m_destination ), KUROO );
 			
-			m_diffSource = source;
-			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
+			// Watch for changes
+			m_mergingFile->addFile( m_destination );
 			
-			if ( !eProc->isRunning() ) {
-				LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
-				KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
-										.arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
-				SignalistSingleton::Instance()->setKurooBusy( false );
-			}
-			else {
-				LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( destination ), KUROO );
-				backup( source, destination );
-			}
+			// Make temporary backup of original conf file
+			KIO::file_copy( m_destination, backupPath + "merging.orig" , -1, true, false, false );
 		}
 	}
-	else {
-		SignalistSingleton::Instance()->setKurooBusy( false );
-		LogSingleton::Instance()->writeLog( i18n( "etc-update completed." ), KUROO );
-	}
+}
+
+void EtcUpdate::slotChanged()
+{
+	m_changed = true;
 }
 
 /**
- * After diff tool, delete original diff file.
- * And go for next...
+ * After diff tool completed, close all.
  * @param proc
  */
-void EtcUpdate::slotCleanupEtcUpdateDiff( KProcess* proc )
+void EtcUpdate::slotCleanupDiff( KProcess* proc )
 {
-	disconnect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupEtcUpdateDiff( KProcess* ) ) );
-	KIO::file_delete( m_diffSource );
-	LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_diffSource )
-	                                    .arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
-	m_diffSource = QString::null;
-	
-	// Move to next etc-file
-	runDiff();
-}
+	m_mergingFile->removeFile( m_destination );
 
-/**
- * Backup the original etc-files with timestamp and store in db.
- * @param source
- * @param destination
- */
-void EtcUpdate::backup( const QString& source, const QString& destination )
-{
-	QDateTime dt = QDateTime::currentDateTime();
-	QString backupSource = source.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
-	QString backupDestination = destination.section( "/", -1, -1 ) + "_" + dt.toString( "yyyyMMdd_hhmm" );
+	if ( m_changed ) {
 	
-	KIO::file_copy( source, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupSource,
-	                -1, true, false, false );
-	KIO::file_copy( destination, GlobalSingleton::Instance()->kurooDir() + "backup/" + backupDestination,
-	                -1, true, false, false );
-	
-	KurooDBSingleton::Instance()->addBackup( backupSource, backupDestination );
-	emit signalEtcFileMerged();
+		QDateTime dt = QDateTime::currentDateTime();
+		QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/";
+		QString backupPathDir = backupPath + dt.toString( "yyyyMMdd_hhmm" ) + "/";
+		QDir d( backupPathDir );
+		if ( !d.exists() )
+			d.mkdir( backupPathDir );
+		
+		// Make backup of original file
+		QString destination = m_destination;
+		destination.replace( "/", ":" );
+		KIO::file_copy( backupPath + "merging.orig", backupPathDir + destination + ".orig", -1, true, false, false );
+		KIO::file_copy( m_destination, backupPathDir + destination, -1, true, false, true );
+		KIO::file_delete( m_source );
+		
+		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_source )
+				.arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
+		
+		KurooDBSingleton::Instance()->addBackup( m_source, m_destination );
+		emit signalEtcFileMerged();
+	}
 }
 
 #include "etcupdate.moc"

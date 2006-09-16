@@ -514,13 +514,9 @@ void ConfigDialog::parseMakeConf()
 		}
 		
 		if ( (*it).contains( QRegExp("USE=") ) ) {
-			if ( rx.search( *it ) > -1 ) {
-				QString s = KurooConfig::use();
-				if(!s.isEmpty())
-					s += " ";
-				s += rx.cap(4).remove("${USE}").remove("$(USE)").remove("$USE");
-				KurooConfig::setUse( s );
-			} else
+			if ( rx.search( *it ) > -1 )
+				KurooConfig::setUse( rx.cap(4) );
+			else
 				kdWarning(0) << "Parsing /etc/make.conf: can not parse USE." << LINE_INFO;
 			continue;
 		}

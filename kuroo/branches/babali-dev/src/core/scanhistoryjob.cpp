@@ -67,6 +67,7 @@ bool ScanHistoryJob::doJob()
 	}
 	
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
+	
 	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 	
 	// Parse emerge.log lines
@@ -75,6 +76,8 @@ bool ScanHistoryJob::doJob()
 	QRegExp rxPackage( "(\\s+)(\\S+/\\S+)" );
 	static QMap<QString, uint> logMap;
 	bool isStatisticUpdated( false );
+	eLog elog;
+	QString einfo;
 	
 	foreach ( m_logLines ) {
 		
@@ -110,8 +113,31 @@ bool ScanHistoryJob::doJob()
 					QMap<QString, uint>::iterator itLogMap = logMap.find( package );
 					if ( itLogMap != logMap.end() ) {
 						isStatisticUpdated = true;
-						int secTime = timeStamp.toUInt() - itLogMap.data();
+						uint emergeStart = itLogMap.data();
+						uint emergeCompleted = timeStamp.toUInt();
+						int secTime = emergeCompleted - emergeStart;
 						logMap.erase( itLogMap );
+						
+						// Find matching elog file
+						eLogVector eLogs = HistorySingleton::Instance()->getELogs();
+						if ( eLogs.size() > 0 ) {
+							
+							elog = eLogs.last();
+							while ( eLogs.size() > 0 && elog.timestamp < emergeStart ) {
+								elog = eLogs.last();
+								eLogs.pop_back();
+							}
+							
+							if ( elog.timestamp >= emergeStart && elog.timestamp <= emergeCompleted )
+								einfo = elog.package;
+							else
+								einfo = "";
+							
+// 							kdDebug() << "elog.package=" << elog.package << endl;
+// 							kdDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
+// 							kdDebug() << "emergeStart=" << emergeStart << LINE_INFO;
+// 							kdDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
+						}
 						
 						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
 						if ( !parts.isEmpty() ) {
@@ -128,7 +154,7 @@ bool ScanHistoryJob::doJob()
 								itMap.data().inc();
 							}
 							
-							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
+// 							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
 							KurooDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO history (package, timestamp, time, einfo, emerge) "
 								"VALUES ('%1', '%2', '%3', '%4','true');" )

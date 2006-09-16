@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "threadweaver.h"
+//#include "Shutdown.h"
 
 #include <qtimer.h>
 

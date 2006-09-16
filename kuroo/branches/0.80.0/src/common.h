@@ -36,6 +36,7 @@
 #include "portagefiles.h"
 #include "filewatcher.h"
 #include "global.h"
+class Shutdown; //#include "shutdown.h"
 #include "singleton.h"
 
 #include <qregexp.h>
@@ -57,6 +58,7 @@ typedef Singleton<History> HistorySingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;
+typedef Singleton<Shutdown> ShutdownSingleton;
 
 // The package status
 enum PackageStatus {

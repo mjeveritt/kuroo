@@ -25,6 +25,7 @@
 #include "packageinspector.h"
 #include "versionview.h"
 #include "packageversion.h"
+#include "shutdown.h"
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -87,6 +88,10 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
+	// Enable/Disable Shutdown
+	connect( cbShutdown, SIGNAL(toggled(bool)),
+		ShutdownSingleton::Instance(), SLOT(slotEnable(bool)));
+	
 	slotInit();
 }
 
@@ -142,6 +147,8 @@ void QueueTab::slotInit()
 		cbRemove->setChecked( true );
 	else
 		cbRemove->setChecked( false );
+	
+	cbShutdown->setChecked( false );
 	
 	slotRemoveInstalled();
 	

@@ -19,4 +19,4 @@ IUSE="debug"
 RDEPEND="!app-portage/guitoo
 	|| (kde-misc/kdiff3 kde-base/kompare kde-base/kdesdk)"
 
-need-kde 3.4
+need-kde 3.5

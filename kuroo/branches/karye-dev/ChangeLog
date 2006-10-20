@@ -1,3 +1,9 @@
+20-10-06
+Fix for history view: parsing elog dir after emerge complete.
+Merge view: Now showing all backuped files from /var/cache/kuroo/backup/configuration
+History view: Added button to view elog, and showing this file.
+Add "world" and "queue"-status to inspector.
+Fixed: no hits warning is not showing sometimes.
 View-menu is removed, "Release Information" moved to Help-menu.
 KDE-settings "Show icons on buttons" is now respected.
 Empty package list warning moved up, reformated package name as name (cat/subcat) in queue and history.

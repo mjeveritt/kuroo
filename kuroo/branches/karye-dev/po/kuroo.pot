@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-08 16:51+0200\n"
+"POT-Creation-Date: 2006-10-20 10:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1127,6 +1127,17 @@ msgstr ""
 msgid "Installation message for %1:"
 msgstr ""
 
+#: history/historytab.cpp:171
+msgid ""
+"Can not find elog for this emerge. Please check elog settings in /etc/make."
+"conf.\n"
+"Error reading:\n"
+msgstr ""
+
+#: history/historytab.cpp:173
+msgid "emerge elog"
+msgstr ""
+
 #: kuroo.cpp:86 kuroo.cpp:88 kuroo.cpp:203 kuroo.cpp:205
 msgid "settings"
 msgstr ""
@@ -1774,15 +1785,12 @@ msgstr ""
 #: intro/introdlg.cpp:54
 msgid ""
 "Kuroo - A KDE Portage frontend that allows you to do most common software "
-"maintenance tasks on gentoo systems</p>New features:<br>Unified package "
-"view: fast package browsing and searching with filters.<br>Two Column "
-"Selector, Package Inspector, Progress bars, Use-Flag Editor, Emerge and "
-"Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
-"wiki/TellUs>We love to hear from you. Tell us what you think of Kuroo!</"
-"a><br>"
+"maintenance tasks on gentoo systems</p><br><a href=http://trac.kuroo.org/"
+"kuroo/wiki/TellUs>We love to hear from you. Tell us what you think of Kuroo!"
+"</a><br>"
 msgstr ""
 
-#: intro/introdlg.cpp:65
+#: intro/introdlg.cpp:61
 msgid ""
 "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></"
 "tr>"

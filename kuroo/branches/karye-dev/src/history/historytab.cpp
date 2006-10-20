@@ -166,8 +166,12 @@ void HistoryTab::slotViewInfo()
 		
 			Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
 		}
-		else
+		else {
 			kdError(0) << "Reading: " << eLogFile << LINE_INFO;
+			KMessageBox::error( this, i18n("Can not find elog for this emerge. Please check elog settings in /etc/make.conf.\n"
+										   "Error reading:\n" + eLogFile
+										  ), i18n("emerge elog") );
+		}
 	}
 }
 

@@ -79,34 +79,51 @@ MergeListView::~MergeListView()
 {}
 
 /**
- * Append the new unmerged configuration files ontop.
+ * Append the new unmerged configuration files.
  */
-void MergeListView::loadConfFiles( const QStringList& confFilesList )
+void MergeListView::loadConfFiles( const QStringList& filesList )
 {
 	clear();
 	m_itemMap.clear();
 	
-	foreach ( confFilesList ) {
+	foreach ( filesList ) {
 		QString source = *it;
-		
-// 		kdDebug() << "source=" << source << LINE_INFO;
-		
 		QString destination = source;
 		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+		new MergeItem( this, source, destination );
+	}
+}
+
+/**
+ * Insert merged configurations files from backup.
+ */
+void MergeListView::loadBackupFiles( const QStringList& filesList )
+{
+	clear();
+	m_itemMap.clear();
+	
+	// Find dates
+	foreach ( filesList ) {
+		QString date = (*it).section( "/", -2, -2 ).mid(0,8);
+		if ( !m_itemMap.contains( date ) )
+			m_itemMap[ date ] = NULL;
+	}
+	
+	// Insert sorted dates
+	for ( ItemMap::Iterator it = m_itemMap.begin(); it != m_itemMap.end(); ++it ) {
+		QString date = it.key();
+		QString localDate = m_loc->formatDate( QDate( date.mid(0,4).toInt(), date.mid(4,2).toInt(), date.mid(6,2).toInt() ) );
 		
-		if ( source.contains( GlobalSingleton::Instance()->kurooDir() ) ) {
-			
-			QString date = source.section( "/", -2, -2 );
-			if ( !m_itemMap.contains( date ) ) {
-				MergeItem *item = new MergeItem( this, date );
-				m_itemMap[ date ] = item;
-				item->setOpen( true );
-			}
-			
-			new MergeItem( m_itemMap[ date ], source, source + ".orig" );
-		}
-		else
-			new MergeItem( this, source, destination );
+		MergeItem *item = new MergeItem( this, localDate );
+		item->setOpen( true );
+		m_itemMap[ date ] = item;
+	}
+	
+	// Insert files
+	foreach ( filesList ) {
+		QString source = *it;
+		QString date = source.section( "/", -2, -2 ).mid(0,8);
+		new MergeItem( m_itemMap[ date ], source, source + ".orig" );
 	}
 }
 

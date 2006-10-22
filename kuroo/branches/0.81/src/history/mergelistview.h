@@ -39,6 +39,7 @@ public:
 	class			MergeItem;
 	
 	void			loadConfFiles( const QStringList& confFilesList );
+	void			loadBackupFiles( const QStringList& confFilesList );
 	
 signals:
 	void    		signalHistoryLoaded();

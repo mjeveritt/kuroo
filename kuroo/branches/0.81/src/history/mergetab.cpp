@@ -30,8 +30,6 @@
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
 #include <klistviewsearchline.h>
-#include <krun.h>
-#include <kprocio.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
@@ -100,7 +98,7 @@ void MergeTab::slotLoadConfFiles()
 	
 	QStringList backupFilesList = EtcUpdateSingleton::Instance()->backupFilesList();
 	if ( !backupFilesList.isEmpty() )
-		mergeView->loadConfFiles( backupFilesList );
+		mergeView->loadBackupFiles( backupFilesList );
 	
 	emit signalMergeChanged();
 }
@@ -111,7 +109,7 @@ void MergeTab::slotClearFilter()
 }
 
 /**
- * Activate buttons only when any file is selected.
+ * Activate buttons only when file is selected.
  */
 void MergeTab::slotButtonView()
 {
@@ -128,7 +126,7 @@ void MergeTab::slotButtonView()
 }
 
 /**
- * Activate buttons only when any file is selected.
+ * Activate buttons only when file is selected.
  */
 void MergeTab::slotButtonMerge()
 {
@@ -149,7 +147,6 @@ void MergeTab::slotButtonMerge()
  */
 void MergeTab::slotViewFile()
 {
-	DEBUG_LINE_INFO;
 	QListViewItem *item = mergeView->currentItem();
 	if ( !item || !item->parent() )
 		return;
@@ -165,11 +162,10 @@ void MergeTab::slotViewFile()
  */
 void MergeTab::slotMergeFile()
 {
-	DEBUG_LINE_INFO;
 	QListViewItem *item = unmergeView->currentItem();
 	if ( !item && item->parent() )
 		return;
-				
+	
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
 	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
 	

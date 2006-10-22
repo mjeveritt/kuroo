@@ -16,7 +16,6 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE="debug"
 
-RDEPEND="!app-portage/guitoo
-	|| (kde-misc/kdiff3 kde-base/kompare kde-base/kdesdk)"
+RDEPEND="kde-misc/kdiff3"
 
 need-kde 3.5

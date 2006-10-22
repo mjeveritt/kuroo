@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-20 10:15+0200\n"
+"POT-Creation-Date: 2006-10-22 10:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -388,7 +388,7 @@ msgstr ""
 msgid "Mas&ked Version"
 msgstr ""
 
-#: rc.cpp:193 rc.cpp:300 rc.cpp:612
+#: rc.cpp:193 rc.cpp:300 rc.cpp:606
 #, no-c-format
 msgid "Alt+K"
 msgstr ""
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Download all packa&ges before installing them (--fetch-all-uri)"
 msgstr ""
 
-#: rc.cpp:291 rc.cpp:661
+#: rc.cpp:291 rc.cpp:655
 #, no-c-format
 msgid "Alt+G"
 msgstr ""
@@ -567,7 +567,7 @@ msgstr ""
 msgid "Save log on e&xit"
 msgstr ""
 
-#: rc.cpp:346 rc.cpp:600
+#: rc.cpp:346 rc.cpp:594
 #, no-c-format
 msgid "Alt+X"
 msgstr ""
@@ -929,121 +929,111 @@ msgstr ""
 
 #: rc.cpp:575
 #, no-c-format
-msgid "Etc-update merging frontend"
-msgstr ""
-
-#: rc.cpp:578
-#, no-c-format
-msgid "External tool"
-msgstr ""
-
-#: rc.cpp:581
-#, no-c-format
 msgid "Emerge check update options"
 msgstr ""
 
-#: rc.cpp:584
+#: rc.cpp:578
 #, no-c-format
 msgid ""
 "<i>Forces emerge to consider the entire dependency tree of packages.<br>\n"
 "Refresh Updates for changes to take effect.</i>"
 msgstr ""
 
-#: rc.cpp:588
+#: rc.cpp:582
 #, no-c-format
 msgid "&Deep"
 msgstr ""
 
-#: rc.cpp:591
+#: rc.cpp:585
 #, no-c-format
 msgid "Alt+D"
 msgstr ""
 
-#: rc.cpp:594
+#: rc.cpp:588
 #, no-c-format
 msgid "Kuroo options"
 msgstr ""
 
-#: rc.cpp:597
+#: rc.cpp:591
 #, no-c-format
 msgid "Dock kuroo in system tray (close does not e&xit kuroo)"
 msgstr ""
 
-#: rc.cpp:603
+#: rc.cpp:597
 #, no-c-format
 msgid "Package options"
 msgstr ""
 
-#: rc.cpp:606
+#: rc.cpp:600
 #, no-c-format
 msgid "<i>Restart for changes to take effect.</i>"
 msgstr ""
 
-#: rc.cpp:609
+#: rc.cpp:603
 #, no-c-format
 msgid "Show installed pac&kages in separate column"
 msgstr ""
 
-#: rc.cpp:615
+#: rc.cpp:609
 #, no-c-format
 msgid "Package filter options"
 msgstr ""
 
-#: rc.cpp:620
+#: rc.cpp:614
 #, no-c-format
 msgid "Click to select the background color of the OSD."
 msgstr ""
 
-#: rc.cpp:623 rc.cpp:642
+#: rc.cpp:617 rc.cpp:636
 #, no-c-format
 msgid "The color of the OSD background."
 msgstr ""
 
-#: rc.cpp:627
+#: rc.cpp:621
 #, no-c-format
 msgid "Click to select the color of the OSD text."
 msgstr ""
 
-#: rc.cpp:630 rc.cpp:636 rc.cpp:648
+#: rc.cpp:624 rc.cpp:630 rc.cpp:642
 #, no-c-format
 msgid "The color of the OSD text."
 msgstr ""
 
-#: rc.cpp:633
+#: rc.cpp:627
 #, no-c-format
 msgid "No matching packages found"
 msgstr ""
 
-#: rc.cpp:639
+#: rc.cpp:633
 #, no-c-format
 msgid "Matching packages found"
 msgstr ""
 
-#: rc.cpp:645
+#: rc.cpp:639
 #, no-c-format
 msgid "Log browser text font"
 msgstr ""
 
-#: rc.cpp:651 core/etcupdate.cpp:65 core/etcupdate.cpp:167 main.cpp:43
+#: rc.cpp:645 core/etcupdate.cpp:65 core/etcupdate.cpp:168 main.cpp:43
 #, no-c-format
 msgid "Kuroo"
 msgstr ""
 
-#: rc.cpp:654
+#: rc.cpp:648
 #, no-c-format
 msgid "Release information"
 msgstr ""
 
-#: rc.cpp:658
+#: rc.cpp:652
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
 msgstr ""
 
-#: history/mergetab.cpp:75
+#: history/mergetab.cpp:73
 msgid "New Configuration file"
 msgstr ""
 
-#: history/mergetab.cpp:76
+#: history/mergetab.cpp:74
 msgid "Merged Configuration file"
 msgstr ""
 
@@ -1249,19 +1239,19 @@ msgstr ""
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
 msgstr ""
 
-#: core/etcupdate.cpp:165
+#: core/etcupdate.cpp:166
 msgid "%1 didn't start."
 msgstr ""
 
-#: core/etcupdate.cpp:166
+#: core/etcupdate.cpp:167
 msgid "%1 could not start!"
 msgstr ""
 
-#: core/etcupdate.cpp:170
+#: core/etcupdate.cpp:171
 msgid "Merging changes in '%1'."
 msgstr ""
 
-#: core/etcupdate.cpp:210
+#: core/etcupdate.cpp:211
 msgid "Deleting '%1'. Backup saved in %2."
 msgstr ""
 

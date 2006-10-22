@@ -152,7 +152,8 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, bool
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( m_destination );
 
 		eProc->resetAll();
-		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
+// 		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
+		*eProc << "kdiff3" << m_source << m_destination;
 		
 		if ( isNew )
 			*eProc << "-o" << m_destination;

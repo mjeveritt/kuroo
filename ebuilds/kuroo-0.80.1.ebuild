@@ -5,7 +5,7 @@ inherit kde
 
 DESCRIPTION="A KDE Portage frontend that allows you to do most common software maintainance tasks on gentoo systems"
 HOMEPAGE="http://kuroo.org"
-SRC_URI="http://files.kuroo.org/files/${P}.tar.bz2"
+SRC_URI="http://files.kuroo.org/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"

@@ -119,7 +119,7 @@ public:
     				keywords = "~" + KurooConfig::arch();
 
 				QString id = KurooDBSingleton::Instance()->singleQuery( 
-					" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+					"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 				
 				if ( id.isEmpty() )
 					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
@@ -208,7 +208,7 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
@@ -299,7 +299,7 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
@@ -390,7 +390,7 @@ public:
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
@@ -466,7 +466,7 @@ public:
 			use.simplifyWhiteSpace();
 			
 			QString id = KurooDBSingleton::Instance()->singleQuery( 
-				" SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+				"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 			
 			if ( id.isEmpty() )
 				kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
@@ -506,7 +506,7 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( 
 			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
-			" WHERE package.id = packageKeywords.idPackage;" );
+			"WHERE package.id = packageKeywords.idPackage;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
@@ -624,7 +624,7 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( 
 			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
-			" WHERE package.id = packageUse.idPackage;" );
+			"WHERE package.id = packageUse.idPackage;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;

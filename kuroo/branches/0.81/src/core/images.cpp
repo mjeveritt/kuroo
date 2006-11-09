@@ -74,6 +74,7 @@ void Images::init( QObject *parent )
 	pxViewHistory = ldr->loadIcon( "kuroo_history", KIcon::Panel );
 	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIcon::Panel );
 	pxViewLog = ldr->loadIcon( "kuroo_log", KIcon::Panel );
+	pxWhatsThis = ldr->loadIcon( "info", KIcon::Panel );
 }
 
 /**
@@ -166,6 +167,10 @@ const QPixmap& Images::icon( int image )
 		
 		case VIEW_LOG:
 			return pxViewLog;
+			break;
+			
+		case VIEW_WHATSTHIS:
+			return pxWhatsThis;
 			break;
 		
 		default:

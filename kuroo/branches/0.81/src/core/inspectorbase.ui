@@ -346,6 +346,16 @@
                                 <property name="exclusive">
                                     <bool>true</bool>
                                 </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>When you want to install a package that isn't available for your system, you will receive this masking error. You should try installing a different application that is available for your system or wait until the package is put available. There is always a reason why a package is masked:
+
+    * ~arch keyword means that the application is not tested sufficiently to be put in the stable branch. Wait a few days or weeks and try again.
+    * -arch keyword or -* keyword means that the application does not work on your architecture. If you believe the package does work file a bug at our bugzilla website.
+    * missing keyword means that the application has not been tested on your architecture yet. Ask the architecture porting team to test the package or test it for them and report your findings on our bugzilla website.
+    * package.mask means that the package has been found corrupt, unstable or worse and has been deliberately marked as do-not-use.
+    * profile means that the package has been found not suitable for your profile. The application might break your system if you installed it or is just not compatible with the profile you use.
+</string>
+                                </property>
                                 <grid>
                                     <property name="name">
                                         <cstring>unnamed</cstring>

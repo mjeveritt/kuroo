@@ -64,6 +64,7 @@ private slots:
 	void 				slotQuit();
 	void				slotWait();
 	void 				slotTerminate();
+	void				slotWhatsThis( int tabIndex );
 	
 private:
 	void 				setupActions();

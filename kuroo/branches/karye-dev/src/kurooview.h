@@ -71,10 +71,13 @@ private slots:
 	void 				slotShowView();
 	
 private:
-	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge;
+	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge, *iconWhatsThis;
 	
 	// True if history needs to be recreated from scratch
 	bool				m_isHistoryRestored;
+	
+signals:
+	void				signalWhatsThis();
 };
 
 class KurooView::IconListItem : public QListBoxItem

@@ -60,12 +60,14 @@ Kuroo::Kuroo()
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	GlobalSingleton::Instance()->setColorTheme();
-	
+			
 	setCentralWidget( m_view );
 	setupActions();
 	statusBar();
 	setupGUI();
 		
+// 	connect( m_view, SIGNAL( signalWhatsThis() ), this, SLOT( whatsThis() ) );
+	
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() )
 		systemTray->activate();
@@ -109,6 +111,15 @@ Kuroo::~Kuroo()
 		}
 	}
 }
+
+void Kuroo::slotWhatsThis( int tabIndex )
+{
+	kdDebug() << "tabIndex=" << tabIndex << LINE_INFO;
+	
+	if ( tabIndex == 5 )
+		whatsThis();
+}
+
 
 /**
  * Build mainwindow menus and toolbar.

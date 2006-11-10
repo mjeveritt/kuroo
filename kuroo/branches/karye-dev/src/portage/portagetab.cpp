@@ -150,8 +150,8 @@ void PortageTab::slotInit()
 void PortageTab::slotWhatsThis()
 {
 	QWhatsThis::display( i18n( 
-			"Portage info..."
-			"" )
+			"Overview of all packages in Portage, installed packages as well as package updates. "
+			"Use the filter to find matching packages." )
 			, QCursor::pos(), this );
 }
 

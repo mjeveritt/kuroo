@@ -26,6 +26,7 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qheader.h>
+#include <qwhatsthis.h>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -40,6 +41,9 @@
 MergeTab::MergeTab( QWidget* parent )
 	: MergeBase( parent )
 {
+	// Connect What's this button
+	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
 	
 	mergeFilter->setListView( mergeView );
@@ -70,11 +74,23 @@ MergeTab::~MergeTab()
  */
 void MergeTab::slotInit()
 {
+	pbWhatsThis->setIconSet( SmallIconSet("info") );
 	unmergeView->header()->setLabel( 0, i18n("New Configuration file") );
 	mergeView->header()->setLabel( 0, i18n("Merged Configuration file") );
 	pbMerge->setDisabled( true );
 	pbView->setDisabled( true );
 	slotReload();
+}
+
+/**
+ * What's this info explaning this tabs functionality.
+ */
+void MergeTab::slotWhatsThis()
+{
+	QWhatsThis::display( i18n( 
+			"Keep track of configuration files that were changed..."
+			"" )
+			, QCursor::pos(), this );
 }
 
 /**

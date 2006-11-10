@@ -45,8 +45,11 @@ private:
 	void				processPackage( bool viewInspector );
 	
 private slots:
-	void				slotRefresh();
 	void				slotInit();
+	
+	void				slotWhatsThis();
+	
+	void				slotRefresh();
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();
 	void				slotButtons();

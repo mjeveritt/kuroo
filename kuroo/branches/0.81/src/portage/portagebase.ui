@@ -233,10 +233,6 @@
                             <property name="buttonGroupId">
                                 <number>4</number>
                             </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. 
-Since Portage only checks the ebuilds in your Portage tree you first have to update your Portage tree. When your Portage tree is updated, you can update your system with packages listed here.</string>
-                            </property>
                         </widget>
                         <widget class="QRadioButton" row="1" column="1">
                             <property name="name">
@@ -542,12 +538,6 @@ Since Portage only checks the ebuilds in your Portage tree you first have to upd
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Uninstall selected packages...</string>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>When you want to remove a software package from your system.
-This will tell Portage to remove all files installed by that package from your system except the configuration files of that application if you have altered those after the installation. Leaving the configuration files allows you to continue working with the package if you ever decide to install it again.
-
-However, a big warning applies: Portage will not check if the package you want to remove is required by another package. It will however warn you when you want to remove an important package that breaks your system if you unmerge it.</string>
                                             </property>
                                         </widget>
                                         <widget class="KPushButton" row="0" column="0">

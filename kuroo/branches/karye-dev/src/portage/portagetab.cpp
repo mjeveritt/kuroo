@@ -144,13 +144,14 @@ void PortageTab::slotInit()
 	slotBusy();
 }
 
+/**
+ * What's this info explaning this tabs functionality.
+ */
 void PortageTab::slotWhatsThis()
 {
 	QWhatsThis::display( i18n( 
-			"To keep your system in perfect shape (and not to mention install the latest security updates)"
-			" you need to update your system regularly. "
-			"Since Portage only checks the ebuilds in your Portage tree you first have to update your Portage tree. "
-			"When your Portage tree is updated, you can update your system with packages listed here." )
+			"Portage info..."
+			"" )
 			, QCursor::pos(), this );
 }
 

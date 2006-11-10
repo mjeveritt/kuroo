@@ -36,6 +36,9 @@ public:
 
 private slots:
 	void 		slotInit();
+	
+	void		slotWhatsThis();
+	
 	void		slotReload();
 	void		slotReload( int limit );
 	void		slotClearFilter();

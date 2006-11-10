@@ -25,6 +25,7 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
+#include <qwhatsthis.h>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -39,6 +40,9 @@
 HistoryTab::HistoryTab( QWidget* parent )
 	: HistoryBase( parent )
 {
+	// Connect What's this button
+	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
 	
 	historyFilter->setListView( historyView );
@@ -77,12 +81,25 @@ HistoryTab::~HistoryTab()
  */
 void HistoryTab::slotInit()
 {
+	pbWhatsThis->setIconSet( SmallIconSet("info") );
+	
 	pbView->setDisabled( true );
 	
 	if ( KurooConfig::viewUnmerges() )
 		viewUnmerges->setChecked( true );
 	else
 		viewUnmerges->setChecked( false );
+}
+
+/**
+ * What's this info explaning this tabs functionality.
+ */
+void HistoryTab::slotWhatsThis()
+{
+	QWhatsThis::display( i18n( 
+			"The emerge histories keep track of emerged/unemerged packages."
+			"" )
+			, QCursor::pos(), this );
 }
 
 /**

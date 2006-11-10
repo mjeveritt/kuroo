@@ -32,6 +32,7 @@
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
@@ -50,6 +51,9 @@
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null )
 {
+	// Connect What's this button
+	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
@@ -168,6 +172,18 @@ void QueueTab::slotInit()
 	pbAdvanced->setIconSet( SmallIconSet("options") );
 	pbCheck->setIconSet( SmallIconSet("gear") );
 	pbGo->setIconSet( SmallIconSet("launch") );
+	pbWhatsThis->setIconSet( SmallIconSet("info") );
+}
+
+/**
+ * What's this info explaning this tabs functionality.
+ */
+void QueueTab::slotWhatsThis()
+{
+	QWhatsThis::display( i18n( 
+			"The emerge queue quickly shows which packages are currently being installed."
+			"" )
+			, QCursor::pos(), this );
 }
 
 /**

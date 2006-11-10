@@ -75,9 +75,6 @@ private:
 	
 	// True if history needs to be recreated from scratch
 	bool				m_isHistoryRestored;
-	
-// signals:
-// 	void				signalWhatsThis();
 };
 
 class KurooView::IconListItem : public QListBoxItem

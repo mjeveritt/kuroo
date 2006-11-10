@@ -97,7 +97,7 @@ void HistoryTab::slotInit()
 void HistoryTab::slotWhatsThis()
 {
 	QWhatsThis::display( i18n( 
-			"The emerge histories keep track of emerged/unemerged packages."
+			"The emerge history keep track of emerged/unemerged packages."
 			"" )
 			, QCursor::pos(), this );
 }

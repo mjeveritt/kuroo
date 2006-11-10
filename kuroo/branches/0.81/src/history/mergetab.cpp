@@ -88,8 +88,8 @@ void MergeTab::slotInit()
 void MergeTab::slotWhatsThis()
 {
 	QWhatsThis::display( i18n( 
-			"Keep track of configuration files that were changed..."
-			"" )
+			"The configuration keep track of configuration files that need to be merged. "
+			"Old merged changes can then be reviewed." )
 			, QCursor::pos(), this );
 }
 

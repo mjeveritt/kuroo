@@ -86,8 +86,8 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Configuration") );
 	iconLog = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_LOG ), i18n("Log") );
 	
-	iconWhatsThis = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_WHATSTHIS ), i18n("What's this?") );
-	connect( viewMenu, SIGNAL( highlighted( int ) ), parent, SLOT( slotWhatsThis( int ) ) );
+// 	iconWhatsThis = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_WHATSTHIS ), i18n("What's this?") );
+// 	connect( viewMenu, SIGNAL( highlighted( int ) ), parent, SLOT( slotWhatsThis( int ) ) );
 	
 	// Connect menu-icons to the pages
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
@@ -118,8 +118,8 @@ void KurooView::slotShowView()
 		packageInspector->hide();
 	
 	int tabIndex = viewMenu->currentItem() + 1;
-	
-	if ( tabIndex < 6 )
+/*	
+	if ( tabIndex < 6 )*/
 		viewStack->raiseWidget( tabIndex );
 }
 

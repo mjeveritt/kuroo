@@ -60,6 +60,9 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
 {
+	// Connect What's this button
+	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
+	
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
@@ -134,6 +137,7 @@ void PortageTab::slotInit()
 	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
 	pbUninstall->setIconSet( SmallIconSet("remove") );
 	pbAdvanced->setIconSet( SmallIconSet("options") );
+	pbWhatsThis->setIconSet( SmallIconSet("info") );
 	
 	slotBusy();
 }

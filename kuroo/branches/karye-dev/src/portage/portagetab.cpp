@@ -35,6 +35,7 @@
 #include <qcombobox.h>
 #include <qbuttongroup.h>
 #include <qtimer.h>
+#include <qwhatsthis.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
@@ -61,7 +62,8 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
 {
 	// Connect What's this button
-	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
+// 	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
+	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 	
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
@@ -140,6 +142,16 @@ void PortageTab::slotInit()
 	pbWhatsThis->setIconSet( SmallIconSet("info") );
 	
 	slotBusy();
+}
+
+void PortageTab::slotWhatsThis()
+{
+	QWhatsThis::display( i18n( 
+			"To keep your system in perfect shape (and not to mention install the latest security updates)"
+			" you need to update your system regularly. "
+			"Since Portage only checks the ebuilds in your Portage tree you first have to update your Portage tree. "
+			"When your Portage tree is updated, you can update your system with packages listed here." )
+			, QCursor::pos(), this );
 }
 
 /**

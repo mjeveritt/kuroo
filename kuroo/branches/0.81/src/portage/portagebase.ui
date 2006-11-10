@@ -87,7 +87,7 @@
                         </size>
                     </property>
                 </spacer>
-				<widget class="KPushButton" row="0" column="2">
+                <widget class="KPushButton" row="0" column="2">
                     <property name="name">
                         <cstring>pbWhatsThis</cstring>
                     </property>
@@ -696,6 +696,7 @@ However, a big warning applies: Portage will not check if the package you want t
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>categorieslistview.h</includehint>
     <includehint>categorieslistview.h</includehint>

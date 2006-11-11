@@ -149,9 +149,20 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( 
-			"Overview of all packages in Portage, installed packages as well as package updates. "
-			"Use the filter to find matching packages." )
+	QWhatsThis::display( i18n( "<qt>"
+			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br>"
+			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
+			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
+			"Select 'Sync Portage' in the Portage menu.<br>"
+			"After syncing Kuroo will search for newer version of the applications you have installed. "
+			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br>"
+			"If you want to update every single package on your system, check the Deep checkbox in Kuroo Preferences.<br><br>"
+			"When you want to remove a software package from your system, select a package and press 'Uninstall'. "
+			"This will tell Portage to remove all files installed by that package from your system except the configuration files "
+			"of that application if you have altered those after the installation. "
+			"However, a big warning applies: Portage will not check if the package you want to remove is required by another package. "
+			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br><br>"
+			"Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" )
 			, QCursor::pos(), this );
 }
 

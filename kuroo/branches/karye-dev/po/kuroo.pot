@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-10 18:45+0100\n"
+"POT-Creation-Date: 2006-11-11 13:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,90 +30,107 @@ msgstr ""
 msgid "View package details..."
 msgstr ""
 
-#: portage/portagetab.cpp:153
+#: portage/portagetab.cpp:152
 msgid ""
-"Overview of all packages in Portage, installed packages as well as package "
-"updates. Use the filter to find matching packages."
+"<qt>This tab gives an overview of all packages available: in Portage, "
+"installed packages as well as package updates.<br>To keep your system in "
+"perfect shape (and not to mention install the latest security updates) you "
+"need to update your system regularly. Since Portage only checks the ebuilds "
+"in your Portage tree you first have to sync your Portage tree: Select 'Sync "
+"Portage' in the Portage menu.<br>After syncing Kuroo will search for newer "
+"version of the applications you have installed. However, it will only verify "
+"the versions for the applications you have explicitly installed - not the "
+"dependencies.<br>If you want to update every single package on your system, "
+"check the Deep checkbox in Kuroo Preferences.<br><br>When you want to remove "
+"a software package from your system, select a package and press 'Uninstall'. "
+"This will tell Portage to remove all files installed by that package from "
+"your system except the configuration files of that application if you have "
+"altered those after the installation. However, a big warning applies: "
+"Portage will not check if the package you want to remove is required by "
+"another package. It will however warn you when you want to remove an "
+"important package that breaks your system if you unmerge it.<br><br>Use the "
+"package Inspector to manage package specific version and use-flag settings: "
+"press 'Details' to open the Inspector.</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:180 portage/portagetab.cpp:245
-#: portage/portagetab.cpp:248
+#: portage/portagetab.cpp:191 portage/portagetab.cpp:256
+#: portage/portagetab.cpp:259
 msgid "Add to Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:243
+#: portage/portagetab.cpp:254
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:361
+#: portage/portagetab.cpp:372
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:362
+#: portage/portagetab.cpp:373
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:459
+#: portage/portagetab.cpp:470
 msgid " packages selected"
 msgstr ""
 
-#: portage/portagetab.cpp:489
+#: portage/portagetab.cpp:500
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:493
+#: portage/portagetab.cpp:504
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:499 portage/portagetab.cpp:505
+#: portage/portagetab.cpp:510 portage/portagetab.cpp:516
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:515
+#: portage/portagetab.cpp:526
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:523
+#: portage/portagetab.cpp:534
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:529
+#: portage/portagetab.cpp:540
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:537
+#: portage/portagetab.cpp:548
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:543
+#: portage/portagetab.cpp:554
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:578
+#: portage/portagetab.cpp:589
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:580
+#: portage/portagetab.cpp:591
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:583 rc.cpp:58 rc.cpp:332 queue/queuetab.cpp:516
+#: portage/portagetab.cpp:594 rc.cpp:58 rc.cpp:332 queue/queuetab.cpp:519
 #, no-c-format
 msgid "Details..."
 msgstr ""
 
-#: portage/portagetab.cpp:587 queue/queuetab.cpp:520
+#: portage/portagetab.cpp:598 queue/queuetab.cpp:523
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:589 queue/queuetab.cpp:522
+#: portage/portagetab.cpp:600 queue/queuetab.cpp:525
 msgid "Remove from world"
 msgstr ""
 
-#: portage/portagetab.cpp:594
+#: portage/portagetab.cpp:605
 msgid "&Uninstall"
 msgstr ""
 
@@ -146,7 +163,7 @@ msgstr ""
 #: core/portagefiles.cpp:237 core/portagefiles.cpp:328
 #: core/portagefiles.cpp:419 core/scanupdatesjob.cpp:143
 #: core/scanportagejob.cpp:324 core/scanportagejob.cpp:395 core/emerge.cpp:453
-#: core/emerge.cpp:535 queue/queuetab.cpp:416
+#: core/emerge.cpp:535 queue/queuetab.cpp:419
 msgid "Done."
 msgstr ""
 
@@ -266,12 +283,12 @@ msgstr ""
 
 #: rc.cpp:84
 #, no-c-format
-msgid "Merge Changes..."
+msgid "Merge changes..."
 msgstr ""
 
 #: rc.cpp:87
 #, no-c-format
-msgid "View Changes..."
+msgid "View changes..."
 msgstr ""
 
 #: rc.cpp:97
@@ -539,7 +556,7 @@ msgid ""
 "certain package."
 msgstr ""
 
-#: rc.cpp:303 queue/queuetab.cpp:297
+#: rc.cpp:303 queue/queuetab.cpp:300
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
@@ -1081,10 +1098,14 @@ msgstr ""
 msgid "Merged Configuration file"
 msgstr ""
 
-#: history/mergetab.cpp:91
+#: history/mergetab.cpp:90
 msgid ""
-"The configuration keep track of configuration files that need to be merged. "
-"Old merged changes can then be reviewed."
+"<qt>This tab keeps track of all configuration files that need to be merged."
+"<br>Your system is scanned automatically for configuration files after "
+"completed installation.<br>Select a file to merge and press 'Merge changes'. "
+"KDiff3 will then open with old and new files. After saving changes in KDiff3 "
+"the configuration file will be removed. Old merged changes can then be "
+"reviewed in the right list.</qt>"
 msgstr ""
 
 #: history/mergelistview.cpp:63
@@ -1159,26 +1180,29 @@ msgstr ""
 msgid "Emerge log file"
 msgstr ""
 
-#: history/historytab.cpp:100
-msgid "The emerge history keep track of emerged/unemerged packages."
+#: history/historytab.cpp:99
+msgid ""
+"<qt>The emerge history keeps track of emerged/unemerged packages."
+"<br>Activate the log function in your /etc/make.conf if you want to trace "
+"those messages. Select an entry and press 'View emerge log'.</qt>"
 msgstr ""
 
-#: history/historytab.cpp:184
+#: history/historytab.cpp:185
 msgid "Emerge log"
 msgstr ""
 
-#: history/historytab.cpp:184
+#: history/historytab.cpp:185
 msgid "Installation message for %1:"
 msgstr ""
 
-#: history/historytab.cpp:188
+#: history/historytab.cpp:189
 msgid ""
 "Can not find elog for this emerge. Please check elog settings in /etc/make."
 "conf.\n"
 "Error reading:\n"
 msgstr ""
 
-#: history/historytab.cpp:190
+#: history/historytab.cpp:191
 msgid "emerge elog"
 msgstr ""
 
@@ -1685,53 +1709,59 @@ msgid ""
 "cause the file to always be merged.</td></tr></table></qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:184
+#: queue/queuetab.cpp:183
 msgid ""
-"The emerge queue quickly shows which packages are currently being installed."
+"<qt>The emerge queue quickly shows which packages listed for installation."
+"<br>Since many applications depend on each other, any attempt to install a "
+"certain software package might result in the installation of several "
+"dependencies as well. Don't worry, Portage handles dependencies well."
+"<br><br>If you want to find out what Portage would install when you ask it "
+"to install a certain package, press 'Check Installation'.<br>When all "
+"dependencies are press 'Start Installation'.</qt>"
 msgstr ""
 
-#: queue/queuetab.cpp:246
+#: queue/queuetab.cpp:249
 msgid ""
 "<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></"
 "td></tr>"
 msgstr ""
 
-#: queue/queuetab.cpp:247
+#: queue/queuetab.cpp:250
 msgid "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>"
 msgstr ""
 
-#: queue/queuetab.cpp:248
+#: queue/queuetab.cpp:251
 msgid ""
 "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>"
 msgstr ""
 
-#: queue/queuetab.cpp:249
+#: queue/queuetab.cpp:252
 msgid "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>"
 msgstr ""
 
-#: queue/queuetab.cpp:251
+#: queue/queuetab.cpp:254
 msgid ""
 "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></"
 "table>"
 msgstr ""
 
-#: queue/queuetab.cpp:291
+#: queue/queuetab.cpp:294
 msgid "Abort Installation"
 msgstr ""
 
-#: queue/queuetab.cpp:374
+#: queue/queuetab.cpp:377
 msgid "Do you want to Download following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:374 queue/queuetab.cpp:385
+#: queue/queuetab.cpp:377 queue/queuetab.cpp:388
 msgid "Installation queue"
 msgstr ""
 
-#: queue/queuetab.cpp:385
+#: queue/queuetab.cpp:388
 msgid "Do you want to install following packages?"
 msgstr ""
 
-#: queue/queuetab.cpp:412
+#: queue/queuetab.cpp:415
 msgid "Do you want to abort the running installation?"
 msgstr ""
 

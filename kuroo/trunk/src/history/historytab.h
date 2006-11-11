@@ -36,11 +36,15 @@ public:
 
 private slots:
 	void 		slotInit();
+	
+	void		slotWhatsThis();
+	
 	void		slotReload();
 	void		slotReload( int limit );
 	void		slotClearFilter();
 	void		slotViewUnmerges( bool on );
-	void		slotViewInfo( QListViewItem *item );
+	void		slotButtonView();
+	void		slotViewInfo();
 };
 
 #endif

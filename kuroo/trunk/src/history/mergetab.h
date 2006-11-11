@@ -36,10 +36,16 @@ public:
 
 private slots:
 	void 		slotInit();
+	
+	void		slotWhatsThis();
+	
 	void		slotReload();
+	void		slotLoadConfFiles();
 	void		slotClearFilter();
-	void 		slotViewFile( QListViewItem* item );
-	void		slotCleanupOpenDiff( KProcess* eProc );
+	void		slotButtonView();
+	void		slotButtonMerge();
+	void 		slotViewFile();
+	void		slotMergeFile();
 	
 signals:
 	void		signalMergeChanged();

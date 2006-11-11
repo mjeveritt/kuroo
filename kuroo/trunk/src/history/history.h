@@ -24,13 +24,20 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qvaluevector.h>
 
 class KProcIO;
 class PackageEmergeTime;
 class QString;
 class KDirWatch;
 
+struct eLog {
+	QString package;
+	uint	timestamp;
+};
+
 typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
+typedef QValueVector<eLog> eLogVector;
 
 /**
  * @class History
@@ -51,6 +58,8 @@ public:
 	void					appendEmergeInfo();
 	void					updateStatistics();
 	const QStringList		allMergeHistory();
+	void					scanELog();
+	eLogVector				getELogs();
 	
 public slots:
 	void					slotInit();
@@ -81,6 +90,8 @@ private:
 	
 	// To keep track of sync time
 	QTime					m_syncTime;
+	
+	eLogVector				m_eLogs;
 	
 signals:
 	void					signalScanHistoryCompleted();

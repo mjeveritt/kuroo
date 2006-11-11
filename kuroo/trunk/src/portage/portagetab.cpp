@@ -35,6 +35,7 @@
 #include <qcombobox.h>
 #include <qbuttongroup.h>
 #include <qtimer.h>
+#include <qwhatsthis.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
@@ -60,6 +61,10 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
 {
+	// Connect What's this button
+// 	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
+	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
@@ -94,6 +99,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -133,8 +139,20 @@ void PortageTab::slotInit()
 	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
 	pbUninstall->setIconSet( SmallIconSet("remove") );
 	pbAdvanced->setIconSet( SmallIconSet("options") );
+	pbWhatsThis->setIconSet( SmallIconSet("info") );
 	
 	slotBusy();
+}
+
+/**
+ * What's this info explaning this tabs functionality.
+ */
+void PortageTab::slotWhatsThis()
+{
+	QWhatsThis::display( i18n( 
+			"Overview of all packages in Portage, installed packages as well as package updates. "
+			"Use the filter to find matching packages." )
+			, QCursor::pos(), this );
 }
 
 /**
@@ -189,6 +207,14 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
+	if ( m_packageInspector->isVisible() )
+		return;
+	else {
+		filterGroup->setDisabled( false );
+		searchFilter->setDisabled( false );
+		pbClearFilter->setDisabled( false );
+	}
+	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
 		pbQueue->setDisabled( true );
@@ -240,7 +266,7 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-	m_packageInspector->setDisabled( true );
+// 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
 	disconnect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
@@ -390,6 +416,14 @@ void PortageTab::slotUninstall()
  */
 void PortageTab::slotAdvanced()
 {
+	DEBUG_LINE_INFO;
+	pbUninstall->setDisabled( true );
+	pbAdvanced->setDisabled( true );
+	pbQueue->setDisabled( true );
+	filterGroup->setDisabled( true );
+	searchFilter->setDisabled( true );
+	pbClearFilter->setDisabled( true );
+	
 	if ( packagesView->currentPackage() )
 		processPackage( true );
 }
@@ -398,7 +432,7 @@ void PortageTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else	
+	else
 		processPackage( false );
 }
 
@@ -408,7 +442,6 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
-	DEBUG_LINE_INFO;
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 	
@@ -425,8 +458,12 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += GlobalSingleton::Instance()->fgHexColor() + " size=+1><b>";
 		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
 		lines += "<tr><td>";
-		foreach ( selectedIdList )
-			lines += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name() + " ";
+		foreach ( selectedIdList ) {
+			lines += packagesView->packageItemById( *it )->name();
+			lines += " (" + packagesView->packageItemById( *it )->category().section( "-", 0, 0 ) + "/";
+			lines += packagesView->packageItemById( *it )->category().section( "-", 1, 1 ) + "), ";
+		}
+		lines = lines.left( lines.length() - 2 );
 		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		
@@ -526,6 +563,7 @@ void PortageTab::processPackage( bool viewInspector )
  */
 void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
 {
+	DEBUG_LINE_INFO;
 	if ( !item )
 		return;
 	
@@ -541,30 +579,43 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	else
 		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Remove from queue"), APPEND );
 	
-	menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
+	int menuItem2;
+	menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
+	
+	int menuItem3;
+	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
+	else
+		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
+	menu.setItemEnabled( menuItem3, false );
 	
 	int menuItem4;
-	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
-	else
-		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
-	menu.setItemEnabled( menuItem4, false );
-	
-	int menuItem2;
 	if ( packagesView->currentPackage()->isInstalled() )
-		menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
+		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
 	
-	// No access when kuroo is busy
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
-	     || !packagesView->currentPackage()->isInPortage() )
+	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
+	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
+	kdDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy() << endl;
+	kdDebug() << "packagesView->currentPackage()->isInPortage()=" << packagesView->currentPackage()->isInPortage() << endl;
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+			 || !packagesView->currentPackage()->isInPortage() )
 		menu.setItemEnabled( menuItem1, false );
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() 
-	     || !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
-			menu.setItemEnabled( menuItem2, false );
+	// No uninstall when emerging or no privileges
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+			|| !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
+		menu.setItemEnabled( menuItem4, false );
 	
+	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem4, true );
+		menu.setItemEnabled( menuItem3, true );
+	
+	if ( m_packageInspector->isVisible() ) {
+		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+		menu.setItemEnabled( menuItem3, false );
+		menu.setItemEnabled( menuItem4, false );
+	}
 	
 	switch( menu.exec( point ) ) {
 

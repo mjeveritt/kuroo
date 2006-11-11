@@ -64,6 +64,7 @@ private slots:
 	void 				slotQuit();
 	void				slotWait();
 	void 				slotTerminate();
+	void				slotWhatsThis( int tabIndex );
 	
 private:
 	void 				setupActions();
@@ -78,7 +79,7 @@ private:
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage, *actionEtcUpdate;
+	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

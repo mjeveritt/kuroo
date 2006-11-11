@@ -48,7 +48,9 @@ public slots:
 	
 private slots:
 	void 				slotInit();
-
+	
+	void				slotWhatsThis();
+	
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();
 	void				slotInitButtons();

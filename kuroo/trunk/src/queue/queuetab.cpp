@@ -32,6 +32,7 @@
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
@@ -50,6 +51,9 @@
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null )
 {
+	// Connect What's this button
+	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	
 	// Rmb actions.
 	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
@@ -85,6 +89,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	// Recalculate package when user change settings in Inspector
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	slotInit();
 }
@@ -167,6 +172,18 @@ void QueueTab::slotInit()
 	pbAdvanced->setIconSet( SmallIconSet("options") );
 	pbCheck->setIconSet( SmallIconSet("gear") );
 	pbGo->setIconSet( SmallIconSet("launch") );
+	pbWhatsThis->setIconSet( SmallIconSet("info") );
+}
+
+/**
+ * What's this info explaning this tabs functionality.
+ */
+void QueueTab::slotWhatsThis()
+{
+	QWhatsThis::display( i18n( 
+			"The emerge queue quickly shows which packages are currently being installed."
+			"" )
+			, QCursor::pos(), this );
 }
 
 /**
@@ -201,7 +218,7 @@ void QueueTab::slotRefresh()
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	// Reenable the inspector after queue changes
-	m_packageInspector->setDisabled( true );
+// 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	
 	// If user is not su emerge pretend will not set packages as checked
@@ -266,6 +283,9 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
+	if ( m_packageInspector->isVisible() )
+		return;
+	
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );
@@ -440,6 +460,13 @@ void QueueTab::slotRemoveInstalled()
  */
 void QueueTab::slotAdvanced()
 {
+	DEBUG_LINE_INFO;
+	pbRemove->setDisabled( true );
+	pbClear->setDisabled( true );
+	pbCheck->setDisabled( true );
+	pbAdvanced->setDisabled( true );
+	pbGo->setDisabled( true );
+	
 	if ( queueView->currentPackage() )
 	     processPackage( true );
 }
@@ -448,7 +475,7 @@ void QueueTab::slotPackage()
 {
 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else	
+	else
 		processPackage( false );
 }
 
@@ -495,11 +522,19 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem3, false );
 	
+	// No change to Queue when busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
 	
+	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() )
 		menu.setItemEnabled( menuItem3, true );
+	
+	if ( m_packageInspector->isVisible() ) {
+		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem2, false );
+		menu.setItemEnabled( menuItem3, false );
+	}
 	
 	switch( menu.exec( point ) ) {
 			

@@ -59,9 +59,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
  */
 History::History( QObject *m_parent )
 	: QObject( m_parent ), isEmerging( false ), logWatcher( 0 )
-{
-	slotInit();
-}
+{}
 
 History::~History()
 {
@@ -73,10 +71,20 @@ History::~History()
 void History::init( QObject *parent )
 {
 	m_parent = parent;
-	if ( !m_log.open(IO_ReadOnly) )
+	
+	m_log.setName( KurooConfig::fileEmergeLog() );
+	if ( !m_log.open( IO_ReadOnly ) )
 		kdError(0) << "Reading " << KurooConfig::fileEmergeLog() << LINE_INFO;
 	else
 		stream.setDevice( &m_log );
+	
+	scanELog();
+	loadTimeStatistics();
+	
+	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
+	
+	logWatcher = new KDirWatch( this );
+	logWatcher->addFile( KurooConfig::fileEmergeLog() );
 }
 
 /**
@@ -85,19 +93,13 @@ void History::init( QObject *parent )
  */
 void History::slotInit()
 {
-	m_log.setName( KurooConfig::fileEmergeLog() );
-	loadTimeStatistics();
-	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
-	
-	logWatcher = new KDirWatch( this );
-	logWatcher->addFile( KurooConfig::fileEmergeLog() );
-	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
+// 	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
 }
 
 void History::slotScanHistoryCompleted()
 {
 	emit signalScanHistoryCompleted();
+	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
 }
 
 /**
@@ -107,7 +109,6 @@ void History::slotScanHistoryCompleted()
 bool History::slotRefresh()
 {
 	DEBUG_LINE_INFO;
-	
 	QString lastDate = KurooDBSingleton::Instance()->getKurooDbMeta( "scanTimeStamp" );
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
@@ -192,6 +193,7 @@ void History::slotParse()
 				
 			// Catch emerge session start
 			if ( line.contains( "Started emerge on" ) ) {
+				DEBUG_LINE_INFO;
 				line.replace( "Started emerge on", i18n( "Started emerge on" ) );
 				LogSingleton::Instance()->writeLog( line.section( rxTimeStamp, 1, 1 ), EMERGELOG );
 			}
@@ -199,6 +201,7 @@ void History::slotParse()
 				
 			// Emerge has started, signal queue to launch progressbar for this package
 			if ( line.contains( ">>> emerge" ) && isEmerging ) {
+				DEBUG_LINE_INFO;
 				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
@@ -213,6 +216,8 @@ void History::slotParse()
 
 			// Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
+				scanELog();
+				
 				if ( rxPackage.search( line ) > -1 ) {
 					int order = rxPackage.cap(2).toInt();
 					int total = rxPackage.cap(4).toInt();
@@ -223,7 +228,7 @@ void History::slotParse()
 				}
 				else
 					kdWarning(0) << QString("Can not parse package emerge complete in %1: %2")
-					.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
+									.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
 				
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
@@ -293,7 +298,6 @@ void History::slotParse()
 void History::updateStatistics()
 {
 	DEBUG_LINE_INFO;
-	
 	ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
 }
 
@@ -366,6 +370,39 @@ const QString History::packageTime( const QString& packageNoversion )
 		return QString::number( itMap.data().emergeTime() / itMap.data().count() );
 	else
 		return QString::null;
+}
+
+/**
+ * Collect all eLogs files.
+ */
+void History::scanELog()
+{
+	QDir eLogDir( KurooConfig::dirELog() );
+	eLogDir.setFilter( QDir::Files | QDir::NoSymLinks );
+	eLogDir.setSorting( QDir::Time );
+	
+	eLog elog;
+	m_eLogs.clear();
+	const QFileInfoList* elogList = eLogDir.entryInfoList();
+	if ( elogList ) {
+		QFileInfoListIterator it( *elogList );
+		QFileInfo* elogInfo;
+		while( ( elogInfo = it.current() ) != 0 ) {
+			++it;
+			elog.timestamp = elogInfo->lastModified().toTime_t();
+			elog.package = elogInfo->fileName();
+			m_eLogs.push_back( elog );
+		}
+	}
+	DEBUG_LINE_INFO;
+}
+
+/**
+ * Return vector with all eLog files.
+ */
+eLogVector History::getELogs()
+{
+	return m_eLogs;
 }
 
 #include "history.moc"

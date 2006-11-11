@@ -166,8 +166,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
  * @short Specialized listview for packages in the installation queue.
  */
 QueueListView::QueueListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name ), 
-	m_id( QString::null )
+	: PackageListView( parent, name ), m_id( QString::null )
 {
 	// Setup geometry
 	addColumn( i18n( "Package" ), 320 );
@@ -278,6 +277,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	
 	// Get list of update packages with info
 	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
+	int packageCount = packageList.size() / 7;
 	foreach ( packageList ) {
 		QString id = *it++;
 		QString category = *it++;
@@ -334,6 +334,10 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QueueSingleton::Instance()->insertInCache( id );
 	}
 	setPackageFocus( QString::null );
+	
+	// Cannot have current changed for only one package so emit manually
+	if ( packageCount == 1 )
+		emit currentChanged( 0 );
 }
 
 /**

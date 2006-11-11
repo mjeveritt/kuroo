@@ -60,7 +60,7 @@ Kuroo::Kuroo()
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	GlobalSingleton::Instance()->setColorTheme();
-	
+			
 	setCentralWidget( m_view );
 	setupActions();
 	statusBar();
@@ -110,6 +110,15 @@ Kuroo::~Kuroo()
 	}
 }
 
+void Kuroo::slotWhatsThis( int tabIndex )
+{
+	kdDebug() << "tabIndex=" << tabIndex << LINE_INFO;
+	
+	if ( tabIndex == 5 )
+		whatsThis();
+}
+
+
 /**
  * Build mainwindow menus and toolbar.
  */
@@ -129,9 +138,6 @@ void Kuroo::setupActions()
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
 	                          			this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
-	
-	actionEtcUpdate = new KAction( i18n("&Run etc-update"), 0, KShortcut( CTRL + Key_E ),
-	                               		EtcUpdateSingleton::Instance(), SLOT( slotEtcUpdate() ), actionCollection(), "etc_update" );
 	
 	createGUI();
 }
@@ -156,11 +162,9 @@ void Kuroo::slotBusy()
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
 	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
-// 		actionEtcUpdate->setEnabled( false );
 	}
 	else {
 		actionSyncPortage->setEnabled( true );
-		actionEtcUpdate->setEnabled( true );
 	}
 	
 	// No db no fun!

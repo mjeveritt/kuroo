@@ -37,7 +37,6 @@
  */
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent ), m_packageMessage( QString::null ), m_completedFlag( false ), m_importantMessagePackage( QString::null )
-
 {
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcIO( codec );
@@ -329,7 +328,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			
 			if ( lineLower.contains( QRegExp("^>>> completed installing") ) ) {
 				m_completedFlag = true;
-				m_importantMessagePackage = line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + ":<br>";
+// 				m_importantMessagePackage = line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + ":<br>";
 			}
 			else
 				if ( lineLower.contains( QRegExp("^>>> regenerating") ) )
@@ -347,7 +346,7 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 // 				else
 					if ( lineLower.contains( QRegExp("^!!!") ) ) {
 						LogSingleton::Instance()->writeLog( line, ERROR );
-						m_importantMessage += line + "<br>";
+// 						m_importantMessage += line + "<br>";
 						logDone++;
 					}
 					else
@@ -385,32 +384,32 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		//////////////////////////////////////////////////////////////
 		// Collect einfo and ewarn messages
 		//////////////////////////////////////////////////////////////
-		if ( m_completedFlag ) {
-			
-			QString eMessage = line.section( " * ", 1, 1 ) + line.section( "*** ", 1, 1 );
-			if ( !eMessage.isEmpty() ) {
-
-				eMessage = eMessage.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('%', "&#37;") + "<br>";
-				eMessage.remove( "!!!" );
-				
-				if ( !eMessage.isEmpty() ) {
-					
-					// Append package einfo
-					if ( !m_importantMessagePackage.isEmpty() ) {
-						if ( m_importantMessage.isEmpty() )
-							m_importantMessage += "<b>" + m_importantMessagePackage + "</b>" + eMessage;
-						else
-							m_importantMessage += "<br><b>" + m_importantMessagePackage + "</b>" + eMessage;
-						m_packageMessage = eMessage;
-						m_importantMessagePackage = QString::null;
-					}
-					else {
-						m_packageMessage += eMessage;
-						m_importantMessage += eMessage;
-					}
-				}
-			}
-		}
+// 		if ( m_completedFlag ) {
+// 			
+// 			QString eMessage = line.section( " * ", 1, 1 ) + line.section( "*** ", 1, 1 );
+// 			if ( !eMessage.isEmpty() ) {
+// 
+// 				eMessage = eMessage.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('%', "&#37;") + "<br>";
+// 				eMessage.remove( "!!!" );
+// 				
+// 				if ( !eMessage.isEmpty() ) {
+// 					
+// 					// Append package einfo
+// 					if ( !m_importantMessagePackage.isEmpty() ) {
+// 						if ( m_importantMessage.isEmpty() )
+// 							m_importantMessage += "<b>" + m_importantMessagePackage + "</b>" + eMessage;
+// 						else
+// 							m_importantMessage += "<br><b>" + m_importantMessagePackage + "</b>" + eMessage;
+// 						m_packageMessage = eMessage;
+// 						m_importantMessagePackage = QString::null;
+// 					}
+// 					else {
+// 						m_packageMessage += eMessage;
+// 						m_importantMessage += eMessage;
+// 					}
+// 				}
+// 			}
+// 		}
 		
 		// Save to kuroo.log for debugging
 		LogSingleton::Instance()->writeLog( line, TOLOG );
@@ -455,11 +454,11 @@ void Emerge::cleanup()
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	QueueSingleton::Instance()->addPackageList( m_emergePackageList );
 	
-	if ( !m_blocks.isEmpty() ) {
-		if ( !m_importantMessage.isEmpty() )
-			m_importantMessage += "<br>";
-		m_importantMessage += m_blocks.join("<br>");
-	}
+// 	if ( !m_blocks.isEmpty() ) {
+// 		if ( !m_importantMessage.isEmpty() )
+// 			m_importantMessage += "<br>";
+// 		m_importantMessage += m_blocks.join("<br>");
+// 	}
 	
 	if ( !m_unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
@@ -468,13 +467,13 @@ void Emerge::cleanup()
 			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroo as root to unmask packages!"),
 			                             i18n("Auto-unmasking packages"), NULL );
 	}
-	else {
-		if ( !m_importantMessage.isEmpty() )
-			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
-	}
+// 	else {
+// 		if ( !m_importantMessage.isEmpty() )
+// 			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
+// 	}
 	
-	if ( m_etcUpdateCount != 0 )
-		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
+// 	if ( m_etcUpdateCount != 0 )
+// 		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
 }
 
 /**

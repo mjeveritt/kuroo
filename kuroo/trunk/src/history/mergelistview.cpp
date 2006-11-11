@@ -31,10 +31,16 @@ MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
 	: KListViewItem( parent, date )
 {}
 
+MergeListView::MergeItem::MergeItem( QListView* parent, const char* source, const char* destination )
+	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
+{
+	setText( 0 , m_source );
+}
+
 MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
 	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
 {
-	setText( 0 , m_source.section( QRegExp("_\\d*_\\d*"), 0, 0 ) );
+	setText( 0 , m_source.section( QRegExp( "\\d{8}_\\d{4}/" ), 1, 1 ).replace( ":" , "/" ) );
 }
 
 QString MergeListView::MergeItem::source()
@@ -73,33 +79,52 @@ MergeListView::~MergeListView()
 {}
 
 /**
- * Populate listview with log entries
+ * Append the new unmerged configuration files.
  */
-void MergeListView::loadFromDB()
+void MergeListView::loadConfFiles( const QStringList& filesList )
 {
 	clear();
 	m_itemMap.clear();
 	
-	const QStringList historyList = HistorySingleton::Instance()->allMergeHistory();
-	foreach ( historyList ) {
-		QString timeStamp = *it++;
-		QString source = *it++;
-		QString destination = *it;
-		
-		QDateTime dt;
-		dt.setTime_t( timeStamp.toUInt() );
-		QString date = m_loc->formatDate( dt.date() );
-		
-		if ( !m_itemMap.contains( date ) ) {
-			MergeItem *item = new MergeItem( this, date );
-			m_itemMap[ date ] = item;
-			item->setOpen( true );
-		}
+	foreach ( filesList ) {
+		QString source = *it;
+		QString destination = source;
+		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
+		new MergeItem( this, source, destination );
+	}
+}
 
-		new MergeItem( m_itemMap[ date ], source, destination );
+/**
+ * Insert merged configurations files from backup.
+ */
+void MergeListView::loadBackupFiles( const QStringList& filesList )
+{
+	clear();
+	m_itemMap.clear();
+	
+	// Find dates
+	foreach ( filesList ) {
+		QString date = (*it).section( "/", -2, -2 ).mid(0,8);
+		if ( !m_itemMap.contains( date ) )
+			m_itemMap[ date ] = NULL;
 	}
 	
-	emit signalHistoryLoaded();
+	// Insert sorted dates
+	for ( ItemMap::Iterator it = m_itemMap.begin(); it != m_itemMap.end(); ++it ) {
+		QString date = it.key();
+		QString localDate = m_loc->formatDate( QDate( date.mid(0,4).toInt(), date.mid(4,2).toInt(), date.mid(6,2).toInt() ) );
+		
+		MergeItem *item = new MergeItem( this, localDate );
+		item->setOpen( true );
+		m_itemMap[ date ] = item;
+	}
+	
+	// Insert files
+	foreach ( filesList ) {
+		QString source = *it;
+		QString date = source.section( "/", -2, -2 ).mid(0,8);
+		new MergeItem( m_itemMap[ date ], source, source + ".orig" );
+	}
 }
 
 #include "mergelistview.moc"

@@ -53,12 +53,8 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	introText->setText(   	"<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
 					  i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "
 							"software maintenance tasks on gentoo systems</p>"
-							"New features:<br>"
-							"Unified package view: fast package browsing and searching with filters.<br>"
-							"Two Column Selector, Package Inspector, Progress bars, Use-Flag Editor, "
-							"Emerge and Configuration History, Emerge Queue.<br>"
 							"<br>"
-					        "<a href=http://kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
+					        "<a href=http://trac.kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
 					        "Tell us what you think of Kuroo!</a><br>"
 					      ) );
 	

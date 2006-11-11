@@ -89,6 +89,10 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->useView, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotSetUseFlags( QListViewItem* ) ) );
 	
 	connect( dialog->pbUse, SIGNAL( clicked() ), this, SLOT( slotCalculateUse() ) );
+	
+	// Listen to Queue and World checkboxes
+	connect( dialog->cbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
+	connect( dialog->cbWorld, SIGNAL( clicked() ), this, SLOT( slotWorld() ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -177,14 +181,45 @@ void PackageInspector::updateVersionData()
 		dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
 	}
 	
-	// View icons if package in World and Queue
-	dialog->pixmapInstalled->clear();
+	// Toggle checkboxes if package in World and Queue
 	if ( m_portagePackage->isInWorld() )
-		dialog->pixmapInstalled->setPixmap( ImagesSingleton::Instance()->icon( WORLD ) );
+		dialog->cbWorld->setChecked( true );
+	else
+		dialog->cbWorld->setChecked( false );
 	
-	dialog->pixmapQueued->clear();
 	if ( m_portagePackage->isQueued() )
-		dialog->pixmapQueued->setPixmap( ImagesSingleton::Instance()->icon( QUEUED ) );
+		dialog->cbQueue->setChecked( true );
+	else
+		dialog->cbQueue->setChecked( false );
+}
+
+/**
+ * Add/remove package in World profile using checkbox.
+ */
+void PackageInspector::slotWorld()
+{
+	if ( dialog->cbWorld->isChecked() )
+		PortageSingleton::Instance()->appendWorld( QStringList( m_category + "/" + m_package ) );
+	else
+		PortageSingleton::Instance()->removeFromWorld( QStringList( m_category + "/" + m_package ) );
+}
+
+/**
+ * Add/remove package in Queue using checkbox.
+ */
+void PackageInspector::slotQueue()
+{
+	if ( dialog->cbQueue->isChecked() )
+		QueueSingleton::Instance()->addPackageIdList( QStringList( m_portagePackage->id() ) );
+	else
+		QueueSingleton::Instance()->removePackageIdList( QStringList( m_portagePackage->id() ) );
+	
+	// If user removes last package in Queue, disable the Inspector
+	if ( m_view == VIEW_QUEUE && QueueSingleton::Instance()->size() == 1 ) {
+		dialog->inspectorTabs->setDisabled( true );
+		dialog->cbQueue->setDisabled( true );
+		dialog->cbWorld->setDisabled( true );
+	}
 }
 
 /**
@@ -197,13 +232,19 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	m_portagePackage = portagePackage;
 	m_package = m_portagePackage->name();
 	m_category = m_portagePackage->category();
-	
 	updateVersionData();
 	
+	// Actions that superuser privileges
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
 		dialog->groupSelectStability->setDisabled( true );
 		dialog->useView->setDisabled( true );
+		dialog->cbWorld->setDisabled( true );
+	}
+	else {
+		dialog->inspectorTabs->setDisabled( false );
+		dialog->cbQueue->setDisabled( false );
+		dialog->cbWorld->setDisabled( false );
 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging

@@ -87,9 +87,12 @@ void MergeTab::slotInit()
  */
 void MergeTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( 
-			"The configuration keep track of configuration files that need to be merged. "
-			"Old merged changes can then be reviewed." )
+	QWhatsThis::display( i18n( "<qt>"
+			"This tab keeps track of all configuration files that need to be merged.<br>"
+			"Your system is scanned automatically for configuration files after completed installation.<br>"
+			"Select a file to merge and press 'Merge changes'. KDiff3 will then open with old and new files. "
+			"After saving changes in KDiff3 the configuration file will be removed. "
+			"Old merged changes can then be reviewed in the right list.</qt>" )
 			, QCursor::pos(), this );
 }
 

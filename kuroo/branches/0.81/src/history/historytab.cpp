@@ -96,9 +96,10 @@ void HistoryTab::slotInit()
  */
 void HistoryTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( 
-			"The emerge history keep track of emerged/unemerged packages."
-			"" )
+	QWhatsThis::display( i18n( "<qt>"
+			"The emerge history keeps track of emerged/unemerged packages.<br>"
+			"Activate the log function in your /etc/make.conf if you want to trace those messages. "
+			"Select an entry and press 'View emerge log'.</qt>" )
 			, QCursor::pos(), this );
 }
 

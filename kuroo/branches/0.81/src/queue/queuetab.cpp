@@ -180,9 +180,12 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( 
-			"The emerge queue quickly shows which packages are currently being installed."
-			"" )
+	QWhatsThis::display( i18n( "<qt>"
+			"The emerge queue quickly shows which packages listed for installation.<br>"
+			"Since many applications depend on each other, any attempt to install a certain software package might result in the installation "
+			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br><br>"
+			"If you want to find out what Portage would install when you ask it to install a certain package, press 'Check Installation'.<br>"
+			"When all dependencies are press 'Start Installation'.</qt>" )
 			, QCursor::pos(), this );
 }
 

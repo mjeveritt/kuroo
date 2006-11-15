@@ -200,6 +200,9 @@ void KurooInit::slotEmergeInfo( KProcess* )
 // 		if ( (*it).startsWith( "USE=" ) )
 // 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
+	
+	kdDebug() << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	
 	KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }

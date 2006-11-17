@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-11 13:27+0100\n"
+"POT-Creation-Date: 2006-11-17 11:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,7 +117,7 @@ msgstr ""
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:594 rc.cpp:58 rc.cpp:332 queue/queuetab.cpp:519
+#: portage/portagetab.cpp:594 rc.cpp:58 rc.cpp:286 queue/queuetab.cpp:519
 #, no-c-format
 msgid "Details..."
 msgstr ""
@@ -197,7 +197,7 @@ msgstr ""
 msgid "&All Packages"
 msgstr ""
 
-#: rc.cpp:23 rc.cpp:231 rc.cpp:319
+#: rc.cpp:23 rc.cpp:231 rc.cpp:273
 #, no-c-format
 msgid "Alt+A"
 msgstr ""
@@ -207,7 +207,7 @@ msgstr ""
 msgid "&Updates"
 msgstr ""
 
-#: rc.cpp:29 rc.cpp:113 rc.cpp:344
+#: rc.cpp:29 rc.cpp:113 rc.cpp:298
 #, no-c-format
 msgid "Alt+U"
 msgstr ""
@@ -217,7 +217,7 @@ msgstr ""
 msgid "I&nstalled Packages"
 msgstr ""
 
-#: rc.cpp:35 rc.cpp:203 rc.cpp:288
+#: rc.cpp:35 rc.cpp:203 rc.cpp:323
 #, no-c-format
 msgid "Alt+N"
 msgstr ""
@@ -257,7 +257,7 @@ msgstr ""
 msgid "Return"
 msgstr ""
 
-#: rc.cpp:64 rc.cpp:338
+#: rc.cpp:64 rc.cpp:292
 #, no-c-format
 msgid "Show package details..."
 msgstr ""
@@ -439,7 +439,7 @@ msgstr ""
 msgid "Mas&ked Version"
 msgstr ""
 
-#: rc.cpp:209 rc.cpp:282 rc.cpp:626
+#: rc.cpp:209 rc.cpp:317 rc.cpp:626
 #, no-c-format
 msgid "Alt+K"
 msgstr ""
@@ -508,45 +508,75 @@ msgstr ""
 
 #: rc.cpp:270
 #, no-c-format
-msgid "Download all packa&ges before installing them (--fetch-all-uri)"
-msgstr ""
-
-#: rc.cpp:273 rc.cpp:675
-#, no-c-format
-msgid "Alt+G"
+msgid "Remove &All"
 msgstr ""
 
 #: rc.cpp:276
 #, no-c-format
+msgid "Remove all packages in Queue"
+msgstr ""
+
+#: rc.cpp:283
+#, no-c-format
+msgid "Remove selected package from Queue"
+msgstr ""
+
+#: rc.cpp:289
+#, no-c-format
+msgid "Return, Ctrl+S"
+msgstr ""
+
+#: rc.cpp:295
+#, no-c-format
+msgid "Remove package from Q&ueue after installation"
+msgstr ""
+
+#: rc.cpp:302
+#, no-c-format
+msgid "<font size=\"+1\">Packages in Installation Queue</font>"
+msgstr ""
+
+#: rc.cpp:305
+#, no-c-format
+msgid "Download all packa&ges before installing them (--fetch-all-uri)"
+msgstr ""
+
+#: rc.cpp:308 rc.cpp:675
+#, no-c-format
+msgid "Alt+G"
+msgstr ""
+
+#: rc.cpp:311
+#, no-c-format
 msgid "<b>Emerge Options</b>"
 msgstr ""
 
-#: rc.cpp:279
+#: rc.cpp:314
 #, no-c-format
 msgid "Do not add the pac&kages to the world profile (--oneshot)"
 msgstr ""
 
-#: rc.cpp:285
+#: rc.cpp:320
 #, no-c-format
 msgid "Force reinstall of config files (--&noconfmem)"
 msgstr ""
 
-#: rc.cpp:291
+#: rc.cpp:326
 #, no-c-format
 msgid "Step &1: Check Installation"
 msgstr ""
 
-#: rc.cpp:294
+#: rc.cpp:329
 #, no-c-format
 msgid "Alt+1"
 msgstr ""
 
-#: rc.cpp:297
+#: rc.cpp:332
 #, no-c-format
 msgid "Check packages in Queue with emerge pretend"
 msgstr ""
 
-#: rc.cpp:300
+#: rc.cpp:335
 #, no-c-format
 msgid ""
 "Since many applications depend on each other, any attempt to install a "
@@ -556,56 +586,26 @@ msgid ""
 "certain package."
 msgstr ""
 
-#: rc.cpp:303 queue/queuetab.cpp:300
+#: rc.cpp:338 queue/queuetab.cpp:300
 #, no-c-format
 msgid "Step &2: Start Installation"
 msgstr ""
 
-#: rc.cpp:306
+#: rc.cpp:341
 #, no-c-format
 msgid "Alt+2"
 msgstr ""
 
-#: rc.cpp:309
+#: rc.cpp:344
 #, no-c-format
 msgid "Start emerge of all packages in Queue"
 msgstr ""
 
-#: rc.cpp:312
+#: rc.cpp:347
 #, no-c-format
 msgid ""
 "<b>Summary</b><br>\n"
 "<font color=\"gray\">Installation Queue is empty.</font>"
-msgstr ""
-
-#: rc.cpp:316
-#, no-c-format
-msgid "Remove &All"
-msgstr ""
-
-#: rc.cpp:322
-#, no-c-format
-msgid "Remove all packages in Queue"
-msgstr ""
-
-#: rc.cpp:329
-#, no-c-format
-msgid "Remove selected package from Queue"
-msgstr ""
-
-#: rc.cpp:335
-#, no-c-format
-msgid "Return, Ctrl+S"
-msgstr ""
-
-#: rc.cpp:341
-#, no-c-format
-msgid "Remove package from Q&ueue after installation"
-msgstr ""
-
-#: rc.cpp:348
-#, no-c-format
-msgid "<font size=\"+1\">Packages in Installation Queue</font>"
 msgstr ""
 
 #: rc.cpp:351
@@ -1660,13 +1660,13 @@ msgid ""
 "kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
 
-#: kurooinit.cpp:235
+#: kurooinit.cpp:238
 msgid ""
 "You don't have enough permissions to run kuroo.\n"
 "Please add yourself into portage group!"
 msgstr ""
 
-#: kurooinit.cpp:236
+#: kurooinit.cpp:239
 msgid "User permissions"
 msgstr ""
 

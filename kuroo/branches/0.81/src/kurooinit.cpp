@@ -187,9 +187,9 @@ void KurooInit::slotEmergeInfo( KProcess* )
 		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
 			QString arch = (*it).section( "\"", 1, 1 );
 			
-			// When testing we have two keywords, only pick ~arch
+			// When testing we have two keywords, only pick one
 			if ( arch.contains( "~" ) )
-				arch = "~" + arch.section( "~", 1, 1 );
+				arch = arch.section( "~", 1, 1 );
 			
 			KurooConfig::setArch( arch );
 		}

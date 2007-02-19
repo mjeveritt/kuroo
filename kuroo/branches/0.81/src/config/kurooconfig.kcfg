@@ -13,6 +13,9 @@
 		<entry name="updateDeep" type="Bool">
 			<default>false</default>
 		</entry>
+		<entry name="updateNewUse" type="Bool">
+			<default>false</default>
+		</entry>
 		<entry name="updateDependency" type="Bool">
 			<default>true</default>
 		</entry>
@@ -146,6 +149,36 @@
 		<entry name="DebugBuild" type="String">
 		</entry>
 		<entry name="DirDist" type="String">
+		</entry>
+		<entry name="ElogWarn" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogError" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogLog" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogInfo" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogQa" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysSave" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysMail" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysSyslog" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysCustom" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysSaveSum" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysMailSum" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogMailURI" type="String">
+		</entry>
+		<entry name="ElogMailFromURI" type="String">
+		</entry>
+		<entry name="ElogSubject" type="String">
+		</entry>
+		<entry name="ElogCustomCmd" type="String">
 		</entry>
 		<entry name="Features" type="String">
 		</entry>

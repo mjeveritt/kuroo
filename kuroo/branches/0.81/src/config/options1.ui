@@ -29,20 +29,22 @@
             <property name="title">
                 <string>Emerge check update options</string>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>textLabel1_2</cstring>
+                        <cstring>kcfg_updateNewUse</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;i&gt;Forces emerge to consider the entire dependency tree of packages.&lt;br&gt;
-Refresh Updates for changes to take effect.&lt;/i&gt;</string>
+                        <string>&amp;New Use</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox" row="0" column="0">
+                <widget class="QCheckBox">
                     <property name="name">
                         <cstring>kcfg_updateDeep</cstring>
                     </property>
@@ -56,7 +58,16 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                         <bool>false</bool>
                     </property>
                 </widget>
-            </grid>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;i&gt;Forces emerge to consider the entire dependency tree of packages.&lt;br&gt;
+Refresh Updates for changes to take effect.&lt;/i&gt;</string>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
         <widget class="QGroupBox" row="2" column="0">
             <property name="name">
@@ -346,8 +357,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>

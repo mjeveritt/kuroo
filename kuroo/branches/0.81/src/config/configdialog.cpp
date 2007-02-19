@@ -408,6 +408,70 @@ void ConfigDialog::parseMakeConf()
 				kdWarning(0) << "Parsing /etc/make.conf: can not parse PORTAGE_BINHOST." << LINE_INFO;
 			continue;
 		}
+
+		if ( (*it).contains( QRegExp("PORTAGE_ELOG_CLASSES=") ) ) {
+			/* this is kind of messy, but it gets the job done */
+			if( (*it).contains( QRegExp("warn") ) )
+				KurooConfig::setElogWarn( 1 );
+			if( (*it).contains( QRegExp("error") ) )
+				KurooConfig::setElogError( 1 );
+			if( (*it).contains( QRegExp("info") ) )
+				KurooConfig::setElogInfo( 1 );
+			if( (*it).contains( QRegExp("log") ) )
+				KurooConfig::setElogLog( 1 );
+			if( (*it).contains( QRegExp("qa") ) )
+				KurooConfig::setElogQa( 1 );
+			continue;
+		}
+
+		if( (*it).contains( QRegExp("PORTAGE_ELOG_SYSTEM=") ) ) {
+			/* this is also kindof messy, got a better way? */
+			if( (*it).contains( QRegExp("save") ) )
+				KurooConfig::setElogSysSave( 1 );
+			if( (*it).contains( QRegExp("mail") ) )
+				KurooConfig::setElogSysMail( 1 );
+			if( (*it).contains( QRegExp("syslog") ) )
+				KurooConfig::setElogSysSyslog( 1 );
+			if( (*it).contains( QRegExp("custom") ) )
+				KurooConfig::setElogSysCustom( 1 );
+			if( (*it).contains( QRegExp("save_summary") ) )
+				KurooConfig::setElogSysSaveSum( 1 );
+			if( (*it).contains( QRegExp("mail_summary") ) )
+				KurooConfig::setElogSysMailSum( 1 );
+			continue;
+		}
+
+		if( (*it).contains( QRegExp("PORTAGE_ELOG_COMMAND=") ) ) {
+			if( rx.search(*it) > -1 )
+				KurooConfig::setElogCustomCmd( rx.cap(4) );
+			else
+				kdWarning(0) << "Parsing /etc/make.conf: cannot parse PORTAGE_ELOG_COMMAND" << LINE_INFO;
+			continue;
+		}
+
+		if( (*it).contains( QRegExp("PORTAGE_ELOG_MAILURI=") ) ) {
+			if( rx.search(*it) > -1 )
+				KurooConfig::setElogMailURI( rx.cap(4) );
+			else
+				kdWarning(0) << "Parsing /etc/make.conf: cannot parse PORTAGE_ELOG_MAILURI" << LINE_INFO;
+			continue;
+		}
+
+		if( (*it).contains( QRegExp("PORTAGE_ELOG_MAILFROM=") ) ) {
+			if( rx.search(*it) > -1 )
+				KurooConfig::setElogMailFromURI( rx.cap(4) );
+			else
+				kdWarning(0) << "Parsing /etc/make.conf: cannot parse PORTAGE_ELOG_MAILFROM" << LINE_INFO;
+			continue;
+		}
+
+		if( (*it).contains( QRegExp("PORTAGE_ELOG_MAILSUBJECT=") ) ) {
+			if( rx.search(*it) > -1 )
+				KurooConfig::setElogSubject( rx.cap(4) );
+			else
+				kdWarning(0) << "Parsing /etc/make.conf: cannot parse PORTAGE_MAILSUBJECT" << LINE_INFO;
+			continue;
+		}
 		
 		if ( (*it).contains( QRegExp("PORTAGE_NICENESS=") ) ) {
 			if ( rx.search( *it ) > -1 )
@@ -558,10 +622,12 @@ bool ConfigDialog::saveMakeConf()
 	foreach ( linesConcatenated ) {
 		
 		if ( (*it).contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
-										"DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-		                                "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
-										"PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
-										"RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
+					      "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
+		                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
+					      "PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
+					      "RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
+					      "PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
+			                      "PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
 											
 			if ( rxLine.search( *it ) > -1 )
 				keywords[ rxLine.cap(1) ] = rxLine.cap(4);
@@ -647,6 +713,44 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "RSYNC_TIMEOUT" ] = KurooConfig::rsyncTimeOut();
 
+#define a(x,y) if( strlen(x) ) x.append(" "y); else  x = y
+        QString elog_value = "";
+        if( KurooConfig::elogWarn() )
+          a(elog_value, "warn");
+        if( KurooConfig::elogError() )
+          a(elog_value, "error");
+        if( KurooConfig::elogLog() )
+          a(elog_value, "log");
+        if( KurooConfig::elogInfo() )
+          a(elog_value, "info");
+        if( KurooConfig::elogQa() )
+          a(elog_value, "qa");
+        keywords[ "PORTAGE_ELOG_CLASSES" ] = elog_value;
+	
+	QString elog_sys = "";
+	if( KurooConfig::elogSysSave() )
+	  a(elog_sys, "save");
+	if( KurooConfig::elogSysMail() )
+	  a(elog_sys, "mail");
+	if( KurooConfig::elogSysSyslog() )
+	  a(elog_sys, "syslog");
+	if( KurooConfig::elogSysCustom() )
+	  a(elog_sys, "custom");
+	if( KurooConfig::elogSysSaveSum() )
+	  a(elog_sys, "save_summary");
+	if( KurooConfig::elogSysMailSum() )
+	  a(elog_sys, "mail_summary");
+	keywords[ "PORTAGE_ELOG_SYSTEM" ] = elog_sys;
+#undef a
+
+	keywords[ "PORTAGE_ELOG_COMMAND" ] = KurooConfig::elogCustomCmd();
+
+	keywords[ "PORTAGE_ELOG_MAILURI" ] = KurooConfig::elogMailURI();
+
+	keywords[ "PORTAGE_ELOG_MAILFROM" ] = KurooConfig::elogMailFromURI();
+
+	keywords[ "PORTAGE_ELOG_MAILSUBJECT" ] = KurooConfig::elogSubject();
+	
 	keywords[ "SYNC" ] = KurooConfig::sync();
 	
 	// Write back everything
@@ -666,7 +770,9 @@ bool ConfigDialog::saveMakeConf()
 			                              "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
 			                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
 			                              "PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|"
-			                              "RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR)" ) ) ) {
+			                              "RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
+                                                      "PORTAGE_ELOG_CLASSES|PORTAGE_ELOG_SYSTEM|PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
+			                              "PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
 				                              
 				if ( rxLine.search( *it ) > -1 ) {
 					QString keyword = rxLine.cap(1);

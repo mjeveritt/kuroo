@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>499</width>
+            <width>514</width>
             <height>466</height>
         </rect>
     </property>
@@ -698,30 +698,9 @@
                                     <string>RPMDIR</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit" row="9" column="1">
-                                <property name="name">
-                                    <cstring>kcfg_DirPortLog</cstring>
-                                </property>
-                            </widget>
                             <widget class="QLineEdit" row="8" column="1">
                                 <property name="name">
                                     <cstring>kcfg_PortageBinHost</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="9" column="0">
-                                <property name="name">
-                                    <cstring>makeOpts_5_2_3_5_3</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>0</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>PORT_LOGDIR</string>
                                 </property>
                             </widget>
                             <widget class="QLineEdit" row="7" column="1">
@@ -1432,6 +1411,403 @@
                         </property>
                     </spacer>
                 </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Logging</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBox7</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Logging Options</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>groupBox11</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>ELOG's Custom Command</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>This is the command you want the elog sent through when the 'custom' system is selected.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>PORTAGE_ELOG_COMMAND: only used with the "custom" logging module. Specifies a command
+                     to process log messages. Two variables are expanded:
+                         ${PACKAGE} - expands to the cpv entry of the processed
+                                      package (see $PVR in ebuild(5))
+                         ${LOGFILE} - absolute path to the logfile
+                                              Both variables have to be quoted with single quotes</string>
+                                </property>
+                                <widget class="QLineEdit">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogCustomCmd</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>20</y>
+                                            <width>440</width>
+                                            <height>22</height>
+                                        </rect>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>This is the command you want the elog sent through when the 'custom' system is selected.</string>
+                                        <comment>ELOG's "Custom" system command.</comment>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>PORTAGE_ELOG_COMMAND: only used with the "custom" logging module. Specifies a command
+                     to process log messages. Two variables are expanded:
+                         ${PACKAGE} - expands to the cpv entry of the processed
+                                      package (see $PVR in ebuild(5))
+                         ${LOGFILE} - absolute path to the logfile
+                                              Both variables have to be quoted with single quotes</string>
+                                    </property>
+                                </widget>
+                            </widget>
+                            <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>groupBox9</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Directories</string>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>makeOpts_5_2_3_5_3</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>20</y>
+                                            <width>92</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>PORT_LOGDIR</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit">
+                                    <property name="name">
+                                        <cstring>kcfg_DirPortLog</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>120</x>
+                                            <y>20</y>
+                                            <width>280</width>
+                                            <height>22</height>
+                                        </rect>
+                                    </property>
+                                </widget>
+                            </widget>
+                            <widget class="QGroupBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>groupBox8</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>ELOG Classes</string>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox" row="1" column="1">
+                                        <property name="name">
+                                            <cstring>kcfg_ElogInfo</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Info</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>kcfg_ElogLog</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Log</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>kcfg_ElogError</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>E&amp;rror</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>kcfg_ElogWarn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Warn</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>kcfg_ElogQa</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;QA</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+Q</string>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>groupBox12</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>ELOG's Mail Options</string>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>20</y>
+                                            <width>62</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>To URI</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>50</y>
+                                            <width>62</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>From URI</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogMailURI</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>90</x>
+                                            <y>20</y>
+                                            <width>360</width>
+                                            <height>22</height>
+                                        </rect>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogMailFromURI</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>90</x>
+                                            <y>50</y>
+                                            <width>360</width>
+                                            <height>22</height>
+                                        </rect>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSubject</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>90</x>
+                                            <y>80</y>
+                                            <width>360</width>
+                                            <height>22</height>
+                                        </rect>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel3_2</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>80</y>
+                                            <width>62</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Subject</string>
+                                    </property>
+                                </widget>
+                            </widget>
+                            <widget class="QGroupBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>groupBox10_2</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>ELOG System(s)</string>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysSave</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>20</y>
+                                            <width>53</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Save</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysMail</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>40</y>
+                                            <width>49</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Mail</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysSyslog</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>60</y>
+                                            <width>65</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Syslog</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysCustom</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>80</y>
+                                            <width>70</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Custom</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysSaveSum</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>120</x>
+                                            <y>20</y>
+                                            <width>113</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Save Summary</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysMailSum</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>120</x>
+                                            <y>40</y>
+                                            <width>109</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>Mail Summary</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                            </widget>
+                        </grid>
+                    </widget>
+                </vbox>
             </widget>
         </widget>
     </grid>

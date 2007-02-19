@@ -118,7 +118,7 @@ bool Emerge::queue( const QStringList& packageList )
 	
 	m_emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--columns" << "--nocolor";
+	*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
 	
 	// Add emerge options and packages
 	foreach( packageList )
@@ -157,7 +157,7 @@ bool Emerge::pretend( const QStringList& packageList )
 	
 	m_emergePackageList.clear();
 	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--nocolor" << "--columns" << "-pv";
+	*eProc << "emerge" << "--nospinner" << "--color=n" << "--columns" << "-pv";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList )
@@ -192,7 +192,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "--unmerge" << "--nocolor" << "--nospinner";
+	*eProc << "emerge" << "--unmerge" << "--color=n" << "--nospinner";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList )
@@ -225,7 +225,7 @@ bool Emerge::sync()
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
+	*eProc << "emerge" << "--sync" << "--quiet" << "--color=n" << "--nospinner";
 	
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
@@ -254,11 +254,14 @@ bool Emerge::checkUpdates()
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner" << "--columns";
+	*eProc << "emerge" << "-pvu" << "--color=n" << "--nospinner" << "--columns";
 	
 	// Add deep if checked in gui
 	if ( KurooConfig::updateDeep() )
 		*eProc << "-D";
+	
+	if( KurooConfig::updateNewUse() )
+		*eProc << "-N";
 	
 	*eProc << "world";
 

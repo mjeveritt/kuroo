@@ -139,6 +139,9 @@
                                 <property name="name">
                                     <cstring>kcfg_Chost</cstring>
                                 </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
                                 <property name="editable">
                                     <bool>true</bool>
                                 </property>

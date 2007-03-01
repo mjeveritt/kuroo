@@ -65,6 +65,8 @@ void Images::init( QObject *parent )
 	
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 	pxWarning = ldr->loadIcon( "kuroo_warning", KIcon::Small );
+
+	pxQuickPkg = ldr->loadIcon( "kuroo_quickpkg", KIcon::Small );
 	
 	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
 	pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIcon::Small );
@@ -166,6 +168,9 @@ const QPixmap& Images::icon( int image )
 		
 		case VIEW_LOG:
 			return pxViewLog;
+			break;
+		case QUICKPKG:
+			return pxQuickPkg;
 			break;
 
 		default:

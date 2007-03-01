@@ -49,11 +49,18 @@ public:
 	bool 						pretend( const QStringList& packageList );
 	bool 						queue( const QStringList& packageList );
 	bool 						unmerge( const QStringList& packageList );
+	bool						quickpkg( const QStringList& packageList );
 	bool						sync();
 	bool						checkUpdates();
+	bool						isPaused();
+	bool						canPause();
 	
-	const EmergePackageList		packageList();
-	const QString				packageMessage();
+	const 	EmergePackageList 			packageList();
+	const 	QString					packageMessage();
+
+public slots:
+	void						slotPause();
+	void						slotUnpause();
 	
 private:
 	void						cleanup();
@@ -68,6 +75,8 @@ private slots:
 	void 						slotCleanupSync( KProcess *proc );
 	void 						slotCleanupCheckUpdates( KProcess *proc );
 	void						slotTryEmerge();
+	void						slotBackupComplete( KProcess *proc );
+
 	
 signals:
 	void						signalEmergeComplete();
@@ -78,6 +87,14 @@ private:
 	
 	// Used to collect ewarn and einfo messages spaning multiple lines
 	bool						m_completedFlag;
+
+	// Used to track a quickpkg backup
+	bool						m_backupComplete;
+	bool						m_backingUp;
+
+	// Can we pause this eProc?
+	bool						m_pausable;
+	bool						m_isPaused;
 	
 	// Package with the important message
 	QString						m_importantMessagePackage;

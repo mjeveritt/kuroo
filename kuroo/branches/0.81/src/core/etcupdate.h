@@ -74,6 +74,7 @@ private:
 	QString				m_source, m_destination;
 	
 	bool				m_changed;
+	int				m_mergedMode;
 	
 	KDirWatch			*m_mergingFile;
 };

@@ -281,6 +281,22 @@ void Queue::emergePackageStart( const QString& package, int order, int total )
 }
 
 /**
+ * Pause emerge
+ */
+void Queue::pauseEmerge()
+{
+	m_internalTimer->stop();
+}
+
+/**
+ * Unpause emerge
+ */
+void Queue::unpauseEmerge()
+{
+	m_internalTimer->start( 1000 );
+}
+
+/**
  * Set package progress as 100% = complete.
  * @param package
  */

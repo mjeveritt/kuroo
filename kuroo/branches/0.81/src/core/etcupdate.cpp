@@ -26,6 +26,7 @@
 #include <kio/job.h>
 #include <kinputdialog.h>
 #include <kdirwatch.h>
+#include <errno.h>
 
 /**
  * @class EtcUpdate
@@ -138,6 +139,8 @@ QStringList EtcUpdate::backupFilesList()
  */
 void EtcUpdate::runDiff( const QString& source, const QString& destination, bool isNew )
 {
+	struct stat st;
+
 	if ( !source.isEmpty() ) {
 		m_changed = false;
 		m_source = source;
@@ -170,6 +173,13 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, bool
 		else {
 			LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( m_destination ), KUROO );
 			
+			// get the original file mode
+			memset(&st, 0, sizeof(st));
+			m_mergedMode = -1;
+			if( !(stat( m_destination, &st ) < 0) ) {
+				m_mergedMode = (int)st.st_mode;
+			}
+
 			// Watch for changes
 			m_mergingFile->addFile( m_destination );
 			
@@ -190,22 +200,31 @@ void EtcUpdate::slotChanged()
  */
 void EtcUpdate::slotCleanupDiff( KProcess* proc )
 {
+
 	m_mergingFile->removeFile( m_destination );
 
 	if ( m_changed ) {
-	
+		
 		QDateTime dt = QDateTime::currentDateTime();
 		QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/";
 		QString backupPathDir = backupPath + dt.toString( "yyyyMMdd_hhmm" ) + "/";
 		QDir d( backupPathDir );
-		if ( !d.exists() )
+		if ( !d.exists() ) {
+			QDir bc( backupPath );
+			if( !bc.exists() )
+				bc.mkdir( backupPath );
 			d.mkdir( backupPathDir );
+		}
 		
 		// Make backup of original file
 		QString destination = m_destination;
 		destination.replace( "/", ":" );
+
 		KIO::file_copy( backupPath + "merging.orig", backupPathDir + destination + ".orig", -1, true, false, false );
 		KIO::file_copy( m_destination, backupPathDir + destination, -1, true, false, true );
+
+		KIO::chmod( m_destination, m_mergedMode );
+
 		KIO::file_delete( m_source );
 		
 		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_source )

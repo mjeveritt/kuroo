@@ -580,7 +580,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	const QStringList selectedIdList = packagesView->selectedId();
 	
-	enum Actions { APPEND, UNINSTALL, ADDWORLD, DELWORLD };
+	enum Actions { APPEND, UNINSTALL, ADDWORLD, DELWORLD, QUICKPACKAGE };
 	
 	KPopupMenu menu( this );
 	
@@ -603,14 +603,20 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	int menuItem4;
 	if ( packagesView->currentPackage()->isInstalled() )
 		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
+
+	int menuItem5;
+	if ( packagesView->currentPackage()->isInstalled() )
+		menuItem5 = menu.insertItem( ImagesSingleton::Instance()->icon( QUICKPKG ), i18n("Backup Package"), QUICKPACKAGE );
 	
 	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
 	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
 	kdDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy() << endl;
 	kdDebug() << "packagesView->currentPackage()->isInPortage()=" << packagesView->currentPackage()->isInPortage() << endl;
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
-			 || !packagesView->currentPackage()->isInPortage() )
+			 || !packagesView->currentPackage()->isInPortage() ) {
 		menu.setItemEnabled( menuItem1, false );
+		menu.setItemEnabled( menuItem5, false );
+	}
 	
 	// No uninstall when emerging or no privileges
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
@@ -626,6 +632,7 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		menu.setItemEnabled( menuItem2, false );
 		menu.setItemEnabled( menuItem3, false );
 		menu.setItemEnabled( menuItem4, false );
+		menu.setItemEnabled( menuItem5, false );
 	}
 	
 	switch( menu.exec( point ) ) {
@@ -655,6 +662,15 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 			foreach ( selectedIdList )
 				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
 			PortageSingleton::Instance()->removeFromWorld( packageList );
+			break;
+		}
+		
+		case QUICKPACKAGE: {
+			QStringList packageList;
+			foreach( selectedIdList )
+				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
+			EmergeSingleton::Instance()->quickpkg( packageList );
+			break;
 		}
 	}
 }

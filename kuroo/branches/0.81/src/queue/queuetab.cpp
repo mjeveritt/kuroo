@@ -118,6 +118,11 @@ QueueTab::~QueueTab()
 		KurooConfig::setRemove( true );
 	else
 		KurooConfig::setRemove( false );
+
+	if ( cbBackupPkg->isChecked() )
+		KurooConfig::setBackupPkg( true );
+	else
+		KurooConfig::setBackupPkg( false );
 }
 
 /**
@@ -146,7 +151,12 @@ void QueueTab::slotInit()
 		cbRemove->setChecked( true );
 	else
 		cbRemove->setChecked( false );
-	
+
+	if ( KurooConfig::backupPkg() )
+		cbBackupPkg->setChecked( true );
+	else
+		cbBackupPkg->setChecked( false );
+
 	slotRemoveInstalled();
 	
 	QToolTip::add( cbDownload, i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
@@ -161,6 +171,9 @@ void QueueTab::slotInit()
 	                                  "Portage will normally merge those files only once to prevent the user"
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+
+	QToolTip::add( cbBackupPkg, i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+	                                  "but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
 	
 	// Keyboard shortcuts
 	KAccel* pAccel = new KAccel( this );
@@ -417,6 +430,11 @@ void QueueTab::slotStop()
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
+				// added an explicit busy switch to allow someone to continue once
+				// an abort has happened. 20070223 - aga
+				SignalistSingleton::Instance()->setKurooBusy(false);
+				// added a log entry for the abort
+				LogSingleton::Instance()->writeLog( i18n("Emerge aborted by user."), KUROO );
 		}
 }
 

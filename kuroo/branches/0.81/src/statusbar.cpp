@@ -213,10 +213,29 @@ void KurooStatusBar::clearElapsedTime()
  */
 void KurooStatusBar::startProgress()
 {
-    statusBarProgress->show();
+	statusBarProgress->show();
 	statusBarProgress->setTotalSteps( 0 );
 	statusBarProgress->setTextEnabled( false );
 	m_diffTimer->start( 1000 );
+}
+
+/**
+ * Pause Timers
+ */
+void KurooStatusBar::pauseTimers()
+{
+	m_diffTimer->stop();
+	m_internalTimer->stop();
+	statusBarLabel->setText( i18n("Paused...") );
+}
+
+/**
+ * Unpause Timers
+ */
+void KurooStatusBar::unpauseTimers()
+{
+	m_diffTimer->start(1000);
+	m_internalTimer->start( 1000 );
 }
 
 /**

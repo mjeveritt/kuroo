@@ -29,6 +29,8 @@
 #include <kuser.h>
 #include <kdeversion.h>
 
+#include <signal.h>
+
 /**
  * @class Emerge
  * @short All Gentoo emerge command.
@@ -56,6 +58,8 @@ Emerge::~Emerge()
 void Emerge::init( QObject *parent )
 {
 	m_parent = parent;
+	m_backupComplete = false;
+	m_backingUp = false;
 }
 
 /**
@@ -110,37 +114,143 @@ const EmergePackageList Emerge::packageList()
  */
 bool Emerge::queue( const QStringList& packageList )
 {
-	m_blocks.clear();
-	m_importantMessage = QString::null;
-	m_unmasked = QString::null;
-	m_lastEmergeList = packageList;
-	m_etcUpdateCount = 0;
-	
-	m_emergePackageList.clear();
-	eProc->resetAll();
-	*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
-	
-	// Add emerge options and packages
-	foreach( packageList )
-		*eProc << *it;
-	
-	eProc->start( KProcess::OwnGroup, true );
-	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
-	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
-	SignalistSingleton::Instance()->setKurooBusy( true );
-	
-	if ( !eProc->isRunning() ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
-		slotCleanupQueue( eProc );
-		return false;
+	bool ret = false;
+
+	if( KurooConfig::backupPkg() && !m_backupComplete ) {
+		m_backingUp = true;
+		Emerge::quickpkg( packageList );
+		ret = true;
 	}
 	else {
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
-		KurooStatusBar::instance()->startTimer();
-		return true;
+		m_backupComplete = false;
+		m_blocks.clear();
+		m_importantMessage = QString::null;
+		m_unmasked = QString::null;
+		m_lastEmergeList = packageList;
+		m_etcUpdateCount = 0;
+		
+		m_emergePackageList.clear();
+		eProc->resetAll();
+		*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
+		
+		// Add emerge options and packages
+		foreach( packageList )
+			*eProc << *it;
+		
+		eProc->start( KProcess::OwnGroup, true );
+		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
+		SignalistSingleton::Instance()->setKurooBusy( true );
+		
+		if ( !eProc->isRunning() ) {
+			LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
+			slotCleanupQueue( eProc );
+			ret =  false;
+		}
+		else {
+			m_pausable = true;
+			LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( packageList.join(" ") ), KUROO );
+			KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
+			KurooStatusBar::instance()->startTimer();
+			ret =  true;
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * Pause the eproc
+ */
+void Emerge::slotPause()
+{
+	if ( !eProc->isRunning() || !m_pausable ) {
+		LogSingleton::Instance()->writeLog( i18n("\nEmerge is not running or cannot be paused..."), ERROR );
+	}
+	else {
+		KurooStatusBar::instance()->pauseTimers();
+		QueueSingleton::Instance()->pauseEmerge();
+		eProc->kill(SIGSTOP);
+		m_isPaused = true;
 	}
 }
+
+/**
+ * Unpause the eproc
+ */
+void Emerge::slotUnpause()
+{
+	if ( !m_isPaused ) {
+		LogSingleton::Instance()->writeLog( i18n("\nEmerge is not paused..."), ERROR );
+	}
+	KurooStatusBar::instance()->setProgressStatus("Emerge", i18n("Installing packages in queue...") );
+	KurooStatusBar::instance()->unpauseTimers();
+	QueueSingleton::Instance()->unpauseEmerge();
+	eProc->kill(SIGCONT);
+	m_isPaused = false;
+}
+
+/**
+ * Are we paused?
+ * @return bool
+ */
+bool Emerge::isPaused()
+{
+	return m_isPaused;
+}
+
+/**
+ * Can we pasue?
+ * @return bool
+ */
+bool Emerge::canPause()
+{
+	return m_pausable;
+}
+
+/**
+ * Quickpkg something
+ * @param packageList
+ * @return success
+ */
+bool Emerge::quickpkg( const QStringList& packageList )
+{
+	bool ret = false;
+	m_lastEmergeList = packageList;
+
+	eProc->resetAll();
+	*eProc << "quickpkg";
+	
+	// Add the packages
+	foreach( packageList )
+		*eProc << *it;
+
+	eProc->start( KProcess::OwnGroup, true );
+	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+
+	if ( m_backingUp ) 
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotBackupComplete(KProcess*) ) );
+	else
+		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
+
+	m_backingUp = false;
+
+	SignalistSingleton::Instance()->setKurooBusy( true );
+
+	if ( !eProc->isRunning() ) {
+		LogSingleton::Instance()->writeLog( i18n("\nError: Quickpkg didn't start. "), ERROR );
+		slotCleanupQueue( eProc );
+	}
+	else {
+		LogSingleton::Instance()->writeLog( i18n("Quickpkg %1 started...").arg( packageList.join(" ") ), KUROO );
+		KurooStatusBar::instance()->setProgressStatus( "Quickpkg", i18n("Building binary packages...") );
+		KurooStatusBar::instance()->startTimer();
+		ret = true;
+	}
+
+	return ret;
+}
+
 
 /**
  * Emerge pretend list of packages.
@@ -446,7 +556,7 @@ const QString Emerge::packageMessage()
 //////////////////////////////////////////////////////////////////////////////
 
 /**
- * Cleanup when emerge process is done.
+ * Cleanup when emerge process is 
  * Stop statusbar progress and set kuroo to ready.
  * Present eventual messages collected during emerge to the user.
  */
@@ -483,15 +593,28 @@ void Emerge::cleanup()
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
+void Emerge::slotBackupComplete( KProcess* proc )
+{
+	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotBackupComplete(KProcess*) ) );
+	HistorySingleton::Instance()->updateStatistics();
+	m_backupComplete = 1;
+	Emerge::queue(m_lastEmergeList);
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
 void Emerge::slotCleanupQueue( KProcess* proc )
 {
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
 	cleanup();
 	HistorySingleton::Instance()->updateStatistics();
+	m_pausable = false;
 	emit signalEmergeComplete();
 }
-
 /**
  * Disconnect signals and signal termination to main thread.
  * @param proc	

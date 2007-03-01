@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>619</width>
-            <height>531</height>
+            <width>639</width>
+            <height>523</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -36,6 +36,12 @@
         <widget class="QSplitter" row="0" column="0">
             <property name="name">
                 <cstring>splitter1</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>620</width>
+                    <height>524</height>
+                </size>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -113,10 +119,10 @@
                                             </size>
                                         </property>
                                         <property name="text">
-                                            <string>Remove</string>
+                                            <string>&amp;Remove</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Alt+R</string>
                                         </property>
                                         <property name="autoDefault">
                                             <bool>false</bool>
@@ -363,8 +369,8 @@
                 </property>
                 <property name="minimumSize">
                     <size>
-                        <width>0</width>
-                        <height>160</height>
+                        <width>620</width>
+                        <height>176</height>
                     </size>
                 </property>
                 <property name="frameShape">
@@ -373,96 +379,11 @@
                 <property name="frameShadow">
                     <enum>Plain</enum>
                 </property>
-                <grid>
+                <hbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>4</number>
-                    </property>
-                    <widget class="QLayoutWidget" row="0" column="1">
-                        <property name="name">
-                            <cstring>layout9</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="spacing">
-                                <number>0</number>
-                            </property>
-                            <widget class="QCheckBox" row="1" column="0">
-                                <property name="name">
-                                    <cstring>cbDownload</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Download all packa&amp;ges before installing them (--fetch-all-uri)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_2</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>1</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="margin">
-                                    <number>0</number>
-                                </property>
-                                <property name="text">
-                                    <string>&lt;b&gt;Emerge Options&lt;/b&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="3" column="0">
-                                <property name="name">
-                                    <cstring>cbNoWorld</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Do not add the pac&amp;kages to the world profile (--oneshot)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                            </widget>
-                            <spacer row="4" column="0">
-                                <property name="name">
-                                    <cstring>spacer5</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>30</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QCheckBox" row="2" column="0">
-                                <property name="name">
-                                    <cstring>cbForceConf</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Force reinstall of config files (--&amp;noconfmem)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>layout9</cstring>
                         </property>
@@ -513,7 +434,7 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>20</width>
+                                        <width>46</width>
                                         <height>50</height>
                                     </size>
                                 </property>
@@ -552,7 +473,97 @@
                             </widget>
                         </grid>
                     </widget>
-                </grid>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout9</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>1</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;b&gt;Emerge Options&lt;/b&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbDownload</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Download all packa&amp;ges before installing them (--fetch-all-uri)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbForceConf</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Force reinstall of config files (--&amp;noconfmem)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbNoWorld</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Do not add the pac&amp;kages to the world profile (--oneshot)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbBackupPkg</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Backup packages before merging.</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer5</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </hbox>
             </widget>
         </widget>
     </grid>

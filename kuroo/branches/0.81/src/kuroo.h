@@ -76,7 +76,7 @@ private:
 	Message 			*kurooMessage;
 	KurooInit 			*kurooInit;
 	KurooView 			*m_view;
-	KConfigDialog 		*prefDialog;
+	KConfigDialog 			*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;

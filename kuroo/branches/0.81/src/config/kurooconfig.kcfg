@@ -114,6 +114,9 @@
 		<entry name="remove" type="Bool">
 			<default>false</default>
 		</entry>
+		<entry name="backupPkg" type="Bool">
+			<default>false</default>
+		</entry>
 	</group>
 	<group name="warnings">
 		<entry name="etcFiles" type="String">

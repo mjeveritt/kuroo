@@ -53,6 +53,8 @@ public:
 	void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
 	void					setRemoveInstalled( bool removeInstalled );
+	void					pauseEmerge();
+	void					unpauseEmerge();
 	
 public slots:
 	void					slotOneStep();

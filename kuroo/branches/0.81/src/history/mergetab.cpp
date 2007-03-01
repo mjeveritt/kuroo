@@ -112,12 +112,10 @@ void MergeTab::slotLoadConfFiles()
 {
 	DEBUG_LINE_INFO;
 	QStringList confFilesList = EtcUpdateSingleton::Instance()->confFilesList();
-	if ( !confFilesList.isEmpty() )
-		unmergeView->loadConfFiles( confFilesList );
+	unmergeView->loadConfFiles( confFilesList );
 	
 	QStringList backupFilesList = EtcUpdateSingleton::Instance()->backupFilesList();
-	if ( !backupFilesList.isEmpty() )
-		mergeView->loadBackupFiles( backupFilesList );
+	mergeView->loadBackupFiles( backupFilesList );
 	
 	emit signalMergeChanged();
 }

@@ -33,30 +33,96 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>kcfg_updateNewUse</cstring>
+                        <cstring>layout3</cstring>
                     </property>
-                    <property name="text">
-                        <string>&amp;New Use</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>kcfg_updateDeep</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Deep</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_updateNewUse</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;New Use</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+N</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_updateBuilddeps</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Build Dependancies</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+B</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>--with-bdeps</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>&lt;b&gt;&lt;u&gt;Install with build dependancies&lt;/u&gt;&lt;/b&gt;&lt;br&gt;
+This enables the --with-bdeps option for emerge. &lt;br&gt;
+This can make your install times increase greatly and should be used with care.</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_updateDeep</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Deep</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+D</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer16</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </hbox>
+                        </widget>
+                    </vbox>
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
@@ -137,10 +203,10 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                         <cstring>kcfg_installedColumn</cstring>
                     </property>
                     <property name="text">
-                        <string>Show installed pac&amp;kages in separate column</string>
+                        <string>Show inst&amp;alled packages in separate column</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+K</string>
+                        <string>Alt+A</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>

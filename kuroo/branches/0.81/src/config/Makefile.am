@@ -8,7 +8,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libconfig.la
 
 libconfig_la_SOURCES = settings.kcfgc configdialog.cpp options1.ui options2.ui \
-	options7.ui
+		options7.ui options8.ui
 
 noinst_HEADERS = configdialog.h
 

@@ -24,6 +24,7 @@
 #include "options1.h"
 #include "options2.h"
 #include "options7.h"
+#include "options8.h"
 
 #include <qtextstream.h>
 #include <qdir.h>
@@ -54,10 +55,12 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	Options1* opt1 = new Options1( this, i18n("General") );
 	Options2* opt2 = new Options2( this, i18n("make.conf") );
 	Options7* opt7 = new Options7( this, i18n("Etc-update warnings") );
+	Options8* opt8 = new Options8( this, i18n("Housekeeping") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
 	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
+	addPage( opt8, i18n("Housekeeping"), "kuroo", i18n("Control automatic file cleanup and rebuilding") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
@@ -77,6 +80,7 @@ void ConfigDialog::slotDefaults()
 	parseMakeConf();
 	show();
 }
+
 
 /**
  * Save settings when user press "Apply".

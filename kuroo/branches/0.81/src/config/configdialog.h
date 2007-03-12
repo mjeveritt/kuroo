@@ -27,6 +27,7 @@ class QComboBox;
 class QGroupBox;
 class QVBox;
 class Options2;
+class Options8;
 
 /**
  * @class ConfigDialog

@@ -132,7 +132,10 @@ bool Emerge::queue( const QStringList& packageList )
 		m_emergePackageList.clear();
 		eProc->resetAll();
 		*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
-		
+                
+                if( KurooConfig::updateBuilddeps() )
+                  *eProc << "--with-bdeps=y";
+
 		// Add emerge options and packages
 		foreach( packageList )
 			*eProc << *it;
@@ -149,6 +152,8 @@ bool Emerge::queue( const QStringList& packageList )
 		}
 		else {
 			m_pausable = true;
+                        if( KurooConfig::enableEclean() )
+                          m_doeclean = true;
 			LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( packageList.join(" ") ), KUROO );
 			KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
 			KurooStatusBar::instance()->startTimer();
@@ -268,6 +273,9 @@ bool Emerge::pretend( const QStringList& packageList )
 	m_emergePackageList.clear();
 	eProc->resetAll();
 	*eProc << "emerge" << "--nospinner" << "--color=n" << "--columns" << "-pv";
+        
+        if( KurooConfig::updateBuilddeps() )
+          *eProc << "--with-bdeps=y";
 	
 	// Add argument for each of the attached packages
 	foreach( packageList )
@@ -372,6 +380,9 @@ bool Emerge::checkUpdates()
 	
 	if( KurooConfig::updateNewUse() )
 		*eProc << "-N";
+        
+        if( KurooConfig::updateBuilddeps() )
+          *eProc << "--with-bdeps=y";
 	
 	*eProc << "world";
 
@@ -394,6 +405,7 @@ bool Emerge::checkUpdates()
  * Parse emerge process output for messages and packages.
  * @param proc	
  */
+
 void Emerge::slotEmergeOutput( KProcIO *proc )
 {
 	QString line;	
@@ -494,35 +506,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 							if ( !m_unmasked.isEmpty() && line.startsWith("# ") )
 								m_importantMessage += line.section( "# ", 1, 1 ) + "<br>";
 	
-		//////////////////////////////////////////////////////////////
-		// Collect einfo and ewarn messages
-		//////////////////////////////////////////////////////////////
-// 		if ( m_completedFlag ) {
-// 			
-// 			QString eMessage = line.section( " * ", 1, 1 ) + line.section( "*** ", 1, 1 );
-// 			if ( !eMessage.isEmpty() ) {
-// 
-// 				eMessage = eMessage.replace( '>', "&gt;" ).replace( '<', "&lt;" ).replace('%', "&#37;") + "<br>";
-// 				eMessage.remove( "!!!" );
-// 				
-// 				if ( !eMessage.isEmpty() ) {
-// 					
-// 					// Append package einfo
-// 					if ( !m_importantMessagePackage.isEmpty() ) {
-// 						if ( m_importantMessage.isEmpty() )
-// 							m_importantMessage += "<b>" + m_importantMessagePackage + "</b>" + eMessage;
-// 						else
-// 							m_importantMessage += "<br><b>" + m_importantMessagePackage + "</b>" + eMessage;
-// 						m_packageMessage = eMessage;
-// 						m_importantMessagePackage = QString::null;
-// 					}
-// 					else {
-// 						m_packageMessage += eMessage;
-// 						m_importantMessage += eMessage;
-// 					}
-// 				}
-// 			}
-// 		}
 		
 		// Save to kuroo.log for debugging
 		LogSingleton::Instance()->writeLog( line, TOLOG );
@@ -567,11 +550,6 @@ void Emerge::cleanup()
 	SignalistSingleton::Instance()->setKurooBusy( false );
 	QueueSingleton::Instance()->addPackageList( m_emergePackageList );
 	
-// 	if ( !m_blocks.isEmpty() ) {
-// 		if ( !m_importantMessage.isEmpty() )
-// 			m_importantMessage += "<br>";
-// 		m_importantMessage += m_blocks.join("<br>");
-// 	}
 	
 	if ( !m_unmasked.isEmpty() ) {
 		if ( KUser().isSuperUser() )
@@ -580,13 +558,120 @@ void Emerge::cleanup()
 			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroo as root to unmask packages!"),
 			                             i18n("Auto-unmasking packages"), NULL );
 	}
-// 	else {
-// 		if ( !m_importantMessage.isEmpty() )
-// 			Message::instance()->prompt( i18n("Emerge messages"), i18n("Please check log for more information!"), m_importantMessage );
-// 	}
+
+	/* if m_doclean then perform an eclean */
+        if( m_doeclean )
+        {
+          if( KurooConfig::ecleanDistfiles() )
+          {
+            QTextCodec *codec = QTextCodec::codecForName("utf8");
+            eClean1 = new KProcIO( codec );
+	    eClean1->setUseShell( true, "/bin/bash" );
 	
-// 	if ( m_etcUpdateCount != 0 )
-// 		EtcUpdateSingleton::Instance()->askUpdate( m_etcUpdateCount );
+            #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+	    eClean1->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
+	    #endif
+            eClean1->resetAll();
+            *eClean1 << "eclean";
+            if( KurooConfig::ecleanTimeLimit() )
+            {
+              *eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
+            }
+            if( KurooConfig::ecleanDestructive() )
+            {
+              *eClean1 << "--destructive";
+            }
+            *eClean1 << "--nocolor" << "distfiles";
+            
+            if( KurooConfig::ecleanFetchRestrict() )
+            {
+              *eClean1 << "--fetch-restricted";
+            }
+            if( KurooConfig::ecleanSizeLimit() )
+            {
+              *eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
+            }
+            if ( !eClean1->start( KProcess::OwnGroup, true ) ) {
+                  LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );
+                  m_doeclean = false;
+                  return;
+            }
+            else {
+                  connect( eClean1, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+                  connect( eClean1, SIGNAL( processExited(KProcess*) ), this, SLOT( slotEmergeDistfilesComplete(KProcess*) ) );
+                  SignalistSingleton::Instance()->setKurooBusy( true );
+                  LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles started"), KUROO );
+                  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Cleaning distfiles...") );
+                  KurooStatusBar::instance()->startProgress();
+                  m_doeclean = false;
+                  return;
+            }
+          }
+        }
+}
+
+/**
+ * Run an eclean for packages if necessary
+ * @param proc
+ */
+void Emerge::slotEmergeDistfilesComplete( KProcess* eClean1 )
+{
+  disconnect( eClean1, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+  disconnect( eClean1, SIGNAL( processExited(KProcess*) ), this, SLOT( slotEmergeDistfilesComplete(KProcess*) ) );
+  SignalistSingleton::Instance()->setKurooBusy( false );
+  LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles complete"), KUROO );
+  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
+  KurooStatusBar::instance()->stopTimer();
+  delete eClean1; // cleanup that memory
+  
+  if( KurooConfig::ecleanDistfiles() )
+  {
+    QTextCodec *codec = QTextCodec::codecForName("utf8");
+    eClean2 = new KProcIO( codec );
+    eClean2->setUseShell( true, "/bin/bash" );
+
+    #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+    eClean2->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
+    #endif
+
+    eClean2->resetAll();
+    *eClean2 << "eclean";
+    if( KurooConfig::ecleanTimeLimit() )
+    {
+      *eClean2 << "-t" << KurooConfig::ecleanTimeLimit();
+    }
+    
+
+    *eClean2 << "--nocolor" << "packages";
+    
+    if ( !eClean2->start( KProcess::OwnGroup, true ) ) {
+          LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );
+          KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
+          KurooStatusBar::instance()->stopTimer();
+          return;
+    }
+    else {
+          connect( eClean2, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+          connect( eClean2, SIGNAL( processExited(KProcess*) ), this, SLOT( slotEClean2Complete(KProcess*) ) );
+          SignalistSingleton::Instance()->setKurooBusy( true );
+          LogSingleton::Instance()->writeLog( i18n("\nEclean of packages started"), KUROO );
+          KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Cleaning distfiles...") );
+          KurooStatusBar::instance()->startProgress();
+          return;
+    }
+  }
+        
+}
+
+void Emerge::slotEClean2Complete(KProcess* eClean2)
+{
+  disconnect( eClean2, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+  disconnect( eClean2, SIGNAL( processExited(KProcess*) ), this, SLOT( slotEClean2Complete(KProcess*) ) );
+  LogSingleton::Instance()->writeLog( i18n("\nEcleaning packages complete"), KUROO );
+  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Ready") );
+  KurooStatusBar::instance()->stopTimer();
+  SignalistSingleton::Instance()->setKurooBusy( false );
+  delete eClean2;
 }
 
 /**
@@ -615,6 +700,7 @@ void Emerge::slotCleanupQueue( KProcess* proc )
 	m_pausable = false;
 	emit signalEmergeComplete();
 }
+
 /**
  * Disconnect signals and signal termination to main thread.
  * @param proc	

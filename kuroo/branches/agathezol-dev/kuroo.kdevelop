@@ -124,12 +124,12 @@
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
-      <activetarget>src/config/libconfig.la</activetarget>
+      <activetarget>src/core/libcore.la</activetarget>
     </general>
     <configurations>
       <default>
         <envvars/>
-        <configargs>--enable-debug=full --without-arts</configargs>
+        <configargs>--enable-debug=full</configargs>
         <builddir>debug</builddir>
         <topsourcedir/>
         <cppflags/>
@@ -147,7 +147,10 @@
     </configurations>
   </kdevautoproject>
   <kdevcppsupport>
-    <references/>
+    <references>
+      <pcs>KDElibs</pcs>
+      <pcs>Qt</pcs>
+    </references>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>

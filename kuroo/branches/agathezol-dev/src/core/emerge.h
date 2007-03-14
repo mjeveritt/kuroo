@@ -76,6 +76,8 @@ private slots:
 	void 						slotCleanupCheckUpdates( KProcess *proc );
 	void						slotTryEmerge();
 	void						slotBackupComplete( KProcess *proc );
+        void                                            slotEmergeDistfilesComplete( KProcess* proc );
+        void                                            slotEClean2Complete( KProcess* proc );
 
 	
 signals:
@@ -84,7 +86,9 @@ signals:
 private:
 	QObject*					m_parent;
 	KProcIO*					eProc;
-	
+	KProcIO*                                        eClean1;
+        KProcIO*                                        eClean2;
+        
 	// Used to collect ewarn and einfo messages spaning multiple lines
 	bool						m_completedFlag;
 
@@ -95,6 +99,9 @@ private:
 	// Can we pause this eProc?
 	bool						m_pausable;
 	bool						m_isPaused;
+
+	// should we be ecleaning?
+	bool						m_doeclean;
 	
 	// Package with the important message
 	QString						m_importantMessagePackage;

@@ -60,7 +60,7 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
 	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
-	addPage( opt8, i18n("Housekeeping"), "kuroo", i18n("Control automatic file cleanup and rebuilding") );
+	addPage( opt8, i18n("Housekeeping"), "kuroo_housekeeping", i18n("Control automatic file cleanup and rebuilding") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );

@@ -16,6 +16,6 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE="debug"
 
-RDEPEND="kde-misc/kdiff3"
+RDEPEND="kde-misc/kdiff3 app-portage/gentoolkit"
 
 need-kde 3.5

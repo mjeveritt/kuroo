@@ -57,6 +57,7 @@ public:
 	
 	const 	EmergePackageList 			packageList();
 	const 	QString					packageMessage();
+        void                                            setSkipHousekeeping(bool x);
 
 public slots:
 	void						slotPause();
@@ -66,6 +67,7 @@ private:
 	void						cleanup();
 	bool						countEtcUpdates( const QString& line );
 	void						askUnmaskPackage( const QString& packageKeyword );
+        bool                                            skipHousekeeping();
 	
 private slots:
 	void 						slotEmergeOutput( KProcIO *proc );
@@ -78,6 +80,7 @@ private slots:
 	void						slotBackupComplete( KProcess *proc );
         void                                            slotEmergeDistfilesComplete( KProcess* proc );
         void                                            slotEClean2Complete( KProcess* proc );
+        void                                            slotRevdepRebuildComplete( KProcess* proc );
 
 	
 signals:
@@ -88,6 +91,7 @@ private:
 	KProcIO*					eProc;
 	KProcIO*                                        eClean1;
         KProcIO*                                        eClean2;
+        KProcIO*                                        ioRevdepRebuild;
         
 	// Used to collect ewarn and einfo messages spaning multiple lines
 	bool						m_completedFlag;
@@ -102,6 +106,7 @@ private:
 
 	// should we be ecleaning?
 	bool						m_doeclean;
+        bool                                            m_dorevdeprebuild;
 	
 	// Package with the important message
 	QString						m_importantMessagePackage;
@@ -126,6 +131,8 @@ private:
 	
 	// Count of etc-updates files to merge
 	int							m_etcUpdateCount;
+        
+        bool                                            m_skipHousekeeping;
 };
 
 #endif

@@ -383,6 +383,11 @@ void QueueTab::slotGo()
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
 	
+        if ( cbSkipHousekeeping->isChecked() )
+          EmergeSingleton::Instance()->setSkipHousekeeping(true);
+        else
+          EmergeSingleton::Instance()->setSkipHousekeeping(false);
+        
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {

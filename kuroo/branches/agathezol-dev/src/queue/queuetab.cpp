@@ -123,6 +123,11 @@ QueueTab::~QueueTab()
 		KurooConfig::setBackupPkg( true );
 	else
 		KurooConfig::setBackupPkg( false );
+                        
+        if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+          cbSkipHousekeeping->setDisabled( false );
+        else
+          cbSkipHousekeeping->setDisabled( true );
 }
 
 /**
@@ -156,6 +161,12 @@ void QueueTab::slotInit()
 		cbBackupPkg->setChecked( true );
 	else
 		cbBackupPkg->setChecked( false );
+        
+        if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+           cbSkipHousekeeping->setDisabled( false );
+        else
+           cbSkipHousekeeping->setDisabled( true );
+         
 
 	slotRemoveInstalled();
 	
@@ -289,6 +300,7 @@ void QueueTab::slotBusy()
 		cbNoWorld->setDisabled( true );
 		pbCheck->setDisabled( true );
 		pbGo->setDisabled( true );
+                cbSkipHousekeeping->setDisabled( true );
 	}
 	else
 		slotButtons();
@@ -299,61 +311,73 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
-	if ( m_packageInspector->isVisible() )
-		return;
-	
-	// Kuroo is busy emerging toggle to "abort"
-	if ( EmergeSingleton::Instance()->isRunning() ) {
-		pbGo->setText( i18n( "Abort Installation" ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-	}
-	else {
-		pbGo->setText( i18n( "Step &2: Start Installation" ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-	}
-	
-	// No package selected, disable all buttons
-	if ( queueView->selectedId().isEmpty() ) {
-		pbRemove->setDisabled( true );
-		pbAdvanced->setDisabled( true );
-		return;
-	}
-	
-	// Queue is not empty - enable button "Remove all" and "Check Installation"
-	cbDownload->setDisabled( false );
-	
-	// When emerging packages do not allow user to change the queue
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
-		pbRemove->setDisabled( true );
-		pbClear->setDisabled( true );
-		pbCheck->setDisabled( true );
-	}
-	else {
-		pbRemove->setDisabled( false );
-		pbClear->setDisabled( false );
-		pbCheck->setDisabled( false );
-	}
-	
-	// User is su and packages in queue are "checked" - enable checkboxes
-	if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
-		pbGo->setDisabled( false );
-		cbForceConf->setDisabled( false );
-		cbNoWorld->setDisabled( false );
-		cbRemove->setDisabled( false );
-	}
-	else {
-		pbGo->setDisabled( true );
-		cbForceConf->setDisabled( true );
-		cbNoWorld->setDisabled( true );
-		cbRemove->setDisabled( true );
-	}
-	
-	m_packageInspector->setDisabled( false );
-	pbAdvanced->setDisabled( false );
+        if ( m_packageInspector->isVisible() )
+                return;
+        
+        // Kuroo is busy emerging toggle to "abort"
+        if ( EmergeSingleton::Instance()->isRunning() ) {
+                pbGo->setText( i18n( "Abort Installation" ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+                connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+        }
+        else {
+                pbGo->setText( i18n( "Step &2: Start Installation" ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+                connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+                if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+                  cbSkipHousekeeping->setDisabled( false );
+                else
+                  cbSkipHousekeeping->setDisabled( true );
+        }
+        
+        // No package selected, disable all buttons
+        if ( queueView->selectedId().isEmpty() ) {
+                pbRemove->setDisabled( true );
+                pbAdvanced->setDisabled( true );
+                return;
+        }
+        
+
+        
+        // Queue is not empty - enable button "Remove all" and "Check Installation"
+        cbDownload->setDisabled( false );
+        
+        // When emerging packages do not allow user to change the queue
+        if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+                pbRemove->setDisabled( true );
+                pbClear->setDisabled( true );
+                pbCheck->setDisabled( true );
+                cbSkipHousekeeping->setDisabled( true );
+        }
+        else {
+                pbRemove->setDisabled( false );
+                pbClear->setDisabled( false );
+                pbCheck->setDisabled( false );
+                if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+                  cbSkipHousekeeping->setDisabled( false );
+                else
+                  cbSkipHousekeeping->setDisabled( true );
+         }
+                
+        
+        // User is su and packages in queue are "checked" - enable checkboxes
+        if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
+                pbGo->setDisabled( false );
+                cbForceConf->setDisabled( false );
+                cbNoWorld->setDisabled( false );
+                cbRemove->setDisabled( false );
+        }
+        else {
+                pbGo->setDisabled( true );
+                cbForceConf->setDisabled( true );
+                cbNoWorld->setDisabled( true );
+                cbRemove->setDisabled( true );
+        }
+        
+        m_packageInspector->setDisabled( false );
+        pbAdvanced->setDisabled( false );
 }
 
 

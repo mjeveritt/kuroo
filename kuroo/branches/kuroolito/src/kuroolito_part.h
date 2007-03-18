@@ -18,20 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef KUROOLITO_PART_H
+#define KUROOLITO_PART_H
 
-#ifndef _KUROO_H_
-#define _KUROO_H_
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include "configdialog.h"
-#include "mainwindow.h"
 #include "portagetab.h"
 
-#include <kapplication.h>
-#include <kparts/mainwindow.h>
+#include <kparts/part.h>
+#include <kparts/factory.h>
 
 class KAction;
 class KConfigDialog;
@@ -44,33 +37,34 @@ class Queue;
 class Results;
 class SystemTray;
 
-/**
- * @class Kuroolito
- * @short Main kde window with menus, system tray icon and statusbar.
- */
-class Kuroolito : public KParts::MainWindow
+class KuroolitoPart : public KParts::ReadWritePart
 {
-Q_OBJECT
+	Q_OBJECT
 public:
-	Kuroolito();
-	virtual ~Kuroolito();
-	
-private slots:
-	void 				introWizard();
-	void 				slotPreferences();
-	void				slotBusy();
-	bool 				queryClose();
-	bool 				queryExit();
-	void 				slotQuit();
-	void				slotWait();
-	void 				slotTerminate();
-	void				slotWhatsThis( int tabIndex );
+    KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name );
+
+    virtual ~KuroolitoPart();
+
+protected:
+    /**
+     * This must be implemented by each part
+     */
+    virtual bool openFile();
+
+    /**
+     * This must be implemented by each read-write part
+     */
+    virtual bool saveFile();
+
+protected slots:
+    void fileOpen();
+    void fileSaveAs();
+
 	
 private:
 	void 				setupActions();
 	
 private:
-	KParts::ReadWritePart *m_part;
 	SystemTray			*systemTray;
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
@@ -83,5 +77,23 @@ private:
 	PortageTab 			*viewPortage;
 };
 
-#endif // _KUROO_H_
+class KInstance;
+class KAboutData;
 
+class KuroolitoPartFactory : public KParts::Factory
+{
+    Q_OBJECT
+public:
+    KuroolitoPartFactory();
+    virtual ~KuroolitoPartFactory();
+    virtual KParts::Part* createPartObject( QWidget *parentWidget, const char *widgetName,
+                                            QObject *parent, const char *name,
+                                            const char *classname, const QStringList &args );
+    static KInstance* instance();
+ 
+private:
+    static KInstance* s_instance;
+    static KAboutData* s_about;
+};
+
+#endif

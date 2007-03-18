@@ -56,9 +56,11 @@ enum Focus {
  * @class PortageTab
  * @short Package view with filters.
  */
-PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
+PortageTab::PortageTab( QWidget* parent/*, PackageInspector *packageInspector*/ )
 	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
-	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
+// 	m_packageInspector( packageInspector ),
+// 	m_uninstallInspector( 0 ),
+	m_delayFilters( 0 )
 {
 
 	// Connect the filters
@@ -90,9 +92,9 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Connect changes made in Inspector to this view so it gets updated
-	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
-	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
+// 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
+// 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
+// 	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -160,8 +162,8 @@ void PortageTab::slotWhatsThis()
  */
 void PortageTab::slotNextPackage( bool isNext )
 {
-	if ( !m_packageInspector->isParentView( VIEW_PORTAGE ) )
-		return;
+// 	if ( !m_packageInspector->isParentView( VIEW_PORTAGE ) )
+// 		return;
 	
 	packagesView->nextPackage( isNext );
 }
@@ -204,13 +206,13 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	if ( m_packageInspector->isVisible() )
-		return;
-	else {
+// 	if ( m_packageInspector->isVisible() )
+// 		return;
+// 	else {
 		filterGroup->setDisabled( false );
 		searchFilter->setDisabled( false );
 		pbClearFilter->setDisabled( false );
-	}
+// 	}
 	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
@@ -218,7 +220,7 @@ void PortageTab::slotButtons()
 		return;
 	}
 	
-	m_packageInspector->setDisabled( false );
+// 	m_packageInspector->setDisabled( false );
 	pbAdvanced->setDisabled( false );
 }
 
@@ -288,7 +290,7 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KuroolitoDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-		m_packageInspector->hide();
+// 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
 		packagesView->showNoHitsWarning( true );
@@ -354,10 +356,10 @@ void PortageTab::slotAdvanced()
 
 void PortageTab::slotPackage()
 {
-	if ( m_packageInspector->isVisible() )
+// 	if ( m_packageInspector->isVisible() )
 		processPackage( true );
-	else
-		processPackage( false );
+// 	else
+// 		processPackage( false );
 }
 
 /**
@@ -366,8 +368,8 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
-	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
-		return;
+// 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
+// 		return;
 	
 	summaryBrowser->clear();
 	
@@ -476,8 +478,8 @@ void PortageTab::processPackage( bool viewInspector )
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
 	
 	// Refresh inspector if visible
-	if ( viewInspector )
-		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
+// 	if ( viewInspector )
+// 		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
 }
 
 /**
@@ -495,22 +497,22 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	enum Actions { APPEND, UNINSTALL, ADDWORLD, DELWORLD };
 	
-	KPopupMenu menu( this );
-	
-	int menuItem2;
-	menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
-
-	
-	if ( m_packageInspector->isVisible() ) {
-		menu.setItemEnabled( menuItem2, false );
-	}
-	
-	switch( menu.exec( point ) ) {
-
-		case DETAILS:
-			slotAdvanced();
-			break;
-	}
+// 	KPopupMenu menu( this );
+// 	
+// 	int menuItem2;
+// 	menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
+// 
+// 	
+// 	if ( m_packageInspector->isVisible() ) {
+// 		menu.setItemEnabled( menuItem2, false );
+// 	}
+// 	
+// 	switch( menu.exec( point ) ) {
+// 
+// 		case DETAILS:
+// 			slotAdvanced();
+// 			break;
+// 	}
 }
 
 #include "portagetab.moc"

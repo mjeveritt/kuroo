@@ -1,0 +1,135 @@
+/***************************************************************************
+ *   Copyright (C) 2005 by Karye   *
+ *   karye@users.sourceforge.net   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include "kuroolito_part.h"
+#include "common.h"
+#include "threadweaver.h"
+#include "systemtray.h"
+#include "kurooinit.h"
+#include "kuroo.h"
+#include "statusbar.h"
+#include "introdlg.h"
+#include "portagetab.h"
+#include "packageinspector.h"
+
+KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name )
+    : KParts::ReadWritePart(parent, name),
+// 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
+// 	kurooMessage( new Message( this ) ),
+// 	systemTray( new SystemTray( this ) ),
+	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
+{
+	// we need an instance
+    setInstance( KuroolitoPartFactory::instance() );
+	
+// 	GlobalSingleton::Instance()->setColorTheme();
+	
+	// Create the package inspector
+// 	PackageInspector *packageInspector = new PackageInspector( this );
+	
+	// Add all pages
+	viewPortage = new PortageTab( parentWidget/*, packageInspector*/ );
+	
+	setWidget( viewPortage );
+// 	setupActions();
+// 	statusBar();
+// 	setupGUI();
+	
+	// set our XML-UI resource file
+    setXMLFile("kuroolito_part.rc");
+}
+
+KuroolitoPart::~KuroolitoPart()
+{
+}
+
+bool KuroolitoPart::openFile()
+{
+}
+
+bool KuroolitoPart::saveFile()
+{
+}
+
+void KuroolitoPart::fileOpen()
+{
+}
+
+void KuroolitoPart::fileSaveAs()
+{
+}
+
+// It's usually safe to leave the factory code alone.. with the
+// notable exception of the KAboutData data
+#include <kaboutdata.h>
+#include <klocale.h>
+
+KInstance*  KuroolitoPartFactory::s_instance = 0L;
+KAboutData* KuroolitoPartFactory::s_about = 0L;
+
+KuroolitoPartFactory::KuroolitoPartFactory()
+    : KParts::Factory()
+{
+}
+
+KuroolitoPartFactory::~KuroolitoPartFactory()
+{
+    delete s_instance;
+    delete s_about;
+
+    s_instance = 0L;
+}
+
+KParts::Part* KuroolitoPartFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
+                                                        QObject *parent, const char *name,
+                                                        const char *classname, const QStringList &args )
+{
+    // Create an instance of our Part
+    KuroolitoPart* obj = new KuroolitoPart( parentWidget, widgetName, parent, name );
+
+    // See if we are to be read-write or not
+    if (QCString(classname) == "KParts::ReadOnlyPart")
+        obj->setReadWrite(false);
+
+    return obj;
+}
+
+KInstance* KuroolitoPartFactory::instance()
+{
+    if( !s_instance )
+    {
+        s_about = new KAboutData("kuroolitopart", I18N_NOOP("KuroolitoPart"), "0.1");
+        s_about->addAuthor("Karim Ryde", 0, "karim@bredband.net");
+        s_instance = new KInstance(s_about);
+    }
+    return s_instance;
+}
+
+extern "C"
+{
+    void* init_libkuroolitopart()
+    {
+	KGlobal::locale()->insertCatalogue("kuroolito");
+        return new KuroolitoPartFactory;
+    }
+};
+
+#include "kuroolito_part.moc"
+

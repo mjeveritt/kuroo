@@ -81,23 +81,22 @@ const EmergePackageList Emerge::packageList()
  */
 bool Emerge::sync()
 {
-	m_blocks.clear();
+// 	m_blocks.clear();
 	m_importantMessage = QString::null;
-	m_etcUpdateCount = 0;
+// 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
 	
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
-// 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
+		KuroolitoStatusBar::instance()->setProgressStatus( "Error", i18n("emerge --sync didn't start.") );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupSync(KProcess*) ) );
 		SignalistSingleton::Instance()->setKuroolitoBusy( true );
-// 		LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
 		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
 		KuroolitoStatusBar::instance()->setTotalSteps( KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "syncDuration" ).toInt() );
 		return true;
@@ -110,9 +109,9 @@ bool Emerge::sync()
  */
 bool Emerge::checkUpdates()
 {
-	m_blocks.clear();
+// 	m_blocks.clear();
 	m_importantMessage = QString::null;
-	m_etcUpdateCount = 0;
+// 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
@@ -125,14 +124,13 @@ bool Emerge::checkUpdates()
 	*eProc << "world";
 
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
-// 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
+		KuroolitoStatusBar::instance()->setProgressStatus( "Error", i18n("emerge --update didn't start.") );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 		SignalistSingleton::Instance()->setKuroolitoBusy( true );
-// 		LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
 		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
 		KuroolitoStatusBar::instance()->startProgress();
 		return true;
@@ -145,7 +143,7 @@ bool Emerge::checkUpdates()
  */
 void Emerge::slotEmergeOutput( KProcIO *proc )
 {
-	QString line;	
+	QString line;
 	QRegExp rxPackage = GlobalSingleton::Instance()->rxEmerge();
 	
 	while ( proc->readln( line, true ) >= 0 ) {
@@ -164,8 +162,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 		if ( line.isEmpty() )
 			continue;
 		
-// 		kdDebug() << "line=" << line << LINE_INFO;
-		
 		////////////////////////////////////////////////////////////////////////////
 		// Parse out package and info
 		////////////////////////////////////////////////////////////////////////////
@@ -182,11 +178,8 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			m_emergePackageList.prepend( emergePackage );
 		}
 		
-
-		// Collect blocking lines
-		if ( line.contains( "is blocking" ) )
-			m_blocks += line.section( "[blocks B     ]", 1, 1 ).replace( '>', "&gt;" ).replace( '<', "&lt;" );
-
+		// Collect lines
+		m_importantMessage += line + "<br>";
 	}
 }
 
@@ -194,12 +187,12 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
  * Return einfo and ewarnings collected during emerge of the package.
  * @return message
  */
-const QString Emerge::packageMessage()
-{
-	QString message = m_packageMessage;
-	m_packageMessage = QString::null;
-	return message;
-}
+// const QString Emerge::packageMessage()
+// {
+// 	QString message = m_packageMessage;
+// 	m_packageMessage = QString::null;
+// 	return message;
+// }
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -241,12 +234,6 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	KuroolitoStatusBar::instance()->stopTimer();
 	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
-	
-	if ( !m_blocks.isEmpty() ) {
-		if ( !m_importantMessage.isEmpty() )
-			m_importantMessage += "<br>";
-		m_importantMessage += m_blocks.join("<br>");
-	}
 	
 	if ( !m_importantMessage.isEmpty() )
 		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );

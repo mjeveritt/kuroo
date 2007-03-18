@@ -33,19 +33,17 @@ kdelnk_DATA = kuroolito.desktop
 
 # this is where the XML-GUI resource file goes
 rcdir = $(kde_datadir)/kuroolito
-rc_DATA = kuroolitoui.rc
+rc_DATA = kuroolito_shell.rc
 
 # this is to set set autostart of kuroo_watcher
 autostartdir = $(datadir)/autostart
 
 # headers for kuroo
-noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
-	systemtray.h message.h common.h
+noinst_HEADERS = kurooiface.h singleton.h mainwindow.h statusbar.h systemtray.h \
+	message.h common.h kuroolito_part.h
 
 # source for kuroo
-kuroolito_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
-	statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
-	kurooviewbase.ui
+kuroolito_SOURCES = kuroo.cpp main.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
@@ -53,9 +51,27 @@ METASOURCES = AUTO
 kuroolito_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
-kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/intro/libintro.la \
-	$(top_builddir)/src/core/libcore.la $(LIB_KDEPRINT) $(LIB_KFILE) $(LIB_KDECORE) $(LIB_SQLITE) \
-	$(LIB_SQLITE_LOCAL)
+kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la $(LIB_KDEPRINT) \
+	$(LIB_KFILE) $(LIB_KDECORE)
 
+#########################################################################
+# KPART SECTION
+#########################################################################
+kde_module_LTLIBRARIES = libkuroolitopart.la
 
+# the Part's source, library search path, and link libraries
+libkuroolitopart_la_SOURCES = kuroolito_part.cpp kurooinit.cpp mainwindow.cpp \
+	messagebase.ui message.cpp statusbar.cpp systemtray.cpp
+libkuroolitopart_la_LDFLAGS = -avoid-version -module -no-undefined \
+	$(KDE_PLUGIN) $(all_libraries)
+libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \
+	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/config/libconfig.la $(LIB_KPARTS) $(LIB_KFILE) \
+	$(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
+
+# this is where the desktop file will go 
+partdesktopdir   = $(kde_servicesdir)
+partdesktop_DATA = kuroolito_part.desktop
+
+# this is where the part's XML-GUI resource file goes
+partrcdir   = $(kde_datadir)/kuroolitopart
+partrc_DATA = kuroolito_part.rc

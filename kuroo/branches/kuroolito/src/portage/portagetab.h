@@ -39,7 +39,7 @@ class PortageTab : public PortageBase
 {
 Q_OBJECT
 public:
-	PortageTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
+	PortageTab( QWidget *parent = 0/*, PackageInspector *packageInspector = 0*/ );
     ~PortageTab();
 	
 public slots:
@@ -82,10 +82,10 @@ private:
 	KPopupMenu 			*menu;
 	
 	// The package inspector
-	PackageInspector	*m_packageInspector;
+// 	PackageInspector	*m_packageInspector;
 	
 	// Lists all package versions for uninstalling
-	UninstallInspector	*m_uninstallInspector;
+// 	UninstallInspector	*m_uninstallInspector;
 	
 signals:
 	void				signalChanged();

@@ -70,7 +70,7 @@ QString KuroolitoDB::init( QObject *parent )
 	
 	m_dbConnPool->createDbConnections();
 	
-	return GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas();
+	return KuroolitoConfig::dirHome() + KuroolitoConfig::databas();
 }
 
 DbConnection *KuroolitoDB::getStaticDbConnection()
@@ -187,22 +187,10 @@ bool KuroolitoDB::isPortageEmpty()
 	return values.isEmpty() ? true : values == "0";
 }
 
-bool KuroolitoDB::isQueueEmpty()
-{
-	QString values = singleQuery( "SELECT COUNT(id) FROM queue LIMIT 0, 1;" );
-	return values.isEmpty() ? true : values == "0";
-}
-
 bool KuroolitoDB::isUpdatesEmpty()
 {
 	QString values = singleQuery( QString( "SELECT COUNT(id) FROM package where status = '%1' LIMIT 0, 1;" )
 	                              .arg( PACKAGE_UPDATES_STRING ) );
-	return values.isEmpty() ? true : values == "0";
-}
-
-bool KuroolitoDB::isHistoryEmpty()
-{
-	QString values = singleQuery("SELECT COUNT(id) FROM history LIMIT 0, 1;");
 	return values.isEmpty() ? true : values == "0";
 }
 
@@ -265,38 +253,6 @@ void KuroolitoDB::createTables( DbConnection *conn )
 	      "keywords VARCHAR(32) );"
 	      , conn);
 	
-	query("CREATE TABLE queue ( "
-	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      "idPackage INTEGER, "
-	      "idDepend INTEGER, "
-	      "use VARCHAR(255), "
-	      "size VARCHAR(32), "
-	      "version VARCHAR(32) );"
-	      , conn);
-	
-	query("CREATE TABLE history ( "
-	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      "package VARCHAR(32), "
-	      "timestamp VARCHAR(10), "
-	      "time INTEGER, "
-	      "einfo BLOB, "
-	      "emerge BOOL );"
-	      , conn);
-	
-	query("CREATE TABLE mergeHistory ( "
-	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      "timestamp VARCHAR(10), "
-	      "source VARCHAR(255), "
-	      "destination VARCHAR(255) );"
-	      , conn);
-	
-	query(" CREATE TABLE statistic ( "
-	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      "package VARCHAR(32), "
-	      "time INTEGER, "
-	      "count INTEGER );"
-	      , conn);
-	
 	query("CREATE TABLE cache ( "
 	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      "package VARCHAR(32), "
@@ -333,100 +289,6 @@ void KuroolitoDB::createTables( DbConnection *conn )
 	
 	query("CREATE INDEX index_name_package ON package(name);", conn);
 	query("CREATE INDEX index_category_package ON package(category);", conn);
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-// Database management
-//////////////////////////////////////////////////////////////////////////////
-
-/**
- * Backup to file data which can not be recreated, fex history.einfo and mergeHistory.source/destination
- */
-void KuroolitoDB::backupDb()
-{
-	const QStringList historyData = query( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
-	if ( !historyData.isEmpty() ) {
-		QFile file( GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::fileHistoryBackup() );
-		if ( file.open( IO_WriteOnly ) ) {
-			QTextStream stream( &file );
-			foreach ( historyData ) {
-				QString timestamp = *it++;
-				QString einfo = *it;
-				stream << timestamp << ":" << einfo << "\n";
-			}
-			file.close();
-		}
-		else
-			kdError(0) << QString("Creating backup of history. Writing: %1.").arg( KuroolitoConfig::fileHistoryBackup() ) << LINE_INFO;
-	}
-	
-	const QStringList mergeData = query( "SELECT timestamp, source, destination FROM mergeHistory;" );
-	if ( !mergeData.isEmpty() ) {
-		QFile file( GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::fileMergeBackup() );
-		if ( file.open( IO_WriteOnly ) ) {
-			QTextStream stream( &file );
-			foreach ( mergeData ) {
-				QString timestamp = *it++;
-				QString source = *it++;
-				QString destination = *it;
-				stream << timestamp << ":" << source << ":" << destination << "\n";
-			}
-			file.close();
-		}
-		else
-			kdError(0) << QString("Creating backup of history. Writing: %1.").arg( KuroolitoConfig::fileMergeBackup() ) << LINE_INFO;
-	}
-}
-
-/**
- * Restore data to tables history and mergeHistory
- */
-void KuroolitoDB::restoreBackup()
-{
-	// Restore einfo into table history
-	QFile file( GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::fileHistoryBackup() );
-	QTextStream stream( &file );
-	QStringList lines;
-	if ( !file.open( IO_ReadOnly ) )
-		kdError(0) << QString("Restoring backup of history. Reading: %1.").arg( KuroolitoConfig::fileHistoryBackup() ) << LINE_INFO;
-	else {
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		file.close();
-	}
-	
-	QRegExp rxHistoryLine( "(\\d+):((?:\\S|\\s)*)" );
-	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
-		if ( !(*it).isEmpty() && rxHistoryLine.exactMatch( *it ) ) {
-			QString timestamp = rxHistoryLine.cap(1);
-			QString einfo = rxHistoryLine.cap(2);
-			singleQuery( "UPDATE history SET einfo = '" + escapeString( einfo ) + "' WHERE timestamp = '" + timestamp + "';" );
-		}
-	}
-	
-	// Restore source and destination into table mergeHistory
-	file.setName( GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::fileMergeBackup() );
-	stream.setDevice( &file );
-	lines.clear();
-	if ( !file.open( IO_ReadOnly ) )
-		kdError(0) << QString("Restoring backup of history. Reading: %1.").arg( KuroolitoConfig::fileMergeBackup() ) << LINE_INFO;
-	else {
-		while ( !stream.atEnd() )
-			lines += stream.readLine();
-		file.close();
-	}
-	
-	QRegExp rxMergeLine( "(\\d+):((?:\\S|\\s)*):((?:\\S|\\s)*)" );
-	for ( QStringList::Iterator it = lines.begin(), end = lines.end(); it != end; ++it ) {
-		if ( !(*it).isEmpty() && rxMergeLine.exactMatch( *it ) ) {
-			QString timestamp = rxMergeLine.cap(1);
-			QString source = rxMergeLine.cap(2);
-			QString destination = rxMergeLine.cap(3);
-			singleQuery( "INSERT INTO mergeHistory (timestamp, source, destination) "
-			       "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
-		}
-	}
 }
 
 
@@ -969,49 +831,6 @@ void KuroolitoDB::clearPackageUserMasked( const QString& id )
 // 
 //////////////////////////////////////////////////////////////////////////////
 
-/**
- * Return all packages in the queue.
- */
-const QStringList KuroolitoDB::allQueuePackages()
-{
-	return query( " SELECT package.id, package.category, package.name, "
-	              " package.status, queue.idDepend, queue.size, queue.version "
-	              " FROM queue, package "
-	              " WHERE queue.idPackage = package.id "
-	              " ORDER BY queue.idDepend;" );
-}
-
-/**
- * Return all packages in the queue.
- */
-const QStringList KuroolitoDB::allQueueId()
-{
-	return query( "SELECT idPackage FROM queue;" );
-}
-
-/**
- * Return all history.
- */
-const QStringList KuroolitoDB::allHistory()
-{
-	return query( "SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;" );
-}
-
-/**
- * Return all etc-update history.
- */
-const QStringList KuroolitoDB::allMergeHistory()
-{
-	return query( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;");
-}
-
-/**
- * Return all package statistics.
- */
-const QStringList KuroolitoDB::allStatistic()
-{
-	return query( "SELECT package, time, count FROM statistic ORDER BY id ASC;" );
-}
 
 /**
  * Clear all updates.
@@ -1027,28 +846,6 @@ void KuroolitoDB::resetUpdates()
 void KuroolitoDB::resetInstalled()
 {
 	singleQuery( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
-}
-
-void KuroolitoDB::resetQueue()
-{
-	singleQuery( "DELETE FROM queue;" );
-}
-
-void KuroolitoDB::addEmergeInfo( const QString& einfo )
-{
-	singleQuery( QString("UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);").arg( escapeString( einfo ) ) );
-}
-
-/**
- * Insert etc-update file names.
- * @param source
- * @param destination
- */
-void KuroolitoDB::addBackup( const QString& source, const QString& destination )
-{
-	QDateTime currentTime( QDateTime::currentDateTime() );
-	insert( QString( "INSERT INTO mergeHistory ( timestamp, source, destination ) VALUES ('%1', '%2', '%3');")
-	        .arg( QString::number( currentTime.toTime_t() ) ).arg( source ).arg( destination ) );
 }
 
 
@@ -1071,7 +868,7 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection( SqliteConfig* config )
 	: DbConnection( config )
 {
-	const QCString path = QString( GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas() ).local8Bit();
+	const QCString path = QString( KuroolitoConfig::dirHome() + KuroolitoConfig::databas() ).local8Bit();
 	
     // Open database file and check for correctness
 	m_initialized = false;

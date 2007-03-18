@@ -50,16 +50,9 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	getEnvironment();
 	
 	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( GlobalSingleton::Instance()->kurooDir() );
+	QDir d( KuroolitoConfig::dirHome() );
 	if ( KuroolitoConfig::version() != KuroolitoConfig::hardVersion() || !d.exists() || KuroolitoConfig::wizard() )
 		firstTimeWizard();
-// 	else
-// 		if ( !KUser().isSuperUser() )
-// 			checkUser();
-	
-	// Get portage groupid to set directories and files owned by portage
-// 	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
-// 	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
 	
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -68,49 +61,22 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 		
 		// Create DirHome dir and set permissions so common user can run Kuroolito
 		if ( !d.exists() ) {
-			if ( !d.mkdir(GlobalSingleton::Instance()->kurooDir()) ) {
-				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
-				                            "You must start Kuroolito with kdesu first time for a secure initialization.<br>"
-				                            "Please try again!</qt>"), i18n("Initialization") );
+			if ( !d.mkdir(KuroolitoConfig::dirHome()) ) {
+				KMessageBox::error( 0, i18n("<qt>Could not create kuroolito home directory.<br>"
+				                            "Please correct and try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			}
-			/*else {
-				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
-				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
-			}*/
 			
-			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
+			d.setCurrent( KuroolitoConfig::dirHome() );
 		}
-	}
-	
-	// Check that backup directory exists and set correct permissions
-	QString backupDir = GlobalSingleton::Instance()->kurooDir() + "backup";
-	if ( !d.cd( backupDir ) ) {
-		if ( !d.mkdir( backupDir ) ) {
-			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
-			                            "You must start Kuroolito with kdesu first time for a secure initialization.<br>"
-			                            "Please try again!</qt>"), i18n("Initialization") );
-			exit(0);
-		}
-// 		else {
-// 			chmod( backupDir, 0770 );
-// 			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
-// 		}
 	}
 	
 	KuroolitoConfig::setVersion( KuroolitoConfig::hardVersion() );
 	KuroolitoConfig::writeConfig();
 	
-	// Initialize the log
-// 	QString logFile = LogSingleton::Instance()->init( this );
-// 	if ( !logFile.isEmpty() ) {
-// 		chmod( logFile, 0660 );
-// 		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
-// 	}
-	
 	// Initialize the database
 	QString databaseFile = KuroolitoDBSingleton::Instance()->init( this );
-	QString database = GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas();
+	QString database = KuroolitoConfig::dirHome() + KuroolitoConfig::databas();
 	QString dbVersion = KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "kurooVersion" );
 	
 	// Check for conflicting db design or new install
@@ -118,7 +84,6 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 		
 		// Backup history if there's old db version
 		if ( !dbVersion.isEmpty() ) {
-			KuroolitoDBSingleton::Instance()->backupDb();
 			remove( database );
 			kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 			
@@ -128,10 +93,6 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 		
 		KuroolitoDBSingleton::Instance()->setKuroolitoDbMeta( "kurooVersion", KuroolitoConfig::version().section( "_db", 1, 1 ) );
 	}
-	
-	// Give permissions to portage:portage to access the db also
-// 	chmod( databaseFile, 0660 );
-// 	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
 	
 	// Initialize singletons objects
 	GlobalSingleton::Instance()->init( this );
@@ -190,12 +151,6 @@ void KuroolitoInit::slotEmergeInfo( KProcess* )
 			
 			KuroolitoConfig::setArch( arch );
 		}
-		
-		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
-			KuroolitoConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
-		
-// 		if ( (*it).startsWith( "USE=" ) )
-// 			KuroolitoConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
 	
 	kdDebug() << "KuroolitoConfig::arch()=" << KuroolitoConfig::arch() << LINE_INFO;
@@ -220,21 +175,5 @@ void KuroolitoInit::firstTimeWizard()
 	
 	KuroolitoConfig::setInit( true );
 }
-
-/**
- * Control if user is in portage group.
- */
-// void KuroolitoInit::checkUser()
-// {
-// 	QStringList userGroups = KUser().groupNames();
-// 	foreach( userGroups ) {
-// 		if ( *it == "portage" )
-// 			return;
-// 	}
-// 	
-// 	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
-// 	                       i18n("User permissions") );
-// 	exit(0);
-// }
 
 #include "kurooinit.moc"

@@ -60,10 +60,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 ), m_delayFilters( 0 )
 {
-	// Connect What's this button
-// 	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
-// 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
-	
+
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
@@ -73,14 +70,11 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-// 	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
-// 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( packagesView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
-// 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageQueueChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
@@ -131,14 +125,9 @@ void PortageTab::slotInit()
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."), 
 	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
 
-	// Initialize the uninstall dialog
-// 	m_uninstallInspector = new UninstallInspector( this );
-	
+
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
-// 	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
-// 	pbUninstall->setIconSet( SmallIconSet("remove") );
 	pbAdvanced->setIconSet( SmallIconSet("options") );
-// 	pbWhatsThis->setIconSet( SmallIconSet("info") );
 	
 	slotBusy();
 }
@@ -197,9 +186,7 @@ void PortageTab::slotBusy()
 {
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
-// 		pbUninstall->setDisabled( true );
 		pbAdvanced->setDisabled( true );
-// 		pbQueue->setDisabled( true );
 		filterGroup->setDisabled( true );
 		searchFilter->setDisabled( true );
 		pbClearFilter->setDisabled( true );
@@ -227,43 +214,12 @@ void PortageTab::slotButtons()
 	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
-// 		pbQueue->setDisabled( true );
 		pbAdvanced->setDisabled( true );
-// 		pbUninstall->setDisabled( true );
 		return;
 	}
 	
 	m_packageInspector->setDisabled( false );
 	pbAdvanced->setDisabled( false );
-	
-	// When kuroo is busy disable queue and uninstall button
-// 	if ( SignalistSingleton::Instance()->isKuroolitoBusy() ) {
-// 		pbQueue->setDisabled( true );
-// 		pbUninstall->setDisabled( true );
-// 		return;
-// 	}
-// 	else
-// 		pbQueue->setDisabled( false );
-
-	// Toggle queue button between add/remove
-// 	if ( packagesView->currentPackage()->isInPortage() ) {
-// 		pbQueue->setDisabled( false );
-		
-// 		if ( packagesView->currentPackage()->isQueued() )
-// 			pbQueue->setText( i18n("Remove from Queue") );
-// 		else
-// 			pbQueue->setText( i18n("Add to Queue") );
-// 	}
-// 	else {
-// 		pbQueue->setText( i18n("Add to Queue") );
-// 		pbQueue->setDisabled( true );
-// 	}
-	
-	// If user is su enable uninstall
-// 	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
-// 		pbUninstall->setDisabled( false );
-// 	else
-// 		pbUninstall->setDisabled( true );
 }
 
 
@@ -387,9 +343,7 @@ void PortageTab::slotRefresh()
 void PortageTab::slotAdvanced()
 {
 	DEBUG_LINE_INFO;
-// 	pbUninstall->setDisabled( true );
 	pbAdvanced->setDisabled( true );
-// 	pbQueue->setDisabled( true );
 	filterGroup->setDisabled( true );
 	searchFilter->setDisabled( true );
 	pbClearFilter->setDisabled( true );

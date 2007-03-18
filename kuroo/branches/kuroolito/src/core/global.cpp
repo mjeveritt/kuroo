@@ -44,14 +44,6 @@ void Global::init( QObject *parent )
 }
 
 /**
- * Kuroolito home directory
- */
-const QString Global::kurooDir()
-{
-	return "/var/cache/kuroo/";
-}
-
-/**
  * Regexp to parse emerge output.
  */
 const QRegExp Global::rxEmerge()

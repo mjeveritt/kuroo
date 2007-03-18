@@ -39,9 +39,6 @@ public:
 	void						loadWorld();
 	bool						isInWorld( const QString& package );
 	
-	void						appendWorld( const QStringList& packageList );
-	void						removeFromWorld( const QStringList& packageList );
-	
 	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
 	
 	

@@ -147,17 +147,13 @@ public:
 	//table management methods
 	bool					isCacheEmpty();
 	bool 					isPortageEmpty();
-	bool					isQueueEmpty();
 	bool					isUpdatesEmpty();
-	bool 					isHistoryEmpty();
 	bool 					isValid();
 	void 					createTables( DbConnection *conn = NULL );
 	
 	// Kuroolito main
 	QString					getKuroolitoDbMeta( const QString& meta );
 	void					setKuroolitoDbMeta( const QString& meta, const QString& data );
-	void					backupDb();
-	void					restoreBackup();
 	
 	//////////////////////////////////////////////////////////////////////////////
 	// Queries for Portage
@@ -211,18 +207,10 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	// Miscellanious queries
 	//////////////////////////////////////////////////////////////////////////////
-	const QStringList 		allQueuePackages();
-	const QStringList		allQueueId();
-	const QStringList 		allHistory();
-	const QStringList 		allMergeHistory();
-	const QStringList 		allStatistic();
 	
 	void					resetUpdates();
 	void					resetInstalled();
-	void					resetQueue();
-	void					addEmergeInfo( const QString& einfo );
-	void					addBackup( const QString& source, const QString& destination );
-	
+
 private:
 	QObject*				m_parent;
 

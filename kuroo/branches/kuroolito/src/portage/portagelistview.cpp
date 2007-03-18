@@ -40,10 +40,7 @@
 PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, 
                                            const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
-{
-// 	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
-// 		setQueued( true );
-}
+{}
 
 /**
  * Set icons when package is visible.
@@ -111,9 +108,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 1 );
 	header()->setResizeEnabled( false, 2 );
 	header()->setResizeEnabled( false, 3 );
-	
-	// Refresh packages when packages are added/removed to Queue or get installed
-// 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
 	
 	// Create text-widget warning for "No packages found.."
 	noHitsWarning = new KTextBrowser( this );

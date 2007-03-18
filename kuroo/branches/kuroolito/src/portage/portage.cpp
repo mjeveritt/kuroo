@@ -246,60 +246,6 @@ bool Portage::isInWorld( const QString& package )
 	return m_mapWorld.contains( package );
 }
 
-/**
- * Add package to world file.
- * @param package
- */
-void Portage::appendWorld( const QStringList& packageList )
-{
-	// Check is world is writable
-	QFile file( KuroolitoConfig::fileWorld() );
-	if ( !file.open( IO_WriteOnly ) ) {
-		kdError(0) << "Adding packages to world. Writing: " << KuroolitoConfig::fileWorld() << LINE_INFO;
-		return;
-	}
-	
-	// Make a copy of world map
-	QMap<QString, QString> map = m_mapWorld;
-	
-	// Add/update package into world map
-	foreach ( packageList )
-		m_mapWorld.insert( *it, QString::null );
-	
-	// Update world file
-	QTextStream stream( &file );
-	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
-		stream << it.key() << "\n";
-	file.close();
-	
-	emit signalWorldChanged();
-}
-
-/**
- * Remove package from world file.
- * @param package
- */
-void Portage::removeFromWorld( const QStringList& packageList )
-{
-	// Check is world is writable
-	QFile file( KuroolitoConfig::fileWorld() );
-	if ( !file.open( IO_WriteOnly ) ) {
-		kdError(0) << "Removing packages from world. Writing: " << KuroolitoConfig::fileWorld() << LINE_INFO;
-		return;
-	}
-	
-	// Make a copy of world map
-	foreach ( packageList )
-		m_mapWorld.remove( *it );
-	
-	// Update world file
-	QTextStream stream( &file );
-	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
-		stream << it.key() << "\n";
-	file.close();
-	
-	emit signalWorldChanged();
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Package handlling...

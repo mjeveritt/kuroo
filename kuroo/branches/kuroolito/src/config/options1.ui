@@ -22,139 +22,7 @@
         <property name="margin">
             <number>5</number>
         </property>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>portage_2_2_2</cstring>
-            </property>
-            <property name="title">
-                <string>Emerge check update options</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;i&gt;Forces emerge to consider the entire dependency tree of packages.&lt;br&gt;
-Refresh Updates for changes to take effect.&lt;/i&gt;</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>kcfg_updateDeep</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Deep</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="2" column="0">
-            <property name="name">
-                <cstring>portage_2_3</cstring>
-            </property>
-            <property name="title">
-                <string>Kuroo options</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer row="0" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>146</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>kcfg_isSystrayEnabled</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Dock kuroo in system tray (close does not e&amp;xit kuroo)</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+X</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>portage_2_3_2</cstring>
-            </property>
-            <property name="title">
-                <string>Package options</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>textLabel1_3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>kcfg_installedColumn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Show installed pac&amp;kages in separate column</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <spacer row="0" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2_4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>106</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
-        </widget>
-        <spacer row="5" column="0">
+        <spacer row="4" column="0">
             <property name="name">
                 <cstring>spacer2</cstring>
             </property>
@@ -171,7 +39,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                 </size>
             </property>
         </spacer>
-        <widget class="QGroupBox" row="4" column="0">
+        <widget class="QGroupBox" row="3" column="0">
             <property name="name">
                 <cstring>groupBox7</cstring>
             </property>
@@ -340,6 +208,199 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>The color of the OSD text.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>portage_2_3_2</cstring>
+            </property>
+            <property name="title">
+                <string>Package options</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>kcfg_installedColumn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show installed pac&amp;kages in separate column</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="0" column="1">
+                    <property name="name">
+                        <cstring>spacer2_2_4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>106</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>portage_2_3</cstring>
+            </property>
+            <property name="title">
+                <string>Kuroo options</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer row="0" column="1">
+                    <property name="name">
+                        <cstring>spacer2_2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>146</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>kcfg_isSystrayEnabled</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Dock kuroo in system tray (close does not e&amp;xit kuroo)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+X</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>portage_2_2_2</cstring>
+            </property>
+            <property name="title">
+                <string>Portage directories</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2_2_2_2_2_2_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Portage</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2_2_2_2_2_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>EDB_DEP</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2_2_2_2_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>PKG_DIR</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2_2_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Portage overlays</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirDbPkg</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirPortageOverlay</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirPortage</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="3" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirEdbDep</cstring>
                     </property>
                 </widget>
             </grid>

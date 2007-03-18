@@ -41,8 +41,8 @@ PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, 
                                            const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
-	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
-		setQueued( true );
+// 	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
+// 		setQueued( true );
 }
 
 /**
@@ -52,16 +52,16 @@ void PortageListView::PortageItem::paintCell( QPainter* painter, const QColorGro
 {
 	if ( this->isVisible() ) {
 		
-		if ( column == 3 ) {
-			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
-				setQueued( true );
-				setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
-			}
-			else {
-				setQueued( false );
-				setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
-			}
-		}
+// // 		if ( column == 3 ) {
+// // 			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
+// // 				setQueued( true );
+// // 				setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
+// // 			}
+// // 			else {
+// // 				setQueued( false );
+// // 				setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
+// // 			}
+// // 		}
 		
 		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
 	}
@@ -113,7 +113,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	header()->setResizeEnabled( false, 3 );
 	
 	// Refresh packages when packages are added/removed to Queue or get installed
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
+// 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
 	
 	// Create text-widget warning for "No packages found.."
 	noHitsWarning = new KTextBrowser( this );

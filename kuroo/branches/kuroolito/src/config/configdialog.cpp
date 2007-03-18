@@ -52,12 +52,12 @@ ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *
 	setWFlags( WDestructiveClose );
 	
 	Options1* opt1 = new Options1( this, i18n("General") );
-	Options2* opt2 = new Options2( this, i18n("make.conf") );
-	Options7* opt7 = new Options7( this, i18n("Etc-update warnings") );
+// 	Options2* opt2 = new Options2( this, i18n("make.conf") );
+// 	Options7* opt7 = new Options7( this, i18n("Etc-update warnings") );
 	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
-	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
+// 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
+// 	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
 	
 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
@@ -74,7 +74,7 @@ ConfigDialog::~ConfigDialog()
 void ConfigDialog::slotDefaults()
 {
 	DEBUG_LINE_INFO;
-	parseMakeConf();
+// 	parseMakeConf();
 	show();
 }
 
@@ -168,46 +168,50 @@ void ConfigDialog::parseMakeConf()
 		return;
 	
 	// Clear old entries
-	KurooConfig::setAcceptKeywords( QString::null );
-	KurooConfig::setAutoClean( QString::null );
-	KurooConfig::setBuildPrefix( QString::null );
-	KurooConfig::setCBuild( QString::null );
-	KurooConfig::setCCacheSize( QString::null );
-	KurooConfig::setCFlags( QString::null );
-	KurooConfig::setCXXFlags( QString::null );
-	KurooConfig::setChost( QString::null );
-	KurooConfig::setCleanDelay( QString::null );
-	KurooConfig::setConfigProtect( QString::null );
-	KurooConfig::setConfigProtectMask( QString::null );
-	KurooConfig::setDebugBuild( QString::null );
-	KurooConfig::setDirDist( QString::null );
-	KurooConfig::setFeatures( QString::null );
-	KurooConfig::setFetchCommand( QString::null );
-	KurooConfig::setGentooMirrors( QString::null );
-	KurooConfig::setFtpProxy( QString::null );
-	KurooConfig::setHttpProxy( QString::null );
-	KurooConfig::setMakeOpts( QString::null );
-	KurooConfig::setNoColor( QString::null );
-	KurooConfig::setDirPkgTmp( QString::null );
+// 	KurooConfig::setAcceptKeywords( QString::null );
+// 	KurooConfig::setAutoClean( QString::null );
+// 	KurooConfig::setBuildPrefix( QString::null );
+// 	KurooConfig::setCBuild( QString::null );
+// 	KurooConfig::setCCacheSize( QString::null );
+// 	KurooConfig::setCFlags( QString::null );
+// 	KurooConfig::setCXXFlags( QString::null );
+// 	KurooConfig::setChost( QString::null );
+// 	KurooConfig::setCleanDelay( QString::null );
+// 	KurooConfig::setConfigProtect( QString::null );
+// 	KurooConfig::setConfigProtectMask( QString::null );
+// 	KurooConfig::setDebugBuild( QString::null );
+// 	KurooConfig::setDirDist( QString::null );
+// 	KurooConfig::setFeatures( QString::null );
+// 	KurooConfig::setFetchCommand( QString::null );
+// 	KurooConfig::setGentooMirrors( QString::null );
+// 	KurooConfig::setFtpProxy( QString::null );
+// 	KurooConfig::setHttpProxy( QString::null );
+// 	KurooConfig::setMakeOpts( QString::null );
+// 	KurooConfig::setNoColor( QString::null );
+// 	KurooConfig::setDirPkgTmp( QString::null );
+	
 	KurooConfig::setDirPkg( QString::null );
-	KurooConfig::setDirPortLog( QString::null );
-	KurooConfig::setPortageBinHost( QString::null );
-	KurooConfig::setPortageNiceness( QString::null );
-	KurooConfig::setDirPortageTmp( QString::null );
+	
+// 	KurooConfig::setDirPortLog( QString::null );
+// 	KurooConfig::setPortageBinHost( QString::null );
+// 	KurooConfig::setPortageNiceness( QString::null );
+// 	KurooConfig::setDirPortageTmp( QString::null );
+	
 	KurooConfig::setDirPortage( "/usr/portage" );
-	KurooConfig::setDirPortageOverlay( QString::null );
-	KurooConfig::setResumeCommand( QString::null );
-	KurooConfig::setRoot( QString::null );
-	KurooConfig::setRsyncExcludeFrom( QString::null );
-	KurooConfig::setRsyncProxy( QString::null );
-	KurooConfig::setRsyncRetries( QString::null );
-	KurooConfig::setRsyncRateLimit( QString::null );
-	KurooConfig::setRsyncTimeOut( QString::null );
-	KurooConfig::setDirRpm( QString::null );
-	KurooConfig::setSync( QString::null );
-	KurooConfig::setUse( QString::null );
-	KurooConfig::setUseOrder( QString::null );
-	KurooConfig::setNoColor( QString::null );
+	
+// 	KurooConfig::setDirPortageOverlay( QString::null );
+// 	KurooConfig::setResumeCommand( QString::null );
+// 	KurooConfig::setRoot( QString::null );
+// 	KurooConfig::setRsyncExcludeFrom( QString::null );
+// 	KurooConfig::setRsyncProxy( QString::null );
+// 	KurooConfig::setRsyncRetries( QString::null );
+// 	KurooConfig::setRsyncRateLimit( QString::null );
+// 	KurooConfig::setRsyncTimeOut( QString::null );
+// 	KurooConfig::setDirRpm( QString::null );
+// 	KurooConfig::setSync( QString::null );
+// 	KurooConfig::setUse( QString::null );
+// 	KurooConfig::setUseOrder( QString::null );
+// 	KurooConfig::setNoColor( QString::null );
 	
 	// Parse the lines
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );

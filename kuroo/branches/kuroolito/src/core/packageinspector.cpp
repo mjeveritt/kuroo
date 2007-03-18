@@ -79,10 +79,10 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotRefreshTabs() ) );
 	
 	// Toggle between all 4 stability version
-	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
+// 	connect( dialog->groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
 	
 	// Activate specific version menu
-	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetSpecificVersion( const QString& ) ) );
+// 	connect( dialog->cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetSpecificVersion( const QString& ) ) );
 	
 	connect( dialog->infoHardMasked, SIGNAL( leftClickedURL( const QString& ) ), SLOT( slotHardMaskInfo() ) );
 	
@@ -91,8 +91,8 @@ PackageInspector::PackageInspector( QWidget *parent )
 	connect( dialog->pbUse, SIGNAL( clicked() ), this, SLOT( slotCalculateUse() ) );
 	
 	// Listen to Queue and World checkboxes
-	connect( dialog->cbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
-	connect( dialog->cbWorld, SIGNAL( clicked() ), this, SLOT( slotWorld() ) );
+// 	connect( dialog->cbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
+// 	connect( dialog->cbWorld, SIGNAL( clicked() ), this, SLOT( slotWorld() ) );
 }
 
 PackageInspector::~PackageInspector()
@@ -117,7 +117,7 @@ void PackageInspector::updateVersionData()
 	dialog->cbVersionsDependencies->clear();
 	dialog->cbVersionsInstalled->clear();
 	dialog->cbVersionsUse->clear();
-	dialog->cbVersionsSpecific->clear();
+// 	dialog->cbVersionsSpecific->clear();
 
 	// Iterate sorted version list
 	QString installedVersion;
@@ -150,7 +150,7 @@ void PackageInspector::updateVersionData()
 	dialog->cbVersionsEbuild->insertStringList( versionList );
 	dialog->cbVersionsDependencies->insertStringList( versionList );
 	dialog->cbVersionsUse->insertStringList( versionList );
-	dialog->cbVersionsSpecific->insertStringList( versionList );
+// 	dialog->cbVersionsSpecific->insertStringList( versionList );
 	
 	// Set active version in Inspector dropdown menus
 	if ( !versionInstalledList.isEmpty() ) {
@@ -177,20 +177,20 @@ void PackageInspector::updateVersionData()
 	}
 	
 	if ( !m_portagePackage->emergeVersion().isEmpty() ) {
-		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
+// 		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
 		dialog->versionsView->usedForInstallation( m_portagePackage->emergeVersion() );
 	}
 	
 	// Toggle checkboxes if package in World and Queue
-	if ( m_portagePackage->isInWorld() )
-		dialog->cbWorld->setChecked( true );
-	else
-		dialog->cbWorld->setChecked( false );
+// 	if ( m_portagePackage->isInWorld() )
+// 		dialog->cbWorld->setChecked( true );
+// 	else
+// 		dialog->cbWorld->setChecked( false );
 	
-	if ( m_portagePackage->isQueued() )
-		dialog->cbQueue->setChecked( true );
-	else
-		dialog->cbQueue->setChecked( false );
+// 	if ( m_portagePackage->isQueued() )
+// 		dialog->cbQueue->setChecked( true );
+// 	else
+// 		dialog->cbQueue->setChecked( false );
 }
 
 /**
@@ -198,10 +198,10 @@ void PackageInspector::updateVersionData()
  */
 void PackageInspector::slotWorld()
 {
-	if ( dialog->cbWorld->isChecked() )
-		PortageSingleton::Instance()->appendWorld( QStringList( m_category + "/" + m_package ) );
-	else
-		PortageSingleton::Instance()->removeFromWorld( QStringList( m_category + "/" + m_package ) );
+// 	if ( dialog->cbWorld->isChecked() )
+// 		PortageSingleton::Instance()->appendWorld( QStringList( m_category + "/" + m_package ) );
+// 	else
+// 		PortageSingleton::Instance()->removeFromWorld( QStringList( m_category + "/" + m_package ) );
 }
 
 /**
@@ -209,17 +209,17 @@ void PackageInspector::slotWorld()
  */
 void PackageInspector::slotQueue()
 {
-	if ( dialog->cbQueue->isChecked() )
-		QueueSingleton::Instance()->addPackageIdList( QStringList( m_portagePackage->id() ) );
-	else
-		QueueSingleton::Instance()->removePackageIdList( QStringList( m_portagePackage->id() ) );
+// 	if ( dialog->cbQueue->isChecked() )
+// 		QueueSingleton::Instance()->addPackageIdList( QStringList( m_portagePackage->id() ) );
+// 	else
+// 		QueueSingleton::Instance()->removePackageIdList( QStringList( m_portagePackage->id() ) );
 	
 	// If user removes last package in Queue, disable the Inspector
-	if ( m_view == VIEW_QUEUE && QueueSingleton::Instance()->size() == 1 ) {
-		dialog->inspectorTabs->setDisabled( true );
-		dialog->cbQueue->setDisabled( true );
-		dialog->cbWorld->setDisabled( true );
-	}
+// 	if ( m_view == VIEW_QUEUE && QueueSingleton::Instance()->size() == 1 ) {
+// 		dialog->inspectorTabs->setDisabled( true );
+// 		dialog->cbQueue->setDisabled( true );
+// 		dialog->cbWorld->setDisabled( true );
+// 	}
 }
 
 /**
@@ -237,25 +237,25 @@ void PackageInspector::edit( PackageItem* portagePackage, int view )
 	// Actions that superuser privileges
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
-		dialog->groupSelectStability->setDisabled( true );
+// 		dialog->groupSelectStability->setDisabled( true );
 		dialog->useView->setDisabled( true );
-		dialog->cbWorld->setDisabled( true );
+// 		dialog->cbWorld->setDisabled( true );
 	}
 	else {
 		dialog->inspectorTabs->setDisabled( false );
-		dialog->cbQueue->setDisabled( false );
-		dialog->cbWorld->setDisabled( false );
+// 		dialog->cbQueue->setDisabled( false );
+// 		dialog->cbWorld->setDisabled( false );
 	}
 	
 	// Disabled editing when package is in Queue and kuroo is emerging
-	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
-		dialog->inspectorTabs->page(0)->setDisabled( true );
-		dialog->inspectorTabs->page(1)->setDisabled( true );
-	}
-	else {
-		dialog->inspectorTabs->page(0)->setDisabled( false );
-		dialog->inspectorTabs->page(1)->setDisabled( false );
-	}
+// 	if ( m_portagePackage->isQueued() && EmergeSingleton::Instance()->isRunning() ) {
+// 		dialog->inspectorTabs->page(0)->setDisabled( true );
+// 		dialog->inspectorTabs->page(1)->setDisabled( true );
+// 	}
+// 	else {
+// 		dialog->inspectorTabs->page(0)->setDisabled( false );
+// 		dialog->inspectorTabs->page(1)->setDisabled( false );
+// 	}
 	
 	// Is it first time we load this package
 	if ( m_id != m_portagePackage->id() ) {
@@ -394,9 +394,9 @@ void PackageInspector::slotApply()
 			eProc->start( KProcess::NotifyOnExit, true );
 			SignalistSingleton::Instance()->setKurooBusy( true );
 			
-			if ( !eProc->isRunning() )
-				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
-				                                    .arg( m_category ).arg( m_package ), ERROR );
+// 			if ( !eProc->isRunning() )
+// 				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
+// 				                                    .arg( m_category ).arg( m_package ), ERROR );
 			
 		}
 	}
@@ -488,24 +488,24 @@ void PackageInspector::showSettings()
 	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id ).first();
 	
 	// Enable stability radiobutton
-	if ( !userMaskVersion.isEmpty() ) {
-		dialog->rbVersionsSpecific->setChecked( true );
-		dialog->cbVersionsSpecific->setDisabled( false );
-		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
-	}
-	else {
-		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
-			dialog->rbMasked->setChecked( true );
-		else
-			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_id ) )
-				dialog->rbTesting->setChecked( true );
-			else
-				dialog->rbStable->setChecked( true );
-	}
+// 	if ( !userMaskVersion.isEmpty() ) {
+// 		dialog->rbVersionsSpecific->setChecked( true );
+// 		dialog->cbVersionsSpecific->setDisabled( false );
+// 		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
+// 	}
+// 	else {
+// 		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
+// 			dialog->rbMasked->setChecked( true );
+// 		else
+// 			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_id ) )
+// 				dialog->rbTesting->setChecked( true );
+// 			else
+// 				dialog->rbStable->setChecked( true );
+// 	}
 	
 	// Stability settings before user has changed it
 	if ( m_isVirginState ) {
-		m_stabilityBefore = dialog->groupSelectStability->selectedId();
+// 		m_stabilityBefore = dialog->groupSelectStability->selectedId();
 		m_versionBefore = userMaskVersion;
 	}
 	
@@ -526,7 +526,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		
 		// User wants only stable package
 		case 0 :
-			dialog->cbVersionsSpecific->setDisabled( true );
+// 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.keywords, package.unmask and package.mask
 			KurooDBSingleton::Instance()->clearPackageUnTesting( m_id );
@@ -540,7 +540,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		
 		// User wants only testing package
 		case 1 :
-			dialog->cbVersionsSpecific->setDisabled( true );
+// 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.unmask and package.mask
 			KurooDBSingleton::Instance()->clearPackageUnMasked( m_id );
@@ -553,7 +553,7 @@ void PackageInspector::slotSetStability( int rbStability )
 		
 		// User wants only hardmasked package
 		case 2 :
-			dialog->cbVersionsSpecific->setDisabled( true );
+// 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.keywords and package.mask
 			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
@@ -565,8 +565,8 @@ void PackageInspector::slotSetStability( int rbStability )
 			break;
 		
 		// User wants only specific version
-		case 3 :
-			dialog->cbVersionsSpecific->setDisabled( false );
+// 		case 3 :
+// 			dialog->cbVersionsSpecific->setDisabled( false );
 		
 	}
 
@@ -895,8 +895,8 @@ void PackageInspector::slotCalculateUse()
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	
 	if ( !eProc->isRunning() ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
-		                                    .arg( m_category ).arg( m_package ), ERROR );
+// 		LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
+// 		                                    .arg( m_category ).arg( m_package ), ERROR );
 		slotParsePackageUse( eProc );
 	}
 	else
@@ -940,8 +940,8 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	dialog->useView->clear();
 	if ( tmpUseList.isEmpty() ) {
 		new QListViewItem( dialog->useView, i18n("Use flags could not be calculated. Please check log for more information") );
-		foreach ( m_pretendUseLines )
-			LogSingleton::Instance()->writeLog( *it, ERROR );
+// 		foreach ( m_pretendUseLines )
+// 			LogSingleton::Instance()->writeLog( *it, ERROR );
 		return;
 	}
 	
@@ -999,8 +999,8 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 	dialog->useView->clear();
 	if ( pretendUseList.isEmpty() ) {
 		new QListViewItem( dialog->useView, i18n("Use flags could not be calculated. Please check log for more information") );
-		foreach ( m_pretendUseLines )
-			LogSingleton::Instance()->writeLog( *it, ERROR );
+// 		foreach ( m_pretendUseLines )
+// 			LogSingleton::Instance()->writeLog( *it, ERROR );
 		return;
 	}
 	else
@@ -1051,8 +1051,8 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 			}
 	}
 	
-	if ( KUser().isSuperUser() || EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy())
-		dialog->useView->setDisabled( false );
+// 	if ( KUser().isSuperUser() || EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy())
+// 		dialog->useView->setDisabled( false );
 }
 
 #include "packageinspector.moc"

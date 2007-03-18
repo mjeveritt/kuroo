@@ -193,7 +193,8 @@
   </cppsupportpart>
   <ctagspart>
     <customArguments/>
-    <customTagfilePath/>
+    <customTagfilePath>/home/karye/repository/kuroo-svn/kuroo/branches/kuroolito/tags</customTagfilePath>
+    <activeTagsFiles/>
   </ctagspart>
   <kdevdocumentation>
     <projectdoc>

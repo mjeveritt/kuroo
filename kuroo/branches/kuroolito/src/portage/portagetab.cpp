@@ -26,7 +26,6 @@
 #include "packageinspector.h"
 #include "packageversion.h"
 #include "versionview.h"
-#include "uninstallinspector.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -63,7 +62,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 {
 	// Connect What's this button
 // 	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
-	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+// 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 	
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
@@ -74,14 +73,14 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
-	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
+// 	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
+// 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	connect( packagesView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
+// 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageQueueChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Reload view after changes.
@@ -133,13 +132,13 @@ void PortageTab::slotInit()
 	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
 
 	// Initialize the uninstall dialog
-	m_uninstallInspector = new UninstallInspector( this );
+// 	m_uninstallInspector = new UninstallInspector( this );
 	
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
-	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
-	pbUninstall->setIconSet( SmallIconSet("remove") );
+// 	pbQueue->setIconSet( SmallIconSet("kuroo_queue") );
+// 	pbUninstall->setIconSet( SmallIconSet("remove") );
 	pbAdvanced->setIconSet( SmallIconSet("options") );
-	pbWhatsThis->setIconSet( SmallIconSet("info") );
+// 	pbWhatsThis->setIconSet( SmallIconSet("info") );
 	
 	slotBusy();
 }
@@ -149,21 +148,21 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( "<qt>"
-			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br>"
-			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
-			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
-			"Select 'Sync Portage' in the Portage menu.<br>"
-			"After syncing Kuroo will search for newer version of the applications you have installed. "
-			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br>"
-			"If you want to update every single package on your system, check the Deep checkbox in Kuroo Preferences.<br><br>"
-			"When you want to remove a software package from your system, select a package and press 'Uninstall'. "
-			"This will tell Portage to remove all files installed by that package from your system except the configuration files "
-			"of that application if you have altered those after the installation. "
-			"However, a big warning applies: Portage will not check if the package you want to remove is required by another package. "
-			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br><br>"
-			"Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" )
-			, QCursor::pos(), this );
+// 	QWhatsThis::display( i18n( "<qt>"
+// 			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br>"
+// 			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
+// 			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
+// 			"Select 'Sync Portage' in the Portage menu.<br>"
+// 			"After syncing Kuroo will search for newer version of the applications you have installed. "
+// 			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br>"
+// 			"If you want to update every single package on your system, check the Deep checkbox in Kuroo Preferences.<br><br>"
+// 			"When you want to remove a software package from your system, select a package and press 'Uninstall'. "
+// 			"This will tell Portage to remove all files installed by that package from your system except the configuration files "
+// 			"of that application if you have altered those after the installation. "
+// 			"However, a big warning applies: Portage will not check if the package you want to remove is required by another package. "
+// 			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br><br>"
+// 			"Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" )
+// 			, QCursor::pos(), this );
 }
 
 /**
@@ -188,7 +187,7 @@ void PortageTab::slotNextPackage( bool isNext )
  */
 void PortageTab::slotInitButtons()
 {
-	pbQueue->setText( i18n("Add to Queue") );
+// 	pbQueue->setText( i18n("Add to Queue") );
 }
 
 /**
@@ -198,9 +197,9 @@ void PortageTab::slotBusy()
 {
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
-		pbUninstall->setDisabled( true );
+// 		pbUninstall->setDisabled( true );
 		pbAdvanced->setDisabled( true );
-		pbQueue->setDisabled( true );
+// 		pbQueue->setDisabled( true );
 		filterGroup->setDisabled( true );
 		searchFilter->setDisabled( true );
 		pbClearFilter->setDisabled( true );
@@ -228,9 +227,9 @@ void PortageTab::slotButtons()
 	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
-		pbQueue->setDisabled( true );
+// 		pbQueue->setDisabled( true );
 		pbAdvanced->setDisabled( true );
-		pbUninstall->setDisabled( true );
+// 		pbUninstall->setDisabled( true );
 		return;
 	}
 	
@@ -238,33 +237,33 @@ void PortageTab::slotButtons()
 	pbAdvanced->setDisabled( false );
 	
 	// When kuroo is busy disable queue and uninstall button
-	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
-		pbQueue->setDisabled( true );
-		pbUninstall->setDisabled( true );
-		return;
-	}
-	else
-		pbQueue->setDisabled( false );
+// 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
+// 		pbQueue->setDisabled( true );
+// 		pbUninstall->setDisabled( true );
+// 		return;
+// 	}
+// 	else
+// 		pbQueue->setDisabled( false );
 
 	// Toggle queue button between add/remove
-	if ( packagesView->currentPackage()->isInPortage() ) {
-		pbQueue->setDisabled( false );
+// 	if ( packagesView->currentPackage()->isInPortage() ) {
+// 		pbQueue->setDisabled( false );
 		
-		if ( packagesView->currentPackage()->isQueued() )
-			pbQueue->setText( i18n("Remove from Queue") );
-		else
-			pbQueue->setText( i18n("Add to Queue") );
-	}
-	else {
-		pbQueue->setText( i18n("Add to Queue") );
-		pbQueue->setDisabled( true );
-	}
+// 		if ( packagesView->currentPackage()->isQueued() )
+// 			pbQueue->setText( i18n("Remove from Queue") );
+// 		else
+// 			pbQueue->setText( i18n("Add to Queue") );
+// 	}
+// 	else {
+// 		pbQueue->setText( i18n("Add to Queue") );
+// 		pbQueue->setDisabled( true );
+// 	}
 	
 	// If user is su enable uninstall
-	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
-		pbUninstall->setDisabled( false );
-	else
-		pbUninstall->setDisabled( true );
+// 	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
+// 		pbUninstall->setDisabled( false );
+// 	else
+// 		pbUninstall->setDisabled( true );
 }
 
 
@@ -382,18 +381,18 @@ void PortageTab::slotRefresh()
  */
 void PortageTab::slotQueue()
 {
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		if ( packagesView->currentPackage()->isQueued() )
-			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
-		else {
-			const QStringList selectedIdList = packagesView->selectedId();
-			QStringList packageIdList;
-			foreach( selectedIdList )
-				if ( packagesView->packageItemById( *it )->isInPortage() )
-					packageIdList += *it;
-			QueueSingleton::Instance()->addPackageIdList( packageIdList );
-		}
-	}
+// 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
+// 		if ( packagesView->currentPackage()->isQueued() )
+// 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
+// 		else {
+// 			const QStringList selectedIdList = packagesView->selectedId();
+// 			QStringList packageIdList;
+// 			foreach( selectedIdList )
+// 				if ( packagesView->packageItemById( *it )->isInPortage() )
+// 					packageIdList += *it;
+// 			QueueSingleton::Instance()->addPackageIdList( packageIdList );
+// 		}
+// 	}
 }
 
 /**
@@ -401,20 +400,20 @@ void PortageTab::slotQueue()
  */
 void PortageTab::slotUninstall()
 {
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
-		const QStringList selectedIdList = packagesView->selectedId();
-		
-		// Pick only installed packages
-		QStringList packageList;
-		foreach ( selectedIdList ) {
-			if ( packagesView->packageItemById( *it )->isInstalled() ) {
-				packageList += *it;
-				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
-			}
-		}
-		
-		m_uninstallInspector->view( packageList );
-	}
+// // 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+// // 		const QStringList selectedIdList = packagesView->selectedId();
+// // 		
+// // 		// Pick only installed packages
+// // 		QStringList packageList;
+// // 		foreach ( selectedIdList ) {
+// // 			if ( packagesView->packageItemById( *it )->isInstalled() ) {
+// // 				packageList += *it;
+// // 				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
+// // 			}
+// // 		}
+// // 		
+// // 		m_uninstallInspector->view( packageList );
+// // 	}
 }
 
 
@@ -428,9 +427,9 @@ void PortageTab::slotUninstall()
 void PortageTab::slotAdvanced()
 {
 	DEBUG_LINE_INFO;
-	pbUninstall->setDisabled( true );
+// 	pbUninstall->setDisabled( true );
 	pbAdvanced->setDisabled( true );
-	pbQueue->setDisabled( true );
+// 	pbQueue->setDisabled( true );
 	filterGroup->setDisabled( true );
 	searchFilter->setDisabled( true );
 	pbClearFilter->setDisabled( true );
@@ -605,17 +604,17 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
 	
 	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
-	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
+// 	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
 	kdDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy() << endl;
 	kdDebug() << "packagesView->currentPackage()->isInPortage()=" << packagesView->currentPackage()->isInPortage() << endl;
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
-			 || !packagesView->currentPackage()->isInPortage() )
-		menu.setItemEnabled( menuItem1, false );
+// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+// 			 || !packagesView->currentPackage()->isInPortage() )
+// 		menu.setItemEnabled( menuItem1, false );
 	
 	// No uninstall when emerging or no privileges
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
-			|| !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem4, false );
+// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+// 			|| !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
+// 		menu.setItemEnabled( menuItem4, false );
 	
 	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() )

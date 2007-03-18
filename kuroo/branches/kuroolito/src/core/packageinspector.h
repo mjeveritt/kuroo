@@ -25,6 +25,7 @@
 #include "portagelistview.h"
 
 #include <kdialogbase.h>
+#include <kprocio.h>
 
 /**
  * @class PackageInspector

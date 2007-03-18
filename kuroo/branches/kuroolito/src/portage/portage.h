@@ -42,11 +42,6 @@ public:
 	void						appendWorld( const QStringList& packageList );
 	void						removeFromWorld( const QStringList& packageList );
 	
-	void						pretendPackageList( const QStringList& packageIdList );
-	void						uninstallInstalledPackageList( const QStringList& packageIdList );
-	void						addInstalledPackage( const QString& package );
-	void						removeInstalledPackage( const QString& package );
-	
 	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
 	
 	

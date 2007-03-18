@@ -22,7 +22,7 @@
 #define SCANUPDATESJOB_H
 
 #include "threadweaver.h"
-
+#include "package.h"
 #include <qobject.h>
 
 class DbConnection;

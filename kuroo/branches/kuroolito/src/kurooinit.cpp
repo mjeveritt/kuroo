@@ -101,11 +101,11 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	KurooConfig::writeConfig();
 	
 	// Initialize the log
-	QString logFile = LogSingleton::Instance()->init( this );
-	if ( !logFile.isEmpty() ) {
-		chmod( logFile, 0660 );
-		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
-	}
+// 	QString logFile = LogSingleton::Instance()->init( this );
+// 	if ( !logFile.isEmpty() ) {
+// 		chmod( logFile, 0660 );
+// 		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
+// 	}
 	
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
@@ -136,11 +136,11 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	GlobalSingleton::Instance()->init( this );
 	ImagesSingleton::Instance()->init( this );
 	SignalistSingleton::Instance()->init( this );
-	EmergeSingleton::Instance()->init( this );
-	EtcUpdateSingleton::Instance()->init( this );
-	HistorySingleton::Instance()->init( this );
+// 	EmergeSingleton::Instance()->init( this );
+// 	EtcUpdateSingleton::Instance()->init( this );
+// 	HistorySingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
-	QueueSingleton::Instance()->init( this );
+// 	QueueSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
 	FileWatcherSingleton::Instance()->init( this );
 }

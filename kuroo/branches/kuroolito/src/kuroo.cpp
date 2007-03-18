@@ -26,7 +26,7 @@
 #include "statusbar.h"
 #include "introdlg.h"
 #include "portagetab.h"
-#include "logstab.h"
+#include "packageinspector.h"
 
 #include <unistd.h>
 
@@ -53,15 +53,22 @@
  * @short Main kde window with menus, system tray icon and statusbar.
  */
 Kuroo::Kuroo()
-	: MainWindow( 0, "Kuroo" ),
+	: MainWindow( 0, "Kuroolito" ),
 	kurooInit( new KurooInit( this, "KurooInit" ) ),
 	kurooMessage( new Message( this ) ),
-	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
+// 	m_view( new KurooView( this, "KurooView" ) ), 
+	systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	GlobalSingleton::Instance()->setColorTheme();
-			
-	setCentralWidget( m_view );
+	
+	// Create the package inspector
+	PackageInspector *packageInspector = new PackageInspector( this );
+	
+	// Add all pages
+	viewPortage = new PortageTab( this, packageInspector );
+	
+	setCentralWidget( viewPortage );
 	setupActions();
 	statusBar();
 	setupGUI();
@@ -80,15 +87,20 @@ Kuroo::Kuroo()
 	connect( kapp, SIGNAL( lastWindowClosed() ), kapp, SLOT( quit() ) );
 	
 	// Kuroo must initialize with db first
-	SignalistSingleton::Instance()->setKurooReady( false );
+	SignalistSingleton::Instance()->setKurooReady( true );
 	
 	// Initialize with settings in make.conf
 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
 	if ( !prefDialog )
-		prefDialog = new ConfigDialog( m_view, i18n( "settings" ), KurooConfig::self() );
+		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KurooConfig::self() );
 	
 	// Zack Rusin's delayed initialization technique
-	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
+// 	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
+	
+	if ( !KurooDBSingleton::Instance()->isPortageEmpty() )
+		viewPortage->slotReload();
+	else
+		PortageSingleton::Instance()->slotRefresh();
 }
 
 /**
@@ -112,8 +124,6 @@ Kuroo::~Kuroo()
 
 void Kuroo::slotWhatsThis( int tabIndex )
 {
-	kdDebug() << "tabIndex=" << tabIndex << LINE_INFO;
-	
 	if ( tabIndex == 5 )
 		whatsThis();
 }
@@ -147,26 +157,26 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy()
 {
-	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
-		actionRefreshPortage->setEnabled( false );
-		actionRefreshUpdates->setEnabled( false );
-	}
-	else {
-		actionRefreshPortage->setEnabled( true );
-		actionRefreshUpdates->setEnabled( true );
-		
-		// Make sure progressbar is stopped!
-		KurooStatusBar::instance()->stopTimer();
-	}
+// 	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
+// 		actionRefreshPortage->setEnabled( false );
+// 		actionRefreshUpdates->setEnabled( false );
+// 	}
+// 	else {
+// 		actionRefreshPortage->setEnabled( true );
+// 		actionRefreshUpdates->setEnabled( true );
+// 		
+// 		// Make sure progressbar is stopped!
+// 		KurooStatusBar::instance()->stopTimer();
+// 	}
 	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
-	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
-		actionSyncPortage->setEnabled( false );
-	}
-	else {
-		actionSyncPortage->setEnabled( true );
-	}
-	
+// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
+// 	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+// 		actionSyncPortage->setEnabled( false );
+// 	}
+// 	else {
+// 		actionSyncPortage->setEnabled( true );
+// 	}
+// 	
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
 		actionRefreshPortage->setEnabled( false );
@@ -206,7 +216,7 @@ void Kuroo::slotPreferences()
 {
 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
 	if ( !prefDialog )
-		prefDialog = new ConfigDialog( m_view, i18n( "settings" ), KurooConfig::self() );
+		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KurooConfig::self() );
 	prefDialog->show();
 	prefDialog->raise();
 	prefDialog->setActiveWindow();
@@ -254,11 +264,11 @@ bool Kuroo::queryExit()
  */
 void Kuroo::slotQuit()
 {
-	KurooDBSingleton::Instance()->backupDb();
-	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
-	if ( backupLogJob != NULL )
-		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
-	else
+/*	KurooDBSingleton::Instance()->backupDb();*/
+// 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
+// 	if ( backupLogJob != NULL )
+// 		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
+// 	else
 		slotWait();
 }
 
@@ -269,7 +279,7 @@ void Kuroo::slotWait()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		switch( KMessageBox::questionYesNo( this, 
-			i18n("<qt>Kuroo is busy<br><br>"
+			i18n("<qt>Kuroolito is busy<br><br>"
 			     "Do you want to quit?<br>"
 			     "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 				     

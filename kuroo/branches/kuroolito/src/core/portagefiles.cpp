@@ -675,45 +675,45 @@ void PortageFiles::init( QObject *parent )
  */
 void PortageFiles::refresh( int mask )
 {
-	switch ( mask ) {
-		case PACKAGE_KEYWORDS_SCANNED:
-			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
-			                                    .arg( KurooConfig::filePackageKeywords() ), KUROO );
-			break;
-		case PACKAGE_USER_UNMASK_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
-												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
-			break;
-		case PACKAGE_HARDMASK_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
-												.arg( KurooConfig::filePackageHardMask() ), KUROO );
-			break;
-		case PACKAGE_USER_MASK_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
-												.arg( KurooConfig::filePackageUserMask() ), KUROO );
-			break;
-		case PACKAGE_KEYWORDS_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
-												.arg( KurooConfig::filePackageKeywords() ), KUROO );
-			emit signalPortageFilesChanged();
-			break;
-		case PACKAGE_USER_MASK_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
-												.arg( KurooConfig::filePackageUserMask() ), KUROO );
-			emit signalPortageFilesChanged();
-			break;
-		case PACKAGE_USER_UNMASK_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
-												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
-			break;
-		case PACKAGE_USER_USE_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
-												.arg( KurooConfig::filePackageUserUse() ), KUROO );
-			break;
-		case PACKAGE_USER_USE_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
-												.arg( KurooConfig::filePackageUserUse() ), KUROO );
-	}
+// 	switch ( mask ) {
+// 		case PACKAGE_KEYWORDS_SCANNED:
+// 			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
+// 			                                    .arg( KurooConfig::filePackageKeywords() ), KUROO );
+// 			break;
+// 		case PACKAGE_USER_UNMASK_SCANNED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
+// 												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
+// 			break;
+// 		case PACKAGE_HARDMASK_SCANNED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
+// 												.arg( KurooConfig::filePackageHardMask() ), KUROO );
+// 			break;
+// 		case PACKAGE_USER_MASK_SCANNED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
+// 												.arg( KurooConfig::filePackageUserMask() ), KUROO );
+// 			break;
+// 		case PACKAGE_KEYWORDS_SAVED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
+// 												.arg( KurooConfig::filePackageKeywords() ), KUROO );
+// 			emit signalPortageFilesChanged();
+// 			break;
+// 		case PACKAGE_USER_MASK_SAVED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
+// 												.arg( KurooConfig::filePackageUserMask() ), KUROO );
+// 			emit signalPortageFilesChanged();
+// 			break;
+// 		case PACKAGE_USER_UNMASK_SAVED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
+// 												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
+// 			break;
+// 		case PACKAGE_USER_USE_SCANNED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
+// 												.arg( KurooConfig::filePackageUserUse() ), KUROO );
+// 			break;
+// 		case PACKAGE_USER_USE_SAVED:
+// 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
+// 												.arg( KurooConfig::filePackageUserUse() ), KUROO );
+// 	}
 }
 
 

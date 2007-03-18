@@ -22,6 +22,7 @@
 #define KUROOINIT_H
 
 #include <qobject.h>
+#include <kprocio.h>
 
 class IntroDlg;
 

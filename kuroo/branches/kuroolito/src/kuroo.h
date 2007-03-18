@@ -75,11 +75,12 @@ private:
 	Queue 				*kurooQueue;
 	Message 			*kurooMessage;
 	KurooInit 			*kurooInit;
-	KurooView 			*m_view;
+// 	KurooView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
+	PortageTab 			*viewPortage;
 };
 
 #endif // _KUROO_H_

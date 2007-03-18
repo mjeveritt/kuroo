@@ -25,18 +25,14 @@
 #include "images.h"
 #include "message.h"
 #include "signalist.h"
-#include "emerge.h"
-#include "etcupdate.h"
 #include "statusbar.h"
-#include "log.h"
-#include "queue.h"
 #include "portage.h"
 #include "portagedb.h"
-#include "history.h"
 #include "portagefiles.h"
 #include "filewatcher.h"
 #include "global.h"
 #include "singleton.h"
+#include "emerge.h"
 
 #include <qregexp.h>
 
@@ -46,14 +42,10 @@
 
 // Define all singleton objects
 typedef Singleton<Images> ImagesSingleton;
-typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
-typedef Singleton<EtcUpdate> EtcUpdateSingleton;
-typedef Singleton<Queue> QueueSingleton;
+typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KurooDB> KurooDBSingleton;
-typedef Singleton<Log> LogSingleton;
-typedef Singleton<History> HistorySingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;

@@ -46,10 +46,6 @@ public:
 	~KurooView();
 	
 	PortageTab*			viewPortage;
-	HistoryTab*			viewHistory;
-	QueueTab*			viewQueue;
-	LogsTab* 			viewLogs;
-	MergeTab*			viewMerge;
 	PackageInspector	*packageInspector;
 	
 	void 				slotEmergePretend( QString package );
@@ -63,10 +59,6 @@ public slots:
 private slots:
 	void 				slotCheckPortage();
 	void 				slotPortageUpdated();
-	void 				slotQueueUpdated();
-	void				slotHistoryUpdated();
-	void				slotMergeUpdated();
-	void 				slotLogUpdated();
 	void				slotResetMenu( QListBoxItem* menuItem );
 	void 				slotShowView();
 	

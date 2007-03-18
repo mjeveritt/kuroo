@@ -28,19 +28,19 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
-static const char version[] = "0.81.0_221006_db47";
+static const char description[] = I18N_NOOP("Browser for Gentoo Portage");
+static const char version[] = "0.10.0_221006_db47";
 
 static KCmdLineOptions options[] =
 {
-	{ "option <argument>", I18N_NOOP("Initialize Kuroo with init"), 0 }, KCmdLineLastOption
+	{ "option <argument>", I18N_NOOP("Initialize Kuroolito with init"), 0 }, KCmdLineLastOption
 };
 
 int main( int argc, char **argv )
 {
-	kdDebug() << "Kuroo version=" << version << endl;
+	kdDebug() << "Kuroolito version=" << version << endl;
 	
-	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
+	KAboutData about("kuroolito", I18N_NOOP("Kuroolito"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "info@kuroo.org");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "info@kuroo.org");
 	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
@@ -61,8 +61,8 @@ int main( int argc, char **argv )
 	KApplication app;
 	
     // register ourselves as a dcop client
-	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
-		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
+	if ( app.dcopClient()->isApplicationRegistered("kuroolito") )  {
+		kdDebug() << I18N_NOOP("Kuroolito is already running!") << endl;
 		exit(0);
 	}
 	

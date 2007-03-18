@@ -376,46 +376,6 @@ void PortageTab::slotRefresh()
 	}
 }
 
-/**
- * Append or remove package to the queue.
- */
-void PortageTab::slotQueue()
-{
-// 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
-// 		if ( packagesView->currentPackage()->isQueued() )
-// 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
-// 		else {
-// 			const QStringList selectedIdList = packagesView->selectedId();
-// 			QStringList packageIdList;
-// 			foreach( selectedIdList )
-// 				if ( packagesView->packageItemById( *it )->isInPortage() )
-// 					packageIdList += *it;
-// 			QueueSingleton::Instance()->addPackageIdList( packageIdList );
-// 		}
-// 	}
-}
-
-/**
- * Uninstall selected package.
- */
-void PortageTab::slotUninstall()
-{
-// // 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKuroolitoBusy() || !KUser().isSuperUser() ) {
-// // 		const QStringList selectedIdList = packagesView->selectedId();
-// // 		
-// // 		// Pick only installed packages
-// // 		QStringList packageList;
-// // 		foreach ( selectedIdList ) {
-// // 			if ( packagesView->packageItemById( *it )->isInstalled() ) {
-// // 				packageList += *it;
-// // 				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
-// // 			}
-// // 		}
-// // 		
-// // 		m_uninstallInspector->view( packageList );
-// // 	}
-}
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Package slots
@@ -583,78 +543,19 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	KPopupMenu menu( this );
 	
-	int menuItem1;
-	if ( !packagesView->currentPackage()->isQueued() )
-		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Add to queue"), APPEND );
-	else
-		menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Remove from queue"), APPEND );
-	
 	int menuItem2;
 	menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
-	
-	int menuItem3;
-	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
-	else
-		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
-	menu.setItemEnabled( menuItem3, false );
-	
-	int menuItem4;
-	if ( packagesView->currentPackage()->isInstalled() )
-		menuItem4 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
-	
-	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
-// 	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
-	kdDebug() << "SignalistSingleton::Instance()->isKuroolitoBusy()=" << SignalistSingleton::Instance()->isKuroolitoBusy() << endl;
-	kdDebug() << "packagesView->currentPackage()->isInPortage()=" << packagesView->currentPackage()->isInPortage() << endl;
-// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKuroolitoBusy()
-// 			 || !packagesView->currentPackage()->isInPortage() )
-// 		menu.setItemEnabled( menuItem1, false );
-	
-	// No uninstall when emerging or no privileges
-// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKuroolitoBusy()
-// 			|| !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
-// 		menu.setItemEnabled( menuItem4, false );
-	
-	// Allow editing of World when superuser
-	if ( KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem3, true );
+
 	
 	if ( m_packageInspector->isVisible() ) {
-		menu.setItemEnabled( menuItem1, false );
 		menu.setItemEnabled( menuItem2, false );
-		menu.setItemEnabled( menuItem3, false );
-		menu.setItemEnabled( menuItem4, false );
 	}
 	
 	switch( menu.exec( point ) ) {
 
-		case APPEND:
-			slotQueue();
-			break;
-			
-		case UNINSTALL:
-			slotUninstall();
-			break;
-		
 		case DETAILS:
 			slotAdvanced();
 			break;
-		
-		case ADDWORLD: {
-			QStringList packageList;
-			foreach ( selectedIdList )
-				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
-			PortageSingleton::Instance()->appendWorld( packageList );
-			break;
-		}
-		
-		case DELWORLD: {
-			QStringList packageList;
-			foreach ( selectedIdList )
-				packageList += packagesView->packageItemById( *it )->category() + "/" + packagesView->packageItemById( *it )->name();
-			PortageSingleton::Instance()->removeFromWorld( packageList );
-		}
 	}
 }
 

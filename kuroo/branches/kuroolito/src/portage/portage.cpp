@@ -151,8 +151,8 @@ bool Portage::slotRefresh()
  */
 bool Portage::slotSync()
 {
-// // 	EmergeSingleton::Instance()->sync();
-// // 	return true;
+	EmergeSingleton::Instance()->sync();
+	return true;
 }
 
 /**

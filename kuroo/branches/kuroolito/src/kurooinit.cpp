@@ -53,13 +53,13 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KuroolitoConfig::version() != KuroolitoConfig::hardVersion() || !d.exists() || KuroolitoConfig::wizard() )
 		firstTimeWizard();
-	else
-		if ( !KUser().isSuperUser() )
-			checkUser();
+// 	else
+// 		if ( !KUser().isSuperUser() )
+// 			checkUser();
 	
 	// Get portage groupid to set directories and files owned by portage
-	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
-	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
+// 	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
+// 	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
 	
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -73,10 +73,11 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 				                            "You must start Kuroolito with kdesu first time for a secure initialization.<br>"
 				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
-			} else {
+			}
+			/*else {
 				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
 				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
-			}
+			}*/
 			
 			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
 		}
@@ -91,10 +92,10 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 			                            "Please try again!</qt>"), i18n("Initialization") );
 			exit(0);
 		}
-		else {
-			chmod( backupDir, 0770 );
-			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
-		}
+// 		else {
+// 			chmod( backupDir, 0770 );
+// 			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
+// 		}
 	}
 	
 	KuroolitoConfig::setVersion( KuroolitoConfig::hardVersion() );
@@ -129,18 +130,14 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	}
 	
 	// Give permissions to portage:portage to access the db also
-	chmod( databaseFile, 0660 );
-	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
+// 	chmod( databaseFile, 0660 );
+// 	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
 	
 	// Initialize singletons objects
 	GlobalSingleton::Instance()->init( this );
 	ImagesSingleton::Instance()->init( this );
 	SignalistSingleton::Instance()->init( this );
-// 	EmergeSingleton::Instance()->init( this );
-// 	EtcUpdateSingleton::Instance()->init( this );
-// 	HistorySingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
-// 	QueueSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
 	FileWatcherSingleton::Instance()->init( this );
 }
@@ -227,17 +224,17 @@ void KuroolitoInit::firstTimeWizard()
 /**
  * Control if user is in portage group.
  */
-void KuroolitoInit::checkUser()
-{
-	QStringList userGroups = KUser().groupNames();
-	foreach( userGroups ) {
-		if ( *it == "portage" )
-			return;
-	}
-	
-	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
-	                       i18n("User permissions") );
-	exit(0);
-}
+// void KuroolitoInit::checkUser()
+// {
+// 	QStringList userGroups = KUser().groupNames();
+// 	foreach( userGroups ) {
+// 		if ( *it == "portage" )
+// 			return;
+// 	}
+// 	
+// 	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
+// 	                       i18n("User permissions") );
+// 	exit(0);
+// }
 
 #include "kurooinit.moc"

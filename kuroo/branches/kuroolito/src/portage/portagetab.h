@@ -63,9 +63,6 @@ private slots:
 	void				slotClearFilter();
 	void				slotListPackages();
 	
-	void				slotQueue();
-	void				slotUninstall();
-	
 	void				slotAdvanced();
 	void				slotPackage();
 	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );

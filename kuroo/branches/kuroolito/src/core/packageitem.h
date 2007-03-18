@@ -51,7 +51,6 @@ public:
 	virtual bool					isQueued();
 	virtual bool					isInWorld();
 	
-// 	void							setRollOver( bool isMouseOver );
 	void							setInstalled();
 	void							setDescription( const QString& description );
 	void							setQueued( bool isQueued );

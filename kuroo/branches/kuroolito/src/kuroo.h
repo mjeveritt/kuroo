@@ -28,7 +28,7 @@
 
 #include "configdialog.h"
 #include "mainwindow.h"
-#include "kurooview.h"
+#include "portagetab.h"
 
 #include <kapplication.h>
 
@@ -74,7 +74,7 @@ private:
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
 	Message 			*kurooMessage;
-	KuroolitoInit 			*kurooInit;
+	KuroolitoInit 		*kurooInit;
 // 	KuroolitoView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;

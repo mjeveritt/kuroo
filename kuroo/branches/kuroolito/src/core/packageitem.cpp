@@ -63,22 +63,15 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 		QColorGroup m_colorgroup( colorgroup );
 		QFont font( painter->font() );
 		
-// 		if ( m_isMouseOver ) {
-// 			font.setBold( true );
-// 			painter->setFont( font );
-// 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
-// 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
-// 		}
-		
 		// Optimizing - check only relevant columns
 		switch ( column ) {
 			
 			case 0 : {
 				if ( m_status & PACKAGE_AVAILABLE )
-					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGES ) );
 				else {
 					if ( KuroolitoConfig::installedColumn() ) {
-						setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+						setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGES ) );
 						setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
 					}
 					else
@@ -354,12 +347,6 @@ void PackageItem::parsePackageVersions()
 ///////////////////////////////////////////////////////////////////////////////
 // Accessors
 ///////////////////////////////////////////////////////////////////////////////
-
-// void PackageItem::setRollOver( bool isMouseOver )
-// {
-// 	m_isMouseOver = isMouseOver;
-// 	repaint();
-// }
 
 /**
  * Register package index in parent listView.

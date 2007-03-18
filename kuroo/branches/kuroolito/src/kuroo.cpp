@@ -116,7 +116,7 @@ Kuroolito::~Kuroolito()
 			break;
 		
 		if ( maxLoops-- == 0 ) {
-			KMessageBox::error( 0, i18n("Kuroolito is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
+			KMessageBox::error( 0, i18n("Kuroolito is not responding. Attempting to terminate kuroolito!"), i18n("Terminating") );
 			break;
 		}
 	}
@@ -145,9 +145,6 @@ void Kuroolito::setupActions()
 	
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
-	
-	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
-	                          			this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
 	
 	createGUI();
 }
@@ -190,23 +187,23 @@ void Kuroolito::slotBusy()
  */
 void Kuroolito::slotSync()
 {
-	KLocale *loc = KGlobal::locale();
-	QDateTime t;
-	QString timeStamp( KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "syncTimeStamp" ) );
-	QString lastSyncDate( QString::null );
-	
-	if ( !timeStamp.isEmpty() ) {
-		t.setTime_t( timeStamp.toUInt() );
-		lastSyncDate = loc->formatDateTime(t);
-	}
-	
-	switch( KMessageBox::questionYesNo( this, 
-		i18n( "<qt>Do you want to synchronize portage?<br>"
-		      "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
-			     
-		case KMessageBox::Yes:
-			PortageSingleton::Instance()->slotSync();
-	}
+// 	KLocale *loc = KGlobal::locale();
+// 	QDateTime t;
+// 	QString timeStamp( KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "syncTimeStamp" ) );
+// 	QString lastSyncDate( QString::null );
+// 	
+// 	if ( !timeStamp.isEmpty() ) {
+// 		t.setTime_t( timeStamp.toUInt() );
+// 		lastSyncDate = loc->formatDateTime(t);
+// 	}
+// 	
+// 	switch( KMessageBox::questionYesNo( this, 
+// 		i18n( "<qt>Do you want to synchronize portage?<br>"
+// 		      "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
+// 			     
+// 		case KMessageBox::Yes:
+// 			PortageSingleton::Instance()->slotSync();
+// 	}
 }
 
 /**

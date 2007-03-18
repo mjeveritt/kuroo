@@ -21,9 +21,11 @@
 #ifndef SCANPORTAGEJOB_H
 #define SCANPORTAGEJOB_H
 
+#include "common.h"
 #include "threadweaver.h"
 
 #include <qobject.h>
+#include <qregexp.h>
 
 class DbConnection;
 

@@ -50,9 +50,6 @@ public:
 	
 	void 				slotEmergePretend( QString package );
 	
-public:
-	class 				IconListItem;
-	
 public slots:
 	void 				slotInit();
 
@@ -62,31 +59,8 @@ private slots:
 	void				slotResetMenu( QListBoxItem* menuItem );
 	void 				slotShowView();
 	
-private:
-	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge/*, *iconWhatsThis*/;
-	
 	// True if history needs to be recreated from scratch
 	bool				m_isHistoryRestored;
-};
-
-class KuroolitoView::IconListItem : public QListBoxItem
-{
-public:
-	IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text );
-	virtual int 		height( const QListBox *lb ) const;
-	virtual int 		width( const QListBox *lb ) const;
-	int 				expandMinimumWidth( int width );
-	void 				setChanged( bool modified );
-	bool 				isChanged();
-	
-protected:
-	const QPixmap 		&defaultPixmap();
-	void 				paint( QPainter *painter );
-	
-private:
-	bool 				m_modified;
-	QPixmap 			mPixmap;
-	int 				mMinimumWidth;
 };
 
 #endif // _KUROOVIEW_H_

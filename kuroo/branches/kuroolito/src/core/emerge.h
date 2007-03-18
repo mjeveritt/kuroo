@@ -42,13 +42,8 @@ public:
     ~Emerge();
 
 	void						init( QObject *parent = 0 );
-	void						inputText( const QString& text );
-	bool						stop();
 	bool 						isRunning();
 	
-	bool 						pretend( const QStringList& packageList );
-	bool 						queue( const QStringList& packageList );
-	bool 						unmerge( const QStringList& packageList );
 	bool						sync();
 	bool						checkUpdates();
 	
@@ -57,17 +52,11 @@ public:
 	
 private:
 	void						cleanup();
-	bool						countEtcUpdates( const QString& line );
-	void						askUnmaskPackage( const QString& packageKeyword );
 	
 private slots:
 	void 						slotEmergeOutput( KProcIO *proc );
-	void 						slotCleanupQueue( KProcess *proc );
-	void 						slotCleanupPretend( KProcess *proc );
-	void 						slotCleanupUnmerge( KProcess *proc );
 	void 						slotCleanupSync( KProcess *proc );
 	void 						slotCleanupCheckUpdates( KProcess *proc );
-	void						slotTryEmerge();
 	
 signals:
 	void						signalEmergeComplete();

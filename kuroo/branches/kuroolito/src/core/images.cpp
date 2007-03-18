@@ -104,7 +104,7 @@ const QPixmap& Images::icon( int image )
 			return pxInstalled;
 			break;
 			
-		case PACKAGE:
+		case PACKAGES:
 			return pxPackage;
 			break;
 			

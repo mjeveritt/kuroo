@@ -36,7 +36,7 @@
 		</entry>
 		
 		<entry name="DirHome" type="String">
-			<default>/var/cache/kuroolito</default>
+			<default>.kuroolito</default>
 		</entry>
 		
 		<entry name="databas" type="String">

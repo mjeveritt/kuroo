@@ -100,7 +100,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	setRootIsDecorated( false );
 	setFullWidth( true );
 	
-	if ( KurooConfig::installedColumn() ) {
+	if ( KuroolitoConfig::installedColumn() ) {
 		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
 		setColumnAlignment( 1, Qt::AlignHCenter );
 		setColumnWidth( 1, 25 );

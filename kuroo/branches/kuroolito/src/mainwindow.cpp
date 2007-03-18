@@ -42,9 +42,9 @@ MainWindow::~MainWindow()
  * Create statusBar.
  * @return pointer to statusBar
  */
-KurooStatusBar* MainWindow::statusBar()
+KuroolitoStatusBar* MainWindow::statusBar()
 {
-	sb = new KurooStatusBar( this );
+	sb = new KuroolitoStatusBar( this );
 	return sb;
 }
 

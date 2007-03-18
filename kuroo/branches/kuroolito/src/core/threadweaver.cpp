@@ -299,19 +299,19 @@ void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 	
 	switch( progress ) {
 		case -3:
-			KurooStatusBar::instance()->setProgressStatus( m_id, m_status );
+			KuroolitoStatusBar::instance()->setProgressStatus( m_id, m_status );
 			break;
 	
 		case -2:
-			KurooStatusBar::instance()->setThreadTotalSteps( 0 );
+			KuroolitoStatusBar::instance()->setThreadTotalSteps( 0 );
 			break;
 		
 		case -1:
-			KurooStatusBar::instance()->setThreadTotalSteps( 100 );
+			KuroolitoStatusBar::instance()->setThreadTotalSteps( 100 );
 			break;
 	
 		default:
-			KurooStatusBar::instance()->setProgress( progress );
+			KuroolitoStatusBar::instance()->setProgress( progress );
 	}
 }
 

@@ -269,7 +269,7 @@
                 <cstring>portage_2_3</cstring>
             </property>
             <property name="title">
-                <string>Kuroo options</string>
+                <string>Kuroolito options</string>
             </property>
             <grid>
                 <property name="name">
@@ -297,7 +297,7 @@
                         <cstring>kcfg_isSystrayEnabled</cstring>
                     </property>
                     <property name="text">
-                        <string>Dock kuroo in system tray (close does not e&amp;xit kuroo)</string>
+                        <string>Dock kuroolito in system tray (close does not e&amp;xit kuroo)</string>
                     </property>
                     <property name="accel">
                         <string>Alt+X</string>
@@ -348,7 +348,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>EDB_DEP</string>
+                        <string>Cache</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">
@@ -364,7 +364,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>PKG_DIR</string>
+                        <string>Installed packages</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">

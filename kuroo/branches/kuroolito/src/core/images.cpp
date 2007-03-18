@@ -26,7 +26,7 @@
 
 /**
  * @class Images
- * @short Delivers icons in Kuroo.
+ * @short Delivers icons in Kuroolito.
  */
 Images::Images( QObject* m_parent )
 	: QObject( m_parent )
@@ -44,7 +44,7 @@ void Images::init( QObject *parent )
 	
 	KIconLoader *ldr = KGlobal::iconLoader();
 	
-	pxKuroo = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
+	pxKuroolito = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
 	pxEmerging = ldr->loadIcon( "kuroo1", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
 	
 	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
@@ -85,7 +85,7 @@ const QPixmap& Images::icon( int image )
 	switch ( image ) {
 		
 		case KUROO_READY:
-			return pxKuroo;
+			return pxKuroolito;
 			break;
 			
 		case KUROO_EMERGING:

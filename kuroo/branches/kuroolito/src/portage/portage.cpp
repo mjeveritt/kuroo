@@ -38,10 +38,10 @@ public:
 		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
 	
 	virtual bool doJob() {
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
+		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
 		
 		if ( m_hasUpdate == 0 ) {
-			KurooDBSingleton::Instance()->singleQuery( QString("UPDATE package SET updateVersion = '', status = '%1' WHERE id = '%2';")
+			KuroolitoDBSingleton::Instance()->singleQuery( QString("UPDATE package SET updateVersion = '', status = '%1' WHERE id = '%2';")
 			                                     		.arg( PACKAGE_INSTALLED_STRING ).arg( m_id ), m_db );
 		}
 		else {
@@ -51,11 +51,11 @@ public:
 			else
 				updateString = m_updateVersion + " (D)";
 			
-			KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
+			KuroolitoDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
 			                                     		.arg( updateString ).arg( PACKAGE_UPDATES_STRING ).arg( m_id ), m_db );
 		}
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
@@ -109,7 +109,7 @@ void Portage::init( QObject *parent )
 void Portage::slotChanged()
 {
 	// Register in db so we can check at next start if user has emerged any packages outside kuroo
-	KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
+	KuroolitoDBSingleton::Instance()->setKuroolitoDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 	
 	emit signalPortageChanged();
 }
@@ -135,7 +135,7 @@ void Portage::slotPackageChanged()
 bool Portage::slotRefresh()
 {
 	// Update cache if empty
-	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
+	if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
 		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
 	}
@@ -174,7 +174,7 @@ bool Portage::slotScan()
 	// Wait for cache job to finish before launching the scan.
 	int maxLoops( 99 );
 	while ( true ) {
-		if ( KurooDBSingleton::Instance()->isCacheEmpty() )
+		if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() )
 			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
@@ -203,11 +203,11 @@ void Portage::slotScanCompleted()
 	PortageFilesSingleton::Instance()->loadPackageFiles();
 	
 	// Ready to roll!
-	SignalistSingleton::Instance()->setKurooReady( true );
+	SignalistSingleton::Instance()->setKuroolitoReady( true );
 	slotChanged();
 	
 	// Go on with checking for updates
-	if ( KurooDBSingleton::Instance()->isUpdatesEmpty() )
+	if ( KuroolitoDBSingleton::Instance()->isUpdatesEmpty() )
 		slotRefreshUpdates();
 }
 
@@ -223,7 +223,7 @@ void Portage::loadWorld()
 {
 	m_mapWorld.clear();
 	
-	QFile file( KurooConfig::fileWorld() );
+	QFile file( KuroolitoConfig::fileWorld() );
 	if ( file.open( IO_ReadOnly ) ) {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
@@ -233,7 +233,7 @@ void Portage::loadWorld()
 		emit signalWorldChanged();
 	}
 	else
-		kdError(0) << "Loading packages in world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
+		kdError(0) << "Loading packages in world. Reading: " << KuroolitoConfig::fileWorld() << LINE_INFO;
 }
 
 /**
@@ -253,9 +253,9 @@ bool Portage::isInWorld( const QString& package )
 void Portage::appendWorld( const QStringList& packageList )
 {
 	// Check is world is writable
-	QFile file( KurooConfig::fileWorld() );
+	QFile file( KuroolitoConfig::fileWorld() );
 	if ( !file.open( IO_WriteOnly ) ) {
-		kdError(0) << "Adding packages to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		kdError(0) << "Adding packages to world. Writing: " << KuroolitoConfig::fileWorld() << LINE_INFO;
 		return;
 	}
 	
@@ -282,9 +282,9 @@ void Portage::appendWorld( const QStringList& packageList )
 void Portage::removeFromWorld( const QStringList& packageList )
 {
 	// Check is world is writable
-	QFile file( KurooConfig::fileWorld() );
+	QFile file( KuroolitoConfig::fileWorld() );
 	if ( !file.open( IO_WriteOnly ) ) {
-		kdError(0) << "Removing packages from world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		kdError(0) << "Removing packages from world. Writing: " << KuroolitoConfig::fileWorld() << LINE_INFO;
 		return;
 	}
 	

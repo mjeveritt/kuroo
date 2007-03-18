@@ -379,7 +379,7 @@ void PackageInspector::slotApply()
 		if ( !useList.isEmpty() ) {
 			
 			//set use flags to nothing to check if a string is necessary in package.use
-			KurooDBSingleton::Instance()->setPackageUse( m_id, "" );
+			KuroolitoDBSingleton::Instance()->setPackageUse( m_id, "" );
 			PortageFilesSingleton::Instance()->savePackageUse();
 
 			//recalculate use flags
@@ -392,7 +392,7 @@ void PackageInspector::slotApply()
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );
 			connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
 			eProc->start( KProcess::NotifyOnExit, true );
-			SignalistSingleton::Instance()->setKurooBusy( true );
+			SignalistSingleton::Instance()->setKuroolitoBusy( true );
 			
 // 			if ( !eProc->isRunning() )
 // 				LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
@@ -450,7 +450,7 @@ void PackageInspector::rollbackSettings()
  */
 void PackageInspector::showHardMaskInfo()
 {
-	const QStringList hardMaskInfo = KurooDBSingleton::Instance()->packageHardMaskInfo( m_id );
+	const QStringList hardMaskInfo = KuroolitoDBSingleton::Instance()->packageHardMaskInfo( m_id );
 	
 	if ( !hardMaskInfo.isEmpty() ) {
 		QFont font;
@@ -485,7 +485,7 @@ void PackageInspector::slotHardMaskInfo()
 void PackageInspector::showSettings()
 {
 	// Get user mask specific version
-	QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id ).first();
+	QString userMaskVersion = KuroolitoDBSingleton::Instance()->packageUserMaskAtom( m_id ).first();
 	
 	// Enable stability radiobutton
 // 	if ( !userMaskVersion.isEmpty() ) {
@@ -494,10 +494,10 @@ void PackageInspector::showSettings()
 // 		dialog->cbVersionsSpecific->setCurrentText( m_portagePackage->emergeVersion() );
 // 	}
 // 	else {
-// 		if ( KurooDBSingleton::Instance()->isPackageUnMasked( m_id ) )
+// 		if ( KuroolitoDBSingleton::Instance()->isPackageUnMasked( m_id ) )
 // 			dialog->rbMasked->setChecked( true );
 // 		else
-// 			if ( KurooDBSingleton::Instance()->isPackageUnTesting( m_id ) )
+// 			if ( KuroolitoDBSingleton::Instance()->isPackageUnTesting( m_id ) )
 // 				dialog->rbTesting->setChecked( true );
 // 			else
 // 				dialog->rbStable->setChecked( true );
@@ -529,10 +529,10 @@ void PackageInspector::slotSetStability( int rbStability )
 // 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.keywords, package.unmask and package.mask
-			KurooDBSingleton::Instance()->clearPackageUnTesting( m_id );
-			KurooDBSingleton::Instance()->clearPackageUnMasked( m_id );
-			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
-			KurooDBSingleton::Instance()->clearPackageAvailable( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageUnTesting( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageUnMasked( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageUserMasked( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageAvailable( m_id );
 		
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
@@ -543,10 +543,10 @@ void PackageInspector::slotSetStability( int rbStability )
 // 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.unmask and package.mask
-			KurooDBSingleton::Instance()->clearPackageUnMasked( m_id );
-			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageUnMasked( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageUserMasked( m_id );
 		
-			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
+			KuroolitoDBSingleton::Instance()->setPackageUnTesting( m_id );
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
 			break;
@@ -556,10 +556,10 @@ void PackageInspector::slotSetStability( int rbStability )
 // 			dialog->cbVersionsSpecific->setDisabled( true );
 		
 			// Clear package from package.keywords and package.mask
-			KurooDBSingleton::Instance()->clearPackageUserMasked( m_id );
+			KuroolitoDBSingleton::Instance()->clearPackageUserMasked( m_id );
 		
-			KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
-			KurooDBSingleton::Instance()->setPackageUnMasked( m_id );
+			KuroolitoDBSingleton::Instance()->setPackageUnTesting( m_id );
+			KuroolitoDBSingleton::Instance()->setPackageUnMasked( m_id );
 			m_portagePackage->resetDetailedInfo();
 			emit signalPackageChanged();
 			break;
@@ -583,9 +583,9 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 	enableButtonApply( true );
 	m_versionSettingsChanged = true;
 	
-	KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
-	KurooDBSingleton::Instance()->setPackageUserMasked( m_id );
-	KurooDBSingleton::Instance()->setPackageUnMasked( m_id, version );
+	KuroolitoDBSingleton::Instance()->setPackageUnTesting( m_id );
+	KuroolitoDBSingleton::Instance()->setPackageUserMasked( m_id );
+	KuroolitoDBSingleton::Instance()->setPackageUnMasked( m_id, version );
 	
 	m_portagePackage->resetDetailedInfo();
 	emit signalPackageChanged();
@@ -649,7 +649,7 @@ void PackageInspector::slotRefreshTabs()
  */
 void PackageInspector::loadUseFlagDescription()
 {
-	QString useFile( KurooConfig::dirPortage() + "/profiles/use.desc" );
+	QString useFile( KuroolitoConfig::dirPortage() + "/profiles/use.desc" );
 	QFile f( useFile );
 	
 	if ( f.open( IO_ReadOnly ) ) {
@@ -687,7 +687,7 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 			useList = itMap.data()->useflags();
 		
 		// Get user set package use flags
-		QStringList packageUseList = QStringList::split( " ", KurooDBSingleton::Instance()->packageUse( m_id ) );
+		QStringList packageUseList = QStringList::split( " ", KuroolitoDBSingleton::Instance()->packageUse( m_id ) );
 		
 		dialog->useView->clear();
 		QStringList tmpUseList;
@@ -733,7 +733,7 @@ void PackageInspector::loadChangeLog()
 {
 	dialog->changelogBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 2 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + "/" + m_category + "/" + m_package + "/ChangeLog";
+		QString fileName = KuroolitoDBSingleton::Instance()->packagePath( m_id ) + "/" + m_category + "/" + m_package + "/ChangeLog";
 		QFile file( fileName );
 		
 		if ( file.open( IO_ReadOnly ) ) {
@@ -767,7 +767,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 {
 	dialog->ebuildBrowser->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 3 ) {
-		QString fileName = KurooDBSingleton::Instance()->packagePath( m_id ) + 
+		QString fileName = KuroolitoDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "/" + m_package + "-" + version + ".ebuild";
 		QFile file( fileName );
 		
@@ -794,7 +794,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 {
 	dialog->dependencyView->clear();
 	if ( dialog->inspectorTabs->currentPageIndex() == 4 ) {
-		QString fileName = KurooConfig::dirEdbDep() + KurooDBSingleton::Instance()->packagePath( m_id ) + 
+		QString fileName = KuroolitoConfig::dirEdbDep() + KuroolitoDBSingleton::Instance()->packagePath( m_id ) + 
 			"/" + m_category + "/" + m_package + "-" + version;
 		QFile file( fileName );
 		
@@ -803,7 +803,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			QString textLines;
 			int lineCount( 0 );
 			
-			if ( KurooConfig::portageVersion21() )
+			if ( KuroolitoConfig::portageVersion21() )
 				while ( !stream.atEnd() ) {
 					QString line = stream.readLine();
 					if ( line.contains( "DEPEND=" ) && !line.endsWith( "DEPEND=" ) )
@@ -854,7 +854,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 {
 	dialog->installedFilesBrowser->clear();
 	if ( !version.isEmpty() && dialog->inspectorTabs->currentPageIndex() == 5 ) {
-		QString filename = KurooConfig::dirDbPkg() + "/" + m_category + "/" + m_package + "-" + version + "/CONTENTS";
+		QString filename = KuroolitoConfig::dirDbPkg() + "/" + m_category + "/" + m_package + "-" + version + "/CONTENTS";
 		QFile file( filename );
 		QString textLines;
 		if ( file.open( IO_ReadOnly ) ) {
@@ -892,7 +892,7 @@ void PackageInspector::slotCalculateUse()
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParsePackageUse( KProcess* ) ) );
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );
 	eProc->start( KProcess::NotifyOnExit, true );
-	SignalistSingleton::Instance()->setKurooBusy( true );
+	SignalistSingleton::Instance()->setKuroolitoBusy( true );
 	
 	if ( !eProc->isRunning() ) {
 // 		LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
@@ -920,7 +920,7 @@ void PackageInspector::slotCollectPretendOutput( KProcIO* eProc )
  */
 void PackageInspector::slotParseTempUse( KProcess* eProc )
 {
-	SignalistSingleton::Instance()->setKurooBusy( false );
+	SignalistSingleton::Instance()->setKuroolitoBusy( false );
 	delete eProc;
 	eProc = 0;
 	
@@ -965,7 +965,7 @@ void PackageInspector::slotParseTempUse( KProcess* eProc )
 	
 	QString checkUse = useList.join(", ");
 	if ( !checkUse.remove(", ").remove(" ").isEmpty() ) {
-		KurooDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
+		KuroolitoDBSingleton::Instance()->setPackageUse( m_id, useList.join(" ") );
 		PortageFilesSingleton::Instance()->savePackageUse();
 	}
 }
@@ -978,7 +978,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 {
 	dialog->setDisabled( false );
 	
-	SignalistSingleton::Instance()->setKurooBusy( false );
+	SignalistSingleton::Instance()->setKuroolitoBusy( false );
 	delete eProc;
 	eProc = 0;
 	
@@ -1031,7 +1031,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 		}
 		
 		// Set CheckBox state
-		if ( (*it).startsWith( "+" ) || ( KurooConfig::portageVersion21() && !(*it).startsWith( "-" ) ) ) {
+		if ( (*it).startsWith( "+" ) || ( KuroolitoConfig::portageVersion21() && !(*it).startsWith( "-" ) ) ) {
 			QCheckListItem* useItem = new QCheckListItem( dialog->useView, *it, QCheckListItem::CheckBox );
 			useItem->setMultiLinesEnabled( true );
 			useItem->setText( 1, description.join("\n") );
@@ -1051,7 +1051,7 @@ void PackageInspector::slotParsePackageUse( KProcess* eProc )
 			}
 	}
 	
-// 	if ( KUser().isSuperUser() || EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy())
+// 	if ( KUser().isSuperUser() || EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKuroolitoBusy())
 // 		dialog->useView->setDisabled( false );
 }
 

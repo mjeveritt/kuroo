@@ -36,11 +36,11 @@ public:
     ~Signalist();
 
 	void		init( QObject *parent = 0 );
-	void		setKurooReady( bool isReady );
-	bool		isKurooReady();
-	void		setKurooBusy( bool busy );
+	void		setKuroolitoReady( bool isReady );
+	bool		isKuroolitoReady();
+	void		setKuroolitoBusy( bool busy );
 	void		scanAborted();
-	bool		isKurooBusy();
+	bool		isKuroolitoBusy();
 	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();
@@ -53,7 +53,7 @@ public:
 	void		fontChanged();
 	
 signals:
-	void		signalKurooBusy( bool b );
+	void		signalKuroolitoBusy( bool b );
 	void		signalCachePortageComplete();
 	void 		signalScanPortageComplete();
 	void 		signalScanInstalledComplete();

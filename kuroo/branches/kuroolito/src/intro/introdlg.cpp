@@ -38,33 +38,33 @@ typedef Singleton<Global> GlobalSingleton;
 
 /**
  * @class IntroDlg
- * @short Kuroo introduction wizard.
+ * @short Kuroolito introduction wizard.
  */
 IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	: Intro( parent, name, modal, fl )
 {
-	setCaption( "Kuroolito-" + KurooConfig::hardVersion() );
+	setCaption( "Kuroolitolito-" + KuroolitoConfig::hardVersion() );
 	QWizard::backButton()->hide();
 	QWizard::finishButton()->setText( i18n("Ok") );
 	QWizard::showPage( page1 );
 	QWizard::setHelpEnabled( page1, false );
 	setFinishEnabled( page1, true );
 	
-	introText->setText(   	"<h2>Kuroolito-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
-					  i18n( "Kuroolito - A KDE Portage browser"
+	introText->setText(   	"<h2>Kuroolitolito-" + KuroolitoConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
+					  i18n( "Kuroolitolito - A KDE Portage browser"
 							"<br>"
 					        "<a href=http://trac.kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
-					        "Tell us what you think of Kuroolito!</a><br>"
+					        "Tell us what you think of Kuroolitolito!</a><br>"
 					      ) );
 	
 // 	backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></tr>" )
 // 						.arg( GlobalSingleton::Instance()->kurooDir() + "backup/" ) + 
-// 						"<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
-// 						"<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
-// 						"<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
-// 						"<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
-// 						"<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
-// 						"<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" 
+// 						"<tr><td>" + KuroolitoConfig::filePackageKeywords() + "</td></tr>" +
+// 						"<tr><td>" + KuroolitoConfig::filePackageUserUnMask() + "</td></tr>" +
+// 						"<tr><td>" + KuroolitoConfig::filePackageUserMask() + "</td></tr>" +
+// 						"<tr><td>" + KuroolitoConfig::filePackageUserUse() + "</td></tr>" +
+// 						"<tr><td>" + KuroolitoConfig::fileWorld() + "</td></tr>" +
+// 						"<tr><td>" + KuroolitoConfig::fileMakeConf() + "</td></tr></table></qt>" 
 // 						);
 	
 	adjustSize();
@@ -94,22 +94,22 @@ void IntroDlg::accept()
 	// Backup all portage files changeable by kuroo
 	if ( cbBackup->isOn() ) {
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
-		QString filePackageKeywords( KurooConfig::filePackageKeywords() );
+		QString filePackageKeywords( KuroolitoConfig::filePackageKeywords() );
 		KIO::file_copy( filePackageKeywords, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
 		              -1, true, false, false );
-		QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
+		QString filePackageUserUnMask( KuroolitoConfig::filePackageUserUnMask() );
 		KIO::file_copy( filePackageUserUnMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
 		                -1, true, false, false );
-		QString filePackageUserMask( KurooConfig::filePackageUserMask() );
+		QString filePackageUserMask( KuroolitoConfig::filePackageUserMask() );
 		KIO::file_copy( filePackageUserMask, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
 		                -1, true, false, false );
-		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
+		QString filePackageUserUse( KuroolitoConfig::filePackageUserUse() );
 		KIO::file_copy( filePackageUserUse, GlobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
 		                -1, true, false, false );
-		QString fileWorld( KurooConfig::fileWorld() );
+		QString fileWorld( KuroolitoConfig::fileWorld() );
 		KIO::file_copy( fileWorld, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileWorld.section( "/", -1 ) + dt,
 		                -1, true, false, false );
-		QString fileMakeConf( KurooConfig::fileMakeConf() );
+		QString fileMakeConf( KuroolitoConfig::fileMakeConf() );
 		KIO::file_copy( fileMakeConf, GlobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
 		                -1, true, false, false );
 	}

@@ -77,7 +77,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 				else {
-					if ( KurooConfig::installedColumn() ) {
+					if ( KuroolitoConfig::installedColumn() ) {
 						setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
 						setPixmap( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
 					}
@@ -127,8 +127,8 @@ void PackageItem::initVersions()
 	m_versionMap.clear();
 
 	// Get list of accepted keywords, eg if package is "untesting"
-	QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
-	const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
+	QString acceptedKeywords = KuroolitoDBSingleton::Instance()->packageKeywordsAtom( id() );
+	const QStringList versionsList = KuroolitoDBSingleton::Instance()->packageVersionsInfo( id() );
 	foreach ( versionsList ) {
 		QString versionString = *it++;
 		QString description = *it++;
@@ -161,7 +161,7 @@ void PackageItem::initVersions()
 	
 	// Check if any of this package versions are hardmasked
 	atom = new DependAtom( this );
-	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
+	const QStringList atomHardMaskedList = KuroolitoDBSingleton::Instance()->packageHardMaskAtom( id() );
 // 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
 		
@@ -178,7 +178,7 @@ void PackageItem::initVersions()
 	
 	// Check if any of this package versions are user-masked
 	atom = new DependAtom( this );
-	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
+	const QStringList atomUserMaskedList = KuroolitoDBSingleton::Instance()->packageUserMaskAtom( id() );
 // 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
 		
@@ -195,7 +195,7 @@ void PackageItem::initVersions()
 	
 	// Check if any of this package versions are unmasked
 	atom = new DependAtom( this );
-	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
+	const QStringList atomUnmaskedList = KuroolitoDBSingleton::Instance()->packageUnMaskAtom( id() );
 // 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
 		
@@ -292,7 +292,7 @@ void PackageItem::parsePackageVersions()
 		// Mark official version stability for version listview
 		QString stability;
 		if ( (*sortedVersionIterator)->isNotArch() )
-			stability = i18n("Not on %1").arg( KurooConfig::arch() );
+			stability = i18n("Not on %1").arg( KuroolitoConfig::arch() );
 		else {
 			if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
 				stability = i18n("Hardmasked");

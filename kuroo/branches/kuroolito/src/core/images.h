@@ -26,7 +26,7 @@
 
 /**
  * @class Images
- * @short Delivers icons in Kuroo.
+ * @short Delivers icons in Kuroolito.
  */
 class Images : public QObject
 {
@@ -41,7 +41,7 @@ public:
 private:
 	QObject*		m_parent;
 	QPixmap			pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxDetails, pxRemove, pxWorld, pxWarning;
-	QPixmap			pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
+	QPixmap			pxEmpty, pxKuroolito, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
 	QPixmap			pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
 };
 

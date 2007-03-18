@@ -39,14 +39,14 @@
 #include <kcursor.h>
 
 /**
- * @class KurooView
+ * @class KuroolitoView
  * @short Gui content with icon-menu and pages.
  * 
  * Insert all 5 pages in a widgetStack, connects icon-menu buttons to corresponding pages (tabs).
  * Highlights icon-texts when changes are mades in the page.
  */
-KurooView::KurooView( QWidget *parent, const char *name )
-	: KurooViewBase( parent, name ),
+KuroolitoView::KuroolitoView( QWidget *parent, const char *name )
+	: KuroolitoViewBase( parent, name ),
 	DCOPObject( "kurooIface" ),
 	viewPortage( 0 ), packageInspector( 0 ), m_isHistoryRestored( false )
 {
@@ -74,13 +74,13 @@ KurooView::KurooView( QWidget *parent, const char *name )
 // 	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
 }
 
-KurooView::~KurooView()
+KuroolitoView::~KuroolitoView()
 {}
 
 /**
  * Activate corresponding page when clicking on icon in menu.
  */
-void KurooView::slotShowView()
+void KuroolitoView::slotShowView()
 {
 // 	if ( packageInspector->isVisible() )
 // 		packageInspector->hide();
@@ -92,24 +92,24 @@ void KurooView::slotShowView()
 /**
  * Check if database needs to refreshed.
  */
-void KurooView::slotInit()
+void KuroolitoView::slotInit()
 {
 // 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 	
 	// Check is history is empty, then maybe this is also a fresh install with empty db
-// 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
+// 	if ( KuroolitoDBSingleton::Instance()->isHistoryEmpty() ) {
 // 		m_isHistoryRestored = true;
 // 		
-// 		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
-// 		                                      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
+// 		KMessageBox::information( this, i18n( "<qt>Kuroolito database is empty!<br>"
+// 		                                      "Kuroolito will now first scan your emerge log to create the emerge history.<br>"
 // 		                                      "Next, package information in Portage will be collected.</qt>"), 
-// 		                                i18n( "Initialiazing Kuroo") );
+// 		                                i18n( "Initialiazing Kuroolito") );
 // 		HistorySingleton::Instance()->slotRefresh();
 // 	}
 // 	else {
 		
 		// Load packages if db is not empty
-// 		if ( !KurooDBSingleton::Instance()->isPortageEmpty() ) {
+// 		if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() ) {
 // 			viewPortage->slotReload();
 // 			viewQueue->slotReload( false );
 // 		}
@@ -121,16 +121,16 @@ void KurooView::slotInit()
 // 			disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 // 			
 // 			switch( KMessageBox::warningYesNo( this,
-// 				i18n( "<qt>Kuroo database needs refreshing!<br>"
-// 				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialiazing Kuroo"), i18n("Refresh"), i18n("Skip"), 0 ) ) {
+// 				i18n( "<qt>Kuroolito database needs refreshing!<br>"
+// 				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialiazing Kuroolito"), i18n("Refresh"), i18n("Skip"), 0 ) ) {
 // 
 // 				case KMessageBox::Yes:
-// 					SignalistSingleton::Instance()->setKurooReady( true );
+// 					SignalistSingleton::Instance()->setKuroolitoReady( true );
 // 					PortageSingleton::Instance()->slotRefresh();
 // 					break;
 // 
 // 				default:
-// 					KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
+// 					KuroolitoDBSingleton::Instance()->setKuroolitoDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
 // 					slotCheckPortage();
 // 			}
 // 		}
@@ -141,7 +141,7 @@ void KurooView::slotInit()
  * When starting kuroo, check if portage need to be rescanned.
  * Updates must be scanned afterwards.
  */
-void KurooView::slotCheckPortage()
+void KuroolitoView::slotCheckPortage()
 {
 	DEBUG_LINE_INFO;
 // 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
@@ -154,25 +154,25 @@ void KurooView::slotCheckPortage()
 	
 	DEBUG_LINE_INFO;
 /*	
-	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
+	if ( KuroolitoDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {*/
 		
 		// Ready to roll
-// 		SignalistSingleton::Instance()->setKurooReady( true );
+// 		SignalistSingleton::Instance()->setKuroolitoReady( true );
 // 	}
 // 	DEBUG_LINE_INFO;
 	
 	// Warn user that emerge need root permissions - many rmb actions are disabled
 // 	if ( !KUser().isSuperUser() )
-// 		KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
+// 		KMessageBox::information( this, i18n("You must run Kuroolito as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
 }
 
 /**
  * Dcop interface to emerge pretend process 
  * @param packageList	list of packages to emerge
  */
-void KurooView::slotEmergePretend( QString package )
+void KuroolitoView::slotEmergePretend( QString package )
 {
 // 	EmergeSingleton::Instance()->pretend( package );
 }
@@ -180,7 +180,7 @@ void KurooView::slotEmergePretend( QString package )
 /**
  * Highlight menutext in bleue.
  */
-void KurooView::slotPortageUpdated()
+void KuroolitoView::slotPortageUpdated()
 {
 // 	if ( !iconPackages->isChanged() && !iconPackages->isSelected() ) {
 // 		iconPackages->setChanged( true );
@@ -191,7 +191,7 @@ void KurooView::slotPortageUpdated()
 /**
  * Clear the highlighting menu text back to normal when visits the view.
  */
-void KurooView::slotResetMenu( QListBoxItem* menuItem )
+void KuroolitoView::slotResetMenu( QListBoxItem* menuItem )
 {
 // 	dynamic_cast<IconListItem*>( menuItem )->setChanged( false );
 // 	viewMenu->triggerUpdate( true );
@@ -202,7 +202,7 @@ void KurooView::slotResetMenu( QListBoxItem* menuItem )
 // Create menu icons and highlight menutext when changes.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
+KuroolitoView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
 	: QListBoxItem( listbox ), m_modified( false )
 {
 	mPixmap = pixmap;
@@ -213,7 +213,7 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 	mMinimumWidth = 100;
 }
 
-void KurooView::IconListItem::paint( QPainter *painter )
+void KuroolitoView::IconListItem::paint( QPainter *painter )
 {
 	if ( isSelected() ) {
 		painter->setPen( listBox()->colorGroup().highlightedText() );
@@ -237,7 +237,7 @@ void KurooView::IconListItem::paint( QPainter *painter )
 		painter->drawText( 0, hp + 7, listBox()->maxItemWidth(), ht, Qt::AlignCenter, text() );
 }
 
-int KurooView::IconListItem::height( const QListBox *lb ) const
+int KuroolitoView::IconListItem::height( const QListBox *lb ) const
 {
 	if ( text().isEmpty() )
 		return mPixmap.height();
@@ -247,7 +247,7 @@ int KurooView::IconListItem::height( const QListBox *lb ) const
 	}
 }
 
-int KurooView::IconListItem::width( const QListBox *lb ) const
+int KuroolitoView::IconListItem::width( const QListBox *lb ) const
 {
 	int wt = lb->fontMetrics().boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).width() + 10;
 	int wp = mPixmap.width() + 10;
@@ -255,7 +255,7 @@ int KurooView::IconListItem::width( const QListBox *lb ) const
 	return QMAX( w, mMinimumWidth );
 }
 
-const QPixmap &KurooView::IconListItem::defaultPixmap()
+const QPixmap &KuroolitoView::IconListItem::defaultPixmap()
 {
 	static QPixmap *pix = 0;
 	if ( !pix ) {
@@ -279,12 +279,12 @@ const QPixmap &KurooView::IconListItem::defaultPixmap()
 	return *pix;
 }
 
-void KurooView::IconListItem::setChanged( bool modified )
+void KuroolitoView::IconListItem::setChanged( bool modified )
 {
 	m_modified = modified;
 }
 
-bool KurooView::IconListItem::isChanged()
+bool KuroolitoView::IconListItem::isChanged()
 {
 	return m_modified;
 }

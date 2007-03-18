@@ -27,15 +27,15 @@
 class IntroDlg;
 
 /**
- * @class KurooInit
+ * @class KuroolitoInit
  * @short Checks that kuroo environment is correctly setup.
  */
-class KurooInit : public QObject
+class KuroolitoInit : public QObject
 {
 Q_OBJECT
 public:
-	KurooInit( QObject *parent = 0, const char *name = 0 );
-    ~KurooInit();
+	KuroolitoInit( QObject *parent = 0, const char *name = 0 );
+    ~KuroolitoInit();
 	
 	void 			firstTimeWizard();
 	void 			getEnvironment();

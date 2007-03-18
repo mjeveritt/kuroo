@@ -50,7 +50,7 @@ public:
 private:
 	QObject*				m_parent;
 	
-	// Kuroo widget id so MessageBox's can be made modal
+	// Kuroolito widget id so MessageBox's can be made modal
 	long					m_wId;
 	
 	QString					m_bgColor;

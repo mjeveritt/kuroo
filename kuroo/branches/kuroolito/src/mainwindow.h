@@ -35,10 +35,10 @@ public:
     MainWindow( QWidget *parent = 0, const char *name = 0 );
     ~MainWindow();
 
-	KurooStatusBar 	*statusBar();
+	KuroolitoStatusBar 	*statusBar();
 
 private:
-	KurooStatusBar 	*sb;
+	KuroolitoStatusBar 	*sb;
 };
 
 #endif

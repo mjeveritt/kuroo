@@ -19,7 +19,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Kuroo</string>
+        <string>Kuroolito</string>
     </property>
     <widget class="QWidget">
         <property name="name">

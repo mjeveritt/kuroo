@@ -44,9 +44,9 @@ void FileWatcher::init( QObject *parent )
 	m_parent = parent;
 	watcher = new KDirWatch( this );
 	
-// 	watcher->addDir( KurooConfig::dirDbPkg() + "/sys-apps" );
+// 	watcher->addDir( KuroolitoConfig::dirDbPkg() + "/sys-apps" );
 	
-// 	watcher->addFile( KurooConfig::fileWorld() );
+// 	watcher->addFile( KuroolitoConfig::fileWorld() );
 	
 	connect( watcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged( const QString& ) ) );
 }
@@ -57,20 +57,20 @@ void FileWatcher::init( QObject *parent )
  */
 void FileWatcher::slotChanged( const QString& path )
 {
-	if ( path == KurooConfig::dirDbPkg() + "/sys-apps" ) {
-		QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
+	if ( path == KuroolitoConfig::dirDbPkg() + "/sys-apps" ) {
+		QDir dPortageApp( KuroolitoConfig::dirDbPkg() + "/sys-apps" );
 		dPortageApp.setNameFilter( "portage-*" );
 		dPortageApp.setSorting( QDir::Time );
 		QString portage = dPortageApp.entryList().first();
 		
 		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
-			KurooConfig::setPortageVersion21( true );
+			KuroolitoConfig::setPortageVersion21( true );
 			KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n("Portage version is upgraded to 2.1. "
 										"Please refresh package view."), i18n("Portage version") );
 		}
 	}
 // 	else
-// 	if ( path == KurooConfig::fileWorld() )
+// 	if ( path == KuroolitoConfig::fileWorld() )
 // 		PortageSingleton::Instance()->loadWorld();
 }
 

@@ -38,10 +38,10 @@ SystemTray::SystemTray( QWidget *parent )
 	: KSystemTray( parent )
 {
 	s_instance = this;
-	QToolTip::add( this, i18n("Kuroo - Portage frontend") );
-	contextMenu()->insertItem( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
+	QToolTip::add( this, i18n("Kuroolito - Portage frontend") );
+	contextMenu()->insertItem( i18n("&Configure Kuroolito..."), this, SLOT( slotPreferences() ) );
 	
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 }
 
 SystemTray::~SystemTray()

@@ -35,13 +35,13 @@
  */
 CachePortageJob::CachePortageJob( QObject* parent )
 	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
+	m_db( KuroolitoDBSingleton::Instance()->getStaticDbConnection() )
 {
 }
 
 CachePortageJob::~CachePortageJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+	KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 }
 
 void CachePortageJob::completeJob()
@@ -68,7 +68,7 @@ bool CachePortageJob::doJob()
 	dCategory.setSorting( QDir::Name );
 	
 	// Get a count of total packages for proper progress
-	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
+	QString packageCount = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
 	if ( packageCount == "0" )
 		setProgressTotalSteps( 35000 );
 	else
@@ -76,8 +76,8 @@ bool CachePortageJob::doJob()
 	setStatus( "CachePortage", i18n("Collecting package information...") );
 	
 	// Get list of categories in Portage and Overlays
-	QStringList pathList = KurooConfig::dirPortage();
-	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlay() );
+	QStringList pathList = KuroolitoConfig::dirPortage();
+	const QStringList pathOverlays = QStringList::split( " ", KuroolitoConfig::dirPortageOverlay() );
 	foreach ( pathOverlays )
 		pathList += *it;
 	
@@ -105,7 +105,7 @@ bool CachePortageJob::doJob()
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
 			dPackage.setSorting( QDir::Name );
-			if ( dPackage.cd( KurooConfig::dirEdbDep() + *itPath + "/" + *itCategory ) ) {
+			if ( dPackage.cd( KuroolitoConfig::dirEdbDep() + *itPath + "/" + *itCategory ) ) {
 				QStringList packageList = dPackage.entryList();
 				QStringList::Iterator itPackageEnd = packageList.end();
 				for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
@@ -151,18 +151,18 @@ bool CachePortageJob::doJob()
 			
 		}
 	}
-	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")
+	KuroolitoDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")
 	                                     .arg( count ), m_db );
 	
 	// Store cache in DB
-	KurooDBSingleton::Instance()->query( "DELETE FROM cache;", m_db );
-	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
+	KuroolitoDBSingleton::Instance()->query( "DELETE FROM cache;", m_db );
+	KuroolitoDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
 	QMap< QString, QString >::iterator itMapEnd = mapCache.end();
 	for ( QMap< QString, QString >::iterator itMap = mapCache.begin(); itMap != itMapEnd; ++itMap )
-		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").
+		KuroolitoDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").
 		                                      arg( itMap.key() ).arg( itMap.data() ), m_db );
 
-	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
+	KuroolitoDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 	
 	setStatus( "CachePortage", i18n("Done.") );
 	setProgress( 0 );

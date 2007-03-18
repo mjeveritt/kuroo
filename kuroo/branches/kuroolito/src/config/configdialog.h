@@ -30,7 +30,7 @@ class Options2;
 
 /**
  * @class ConfigDialog
- * @short Kuroo preferences.
+ * @short Kuroolito preferences.
  */
 class ConfigDialog : public KConfigDialog
 {
@@ -41,9 +41,9 @@ public:
 	~ConfigDialog();
 	
 private:
-	const QStringList 	readMakeConf();
-	void 				parseMakeConf();
-	bool 				saveMakeConf();
+// 	const QStringList 	readMakeConf();
+// 	void 				parseMakeConf();
+// 	bool 				saveMakeConf();
 	
 private slots:
 	void 				slotSaveAll();

@@ -50,7 +50,7 @@ int main( int argc, char **argv )
 	about.addCredit("Matteo Azzali", I18N_NOOP("Italian translation"), "kaioth@tiscalinet.it");
 	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
 	about.addCredit("Konrad Mantorski", I18N_NOOP("Polish translation"), "konrad@mantorski.com");
-	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");
+	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroolito icons"), "design@bartelme.at");
 	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
 	about.addCredit("Björn Balazs", I18N_NOOP("OpenUsability"), "B@lazs.de");
 	about.addCredit("Florian Graessle", I18N_NOOP("OpenUsability"), "holehan@gmx.de");
@@ -68,17 +68,17 @@ int main( int argc, char **argv )
 	
 	app.dcopClient()->registerAs( app.name(), false );
 	
-	KurooConfig::setHardVersion( version );
-	KurooConfig::writeConfig();
+	KuroolitoConfig::setHardVersion( version );
+	KuroolitoConfig::writeConfig();
 	
 	app.dcopClient()->setAcceptCalls( true );
 	
 	// see if we are starting with session management
 	if ( app.isRestored() ) {
-		RESTORE( Kuroo );
+		RESTORE( Kuroolito );
 	}
 	else {
-		Kuroo *widget = new Kuroo;
+		Kuroolito *widget = new Kuroolito;
 		widget->show();
 	}
 	

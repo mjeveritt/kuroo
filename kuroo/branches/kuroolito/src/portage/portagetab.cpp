@@ -87,7 +87,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	
 	// Enable/disable this view and buttons when kuroo is busy
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
+	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
@@ -153,9 +153,9 @@ void PortageTab::slotWhatsThis()
 // 			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
 // 			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
 // 			"Select 'Sync Portage' in the Portage menu.<br>"
-// 			"After syncing Kuroo will search for newer version of the applications you have installed. "
+// 			"After syncing Kuroolito will search for newer version of the applications you have installed. "
 // 			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br>"
-// 			"If you want to update every single package on your system, check the Deep checkbox in Kuroo Preferences.<br><br>"
+// 			"If you want to update every single package on your system, check the Deep checkbox in Kuroolito Preferences.<br><br>"
 // 			"When you want to remove a software package from your system, select a package and press 'Uninstall'. "
 // 			"This will tell Portage to remove all files installed by that package from your system except the configuration files "
 // 			"of that application if you have altered those after the installation. "
@@ -196,7 +196,7 @@ void PortageTab::slotInitButtons()
 void PortageTab::slotBusy()
 {
 	// If no db no fun!
-	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
+	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
 // 		pbUninstall->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 // 		pbQueue->setDisabled( true );
@@ -237,7 +237,7 @@ void PortageTab::slotButtons()
 	pbAdvanced->setDisabled( false );
 	
 	// When kuroo is busy disable queue and uninstall button
-// 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
+// 	if ( SignalistSingleton::Instance()->isKuroolitoBusy() ) {
 // 		pbQueue->setDisabled( true );
 // 		pbUninstall->setDisabled( true );
 // 		return;
@@ -288,7 +288,7 @@ void PortageTab::slotReload()
 	connect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
 	
-	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), false );
+	categoriesView->loadCategories( KuroolitoDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), false );
 }
 
 void PortageTab::slotFillFilter( const QString& text )
@@ -312,7 +312,7 @@ void PortageTab::slotActivateFilters()
 {
 	--m_delayFilters;
 	if ( m_delayFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), true );
+		categoriesView->loadCategories( KuroolitoDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), true );
 }
 
 /**
@@ -320,7 +320,7 @@ void PortageTab::slotActivateFilters()
  */
 void PortageTab::slotListSubCategories()
 {
-	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoriesView->currentCategoryId(), 
+	subcategoriesView->loadCategories( KuroolitoDBSingleton::Instance()->portageSubCategories( categoriesView->currentCategoryId(), 
 		filterGroup->selectedId(), searchFilter->text() ) );
 }
 
@@ -330,7 +330,7 @@ void PortageTab::slotListSubCategories()
 void PortageTab::slotListPackages()
 {
 	// Disable all buttons if query result is empty
-	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
+	if ( packagesView->addSubCategoryPackages( KuroolitoDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		m_packageInspector->hide();
 		slotButtons();
@@ -339,7 +339,7 @@ void PortageTab::slotListPackages()
 
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
+			searchFilter->setPaletteBackgroundColor( QColor( KuroolitoConfig::noMatchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
@@ -348,7 +348,7 @@ void PortageTab::slotListPackages()
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );
+			searchFilter->setPaletteBackgroundColor( QColor( KuroolitoConfig::matchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
@@ -381,7 +381,7 @@ void PortageTab::slotRefresh()
  */
 void PortageTab::slotQueue()
 {
-// 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
+// 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
 // 		if ( packagesView->currentPackage()->isQueued() )
 // 			QueueSingleton::Instance()->removePackageIdList( packagesView->selectedId() );
 // 		else {
@@ -400,7 +400,7 @@ void PortageTab::slotQueue()
  */
 void PortageTab::slotUninstall()
 {
-// // 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+// // 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKuroolitoBusy() || !KUser().isSuperUser() ) {
 // // 		const QStringList selectedIdList = packagesView->selectedId();
 // // 		
 // // 		// Pick only installed packages
@@ -533,7 +533,7 @@ void PortageTab::processPackage( bool viewInspector )
 				linesEmerge = i18n("%1Emerge&nbsp;version:%2No version available on %3%4")
 				.arg("<tr><td width=10%><b>")
 				.arg("</font></td><td width=90%><font color=darkRed>")
-				.arg( KurooConfig::arch() )
+				.arg( KuroolitoConfig::arch() )
 				.arg("</b></td></tr>");
 			else
 				linesEmerge = i18n("%1Emerge&nbsp;version:%2No version available - please check package details%3")
@@ -553,7 +553,7 @@ void PortageTab::processPackage( bool viewInspector )
 			linesAvailable = i18n("%1Available&nbsp;versions:%2No versions available on %3%4")
 			.arg("<tr><td width=10%><b>")
 			.arg("</td><td width=90%><font color=darkRed>")
-			.arg( KurooConfig::arch() )
+			.arg( KuroolitoConfig::arch() )
 			.arg("</font></b></td></tr>");
 		
 		summaryBrowser->setText( lines + linesInstalled + linesEmerge + linesAvailable + "</table>");
@@ -605,14 +605,14 @@ void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& poi
 	
 	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
 // 	kdDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning() << endl;
-	kdDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy() << endl;
+	kdDebug() << "SignalistSingleton::Instance()->isKuroolitoBusy()=" << SignalistSingleton::Instance()->isKuroolitoBusy() << endl;
 	kdDebug() << "packagesView->currentPackage()->isInPortage()=" << packagesView->currentPackage()->isInPortage() << endl;
-// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKuroolitoBusy()
 // 			 || !packagesView->currentPackage()->isInPortage() )
 // 		menu.setItemEnabled( menuItem1, false );
 	
 	// No uninstall when emerging or no privileges
-// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy()
+// 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKuroolitoBusy()
 // 			|| !packagesView->currentPackage()->isInstalled() || !KUser().isSuperUser() )
 // 		menu.setItemEnabled( menuItem4, false );
 	

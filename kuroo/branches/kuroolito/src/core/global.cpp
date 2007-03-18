@@ -44,7 +44,7 @@ void Global::init( QObject *parent )
 }
 
 /**
- * Kuroo home directory
+ * Kuroolito home directory
  */
 const QString Global::kurooDir()
 {
@@ -56,7 +56,7 @@ const QString Global::kurooDir()
  */
 const QRegExp Global::rxEmerge()
 {
-	if ( KurooConfig::portageVersion21() )
+	if ( KuroolitoConfig::portageVersion21() )
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
 		                "((\\S+)/(\\S+))"
 		                "(?:\\s*\\[([^\\]]*)\\])?"
@@ -112,7 +112,7 @@ const QStringList Global::parsePackage( const QString& packageString )
 }
 
 /**
- * Kuroo widget parameters.
+ * Kuroolito widget parameters.
  */
 void Global::setColorTheme()
 {
@@ -124,7 +124,7 @@ void Global::setColorTheme()
 }
 
 /**
- * Kuroo widget id so MessageBox's can be made modal.
+ * Kuroolito widget id so MessageBox's can be made modal.
  */
 const long& Global::kurooViewId()
 {

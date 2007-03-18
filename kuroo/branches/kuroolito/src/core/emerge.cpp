@@ -127,7 +127,7 @@ bool Emerge::queue( const QStringList& packageList )
 	eProc->start( KProcess::OwnGroup, true );
 	connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 	connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupQueue(KProcess*) ) );
-	SignalistSingleton::Instance()->setKurooBusy( true );
+	SignalistSingleton::Instance()->setKuroolitoBusy( true );
 	
 	if ( !eProc->isRunning() ) {
 // 		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
@@ -136,8 +136,8 @@ bool Emerge::queue( const QStringList& packageList )
 	}
 	else {
 // 		LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
-		KurooStatusBar::instance()->startTimer();
+		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
+		KuroolitoStatusBar::instance()->startTimer();
 		return true;
 	}
 }
@@ -170,10 +170,10 @@ bool Emerge::pretend( const QStringList& packageList )
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupPretend(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
+		SignalistSingleton::Instance()->setKuroolitoBusy( true );
 // 		LogSingleton::Instance()->writeLog( i18n("\nEmerge pretend %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking installation queue...") );
-		KurooStatusBar::instance()->startProgress();
+		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking installation queue...") );
+		KuroolitoStatusBar::instance()->startProgress();
 		return true;
 	}
 }
@@ -205,10 +205,10 @@ bool Emerge::unmerge( const QStringList& packageList )
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupUnmerge(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
+		SignalistSingleton::Instance()->setKuroolitoBusy( true );
 // 		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
-		KurooStatusBar::instance()->startProgress();
+		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
+		KuroolitoStatusBar::instance()->startProgress();
 		return true;
 	}
 }
@@ -234,10 +234,10 @@ bool Emerge::sync()
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupSync(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
+		SignalistSingleton::Instance()->setKuroolitoBusy( true );
 // 		LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
-		KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
+		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
+		KuroolitoStatusBar::instance()->setTotalSteps( KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "syncDuration" ).toInt() );
 		return true;
 	}
 }
@@ -257,7 +257,7 @@ bool Emerge::checkUpdates()
 	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner" << "--columns";
 	
 	// Add deep if checked in gui
-	if ( KurooConfig::updateDeep() )
+	if ( KuroolitoConfig::updateDeep() )
 		*eProc << "-D";
 	
 	*eProc << "world";
@@ -269,10 +269,10 @@ bool Emerge::checkUpdates()
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
+		SignalistSingleton::Instance()->setKuroolitoBusy( true );
 // 		LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
-		KurooStatusBar::instance()->startProgress();
+		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
+		KuroolitoStatusBar::instance()->startProgress();
 		return true;
 	}
 }
@@ -449,9 +449,9 @@ const QString Emerge::packageMessage()
  */
 void Emerge::cleanup()
 {
-	KurooStatusBar::instance()->stopTimer();
-	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
-	SignalistSingleton::Instance()->setKurooBusy( false );
+	KuroolitoStatusBar::instance()->stopTimer();
+	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
+	SignalistSingleton::Instance()->setKuroolitoBusy( false );
 // 	QueueSingleton::Instance()->addPackageList( m_emergePackageList );
 	
 // 	if ( !m_blocks.isEmpty() ) {
@@ -464,7 +464,7 @@ void Emerge::cleanup()
 		if ( KUser().isSuperUser() )
 			askUnmaskPackage( m_unmasked );
 		else
-			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroo as root to unmask packages!"),
+			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n("You must run Kuroolito as root to unmask packages!"),
 			                             i18n("Auto-unmasking packages"), NULL );
 	}
 // 	else {
@@ -531,8 +531,8 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 	
-	KurooStatusBar::instance()->stopTimer();
-	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
+	KuroolitoStatusBar::instance()->stopTimer();
+	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !m_blocks.isEmpty() ) {
@@ -555,7 +555,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	QString keyword = ( packageKeyword.section( "(masked by: ", 1, 1) ).section( " keyword", 0, 0 );
 	
 	if ( packageKeyword.contains( "missing keyword" ) ) {
-		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KuroolitoConfig::arch() );
 		m_importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
 		                         "Ask the architecture porting team to test the package or test it for them and report your "
 		                         "findings on Gentoo bugzilla website.");
@@ -564,21 +564,21 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 	}
 	else {
 		if ( keyword.contains( "-*" ) ) {
-			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KuroolitoConfig::arch() );
 			m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
 			                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
 			KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), "<qt>" + m_importantMessage + "</qt>", 
 			                             i18n( "-* Keyword" ) , NULL );
 		}
 		else {
-			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
+			if ( !keyword.contains( KuroolitoConfig::arch() ) && keyword.contains( "package.mask" ) ) {
 // 				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
 				
 				switch ( KMessageBox::questionYesNoWId( GlobalSingleton::Instance()->kurooViewId(), 
 				                                        i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>")
 				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel") ) ) {
 					case KMessageBox::Yes :
-						KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
+						KuroolitoDBSingleton::Instance()->setPackageUnMasked( KuroolitoDBSingleton::Instance()->packageId( package ) );
 						PortageFilesSingleton::Instance()->savePackageUserUnMask();
 						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
@@ -592,7 +592,7 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				                                        i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>")
 				                                     .arg( package ), i18n("Information"), i18n("Unmask"), i18n("Cancel") ) ) {
 					case KMessageBox::Yes :
-						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
+						KuroolitoDBSingleton::Instance()->setPackageUnTesting( KuroolitoDBSingleton::Instance()->packageId( package ) );
 						PortageFilesSingleton::Instance()->savePackageKeywords();
 						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );

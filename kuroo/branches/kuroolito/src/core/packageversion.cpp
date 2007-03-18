@@ -54,15 +54,15 @@ PackageVersion::~PackageVersion()
 */
 bool PackageVersion::isAvailable() const
 {
-	if ( KurooConfig::acceptKeywords().startsWith("~") )
-		return ( stability( "~" + KurooConfig::arch() ) == STABLE );
+	if ( KuroolitoConfig::acceptKeywords().startsWith("~") )
+		return ( stability( "~" + KuroolitoConfig::arch() ) == STABLE );
 	else
-		return ( stability( KurooConfig::arch() ) == STABLE );
+		return ( stability( KuroolitoConfig::arch() ) == STABLE );
 }
 
 bool PackageVersion::isNotArch() const
 {
-	if ( m_keywords.contains( KurooConfig::arch() ) || m_keywords.contains( "~" + KurooConfig::arch() ) )
+	if ( m_keywords.contains( KuroolitoConfig::arch() ) || m_keywords.contains( "~" + KuroolitoConfig::arch() ) )
 		return false;
 	else
 		return true;
@@ -658,7 +658,7 @@ bool PackageVersion::isOriginalHardMasked() const
 
 bool PackageVersion::isOriginalTesting() const
 {
-	if ( m_keywords.contains( "~" + KurooConfig::arch() ) )
+	if ( m_keywords.contains( "~" + KuroolitoConfig::arch() ) )
 		return true;
 	else
 		return false;

@@ -24,10 +24,10 @@
 #include <qlabel.h>
 #include <qtimer.h>
 
-KurooStatusBar* KurooStatusBar::s_instance = 0;
+KuroolitoStatusBar* KuroolitoStatusBar::s_instance = 0;
 
 /**
- * @class KurooStatusBar
+ * @class KuroolitoStatusBar
  * @short Singleton object to build statusbar with label and progressbar.
  * 
  * The progressbar is either updated by a timer (eg when emerging packages) or by updated by count (eg when scanning packages).
@@ -35,7 +35,7 @@ KurooStatusBar* KurooStatusBar::s_instance = 0;
  * The messages in the label can be constant or transient. The label displays transient messages for 2 sec then returns to
  * last constant message if any. The message stack is fifo.
  */
-KurooStatusBar::KurooStatusBar( QWidget *parent )
+KuroolitoStatusBar::KuroolitoStatusBar( QWidget *parent )
 	: KStatusBar( parent ),	statusBarProgress( 0 ), statusBarLabel( 0 )
 {
 	s_instance = this;
@@ -63,13 +63,13 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
     connect( m_diffTimer, SIGNAL( timeout() ), this, SLOT( slotAdvance() ) );
 }
 
-KurooStatusBar::~KurooStatusBar()
+KuroolitoStatusBar::~KuroolitoStatusBar()
 {}
 
 /**
  * Set label text in statusbar.
  */
-void KurooStatusBar::setProgressStatus( const QString& id, const QString& message )
+void KuroolitoStatusBar::setProgressStatus( const QString& id, const QString& message )
 {
 	if ( id.isEmpty() ) {
 		statusBarLabel->setText( message );
@@ -91,7 +91,7 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 /**
  * View last message.
  */
-void KurooStatusBar::slotLastMessage()
+void KuroolitoStatusBar::slotLastMessage()
 {
 	QMap<QString, QString>::Iterator it = m_messageMap.end();
 	if ( m_messageMap.size() > 0 ) {
@@ -105,7 +105,7 @@ void KurooStatusBar::slotLastMessage()
 /**
  * Set total for timer progress.
  */
-void KurooStatusBar::setTotalSteps( int total )
+void KuroolitoStatusBar::setTotalSteps( int total )
 {
 	kdDebug() << "total=" << total << LINE_INFO;
 	
@@ -123,7 +123,7 @@ void KurooStatusBar::setTotalSteps( int total )
 		}
 }
 
-void KurooStatusBar::updateTotalSteps( int total )
+void KuroolitoStatusBar::updateTotalSteps( int total )
 {
     statusBarProgress->setTotalSteps( m_timerSteps + total );
     m_diffTimer->stop();
@@ -135,7 +135,7 @@ void KurooStatusBar::updateTotalSteps( int total )
 /**
  * Set total for stepped progress.
  */
-void KurooStatusBar::setThreadTotalSteps( int total )
+void KuroolitoStatusBar::setThreadTotalSteps( int total )
 {
 	statusBarProgress->setTextEnabled( true );
 	statusBarProgress->setTotalSteps( total );
@@ -151,7 +151,7 @@ void KurooStatusBar::setThreadTotalSteps( int total )
  * View progress.
  * @param steps		in %
  */
-void KurooStatusBar::setProgress( int steps )
+void KuroolitoStatusBar::setProgress( int steps )
 {
 	statusBarProgress->setProgress( steps );
 }
@@ -159,7 +159,7 @@ void KurooStatusBar::setProgress( int steps )
 /**
  * Launch internal timer used when emerging packages.
  */
-void KurooStatusBar::startTimer()
+void KuroolitoStatusBar::startTimer()
 {
     connect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
 	m_timerSteps = 0;
@@ -168,7 +168,7 @@ void KurooStatusBar::startTimer()
 /**
  * Stop internal timer.
  */
-void KurooStatusBar::stopTimer()
+void KuroolitoStatusBar::stopTimer()
 {
     disconnect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
 	m_diffTimer->stop();
@@ -182,7 +182,7 @@ void KurooStatusBar::stopTimer()
 /**
  * Increase progress by 1 second.
  */
-void KurooStatusBar::slotOneStep()
+void KuroolitoStatusBar::slotOneStep()
 {
     setProgress( m_timerSteps );
 	if ( m_timerSteps > statusBarProgress->totalSteps() ) {
@@ -191,17 +191,17 @@ void KurooStatusBar::slotOneStep()
 	}
 }
 
-void KurooStatusBar::slotUpdateTime()
+void KuroolitoStatusBar::slotUpdateTime()
 {
     m_timerSteps++;
 }
 
-long KurooStatusBar::elapsedTime()
+long KuroolitoStatusBar::elapsedTime()
 {
 	return m_timerSteps;
 }
 
-void KurooStatusBar::clearElapsedTime()
+void KuroolitoStatusBar::clearElapsedTime()
 {
     m_diffTimer->stop();
     m_internalTimer->stop();
@@ -211,7 +211,7 @@ void KurooStatusBar::clearElapsedTime()
 /**
  * Start relative advance.
  */
-void KurooStatusBar::startProgress()
+void KuroolitoStatusBar::startProgress()
 {
     statusBarProgress->show();
 	statusBarProgress->setTotalSteps( 0 );
@@ -222,7 +222,7 @@ void KurooStatusBar::startProgress()
 /**
  * Show relative advance progress.
  */
-void KurooStatusBar::slotAdvance()
+void KuroolitoStatusBar::slotAdvance()
 {
     m_timerSteps++;
 	statusBarProgress->advance( 2 );

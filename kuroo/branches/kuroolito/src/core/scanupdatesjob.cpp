@@ -38,12 +38,12 @@
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
 	: ThreadWeaver::DependentJob( parent, "DBJob" ),
-	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList )
+	m_db( KuroolitoDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList )
 {}
 
 ScanUpdatesJob::~ScanUpdatesJob()
 {
-	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+	KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
 	if ( isAborted() )
 		SignalistSingleton::Instance()->scanAborted();
@@ -76,7 +76,7 @@ bool ScanUpdatesJob::doJob()
 	int count(0);
 
 	// Temporary tables to avoid locking main table
-	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
+	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                          	"idCategory INTEGER, "
 	                                          	"idSubCategory INTEGER, "
@@ -89,10 +89,10 @@ bool ScanUpdatesJob::doJob()
 	                                          	"updateVersion VARCHAR(32) );"
 	                                          	, m_db );
 	
-	KurooDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
-	KurooDBSingleton::Instance()->singleQuery( QString("UPDATE package_temp SET updateVersion = '', status = '%1' WHERE status = '%2';")
+	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO package_temp SELECT * FROM package;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( QString("UPDATE package_temp SET updateVersion = '', status = '%1' WHERE status = '%2';")
 	                                     .arg( PACKAGE_INSTALLED_STRING ).arg( PACKAGE_UPDATES_STRING ), m_db );
-	KurooDBSingleton::Instance()->singleQuery("BEGIN TRANSACTION;", m_db);
+	KuroolitoDBSingleton::Instance()->singleQuery("BEGIN TRANSACTION;", m_db);
 	
 	EmergePackageList::ConstIterator itEnd = m_packageList.end();
 	for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
@@ -100,7 +100,7 @@ bool ScanUpdatesJob::doJob()
 		// Abort the scan
 		if ( isAborted() ) {
 			kdWarning(0) << "Scanning updates. Scan aborted!" << LINE_INFO;
-			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
+			KuroolitoDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
 		
@@ -108,7 +108,7 @@ bool ScanUpdatesJob::doJob()
 		setProgress( count++ );
 		
 		// Find id for this category in db
-		QString id = KurooDBSingleton::Instance()->singleQuery( " SELECT id FROM package WHERE name = '" + 
+		QString id = KuroolitoDBSingleton::Instance()->singleQuery( " SELECT id FROM package WHERE name = '" + 
 			(*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 		
 		if ( id.isEmpty() ) {
@@ -127,18 +127,18 @@ bool ScanUpdatesJob::doJob()
 				else
 					updateVersion = (*it).version + " (U)";
 				
-				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package_temp SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
+				KuroolitoDBSingleton::Instance()->singleQuery( QString( "UPDATE package_temp SET updateVersion = '%1', status = '%2' WHERE id = '%3';" )
 				                                     .arg( updateVersion ).arg( PACKAGE_UPDATES_STRING ).arg( id ), m_db );
 				
 			}
 		}
 	}
-	KurooDBSingleton::Instance()->singleQuery("COMMIT TRANSACTION;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery("COMMIT TRANSACTION;", m_db );
 	
 	// Move content from temporary table
-	KurooDBSingleton::Instance()->singleQuery( "DELETE FROM package;", m_db );
-	KurooDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
-	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM package;", m_db );
+	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
 	
 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	setProgressTotalSteps( 0 );

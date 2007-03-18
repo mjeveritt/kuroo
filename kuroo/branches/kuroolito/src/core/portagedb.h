@@ -104,16 +104,16 @@ private:
 };
 
 /**
- * @class KurooDB
+ * @class KuroolitoDB
  * @short All database related as connections, queries...
  */
-class KurooDB : public QObject
+class KuroolitoDB : public QObject
 {
 Q_OBJECT
 
 public:
-	KurooDB( QObject *m_parent = 0 );
-	~KurooDB();
+	KuroolitoDB( QObject *m_parent = 0 );
+	~KuroolitoDB();
 	
 	void 					destroy();
 	
@@ -153,9 +153,9 @@ public:
 	bool 					isValid();
 	void 					createTables( DbConnection *conn = NULL );
 	
-	// Kuroo main
-	QString					getKurooDbMeta( const QString& meta );
-	void					setKurooDbMeta( const QString& meta, const QString& data );
+	// Kuroolito main
+	QString					getKuroolitoDbMeta( const QString& meta );
+	void					setKuroolitoDbMeta( const QString& meta, const QString& data );
 	void					backupDb();
 	void					restoreBackup();
 	

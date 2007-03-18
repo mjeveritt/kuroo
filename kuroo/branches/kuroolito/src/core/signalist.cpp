@@ -45,25 +45,25 @@ void Signalist::init( QObject* parent )
  * Sanity level. No db means not ready.
  * @param isReady
  */
-void Signalist::setKurooReady( bool isReady )
+void Signalist::setKuroolitoReady( bool isReady )
 {
 	m_isReady = isReady;
-	emit signalKurooBusy( !isReady );
+	emit signalKuroolitoBusy( !isReady );
 }
 
 /**
  * Return kuroo ready state.
  */
-bool Signalist::isKurooReady()
+bool Signalist::isKuroolitoReady()
 {
 	return m_isReady;
 }
 
 /**
- * Kuroo is busy while scanning for packages or emerging.
+ * Kuroolito is busy while scanning for packages or emerging.
  * @return busy
  */
-bool Signalist::isKurooBusy()
+bool Signalist::isKuroolitoBusy()
 {
 	return m_busy;
 }
@@ -72,7 +72,7 @@ bool Signalist::isKurooBusy()
  * Toggle busy flag for kuroo.
  * @param busy
  */
-void Signalist::setKurooBusy( bool busy )
+void Signalist::setKuroolitoBusy( bool busy )
 {
 	static int busySession(0);
 	
@@ -89,11 +89,11 @@ void Signalist::setKurooBusy( bool busy )
 	
 	if ( busySession == 0 ) {
 		m_busy = false;
-		emit signalKurooBusy( false );
+		emit signalKuroolitoBusy( false );
 	}
 	else {
 		m_busy = true;
-		emit signalKurooBusy( true );
+		emit signalKuroolitoBusy( true );
 	}
 }
 
@@ -102,11 +102,11 @@ void Signalist::setKurooBusy( bool busy )
  */
 void Signalist::scanAborted()
 {
-	setKurooBusy( false );
+	setKuroolitoBusy( false );
 }
 
 /**
- * Kuroo is done syncing.
+ * Kuroolito is done syncing.
  */
 void Signalist::syncDone()
 {
@@ -114,11 +114,11 @@ void Signalist::syncDone()
 }
 
 /**
- * Kuroo is busy scanning.
+ * Kuroolito is busy scanning.
  */
 void Signalist::scanStarted()
 {
-	setKurooBusy( true );
+	setKuroolitoBusy( true );
 }
 
 /**
@@ -127,7 +127,7 @@ void Signalist::scanStarted()
 void Signalist::cachePortageComplete()
 {
 	emit signalCachePortageComplete();
-	setKurooBusy( false );
+	setKuroolitoBusy( false );
 }
 
 /**
@@ -136,7 +136,7 @@ void Signalist::cachePortageComplete()
 void Signalist::scanPortageComplete()
 {
 	emit signalScanPortageComplete();
-	setKurooBusy( false );
+	setKuroolitoBusy( false );
 }
 
 /**
@@ -145,7 +145,7 @@ void Signalist::scanPortageComplete()
 void Signalist::scanUpdatesComplete()
 {
 	emit signalScanUpdatesComplete();
-	setKurooBusy( false );
+	setKuroolitoBusy( false );
 }
 
 /**
@@ -154,7 +154,7 @@ void Signalist::scanUpdatesComplete()
 void Signalist::loadUpdatesComplete()
 {
 	emit signalLoadUpdatesComplete();
-	setKurooBusy( false );
+	setKuroolitoBusy( false );
 }
 
 /**
@@ -163,7 +163,7 @@ void Signalist::loadUpdatesComplete()
 void Signalist::scanHistoryComplete()
 {
 	emit signalScanHistoryComplete();
-	setKurooBusy( false );
+	setKuroolitoBusy( false );
 }
 
 void Signalist::packageQueueChanged()

@@ -70,11 +70,11 @@ public:
 	virtual bool doJob() {
 		
 		// Collect all mask dependatoms
-		QFile file( KurooConfig::filePackageKeywords() );
+		QFile file( KuroolitoConfig::filePackageKeywords() );
 		QTextStream stream( &file );
 		QStringList linesPackage;
 		if ( !file.open( IO_ReadOnly ) )
-			kdWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::filePackageKeywords() << LINE_INFO;
+			kdWarning(0) << "Parsing package.keywords. Reading: " << KuroolitoConfig::filePackageKeywords() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -87,13 +87,13 @@ public:
 		
 		setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
 		
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageKeywords_temp ( "
+		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
+		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageKeywords_temp ( "
 		                                    		"idPackage INTEGER UNIQUE, "
 		                                    		"keywords VARCHAR(255) );"
 		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		for ( QStringList::Iterator it = linesPackage.begin(), end = linesPackage.end(); it != end; ++it ) {
 			
@@ -116,33 +116,33 @@ public:
 					tokenIterator++;
 				}
 				if ( keywords.isEmpty() )
-    				keywords = "~" + KurooConfig::arch();
+    				keywords = "~" + KuroolitoConfig::arch();
 
-				QString id = KurooDBSingleton::Instance()->singleQuery( 
+				QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
 					"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 				
 				if ( id.isEmpty() )
 					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
 					.arg( category ).arg( name ) << LINE_INFO;
 				else
-					KurooDBSingleton::Instance()->insert( QString( 
+					KuroolitoDBSingleton::Instance()->insert( QString( 
 						"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
 					                                      .arg( id ).arg( keywords ), m_db );
 			}
 			else
 				kdWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
-					.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+					.arg( KuroolitoConfig::filePackageKeywords() ) << LINE_INFO;
 			
 		}
 		file.close();
-		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageKeywords;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageKeywords SELECT * FROM packageKeywords_temp;", m_db );
-		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageKeywords_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM packageKeywords;", m_db );
+		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO packageKeywords SELECT * FROM packageKeywords_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageKeywords_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageKeywords", i18n("Done.") );
 		return true;
 	}
@@ -164,11 +164,11 @@ public:
 	virtual bool doJob() {
 		
 		// Collect all unmask dependatoms
-		QFile file( KurooConfig::filePackageUserUnMask() );
+		QFile file( KuroolitoConfig::filePackageUserUnMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing package.unmask. Reading: " << KurooConfig::filePackageUserUnMask() << LINE_INFO;
+			kdError(0) << "Parsing package.unmask. Reading: " << KuroolitoConfig::filePackageUserUnMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -181,14 +181,14 @@ public:
 		
 		setStatus( "PackageUserUnMask", i18n("Collecting user unmasked packages...") );
 		
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUnmask_temp ( "
+		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
+		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUnmask_temp ( "
 													"idPackage INTEGER UNIQUE, "
 													"dependAtom VARCHAR(255), "
 		                                    		"comment BLOB );"
 													, m_db);
 		
-		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
@@ -207,33 +207,33 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->singleQuery( 
+						QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
 							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( 
+							KuroolitoDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 					else
 						kdWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+							.arg( KuroolitoConfig::filePackageUserUnMask() ) << LINE_INFO;
 				}
 			}
 		}
 		file.close();
-		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUnmask;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUnmask SELECT * FROM packageUnmask_temp;", m_db );
-		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUnmask_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM packageUnmask;", m_db );
+		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO packageUnmask SELECT * FROM packageUnmask_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageUnmask_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageUserUnMask", i18n("Done.") );
 		return true;
 	}
@@ -255,11 +255,11 @@ public:
 	virtual bool doJob() {
 		
 		// Collect all mask dependatoms
-		QFile file( KurooConfig::filePackageHardMask() );
+		QFile file( KuroolitoConfig::filePackageHardMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing package.mask. Reading: " << KurooConfig::filePackageHardMask() << LINE_INFO;
+			kdError(0) << "Parsing package.mask. Reading: " << KuroolitoConfig::filePackageHardMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -272,14 +272,14 @@ public:
 		
 		setStatus( "PackageHardMask", i18n("Collecting hardmasked packages...") );
 		
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageHardMask_temp ( "
+		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
+		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageHardMask_temp ( "
 		                                    		"idPackage INTEGER, "
 		                                    		"dependAtom VARCHAR(255), "
 		                                    		"comment BLOB );"
 		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
@@ -298,33 +298,33 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->singleQuery( 
+						QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
 							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( 
+							KuroolitoDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
 
 					}
 					else
 						kdWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+							.arg( KuroolitoConfig::filePackageHardMask() ) << LINE_INFO;
 				}
 			}
 		}
 		file.close();
-		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageHardMask;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageHardMask SELECT * FROM packageHardMask_temp;", m_db );
-		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageHardMask_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM packageHardMask;", m_db );
+		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO packageHardMask SELECT * FROM packageHardMask_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageHardMask_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageHardMask", i18n("Done.") );
 		return true;
 	}
@@ -346,11 +346,11 @@ public:
 	virtual bool doJob() {
 		
 		// Collect all mask dependatoms from /etc/portage/package.mask
-		QFile file( KurooConfig::filePackageUserMask() );
+		QFile file( KuroolitoConfig::filePackageUserMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing user package.mask. Reading: " << KurooConfig::filePackageUserMask() << LINE_INFO;
+			kdError(0) << "Parsing user package.mask. Reading: " << KuroolitoConfig::filePackageUserMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -363,14 +363,14 @@ public:
 		
 		setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
 		
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUserMask_temp ( "
+		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
+		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUserMask_temp ( "
 		                                    		"idPackage INTEGER UNIQUE, "
 		                                    		"dependAtom VARCHAR(255), "
 		                                    		"comment BLOB );"
 		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
@@ -389,33 +389,33 @@ public:
 						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
 						QString name = rxAtom.cap( POS_PACKAGE );
 						
-						QString id = KurooDBSingleton::Instance()->singleQuery( 
+						QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
 							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
 								.arg( category ).arg( name ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( 
+							KuroolitoDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
 						
 					}
 					else
 						kdWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+							.arg( KuroolitoConfig::filePackageUserMask() ) << LINE_INFO;
 				}
 			}
 		}
 		file.close();
-		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUserMask;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUserMask SELECT * FROM packageUserMask_temp;", m_db );
-		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUserMask_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM packageUserMask;", m_db );
+		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO packageUserMask SELECT * FROM packageUserMask_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageUserMask_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		setStatus( "PackageUserMask", i18n("Done.") );
 		return true;
 	}
@@ -436,11 +436,11 @@ public:
 	
 	virtual bool doJob() {
 		
-		QFile file( KurooConfig::filePackageUserUse() );
+		QFile file( KuroolitoConfig::filePackageUserUse() );
 		QTextStream stream( &file );
 		QStringList linesUse;
 		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::filePackageUserUse() << LINE_INFO;
+			kdError(0) << "Parsing user package.use. Reading: %1." << KuroolitoConfig::filePackageUserUse() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
@@ -451,13 +451,13 @@ public:
 		if ( linesUse.isEmpty() )
 			return false;
 		
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUse_temp ( "
+		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
+		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUse_temp ( "
 		                                    		"idPackage INTEGER UNIQUE, "
 		                                    		"use VARCHAR(255) );"
 		                                    		, m_db);
 		
-		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		for ( QStringList::Iterator it = linesUse.begin(), end = linesUse.end(); it != end; ++it ) {
 			QString category = (*it).section( '/', 0, 0 );
@@ -465,26 +465,26 @@ public:
 			QString use = (*it).section( ' ', 1 );
 			use.simplifyWhiteSpace();
 			
-			QString id = KurooDBSingleton::Instance()->singleQuery( 
+			QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
 				"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 			
 			if ( id.isEmpty() )
 				kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
 					.arg( category ).arg( name ) << LINE_INFO;
 			else
-				KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )
+				KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )
 				                                      .arg( id ).arg( use ), m_db );
 			
 		}
 		file.close();
-		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
 		// Move content from temporary table to installedPackages
-		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUse;", m_db );
-		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUse SELECT * FROM packageUse_temp;", m_db );
-		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUse_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM packageUse;", m_db );
+		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO packageUse SELECT * FROM packageUse_temp;", m_db );
+		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageUse_temp;", m_db );
 		
-		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
+		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
 	
@@ -504,19 +504,19 @@ public:
 	
 	virtual bool doJob() {
 		
-		const QStringList lines = KurooDBSingleton::Instance()->query( 
+		const QStringList lines = KuroolitoDBSingleton::Instance()->query( 
 			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
 			"WHERE package.id = packageKeywords.idPackage;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
-				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+				.arg( KuroolitoConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
 		
-		QFile file( KurooConfig::filePackageKeywords() );
+		QFile file( KuroolitoConfig::filePackageKeywords() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KuroolitoConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -548,17 +548,17 @@ public:
 	
 	virtual bool doJob() {
 		
-		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
+		const QStringList lines = KuroolitoDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
-				.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+				.arg( KuroolitoConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
-		QFile file( KurooConfig::filePackageUserMask() );
+		QFile file( KuroolitoConfig::filePackageUserMask() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KuroolitoConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -585,17 +585,17 @@ public:
 	
 	virtual bool doJob() {
 		
-		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
+		const QStringList lines = KuroolitoDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
 			kdWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
-				.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+				.arg( KuroolitoConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
-		QFile file( KurooConfig::filePackageUserUnMask() );
+		QFile file( KuroolitoConfig::filePackageUserUnMask() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KuroolitoConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -622,18 +622,18 @@ public:
 	
 	virtual bool doJob() {
 		
-		const QStringList lines = KurooDBSingleton::Instance()->query( 
+		const QStringList lines = KuroolitoDBSingleton::Instance()->query( 
 			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
 			"WHERE package.id = packageUse.idPackage;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KuroolitoConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		
-		QFile file( KurooConfig::filePackageUserUse() );
+		QFile file( KuroolitoConfig::filePackageUserUse() );
 		QTextStream stream( &file );
 		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kdError(0) << QString("Writing: %1.").arg( KuroolitoConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		
@@ -678,41 +678,41 @@ void PortageFiles::refresh( int mask )
 // 	switch ( mask ) {
 // 		case PACKAGE_KEYWORDS_SCANNED:
 // 			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
-// 			                                    .arg( KurooConfig::filePackageKeywords() ), KUROO );
+// 			                                    .arg( KuroolitoConfig::filePackageKeywords() ), KUROO );
 // 			break;
 // 		case PACKAGE_USER_UNMASK_SCANNED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
-// 												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageUserUnMask() ), KUROO );
 // 			break;
 // 		case PACKAGE_HARDMASK_SCANNED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
-// 												.arg( KurooConfig::filePackageHardMask() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageHardMask() ), KUROO );
 // 			break;
 // 		case PACKAGE_USER_MASK_SCANNED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
-// 												.arg( KurooConfig::filePackageUserMask() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageUserMask() ), KUROO );
 // 			break;
 // 		case PACKAGE_KEYWORDS_SAVED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
-// 												.arg( KurooConfig::filePackageKeywords() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageKeywords() ), KUROO );
 // 			emit signalPortageFilesChanged();
 // 			break;
 // 		case PACKAGE_USER_MASK_SAVED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
-// 												.arg( KurooConfig::filePackageUserMask() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageUserMask() ), KUROO );
 // 			emit signalPortageFilesChanged();
 // 			break;
 // 		case PACKAGE_USER_UNMASK_SAVED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
-// 												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageUserUnMask() ), KUROO );
 // 			break;
 // 		case PACKAGE_USER_USE_SCANNED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
-// 												.arg( KurooConfig::filePackageUserUse() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageUserUse() ), KUROO );
 // 			break;
 // 		case PACKAGE_USER_USE_SAVED:
 // 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
-// 												.arg( KurooConfig::filePackageUserUse() ), KUROO );
+// 												.arg( KuroolitoConfig::filePackageUserUse() ), KUROO );
 // 	}
 }
 

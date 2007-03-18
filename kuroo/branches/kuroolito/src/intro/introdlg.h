@@ -25,7 +25,7 @@
 
 /**
  * @class IntroDlg
- * @short Kuroo introductory wizard.
+ * @short Kuroolito introductory wizard.
  */
 class IntroDlg : public Intro
 {

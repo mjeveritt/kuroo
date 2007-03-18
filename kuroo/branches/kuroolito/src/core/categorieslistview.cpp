@@ -185,7 +185,7 @@ void CategoriesListView::init()
 	clear();
 	
 	// Get all available categories
-	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
+	const QStringList allCategoriesList = KuroolitoDBSingleton::Instance()->allCategories();
 	int i = allCategoriesList.size() - 1;
 	categories.resize( i + 1 );
 	
@@ -248,7 +248,7 @@ void SubCategoriesListView::init()
 	categories.clear();
 	allSubCategories.clear();
 	
-	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allSubCategories();
+	const QStringList allCategoriesList = KuroolitoDBSingleton::Instance()->allSubCategories();
 	int size = allCategoriesList.size() / 3 + 1;
 
 	// Prepend the meta-category All at id = 0

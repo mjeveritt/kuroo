@@ -37,21 +37,21 @@
 #include <kprocio.h>
 
 /**
- * @class KurooInit
- * @short KurooInit checks that kuroo environment is correctly setup.
+ * @class KuroolitoInit
+ * @short KuroolitoInit checks that kuroo environment is correctly setup.
  * 
  * And launch intro wizard whenever a new version of kuroo is installed.
  * Set ownership for directories and files to portage:portage.
  * Check that user is in portage group.
  */
-KurooInit::KurooInit( QObject *parent, const char *name )
+KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
 	getEnvironment();
 	
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
-	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() )
+	if ( KuroolitoConfig::version() != KuroolitoConfig::hardVersion() || !d.exists() || KuroolitoConfig::wizard() )
 		firstTimeWizard();
 	else
 		if ( !KUser().isSuperUser() )
@@ -63,14 +63,14 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
-		KurooConfig::setSaveLog( false );
+	if ( args->getOption("option") == "init" || KuroolitoConfig::init() ) {
+		KuroolitoConfig::setSaveLog( false );
 		
-		// Create DirHome dir and set permissions so common user can run Kuroo
+		// Create DirHome dir and set permissions so common user can run Kuroolito
 		if ( !d.exists() ) {
 			if ( !d.mkdir(GlobalSingleton::Instance()->kurooDir()) ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
-				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+				                            "You must start Kuroolito with kdesu first time for a secure initialization.<br>"
 				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
@@ -87,7 +87,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	if ( !d.cd( backupDir ) ) {
 		if ( !d.mkdir( backupDir ) ) {
 			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
-			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
+			                            "You must start Kuroolito with kdesu first time for a secure initialization.<br>"
 			                            "Please try again!</qt>"), i18n("Initialization") );
 			exit(0);
 		}
@@ -97,8 +97,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		}
 	}
 	
-	KurooConfig::setVersion( KurooConfig::hardVersion() );
-	KurooConfig::writeConfig();
+	KuroolitoConfig::setVersion( KuroolitoConfig::hardVersion() );
+	KuroolitoConfig::writeConfig();
 	
 	// Initialize the log
 // 	QString logFile = LogSingleton::Instance()->init( this );
@@ -108,24 +108,24 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 // 	}
 	
 	// Initialize the database
-	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-	QString database = GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
-	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
+	QString databaseFile = KuroolitoDBSingleton::Instance()->init( this );
+	QString database = GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas();
+	QString dbVersion = KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "kurooVersion" );
 	
 	// Check for conflicting db design or new install
-	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
+	if ( KuroolitoConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
 		
 		// Backup history if there's old db version
 		if ( !dbVersion.isEmpty() ) {
-			KurooDBSingleton::Instance()->backupDb();
+			KuroolitoDBSingleton::Instance()->backupDb();
 			remove( database );
 			kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 			
 			// and recreate with new structure
-			KurooDBSingleton::Instance()->init( this );
+			KuroolitoDBSingleton::Instance()->init( this );
 		}
 		
-		KurooDBSingleton::Instance()->setKurooDbMeta( "kurooVersion", KurooConfig::version().section( "_db", 1, 1 ) );
+		KuroolitoDBSingleton::Instance()->setKuroolitoDbMeta( "kurooVersion", KuroolitoConfig::version().section( "_db", 1, 1 ) );
 	}
 	
 	// Give permissions to portage:portage to access the db also
@@ -145,15 +145,15 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	FileWatcherSingleton::Instance()->init( this );
 }
 
-KurooInit::~KurooInit()
+KuroolitoInit::~KuroolitoInit()
 {
-	KurooConfig::setInit( false );
+	KuroolitoConfig::setInit( false );
 }
 
 /**
  * Run "emerge --info" to collect system info like "ACCEPT_KEYWORDS" and "CONFIG_PROTECT".
  */
-void KurooInit::getEnvironment()
+void KuroolitoInit::getEnvironment()
 {
 	DEBUG_LINE_INFO;
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
@@ -168,21 +168,21 @@ void KurooInit::getEnvironment()
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput( KProcIO* ) ) );
 }
 
-void KurooInit::slotCollectOutput( KProcIO* eProc )
+void KuroolitoInit::slotCollectOutput( KProcIO* eProc )
 {
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 )
 		m_emergeInfoLines += line;
 }
 
-void KurooInit::slotEmergeInfo( KProcess* )
+void KuroolitoInit::slotEmergeInfo( KProcess* )
 {
 	foreach ( m_emergeInfoLines ) {
 		
 		if ( (*it).startsWith( "Portage 2.0" ) )
-			KurooConfig::setPortageVersion21( false );
+			KuroolitoConfig::setPortageVersion21( false );
 		else
-			KurooConfig::setPortageVersion21( true );
+			KuroolitoConfig::setPortageVersion21( true );
 		
 		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
 			QString arch = (*it).section( "\"", 1, 1 );
@@ -191,19 +191,19 @@ void KurooInit::slotEmergeInfo( KProcess* )
 			if ( arch.contains( "~" ) )
 				arch = arch.section( "~", 1, 1 );
 			
-			KurooConfig::setArch( arch );
+			KuroolitoConfig::setArch( arch );
 		}
 		
 		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
-			KurooConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
+			KuroolitoConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
 		
 // 		if ( (*it).startsWith( "USE=" ) )
-// 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
+// 			KuroolitoConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
 	
-	kdDebug() << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	kdDebug() << "KuroolitoConfig::arch()=" << KuroolitoConfig::arch() << LINE_INFO;
 	
-	KurooConfig::writeConfig();
+	KuroolitoConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }
 
@@ -212,22 +212,22 @@ void KurooInit::slotEmergeInfo( KProcess* )
  * and overlay location.
  * If user aborts the wizard it will be relaunched again next time.
  */
-void KurooInit::firstTimeWizard()
+void KuroolitoInit::firstTimeWizard()
 {
 	IntroDlg wizardDialog;
 	
 	if ( wizardDialog.exec() != QDialog::Accepted )
 		exit(0);
 	else
-		KurooConfig::setWizard( false );
+		KuroolitoConfig::setWizard( false );
 	
-	KurooConfig::setInit( true );
+	KuroolitoConfig::setInit( true );
 }
 
 /**
  * Control if user is in portage group.
  */
-void KurooInit::checkUser()
+void KuroolitoInit::checkUser()
 {
 	QStringList userGroups = KUser().groupNames();
 	foreach( userGroups ) {

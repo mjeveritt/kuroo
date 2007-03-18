@@ -45,7 +45,7 @@ typedef Singleton<Images> ImagesSingleton;
 typedef Singleton<Emerge> EmergeSingleton;
 typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Portage> PortageSingleton;
-typedef Singleton<KurooDB> KurooDBSingleton;
+typedef Singleton<KuroolitoDB> KuroolitoDBSingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;

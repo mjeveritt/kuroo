@@ -35,15 +35,15 @@ class MergeTab;
 class PackageInspector;
 
 /**
- * @class KurooView
+ * @class KuroolitoView
  * @short Create the gui content with icon-menu and pages.
  */
-class KurooView : public KurooViewBase, public kurooIface
+class KuroolitoView : public KuroolitoViewBase, public kurooIface
 {
 Q_OBJECT
 public:
-	KurooView( QWidget *parent, const char *name );
-	~KurooView();
+	KuroolitoView( QWidget *parent, const char *name );
+	~KuroolitoView();
 	
 	PortageTab*			viewPortage;
 	PackageInspector	*packageInspector;
@@ -69,7 +69,7 @@ private:
 	bool				m_isHistoryRestored;
 };
 
-class KurooView::IconListItem : public QListBoxItem
+class KuroolitoView::IconListItem : public QListBoxItem
 {
 public:
 	IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text );

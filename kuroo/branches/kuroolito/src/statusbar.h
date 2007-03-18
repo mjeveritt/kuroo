@@ -28,19 +28,19 @@
 class QTimer;
 
 /**
- * @class KurooStatusBar
+ * @class KuroolitoStatusBar
  * @short Singleton statusbar with label and progressbar.
  */
-class KurooStatusBar : public KStatusBar
+class KuroolitoStatusBar : public KStatusBar
 {
 Q_OBJECT
-	static KurooStatusBar* s_instance;
+	static KuroolitoStatusBar* s_instance;
 	
 public:
-	KurooStatusBar( QWidget *parent = 0 );
-    ~KurooStatusBar();
+	KuroolitoStatusBar( QWidget *parent = 0 );
+    ~KuroolitoStatusBar();
 	
-	static 					KurooStatusBar* instance() { return s_instance; }
+	static 					KuroolitoStatusBar* instance() { return s_instance; }
 	
 	void 					setProgressStatus( const QString& id, const QString& text );
     

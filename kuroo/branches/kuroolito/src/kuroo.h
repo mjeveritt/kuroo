@@ -37,22 +37,22 @@ class KConfigDialog;
 class KURL;
 class IntroDlg;
 class KCmdLineArgs;
-class KurooInit;
+class KuroolitoInit;
 class Message;
 class Queue;
 class Results;
 class SystemTray;
 
 /**
- * @class Kuroo
+ * @class Kuroolito
  * @short Main kde window with menus, system tray icon and statusbar.
  */
-class Kuroo : public MainWindow
+class Kuroolito : public MainWindow
 {
 Q_OBJECT
 public:
-	Kuroo();
-	virtual ~Kuroo();
+	Kuroolito();
+	virtual ~Kuroolito();
 	
 private slots:
 	void 				introWizard();
@@ -74,8 +74,8 @@ private:
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
 	Message 			*kurooMessage;
-	KurooInit 			*kurooInit;
-// 	KurooView 			*m_view;
+	KuroolitoInit 			*kurooInit;
+// 	KuroolitoView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;

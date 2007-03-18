@@ -85,22 +85,22 @@ void IntroDlg::accept()
 // 	if ( cbBackup->isOn() ) {
 // 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
 // 		QString filePackageKeywords( KuroolitoConfig::filePackageKeywords() );
-// 		KIO::file_copy( filePackageKeywords, KuroolitoConfig::dirHome() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
+// 		KIO::file_copy( filePackageKeywords, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
 // 		              -1, true, false, false );
 // 		QString filePackageUserUnMask( KuroolitoConfig::filePackageUserUnMask() );
-// 		KIO::file_copy( filePackageUserUnMask, KuroolitoConfig::dirHome() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
+// 		KIO::file_copy( filePackageUserUnMask, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
 // 		                -1, true, false, false );
 // 		QString filePackageUserMask( KuroolitoConfig::filePackageUserMask() );
-// 		KIO::file_copy( filePackageUserMask, KuroolitoConfig::dirHome() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
+// 		KIO::file_copy( filePackageUserMask, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
 // 		                -1, true, false, false );
 // 		QString filePackageUserUse( KuroolitoConfig::filePackageUserUse() );
-// 		KIO::file_copy( filePackageUserUse, KuroolitoConfig::dirHome() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
+// 		KIO::file_copy( filePackageUserUse, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
 // 		                -1, true, false, false );
 // 		QString fileWorld( KuroolitoConfig::fileWorld() );
-// 		KIO::file_copy( fileWorld, KuroolitoConfig::dirHome() + "backup/" + fileWorld.section( "/", -1 ) + dt,
+// 		KIO::file_copy( fileWorld, lobalSingleton::Instance()->kurooDir() + "backup/" + fileWorld.section( "/", -1 ) + dt,
 // 		                -1, true, false, false );
 // 		QString fileMakeConf( KuroolitoConfig::fileMakeConf() );
-// 		KIO::file_copy( fileMakeConf, KuroolitoConfig::dirHome() + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
+// 		KIO::file_copy( fileMakeConf, lobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
 // 		                -1, true, false, false );
 // 	}
 	

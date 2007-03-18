@@ -70,7 +70,7 @@ QString KuroolitoDB::init( QObject *parent )
 	
 	m_dbConnPool->createDbConnections();
 	
-	return KuroolitoConfig::dirHome() + KuroolitoConfig::databas();
+	return GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas();
 }
 
 DbConnection *KuroolitoDB::getStaticDbConnection()
@@ -868,7 +868,7 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection( SqliteConfig* config )
 	: DbConnection( config )
 {
-	const QCString path = QString( KuroolitoConfig::dirHome() + KuroolitoConfig::databas() ).local8Bit();
+	const QCString path = QString( GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas() ).local8Bit();
 	
     // Open database file and check for correctness
 	m_initialized = false;

@@ -50,7 +50,7 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	getEnvironment();
 	
 	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( KuroolitoConfig::dirHome() );
+	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KuroolitoConfig::version() != KuroolitoConfig::hardVersion() || !d.exists() || KuroolitoConfig::wizard() )
 		firstTimeWizard();
 	
@@ -61,13 +61,13 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 		
 		// Create DirHome dir and set permissions so common user can run Kuroolito
 		if ( !d.exists() ) {
-			if ( !d.mkdir(KuroolitoConfig::dirHome()) ) {
+			if ( !d.mkdir( GlobalSingleton::Instance()->kurooDir() ) ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroolito home directory.<br>"
 				                            "Please correct and try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			}
 			
-			d.setCurrent( KuroolitoConfig::dirHome() );
+			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
 		}
 	}
 	
@@ -76,7 +76,7 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	
 	// Initialize the database
 	QString databaseFile = KuroolitoDBSingleton::Instance()->init( this );
-	QString database = KuroolitoConfig::dirHome() + KuroolitoConfig::databas();
+	QString database = GlobalSingleton::Instance()->kurooDir() + KuroolitoConfig::databas();
 	QString dbVersion = KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "kurooVersion" );
 	
 	// Check for conflicting db design or new install

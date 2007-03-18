@@ -22,8 +22,6 @@
 #include "systemtray.h"
 #include "configdialog.h"
 #include "options1.h"
-#include "options2.h"
-#include "options7.h"
 
 #include <qtextstream.h>
 #include <qdir.h>

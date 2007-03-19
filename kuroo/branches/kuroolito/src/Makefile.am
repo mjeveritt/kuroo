@@ -75,3 +75,6 @@ partdesktop_DATA = kuroolito_part.desktop
 # this is where the part's XML-GUI resource file goes
 partrcdir   = $(kde_datadir)/kuroolitopart
 partrc_DATA = kuroolito_part.rc
+
+globaladddir   = $(kde_datadir)/konqsidebartng/add
+globaladd_DATA = kuroolito_part.desktop

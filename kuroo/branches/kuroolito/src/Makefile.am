@@ -66,15 +66,13 @@ libkuroolitopart_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(all_libraries)
 libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \
 	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/config/libconfig.la $(LIB_KPARTS) $(LIB_KFILE) \
-	$(LIB_SQLITE) $(LIB_SQLITE_LOCAL) -lkonqsidebarplugin
+	$(LIB_SQLITE) $(LIB_SQLITE_LOCAL) -lkonq
 
 # this is where the desktop file will go 
 partdesktopdir   = $(kde_servicesdir)
 partdesktop_DATA = kuroolito_part.desktop
 
 # this is where the part's XML-GUI resource file goes
-partrcdir   = $(kde_datadir)/kuroolitopart
+partrcdir   = $(kde_datadir)/kuroolito
 partrc_DATA = kuroolito_part.rc
 
-globaladddir   = $(kde_datadir)/konqsidebartng/add
-globaladd_DATA = kuroolito_part.desktop

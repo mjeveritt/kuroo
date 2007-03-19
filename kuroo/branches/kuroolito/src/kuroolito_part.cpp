@@ -48,14 +48,10 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	viewPortage = new PortageTab( parentWidget/*, packageInspector*/ );
 	setWidget( viewPortage );
 	
-	DEBUG_LINE_INFO;
-	
 	if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() )
 		viewPortage->slotReload();
 	else
 		PortageSingleton::Instance()->slotRefresh();
-	
-	DEBUG_LINE_INFO;
 	
 // 	setupActions();
 // 	statusBar();

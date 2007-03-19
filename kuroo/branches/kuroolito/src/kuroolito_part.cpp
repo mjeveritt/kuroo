@@ -46,8 +46,13 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	
 	// Add all pages
 	viewPortage = new PortageTab( parentWidget/*, packageInspector*/ );
-	
 	setWidget( viewPortage );
+	
+	if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() )
+		viewPortage->slotReload();
+	else
+		PortageSingleton::Instance()->slotRefresh();
+	
 // 	setupActions();
 // 	statusBar();
 // 	setupGUI();

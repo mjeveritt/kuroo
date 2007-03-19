@@ -1,19 +1,10 @@
 [Desktop Entry]
-Comment=KDE frontend to Gentoo portage
-Comment[en_US]=KDE browser to Gentoo portage
-Comment[nb]=KDE-grensesnitt for Gentoo Portage
-Encoding=UTF-8
-Exec=kuroolito -caption "%c" %i %m
 GenericName=KDE browser to Gentoo portage
-GenericName[en_US]=KDE browser to Gentoo portage
-GenericName[nb]=KDE-grensesnitt for Gentoo Portage
 Icon=kuroo
-MimeType=
-Name=Kuroolito
-Name[en_US]=Kuroolito
-Path=
-StartupNotify=true
-Terminal=false
-Type=Application
-X-KDE-SubstituteUID=false
-X-KDE-Username=Kuroolito
+Encoding=UTF-8
+Name=KuroolitoPart
+Name[xx]=xxKuroolitoPartxx
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-Library=libkuroolitopart
+Type=Service

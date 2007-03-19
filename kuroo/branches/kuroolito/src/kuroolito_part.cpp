@@ -31,7 +31,7 @@
 
 KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name )
     : KParts::ReadWritePart(parent, name),
-// 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
+	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
 // 	kurooMessage( new Message( this ) ),
 // 	systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
@@ -48,10 +48,14 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	viewPortage = new PortageTab( parentWidget/*, packageInspector*/ );
 	setWidget( viewPortage );
 	
+	DEBUG_LINE_INFO;
+	
 	if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() )
 		viewPortage->slotReload();
 	else
 		PortageSingleton::Instance()->slotRefresh();
+	
+	DEBUG_LINE_INFO;
 	
 // 	setupActions();
 // 	statusBar();

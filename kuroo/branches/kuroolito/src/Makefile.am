@@ -66,7 +66,7 @@ libkuroolitopart_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(all_libraries)
 libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \
 	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/config/libconfig.la $(LIB_KPARTS) $(LIB_KFILE) \
-	$(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
+	$(LIB_SQLITE) $(LIB_SQLITE_LOCAL) -lkonqsidebarplugin
 
 # this is where the desktop file will go 
 partdesktopdir   = $(kde_servicesdir)

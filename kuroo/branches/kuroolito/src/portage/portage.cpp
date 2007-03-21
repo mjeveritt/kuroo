@@ -91,7 +91,7 @@ Portage::Portage( QObject *m_parent )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
 
 	// Start refresh directly after emerge sync
-	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotSyncCompleted() ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotSyncCompleted() ) );
 }
 
 Portage::~Portage()
@@ -151,8 +151,8 @@ bool Portage::slotRefresh()
  */
 bool Portage::slotSync()
 {
-	EmergeSingleton::Instance()->sync();
-	return true;
+// 	EmergeSingleton::Instance()->sync();
+// 	return true;
 }
 
 /**
@@ -160,7 +160,7 @@ bool Portage::slotSync()
  */
 void Portage::slotSyncCompleted()
 {
-	slotRefresh();
+// 	slotRefresh();
 }
 
 /**

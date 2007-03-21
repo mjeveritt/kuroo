@@ -90,7 +90,7 @@ bool Emerge::sync()
 	*eProc << "emerge" << "--sync" << "--quiet" << "--nocolor" << "--nospinner";
 	
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
-		KuroolitoStatusBar::instance()->setProgressStatus( "Error", i18n("emerge --sync didn't start.") );
+// 		KuroolitoStatusBar::instance()->setProgressStatus( "Error", i18n("emerge --sync didn't start.") );
 		return false;
 	}
 	else {
@@ -236,7 +236,8 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !m_importantMessage.isEmpty() )
-		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );
+		KMessageBox::error( 0, m_importantMessage, i18n("Important message!") );
+// 		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );
 }
 
 #include "emerge.moc"

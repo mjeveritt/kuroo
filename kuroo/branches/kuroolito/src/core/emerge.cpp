@@ -97,8 +97,8 @@ bool Emerge::sync()
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupSync(KProcess*) ) );
 		SignalistSingleton::Instance()->setKuroolitoBusy( true );
-		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
-		KuroolitoStatusBar::instance()->setTotalSteps( KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "syncDuration" ).toInt() );
+// 		/*KuroolitoStatusBar*/::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
+// 		KuroolitoStatusBar::instance()->setTotalSteps( KuroolitoDBSingleton::Instance()->getKuroolitoDbMeta( "syncDuration" ).toInt() );
 		return true;
 	}
 }
@@ -124,15 +124,15 @@ bool Emerge::checkUpdates()
 	*eProc << "world";
 
 	if ( !eProc->start( KProcess::OwnGroup, true ) ) {
-		KuroolitoStatusBar::instance()->setProgressStatus( "Error", i18n("emerge --update didn't start.") );
+// 		KuroolitoStatusBar::instance()->setProgressStatus( "Error", i18n("emerge --update didn't start.") );
 		return false;
 	}
 	else {
 		connect( eProc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 		connect( eProc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 		SignalistSingleton::Instance()->setKuroolitoBusy( true );
-		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
-		KuroolitoStatusBar::instance()->startProgress();
+// 		KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
+// 		KuroolitoStatusBar::instance()->startProgress();
 		return true;
 	}
 }
@@ -206,8 +206,8 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
  */
 void Emerge::cleanup()
 {
-	KuroolitoStatusBar::instance()->stopTimer();
-	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
+// 	KuroolitoStatusBar::instance()->stopTimer();
+// 	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKuroolitoBusy( false );
 }
 
@@ -231,8 +231,8 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
 	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupCheckUpdates(KProcess*) ) );
 	
-	KuroolitoStatusBar::instance()->stopTimer();
-	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
+// 	KuroolitoStatusBar::instance()->stopTimer();
+// 	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !m_importantMessage.isEmpty() )

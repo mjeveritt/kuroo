@@ -32,7 +32,7 @@
 KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name )
     : KParts::ReadWritePart(parent, name),
 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
-// 	kurooMessage( new Message( this ) ),
+	kurooMessage( new Message( parentWidget ) ),
 // 	systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {

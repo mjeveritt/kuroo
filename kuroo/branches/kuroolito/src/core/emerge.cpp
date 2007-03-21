@@ -236,8 +236,7 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
 	if ( !m_importantMessage.isEmpty() )
-		KMessageBox::error( 0, m_importantMessage, i18n("Important message!") );
-// 		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );
+		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );
 }
 
 #include "emerge.moc"

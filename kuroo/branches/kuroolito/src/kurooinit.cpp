@@ -54,12 +54,14 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	if ( KuroolitoConfig::version() != KuroolitoConfig::hardVersion() || !d.exists() || KuroolitoConfig::wizard() )
 		firstTimeWizard();
 	
+	kdDebug() << "KuroolitoInit::KuroolitoInit" << endl;
+	
 	// Setup kuroo environment
 // 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( KuroolitoConfig::init() ) {
-		KuroolitoConfig::setSaveLog( false );
+// 		KuroolitoConfig::setSaveLog( false );
 		
-		// Create DirHome dir and set permissions so common user can run Kuroolito
+		// Create DirHome dir
 		if ( !d.exists() ) {
 			if ( !d.mkdir( GlobalSingleton::Instance()->kurooDir() ) ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroolito home directory.<br>"

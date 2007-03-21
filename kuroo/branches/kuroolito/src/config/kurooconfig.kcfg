@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd"> 
 	<kcfg>
-	<kcfgfile name="kuroorc"/> 
+	<kcfgfile name="kuroolitorc"/> 
 	<group name="general">
 		<entry name="portageVersion21" type="Bool">
 			<default>false</default>

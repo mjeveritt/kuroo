@@ -55,9 +55,9 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 		firstTimeWizard();
 	
 	// Setup kuroo environment
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if ( args->getOption("option") == "init" || KuroolitoConfig::init() ) {
-		KuroolitoConfig::setSaveLog( false );
+// 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+// 	if ( args->getOption("option") == "init" || KuroolitoConfig::init() ) {
+// 		KuroolitoConfig::setSaveLog( false );
 		
 		// Create DirHome dir and set permissions so common user can run Kuroolito
 		if ( !d.exists() ) {
@@ -69,7 +69,7 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 			
 			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
 		}
-	}
+// 	}
 	
 	KuroolitoConfig::setVersion( KuroolitoConfig::hardVersion() );
 	KuroolitoConfig::writeConfig();

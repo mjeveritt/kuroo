@@ -297,22 +297,22 @@ void ThreadWeaver::Job::customEvent( QCustomEvent *e )
 {
 	int progress = static_cast<ProgressEvent*>(e)->progress;
 	
-	switch( progress ) {
-		case -3:
-			KuroolitoStatusBar::instance()->setProgressStatus( m_id, m_status );
-			break;
-	
-		case -2:
-			KuroolitoStatusBar::instance()->setThreadTotalSteps( 0 );
-			break;
-		
-		case -1:
-			KuroolitoStatusBar::instance()->setThreadTotalSteps( 100 );
-			break;
-	
-		default:
-			KuroolitoStatusBar::instance()->setProgress( progress );
-	}
+// 	switch( progress ) {
+// 		case -3:
+// 			KuroolitoStatusBar::instance()->setProgressStatus( m_id, m_status );
+// 			break;
+// 	
+// 		case -2:
+// 			KuroolitoStatusBar::instance()->setThreadTotalSteps( 0 );
+// 			break;
+// 		
+// 		case -1:
+// 			KuroolitoStatusBar::instance()->setThreadTotalSteps( 100 );
+// 			break;
+// 	
+// 		default:
+// 			KuroolitoStatusBar::instance()->setProgress( progress );
+// 	}
 }
 
 ThreadWeaver::DependentJob::DependentJob( QObject *dependent, const char *name )

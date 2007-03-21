@@ -115,7 +115,7 @@ bool Emerge::checkUpdates()
 	m_emergePackageList.clear();
 	
 	eProc->resetAll();
-	*eProc << "emerge" << "-pvu" << "--nocolor" << "--nospinner" << "--columns";
+	*eProc << "emerge" << "-pvu" << "--color=no" << "--nospinner" << "--columns";
 	
 	// Add deep if checked in gui
 	if ( KuroolitoConfig::updateDeep() )

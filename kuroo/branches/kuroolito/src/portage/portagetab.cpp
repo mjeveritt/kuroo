@@ -73,7 +73,7 @@ PortageTab::PortageTab( QWidget* parent/*, PackageInspector *packageInspector*/ 
 	
 	// Button actions.
 	connect( packagesView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
-	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
+// 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
@@ -129,7 +129,7 @@ void PortageTab::slotInit()
 
 
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
-	pbAdvanced->setIconSet( SmallIconSet("options") );
+// 	pbAdvanced->setIconSet( SmallIconSet("options") );
 	
 	slotBusy();
 }
@@ -188,7 +188,7 @@ void PortageTab::slotBusy()
 {
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
-		pbAdvanced->setDisabled( true );
+// 		pbAdvanced->setDisabled( true );
 		filterGroup->setDisabled( true );
 		searchFilter->setDisabled( true );
 		pbClearFilter->setDisabled( true );
@@ -216,12 +216,12 @@ void PortageTab::slotButtons()
 	
 	// No current package, disable all buttons
 	if ( !packagesView->currentPackage() ) {
-		pbAdvanced->setDisabled( true );
+// 		pbAdvanced->setDisabled( true );
 		return;
 	}
 	
 // 	m_packageInspector->setDisabled( false );
-	pbAdvanced->setDisabled( false );
+// 	pbAdvanced->setDisabled( false );
 }
 
 
@@ -235,7 +235,7 @@ void PortageTab::slotButtons()
 void PortageTab::slotReload()
 {
 // 	m_packageInspector->setDisabled( true );
-	pbAdvanced->setDisabled( true );
+// 	pbAdvanced->setDisabled( true );
 	
 	disconnect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
@@ -345,7 +345,7 @@ void PortageTab::slotRefresh()
 void PortageTab::slotAdvanced()
 {
 	DEBUG_LINE_INFO;
-	pbAdvanced->setDisabled( true );
+// 	pbAdvanced->setDisabled( true );
 	filterGroup->setDisabled( true );
 	searchFilter->setDisabled( true );
 	pbClearFilter->setDisabled( true );
@@ -393,7 +393,7 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		
-		pbAdvanced->setDisabled( true );
+// 		pbAdvanced->setDisabled( true );
 		return;
 	}
 	

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>604</width>
-            <height>487</height>
+            <height>399</height>
         </rect>
     </property>
     <property name="caption">
@@ -413,55 +413,6 @@
                                         <enum>NoFrame</enum>
                                     </property>
                                 </widget>
-                                <widget class="QLayoutWidget" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>layout18</cstring>
-                                    </property>
-                                    <grid>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <spacer row="0" column="2">
-                                            <property name="name">
-                                                <cstring>spacer9</cstring>
-                                            </property>
-                                            <property name="orientation">
-                                                <enum>Horizontal</enum>
-                                            </property>
-                                            <property name="sizeType">
-                                                <enum>Expanding</enum>
-                                            </property>
-                                            <property name="sizeHint">
-                                                <size>
-                                                    <width>20</width>
-                                                    <height>5</height>
-                                                </size>
-                                            </property>
-                                        </spacer>
-                                        <widget class="KPushButton" row="0" column="3">
-                                            <property name="name">
-                                                <cstring>pbAdvanced</cstring>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy>
-                                                    <hsizetype>1</hsizetype>
-                                                    <vsizetype>0</vsizetype>
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Details...</string>
-                                            </property>
-                                            <property name="accel">
-                                                <string>Alt+D</string>
-                                            </property>
-                                            <property name="toolTip" stdset="0">
-                                                <string>Show package details...</string>
-                                            </property>
-                                        </widget>
-                                    </grid>
-                                </widget>
                             </grid>
                         </widget>
                     </widget>
@@ -563,6 +514,5 @@
     <includehint>categorieslistview.h</includehint>
     <includehint>portagelistview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
-    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

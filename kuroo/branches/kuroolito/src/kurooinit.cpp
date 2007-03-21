@@ -156,7 +156,6 @@ void KuroolitoInit::slotEmergeInfo( KProcess* )
 	kdDebug() << "KuroolitoConfig::arch()=" << KuroolitoConfig::arch() << LINE_INFO;
 	
 	KuroolitoConfig::writeConfig();
-	DEBUG_LINE_INFO;
 }
 
 /**

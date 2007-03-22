@@ -72,16 +72,16 @@ KuroolitoPart::~KuroolitoPart()
  */
 void KuroolitoPart::setupActions()
 {
-// 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
-// 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
+	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 // 	
 // 	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
 // 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 // 	
-	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
+	 (void) new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	
-	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
+	 (void) new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
 // 	createGUI();

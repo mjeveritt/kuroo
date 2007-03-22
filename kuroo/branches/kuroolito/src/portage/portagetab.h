@@ -49,9 +49,6 @@ public slots:
 private slots:
 	void 				slotInit();
 	
-	void				slotWhatsThis();
-	
-	void				slotNextPackage( bool isNext );
 	void				slotBusy();
 	void				slotInitButtons();
 	void				slotButtons();
@@ -63,9 +60,7 @@ private slots:
 	void				slotClearFilter();
 	void				slotListPackages();
 	
-	void				slotAdvanced();
 	void				slotPackage();
-	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
 	
 private:
 	void				processPackage( bool viewInspector );
@@ -77,15 +72,6 @@ private:
 	
 	// Delay package view until all text in entered in the text-filter
 	int					m_delayFilters;
-	
-	// rmb
-	KPopupMenu 			*menu;
-	
-	// The package inspector
-// 	PackageInspector	*m_packageInspector;
-	
-	// Lists all package versions for uninstalling
-// 	UninstallInspector	*m_uninstallInspector;
 	
 signals:
 	void				signalChanged();

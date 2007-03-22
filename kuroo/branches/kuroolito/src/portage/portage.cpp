@@ -89,9 +89,6 @@ Portage::Portage( QObject *m_parent )
 	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
-
-	// Start refresh directly after emerge sync
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalSyncDone() ), this, SLOT( slotSyncCompleted() ) );
 }
 
 Portage::~Portage()
@@ -146,24 +143,6 @@ bool Portage::slotRefresh()
 }
 
 /**
- * Start emerge sync.
- * @return bool
- */
-bool Portage::slotSync()
-{
-// 	EmergeSingleton::Instance()->sync();
-// 	return true;
-}
-
-/**
- * Stop progressbar.
- */
-void Portage::slotSyncCompleted()
-{
-// 	slotRefresh();
-}
-
-/**
  * Continue with scan of portage packages.
  * @return bool
  */
@@ -196,9 +175,6 @@ bool Portage::slotScan()
  */
 void Portage::slotScanCompleted()
 {
-	// Reset Queue with it's own cache
-// 	QueueSingleton::Instance()->reset();
-	
 	// Now all Portage files
 	PortageFilesSingleton::Instance()->loadPackageFiles();
 	

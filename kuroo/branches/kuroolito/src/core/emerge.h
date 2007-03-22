@@ -48,7 +48,6 @@ public:
 	bool						checkUpdates();
 	
 	const EmergePackageList		packageList();
-// 	const QString				packageMessage();
 	
 private:
 	void						cleanup();
@@ -76,21 +75,10 @@ private:
 	
 	// The current package
 	QString						m_packageMessage;
-	
-	// The parsed package emerge says need unmasking
-// 	QString						m_unmasked;
-	
-	// Collect all blocking packages
-// 	QStringList 				m_blocks;
-	
-	// Remember packages emerge started with, used when auto-unmasking
-// 	QStringList					m_lastEmergeList;
-	
+
 	// List of parsed packages
 	EmergePackageList			m_emergePackageList;
-	
-	// Count of etc-updates files to merge
-// 	int							m_etcUpdateCount;
+
 };
 
 #endif

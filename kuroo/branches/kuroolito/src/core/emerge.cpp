@@ -183,17 +183,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 	}
 }
 
-/**
- * Return einfo and ewarnings collected during emerge of the package.
- * @return message
- */
-// const QString Emerge::packageMessage()
-// {
-// 	QString message = m_packageMessage;
-// 	m_packageMessage = QString::null;
-// 	return message;
-// }
-
 
 //////////////////////////////////////////////////////////////////////////////
 // Post emerge stuff

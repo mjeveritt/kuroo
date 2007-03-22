@@ -68,12 +68,10 @@ PortageTab::PortageTab( QWidget* parent/*, PackageInspector *packageInspector*/ 
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
 	
 	// Rmb actions.
-	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
-	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+// 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
+// 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
-	connect( packagesView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
-// 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
 	// Toggle Queue button between "add/remove" when after queue has been edited
@@ -90,11 +88,6 @@ PortageTab::PortageTab( QWidget* parent/*, PackageInspector *packageInspector*/ 
 	
 	// Load Inspector with current package info
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
-	
-	// Connect changes made in Inspector to this view so it gets updated
-// 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
-// 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
-// 	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -129,45 +122,9 @@ void PortageTab::slotInit()
 
 
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
-// 	pbAdvanced->setIconSet( SmallIconSet("options") );
 	
 	slotBusy();
 }
-
-/**
- * What's this info explaning this tabs functionality.
- */
-void PortageTab::slotWhatsThis()
-{
-// 	QWhatsThis::display( i18n( "<qt>"
-// 			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br>"
-// 			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
-// 			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
-// 			"Select 'Sync Portage' in the Portage menu.<br>"
-// 			"After syncing Kuroolito will search for newer version of the applications you have installed. "
-// 			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br>"
-// 			"If you want to update every single package on your system, check the Deep checkbox in Kuroolito Preferences.<br><br>"
-// 			"When you want to remove a software package from your system, select a package and press 'Uninstall'. "
-// 			"This will tell Portage to remove all files installed by that package from your system except the configuration files "
-// 			"of that application if you have altered those after the installation. "
-// 			"However, a big warning applies: Portage will not check if the package you want to remove is required by another package. "
-// 			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br><br>"
-// 			"Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" )
-// 			, QCursor::pos(), this );
-}
-
-/**
- * Forward signal from next-buttons only if this tab is visible for user.
- * @param isNext
- */
-void PortageTab::slotNextPackage( bool isNext )
-{
-// 	if ( !m_packageInspector->isParentView( VIEW_PORTAGE ) )
-// 		return;
-	
-	packagesView->nextPackage( isNext );
-}
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Toggle button slots
@@ -234,9 +191,6 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-// 	m_packageInspector->setDisabled( true );
-// 	pbAdvanced->setDisabled( true );
-	
 	disconnect( categoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotListPackages() ) );
 	
@@ -290,7 +244,6 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KuroolitoDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-// 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
 		packagesView->showNoHitsWarning( true );
@@ -339,21 +292,6 @@ void PortageTab::slotRefresh()
 // Package slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * Open advanced dialog with: ebuild, versions, use flags...
- */
-void PortageTab::slotAdvanced()
-{
-	DEBUG_LINE_INFO;
-// 	pbAdvanced->setDisabled( true );
-	filterGroup->setDisabled( true );
-	searchFilter->setDisabled( true );
-	pbClearFilter->setDisabled( true );
-	
-	if ( packagesView->currentPackage() )
-		processPackage( true );
-}
-
 void PortageTab::slotPackage()
 {
 // 	if ( m_packageInspector->isVisible() )
@@ -368,9 +306,6 @@ void PortageTab::slotPackage()
  */
 void PortageTab::processPackage( bool viewInspector )
 {
-// 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
-// 		return;
-	
 	summaryBrowser->clear();
 	
 	// Multiple packages selected
@@ -393,7 +328,6 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += "</td></tr>";
 		summaryBrowser->setText( lines + "</table>");
 		
-// 		pbAdvanced->setDisabled( true );
 		return;
 	}
 	
@@ -476,43 +410,6 @@ void PortageTab::processPackage( bool viewInspector )
 	}
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");
-	
-	// Refresh inspector if visible
-// 	if ( viewInspector )
-// 		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
-}
-
-/**
- * Popup menu for actions like emerge.
- * @param item
- * @param point
- */
-void PortageTab::contextMenu( KListView*, QListViewItem* item, const QPoint& point )
-{
-	DEBUG_LINE_INFO;
-	if ( !item )
-		return;
-	
-	const QStringList selectedIdList = packagesView->selectedId();
-	
-	enum Actions { APPEND, UNINSTALL, ADDWORLD, DELWORLD };
-	
-// 	KPopupMenu menu( this );
-// 	
-// 	int menuItem2;
-// 	menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
-// 
-// 	
-// 	if ( m_packageInspector->isVisible() ) {
-// 		menu.setItemEnabled( menuItem2, false );
-// 	}
-// 	
-// 	switch( menu.exec( point ) ) {
-// 
-// 		case DETAILS:
-// 			slotAdvanced();
-// 			break;
-// 	}
 }
 
 #include "portagetab.moc"

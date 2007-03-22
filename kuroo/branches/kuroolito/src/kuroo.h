@@ -56,18 +56,18 @@ public:
 	virtual ~Kuroolito();
 	
 private slots:
-	void 				introWizard();
-	void 				slotPreferences();
-	void				slotBusy();
-	bool 				queryClose();
-	bool 				queryExit();
-	void 				slotQuit();
-	void				slotWait();
-	void 				slotTerminate();
-	void				slotWhatsThis( int tabIndex );
+// 	void 				introWizard();
+// 	void 				slotPreferences();
+// 	void				slotBusy();
+// 	bool 				queryClose();
+// 	bool 				queryExit();
+// 	void 				slotQuit();
+// 	void				slotWait();
+// 	void 				slotTerminate();
+// 	void				slotWhatsThis( int tabIndex );
 	
 private:
-	void 				setupActions();
+// 	void 				setupActions();
 	
 private:
 	KParts::ReadWritePart *m_part;

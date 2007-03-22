@@ -61,10 +61,10 @@ Kuroolito::Kuroolito()
     setXMLFile("kuroolito_shell.rc");
 
     // then, setup our actions
-    setupActions();
+//     setupActions();
 
     // and a status bar
-    statusBar()->show();
+//     statusBar()->show();
 
     // this routine will find and load our Part.  it finds the Part by
     // name which is a bad idea usually.. but it's alright in this
@@ -155,18 +155,18 @@ Kuroolito::~Kuroolito()
 // 	}
 }
 
-void Kuroolito::slotWhatsThis( int tabIndex )
-{
+// void Kuroolito::slotWhatsThis( int tabIndex )
+// {
 // 	if ( tabIndex == 5 )
 // 		whatsThis();
-}
+// }
 
 
 /**
  * Build mainwindow menus and toolbar.
  */
-void Kuroolito::setupActions()
-{
+// void Kuroolito::setupActions()
+// {
 // 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 // 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 // 	
@@ -180,50 +180,50 @@ void Kuroolito::setupActions()
 // 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 // 	
 // 	createGUI();
-}
+// }
 
 /**
  * Disable buttons when kuroo is busy.
  */
-void Kuroolito::slotBusy()
-{
+// void Kuroolito::slotBusy()
+// {
 	// No db no fun!
 // 	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
 // 		actionRefreshPortage->setEnabled( false );
 // 		actionRefreshUpdates->setEnabled( false );
 // 		actionSyncPortage->setEnabled( false );
 // 	}
-}
+// }
 
 /**
  * Open kuroo preferences window.
  */
-void Kuroolito::slotPreferences()
-{
+// void Kuroolito::slotPreferences()
+// {
 // 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
 // 	if ( !prefDialog )
 // 		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
 // 	prefDialog->show();
 // 	prefDialog->raise();
 // 	prefDialog->setActiveWindow();
-}
+// }
 
 /**
  * Show the wizard.
  */
-void Kuroolito::introWizard()
-{
+// void Kuroolito::introWizard()
+// {
 // 	if ( !wizardDialog )
 // 		wizardDialog = new IntroDlg( this );
 // 	
 // 	wizardDialog->show();
-}
+// }
 
 /**
  * Hide or minimize kuroo window when clicking in close button.
  */
-bool Kuroolito::queryClose()
-{
+// bool Kuroolito::queryClose()
+// {
 // 	if ( !m_shuttingDown ) {
 // 		if ( !KuroolitoConfig::isSystrayEnabled() )
 // 			slotWait();
@@ -234,30 +234,30 @@ bool Kuroolito::queryClose()
 // 	}
 // 	
 // 	return true;
-}
+// }
 
 /**
  * Bye, bye!
  */
-bool Kuroolito::queryExit()
-{
-	return true;
-}
+// bool Kuroolito::queryExit()
+// {
+// 	return true;
+// }
 
 /**
  * Backup emerge and merge history entries to text file.
  * Wait for the backup of the log is completed before terminating.
  */
-void Kuroolito::slotQuit()
-{
-	slotWait();
-}
+// void Kuroolito::slotQuit()
+// {
+// 	slotWait();
+// }
 
 /**
  * Abort any running threads.
  */
-void Kuroolito::slotWait()
-{
+// void Kuroolito::slotWait()
+// {
 // 	if ( SignalistSingleton::Instance()->isKuroolitoBusy() ) {
 // 		switch( KMessageBox::questionYesNo( this, 
 // 			i18n("<qt>Kuroolitolito is busy<br><br>"
@@ -273,15 +273,15 @@ void Kuroolito::slotWait()
 // 	}
 // 	else
 // 		slotTerminate();
-}
+// }
 
 /**
  * Terminate kuroo.
  */
-void Kuroolito::slotTerminate()
-{
-	m_shuttingDown = true;
-	close();
-}
+// void Kuroolito::slotTerminate()
+// {
+// 	m_shuttingDown = true;
+// 	close();
+// }
 
 #include "kuroo.moc"

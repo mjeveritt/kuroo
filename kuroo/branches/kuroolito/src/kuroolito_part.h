@@ -68,8 +68,6 @@ private:
 	
 private:
 	SystemTray			*systemTray;
-	Results 			*kurooResults;
-	Queue 				*kurooQueue;
 	Message 			*kurooMessage;
 	KuroolitoInit 		*kurooInit;
 	KConfigDialog 		*prefDialog;

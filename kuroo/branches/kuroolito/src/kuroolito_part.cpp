@@ -33,7 +33,6 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
     : KParts::ReadWritePart(parent, name),
 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
 	kurooMessage( new Message( parentWidget ) ),
-// 	systemTray( new SystemTray( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	// we need an instance
@@ -51,15 +50,11 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 		PortageSingleton::Instance()->slotRefresh();
 	
 	// Initialize with settings in make.conf
-	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
-	if ( !prefDialog )
-		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
+// 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
+// 	if ( !prefDialog )
+// 		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
 	
 	setupActions();
-// 	statusBar();
-// 	setupGUI();
-	
-	// set our XML-UI resource file
     setXMLFile("kuroolito_part.rc");
 }
 
@@ -74,13 +69,10 @@ void KuroolitoPart::setupActions()
 {
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
-// 	
-// 	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
-// 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
-// 	
-	 actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
+
+	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
 	
-	 actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
+	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
 	
 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
@@ -156,7 +148,7 @@ KInstance* KuroolitoPartFactory::instance()
     if( !s_instance )
     {
         s_about = new KAboutData("kuroolitopart", I18N_NOOP("KuroolitoPart"), "0.1");
-        s_about->addAuthor("Karim Ryde", 0, "karim@bredband.net");
+        s_about->addAuthor("karye", 0, "info@kuroo.org");
         s_instance = new KInstance(s_about);
     }
     return s_instance;

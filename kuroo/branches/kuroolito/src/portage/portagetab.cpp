@@ -56,20 +56,14 @@ enum Focus {
  * @class PortageTab
  * @short Package view with filters.
  */
-PortageTab::PortageTab( QWidget* parent/*, PackageInspector *packageInspector*/ )
+PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
-// 	m_packageInspector( packageInspector ),
-// 	m_uninstallInspector( 0 ),
 	m_delayFilters( 0 )
 {
 
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
-	
-	// Rmb actions.
-// 	connect( packagesView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
-// 	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 	
 	// Button actions.
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
@@ -114,12 +108,6 @@ void PortageTab::slotInit()
 	summaryPalette.setInactive( summaryColorGroup );
 	summaryPalette.setDisabled( summaryColorGroup );
 	summaryBrowser->setPalette( summaryPalette );
-	
-	// Keyboard shortcuts
-	KAccel* pAccel = new KAccel( this );
-	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."), 
-	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
-
 
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
 	
@@ -145,7 +133,6 @@ void PortageTab::slotBusy()
 {
 	// If no db no fun!
 	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
-// 		pbAdvanced->setDisabled( true );
 		filterGroup->setDisabled( true );
 		searchFilter->setDisabled( true );
 		pbClearFilter->setDisabled( true );
@@ -176,9 +163,6 @@ void PortageTab::slotButtons()
 // 		pbAdvanced->setDisabled( true );
 		return;
 	}
-	
-// 	m_packageInspector->setDisabled( false );
-// 	pbAdvanced->setDisabled( false );
 }
 
 
@@ -320,9 +304,8 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
 		lines += "<tr><td>";
 		foreach ( selectedIdList ) {
-			lines += packagesView->packageItemById( *it )->name();
-			lines += " (" + packagesView->packageItemById( *it )->category().section( "-", 0, 0 ) + "/";
-			lines += packagesView->packageItemById( *it )->category().section( "-", 1, 1 ) + "), ";
+			lines += packagesView->packageItemById( *it )->category() + "/";
+			lines += packagesView->packageItemById( *it )->name() + " ";
 		}
 		lines = lines.left( lines.length() - 2 );
 		lines += "</td></tr>";

@@ -39,7 +39,7 @@ class PortageTab : public PortageBase
 {
 Q_OBJECT
 public:
-	PortageTab( QWidget *parent = 0/*, PackageInspector *packageInspector = 0*/ );
+	PortageTab( QWidget *parent = 0 );
     ~PortageTab();
 	
 public slots:

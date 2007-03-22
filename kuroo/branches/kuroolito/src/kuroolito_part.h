@@ -26,7 +26,7 @@
 #include <kparts/part.h>
 #include <kparts/factory.h>
 
-class KAction;
+class KActionMenu;
 class KConfigDialog;
 class KURL;
 class IntroDlg;
@@ -75,7 +75,7 @@ private:
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
+	KActionMenu			*actionRefreshPortage, *actionRefreshUpdates;
 	PortageTab 			*viewPortage;
 };
 

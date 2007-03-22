@@ -42,7 +42,7 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	GlobalSingleton::Instance()->setColorTheme();
 	
 	// Add all pages
-	viewPortage = new PortageTab( parentWidget/*, packageInspector*/ );
+	viewPortage = new PortageTab( parentWidget );
 	setWidget( viewPortage );
 	
 	if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() )
@@ -78,13 +78,13 @@ void KuroolitoPart::setupActions()
 // 	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
 // 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 // 	
-	 (void) new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
-	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	 actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
 	
-	 (void) new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
-	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
+	 actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
 	
-// 	createGUI();
+	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
+	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
+
 }
 
 /**

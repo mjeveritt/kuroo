@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KuroolitoPart" library="libkuroolitopart" version="1">
 <MenuBar>
-	<Menu name="Tools">
-		<text>&amp;Portage</text>
+	<Menu name="tools">
+		<text>&amp;Tools</text>
 		<Action name="refresh_portage" />
 		<Action name="refresh_updates" />
 	</Menu>

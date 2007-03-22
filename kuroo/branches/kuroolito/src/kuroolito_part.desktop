@@ -8,4 +8,3 @@ MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-Library=libkuroolitopart
 Type=Service
-

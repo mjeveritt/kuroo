@@ -49,16 +49,10 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	else
 		PortageSingleton::Instance()->slotRefresh();
 	
-	// Initialize with settings in make.conf
-// 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
-// 	if ( !prefDialog )
-// 		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
-	
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 
 	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
-	
 	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
 	
 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
@@ -137,8 +131,7 @@ KParts::Part* KuroolitoPartFactory::createPartObject( QWidget *parentWidget, con
 
 KInstance* KuroolitoPartFactory::instance()
 {
-    if( !s_instance )
-    {
+    if( !s_instance ) {
         s_about = new KAboutData("kuroolitopart", I18N_NOOP("KuroolitoPart"), "0.1");
         s_about->addAuthor("karye", 0, "info@kuroo.org");
         s_instance = new KInstance(s_about);
@@ -148,9 +141,8 @@ KInstance* KuroolitoPartFactory::instance()
 
 extern "C"
 {
-    void* init_libkuroolitopart()
-    {
-	KGlobal::locale()->insertCatalogue("kuroolito");
+    void* init_libkuroolitopart() {
+		KGlobal::locale()->insertCatalogue("kuroolito");
         return new KuroolitoPartFactory;
     }
 };

@@ -39,10 +39,7 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	// we need an instance
     setInstance( KuroolitoPartFactory::instance() );
 	
-// 	GlobalSingleton::Instance()->setColorTheme();
-	
-	// Create the package inspector
-// 	PackageInspector *packageInspector = new PackageInspector( this );
+	GlobalSingleton::Instance()->setColorTheme();
 	
 	// Add all pages
 	viewPortage = new PortageTab( parentWidget/*, packageInspector*/ );
@@ -53,7 +50,12 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	else
 		PortageSingleton::Instance()->slotRefresh();
 	
-// 	setupActions();
+	// Initialize with settings in make.conf
+	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
+	if ( !prefDialog )
+		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
+	
+	setupActions();
 // 	statusBar();
 // 	setupGUI();
 	
@@ -63,6 +65,39 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 
 KuroolitoPart::~KuroolitoPart()
 {
+}
+
+/**
+ * Build mainwindow menus and toolbar.
+ */
+void KuroolitoPart::setupActions()
+{
+// 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+// 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
+// 	
+// 	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
+// 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
+// 	
+	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
+	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	
+	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
+	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
+	
+// 	createGUI();
+}
+
+/**
+ * Open kuroo preferences window.
+ */
+void KuroolitoPart::slotPreferences()
+{
+	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
+	if ( !prefDialog )
+		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
+	prefDialog->show();
+	prefDialog->raise();
+	prefDialog->setActiveWindow();
 }
 
 bool KuroolitoPart::openFile()

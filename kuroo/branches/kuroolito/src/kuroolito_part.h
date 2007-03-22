@@ -49,18 +49,20 @@ protected:
     /**
      * This must be implemented by each part
      */
-    virtual bool openFile();
+    virtual bool 		openFile();
 
     /**
      * This must be implemented by each read-write part
      */
-    virtual bool saveFile();
+    virtual bool 		saveFile();
 
 protected slots:
-    void fileOpen();
-    void fileSaveAs();
+    void 				fileOpen();
+    void 				fileSaveAs();
 
-	
+private slots:
+	void 				slotPreferences();
+
 private:
 	void 				setupActions();
 	

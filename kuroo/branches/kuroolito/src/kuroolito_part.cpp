@@ -50,7 +50,7 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 		PortageSingleton::Instance()->slotRefresh();
 	
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
-	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
+	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection(), "configure_kuroolito" )->setText( i18n( "Configure Kuroolito..." ) );
 
 	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
 	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );

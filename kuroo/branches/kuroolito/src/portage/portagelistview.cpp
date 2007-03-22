@@ -181,8 +181,8 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString update = *it;
 
 		PortageItem* item = new PortageItem( this, name, id, category, description, status.toInt() );
-		item->setText( 4, update );
-		item->setText( 5, description );
+		item->setText( 3, update );
+		item->setText( 4, description );
 		
 		indexPackage( id, item );
 	}

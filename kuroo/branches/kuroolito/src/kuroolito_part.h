@@ -62,9 +62,6 @@ protected slots:
 
 private slots:
 	void 				slotPreferences();
-
-private:
-	void 				setupActions();
 	
 private:
 	SystemTray			*systemTray;

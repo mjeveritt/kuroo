@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KuroolitoPart" library="libkuroolitopart" version="1">
+<!DOCTYPE kpartplugin>
+<kpartplugin name="KuroolitoPart" library="libkuroolitopart" version="1">
 <MenuBar>
 	<Menu name="tools">
 		<text>&amp;Tools</text>
@@ -10,4 +10,4 @@
 		<Action name="information" />
 	</Menu>
 </MenuBar>
-</kpartgui>
+</kpartplugin>

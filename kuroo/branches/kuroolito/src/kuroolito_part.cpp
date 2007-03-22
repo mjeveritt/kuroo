@@ -54,19 +54,6 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 // 	if ( !prefDialog )
 // 		prefDialog = new ConfigDialog( viewPortage, i18n( "settings" ), KuroolitoConfig::self() );
 	
-	setupActions();
-    setXMLFile("kuroolito_part.rc");
-}
-
-KuroolitoPart::~KuroolitoPart()
-{
-}
-
-/**
- * Build mainwindow menus and toolbar.
- */
-void KuroolitoPart::setupActions()
-{
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 
@@ -76,7 +63,12 @@ void KuroolitoPart::setupActions()
 	
 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
+	
+    setXMLFile("kuroolito_part.rc");
+}
 
+KuroolitoPart::~KuroolitoPart()
+{
 }
 
 /**

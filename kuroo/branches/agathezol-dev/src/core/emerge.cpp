@@ -665,10 +665,10 @@ void Emerge::slotRevdepRebuildComplete( KProcess* ioRevdepRebuild )
 {
   disconnect( ioRevdepRebuild, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
   disconnect( ioRevdepRebuild, SIGNAL( processExited(KProcess*) ), this, SLOT( slotRevepRebuildComplete(KProcess*) ) );
-  SignalistSingleton::Instance()->setKurooBusy( false );
   LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuildcomplete"), KUROO );
   KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
   KurooStatusBar::instance()->stopTimer();
+  SignalistSingleton::Instance()->setKurooBusy( false );
   delete ioRevdepRebuild; // cleanup that memory
 }
 
@@ -681,10 +681,10 @@ void Emerge::slotEmergeDistfilesComplete( KProcess* eClean1 )
 {
   disconnect( eClean1, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
   disconnect( eClean1, SIGNAL( processExited(KProcess*) ), this, SLOT( slotEmergeDistfilesComplete(KProcess*) ) );
-  SignalistSingleton::Instance()->setKurooBusy( false );
   LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles complete"), KUROO );
   KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
   KurooStatusBar::instance()->stopTimer();
+  SignalistSingleton::Instance()->setKurooBusy( false );
   delete eClean1; // cleanup that memory
   
   if( KurooConfig::ecleanDistfiles() )

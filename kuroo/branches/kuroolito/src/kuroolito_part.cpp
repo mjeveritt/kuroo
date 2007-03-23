@@ -54,14 +54,14 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName,
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection(), "configure_kuroolito" )->setText( i18n( "Configure Kuroolito..." ) );
 
-// 	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
-// 	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
+	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
+	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
 	
-	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
-	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
-	
-	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
-	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
+// 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
+// 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+// 	
+// 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
+// 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));

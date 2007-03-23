@@ -32,8 +32,8 @@ kdelnkdir = $(kde_appsdir)/System
 kdelnk_DATA = kuroolito.desktop
 
 # this is where the XML-GUI resource file goes
-rcdir = $(kde_datadir)/kuroolito
-rc_DATA = kuroolito_shell.rc
+# rcdir = $(kde_datadir)/kuroolito
+# rc_DATA = kuroolito_shell.rc
 
 # this is to set set autostart of kuroo_watcher
 autostartdir = $(datadir)/autostart
@@ -72,7 +72,7 @@ libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \
 partdesktopdir   = $(kde_servicesdir)
 partdesktop_DATA = kuroolito_part.desktop
 
-# this is where the part's XML-GUI resource file goes
+# this is where the XML-GUI resource file goes
 rcdir   = $(kde_datadir)/kuroolito
-rc_DATA = kuroolito_part.rc
+rc_DATA = kuroolito_shell.rc kuroolito_part.rc
 

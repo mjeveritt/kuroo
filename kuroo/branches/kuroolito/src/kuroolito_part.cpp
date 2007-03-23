@@ -29,8 +29,10 @@
 #include "portagetab.h"
 #include "packageinspector.h"
 
-KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name )
-    : KParts::ReadWritePart(parent, name),
+KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, 
+							  QObject *parent, const char *name,
+		 					  const QStringList& /* args */ )
+    : KParts::ReadWritePart( parent, name ),
 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
 	kurooMessage( new Message( parentWidget ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
@@ -52,8 +54,14 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection(), "configure_kuroolito" )->setText( i18n( "Configure Kuroolito..." ) );
 
-	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
-	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
+// 	actionRefreshPortage = new KActionMenu( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
+// 	actionRefreshUpdates = new KActionMenu( i18n("&Refresh Updates"), actionCollection(), "refresh_updates" );
+	
+	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
+	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	
+	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
+	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
@@ -120,7 +128,7 @@ KParts::Part* KuroolitoPartFactory::createPartObject( QWidget *parentWidget, con
                                                         const char *classname, const QStringList &args )
 {
     // Create an instance of our Part
-    KuroolitoPart* obj = new KuroolitoPart( parentWidget, widgetName, parent, name );
+    KuroolitoPart* obj = new KuroolitoPart( parentWidget, widgetName, parent, name, args );
 
     // See if we are to be read-write or not
     if (QCString(classname) == "KParts::ReadOnlyPart")

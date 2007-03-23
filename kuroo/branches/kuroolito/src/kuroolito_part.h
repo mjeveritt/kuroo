@@ -26,7 +26,8 @@
 #include <kparts/part.h>
 #include <kparts/factory.h>
 
-class KActionMenu;
+// class KActionMenu;
+class KAction;
 class KConfigDialog;
 class KURL;
 class IntroDlg;
@@ -41,7 +42,9 @@ class KuroolitoPart : public KParts::ReadWritePart
 {
 	Q_OBJECT
 public:
-    KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name );
+    KuroolitoPart( QWidget *parentWidget, const char *widgetName, 
+				   QObject *parent, const char *name,
+		 		   const QStringList& /* args */ );
 
     virtual ~KuroolitoPart();
 
@@ -70,7 +73,8 @@ private:
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-	KActionMenu			*actionRefreshPortage, *actionRefreshUpdates;
+// 	KActionMenu			*actionRefreshPortage, *actionRefreshUpdates;
+	KAction             *actionRefreshPortage, *actionRefreshUpdates;
 	PortageTab 			*viewPortage;
 };
 

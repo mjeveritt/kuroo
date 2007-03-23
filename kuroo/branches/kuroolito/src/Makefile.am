@@ -76,3 +76,5 @@ partdesktop_DATA = kuroolito_part.desktop
 rcdir   = $(kde_datadir)/kuroolito
 rc_DATA = kuroolito_shell.rc kuroolito_part.rc
 
+# configdir = $(kde_confdir)
+# config_DATA = kuroolitorc

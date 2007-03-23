@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="KuroolitoPart" library="libkuroolitopart" version="1">
+<kpartgui name="kuroolitokart" library="libkuroolitopart" version="1">
 <MenuBar>
 	<Menu name="tools">
 		<text>&amp;Tools</text>

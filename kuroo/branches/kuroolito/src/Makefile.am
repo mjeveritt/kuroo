@@ -73,6 +73,6 @@ partdesktopdir   = $(kde_servicesdir)
 partdesktop_DATA = kuroolito_part.desktop
 
 # this is where the part's XML-GUI resource file goes
-partrcdir   = $(kde_datadir)/kuroolito
-partrc_DATA = kuroolito_part.rc
+rcdir   = $(kde_datadir)/kuroolito
+rc_DATA = kuroolito_part.rc
 

@@ -74,7 +74,8 @@ partdesktop_DATA = kuroolito_part.desktop
 
 # this is where the XML-GUI resource file goes
 rcdir   = $(kde_datadir)/kuroolito
-rc_DATA = kuroolito_shell.rc kuroolito_part.rc
+rc_DATA = kuroolito_shellui.rc
 
 # configdir = $(kde_confdir)
 # config_DATA = kuroolitorc
+partrc_DATA = kuroolito_partui.rc

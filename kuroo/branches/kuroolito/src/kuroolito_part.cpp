@@ -51,6 +51,8 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName,
 	else
 		PortageSingleton::Instance()->slotRefresh();
 	
+	setXMLFile("kuroolito_part.rc");
+	
 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection(), "configure_kuroolito" )->setText( i18n( "Configure Kuroolito..." ) );
 
@@ -65,8 +67,6 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName,
 	
 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
-	
-    setXMLFile("kuroolito_part.rc");
 }
 
 KuroolitoPart::~KuroolitoPart()

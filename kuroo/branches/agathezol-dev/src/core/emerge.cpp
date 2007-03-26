@@ -626,7 +626,7 @@ void Emerge::cleanup()
             }
           }
         } /* end mclean section */
-        if( m_dorevdeprebuild )
+        else if( m_dorevdeprebuild )
         {
           QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
           ioRevdepRebuild = new KProcIO( revdepcodec );
@@ -723,6 +723,34 @@ void Emerge::slotEmergeDistfilesComplete( KProcess* eClean1 )
           return;
     }
   }
+  else if( m_dorevdeprebuild )
+  {
+    QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
+    ioRevdepRebuild = new KProcIO( revdepcodec );
+    ioRevdepRebuild->setUseShell( true, "/bin/bash" );
+    #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+    ioRevdepRebuild->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
+    #endif
+    ioRevdepRebuild->resetAll();
+    *ioRevdepRebuild << "revdep-rebuild";
+    *ioRevdepRebuild << "--no-color";
+    *ioRevdepRebuild << "--ignore";
+    if( !ioRevdepRebuild->start( KProcess::OwnGroup, true ) )
+    {
+      LogSingleton::Instance()->writeLog( i18n("\nError: revdep-rebuild failed to start."), ERROR );
+      m_dorevdeprebuild = false;
+    }
+    else
+    {
+      connect( ioRevdepRebuild, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+      connect( ioRevdepRebuild, SIGNAL( processExited(KProcess*) ), this, SLOT( slotRevepRebuildComplete(KProcess*) ) );
+      SignalistSingleton::Instance()->setKurooBusy( true );
+      LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuild Running..."), KUROO );
+      KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
+      KurooStatusBar::instance()->startProgress();
+      m_dorevdeprebuild = false;
+    }
+  } /* end revdeprebuild section */
         
 }
 
@@ -735,6 +763,34 @@ void Emerge::slotEClean2Complete(KProcess* eClean2)
   KurooStatusBar::instance()->stopTimer();
   SignalistSingleton::Instance()->setKurooBusy( false );
   delete eClean2;
+  if( m_dorevdeprebuild )
+  {
+    QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
+    ioRevdepRebuild = new KProcIO( revdepcodec );
+    ioRevdepRebuild->setUseShell( true, "/bin/bash" );
+    #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
+    ioRevdepRebuild->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
+    #endif
+    ioRevdepRebuild->resetAll();
+    *ioRevdepRebuild << "revdep-rebuild";
+    *ioRevdepRebuild << "--no-color";
+    *ioRevdepRebuild << "--ignore";
+    if( !ioRevdepRebuild->start( KProcess::OwnGroup, true ) )
+    {
+      LogSingleton::Instance()->writeLog( i18n("\nError: revdep-rebuild failed to start."), ERROR );
+      m_dorevdeprebuild = false;
+    }
+    else
+    {
+      connect( ioRevdepRebuild, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
+      connect( ioRevdepRebuild, SIGNAL( processExited(KProcess*) ), this, SLOT( slotRevepRebuildComplete(KProcess*) ) );
+      SignalistSingleton::Instance()->setKurooBusy( true );
+      LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuild Running..."), KUROO );
+      KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
+      KurooStatusBar::instance()->startProgress();
+      m_dorevdeprebuild = false;
+    }
+  } /* end revdeprebuild section */
 }
 
 /**

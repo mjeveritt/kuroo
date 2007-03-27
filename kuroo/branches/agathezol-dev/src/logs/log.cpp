@@ -107,7 +107,7 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case EMERGE: {
 			if ( m_verboseLog && m_verboseLog->isChecked() ) {
-				line = "<font color=blue>" + line.replace('>', "&gt;").replace('<', "&lt;")+ "</font>";
+				line = line.replace('>', "&gt;").replace('<', "&lt;");
 				m_logBrowser->append( line );
 				emit signalLogChanged();
 			}
@@ -120,7 +120,7 @@ void Log::writeLog( const QString& output, int logType )
 		}
 		
 		case ERROR: {
-			line = "<font color=red>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
+			line = line.replace('>', "&gt;").replace('<', "&lt;");
 			m_logBrowser->append( line );
 			break;
 		}
@@ -133,7 +133,7 @@ void Log::writeLog( const QString& output, int logType )
 		}
 		
 		case EMERGELOG: {
-			line = "<font color=BlueViolet>" + line.replace('>', "&gt;").replace('<', "&lt;") + "</font>";
+			line = line.replace('>', "&gt;").replace('<', "&lt;");
 			m_logBrowser->append( line );
 		}
 	}

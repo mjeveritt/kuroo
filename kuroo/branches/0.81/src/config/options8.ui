@@ -74,6 +74,9 @@
                     <property name="checked">
                         <bool>false</bool>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Eclean is a tool provided by gentoolkit. It is used to keep the portage directories cleaned up and to prevent unnecessary disk usage.</string>
+                    </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
@@ -115,6 +118,12 @@
                                             <property name="accel">
                                                 <string>Alt+D</string>
                                             </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>clean downloaded source files</string>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>The distfiles are the collection of source files your computer downloads in order to install something. These files tend to build up over time and should be cleaned out. Selecting this option allows Kuroo to clean them for you.</string>
+                                            </property>
                                         </widget>
                                         <widget class="QCheckBox" row="1" column="0">
                                             <property name="name">
@@ -128,6 +137,9 @@
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>quickpkg files are included in this</string>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>The backup files are your binary package files. These include backups made by Kuroo as well as any packages you have built using &lt;b&gt;quickpkg&lt;/b&gt; (&lt;i&gt;kuroo uses quickpkg to make backups&lt;/i&gt;.) Selecting this option allows Kuroo to cleanup backups that reach a certain age, the age specified in 'Time Limit'.</string>
                                             </property>
                                         </widget>
                                     </grid>
@@ -201,10 +213,7 @@
                                         <string>use --destructive for eclean</string>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>Using a destructive eclean means it will only keep&lt;br&gt;
-the minimum files for reinstallation of your system.&lt;br&gt;
-If you are trying to conserve space this option should&lt;br&gt;
-be enabled.</string>
+                                        <string>A destructive eclean leaves only the source files necessary to re-install your system on your hard drive. This is probably the desired eclean as it is the most space concerving method.</string>
                                     </property>
                                 </widget>
                                 <widget class="QCheckBox">
@@ -249,6 +258,12 @@ be enabled.</string>
                                                     <verstretch>0</verstretch>
                                                 </sizepolicy>
                                             </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>max size of ebuild to delete</string>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>The size limit is a cap on the distfile sizes you want cleaned up. If you enter 100M for instance Kuroo won't auto-clean any file larger than 100M in size. This is useful if you have a slow internet connection and never want to download that big file again.&lt;br&gt;&lt;i&gt;Man eclean for more info&lt;/i&gt;</string>
+                                            </property>
                                         </widget>
                                         <widget class="QLineEdit" row="1" column="2">
                                             <property name="name">
@@ -261,6 +276,12 @@ be enabled.</string>
                                                     <horstretch>0</horstretch>
                                                     <verstretch>0</verstretch>
                                                 </sizepolicy>
+                                            </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>protect files less than this old</string>
+                                            </property>
+                                            <property name="whatsThis" stdset="0">
+                                                <string>Time limit is useful for protecting files that are less than the specified age. If you insert 1m Kuroo will not delete a file that is newer than one month old. This value is useful both for distfiles and for backup files. You should have this value set.</string>
                                             </property>
                                         </widget>
                                         <spacer row="1" column="1">

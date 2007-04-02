@@ -180,7 +180,7 @@
                                         <cstring>cbQueue</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>In Install Queue</string>
+                                        <string>In Install &amp;Queue</string>
                                     </property>
                                     <property name="checked">
                                         <bool>false</bool>
@@ -550,10 +550,10 @@ and do not update further</string>
                                     <cstring>pbUse</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>C&amp;alculate Use Flags</string>
+                                    <string>&amp;Retrieve Use Flags</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+A</string>
+                                    <string>Alt+R</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Previous Package</string>

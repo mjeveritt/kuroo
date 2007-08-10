@@ -296,7 +296,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		else
 			size = formatSize( size );
 
-		if ( idDepend == "0" ) {
+		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, status.toInt(), duration );
 			item->setOpen( true );
 		}

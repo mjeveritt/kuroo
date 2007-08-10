@@ -386,7 +386,7 @@ void PackageInspector::slotApply()
 			m_pretendUseLines.clear();
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
-			*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+			*eProc << "emerge" << "--columns" << "--nospinner" << "--color=no" << "-pv" << m_category + "/" + m_package;
 			m_useList = useList;
 
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );

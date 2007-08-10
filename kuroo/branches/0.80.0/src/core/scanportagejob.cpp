@@ -495,26 +495,26 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	file.close();
 	
 	// Get package size. Try in cache first.
-	QString size = cacheFind( category + "/" + name + "-" + version ) ;
-	if ( !size.isEmpty() )
-		info.size = formatSize( size );
-	else {
-		QString path = KurooConfig::dirPortage() + "/" + category + "/" + name + "/files/digest-" + name + "-" + version;
-		file.setName( path );
-		if ( file.open( IO_ReadOnly ) ) {
-			std::ifstream in( path );
-			std::string word;
-			while ( in >> word );
-			file.close();
-			info.size = formatSize( word );
-			
-			// Add new value into cache.
-			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');")
-			                                      .arg( name + "-" + version ).arg( word ), m_db );
-		}
-		else
-			kdError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
-	}
+// 	QString size = cacheFind( category + "/" + name + "-" + version ) ;
+// 	if ( !size.isEmpty() )
+// 		info.size = formatSize( size );
+// 	else {
+// 		QString path = KurooConfig::dirPortage() + "/" + category + "/" + name + "/files/digest-" + name + "-" + version;
+// 		file.setName( path );
+// 		if ( file.open( IO_ReadOnly ) ) {
+// 			std::ifstream in( path );
+// 			std::string word;
+// 			while ( in >> word );
+// 			file.close();
+// 			info.size = formatSize( word );
+// 			
+// 			// Add new value into cache.
+// 			KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');")
+// 			                                      .arg( name + "-" + version ).arg( word ), m_db );
+// 		}
+// 		else
+// 			kdError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
+// 	}
 	
 	return info;
 }

@@ -1,3 +1,6 @@
+19-08-2007
+Removed support for included SQLite
+
 View-menu is removed, "Release Information" moved to Help-menu.
 KDE-settings "Show icons on buttons" is now respected.
 Empty package list warning moved up, reformated package name as name (cat/subcat) in queue and history.

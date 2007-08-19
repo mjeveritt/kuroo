@@ -6,17 +6,17 @@ AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
 # Check presence of sqlite3
-sqlite_version="3.3"
-PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, HAVE_SQLITE=true, HAVE_SQLITE=false)
+sqlite_version="3.0"
+PKG_CHECK_MODULES(SQLITE, sqlite3 >= $sqlite_version, HAVE_SQLITE=true, HAVE_SQLITE=false)
 AC_SUBST(SQLITE_LIBS)
 AC_SUBST(SQLITE_CFLAGS)
 if test $HAVE_SQLITE = false; then
     HAVE_SQLITE=0;
-    instruments_db_support="no"
     echo "*** Required sqlite version not found!"
     echo "*** You need to have sqlite version ${sqlite_version} or higher"
-    echo "*** for instruments database support to be enabled."
-    echo "*** Support for instruments DB will be disabled!"
+    echo "*** for portage's database to be enabled."
+    echo "*** Without this kuroo can't build!!"
+    exit 1
 else
     HAVE_SQLITE=1
     instruments_db_support="yes"

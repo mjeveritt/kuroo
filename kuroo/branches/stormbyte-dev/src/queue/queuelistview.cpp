@@ -96,7 +96,7 @@ void QueueListView::QueueItem::setComplete()
 /**
  * Is this package progress 100%?
  */
-bool QueueListView::QueueItem::isComplete()
+bool QueueListView::QueueItem::isComplete() const
 {
 	return m_isComplete;
 }
@@ -178,7 +178,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	addColumn( i18n( "Duration" ), 100 );
 	addColumn( i18n( "Size" ), 100 );
 	addColumn( i18n( "Progress" ), 70 );
-	
+
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
 	setFullWidth( true );
@@ -190,12 +190,12 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	setColumnWidthMode( 4, QListView::Manual );
 	setColumnWidthMode( 5, QListView::Manual );
 	setColumnWidthMode( 6, QListView::Manual );
-	
+
 	setColumnAlignment( 5, Qt::AlignRight );
-	
+
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
 	setSorting( -1, false );
-	
+
 	if ( KurooConfig::installedColumn() ) {
 		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
 		setColumnAlignment( 1, Qt::AlignHCenter );
@@ -203,10 +203,10 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	}
 	else
 		hideColumn( 1 );
-	
+
 	header()->setResizeEnabled( false, 1 );
 	header()->setResizeEnabled( false, 2 );
-	
+
 	connect( this, SIGNAL( collapsed( QListViewItem* ) ), this, SLOT( slotHideBars( QListViewItem* ) ) );
 }
 
@@ -233,7 +233,7 @@ void QueueListView::slotPackageDown()
 		packageItem->moveItem( packageItem->itemBelow() );
 }
 
-/** 
+/**
  * All packages in listview by name - no children
  * @return packageList
  */
@@ -248,7 +248,7 @@ const QStringList QueueListView::allPackagesNoChildren()
 	return packageList;
 }
 
-/** 
+/**
  * All packages in listview by name - no children
  * @return packageList
  */
@@ -272,9 +272,9 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 {
 	QueueItem* item;
 	m_sumSize = 0;
-	
+
 	resetListView();
-	
+
 	// Get list of update packages with info
 	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
 	int packageCount = packageList.size() / 7;
@@ -286,10 +286,10 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString idDepend = *it++;
 		QString size = *it++;
 		QString version = *it;
-		
+
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
-		
+
 		// If version get size
 		if ( size.isEmpty() || size == "0" )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
@@ -305,19 +305,19 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			if ( itemDepend )
 				item = new QueueItem( itemDepend, category, name, id, status.toInt(), duration );
 		}
-		
+
 		// Add version to be emerged
 		if ( version.isEmpty() )
 			item->setText( 3, i18n("na") );
 		else
 			item->setText( 3, version );
-		
+
 		// Add emerge duration
 		if ( duration == diffTime )
 			item->setText( 4, i18n("na") );
 		else
 			item->setText( 4, GlobalSingleton::Instance()->formatTime( duration ) );
-		
+
 		// Add download size = tarball size
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
@@ -325,16 +325,16 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			item->setText( 5, size );
 			addSize( size );
 		}
-		
+
 		item->setPretended( hasCheckedQueue );
-		
+
 		indexPackage( id, item );
-		
+
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( id );
 	}
 	setPackageFocus( QString::null );
-	
+
 	// Cannot have current changed for only one package so emit manually
 	if ( packageCount == 1 )
 		emit currentChanged( 0 );
@@ -347,7 +347,7 @@ void QueueListView::viewportResizeEvent( QResizeEvent* )
 {
 	setColumnWidth( 6, 70 );
 	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + columnWidth(5) + 70;
-	
+
 	if ( KurooConfig::installedColumn() )
 		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );
 	else
@@ -361,12 +361,12 @@ void QueueListView::viewportResizeEvent( QResizeEvent* )
 
 /**
  * Get total emerge duration in format hh:mm:ss.
- * @return totalDuration 
+ * @return totalDuration
  */
-long QueueListView::totalDuration()
+long QueueListView::totalDuration() const
 {
 	long totalSeconds( 0 );
-	QListViewItemIterator it( this );
+	QListViewItemIterator it( &(QListView&)(*this) );
 	while ( it.current() ) {
 		if ( !dynamic_cast<QueueItem*>( it.current() )->isComplete() )
 			totalSeconds += dynamic_cast<QueueItem*>( it.current() )->remainingDuration();
@@ -377,7 +377,7 @@ long QueueListView::totalDuration()
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 /////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -393,30 +393,30 @@ void QueueListView::addSize( const QString& size )
 
 /**
  * Get sum of packages sizes.
- * @return sumSize 
+ * @return sumSize
  */
-const QString QueueListView::totalSize()
+const QString QueueListView::totalSize() const
 {
 	return formatSize( QString::number( m_sumSize ) );
 }
 
 /**
- * Format package size nicely 
- * @param size 
+ * Format package size nicely
+ * @param size
  * @return total		as "xxx kB"
  */
-const QString QueueListView::formatSize( const QString& sizeString )
+const QString QueueListView::formatSize( const QString& sizeString ) const
 {
 	KLocale *loc = KGlobal::locale();
 	QString total;
 	QString tmp ( sizeString );
 	int size = tmp.remove(',').toInt();
-	
+
 	if ( size == 0 )
 		total = "0 kB ";
 	else
 		total = loc->formatNumber( (double)size, 0 ) + " kB ";
-	
+
 	return total;
 }
 
@@ -432,9 +432,9 @@ void QueueListView::slotPackageStart( const QString& id )
 	}
 	else
 		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setStart();
-	
+
 	m_id = id;
-	
+
 	// Update kuroo statusbar with remaining emerge duration
 	KurooStatusBar::instance()->updateTotalSteps( totalDuration() );
 }
@@ -451,7 +451,7 @@ void QueueListView::slotPackageComplete( const QString& id )
 	}
 	else
 		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setComplete();
-	
+
 	m_id = QString::null;
 }
 

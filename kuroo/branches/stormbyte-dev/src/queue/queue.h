@@ -32,20 +32,20 @@ class QTimer;
 class Queue : public QObject
 {
 Q_OBJECT
-	
+
 public:
 	Queue( QObject *m_parent = 0 );
 	~Queue();
-	
+
 	void					init( QObject *parent = 0 );
 	void					emergePackageStart( const QString& package, int order, int total );
 	void					emergePackageComplete( const QString& package, int order, int total );
-	bool					isQueueBusy();
+	bool					isQueueBusy() const;
 	void					clearCache();
-	int						size();
+	int					size() const;
 	void					insertInCache( const QString& id );
 	void					deleteFromCache( const QString& id );
-	bool					isQueued( const QString& id );
+	bool					isQueued( const QString& id ) const;
 	void					reset();
 	void					refresh( bool hasCheckedQueue );
 	void					removePackageIdList( const QStringList& packageIdList );
@@ -53,29 +53,29 @@ public:
 	void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
 	void					setRemoveInstalled( bool removeInstalled );
-	
+
 public slots:
 	void					slotOneStep();
 	void					slotClearQueue();
-	
+
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );
 	void					signalPackageAdvance();
 	void					signalPackageStart( const QString& id );
 	void					signalPackageComplete( const QString& id );
-	
+
 private:
 	QObject					*m_parent;
-	
+
 	// Queue is busy emerging
 	bool					m_isQueueBusy;
-	
+
 	// Cache contaning packages in Queue
 	QMap<QString, bool>		m_queueCache;
-	
+
 	// Timer for installation progress
 	QTimer*					m_internalTimer;
-	
+
 	// Clear queue after installation?
 	bool					m_removeInstalled;
 };

@@ -40,7 +40,7 @@ class Shutdown; //#include "shutdown.h"
 #include "singleton.h"
 
 #include <qregexp.h>
-
+#include <qstring.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>

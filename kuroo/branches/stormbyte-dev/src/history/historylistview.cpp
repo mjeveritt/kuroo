@@ -42,7 +42,7 @@ void HistoryListView::HistoryItem::setEinfo( const QString& einfo )
 	setText( 2 , m_einfo.section( "<br>", 0, 0 ) );
 }
 
-QString HistoryListView::HistoryItem::einfo()
+QString HistoryListView::HistoryItem::einfo() const
 {
 	return m_einfo;
 }
@@ -80,7 +80,7 @@ HistoryListView::~HistoryListView()
 /**
  * @return current entry.
  */
-QString HistoryListView::current()
+QString HistoryListView::current() const
 {
 	QListViewItem *item = currentItem();
 	
@@ -93,10 +93,10 @@ QString HistoryListView::current()
 /**
  * @return list of selected packages.
  */
-QStringList HistoryListView::selected()
+QStringList HistoryListView::selected() const
 {
 	QStringList packageList;
-	QListViewItemIterator it(this);
+	QListViewItemIterator it(&(HistoryListView&)(*this));
 	
 	for ( ; it.current(); ++it )
 		if ( it.current()->parent() && it.current()->isSelected() )

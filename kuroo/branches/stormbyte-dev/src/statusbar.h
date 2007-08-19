@@ -49,7 +49,7 @@ public:
     
 	void					startTimer();
 	void					stopTimer();
-	long					elapsedTime();
+	long					elapsedTime() const;
     void					clearElapsedTime();
     
     void					startProgress();

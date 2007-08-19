@@ -62,17 +62,17 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 	if ( this->isVisible() ) {
 		QColorGroup m_colorgroup( colorgroup );
 		QFont font( painter->font() );
-		
+
 // 		if ( m_isMouseOver ) {
 // 			font.setBold( true );
 // 			painter->setFont( font );
 // 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
 // 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 // 		}
-		
+
 		// Optimizing - check only relevant columns
 		switch ( column ) {
-			
+
 			case 0 : {
 				if ( m_status & PACKAGE_AVAILABLE )
 					setPixmap( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
@@ -83,7 +83,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 					}
 					else
 						setPixmap( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
-					
+
 					if ( m_status & PACKAGE_OLD ) {
 						font.setItalic( true );
 						painter->setFont( font );
@@ -92,7 +92,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 				}
 				break;
 			}
-			
+
 			case 2 : {
 				if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
 					m_inWorld = true;
@@ -104,7 +104,7 @@ void PackageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, i
 				}
 			}
 		}
-		
+
 		KListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 	}
 }
@@ -122,7 +122,7 @@ void PackageItem::initVersions()
 {
 	if ( m_isInitialized )
 		return;
-	
+
 	m_versions.clear();
 	m_versionMap.clear();
 
@@ -139,7 +139,7 @@ void PackageItem::initVersions()
 		QString slot = *it++;
 		QString keywords = *it++;
 		QString size = *it;
-		
+
 		PackageVersion* version = new PackageVersion( this, versionString );
 		version->setDescription( description );
 		version->setHomepage( homepage );
@@ -149,22 +149,22 @@ void PackageItem::initVersions()
 		version->setKeywords( QStringList::split( " ", keywords ) );
 		version->setAcceptedKeywords( QStringList::split( " ", acceptedKeywords ) );
 		version->setSize( size );
-		
+
 		if ( status == PACKAGE_INSTALLED_STRING )
 			version->setInstalled( true );
-		
+
 		m_versions.append( version );
 		m_versionMap.insert( versionString, version );
 	}
-	
+
 	// Now that we have all available versions, sort out masked ones and leaving unmasked.
-	
+
 	// Check if any of this package versions are hardmasked
 	atom = new DependAtom( this );
 	const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 // 	kdDebug() << "atomHardMaskedList=" << atomHardMaskedList << endl;
 	foreach ( atomHardMaskedList ) {
-		
+
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 		// and get the matching versions
 		if ( atom->parse( *it ) ) {
@@ -175,13 +175,13 @@ void PackageItem::initVersions()
 		}
 	}
 	delete atom;
-	
+
 	// Check if any of this package versions are user-masked
 	atom = new DependAtom( this );
 	const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 // 	kdDebug() << "atomUserMaskedList=" << atomUserMaskedList << endl;
 	foreach ( atomUserMaskedList ) {
-		
+
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 		// and get the matching versions
 		if ( atom->parse( *it ) ) {
@@ -192,13 +192,13 @@ void PackageItem::initVersions()
 		}
 	}
 	delete atom;
-	
+
 	// Check if any of this package versions are unmasked
 	atom = new DependAtom( this );
 	const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
 // 	kdDebug() << "atomUnmaskedList=" << atomUnmaskedList << endl;
 	foreach ( atomUnmaskedList ) {
-		
+
 		// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 		// and get the matching versions
 		if ( atom->parse( *it ) ) {
@@ -218,7 +218,7 @@ void PackageItem::initVersions()
  * Return list of versions.
  * @return QValueList<PackageVersion*>
  */
-QValueList<PackageVersion*> PackageItem::versionList()
+QValueList<PackageVersion*> PackageItem::versionList() const
 {
 	return m_versions;
 }
@@ -227,7 +227,7 @@ QValueList<PackageVersion*> PackageItem::versionList()
  * Return map of versions - faster find.
  * @return QMap<QString, PackageVersion*>
  */
-QMap<QString, PackageVersion*> PackageItem::versionMap()
+QMap<QString, PackageVersion*> PackageItem::versionMap() const
 {
 	return m_versionMap;
 }
@@ -242,13 +242,13 @@ QValueList<PackageVersion*> PackageItem::sortedVersionList()
 {
 	QValueList<PackageVersion*> sortedVersions;
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
-	
+
 	for( QValueList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
 		if ( versionIterator == m_versions.begin() ) {
 			sortedVersions.append( *versionIterator );
 			continue; // if there is only one version, it can't be compared
 		}
-		
+
 		// reverse iteration through the sorted version list
 		sortedVersionIterator = sortedVersions.end();
 		while ( true ) {
@@ -256,7 +256,7 @@ QValueList<PackageVersion*> PackageItem::sortedVersionList()
 				sortedVersions.prepend( *versionIterator );
 				break;
 			}
-			
+
 			sortedVersionIterator--;
 			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
 				sortedVersionIterator++; // insert after the compared one, not before
@@ -275,20 +275,20 @@ void PackageItem::parsePackageVersions()
 {
 	if ( !m_isInitialized )
 		initVersions();
-	
+
 	m_versionsDataList.clear();
 	m_linesAvailable = QString::null;
 	m_linesEmerge = QString::null;
 	m_linesInstalled = QString::null;
-	
+
 	// Iterate sorted versions list
 	QString version;
 	QValueList<PackageVersion*> sortedVersions = sortedVersionList();
 	QValueList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		
+
 		version = (*sortedVersionIterator)->version();
-		
+
 		// Mark official version stability for version listview
 		QString stability;
 		if ( (*sortedVersionIterator)->isNotArch() )
@@ -311,13 +311,13 @@ void PackageItem::parsePackageVersions()
 				}
 			}
 		}
-		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << 
+
+// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() <<
 // 			" stability=" << stability << LINE_INFO;
-		
+
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();
-		
+
 		// Create nice summary showing installed packages
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			m_versionsDataList << "1";
@@ -326,7 +326,7 @@ void PackageItem::parsePackageVersions()
 		}
 		else
 			m_versionsDataList << "0";
-		
+
 		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			m_emergeVersion = (*sortedVersionIterator)->version();
@@ -339,12 +339,12 @@ void PackageItem::parsePackageVersions()
 			else
 				m_linesAvailable.prepend( version + ", " );
 		}
-		
+
 		// Get description and homepage from most recent version = assuming most correct
 		m_description = (*sortedVersionIterator)->description();
 		m_homepage = (*sortedVersionIterator)->homepage();
 	}
-	
+
 	// Remove trailing commas
 	m_linesInstalled.truncate( m_linesInstalled.length() - 2 );
 	m_linesAvailable.truncate( m_linesAvailable.length() - 2 );
@@ -396,7 +396,7 @@ void PackageItem::setQueued( bool isQueued )
  * Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
  * @return true if first
  */
-bool PackageItem::isFirstPackage()
+bool PackageItem::isFirstPackage() const
 {
 	return ( m_index == m_parent->childCount() );
 }
@@ -405,7 +405,7 @@ bool PackageItem::isFirstPackage()
  * Is this the last package?
  * @return true if last
  */
-bool PackageItem::isLastPackage()
+bool PackageItem::isLastPackage() const
 {
 	return ( m_index == 1 );
 }
@@ -414,7 +414,7 @@ bool PackageItem::isLastPackage()
  * Is this package installed.
  * @return true if yes
  */
-bool PackageItem::isInstalled()
+bool PackageItem::isInstalled() const
 {
 	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
 }
@@ -423,7 +423,7 @@ bool PackageItem::isInstalled()
  * Is this package available in Portage tree?
  * @return true if yes
  */
-bool PackageItem::isInPortage()
+bool PackageItem::isInPortage() const
 {
 	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
 }
@@ -432,12 +432,12 @@ bool PackageItem::isInPortage()
  * Is this package is in the emerge queue?
  * @return true/false
  */
-bool PackageItem::isQueued()
+bool PackageItem::isQueued() const
 {
 	return m_isQueued;
 }
 
-bool PackageItem::isInWorld()
+bool PackageItem::isInWorld() const
 {
 	return m_inWorld;
 }

@@ -34,9 +34,9 @@ class ToolTip : public QToolTip
 public:
 	ToolTip( KListView *pWidget, QToolTipGroup *group = 0 );
 	virtual ~ToolTip();
-	
+
 	void 		maybeTip( const QPoint &pos );
-	
+
 private:
 	KListView 	*m_pParent;
 };

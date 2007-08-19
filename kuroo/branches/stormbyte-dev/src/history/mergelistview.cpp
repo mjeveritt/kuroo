@@ -43,12 +43,12 @@ MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, cons
 	setText( 0 , m_source.section( QRegExp( "\\d{8}_\\d{4}/" ), 1, 1 ).replace( ":" , "/" ) );
 }
 
-QString MergeListView::MergeItem::source()
+QString MergeListView::MergeItem::source() const
 {
 	return m_source;
 }
 
-QString MergeListView::MergeItem::destination()
+QString MergeListView::MergeItem::destination() const
 {
 	return m_destination;
 }

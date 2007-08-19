@@ -50,52 +50,51 @@ public:
 	History( QObject *m_parent = 0 );
     ~History();
 
-	void					init( QObject *parent = 0 );
-	void					loadTimeStatistics();
-	const EmergeTimeMap 	getStatisticsMap();
-	void 					setStatisticsMap( const EmergeTimeMap& statisticsMap );
+	void				init( QObject *parent = 0 );
+	void				loadTimeStatistics();
+	const EmergeTimeMap 		getStatisticsMap() const;
+	void 				setStatisticsMap( const EmergeTimeMap& statisticsMap );
 	const QString 			packageTime( const QString& packageNoversion );
-	void					appendEmergeInfo();
-	void					updateStatistics();
-	const QStringList		allMergeHistory();
-	void					scanELog();
-	eLogVector				getELogs();
+	void				appendEmergeInfo();
+	void				updateStatistics();
+	const QStringList		allMergeHistory() const;
+	void				scanELog();
+	eLogVector			getELogs() const;
 	
 public slots:
-	void					slotInit();
-	void					slotScanHistoryCompleted();
-	bool					slotRefresh();
-	
+	void				slotInit();
+	void				slotScanHistoryCompleted();
+	bool				slotRefresh();
 private slots:
-	void					slotScanHistory( const QStringList& lines );
-	void					slotParse();
+	void				slotScanHistory( const QStringList& lines );
+	void				slotParse();
 
 private:
-	QObject*				m_parent;
+	QObject*			m_parent;
 	
 	// Watches the emerge.log file
-	KDirWatch				*logWatcher;
+	KDirWatch			*logWatcher;
 	
 	// Map with packages emerge duration
 	EmergeTimeMap			m_statisticsMap;
 	
 	// The emerge.log
-	QFile 					m_log;
+	QFile 				m_log;
 	
 	// Stream for emerge.log
 	QTextStream 			stream;
 	
 	// Is kuroo emerging or just downloading the package
-	bool					isEmerging;
+	bool				isEmerging;
 	
 	// To keep track of sync time
-	QTime					m_syncTime;
+	QTime				m_syncTime;
 	
-	eLogVector				m_eLogs;
+	eLogVector			m_eLogs;
 	
 signals:
-	void					signalScanHistoryCompleted();
-	void					signalHistoryChanged();
+	void				signalScanHistoryCompleted();
+	void				signalHistoryChanged();
 };
 
 #endif

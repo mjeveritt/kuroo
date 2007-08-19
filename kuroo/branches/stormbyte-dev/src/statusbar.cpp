@@ -196,7 +196,7 @@ void KurooStatusBar::slotUpdateTime()
     m_timerSteps++;
 }
 
-long KurooStatusBar::elapsedTime()
+long KurooStatusBar::elapsedTime() const
 {
 	return m_timerSteps;
 }

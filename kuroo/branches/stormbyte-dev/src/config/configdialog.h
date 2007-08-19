@@ -41,7 +41,7 @@ public:
 	~ConfigDialog();
 	
 private:
-	const QStringList 	readMakeConf();
+	const QStringList 		readMakeConf() const;
 	void 				parseMakeConf();
 	bool 				saveMakeConf();
 	

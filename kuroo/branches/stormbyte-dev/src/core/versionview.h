@@ -29,14 +29,31 @@ Q_OBJECT
 public:
     VersionView( QWidget *parent = 0, const char *name = 0 );
     ~VersionView();
+	/**
+	* @class VersionViewItem
+	* @short Subclass for formating text.
+	*/
+	class 		VersionItem : public KListViewItem
+		{
+		public:
+			VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
+			~VersionItem();
 
-	class 		VersionItem;
-	
+			bool	isInstalled() const;
+
+		protected:
+			void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+
+		private:
+			bool	m_isInstalled;
+			int		m_stability;
+		};
+
 	void		insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
 	void		usedForInstallation( const QString& version );
-	int			hasUpdate();
-	QString 	updateVersion();
-	
+	int			hasUpdate() const;
+	QString 	updateVersion() const;
+
 private:
 	QString		m_emergeVersion;
 	int			m_installedIndex, m_emergeIndex;

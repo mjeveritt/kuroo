@@ -54,7 +54,7 @@ void Signalist::setKurooReady( bool isReady )
 /**
  * Return kuroo ready state.
  */
-bool Signalist::isKurooReady()
+bool Signalist::isKurooReady() const
 {
 	return m_isReady;
 }
@@ -63,7 +63,7 @@ bool Signalist::isKurooReady()
  * Kuroo is busy while scanning for packages or emerging.
  * @return busy
  */
-bool Signalist::isKurooBusy()
+bool Signalist::isKurooBusy() const
 {
 	return m_busy;
 }
@@ -75,7 +75,7 @@ bool Signalist::isKurooBusy()
 void Signalist::setKurooBusy( bool busy )
 {
 	static int busySession(0);
-	
+
 	if ( !busy ) {
 		if ( busySession > 0 ) {
 			busySession--;
@@ -86,7 +86,7 @@ void Signalist::setKurooBusy( bool busy )
 		busySession++;
 		QApplication::setOverrideCursor( KCursor::workingCursor() );
 	}
-	
+
 	if ( busySession == 0 ) {
 		m_busy = false;
 		emit signalKurooBusy( false );

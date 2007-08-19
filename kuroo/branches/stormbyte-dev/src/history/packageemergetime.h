@@ -26,10 +26,10 @@ public:
 		: m_eTime( emergeTime ), m_eCount( count )
 	{ }
 	
-	int emergeTime() const { return m_eTime; }
-	int count() const { return m_eCount; }
-	void add( int emergeTime ) { m_eTime += emergeTime; }
-	void inc() { m_eCount++; }
+	inline int emergeTime() const { return m_eTime; }
+	inline int count() const { return m_eCount; }
+	inline void add( int emergeTime ) { m_eTime += emergeTime; }
+	inline void inc() { m_eCount++; }
 	
 private:
 	int m_eTime;

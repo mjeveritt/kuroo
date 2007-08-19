@@ -45,18 +45,18 @@ private:
 	bool 								doJob();
 	void 								completeJob();
 	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
-	QString								formatSize( const QString& size );
-	
+	QString								formatSize( const QString& size ) const;
+
 	void								loadCache();
 	QString								cacheFind( const QString& package );
-	
+
 private:
 	QRegExp								rxAtom;
 
 	DbConnection* const 				m_db;
-	
+
 	QMap<QString, QString> 				m_mapCache;
-	
+
 	struct Data {
 		QString							description;
 		QString							homepage;

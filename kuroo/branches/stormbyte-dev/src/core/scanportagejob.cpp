@@ -525,7 +525,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
  * @param size
  * @return total		as "xxx kB"
  */
-QString ScanPortageJob::formatSize( const QString& size )
+QString ScanPortageJob::formatSize( const QString& size ) const
 {
 	KLocale *loc = KGlobal::locale();
 	QString total;

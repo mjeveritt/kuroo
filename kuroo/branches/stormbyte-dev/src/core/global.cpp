@@ -31,6 +31,8 @@
  * @class Global
  * @short Some useful global methods.
  */
+
+const QString Global::workdir = "/var/cache/kuroo/";
 Global::Global( QObject *parent )
 	: QObject( parent )
 {}
@@ -46,9 +48,9 @@ void Global::init( QObject *parent )
 /**
  * Kuroo home directory
  */
-const QString Global::kurooDir()
+const QString Global::kurooDir() const
 {
-	return "/var/cache/kuroo/";
+	return workdir;
 }
 
 /**
@@ -118,7 +120,7 @@ void Global::setColorTheme()
 {
 	QColor c = KGlobalSettings::highlightColor();
 	m_bgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
-	
+
 	c = KGlobalSettings::highlightedTextColor();
 	m_fgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
 }
@@ -155,13 +157,13 @@ const QString Global::formatTime( long duration )
 	KLocale *loc = KGlobal::locale();
 	QString totalDays;
 	unsigned durationDays, totalSeconds;
-	
+
 	durationDays = duration / 86400;
 	totalSeconds = duration % 86400;
-	
+
 	if ( durationDays > 0 )
 		totalDays = i18n( "%1d " ).arg( QString::number( durationDays ) );
-	
+
 	QTime emergeTime( 0, 0, 0 );
 	emergeTime = emergeTime.addSecs( totalSeconds );
 	return totalDays + loc->formatTime( emergeTime, true, true );

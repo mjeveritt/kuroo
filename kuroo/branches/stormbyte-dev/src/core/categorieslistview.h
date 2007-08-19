@@ -35,30 +35,46 @@ Q_OBJECT
 public:
 	CategoriesView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesView();
+	/**
+	 * @class CategoriesView::CategoryItem
+	 * @short Highlight empty category.
+	 */
+	class CategoryItem : public QListViewItem
+	{
+		public:
+			CategoryItem( QListView* parent, const char* name, const QString &id );
 
-	class CategoryItem;
-	
-	CategoryItem*							currentCategory();
-	const QString							currentCategoryId();
-	
+			void 			setOn( bool on );
+			const QString& 	id() const;
+			const QString& 	name() const;
+
+		protected:
+			QString			m_id, m_name;
+			bool 			m_on;
+			void 			paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+	};
+
+	CategoryItem*							currentCategory() const;
+	const QString							currentCategoryId() const;
+
 protected slots:
 	void									slotStoreFocus( QListViewItem* item );
-	
+
 protected:
 	void									restoreFocus( bool isFiltered );
-	
+
 protected:
-	
+
 	// Category that has focus
 	QString									m_focus;
-	
+
 	// Index of categoris in listview
 	QDict<CategoryItem>						m_categoryIndex;
 
 	// Vector containing all categories
 	typedef QValueVector<CategoryItem*>		Categories;
 	Categories			 					categories;
-	
+
 signals:
 	void									categoriesChanged();
 };
@@ -73,7 +89,7 @@ Q_OBJECT
 public:
 	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesListView();
-	
+
 	void									init();
 	void 									loadCategories( const QStringList& categoriesList, bool isFiltered );
 };
@@ -88,12 +104,12 @@ Q_OBJECT
 public:
 	SubCategoriesListView( QWidget *parent = 0, const char *name = 0 );
 	~SubCategoriesListView();
-	
+
 	void									init();
 	void 									loadCategories( const QStringList& categoriesList );
-	
+
 private:
-	
+
 	// Vector containing all sub-categories
 	typedef std::map<int, QString>			SubCategory;
 	typedef std::vector<SubCategory>		AllSubCategories;

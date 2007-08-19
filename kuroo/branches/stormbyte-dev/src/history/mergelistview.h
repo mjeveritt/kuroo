@@ -61,8 +61,8 @@ public:
 	MergeItem( QListView* parent, const char* source, const char* destination );
 	MergeItem( MergeItem* parent, const char* source, const char* destination );
 	
-	QString			source();
-	QString			destination();
+	QString			source() const;
+	QString			destination() const;
 	
 private:
 	QString 		m_source, m_destination;

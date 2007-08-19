@@ -25,25 +25,7 @@
 
 #include <klistview.h>
 
-/**
- * @class VersionViewItem
- * @short Subclass for formating text.
- */
-class VersionView::VersionItem : public KListViewItem
-{
-public:
-	VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
-	~VersionItem();
-	
-	bool	isInstalled();
-	
-protected:
-	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-	
-private:
-	bool	m_isInstalled;
-	int		m_stability;
-};
+
 
 VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, int stability )
 	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_stability( stability )
@@ -52,7 +34,7 @@ VersionView::VersionItem::VersionItem( QListView* parent, const char* version, b
 VersionView::VersionItem::~VersionItem()
 {}
 
-bool VersionView::VersionItem::isInstalled()
+bool VersionView::VersionItem::isInstalled() const
 {
 	return m_isInstalled;
 }
@@ -64,20 +46,20 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, in
 {
 	QColorGroup m_cg( cg );
 	QFont font( p->font() );
-	
+
 	if ( m_isInstalled )
 		font.setBold( true );
-	
+
 	switch ( m_stability ) {
 		case ( TESTING ) :
 			font.setItalic( true );
 			break;
-	
+
 		case ( HARDMASKED ) :
 			font.setItalic( true );
 			m_cg.setColor( QColorGroup::Text, Qt::darkRed );
 	}
-		
+
 	p->setFont( font );
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
@@ -116,7 +98,7 @@ void VersionView::insertItem( const char* version, const char* stability, const 
 			item = new VersionItem( this, " ", isInstalled, HARDMASKED );
 		else
 			item = new VersionItem( this, " ", isInstalled, NULL );
-			
+
 	item->setText( 1, version );
 	item->setText( 2, stability );
 	item->setText( 3, size );
@@ -132,23 +114,23 @@ void VersionView::usedForInstallation( const QString& version )
 	while ( myChild ) {
 		if ( dynamic_cast<VersionItem*>( myChild )->isInstalled() )
 			m_installedIndex = itemIndex( myChild );
-		
+
 		if ( myChild->text(1) == version ) {
 			myChild->setPixmap( 0, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
 			m_emergeIndex = itemIndex( myChild );
 		}
 		myChild = myChild->nextSibling();
 	}
-	
+
 	m_emergeVersion = version;
 }
 
-int VersionView::hasUpdate()
+int VersionView::hasUpdate() const
 {
 	return m_installedIndex - m_emergeIndex;
 }
 
-QString VersionView::updateVersion()
+QString VersionView::updateVersion() const
 {
 	return m_emergeVersion;
 }

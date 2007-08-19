@@ -36,19 +36,19 @@ Q_OBJECT
 public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
-	
+
 	void							edit( PackageItem* portagePackage, int view );
-	bool							isParentView( int view );
+	bool							isParentView( int view ) const;
 	void							showHardMaskInfo();
-	
+
 	InspectorBase					*dialog;
-	
+
 private:
 	void							updateVersionData();
 	void							rollbackSettings();
 	void							loadUseFlagDescription();
 	void							loadChangeLog();
-	
+
 private slots:
 	void							slotHardMaskInfo();
 	void							slotPreviousPackage();
@@ -71,21 +71,21 @@ private slots:
 	void							slotParseTempUse( KProcess* eProc );
 	void							slotQueue();
 	void							slotWorld();
-	
+
 private:
-	
+
 	// Wiew that called the Inspector
 	int								m_view;
-	
+
 	// Keep track when user changes any version masking settings
 	bool							m_versionSettingsChanged;
-	
+
 	// Keep track when user changes use settings
 	bool							m_useSettingsChanged;
-	
+
 	// Is this package settings untouched
 	bool							m_isVirginState;
-	
+
 	QString							m_id, m_category, m_package, m_hardMaskComment;
 	QMap<QString, QString>			m_useMap;
 	PackageItem* 					m_portagePackage;
@@ -93,7 +93,7 @@ private:
 	QString							m_versionBefore;
 	QStringList						m_pretendUseLines;
 	QStringList 					m_useList;
-	
+
 signals:
 	void							signalNextPackage( bool up );
 	void							signalPackageChanged();

@@ -110,7 +110,7 @@ void ConfigDialog::slotSaveAll()
  * Read '/etc/make.conf' into stringList by taking into account the different kind of extended lines.
  * @return linesConcatenated
  */
-const QStringList ConfigDialog::readMakeConf()
+const QStringList ConfigDialog::readMakeConf() const
 {
 	QStringList linesConcatenated;
 	QFile makeconf( KurooConfig::fileMakeConf() );

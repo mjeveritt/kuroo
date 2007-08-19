@@ -74,7 +74,7 @@ public:
 	QStringList 		query( const QString& /* statement */ );
 	QString		 		singleQuery( const QString& /* statement */ );
 	int 				insert( const QString& /* statement */ );
-	bool 				isConnected()const { return true; }
+	bool 				isConnected() const { return true; }
 
 private:
 	static void 		sqlite_rand( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ );
@@ -130,7 +130,7 @@ public:
 	*
 	* @return static DbConnection
 	*/
-	DbConnection 			*getStaticDbConnection();
+	DbConnection 			*getStaticDbConnection() const;
 
 	/**
 	* Returns the DbConnection back to connection pool.

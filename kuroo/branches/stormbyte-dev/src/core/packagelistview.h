@@ -41,27 +41,27 @@ public:
 public:
 	virtual	void				resetListView();
 	virtual	PackageItem* 		packageItemById( const QString& id );
-	virtual const QString		currentId();
-	int							currentItemStatus();
-	virtual PackageItem* 		currentPackage();
-	virtual const QStringList	selectedId();
-	virtual const QStringList	selectedPackages();
-	virtual const QStringList	allId();
-	virtual const QStringList	allPackages();
-	virtual const QString		count();
+	virtual const QString		currentId() const;
+	int							currentItemStatus() const;
+	virtual PackageItem* 		currentPackage() const;
+	virtual const QStringList	selectedId() const;
+	virtual const QStringList	selectedPackages() const;
+	virtual const QStringList	allId() const;
+	virtual const QStringList	allPackages() const;
+	virtual const QString		count() const;
 	void						nextPackage( bool isPrevious );
-	
+
 protected slots:
 // 	void						rollOver( QListViewItem* item );
 	void						setPackageFocus( const QString& id );
 	virtual void 				indexPackage( const QString& id, PackageItem *item );
-	
+
 protected:
 	QDict<PackageItem>			m_packageIndex;
-	
+
 signals:
 // 	void						signalCurrentChanged();
-	
+
 private:
 	QListViewItem* 				lastItem;
 };

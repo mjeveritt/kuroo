@@ -39,36 +39,36 @@ public:
 	~QueueListView();
 
 	class					QueueItem;
-	
+
 	const QStringList		allPackagesNoChildren();
 	const QStringList		allEndUserPackages();
 	void 					insertPackageList( bool hasCheckedQueue );
-	long			 		totalDuration();
-	const QString		 	totalSize();
-	
+	long			 		totalDuration() const;
+	const QString		 	totalSize() const;
+
 public slots:
 	void					slotPackageUp();
 	void					slotPackageDown();
 	void					slotPackageComplete( const QString& id );
 	void					slotPackageStart( const QString& id );
 	void					slotPackageProgress();
-	
+
 private:
 	void					viewportResizeEvent( QResizeEvent* );
-	const QString		 	formatSize( const QString& sizeString );
+	const QString		 	formatSize( const QString& sizeString ) const;
 	void 					addSize( const QString& size );
-	
+
 private slots:
 	void					slotHideBars( QListViewItem* item );
-	
+
 signals:
 	void					signalPackageEmerged();
-	
+
 private:
 
-	// Total sum of all package emerge duration 
+	// Total sum of all package emerge duration
 	int 					m_sumSize;
-	
+
 	// Current emerging package
 	QString					m_id;
 };
@@ -83,36 +83,36 @@ public:
 	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	~QueueItem();
-	
+
 	QString			package();
 	void			setComplete();
-	bool			isComplete();
+	bool			isComplete() const;
 	int				remainingDuration();
 	void			setStart();
 	void			oneStep();
 	void			setPretended( bool isChecked );
 	void			hideBar();
-	
+
 protected:
 	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
-	
+
 private:
-	
+
 	// Individual package progressbar
 	KProgress* 		m_bar;
-	
+
 	// Current emerge progress in seconds
 	int				m_progress;
-	
+
 	// Total emerge duration
 	int				m_duration;
-	
+
 	// Is this package ok by "emerge --pretend"
 	bool			m_isChecked;
-	
+
 	// Is this package progress = 100% eg completed
 	bool			m_isComplete;
-	
+
 	QString			m_package;
 };
 

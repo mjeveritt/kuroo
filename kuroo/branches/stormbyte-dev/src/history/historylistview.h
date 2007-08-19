@@ -43,8 +43,8 @@ public:
 	
 	class			HistoryItem;
 	
-	QString 		current();
-	QStringList 	selected();
+	QString 		current() const;
+	QStringList 		selected() const;
 	void 			loadFromDB( int days );
 	
 private:
@@ -68,7 +68,7 @@ public:
 	HistoryItem( HistoryItem* parent, const char* package );
 	
 	void			setEinfo( const QString& einfo );
-	QString			einfo();
+	QString			einfo() const;
 	
 private:
 	QString 		m_einfo;

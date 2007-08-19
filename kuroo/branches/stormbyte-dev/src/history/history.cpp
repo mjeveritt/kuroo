@@ -317,7 +317,7 @@ void History::appendEmergeInfo()
  * Return all etc-file merge history.
  * @return QStringList
  */
-const QStringList History::allMergeHistory()
+const QStringList History::allMergeHistory() const
 {
 	return KurooDBSingleton::Instance()->allMergeHistory();
 }
@@ -344,7 +344,7 @@ void History::loadTimeStatistics()
  * Return statistics map.
  * @return m_statisticsMap
  */
-const EmergeTimeMap History::getStatisticsMap()
+const EmergeTimeMap History::getStatisticsMap() const
 {
 	return m_statisticsMap;
 }
@@ -363,7 +363,7 @@ void History::setStatisticsMap( const EmergeTimeMap& statisticsMap )
  * @param package
  * @return emergeTime		time or na
  */
-const QString History::packageTime( const QString& packageNoversion )
+const QString History::packageTime( const QString& packageNoversion ) 
 {
 	EmergeTimeMap::iterator itMap = m_statisticsMap.find( packageNoversion );
 	if ( itMap != m_statisticsMap.end() )
@@ -400,7 +400,7 @@ void History::scanELog()
 /**
  * Return vector with all eLog files.
  */
-eLogVector History::getELogs()
+eLogVector History::getELogs() const
 {
 	return m_eLogs;
 }

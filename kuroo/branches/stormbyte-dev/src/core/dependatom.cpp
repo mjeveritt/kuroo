@@ -48,7 +48,7 @@ enum Positions {
  */
 DependAtom::DependAtom( PackageItem* portagePackage )
 	: m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null ),
-	rxAtom(	
+	rxAtom(
 	       	"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
 			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
@@ -82,30 +82,30 @@ DependAtom::~DependAtom()
 bool DependAtom::parse( const QString& atom )
 {
 // 	kdDebug() << "atom=" << atom << LINE_INFO;
-	
+
 	// Do the regexp match, which also prepares for text capture
 	if ( !rxAtom.exactMatch( atom ) ) {
 		m_matches = false;
 		return false;
 	}
-	
+
 	// Get the captured strings
 	m_callsign	= rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
 	m_prefix	= rxAtom.cap( POS_PREFIX );
 	m_package	= rxAtom.cap( POS_PACKAGE );
 	m_version	= rxAtom.cap( POS_VERSION );
 	m_category	= rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-	
+
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
 		m_matches = false;
 		return false;
 	}
-	
+
 	// Strip the hyphen at the start of the version, except when it's a "*"
 	if ( !m_version.isEmpty() && m_version[0] == '-' )
 		m_version = m_version.mid(1);
-	
+
 	// Not yet returned false, so it's a valid atom
 	m_matches = true;
 	return true;
@@ -120,52 +120,52 @@ bool DependAtom::parse( const QString& atom )
 QValueList<PackageVersion*> DependAtom::matchingVersions()
 {
 	QValueList<PackageVersion*> matchingVersions;
-	
+
 	if ( m_package == NULL || !m_matches )
 		return matchingVersions; // return an empty list
-	
+
 	if ( m_portagePackage->category() != m_category || m_portagePackage->name() != m_package )
 		return matchingVersions; // return an empty list
 
 	bool matchAllVersions( false );
 	if ( m_version.isEmpty() || m_version == "*" )
 		matchAllVersions = true;
-	
+
 	bool matchBaseVersion( false );
 	if ( m_version.endsWith("*") ) {
-		
+
 		// remove the trailing star
 		m_version = m_version.left( m_version.length() - 1 );
 		matchBaseVersion = true;
 	}
-	
+
 	// When this is set true, it will match all versions
 	// with exactly the same version string as the parsed one.
 	bool matchEqual = m_prefix.endsWith("=");
-	
+
 	// When this is set true, it will match all versions greater than
 	// (but not equalling) the parsed version from the atom.
 	// When false, it will match all versions less than
 	// (but not equalling, too) the parsed version.
 	bool matchGreaterThan = m_prefix.startsWith(">");
-	
+
 	// Match '~' prefix for this exact version and all its revisions
 	bool matchAllRevisions( false );
 	if ( m_prefix.startsWith("~") ) {
 		matchEqual = true;
 		matchAllRevisions = true;
 	}
-	
+
 	QValueList<PackageVersion*> versions = m_portagePackage->versionList();
 
 // 	kdDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan << endl;
-	
+
 	// So, let's iterate through the versions to check if they match or not
 	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-		
-// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
+
+// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
-		
+
 		if ( ( matchAllVersions ) ||
 		     ( matchBaseVersion   && (*versionIterator)->version().startsWith( m_version ) ) ||
 		     ( matchEqual         && (*versionIterator)->version() == m_version ) ||
@@ -177,9 +177,9 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 			continue;
 		}
 	}
-	
+
 	return matchingVersions;
-	
+
 } // end of matchingVersions()
 
 
@@ -189,7 +189,7 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
  * where it looks, for example, like DEPEND="!app-cdr/dvdrtools".
  * If there is no call sign, the function returns false.
  */
-bool DependAtom::isBlocking()
+bool DependAtom::isBlocking() const
 {
 	return m_callsign;
 }

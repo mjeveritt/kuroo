@@ -38,29 +38,29 @@ public:
 	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
 	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
 	~PackageItem();
-	
+
 	const int						status() const;
 	const QString& 					id() const;
 	const QString&					name() const;
 	const QString& 					category() const;
 	const QString&					description() const;
-	
-	virtual void					setPackageIndex( int index );	
-	virtual bool					isInstalled();
-	virtual bool					isInPortage();
-	virtual bool					isQueued();
-	virtual bool					isInWorld();
-	
+
+	virtual void					setPackageIndex( int index );
+	virtual bool					isInstalled() const;
+	virtual bool					isInPortage() const;
+	virtual bool					isQueued() const;
+	virtual bool					isInWorld() const;
+
 // 	void							setRollOver( bool isMouseOver );
 	void							setInstalled();
 	void							setDescription( const QString& description );
 	void							setQueued( bool isQueued );
-	bool							isFirstPackage();
-	bool							isLastPackage();
-	
+	bool							isFirstPackage() const;
+	bool							isLastPackage() const;
+
 	void 							initVersions();
-	QValueList<PackageVersion*> 	versionList();
-	QMap<QString,PackageVersion*> 	versionMap();
+	QValueList<PackageVersion*> 	versionList() const;
+	QMap<QString,PackageVersion*> 	versionMap() const;
 	QValueList<PackageVersion*> 	sortedVersionList();
 	void							resetDetailedInfo();
 
@@ -72,64 +72,64 @@ public:
 	const QString&					linesAvailable() const;
 	const QString&					linesEmerge() const;
 	const bool						isInArch() const;
-	
+
 protected:
 	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
-	
+
 private:
 	QListView						*m_parent;
-	
+
 	// Is the mouse pointer over this package
 	bool							m_isMouseOver;
-	
+
 	// Keep track of package's index in parent listview
 	int								m_index;
-	
+
 	// Package's db id
 	QString							m_id;
-	
+
 	// Package name-string
 	QString							m_name;
-	
+
 	// Is package INSTALLED or OLD ( INSTALLED but not in Portage anymore )
 	int								m_status;
-	
+
 	// Package description
 	QString							m_description;
-	
+
 	// Keep track of package's category
 	QString							m_category;
-	
+
 	// True if package is in installation queue
 	bool							m_isQueued;
-	
+
 	// True if package is in world file
 	bool							m_inWorld;
-	
+
 	// True if package and its versions has been initialized with all data
 	bool							m_isInitialized;
-	
+
 	// Valuelist with all versions and their data
 	QValueList<PackageVersion*>		m_versions;
-	
+
 	// Alternatively map with all versions and their data
 	QMap<QString, PackageVersion*>	m_versionMap;
-	
+
 	// Atom object needed for versions stability
 	DependAtom* 					atom;
 
 	// Formatted string
 	QString							m_linesInstalled, m_linesAvailable, m_linesEmerge;
-	
+
 	// Version used by emerge
 	QString							m_emergeVersion;
-	
+
 	// Latest versions homepage supposed to be most current
 	QString							m_homepage;
-	
+
 	// Versions list together with stability info etc...
 	QStringList						m_versionsDataList;
-	
+
 	// Is this package available in this arch?
 	bool							m_isInArch;
 };

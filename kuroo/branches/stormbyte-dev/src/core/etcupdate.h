@@ -41,40 +41,40 @@ public:
     ~EtcUpdate();
 
 	void				init( QObject *parent = 0 );
-	QStringList			confFilesList();
-	QStringList			backupFilesList();
+	QStringList			confFilesList() const;
+	QStringList			backupFilesList() const;
 	void				runDiff( const QString& source, const QString& destination, bool isNew );
-	
+
 public slots:
 	void				slotEtcUpdate();
-	
+
 private slots:
 	void				slotChanged();
 	void				slotFinished();
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
 	void				slotCleanupDiff( KProcess* );
-	
+
 signals:
 	void				signalEtcFileMerged();
 	void				signalScanCompleted();
-	
+
 private:
 	QObject*			m_parent;
 	KProcIO*			eProc;
-	
+
 	QStringList 		m_configProtectList;
 	QString				m_configProtectDir;
-	
+
 	// List of etc-files for merging
 	QStringList			m_backupFilesList;
-	
+
 	// List of etc-files for merging
 	QStringList			m_etcFilesList;
-	
+
 	QString				m_source, m_destination;
-	
+
 	bool				m_changed;
-	
+
 	KDirWatch			*m_mergingFile;
 };
 

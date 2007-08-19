@@ -37,10 +37,10 @@ public:
 
 	void		init( QObject *parent = 0 );
 	void		setKurooReady( bool isReady );
-	bool		isKurooReady();
+	bool		isKurooReady() const;
 	void		setKurooBusy( bool busy );
 	void		scanAborted();
-	bool		isKurooBusy();
+	bool		isKurooBusy() const;
 	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();
@@ -51,7 +51,7 @@ public:
 	void		packageQueueChanged();
 	void		packageClicked( const QString& package );
 	void		fontChanged();
-	
+
 signals:
 	void		signalKurooBusy( bool b );
 	void		signalCachePortageComplete();
@@ -65,7 +65,7 @@ signals:
 	void		signalPackageQueueChanged();
 	void		signalPackageClicked( const QString& package );
 	void		signalFontChanged();
-	
+
 private:
 	QObject*	m_parent;
 	bool		m_busy, m_isReady;

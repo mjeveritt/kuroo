@@ -15,9 +15,9 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 SUBDIRS = config intro core history logs portage queue
 
 # embedded sqlite as library
-SQLITE_SUBDIR = sqlite
-LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
-sqlite_includes = -I$(top_srcdir)/sqlite
+#SQLITE_SUBDIR = sqlite
+#LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
+#sqlite_includes = -I$(top_srcdir)/sqlite
 
 # makes pot translation files
 messages: rc.cpp
@@ -27,7 +27,7 @@ messages: rc.cpp
 		$(XGETTEXT) $$LIST -o $(podir)/kuroo.pot; \
 	fi
 
-# this is where the kdelnk file will go 
+# this is where the kdelnk file will go
 kdelnkdir = $(kde_appsdir)/System
 kdelnk_DATA = kuroo.desktop
 
@@ -57,6 +57,5 @@ kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
 	$(top_builddir)/src/config/libconfig.la $(top_builddir)/src/queue/libqueue.la \
 	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
 	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KDEPRINT) $(LIB_KFILE) \
-	$(LIB_KDECORE) $(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
-
+	$(LIB_KDECORE) $(LIB_SQLITE)
 

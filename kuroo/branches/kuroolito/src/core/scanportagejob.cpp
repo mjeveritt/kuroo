@@ -343,9 +343,9 @@ void ScanPortageJob::scanInstalledPackages()
 		while ( !stream.atEnd() ) {
 			QString package = stream.readLine();
 			
-			QString category = package.section("/", 0, 1);
+			QString category = package.section("/", 0, 0);
 			QString name = package.section("/", 1, 1);
-			QString version = package.section("/", 2, 1);
+			QString version = package.section("/", 2, 2);
 			
 			kdDebug() << "package=" << package << " category=" << category <<  " name=" <<  name << " version=" << version << LINE_INFO;
 			

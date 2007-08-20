@@ -152,7 +152,6 @@ KurooInit::~KurooInit()
 
 /**
  * Parse /etc/make.conf for location of Portage directories.
- * arch is found in /etc/make.profile/make.defaults.
  */
 void KurooInit::getEnvironment()
 {

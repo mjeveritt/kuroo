@@ -346,6 +346,8 @@ void ScanPortageJob::scanInstalledPackages()
 				QString cat = category.section("-", 0, 1);
 				QString subcat = category.section("-", 1, 1);
 				
+				kdDebug() << "package=" << package << " category=" << category <<  " name=" <<  name << " version=" << version << LINE_INFO;
+				
 				// Insert category if not found in portage
 				if ( !m_categories.contains( category ) )
 					m_categories[ category ];

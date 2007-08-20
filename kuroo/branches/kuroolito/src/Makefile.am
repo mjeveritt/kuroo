@@ -40,7 +40,7 @@ autostartdir = $(datadir)/autostart
 
 # headers for kuroo
 noinst_HEADERS = kurooiface.h singleton.h mainwindow.h statusbar.h systemtray.h \
-	message.h common.h kuroolito_part.h
+	common.h kuroolito_part.h
 
 # source for kuroo
 kuroolito_SOURCES = kuroo.cpp main.cpp
@@ -61,7 +61,7 @@ kde_module_LTLIBRARIES = libkuroolitopart.la
 
 # the Part's source, library search path, and link libraries
 libkuroolitopart_la_SOURCES = kuroolito_part.cpp kurooinit.cpp mainwindow.cpp \
-	messagebase.ui message.cpp statusbar.cpp systemtray.cpp
+	statusbar.cpp systemtray.cpp
 libkuroolitopart_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(all_libraries)
 libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \

@@ -19,7 +19,6 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "message.h"
 #include "statusbar.h"
 
 #include <qtextcodec.h>
@@ -224,8 +223,8 @@ void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 // 	KuroolitoStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 	
-	if ( !m_importantMessage.isEmpty() )
-		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );
+// 	if ( !m_importantMessage.isEmpty() )
+// 		Message::instance()->prompt( i18n("Important"), i18n("Important message!"), m_importantMessage );
 }
 
 #include "emerge.moc"

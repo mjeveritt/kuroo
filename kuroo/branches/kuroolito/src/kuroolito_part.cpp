@@ -34,7 +34,7 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName,
 		 					  const QStringList& /* args */ )
     : KParts::ReadWritePart( parent, name ),
 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
-	kurooMessage( new Message( parentWidget ) ),
+// 	kurooMessage( new Message( parentWidget ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	// we need an instance

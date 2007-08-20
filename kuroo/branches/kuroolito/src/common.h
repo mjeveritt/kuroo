@@ -23,7 +23,6 @@
 
 #include "settings.h"
 #include "images.h"
-#include "message.h"
 #include "signalist.h"
 #include "statusbar.h"
 #include "portage.h"

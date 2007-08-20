@@ -138,7 +138,7 @@ bool ScanPortageJob::doJob()
 	const QStringList pathOverlays = QStringList::split( " ", KuroolitoConfig::dirPortageOverlay() );
 	foreach ( pathOverlays )
 		pathList += *it;
-	
+	DEBUG_LINE_INFO;
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 	

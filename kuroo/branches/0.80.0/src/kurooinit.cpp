@@ -185,8 +185,12 @@ void KurooInit::slotEmergeInfo( KProcess* )
 		else
 			KurooConfig::setPortageVersion21( true );
 		
-		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) )
-			KurooConfig::setArch( (*it).section( "\"", 1, 1 ) );
+		// Parse out system architecture
+		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
+			QString arch = (*it).section( "\"", 1, 1 ).section( " ", -1, 1 );
+			arch = arch.remove("~");
+			KurooConfig::setArch( arch );
+		}
 
 		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
 			KurooConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );

@@ -312,8 +312,7 @@ void PackageItem::parsePackageVersions()
 			}
 		}
 		
-// 		kdDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << 
-// 			" stability=" << stability << LINE_INFO;
+// kdDebug() << "version=" << (*sortedVersionIterator)->version() << " isAvailable=" << (*sortedVersionIterator)->isAvailable() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << " stability=" << stability << LINE_INFO;
 		
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();

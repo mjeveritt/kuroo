@@ -62,7 +62,7 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 					        "Tell us what you think of Kuroo!</a><br>"
 					      ) );
 	
-	backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></tr>" )
+	backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into <b>%1</b> of following files:</td></tr>" )
 						.arg( GlobalSingleton::Instance()->kurooDir() + "backup/" ) + 
 						"<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
 						"<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +

@@ -211,19 +211,19 @@ bool ScanPortageJob::doJob()
 						if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
 							m_categories[ *itCategory ].packages[ name ];
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
-							m_categories[ *itCategory ].packages[ name ].description = info.description;
+// 							m_categories[ *itCategory ].packages[ name ].description = info.description;
 							m_categories[ *itCategory ].packages[ name ].path = *itPath;
 						}
 						
 						// Insert version in portage
 						if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].status = PACKAGE_AVAILABLE_STRING;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
-							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
+// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
 						}
 					
@@ -341,35 +341,32 @@ void ScanPortageJob::scanInstalledPackages()
 	else {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
-				QString package = stream.readLine();
-				
-				QString category = package.section("/", 0, 1);
-				QString name = package.section("/", 1, 1);
-				QString version = package.section("/", 2, 1);
-				
-				QString cat = category.section("-", 0, 1);
-				QString subcat = category.section("-", 1, 1);
-				
-				kdDebug() << "package=" << package << " category=" << category <<  " name=" <<  name << " version=" << version << LINE_INFO;
-				
-				// Insert category if not found in portage
-				if ( !m_categories.contains( category ) )
-					m_categories[ category ];
-				
-				// Insert and/or mark package as installed (old is package not in portage anymore)
-				if ( !m_categories[ category ].packages.contains( name ) ) {
-					m_categories[ category ].packages[ name ];
-					m_categories[ category ].packages[ name ].status = PACKAGE_OLD_STRING;
-				}
-				else
-					m_categories[ category ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
-				
-				// Insert old version in portage
-				if ( !m_categories[ category ].packages[ name ].versions.contains( version ) )
-					m_categories[ category ].packages[ name ].versions[ version ];
-				
-				// Mark version as installed
-				m_categories[ category ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
+			QString package = stream.readLine();
+			
+			QString category = package.section("/", 0, 1);
+			QString name = package.section("/", 1, 1);
+			QString version = package.section("/", 2, 1);
+			
+			kdDebug() << "package=" << package << " category=" << category <<  " name=" <<  name << " version=" << version << LINE_INFO;
+			
+			// Insert category if not found in portage
+			if ( !m_categories.contains( category ) )
+				m_categories[ category ];
+			
+			// Insert and/or mark package as installed (old is package not in portage anymore)
+			if ( !m_categories[ category ].packages.contains( name ) ) {
+				m_categories[ category ].packages[ name ];
+				m_categories[ category ].packages[ name ].status = PACKAGE_OLD_STRING;
+			}
+			else
+				m_categories[ category ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
+			
+			// Insert old version in portage
+			if ( !m_categories[ category ].packages[ name ].versions.contains( version ) )
+				m_categories[ category ].packages[ name ].versions[ version ];
+			
+			// Mark version as installed
+			m_categories[ category ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
 		}
 		file.close();
 	}

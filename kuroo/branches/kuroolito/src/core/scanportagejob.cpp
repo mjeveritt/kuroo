@@ -89,7 +89,7 @@ bool ScanPortageJob::doJob()
 	setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );
 	
 	// Load Portage cache files to speed up portage scan
-	loadCache();
+// 	loadCache();
 	
 	// Temporary table for all categories
 	KuroolitoDBSingleton::Instance()->singleQuery(	"BEGIN TRANSACTION;", m_db );
@@ -331,6 +331,8 @@ bool ScanPortageJob::doJob()
  */
 void ScanPortageJob::scanInstalledPackages()
 {
+	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
+	
 	QFile file( "/var/cache/kuroo/installedPackages.lst" );
 	if ( !file.open( IO_ReadOnly ) )
 		kdError(0) << "Cannot read /var/cache/kuroo/installedPackages.lst." << LINE_INFO;
@@ -369,6 +371,7 @@ void ScanPortageJob::scanInstalledPackages()
 		}
 		file.close();
 	}
+	setStatus( "ScanInstalled", i18n("Done.") );
 	
 // 	QDir dCategory, dPackage;
 // 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );

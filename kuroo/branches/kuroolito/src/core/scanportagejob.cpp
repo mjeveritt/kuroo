@@ -242,7 +242,7 @@ bool ScanPortageJob::doJob()
 			lastCategory = category;
 		}
 	}
-	
+	DEBUG_LINE_INFO;
 	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
 	scanInstalledPackages();
 	

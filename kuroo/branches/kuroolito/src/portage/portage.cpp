@@ -176,7 +176,7 @@ bool Portage::slotScan()
 void Portage::slotScanCompleted()
 {
 	// Now all Portage files
-	PortageFilesSingleton::Instance()->loadPackageFiles();
+// 	PortageFilesSingleton::Instance()->loadPackageFiles();
 	
 	// Ready to roll!
 	SignalistSingleton::Instance()->setKuroolitoReady( true );

@@ -132,11 +132,11 @@ void Portage::slotPackageChanged()
 bool Portage::slotRefresh()
 {
 	// Update cache if empty
-	if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() ) {
-		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
-	}
-	else
+// 	if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() ) {
+// 		SignalistSingleton::Instance()->scanStarted();
+// 		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+// 	}
+// 	else
 		slotScan();
 	
 	return true;
@@ -151,18 +151,18 @@ bool Portage::slotScan()
 	DEBUG_LINE_INFO;
 	
 	// Wait for cache job to finish before launching the scan.
-	int maxLoops( 99 );
-	while ( true ) {
-		if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() )
-			::usleep( 100000 ); // Sleep 100 msec
-		else
-			break;
-		
-		if ( maxLoops-- == 0 ) {
-			kdWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
-			break;
-		}
-	}
+// 	int maxLoops( 99 );
+// 	while ( true ) {
+// 		if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() )
+// 			::usleep( 100000 ); // Sleep 100 msec
+// 		else
+// 			break;
+// 		
+// 		if ( maxLoops-- == 0 ) {
+// 			kdWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
+// 			break;
+// 		}
+// 	}
 	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );

@@ -331,6 +331,8 @@ bool ScanPortageJob::doJob()
  */
 void ScanPortageJob::scanInstalledPackages()
 {
+	DEBUG_LINE_INFO;
+	
 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
 	
 	QFile file( "/var/cache/kuroo/installedPackages.lst" );

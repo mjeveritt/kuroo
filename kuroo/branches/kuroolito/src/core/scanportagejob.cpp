@@ -332,38 +332,41 @@ bool ScanPortageJob::doJob()
 void ScanPortageJob::scanInstalledPackages()
 {
 	QFile file( "/var/cache/kuroo/installedPackages.lst" );
-	QTextStream stream( &file );
-	while ( !stream.atEnd() ) {
-			QString package = stream.readLine();
-			
-			QString category = package.section("/", 0, 1);
-			QString name = package.section("/", 1, 1);
-			QString version = package.section("/", 2, 1);
-			
-			QString cat = category.section("-", 0, 1);
-			QString subcat = category.section("-", 1, 1);
-			
-			// Insert category if not found in portage
-			if ( !m_categories.contains( category ) )
-				m_categories[ category ];
-			
-			// Insert and/or mark package as installed (old is package not in portage anymore)
-			if ( !m_categories[ category ].packages.contains( name ) ) {
-				m_categories[ category ].packages[ name ];
-				m_categories[ category ].packages[ name ].status = PACKAGE_OLD_STRING;
-			}
-			else
-				m_categories[ category ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
-			
-			// Insert old version in portage
-			if ( !m_categories[ category ].packages[ name ].versions.contains( version ) )
-				m_categories[ category ].packages[ name ].versions[ version ];
-			
-			// Mark version as installed
-			m_categories[ category ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
+	if ( !file.open( IO_ReadOnly ) )
+		kdError(0) << "Cannot read /var/cache/kuroo/installedPackages.lst." << LINE_INFO;
+	else {
+		QTextStream stream( &file );
+		while ( !stream.atEnd() ) {
+				QString package = stream.readLine();
+				
+				QString category = package.section("/", 0, 1);
+				QString name = package.section("/", 1, 1);
+				QString version = package.section("/", 2, 1);
+				
+				QString cat = category.section("-", 0, 1);
+				QString subcat = category.section("-", 1, 1);
+				
+				// Insert category if not found in portage
+				if ( !m_categories.contains( category ) )
+					m_categories[ category ];
+				
+				// Insert and/or mark package as installed (old is package not in portage anymore)
+				if ( !m_categories[ category ].packages.contains( name ) ) {
+					m_categories[ category ].packages[ name ];
+					m_categories[ category ].packages[ name ].status = PACKAGE_OLD_STRING;
+				}
+				else
+					m_categories[ category ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
+				
+				// Insert old version in portage
+				if ( !m_categories[ category ].packages[ name ].versions.contains( version ) )
+					m_categories[ category ].packages[ name ].versions[ version ];
+				
+				// Mark version as installed
+				m_categories[ category ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
+		}
+		file.close();
 	}
-	file.close();
-	
 	
 // 	QDir dCategory, dPackage;
 // 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );

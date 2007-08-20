@@ -63,10 +63,10 @@ kde_module_LTLIBRARIES = libkuroolitopart.la
 libkuroolitopart_la_SOURCES = kuroolito_part.cpp kurooinit.cpp mainwindow.cpp \
 	statusbar.cpp systemtray.cpp
 libkuroolitopart_la_LDFLAGS = -avoid-version -module -no-undefined \
-	$(KDE_PLUGIN) $(all_libraries)
+	$(KDE_PLUGIN) $(SQLITE_LIBS) $(all_libraries)
 libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \
 	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/config/libconfig.la $(LIB_KPARTS) $(LIB_KFILE) \
-	$(LIB_SQLITE) -lkonq
+	$(SQLITE_LIBS) -lkonq
 
 # this is where the desktop file will go 
 partdesktopdir   = $(kde_servicesdir)

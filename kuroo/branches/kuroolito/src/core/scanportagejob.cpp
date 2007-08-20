@@ -21,7 +21,7 @@
 #include "common.h"
 #include "scanportagejob.h"
 
-#include <sqlite.h>
+#include <sqlite3.h>
 #include <fstream>
 #include <string>
 #include <vector>

@@ -27,7 +27,7 @@
 #include <qsemaphore.h>      //stack allocated
 #include <qstringlist.h>     //stack allocated
 
-#include <sqlite.h>
+#include <sqlite3.h>
 
 class Package;
 class DbConnection;

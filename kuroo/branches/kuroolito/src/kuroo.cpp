@@ -58,7 +58,7 @@ Kuroolito::Kuroolito()
 {
 	
 	// set the shell's ui resource file
-    setXMLFile("kuroolito_shellui.rc");
+    setXMLFile("kuroolito/kuroolito_shellui.rc");
 
     // then, setup our actions
 //     setupActions();

@@ -211,19 +211,19 @@ bool ScanPortageJob::doJob()
 						if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
 							m_categories[ *itCategory ].packages[ name ];
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
-// 							m_categories[ *itCategory ].packages[ name ].description = info.description;
+							m_categories[ *itCategory ].packages[ name ].description = info.description;
 							m_categories[ *itCategory ].packages[ name ].path = *itPath;
 						}
 						
 						// Insert version in portage
 						if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) ) {
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].description = info.description;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].homepage = info.homepage;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].status = PACKAGE_AVAILABLE_STRING;
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
-// 							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].licenses = info.licenses;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].useFlags = info.useFlags;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].slot = info.slot;
+							m_categories[ *itCategory ].packages[ name ].versions[ version ].size = info.size;
 							m_categories[ *itCategory ].packages[ name ].versions[ version ].keywords = info.keywords;
 						}
 					
@@ -346,9 +346,7 @@ void ScanPortageJob::scanInstalledPackages()
 			QString category = package.section("/", 0, 0);
 			QString name = package.section("/", 1, 1);
 			QString version = package.section("/", 2, 2);
-			
-			kdDebug() << "package=" << package << " category=" << category <<  " name=" <<  name << " version=" << version << LINE_INFO;
-			
+
 			// Insert category if not found in portage
 			if ( !m_categories.contains( category ) )
 				m_categories[ category ];
@@ -371,69 +369,6 @@ void ScanPortageJob::scanInstalledPackages()
 		file.close();
 	}
 	setStatus( "ScanInstalled", i18n("Done.") );
-	
-// 	QDir dCategory, dPackage;
-// 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
-// 	dCategory.setSorting( QDir::Name );
-// 	
-// 	if ( !dCategory.cd( KuroolitoConfig::dirDbPkg() ) )
-// 		kdWarning(0) << "Scanning installed packages. Can not access " << KuroolitoConfig::dirDbPkg() << LINE_INFO;
-// 	
-// 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
-// 	
-// 	// Get list of categories for installed packages
-// 	QStringList categoryList = dCategory.entryList();
-// 	QStringList::Iterator itCategoryEnd = categoryList.end();
-// 	for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-// 		
-// 		if ( *itCategory == "." || *itCategory == ".." )
-// 			continue;
-// 		
-// 		// Get list of packages in this category
-// 		dPackage.setFilter( QDir::Dirs | QDir::NoSymLinks );
-// 		dPackage.setSorting( QDir::Name );
-// 		
-// 		if ( dPackage.cd( KuroolitoConfig::dirDbPkg() + "/" + *itCategory ) ) {
-// 			QStringList packageList = dPackage.entryList();
-// 			QStringList::Iterator itPackageEnd = packageList.end();
-// 			for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
-// 				
-// 				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
-// 					continue;
-// 				
-// 				QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
-// 				if ( !parts.isEmpty() ) {
-// 					QString name = parts[1];
-// 					QString version = parts[2];
-// 
-// 					// Insert category if not found in portage
-// 					if ( !m_categories.contains( *itCategory ) )
-// 						m_categories[ *itCategory ];
-// 					
-// 					// Insert and/or mark package as installed (old is package not in portage anymore)
-// 					if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
-// 						m_categories[ *itCategory ].packages[ name ];
-// 						m_categories[ *itCategory ].packages[ name ].status = PACKAGE_OLD_STRING;
-// 					}
-// 					else
-// 						m_categories[ *itCategory ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
-// 					
-// 					// Insert old version in portage
-// 					if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) )
-// 						m_categories[ *itCategory ].packages[ name ].versions[ version ];
-// 					
-// 					// Mark version as installed
-// 					m_categories[ *itCategory ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
-// 					
-// 				}
-// 				else
-// 					kdWarning(0) << "Scanning installed packages. Can not match " << *itPackage << LINE_INFO;
-// 			}
-// 		}
-// 		else
-// 			kdWarning(0) << "Scanning installed packages. Can not access " << KuroolitoConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
-// 	}
-// 	setStatus( "ScanInstalled", i18n("Done.") );
 }
 
 /**
@@ -534,29 +469,6 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 		}
 	}
 	file.close();
-	
-	// Get package size. Try in cache first.
-// 	QString size = cacheFind( category + "/" + name + "-" + version ) ;
-// 	if ( !size.isEmpty() )
-// 		info.size = formatSize( size );
-// 	else {
-// 		QString path = KuroolitoConfig::dirPortage() + "/" + category + "/" + name + "/files/digest-" + name + "-" + version;
-// 		file.setName( path );
-// 		if ( file.open( IO_ReadOnly ) ) {
-// 			std::ifstream in( path );
-// 			std::string word;
-// 			while ( in >> word );
-// 			file.close();
-// 			info.size = formatSize( word );
-// 			
-// 			// Add new value into cache.
-// 			KuroolitoDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');")
-// 			                                      .arg( name + "-" + version ).arg( word ), m_db );
-// 		}
-// 		else
-// 			kdError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
-// 	}
-	
 	return info;
 }
 

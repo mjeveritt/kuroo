@@ -64,21 +64,22 @@ private slots:
 	void 				slotQuit();
 	void				slotWait();
 	void 				slotTerminate();
+	void				slotWhatsThis( int tabIndex );
 	
 private:
 	void 				setupActions();
 	
 private:
-	KurooView 			*m_view;
-	Message 			*kurooMessage;
 	SystemTray			*systemTray;
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
+	Message 			*kurooMessage;
 	KurooInit 			*kurooInit;
-	KConfigDialog 		*prefDialog;
+	KurooView 			*m_view;
+	KConfigDialog 			*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage/*, *actionEtcUpdate*/;
+	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

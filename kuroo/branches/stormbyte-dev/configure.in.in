@@ -19,7 +19,6 @@ if test $HAVE_SQLITE = false; then
     exit 1
 else
     HAVE_SQLITE=1
-    instruments_db_support="yes"
 fi
 AM_CONDITIONAL(HAVE_SQLITE, test $HAVE_SQLITE3 = 1)
 AC_DEFINE_UNQUOTED(HAVE_SQLITE,$HAVE_SQLITE,[Define to 1 if you have SQLITE3 installed.])

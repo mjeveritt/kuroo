@@ -151,8 +151,7 @@ KurooInit::~KurooInit()
 }
 
 /**
- * Parse /etc/make.conf for location of Portage directories.
- * arch is found in /etc/make.profile/make.defaults.
+ * Run "emerge --info" to collect system info like "ACCEPT_KEYWORDS" and "CONFIG_PROTECT".
  */
 void KurooInit::getEnvironment()
 {
@@ -185,15 +184,25 @@ void KurooInit::slotEmergeInfo( KProcess* )
 		else
 			KurooConfig::setPortageVersion21( true );
 		
-		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) )
-			KurooConfig::setArch( (*it).section( "\"", 1, 1 ) );
-
+		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
+			QString arch = (*it).section( "\"", 1, 1 );
+			
+			// When testing we have two keywords, only pick one
+			if ( arch.contains( "~" ) )
+				arch = arch.section( "~", 1, 1 );
+			
+			KurooConfig::setArch( arch );
+		}
+		
 		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
 			KurooConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
 		
 // 		if ( (*it).startsWith( "USE=" ) )
 // 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
+	
+	kdDebug() << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	
 	KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }

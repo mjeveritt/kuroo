@@ -20,11 +20,16 @@
 #ifndef __DataList__
 #define __DataList__
 
-#include <new>
+#include <new.h>
+
+//template <class T> class DataList_Node;
 
 template <class T> class DataList;
+template <class T> class ListIterator;
+
 template <class T> class DataList_Node {
 	friend class DataList<T>;
+	friend class ListIterator<T>;
 	public:
 		inline DataList_Node(const T& it) {
 			item=it;
@@ -48,6 +53,28 @@ template <class T> class DataList_Node {
 	private:
 		T item;
 		DataList_Node* next;
+};
+
+template <class T> class ListIterator {
+	friend class DataList<T>;
+	public:
+		inline ListIterator() { item=NULL; }
+		inline ListIterator(const ListIterator& lt) { item=lt.item; }
+		inline ~ListIterator() { item=NULL; }
+		ListIterator& operator=(const ListIterator& lt) {
+			if (this!=&lt) item=lt.item;
+			return (*this);
+		}
+		ListIterator Next() {
+			ListIterator<T> result;
+			if (item!=NULL) result.item=item->next;
+			return result;
+		}
+		inline bool isEmpty() { return item==NULL; }
+		inline T GetItem() const { return item->item; }
+
+	private:
+		DataList_Node<T>* item;
 };
 
 template <class T> class DataList {
@@ -104,29 +131,18 @@ template <class T> class DataList {
 		bool HeadAdd(const T& it) {
 			bool result=true;
 			DataList_Node<T>* nod=NULL;
-			try {
-				nod=new DataList_Node<T>(it);
-				if (first==NULL) first=last=nod;
-				else { nod->next=first; first=nod; }
-			}
-			catch(const std::bad_alloc& bd) {
-				//cerr << "Error: Not enough memory." >> endl;
-				result=false;
-			}
+			nod=new DataList_Node<T>(it);
+			if (first==NULL) first=last=nod;
+			else { nod->next=first; first=nod; }
+			result=false;
 			return result;
 		}
 		bool TailAdd(const T& it) {
 			bool result=true;
 			DataList_Node<T>* nod=NULL;
-			try {
-				nod=new DataList_Node<T>(it);
-				if (first==NULL) first=last=nod;
-				else { last->next=nod; last=nod; }
-			}
-			catch(const std::bad_alloc& bd) {
-				//cerr << "Error: Not enough memory." >> endl;
-				result=false;
-			}
+			nod=new DataList_Node<T>(it);
+			if (first==NULL) first=last=nod;
+			else { last->next=nod; last=nod; }
 			return result;
 		}
 		inline bool Add(const T& it) { return TailAdd(it); }
@@ -206,6 +222,17 @@ template <class T> class DataList {
 		inline T GetLast() const {
 			T result=NULL;
 			if (last!=NULL) result=(last->item);
+		}
+		ListIterator<T> First() const {
+			ListIterator<T> it;
+			if (first!=NULL) it.item=first;
+			return it;
+		}
+		
+		ListIterator<T> Last() const {
+			ListIterator<T> it;
+			if (last!=NULL) it.item=last;
+			return it;
 		}
 
 	private:

@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "scanportagejob.h"
-#include "../sqlite/sqlite3.h"
+#include <sqlite3.h>
 
 #include <fstream>
 #include <string>

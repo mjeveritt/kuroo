@@ -36,11 +36,10 @@
 #include "portagefiles.h"
 #include "filewatcher.h"
 #include "global.h"
-class Shutdown; //#include "shutdown.h"
 #include "singleton.h"
 
 #include <qregexp.h>
-#include <qstring.h>
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -58,7 +57,6 @@ typedef Singleton<History> HistorySingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;
-typedef Singleton<Shutdown> ShutdownSingleton;
 
 // The package status
 enum PackageStatus {
@@ -110,7 +108,8 @@ enum Icons {
 		VERSION_INSTALLED,
 		QUEUED_COLUMN,
 		INSTALLED_COLUMN,
-		WORLD_COLUMN
+		WORLD_COLUMN,
+		QUICKPKG
 };
 
 // The "maskedness" of a package version.

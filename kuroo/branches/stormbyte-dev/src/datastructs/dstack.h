@@ -20,7 +20,7 @@
 #ifndef __DataStack__
 #define __DataStack__
 
-#include "list.h"
+#include "dlist.h"
 
 template <class T> class DataStack {
 	public:

@@ -49,7 +49,9 @@ public:
     
 	void					startTimer();
 	void					stopTimer();
-	long					elapsedTime() const;
+	void					pauseTimers();
+	void					unpauseTimers();
+	long					elapsedTime();
     void					clearElapsedTime();
     
     void					startProgress();

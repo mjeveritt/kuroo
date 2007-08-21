@@ -20,7 +20,7 @@
 #ifndef __DataQueue__
 #define __DataQueue__
 
-#include "list.h"
+#include "dlist.h"
 
 template <class T> class DataQueue {
 	public:

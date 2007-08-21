@@ -69,12 +69,12 @@ private:
 	void 				setupActions();
 	
 private:
+	KurooView 			*m_view;
+	Message 			*kurooMessage;
 	SystemTray			*systemTray;
 	Results 			*kurooResults;
 	Queue 				*kurooQueue;
-	Message 			*kurooMessage;
 	KurooInit 			*kurooInit;
-	KurooView 			*m_view;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;

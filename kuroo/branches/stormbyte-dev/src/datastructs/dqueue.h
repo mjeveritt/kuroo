@@ -1,19 +1,19 @@
-#ifndef __Queue__
-#define __Queue__
+#ifndef __DataQueue__
+#define __DataQueue__
 
 #include "list.h"
 
-template <class T> class Queue {
+template <class T> class DataQueue {
 	public:
-		Queue() { }
-		Queue(const Queue& q) { _list=q._list; }
-		~Queue() { }
-		Queue& operator=(const Queue& q) {
+		DataQueue() { }
+		DataQueue(const DataQueue& q) { _list=q._list; }
+		~DataQueue() { }
+		DataQueue& operator=(const DataQueue& q) {
 			if (this!=&q) _list=q._list;
 			return (*this);
 		}
-		inline bool EnQueue(const T& it) { return _list.TailAdd(it); }
-		T UnQueue() {
+		inline bool EnDataQueue(const T& it) { return _list.TailAdd(it); }
+		T UnDataQueue() {
 			T result=_list.GetFirst();
 			_list.HeadDel();
 			return result;
@@ -27,7 +27,7 @@ template <class T> class Queue {
 		inline bool isEmpty() const { return _list.isEmpty; }
 
 	private:
-		List<T> _list;
+		DataList<T> _list;
 };
 
 #endif

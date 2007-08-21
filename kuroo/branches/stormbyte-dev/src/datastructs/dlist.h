@@ -1,24 +1,24 @@
-#ifndef __List__
-#define __List__
+#ifndef __DataList__
+#define __DataList__
 
 #include <new>
 
-template <class T> class List;
-template <class T> class List_Node {
-	friend class List<T>;
+template <class T> class DataList;
+template <class T> class DataList_Node {
+	friend class DataList<T>;
 	public:
-		inline List_Node(const T& it) {
+		inline DataList_Node(const T& it) {
 			item=it;
 			next=NULL;
 		}
-		inline List_Node(const List_Node& nod) {
+		inline DataList_Node(const DataList_Node& nod) {
 			item=nod.item;
 			next=nod.next;
 		}
-		inline ~List_Node() {
+		inline ~DataList_Node() {
 			next=NULL;
 		}
-		List_Node& operator=(const List_Node& nod) {
+		DataList_Node& operator=(const DataList_Node& nod) {
 			if (this!=&nod) {
 				item=nod.item;
 				next=nod.next;
@@ -28,17 +28,17 @@ template <class T> class List_Node {
 
 	private:
 		T item;
-		List_Node* next;
+		DataList_Node* next;
 };
 
-template <class T> class List {
+template <class T> class DataList {
 	public:
-		inline List() { first=NULL; }
-		List(const List& list) {
+		inline DataList() { first=NULL; }
+		DataList(const DataList& list) {
 			first=NULL;
-			List_Node<T> *nodo=NULL, *nav=list.first, *ant=NULL;
+			DataList_Node<T> *nodo=NULL, *nav=list.first, *ant=NULL;
 			while (nav!=NULL) {
-				nodo=new List_Node<T>(*nav);
+				nodo=new DataList_Node<T>(*nav);
 				if (ant==NULL) first=nodo; else ant->next=nodo;
 				ant=nodo;
 				if (nav->next=NULL) last=nodo;
@@ -46,9 +46,9 @@ template <class T> class List {
 				nav=nav->next;
 			}
 		}
-		~List() {
+		~DataList() {
 			if (first!=NULL) {
-				List_Node<T> *nav=first;
+				DataList_Node<T> *nav=first;
 				while (nav!=NULL) {
 					nav=first->next;
 					delete first;
@@ -57,11 +57,11 @@ template <class T> class List {
 				last=NULL;
 			}
 		}
-		List& operator=(const List& list) {
+		DataList& operator=(const DataList& list) {
 			if (this!=&list) {
 				//Primero borro si hace falta
 				if (first!=NULL) {
-					List_Node<T> *nav=first;
+					DataList_Node<T> *nav=first;
 					while (nav!=NULL) {
 						nav=first->next;
 						delete first;
@@ -70,9 +70,9 @@ template <class T> class List {
 					last=NULL;
 				}
 				//Ahora copio..
-				List_Node<T> *nodo=NULL, *nav=list.first, *ant=NULL;
+				DataList_Node<T> *nodo=NULL, *nav=list.first, *ant=NULL;
 				while (nav!=NULL) {
-					nodo=new List_Node<T>(*nav);
+					nodo=new DataList_Node<T>(*nav);
 					if (ant==NULL) first=nodo; else ant->next=nodo;
 					ant=nodo;
 					if (nav->next==NULL) last=nodo;
@@ -84,9 +84,9 @@ template <class T> class List {
 		}
 		bool HeadAdd(const T& it) {
 			bool result=true;
-			List_Node<T>* nod=NULL;
+			DataList_Node<T>* nod=NULL;
 			try {
-				nod=new List_Node<T>(it);
+				nod=new DataList_Node<T>(it);
 				if (first==NULL) first=last=nod;
 				else { nod->next=first; first=nod; }
 			}
@@ -98,9 +98,9 @@ template <class T> class List {
 		}
 		bool TailAdd(const T& it) {
 			bool result=true;
-			List_Node<T>* nod=NULL;
+			DataList_Node<T>* nod=NULL;
 			try {
-				nod=new List_Node<T>(it);
+				nod=new DataList_Node<T>(it);
 				if (first==NULL) first=last=nod;
 				else { last->next=nod; last=nod; }
 			}
@@ -114,7 +114,7 @@ template <class T> class List {
 		bool HeadDel() {
 			bool result=true;
 			if (first!=NULL) {
-				List_Node<T>* nod=NULL;
+				DataList_Node<T>* nod=NULL;
 				nod=first->next;
 				delete first;
 				first=nod;
@@ -127,7 +127,7 @@ template <class T> class List {
 		bool TailDel() {
 			bool result=true;
 			if (last!=NULL) {
-				List_Node<T>* nod=first;
+				DataList_Node<T>* nod=first;
 				while (nod->next!=NULL && nod->next!=last)
 					nod=nod->next;
 				delete last;
@@ -139,7 +139,7 @@ template <class T> class List {
 			return result;
 		}
 		bool Del(const T& it) {
-			List_Node<T> *ant=NULL, *nav=first;
+			DataList_Node<T> *ant=NULL, *nav=first;
 			bool finded=false;
 			while (nav!=NULL && !finded) {
 				if (nav->item==it) finded=true;
@@ -162,7 +162,7 @@ template <class T> class List {
 		}
 		inline bool isEmpty() const { return (first==NULL); }
 		bool Search(const T& it) const {
-			List_Node<T> *nav=first;
+			DataList_Node<T> *nav=first;
 			bool finded=false;
 			while (nav!=NULL && !finded) {
 				if (nav->item==it) finded=true;
@@ -171,7 +171,7 @@ template <class T> class List {
 			return finded;
 		}
 		int Size() const {
-			List_Node<T> *nav=first;
+			DataList_Node<T> *nav=first;
 			int result=0;
 			while (nav!=NULL) {
 				result++;
@@ -190,8 +190,8 @@ template <class T> class List {
 		}
 
 	private:
-		List_Node<T>* first;
-		List_Node<T>* last;
+		DataList_Node<T>* first;
+		DataList_Node<T>* last;
 };
 #endif
 

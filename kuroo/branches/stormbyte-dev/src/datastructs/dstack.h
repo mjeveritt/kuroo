@@ -1,14 +1,14 @@
-#ifndef __Stack__
-#define __Stack__
+#ifndef __DataStack__
+#define __DataStack__
 
 #include "list.h"
 
-template <class T> class Stack {
+template <class T> class DataStack {
 	public:
-		Stack() { }
-		Stack(const Stack& st) { _list=st._list; }
-		~Stack() { }
-		Stack& operator=(const Stack& st) {
+		DataStack() { }
+		DataStack(const DataStack& st) { _list=st._list; }
+		~DataStack() { }
+		DataStack& operator=(const DataStack& st) {
 			if (this!=&st) _list=st._list;
 			return (*this);
 		}
@@ -24,7 +24,7 @@ template <class T> class Stack {
 		inline bool Search(const T& it) const { return _list.Search(it); }
 
 	private:
-		List<T> _list;
+		DataList<T> _list;
 };
 
 #endif

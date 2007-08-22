@@ -183,17 +183,39 @@ template <class T> class DataList {
 			if (finded) {
 				if (first==nav) {
 					first=nav->next;
-					delete nav;
 					if (first==NULL) last=first;
 					else if (first->next==NULL) last=first;
 				}
 				else {
 					ant->next=nav->next;
 					if (nav==last) last=ant;
-					delete nav;
 				}
+				delete nav;
 			}
 			return finded;
+		}
+		bool Del(const int& pos) {
+			int max_size=Size();
+			bool result=false;
+			if (pos>=0 && pos<max_size) {
+				DataList_Node<T> *nav=first, *ant=NULL;
+				for (int i=0; i<=pos; i++) {
+					ant=nav;
+					nav=nav->next;
+				}
+				if (first==nav) {
+					first=nav->next;
+					if (first==NULL) last=first;
+					else if (first->next==NULL) last=first;
+				}
+				else {
+					ant->next=nav->next;
+					if (nav==last) last=ant;
+				}
+				delete nav;
+				result=true;
+			}
+			return result;
 		}
 		inline bool isEmpty() const { return (first==NULL); }
 		bool Search(const T& it) const {
@@ -224,7 +246,6 @@ template <class T> class DataList {
 				return node->item;
 			}
 		}
-		
 		T operator[] (const int& pos) const {
 			if (pos<0 || pos>=Size()) return error;
 			else {

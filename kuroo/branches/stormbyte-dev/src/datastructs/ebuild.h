@@ -26,8 +26,8 @@ using namespace std;
 
 class Ebuild {
 	public:
-		inline Ebuild(const string& cat="", const string& pack="", const string& ver=""):
-			category(cat), package(pack), version(ver) { recordInWorld=true; }
+		inline Ebuild(const string& cat="", const string& pack="", const string& ver="", const bool record=false):
+			category(cat), package(pack), version(ver), recordInWorld(record) { }
 		inline Ebuild(const Ebuild& e) { category=e.category; package=e.package; version=e.version; recordInWorld=e.recordInWorld; }
 		~Ebuild() { }
 		Ebuild& operator=(const Ebuild&);

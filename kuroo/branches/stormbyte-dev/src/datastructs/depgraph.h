@@ -22,12 +22,14 @@
 
 #include "graph.h"
 
-class DepGraph: public Graph {
+class DepGraph: private Graph {
 	public:
 		DepGraph();
 		DepGraph(const DepGraph&);
 		~DepGraph();
 		DepGraph& operator=(const DepGraph&);
+		bool AddEbuild(const Ebuild&);
+		void ScanDependencies();
 		void MergeFinished(const Ebuild&);
 		void UpdateEmergeQueue(DataQueue<Ebuild>&);
 };

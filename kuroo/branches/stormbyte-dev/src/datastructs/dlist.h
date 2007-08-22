@@ -20,16 +20,15 @@
 #ifndef __DataList__
 #define __DataList__
 
-#include <new.h>
+#include <iostream>
 
+using namespace std;
 //template <class T> class DataList_Node;
 
 template <class T> class DataList;
-template <class T> class ListIterator;
 
 template <class T> class DataList_Node {
 	friend class DataList<T>;
-	friend class ListIterator<T>;
 	public:
 		inline DataList_Node(const T& it) {
 			item=it;
@@ -55,6 +54,7 @@ template <class T> class DataList_Node {
 		DataList_Node* next;
 };
 
+/* I Think this is a nightmare for a user to use, so I'll implement operator[]
 template <class T> class ListIterator {
 	friend class DataList<T>;
 	public:
@@ -75,14 +75,14 @@ template <class T> class ListIterator {
 
 	private:
 		DataList_Node<T>* item;
-};
+}; */
 
 template <class T> class DataList {
 	public:
 		inline DataList() { first=NULL; }
 		DataList(const DataList& list) {
 			first=NULL;
-			DataList_Node<T> *nodo=NULL, *nav=list.first, *ant=NULL;
+			DataList_Node<T> *nodo=NULL, *nav=first, *ant=NULL;
 			while (nav!=NULL) {
 				nodo=new DataList_Node<T>(*nav);
 				if (ant==NULL) first=nodo; else ant->next=nodo;
@@ -214,6 +214,26 @@ template <class T> class DataList {
 			}
 			return result;
 		}
+		T& operator[] (const int& pos) {
+			error=T();
+			if (pos<0 || pos>=Size()) return error;
+			else {
+				DataList_Node<T>* node=first;
+				for (int i=0; i<pos; i++)
+					node=node->next;
+				return node->item;
+			}
+		}
+		
+		T operator[] (const int& pos) const {
+			if (pos<0 || pos>=Size()) return error;
+			else {
+				DataList_Node<T>* node=first;
+				for (int i=0; i<pos; i++)
+					node=node->next;
+				return node->item;
+			}
+		}
 		inline T GetFirst() const { 
 			T result;
 			if (first!=NULL) result=(first->item);
@@ -223,22 +243,15 @@ template <class T> class DataList {
 			T result=NULL;
 			if (last!=NULL) result=(last->item);
 		}
-		ListIterator<T> First() const {
-			ListIterator<T> it;
-			if (first!=NULL) it.item=first;
-			return it;
-		}
-		
-		ListIterator<T> Last() const {
-			ListIterator<T> it;
-			if (last!=NULL) it.item=last;
-			return it;
-		}
 
 	private:
 		DataList_Node<T>* first;
 		DataList_Node<T>* last;
+		static T error;
 };
+
+template <class T> T DataList<T>::error=T();
+
 #endif
 
 

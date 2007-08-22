@@ -82,11 +82,8 @@ Graph& Graph::operator=(const Graph& gr) {
 bool Graph::AddNode(const Ebuild& e) {
 	//Can't have repeated nodes!
 	bool result=false;
-	ListIterator<Graph_Node> it=_list.First();
-	while (!it.isEmpty() && !result) {
-		if (it.GetItem().ebuild==e) result=true;
-		else it=it.Next();
-	}
+	for (int i=0; i<_list.Size() && !result;i++)
+		if (_list[i].GetEbuild()==e) result=true;
 	if (!result) {
 		Graph_Node temp(e);
 		result=_list.Add(temp);
@@ -95,5 +92,20 @@ bool Graph::AddNode(const Ebuild& e) {
 }
 
 bool Graph::DelNode(const Ebuild& e) {
-#warning IMPLEMENT THIS
+	bool result=false;
+	int node_pos;
+	for (node_pos=0; node_pos<_list.Size() && !result; node_pos++)
+		if (_list[node_pos].GetEbuild()==e) result=true;
+	if (result) {
+		int max_in=_list[node_pos].in.Size(), max_out=_list[node_pos].out.Size();
+		for (int l1=0; l1<max_in; l1++) {
+			_list[node_pos].in[l1]->outDegree--;
+			_list[node_pos].in[l1]->out.Del(&_list[node_pos]);
+		}
+		for (int l1=0; l1<max_out; l1++) {
+			_list[node_pos].out[l1]->inDegree--;
+			_list[node_pos].out[l1]->in.Del(&_list[node_pos]);
+		}
+	}
+	return result;
 }

@@ -91,21 +91,10 @@ bool Emerge::stop()
 }
 
 /**
- * Convenience flag.
- * @return true if emerging.
+ * Checks if emerge is running.
+ * @return true if emerging, false otherwise.
  */
-bool Emerge::isRunning()
-{
-	return eProc->isRunning();
-}
-
-/**
- * @return list of packages parsed out from emerge output.
- */
-const EmergePackageList Emerge::packageList()
-{
-	return m_emergePackageList;
-}
+bool Emerge::isRunning() const { return eProc->isRunning(); }
 
 /**
  * Emerge list of packages.
@@ -168,23 +157,6 @@ bool Emerge::queue( const QStringList& packageList )
 
 
 /**
- * Set Skip Housekeeping
- */
-void Emerge::setSkipHousekeeping( bool x )
-{
-  m_skipHousekeeping = x;
-}
-
-/**
- * Do we Skip housekeeping
- * @return bool
- */
-bool Emerge::skipHousekeeping()
-{
-  return m_skipHousekeeping;
-}
-
-/**
  * Pause the eproc
  */
 void Emerge::slotPause()
@@ -213,24 +185,6 @@ void Emerge::slotUnpause()
 	QueueSingleton::Instance()->unpauseEmerge();
 	eProc->kill(SIGCONT);
 	m_isPaused = false;
-}
-
-/**
- * Are we paused?
- * @return bool
- */
-bool Emerge::isPaused()
-{
-	return m_isPaused;
-}
-
-/**
- * Can we pasue?
- * @return bool
- */
-bool Emerge::canPause()
-{
-	return m_pausable;
 }
 
 /**

@@ -46,7 +46,13 @@ public:
 	
 	QValueList<PackageVersion*> matchingVersions();
 	
-	bool isBlocking();
+	/**
+	 * Return true if the atom begins with a call sign ("!") which means that
+	 * this package is blocking another one. This is only used inside ebuilds,
+	 * where it looks, for example, like DEPEND="!app-cdr/dvdrtools".
+	 * If there is no call sign, the function returns false.
+	 */
+	inline bool isBlocking() const { return m_callsign; }
 	
 private:
 	// A pointer to the portage tree from which the packages are retrieved.

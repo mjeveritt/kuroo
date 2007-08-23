@@ -46,7 +46,7 @@ private:
 	bool 						doJob();
 	void 						completeJob();
 	
-	QString 					escapeString( QString string ) { return string.replace('\'', "''"); }
+	inline QString 					escapeString( QString string ) const { return string.replace('\'', "''"); }
 	
 private:
 	DbConnection* const			m_db;

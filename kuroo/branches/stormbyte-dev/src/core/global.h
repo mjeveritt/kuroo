@@ -37,17 +37,27 @@ public:
     Global( QObject *parent = 0 );
     ~Global();
 	
-	void 					init( QObject *parent = 0 );
-	const QString 			kurooDir();
-	const QRegExp			rxEmerge();
-	const QStringList 		parsePackage( const QString& packageString );
-	void 					setColorTheme();
-	const long&				kurooViewId();
-	const QString&			bgHexColor();
-	const QString&			fgHexColor();
-	const QString 			formatTime( long duration );
+	void 				init( QObject *parent = 0 );
+	const QString			kurooDir() const;
+	const QRegExp			rxEmerge() const;
+	const QStringList 		parsePackage( const QString& packageString ) const;
+	void 				setColorTheme();
+	/**
+	 * Kuroo widget id so MessageBox's can be made modal.
+	 */
+	inline const long&		kurooViewId() const { return	m_wId; }
+	/**
+	 * Return KDE background color-theme.
+	 */
+	inline const QString&		bgHexColor() const { return m_bgColor; }
+	/**
+	 * Return KDE foreground color-theme.
+	 */
+	inline const QString&		fgHexColor() const { return m_fgColor; }
+	const QString 			formatTime( const long& ) const;
 	
 private:
+	static const QString			kuroo_dir;
 	QObject*				m_parent;
 	
 	// Kuroo widget id so MessageBox's can be made modal

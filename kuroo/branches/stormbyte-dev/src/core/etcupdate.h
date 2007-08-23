@@ -41,9 +41,15 @@ public:
     ~EtcUpdate();
 
 	void				init( QObject *parent = 0 );
-	QStringList			confFilesList();
-	QStringList			backupFilesList();
-	void				runDiff( const QString& source, const QString& destination, bool isNew );
+	/**
+	 * Return found configuration files.
+	 */
+	inline QStringList		confFilesList() const { return m_etcFilesList; }
+	/**
+	 * Return backup files found in /var/cache/kuroo/backup/configuration.
+	 */
+	inline QStringList		backupFilesList() const { return m_backupFilesList; }
+	void				runDiff( const QString& source, const QString& destination, const bool& isNew );
 	
 public slots:
 	void				slotEtcUpdate();

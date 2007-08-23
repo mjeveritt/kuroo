@@ -36,7 +36,7 @@ public:
     ~Images();
 
 	void 			init( QObject *parent = 0 );
-	const QPixmap&	icon( int image );
+	const QPixmap&	icon( const int& image );
 	
 private:
 	QObject*		m_parent;

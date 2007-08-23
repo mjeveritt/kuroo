@@ -45,34 +45,18 @@ void Signalist::init( QObject* parent )
  * Sanity level. No db means not ready.
  * @param isReady
  */
-void Signalist::setKurooReady( bool isReady )
+void Signalist::setKurooReady( const bool& isReady )
 {
 	m_isReady = isReady;
 	emit signalKurooBusy( !isReady );
 }
 
-/**
- * Return kuroo ready state.
- */
-bool Signalist::isKurooReady()
-{
-	return m_isReady;
-}
-
-/**
- * Kuroo is busy while scanning for packages or emerging.
- * @return busy
- */
-bool Signalist::isKurooBusy()
-{
-	return m_busy;
-}
 
 /**
  * Toggle busy flag for kuroo.
  * @param busy
  */
-void Signalist::setKurooBusy( bool busy )
+void Signalist::setKurooBusy( const bool& busy )
 {
 	static int busySession(0);
 	
@@ -97,13 +81,7 @@ void Signalist::setKurooBusy( bool busy )
 	}
 }
 
-/**
- * Job wasn't successful.
- */
-void Signalist::scanAborted()
-{
-	setKurooBusy( false );
-}
+
 
 /**
  * Kuroo is done syncing.

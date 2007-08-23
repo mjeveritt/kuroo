@@ -4,38 +4,20 @@ AM_INIT_AUTOMAKE(kuroo, 0.82.0)
 AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
-###############################################################################
-# BEGIN SQLITE CHECK
-###############################################################################
-
-LIB_SQLITE=""
-
-AC_ARG_WITH(included-sqlite,
-AC_HELP_STRING([--without-included-sqlite],[don't use the included sqlite sources [default=with]]),
-[included_sqlite=$withval],
-[included_sqlite=yes]
-)
-
-if test x$included_sqlite = xno; then
-if test x$PKGCONFIGFOUND = xyes; then
-PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.2.7,	have_sqlite=yes,have_sqlite=no)
-
-if test x$have_sqlite = xyes; then
-## AC_DEFINE(HAVE_SQLITE, 1, [have SQLite database library])
-LIB_SQLITE=`pkg-config --libs sqlite3`
+# Check presence of sqlite3
+sqlite_version="3.0"
+PKG_CHECK_MODULES(SQLITE, sqlite3 >= $sqlite_version, HAVE_SQLITE=true, HAVE_SQLITE=false)
+AC_SUBST(SQLITE_LIBS)
+AC_SUBST(SQLITE_CFLAGS)
+if test $HAVE_SQLITE = false; then
+    HAVE_SQLITE=0;
+    echo "*** Required sqlite version not found!"
+    echo "*** You need to have sqlite version ${sqlite_version} or higher"
+    echo "*** for portage's database to be enabled."
+    echo "*** Without this kuroo can't build!!"
+    exit 1
+else
+    HAVE_SQLITE=1
 fi
-fi
-fi
-
-AC_SUBST(LIB_SQLITE)
-AM_CONDITIONAL(with_included_sqlite, [test x$included_sqlite = xyes])
-
-
-# Determine pointer size for sqlite
-
-KDE_CHECK_TYPES
-AC_DEFINE(SQLITE_PTR_SZ, SIZEOF_CHAR_P, [Determine pointer size for SQLite])
-
-###############################################################################
-# END SQLITE CHECK
-###############################################################################
+AM_CONDITIONAL(HAVE_SQLITE, test $HAVE_SQLITE3 = 1)
+AC_DEFINE_UNQUOTED(HAVE_SQLITE,$HAVE_SQLITE,[Define to 1 if you have SQLITE3 installed.])

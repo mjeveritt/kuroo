@@ -63,7 +63,7 @@ public:
 	void		fontChanged();
 	
 signals:
-	void		signalKurooBusy( const bool& b );
+	void		signalKurooBusy( bool b );
 	void		signalCachePortageComplete();
 	void 		signalScanPortageComplete();
 	void 		signalScanInstalledComplete();

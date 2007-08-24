@@ -222,7 +222,7 @@
 		</entry>
 		<entry name="MakeOpts" type="String">
 		</entry>
-		<entry name="NoColor" type="String">
+		<entry name="NoColor" type="Bool">
 		</entry>
 		<entry name="DirPkgTmp" type="String">
 		</entry>

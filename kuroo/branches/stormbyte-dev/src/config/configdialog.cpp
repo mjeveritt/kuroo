@@ -168,7 +168,7 @@ void ConfigDialog::parseMakeConf()
 	QStringList linesConcatenated = readMakeConf();
 	if ( !linesConcatenated.isEmpty() ) {
 		// Clear old entries
-		KurooConfig::setAcceptKeywords( QString::null ); /***** GRRRRRRRR ***********/
+		KurooConfig::setAcceptKeywords( QString::null );
 		KurooConfig::setAutoClean( QString::null );
 		KurooConfig::setBuildPrefix( QString::null );
 		KurooConfig::setCBuild( QString::null );
@@ -658,11 +658,11 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "USE_ORDER" ] = KurooConfig::useOrder();
 
-	//Fix a BUG which stores AUTOCLEAN content translated to /etc/make.conf which should not be..
-	if (KurooConfig::noColor()==0)
-		keywords[ "NOCOLOR" ] = "yes";
+	//Fix a BUG which stores NOCOLOR content translated to /etc/make.conf which should not be..
+	if (KurooConfig::noColor())
+		keywords[ "NOCOLOR" ] = "true";
 	else
-		keywords[ "NOCOLOR" ] = "no";
+		keywords[ "NOCOLOR" ] = "false";
 
 	keywords[ "ROOT" ] = KurooConfig::root();
 
@@ -687,7 +687,7 @@ bool ConfigDialog::saveMakeConf()
 	keywords[ "PORTAGE_TMPDIR" ] = KurooConfig::dirPortageTmp();
 
 	//Fix a BUG which stores AUTOCLEAN content translated to /etc/make.conf which should not be..
-	if (KurooConfig::autoClean()==0)
+	if (KurooConfig::autoClean()=="0")
 		keywords[ "AUTOCLEAN" ] = "yes";
 	else
 		keywords[ "AUTOCLEAN" ] = "no";

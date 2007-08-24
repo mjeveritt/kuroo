@@ -81,7 +81,6 @@ void ConfigDialog::slotDefaults()
 	show();
 }
 
-
 /**
  * Save settings when user press "Apply".
  */
@@ -89,7 +88,6 @@ void ConfigDialog::slotSaveAll()
 {
 	DEBUG_LINE_INFO;
 	switch( activePageIndex() ) {
-		
 		// Activate the systray directly (not needing restarting kuroo)
 		case 0: {
 			if ( KurooConfig::isSystrayEnabled() )
@@ -170,7 +168,7 @@ void ConfigDialog::parseMakeConf()
 	QStringList linesConcatenated = readMakeConf();
 	if ( !linesConcatenated.isEmpty() ) {
 		// Clear old entries
-		KurooConfig::setAcceptKeywords( QString::null );
+		KurooConfig::setAcceptKeywords( QString::null ); /***** GRRRRRRRR ***********/
 		KurooConfig::setAutoClean( QString::null );
 		KurooConfig::setBuildPrefix( QString::null );
 		KurooConfig::setCBuild( QString::null );
@@ -660,7 +658,11 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "USE_ORDER" ] = KurooConfig::useOrder();
 
-	keywords[ "NOCOLOR" ] = KurooConfig::noColor();
+	//Fix a BUG which stores AUTOCLEAN content translated to /etc/make.conf which should not be..
+	if (KurooConfig::noColor()==0)
+		keywords[ "NOCOLOR" ] = "yes";
+	else
+		keywords[ "NOCOLOR" ] = "no";
 
 	keywords[ "ROOT" ] = KurooConfig::root();
 
@@ -684,7 +686,11 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "PORTAGE_TMPDIR" ] = KurooConfig::dirPortageTmp();
 
-	keywords[ "AUTOCLEAN" ] = KurooConfig::autoClean();
+	//Fix a BUG which stores AUTOCLEAN content translated to /etc/make.conf which should not be..
+	if (KurooConfig::autoClean()==0)
+		keywords[ "AUTOCLEAN" ] = "yes";
+	else
+		keywords[ "AUTOCLEAN" ] = "no";
 
 	keywords[ "BUILD_PREFIX" ] = KurooConfig::buildPrefix();
 

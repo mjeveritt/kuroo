@@ -43,7 +43,7 @@ int main( int argc, char **argv )
 	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "info@kuroo.org");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "info@kuroo.org");
-	about.addAuthor("David", I18N_NOOP("Original author and maintainer"), "StormByte@gmail.com");
+	about.addAuthor("David C. Manuelda", I18N_NOOP("Main developer and maintainer"), "StormByte@gmail.com");
 	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
 	about.addCredit("Jan Schnackenberg", I18N_NOOP("German translation"), "jan@schnackenberg.org");
 	about.addCredit("Alexander Reiterer", I18N_NOOP("German translation"), "alexander.reiterer@tuwien.ac.at");

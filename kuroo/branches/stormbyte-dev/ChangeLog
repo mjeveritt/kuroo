@@ -1,23 +1,20 @@
-25-08-07
+0.81:
+===================================================================================
+BUGFIXES:
+#61
+#243
+#248
+
+ENHANCEMENTS:
 Solved a glitch wich would show a filter related error when no updates are available.
-Added a translatable string
-Removed all --nocolor code as it is deprecated (substituted by --color=n)
-Removed a huge memory usage bug when having the whole log into memory.
 fetchrestricted for eclean is not needed unless destructive is used too (solved)
 eclean bug: Does not exists minutes measure. Changing default to hours.
 Added possibility to set custom buffer size in number of lines.
-
-24-08-07
 Removed included SQLite support in favor of a external SQLite library.
-Inlined some code.
-Fixed a bug in writting to make.conf (ticket #248)
 Updated credits of About box
-Added eclean and revdep-rebuild support
-Added more translatable strings
-Updated spanish translation
 
 
-20-10-06
+Older Versions:
 Only kdiff3 is supported as merge tool.
 Fix for history view: parsing elog dir after emerge complete.
 Merge view: Now showing all backuped files from /var/cache/kuroo/backup/configuration
@@ -32,8 +29,6 @@ Added russian translation by Bart.
 Added icons in all rmb's.
 Fixed Ticket #203: Crash On Click Use Flag for portage < 2.1.
 Patch by Schnacki: Dependencies incorrect for portage < 2.1.
-
-13-05-2006
 Settings: Fixed resetting to default all settings.
 LogsTab: text is wrapped at widget boundary.
 Emerge: added Stdin.
@@ -44,9 +39,6 @@ Package summary: Added support for depend-atom operator '~'.
 Fixed Ticket #127: Enter should open Inspector.
 Fixed Ticket #123: Package inspector dialog doesn't resize properly when process is running.
 Fixed Ticket #169: resizing package Inspector: fixed resize the grids.
-
-11-04-2006
-Fixed tickets:
 76	24h limit in queue
 95	Improved estimated time remaining	
 132	installing specific version doesn't always work

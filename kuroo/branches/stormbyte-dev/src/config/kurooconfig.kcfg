@@ -119,7 +119,7 @@
 			<default>0</default>
 		</entry>
 		<entry name="EcleanTimeLimit" type="String">
-			<default>1m</default>
+			<default>1h</default>
 		</entry>
 		<entry name="ecleanDestructive" type="Bool">
 		        <default>false</default>

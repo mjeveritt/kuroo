@@ -538,6 +538,7 @@ void Emerge::cleanup()
         {
           if( KurooConfig::ecleanDistfiles() )
           {
+		  QString ecleanCOMMAND;
             QTextCodec *codec = QTextCodec::codecForName("utf8");
             eClean1 = new KProcIO( codec );
 	    eClean1->setUseShell( true, "/bin/bash" );
@@ -547,24 +548,36 @@ void Emerge::cleanup()
 	    #endif
             eClean1->resetAll();
             *eClean1 << "eclean";
+	    ecleanCOMMAND="eclean ";
             if( KurooConfig::ecleanTimeLimit() )
             {
               *eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
+	      ecleanCOMMAND+="-t";
+	      ecleanCOMMAND+=KurooConfig::ecleanTimeLimit();
+	      ecleanCOMMAND+=" ";
             }
             if( KurooConfig::ecleanDestructive() )
             {
               *eClean1 << "--destructive";
+	      ecleanCOMMAND+="--destructive ";
+	      
             }
-            *eClean1 << "--color=n" << "distfiles";
+            *eClean1 << "--nocolor";
+	    ecleanCOMMAND+="--nocolor ";
             
-            if( KurooConfig::ecleanFetchRestrict() )
+            if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
             {
               *eClean1 << "--fetch-restricted";
+	      ecleanCOMMAND+="--fetch-restricted ";
             }
+	    *eClean1 << "distfiles ";
             if( KurooConfig::ecleanSizeLimit() )
             {
               *eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
+	      ecleanCOMMAND+="-s"+KurooConfig::ecleanSizeLimit()+" ";
             }
+	    ecleanCOMMAND+="distfiles";
+	    kdDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
             if ( !eClean1->start( KProcess::OwnGroup, true ) ) {
                   LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );
                   m_doeclean = false;
@@ -661,7 +674,7 @@ void Emerge::slotEmergeDistfilesComplete( KProcess* eClean1 )
     }
     
 
-    *eClean2 << "--color=n" << "packages";
+    *eClean2 << "--nocolor" << "packages";
     
     if ( !eClean2->start( KProcess::OwnGroup, true ) ) {
           LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );

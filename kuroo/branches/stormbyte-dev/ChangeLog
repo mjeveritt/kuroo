@@ -2,6 +2,9 @@
 Solved a glitch wich would show a filter related error when no updates are available.
 Added a translatable string
 Removed all --nocolor code as it is deprecated (substituted by --color=n)
+Removed a huge memory usage bug when having the whole log into memory.
+fetchrestricted for eclean is not needed unless destructive is used too (solved)
+eclean bug: Does not exists minutes measure. Changing default to hours.
 
 25-08-07
 Removed included SQLite support in favor of a external SQLite library.

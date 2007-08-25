@@ -30,6 +30,9 @@
 #include <kio/job.h>
 #include <kmessagebox.h>
 
+
+const unsigned int Log::max_lines = 2000;
+
 /**
  * @class Log
  * @short Log output from all actions as emerge, scanning... to log window and to file.
@@ -37,7 +40,7 @@
  * @todo: save all output to log file
  */
 Log::Log( QObject* m_parent )
-	: QObject( m_parent ), m_logBrowser( 0 ), m_verboseLog( 0 ), m_saveLog( 0 )
+	: QObject( m_parent ), m_logBrowser( 0 ), m_verboseLog( 0 ), m_saveLog( 0 ), numLines( 0 )
 {}
 
 Log::~Log()
@@ -54,6 +57,7 @@ const QString Log::init( QObject *parent )
 	m_parent = parent;
 	
 	QString logName = GlobalSingleton::Instance()->kurooDir() + "kuroo.log";
+	kdDebug(0) << logName << "\n";
 	m_logFile.setName( logName );
 	if( !m_logFile.open( IO_WriteOnly ) ) {
 		kdError(0) << "Writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
@@ -107,34 +111,54 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case EMERGE: {
 			if ( m_verboseLog && m_verboseLog->isChecked() ) {
+				if (numLines>max_lines) {
+					m_logBrowser->clear();
+					numLines=0;
+				}
 				line = line.replace('>', "&gt;").replace('<', "&lt;");
 				m_logBrowser->append( line );
+				numLines++;
 				emit signalLogChanged();
 			}
 			break;
 		}
 		
 		case KUROO: {
+			if (numLines>max_lines) {
+				m_logBrowser->clear();
+				numLines=0;
+			}
 			m_logBrowser->append(line);
+			numLines++;
 			break;
 		}
 		
 		case ERROR: {
+			if (numLines>max_lines) {
+				m_logBrowser->clear();
+				numLines=0;
+			}
 			line = line.replace('>', "&gt;").replace('<', "&lt;");
 			m_logBrowser->append( line );
+			numLines++;
 			break;
 		}
 		
 		case TOLOG: {
 			QTextStream st( &m_logFile );
-    		st << line << "\n";
+			st << line << "\n";
 			m_logFile.flush();
 			break;
 		}
 		
 		case EMERGELOG: {
+			if (numLines>max_lines) {
+				m_logBrowser->clear();
+				numLines=0;
+			}
 			line = line.replace('>', "&gt;").replace('<', "&lt;");
 			m_logBrowser->append( line );
+			numLines++;
 		}
 	}
 }

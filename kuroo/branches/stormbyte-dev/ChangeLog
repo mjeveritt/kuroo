@@ -1,3 +1,8 @@
+26-08-07
+Solved a glitch wich would show a filter related error when no updates are available.
+Added a translatable string
+Removed all --nocolor code as it is deprecated (substituted by --color=n)
+
 25-08-07
 Removed included SQLite support in favor of a external SQLite library.
 Inlined some code.

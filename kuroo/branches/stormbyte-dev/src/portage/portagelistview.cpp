@@ -131,14 +131,18 @@ PortageListView::~PortageListView()
 void PortageListView::showNoHitsWarning( const bool& noHits, const int& number_of_terms )
 {
 	if ( noHits ) {
-		if (number_of_terms<=1) //Singular
-			noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages were found using this filter term</font><br><font color=darkRed>Please modify the filter term you have chosen!<br>Try using a more general filter term, so kuroo can find matching packages.</b></font>" ) );
-		else //Plural
-			noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages were found using these filter term</font><br><font color=darkRed>Please modify the filter terms you have chosen!<br>Try using more general filter terms, so kuroo can find matching packages.</b></font>" ) );
+		if (number_of_terms<=0)
+				noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No updates were found</font><br><font color=darkRed>There are no updates available at the moment. Please synchronize portage if you haven't already done so and try again.</b></font>" ) );
+		else if (number_of_terms==1)
+				noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages were found using this filter term</font><br><font color=darkRed>Please modify the filter term you have chosen!<br>Try using a more general filter term, so kuroo can find matching packages.</b></font>" ) );
+		else
+				noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages were found using these filter term</font><br><font color=darkRed>Please modify the filter terms you have chosen!<br>Try using more general filter terms, so kuroo can find matching packages.</b></font>" ) );
 		noHitsWarning->show();
 	}
-	else
+	else {
+		noHitsWarning->setText( "" );
 		noHitsWarning->hide();
+	}
 }
 
 /**

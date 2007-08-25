@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-25 03:46+0200\n"
+"POT-Creation-Date: 2007-08-25 09:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -705,7 +705,7 @@ msgid "Description"
 msgstr ""
 
 #: core/inspectorbase.cpp:399 portage/portagelistview.cpp:80
-#: portage/portagelistview.cpp:160 portage/portagelistview.cpp:162
+#: portage/portagelistview.cpp:168 portage/portagelistview.cpp:170
 #: portage/uninstallbase.cpp:45 portage/uninstallbase.cpp:77
 #: queue/queuelistview.cpp:172 rc.cpp:48 rc.cpp:241
 #, no-c-format
@@ -1163,7 +1163,14 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: portage/portagelistview.cpp:135
+#: portage/portagelistview.cpp:136
+msgid ""
+"<font color=darkRed size=+1><b>No updates were found</font><br><font "
+"color=darkRed>There are no updates available at the moment. Please "
+"synchronize portage if you haven't already done so and try again.</b></font>"
+msgstr ""
+
+#: portage/portagelistview.cpp:140
 msgid ""
 "<font color=darkRed size=+1><b>No packages were found using this filter "
 "term</font><br><font color=darkRed>Please modify the filter term you have "
@@ -1171,7 +1178,7 @@ msgid ""
 "packages.</b></font>"
 msgstr ""
 
-#: portage/portagelistview.cpp:137
+#: portage/portagelistview.cpp:143
 msgid ""
 "<font color=darkRed size=+1><b>No packages were found using these filter "
 "term</font><br><font color=darkRed>Please modify the filter terms you have "

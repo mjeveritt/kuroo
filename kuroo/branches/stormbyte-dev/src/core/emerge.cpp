@@ -555,7 +555,7 @@ void Emerge::cleanup()
             {
               *eClean1 << "--destructive";
             }
-            *eClean1 << "--nocolor" << "distfiles";
+            *eClean1 << "--color=n" << "distfiles";
             
             if( KurooConfig::ecleanFetchRestrict() )
             {
@@ -661,7 +661,7 @@ void Emerge::slotEmergeDistfilesComplete( KProcess* eClean1 )
     }
     
 
-    *eClean2 << "--nocolor" << "packages";
+    *eClean2 << "--color=n" << "packages";
     
     if ( !eClean2->start( KProcess::OwnGroup, true ) ) {
           LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );

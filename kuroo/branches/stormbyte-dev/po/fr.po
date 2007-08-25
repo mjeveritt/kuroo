@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-25 03:46+0200\n"
+"POT-Creation-Date: 2007-08-25 09:17+0200\n"
 "PO-Revision-Date: 2006-05-12 16:33+0200\n"
 "Last-Translator: Karim Ryde <karim@bredband.net>\n"
 "Language-Team:  <en@li.org>\n"
@@ -792,7 +792,7 @@ msgid "Description"
 msgstr "Description"
 
 #: core/inspectorbase.cpp:399 portage/portagelistview.cpp:80
-#: portage/portagelistview.cpp:160 portage/portagelistview.cpp:162
+#: portage/portagelistview.cpp:168 portage/portagelistview.cpp:170
 #: portage/uninstallbase.cpp:45 portage/uninstallbase.cpp:77
 #: queue/queuelistview.cpp:172 rc.cpp:48 rc.cpp:241
 #, no-c-format
@@ -1271,7 +1271,19 @@ msgstr "Paquet"
 msgid "Update"
 msgstr "Mise à jour"
 
-#: portage/portagelistview.cpp:135
+#: portage/portagelistview.cpp:136
+#, fuzzy
+msgid ""
+"<font color=darkRed size=+1><b>No updates were found</font><br><font "
+"color=darkRed>There are no updates available at the moment. Please "
+"synchronize portage if you haven't already done so and try again.</b></font>"
+msgstr ""
+"<font color=darkRed size=+1><b>Aucun paquet n'a été trouvé avec ce filtre</"
+"font> <br><font color=darkRed>Veuillez modifier le filtre que vous avez "
+"choisi !<br>Essayer d'utiliser un filtre plus général pour que kuroo trouve "
+"ainsi les paquets correspondants.</b></font>"
+
+#: portage/portagelistview.cpp:140
 #, fuzzy
 msgid ""
 "<font color=darkRed size=+1><b>No packages were found using this filter "
@@ -1284,7 +1296,7 @@ msgstr ""
 "choisi !<br>Essayer d'utiliser un filtre plus général pour que kuroo trouve "
 "ainsi les paquets correspondants.</b></font>"
 
-#: portage/portagelistview.cpp:137
+#: portage/portagelistview.cpp:143
 #, fuzzy
 msgid ""
 "<font color=darkRed size=+1><b>No packages were found using these filter "

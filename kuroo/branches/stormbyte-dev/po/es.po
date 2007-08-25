@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-25 03:46+0200\n"
-"PO-Revision-Date: 2007-08-25 04:10+0200\n"
+"POT-Creation-Date: 2007-08-25 09:17+0200\n"
+"PO-Revision-Date: 2007-08-25 09:11+0200\n"
 "Last-Translator: David Carlos Manuelda <StormByte@users.sourceforge.net>\n"
 "Language-Team: español <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,8 @@ msgstr "&Sincronizar Portage"
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
-msgstr "<qt>¿Desea sincronizar portage?<br>Esto tomará un par de minutos...</qt>"
+msgstr ""
+"<qt>¿Desea sincronizar portage?<br>Esto tomará un par de minutos...</qt>"
 
 #: kuroo.cpp:195
 msgid "Last sync: %1"
@@ -380,7 +381,8 @@ msgstr "Terminado."
 
 #: core/emerge.cpp:532
 msgid "You must run Kuroo as root to unmask packages!"
-msgstr "¡Debe ejecutar Kuroo como administrador (root) para desocultar paquetes!"
+msgstr ""
+"¡Debe ejecutar Kuroo como administrador (root) para desocultar paquetes!"
 
 #: core/emerge.cpp:533
 msgid "Auto-unmasking packages"
@@ -511,7 +513,8 @@ msgid "Please add package to \"package.unmask\"."
 msgstr "Por favor agregue el paquete a \"package.unmask\"."
 
 #: core/emerge.cpp:868
-msgid "<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid ""
+"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>¡No se puede instalar el paquete oculto!<br>¿Desea desocultar <b>%1</b>?"
 "</qt>"
@@ -525,7 +528,8 @@ msgid "Please add package to \"package.keywords\"."
 msgstr "Por favor agregue el paquete a \"package.keywords\"."
 
 #: core/emerge.cpp:882
-msgid "<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgid ""
+"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
 msgstr ""
 "<qt>¡No se puede instalar el paquete en prueba!<br>¿Desea desocultar <b>%1</"
 "b> de prueba?</qt>"
@@ -576,7 +580,8 @@ msgstr "Recolectando paquetes instalados..."
 
 #: core/etcupdate.cpp:66
 msgid "Please specify merge tool in settings!"
-msgstr "¡Por favor especifique una herramienta de instalación en la configuración!"
+msgstr ""
+"¡Por favor especifique una herramienta de instalación en la configuración!"
 
 #: core/etcupdate.cpp:140
 msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
@@ -661,7 +666,8 @@ msgid "%1No installed files found.%2"
 msgstr "%1 No se encontraron archivos instalados. %2"
 
 #: core/packageinspector.cpp:935 core/packageinspector.cpp:994
-msgid "Use flags could not be calculated. Please check log for more information"
+msgid ""
+"Use flags could not be calculated. Please check log for more information"
 msgstr ""
 "No se pudieron calcular las banderas USE. Por favor revise el registro para "
 "mas información."
@@ -740,11 +746,13 @@ msgstr "Se completo de guardar los paquetes desocultados por el usuario en %1."
 
 #: core/portagefiles.cpp:710
 msgid "Completed scanning user package use flags in %1."
-msgstr "Se completo de buscar por banderas USE establecidas por el usuario en %1."
+msgstr ""
+"Se completo de buscar por banderas USE establecidas por el usuario en %1."
 
 #: core/portagefiles.cpp:714
 msgid "Completed saving user package use in %1."
-msgstr "Se completo de guardar las banderas USE establecidas por el usuario en %1."
+msgstr ""
+"Se completo de guardar las banderas USE establecidas por el usuario en %1."
 
 #: core/cacheportagejob.cpp:76
 msgid "Collecting package information..."
@@ -786,7 +794,7 @@ msgid "Description"
 msgstr "Descripción"
 
 #: core/inspectorbase.cpp:399 portage/portagelistview.cpp:80
-#: portage/portagelistview.cpp:160 portage/portagelistview.cpp:162
+#: portage/portagelistview.cpp:168 portage/portagelistview.cpp:170
 #: portage/uninstallbase.cpp:45 portage/uninstallbase.cpp:77
 #: queue/queuelistview.cpp:172 rc.cpp:48 rc.cpp:241
 #, no-c-format
@@ -1030,7 +1038,8 @@ msgstr "Saltar"
 
 #: kurooview.cpp:195
 msgid "You must run Kuroo as root to emerge packages!"
-msgstr "¡Debe ejecutar Kuroo como administrador (root) para poder instalar paquetes!"
+msgstr ""
+"¡Debe ejecutar Kuroo como administrador (root) para poder instalar paquetes!"
 
 #: statusbar.cpp:229
 msgid "Paused..."
@@ -1216,7 +1225,8 @@ msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr "%1 Instalar&nbsp;versión: %2 No hay versión disponible en %3%4"
 
 #: portage/portagetab.cpp:554
-msgid "%1Emerge&nbsp;version:%2No version available - please check package details%3"
+msgid ""
+"%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 "%1 Instalar&nbsp;versión: %2 No hay versión disponible por favor verifique "
 "los detalles del paquete %3"
@@ -1258,22 +1268,40 @@ msgstr "Paquete"
 msgid "Update"
 msgstr "Actualización"
 
-#: portage/portagelistview.cpp:135
+#: portage/portagelistview.cpp:136
+#, fuzzy
+msgid ""
+"<font color=darkRed size=+1><b>No updates were found</font><br><font "
+"color=darkRed>There are no updates available at the moment. Please "
+"synchronize portage if you haven't already done so and try again.</b></font>"
+msgstr ""
+"<font color=darkRed size=+1><b>No se han encontrado actualizaciones</"
+"font><br><font color=darkRed>No hay actualizaciones disponibles en este "
+"momento. Por favor, sincronice portage si no lo ha hecho ya e inténtelo otra "
+"vez.</b></font>"
+
+#: portage/portagelistview.cpp:140
 msgid ""
 "<font color=darkRed size=+1><b>No packages were found using this filter "
 "term</font><br><font color=darkRed>Please modify the filter term you have "
 "chosen!<br>Try using a more general filter term, so kuroo can find matching "
 "packages.</b></font>"
-msgstr "<font color=darkRed size=+1><b>No se han encontrado paquetes utilizando ese término como filtro</font><br><font color=darkRed>Por favor, ¡modifique el término de filtrado que ha escogido!<br>Intente usar un término de filtrado más generalizado para que kuroo pueda encontrar paquetes que coincidan.</b></font>"
+msgstr ""
+"<font color=darkRed size=+1><b>No se han encontrado paquetes utilizando ese "
+"término como filtro</font><br><font color=darkRed>Por favor, ¡modifique el "
+"término de filtrado que ha escogido!<br>Intente usar un término de filtrado "
+"más generalizado para que kuroo pueda encontrar paquetes que coincidan.</b></"
+"font>"
 
-#: portage/portagelistview.cpp:137
+#: portage/portagelistview.cpp:143
 msgid ""
 "<font color=darkRed size=+1><b>No packages were found using these filter "
 "term</font><br><font color=darkRed>Please modify the filter terms you have "
 "chosen!<br>Try using more general filter terms, so kuroo can find matching "
 "packages.</b></font>"
 msgstr ""
-"<font color=darkRed size=+1><b>No se han encontrado paquetes utilizando esos términos como filtro</b></font><br><font color=darkRed><b>Por favor, "
+"<font color=darkRed size=+1><b>No se han encontrado paquetes utilizando esos "
+"términos como filtro</b></font><br><font color=darkRed><b>Por favor, "
 "¡modifique los términos de filtrado que ha escogido!<br>Intente usar "
 "términos de filtrado mas generalizados para que Kuroo pueda encontrar "
 "paquetes que coincidan.</b></font>"
@@ -1469,7 +1497,8 @@ msgid "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:275
-msgid "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>"
+msgid ""
+"<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>"
 msgstr ""
 
 #: queue/queuetab.cpp:276
@@ -1722,9 +1751,9 @@ msgid "Kuroo options"
 msgstr "Opciones de Kuroo"
 
 #: config/options1.cpp:200 rc.cpp:382
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Dock kuroo in system tray (close does not e&xit kuroo)"
-msgstr "Mostrar Kuroo en la bandeja de sistema (cerrar no sale de Kuroo)"
+msgstr "Mostrar Kuroo en la bandeja de sistema (&cerrar no sale de Kuroo)"
 
 #: config/options1.cpp:202 rc.cpp:388
 #, no-c-format
@@ -2525,4 +2554,3 @@ msgstr "Archivo de configuración"
 #, no-c-format
 msgid "&Portage"
 msgstr "&Portage"
-

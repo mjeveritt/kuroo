@@ -1,3 +1,13 @@
+25-08-07
+Removed included SQLite support in favor of a external SQLite library.
+Inlined some code.
+Fixed a bug in writting to make.conf (ticket #248)
+Updated credits of About box
+Added eclean and revdep-rebuild support
+Added more translatable strings
+Updated spanish translation
+
+
 20-10-06
 Only kdiff3 is supported as merge tool.
 Fix for history view: parsing elog dir after emerge complete.

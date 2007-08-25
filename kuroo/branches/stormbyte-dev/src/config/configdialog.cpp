@@ -40,6 +40,8 @@
 #include <ktextedit.h>
 #include <kuser.h>
 
+#include "log.h"
+
 /**
  * @class ConfigDialog
  * @short Kuroo preferences.
@@ -86,6 +88,8 @@ void ConfigDialog::slotDefaults()
  */
 void ConfigDialog::slotSaveAll()
 {
+	Log::buffer_MaxLines=KurooConfig::logLines();
+	kdDebug(0) << "Buffer changed to " << Log::buffer_MaxLines << "\n";
 	DEBUG_LINE_INFO;
 	switch( activePageIndex() ) {
 		// Activate the systray directly (not needing restarting kuroo)
@@ -169,7 +173,7 @@ void ConfigDialog::parseMakeConf()
 	if ( !linesConcatenated.isEmpty() ) {
 		// Clear old entries
 		KurooConfig::setAcceptKeywords( QString::null );
-		KurooConfig::setAutoClean( QString::null );
+		KurooConfig::setAutoClean( true );
 		KurooConfig::setBuildPrefix( QString::null );
 		KurooConfig::setCBuild( QString::null );
 		KurooConfig::setCCacheSize( QString::null );
@@ -187,7 +191,7 @@ void ConfigDialog::parseMakeConf()
 		KurooConfig::setFtpProxy( QString::null );
 		KurooConfig::setHttpProxy( QString::null );
 		KurooConfig::setMakeOpts( QString::null );
-		KurooConfig::setNoColor( QString::null );
+		KurooConfig::setNoColor( false );
 		KurooConfig::setDirPkgTmp( QString::null );
 		KurooConfig::setDirPkg( QString::null );
 		KurooConfig::setDirPortLog( QString::null );
@@ -207,7 +211,6 @@ void ConfigDialog::parseMakeConf()
 		KurooConfig::setSync( QString::null );
 		KurooConfig::setUse( QString::null );
 		KurooConfig::setUseOrder( QString::null );
-		KurooConfig::setNoColor( QString::null );
 		
 		// Parse the lines
 		QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
@@ -687,7 +690,7 @@ bool ConfigDialog::saveMakeConf()
 	keywords[ "PORTAGE_TMPDIR" ] = KurooConfig::dirPortageTmp();
 
 	//Fix a BUG which stores AUTOCLEAN content translated to /etc/make.conf which should not be..
-	if (KurooConfig::autoClean()=="0")
+	if (KurooConfig::autoClean())
 		keywords[ "AUTOCLEAN" ] = "yes";
 	else
 		keywords[ "AUTOCLEAN" ] = "no";
@@ -807,5 +810,7 @@ bool ConfigDialog::saveMakeConf()
 		return false;
 	}
 }
+
+
 
 #include "configdialog.moc"

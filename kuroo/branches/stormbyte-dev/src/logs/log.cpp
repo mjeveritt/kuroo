@@ -29,9 +29,9 @@
 #include <kuser.h>
 #include <kio/job.h>
 #include <kmessagebox.h>
+#include "settings.h"
 
-
-const unsigned int Log::max_lines = 2000;
+int Log::buffer_MaxLines = 2000;
 
 /**
  * @class Log
@@ -111,36 +111,21 @@ void Log::writeLog( const QString& output, int logType )
 		
 		case EMERGE: {
 			if ( m_verboseLog && m_verboseLog->isChecked() ) {
-				if (numLines>max_lines) {
-					m_logBrowser->clear();
-					numLines=0;
-				}
-				line = line.replace('>', "&gt;").replace('<', "&lt;");
-				m_logBrowser->append( line );
-				numLines++;
+				//line = line.replace('>', "&gt;").replace('<', "&lt;");
+				addText( line );
 				emit signalLogChanged();
 			}
 			break;
 		}
 		
 		case KUROO: {
-			if (numLines>max_lines) {
-				m_logBrowser->clear();
-				numLines=0;
-			}
-			m_logBrowser->append(line);
-			numLines++;
+			addText( line );
 			break;
 		}
 		
 		case ERROR: {
-			if (numLines>max_lines) {
-				m_logBrowser->clear();
-				numLines=0;
-			}
 			line = line.replace('>', "&gt;").replace('<', "&lt;");
-			m_logBrowser->append( line );
-			numLines++;
+			addText( line );
 			break;
 		}
 		
@@ -152,15 +137,21 @@ void Log::writeLog( const QString& output, int logType )
 		}
 		
 		case EMERGELOG: {
-			if (numLines>max_lines) {
-				m_logBrowser->clear();
-				numLines=0;
-			}
 			line = line.replace('>', "&gt;").replace('<', "&lt;");
-			m_logBrowser->append( line );
-			numLines++;
+			addText( line );
 		}
 	}
 }
+
+void Log::addText(const QString& str) {
+	//kdDebug(0) << "Max Buffer Lines: " << buffer_MaxLines << "\n";
+	if (numLines>buffer_MaxLines) {
+		m_logBrowser->clear();
+		numLines=0;
+	}
+	m_logBrowser->append(str);
+	numLines++;
+}
+
 
 #include "log.moc"

@@ -44,14 +44,15 @@ public:
 	
 	const QString		init( QObject *parent = 0 );
 	KIO::Job*		backupLog();
+	static int		buffer_MaxLines;
 	
 private:
+	void addText(const QString&);
 	QObject*		m_parent;
 	QCheckBox 		*m_verboseLog, *m_saveLog;
 	KTextBrowser 		*m_logBrowser;
 	QFile 			m_logFile;
 	unsigned int		numLines;
-	static const unsigned int	max_lines;
 	
 signals:
 	void			signalLogChanged();

@@ -42,9 +42,9 @@ public:
 	virtual	void			resetListView();
 	virtual	PackageItem* 		packageItemById( const QString& id ) const;
 	virtual const QString		currentId() const;
-	inline int			currentItemStatus() const;
+	int				currentItemStatus() const;
 	
-	inline virtual PackageItem* 	currentPackage() const;
+	virtual PackageItem* 		currentPackage() const;
 	virtual const QStringList	selectedId() const;
 	virtual const QStringList	selectedPackages() const;
 	virtual const QStringList	allId() const;

@@ -330,13 +330,27 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
+	int numberOfTerms=0; //For singular or plural message
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
-		packagesView->showNoHitsWarning( true );
+		/*** We check number of terms to pass to showNoHitsWarning **/
+		QChar space((char)32);
+		bool iscounted=false;
+		for (unsigned int i=0; i<searchFilter->text().length(); i++) {
+			if (searchFilter->text()[i]!=space) {
+				if (!iscounted) numberOfTerms++;
+				iscounted=true;
+			}
+			else {
+				iscounted=false;
+			}
+		}
+		kdDebug(0) << numberOfTerms << LINE_INFO << "\n";
+		packagesView->showNoHitsWarning( true , numberOfTerms);
 
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
@@ -345,7 +359,7 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
 	else {
-		packagesView->showNoHitsWarning( false );
+		packagesView->showNoHitsWarning( false , numberOfTerms);
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )

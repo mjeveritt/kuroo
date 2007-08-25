@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-24 18:53+0200\n"
+"POT-Creation-Date: 2007-08-25 03:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -705,7 +705,7 @@ msgid "Description"
 msgstr ""
 
 #: core/inspectorbase.cpp:399 portage/portagelistview.cpp:80
-#: portage/portagelistview.cpp:158 portage/portagelistview.cpp:160
+#: portage/portagelistview.cpp:160 portage/portagelistview.cpp:162
 #: portage/uninstallbase.cpp:45 portage/uninstallbase.cpp:77
 #: queue/queuelistview.cpp:172 rc.cpp:48 rc.cpp:241
 #, no-c-format
@@ -1036,7 +1036,7 @@ msgstr ""
 msgid "Add/Remove selected packages to the Installation Queue"
 msgstr ""
 
-#: portage/portagebase.cpp:251 portage/portagetab.cpp:594
+#: portage/portagebase.cpp:251 portage/portagetab.cpp:608
 #: queue/queuebase.cpp:205 queue/queuetab.cpp:566 rc.cpp:228 rc.cpp:282
 #, no-c-format
 msgid "Details..."
@@ -1088,74 +1088,74 @@ msgstr ""
 msgid "Remove from Queue"
 msgstr ""
 
-#: portage/portagetab.cpp:372
+#: portage/portagetab.cpp:386
 msgid ""
 "<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 
-#: portage/portagetab.cpp:373
+#: portage/portagetab.cpp:387
 msgid "Refreshing Packages"
 msgstr ""
 
-#: portage/portagetab.cpp:470
+#: portage/portagetab.cpp:484
 msgid " packages selected"
 msgstr ""
 
-#: portage/portagetab.cpp:500
+#: portage/portagetab.cpp:514
 msgid "<b>Homepage: </b>"
 msgstr ""
 
-#: portage/portagetab.cpp:504
+#: portage/portagetab.cpp:518
 msgid "%1Package not available in Portage tree anymore!%2"
 msgstr ""
 
-#: portage/portagetab.cpp:510 portage/portagetab.cpp:516
+#: portage/portagetab.cpp:524 portage/portagetab.cpp:530
 msgid "%1Installed&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:526
+#: portage/portagetab.cpp:540
 msgid "%1Emerge&nbsp;version:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:534
+#: portage/portagetab.cpp:548
 msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:540
+#: portage/portagetab.cpp:554
 msgid ""
 "%1Emerge&nbsp;version:%2No version available - please check package details%3"
 msgstr ""
 
-#: portage/portagetab.cpp:548
+#: portage/portagetab.cpp:562
 msgid "%1Available&nbsp;versions:%2%3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:554
+#: portage/portagetab.cpp:568
 msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
 msgstr ""
 
-#: portage/portagetab.cpp:589
+#: portage/portagetab.cpp:603
 msgid "&Add to queue"
 msgstr ""
 
-#: portage/portagetab.cpp:591
+#: portage/portagetab.cpp:605
 msgid "&Remove from queue"
 msgstr ""
 
-#: portage/portagetab.cpp:598 queue/queuetab.cpp:570
+#: portage/portagetab.cpp:612 queue/queuetab.cpp:570
 msgid "Add to world"
 msgstr ""
 
-#: portage/portagetab.cpp:600 queue/queuetab.cpp:572
+#: portage/portagetab.cpp:614 queue/queuetab.cpp:572
 msgid "Remove from world"
 msgstr ""
 
-#: portage/portagetab.cpp:605
+#: portage/portagetab.cpp:619
 msgid "&Uninstall"
 msgstr ""
 
-#: portage/portagetab.cpp:609
+#: portage/portagetab.cpp:623
 msgid "Backup Package"
 msgstr ""
 
@@ -1163,12 +1163,20 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: portage/portagelistview.cpp:122
+#: portage/portagelistview.cpp:135
 msgid ""
-"<font color=darkRed size=+1><b>No packages found with these filter settings</"
-"font><br><font color=darkRed>Please modify the filter settings you have "
-"chosen!<br>Try to use more general filter options, so kuroo can find "
-"matching packages.</b></font>"
+"<font color=darkRed size=+1><b>No packages were found using this filter "
+"term</font><br><font color=darkRed>Please modify the filter term you have "
+"chosen!<br>Try using a more general filter term, so kuroo can find matching "
+"packages.</b></font>"
+msgstr ""
+
+#: portage/portagelistview.cpp:137
+msgid ""
+"<font color=darkRed size=+1><b>No packages were found using these filter "
+"term</font><br><font color=darkRed>Please modify the filter terms you have "
+"chosen!<br>Try using more general filter terms, so kuroo can find matching "
+"packages.</b></font>"
 msgstr ""
 
 #: portage/uninstallbase.cpp:78 rc.cpp:244

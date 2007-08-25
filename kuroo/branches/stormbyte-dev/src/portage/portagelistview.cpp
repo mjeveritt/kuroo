@@ -119,9 +119,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	noHitsWarning = new KTextBrowser( this );
 	noHitsWarning->setGeometry( QRect( 20, 50, 400, 300 ) );
 	noHitsWarning->setFrameShape( QFrame::NoFrame );
-	noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
-	                              "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
-	                              "Try to use more general filter options, so kuroo can find matching packages.</b></font>") );
 }
 
 PortageListView::~PortageListView()
@@ -131,10 +128,15 @@ PortageListView::~PortageListView()
  * Show warning text when package view is empty.
  * @param show/hide
  */
-void PortageListView::showNoHitsWarning( bool noHits )
+void PortageListView::showNoHitsWarning( const bool& noHits, const int& number_of_terms )
 {
-	if ( noHits )
+	if ( noHits ) {
+		if (number_of_terms<=1) //Singular
+			noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages were found using this filter term</font><br><font color=darkRed>Please modify the filter term you have chosen!<br>Try using a more general filter term, so kuroo can find matching packages.</b></font>" ) );
+		else //Plural
+			noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No packages were found using these filter term</font><br><font color=darkRed>Please modify the filter terms you have chosen!<br>Try using more general filter terms, so kuroo can find matching packages.</b></font>" ) );
 		noHitsWarning->show();
+	}
 	else
 		noHitsWarning->hide();
 }

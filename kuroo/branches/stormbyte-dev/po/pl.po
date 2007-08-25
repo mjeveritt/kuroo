@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-25 15:30+0200\n"
+"POT-Creation-Date: 2007-08-25 03:46+0200\n"
 "PO-Revision-Date: 2006-05-12 16:38+0200\n"
 "Last-Translator: Karim Ryde <karim@bredband.net>\n"
 "Language-Team:  <en@li.org>\n"
@@ -17,1112 +17,171 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.2\n"
 
-#: portage/uninstallinspector.cpp:32
-msgid "Uninstall Packages"
-msgstr "Odinstaluj pakiety"
-
-#: portage/uninstallinspector.cpp:77
+#: kurooinit.cpp:72
 msgid ""
-"<font color=red><b>You are uninstalling packages part of your system profile!"
-"<br>This may be damaging to your system!</b></font>"
+"<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
+"kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
-"<font color=red><b>Usuwasz pakiety wchodzące w skład profilu systemowego!"
-"<br>To może spowodować uszkodzenie systemu!</b></font>"
+"<qt>Nie można utworzyć katalogu domowego programu Kuroo.<br>Dla "
+"bezpieczeństwa najpierw należy uruchomić program Kuroo za pomocą aplikacji "
+"kdesu.<br>Spróbuj ponownie!</qt>"
 
-#: portage/portagetab.cpp:126 queue/queuetab.cpp:162
-msgid "View package details..."
-msgstr "Szczegółowe informacje o pakiecie..."
+#: kurooinit.cpp:74 kurooinit.cpp:91
+msgid "Initialization"
+msgstr "Inicjowanie"
 
-#: portage/portagetab.cpp:162 portage/portagetab.cpp:219
-#: portage/portagetab.cpp:222
-msgid "Add to Queue"
-msgstr "Dodaj do kolejki"
-
-#: portage/portagetab.cpp:217
-msgid "Remove from Queue"
-msgstr "Usuń z kolejki"
-
-#: portage/portagetab.cpp:303
+#: kurooinit.cpp:89
 msgid ""
-"<font color=darkRed size=+1><b>No package found with these filter settings</"
-"font><br><font color=darkRed>Please modify the filter settings you have "
-"chosen!<br>Try to use more general filter options, so kuroo can find "
-"matching packages.</b></font>"
+"<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
+"kdesu first time for a secure initialization.<br>Please try again!</qt>"
 msgstr ""
-"<font color=darkRed size=+1><b>Brak dostępnych pakietów z tymi ustawieniami "
-"filtrowania</font><br><font color=darkGray>Zmodyfikuj ustawienia filtrowania!"
-"<br>Użyj bardziej ogólnych opcji filtrowania, aby program Kuroo mógł znaleźć "
-"odpowiednie pakiety.</b></font>"
+"<qt>Nie można utworzyć katalogu kopii zapasowej dla programu Kuroo.<br>Dla "
+"bezpieczeństwa najpierw należy uruchomić program Kuroo za pomocą aplikacji "
+"kdesu.<br>Spróbuj ponownie!</qt>"
 
-#: portage/portagetab.cpp:337
+#: kurooinit.cpp:238
 msgid ""
-"<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
-"minutes...</qt>"
+"You don't have enough permissions to run kuroo.\n"
+"Please add yourself into portage group!"
 msgstr ""
-"<qt>Odświeżyć widok Portage?<br>Operacja może potrwać kilka minut...</qt>"
+"Nie masz wystarczających uprawnień, aby uruchomić program Kuroo.\n"
+"Użytkownik musi należeć do grupy portage!"
 
-#: portage/portagetab.cpp:338
-msgid "Refreshing Packages"
-msgstr "Odświeżanie pakietów"
+#: kurooinit.cpp:239
+msgid "User permissions"
+msgstr "Uprawnienia użytkowników"
 
-#: portage/portagetab.cpp:427
-msgid " packages selected"
-msgstr " wybrane pakiety"
-
-#: portage/portagetab.cpp:453
-msgid "<b>Homepage: </b>"
-msgstr "<b>Strona domowa: </b>"
-
-#: portage/portagetab.cpp:457
-msgid "%1Package not available in Portage tree anymore!%2"
-msgstr "%1Pakietu nie ma już w drzewie Portage%2"
-
-#: portage/portagetab.cpp:463 portage/portagetab.cpp:469
-msgid "%1Installed&nbsp;version:%2%3%4"
-msgstr "%1Zainstalowana&nbsp;wersja:%2%3%4"
-
-#: portage/portagetab.cpp:479
-msgid "%1Emerge&nbsp;version:%2%3%4"
-msgstr "%1Wersja&nbsp;emerge%2%3%4"
-
-#: portage/portagetab.cpp:487
-msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
-msgstr "%1Wersja&nbsp;emerge:%2brak dostępnych wersji %3%4"
-
-#: portage/portagetab.cpp:493
-msgid ""
-"%1Emerge&nbsp;version:%2No version available - please check package details%3"
-msgstr ""
-"%1Wersja&nbsp;emerge:%2wersja niedostępna - zapoznaj się ze szczegółowymi "
-"informacjami o pakiecie%3"
-
-#: portage/portagetab.cpp:501
-msgid "%1Available&nbsp;versions:%2%3%4"
-msgstr "%1Dostępne&nbsp;wersje:%2%3%4"
-
-#: portage/portagetab.cpp:507
-msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
-msgstr "%1Dostępne&nbsp;wersje:%2brak dostępnych wersji %3%4"
-
-#: portage/portagetab.cpp:541
-msgid "&Add to queue"
-msgstr "&Dodaj do kolejki"
-
-#: portage/portagetab.cpp:543
-msgid "&Remove from queue"
-msgstr "&Usuń z kolejki"
-
-#: portage/portagetab.cpp:545 rc.cpp:54 rc.cpp:262 queue/queuetab.cpp:492
-#, no-c-format
-msgid "Details..."
-msgstr "Szczegóły..."
-
-#: portage/portagetab.cpp:549 queue/queuetab.cpp:496
-msgid "Add to world"
-msgstr "Dodaj do pliku world"
-
-#: portage/portagetab.cpp:551 queue/queuetab.cpp:498
-msgid "Remove from world"
-msgstr "Usuń z pliku world"
-
-#: portage/portagetab.cpp:556
-msgid "&Uninstall"
-msgstr "&Odinstaluj"
-
-#: portage/portagelistview.cpp:79 portage/portagelistview.cpp:138
-#: portage/portagelistview.cpp:140 rc.cpp:67 rc.cpp:132
-#: queue/queuelistview.cpp:168
-#, no-c-format
-msgid "Package"
-msgstr "Pakiet"
-
-#: portage/portagelistview.cpp:87
-msgid "Update"
-msgstr "Aktualizacja"
-
-#: portage/portagelistview.cpp:88 rc.cpp:213
-#, no-c-format
-msgid "Description"
-msgstr "Opis"
-
-#: statusbar.cpp:102 history/history.cpp:261 history/history.cpp:262
-#: core/etcupdate.cpp:127 core/cacheportagejob.cpp:166
-#: core/portagefiles.cpp:146 core/portagefiles.cpp:237
-#: core/portagefiles.cpp:328 core/portagefiles.cpp:419
-#: core/scanupdatesjob.cpp:143 core/scanportagejob.cpp:323
-#: core/scanportagejob.cpp:394 core/emerge.cpp:451 core/emerge.cpp:532
-#: queue/queuetab.cpp:399
-msgid "Done."
-msgstr "Gotowe."
-
-#: rc.cpp:3
-#, no-c-format
-msgid "Form2"
-msgstr "Formularz2"
-
-#: rc.cpp:6
-#, no-c-format
-msgid "<font size=\"+1\">Packages in Portage</font>"
-msgstr "<font size=\"+1\">Pakiety w Portage</font>"
-
-#: rc.cpp:9
-#, no-c-format
-msgid "Filter packages here..."
-msgstr "Filtruj pakiety..."
-
-#: rc.cpp:12 rc.cpp:84 rc.cpp:126
-#, no-c-format
-msgid "Filter:"
-msgstr ""
-
-#: rc.cpp:16
-#, no-c-format
-msgid "&All Packages"
-msgstr "&Wszystkie pakiety"
-
-#: rc.cpp:19 rc.cpp:204 rc.cpp:249 rc.cpp:636
-#, no-c-format
-msgid "Alt+A"
-msgstr "Alt+W"
-
-#: rc.cpp:22
-#, no-c-format
-msgid "&Updates"
-msgstr "&Aktualizacje"
-
-#: rc.cpp:25 rc.cpp:101 rc.cpp:274
-#, no-c-format
-msgid "Alt+U"
-msgstr "Alt+A"
-
-#: rc.cpp:28
-#, no-c-format
-msgid "I&nstalled Packages"
-msgstr "Zai&nstalowane pakiety"
-
-#: rc.cpp:31 rc.cpp:176 rc.cpp:295 rc.cpp:347
-#, no-c-format
-msgid "Alt+N"
-msgstr "Alt+N"
-
-#: rc.cpp:35 rc.cpp:81 rc.cpp:95
-#, no-c-format
-msgid "Clear filter"
-msgstr "Wyczyść filtr"
-
-#: rc.cpp:38
-#, no-c-format
-msgid "Uninstall"
-msgstr "Odinstaluj"
-
-#: rc.cpp:42
-#, no-c-format
-msgid "Uninstall selected packages..."
-msgstr "Usuwanie pakietów..."
-
-#: rc.cpp:45
-#, no-c-format
-msgid "Add to &Queue"
-msgstr "Dodaj do &kolejki"
-
-#: rc.cpp:48
-#, no-c-format
-msgid "Alt+Q"
-msgstr "Alt+K"
-
-#: rc.cpp:51
-#, no-c-format
-msgid "Add/Remove selected packages to the Installation Queue"
-msgstr "Dodaj/Usuń wybrane pakiety do/z kolejki"
-
-#: rc.cpp:57
-#, no-c-format
-msgid "Return"
-msgstr "Wróć"
-
-#: rc.cpp:60 rc.cpp:268
-#, no-c-format
-msgid "Show package details..."
-msgstr "Szczegółowe informacje o pakiecie..."
-
-#: rc.cpp:63 rc.cpp:74 rc.cpp:129 rc.cpp:240 rc.cpp:350 rc.cpp:356 rc.cpp:359
-#: rc.cpp:566
+#: kurooviewbase.cpp:74 messagebase.cpp:61 core/inspectorbase.cpp:398
+#: portage/uninstallbase.cpp:75 queue/queuebase.cpp:193
+#: config/options8.cpp:168 config/options1.cpp:185 config/options2.cpp:630
+#: config/options7.cpp:56 rc.cpp:39 rc.cpp:45 rc.cpp:237 rc.cpp:248 rc.cpp:343
+#: rc.cpp:436 rc.cpp:746 rc.cpp:749 rc.cpp:839
 #, no-c-format
 msgid "Form1"
 msgstr "Formularz1"
 
-#: rc.cpp:70
-#, no-c-format
-msgid ""
-"Portage will not check if the package you want to remove is required by "
-"another package.<br>\n"
-"Do you want to uninstall following packages?"
-msgstr ""
-"Portage nie będzie sprawdzać, czy pakietu, który chcesz usunąć, nie wymaga "
-"inny pakiet.<br>\n"
-"Czy chcesz odinstalować następujące pakiety?"
-
-#: rc.cpp:77 rc.cpp:91 rc.cpp:326
-#, no-c-format
-msgid "Form3"
-msgstr "Formularz3"
-
-#: rc.cpp:87
-#, no-c-format
-msgid ""
-"<font size=\"+1\">Etc-update History</font><br>\n"
-"<i>Click on configuration file to view changes...</i>"
-msgstr ""
-"<font size=\"+1\">Historia etc-update</font><br>\n"
-"<i>Kliknij plik konfiguracyjny, aby wyświetlić zmiany w narzędziu do "
-"porównywania różnic</i>"
-
-#: rc.cpp:98
-#, no-c-format
-msgid "Show &unmerges"
-msgstr "Wyświetl usunię&cia"
-
-#: rc.cpp:104
-#, no-c-format
-msgid "last week"
-msgstr "ten tydzień"
-
-#: rc.cpp:107
-#, no-c-format
-msgid "last month"
-msgstr "ten miesiąc"
-
-#: rc.cpp:110
-#, no-c-format
-msgid "last 6 months"
-msgstr "ostatnie pół roku"
-
-#: rc.cpp:113
-#, no-c-format
-msgid "last year"
-msgstr "ten rok "
-
-#: rc.cpp:116
-#, no-c-format
-msgid "all"
-msgstr "wszystkie"
-
-#: rc.cpp:119
-#, no-c-format
-msgid ""
-"<font size=\"+1\">Installation History</font><br>\n"
-"<i>Click on package with info to view all information</i>"
-msgstr ""
-"<font size=\"+1\">Historia instalacji</font><br>\n"
-"<i>Kliknij pakiet, aby wyświetlić wszystkie informacje</i>"
-
-#: rc.cpp:123
-#, no-c-format
-msgid "Show:"
-msgstr "Wyświetl:"
-
-#: rc.cpp:135
-#, no-c-format
-msgid "textLabel1"
-msgstr "textLabel1"
-
-#: rc.cpp:138
-#, no-c-format
-msgid ">>"
-msgstr ">>"
-
-#: rc.cpp:142
-#, no-c-format
-msgid "Next Package"
-msgstr "Następny pakiet"
-
-#: rc.cpp:147
-#, no-c-format
-msgid "<<"
-msgstr "<<"
-
-#: rc.cpp:151 rc.cpp:207
-#, no-c-format
-msgid "Previous Package"
-msgstr "Poprzedni pakiet"
-
-#: rc.cpp:154
-#, no-c-format
-msgid "Versi&ons"
-msgstr "Wers&je"
-
-#: rc.cpp:157
-#, no-c-format
-msgid "Available Versions for this package:"
-msgstr "Dostępne wersje tego pakietu:"
-
-#: rc.cpp:161
-#, no-c-format
-msgid "Emerge version"
-msgstr "Wersja emerge"
-
-#: rc.cpp:164
-#, no-c-format
-msgid "For this package always install:"
-msgstr "Instaluj zawsze:"
-
-#: rc.cpp:167
-#, no-c-format
-msgid "Stab&le Version"
-msgstr "wersję &stabilną"
-
-#: rc.cpp:170
-#, no-c-format
-msgid "Alt+L"
-msgstr "Alt+S"
-
-#: rc.cpp:173
-#, no-c-format
-msgid "Testi&ng Version"
-msgstr "wersję &testową"
-
-#: rc.cpp:179
-#, no-c-format
-msgid "Mas&ked Version"
-msgstr "wersję &zamaskowaną"
-
-#: rc.cpp:182 rc.cpp:289
-#, no-c-format
-msgid "Alt+K"
-msgstr "Alt+Z"
-
-#: rc.cpp:185
-#, no-c-format
-msgid "Select Version"
-msgstr "Wybierz wersję"
-
-#: rc.cpp:188
-#, no-c-format
-msgid ""
-"Install onl&y specific version \n"
-"and do not update further"
-msgstr ""
-"Zainstaluj &tylko określoną wersję \n"
-"i jej później nie aktualizuj"
-
-#: rc.cpp:192 rc.cpp:624
-#, no-c-format
-msgid "Alt+Y"
-msgstr "Alt+T"
-
-#: rc.cpp:195
-#, no-c-format
-msgid "&Use Flags"
-msgstr "Flagi &USE"
-
-#: rc.cpp:198
-#, no-c-format
-msgid "Add or Remove Use Flags support:"
-msgstr "Włącz lub wyłącz obsługę flag USE:"
-
-#: rc.cpp:201
-#, no-c-format
-msgid "C&alculate Use Flags"
-msgstr "&Pobierz flagi USE"
-
-#: rc.cpp:210
-#, no-c-format
-msgid "Use"
-msgstr "USE"
-
-#: rc.cpp:216 rc.cpp:225 rc.cpp:231 rc.cpp:237
-#, no-c-format
-msgid "Select version:"
-msgstr "Wybierz wersję:"
-
-#: rc.cpp:219
-#, no-c-format
-msgid "Ch&angeLog"
-msgstr "&Rejestr zmian"
-
-#: rc.cpp:222
-#, no-c-format
-msgid "E&build"
-msgstr "E&build"
-
-#: rc.cpp:228
-#, no-c-format
-msgid "Dependencies"
-msgstr "Zależności"
-
-#: rc.cpp:234
-#, no-c-format
-msgid "I&nstalled Files"
-msgstr "Zai&nstalowane pliki"
-
-#: rc.cpp:243
-#, no-c-format
-msgid "<font size=\"+1\">Packages in Installation Queue</font>"
-msgstr "<font size=\"+1\">Pakiety w kolejce instalacji</font>"
-
-#: rc.cpp:246
-#, no-c-format
-msgid "Remove &All"
-msgstr "Usuń &wszystko"
-
-#: rc.cpp:252
-#, no-c-format
-msgid "Remove all packages in Queue"
-msgstr "Instalowanie pakietów z kolejki..."
-
-#: rc.cpp:259
-#, no-c-format
-msgid "Remove selected package from Queue"
-msgstr "Usuń z kolejki"
-
-#: rc.cpp:265
-#, no-c-format
-msgid "Return, Ctrl+S"
-msgstr "Wróć, Ctrl+S"
-
-#: rc.cpp:271
-#, no-c-format
-msgid "Remove package from Q&ueue after installation"
-msgstr "Usuń pakiet z &kolejki po zainstalowaniu"
-
-#: rc.cpp:277
-#, fuzzy, no-c-format
-msgid "Download all packa&ges before installing them (--fetch-all-uri)"
-msgstr "&Pobierz wszystkie pakiety przed zainstalowaniem (--fetch-all-uri)"
-
-#: rc.cpp:280 rc.cpp:654
-#, no-c-format
-msgid "Alt+G"
-msgstr "Alt+G"
-
-#: rc.cpp:283
-#, no-c-format
-msgid "<b>Emerge Options</b>"
-msgstr "<b>Opcje emergowania</b>"
-
-#: rc.cpp:286
-#, no-c-format
-msgid "Do not add the pac&kages to the world profile (--oneshot)"
-msgstr "Nie dopisuj pa&kietów do pliku world (--oneshot)"
-
-#: rc.cpp:292
-#, no-c-format
-msgid "Force reinstall of config files (--&noconfmem)"
-msgstr "Wymuś ponowną instalację plików konfiguracyjnych (--&noconfmem)"
-
-#: rc.cpp:298
-#, no-c-format
-msgid "Step &1: Check Installation"
-msgstr "Etap &1: sprawdź instalację"
-
-#: rc.cpp:301
-#, no-c-format
-msgid "Alt+1"
-msgstr "Alt+1"
-
-#: rc.cpp:304
-#, no-c-format
-msgid "Check packages in Queue with emerge pretend"
-msgstr "Sprawdź pakiety w kolejce za pomocą emerge --pretend"
-
-#: rc.cpp:307 queue/queuetab.cpp:280
-#, no-c-format
-msgid "Step &2: Start Installation"
-msgstr "Etap &2: rozpoczęcie instalacji"
-
-#: rc.cpp:310 rc.cpp:642
-#, no-c-format
-msgid "Alt+2"
-msgstr "Alt+2"
-
-#: rc.cpp:313
-#, no-c-format
-msgid "Start emerge of all packages in Queue"
-msgstr "Instalowanie pakietów z kolejki..."
-
-#: rc.cpp:316
-#, no-c-format
-msgid ""
-"<b>Summary</b><br>\n"
-"<font color=\"gray\">Installation Queue is empty.</font>"
-msgstr ""
-"<b>Podsumowanie</b><br>\n"
-"<font color=\"gray\">Kolejka instalacji jest pusta.</font>"
-
-#: rc.cpp:320
-#, no-c-format
-msgid "&Portage"
-msgstr "&Portage"
-
-#: rc.cpp:329
-#, no-c-format
-msgid "Ver&bose"
-msgstr "Try&b informacyjny"
-
-#: rc.cpp:332
-#, no-c-format
-msgid "Alt+B"
-msgstr "Alt+P"
-
-#: rc.cpp:335
-#, no-c-format
-msgid "Save log on e&xit"
-msgstr "Zapisz dziennik przy wy&jściu"
-
-#: rc.cpp:338
-#, no-c-format
-msgid "Alt+X"
-msgstr "Alt+J"
-
-#: rc.cpp:341
-#, no-c-format
-msgid "<font size=\"+1\">Activity Log</font>"
-msgstr "<font size=\"+1\">Dziennik aktywności</font>"
-
-#: rc.cpp:344
-#, fuzzy, no-c-format
-msgid "Termi&nal input"
-msgstr "Kończenie"
-
-#: rc.cpp:353
-#, no-c-format
-msgid "Warning!"
-msgstr "Ostrzeżenie!"
-
-#: rc.cpp:362
-#, no-c-format
-msgid "&Build"
-msgstr "&Kompilacja"
-
-#: rc.cpp:365
-#, no-c-format
-msgid "Build options"
-msgstr "Opcje kompilacji"
-
-#: rc.cpp:368
-#, no-c-format
-msgid "i386-pc-linux-gnu"
-msgstr "i386-pc-linux-gnu"
-
-#: rc.cpp:371
-#, no-c-format
-msgid "i486-pc-linux-gnu"
-msgstr "i486-pc-linux-gnu"
-
-#: rc.cpp:374
-#, no-c-format
-msgid "i586-pc-linux-gnu"
-msgstr "i586-pc-linux-gnu"
-
-#: rc.cpp:377
-#, no-c-format
-msgid "i686-pc-linux-gnu"
-msgstr "i686-pc-linux-gnu"
-
-#: rc.cpp:380
-#, no-c-format
-msgid "alpha-unknown-linux-gnu"
-msgstr "alpha-unknown-linux-gnu"
-
-#: rc.cpp:383
-#, no-c-format
-msgid "powerpc-unknown-linux-gnu"
-msgstr "powerpc-unknown-linux-gnu"
-
-#: rc.cpp:386
-#, no-c-format
-msgid "powerpc64-unknown-linux-gnu"
-msgstr "powerpc64-unknown-linux-gnu"
-
-#: rc.cpp:389
-#, no-c-format
-msgid "sparc-unknown-linux-gnu"
-msgstr "sparc-unknown-linux-gnu"
-
-#: rc.cpp:392
-#, no-c-format
-msgid "hppa-unknown-linux-gnu"
-msgstr "hppa-unknown-linux-gnu"
-
-#: rc.cpp:395
-#, no-c-format
-msgid "hppa1.1-unknown-linux-gnu"
-msgstr "hppa1.1-unknown-linux-gnu"
-
-#: rc.cpp:398
-#, no-c-format
-msgid "hppa2.0-unknown-linux-gnu"
-msgstr "hppa2.0-unknown-linux-gnu"
-
-#: rc.cpp:401
-#, no-c-format
-msgid "mips-unknown-linux-gnu"
-msgstr "mips-unknown-linux-gnu"
-
-#: rc.cpp:404
-#, no-c-format
-msgid "x86_64-pc-linux-gnu"
-msgstr "x86_64-pc-linux-gnu"
-
-#: rc.cpp:407
-#, no-c-format
-msgid "CHOST"
-msgstr "CHOST"
-
-#: rc.cpp:410
-#, no-c-format
-msgid "CFLAGS"
-msgstr "CFLAGS"
-
-#: rc.cpp:413
-#, no-c-format
-msgid "CXXFLAGS"
-msgstr "CXXFLAGS"
-
-#: rc.cpp:416
-#, no-c-format
-msgid "MAKEOPTS"
-msgstr "MAKEOPTS"
-
-#: rc.cpp:419
-#, no-c-format
-msgid "USE"
-msgstr "USE"
-
-#: rc.cpp:422
-#, no-c-format
-msgid "&Advanced build"
-msgstr "&Zaawansowana kompilacja"
-
-#: rc.cpp:425
-#, no-c-format
-msgid "Advanced build options"
-msgstr "Zaawansowane opcje kompilacji"
-
-#: rc.cpp:428
-#, no-c-format
-msgid "CBUILD"
-msgstr "CBUILD"
-
-#: rc.cpp:431
-#, no-c-format
-msgid "BUILD_PREFIX"
-msgstr "BUILD_PREFIX"
-
-#: rc.cpp:434
-#, no-c-format
-msgid "CCACHE_SIZE"
-msgstr "CCACHE_SIZE"
-
-#: rc.cpp:437
-#, no-c-format
-msgid "ACCEPT_KEYWORDS"
-msgstr "ACCEPT_KEYWORDS"
-
-#: rc.cpp:440
-#, no-c-format
-msgid "PORTAGE_NICENESS"
-msgstr "PORTAGE_NICENESS"
-
-#: rc.cpp:443
-#, no-c-format
-msgid "NOCOLOR"
-msgstr "NOCOLOR"
-
-#: rc.cpp:446
-#, no-c-format
-msgid "DEBUGBUILD"
-msgstr "DEBUGBUILD"
-
-#: rc.cpp:449
-#, no-c-format
-msgid "yes"
-msgstr "yes"
-
-#: rc.cpp:452
-#, no-c-format
-msgid "no"
-msgstr "no"
-
-#: rc.cpp:455
-#, no-c-format
-msgid "true"
-msgstr "true"
-
-#: rc.cpp:458
-#, no-c-format
-msgid "false"
-msgstr "false"
-
-#: rc.cpp:461 history/history.cpp:273
-#, no-c-format
-msgid "AUTOCLEAN"
-msgstr "AUTOCLEAN"
-
-#: rc.cpp:464
-#, no-c-format
-msgid "USE_ORDER"
-msgstr "USE_ORDER"
-
-#: rc.cpp:467
-#, no-c-format
-msgid "CLEAN_DELAY"
-msgstr "CLEAN_DELAY"
-
-#: rc.cpp:470
-#, no-c-format
-msgid "FEATURES"
-msgstr "FEATURES"
-
-#: rc.cpp:473
-#, no-c-format
-msgid "Directories"
-msgstr "Katalogi"
-
-#: rc.cpp:476
-#, no-c-format
-msgid "Portage directories"
-msgstr "Katalogi Portage"
-
-#: rc.cpp:479
-#, no-c-format
-msgid "RPMDIR"
-msgstr "RPMDIR"
-
-#: rc.cpp:482
-#, no-c-format
-msgid "PORT_LOGDIR"
-msgstr "PORT_LOGDIR"
-
-#: rc.cpp:485
-#, no-c-format
-msgid "PORTAGE_BINHOST"
-msgstr "PORTAGE_BINHOST"
-
-#: rc.cpp:488
-#, no-c-format
-msgid "PORTDIR"
-msgstr "PORTDIR"
-
-#: rc.cpp:491
-#, no-c-format
-msgid "ROOT"
-msgstr "ROOT"
-
-#: rc.cpp:494
-#, no-c-format
-msgid "PORTAGE_TMPDIR"
-msgstr "PORTAGE_TMPDIR"
-
-#: rc.cpp:497
-#, no-c-format
-msgid "PORTDIR_OVERLAY"
-msgstr "PORTDIR_OVERLAY"
-
-#: rc.cpp:500
-#, no-c-format
-msgid "PKG_DIR"
-msgstr "PKG_DIR"
-
-#: rc.cpp:503
-#, no-c-format
-msgid "DISTDIR"
-msgstr "DISTDIR"
-
-#: rc.cpp:506
-#, no-c-format
-msgid "PKG_TMPDIR"
-msgstr "PKG_TMPDIR"
-
-#: rc.cpp:509
-#, no-c-format
-msgid "Confi&gurations"
-msgstr "Pliki konfi&guracyjne"
-
-#: rc.cpp:512
-#, no-c-format
-msgid "Config files in /etc"
-msgstr "Pliki konfiguracyjne w katalogu /etc"
-
-#: rc.cpp:515
-#, no-c-format
-msgid "CONFIG_PROTECT"
-msgstr "CONFIG_PROTECT"
-
-#: rc.cpp:518
-#, no-c-format
-msgid "CONFIG_PROTECT_MASK"
-msgstr "CONFIG_PROTECT_MASK"
-
-#: rc.cpp:521
-#, no-c-format
-msgid "&Network"
-msgstr "&Sieć"
-
-#: rc.cpp:524
-#, no-c-format
-msgid "Download"
-msgstr "Pobieranie"
-
-#: rc.cpp:527
-#, no-c-format
-msgid "HTTP_PROXY"
-msgstr "HTTP_PROXY"
-
-#: rc.cpp:530
-#, no-c-format
-msgid "FTP_PROXY"
-msgstr "FTP_PROXY"
-
-#: rc.cpp:533
-#, no-c-format
-msgid "RESUMECOMMAND"
-msgstr "RESUMECOMMAND"
-
-#: rc.cpp:536
-#, no-c-format
-msgid "FETCHCOMMAND"
-msgstr "FETCHCOMMAND"
-
-#: rc.cpp:539
-#, no-c-format
-msgid "GENTOO_MIRRORS"
-msgstr "GENTOO_MIRRORS"
-
-#: rc.cpp:542
-#, no-c-format
-msgid "S&ync"
-msgstr "S&ynchronizacja"
-
-#: rc.cpp:545
-#, no-c-format
-msgid "Sync"
-msgstr "Synchronizacja"
-
-#: rc.cpp:548
-#, no-c-format
-msgid "RSYNC_PROXY"
-msgstr "RSYNC_PROXY"
-
-#: rc.cpp:551
-#, no-c-format
-msgid "RSYNC_TIMEOUT"
-msgstr "RSYNC_TIMEOUT"
-
-#: rc.cpp:554
-#, no-c-format
-msgid "SYNC"
-msgstr "SYNC"
-
-#: rc.cpp:557
-#, no-c-format
-msgid "RSYNC_RETRIES"
-msgstr "RSYNC_RETRIES"
-
-#: rc.cpp:560
-#, no-c-format
-msgid "RSYNC_EXCLUDEFROM"
-msgstr "RSYNC_EXCLUDEFROM"
-
-#: rc.cpp:563
-#, no-c-format
-msgid "RSYNC_RATELIMIT"
-msgstr "RSYNC_RATELIMIT"
-
-#: rc.cpp:569
-#, no-c-format
-msgid "Etc-update merging frontend"
-msgstr "Interfejs narzędzia scalającego etc-update"
-
-#: rc.cpp:572
-#, no-c-format
-msgid "External tool"
-msgstr "Zewnętrzne narzędzie"
-
-#: rc.cpp:575
-#, no-c-format
-msgid "Emerge check update options"
-msgstr "Opcje sprawdzania aktualizacji"
-
-#: rc.cpp:578
-#, no-c-format
-msgid ""
-"<i>Forces emerge to consider the entire dependency tree of packages.<br>\n"
-"Refresh Updates for changes to take effect.</i>"
-msgstr ""
-"<i>Wymusza sprawdzanie całego drzewa zależności pakietu.<br>\n"
-"Odśwież widok aktualizacji, aby uwzględnić zmiany.<i>"
-
-#: rc.cpp:582
-#, no-c-format
-msgid "&Deep"
-msgstr "&Głęboko"
-
-#: rc.cpp:585
-#, no-c-format
-msgid "Alt+D"
-msgstr "Alt+G"
-
-#: rc.cpp:588
-#, no-c-format
-msgid "Package filter options"
-msgstr "Opcje filtrowania pakietów"
-
-#: rc.cpp:593
-#, no-c-format
-msgid "Click to select the background color of the OSD."
-msgstr "Kliknij, aby wybrać kolor tła OSD."
-
-#: rc.cpp:596 rc.cpp:615
-#, no-c-format
-msgid "The color of the OSD background."
-msgstr "Kolor tła OSD."
-
-#: rc.cpp:600
-#, no-c-format
-msgid "Click to select the color of the OSD text."
-msgstr "Kliknij, aby wybrać kolor tekstu OSD."
-
-#: rc.cpp:603 rc.cpp:609
-#, no-c-format
-msgid "The color of the OSD text."
-msgstr "Kolor tekstu OSD."
-
-#: rc.cpp:606
-#, no-c-format
-msgid "No matching packages found"
-msgstr "Nie znaleziono pasujących pakietów"
-
-#: rc.cpp:612
-#, no-c-format
-msgid "Matching packages found"
-msgstr "Znaleziono pasujące pakiety"
-
-#: rc.cpp:618
-#, no-c-format
-msgid "Kuroo options"
-msgstr "Opcje programu Kuroo"
-
-#: rc.cpp:621
-#, no-c-format
-msgid "Dock kuroo in s&ystem tray (close does not exit kuroo)"
-msgstr "Za&dokuj program (nie zostanie zamknięty po kliknięciu ikony krzyżyka)"
-
-#: rc.cpp:627
-#, no-c-format
-msgid "Package options"
-msgstr "Opcje filtrowania pakietów"
-
-#: rc.cpp:630
-#, no-c-format
-msgid "<i>Restart for changes to take effect.</i>"
-msgstr "<i>Uruchom program ponownie, aby wprowadzić zmiany.</i>"
-
-#: rc.cpp:633
-#, no-c-format
-msgid "Show inst&alled packages in separate column"
-msgstr "Wyświetlaj zai&nstalowane pakiety w oddzielnej kolumnie"
-
-#: rc.cpp:639
-#, no-c-format
-msgid "Portage version >= &2.1"
-msgstr "Wersja Portage >= &2.1"
-
-#: rc.cpp:645 core/etcupdate.cpp:61 core/etcupdate.cpp:75
-#: core/etcupdate.cpp:186 main.cpp:43
+#: intro/intro.cpp:465 core/etcupdate.cpp:66 core/etcupdate.cpp:156
+#: main.cpp:43 rc.cpp:3
 #, no-c-format
 msgid "Kuroo"
 msgstr "Kuroo"
 
-#: rc.cpp:648
-#, no-c-format
-msgid "Release information"
-msgstr "Informacje o wydaniu"
-
-#: rc.cpp:651
+#: intro/intro.cpp:467 rc.cpp:10
 #, no-c-format
 msgid "Backup all user editable porta&ge files before proceeding."
 msgstr ""
 "Najpierw utwórz kopie zapasowe wszystkich plików związanych z Porga&ge, "
 "które może edytować użytkownik."
 
-#: history/mergelistview.cpp:57
-msgid "Configuration file"
-msgstr "Plik konfiguracyjny"
+#: intro/intro.cpp:468 queue/queuebase.cpp:219 rc.cpp:13 rc.cpp:322
+#, no-c-format
+msgid "Alt+G"
+msgstr "Alt+G"
 
-#: history/history.cpp:168
-msgid " to "
-msgstr " w "
+#: intro/intro.cpp:470 rc.cpp:6
+#, no-c-format
+msgid "Release information"
+msgstr "Informacje o wydaniu"
 
-#: history/history.cpp:169
-msgid " of "
-msgstr " z "
+#: intro/introdlg.cpp:48
+msgid "Ok"
+msgstr "OK"
 
-#: history/history.cpp:184
-msgid "Compiling/Merging"
-msgstr "Kompilowanie/scalanie"
+#: intro/introdlg.cpp:54
+#, fuzzy
+msgid ""
+"Kuroo - A KDE Portage frontend that allows you to do most common software "
+"maintenance tasks on gentoo systems</p><br><a href=http://trac.kuroo.org/"
+"kuroo/wiki/TellUs>We love to hear from you. Tell us what you think of Kuroo!"
+"</a><br>"
+msgstr ""
+"Kuroo  - nakładka graficzna na Portage dla środowiska KDE, która ułatwia "
+"zarządzanie oprogramowaniem w systemach z rodziny Gentoo</p><b>Nowe funkcje</"
+"b><br>jednolity widok pakietów, szybkie przeglądanie i wyszukiwanie przy "
+"użyciu filtrów,<br>dwukolumnowy selektor, inspektor pakietów, paski postępu, "
+"edytor flag USE, historia emergowania i konfiguracji, kolejka emergowania."
+"<br ><br><a href=http://kuroo.org/kuroo/wiki/TellUs>Podziel się opinią o "
+"programie Kuroo!</a><br>"
 
-#: history/history.cpp:185
-msgid "Post-Build Cleaning"
-msgstr "Zamiatanie po kompilacji"
+#: intro/introdlg.cpp:61
+#, fuzzy
+msgid ""
+"<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></"
+"tr>"
+msgstr ""
+"<qt><table width=300><tr><td>W katalogu %1 zapisz kopie zapasowe "
+"następujących plików:</td></tr>"
 
-#: history/history.cpp:186
-msgid "Cleaning"
-msgstr "Zamiatanie"
+#: systemtray.cpp:41
+msgid "Kuroo - Portage frontend"
+msgstr "Kuroo - nakładka graficzna na Portage"
 
-#: history/history.cpp:195
-msgid "Started emerge on"
-msgstr "Emergowanie uruchomiono o"
+#: systemtray.cpp:42
+msgid "&Configure Kuroo..."
+msgstr "&Konfiguruj Kuroo..."
 
-#: history/history.cpp:228
-msgid "completed emerge"
-msgstr "zakończono emergowanie"
+#: systemtray.cpp:43
+msgid "Pause Emerge"
+msgstr ""
 
-#: history/history.cpp:237
-msgid "unmerge success"
-msgstr "usuwanie powiodło się"
+#: systemtray.cpp:44
+msgid "Unpause Emerge"
+msgstr ""
 
-#: history/history.cpp:245 history/history.cpp:246
-msgid "Synchronizing Portage..."
-msgstr "Synchronizowanie Portage..."
+#: logs/log.cpp:60
+msgid "Writing %1kuroo.log."
+msgstr "Zapisywanie pliku %1kuroo.log"
 
-#: history/history.cpp:254 history/history.cpp:255
-msgid "Sync completed."
-msgstr "Zakończono synchronizację."
+#: logs/log.cpp:60 config/configdialog.cpp:106
+msgid "Saving"
+msgstr "Zapisywanie"
 
-#: history/history.cpp:274
-msgid "Unmerging"
-msgstr "Usuwanie"
+#: logs/logsbase.cpp:114 history/mergebase.cpp:175 history/historybase.cpp:141
+#: rc.cpp:17 rc.cpp:842 rc.cpp:862
+#, no-c-format
+msgid "Form3"
+msgstr "Formularz3"
 
-#: history/history.cpp:275
-msgid "Finished. Cleaning up"
-msgstr "Zakończono. Zamiatanie..."
+#: logs/logsbase.cpp:115 rc.cpp:20
+#, no-c-format
+msgid "Ver&bose"
+msgstr "Try&b informacyjny"
 
-#: history/history.cpp:276
-msgid "Exiting successfully"
-msgstr "Wyjście powiodło się"
+#: logs/logsbase.cpp:116 queue/queuebase.cpp:225 config/options1.cpp:190
+#: rc.cpp:23 rc.cpp:340 rc.cpp:358
+#, no-c-format
+msgid "Alt+B"
+msgstr "Alt+P"
 
-#: history/history.cpp:277 kuroo.cpp:107
-msgid "Terminating"
-msgstr "Kończenie"
+#: logs/logsbase.cpp:117 rc.cpp:26
+#, no-c-format
+msgid "Save log on e&xit"
+msgstr "Zapisz dziennik przy wy&jściu"
 
-#: history/historylistview.cpp:58
-msgid "Date"
-msgstr "Data"
+#: logs/logsbase.cpp:118 config/options1.cpp:201 rc.cpp:29 rc.cpp:385
+#, no-c-format
+msgid "Alt+X"
+msgstr "Alt+J"
 
-#: history/historylistview.cpp:59 queue/queuelistview.cpp:174
-msgid "Duration"
-msgstr "Czas trwania"
+#: logs/logsbase.cpp:119 rc.cpp:32
+#, no-c-format
+msgid "<font size=\"+1\">Activity Log</font>"
+msgstr "<font size=\"+1\">Dziennik aktywności</font>"
 
-#: history/historylistview.cpp:60 history/historytab.cpp:138
-msgid "Emerge info"
-msgstr "Informacje o emergowaniu"
+#: logs/logsbase.cpp:120 rc.cpp:35
+#, no-c-format
+msgid "Manual text input..."
+msgstr ""
 
-#: history/historytab.cpp:138
-msgid "Installation message for %1:"
-msgstr "Komunikat instalacyjny dotyczący %1:"
+#: logs/logstab.cpp:94
+msgid "User Input"
+msgstr "Dane użytkownika"
 
-#: kuroo.cpp:86 kuroo.cpp:88 kuroo.cpp:203 kuroo.cpp:205
+#: logs/logstab.cpp:94
+msgid "Enter text:"
+msgstr "Wprowadź tekst"
+
+#: kuroo.cpp:86 kuroo.cpp:88 kuroo.cpp:207 kuroo.cpp:209
 msgid "settings"
 msgstr "ustawienia"
 
@@ -1130,38 +189,39 @@ msgstr "ustawienia"
 msgid "Kuroo is not responding. Attempting to terminate kuroo!"
 msgstr "Kuroo nie odpowiada. Ubij gada!"
 
-#: kuroo.cpp:121
-msgid "&Information"
-msgstr "&Informacje "
+#: kuroo.cpp:107 history/history.cpp:282
+msgid "Terminating"
+msgstr "Kończenie"
 
-#: kuroo.cpp:124
+#: kuroo.cpp:130
+#, fuzzy
+msgid "&Release information"
+msgstr "Informacje o wydaniu"
+
+#: kuroo.cpp:133
 msgid "&Refresh Packages"
 msgstr "Odśwież widok &Pakiety"
 
-#: kuroo.cpp:127
+#: kuroo.cpp:136
 msgid "&Refresh Updates"
 msgstr "Odśwież widok Akt&ualizacje"
 
-#: kuroo.cpp:130
+#: kuroo.cpp:139
 msgid "&Sync Portage"
 msgstr "&Synchronizuj Portage"
 
-#: kuroo.cpp:133
-msgid "&Run etc-update"
-msgstr "Uruchom &etc-update"
-
-#: kuroo.cpp:190
+#: kuroo.cpp:194
 msgid ""
 "<qt>Do you want to synchronize portage?<br>This will take a couple of "
 "minutes...</qt>"
 msgstr ""
 "<qt>Zsynchronizować Portage?<br>Operacja może potrwać kilka minut...</qt>"
 
-#: kuroo.cpp:191
+#: kuroo.cpp:195
 msgid "Last sync: %1"
 msgstr "Ostatnia synchronizacja: %1"
 
-#: kuroo.cpp:268
+#: kuroo.cpp:272
 msgid ""
 "<qt>Kuroo is busy<br><br>Do you want to quit?<br>All jobs will be aborted.</"
 "qt>"
@@ -1169,39 +229,411 @@ msgstr ""
 "<qt>Program Kuroo jest zajęty<br><br>Czy chcesz go zamknąć?<br>Wszystkie "
 "zadania zostaną anulowane.</qt>"
 
-#: core/packageitem.cpp:295
-msgid "Not on %1"
-msgstr "Nie w %1"
+#: messagebase.cpp:62 rc.cpp:42
+#, no-c-format
+msgid "Warning!"
+msgstr "Ostrzeżenie!"
 
-#: core/packageitem.cpp:298 core/versionview.cpp:115
-msgid "Hardmasked"
-msgstr "Zamaskowane na sztywno"
+#: core/filewatcher.cpp:68
+msgid "Portage version is upgraded to 2.1. Please refresh package view."
+msgstr "Portage uaktualniono do wersji 2.1. Odśwież widok pakietów."
 
-#: core/packageitem.cpp:303 core/versionview.cpp:112
+#: core/filewatcher.cpp:69
+msgid "Portage version"
+msgstr "Wersja Portage"
+
+#: core/emerge.cpp:76
+msgid "Can not process input! Emerge is not running."
+msgstr ""
+"Nie możne przetworzyć danych wejściowych! Emergowanie nie jest uruchomione."
+
+#: core/emerge.cpp:138 core/emerge.cpp:259
+msgid ""
+"\n"
+"Error: Emerge didn't start. "
+msgstr ""
+"\n"
+"Błąd: Emergowanie nie rozpoczęło się. "
+
+#: core/emerge.cpp:148
+msgid ""
+"\n"
+"Emerge %1 started..."
+msgstr ""
+"\n"
+"Rozpoczęło się emergowanie pakietu %1..."
+
+#: core/emerge.cpp:149 core/emerge.cpp:183
+msgid "Installing packages in queue..."
+msgstr "Instalowanie pakietów z kolejki..."
+
+#: core/emerge.cpp:165
+msgid ""
+"\n"
+"Emerge is not running or cannot be paused..."
+msgstr ""
+
+#: core/emerge.cpp:181
+#, fuzzy
+msgid ""
+"\n"
+"Emerge is not paused..."
+msgstr ""
+"\n"
+"Rozpoczęło się emergowanie pakietu %1..."
+
+#: core/emerge.cpp:220
+#, fuzzy
+msgid ""
+"\n"
+"Error: Quickpkg didn't start. "
+msgstr ""
+"\n"
+"Błąd: Emergowanie nie rozpoczęło się. "
+
+#: core/emerge.cpp:224
+#, fuzzy
+msgid "Quickpkg %1 started..."
+msgstr ""
+"\n"
+"Rozpoczęło się emergowanie pakietu %1..."
+
+#: core/emerge.cpp:225
+#, fuzzy
+msgid "Building binary packages..."
+msgstr "Zbieranie informacji o zainstalowanych pakietach..."
+
+#: core/emerge.cpp:266
+msgid ""
+"\n"
+"Emerge pretend %1 started..."
+msgstr ""
+"\n"
+"Uruchomiono symulację emergowania pakietu %1..."
+
+#: core/emerge.cpp:267
+msgid "Checking installation queue..."
+msgstr "Sprawdzanie kolejki instalacji..."
+
+#: core/emerge.cpp:294 core/emerge.cpp:323 core/emerge.cpp:364
+msgid ""
+"\n"
+"Error: Emerge didn't start."
+msgstr ""
+"\n"
+"Błąd: emergowanie nie rozpoczęło się."
+
+#: core/emerge.cpp:301
+msgid ""
+"\n"
+"Unmerge %1 started..."
+msgstr ""
+"\n"
+"Rozpoczęto usuwanie pakietu %1..."
+
+#: core/emerge.cpp:302
+msgid "Uninstalling packages..."
+msgstr "Usuwanie pakietów..."
+
+#: core/emerge.cpp:330
+msgid ""
+"\n"
+"Emerge synchronize Portage Tree started..."
+msgstr ""
+"\n"
+"Rozpoczęto synchronizowanie drzewa Portage..."
+
+#: core/emerge.cpp:331
+msgid "Synchronizing portage tree..."
+msgstr "Synchronizowanie drzewa Portage..."
+
+#: core/emerge.cpp:371
+msgid ""
+"\n"
+"Emerge check package updates started..."
+msgstr ""
+"\n"
+"Rozpoczęto sprawdzanie aktualizacji pakietów..."
+
+#: core/emerge.cpp:372
+msgid "Checking for package updates..."
+msgstr "Sprawdzanie aktualizacji..."
+
+#: core/emerge.cpp:467
+msgid "Root access required!"
+msgstr "Wymagane uprawnienia roota!"
+
+#: core/emerge.cpp:473
+msgid "There is no ebuilds to satisfy %1"
+msgstr "Brak ebuildów odpowiadających żądaniu %1"
+
+#: core/emerge.cpp:523 core/emerge.cpp:825 core/scanupdatesjob.cpp:143
+#: core/scanportagejob.cpp:324 core/scanportagejob.cpp:395
+#: core/portagefiles.cpp:146 core/portagefiles.cpp:237
+#: core/portagefiles.cpp:328 core/portagefiles.cpp:419
+#: core/cacheportagejob.cpp:167 statusbar.cpp:102 queue/queuetab.cpp:461
+#: history/history.cpp:266 history/history.cpp:267
+msgid "Done."
+msgstr "Gotowe."
+
+#: core/emerge.cpp:532
+msgid "You must run Kuroo as root to unmask packages!"
+msgstr "Aby emergować pakiety, należy uruchomić program Kuroo jako root!"
+
+#: core/emerge.cpp:533
+msgid "Auto-unmasking packages"
+msgstr "Automatyczne odmaskowanie pakietów"
+
+#: core/emerge.cpp:569 core/emerge.cpp:667
+#, fuzzy
+msgid ""
+"\n"
+"Error: Eclean didn't start."
+msgstr ""
+"\n"
+"Błąd: emergowanie nie rozpoczęło się."
+
+#: core/emerge.cpp:577
+msgid ""
+"\n"
+"Eclean of distfiles started"
+msgstr ""
+
+#: core/emerge.cpp:578 core/emerge.cpp:678
+#, fuzzy
+msgid "Cleaning distfiles..."
+msgstr "Zbieranie informacji o zainstalowanych pakietach..."
+
+#: core/emerge.cpp:598 core/emerge.cpp:697 core/emerge.cpp:738
+#, fuzzy
+msgid ""
+"\n"
+"Error: revdep-rebuild failed to start."
+msgstr ""
+"\n"
+"Błąd: emergowanie nie rozpoczęło się."
+
+#: core/emerge.cpp:607 core/emerge.cpp:706 core/emerge.cpp:747
+msgid ""
+"\n"
+"Revdep-rebuild Running..."
+msgstr ""
+
+#: core/emerge.cpp:608 core/emerge.cpp:707 core/emerge.cpp:748
+#, fuzzy
+msgid "Running revdep-rebuild..."
+msgstr ""
+"\n"
+"Wykonywanie etc-update..."
+
+#: core/emerge.cpp:624
+msgid ""
+"\n"
+"Revdep-rebuildcomplete"
+msgstr ""
+
+#: core/emerge.cpp:625 core/emerge.cpp:641 core/emerge.cpp:668
+#, fuzzy
+msgid "Done"
+msgstr "Gotowe."
+
+#: core/emerge.cpp:640
+msgid ""
+"\n"
+"Eclean of distfiles complete"
+msgstr ""
+
+#: core/emerge.cpp:677
+#, fuzzy
+msgid ""
+"\n"
+"Eclean of packages started"
+msgstr ""
+"\n"
+"Rozpoczęto sprawdzanie aktualizacji pakietów..."
+
+#: core/emerge.cpp:719
+#, fuzzy
+msgid ""
+"\n"
+"Ecleaning packages complete"
+msgstr " wybrane pakiety"
+
+#: core/emerge.cpp:720
+msgid "Ready"
+msgstr ""
+
+#: core/emerge.cpp:835
+msgid "Important"
+msgstr "Ważne"
+
+#: core/emerge.cpp:835
+msgid "Please check log for more information!"
+msgstr "Więcej informacji w dzienniku!"
+
+#: core/emerge.cpp:848 core/emerge.cpp:857
+msgid "%1 is not available on your architecture %2!<br><br>"
+msgstr "Pakiet %1 nie jest dostępny dla architektury %2!<br><br>"
+
+#: core/emerge.cpp:849
+msgid ""
+"<b>missing keyword</b> means that the application has not been tested on "
+"your architecture yet.<br>Ask the architecture porting team to test the "
+"package or test it for them and report your findings on Gentoo bugzilla "
+"website."
+msgstr ""
+"<br><b>brakujące słowo kluczowe</b> oznacza, że działanie aplikacji nie "
+"zostało jeszcze sprawdzone w wybranej architekturze. Poproś zespół zajmujący "
+"się tą architekturą o przetestowanie pakietu lub zrób to samodzielnie, a "
+"następnie podziel się spostrzeżeniami, korzystając z bugzilli systemu Gentoo."
+
+#: core/emerge.cpp:853
+msgid "Missing Keyword"
+msgstr "Brakujące słowo kluczowe "
+
+#: core/emerge.cpp:858
+msgid ""
+"<br><b>-* keyword</b> means that the application does not work on your "
+"architecture.<br>If you believe the package does work file a bug at Gentoo "
+"bugzilla website."
+msgstr ""
+"<br>Oznaczenie <b>-* słowo kluczowe</b> oznacza, że ta aplikacja jeszcze nie "
+"działa na wybranej architekturze.<br>Jeśli uważasz, że z programu można "
+"korzystać, zgłoś błąd w bugzilli systemu Gentoo."
+
+#: core/emerge.cpp:861
+msgid "-* Keyword"
+msgstr "-* Słowo kluczowe "
+
+#: core/emerge.cpp:865
+msgid "Please add package to \"package.unmask\"."
+msgstr "Dopisz pakiet do pliku \"package.unmask\"."
+
+#: core/emerge.cpp:868
+msgid ""
+"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr ""
+"<qt>Nie można zemergować zamaskowanego pakietu!<br>Czy chcesz odmaskować "
+"pakiet <b>%1</b>?</qt>"
+
+#: core/emerge.cpp:869 core/emerge.cpp:883
+msgid "Unmask"
+msgstr "Odmaskuj"
+
+#: core/emerge.cpp:879
+msgid "Please add package to \"package.keywords\"."
+msgstr "Dopisz pakiet do pliku \"package.keywords\"."
+
+#: core/emerge.cpp:882
+msgid ""
+"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
+msgstr ""
+"<qt>Nie można zemergować pakietu testowego!<br>Czy chcesz odmaskować pakiet "
+"<b>%1</b>?</qt>"
+
+#: core/versionview.cpp:68 queue/queuelistview.cpp:177
+msgid "Version"
+msgstr "Wersja"
+
+#: core/versionview.cpp:69
+msgid "Stability"
+msgstr "Stabilność"
+
+#: core/versionview.cpp:70 queue/queuelistview.cpp:179
+msgid "Size"
+msgstr "Rozmiar"
+
+#: core/versionview.cpp:87 core/packageitem.cpp:285
 msgid "Testing"
 msgstr "Testowe"
 
-#: core/packageitem.cpp:308
+#: core/versionview.cpp:90 core/packageitem.cpp:280
+msgid "Hardmasked"
+msgstr "Zamaskowane na sztywno"
+
+#: core/scanupdatesjob.cpp:74
+msgid "Refreshing updates view..."
+msgstr "Odświeżanie widoku aktualizacji..."
+
+#: core/packageitem.cpp:277
+msgid "Not on %1"
+msgstr "Nie w %1"
+
+#: core/packageitem.cpp:290
 msgid "Stable"
 msgstr "Stabilne"
 
-#: core/packageitem.cpp:310
+#: core/packageitem.cpp:292
 msgid "Not available"
 msgstr "Niedostępny"
+
+#: core/scanportagejob.cpp:89
+msgid "Refreshing Portage packages view..."
+msgstr "Odświeżanie widoku pakietów w Portage..."
+
+#: core/scanportagejob.cpp:341
+msgid "Collecting installed packages..."
+msgstr "Zbieranie informacji o zainstalowanych pakietach..."
+
+#: core/etcupdate.cpp:66
+msgid "Please specify merge tool in settings!"
+msgstr "Określ narzędzie scalające w ustawieniach!"
+
+#: core/etcupdate.cpp:140
+msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
+msgstr ""
+"<font color=red>Ostrzeżenie!<br>Element %1 był edytowany przez użytkownika.</"
+"font><br>"
+
+#: core/etcupdate.cpp:154
+msgid "%1 didn't start."
+msgstr "%1 nie rozpoczęło się."
+
+#: core/etcupdate.cpp:155
+msgid "%1 could not start!"
+msgstr "Nie można uruchomić %1!"
+
+#: core/etcupdate.cpp:159
+msgid "Merging changes in '%1'."
+msgstr "Scalanie zmian w pliku '%1'."
+
+#: core/etcupdate.cpp:215
+msgid "Deleting '%1'. Backup saved in %2."
+msgstr "Usuwanie elementu %1. Kopię zapasową zapisano w %2."
+
+#: core/global.cpp:138
+#, c-format
+msgid "%1d "
+msgstr "%1d "
+
+#: core/categorieslistview.cpp:61 core/categorieslistview.cpp:162
+#: core/categorieslistview.cpp:163 core/categorieslistview.cpp:216
+#: core/categorieslistview.cpp:263 core/categorieslistview.cpp:264
+#: core/categorieslistview.cpp:279 core/categorieslistview.cpp:280
+msgid "All"
+msgstr "Wszystkie"
+
+#: core/categorieslistview.cpp:130 core/categorieslistview.cpp:131
+msgid "Category"
+msgstr "Kategoria"
+
+#: core/categorieslistview.cpp:195 core/categorieslistview.cpp:196
+msgid "Subcategory"
+msgstr "Podkategoria"
 
 #: core/packageinspector.cpp:55
 msgid "Package details"
 msgstr "Szczegółowe informacje o pakiecie"
 
-#: core/packageinspector.cpp:265 core/packageinspector.cpp:290
+#: core/packageinspector.cpp:299 core/packageinspector.cpp:324
 msgid "<qt>Settings are changed!<br>Do you want to save them?</qt>"
 msgstr "<qt>Zmieniono ustawienia!<br>Czy chcesz je zapisać?</qt>"
 
-#: core/packageinspector.cpp:266 core/packageinspector.cpp:291
+#: core/packageinspector.cpp:300 core/packageinspector.cpp:325
 msgid "Saving settings"
 msgstr "Zapisywanie ustawień"
 
-#: core/packageinspector.cpp:357 core/packageinspector.cpp:853
+#: core/packageinspector.cpp:391 core/packageinspector.cpp:891
 msgid ""
 "\n"
 "Error: Could not calculate use flag for package %1/%2."
@@ -1209,165 +641,61 @@ msgstr ""
 "\n"
 "Błąd: nie można ustalić flag USE dla pakietu %1/%2."
 
-#: core/packageinspector.cpp:419
+#: core/packageinspector.cpp:453
 msgid "Click for hardmask info!"
 msgstr "Informacje o maskowaniu!"
 
-#: core/packageinspector.cpp:437
+#: core/packageinspector.cpp:471
 msgid "%1/%2 hardmask info!"
 msgstr "%1/%2 - informacje o maskowaniu na sztywno!"
 
-#: core/packageinspector.cpp:716
+#: core/packageinspector.cpp:750
 msgid "%1No ChangeLog found.%2"
 msgstr "%1Nie znaleziono rejestru zmian.%2"
 
-#: core/packageinspector.cpp:743
+#: core/packageinspector.cpp:777
 msgid "%1No ebuild found.%2"
 msgstr "%1Nie znaleziono ebuilda.%2"
 
-#: core/packageinspector.cpp:827
+#: core/packageinspector.cpp:865
 msgid "%1No installed files found.%2"
 msgstr "%1Nie znaleziono zainstalowanych plików.%2"
 
-#: core/packageinspector.cpp:897 core/packageinspector.cpp:956
+#: core/packageinspector.cpp:935 core/packageinspector.cpp:994
 msgid ""
 "Use flags could not be calculated. Please check log for more information"
 msgstr "Nie można pobrać flag USE. Więcej informacji w dzienniku."
 
-#: core/etcupdate.cpp:60
-msgid ""
-"<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to "
-"merge changes?</qt>"
+#: core/dependencyview.cpp:149
+msgid "Dependency"
+msgstr "Zależności"
+
+#: core/dependencyview.cpp:197
+msgid "Compile-time dependencies"
+msgstr "Zależności"
+
+#: core/dependencyview.cpp:203
+#, fuzzy
+msgid "Runtime dependencies"
+msgstr "Zależności"
+
+#: core/dependencyview.cpp:209
+#, fuzzy
+msgid "Post-merge dependencies"
+msgstr "Zależności"
+
+#: core/dependencyview.cpp:240
+msgid "Depend on either:"
+msgstr "Zależy od:"
+
+#: core/dependencyview.cpp:255
+msgid "Without USE-flag %1:"
 msgstr ""
-"<qt>WAŻNE: Następująca liczba plików w katalogu /etc wymaga aktualizacji: %1."
-"<br>Uwzględnić zmiany?</qt>"
 
-#: core/etcupdate.cpp:75
-msgid "Please specify merge tool in settings!"
-msgstr "Określ narzędzie scalające w ustawieniach!"
-
-#: core/etcupdate.cpp:87
-msgid ""
-"\n"
-"etc-update didn't start. "
-msgstr ""
-"\n"
-"Proces etc-update nie rozpoczął się. "
-
-#: core/etcupdate.cpp:93
-msgid ""
-"\n"
-"Running etc-update..."
-msgstr ""
-"\n"
-"Wykonywanie etc-update..."
-
-#: core/etcupdate.cpp:94
-msgid "Checking for configuration file updates..."
-msgstr "Sprawdzanie aktualizacji plików konfiguracyjnych..."
-
-#: core/etcupdate.cpp:135
-msgid "There are no files that need to be updated through etc-update."
-msgstr "Brak plików do zaktualizowania za pomocą narzędzia etc-update."
-
-#: core/etcupdate.cpp:135 kurooview.cpp:86
-msgid "Etc-update"
-msgstr "Etc-update"
-
-#: core/etcupdate.cpp:166
-msgid "<font color=red>Warning!<br>%1 has been edited by you.</font><br>"
-msgstr ""
-"<font color=red>Ostrzeżenie!<br>Element %1 był edytowany przez użytkownika.</"
-"font><br>"
-
-#: core/etcupdate.cpp:169
-msgid "<qt>%1Do you want to merge changes in %2?</qt>"
-msgstr "<qt>%1Scalić zmiany w pliku %2?</qt>"
-
-#: core/etcupdate.cpp:171
-msgid "etc-update (%1 of %2)"
-msgstr "etc-update (%1 z %2)"
-
-#: core/etcupdate.cpp:184
-msgid "%1 didn't start."
-msgstr "%1 nie rozpoczęło się."
-
-#: core/etcupdate.cpp:185
-msgid "%1 could not start!"
-msgstr "Nie można uruchomić %1!"
-
-#: core/etcupdate.cpp:190
-msgid "Merging changes in '%1'."
-msgstr "Scalanie zmian w pliku '%1'."
-
-#: core/etcupdate.cpp:199
-msgid "Skipping '%1'. etc-update will ask again next time."
-msgstr ""
-"Pominięto plik %1. Monit zostanie wyświetlony przy następnym etc-update."
-
-#: core/etcupdate.cpp:206
-msgid "etc-update completed."
-msgstr "Zakończono proces etc-update."
-
-#: core/etcupdate.cpp:219
-msgid "Deleting '%1'. Backup saved in %2."
-msgstr "Usuwanie elementu %1. Kopię zapasową zapisano w %2."
-
-#: core/categorieslistview.cpp:97 core/categorieslistview.cpp:203
-#: core/categorieslistview.cpp:204 core/categorieslistview.cpp:257
-#: core/categorieslistview.cpp:304 core/categorieslistview.cpp:305
-#: core/categorieslistview.cpp:320 core/categorieslistview.cpp:321
-msgid "All"
-msgstr "Wszystkie"
-
-#: core/categorieslistview.cpp:171 core/categorieslistview.cpp:172
-msgid "Category"
-msgstr "Kategoria"
-
-#: core/categorieslistview.cpp:236 core/categorieslistview.cpp:237
-msgid "Subcategory"
-msgstr "Podkategoria"
-
-#: core/tooltip.cpp:69 core/tooltip.cpp:81
-msgid "%1 is installed"
-msgstr "%1 jest zainstalowany"
-
-#: core/tooltip.cpp:72
-msgid "%1 is not installed"
-msgstr "%1 nie jest zainstalowany"
-
-#: core/tooltip.cpp:74
-msgid "%1 not in Portage"
-msgstr "%1 nie ma w Portage"
-
-#: core/tooltip.cpp:86
-msgid "%1 is present in World profile"
-msgstr "%1 figuruje w profilu World"
-
-#: core/tooltip.cpp:91
-msgid "%1 is present in Queue"
-msgstr "%1 w kolejce"
-
-#: core/filewatcher.cpp:68
-msgid "Portage version is upgraded to 2.1. Please refresh package view."
-msgstr "Portage uaktualniono do wersji 2.1. Odśwież widok pakietów."
-
-#: core/filewatcher.cpp:69 kurooinit.cpp:66
-msgid "Portage version"
-msgstr "Wersja Portage"
-
-#: core/cacheportagejob.cpp:75
-msgid "Collecting package information..."
-msgstr "Zbieranie informacji o pakietach..."
-
-#: core/cacheportagejob.cpp:100 core/cacheportagejob.cpp:118
-msgid "Caching aborted."
-msgstr "Anulowano zapisywanie w pamięci podręcznej."
-
-#: core/global.cpp:163
-#, c-format
-msgid "%1d "
-msgstr "%1d "
+#: core/dependencyview.cpp:258
+#, fuzzy
+msgid "With USE-flag %1:"
+msgstr "Z ustawioną flagą USE %1:"
 
 #: core/portagefiles.cpp:88
 msgid "Collecting user package keywords..."
@@ -1426,295 +754,231 @@ msgstr ""
 msgid "Completed saving user package use in %1."
 msgstr "Zapisano plik package.use użytkownika w %1."
 
-#: core/scanupdatesjob.cpp:74
-msgid "Refreshing updates view..."
-msgstr "Odświeżanie widoku aktualizacji..."
+#: core/cacheportagejob.cpp:76
+msgid "Collecting package information..."
+msgstr "Zbieranie informacji o pakietach..."
 
-#: core/scanportagejob.cpp:88
-msgid "Refreshing Portage packages view..."
-msgstr "Odświeżanie widoku pakietów w Portage..."
+#: core/cacheportagejob.cpp:101 core/cacheportagejob.cpp:119
+msgid "Caching aborted."
+msgstr "Anulowano zapisywanie w pamięci podręcznej."
 
-#: core/scanportagejob.cpp:340
-msgid "Collecting installed packages..."
-msgstr "Zbieranie informacji o zainstalowanych pakietach..."
+#: core/tooltip.cpp:69 core/tooltip.cpp:81
+msgid "%1 is installed"
+msgstr "%1 jest zainstalowany"
 
-#: core/dependencyview.cpp:149
-msgid "Dependency"
+#: core/tooltip.cpp:72
+msgid "%1 is not installed"
+msgstr "%1 nie jest zainstalowany"
+
+#: core/tooltip.cpp:74
+msgid "%1 not in Portage"
+msgstr "%1 nie ma w Portage"
+
+#: core/tooltip.cpp:86
+msgid "%1 is present in World profile"
+msgstr "%1 figuruje w profilu World"
+
+#: core/tooltip.cpp:91
+msgid "%1 is present in Queue"
+msgstr "%1 w kolejce"
+
+#: core/inspectorbase.cpp:274 core/inspectorbase.cpp:437 rc.cpp:140
+#, no-c-format
+msgid "Use"
+msgstr "USE"
+
+#: core/inspectorbase.cpp:275 core/inspectorbase.cpp:438
+#: portage/portagelistview.cpp:89 rc.cpp:143
+#, no-c-format
+msgid "Description"
+msgstr "Opis"
+
+#: core/inspectorbase.cpp:399 portage/portagelistview.cpp:80
+#: portage/portagelistview.cpp:160 portage/portagelistview.cpp:162
+#: portage/uninstallbase.cpp:45 portage/uninstallbase.cpp:77
+#: queue/queuelistview.cpp:172 rc.cpp:48 rc.cpp:241
+#, no-c-format
+msgid "Package"
+msgstr "Pakiet"
+
+#: core/inspectorbase.cpp:400 rc.cpp:51
+#, no-c-format
+msgid "textLabel1"
+msgstr "textLabel1"
+
+#: core/inspectorbase.cpp:401 rc.cpp:54
+#, fuzzy, no-c-format
+msgid "In Install Queue"
+msgstr "Kolejka instalacji"
+
+#: core/inspectorbase.cpp:402 rc.cpp:57
+#, no-c-format
+msgid "In World"
+msgstr ""
+
+#: core/inspectorbase.cpp:403 rc.cpp:60
+#, no-c-format
+msgid "<<"
+msgstr "<<"
+
+#: core/inspectorbase.cpp:405 core/inspectorbase.cpp:436 rc.cpp:64 rc.cpp:137
+#, no-c-format
+msgid "Previous Package"
+msgstr "Poprzedni pakiet"
+
+#: core/inspectorbase.cpp:406 rc.cpp:67
+#, no-c-format
+msgid ">>"
+msgstr ">>"
+
+#: core/inspectorbase.cpp:408 rc.cpp:71
+#, no-c-format
+msgid "Next Package"
+msgstr "Następny pakiet"
+
+#: core/inspectorbase.cpp:409 rc.cpp:77
+#, no-c-format
+msgid "Available Versions for this package:"
+msgstr "Dostępne wersje tego pakietu:"
+
+#: core/inspectorbase.cpp:411 rc.cpp:81
+#, no-c-format
+msgid "Emerge version"
+msgstr "Wersja emerge"
+
+#: core/inspectorbase.cpp:412 rc.cpp:84
+#, no-c-format
+msgid "For this package always install:"
+msgstr "Instaluj zawsze:"
+
+#: core/inspectorbase.cpp:413 rc.cpp:87
+#, no-c-format
+msgid ""
+"When you want to install a package that isn't available for your system, you "
+"will receive this masking error. You should try installing a different "
+"application that is available for your system or wait until the package is "
+"put available. There is always a reason why a package is masked:\n"
+"\n"
+"    * ~arch keyword means that the application is not tested sufficiently to "
+"be put in the stable branch. Wait a few days or weeks and try again.\n"
+"    * -arch keyword or -* keyword means that the application does not work "
+"on your architecture. If you believe the package does work file a bug at our "
+"bugzilla website.\n"
+"    * missing keyword means that the application has not been tested on your "
+"architecture yet. Ask the architecture porting team to test the package or "
+"test it for them and report your findings on our bugzilla website.\n"
+"    * package.mask means that the package has been found corrupt, unstable "
+"or worse and has been deliberately marked as do-not-use.\n"
+"    * profile means that the package has been found not suitable for your "
+"profile. The application might break your system if you installed it or is "
+"just not compatible with the profile you use.\n"
+msgstr ""
+
+#: core/inspectorbase.cpp:421 rc.cpp:97
+#, no-c-format
+msgid "Stab&le Version"
+msgstr "wersję &stabilną"
+
+#: core/inspectorbase.cpp:422 rc.cpp:100
+#, no-c-format
+msgid "Alt+L"
+msgstr "Alt+S"
+
+#: core/inspectorbase.cpp:423 rc.cpp:103
+#, no-c-format
+msgid "Testi&ng Version"
+msgstr "wersję &testową"
+
+#: core/inspectorbase.cpp:424 portage/portagebase.cpp:242
+#: queue/queuebase.cpp:221 config/options1.cpp:188 rc.cpp:106 rc.cpp:205
+#: rc.cpp:328 rc.cpp:352
+#, no-c-format
+msgid "Alt+N"
+msgstr "Alt+N"
+
+#: core/inspectorbase.cpp:425 rc.cpp:109
+#, no-c-format
+msgid "Mas&ked Version"
+msgstr "wersję &zamaskowaną"
+
+#: core/inspectorbase.cpp:426 queue/queuebase.cpp:223 config/options8.cpp:177
+#: rc.cpp:112 rc.cpp:334 rc.cpp:779
+#, no-c-format
+msgid "Alt+K"
+msgstr "Alt+Z"
+
+#: core/inspectorbase.cpp:428 rc.cpp:115
+#, no-c-format
+msgid "Select Version"
+msgstr "Wybierz wersję"
+
+#: core/inspectorbase.cpp:429 rc.cpp:118
+#, no-c-format
+msgid ""
+"Install onl&y specific version \n"
+"and do not update further"
+msgstr ""
+"Zainstaluj &tylko określoną wersję \n"
+"i jej później nie aktualizuj"
+
+#: core/inspectorbase.cpp:431 rc.cpp:122
+#, no-c-format
+msgid "Alt+Y"
+msgstr "Alt+T"
+
+#: core/inspectorbase.cpp:432 rc.cpp:74
+#, no-c-format
+msgid "Versi&ons"
+msgstr "Wers&je"
+
+#: core/inspectorbase.cpp:433 rc.cpp:128
+#, no-c-format
+msgid "Add or Remove Use Flags support:"
+msgstr "Włącz lub wyłącz obsługę flag USE:"
+
+#: core/inspectorbase.cpp:434 rc.cpp:131
+#, no-c-format
+msgid "C&alculate Use Flags"
+msgstr "&Pobierz flagi USE"
+
+#: core/inspectorbase.cpp:435 portage/portagebase.cpp:238
+#: queue/queuebase.cpp:200 config/options1.cpp:205 rc.cpp:134 rc.cpp:193
+#: rc.cpp:267 rc.cpp:397
+#, no-c-format
+msgid "Alt+A"
+msgstr "Alt+W"
+
+#: core/inspectorbase.cpp:439 core/inspectorbase.cpp:442
+#: core/inspectorbase.cpp:444 core/inspectorbase.cpp:446 rc.cpp:146 rc.cpp:155
+#: rc.cpp:161 rc.cpp:167
+#, no-c-format
+msgid "Select version:"
+msgstr "Wybierz wersję:"
+
+#: core/inspectorbase.cpp:440 rc.cpp:125
+#, no-c-format
+msgid "&Use Flags"
+msgstr "Flagi &USE"
+
+#: core/inspectorbase.cpp:441 rc.cpp:149
+#, no-c-format
+msgid "Ch&angeLog"
+msgstr "&Rejestr zmian"
+
+#: core/inspectorbase.cpp:443 rc.cpp:152
+#, no-c-format
+msgid "E&build"
+msgstr "E&build"
+
+#: core/inspectorbase.cpp:445 rc.cpp:158
+#, no-c-format
+msgid "Dependencies"
 msgstr "Zależności"
 
-#: core/dependencyview.cpp:197
-msgid "Compile-time dependencies"
-msgstr "Zależności"
-
-#: core/dependencyview.cpp:203
-#, fuzzy
-msgid "Runtime dependencies"
-msgstr "Zależności"
-
-#: core/dependencyview.cpp:209
-#, fuzzy
-msgid "Post-merge dependencies"
-msgstr "Zależności"
-
-#: core/dependencyview.cpp:240
-msgid "Depend on either:"
-msgstr "Zależy od:"
-
-#: core/dependencyview.cpp:255
-msgid "Without USE-flag %1:"
-msgstr ""
-
-#: core/dependencyview.cpp:258
-#, fuzzy
-msgid "With USE-flag %1:"
-msgstr "Z ustawioną flagą USE %1:"
-
-#: core/emerge.cpp:72
-msgid "Can not process input! Emerge is not running."
-msgstr ""
-"Nie możne przetworzyć danych wejściowych! Emergowanie nie jest uruchomione."
-
-#: core/emerge.cpp:133 core/emerge.cpp:167
-msgid ""
-"\n"
-"Error: Emerge didn't start. "
-msgstr ""
-"\n"
-"Błąd: Emergowanie nie rozpoczęło się. "
-
-#: core/emerge.cpp:138
-msgid ""
-"\n"
-"Emerge %1 started..."
-msgstr ""
-"\n"
-"Rozpoczęło się emergowanie pakietu %1..."
-
-#: core/emerge.cpp:139
-msgid "Installing packages in queue..."
-msgstr "Instalowanie pakietów z kolejki..."
-
-#: core/emerge.cpp:174
-msgid ""
-"\n"
-"Emerge pretend %1 started..."
-msgstr ""
-"\n"
-"Uruchomiono symulację emergowania pakietu %1..."
-
-#: core/emerge.cpp:175
-msgid "Checking installation queue..."
-msgstr "Sprawdzanie kolejki instalacji..."
-
-#: core/emerge.cpp:202 core/emerge.cpp:231 core/emerge.cpp:266
-msgid ""
-"\n"
-"Error: Emerge didn't start."
-msgstr ""
-"\n"
-"Błąd: emergowanie nie rozpoczęło się."
-
-#: core/emerge.cpp:209
-msgid ""
-"\n"
-"Unmerge %1 started..."
-msgstr ""
-"\n"
-"Rozpoczęto usuwanie pakietu %1..."
-
-#: core/emerge.cpp:210
-msgid "Uninstalling packages..."
-msgstr "Usuwanie pakietów..."
-
-#: core/emerge.cpp:238
-msgid ""
-"\n"
-"Emerge synchronize Portage Tree started..."
-msgstr ""
-"\n"
-"Rozpoczęto synchronizowanie drzewa Portage..."
-
-#: core/emerge.cpp:239
-msgid "Synchronizing portage tree..."
-msgstr "Synchronizowanie drzewa Portage..."
-
-#: core/emerge.cpp:273
-msgid ""
-"\n"
-"Emerge check package updates started..."
-msgstr ""
-"\n"
-"Rozpoczęto sprawdzanie aktualizacji pakietów..."
-
-#: core/emerge.cpp:274
-msgid "Checking for package updates..."
-msgstr "Sprawdzanie aktualizacji..."
-
-#: core/emerge.cpp:366
-msgid "Root access required!"
-msgstr "Wymagane uprawnienia roota!"
-
-#: core/emerge.cpp:372
-msgid "There is no ebuilds to satisfy %1"
-msgstr "Brak ebuildów odpowiadających żądaniu %1"
-
-#: core/emerge.cpp:465
-msgid "You must run Kuroo as root to unmask packages!"
-msgstr "Aby emergować pakiety, należy uruchomić program Kuroo jako root!"
-
-#: core/emerge.cpp:466
-msgid "Auto-unmasking packages"
-msgstr "Automatyczne odmaskowanie pakietów"
-
-#: core/emerge.cpp:470
-msgid "Emerge messages"
-msgstr "Komunikaty emergowania"
-
-#: core/emerge.cpp:470 core/emerge.cpp:542
-msgid "Please check log for more information!"
-msgstr "Więcej informacji w dzienniku!"
-
-#: core/emerge.cpp:542
-msgid "Important"
-msgstr "Ważne"
-
-#: core/emerge.cpp:555 core/emerge.cpp:564
-msgid "%1 is not available on your architecture %2!<br><br>"
-msgstr "Pakiet %1 nie jest dostępny dla architektury %2!<br><br>"
-
-#: core/emerge.cpp:556
-msgid ""
-"<b>missing keyword</b> means that the application has not been tested on "
-"your architecture yet.<br>Ask the architecture porting team to test the "
-"package or test it for them and report your findings on Gentoo bugzilla "
-"website."
-msgstr ""
-"<br><b>brakujące słowo kluczowe</b> oznacza, że działanie aplikacji nie "
-"zostało jeszcze sprawdzone w wybranej architekturze. Poproś zespół zajmujący "
-"się tą architekturą o przetestowanie pakietu lub zrób to samodzielnie, a "
-"następnie podziel się spostrzeżeniami, korzystając z bugzilli systemu Gentoo."
-
-#: core/emerge.cpp:560
-msgid "Missing Keyword"
-msgstr "Brakujące słowo kluczowe "
-
-#: core/emerge.cpp:565
-msgid ""
-"<br><b>-* keyword</b> means that the application does not work on your "
-"architecture.<br>If you believe the package does work file a bug at Gentoo "
-"bugzilla website."
-msgstr ""
-"<br>Oznaczenie <b>-* słowo kluczowe</b> oznacza, że ta aplikacja jeszcze nie "
-"działa na wybranej architekturze.<br>Jeśli uważasz, że z programu można "
-"korzystać, zgłoś błąd w bugzilli systemu Gentoo."
-
-#: core/emerge.cpp:568
-msgid "-* Keyword"
-msgstr "-* Słowo kluczowe "
-
-#: core/emerge.cpp:572
-msgid "Please add package to \"package.unmask\"."
-msgstr "Dopisz pakiet do pliku \"package.unmask\"."
-
-#: core/emerge.cpp:575
-msgid ""
-"<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
-"<qt>Nie można zemergować zamaskowanego pakietu!<br>Czy chcesz odmaskować "
-"pakiet <b>%1</b>?</qt>"
-
-#: core/emerge.cpp:576 core/emerge.cpp:591
-msgid "Unmask"
-msgstr "Odmaskuj"
-
-#: core/emerge.cpp:587
-msgid "Please add package to \"package.keywords\"."
-msgstr "Dopisz pakiet do pliku \"package.keywords\"."
-
-#: core/emerge.cpp:590
-msgid ""
-"<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>"
-msgstr ""
-"<qt>Nie można zemergować pakietu testowego!<br>Czy chcesz odmaskować pakiet "
-"<b>%1</b>?</qt>"
-
-#: core/versionview.cpp:93 queue/queuelistview.cpp:173
-msgid "Version"
-msgstr "Wersja"
-
-#: core/versionview.cpp:94
-msgid "Stability"
-msgstr "Stabilność"
-
-#: core/versionview.cpp:95 queue/queuelistview.cpp:175
-msgid "Size"
-msgstr "Rozmiar"
-
-#: _translatorinfo.cpp:1
-msgid ""
-"_: NAME OF TRANSLATORS\n"
-"Your names"
-msgstr "Konrad Mantorski"
-
-#: _translatorinfo.cpp:3
-msgid ""
-"_: EMAIL OF TRANSLATORS\n"
-"Your emails"
-msgstr "konrad@mantorski.com"
-
-#: kurooinit.cpp:64
-msgid ""
-"Can not identify portage version!\n"
-"Kuroo can not correctly parse package information.\n"
-"You can select portage version in settings."
-msgstr ""
-"Nie można rozpoznać wersji Portage!\n"
-"Program Kuroo nie może prawidłowo przetworzyć informacji o pakietach.\n"
-"Wersję Portage można określić w ustawieniach."
-
-#: kurooinit.cpp:87
-msgid ""
-"<qt>Could not create kuroo home directory.<br>You must start Kuroo with "
-"kdesu first time for a secure initialization.<br>Please try again!</qt>"
-msgstr ""
-"<qt>Nie można utworzyć katalogu domowego programu Kuroo.<br>Dla "
-"bezpieczeństwa najpierw należy uruchomić program Kuroo za pomocą aplikacji "
-"kdesu.<br>Spróbuj ponownie!</qt>"
-
-#: kurooinit.cpp:89 kurooinit.cpp:106 kurooinit.cpp:209
-msgid "Initialization"
-msgstr "Inicjowanie"
-
-#: kurooinit.cpp:104
-msgid ""
-"<qt>Could not create kuroo backup directory.<br>You must start Kuroo with "
-"kdesu first time for a secure initialization.<br>Please try again!</qt>"
-msgstr ""
-"<qt>Nie można utworzyć katalogu kopii zapasowej dla programu Kuroo.<br>Dla "
-"bezpieczeństwa najpierw należy uruchomić program Kuroo za pomocą aplikacji "
-"kdesu.<br>Spróbuj ponownie!</qt>"
-
-#: kurooinit.cpp:210
-msgid ""
-"Kuroo can not detect your architecture!\n"
-"You must select appropriate architecture to proceed.\n"
-"Please select:"
-msgstr ""
-"Kuroo nie może rozpoznać używanej architektury!\n"
-"Musisz wybrać odpowiednią architekturę, aby kontynuować.\n"
-"Wybierz:"
-
-#: kurooinit.cpp:264
-msgid ""
-"You don't have enough permissions to run kuroo.\n"
-"Please add yourself into portage group!"
-msgstr ""
-"Nie masz wystarczających uprawnień, aby uruchomić program Kuroo.\n"
-"Użytkownik musi należeć do grupy portage!"
-
-#: kurooinit.cpp:265
-msgid "User permissions"
-msgstr "Uprawnienia użytkowników"
+#: core/inspectorbase.cpp:447 rc.cpp:164
+#, no-c-format
+msgid "I&nstalled Files"
+msgstr "Zai&nstalowane pliki"
 
 #: message.cpp:38
 msgid "Message"
@@ -1724,16 +988,435 @@ msgstr "Komunikat"
 msgid "Copy text to clipboard"
 msgstr "Skopiuj tekst do schowka"
 
-#: queue/queuelistview.cpp:176
-msgid "Progress"
-msgstr "Postęp"
+#: kurooview.cpp:83
+msgid "Packages"
+msgstr "Pakiety"
 
-#: queue/queuelistview.cpp:306 queue/queuelistview.cpp:312
-#: queue/queuelistview.cpp:318
-msgid "na"
-msgstr "nd"
+#: kurooview.cpp:84
+msgid "Queue"
+msgstr "Kolejka"
 
-#: queue/queuetab.cpp:147
+#: kurooview.cpp:85
+msgid "History"
+msgstr "Historia"
+
+#: kurooview.cpp:87 config/options2.cpp:722 rc.cpp:686
+#, no-c-format
+msgid "Log"
+msgstr "Dziennik"
+
+#: kurooview.cpp:132
+msgid ""
+"<qt>Kuroo database is empty!<br>Kuroo will now first scan your emerge log to "
+"create the emerge history.<br>Next, package information in Portage will be "
+"collected.</qt>"
+msgstr ""
+"<qt>Baza danych programu Kuroo jest pusta!<br>Program przeskanuje najpierw "
+"dziennik emergowania, aby utworzyć historię instalacji.<br>Następnie zostaną "
+"zebrane informacje o pakietach w Portage.</qt>"
+
+#: kurooview.cpp:135 kurooview.cpp:152
+msgid "Initialiazing Kuroo"
+msgstr "Inicjowanie Kuroo"
+
+#: kurooview.cpp:151
+msgid ""
+"<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
+"has changed.</qt>"
+msgstr ""
+"<qt>Baza danych programu Kuroo wymaga odświeżenia!<br>Dziennik emergowania "
+"wskazuje zmiany w systemie.</qt>"
+
+#: kurooview.cpp:152
+msgid "Refresh"
+msgstr "Odśwież"
+
+#: kurooview.cpp:152
+msgid "Skip"
+msgstr "Pomiń"
+
+#: kurooview.cpp:195
+msgid "You must run Kuroo as root to emerge packages!"
+msgstr "Aby emergować pakiety, należy uruchomić program Kuroo jako root!"
+
+#: statusbar.cpp:229
+msgid "Paused..."
+msgstr ""
+
+#: portage/uninstallinspector.cpp:32
+msgid "Uninstall Packages"
+msgstr "Odinstaluj pakiety"
+
+#: portage/uninstallinspector.cpp:77
+msgid ""
+"<font color=red><b>You are uninstalling packages part of your system profile!"
+"<br>This may be damaging to your system!</b></font>"
+msgstr ""
+"<font color=red><b>Usuwasz pakiety wchodzące w skład profilu systemowego!"
+"<br>To może spowodować uszkodzenie systemu!</b></font>"
+
+#: portage/portagebase.cpp:230 rc.cpp:173
+#, no-c-format
+msgid "Form2"
+msgstr "Formularz2"
+
+#: portage/portagebase.cpp:231 rc.cpp:176
+#, no-c-format
+msgid "<font size=\"+1\">Packages in Portage</font>"
+msgstr "<font size=\"+1\">Pakiety w Portage</font>"
+
+#: portage/portagebase.cpp:233 rc.cpp:180
+#, no-c-format
+msgid "What's This"
+msgstr ""
+
+#: portage/portagebase.cpp:234 rc.cpp:183
+#, no-c-format
+msgid "Filter packages here..."
+msgstr "Filtruj pakiety..."
+
+#: portage/portagebase.cpp:235 history/mergebase.cpp:180
+#: history/historybase.cpp:143 rc.cpp:186 rc.cpp:855 rc.cpp:868
+#, no-c-format
+msgid "Filter:"
+msgstr ""
+
+#: portage/portagebase.cpp:237 rc.cpp:190
+#, no-c-format
+msgid "&All Packages"
+msgstr "&Wszystkie pakiety"
+
+#: portage/portagebase.cpp:239 rc.cpp:196
+#, no-c-format
+msgid "&Updates"
+msgstr "&Aktualizacje"
+
+#: portage/portagebase.cpp:240 queue/queuebase.cpp:198 config/options8.cpp:182
+#: config/options2.cpp:741 history/historybase.cpp:145 rc.cpp:199 rc.cpp:261
+#: rc.cpp:735 rc.cpp:794 rc.cpp:874
+#, no-c-format
+msgid "Alt+U"
+msgstr "Alt+A"
+
+#: portage/portagebase.cpp:241 rc.cpp:202
+#, no-c-format
+msgid "I&nstalled Packages"
+msgstr "Zai&nstalowane pakiety"
+
+#: portage/portagebase.cpp:244 history/mergebase.cpp:179
+#: history/historybase.cpp:148 rc.cpp:209 rc.cpp:852 rc.cpp:881
+#, no-c-format
+msgid "Clear filter"
+msgstr "Wyczyść filtr"
+
+#: portage/portagebase.cpp:245 rc.cpp:212
+#, no-c-format
+msgid "Uninstall"
+msgstr "Odinstaluj"
+
+#: portage/portagebase.cpp:247 rc.cpp:216
+#, no-c-format
+msgid "Uninstall selected packages..."
+msgstr "Usuwanie pakietów..."
+
+#: portage/portagebase.cpp:248 rc.cpp:219
+#, no-c-format
+msgid "Add to &Queue"
+msgstr "Dodaj do &kolejki"
+
+#: portage/portagebase.cpp:249 config/options2.cpp:728 rc.cpp:222 rc.cpp:702
+#, no-c-format
+msgid "Alt+Q"
+msgstr "Alt+K"
+
+#: portage/portagebase.cpp:250 rc.cpp:225
+#, no-c-format
+msgid "Add/Remove selected packages to the Installation Queue"
+msgstr "Dodaj/Usuń wybrane pakiety do/z kolejki"
+
+#: portage/portagebase.cpp:251 portage/portagetab.cpp:608
+#: queue/queuebase.cpp:205 queue/queuetab.cpp:566 rc.cpp:228 rc.cpp:282
+#, no-c-format
+msgid "Details..."
+msgstr "Szczegóły..."
+
+#: portage/portagebase.cpp:252 rc.cpp:231
+#, no-c-format
+msgid "Return"
+msgstr "Wróć"
+
+#: portage/portagebase.cpp:253 queue/queuebase.cpp:207 rc.cpp:234 rc.cpp:288
+#, no-c-format
+msgid "Show package details..."
+msgstr "Szczegółowe informacje o pakiecie..."
+
+#: portage/portagetab.cpp:132 queue/queuetab.cpp:191
+msgid "View package details..."
+msgstr "Szczegółowe informacje o pakiecie..."
+
+#: portage/portagetab.cpp:152
+msgid ""
+"<qt>This tab gives an overview of all packages available: in Portage, "
+"installed packages as well as package updates.<br>To keep your system in "
+"perfect shape (and not to mention install the latest security updates) you "
+"need to update your system regularly. Since Portage only checks the ebuilds "
+"in your Portage tree you first have to sync your Portage tree: Select 'Sync "
+"Portage' in the Portage menu.<br>After syncing Kuroo will search for newer "
+"version of the applications you have installed. However, it will only verify "
+"the versions for the applications you have explicitly installed - not the "
+"dependencies.<br>If you want to update every single package on your system, "
+"check the Deep checkbox in Kuroo Preferences.<br><br>When you want to remove "
+"a software package from your system, select a package and press 'Uninstall'. "
+"This will tell Portage to remove all files installed by that package from "
+"your system except the configuration files of that application if you have "
+"altered those after the installation. However, a big warning applies: "
+"Portage will not check if the package you want to remove is required by "
+"another package. It will however warn you when you want to remove an "
+"important package that breaks your system if you unmerge it.<br><br>Use the "
+"package Inspector to manage package specific version and use-flag settings: "
+"press 'Details' to open the Inspector.</qt>"
+msgstr ""
+
+#: portage/portagetab.cpp:191 portage/portagetab.cpp:256
+#: portage/portagetab.cpp:259
+msgid "Add to Queue"
+msgstr "Dodaj do kolejki"
+
+#: portage/portagetab.cpp:254
+msgid "Remove from Queue"
+msgstr "Usuń z kolejki"
+
+#: portage/portagetab.cpp:386
+msgid ""
+"<qt>Do you want to refresh the Packages view?<br>This will take a couple of "
+"minutes...</qt>"
+msgstr ""
+"<qt>Odświeżyć widok Portage?<br>Operacja może potrwać kilka minut...</qt>"
+
+#: portage/portagetab.cpp:387
+msgid "Refreshing Packages"
+msgstr "Odświeżanie pakietów"
+
+#: portage/portagetab.cpp:484
+msgid " packages selected"
+msgstr " wybrane pakiety"
+
+#: portage/portagetab.cpp:514
+msgid "<b>Homepage: </b>"
+msgstr "<b>Strona domowa: </b>"
+
+#: portage/portagetab.cpp:518
+msgid "%1Package not available in Portage tree anymore!%2"
+msgstr "%1Pakietu nie ma już w drzewie Portage%2"
+
+#: portage/portagetab.cpp:524 portage/portagetab.cpp:530
+msgid "%1Installed&nbsp;version:%2%3%4"
+msgstr "%1Zainstalowana&nbsp;wersja:%2%3%4"
+
+#: portage/portagetab.cpp:540
+msgid "%1Emerge&nbsp;version:%2%3%4"
+msgstr "%1Wersja&nbsp;emerge%2%3%4"
+
+#: portage/portagetab.cpp:548
+msgid "%1Emerge&nbsp;version:%2No version available on %3%4"
+msgstr "%1Wersja&nbsp;emerge:%2brak dostępnych wersji %3%4"
+
+#: portage/portagetab.cpp:554
+msgid ""
+"%1Emerge&nbsp;version:%2No version available - please check package details%3"
+msgstr ""
+"%1Wersja&nbsp;emerge:%2wersja niedostępna - zapoznaj się ze szczegółowymi "
+"informacjami o pakiecie%3"
+
+#: portage/portagetab.cpp:562
+msgid "%1Available&nbsp;versions:%2%3%4"
+msgstr "%1Dostępne&nbsp;wersje:%2%3%4"
+
+#: portage/portagetab.cpp:568
+msgid "%1Available&nbsp;versions:%2No versions available on %3%4"
+msgstr "%1Dostępne&nbsp;wersje:%2brak dostępnych wersji %3%4"
+
+#: portage/portagetab.cpp:603
+msgid "&Add to queue"
+msgstr "&Dodaj do kolejki"
+
+#: portage/portagetab.cpp:605
+msgid "&Remove from queue"
+msgstr "&Usuń z kolejki"
+
+#: portage/portagetab.cpp:612 queue/queuetab.cpp:570
+msgid "Add to world"
+msgstr "Dodaj do pliku world"
+
+#: portage/portagetab.cpp:614 queue/queuetab.cpp:572
+msgid "Remove from world"
+msgstr "Usuń z pliku world"
+
+#: portage/portagetab.cpp:619
+msgid "&Uninstall"
+msgstr "&Odinstaluj"
+
+#: portage/portagetab.cpp:623
+#, fuzzy
+msgid "Backup Package"
+msgstr "Pakiet"
+
+#: portage/portagelistview.cpp:88
+msgid "Update"
+msgstr "Aktualizacja"
+
+#: portage/portagelistview.cpp:135
+#, fuzzy
+msgid ""
+"<font color=darkRed size=+1><b>No packages were found using this filter "
+"term</font><br><font color=darkRed>Please modify the filter term you have "
+"chosen!<br>Try using a more general filter term, so kuroo can find matching "
+"packages.</b></font>"
+msgstr ""
+"<font color=darkRed size=+1><b>Brak dostępnych pakietów z tymi ustawieniami "
+"filtrowania</font><br><font color=darkGray>Zmodyfikuj ustawienia filtrowania!"
+"<br>Użyj bardziej ogólnych opcji filtrowania, aby program Kuroo mógł znaleźć "
+"odpowiednie pakiety.</b></font>"
+
+#: portage/portagelistview.cpp:137
+#, fuzzy
+msgid ""
+"<font color=darkRed size=+1><b>No packages were found using these filter "
+"term</font><br><font color=darkRed>Please modify the filter terms you have "
+"chosen!<br>Try using more general filter terms, so kuroo can find matching "
+"packages.</b></font>"
+msgstr ""
+"<font color=darkRed size=+1><b>Brak dostępnych pakietów z tymi ustawieniami "
+"filtrowania</font><br><font color=darkGray>Zmodyfikuj ustawienia filtrowania!"
+"<br>Użyj bardziej ogólnych opcji filtrowania, aby program Kuroo mógł znaleźć "
+"odpowiednie pakiety.</b></font>"
+
+#: portage/uninstallbase.cpp:78 rc.cpp:244
+#, no-c-format
+msgid ""
+"Portage will not check if the package you want to remove is required by "
+"another package.<br>\n"
+"Do you want to uninstall following packages?"
+msgstr ""
+"Portage nie będzie sprawdzać, czy pakietu, który chcesz usunąć, nie wymaga "
+"inny pakiet.<br>\n"
+"Czy chcesz odinstalować następujące pakiety?"
+
+#: queue/queuebase.cpp:195 rc.cpp:252
+#, no-c-format
+msgid "<font size=\"+1\">Packages in Installation Queue</font>"
+msgstr "<font size=\"+1\">Pakiety w kolejce instalacji</font>"
+
+#: queue/queuebase.cpp:196 rc.cpp:255
+#, no-c-format
+msgid "Skip Housekeeping"
+msgstr ""
+
+#: queue/queuebase.cpp:197 rc.cpp:258
+#, no-c-format
+msgid "Remove package from Q&ueue after installation"
+msgstr "Usuń pakiet z &kolejki po zainstalowaniu"
+
+#: queue/queuebase.cpp:199 rc.cpp:264
+#, no-c-format
+msgid "Remove &All"
+msgstr "Usuń &wszystko"
+
+#: queue/queuebase.cpp:201 rc.cpp:270
+#, no-c-format
+msgid "Remove all packages in Queue"
+msgstr "Instalowanie pakietów z kolejki..."
+
+#: queue/queuebase.cpp:203 config/options8.cpp:186 rc.cpp:276 rc.cpp:806
+#, fuzzy, no-c-format
+msgid "Alt+R"
+msgstr "Alt+W"
+
+#: queue/queuebase.cpp:204 rc.cpp:279
+#, no-c-format
+msgid "Remove selected package from Queue"
+msgstr "Usuń z kolejki"
+
+#: queue/queuebase.cpp:206 rc.cpp:285
+#, no-c-format
+msgid "Return, Ctrl+S"
+msgstr "Wróć, Ctrl+S"
+
+#: queue/queuebase.cpp:208 rc.cpp:291
+#, no-c-format
+msgid "Step &1: Check Installation"
+msgstr "Etap &1: sprawdź instalację"
+
+#: queue/queuebase.cpp:209 rc.cpp:294
+#, no-c-format
+msgid "Alt+1"
+msgstr "Alt+1"
+
+#: queue/queuebase.cpp:210 rc.cpp:297
+#, no-c-format
+msgid "Check packages in Queue with emerge pretend"
+msgstr "Sprawdź pakiety w kolejce za pomocą emerge --pretend"
+
+#: queue/queuebase.cpp:211 rc.cpp:300
+#, no-c-format
+msgid ""
+"Since many applications depend on each other, any attempt to install a "
+"certain software package might result in the installation of several "
+"dependencies as well. Don't worry, Portage handles dependencies well. If you "
+"want to find out what Portage would install when you ask it to install a "
+"certain package."
+msgstr ""
+
+#: queue/queuebase.cpp:212 queue/queuetab.cpp:325 rc.cpp:303
+#, no-c-format
+msgid "Step &2: Start Installation"
+msgstr "Etap &2: rozpoczęcie instalacji"
+
+#: queue/queuebase.cpp:213 rc.cpp:306
+#, no-c-format
+msgid "Alt+2"
+msgstr "Alt+2"
+
+#: queue/queuebase.cpp:214 rc.cpp:309
+#, no-c-format
+msgid "Start emerge of all packages in Queue"
+msgstr "Instalowanie pakietów z kolejki..."
+
+#: queue/queuebase.cpp:215 rc.cpp:312
+#, no-c-format
+msgid ""
+"<b>Summary</b><br>\n"
+"<font color=\"gray\">Installation Queue is empty.</font>"
+msgstr ""
+"<b>Podsumowanie</b><br>\n"
+"<font color=\"gray\">Kolejka instalacji jest pusta.</font>"
+
+#: queue/queuebase.cpp:217 rc.cpp:316
+#, no-c-format
+msgid "<b>Emerge Options</b>"
+msgstr "<b>Opcje emergowania</b>"
+
+#: queue/queuebase.cpp:218 rc.cpp:319
+#, fuzzy, no-c-format
+msgid "Download all packa&ges before installing them (--fetch-all-uri)"
+msgstr "&Pobierz wszystkie pakiety przed zainstalowaniem (--fetch-all-uri)"
+
+#: queue/queuebase.cpp:220 rc.cpp:325
+#, no-c-format
+msgid "Force reinstall of config files (--&noconfmem)"
+msgstr "Wymuś ponowną instalację plików konfiguracyjnych (--&noconfmem)"
+
+#: queue/queuebase.cpp:222 rc.cpp:331
+#, no-c-format
+msgid "Do not add the pac&kages to the world profile (--oneshot)"
+msgstr "Nie dopisuj pa&kietów do pliku world (--oneshot)"
+
+#: queue/queuebase.cpp:224 rc.cpp:337
+#, no-c-format
+msgid "&Backup packages before merging."
+msgstr ""
+
+#: queue/queuetab.cpp:173
 msgid ""
 "<qt><table width=300><tr><td>Instead of doing any package building, just "
 "perform fetches for all packages (the main package as well as all "
@@ -1742,7 +1425,7 @@ msgstr ""
 "<qt><table width=300><tr><td>Pakiety nie zostaną teraz skompilowane, a "
 "jedynie pobrane (wraz z zależnościami).</td></tr></table></qt>"
 
-#: queue/queuetab.cpp:151
+#: queue/queuetab.cpp:177
 msgid ""
 "<qt><table width=300><tr><td>Emerge as normal, but do not add the packages "
 "to the world profile for later updating.</td></tr></table></qt>"
@@ -1751,7 +1434,7 @@ msgstr ""
 "pakietów do profilu world w celu późniejszej aktualizacji.</td></tr></"
 "table></qt>"
 
-#: queue/queuetab.cpp:154
+#: queue/queuetab.cpp:180
 msgid ""
 "<qt><table width=300><tr><td>Causes portage to disregard merge records "
 "indicating that a config fileinside of a CONFIG_PROTECT directory has been "
@@ -1766,45 +1449,852 @@ msgstr ""
 "nieskończoność. Ta flaga spowoduje, że plik będzie zawsze scalany.</td></"
 "tr></table></qt>"
 
-#: queue/queuetab.cpp:229
-msgid "<b>Summary</b><br>"
-msgstr "<b>Podsumowanie</b><br>"
+#: queue/queuetab.cpp:186
+#, fuzzy
+msgid ""
+"<qt><table width=300><tr><td>Emerge as normal, but use quickpkg to make a "
+"backup of the installed ebuilds before merging.</td></tr></table></qt>"
+msgstr ""
+"<qt><table width=300><tr><td>Normalne emergowanie, ale bez dodawania "
+"pakietów do profilu world w celu późniejszej aktualizacji.</td></tr></"
+"table></qt>"
 
-#: queue/queuetab.cpp:230
-msgid "Number of packages: %1<br>"
-msgstr "Liczba pakietów: %1<br>"
+#: queue/queuetab.cpp:207
+msgid ""
+"<qt>The emerge queue quickly shows which packages listed for installation."
+"<br>Since many applications depend on each other, any attempt to install a "
+"certain software package might result in the installation of several "
+"dependencies as well. Don't worry, Portage handles dependencies well."
+"<br><br>If you want to find out what Portage would install when you ask it "
+"to install a certain package, press 'Check Installation'.<br>When all "
+"dependencies are press 'Start Installation'.</qt>"
+msgstr ""
 
-#: queue/queuetab.cpp:231
-msgid "Initial estimated time: %1<br>"
-msgstr "Wstępnie szacowany czas instalacji: %1<br>"
-
-#: queue/queuetab.cpp:232
-msgid "Elapsed time: %1<br>"
-msgstr "Dotychczasowy czas instalacji: %1<br>"
-
-#: queue/queuetab.cpp:234
-msgid "Estimated time remaining: %1<br>"
-msgstr "Szacowany pozostały czas: %1<br>"
+#: queue/queuetab.cpp:273
+msgid ""
+"<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></"
+"td></tr>"
+msgstr ""
 
 #: queue/queuetab.cpp:274
+msgid "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>"
+msgstr ""
+
+#: queue/queuetab.cpp:275
+msgid ""
+"<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>"
+msgstr ""
+
+#: queue/queuetab.cpp:276
+msgid "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>"
+msgstr ""
+
+#: queue/queuetab.cpp:278
+msgid ""
+"<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></"
+"table>"
+msgstr ""
+
+#: queue/queuetab.cpp:319
 msgid "Abort Installation"
 msgstr "Anuluj instalację"
 
-#: queue/queuetab.cpp:357
+#: queue/queuetab.cpp:419
 msgid "Do you want to Download following packages?"
 msgstr "Czy chcesz pobrać następujące pakiety?"
 
-#: queue/queuetab.cpp:357 queue/queuetab.cpp:368
+#: queue/queuetab.cpp:419 queue/queuetab.cpp:430
 msgid "Installation queue"
 msgstr "Kolejka instalacji"
 
-#: queue/queuetab.cpp:368
+#: queue/queuetab.cpp:430
 msgid "Do you want to install following packages?"
 msgstr "Czy chcesz zainstalować następujące pakiety?"
 
-#: queue/queuetab.cpp:395
+#: queue/queuetab.cpp:457
 msgid "Do you want to abort the running installation?"
 msgstr "Czy chcesz anulować trwającą instalację?"
+
+#: queue/queuetab.cpp:466
+#, fuzzy
+msgid "Emerge aborted by user."
+msgstr ""
+"\n"
+"Uruchomiono symulację emergowania pakietu %1..."
+
+#: queue/queuelistview.cpp:178 history/historylistview.cpp:58
+msgid "Duration"
+msgstr "Czas trwania"
+
+#: queue/queuelistview.cpp:180
+msgid "Progress"
+msgstr "Postęp"
+
+#: queue/queuelistview.cpp:311 queue/queuelistview.cpp:317
+#: queue/queuelistview.cpp:323
+msgid "na"
+msgstr "nd"
+
+#: config/options8.cpp:169 rc.cpp:755
+#, no-c-format
+msgid "Enable Eclean"
+msgstr ""
+
+#: config/options8.cpp:170 rc.cpp:758
+#, no-c-format
+msgid ""
+"Eclean is a tool provided by gentoolkit. It is used to keep the portage "
+"directories cleaned up and to prevent unnecessary disk usage."
+msgstr ""
+
+#: config/options8.cpp:171 rc.cpp:761
+#, no-c-format
+msgid "Cleanup Groups"
+msgstr ""
+
+#: config/options8.cpp:172 rc.cpp:764
+#, no-c-format
+msgid "&Distfiles"
+msgstr ""
+
+#: config/options8.cpp:173 config/options1.cpp:196 rc.cpp:372 rc.cpp:767
+#, no-c-format
+msgid "Alt+D"
+msgstr "Alt+G"
+
+#: config/options8.cpp:174 rc.cpp:770
+#, no-c-format
+msgid "clean downloaded source files"
+msgstr ""
+
+#: config/options8.cpp:175 rc.cpp:773
+#, no-c-format
+msgid ""
+"The distfiles are the collection of source files your computer downloads in "
+"order to install something. These files tend to build up over time and "
+"should be cleaned out. Selecting this option allows Kuroo to clean them for "
+"you."
+msgstr ""
+
+#: config/options8.cpp:176 rc.cpp:776
+#, no-c-format
+msgid "Bac&kup Files"
+msgstr ""
+
+#: config/options8.cpp:178 rc.cpp:782
+#, no-c-format
+msgid "quickpkg files are included in this"
+msgstr ""
+
+#: config/options8.cpp:179 rc.cpp:785
+#, no-c-format
+msgid ""
+"The backup files are your binary package files. These include backups made "
+"by Kuroo as well as any packages you have built using <b>quickpkg</b> "
+"(<i>kuroo uses quickpkg to make backups</i>.) Selecting this option allows "
+"Kuroo to cleanup backups that reach a certain age, the age specified in "
+"'Time Limit'."
+msgstr ""
+
+#: config/options8.cpp:181 rc.cpp:791
+#, no-c-format
+msgid "Destr&uctive"
+msgstr ""
+
+#: config/options8.cpp:183 rc.cpp:797
+#, no-c-format
+msgid "use --destructive for eclean"
+msgstr ""
+
+#: config/options8.cpp:184 rc.cpp:800
+#, no-c-format
+msgid ""
+"A destructive eclean leaves only the source files necessary to re-install "
+"your system on your hard drive. This is probably the desired eclean as it is "
+"the most space concerving method."
+msgstr ""
+
+#: config/options8.cpp:185 rc.cpp:803
+#, no-c-format
+msgid "Fetch &Restrict"
+msgstr ""
+
+#: config/options8.cpp:187 rc.cpp:809
+#, no-c-format
+msgid "Don't clean packages that have fetch restriction in portage."
+msgstr ""
+
+#: config/options8.cpp:188 rc.cpp:812
+#, no-c-format
+msgid "max size of ebuild to delete"
+msgstr ""
+
+#: config/options8.cpp:189 rc.cpp:815
+#, no-c-format
+msgid ""
+"The size limit is a cap on the distfile sizes you want cleaned up. If you "
+"enter 100M for instance Kuroo won't auto-clean any file larger than 100M in "
+"size. This is useful if you have a slow internet connection and never want "
+"to download that big file again.<br><i>Man eclean for more info</i>"
+msgstr ""
+
+#: config/options8.cpp:190 rc.cpp:818
+#, no-c-format
+msgid "protect files less than this old"
+msgstr ""
+
+#: config/options8.cpp:191 rc.cpp:821
+#, no-c-format
+msgid ""
+"Time limit is useful for protecting files that are less than the specified "
+"age. If you insert 1m Kuroo will not delete a file that is newer than one "
+"month old. This value is useful both for distfiles and for backup files. You "
+"should have this value set."
+msgstr ""
+
+#: config/options8.cpp:192 rc.cpp:824
+#, no-c-format
+msgid "Time Limit"
+msgstr ""
+
+#: config/options8.cpp:193 rc.cpp:827
+#, no-c-format
+msgid "Size Limit"
+msgstr ""
+
+#: config/options8.cpp:194 rc.cpp:752
+#, fuzzy, no-c-format
+msgid "ECle&an"
+msgstr "Zamiatanie"
+
+#: config/options8.cpp:195 rc.cpp:833
+#, no-c-format
+msgid "Revdep Rebuild"
+msgstr ""
+
+#: config/options8.cpp:196 rc.cpp:836
+#, no-c-format
+msgid ""
+"With revdep-rebuild enabled your system will run the revdep-rebuild utility "
+"following an emerge to ensure library consistency. This takes a lot of time "
+"and may not be desirable every time you emerge."
+msgstr ""
+
+#: config/options8.cpp:197 rc.cpp:830
+#, no-c-format
+msgid "Revdep Re&build"
+msgstr ""
+
+#: config/options1.cpp:186 rc.cpp:346
+#, no-c-format
+msgid "Emerge check update options"
+msgstr "Opcje sprawdzania aktualizacji"
+
+#: config/options1.cpp:187 rc.cpp:349
+#, no-c-format
+msgid "&New Use"
+msgstr ""
+
+#: config/options1.cpp:189 rc.cpp:355
+#, fuzzy, no-c-format
+msgid "&Build Dependancies"
+msgstr "Zależności"
+
+#: config/options1.cpp:191 rc.cpp:361
+#, no-c-format
+msgid "--with-bdeps"
+msgstr ""
+
+#: config/options1.cpp:192 rc.cpp:364
+#, no-c-format
+msgid ""
+"<b><u>Install with build dependancies</u></b><br>\n"
+"This enables the --with-bdeps option for emerge. <br>\n"
+"This can make your install times increase greatly and should be used with "
+"care."
+msgstr ""
+
+#: config/options1.cpp:195 rc.cpp:369
+#, no-c-format
+msgid "&Deep"
+msgstr "&Głęboko"
+
+#: config/options1.cpp:197 rc.cpp:375
+#, no-c-format
+msgid ""
+"<i>Forces emerge to consider the entire dependency tree of packages.<br>\n"
+"Refresh Updates for changes to take effect.</i>"
+msgstr ""
+"<i>Wymusza sprawdzanie całego drzewa zależności pakietu.<br>\n"
+"Odśwież widok aktualizacji, aby uwzględnić zmiany.<i>"
+
+#: config/options1.cpp:199 rc.cpp:379
+#, no-c-format
+msgid "Kuroo options"
+msgstr "Opcje programu Kuroo"
+
+#: config/options1.cpp:200 rc.cpp:382
+#, fuzzy, no-c-format
+msgid "Dock kuroo in system tray (close does not e&xit kuroo)"
+msgstr "Za&dokuj program (nie zostanie zamknięty po kliknięciu ikony krzyżyka)"
+
+#: config/options1.cpp:202 rc.cpp:388
+#, no-c-format
+msgid "Package options"
+msgstr "Opcje filtrowania pakietów"
+
+#: config/options1.cpp:203 rc.cpp:391
+#, no-c-format
+msgid "<i>Restart for changes to take effect.</i>"
+msgstr "<i>Uruchom program ponownie, aby wprowadzić zmiany.</i>"
+
+#: config/options1.cpp:204 rc.cpp:394
+#, no-c-format
+msgid "Show inst&alled packages in separate column"
+msgstr "Wyświetlaj zai&nstalowane pakiety w oddzielnej kolumnie"
+
+#: config/options1.cpp:206 rc.cpp:400
+#, no-c-format
+msgid "Package filter options"
+msgstr "Opcje filtrowania pakietów"
+
+#: config/options1.cpp:209 rc.cpp:405
+#, no-c-format
+msgid "Click to select the background color of the OSD."
+msgstr "Kliknij, aby wybrać kolor tła OSD."
+
+#: config/options1.cpp:210 config/options1.cpp:217 rc.cpp:408 rc.cpp:427
+#, no-c-format
+msgid "The color of the OSD background."
+msgstr "Kolor tła OSD."
+
+#: config/options1.cpp:212 rc.cpp:412
+#, no-c-format
+msgid "Click to select the color of the OSD text."
+msgstr "Kliknij, aby wybrać kolor tekstu OSD."
+
+#: config/options1.cpp:213 config/options1.cpp:215 config/options1.cpp:219
+#: rc.cpp:415 rc.cpp:421 rc.cpp:433
+#, no-c-format
+msgid "The color of the OSD text."
+msgstr "Kolor tekstu OSD."
+
+#: config/options1.cpp:214 rc.cpp:418
+#, no-c-format
+msgid "No matching packages found"
+msgstr "Nie znaleziono pasujących pakietów"
+
+#: config/options1.cpp:216 rc.cpp:424
+#, no-c-format
+msgid "Matching packages found"
+msgstr "Znaleziono pasujące pakiety"
+
+#: config/options1.cpp:218 rc.cpp:430
+#, no-c-format
+msgid "Log browser text font"
+msgstr ""
+
+#: config/options2.cpp:631 rc.cpp:442
+#, no-c-format
+msgid "Build options"
+msgstr "Opcje kompilacji"
+
+#: config/options2.cpp:633 rc.cpp:445
+#, no-c-format
+msgid "i386-pc-linux-gnu"
+msgstr "i386-pc-linux-gnu"
+
+#: config/options2.cpp:634 rc.cpp:448
+#, no-c-format
+msgid "i486-pc-linux-gnu"
+msgstr "i486-pc-linux-gnu"
+
+#: config/options2.cpp:635 rc.cpp:451
+#, no-c-format
+msgid "i586-pc-linux-gnu"
+msgstr "i586-pc-linux-gnu"
+
+#: config/options2.cpp:636 rc.cpp:454
+#, no-c-format
+msgid "i686-pc-linux-gnu"
+msgstr "i686-pc-linux-gnu"
+
+#: config/options2.cpp:637 rc.cpp:457
+#, no-c-format
+msgid "alpha-unknown-linux-gnu"
+msgstr "alpha-unknown-linux-gnu"
+
+#: config/options2.cpp:638 rc.cpp:460
+#, no-c-format
+msgid "powerpc-unknown-linux-gnu"
+msgstr "powerpc-unknown-linux-gnu"
+
+#: config/options2.cpp:639 rc.cpp:463
+#, no-c-format
+msgid "powerpc64-unknown-linux-gnu"
+msgstr "powerpc64-unknown-linux-gnu"
+
+#: config/options2.cpp:640 rc.cpp:466
+#, no-c-format
+msgid "sparc-unknown-linux-gnu"
+msgstr "sparc-unknown-linux-gnu"
+
+#: config/options2.cpp:641 rc.cpp:469
+#, no-c-format
+msgid "hppa-unknown-linux-gnu"
+msgstr "hppa-unknown-linux-gnu"
+
+#: config/options2.cpp:642 rc.cpp:472
+#, no-c-format
+msgid "hppa1.1-unknown-linux-gnu"
+msgstr "hppa1.1-unknown-linux-gnu"
+
+#: config/options2.cpp:643 rc.cpp:475
+#, no-c-format
+msgid "hppa2.0-unknown-linux-gnu"
+msgstr "hppa2.0-unknown-linux-gnu"
+
+#: config/options2.cpp:644 rc.cpp:478
+#, no-c-format
+msgid "mips-unknown-linux-gnu"
+msgstr "mips-unknown-linux-gnu"
+
+#: config/options2.cpp:645 rc.cpp:481
+#, no-c-format
+msgid "x86_64-pc-linux-gnu"
+msgstr "x86_64-pc-linux-gnu"
+
+#: config/options2.cpp:646 rc.cpp:484
+#, no-c-format
+msgid "CHOST"
+msgstr "CHOST"
+
+#: config/options2.cpp:647 rc.cpp:487
+#, no-c-format
+msgid "CFLAGS"
+msgstr "CFLAGS"
+
+#: config/options2.cpp:648 rc.cpp:490
+#, no-c-format
+msgid "CXXFLAGS"
+msgstr "CXXFLAGS"
+
+#: config/options2.cpp:649 rc.cpp:493
+#, no-c-format
+msgid "MAKEOPTS"
+msgstr "MAKEOPTS"
+
+#: config/options2.cpp:650 rc.cpp:496
+#, no-c-format
+msgid "USE"
+msgstr "USE"
+
+#: config/options2.cpp:651 rc.cpp:439
+#, no-c-format
+msgid "&Build"
+msgstr "&Kompilacja"
+
+#: config/options2.cpp:652 rc.cpp:502
+#, no-c-format
+msgid "Advanced build options"
+msgstr "Zaawansowane opcje kompilacji"
+
+#: config/options2.cpp:653 rc.cpp:505
+#, no-c-format
+msgid "CBUILD"
+msgstr "CBUILD"
+
+#: config/options2.cpp:654 rc.cpp:508
+#, no-c-format
+msgid "BUILD_PREFIX"
+msgstr "BUILD_PREFIX"
+
+#: config/options2.cpp:655 rc.cpp:511
+#, no-c-format
+msgid "CCACHE_SIZE"
+msgstr "CCACHE_SIZE"
+
+#: config/options2.cpp:656 rc.cpp:514
+#, no-c-format
+msgid "ACCEPT_KEYWORDS"
+msgstr "ACCEPT_KEYWORDS"
+
+#: config/options2.cpp:657 rc.cpp:517
+#, no-c-format
+msgid "PORTAGE_NICENESS"
+msgstr "PORTAGE_NICENESS"
+
+#: config/options2.cpp:658 rc.cpp:520
+#, no-c-format
+msgid "NOCOLOR"
+msgstr "NOCOLOR"
+
+#: config/options2.cpp:659 rc.cpp:523
+#, no-c-format
+msgid "DEBUGBUILD"
+msgstr "DEBUGBUILD"
+
+#: config/options2.cpp:661 rc.cpp:526
+#, no-c-format
+msgid "yes"
+msgstr "yes"
+
+#: config/options2.cpp:662 rc.cpp:529
+#, no-c-format
+msgid "no"
+msgstr "no"
+
+#: config/options2.cpp:664 rc.cpp:532
+#, no-c-format
+msgid "true"
+msgstr "true"
+
+#: config/options2.cpp:665 rc.cpp:535
+#, no-c-format
+msgid "false"
+msgstr "false"
+
+#: config/options2.cpp:666 history/history.cpp:278 rc.cpp:538
+#, no-c-format
+msgid "AUTOCLEAN"
+msgstr "AUTOCLEAN"
+
+#: config/options2.cpp:667 rc.cpp:541
+#, no-c-format
+msgid "USE_ORDER"
+msgstr "USE_ORDER"
+
+#: config/options2.cpp:668 rc.cpp:544
+#, no-c-format
+msgid "CLEAN_DELAY"
+msgstr "CLEAN_DELAY"
+
+#: config/options2.cpp:669 rc.cpp:547
+#, no-c-format
+msgid "FEATURES"
+msgstr "FEATURES"
+
+#: config/options2.cpp:670 rc.cpp:499
+#, fuzzy, no-c-format
+msgid "Advan&ced build"
+msgstr "&Zaawansowana kompilacja"
+
+#: config/options2.cpp:671 rc.cpp:553
+#, no-c-format
+msgid "Portage directories"
+msgstr "Katalogi Portage"
+
+#: config/options2.cpp:672 rc.cpp:556
+#, no-c-format
+msgid "RPMDIR"
+msgstr "RPMDIR"
+
+#: config/options2.cpp:673 rc.cpp:559
+#, no-c-format
+msgid "PORTAGE_BINHOST"
+msgstr "PORTAGE_BINHOST"
+
+#: config/options2.cpp:674 rc.cpp:562
+#, no-c-format
+msgid "PORTDIR"
+msgstr "PORTDIR"
+
+#: config/options2.cpp:675 rc.cpp:565
+#, no-c-format
+msgid "ROOT"
+msgstr "ROOT"
+
+#: config/options2.cpp:676 rc.cpp:568
+#, no-c-format
+msgid "PORTAGE_TMPDIR"
+msgstr "PORTAGE_TMPDIR"
+
+#: config/options2.cpp:677 rc.cpp:571
+#, no-c-format
+msgid "PORTDIR_OVERLAY"
+msgstr "PORTDIR_OVERLAY"
+
+#: config/options2.cpp:678 rc.cpp:574
+#, no-c-format
+msgid "PKG_DIR"
+msgstr "PKG_DIR"
+
+#: config/options2.cpp:679 rc.cpp:577
+#, no-c-format
+msgid "DISTDIR"
+msgstr "DISTDIR"
+
+#: config/options2.cpp:680 rc.cpp:580
+#, no-c-format
+msgid "PKG_TMPDIR"
+msgstr "PKG_TMPDIR"
+
+#: config/options2.cpp:681 rc.cpp:550
+#, fuzzy, no-c-format
+msgid "D&irectories"
+msgstr "Katalogi"
+
+#: config/options2.cpp:682 rc.cpp:586
+#, no-c-format
+msgid "Config files in /etc"
+msgstr "Pliki konfiguracyjne w katalogu /etc"
+
+#: config/options2.cpp:683 rc.cpp:589
+#, no-c-format
+msgid "CONFIG_PROTECT"
+msgstr "CONFIG_PROTECT"
+
+#: config/options2.cpp:684 rc.cpp:592
+#, no-c-format
+msgid "CONFIG_PROTECT_MASK"
+msgstr "CONFIG_PROTECT_MASK"
+
+#: config/options2.cpp:685 rc.cpp:583
+#, no-c-format
+msgid "Confi&gurations"
+msgstr "Pliki konfi&guracyjne"
+
+#: config/options2.cpp:686 rc.cpp:598
+#, no-c-format
+msgid "Download"
+msgstr "Pobieranie"
+
+#: config/options2.cpp:687 rc.cpp:601
+#, no-c-format
+msgid "HTTP_PROXY"
+msgstr "HTTP_PROXY"
+
+#: config/options2.cpp:688 rc.cpp:604
+#, no-c-format
+msgid "FTP_PROXY"
+msgstr "FTP_PROXY"
+
+#: config/options2.cpp:689 rc.cpp:607
+#, no-c-format
+msgid "RESUMECOMMAND"
+msgstr "RESUMECOMMAND"
+
+#: config/options2.cpp:690 rc.cpp:610
+#, no-c-format
+msgid "FETCHCOMMAND"
+msgstr "FETCHCOMMAND"
+
+#: config/options2.cpp:691 rc.cpp:613
+#, no-c-format
+msgid "GENTOO_MIRRORS"
+msgstr "GENTOO_MIRRORS"
+
+#: config/options2.cpp:692 rc.cpp:595
+#, no-c-format
+msgid "&Network"
+msgstr "&Sieć"
+
+#: config/options2.cpp:693 rc.cpp:619
+#, no-c-format
+msgid "Sync"
+msgstr "Synchronizacja"
+
+#: config/options2.cpp:694 rc.cpp:622
+#, no-c-format
+msgid "RSYNC_PROXY"
+msgstr "RSYNC_PROXY"
+
+#: config/options2.cpp:695 rc.cpp:625
+#, no-c-format
+msgid "RSYNC_TIMEOUT"
+msgstr "RSYNC_TIMEOUT"
+
+#: config/options2.cpp:696 rc.cpp:628
+#, no-c-format
+msgid "SYNC"
+msgstr "SYNC"
+
+#: config/options2.cpp:697 rc.cpp:631
+#, no-c-format
+msgid "RSYNC_RETRIES"
+msgstr "RSYNC_RETRIES"
+
+#: config/options2.cpp:698 rc.cpp:634
+#, no-c-format
+msgid "RSYNC_EXCLUDEFROM"
+msgstr "RSYNC_EXCLUDEFROM"
+
+#: config/options2.cpp:699 rc.cpp:637
+#, no-c-format
+msgid "RSYNC_RATELIMIT"
+msgstr "RSYNC_RATELIMIT"
+
+#: config/options2.cpp:700 rc.cpp:616
+#, fuzzy, no-c-format
+msgid "&Sync"
+msgstr "Synchronizacja"
+
+#: config/options2.cpp:701 rc.cpp:643
+#, no-c-format
+msgid "Logging Options"
+msgstr ""
+
+#: config/options2.cpp:702 rc.cpp:646
+#, no-c-format
+msgid "ELOG's Custom Command"
+msgstr ""
+
+#: config/options2.cpp:703 config/options2.cpp:710 rc.cpp:649 rc.cpp:660
+#, no-c-format
+msgid ""
+"This is the command you want the elog sent through when the 'custom' system "
+"is selected."
+msgstr ""
+
+#: config/options2.cpp:704 config/options2.cpp:711 rc.cpp:652 rc.cpp:663
+#, no-c-format
+msgid ""
+"PORTAGE_ELOG_COMMAND: only used with the \"custom\" logging module. "
+"Specifies a command\n"
+"                     to process log messages. Two variables are expanded:\n"
+"                         ${PACKAGE} - expands to the cpv entry of the "
+"processed\n"
+"                                      package (see $PVR in ebuild(5))\n"
+"                         ${LOGFILE} - absolute path to the logfile\n"
+"                                              Both variables have to be "
+"quoted with single quotes"
+msgstr ""
+
+#: config/options2.cpp:717 rc.cpp:671
+#, no-c-format
+msgid "Directories"
+msgstr "Katalogi"
+
+#: config/options2.cpp:718 rc.cpp:674
+#, no-c-format
+msgid "PORT_LOGDIR"
+msgstr "PORT_LOGDIR"
+
+#: config/options2.cpp:719 rc.cpp:677
+#, no-c-format
+msgid "ELOG Classes"
+msgstr ""
+
+#: config/options2.cpp:720 rc.cpp:680
+#, no-c-format
+msgid "In&fo"
+msgstr ""
+
+#: config/options2.cpp:721 rc.cpp:683
+#, fuzzy, no-c-format
+msgid "Alt+F"
+msgstr "Alt+W"
+
+#: config/options2.cpp:724 rc.cpp:690
+#, no-c-format
+msgid "E&rror"
+msgstr ""
+
+#: config/options2.cpp:725 rc.cpp:693
+#, fuzzy, no-c-format
+msgid "&Warn"
+msgstr "Ostrzeżenie!"
+
+#: config/options2.cpp:726 rc.cpp:696
+#, fuzzy, no-c-format
+msgid "Alt+W"
+msgstr "Alt+W"
+
+#: config/options2.cpp:727 rc.cpp:699
+#, no-c-format
+msgid "&QA"
+msgstr ""
+
+#: config/options2.cpp:729 rc.cpp:705
+#, no-c-format
+msgid "ELOG's Mail Options"
+msgstr ""
+
+#: config/options2.cpp:730 rc.cpp:708
+#, no-c-format
+msgid "To URI"
+msgstr ""
+
+#: config/options2.cpp:731 rc.cpp:711
+#, no-c-format
+msgid "From URI"
+msgstr ""
+
+#: config/options2.cpp:732 rc.cpp:714
+#, no-c-format
+msgid "Subject"
+msgstr ""
+
+#: config/options2.cpp:733 rc.cpp:717
+#, no-c-format
+msgid "ELOG System(s)"
+msgstr ""
+
+#: config/options2.cpp:736 rc.cpp:724
+#, no-c-format
+msgid "Mail"
+msgstr ""
+
+#: config/options2.cpp:738 rc.cpp:728
+#, no-c-format
+msgid "Syslog"
+msgstr ""
+
+#: config/options2.cpp:740 rc.cpp:732
+#, no-c-format
+msgid "C&ustom"
+msgstr ""
+
+#: config/options2.cpp:742 rc.cpp:738
+#, no-c-format
+msgid "Save Summary"
+msgstr ""
+
+#: config/options2.cpp:744 rc.cpp:742
+#, no-c-format
+msgid "Mail Summary"
+msgstr ""
+
+#: config/options2.cpp:746 rc.cpp:640
+#, fuzzy, no-c-format
+msgid "Logging"
+msgstr "Dziennik"
+
+#: config/configdialog.cpp:55 config/configdialog.cpp:60
+msgid "General"
+msgstr "Ogólne"
+
+#: config/configdialog.cpp:56 config/configdialog.cpp:61
+msgid "make.conf"
+msgstr "make.conf"
+
+#: config/configdialog.cpp:57 config/configdialog.cpp:62
+msgid "Etc-update warnings"
+msgstr "Ostrzeżenia przy etc-update"
+
+#: config/configdialog.cpp:58 config/configdialog.cpp:63
+msgid "Housekeeping"
+msgstr ""
+
+#: config/configdialog.cpp:60
+msgid "General preferences"
+msgstr "Preferencje ogólne"
+
+#: config/configdialog.cpp:61
+msgid "Edit your make.conf file"
+msgstr "Edycja pliku make.conf"
+
+#: config/configdialog.cpp:62
+msgid "Edit your etc-update warning file list"
+msgstr "Edycja listy ostrzeżeń narzędzia etc-update"
+
+#: config/configdialog.cpp:63
+msgid "Control automatic file cleanup and rebuilding"
+msgstr ""
+
+#: config/configdialog.cpp:106
+msgid "Failed to save %1. Please run as root."
+msgstr "Nie można zapisać %1. Uruchom program jako root."
 
 #: main.cpp:31
 msgid "Frontend to Gentoo Portage"
@@ -1819,172 +2309,344 @@ msgid "Original author and maintainer"
 msgstr "Autor i opiekun projektu"
 
 #: main.cpp:46
+#, fuzzy
+msgid "Main developer and maintainer"
+msgstr "Autor i opiekun projektu"
+
+#: main.cpp:47
 msgid "French translation"
 msgstr "Tłumaczenie na francuski"
 
-#: main.cpp:47 main.cpp:48 main.cpp:49
+#: main.cpp:48 main.cpp:49 main.cpp:50
 msgid "German translation"
 msgstr "Tłumaczenie na niemiecki"
 
-#: main.cpp:50
+#: main.cpp:51
 msgid "Italian translation"
 msgstr "Tłumaczenie na włoski"
 
-#: main.cpp:51
+#: main.cpp:52
 msgid "Norwegian translation"
 msgstr "Tłumaczenie na norweski"
 
-#: main.cpp:52
+#: main.cpp:53
 msgid "Polish translation"
 msgstr "Tłumaczenie na polski"
 
-#: main.cpp:53
+#: main.cpp:54
 msgid "Kuroo icons"
 msgstr "Ikony programu Kuroo"
 
-#: main.cpp:54
+#: main.cpp:55
 msgid "Portage version code"
 msgstr "Kod wersji Portage"
 
-#: main.cpp:55 main.cpp:56
+#: main.cpp:56 main.cpp:57
 msgid "OpenUsability"
 msgstr "OpenUsability"
 
-#: main.cpp:65
+#: main.cpp:66
 msgid "Kuroo is already running!"
 msgstr "Program Kuroo został już uruchomiony!"
 
-#: logs/logstab.cpp:91
-msgid "User Input"
-msgstr "Dane użytkownika"
-
-#: logs/logstab.cpp:91
-msgid "Enter text:"
-msgstr "Wprowadź tekst"
-
-#: logs/log.cpp:60
-msgid "Writing %1kuroo.log."
-msgstr "Zapisywanie pliku %1kuroo.log"
-
-#: logs/log.cpp:60 config/configdialog.cpp:101
-msgid "Saving"
-msgstr "Zapisywanie"
-
-#: config/configdialog.cpp:54 config/configdialog.cpp:58
-msgid "General"
-msgstr "Ogólne"
-
-#: config/configdialog.cpp:55 config/configdialog.cpp:59
-msgid "make.conf"
-msgstr "make.conf"
-
-#: config/configdialog.cpp:56 config/configdialog.cpp:60
-msgid "Etc-update warnings"
-msgstr "Ostrzeżenia przy etc-update"
-
-#: config/configdialog.cpp:58
-msgid "General preferences"
-msgstr "Preferencje ogólne"
-
-#: config/configdialog.cpp:59
-msgid "Edit your make.conf file"
-msgstr "Edycja pliku make.conf"
-
-#: config/configdialog.cpp:60
-msgid "Edit your etc-update warning file list"
-msgstr "Edycja listy ostrzeżeń narzędzia etc-update"
-
-#: config/configdialog.cpp:101
-msgid "Failed to save %1. Please run as root."
-msgstr "Nie można zapisać %1. Uruchom program jako root."
-
-#: intro/introdlg.cpp:48
-msgid "Ok"
-msgstr "OK"
-
-#: intro/introdlg.cpp:53
+#: _translatorinfo.cpp:1
 msgid ""
-"<qt><table width=300><tr><td>Make backup copies in %1 of following files:</"
-"td></tr>"
-msgstr ""
-"<qt><table width=300><tr><td>W katalogu %1 zapisz kopie zapasowe "
-"następujących plików:</td></tr>"
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Konrad Mantorski"
 
-#: intro/introdlg.cpp:64
+#: _translatorinfo.cpp:3
 msgid ""
-"Kuroo - A KDE Portage frontend that allows you to do most common software "
-"maintenance tasks on gentoo systems</p>New features:<br>Unified package "
-"view: fast package browsing and searching with filters.<br>Two Column "
-"Selector, Package Inspector, Progress bars, Use-Flag Editor, Emerge and "
-"Configuration History, Emerge Queue.<br><br><a href=http://kuroo.org/kuroo/"
-"wiki/TellUs>We love to hear from you. Tell us what you think of Kuroo!</"
-"a><br>"
-msgstr ""
-"Kuroo  - nakładka graficzna na Portage dla środowiska KDE, która ułatwia "
-"zarządzanie oprogramowaniem w systemach z rodziny Gentoo</p><b>Nowe funkcje</"
-"b><br>jednolity widok pakietów, szybkie przeglądanie i wyszukiwanie przy "
-"użyciu filtrów,<br>dwukolumnowy selektor, inspektor pakietów, paski postępu, "
-"edytor flag USE, historia emergowania i konfiguracji, kolejka emergowania."
-"<br ><br><a href=http://kuroo.org/kuroo/wiki/TellUs>Podziel się opinią o "
-"programie Kuroo!</a><br>"
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "konrad@mantorski.com"
 
-#: kurooview.cpp:83
-msgid "Packages"
-msgstr "Pakiety"
+#: history/mergebase.cpp:176 rc.cpp:845
+#, fuzzy, no-c-format
+msgid "Merge changes..."
+msgstr "Scalanie zmian w pliku '%1'."
 
-#: kurooview.cpp:84
-msgid "Queue"
-msgstr "Kolejka"
+#: history/mergebase.cpp:177 rc.cpp:848
+#, fuzzy, no-c-format
+msgid "View changes..."
+msgstr "Szczegółowe informacje o pakiecie..."
 
-#: kurooview.cpp:85
-msgid "History"
-msgstr "Historia"
+#: history/mergebase.cpp:181 rc.cpp:858
+#, fuzzy, no-c-format
+msgid "<font size=\"+1\">Configuration Files</font>"
+msgstr "<font size=\"+1\">Dziennik aktywności</font>"
 
-#: kurooview.cpp:87
-msgid "Log"
-msgstr "Dziennik"
-
-#: kurooview.cpp:133
+#: history/historytab.cpp:99
 msgid ""
-"<qt>Kuroo database is empty!<br>Kuroo will now first scan your emerge log to "
-"create the emerge history.<br>Next, package information in Portage will be "
-"collected.</qt>"
+"<qt>The emerge history keeps track of emerged/unemerged packages."
+"<br>Activate the log function in your /etc/make.conf if you want to trace "
+"those messages. Select an entry and press 'View emerge log'.</qt>"
 msgstr ""
-"<qt>Baza danych programu Kuroo jest pusta!<br>Program przeskanuje najpierw "
-"dziennik emergowania, aby utworzyć historię instalacji.<br>Następnie zostaną "
-"zebrane informacje o pakietach w Portage.</qt>"
 
-#: kurooview.cpp:136 kurooview.cpp:153
-msgid "Initialiazing Kuroo"
-msgstr "Inicjowanie Kuroo"
+#: history/historytab.cpp:185
+#, fuzzy
+msgid "Emerge log"
+msgstr "Informacje o emergowaniu"
 
-#: kurooview.cpp:152
+#: history/historytab.cpp:185
+msgid "Installation message for %1:"
+msgstr "Komunikat instalacyjny dotyczący %1:"
+
+#: history/historytab.cpp:189
 msgid ""
-"<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system "
-"has changed.</qt>"
+"Can not find elog for this emerge. Please check elog settings in /etc/make."
+"conf.\n"
+"Error reading:\n"
 msgstr ""
-"<qt>Baza danych programu Kuroo wymaga odświeżenia!<br>Dziennik emergowania "
-"wskazuje zmiany w systemie.</qt>"
 
-#: kurooview.cpp:153
-msgid "Refresh"
-msgstr "Odśwież"
+#: history/historytab.cpp:191
+#, fuzzy
+msgid "emerge elog"
+msgstr "Wersja emerge"
 
-#: kurooview.cpp:153
-msgid "Skip"
-msgstr "Pomiń"
+#: history/historylistview.cpp:57
+msgid "Date"
+msgstr "Data"
 
-#: kurooview.cpp:192
-msgid "You must run Kuroo as root to emerge packages!"
-msgstr "Aby emergować pakiety, należy uruchomić program Kuroo jako root!"
+#: history/historylistview.cpp:59
+#, fuzzy
+msgid "Emerge log file"
+msgstr "Informacje o emergowaniu"
 
-#: systemtray.cpp:41
-msgid "Kuroo - Portage frontend"
-msgstr "Kuroo - nakładka graficzna na Portage"
+#: history/mergetab.cpp:78
+#, fuzzy
+msgid "New Configuration file"
+msgstr "Plik konfiguracyjny"
 
-#: systemtray.cpp:42
-msgid "&Configure Kuroo..."
-msgstr "&Konfiguruj Kuroo..."
+#: history/mergetab.cpp:79
+#, fuzzy
+msgid "Merged Configuration file"
+msgstr "Plik konfiguracyjny"
+
+#: history/mergetab.cpp:90
+msgid ""
+"<qt>This tab keeps track of all configuration files that need to be merged."
+"<br>Your system is scanned automatically for configuration files after "
+"completed installation.<br>Select a file to merge and press 'Merge changes'. "
+"KDiff3 will then open with old and new files. After saving changes in KDiff3 "
+"the configuration file will be removed. Old merged changes can then be "
+"reviewed in the right list.</qt>"
+msgstr ""
+
+#: history/historybase.cpp:142 rc.cpp:865
+#, no-c-format
+msgid "View emerge log..."
+msgstr ""
+
+#: history/historybase.cpp:144 rc.cpp:871
+#, no-c-format
+msgid "Show &unmerges"
+msgstr "Wyświetl usunię&cia"
+
+#: history/historybase.cpp:146 rc.cpp:877
+#, fuzzy, no-c-format
+msgid "<font size=\"+1\">Installation History</font>"
+msgstr "<font size=\"+1\">Pakiety w kolejce instalacji</font>"
+
+#: history/historybase.cpp:149 rc.cpp:884
+#, no-c-format
+msgid "Show:"
+msgstr "Wyświetl:"
+
+#: history/historybase.cpp:152 rc.cpp:888
+#, no-c-format
+msgid "last week"
+msgstr "ten tydzień"
+
+#: history/historybase.cpp:153 rc.cpp:891
+#, no-c-format
+msgid "last month"
+msgstr "ten miesiąc"
+
+#: history/historybase.cpp:154 rc.cpp:894
+#, no-c-format
+msgid "last 6 months"
+msgstr "ostatnie pół roku"
+
+#: history/historybase.cpp:155 rc.cpp:897
+#, no-c-format
+msgid "last year"
+msgstr "ten rok "
+
+#: history/historybase.cpp:156 rc.cpp:900
+#, no-c-format
+msgid "all"
+msgstr "wszystkie"
+
+#: history/history.cpp:169
+msgid " to "
+msgstr " w "
+
+#: history/history.cpp:170
+msgid " of "
+msgstr " z "
+
+#: history/history.cpp:185
+msgid "Compiling/Merging"
+msgstr "Kompilowanie/scalanie"
+
+#: history/history.cpp:186
+msgid "Post-Build Cleaning"
+msgstr "Zamiatanie po kompilacji"
+
+#: history/history.cpp:187
+msgid "Cleaning"
+msgstr "Zamiatanie"
+
+#: history/history.cpp:197
+msgid "Started emerge on"
+msgstr "Emergowanie uruchomiono o"
+
+#: history/history.cpp:233
+msgid "completed emerge"
+msgstr "zakończono emergowanie"
+
+#: history/history.cpp:242
+msgid "unmerge success"
+msgstr "usuwanie powiodło się"
+
+#: history/history.cpp:250 history/history.cpp:251
+msgid "Synchronizing Portage..."
+msgstr "Synchronizowanie Portage..."
+
+#: history/history.cpp:259 history/history.cpp:260
+msgid "Sync completed."
+msgstr "Zakończono synchronizację."
+
+#: history/history.cpp:279
+msgid "Unmerging"
+msgstr "Usuwanie"
+
+#: history/history.cpp:280
+msgid "Finished. Cleaning up"
+msgstr "Zakończono. Zamiatanie..."
+
+#: history/history.cpp:281
+msgid "Exiting successfully"
+msgstr "Wyjście powiodło się"
+
+#: history/mergelistview.cpp:63
+msgid "Configuration file"
+msgstr "Plik konfiguracyjny"
+
+#: rc.cpp:170
+#, no-c-format
+msgid "&Portage"
+msgstr "&Portage"
+
+#~ msgid ""
+#~ "<font size=\"+1\">Etc-update History</font><br>\n"
+#~ "<i>Click on configuration file to view changes...</i>"
+#~ msgstr ""
+#~ "<font size=\"+1\">Historia etc-update</font><br>\n"
+#~ "<i>Kliknij plik konfiguracyjny, aby wyświetlić zmiany w narzędziu do "
+#~ "porównywania różnic</i>"
+
+#~ msgid ""
+#~ "<font size=\"+1\">Installation History</font><br>\n"
+#~ "<i>Click on package with info to view all information</i>"
+#~ msgstr ""
+#~ "<font size=\"+1\">Historia instalacji</font><br>\n"
+#~ "<i>Kliknij pakiet, aby wyświetlić wszystkie informacje</i>"
+
+#, fuzzy
+#~ msgid "Termi&nal input"
+#~ msgstr "Kończenie"
+
+#~ msgid "S&ync"
+#~ msgstr "S&ynchronizacja"
+
+#~ msgid "Etc-update merging frontend"
+#~ msgstr "Interfejs narzędzia scalającego etc-update"
+
+#~ msgid "External tool"
+#~ msgstr "Zewnętrzne narzędzie"
+
+#~ msgid "Portage version >= &2.1"
+#~ msgstr "Wersja Portage >= &2.1"
+
+#~ msgid "&Information"
+#~ msgstr "&Informacje "
+
+#~ msgid "&Run etc-update"
+#~ msgstr "Uruchom &etc-update"
+
+#~ msgid ""
+#~ "<qt>IMPORTANT: %1 config files in /etc need updating.<br>Do you want to "
+#~ "merge changes?</qt>"
+#~ msgstr ""
+#~ "<qt>WAŻNE: Następująca liczba plików w katalogu /etc wymaga aktualizacji: "
+#~ "%1.<br>Uwzględnić zmiany?</qt>"
+
+#~ msgid ""
+#~ "\n"
+#~ "etc-update didn't start. "
+#~ msgstr ""
+#~ "\n"
+#~ "Proces etc-update nie rozpoczął się. "
+
+#~ msgid "Checking for configuration file updates..."
+#~ msgstr "Sprawdzanie aktualizacji plików konfiguracyjnych..."
+
+#~ msgid "There are no files that need to be updated through etc-update."
+#~ msgstr "Brak plików do zaktualizowania za pomocą narzędzia etc-update."
+
+#~ msgid "Etc-update"
+#~ msgstr "Etc-update"
+
+#~ msgid "<qt>%1Do you want to merge changes in %2?</qt>"
+#~ msgstr "<qt>%1Scalić zmiany w pliku %2?</qt>"
+
+#~ msgid "etc-update (%1 of %2)"
+#~ msgstr "etc-update (%1 z %2)"
+
+#~ msgid "Skipping '%1'. etc-update will ask again next time."
+#~ msgstr ""
+#~ "Pominięto plik %1. Monit zostanie wyświetlony przy następnym etc-update."
+
+#~ msgid "etc-update completed."
+#~ msgstr "Zakończono proces etc-update."
+
+#~ msgid "Emerge messages"
+#~ msgstr "Komunikaty emergowania"
+
+#~ msgid ""
+#~ "Can not identify portage version!\n"
+#~ "Kuroo can not correctly parse package information.\n"
+#~ "You can select portage version in settings."
+#~ msgstr ""
+#~ "Nie można rozpoznać wersji Portage!\n"
+#~ "Program Kuroo nie może prawidłowo przetworzyć informacji o pakietach.\n"
+#~ "Wersję Portage można określić w ustawieniach."
+
+#~ msgid ""
+#~ "Kuroo can not detect your architecture!\n"
+#~ "You must select appropriate architecture to proceed.\n"
+#~ "Please select:"
+#~ msgstr ""
+#~ "Kuroo nie może rozpoznać używanej architektury!\n"
+#~ "Musisz wybrać odpowiednią architekturę, aby kontynuować.\n"
+#~ "Wybierz:"
+
+#~ msgid "<b>Summary</b><br>"
+#~ msgstr "<b>Podsumowanie</b><br>"
+
+#~ msgid "Number of packages: %1<br>"
+#~ msgstr "Liczba pakietów: %1<br>"
+
+#~ msgid "Initial estimated time: %1<br>"
+#~ msgstr "Wstępnie szacowany czas instalacji: %1<br>"
+
+#~ msgid "Elapsed time: %1<br>"
+#~ msgstr "Dotychczasowy czas instalacji: %1<br>"
+
+#~ msgid "Estimated time remaining: %1<br>"
+#~ msgstr "Szacowany pozostały czas: %1<br>"
 
 #~ msgid "E&nter"
 #~ msgstr "E&nter"

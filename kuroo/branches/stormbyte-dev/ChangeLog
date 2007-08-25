@@ -1,12 +1,13 @@
-26-08-07
+25-08-07
 Solved a glitch wich would show a filter related error when no updates are available.
 Added a translatable string
 Removed all --nocolor code as it is deprecated (substituted by --color=n)
 Removed a huge memory usage bug when having the whole log into memory.
 fetchrestricted for eclean is not needed unless destructive is used too (solved)
 eclean bug: Does not exists minutes measure. Changing default to hours.
+Added possibility to set custom buffer size in number of lines.
 
-25-08-07
+24-08-07
 Removed included SQLite support in favor of a external SQLite library.
 Inlined some code.
 Fixed a bug in writting to make.conf (ticket #248)

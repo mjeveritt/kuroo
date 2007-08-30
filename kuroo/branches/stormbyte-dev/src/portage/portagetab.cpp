@@ -27,6 +27,7 @@
 #include "packageversion.h"
 #include "versionview.h"
 #include "uninstallinspector.h"
+#include "portagebase.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -36,6 +37,7 @@
 #include <qbuttongroup.h>
 #include <qtimer.h>
 #include <qwhatsthis.h>
+#include <qradiobutton.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
@@ -337,16 +339,20 @@ void PortageTab::slotListPackages()
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
+		if (radioUpdates->isChecked())
+			numberOfTerms=-1;
+		else {
 		/*** We check number of terms to pass to showNoHitsWarning **/
-		QChar space((char)32);
-		bool iscounted=false;
-		for (unsigned int i=0; i<searchFilter->text().length(); i++) {
-			if (searchFilter->text()[i]!=space) {
-				if (!iscounted) numberOfTerms++;
-				iscounted=true;
-			}
-			else {
-				iscounted=false;
+			QChar space((char)32);
+			bool iscounted=false;
+			for (unsigned int i=0; i<searchFilter->text().length(); i++) {
+				if (searchFilter->text()[i]!=space) {
+					if (!iscounted) numberOfTerms++;
+					iscounted=true;
+				}
+				else {
+					iscounted=false;
+				}
 			}
 		}
 		kdDebug(0) << numberOfTerms << LINE_INFO << "\n";

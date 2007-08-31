@@ -98,13 +98,6 @@ PackageInspector::PackageInspector( QWidget *parent )
 PackageInspector::~PackageInspector()
 {}
 
-/**
- * Return the caller.
- */
-bool PackageInspector::isParentView( int view )
-{
-	return m_view == view;
-}
 
 /**
  * Update the Inspector gui with new versions and data.
@@ -226,7 +219,7 @@ void PackageInspector::slotQueue()
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PackageItem* portagePackage, int view )
+void PackageInspector::edit( PackageItem* portagePackage, const int& view )
 {
 	m_view = view;
 	m_portagePackage = portagePackage;

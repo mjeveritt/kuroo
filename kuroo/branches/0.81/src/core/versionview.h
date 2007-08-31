@@ -30,12 +30,30 @@ public:
     VersionView( QWidget *parent = 0, const char *name = 0 );
     ~VersionView();
 
-	class 		VersionItem;
+    /**
+     * @class VersionViewItem
+     * @short Subclass for formating text.
+     */
+    class 		VersionItem : public KListViewItem
+    {
+	    public:
+		    VersionItem( QListView* parent, const char* version, const bool& isInstalled, const int& stability );
+		    ~VersionItem();
 	
-	void		insertItem( const char* version, const char* stability, const char* size, bool isInstalled );
+		    inline bool	isInstalled() { return m_isInstalled; }
+	
+	    protected:
+		    void 	paintCell( QPainter *p, const QColorGroup &cg, const int& column, const int& width, const int& alignment );
+	
+	    private:
+		    bool	m_isInstalled;
+		    int		m_stability;
+    };
+	
+	void		insertItem( const char* version, const char* stability, const char* size, const bool& isInstalled );
 	void		usedForInstallation( const QString& version );
-	int			hasUpdate();
-	QString 	updateVersion();
+	inline int	hasUpdate() const { return m_installedIndex - m_emergeIndex; }
+	inline QString 	updateVersion() const { return m_emergeVersion; }
 	
 private:
 	QString		m_emergeVersion;

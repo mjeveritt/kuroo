@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>514</width>
-            <height>466</height>
+            <height>486</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -322,7 +322,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Advanced build</string>
+                    <string>Advan&amp;ced build</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -525,9 +525,6 @@
                                 <property name="name">
                                     <cstring>kcfg_AutoClean</cstring>
                                 </property>
-                                <property name="editable">
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget class="QComboBox" row="11" column="1">
                                 <item>
@@ -542,9 +539,6 @@
                                 </item>
                                 <property name="name">
                                     <cstring>kcfg_NoColor</cstring>
-                                </property>
-                                <property name="editable">
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="10" column="0">
@@ -665,7 +659,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Directories</string>
+                    <string>D&amp;irectories</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1248,7 +1242,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>S&amp;ync</string>
+                    <string>&amp;Sync</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1542,10 +1536,10 @@
                                             <cstring>kcfg_ElogInfo</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Info</string>
+                                            <string>In&amp;fo</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Alt+F</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="0" column="1">
@@ -1572,10 +1566,10 @@
                                             <cstring>kcfg_ElogWarn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Warn</string>
+                                            <string>&amp;Warn</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Alt+W</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="0" column="2">
@@ -1701,7 +1695,7 @@
                                         <rect>
                                             <x>10</x>
                                             <y>20</y>
-                                            <width>53</width>
+                                            <width>100</width>
                                             <height>20</height>
                                         </rect>
                                     </property>
@@ -1720,7 +1714,7 @@
                                         <rect>
                                             <x>10</x>
                                             <y>40</y>
-                                            <width>49</width>
+                                            <width>100</width>
                                             <height>20</height>
                                         </rect>
                                     </property>
@@ -1739,31 +1733,12 @@
                                         <rect>
                                             <x>10</x>
                                             <y>60</y>
-                                            <width>65</width>
+                                            <width>100</width>
                                             <height>20</height>
                                         </rect>
                                     </property>
                                     <property name="text">
                                         <string>Syslog</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                </widget>
-                                <widget class="QCheckBox">
-                                    <property name="name">
-                                        <cstring>kcfg_ElogSysCustom</cstring>
-                                    </property>
-                                    <property name="geometry">
-                                        <rect>
-                                            <x>10</x>
-                                            <y>80</y>
-                                            <width>70</width>
-                                            <height>20</height>
-                                        </rect>
-                                    </property>
-                                    <property name="text">
-                                        <string>Custom</string>
                                     </property>
                                     <property name="accel">
                                         <string></string>
@@ -1777,7 +1752,7 @@
                                         <rect>
                                             <x>120</x>
                                             <y>20</y>
-                                            <width>113</width>
+                                            <width>120</width>
                                             <height>20</height>
                                         </rect>
                                     </property>
@@ -1796,7 +1771,7 @@
                                         <rect>
                                             <x>120</x>
                                             <y>40</y>
-                                            <width>109</width>
+                                            <width>120</width>
                                             <height>20</height>
                                         </rect>
                                     </property>
@@ -1805,6 +1780,25 @@
                                     </property>
                                     <property name="accel">
                                         <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>kcfg_ElogSysCustom</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>120</x>
+                                            <y>60</y>
+                                            <width>100</width>
+                                            <height>20</height>
+                                        </rect>
+                                    </property>
+                                    <property name="text">
+                                        <string>C&amp;ustom</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+U</string>
                                     </property>
                                 </widget>
                             </widget>

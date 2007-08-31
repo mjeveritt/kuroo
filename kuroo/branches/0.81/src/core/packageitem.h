@@ -38,43 +38,100 @@ public:
 	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
 	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
 	~PackageItem();
+	/**
+	 * Package status describing if this package is installed or not.
+	 * @return status
+	 */
+	inline const int				status() const { return m_status; }
+	/**
+	 * Package db id.
+	 * @return id
+	 */
+	inline const QString& 				id() const { return m_id; }
+	/**
+	 * Package name as kuroo in app-portage/kuroo.
+	 * @return name
+	 */
+	inline const QString&				name() const { return m_name; }
+	/**
+	 * Accessor for category.
+	 * @return the package category.
+	 */
+	inline const QString& 				category() const { return m_category; }
+	/**
+	 * Package description.
+	 * @return description
+	 */
+	inline const QString&				description() const { return m_description; }
 	
-	const int						status() const;
-	const QString& 					id() const;
-	const QString&					name() const;
-	const QString& 					category() const;
-	const QString&					description() const;
-	
-	virtual void					setPackageIndex( int index );	
-	virtual bool					isInstalled();
-	virtual bool					isInPortage();
-	virtual bool					isQueued();
-	virtual bool					isInWorld();
+	virtual void					setPackageIndex( const int& index );	
+	virtual bool					isInstalled() const;
+	virtual bool					isInPortage() const;
+	/**
+	 * Is this package is in the emerge queue?
+	 * @return true/false
+	 */
+	inline virtual bool				isQueued() const { return m_isQueued; }
+	/**
+	 * Is this package in world?
+	 * @return true/false
+	 */
+	inline virtual bool				isInWorld() const { return m_inWorld; }
 	
 // 	void							setRollOver( bool isMouseOver );
 	void							setInstalled();
 	void							setDescription( const QString& description );
-	void							setQueued( bool isQueued );
-	bool							isFirstPackage();
-	bool							isLastPackage();
+	void							setQueued( const bool& isQueued );
+	bool							isFirstPackage() const;
+	/**
+	 * Is this the last package?
+	 * @return true if last
+	 */
+	inline bool						isLastPackage() const  { return ( m_index == 1 ); }
 	
 	void 							initVersions();
-	QValueList<PackageVersion*> 	versionList();
-	QMap<QString,PackageVersion*> 	versionMap();
-	QValueList<PackageVersion*> 	sortedVersionList();
+	/**
+	 * Return list of versions.
+	 * @return QValueList<PackageVersion*>
+	 */
+	inline QValueList<PackageVersion*> 			versionList()const  { return m_versions; }
+	/**
+	 * Return map of versions - faster find.
+	 * @return QMap<QString, PackageVersion*>
+	 */
+	inline QMap<QString,PackageVersion*> 			versionMap() const { return m_versionMap; }
+	QValueList<PackageVersion*> 				sortedVersionList();
 	void							resetDetailedInfo();
 
-	void							parsePackageVersions();
-	const QStringList&				versionDataList() const;
-	const QString&					emergeVersion() const;
-	const QString&					homepage() const;
-	const QString&					linesInstalled() const;
-	const QString&					linesAvailable() const;
-	const QString&					linesEmerge() const;
-	const bool						isInArch() const;
+	void						parsePackageVersions();
+	/**
+	 * Return versions list together with stability info etc...
+	 */
+	inline const QStringList&				versionDataList() const { return m_versionsDataList; }
+	/**
+	 * Return version used by emerge.
+	 */
+	inline const QString&					emergeVersion() const { return m_emergeVersion; }
+	/** Queries homepage of application
+	 * @return that homepage
+	 */
+	inline const QString&					homepage() const { return m_homepage; }
+	/**
+	 * Returns list of installed versions in html-format.
+	 */
+	inline const QString&					linesInstalled() const { return m_linesInstalled; }
+	/**
+	 * Returns list of available versions in html-format.
+	 */
+	inline const QString&					linesAvailable() const { return m_linesAvailable; }
+	/**
+	 * Returns list emergeable versions in html-format.
+	 */
+	inline const QString&					linesEmerge() const { return m_linesEmerge; }
+	inline const bool					isInArch() const { return m_isInArch; }
 	
 protected:
-	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+	void				paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
 	
 private:
 	QListView						*m_parent;

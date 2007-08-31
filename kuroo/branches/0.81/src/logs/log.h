@@ -37,19 +37,22 @@ class Log : public QObject
 Q_OBJECT
 public:
 	Log( QObject *m_parent = 0 );
-    ~Log();
+	~Log();
 	
 	void 			setGui( KTextBrowser *logBrowserGui, QCheckBox *verboseLogGui, QCheckBox *saveLogGui );
 	void 			writeLog( const QString& output, int logType );
 	
-	const QString	init( QObject *parent = 0 );
+	const QString		init( QObject *parent = 0 );
 	KIO::Job*		backupLog();
+	static int		buffer_MaxLines;
 	
 private:
+	void addText(const QString&);
 	QObject*		m_parent;
 	QCheckBox 		*m_verboseLog, *m_saveLog;
-	KTextBrowser 	*m_logBrowser;
+	KTextBrowser 		*m_logBrowser;
 	QFile 			m_logFile;
+	unsigned int		numLines;
 	
 signals:
 	void			signalLogChanged();

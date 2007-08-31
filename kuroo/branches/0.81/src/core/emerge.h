@@ -39,12 +39,12 @@ class Emerge : public QObject
 Q_OBJECT
 public:
 	Emerge( QObject *m_parent = 0 );
-    ~Emerge();
+	~Emerge();
 
 	void						init( QObject *parent = 0 );
 	void						inputText( const QString& text );
 	bool						stop();
-	bool 						isRunning();
+	bool 						isRunning() const;
 	
 	bool 						pretend( const QStringList& packageList );
 	bool 						queue( const QStringList& packageList );
@@ -52,12 +52,26 @@ public:
 	bool						quickpkg( const QStringList& packageList );
 	bool						sync();
 	bool						checkUpdates();
-	bool						isPaused();
-	bool						canPause();
+	/**
+	 * Are we paused?
+	 * @return bool
+	 */
+	inline bool					isPaused() const { return m_isPaused; }
+	/**
+	 * Can we pasue?
+	 * @return bool
+	 */
+	inline bool					canPause() const { return m_pausable; }
 	
-	const 	EmergePackageList 			packageList();
+	/**
+	 * @return list of packages parsed out from emerge output.
+	 */
+	inline const 	EmergePackageList 		packageList() const { return m_emergePackageList; }
 	const 	QString					packageMessage();
-        void                                            setSkipHousekeeping(bool x);
+	/**
+	 * Set Skip Housekeeping
+	 */
+	inline void					setSkipHousekeeping(const bool& x) { m_skipHousekeeping = x;}
 
 public slots:
 	void						slotPause();
@@ -67,7 +81,11 @@ private:
 	void						cleanup();
 	bool						countEtcUpdates( const QString& line );
 	void						askUnmaskPackage( const QString& packageKeyword );
-        bool                                            skipHousekeeping();
+	/**
+	 * Do we Skip housekeeping?
+	 * @return bool
+	 */
+	inline bool					skipHousekeeping() const { return m_skipHousekeeping; }
 	
 private slots:
 	void 						slotEmergeOutput( KProcIO *proc );
@@ -78,9 +96,9 @@ private slots:
 	void 						slotCleanupCheckUpdates( KProcess *proc );
 	void						slotTryEmerge();
 	void						slotBackupComplete( KProcess *proc );
-        void                                            slotEmergeDistfilesComplete( KProcess* proc );
-        void                                            slotEClean2Complete( KProcess* proc );
-        void                                            slotRevdepRebuildComplete( KProcess* proc );
+	void						slotEmergeDistfilesComplete( KProcess* proc );
+        void						slotEClean2Complete( KProcess* proc );
+        void						slotRevdepRebuildComplete( KProcess* proc );
 
 	
 signals:

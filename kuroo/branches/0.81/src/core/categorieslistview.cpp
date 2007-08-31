@@ -27,26 +27,6 @@
 #include <klistview.h>
 #include <kglobal.h>
 
-/**
- * @class CategoriesView::CategoryItem
- * @short Highlight empty category.
- */
-class CategoriesView::CategoryItem : public QListViewItem
-{
-public:
-	CategoryItem( QListView* parent, const char* name, const QString &id );
-	
-	void 			setOn( bool on );
-	const QString& 	id();
-	const QString& 	name();
-	
-protected:
-	QString			m_id, m_name;
-	bool 			m_on;
-	void 			paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-};
-
-
 CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
 	: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
 {}
@@ -71,22 +51,6 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg
 	}
 	
 	QListViewItem::paintCell( p, m_cg, column, width, alignment );
-}
-
-void CategoriesView::CategoryItem::setOn( bool on )
-{
-	m_on = on;
-	repaint();
-}
-
-const QString& CategoriesView::CategoryItem::id()
-{
-	return m_id;
-}
-
-const QString& CategoriesView::CategoryItem::name()
-{
-	return m_name;
 }
 
 /**
@@ -119,7 +83,7 @@ void CategoriesView::slotStoreFocus( QListViewItem* item )
  * Retreive last focus category from internal index, and making that category current.
  * bool is this triggered by filter action?
  */
-void CategoriesView::restoreFocus( bool isFiltered )
+void CategoriesView::restoreFocus( const bool& isFiltered )
 {
 	CategoryItem* focusCategory = m_categoryIndex.find( m_focus );
 	if ( !focusCategory )
@@ -134,16 +98,11 @@ void CategoriesView::restoreFocus( bool isFiltered )
 
 }
 
-CategoriesView::CategoryItem* CategoriesView::currentCategory()
-{
-	return dynamic_cast<CategoryItem*>( this->currentItem() );
-}
-
 /**
  * Get current category idDB.
  * @return category
  */
-const QString CategoriesView::currentCategoryId()
+const QString CategoriesView::currentCategoryId() const
 {
 	CategoryItem* item = currentCategory();
 	if ( item )

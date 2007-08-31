@@ -25,42 +25,17 @@
 
 #include <klistview.h>
 
-/**
- * @class VersionViewItem
- * @short Subclass for formating text.
- */
-class VersionView::VersionItem : public KListViewItem
-{
-public:
-	VersionItem( QListView* parent, const char* version, bool isInstalled, int stability );
-	~VersionItem();
-	
-	bool	isInstalled();
-	
-protected:
-	void 	paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-	
-private:
-	bool	m_isInstalled;
-	int		m_stability;
-};
-
-VersionView::VersionItem::VersionItem( QListView* parent, const char* version, bool isInstalled, int stability )
+VersionView::VersionItem::VersionItem( QListView* parent, const char* version, const bool& isInstalled, const int& stability )
 	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_stability( stability )
 {}
 
 VersionView::VersionItem::~VersionItem()
 {}
 
-bool VersionView::VersionItem::isInstalled()
-{
-	return m_isInstalled;
-}
-
 /**
  * Paint the installed version in dark green.
  */
-void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, const int& column, const int& width, const int& alignment )
 {
 	QColorGroup m_cg( cg );
 	QFont font( p->font() );
@@ -106,7 +81,7 @@ VersionView::~VersionView()
 {
 }
 
-void VersionView::insertItem( const char* version, const char* stability, const char* size, bool isInstalled )
+void VersionView::insertItem( const char* version, const char* stability, const char* size, const bool& isInstalled )
 {
 	VersionItem* item;
 	if ( stability == i18n("Testing") )
@@ -143,14 +118,5 @@ void VersionView::usedForInstallation( const QString& version )
 	m_emergeVersion = version;
 }
 
-int VersionView::hasUpdate()
-{
-	return m_installedIndex - m_emergeIndex;
-}
-
-QString VersionView::updateVersion()
-{
-	return m_emergeVersion;
-}
 
 #include "versionview.moc"

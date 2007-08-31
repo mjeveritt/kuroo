@@ -73,16 +73,19 @@ void PackageListView::resetListView()
  * Current package status.
  * @return status
  */
-int PackageListView::currentItemStatus()
-{
-	return currentPackage()->status();
-}
+int PackageListView::currentItemStatus() const  { return currentPackage()->status(); }
 
+/**
+ * The current package.
+ * @return PackageItem*
+ */
+PackageItem* PackageListView::currentPackage() const  { return dynamic_cast<PackageItem*>( this->currentItem() ); }
+	
 /**
  * Return PackageItem from listview index.
  * @param id
  */
-PackageItem* PackageListView::packageItemById( const QString& id )
+PackageItem* PackageListView::packageItemById( const QString& id ) const
 {
 	if ( id.isEmpty() || !m_packageIndex[id] )
 		return NULL;
@@ -94,7 +97,7 @@ PackageItem* PackageListView::packageItemById( const QString& id )
  * Current package id.
  * @return id
  */
-const QString PackageListView::currentId()
+const QString PackageListView::currentId() const
 {
 	PackageItem* item = currentPackage();
 	if ( item )
@@ -104,22 +107,13 @@ const QString PackageListView::currentId()
 }
 
 /**
- * The current package.
- * @return PackageItem*
- */
-PackageItem* PackageListView::currentPackage()
-{
-	return dynamic_cast<PackageItem*>( this->currentItem() );
-}
-
-/**
  * All selected packages by id.
  * @return idList
  */
-const QStringList PackageListView::selectedId()
+const QStringList PackageListView::selectedId() const
 {
 	QStringList idList;
-	QListViewItemIterator it( this );
+	QListViewItemIterator it( (PackageListView*)&(*this) );
 	while ( it.current() ) {
 		QListViewItem *item = it.current();
 		if ( item->isSelected() )
@@ -133,10 +127,10 @@ const QStringList PackageListView::selectedId()
  * All selected packages by name.
  * @return packageList
  */
-const QStringList PackageListView::selectedPackages()
+const QStringList PackageListView::selectedPackages() const
 {
 	QStringList packageList;
-	QListViewItemIterator it( this );
+	QListViewItemIterator it( (PackageListView*)&(*this) );
 	while ( it.current() ) {
 		QListViewItem *item = it.current();
 		if ( item->isSelected() )
@@ -150,10 +144,10 @@ const QStringList PackageListView::selectedPackages()
  * All packages in listview by id.
  * @return idList
  */
-const QStringList PackageListView::allId()
+const QStringList PackageListView::allId() const
 {
 	QStringList idList;
-	QListViewItemIterator it( this );
+	QListViewItemIterator it( (PackageListView*)&(*this) );
 	while ( it.current() ) {
 		idList += dynamic_cast<PackageItem*>( it.current() )->id();
 		++it;
@@ -165,10 +159,10 @@ const QStringList PackageListView::allId()
  * All packages in listview by name.
  * @return packageList
  */
-const QStringList PackageListView::allPackages()
+const QStringList PackageListView::allPackages() const
 {
 	QStringList packageList;
-	QListViewItemIterator it( this );
+	QListViewItemIterator it( (PackageListView*)&(*this) );
 	while ( it.current() ) {
 		packageList += dynamic_cast<PackageItem*>( it.current() )->name();
 		++it;
@@ -201,27 +195,18 @@ void PackageListView::setPackageFocus( const QString& id )
  */
 void PackageListView::indexPackage( const QString& id, PackageItem *item )
 {
-	if ( id.isEmpty() )
-		return;
-	
-	m_packageIndex.insert( id, item );
-	m_packageIndex[id]->setPackageIndex( m_packageIndex.count() );
+	if ( !id.isEmpty() ) {
+		m_packageIndex.insert( id, item );
+		m_packageIndex[id]->setPackageIndex( m_packageIndex.count() );
+	}
 }
 
-/**
- * Total number of packages in listview.
- * @return QString
- */
-const QString PackageListView::count()
-{
-	return QString::number( m_packageIndex.count() );
-}
 
 /**
  * Move to next package in listview.
  * @param isUp true is previous, false is next
  */
-void PackageListView::nextPackage( bool isPrevious )
+void PackageListView::nextPackage( const bool& isPrevious )
 {
 	if ( isVisible() ) {
 		QListViewItem* item = currentItem();

@@ -91,21 +91,10 @@ bool Emerge::stop()
 }
 
 /**
- * Convenience flag.
- * @return true if emerging.
+ * Checks if emerge is running.
+ * @return true if emerging, false otherwise.
  */
-bool Emerge::isRunning()
-{
-	return eProc->isRunning();
-}
-
-/**
- * @return list of packages parsed out from emerge output.
- */
-const EmergePackageList Emerge::packageList()
-{
-	return m_emergePackageList;
-}
+bool Emerge::isRunning() const { return eProc->isRunning(); }
 
 /**
  * Emerge list of packages.
@@ -168,23 +157,6 @@ bool Emerge::queue( const QStringList& packageList )
 
 
 /**
- * Set Skip Housekeeping
- */
-void Emerge::setSkipHousekeeping( bool x )
-{
-  m_skipHousekeeping = x;
-}
-
-/**
- * Do we Skip housekeeping
- * @return bool
- */
-bool Emerge::skipHousekeeping()
-{
-  return m_skipHousekeeping;
-}
-
-/**
  * Pause the eproc
  */
 void Emerge::slotPause()
@@ -213,24 +185,6 @@ void Emerge::slotUnpause()
 	QueueSingleton::Instance()->unpauseEmerge();
 	eProc->kill(SIGCONT);
 	m_isPaused = false;
-}
-
-/**
- * Are we paused?
- * @return bool
- */
-bool Emerge::isPaused()
-{
-	return m_isPaused;
-}
-
-/**
- * Can we pasue?
- * @return bool
- */
-bool Emerge::canPause()
-{
-	return m_pausable;
 }
 
 /**
@@ -584,6 +538,7 @@ void Emerge::cleanup()
         {
           if( KurooConfig::ecleanDistfiles() )
           {
+		  QString ecleanCOMMAND;
             QTextCodec *codec = QTextCodec::codecForName("utf8");
             eClean1 = new KProcIO( codec );
 	    eClean1->setUseShell( true, "/bin/bash" );
@@ -593,24 +548,36 @@ void Emerge::cleanup()
 	    #endif
             eClean1->resetAll();
             *eClean1 << "eclean";
+	    ecleanCOMMAND="eclean ";
             if( KurooConfig::ecleanTimeLimit() )
             {
               *eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
+	      ecleanCOMMAND+="-t";
+	      ecleanCOMMAND+=KurooConfig::ecleanTimeLimit();
+	      ecleanCOMMAND+=" ";
             }
             if( KurooConfig::ecleanDestructive() )
             {
               *eClean1 << "--destructive";
+	      ecleanCOMMAND+="--destructive ";
+	      
             }
-            *eClean1 << "--nocolor" << "distfiles";
+            *eClean1 << "--nocolor";
+	    ecleanCOMMAND+="--nocolor ";
             
-            if( KurooConfig::ecleanFetchRestrict() )
+            if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
             {
               *eClean1 << "--fetch-restricted";
+	      ecleanCOMMAND+="--fetch-restricted ";
             }
+	    *eClean1 << "distfiles ";
             if( KurooConfig::ecleanSizeLimit() )
             {
               *eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
+	      ecleanCOMMAND+="-s"+KurooConfig::ecleanSizeLimit()+" ";
             }
+	    ecleanCOMMAND+="distfiles";
+	    kdDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
             if ( !eClean1->start( KProcess::OwnGroup, true ) ) {
                   LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );
                   m_doeclean = false;

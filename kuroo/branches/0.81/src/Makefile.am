@@ -52,7 +52,7 @@ kuroo_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
 	$(top_builddir)/src/config/libconfig.la $(top_builddir)/src/queue/libqueue.la \
 	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
-	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KDEPRINT) $(LIB_KFILE) \
+	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KFILE) \
 	$(LIB_KDECORE) $(SQLITE_LIBS)
 
 

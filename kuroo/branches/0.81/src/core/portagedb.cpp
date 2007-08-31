@@ -1051,7 +1051,6 @@ void KurooDB::addBackup( const QString& source, const QString& destination )
 	        .arg( QString::number( currentTime.toTime_t() ) ).arg( source ).arg( destination ) );
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1342,6 +1341,11 @@ void DbConnectionPool::putDbConnection( const DbConnection *conn )
 {
 	enqueue( conn );
 	m_semaphore--;
+}
+
+QString DbConnectionPool::escapeString(const QString& str) const {
+	QString result=str;
+	return result.replace('\'', "''");
 }
 
 #include "portagedb.moc"

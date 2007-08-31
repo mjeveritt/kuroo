@@ -118,26 +118,11 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 	}
 }
 
-/**
- * Return found configuration files.
- */
-QStringList EtcUpdate::confFilesList()
-{
-	return m_etcFilesList;
-}
-
-/**
- * Return backup files found in /var/cache/kuroo/backup/configuration.
- */
-QStringList EtcUpdate::backupFilesList()
-{
-	return m_backupFilesList;
-}
 
 /**
  * Launch diff tool with first etc-file in list.
  */
-void EtcUpdate::runDiff( const QString& source, const QString& destination, bool isNew )
+void EtcUpdate::runDiff( const QString& source, const QString& destination, const bool& isNew )
 {
 	struct stat st;
 

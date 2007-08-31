@@ -82,7 +82,7 @@ void Images::init( QObject *parent )
  * Deliver icons.
  * @return pointer to pixmap
  */
-const QPixmap& Images::icon( int image )
+const QPixmap& Images::icon( const int& image )
 {
 	switch ( image ) {
 		
@@ -174,7 +174,8 @@ const QPixmap& Images::icon( int image )
 			break;
 
 		default:
-			pxEmpty;
+			return pxEmpty;
+			break;
 	}
 }
 

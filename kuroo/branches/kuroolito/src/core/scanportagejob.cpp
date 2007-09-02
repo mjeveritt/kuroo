@@ -68,7 +68,6 @@ void ScanPortageJob::completeJob()
  */
 bool ScanPortageJob::doJob()
 {
-	DEBUG_LINE_INFO;
 	int count( 0 );
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -91,10 +90,7 @@ bool ScanPortageJob::doJob()
 	// Load Portage cache files to speed up portage scan
 // 	loadCache();
 	
-	DEBUG_LINE_INFO;
 	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '/var/cache/edb/dep/usr/portage.sqlite' AS portage;", m_db );
-	DEBUG_LINE_INFO;
-	
 	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT portage_package_key FROM portage.portage_packages;", m_db );
 	foreach ( cachePackages ) {
 		QString package = *it;
@@ -105,7 +101,7 @@ bool ScanPortageJob::doJob()
 			QString name = parts[1];
 			QString version = parts[2];
 		}
-		kdDebug() << "package=" << package << LINE_INFO;
+		kdWarning(0) << "package=" << package << LINE_INFO;
 	}
 	KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	

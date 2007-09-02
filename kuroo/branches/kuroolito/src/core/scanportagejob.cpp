@@ -97,7 +97,7 @@ bool ScanPortageJob::doJob()
 	
 	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT portage_package_key FROM portage.portage_packages;", m_db );
 	foreach ( cachePackages ) {
-		QString package = *it++;
+		QString package = *it;
 		QString category = package.section("/", 0, 0);
 		QString nameVersion = package.section("/", 1, 1);
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( nameVersion );

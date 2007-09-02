@@ -91,21 +91,41 @@ bool ScanPortageJob::doJob()
 	// Load Portage cache files to speed up portage scan
 // 	loadCache();
 	
+	DEBUG_LINE_INFO;
+	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE /var/cache/edb/dep/usr/portage.sqlite AS portage;", m_db );
+	DEBUG_LINE_INFO;
+	
+	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT portage_package_key FROM portage;", m_db );
+	foreach ( cachePackages ) {
+		QString package = *it++;
+		QString category = package.section("/", 0, 0);
+		QString nameVersion = package.section("/", 1, 1);
+		QStringList parts = GlobalSingleton::Instance()->parsePackage( nameVersion );
+		if ( !parts.isEmpty() ) {
+			QString name = parts[1];
+			QString version = parts[2];
+		}
+		kdDebug() << "package=" << package << LINE_INFO;
+	}
+	KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
+	
+	
+	
 	// Temporary table for all categories
-	KuroolitoDBSingleton::Instance()->singleQuery(	"BEGIN TRANSACTION;", m_db );
-	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE category_temp ( "
+	KuroolitoDBSingleton::Instance()->singleQuery("BEGIN TRANSACTION;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery("CREATE TEMP TABLE category_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                    		"name VARCHAR(32) UNIQUE );"
 	                                    		, m_db );
 	
-	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE subCategory_temp ( "
+	KuroolitoDBSingleton::Instance()->singleQuery("CREATE TEMP TABLE subCategory_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                    		"name VARCHAR(32), "
 	                                    		"idCategory INTEGER );"
 	                                    		, m_db );
 	
 	// Temporary table for all packages
-	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
+	KuroolitoDBSingleton::Instance()->singleQuery("CREATE TEMP TABLE package_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                    		"idCategory INTEGER, "
 	                                          	"idSubCategory INTEGER, "
@@ -119,7 +139,7 @@ bool ScanPortageJob::doJob()
 	                                          	, m_db );
 	
 	// Temporary table for all versions
-	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE version_temp ( "
+	KuroolitoDBSingleton::Instance()->singleQuery("CREATE TEMP TABLE version_temp ( "
 	                                          	"id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	                                          	"idPackage INTEGER, "
 	                                          	"name VARCHAR(32),"
@@ -138,7 +158,7 @@ bool ScanPortageJob::doJob()
 	const QStringList pathOverlays = QStringList::split( " ", KuroolitoConfig::dirPortageOverlay() );
 	foreach ( pathOverlays )
 		pathList += *it;
-	DEBUG_LINE_INFO;
+	
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 	
@@ -167,11 +187,9 @@ bool ScanPortageJob::doJob()
 			QString subCategory = ( *itCategory ).section( "-", 1, 1 );
 			
 			if ( lastCategory != category )
-				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( 
-					"INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 			
-			int idSubCategory = KuroolitoDBSingleton::Instance()->insert(QString( 
-				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
+			int idSubCategory = KuroolitoDBSingleton::Instance()->insert(QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
     			.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
 			// Get list of packages in this category
@@ -242,6 +260,7 @@ bool ScanPortageJob::doJob()
 			lastCategory = category;
 		}
 	}
+	
 	DEBUG_LINE_INFO;
 	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
 	scanInstalledPackages();
@@ -497,13 +516,16 @@ QString ScanPortageJob::formatSize( const QString& size )
  */
 void ScanPortageJob::loadCache()
 {
-	m_mapCache.clear();
-	const QStringList cacheList = KuroolitoDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
-	foreach ( cacheList ) {
-		QString package = *it++;
-		QString size = *it;
-		m_mapCache.insert( package, size );
-	}
+	
+	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH /var/cache/edb/dep/usr/portage.sqlite AS CACHE;", m_db );
+	
+// 	m_mapCache.clear();
+// 	const QStringList cacheList = KuroolitoDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
+// 	foreach ( cacheList ) {
+// 		QString package = *it++;
+// 		QString size = *it;
+// 		m_mapCache.insert( package, size );
+// 	}
 }
 
 /**

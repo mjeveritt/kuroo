@@ -211,9 +211,9 @@ void KuroolitoDB::createTables( DbConnection *conn )
 	      "data VARCHAR(64) );"
 		  , conn);
 	
-	query(" INSERT INTO dbInfo (meta, data) VALUES ('syncTimeStamp', '0');", conn);
-	query(" INSERT INTO dbInfo (meta, data) VALUES ('packageCount', '0');", conn);
-	query(" INSERT INTO dbInfo (meta, data) VALUES ('scanDuration', '100');", conn);
+	query("INSERT INTO dbInfo (meta, data) VALUES ('syncTimeStamp', '0');", conn);
+	query("INSERT INTO dbInfo (meta, data) VALUES ('packageCount', '0');", conn);
+	query("INSERT INTO dbInfo (meta, data) VALUES ('scanDuration', '100');", conn);
 	
 	query("CREATE TABLE category ( "
 	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -879,7 +879,6 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 		
 		if ( !format.startsWith( "SQLite format 3" ) )
 			kdWarning(0) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
-
 		else
 			if ( sqlite3_open( path, &m_db ) != SQLITE_OK ) {
 				kdWarning(0) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;

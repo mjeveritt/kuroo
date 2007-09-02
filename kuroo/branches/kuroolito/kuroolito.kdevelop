@@ -114,7 +114,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>src/kuroolito</mainprogram>
+      <mainprogram/>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
@@ -123,6 +123,11 @@
         <kuroo/>
         <kuroolito/>
       </runarguments>
+      <globaldebugarguments/>
+      <globalcwd>/home/karye/repository/kuroo-svn/kuroo/branches/kuroolito/debug</globalcwd>
+      <useglobalprogram>false</useglobalprogram>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
@@ -131,7 +136,7 @@
     <configurations>
       <default>
         <envvars/>
-        <configargs>--enable-debug=full</configargs>
+        <configargs>--enable-debug=full --without-arts</configargs>
         <builddir>debug</builddir>
         <topsourcedir/>
         <cppflags/>

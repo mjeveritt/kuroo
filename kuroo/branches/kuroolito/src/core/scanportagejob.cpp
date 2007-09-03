@@ -204,7 +204,7 @@ bool ScanPortageJob::doJob()
 	}
 	
 	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
-// 	scanInstalledPackages();
+	scanInstalledPackages();
 	
 	// Iterate through portage map and insert everything in db
 	PortageCategories::iterator itCategoryEnd = m_categories.end();

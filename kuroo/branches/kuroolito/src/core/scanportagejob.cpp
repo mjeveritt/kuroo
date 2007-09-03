@@ -90,7 +90,7 @@ bool ScanPortageJob::doJob()
 	// Load Portage cache files to speed up portage scan
 // 	loadCache();
 	
-	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '/var/cache/edb/dep/usr/portage.sqlite' AS portage;", m_db );
+	KuroolitoDBSingleton::Instance()->query( "ATTACH DATABASE '/var/cache/edb/dep/usr/portage.sqlite' AS portage;", m_db );
 	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT portage_package_key FROM portage.portage_packages;", m_db );
 	kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 	foreach ( cachePackages ) {

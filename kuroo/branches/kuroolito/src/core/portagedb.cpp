@@ -222,7 +222,7 @@ void KuroolitoDB::createTables( DbConnection *conn )
 	
 	query("CREATE TABLE subCategory ( "
 	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      "name VARCHAR(32), "
+	      "name VARCHAR(32) UNIQUE, "
 	      "idCategory INTEGER );"
 	      , conn);
 	

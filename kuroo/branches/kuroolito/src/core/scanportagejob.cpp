@@ -105,7 +105,7 @@ bool ScanPortageJob::doJob()
 	
 	KuroolitoDBSingleton::Instance()->singleQuery("CREATE TEMP TABLE subCategory_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	                                    		"name VARCHAR(32), "
+	                                    		"name VARCHAR(32) UNIQUE, "
 	                                    		"idCategory INTEGER );"
 	                                    		, m_db );
 	
@@ -161,19 +161,19 @@ bool ScanPortageJob::doJob()
 // 			int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 // 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
-			kdWarning(0) << "package=" << package << LINE_INFO;
-			kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
-			kdWarning(0) << "category=" << category << LINE_INFO;
-			kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
-			kdWarning(0) << "name=" << name << LINE_INFO;
-			kdWarning(0) << "version=" << version << LINE_INFO;
-			
 			// Insert category and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
-				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				if ( lastCategory != category )
+					idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 				
+				kdWarning(0) << "package=" << package << LINE_INFO;
+				kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
+				kdWarning(0) << "category=" << category << LINE_INFO;
+				kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
+				kdWarning(0) << "name=" << name << LINE_INFO;
+				kdWarning(0) << "version=" << version << LINE_INFO;
 				kdWarning(0) << "idCategory=" << idCategory << LINE_INFO;
 				kdWarning(0) << "idSubCategory=" << idSubCategory << LINE_INFO;
 				
@@ -204,7 +204,7 @@ bool ScanPortageJob::doJob()
 		else
 			kdWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << package << LINE_INFO;
 		
-// 		lastCategory = category;
+		lastCategory = category;
 	}
 	
 	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)

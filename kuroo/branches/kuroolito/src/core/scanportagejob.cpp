@@ -485,45 +485,114 @@ bool ScanPortageJob::doJob()
  */
 void ScanPortageJob::scanInstalledPackages()
 {
-	DEBUG_LINE_INFO;
+	QDir dCategory, dPackage;
+	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
+	dCategory.setSorting( QDir::Name );
+	
+	if ( !dCategory.cd( KuroolitoConfig::dirDbPkg() ) )
+		kdWarning(0) << "Scanning installed packages. Can not access " << KuroolitoConfig::dirDbPkg() << LINE_INFO;
 	
 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
 	
-	QFile file( "/var/cache/kuroo/installedPackages.lst" );
-	if ( !file.open( IO_ReadOnly ) )
-		kdError(0) << "Cannot read /var/cache/kuroo/installedPackages.lst" << LINE_INFO;
-	else {
-		QTextStream stream( &file );
-		while ( !stream.atEnd() ) {
-			QString package = stream.readLine();
-			
-			QString category = package.section("/", 0, 0);
-			QString name = package.section("/", 1, 1);
-			QString version = package.section("/", 2, 2);
+	// Get list of categories for installed packages
+	QStringList categoryList = dCategory.entryList();
+	QStringList::Iterator itCategoryEnd = categoryList.end();
+	for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+		
+		if ( *itCategory == "." || *itCategory == ".." )
+			continue;
+		
+		// Get list of packages in this category
+		dPackage.setFilter( QDir::Dirs | QDir::NoSymLinks );
+		dPackage.setSorting( QDir::Name );
+		
+		if ( dPackage.cd( KuroolitoConfig::dirDbPkg() + "/" + *itCategory ) ) {
+			QStringList packageList = dPackage.entryList();
+			QStringList::Iterator itPackageEnd = packageList.end();
+			for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
+				
+				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
+					continue;
+				
+				QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+				if ( !parts.isEmpty() ) {
+					QString name = parts[1];
+					QString version = parts[2];
 
-			// Insert category if not found in portage
-			if ( !m_categories.contains( category ) )
-				m_categories[ category ];
-			
-			// Insert and/or mark package as installed (old is package not in portage anymore)
-			if ( !m_categories[ category ].packages.contains( name ) ) {
-				m_categories[ category ].packages[ name ];
-				m_categories[ category ].packages[ name ].status = PACKAGE_OLD_STRING;
+					// Insert category if not found in portage
+					if ( !m_categories.contains( *itCategory ) )
+						m_categories[ *itCategory ];
+					
+					// Insert and/or mark package as installed (old is package not in portage anymore)
+					if ( !m_categories[ *itCategory ].packages.contains( name ) ) {
+						m_categories[ *itCategory ].packages[ name ];
+						m_categories[ *itCategory ].packages[ name ].status = PACKAGE_OLD_STRING;
+					}
+					else
+						m_categories[ *itCategory ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
+					
+					// Insert old version in portage
+					if ( !m_categories[ *itCategory ].packages[ name ].versions.contains( version ) )
+						m_categories[ *itCategory ].packages[ name ].versions[ version ];
+					
+					// Mark version as installed
+					m_categories[ *itCategory ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
+					
+				}
+				else
+					kdWarning(0) << "Scanning installed packages. Can not match " << *itPackage << LINE_INFO;
 			}
-			else
-				m_categories[ category ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
-			
-			// Insert old version in portage
-			if ( !m_categories[ category ].packages[ name ].versions.contains( version ) )
-				m_categories[ category ].packages[ name ].versions[ version ];
-			
-			// Mark version as installed
-			m_categories[ category ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
 		}
-		file.close();
+		else
+			kdWarning(0) << "Scanning installed packages. Can not access " << KuroolitoConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
 	}
 	setStatus( "ScanInstalled", i18n("Done.") );
 }
+
+/**
+ * Collect list of installed packages.
+ */
+// void ScanPortageJob::scanInstalledPackages()
+// {
+// 	DEBUG_LINE_INFO;
+// 	
+// 	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
+// 	
+// 	QFile file( "/var/cache/kuroo/installedPackages.lst" );
+// 	if ( !file.open( IO_ReadOnly ) )
+// 		kdError(0) << "Cannot read /var/cache/kuroo/installedPackages.lst" << LINE_INFO;
+// 	else {
+// 		QTextStream stream( &file );
+// 		while ( !stream.atEnd() ) {
+// 			QString package = stream.readLine();
+// 			
+// 			QString category = package.section("/", 0, 0);
+// 			QString name = package.section("/", 1, 1);
+// 			QString version = package.section("/", 2, 2);
+// 
+// 			// Insert category if not found in portage
+// 			if ( !m_categories.contains( category ) )
+// 				m_categories[ category ];
+// 			
+// 			// Insert and/or mark package as installed (old is package not in portage anymore)
+// 			if ( !m_categories[ category ].packages.contains( name ) ) {
+// 				m_categories[ category ].packages[ name ];
+// 				m_categories[ category ].packages[ name ].status = PACKAGE_OLD_STRING;
+// 			}
+// 			else
+// 				m_categories[ category ].packages[ name ].status = PACKAGE_INSTALLED_STRING;
+// 			
+// 			// Insert old version in portage
+// 			if ( !m_categories[ category ].packages[ name ].versions.contains( version ) )
+// 				m_categories[ category ].packages[ name ].versions[ version ];
+// 			
+// 			// Mark version as installed
+// 			m_categories[ category ].packages[ name ].versions[ version ].status = PACKAGE_INSTALLED_STRING;
+// 		}
+// 		file.close();
+// 	}
+// 	setStatus( "ScanInstalled", i18n("Done.") );
+// }
 
 /**
  * Collect info about this ebuild. Based on Jakob Petsovits code.

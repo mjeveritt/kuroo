@@ -491,7 +491,7 @@ void ScanPortageJob::scanInstalledPackages()
 	
 	QFile file( "/var/cache/kuroo/installedPackages.lst" );
 	if ( !file.open( IO_ReadOnly ) )
-		kdError(0) << "Cannot read /var/cache/kuroo/installedPackages.lst." << LINE_INFO;
+		kdError(0) << "Cannot read /var/cache/kuroo/installedPackages.lst" << LINE_INFO;
 	else {
 		QTextStream stream( &file );
 		while ( !stream.atEnd() ) {

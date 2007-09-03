@@ -92,7 +92,7 @@ bool ScanPortageJob::doJob()
 	
 	// Fetch all portage packages by attaching external sqlite database
 	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '/var/cache/edb/dep/usr/portage.sqlite' AS portage;", m_db );
-	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key FROM portage.portage_packages;", m_db );
+	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;", m_db );
 	kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 	KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	
@@ -141,8 +141,13 @@ bool ScanPortageJob::doJob()
 	int idCategory;
 	QString lastCategory;
 	foreach ( cachePackages ) {
-		QString package = *it;
-// 		kdWarning(0) << "package=" << package << LINE_INFO;
+		QString package = *it++;
+		QString mtime = *it++;
+		QString homepage = *it++;
+		QString license = *it++;
+		QString description = *it++;
+		QString keywords = *it++;
+		QString iuse = *it;
 		
 		QString categorySubcategory = package.section( "/", 0, 0 );
 		QString category = ( categorySubcategory ) .section( "-", 0, 0 );
@@ -154,13 +159,7 @@ bool ScanPortageJob::doJob()
 		if ( !parts.isEmpty() ) {
 			QString name = parts[1];
 			QString version = parts[2];
-		
-/*			if ( lastCategory != category )
-				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );*/
-			
-// 			int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-// 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
-			
+
 			// Insert unique category-subcategory and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
 				
@@ -171,14 +170,14 @@ bool ScanPortageJob::doJob()
 				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 				
-				kdWarning(0) << "_package=" << package << LINE_INFO;
-				kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
-				kdWarning(0) << "category=" << category << LINE_INFO;
-				kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
-				kdWarning(0) << "name=" << name << LINE_INFO;
-				kdWarning(0) << "version=" << version << LINE_INFO;
-				kdWarning(0) << "idCategory=" << idCategory << LINE_INFO;
-				kdWarning(0) << "idSubCategory=" << idSubCategory << LINE_INFO;
+// 				kdWarning(0) << "_package=" << package << LINE_INFO;
+// 				kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
+// 				kdWarning(0) << "category=" << category << LINE_INFO;
+// 				kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
+// 				kdWarning(0) << "name=" << name << LINE_INFO;
+// 				kdWarning(0) << "version=" << version << LINE_INFO;
+// 				kdWarning(0) << "idCategory=" << idCategory << LINE_INFO;
+// 				kdWarning(0) << "idSubCategory=" << idSubCategory << LINE_INFO;
 				
 				m_categories[ categorySubcategory ].idCategory = QString::number( idCategory );
 				m_categories[ categorySubcategory ].idSubCategory = QString::number( idSubCategory );
@@ -188,20 +187,20 @@ bool ScanPortageJob::doJob()
 			if ( !m_categories[ categorySubcategory ].packages.contains( name ) ) {
 				m_categories[ categorySubcategory ].packages[ name ];
 				m_categories[ categorySubcategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
-				m_categories[ categorySubcategory ].packages[ name ].description = QString::null;
+				m_categories[ categorySubcategory ].packages[ name ].description = description;
 				m_categories[ categorySubcategory ].packages[ name ].path = QString::null;
 			}
 			
 			// Insert version in portage
 			if ( !m_categories[ categorySubcategory ].packages[ name ].versions.contains( version ) ) {
-				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].description = QString::null;
-				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].homepage = QString::null;
+				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].description = description;
+				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].homepage = homepage;
 				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].status = PACKAGE_AVAILABLE_STRING;
-				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].licenses = QString::null;
-				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].useFlags = QString::null;
+				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].licenses = license;
+				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].useFlags = iuse;
 				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].slot = QString::null;
 				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].size = QString::null;
-				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].keywords = QString::null;
+				m_categories[ categorySubcategory ].packages[ name ].versions[ version ].keywords = keywords;
 			}
 		}
 		else

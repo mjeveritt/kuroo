@@ -16,5 +16,8 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE="debug"
 RDEPEND=">dev-python/pysqlite-2"
+pkg_postinst() {
+    ewarn "You must uncomment portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules"
+}
 
 need-kde 3.5

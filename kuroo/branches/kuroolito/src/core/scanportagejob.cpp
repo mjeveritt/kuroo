@@ -105,7 +105,7 @@ bool ScanPortageJob::doJob()
 	
 	KuroolitoDBSingleton::Instance()->singleQuery("CREATE TEMP TABLE subCategory_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	                                    		"name VARCHAR(32) UNIQUE, "
+	                                    		"name VARCHAR(32), "
 	                                    		"idCategory INTEGER );"
 	                                    		, m_db );
 	
@@ -161,14 +161,17 @@ bool ScanPortageJob::doJob()
 // 			int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 // 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
-			// Insert category and db id's in portage
+			// Insert unique category-subcategory and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
+				
+				// Only insert category once
 				if ( lastCategory != category )
 					idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				// .. and now insert next found subcategory
 				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 				
-				kdWarning(0) << "package=" << package << LINE_INFO;
+				kdWarning(0) << "_package=" << package << LINE_INFO;
 				kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
 				kdWarning(0) << "category=" << category << LINE_INFO;
 				kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
@@ -208,7 +211,7 @@ bool ScanPortageJob::doJob()
 	}
 	
 	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
-	scanInstalledPackages();
+// 	scanInstalledPackages();
 	
 	// Iterate through portage map and insert everything in db
 	PortageCategories::iterator itCategoryEnd = m_categories.end();
@@ -230,11 +233,10 @@ bool ScanPortageJob::doJob()
 			// Create meta tag containing all text of interest for searching
 			QString meta = category + " " + package + " " + description;
 			
-			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, category, "
-								"name, description, status, path, meta) "
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, category, name, description, status, path, meta) "
 								"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');")
-				.arg( idCategory ).arg( idSubCategory ).arg( category ).arg( package )
-				.arg( description ).arg( status ).arg( path ).arg( meta );
+								.arg( idCategory ).arg( idSubCategory ).arg( category ).arg( package )
+								.arg( description ).arg( status ).arg( path ).arg( meta );
 			
 			idPackage = QString::number( KuroolitoDBSingleton::Instance()->insert( sql, m_db ) );
 			

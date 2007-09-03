@@ -215,14 +215,16 @@ void KuroolitoDB::createTables( DbConnection *conn )
 	query("INSERT INTO dbInfo (meta, data) VALUES ('packageCount', '0');", conn);
 	query("INSERT INTO dbInfo (meta, data) VALUES ('scanDuration', '100');", conn);
 	
+	// Can be Unique
 	query("CREATE TABLE category ( "
 	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
 	      "name VARCHAR(32) UNIQUE );"
 	      , conn);
 	
+	// Cannot be unique, like gnome-base, kde-base
 	query("CREATE TABLE subCategory ( "
 	      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	      "name VARCHAR(32) UNIQUE, "
+	      "name VARCHAR(32), "
 	      "idCategory INTEGER );"
 	      , conn);
 	

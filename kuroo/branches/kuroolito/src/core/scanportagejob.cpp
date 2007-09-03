@@ -142,7 +142,7 @@ bool ScanPortageJob::doJob()
 	QString lastCategory;
 	foreach ( cachePackages ) {
 		QString package = *it;
-		kdWarning(0) << "package=" << package << LINE_INFO;
+// 		kdWarning(0) << "package=" << package << LINE_INFO;
 		
 		QString categorySubcategory = package.section("/", 0, 0);
 		QString category = ( categorySubcategory ) .section( "-", 0, 0 );
@@ -155,14 +155,18 @@ bool ScanPortageJob::doJob()
 			QString name = parts[1];
 			QString version = parts[2];
 		
-			if ( lastCategory != category )
-				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+/*			if ( lastCategory != category )
+				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );*/
 			
-			int idSubCategory = KuroolitoDBSingleton::Instance()->insert(QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
+// 			int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
+// 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
 			// Insert category and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
+				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
+				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
+				
 				m_categories[ categorySubcategory ].idCategory = QString::number( idCategory );
 				m_categories[ categorySubcategory ].idSubCategory = QString::number( idSubCategory );
 			}

@@ -144,8 +144,11 @@ bool ScanPortageJob::doJob()
 		QString package = *it++;
 		QString mtime = *it++;
 		QString homepage = *it++;
+		homepage = homepage.replace('\'', "''").replace('%', "&#37;");
 		QString license = *it++;
+		license = license.replace('\'', "''").replace('%', "&#37;");
 		QString description = *it++;
+		description = description.replace('\'', "''").replace('%', "&#37;");
 		QString keywords = *it++;
 		QString iuse = *it;
 		

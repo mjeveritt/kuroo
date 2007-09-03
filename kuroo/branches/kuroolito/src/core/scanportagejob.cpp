@@ -92,8 +92,11 @@ bool ScanPortageJob::doJob()
 	
 	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '/var/cache/edb/dep/usr/portage.sqlite' AS portage;", m_db );
 	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT portage_package_key FROM portage.portage_packages;", m_db );
+	kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 	foreach ( cachePackages ) {
 		QString package = *it;
+		kdWarning(0) << "package=" << package << LINE_INFO;
+		
 		QString category = package.section("/", 0, 0);
 		QString nameVersion = package.section("/", 1, 1);
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( nameVersion );
@@ -101,7 +104,6 @@ bool ScanPortageJob::doJob()
 			QString name = parts[1];
 			QString version = parts[2];
 		}
-		kdWarning(0) << "package=" << package << LINE_INFO;
 	}
 	KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	

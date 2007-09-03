@@ -15,9 +15,9 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 SUBDIRS = config intro core portage
 
 # embedded sqlite as library
-SQLITE_SUBDIR = sqlite
-LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
-sqlite_includes = -I$(top_srcdir)/sqlite
+# SQLITE_SUBDIR = sqlite
+# LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
+# sqlite_includes = -I$(top_srcdir)/sqlite
 
 # makes pot translation files
 messages: rc.cpp

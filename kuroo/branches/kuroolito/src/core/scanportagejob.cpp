@@ -173,15 +173,6 @@ bool ScanPortageJob::doJob()
 				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 				
-// 				kdWarning(0) << "_package=" << package << LINE_INFO;
-// 				kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
-// 				kdWarning(0) << "category=" << category << LINE_INFO;
-// 				kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
-// 				kdWarning(0) << "name=" << name << LINE_INFO;
-// 				kdWarning(0) << "version=" << version << LINE_INFO;
-// 				kdWarning(0) << "idCategory=" << idCategory << LINE_INFO;
-// 				kdWarning(0) << "idSubCategory=" << idSubCategory << LINE_INFO;
-				
 				m_categories[ categorySubcategory ].idCategory = QString::number( idCategory );
 				m_categories[ categorySubcategory ].idSubCategory = QString::number( idSubCategory );
 			}

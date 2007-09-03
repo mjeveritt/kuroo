@@ -190,86 +190,89 @@ bool ScanPortageJob::doJob()
 		else
 			kdWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << package << LINE_INFO;
 		
-		// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
-		scanInstalledPackages();
-		
-		// Iterate through portage map and insert everything in db
-		PortageCategories::iterator itCategoryEnd = m_categories.end();
-		for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-		
-			PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
-			for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
+		lastCategory = category;
+	}
+	
+	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)
+	scanInstalledPackages();
+	
+	// Iterate through portage map and insert everything in db
+	PortageCategories::iterator itCategoryEnd = m_categories.end();
+	for ( PortageCategories::iterator itCategory = m_categories.begin(); itCategory != itCategoryEnd; ++itCategory ) {
+	
+		PortagePackages::iterator itPackageEnd = itCategory.data().packages.end();
+		for ( PortagePackages::iterator itPackage = itCategory.data().packages.begin(); itPackage != itPackageEnd; ++itPackage ) {
+			
+			QString idPackage;
+			QString idCategory = itCategory.data().idCategory;
+			QString idSubCategory = itCategory.data().idSubCategory;
+			
+			QString category = itCategory.key();
+			QString package = itPackage.key();
+			QString status = itPackage.data().status;
+			QString description = itPackage.data().description;
+			QString path = itPackage.data().path;
+			
+			// Create meta tag containing all text of interest for searching
+			QString meta = category + " " + package + " " + description;
+			
+			QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, category, "
+								"name, description, status, path, meta) "
+								"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');")
+				.arg( idCategory ).arg( idSubCategory ).arg( category ).arg( package )
+				.arg( description ).arg( status ).arg( path ).arg( meta );
+			
+			idPackage = QString::number( KuroolitoDBSingleton::Instance()->insert( sql, m_db ) );
+			
+			PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
+			for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
 				
-				QString idPackage;
-				QString idCategory = itCategory.data().idCategory;
-				QString idSubCategory = itCategory.data().idSubCategory;
+				QString version = itVersion.key();
+				description = itVersion.data().description;
+				QString homepage = itVersion.data().homepage;
+				QString status = itVersion.data().status;
+				QString licenses = itVersion.data().licenses;
+				QString useFlags = itVersion.data().useFlags;
+				QString slot = itVersion.data().slot;
+				QString size = itVersion.data().size;
+				QString keywords = itVersion.data().keywords;
 				
-				QString category = itCategory.key();
-				QString package = itPackage.key();
-				QString status = itPackage.data().status;
-				QString description = itPackage.data().description;
-				QString path = itPackage.data().path;
+				QString sqlVersion = QString( "INSERT INTO version_temp "
+											"(idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
+											"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
+					.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )
+					.arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );
 				
-				// Create meta tag containing all text of interest for searching
-				QString meta = category + " " + package + " " + description;
-				
-				QString sql = QString( "INSERT INTO package_temp (idCategory, idSubCategory, category, "
-									"name, description, status, path, meta) "
-									"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8');")
-					.arg( idCategory ).arg( idSubCategory ).arg( category ).arg( package )
-					.arg( description ).arg( status ).arg( path ).arg( meta );
-				
-				idPackage = QString::number( KuroolitoDBSingleton::Instance()->insert( sql, m_db ) );
-				
-				PortageVersions::iterator itVersionEnd = itPackage.data().versions.end();
-				for ( PortageVersions::iterator itVersion = itPackage.data().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
-					
-					QString version = itVersion.key();
-					description = itVersion.data().description;
-					QString homepage = itVersion.data().homepage;
-					QString status = itVersion.data().status;
-					QString licenses = itVersion.data().licenses;
-					QString useFlags = itVersion.data().useFlags;
-					QString slot = itVersion.data().slot;
-					QString size = itVersion.data().size;
-					QString keywords = itVersion.data().keywords;
-					
-					QString sqlVersion = QString( "INSERT INTO version_temp "
-												"(idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
-												"VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', " )
-						.arg( idPackage ).arg( version ).arg( description ).arg( homepage ).arg( size )
-						.arg( keywords ).arg( status ).arg( licenses ).arg( useFlags );
-					
-					sqlVersion += QString( "'%1');" ).arg( slot );
-					KuroolitoDBSingleton::Instance()->insert( sqlVersion, m_db );
-				}
+				sqlVersion += QString( "'%1');" ).arg( slot );
+				KuroolitoDBSingleton::Instance()->insert( sqlVersion, m_db );
 			}
 		}
-		m_categories.clear();
-		
-		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );
-		
-		// Move content from temporary table 
-		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM category;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM subCategory;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM package;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM version;", m_db );
-	
-		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
-		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO category SELECT * FROM category_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->insert( "INSERT INTO version SELECT * FROM version_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
-		
-		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE category_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE subCategory_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
-		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE version_temp;", m_db );
-		
-		return true;
 	}
+	m_categories.clear();
+	
+	KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';").arg( count ), m_db );
+	
+	// Move content from temporary table 
+	KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM category;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM subCategory;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM package;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DELETE FROM version;", m_db );
+
+	KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
+	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO category SELECT * FROM category_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO subCategory SELECT * FROM subCategory_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO version SELECT * FROM version_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
+	
+	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE category_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE subCategory_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
+	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE version_temp;", m_db );
+	
+	return true;
+}
 	
 	
 	
@@ -463,10 +466,10 @@ bool ScanPortageJob::doJob()
 // 	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
 // 	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE version_temp;", m_db );
 	
-	setStatus( "ScanPortage", i18n("Done.") );
-	setProgressTotalSteps( 0 );
-	return true;
-}
+// 	setStatus( "ScanPortage", i18n("Done.") );
+// 	setProgressTotalSteps( 0 );
+// 	return true;
+// }
 
 /**
  * Collect list of installed packages.

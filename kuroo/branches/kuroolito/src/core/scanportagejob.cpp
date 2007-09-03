@@ -144,7 +144,7 @@ bool ScanPortageJob::doJob()
 		QString package = *it;
 // 		kdWarning(0) << "package=" << package << LINE_INFO;
 		
-		QString categorySubcategory = package.section("/", 0, 0);
+		QString categorySubcategory = package.section( "/", 0, 0 );
 		QString category = ( categorySubcategory ) .section( "-", 0, 0 );
 		QString subCategory = ( categorySubcategory ).section( "-", 1, 1 );
 		
@@ -161,11 +161,21 @@ bool ScanPortageJob::doJob()
 // 			int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 // 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
+			kdWarning(0) << "package=" << package << LINE_INFO;
+			kdWarning(0) << "categorySubcategory=" << categorySubcategory << LINE_INFO;
+			kdWarning(0) << "category=" << category << LINE_INFO;
+			kdWarning(0) << "subCategory=" << subCategory << LINE_INFO;
+			kdWarning(0) << "name=" << name << LINE_INFO;
+			kdWarning(0) << "version=" << version << LINE_INFO;
+			
 			// Insert category and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
 				idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
+				
+				kdWarning(0) << "idCategory=" << idCategory << LINE_INFO;
+				kdWarning(0) << "idSubCategory=" << idSubCategory << LINE_INFO;
 				
 				m_categories[ categorySubcategory ].idCategory = QString::number( idCategory );
 				m_categories[ categorySubcategory ].idSubCategory = QString::number( idSubCategory );
@@ -194,7 +204,7 @@ bool ScanPortageJob::doJob()
 		else
 			kdWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << package << LINE_INFO;
 		
-		lastCategory = category;
+// 		lastCategory = category;
 	}
 	
 	// Now scan installed packages, eg mark packages as installed and add "old" packages (not in Portage anymore)

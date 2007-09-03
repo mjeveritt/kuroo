@@ -15,5 +15,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64 ~ppc ~sparc"
 IUSE="debug"
+RDEPEND=">dev-python/pysqlite-2.*"
 
 need-kde 3.5

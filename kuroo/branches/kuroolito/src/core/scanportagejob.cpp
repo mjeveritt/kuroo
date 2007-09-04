@@ -79,11 +79,11 @@ bool ScanPortageJob::doJob()
 	}
 	
 	// Get a count of total packages for proper progress
-	QString packageCount = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
-	if ( packageCount == "0" )
-		setProgressTotalSteps( 25000 );
-	else
-		setProgressTotalSteps( packageCount.toInt() );
+// 	QString packageCount = KuroolitoDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
+// 	if ( packageCount == "0" )
+// 		setProgressTotalSteps( 25000 );
+// 	else
+// 		setProgressTotalSteps( packageCount.toInt() );
 	
 // 	setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );
 	
@@ -91,10 +91,15 @@ bool ScanPortageJob::doJob()
 // 	loadCache();
 	
 	// Fetch all portage packages by attaching external sqlite database
-	KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '/var/cache/edb/dep/usr/portage.sqlite' AS portage;", m_db );
-	const QStringList& cachePackages = KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;", m_db );
-	kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
-	KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
+	QStringList cachePackages;
+	const QStringList& sqliteFiles = GlobalSingleton::Instance()->sqliteFileList();
+	foreach ( sqliteFiles ) {
+		KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '%1' AS portage;", m_db ).arg(*it);
+		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse"
+																"FROM portage.portage_packages;", m_db );
+		kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
+		KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
+	}
 	
 	// Temporary table for all categories
 	KuroolitoDBSingleton::Instance()->singleQuery("BEGIN TRANSACTION;", m_db );
@@ -140,7 +145,8 @@ bool ScanPortageJob::doJob()
 	
 	int idCategory;
 	QString lastCategory;
-	foreach ( cachePackages ) {
+	const QStringList& cachePackagesList = cachePackages;
+	foreach ( cachePackagesList ) {
 		QString package = *it++;
 		QString mtime = *it++;
 		QString homepage = *it++;

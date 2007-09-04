@@ -167,4 +167,14 @@ const QString Global::formatTime( long duration )
 	return totalDays + loc->formatTime( emergeTime, true, true );
 }
 
+void Global::addSqliteFile( const QString& sqliteFile )
+{
+	m_sqliteFileList += sqliteFile;
+}
+
+const QStringList& Global::sqliteFileList()
+{
+	return m_sqliteFileList;
+}
+
 #include "global.moc"

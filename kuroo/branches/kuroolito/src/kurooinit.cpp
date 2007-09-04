@@ -126,6 +126,10 @@ void KuroolitoInit::getEnvironment()
 	}
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotEmergeInfo( KProcess* ) ) );
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput( KProcIO* ) ) );
+	
+	KProcIO* eProc1 = new KProcIO( codec );
+	*eProc1 << "find" << KuroolitoConfig::dirEdbDep() << "-type f -name '*.sqlite'";
+	connect( eProc1, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput2( KProcIO* ) ) );
 }
 
 void KuroolitoInit::slotCollectOutput( KProcIO* eProc )
@@ -133,6 +137,13 @@ void KuroolitoInit::slotCollectOutput( KProcIO* eProc )
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 )
 		m_emergeInfoLines += line;
+}
+
+void KuroolitoInit::slotCollectOutput2( KProcIO* eProc )
+{
+	QString line;
+	while ( eProc->readln( line, true ) >= 0 )
+		GlobalSingleton::Instance()->addSqliteFile( line );
 }
 
 void KuroolitoInit::slotEmergeInfo( KProcess* )

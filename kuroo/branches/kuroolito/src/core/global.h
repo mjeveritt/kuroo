@@ -22,6 +22,7 @@
 #define GLOBAL_H
 
 #include <qobject.h>
+#include <qstringlist.h>
 
 class QRegExp;
 class QWidget;
@@ -46,6 +47,8 @@ public:
 	const QString&			bgHexColor();
 	const QString&			fgHexColor();
 	const QString 			formatTime( long duration );
+	void					addSqliteFile( const QString& sqliteFile );
+	const QStringList&		sqliteFileList();
 	
 private:
 	QObject*				m_parent;
@@ -56,6 +59,8 @@ private:
 	QString					m_bgColor;
 	
 	QString					m_fgColor;
+	
+	QStringList				m_sqliteFileList;
 };
 
 #endif

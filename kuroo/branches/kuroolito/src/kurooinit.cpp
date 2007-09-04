@@ -128,9 +128,9 @@ void KuroolitoInit::getEnvironment()
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput( KProcIO* ) ) );
 	
 	KProcIO* eProc1 = new KProcIO( codec );
-	QString findCommand = "find " + KuroolitoConfig::dirEdbDep() + " -name *.sqlite";
+	QString findCommand = KuroolitoConfig::dirEdbDep() + " -name *.sqlite";
 	kdWarning(0) << "findCommand=" << findCommand << LINE_INFO;
-	*eProc1 << findCommand;
+	*eProc1 << "find" << findCommand;
 	eProc1->start( KProcess::NotifyOnExit, KProcess::All );
 	connect( eProc1, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput2( KProcIO* ) ) );
 }

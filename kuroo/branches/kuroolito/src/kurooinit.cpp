@@ -142,8 +142,10 @@ void KuroolitoInit::slotCollectOutput( KProcIO* eProc )
 void KuroolitoInit::slotCollectOutput2( KProcIO* eProc )
 {
 	QString line;
-	while ( eProc->readln( line, true ) >= 0 )
+	while ( eProc->readln( line, true ) >= 0 ) {
 		GlobalSingleton::Instance()->addSqliteFile( line );
+		kdWarning(0) << "line=" << line << LINE_INFO;
+	}
 }
 
 void KuroolitoInit::slotEmergeInfo( KProcess* )

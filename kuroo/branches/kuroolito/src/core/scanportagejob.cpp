@@ -93,6 +93,7 @@ bool ScanPortageJob::doJob()
 	// Fetch all portage packages by attaching external sqlite database
 	QStringList cachePackages;
 	const QStringList& sqliteFiles = GlobalSingleton::Instance()->sqliteFileList();
+	kdWarning(0) << "sqliteFiles=" << sqliteFiles << LINE_INFO;
 	foreach ( sqliteFiles ) {
 		KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '%1' AS portage;", m_db ).arg(*it);
 		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse"

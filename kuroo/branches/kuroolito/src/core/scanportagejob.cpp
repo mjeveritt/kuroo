@@ -95,8 +95,8 @@ bool ScanPortageJob::doJob()
 	const QStringList& sqliteFiles = GlobalSingleton::Instance()->sqliteFileList();
 	kdWarning(0) << "sqliteFiles=" << sqliteFiles << LINE_INFO;
 	foreach ( sqliteFiles ) {
-		KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '%1' AS portage;", m_db ).arg(*it);
-		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse"
+		KuroolitoDBSingleton::Instance()->singleQuery( "ATTACH DATABASE '%1' AS portage;", m_db ).arg( *it );
+		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse "
 																"FROM portage.portage_packages;", m_db );
 		kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 		KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );

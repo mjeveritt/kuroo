@@ -128,7 +128,7 @@ void KuroolitoInit::getEnvironment()
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput( KProcIO* ) ) );
 	
 	KProcIO* eProc1 = new KProcIO( codec );
-	*eProc1 << "find" << KuroolitoConfig::dirEdbDep() << "-type" << "f" << "-name" << "\"*.sqlite\"";
+	*eProc1 << "find" << KuroolitoConfig::dirEdbDep() << "-type f" << "-name *.sqlite";
 	eProc1->start( KProcess::NotifyOnExit, KProcess::All );
 	connect( eProc1, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput2( KProcIO* ) ) );
 }

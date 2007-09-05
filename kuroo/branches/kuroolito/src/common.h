@@ -28,7 +28,6 @@
 #include "portage.h"
 #include "portagedb.h"
 #include "portagefiles.h"
-#include "filewatcher.h"
 #include "global.h"
 #include "singleton.h"
 #include "emerge.h"
@@ -46,7 +45,7 @@ typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KuroolitoDB> KuroolitoDBSingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
-typedef Singleton<FileWatcher> FileWatcherSingleton;
+// typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;
 
 // The package status

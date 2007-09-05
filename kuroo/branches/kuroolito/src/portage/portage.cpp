@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "scanportagejob.h"
-#include "cacheportagejob.h"
 #include "scanupdatesjob.h"
 
 #include <kmessagebox.h>

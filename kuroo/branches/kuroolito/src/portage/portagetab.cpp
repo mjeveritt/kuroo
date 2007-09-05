@@ -390,7 +390,7 @@ void PortageTab::processPackage( bool viewInspector )
 			.arg( KuroolitoConfig::arch() )
 			.arg("</font></b></td></tr>");
 		
-				// Construct available versions line
+		// Construct not available versions line
 		if ( !linesUnavailable.isEmpty() )
 			linesUnavailable = i18n("%1Not&nbsp;Available&nbsp;versions:%2%3%4")
 			.arg("<tr><td width=10%><b>")

@@ -64,7 +64,7 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 		// Create DirHome dir
 		if ( !d.exists() ) {
 			if ( !d.mkdir( GlobalSingleton::Instance()->kurooDir() ) ) {
-				KMessageBox::error( 0, i18n("<qt>Could not create kuroolito home directory.<br>"
+				KMessageBox::error( 0, i18n("<qt>Cannot create kuroolito home directory.<br>"
 				                            "Please correct and try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			}
@@ -102,7 +102,7 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	SignalistSingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
-	FileWatcherSingleton::Instance()->init( this );
+// 	FileWatcherSingleton::Instance()->init( this );
 }
 
 KuroolitoInit::~KuroolitoInit()
@@ -132,6 +132,7 @@ void KuroolitoInit::getEnvironment()
 	*eProc1 << "find" << KuroolitoConfig::dirEdbDep() << "-name" << "*.sqlite";
 	eProc1->start( KProcess::NotifyOnExit, KProcess::All );
 	connect( eProc1, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput2( KProcIO* ) ) );
+	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotSqliteDb( KProcess* ) ) );
 }
 
 void KuroolitoInit::slotCollectOutput( KProcIO* eProc )
@@ -171,6 +172,14 @@ void KuroolitoInit::slotEmergeInfo( KProcess* )
 	}
 
 	KuroolitoConfig::writeConfig();
+}
+
+void KuroolitoInit::slotSqliteDb( KProcess* )
+{
+	if ( GlobalSingleton::Instance()->sqliteFileList().empty() )
+		KMessageBox::error(0, i18n("Cannot find any portage sqlite dabatase!\nIn order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules."), i18n("Initialization"));
+	
+	KMessageBox::error(0, i18n("Cannot find any portage sqlite dabatase!\nIn order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules."), i18n("Initialization"));
 }
 
 /**

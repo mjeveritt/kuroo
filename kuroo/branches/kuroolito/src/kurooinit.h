@@ -45,6 +45,7 @@ private slots:
 	void			slotCollectOutput( KProcIO* eProc );
 	void			slotCollectOutput2( KProcIO* eProc );
 	void			slotEmergeInfo( KProcess* );
+	void 			slotSqliteDb( KProcess* );
 	
 private:
 	IntroDlg 		*wizardDialog;

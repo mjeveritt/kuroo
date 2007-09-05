@@ -170,7 +170,6 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	resetListView();
 	setHeader( QString::null );
 	
-	// Don't load all packages, only first ROWLIMIT
 	int packageCount = packageList.size() / 6;
 	foreach ( packageList ) {
 		QString id = *it++;

@@ -49,13 +49,13 @@ void Images::init( QObject *parent )
 	
 	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
 	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
-	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
+// 	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
 	
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
 	
-	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
-	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
+// 	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
+// 	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
 	
 	pxWorld = ldr->loadIcon( "kuroo_world", KIcon::Small );
 	pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIcon::Small );
@@ -70,10 +70,10 @@ void Images::init( QObject *parent )
 	pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIcon::Small );
 	
 	pxViewPackages =  ldr->loadIcon( "kuroo", KIcon::Panel );
-	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIcon::Panel );
-	pxViewHistory = ldr->loadIcon( "kuroo_history", KIcon::Panel );
-	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIcon::Panel );
-	pxViewLog = ldr->loadIcon( "kuroo_log", KIcon::Panel );
+// 	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIcon::Panel );
+// 	pxViewHistory = ldr->loadIcon( "kuroo_history", KIcon::Panel );
+// 	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIcon::Panel );
+// 	pxViewLog = ldr->loadIcon( "kuroo_log", KIcon::Panel );
 }
 
 /**
@@ -108,9 +108,9 @@ const QPixmap& Images::icon( int image )
 			return pxPackage;
 			break;
 			
-		case QUEUED:
-			return pxQueued;
-			break;
+// 		case QUEUED:
+// 			return pxQueued;
+// 			break;
 	
 		case UNMERGED:
 			return pxUnmerged;
@@ -120,9 +120,9 @@ const QPixmap& Images::icon( int image )
 			return pxDetails;
 			break;
 		
-		case REMOVE:
-			return pxRemove;
-			break;
+// 		case REMOVE:
+// 			return pxRemove;
+// 			break;
 		
 		case NEW:
 			return pxNew;
@@ -136,9 +136,9 @@ const QPixmap& Images::icon( int image )
 			return pxVersionInstalled;
 			break;
 		
-		case QUEUED_COLUMN:
-			return pxQueuedColumn;
-			break;
+// 		case QUEUED_COLUMN:
+// 			return pxQueuedColumn;
+// 			break;
 		
 		case INSTALLED_COLUMN:
 			return pxInstalledColumn;
@@ -152,21 +152,21 @@ const QPixmap& Images::icon( int image )
 			return pxViewPackages;
 			break;
 		
-		case VIEW_QUEUE:
-			return pxViewQueue;
-			break;
+// 		case VIEW_QUEUE:
+// 			return pxViewQueue;
+// 			break;
 		
-		case VIEW_HISTORY:
-			return pxViewHistory;
-			break;
+// 		case VIEW_HISTORY:
+// 			return pxViewHistory;
+// 			break;
 		
-		case VIEW_MERGE:
-			return pxViewMerge;
-			break;
+// 		case VIEW_MERGE:
+// 			return pxViewMerge;
+// 			break;
 		
-		case VIEW_LOG:
-			return pxViewLog;
-			break;
+// 		case VIEW_LOG:
+// 			return pxViewLog;
+// 			break;
 
 		default:
 			pxEmpty;

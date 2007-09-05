@@ -344,6 +344,7 @@ void PackageItem::parsePackageVersions()
 	// Remove trailing commas
 	m_linesInstalled.truncate( m_linesInstalled.length() - 2 );
 	m_linesAvailable.truncate( m_linesAvailable.length() - 2 );
+	m_linesUnavailable.truncate( m_linesUnavailable.length() - 2 );
 }
 
 

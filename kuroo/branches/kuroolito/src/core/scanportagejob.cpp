@@ -96,7 +96,7 @@ bool ScanPortageJob::doJob()
 	kdWarning(0) << "sqliteFiles=" << sqliteFiles << LINE_INFO;
 	foreach ( sqliteFiles ) {
 		KuroolitoDBSingleton::Instance()->singleQuery( QString( "ATTACH DATABASE '%1' AS portage;" ).arg( *it ), m_db );
-		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;", m_db );
+		cachePackages += KuroolitoDBSingleton::Instance()->query( QString( "SELECT '%1' AS path, portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;" ).arg( *it ), m_db );
 		kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 		KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	}
@@ -147,6 +147,7 @@ bool ScanPortageJob::doJob()
 	QString lastCategory;
 	const QStringList& cachePackagesList = cachePackages;
 	foreach ( cachePackagesList ) {
+		QString path = *it++;
 		QString package = *it++;
 		QString mtime = *it++;
 		QString homepage = *it++;
@@ -171,6 +172,8 @@ bool ScanPortageJob::doJob()
 			QString name = parts[1];
 			QString version = parts[2];
 
+			kdWarning(0) << "path=" << path  << "name=" << name << "version=" << version << LINE_INFO;
+			
 			// Insert unique category-subcategory and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
 				
@@ -190,7 +193,7 @@ bool ScanPortageJob::doJob()
 				m_categories[ categorySubcategory ].packages[ name ];
 				m_categories[ categorySubcategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 				m_categories[ categorySubcategory ].packages[ name ].description = description;
-				m_categories[ categorySubcategory ].packages[ name ].path = QString::null;
+				m_categories[ categorySubcategory ].packages[ name ].path = path;
 			}
 			
 			// Insert version in portage

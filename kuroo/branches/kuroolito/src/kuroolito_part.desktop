@@ -8,3 +8,7 @@ MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-Library=libkuroolitopart
 Type=Service
+Open=true
+X-KDE-TreeModule=Virtual
+X-KDE-RelURL=services
+X-KDE-KonqSidebarModule=konqsidebar_tree

@@ -69,6 +69,7 @@ public:
 	const QString&					homepage() const;
 	const QString&					linesInstalled() const;
 	const QString&					linesAvailable() const;
+	const QString&					linesUnavailable() const;
 	const QString&					linesEmerge() const;
 	const bool						isInArch() const;
 	
@@ -118,7 +119,7 @@ private:
 	DependAtom* 					atom;
 
 	// Formatted string
-	QString							m_linesInstalled, m_linesAvailable, m_linesEmerge;
+	QString							m_linesInstalled, m_linesAvailable, m_linesUnavailable, m_linesEmerge;
 	
 	// Version used by emerge
 	QString							m_emergeVersion;

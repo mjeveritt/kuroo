@@ -318,6 +318,7 @@ void PortageTab::processPackage( bool viewInspector )
 	packagesView->currentPackage()->parsePackageVersions();
 	QString linesInstalled = packagesView->currentPackage()->linesInstalled();
 	QString linesAvailable = packagesView->currentPackage()->linesAvailable();
+	QString linesUnavailable = packagesView->currentPackage()->linesUnavailable();
 	QString linesEmerge = packagesView->currentPackage()->linesEmerge();
 	
 	// Build summary html-view
@@ -389,7 +390,15 @@ void PortageTab::processPackage( bool viewInspector )
 			.arg( KuroolitoConfig::arch() )
 			.arg("</font></b></td></tr>");
 		
-		summaryBrowser->setText( lines + linesInstalled + linesEmerge + linesAvailable + "</table>");
+				// Construct available versions line
+		if ( !linesUnavailable.isEmpty() )
+			linesUnavailable = i18n("%1Not&nbsp;Available&nbsp;versions:%2%3%4")
+			.arg("<tr><td width=10%><b>")
+			.arg("</b></td><td width=90%>")
+			.arg( linesUnavailable )
+			.arg("</b></td></tr>");
+		
+		summaryBrowser->setText( lines + linesInstalled + linesEmerge + linesAvailable + linesUnavailable + "</table>");
 	}
 	else
 		summaryBrowser->setText( lines + linesInstalled + "</table>");

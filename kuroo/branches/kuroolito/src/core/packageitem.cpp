@@ -271,6 +271,7 @@ void PackageItem::parsePackageVersions()
 	
 	m_versionsDataList.clear();
 	m_linesAvailable = QString::null;
+	m_linesUnavailable = QString::null;
 	m_linesEmerge = QString::null;
 	m_linesInstalled = QString::null;
 	
@@ -327,8 +328,10 @@ void PackageItem::parsePackageVersions()
 			m_linesAvailable.prepend( version + ", " );
 		}
 		else {
-			if ( (*sortedVersionIterator)->isNotArch() )
+			if ( (*sortedVersionIterator)->isNotArch() ) {
 				m_isInArch = false;
+				m_linesUnavailable.prepend( version + ", " );
+			}
 			else
 				m_linesAvailable.prepend( version + ", " );
 		}
@@ -493,6 +496,14 @@ const QString& PackageItem::linesInstalled() const
 const QString& PackageItem::linesAvailable() const
 {
 	return m_linesAvailable;
+}
+
+/**
+ * Returns list of unavailable versions in html-format.
+ */
+const QString& PackageItem::linesUnavailable() const
+{
+	return m_linesUnavailable;
 }
 
 /**

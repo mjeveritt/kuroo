@@ -96,7 +96,8 @@ bool ScanPortageJob::doJob()
 	kdWarning(0) << "sqliteFiles=" << sqliteFiles << LINE_INFO;
 	foreach ( sqliteFiles ) {
 		KuroolitoDBSingleton::Instance()->singleQuery( QString( "ATTACH DATABASE '%1' AS portage;" ).arg( *it ), m_db );
-		cachePackages += KuroolitoDBSingleton::Instance()->query( QString( "SELECT '%1' AS path, portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;" ).arg( *it ), m_db );
+		QString path = ( *it ).section( KuroolitoConfig::dirEdbDep(), 1, 1 );
+		cachePackages += KuroolitoDBSingleton::Instance()->query( QString( "SELECT '%1' AS path, portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;" ).arg( path ), m_db );
 		kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 		KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	}
@@ -158,9 +159,7 @@ bool ScanPortageJob::doJob()
 		description = description.replace('\'', "''").replace('%', "&#37;");
 		QString keywords = *it++;
 		QString iuse = *it;
-		
-		kdWarning(0) << "package=" << package << LINE_INFO;
-		
+
 		QString categorySubcategory = package.section( "/", 0, 0 );
 		QString category = ( categorySubcategory ) .section( "-", 0, 0 );
 		QString subCategory = ( categorySubcategory ).section( "-", 1, 1 );
@@ -172,14 +171,13 @@ bool ScanPortageJob::doJob()
 			QString name = parts[1];
 			QString version = parts[2];
 
-			kdWarning(0) << "path=" << path  << "name=" << name << "version=" << version << LINE_INFO;
-			
 			// Insert unique category-subcategory and db id's in portage
 			if ( !m_categories.contains( categorySubcategory ) ) {
 				
 				// Only insert category once
 				if ( lastCategory != category )
 					idCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
+				
 				// .. and now insert next found subcategory
 				int idSubCategory = KuroolitoDBSingleton::Instance()->insert( QString( "INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
 				.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);

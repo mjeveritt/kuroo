@@ -96,7 +96,7 @@ bool ScanPortageJob::doJob()
 	kdWarning(0) << "sqliteFiles=" << sqliteFiles << LINE_INFO;
 	foreach ( sqliteFiles ) {
 		KuroolitoDBSingleton::Instance()->singleQuery( QString( "ATTACH DATABASE '%1' AS portage;" ).arg( *it ), m_db );
-		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages ORDER BY portage_package_key;", m_db );
+		cachePackages += KuroolitoDBSingleton::Instance()->query( "SELECT portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;", m_db );
 		kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 		KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	}
@@ -157,6 +157,8 @@ bool ScanPortageJob::doJob()
 		description = description.replace('\'', "''").replace('%', "&#37;");
 		QString keywords = *it++;
 		QString iuse = *it;
+		
+		kdWarning(0) << "package=" << package << LINE_INFO;
 		
 		QString categorySubcategory = package.section( "/", 0, 0 );
 		QString category = ( categorySubcategory ) .section( "-", 0, 0 );

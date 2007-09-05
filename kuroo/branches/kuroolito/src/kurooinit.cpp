@@ -178,8 +178,6 @@ void KuroolitoInit::slotSqliteDb( KProcess* )
 {
 	if ( GlobalSingleton::Instance()->sqliteFileList().empty() )
 		KMessageBox::error(0, i18n("Cannot find any portage sqlite dabatase!\nIn order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules."), i18n("Initialization"));
-	
-	KMessageBox::error(0, i18n("Cannot find any portage sqlite dabatase!\nIn order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules."), i18n("Initialization"));
 }
 
 /**

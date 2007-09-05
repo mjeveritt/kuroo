@@ -31,10 +31,6 @@ messages: rc.cpp
 kdelnkdir = $(kde_appsdir)/System
 kdelnk_DATA = kuroolito.desktop
 
-# this is where the XML-GUI resource file goes
-# rcdir = $(kde_datadir)/kuroolito
-# rc_DATA = kuroolito_shell.rc
-
 # this is to set set autostart of kuroo_watcher
 autostartdir = $(datadir)/autostart
 
@@ -76,6 +72,8 @@ partdesktop_DATA = kuroolito_part.desktop
 rcdir   = $(kde_datadir)/kuroolito
 rc_DATA = kuroolito_partui.rc kuroolito_shellui.rc
 
-# configdir = $(kde_confdir)
-# config_DATA = kuroolitorc
-# partrc_DATA = kuroolito_partui.rc
+libkuroolitopart_add_DATA = kuroolito_tng.desktop
+libkuroolitopart_adddir = $(kde_datadir)/konqsidebartng/add
+
+libkuroolitopart_kickerentries_DATA = kuroolito_tng.desktop
+libkuroolitopart_kickerentriesdir = $(kde_datadir)/konqsidebartng/kicker_entries

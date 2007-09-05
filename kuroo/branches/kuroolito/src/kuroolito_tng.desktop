@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Link
+URL=
+Name=Kuroolito
+GenericName=Kuroolito
+Comment=KDE browser to Gentoo portage
+Icon=kuroo
+
+Open=true
+X-KDE-KonqSidebarModule=libkuroolitopart
+X-KDE-KonqSidebarUniversal=true
+X-KDE-KonqSidebarAddModule=libkuroolitopart
+

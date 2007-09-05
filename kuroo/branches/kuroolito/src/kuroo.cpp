@@ -62,6 +62,9 @@ Kuroolito::Kuroolito()
     // and a status bar
 //     statusBar()->show();
 
+	// set the shell's ui resource file
+    setXMLFile("kuroolito/kuroolito_shellui.rc");
+	
     // this routine will find and load our Part.  it finds the Part by
     // name which is a bad idea usually.. but it's alright in this
     // case since our Part is made for this Shell
@@ -88,9 +91,6 @@ Kuroolito::Kuroolito()
         // next time we enter the event loop...
         return;
     }
-	
-	// set the shell's ui resource file
-    setXMLFile("kuroolito/kuroolito_shellui.rc");
 	
 // 	GlobalSingleton::Instance()->setColorTheme();
 // 	

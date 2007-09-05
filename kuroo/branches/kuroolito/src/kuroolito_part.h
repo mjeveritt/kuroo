@@ -60,7 +60,7 @@ protected:
     virtual bool 		saveFile();
 
 protected slots:
-    void 				slotQuit();
+    bool 				slotQuit();
     void 				fileSaveAs();
 
 private slots:

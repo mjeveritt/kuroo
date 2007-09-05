@@ -29,13 +29,10 @@
 #include "portagetab.h"
 #include "packageinspector.h"
 
-KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, 
-							  QObject *parent, const char *name,
-		 					  const QStringList& /* args */ )
+KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, const QStringList& )
     : KParts::ReadWritePart( parent, name ),
 	kurooInit( new KuroolitoInit( this, "KuroolitoInit" ) ),
-// 	kurooMessage( new Message( parentWidget ) ),
-	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
+	prefDialog( 0 )
 {
 	// we need an instance
     setInstance( KuroolitoPartFactory::instance() );
@@ -65,8 +62,8 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName,
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
-	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
-	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
+// 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
+// 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));
 }
 
 KuroolitoPart::~KuroolitoPart()
@@ -94,9 +91,9 @@ bool KuroolitoPart::saveFile()
 {
 }
 
-void KuroolitoPart::slotQuit()
+bool KuroolitoPart::slotQuit()
 {
-	exit(0);
+	return true;
 }
 
 void KuroolitoPart::fileSaveAs()

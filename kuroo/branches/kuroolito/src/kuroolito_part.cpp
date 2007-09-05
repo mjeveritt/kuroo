@@ -48,9 +48,7 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	else
 		PortageSingleton::Instance()->slotRefresh();
 	
-	setXMLFile("kuroolito/kuroolito_partui.rc");
-	
-	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection(), "file_quit" );
 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection(), "configure_kuroolito" )->setText( i18n( "Configure Kuroolito..." ) );
 
 // 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), actionCollection(), "refresh_portage" );
@@ -61,6 +59,8 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
+	
+	setXMLFile("kuroolito/kuroolito_partui.rc");
 	
 // 	QObject::connect(actionRefreshPortage, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefresh() ));
 // 	QObject::connect(actionRefreshUpdates, SIGNAL (aboutToShow()), PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ));

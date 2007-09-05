@@ -56,10 +56,6 @@
 Kuroolito::Kuroolito()
 	: KParts::MainWindow( 0L, "Kuroolito" )
 {
-	
-	// set the shell's ui resource file
-    setXMLFile("kuroolito/kuroolito_shellui.rc");
-
     // then, setup our actions
 //     setupActions();
 
@@ -92,6 +88,9 @@ Kuroolito::Kuroolito()
         // next time we enter the event loop...
         return;
     }
+	
+	// set the shell's ui resource file
+    setXMLFile("kuroolito/kuroolito_shellui.rc");
 	
 // 	GlobalSingleton::Instance()->setColorTheme();
 // 	

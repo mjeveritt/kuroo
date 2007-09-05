@@ -248,10 +248,10 @@ Kuroolito::~Kuroolito()
  * Backup emerge and merge history entries to text file.
  * Wait for the backup of the log is completed before terminating.
  */
-void Kuroolito::slotQuit()
-{
-	exit(0);
-}
+// void Kuroolito::slotQuit()
+// {
+// 	exit(0);
+// }
 
 /**
  * Abort any running threads.

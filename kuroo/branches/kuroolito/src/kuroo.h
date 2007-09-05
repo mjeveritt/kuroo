@@ -61,7 +61,7 @@ private slots:
 // 	void				slotBusy();
 // 	bool 				queryClose();
 // 	bool 				queryExit();
-	void 				slotQuit();
+// 	void 				slotQuit();
 // 	void				slotWait();
 // 	void 				slotTerminate();
 // 	void				slotWhatsThis( int tabIndex );

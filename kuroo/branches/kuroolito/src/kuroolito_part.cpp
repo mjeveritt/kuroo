@@ -94,8 +94,9 @@ bool KuroolitoPart::saveFile()
 {
 }
 
-void KuroolitoPart::fileOpen()
+void KuroolitoPart::slotQuit()
 {
+	exit(0);
 }
 
 void KuroolitoPart::fileSaveAs()

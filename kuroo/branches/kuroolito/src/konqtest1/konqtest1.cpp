@@ -37,7 +37,7 @@ extern "C" {
                 map->insert("Type", "Link");
                 map->insert("URL", "");
                 map->insert("Icon", "kuroo");
-                map->insert("Name", i18n("Portage"));
+                map->insert("Name", "Portage");
                 map->insert("Open", "true");
                 map->insert("X-KDE-KonqSidebarModule","konqsidebar_konqtest1");
                 fn->setLatin1("konqtest1%1.desktop");

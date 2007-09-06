@@ -9,8 +9,5 @@
 		<Action name="refresh_portage" />
 		<Action name="refresh_updates" />
 	</Menu>
-	<Menu name="help">
-		<Action name="information" />
-	</Menu>
 </MenuBar>
 </kpartgui>

@@ -12,7 +12,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 	-I$(top_builddir)/src/history -I$(top_builddir)/src/core -I$(top_builddir)/src/config \
 	-I$(top_builddir)/src/portage -I$(top_builddir)/src/logs $(all_includes)
 
-SUBDIRS = config intro core portage
+SUBDIRS = config intro core portage metabar
 
 # embedded sqlite as library
 # SQLITE_SUBDIR = sqlite

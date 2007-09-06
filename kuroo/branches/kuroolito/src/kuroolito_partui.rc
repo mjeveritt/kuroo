@@ -5,9 +5,6 @@
 		<Action name="refresh_portage" />
 		<Action name="refresh_updates" />
 	</Menu>
-	<Menu name="help">
-		<Action name="information" />
-	</Menu>
 	<Menu name="settings"><text>&amp;Settings</text>
     	<Action name="configure_kuroolito"/>
   	</Menu>

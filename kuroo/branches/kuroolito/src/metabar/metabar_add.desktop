@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=A konqueror navigation panel plugin called Metabar
+Encoding=UTF-8
+Icon=kuroo
+Name=Portage
+Name[de]=Portage
+Open=false
+Type=Link
+URL=
+X-KDE-KonqSidebarAddModule=konqsidebar_metabar

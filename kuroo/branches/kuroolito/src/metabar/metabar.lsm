@@ -1,0 +1,16 @@
+Begin3
+Title:          Metabar -- Konqueror Meta Info Siebar
+Version:        0.1
+Entered-date:   
+Description:    
+Keywords:       KDE Qt
+Author:         Florian Roth <florian@synatic.net>
+Maintained-by:  Florian Roth <florian@synatic.net>
+Home-page:      
+Alternate-site: 
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/utils
+                xxxxxx  metabar-0.1.tar.gz
+                xxx     metabar-0.1.lsm
+Platform:       Linux. Needs KDE
+Copying-policy: GPL
+End

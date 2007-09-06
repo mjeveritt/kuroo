@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>457</height>
+            <height>359</height>
         </rect>
     </property>
     <property name="caption">
@@ -206,10 +206,10 @@
                         <cstring>kcfg_installedColumn</cstring>
                     </property>
                     <property name="text">
-                        <string>Show installed pac&amp;kages in separate column</string>
+                        <string>Show inst&amp;alled packages in separate column</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+K</string>
+                        <string>Alt+A</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -232,50 +232,6 @@
                         </size>
                     </property>
                 </spacer>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>portage_2_3</cstring>
-            </property>
-            <property name="title">
-                <string>Kuroolito options</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer row="0" column="1">
-                    <property name="name">
-                        <cstring>spacer2_2_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>146</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>kcfg_isSystrayEnabled</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Dock kuroolito in system tray (close does not e&amp;xit kuroo)</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+X</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
             </grid>
         </widget>
         <widget class="QGroupBox" row="0" column="0">
@@ -337,30 +293,9 @@
                         <string>Installed packages</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel3_2_2_2_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Portage overlays</string>
-                    </property>
-                </widget>
                 <widget class="QLineEdit" row="2" column="1">
                     <property name="name">
                         <cstring>kcfg_DirDbPkg</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirPortageOverlay</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="0" column="1">

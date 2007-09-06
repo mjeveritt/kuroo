@@ -1,19 +1,26 @@
 [Desktop Entry]
+
 Comment=KDE frontend to Gentoo portage
 Comment[en_US]=KDE browser to Gentoo portage
 Comment[nb]=KDE-grensesnitt for Gentoo Portage
+
 Encoding=UTF-8
 Exec=kuroolito -caption "%c" %i %m
+
 GenericName=KDE browser to Gentoo portage
 GenericName[en_US]=KDE browser to Gentoo portage
 GenericName[nb]=KDE-grensesnitt for Gentoo Portage
-Icon=kuroo
-MimeType=
+
 Name=Kuroolito
 Name[en_US]=Kuroolito
+
+Icon=kuroo
+MimeType=
 Path=
 StartupNotify=true
 Terminal=false
 Type=Application
+
 X-KDE-SubstituteUID=false
 X-KDE-Username=Kuroolito
+Categories=Application;System;X-KDE-System;

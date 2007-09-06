@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Link
 URL=
-Icon=wizard
+Icon=kuroo
 Comment=A konqueror navigation panel plugin  called $NAME$
 Comment[ca]=Un connector per al plafó de navegació de Konqueror anomenat $NAME$
 Comment[da]=Et Konqueror navigationspanel plugin der hedder $NAME$
@@ -32,7 +32,7 @@ Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter $NAME$
 Comment[tr]=$NAME$ adında bir konqueror gezinme paneli eklentisi
 Comment[zh_CN]=一个称作 $NAME$ 的 konqueror 导航面板插件
 Comment[zh_TW]=名稱為 $NAME$ 的 Konqueror 導覽面板外掛程式
-Name=konqtest1
+Name=Portage
 
 Open=false
 X-KDE-KonqSidebarModule=konqsidebar_konqtest1

@@ -78,5 +78,4 @@ libkuroolitopart_adddir = $(kde_datadir)/konqsidebartng/add
 libkuroolitopart_kickerentries_DATA = kuroolito_tng.desktop
 libkuroolitopart_kickerentriesdir = $(kde_datadir)/konqsidebartng/kicker_entries
 
-libkuroolitopart_services_DATA = kuroolito_tng.desktop
 libkuroolitopart_servicesdir = $(kde_datadir)/konqsidebartng/virtual_folders/services

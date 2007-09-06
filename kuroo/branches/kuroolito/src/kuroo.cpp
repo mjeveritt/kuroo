@@ -166,11 +166,11 @@ Kuroolito::~Kuroolito()
  */
 void Kuroolito::setupActions()
 {
-	KStdAction::quit( kapp, SLOT( slotQuit() ), actionCollection() );
-	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
+	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+// 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
-	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
-	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
+// 	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
+// 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 	
 // 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
 // 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
@@ -247,10 +247,10 @@ void Kuroolito::setupActions()
  * Backup emerge and merge history entries to text file.
  * Wait for the backup of the log is completed before terminating.
  */
-// void Kuroolito::slotQuit()
-// {
-// 	exit(0);
-// }
+void Kuroolito::slotQuit()
+{
+	exit(0);
+}
 
 /**
  * Abort any running threads.

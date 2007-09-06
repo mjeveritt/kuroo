@@ -67,7 +67,7 @@ private slots:
 // 	void				slotWhatsThis( int tabIndex );
 	
 private:
-// 	void 				setupActions();
+	void 				setupActions();
 	
 private:
 	KParts::ReadWritePart *m_part;

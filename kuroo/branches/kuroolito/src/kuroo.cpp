@@ -56,14 +56,14 @@
 Kuroolito::Kuroolito()
 	: KParts::MainWindow( 0L, "Kuroolito" )
 {
-    // then, setup our actions
-//     setupActions();
-
-    // and a status bar
-//     statusBar()->show();
-
 	// set the shell's ui resource file
     setXMLFile("kuroolito/kuroolito_shellui.rc");
+	
+    // then, setup our actions
+    setupActions();
+
+    // and a status bar
+    statusBar()->show();
 	
     // this routine will find and load our Part.  it finds the Part by
     // name which is a bad idea usually.. but it's alright in this
@@ -164,14 +164,14 @@ Kuroolito::~Kuroolito()
 /**
  * Build mainwindow menus and toolbar.
  */
-// void Kuroolito::setupActions()
-// {
-// 	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
-// 	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
-// 	
-// 	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
-// 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
-// 	
+void Kuroolito::setupActions()
+{
+	KStdAction::quit( kapp, SLOT( slotQuit() ), actionCollection() );
+	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
+	
+	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
+	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
+	
 // 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
 // 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 // 	
@@ -179,7 +179,7 @@ Kuroolito::~Kuroolito()
 // 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 // 	
 // 	createGUI();
-// }
+}
 
 /**
  * Disable buttons when kuroo is busy.

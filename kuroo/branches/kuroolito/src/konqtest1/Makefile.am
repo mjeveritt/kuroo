@@ -9,3 +9,6 @@ konqsidebar_konqtest1_la_LIBADD = $(LIB_KPARTS) $(LIB_KFILE)
 
 konqtest1_entry_DATA = konqtest1.desktop
 konqtest1_entrydir = $(kde_datadir)/konqsidebartng/entries
+
+konqtest1_add_DATA = konqtest1_add.desktop
+konqtest1_adddir = $(kde_datadir)/konqsidebartng/add

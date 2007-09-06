@@ -18,5 +18,5 @@ Name=Portage
 Name[xx]=xxPortagexx
 
 Open=false
-X-KDE-KonqSidebarModule=konqsidebar_metabar
+X-KDE-KonqSidebarModule=kuroolito_metabar
 

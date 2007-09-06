@@ -7,4 +7,4 @@ Name[de]=Portage
 Open=false
 Type=Link
 URL=
-X-KDE-KonqSidebarAddModule=konqsidebar_metabar
+X-KDE-KonqSidebarAddModule=kuroolito_metabar

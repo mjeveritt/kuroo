@@ -271,15 +271,15 @@ xdg_menudir = @xdg_menudir@
 INCLUDES = $(all_includes)
 #>- METASOURCES = AUTO
 
-kde_module_LTLIBRARIES = konqsidebar_metabar.la
+kde_module_LTLIBRARIES = kuroolito_metabar.la
 
 KDE_ICON = AUTO
 
-konqsidebar_metabar_la_SOURCES = metabar.cpp configdialog.cpp linkwidget.cpp \
+kuroolito_metabar_la_SOURCES = metabar.cpp configdialog.cpp linkwidget.cpp \
 	metaframe.cpp serviceloader.cpp
 
-konqsidebar_metabar_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-konqsidebar_metabar_la_LIBADD = $(LIB_KFILE) $(LIB_KPARTS) -lkonqsidebarplugin
+kuroolito_metabar_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+kuroolito_metabar_la_LIBADD = $(LIB_KFILE) $(LIB_KPARTS) -lkonqsidebarplugin
 
 metabar_entrydir = $(kde_datadir)/konqsidebartng/entries
 metabar_adddir = $(kde_datadir)/konqsidebartng/add
@@ -296,17 +296,17 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(kde_module_LTLIBRARIES)
 
-konqsidebar_metabar_la_DEPENDENCIES =
-am_konqsidebar_metabar_la_OBJECTS = metabar.lo configdialog.lo \
+kuroolito_metabar_la_DEPENDENCIES =
+am_kuroolito_metabar_la_OBJECTS = metabar.lo configdialog.lo \
 	linkwidget.lo metaframe.lo serviceloader.lo
-#>- konqsidebar_metabar_la_OBJECTS = $(am_konqsidebar_metabar_la_OBJECTS)
+#>- kuroolito_metabar_la_OBJECTS = $(am_kuroolito_metabar_la_OBJECTS)
 #>+ 6
-konqsidebar_metabar_la_final_OBJECTS = konqsidebar_metabar_la.all_cpp.lo 
-konqsidebar_metabar_la_nofinal_OBJECTS = metabar.lo configdialog.lo \
+kuroolito_metabar_la_final_OBJECTS = kuroolito_metabar_la.all_cpp.lo 
+kuroolito_metabar_la_nofinal_OBJECTS = metabar.lo configdialog.lo \
 	linkwidget.lo metaframe.lo serviceloader.lo\
 configdialog.moc.lo linkwidget.moc.lo serviceloader.moc.lo metaframe.moc.lo 
-@KDE_USE_FINAL_FALSE@konqsidebar_metabar_la_OBJECTS = $(konqsidebar_metabar_la_nofinal_OBJECTS)
-@KDE_USE_FINAL_TRUE@konqsidebar_metabar_la_OBJECTS = $(konqsidebar_metabar_la_final_OBJECTS)
+@KDE_USE_FINAL_FALSE@kuroolito_metabar_la_OBJECTS = $(kuroolito_metabar_la_nofinal_OBJECTS)
+@KDE_USE_FINAL_TRUE@kuroolito_metabar_la_OBJECTS = $(kuroolito_metabar_la_final_OBJECTS)
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -320,7 +320,7 @@ am__depfiles_maybe = depfiles
 #>- @AMDEP_TRUE@	./$(DEPDIR)/metaframe.Plo \
 #>- @AMDEP_TRUE@	./$(DEPDIR)/serviceloader.Plo
 #>+ 8
-@AMDEP_TRUE@@KDE_USE_FINAL_TRUE@DEP_FILES =  $(DEPDIR)/configdialog.moc.P $(DEPDIR)/linkwidget.moc.P $(DEPDIR)/serviceloader.moc.P $(DEPDIR)/metaframe.moc.P  $(DEPDIR)/konqsidebar_metabar_la.all_cpp.P ./$(DEPDIR)/configdialog.Plo \
+@AMDEP_TRUE@@KDE_USE_FINAL_TRUE@DEP_FILES =  $(DEPDIR)/configdialog.moc.P $(DEPDIR)/linkwidget.moc.P $(DEPDIR)/serviceloader.moc.P $(DEPDIR)/metaframe.moc.P  $(DEPDIR)/kuroolito_metabar_la.all_cpp.P ./$(DEPDIR)/configdialog.Plo \
 @AMDEP_TRUE@@KDE_USE_FINAL_TRUE@	@AMDEP_TRUE@	./$(DEPDIR)/linkwidget.Plo ./$(DEPDIR)/metabar.Plo \
 @AMDEP_TRUE@@KDE_USE_FINAL_TRUE@	@AMDEP_TRUE@	./$(DEPDIR)/metaframe.Plo \
 @AMDEP_TRUE@@KDE_USE_FINAL_TRUE@	@AMDEP_TRUE@	./$(DEPDIR)/serviceloader.Plo
@@ -347,13 +347,13 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link --tag=CXX $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(KDE_CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = @CXXFLAGS@
-DIST_SOURCES = $(konqsidebar_metabar_la_SOURCES)
+DIST_SOURCES = $(kuroolito_metabar_la_SOURCES)
 DATA = $(metabar_add_DATA) $(metabar_data_DATA) $(metabar_entry_DATA)
 
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = $(noinst_HEADERS) Makefile.am Makefile.in
-SOURCES = $(konqsidebar_metabar_la_SOURCES)
+SOURCES = $(kuroolito_metabar_la_SOURCES)
 
 #>- all: all-am
 #>+ 1
@@ -398,11 +398,11 @@ clean-kde_moduleLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-#>- konqsidebar_metabar.la: $(konqsidebar_metabar_la_OBJECTS) $(konqsidebar_metabar_la_DEPENDENCIES) 
+#>- kuroolito_metabar.la: $(kuroolito_metabar_la_OBJECTS) $(kuroolito_metabar_la_DEPENDENCIES) 
 #>+ 2
-@KDE_USE_CLOSURE_TRUE@konqsidebar_metabar.la: konqsidebar_metabar.la.closure $(konqsidebar_metabar_la_OBJECTS) $(konqsidebar_metabar_la_DEPENDENCIES) 
-@KDE_USE_CLOSURE_FALSE@konqsidebar_metabar.la: $(konqsidebar_metabar_la_OBJECTS) $(konqsidebar_metabar_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(kde_moduledir) $(konqsidebar_metabar_la_LDFLAGS) $(konqsidebar_metabar_la_OBJECTS) $(konqsidebar_metabar_la_LIBADD) $(LIBS)
+@KDE_USE_CLOSURE_TRUE@kuroolito_metabar.la: kuroolito_metabar.la.closure $(kuroolito_metabar_la_OBJECTS) $(kuroolito_metabar_la_DEPENDENCIES) 
+@KDE_USE_CLOSURE_FALSE@kuroolito_metabar.la: $(kuroolito_metabar_la_OBJECTS) $(kuroolito_metabar_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(kde_moduledir) $(kuroolito_metabar_la_LDFLAGS) $(kuroolito_metabar_la_OBJECTS) $(kuroolito_metabar_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -673,12 +673,12 @@ uninstall-am: uninstall-kde-icons  uninstall-info-am uninstall-kde_moduleLTLIBRA
 .NOEXPORT:
 
 #>+ 8
-konqsidebar_metabar.la.closure: $(konqsidebar_metabar_la_OBJECTS) $(konqsidebar_metabar_la_DEPENDENCIES)
-	@echo "int main() {return 0;}" > konqsidebar_metabar_la_closure.cpp
-	@$(LTCXXCOMPILE) -c konqsidebar_metabar_la_closure.cpp
-	$(CXXLINK) konqsidebar_metabar_la_closure.lo $(konqsidebar_metabar_la_LDFLAGS) $(konqsidebar_metabar_la_OBJECTS) $(konqsidebar_metabar_la_LIBADD) $(LIBS)
-	@rm -f konqsidebar_metabar_la_closure.* konqsidebar_metabar.la.closure
-	@echo "timestamp" > konqsidebar_metabar.la.closure
+kuroolito_metabar.la.closure: $(kuroolito_metabar_la_OBJECTS) $(kuroolito_metabar_la_DEPENDENCIES)
+	@echo "int main() {return 0;}" > kuroolito_metabar_la_closure.cpp
+	@$(LTCXXCOMPILE) -c kuroolito_metabar_la_closure.cpp
+	$(CXXLINK) kuroolito_metabar_la_closure.lo $(kuroolito_metabar_la_LDFLAGS) $(kuroolito_metabar_la_OBJECTS) $(kuroolito_metabar_la_LIBADD) $(LIBS)
+	@rm -f kuroolito_metabar_la_closure.* kuroolito_metabar.la.closure
+	@echo "timestamp" > kuroolito_metabar.la.closure
 
 
 #>+ 3
@@ -725,7 +725,7 @@ KDE_DIST=metabar_add.desktop metabar.lsm metabar.desktop hi16-app-metabar.png hi
 
 #>+ 3
 clean-closures:
-	-rm -f  konqsidebar_metabar.la.closure
+	-rm -f  kuroolito_metabar.la.closure
 
 #>+ 2
 docs-am:
@@ -771,36 +771,36 @@ bcheck-am:
 
 
 #>+ 11
-konqsidebar_metabar_la.all_cpp.cpp: $(srcdir)/Makefile.in $(srcdir)/metabar.cpp $(srcdir)/configdialog.cpp $(srcdir)/linkwidget.cpp $(srcdir)/metaframe.cpp $(srcdir)/serviceloader.cpp linkwidget.moc.cpp configdialog.moc.cpp metaframe.moc.cpp serviceloader.moc.cpp  metabar.moc
-	@echo 'creating konqsidebar_metabar_la.all_cpp.cpp ...'; \
-	rm -f konqsidebar_metabar_la.all_cpp.files konqsidebar_metabar_la.all_cpp.final; \
-	echo "#define KDE_USE_FINAL 1" >> konqsidebar_metabar_la.all_cpp.final; \
+kuroolito_metabar_la.all_cpp.cpp: $(srcdir)/Makefile.in $(srcdir)/metabar.cpp $(srcdir)/configdialog.cpp $(srcdir)/linkwidget.cpp $(srcdir)/metaframe.cpp $(srcdir)/serviceloader.cpp linkwidget.moc.cpp configdialog.moc.cpp metaframe.moc.cpp serviceloader.moc.cpp  metabar.moc
+	@echo 'creating kuroolito_metabar_la.all_cpp.cpp ...'; \
+	rm -f kuroolito_metabar_la.all_cpp.files kuroolito_metabar_la.all_cpp.final; \
+	echo "#define KDE_USE_FINAL 1" >> kuroolito_metabar_la.all_cpp.final; \
 	for file in metabar.cpp configdialog.cpp linkwidget.cpp metaframe.cpp serviceloader.cpp linkwidget.moc.cpp configdialog.moc.cpp metaframe.moc.cpp serviceloader.moc.cpp ; do \
-	  echo "#include \"$$file\"" >> konqsidebar_metabar_la.all_cpp.files; \
-	  test ! -f $(srcdir)/$$file || egrep '^#pragma +implementation' $(srcdir)/$$file >> konqsidebar_metabar_la.all_cpp.final; \
+	  echo "#include \"$$file\"" >> kuroolito_metabar_la.all_cpp.files; \
+	  test ! -f $(srcdir)/$$file || egrep '^#pragma +implementation' $(srcdir)/$$file >> kuroolito_metabar_la.all_cpp.final; \
 	done; \
-	cat konqsidebar_metabar_la.all_cpp.final konqsidebar_metabar_la.all_cpp.files > konqsidebar_metabar_la.all_cpp.cpp; \
-	rm -f konqsidebar_metabar_la.all_cpp.final konqsidebar_metabar_la.all_cpp.files
+	cat kuroolito_metabar_la.all_cpp.final kuroolito_metabar_la.all_cpp.files > kuroolito_metabar_la.all_cpp.cpp; \
+	rm -f kuroolito_metabar_la.all_cpp.final kuroolito_metabar_la.all_cpp.files
 
 #>+ 3
 clean-final:
-	-rm -f konqsidebar_metabar_la.all_cpp.cpp
+	-rm -f kuroolito_metabar_la.all_cpp.cpp
 
 #>+ 3
 final:
-	$(MAKE) konqsidebar_metabar_la_OBJECTS="$(konqsidebar_metabar_la_final_OBJECTS)" all-am
+	$(MAKE) kuroolito_metabar_la_OBJECTS="$(kuroolito_metabar_la_final_OBJECTS)" all-am
 
 #>+ 3
 final-install:
-	$(MAKE) konqsidebar_metabar_la_OBJECTS="$(konqsidebar_metabar_la_final_OBJECTS)" install-am
+	$(MAKE) kuroolito_metabar_la_OBJECTS="$(kuroolito_metabar_la_final_OBJECTS)" install-am
 
 #>+ 3
 no-final:
-	$(MAKE) konqsidebar_metabar_la_OBJECTS="$(konqsidebar_metabar_la_nofinal_OBJECTS)" all-am
+	$(MAKE) kuroolito_metabar_la_OBJECTS="$(kuroolito_metabar_la_nofinal_OBJECTS)" all-am
 
 #>+ 3
 no-final-install:
-	$(MAKE) konqsidebar_metabar_la_OBJECTS="$(konqsidebar_metabar_la_nofinal_OBJECTS)" install-am
+	$(MAKE) kuroolito_metabar_la_OBJECTS="$(kuroolito_metabar_la_nofinal_OBJECTS)" install-am
 
 #>+ 3
 cvs-clean:

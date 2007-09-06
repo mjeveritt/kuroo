@@ -1,14 +1,14 @@
 INCLUDES = $(all_includes)
 METASOURCES = AUTO
 
-kde_module_LTLIBRARIES=konqsidebar_metabar.la
+kde_module_LTLIBRARIES=kuroolito_metabar.la
 
 KDE_ICON = AUTO
 
-konqsidebar_metabar_la_SOURCES = metabar.cpp configdialog.cpp linkwidget.cpp \
+kuroolito_metabar_la_SOURCES = metabar.cpp configdialog.cpp linkwidget.cpp \
 	metaframe.cpp serviceloader.cpp
-konqsidebar_metabar_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-konqsidebar_metabar_la_LIBADD = $(LIB_KFILE) $(LIB_KPARTS) -lkonqsidebarplugin
+kuroolito_metabar_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+kuroolito_metabar_la_LIBADD = $(LIB_KFILE) $(LIB_KPARTS) -lkonqsidebarplugin
 
 metabar_entrydir = $(kde_datadir)/konqsidebartng/entries
 metabar_adddir = $(kde_datadir)/konqsidebartng/add

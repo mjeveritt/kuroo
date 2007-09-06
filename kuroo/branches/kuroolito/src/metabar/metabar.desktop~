@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Link
 URL=
-Icon=metabar
+Icon=kuroo
 Comment=A konqueror navigation panel plugin  called Metabar
 Comment[da]=Et Konqueror navigationspanel plugin der hedder Metabar
 Comment[et]=Konquerori liikumispaneeli plugin nimega Metabar
@@ -14,8 +14,8 @@ Comment[pt_BR]=Um plugin de painel de navegação do konqueror chamado Metabar
 Comment[ru]=Модуль панели навигации konqueror Metabar
 Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter Metabar
 Comment[xx]=xxA konqueror navigation panel plugin  called Metabarxx
-Name=metabar
-Name[xx]=xxmetabarxx
+Name=Portage
+Name[xx]=xxPortagexx
 
 Open=false
 X-KDE-KonqSidebarModule=konqsidebar_metabar

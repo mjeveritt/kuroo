@@ -45,10 +45,10 @@ extern "C" {
     Q_UNUSED(param);
 
     map->insert("Type", "Link");
-    map->insert("Icon", "metabar");
-    map->insert("Name", "Metabar");
+    map->insert("Icon", "kuroo");
+    map->insert("Name", "Portage");
     map->insert("Open", "true");
-    map->insert("X-KDE-KonqSidebarModule","konqsidebar_metabar");
+    map->insert("X-KDE-KonqSidebarModule","kuroolito_metabar");
     fn->setLatin1("metabar%1.desktop");
     return true;
   }

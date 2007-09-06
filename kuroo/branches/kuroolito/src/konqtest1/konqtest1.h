@@ -35,11 +35,8 @@ public:
 
 protected:
 	/*Example widget only. You use whichever widget you want. You onl have to care that getWidget returns some kind of widget */
-	QWidget *widget;
+	QLabel *widget;
     virtual void handleURL(const KURL &url);
-		
-private:
-	KParts::ReadWritePart *m_part;
 
 };
 

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Link
-URL=
+URL=portage:/
 Icon=kuroo
 Comment=A konqueror navigation panel plugin  called $NAME$
 Comment[ca]=Un connector per al plafó de navegació de Konqueror anomenat $NAME$

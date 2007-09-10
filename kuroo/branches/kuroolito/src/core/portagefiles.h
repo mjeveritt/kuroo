@@ -43,14 +43,6 @@ public:
 	void			loadPackageUserMask();
 	void			loadPackageUse();
 	
-	void			savePackageKeywords();
-	void 			savePackageUserUnMask();
-	void			savePackageUserMask();
-	void			savePackageUse();
-	
-signals:
-	void			signalPortageFilesChanged();
-	
 private:
 	QObject*		m_parent;
 };

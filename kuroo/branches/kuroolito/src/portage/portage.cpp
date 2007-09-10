@@ -184,7 +184,7 @@ void Portage::loadWorld()
 		emit signalWorldChanged();
 	}
 	else
-		kdError(0) << "Loading packages in world. Reading: " << KuroolitoConfig::fileWorld() << LINE_INFO;
+		kdError(0) << "Loading packages in world. Cannot read: " << KuroolitoConfig::fileWorld() << LINE_INFO;
 }
 
 /**
@@ -208,12 +208,7 @@ bool Portage::isInWorld( const QString& package )
  */
 bool Portage::slotRefreshUpdates()
 {
-	if ( !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
-		EmergeSingleton::Instance()->checkUpdates();
-		return true;
-	}
-	else
-		return false;
+	EmergeSingleton::Instance()->checkUpdates();
 }
 
 /**

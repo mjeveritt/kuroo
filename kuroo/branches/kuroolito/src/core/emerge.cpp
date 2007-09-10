@@ -36,7 +36,7 @@
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent )
 {
-	QTextCodec *codec = QTextCodec::codecForName("utf8");
+	QTextCodec *codec = QTextCodec::codecForName( "utf8" );
 	eProc = new KProcIO( codec );
 	eProc->setUseShell( true, "/bin/bash" );
 	

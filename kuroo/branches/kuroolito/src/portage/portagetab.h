@@ -47,17 +47,13 @@ public slots:
 	
 private slots:
 	void 				slotInit();
-
-	
 	void				slotListSubCategories();
 	void				slotFillFilter( const QString& text );
 	void				slotFilters();
 	void				slotActivateFilters();
 	void				slotClearFilter();
 	void				slotListPackages();
-	
-private:
-	void				processPackage();
+	void				slotPackage();
 	
 private:
 	

@@ -44,19 +44,12 @@
 #include <kiconloader.h>
 #include <kaccel.h>
 
-enum Focus {
-		CATEGORYLIST,
-		SUBCATEGORYLIST,
-		PACKAGELIST
-};
-
 /**
  * @class PortageTab
  * @short Package view with filters.
  */
 PortageTab::PortageTab( QWidget* parent )
-	: PortageBase( parent ), m_focusWidget( PACKAGELIST ),
-	m_delayFilters( 0 )
+	: PortageBase( parent ), m_delayFilters( 0 )
 {
 
 	// Connect the filters
@@ -71,6 +64,9 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
+	
+	// Load with current package info
+	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	slotInit();
 }
@@ -181,7 +177,7 @@ void PortageTab::slotListPackages()
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 		
-		processPackage();
+		slotPackage();
 	}
 }
 
@@ -197,7 +193,7 @@ void PortageTab::slotClearFilter()
  * Process package and all it's versions.
  * Update summary and Inspector.
  */
-void PortageTab::processPackage()
+void PortageTab::slotPackage()
 {
 	summaryBrowser->clear();
 	

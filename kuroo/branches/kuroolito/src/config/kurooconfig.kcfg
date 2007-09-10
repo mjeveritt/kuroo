@@ -35,7 +35,7 @@
 		</entry>
 		
 		<entry name="UpdateCommand" type="String">
-			<default>"emerge -pvu --color=n --nospinner --columns world"</default>
+			<default>emerge -pvu --color=n --nospinner --columns world</default>
 		</entry>
 
 		<entry name="DirDbPkg" type="String">

@@ -105,7 +105,7 @@ void PortageTab::slotInit()
 
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
 	
-	slotBusy();
+// 	slotBusy();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,17 +126,17 @@ void PortageTab::slotInitButtons()
 void PortageTab::slotBusy()
 {
 	// If no db no fun!
-	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
-		filterGroup->setDisabled( true );
-		searchFilter->setDisabled( true );
-		pbClearFilter->setDisabled( true );
-	}
-	else {
-		filterGroup->setDisabled( false );
-		searchFilter->setDisabled( false );
-		pbClearFilter->setDisabled( false );
-		slotButtons();
-	}
+// 	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
+// 		filterGroup->setDisabled( true );
+// 		searchFilter->setDisabled( true );
+// 		pbClearFilter->setDisabled( true );
+// 	}
+// 	else {
+// 		filterGroup->setDisabled( false );
+// 		searchFilter->setDisabled( false );
+// 		pbClearFilter->setDisabled( false );
+// 		slotButtons();
+// 	}
 }
 
 /**
@@ -144,9 +144,9 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-	filterGroup->setDisabled( false );
-	searchFilter->setDisabled( false );
-	pbClearFilter->setDisabled( false );
+// 	filterGroup->setDisabled( false );
+// 	searchFilter->setDisabled( false );
+// 	pbClearFilter->setDisabled( false );
 }
 
 

@@ -137,12 +137,14 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
 			emergePackage.size = rxPackage.cap(8);
 			m_emergePackageList.prepend( emergePackage );
 		}
+		
+		kdDebug() << line << endl;
 	}
 }
 
 
 //////////////////////////////////////////////////////////////////////////////
-// Post emerge stuff
+// Post emerge
 //////////////////////////////////////////////////////////////////////////////
 
 /**

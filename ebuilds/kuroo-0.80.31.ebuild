@@ -15,4 +15,12 @@ IUSE=""
 RDEPEND="app-portage/gentoolkit
 	kde-misc/kdiff3
 	|| ( kde-base/kdesu kde-base/kdebase )"
+
 need-kde 3.5
+
+src_unpack() {
+	kde_src_unpack
+
+	# Fix the desktop file for compliance with the spec. Fixes bug 188755.
+	epatch "${FILESDIR}/${PN}-desktop-file.patch"
+}

@@ -1,15 +1,11 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit kde subversion
-
-ESVN_PROJECT="${PN/-svn}"
-ESVN_REPO_URI="svn://kuroo.org/repos/kuroo/branches/kuroolito"
-ESVN_STORE_DIR="${DISTDIR}/svn-src"
-ESVN_BOOTSTRAP="make -f Makefile.cvs"
+inherit kde
 
 DESCRIPTION="A KDE Portage browser"
 HOMEPAGE="http://kuroo.org"
+SRC_URI="http://files.kuroo.org/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"

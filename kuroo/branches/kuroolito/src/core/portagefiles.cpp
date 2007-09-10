@@ -196,7 +196,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").utf8();
+					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").local8Bit();
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -286,7 +286,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).section( "#", 1, 1 ).replace('\'', "''").replace('%', "&#37;").utf8();
+					commentLines += (*it).section( "#", 1, 1 ).replace('\'', "''").replace('%', "&#37;").local8Bit();
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -376,7 +376,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").utf8();
+					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").local8Bit();
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -510,27 +510,27 @@ void PortageFiles::refresh( int mask )
 {
 	switch ( mask ) {
 		case PACKAGE_KEYWORDS_SCANNED:
-			kdDebug() << i18n( "Completed scanning for package keywords in %1." ).arg( KuroolitoConfig::filePackageKeywords() );
+			kdDebug() << i18n( "Completed scanning for package keywords in %1." ).arg( KuroolitoConfig::filePackageKeywords() ) << endl;
 			break;
 			
 		case PACKAGE_USER_UNMASK_SCANNED:
-			 kdDebug() << i18n("Completed scanning for unmasked packages in %1.").arg( KuroolitoConfig::filePackageUserUnMask() );
+			 kdDebug() << i18n("Completed scanning for unmasked packages in %1.").arg( KuroolitoConfig::filePackageUserUnMask() ) << endl;
 			break;
 			
 		case PACKAGE_HARDMASK_SCANNED:
-			kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KuroolitoConfig::filePackageHardMask() );
+			kdDebug() << i18n("Completed scanning for hardmasked packages in %1.").arg( KuroolitoConfig::filePackageHardMask() ) << endl;
 			break;
 			
 		case PACKAGE_USER_MASK_SCANNED:
-			kdDebug() << i18n("Completed scanning for user masked packages in %1.").arg( KuroolitoConfig::filePackageUserMask() );
+			kdDebug() << i18n("Completed scanning for user masked packages in %1.").arg( KuroolitoConfig::filePackageUserMask() ) << endl;
 			break;
 
 		case PACKAGE_USER_MASK_SAVED:
-			kdDebug() << i18n("Completed saving user masked packages in %1.").arg( KuroolitoConfig::filePackageUserMask() );
+			kdDebug() << i18n("Completed saving user masked packages in %1.").arg( KuroolitoConfig::filePackageUserMask() ) << endl;
 			break;
 
 		case PACKAGE_USER_USE_SCANNED:
-			kdDebug() << i18n("Completed scanning user package use flags in %1.").arg( KuroolitoConfig::filePackageUserUse() );
+			kdDebug() << i18n("Completed scanning user package use flags in %1.").arg( KuroolitoConfig::filePackageUserUse() ) << endl;
 			break;
 
 	}

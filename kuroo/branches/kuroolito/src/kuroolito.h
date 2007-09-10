@@ -56,6 +56,7 @@ public:
 	
 private slots:
 	void 				slotQuit();
+	bool 				queryClose();
 	
 private:
 	void 				setupActions();

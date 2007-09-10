@@ -39,31 +39,11 @@ SystemTray::SystemTray( QWidget *parent )
 {
 	s_instance = this;
 	QToolTip::add( this, i18n("Kuroolito - Portage frontend") );
-	contextMenu()->insertItem( i18n("&Configure Kuroolito..."), this, SLOT( slotPreferences() ) );
-	setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
-	show();
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy(bool) ), this, SLOT( slotBusy(bool) ) );
+	this->setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
 }
 
 SystemTray::~SystemTray()
 {
-}
-
-void SystemTray::slotPreferences()
-{
-	emit signalPreferences();
-}
-
-/**
- * Show busy kuroo icon.
- * @param	kuroo state = busy or ready
- */
-void SystemTray::slotBusy( bool busy )
-{
-	if ( busy && isVisible() )
-		setPixmap( ImagesSingleton::Instance()->icon( KUROO_EMERGING ) );
-	else
-		setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
 }
 
 #include "systemtray.moc"

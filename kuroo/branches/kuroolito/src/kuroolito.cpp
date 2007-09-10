@@ -52,7 +52,7 @@
  * @short Main kde window with menus, system tray icon and statusbar.
  */
 Kuroolito::Kuroolito()
-	: KParts::MainWindow( 0L, "Kuroolito" )
+	: KParts::MainWindow( 0L, "Kuroolito" ), m_shuttingDown( false )
 {
 	// set the shell's ui resource file
     setXMLFile("kuroolito/kuroolito_shellui.rc");
@@ -94,6 +94,7 @@ Kuroolito::Kuroolito()
     }
 	
 	systemTray = new SystemTray( this );
+	systemTray->show();
 }
 
 /**
@@ -112,9 +113,18 @@ void Kuroolito::setupActions()
 }
 
 /**
- * Backup emerge and merge history entries to text file.
- * Wait for the backup of the log is completed before terminating.
+ * Hide or minimize kuroo window when clicking in close button.
  */
+bool Kuroolito::queryClose()
+{
+	if ( !m_shuttingDown ) {
+		hide();
+		return false;
+	}
+	else
+		return true;
+}
+
 void Kuroolito::slotQuit()
 {
 	exit(0);

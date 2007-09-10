@@ -38,13 +38,6 @@ public:
     ~SystemTray();
 	
 	static SystemTray* 	instance() { return s_instance; }
-
-private slots:
-	void 				slotPreferences();
-	void				slotBusy( bool busy );
-
-signals:
-	void				signalPreferences();
 };
 
 #endif

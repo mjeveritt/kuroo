@@ -81,12 +81,7 @@ private:
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )
 {
-	// When cache scan is done go one scanning portage for all packages
-	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
-	
-	// Then portage scan is completed
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotScanCompleted() ) );
-	
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanUpdatesComplete() ), this, SLOT( slotLoadUpdates() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalLoadUpdatesComplete() ), this, SLOT( slotChanged() ) );
 }
@@ -131,8 +126,12 @@ void Portage::slotPackageChanged()
  */
 bool Portage::slotRefresh()
 {
-	slotScan();
-	return true;
+	if ( !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
+		slotScan();
+		return true;
+	}
+	else
+		return false;
 }
 
 /**
@@ -203,7 +202,6 @@ bool Portage::isInWorld( const QString& package )
 // Package handlling...
 ////////////////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * Start scan of update packages.
  * @return bool
@@ -224,13 +222,15 @@ bool Portage::slotRefreshUpdates()
  */
 bool Portage::slotLoadUpdates()
 {
-	if ( !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
+	if ( EmergeSingleton::Instance()->packageList().isEmpty() ) {
+		KMessageBox::error( 0, i18n( "No updates found! Please try '%1' in console to resolve issues." ).arg( KuroolitoConfig::updateCommand() ), i18n( "Calculations World Updates" ) );
+		return false;
+	}
+	else {
 		SignalistSingleton::Instance()->scanStarted();
 		ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
 		return true;
 	}
-	else
-		return false;
 }
 
 #include "portage.moc"

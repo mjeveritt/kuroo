@@ -151,17 +151,6 @@ void Emerge::slotEmergeOutput( KProcIO *proc )
  * Disconnect signals and signal termination to main thread.
  * @param proc	
  */
-void Emerge::slotCleanupSync( KProcess* proc )
-{
-	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(KProcess*) ), this, SLOT( slotCleanupSync(KProcess*) ) );
-	SignalistSingleton::Instance()->setKuroolitoBusy( false );
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
 void Emerge::slotCleanupCheckUpdates( KProcess* proc )
 {
 	disconnect( proc, SIGNAL( readReady(KProcIO*) ), this, SLOT( slotEmergeOutput(KProcIO*) ) );

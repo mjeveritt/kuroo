@@ -50,7 +50,6 @@ public:
 	
 private slots:
 	void 						slotEmergeOutput( KProcIO *proc );
-	void 						slotCleanupSync( KProcess *proc );
 	void 						slotCleanupCheckUpdates( KProcess *proc );
 	
 signals:

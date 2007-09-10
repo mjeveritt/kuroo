@@ -71,12 +71,6 @@ PortageTab::PortageTab( QWidget* parent )
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	
-	// Enable/disable this view and buttons when kuroo is busy
-// 	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy( bool ) ), this, SLOT( slotBusy() ) );
-	
-	// Enable/disable buttons
-// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
-
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
 	
@@ -212,9 +206,11 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KuroolitoDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-		slotButtons();
+// 		slotButtons();
 		summaryBrowser->clear();
-		packagesView->showNoHitsWarning( true );
+		packagesView->showNoHitsWarning( i18n( "<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
+											   "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
+											   "Try to use more general filter options, so kuroo can find matching packages.</b></font>" ) );
 
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
@@ -223,7 +219,7 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
 	else {
-		packagesView->showNoHitsWarning( false );
+		packagesView->showNoHitsWarning( QString::null );
 		
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
@@ -242,20 +238,6 @@ void PortageTab::slotClearFilter()
 {
 	searchFilter->clear();
 }
-
-/**
- * Refresh packages list.
- */
-// void PortageTab::slotRefresh()
-// {
-// 	switch( KMessageBox::questionYesNo( this,
-// 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
-// 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
-// 	                                    KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
-// 		case KMessageBox::Yes:
-// 			PortageSingleton::Instance()->slotRefresh();
-// 	}
-// }
 
 /**
  * Process package and all it's versions.

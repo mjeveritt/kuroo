@@ -41,7 +41,7 @@ public:
 	
 	class 							PortageItem;
 	
-	void							showNoHitsWarning( bool noHits );
+	void							showNoHitsWarning( const QString& warning );
 	PortageListView::PortageItem* 	currentPortagePackage();
 	void							setHeader( const QString& text );
 	int 							addSubCategoryPackages( const QStringList& packageList );

@@ -128,7 +128,10 @@ void KuroolitoInit::getEnvironment()
 	KProcIO* eProc1 = new KProcIO( codec );
 	eProc1->setUseShell( true, "/bin/bash" );
 	*eProc1 << "find" << KuroolitoConfig::dirEdbDep() << "-name" << "*.sqlite";
-	eProc1->start( KProcess::NotifyOnExit, KProcess::All );
+	if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+		kdError(0) << QString( "Cannot run 'find %1 -name *.sqlite', quitting!" ).arg( KuroolitoConfig::dirEdbDep() ) << LINE_INFO;
+		exit(0);
+	}
 	connect( eProc1, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput2( KProcIO* ) ) );
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotSqliteDb( KProcess* ) ) );
 }
@@ -145,7 +148,7 @@ void KuroolitoInit::slotCollectOutput2( KProcIO* eProc )
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 ) {
 		GlobalSingleton::Instance()->addSqliteFile( line );
-		kdDebug() << "Found overlay " << line << endl;
+		kdDebug() << "Found portage cache: " << line << endl;
 	}
 }
 
@@ -159,6 +162,7 @@ void KuroolitoInit::slotEmergeInfo( KProcess* )
 			if ( arch.contains( "~" ) )
 				arch = arch.section( "~", 1, 1 );
 			
+			kdDebug() << "Found system arch: " << arch << endl;
 			KuroolitoConfig::setArch( arch );
 		}
 	}
@@ -169,7 +173,7 @@ void KuroolitoInit::slotEmergeInfo( KProcess* )
 void KuroolitoInit::slotSqliteDb( KProcess* )
 {
 	if ( GlobalSingleton::Instance()->sqliteFileList().empty() )
-		KMessageBox::error(0, i18n("Cannot find any portage sqlite dabatase!\nIn order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules."), i18n("Initialization"));
+		KMessageBox::error( 0, i18n( "Cannot find any portage sqlite dabatase!\nIn order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules." ), i18n( "Initialization" ) );
 }
 
 /**

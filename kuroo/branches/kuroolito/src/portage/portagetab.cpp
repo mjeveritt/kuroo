@@ -96,51 +96,7 @@ void PortageTab::slotInit()
 	summaryBrowser->setPalette( summaryPalette );
 
 	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
-	
-// 	slotBusy();
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Toggle button slots
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Reset queue button text when queue is refreshed.
- */
-void PortageTab::slotInitButtons()
-{
-// 	pbQueue->setText( i18n("Add to Queue") );
-}
-
-/**
- * Disable/enable buttons when kuroo is busy.
- */
-void PortageTab::slotBusy()
-{
-	// If no db no fun!
-// 	if ( !SignalistSingleton::Instance()->isKuroolitoReady() ) {
-// 		filterGroup->setDisabled( true );
-// 		searchFilter->setDisabled( true );
-// 		pbClearFilter->setDisabled( true );
-// 	}
-// 	else {
-// 		filterGroup->setDisabled( false );
-// 		searchFilter->setDisabled( false );
-// 		pbClearFilter->setDisabled( false );
-// 		slotButtons();
-// 	}
-}
-
-/**
- * Toggle buttons states.
- */
-void PortageTab::slotButtons()
-{
-// 	filterGroup->setDisabled( false );
-// 	searchFilter->setDisabled( false );
-// 	pbClearFilter->setDisabled( false );
-}
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Package view slots
@@ -208,7 +164,7 @@ void PortageTab::slotListPackages()
 		summaryBrowser->clear();
 		packagesView->showNoHitsWarning( i18n( "<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
 											   "<font color=darkRed>Please modify the filter settings you have chosen!<br>"
-											   "Try to use more general filter options, so kuroo can find matching packages.</b></font>" ) );
+											   "Try to use more general filter options, so Kuroolito can find matching packages.</b></font>" ) );
 
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )

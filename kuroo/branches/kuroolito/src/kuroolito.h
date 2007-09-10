@@ -35,7 +35,6 @@
 class KAction;
 class KConfigDialog;
 class KURL;
-class IntroDlg;
 class KCmdLineArgs;
 class KuroolitoInit;
 
@@ -59,9 +58,7 @@ private:
 	
 private:
 	KParts::ReadWritePart *m_part;
-	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 	PortageTab 			*viewPortage;
 };
 

@@ -44,14 +44,10 @@ public:
 	
 public slots:
 	void				slotReload();
-// 	void				slotRefresh();
 	
 private slots:
 	void 				slotInit();
-	
-	void				slotBusy();
-	void				slotInitButtons();
-	void				slotButtons();
+
 	
 	void				slotListSubCategories();
 	void				slotFillFilter( const QString& text );

@@ -71,7 +71,7 @@ Kuroolito::Kuroolito()
 		
         // now that the Part is loaded, we cast it to a Part to get
         // our hands on it
-        m_part = static_cast<KParts::ReadWritePart *>(factory->create(this, "kuroolito_part", "KParts::ReadWritePart" ));
+        m_part = static_cast<KParts::ReadWritePart *>( factory->create( this, "kuroolito_part", "KParts::ReadWritePart" ));
 
         if (m_part) {
 			

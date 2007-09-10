@@ -12,7 +12,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 	-I$(top_builddir)/src/history -I$(top_builddir)/src/core -I$(top_builddir)/src/config \
 	-I$(top_builddir)/src/portage -I$(top_builddir)/src/logs $(all_includes)
 
-SUBDIRS = config intro core portage konqtest1
+SUBDIRS = config intro core portage
 
 # makes pot translation files
 messages: rc.cpp
@@ -62,10 +62,8 @@ partdesktop_DATA = kuroolito_part.desktop
 rcdir   = $(kde_datadir)/kuroolito
 rc_DATA = kuroolito_partui.rc kuroolito_shellui.rc
 
-libkuroolitopart_add_DATA = kuroolito_tng.desktop
-libkuroolitopart_adddir = $(kde_datadir)/konqsidebartng/add
-
-libkuroolitopart_kickerentries_DATA = kuroolito_tng.desktop
-libkuroolitopart_kickerentriesdir = $(kde_datadir)/konqsidebartng/kicker_entries
-
-libkuroolitopart_servicesdir = $(kde_datadir)/konqsidebartng/virtual_folders/services
+# libkuroolitopart_adddir = $(kde_datadir)/konqsidebartng/add
+# 
+# libkuroolitopart_kickerentriesdir = $(kde_datadir)/konqsidebartng/kicker_entries
+# 
+# libkuroolitopart_servicesdir = $(kde_datadir)/konqsidebartng/virtual_folders/services

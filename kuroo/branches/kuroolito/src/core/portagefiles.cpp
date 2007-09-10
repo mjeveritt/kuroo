@@ -84,9 +84,7 @@ public:
 		// Something is wrong, no files found, get outta here
 		if ( linesPackage.isEmpty() )
 			return false;
-		
-		setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
-		
+				
 		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
 		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageKeywords_temp ( "
 		                                    		"idPackage INTEGER UNIQUE, keywords VARCHAR(255) );", m_db);
@@ -95,42 +93,46 @@ public:
 		
 		for ( QStringList::Iterator it = linesPackage.begin(), end = linesPackage.end(); it != end; ++it ) {
 			
-			// set the atom string
-			QStringList tokens = QStringList::split( ' ', *it );
-			QString package = tokens[0];
-			
-			if ( !(*it).isEmpty() && rxAtom.exactMatch( package ) ) {
-	
-				// Get the captured strings
-				QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-				QString name = rxAtom.cap( POS_PACKAGE );
-				QString keywords;
-				
-				// extract this line's keywords
-				QStringList::iterator tokenIterator = tokens.begin();
-				tokenIterator++;
-				while ( tokenIterator != tokens.end() ) {
-					keywords += *tokenIterator + " ";
-					tokenIterator++;
-				}
-				if ( keywords.isEmpty() )
-    				keywords = "~" + KuroolitoConfig::arch();
-
-				QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
-					"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
-				
-				if ( id.isEmpty() )
-					kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
-					.arg( category ).arg( name ) << LINE_INFO;
-				else
-					KuroolitoDBSingleton::Instance()->insert( QString( 
-						"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
-					                                      .arg( id ).arg( keywords ), m_db );
+			if ( (*it).stripWhiteSpace().startsWith( "#" ) ) {
+				continue;
 			}
-			else
-				kdWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
-					.arg( KuroolitoConfig::filePackageKeywords() ) << LINE_INFO;
-			
+			else {
+				// set the atom string
+				QStringList tokens = QStringList::split( ' ', *it );
+				QString package = tokens[0];
+				
+				if ( !(*it).isEmpty() && rxAtom.exactMatch( package ) ) {
+		
+					// Get the captured strings
+					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					QString name = rxAtom.cap( POS_PACKAGE );
+					QString keywords;
+					
+					// extract this line's keywords
+					QStringList::iterator tokenIterator = tokens.begin();
+					tokenIterator++;
+					while ( tokenIterator != tokens.end() ) {
+						keywords += *tokenIterator + " ";
+						tokenIterator++;
+					}
+					if ( keywords.isEmpty() )
+						keywords = "~" + KuroolitoConfig::arch();
+	
+					QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
+						"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+					
+					if ( id.isEmpty() )
+						kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
+						.arg( category ).arg( name ) << LINE_INFO;
+					else
+						KuroolitoDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
+															.arg( id ).arg( keywords ), m_db );
+				}
+				else
+					kdWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+						.arg( KuroolitoConfig::filePackageKeywords() ) << LINE_INFO;
+			}
 		}
 		file.close();
 		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
@@ -141,7 +143,6 @@ public:
 		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageKeywords_temp;", m_db );
 		
 		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		setStatus( "PackageKeywords", i18n("Done.") );
 		return true;
 	}
 	
@@ -168,7 +169,7 @@ public:
 		if ( !file.open( IO_ReadOnly ) )
 			kdError(0) << "Parsing package.unmask. Reading: " << KuroolitoConfig::filePackageUserUnMask() << LINE_INFO;
 		else {
-			while ( !stream.atEnd() )
+			while ( !stream.atEnd() )													
 				linesDependAtom += stream.readLine();
 			file.close();
 		}
@@ -176,51 +177,43 @@ public:
 		// Something is wrong, no files found, get outta here
 		if ( linesDependAtom.isEmpty() )
 			return false;
-		
-		setStatus( "PackageUserUnMask", i18n("Collecting user unmasked packages...") );
-		
+				
 		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
 		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUnmask_temp ( "
-													"idPackage INTEGER UNIQUE, dependAtom VARCHAR(255), comment BLOB );"
-													, m_db);
+													"idPackage INTEGER UNIQUE, dependAtom VARCHAR(255), comment BLOB );", m_db);
 		
 		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
-			
-			// Collect comment lines above the dependatom
-			if ( (*it).isEmpty() )
-				commentLines.clear();
+			if ( (*it).stripWhiteSpace().startsWith( "#" ) ) {
+				continue;
+			}
 			else {
-				if ( (*it).startsWith( "#" ) ) {
-					continue;
-				}
-				else {
-					if ( rxAtom.exactMatch( *it ) ) {
+				if ( rxAtom.exactMatch( *it ) ) {
 
-						// Get the captured strings
-						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-						QString name = rxAtom.cap( POS_PACKAGE );
-						
-						QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
-							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
-						
-						if ( id.isEmpty() )
-							kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
-							.arg( category ).arg( name ) << LINE_INFO;
-						else
-							KuroolitoDBSingleton::Instance()->insert( QString( 
-								"INSERT INTO packageUnmask_temp (idPackage, dependAtom) "
-								"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
-						
-					}
+					// Get the captured strings
+					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					QString name = rxAtom.cap( POS_PACKAGE );
+					
+					QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
+						"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+					
+					if ( id.isEmpty() )
+						kdWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
+						.arg( category ).arg( name ) << LINE_INFO;
 					else
-						kdWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
-							.arg( KuroolitoConfig::filePackageUserUnMask() ) << LINE_INFO;
+						KuroolitoDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO packageUnmask_temp (idPackage, dependAtom) "
+							"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
+					
 				}
+				else
+					kdWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
+						.arg( KuroolitoConfig::filePackageUserUnMask() ) << LINE_INFO;
 			}
 		}
+		
 		file.close();
 		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
@@ -265,49 +258,40 @@ public:
 		// Something is wrong, no files found, get outta here
 		if ( linesDependAtom.isEmpty() )
 			return false;
-		
-		setStatus( "PackageHardMask", i18n("Collecting hardmasked packages...") );
-		
+				
 		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
 		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageHardMask_temp ( "
-		                                    		"idPackage INTEGER, dependAtom VARCHAR(255), comment BLOB );"
-		                                    		, m_db);
+		                                    		"idPackage INTEGER, dependAtom VARCHAR(255), comment BLOB );", m_db);
 		
 		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
-			
-			// Collect comment lines above the dependatom
-			if ( (*it).isEmpty() )
-				commentLines.clear();
+			if ( (*it).stripWhiteSpace().startsWith( "#" ) ) {
+				continue;
+			}
 			else {
-				if ( (*it).startsWith( "#" ) ) {
-					continue;
-				}
-				else {
-					if ( rxAtom.exactMatch( *it ) ) {
-						
-						// Get the captured strings
-						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-						QString name = rxAtom.cap( POS_PACKAGE );
-						
-						QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
-							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
-						
-						if ( id.isEmpty() )
-							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
-							.arg( category ).arg( name ) << LINE_INFO;
-						else
-							KuroolitoDBSingleton::Instance()->insert( QString( 
-								"INSERT INTO packageHardMask_temp (idPackage, dependAtom) "
-								"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
-
-					}
+				if ( rxAtom.exactMatch( *it ) ) {
+					
+					// Get the captured strings
+					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					QString name = rxAtom.cap( POS_PACKAGE );
+					
+					QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
+						"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+					
+					if ( id.isEmpty() )
+						kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
+						.arg( category ).arg( name ) << LINE_INFO;
 					else
-						kdWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
-							.arg( KuroolitoConfig::filePackageHardMask() ) << LINE_INFO;
+						KuroolitoDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO packageHardMask_temp (idPackage, dependAtom) "
+							"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
+
 				}
+				else
+					kdWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+						.arg( KuroolitoConfig::filePackageHardMask() ) << LINE_INFO;
 			}
 		}
 		file.close();
@@ -319,7 +303,6 @@ public:
 		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageHardMask_temp;", m_db );
 		
 		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		setStatus( "PackageHardMask", i18n("Done.") );
 		return true;
 	}
 	
@@ -354,51 +337,43 @@ public:
 		// Something is wrong, no files found, get outta here
 		if ( linesDependAtom.isEmpty() )
 			return false;
-		
-		setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
-		
+				
 		DbConnection* const m_db = KuroolitoDBSingleton::Instance()->getStaticDbConnection();
 		KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUserMask_temp ( "
-		                                    		"idPackage INTEGER UNIQUE, dependAtom VARCHAR(255), comment BLOB );"
-		                                    		, m_db);
+		                                    		"idPackage INTEGER UNIQUE, dependAtom VARCHAR(255), comment BLOB );", m_db);
 		
 		KuroolitoDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
-			
-			// Collect comment lines above the dependatom
-			if ( (*it).isEmpty() )
-				commentLines.clear();
+			if ( (*it).stripWhiteSpace().startsWith( "#" ) ) {
+				continue;
+			}
 			else {
-				if ( (*it).startsWith( "#" ) ) {
-					continue;
-				}
-				else {
-					if ( rxAtom.exactMatch( *it ) ) {
-						
-						// Get the captured strings
-						QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-						QString name = rxAtom.cap( POS_PACKAGE );
-						
-						QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
-							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
-						
-						if ( id.isEmpty() )
-							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
-								.arg( category ).arg( name ) << LINE_INFO;
-						else
-							KuroolitoDBSingleton::Instance()->insert( QString( 
-								"INSERT INTO packageUserMask_temp (idPackage, dependAtom) "
-								"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
-						
-					}
+				if ( rxAtom.exactMatch( *it ) ) {
+					
+					// Get the captured strings
+					QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+					QString name = rxAtom.cap( POS_PACKAGE );
+					
+					QString id = KuroolitoDBSingleton::Instance()->singleQuery( 
+						"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+					
+					if ( id.isEmpty() )
+						kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
+							.arg( category ).arg( name ) << LINE_INFO;
 					else
-						kdWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
-							.arg( KuroolitoConfig::filePackageUserMask() ) << LINE_INFO;
+						KuroolitoDBSingleton::Instance()->insert( QString( 
+							"INSERT INTO packageUserMask_temp (idPackage, dependAtom) "
+							"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
+					
 				}
+				else
+					kdWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
+						.arg( KuroolitoConfig::filePackageUserMask() ) << LINE_INFO;
 			}
 		}
+		
 		file.close();
 		KuroolitoDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
@@ -408,7 +383,6 @@ public:
 		KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE packageUserMask_temp;", m_db );
 		
 		KuroolitoDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		setStatus( "PackageUserMask", i18n("Done.") );
 		return true;
 	}
 	

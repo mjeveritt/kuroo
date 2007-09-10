@@ -71,8 +71,6 @@ bool ScanUpdatesJob::doJob()
 	if ( m_packageList.isEmpty() )
 		kdWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
 	
-// 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
-
 	// Temporary tables to avoid locking main table
 	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
 	                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -135,7 +133,6 @@ bool ScanUpdatesJob::doJob()
 	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
 	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
 	
-// 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	return true;
 }
 

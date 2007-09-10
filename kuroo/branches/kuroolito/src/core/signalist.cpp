@@ -157,20 +157,6 @@ void Signalist::loadUpdatesComplete()
 	setKuroolitoBusy( false );
 }
 
-/**
- * Db is updated with the new history entries.
- */
-// void Signalist::scanHistoryComplete()
-// {
-// 	emit signalScanHistoryComplete();
-// 	setKuroolitoBusy( false );
-// }
-
-// void Signalist::packageQueueChanged()
-// {
-// 	emit signalPackageQueueChanged();
-// }
-
 void Signalist::packageClicked( const QString& package )
 {
 	emit signalPackageClicked( package );

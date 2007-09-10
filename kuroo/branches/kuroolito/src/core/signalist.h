@@ -47,8 +47,6 @@ public:
 	void 		scanPortageComplete();
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
-// 	void		scanHistoryComplete();
-// 	void		packageQueueChanged();
 	void		packageClicked( const QString& package );
 	void		fontChanged();
 	

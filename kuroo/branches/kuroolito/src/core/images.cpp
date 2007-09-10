@@ -47,7 +47,6 @@ void Images::init( QObject *parent )
 	pxKuroolito = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
 	
 	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
-
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
 

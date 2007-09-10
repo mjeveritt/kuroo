@@ -81,12 +81,11 @@ bool ScanPortageJob::doJob()
 	// Fetch all portage packages by attaching external sqlite database
 	QStringList cachePackages;
 	const QStringList& sqliteFiles = GlobalSingleton::Instance()->sqliteFileList();
-	kdWarning(0) << "sqliteFiles=" << sqliteFiles << LINE_INFO;
+	
 	foreach ( sqliteFiles ) {
 		KuroolitoDBSingleton::Instance()->singleQuery( QString( "ATTACH DATABASE '%1' AS portage;" ).arg( *it ), m_db );
 		QString path = ( *it ).section( KuroolitoConfig::dirEdbDep(), 1, 1 );
 		cachePackages += KuroolitoDBSingleton::Instance()->query( QString( "SELECT '%1' AS path, portage_package_key, _mtime_, homepage, license, description, keywords, iuse FROM portage.portage_packages;" ).arg( path ), m_db );
-		kdWarning(0) << "cachePackages.size()=" << cachePackages.size() << LINE_INFO;
 		KuroolitoDBSingleton::Instance()->singleQuery( "DETACH DATABASE portage;", m_db );
 	}
 	
@@ -292,8 +291,6 @@ void ScanPortageJob::scanInstalledPackages()
 	if ( !dCategory.cd( KuroolitoConfig::dirDbPkg() ) )
 		kdWarning(0) << "Scanning installed packages. Can not access " << KuroolitoConfig::dirDbPkg() << LINE_INFO;
 	
-	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
-	
 	// Get list of categories for installed packages
 	QStringList categoryList = dCategory.entryList();
 	QStringList::Iterator itCategoryEnd = categoryList.end();
@@ -346,7 +343,6 @@ void ScanPortageJob::scanInstalledPackages()
 		else
 			kdWarning(0) << "Scanning installed packages. Can not access " << KuroolitoConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
 	}
-	setStatus( "ScanInstalled", i18n("Done.") );
 }
 
 #include "scanportagejob.moc"

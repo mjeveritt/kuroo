@@ -206,7 +206,7 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KuroolitoDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
-// 		slotButtons();
+		
 		summaryBrowser->clear();
 		packagesView->showNoHitsWarning( i18n( "<font color=darkRed size=+1><b>No packages found with these filter settings</font><br>"
 											   "<font color=darkRed>Please modify the filter settings you have chosen!<br>"

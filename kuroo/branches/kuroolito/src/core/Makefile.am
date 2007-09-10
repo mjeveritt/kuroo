@@ -7,13 +7,12 @@ METASOURCES = AUTO
 
 noinst_HEADERS = scanupdatesjob.h scanportagejob.h signalist.h threadweaver.h \
 	portagedb.h packageitem.h tooltip.h packagelistview.h categorieslistview.h \
-	packageversion.h dependatom.h portagefiles.h images.h versionview.h global.h \
-	dependencyview.h
+	packageversion.h dependatom.h portagefiles.h images.h global.h
 
 libcore_la_SOURCES = scanupdatesjob.cpp scanportagejob.cpp signalist.cpp \
 	threadweaver.cpp portagedb.cpp packageitem.cpp tooltip.cpp packagelistview.cpp \
 	categorieslistview.cpp packageversion.cpp dependatom.cpp portagefiles.cpp images.cpp \
-	inspectorbase.ui versionview.cpp global.cpp dependencyview.cpp emerge.cpp
+	global.cpp emerge.cpp
 
 noinst_LTLIBRARIES = libcore.la
 

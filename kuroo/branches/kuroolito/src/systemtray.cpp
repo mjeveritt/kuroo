@@ -39,7 +39,6 @@ SystemTray::SystemTray( QWidget *parent )
 {
 	s_instance = this;
 	QToolTip::add( this, i18n("Kuroolito - Portage frontend") );
-	this->setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
 }
 
 SystemTray::~SystemTray()

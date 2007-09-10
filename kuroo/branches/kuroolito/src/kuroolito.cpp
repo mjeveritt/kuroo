@@ -95,6 +95,8 @@ Kuroolito::Kuroolito()
 	
 	systemTray = new SystemTray( this );
 	systemTray->show();
+	systemTray->setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
+	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 }
 
 /**

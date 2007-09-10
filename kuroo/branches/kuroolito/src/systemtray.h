@@ -38,8 +38,6 @@ public:
     ~SystemTray();
 	
 	static SystemTray* 	instance() { return s_instance; }
-	void				activate();
-	void				inactivate();
 
 private slots:
 	void 				slotPreferences();

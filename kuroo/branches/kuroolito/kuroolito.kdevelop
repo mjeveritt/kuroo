@@ -121,13 +121,19 @@
       <envvars/>
       <runarguments>
         <kuroo/>
-        <kuroolito/>
+        <kuroolito></kuroolito>
       </runarguments>
       <globaldebugarguments/>
       <globalcwd>/home/karye/repository/kuroo-svn/kuroo/branches/kuroolito/debug</globalcwd>
       <useglobalprogram>false</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
+      <debugarguments>
+        <kuroolito></kuroolito>
+      </debugarguments>
+      <cwd>
+        <kuroolito>/home/karye/repository/kuroo-svn/kuroo/branches/kuroolito/debug/./src</kuroolito>
+      </cwd>
     </run>
     <general>
       <useconfiguration>default</useconfiguration>

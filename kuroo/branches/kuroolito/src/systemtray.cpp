@@ -40,23 +40,13 @@ SystemTray::SystemTray( QWidget *parent )
 	s_instance = this;
 	QToolTip::add( this, i18n("Kuroolito - Portage frontend") );
 	contextMenu()->insertItem( i18n("&Configure Kuroolito..."), this, SLOT( slotPreferences() ) );
-	
+	setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
+	show();
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 }
 
 SystemTray::~SystemTray()
 {
-}
-
-void SystemTray::activate()
-{
-	slotBusy( false );
-	show();
-}
-
-void SystemTray::inactivate()
-{
-	hide();
 }
 
 void SystemTray::slotPreferences()

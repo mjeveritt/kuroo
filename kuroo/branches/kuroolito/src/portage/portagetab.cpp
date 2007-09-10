@@ -147,8 +147,6 @@ void PortageTab::slotButtons()
 	filterGroup->setDisabled( false );
 	searchFilter->setDisabled( false );
 	pbClearFilter->setDisabled( false );
-
-	processPackage();
 }
 
 
@@ -232,6 +230,8 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( QColor( KuroolitoConfig::matchColor() ) );
 		else
 			searchFilter->setPaletteBackgroundColor( Qt::white );
+		
+		processPackage();
 	}
 }
 

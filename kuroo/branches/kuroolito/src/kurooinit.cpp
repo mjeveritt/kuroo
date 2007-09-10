@@ -59,8 +59,7 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	// Setup kuroo environment
 // 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( KuroolitoConfig::init() ) {
-// 		KuroolitoConfig::setSaveLog( false );
-		
+
 		// Create DirHome dir
 		if ( !d.exists() ) {
 			if ( !d.mkdir( GlobalSingleton::Instance()->kurooDir() ) ) {

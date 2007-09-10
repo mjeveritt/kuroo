@@ -45,35 +45,20 @@ void Images::init( QObject *parent )
 	KIconLoader *ldr = KGlobal::iconLoader();
 	
 	pxKuroolito = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
-	pxEmerging = ldr->loadIcon( "kuroo1", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
 	
 	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
-	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
-// 	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
-	
+
 	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
 	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
-	
-// 	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
-// 	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
-	
+
 	pxWorld = ldr->loadIcon( "kuroo_world", KIcon::Small );
 	pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIcon::Small );
-	
-	pxDetails = ldr->loadIcon( "options", KIcon::Small );
-	pxRemove = ldr->loadIcon( "remove", KIcon::Small );
 	
 	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
 	pxWarning = ldr->loadIcon( "kuroo_warning", KIcon::Small );
 	
 	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
 	pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIcon::Small );
-	
-	pxViewPackages =  ldr->loadIcon( "kuroo", KIcon::Panel );
-// 	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIcon::Panel );
-// 	pxViewHistory = ldr->loadIcon( "kuroo_history", KIcon::Panel );
-// 	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIcon::Panel );
-// 	pxViewLog = ldr->loadIcon( "kuroo_log", KIcon::Panel );
 }
 
 /**
@@ -86,10 +71,6 @@ const QPixmap& Images::icon( int image )
 		
 		case KUROO_READY:
 			return pxKuroolito;
-			break;
-			
-		case KUROO_EMERGING:
-			return pxEmerging;
 			break;
 	
 		case EMPTY:
@@ -107,26 +88,6 @@ const QPixmap& Images::icon( int image )
 		case PACKAGES:
 			return pxPackage;
 			break;
-			
-// 		case QUEUED:
-// 			return pxQueued;
-// 			break;
-	
-		case UNMERGED:
-			return pxUnmerged;
-			break;
-		
-		case DETAILS:
-			return pxDetails;
-			break;
-		
-// 		case REMOVE:
-// 			return pxRemove;
-// 			break;
-		
-		case NEW:
-			return pxNew;
-			break;
 		
 		case WORLD:
 			return pxWorld;
@@ -135,11 +96,7 @@ const QPixmap& Images::icon( int image )
 		case VERSION_INSTALLED:
 			return pxVersionInstalled;
 			break;
-		
-// 		case QUEUED_COLUMN:
-// 			return pxQueuedColumn;
-// 			break;
-		
+
 		case INSTALLED_COLUMN:
 			return pxInstalledColumn;
 			break;
@@ -147,27 +104,7 @@ const QPixmap& Images::icon( int image )
 		case WORLD_COLUMN:
 			return pxWorldColumn;
 			break;
-		
-		case VIEW_PORTAGE:
-			return pxViewPackages;
-			break;
-		
-// 		case VIEW_QUEUE:
-// 			return pxViewQueue;
-// 			break;
-		
-// 		case VIEW_HISTORY:
-// 			return pxViewHistory;
-// 			break;
-		
-// 		case VIEW_MERGE:
-// 			return pxViewMerge;
-// 			break;
-		
-// 		case VIEW_LOG:
-// 			return pxViewLog;
-// 			break;
-
+			
 		default:
 			pxEmpty;
 	}

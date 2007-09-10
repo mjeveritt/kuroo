@@ -23,9 +23,7 @@
 #include "categorieslistview.h"
 #include "portagelistview.h"
 #include "portagetab.h"
-// #include "packageinspector.h"
 #include "packageversion.h"
-#include "versionview.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>

@@ -24,7 +24,6 @@
 #include "settings.h"
 #include "images.h"
 #include "signalist.h"
-#include "statusbar.h"
 #include "portage.h"
 #include "portagedb.h"
 #include "portagefiles.h"
@@ -45,7 +44,6 @@ typedef Singleton<Signalist> SignalistSingleton;
 typedef Singleton<Portage> PortageSingleton;
 typedef Singleton<KuroolitoDB> KuroolitoDBSingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
-// typedef Singleton<FileWatcher> FileWatcherSingleton;
 typedef Singleton<Global> GlobalSingleton;
 
 // The package status
@@ -84,19 +82,14 @@ enum Icons {
 		VIEW_LOG,
 		PACKAGES,
 		INSTALLED,
-		QUEUED,
 		WORLD,
-		NOTQUEUED,
 		UNMERGED,
-		DETAILS,
-		REMOVE,
 		NEW,
 		EMPTY,
 		WARNING,
 		KUROO_READY,
 		KUROO_EMERGING,
 		VERSION_INSTALLED,
-		QUEUED_COLUMN,
 		INSTALLED_COLUMN,
 		WORLD_COLUMN
 };
@@ -114,16 +107,6 @@ static const QString STABLE_STRING( QString::number( STABLE ) );
 static const QString TESTING_STRING( QString::number( TESTING ) );
 static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
-
-typedef struct Info {
-	QString slot;
-	QString homepage;
-	QString licenses;
-	QString description;
-	QString keywords;
-	QString useFlags;
-	QString size;
-};
 
 /**
  * Use this to const-iterate over QStringLists, if you like.

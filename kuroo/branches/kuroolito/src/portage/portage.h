@@ -37,10 +37,7 @@ public:
 	void						init( QObject *parent = 0 );
 	
 	void						loadWorld();
-	bool						isInWorld( const QString& package );
-	
-	void						checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate );
-	
+	bool						isInWorld( const QString& package );	
 	
 public slots:
 	void						slotChanged();

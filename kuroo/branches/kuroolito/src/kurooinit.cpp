@@ -145,7 +145,7 @@ void KuroolitoInit::slotCollectOutput2( KProcIO* eProc )
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 ) {
 		GlobalSingleton::Instance()->addSqliteFile( line );
-		kdDebug() << "line=" << line << endl;
+		kdDebug() << "Found overlay " << line << endl;
 	}
 }
 

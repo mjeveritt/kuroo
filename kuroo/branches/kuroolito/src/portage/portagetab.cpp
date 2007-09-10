@@ -72,10 +72,10 @@ PortageTab::PortageTab( QWidget* parent )
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	
 	// Enable/disable this view and buttons when kuroo is busy
-	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy( bool ) ), this, SLOT( slotBusy() ) );
+// 	connect( SignalistSingleton::Instance(), SIGNAL( signalKuroolitoBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Enable/disable buttons
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
+// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -246,16 +246,16 @@ void PortageTab::slotClearFilter()
 /**
  * Refresh packages list.
  */
-void PortageTab::slotRefresh()
-{
-	switch( KMessageBox::questionYesNo( this,
-		i18n( "<qt>Do you want to refresh the Packages view?<br>"
-		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
-	                                    KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
-		case KMessageBox::Yes:
-			PortageSingleton::Instance()->slotRefresh();
-	}
-}
+// void PortageTab::slotRefresh()
+// {
+// 	switch( KMessageBox::questionYesNo( this,
+// 		i18n( "<qt>Do you want to refresh the Packages view?<br>"
+// 		      "This will take a couple of minutes...</qt>"), i18n( "Refreshing Packages" ), 
+// 	                                    KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
+// 		case KMessageBox::Yes:
+// 			PortageSingleton::Instance()->slotRefresh();
+// 	}
+// }
 
 /**
  * Process package and all it's versions.

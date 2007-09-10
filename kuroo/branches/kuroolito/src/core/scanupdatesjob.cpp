@@ -71,9 +71,7 @@ bool ScanUpdatesJob::doJob()
 	if ( m_packageList.isEmpty() )
 		kdWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
 	
-	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
-	setProgressTotalSteps( m_packageList.count() );
-	int count(0);
+// 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 
 	// Temporary tables to avoid locking main table
 	KuroolitoDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "
@@ -103,9 +101,6 @@ bool ScanUpdatesJob::doJob()
 			KuroolitoDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
-		
-		// count is also ordering number
-		setProgress( count++ );
 		
 		// Find id for this category in db
 		QString id = KuroolitoDBSingleton::Instance()->singleQuery( " SELECT id FROM package WHERE name = '" + 
@@ -140,8 +135,7 @@ bool ScanUpdatesJob::doJob()
 	KuroolitoDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
 	KuroolitoDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
 	
-	setStatus( "ScanUpdates", i18n( "Done." ) );
-	setProgressTotalSteps( 0 );
+// 	setStatus( "ScanUpdates", i18n( "Done." ) );
 	return true;
 }
 

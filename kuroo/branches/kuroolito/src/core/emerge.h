@@ -44,13 +44,9 @@ public:
 	void						init( QObject *parent = 0 );
 	bool 						isRunning();
 	
-	bool						sync();
 	bool						checkUpdates();
 	
 	const EmergePackageList		packageList();
-	
-private:
-	void						cleanup();
 	
 private slots:
 	void 						slotEmergeOutput( KProcIO *proc );
@@ -63,18 +59,6 @@ signals:
 private:
 	QObject*					m_parent;
 	KProcIO*					eProc;
-	
-	// Used to collect ewarn and einfo messages spaning multiple lines
-	bool						m_completedFlag;
-	
-	// Package with the important message
-	QString						m_importantMessagePackage;
-	
-	// Collects messages from emerge, like masked errors, ewarn and einfos
-	QString 					m_importantMessage;
-	
-	// The current package
-	QString						m_packageMessage;
 
 	// List of parsed packages
 	EmergePackageList			m_emergePackageList;

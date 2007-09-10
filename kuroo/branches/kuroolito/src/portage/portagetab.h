@@ -44,7 +44,7 @@ public:
 	
 public slots:
 	void				slotReload();
-	void				slotRefresh();
+// 	void				slotRefresh();
 	
 private slots:
 	void 				slotInit();
@@ -59,8 +59,6 @@ private slots:
 	void				slotActivateFilters();
 	void				slotClearFilter();
 	void				slotListPackages();
-	
-// 	void				slotPackage();
 	
 private:
 	void				processPackage();

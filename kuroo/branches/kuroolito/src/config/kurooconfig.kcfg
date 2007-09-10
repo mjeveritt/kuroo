@@ -34,8 +34,8 @@
 			<default>kuroolito.db</default>
 		</entry>
 		
-		<entry name="DirPortage" type="String">
-			<default>/usr/portage</default>
+		<entry name="UpdateCommand" type="String">
+			<default>"emerge -pvu --color=n --nospinner --columns world"</default>
 		</entry>
 
 		<entry name="DirDbPkg" type="String">

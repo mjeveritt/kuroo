@@ -143,7 +143,6 @@ bool Portage::slotScan()
 {
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
-	
 	return true;
 }
 
@@ -211,8 +210,12 @@ bool Portage::isInWorld( const QString& package )
  */
 bool Portage::slotRefreshUpdates()
 {
-	EmergeSingleton::Instance()->checkUpdates();
-	return true;
+	if ( !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
+		EmergeSingleton::Instance()->checkUpdates();
+		return true;
+	}
+	else
+		return false;
 }
 
 /**
@@ -221,17 +224,13 @@ bool Portage::slotRefreshUpdates()
  */
 bool Portage::slotLoadUpdates()
 {
-	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
-	return true;
-}
-
-/**
- * Update packages when user changes package stability.
- */
-void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
-{
-	ThreadWeaver::instance()->queueJob( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
+	if ( !SignalistSingleton::Instance()->isKuroolitoBusy() ) {
+		SignalistSingleton::Instance()->scanStarted();
+		ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
+		return true;
+	}
+	else
+		return false;
 }
 
 #include "portage.moc"

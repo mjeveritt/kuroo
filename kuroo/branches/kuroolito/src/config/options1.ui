@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>450</width>
-            <height>359</height>
+            <width>435</width>
+            <height>391</height>
         </rect>
     </property>
     <property name="caption">
@@ -247,7 +247,7 @@
                 </property>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>textLabel3_2_2_2_2_2_2_3</cstring>
+                        <cstring>textLabel3_2_2_2_2_2_2</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -258,10 +258,15 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Portage</string>
+                        <string>Installed packages</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="3" column="0">
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>kcfg_DirDbPkg</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
                     <property name="name">
                         <cstring>textLabel3_2_2_2_2_2_2_2</cstring>
                     </property>
@@ -277,9 +282,32 @@
                         <string>Cache</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="2" column="0">
+                <widget class="QLineEdit" row="1" column="1">
                     <property name="name">
-                        <cstring>textLabel3_2_2_2_2_2_2</cstring>
+                        <cstring>kcfg_DirEdbDep</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>portage_2_2_2_2</cstring>
+            </property>
+            <property name="title">
+                <string>Update calculation</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>kcfg_UpdateCommand</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2_2_2_2_2_2_2_2</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -290,22 +318,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Installed packages</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirDbPkg</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirPortage</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="3" column="1">
-                    <property name="name">
-                        <cstring>kcfg_DirEdbDep</cstring>
+                        <string>Update command</string>
                     </property>
                 </widget>
             </grid>

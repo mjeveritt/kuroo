@@ -40,8 +40,7 @@ kuroolito_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
 kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/core/libcore.la $(LIB_KDECORE) $(LIB_KDEPRINT) \
-	$(LIB_KFILE)
+	$(top_builddir)/src/core/libcore.la $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_KFILE)
 
 #########################################################################
 # KPART SECTION

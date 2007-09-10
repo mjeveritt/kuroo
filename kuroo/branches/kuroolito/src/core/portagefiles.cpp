@@ -72,7 +72,6 @@ public:
 		// Collect all mask dependatoms
 		QFile file( KuroolitoConfig::filePackageKeywords() );
 		QTextStream stream( &file );
-		stream.setEncoding( QTextStream::Locale );
 		QStringList linesPackage;
 		if ( !file.open( IO_ReadOnly ) )
 			kdWarning(0) << "Parsing package.keywords. Reading: " << KuroolitoConfig::filePackageKeywords() << LINE_INFO;
@@ -165,7 +164,6 @@ public:
 		// Collect all unmask dependatoms
 		QFile file( KuroolitoConfig::filePackageUserUnMask() );
 		QTextStream stream( &file );
-		stream.setEncoding( QTextStream::Locale );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
 			kdError(0) << "Parsing package.unmask. Reading: " << KuroolitoConfig::filePackageUserUnMask() << LINE_INFO;
@@ -196,7 +194,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").local8Bit();
+					continue;
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -213,8 +211,8 @@ public:
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KuroolitoDBSingleton::Instance()->insert( QString( 
-								"INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
-								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+								"INSERT INTO packageUnmask_temp (idPackage, dependAtom) "
+								"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
 						
 					}
 					else
@@ -255,7 +253,6 @@ public:
 		// Collect all mask dependatoms
 		QFile file( KuroolitoConfig::filePackageHardMask() );
 		QTextStream stream( &file );
-		stream.setEncoding( QTextStream::Locale );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
 			kdError(0) << "Parsing package.mask. Reading: " << KuroolitoConfig::filePackageHardMask() << LINE_INFO;
@@ -286,7 +283,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).section( "#", 1, 1 ).replace('\'', "''").replace('%', "&#37;").local8Bit();
+					continue;
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -303,8 +300,8 @@ public:
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KuroolitoDBSingleton::Instance()->insert( QString( 
-								"INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
-								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
+								"INSERT INTO packageHardMask_temp (idPackage, dependAtom) "
+								"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
 
 					}
 					else
@@ -345,7 +342,6 @@ public:
 		// Collect all mask dependatoms from /etc/portage/package.mask
 		QFile file( KuroolitoConfig::filePackageUserMask() );
 		QTextStream stream( &file );
-		stream.setEncoding( QTextStream::Locale );
 		QStringList linesDependAtom;
 		if ( !file.open( IO_ReadOnly ) )
 			kdError(0) << "Parsing user package.mask. Reading: " << KuroolitoConfig::filePackageUserMask() << LINE_INFO;
@@ -376,7 +372,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").local8Bit();
+					continue;
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -393,8 +389,8 @@ public:
 								.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KuroolitoDBSingleton::Instance()->insert( QString( 
-								"INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
-								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
+								"INSERT INTO packageUserMask_temp (idPackage, dependAtom) "
+								"VALUES ('%1', '%2');" ).arg( id ).arg( *it ), m_db );
 						
 					}
 					else
@@ -434,7 +430,6 @@ public:
 		
 		QFile file( KuroolitoConfig::filePackageUserUse() );
 		QTextStream stream( &file );
-		stream.setEncoding( QTextStream::Locale );
 		QStringList linesUse;
 		if ( !file.open( IO_ReadOnly ) )
 			kdError(0) << "Parsing user package.use. Reading: %1." << KuroolitoConfig::filePackageUserUse() << LINE_INFO;

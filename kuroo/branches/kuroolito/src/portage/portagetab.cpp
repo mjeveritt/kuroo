@@ -23,7 +23,7 @@
 #include "categorieslistview.h"
 #include "portagelistview.h"
 #include "portagetab.h"
-#include "packageinspector.h"
+// #include "packageinspector.h"
 #include "packageversion.h"
 #include "versionview.h"
 
@@ -81,7 +81,7 @@ PortageTab::PortageTab( QWidget* parent )
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
+// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -159,10 +159,10 @@ void PortageTab::slotButtons()
 // 	}
 	
 	// No current package, disable all buttons
-	if ( !packagesView->currentPackage() ) {
+// 	if ( !packagesView->currentPackage() ) {
 // 		pbAdvanced->setDisabled( true );
-		return;
-	}
+// 		return;
+// 	}
 }
 
 
@@ -276,19 +276,19 @@ void PortageTab::slotRefresh()
 // Package slots
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PortageTab::slotPackage()
-{
+// void PortageTab::slotPackage()
+// {
 // 	if ( m_packageInspector->isVisible() )
-		processPackage( true );
+// 		processPackage();
 // 	else
 // 		processPackage( false );
-}
+// }
 
 /**
  * Process package and all it's versions.
  * Update summary and Inspector.
  */
-void PortageTab::processPackage( bool viewInspector )
+void PortageTab::processPackage()
 {
 	summaryBrowser->clear();
 	

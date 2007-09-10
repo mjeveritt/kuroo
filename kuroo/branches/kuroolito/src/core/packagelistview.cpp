@@ -39,25 +39,12 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	
 	// Update visible items when world is changed
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
-	
-// 	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
-	
+
 	new ToolTip( this );
 }
 
 PackageListView::~PackageListView()
 {}
-
-/**
- * Create mouse-over effect.
- */
-// void PackageListView::rollOver( QListViewItem* item )
-// {
-// 	dynamic_cast<PackageItem*>( item )->setRollOver( true );
-// 	if ( lastItem )
-// 		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
-// 	lastItem = item;
-// }
 
 /**
  * Clear this listView and package index.

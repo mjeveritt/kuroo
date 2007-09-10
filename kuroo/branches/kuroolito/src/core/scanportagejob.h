@@ -46,12 +46,9 @@ private:
 	void								scanInstalledPackages();
 	bool 								doJob();
 	void 								completeJob();
-	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
+
 	QString								formatSize( const QString& size );
-	
-	void								loadCache();
-	QString								cacheFind( const QString& package );
-	
+
 private:
 	QRegExp								rxAtom;
 

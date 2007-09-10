@@ -83,6 +83,7 @@ Portage::Portage( QObject *m_parent )
 {
 	// When cache scan is done go one scanning portage for all packages
 	connect( SignalistSingleton::Instance(), SIGNAL( signalCachePortageComplete() ), this, SLOT( slotScan() ) );
+	
 	// Then portage scan is completed
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanPortageComplete() ), this, SLOT( slotScanCompleted() ) );
 	
@@ -130,14 +131,7 @@ void Portage::slotPackageChanged()
  */
 bool Portage::slotRefresh()
 {
-	// Update cache if empty
-// 	if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() ) {
-// 		SignalistSingleton::Instance()->scanStarted();
-// 		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
-// 	}
-// 	else
-		slotScan();
-	
+	slotScan();
 	return true;
 }
 
@@ -147,22 +141,6 @@ bool Portage::slotRefresh()
  */
 bool Portage::slotScan()
 {
-	DEBUG_LINE_INFO;
-	
-	// Wait for cache job to finish before launching the scan.
-// 	int maxLoops( 99 );
-// 	while ( true ) {
-// 		if ( KuroolitoDBSingleton::Instance()->isCacheEmpty() )
-// 			::usleep( 100000 ); // Sleep 100 msec
-// 		else
-// 			break;
-// 		
-// 		if ( maxLoops-- == 0 ) {
-// 			kdWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
-// 			break;
-// 		}
-// 	}
-	
 	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
 	
@@ -175,7 +153,7 @@ bool Portage::slotScan()
 void Portage::slotScanCompleted()
 {
 	// Now all Portage files
-// 	PortageFilesSingleton::Instance()->loadPackageFiles();
+	PortageFilesSingleton::Instance()->loadPackageFiles();
 	
 	// Ready to roll!
 	SignalistSingleton::Instance()->setKuroolitoReady( true );

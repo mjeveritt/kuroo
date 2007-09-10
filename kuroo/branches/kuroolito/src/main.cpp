@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Browser for Gentoo Portage");
-static const char version[] = "0.10.0_200807_db47";
+static const char version[] = "0.10.0_100907_db47";
 
 static KCmdLineOptions options[] =
 {
@@ -43,10 +43,7 @@ int main( int argc, char **argv )
 	KAboutData about("kuroolito", I18N_NOOP("Kuroolito"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "info@kuroo.org");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "info@kuroo.org");
-	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
 	about.addCredit("Jan Schnackenberg", I18N_NOOP("German translation"), "jan@schnackenberg.org");
-	about.addCredit("Alexander Reiterer", I18N_NOOP("German translation"), "alexander.reiterer@tuwien.ac.at");
-	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
 	about.addCredit("Matteo Azzali", I18N_NOOP("Italian translation"), "kaioth@tiscalinet.it");
 	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
 	about.addCredit("Konrad Mantorski", I18N_NOOP("Polish translation"), "konrad@mantorski.com");

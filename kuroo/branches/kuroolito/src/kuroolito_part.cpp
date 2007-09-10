@@ -27,7 +27,7 @@
 #include "statusbar.h"
 #include "introdlg.h"
 #include "portagetab.h"
-#include "packageinspector.h"
+// #include "packageinspector.h"
 
 KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, const QStringList& )
     : KParts::ReadWritePart( parent, name ),
@@ -42,6 +42,8 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	// Add all pages
 	viewPortage = new PortageTab( parentWidget );
 	setWidget( viewPortage );
+	
+	viewPortage->setMinimumSize(600,600);
 	
 	if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() )
 		viewPortage->slotReload();

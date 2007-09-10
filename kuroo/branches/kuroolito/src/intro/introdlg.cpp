@@ -51,10 +51,9 @@ IntroDlg::IntroDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
 	setFinishEnabled( page1, true );
 	
 	introText->setText(   	"<h2>Kuroolito-" + KuroolitoConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
-					  i18n( "Kuroolito - A KDE Portage browser"
-							"<br>"
-					        "<a href=http://trac.kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
-					        "Tell us what you think of Kuroolito!</a><br>"
+					  i18n( "<p>Kuroolito - A Portage browser</p>"
+							"<p>In order to activate the sqlite module you must uncomment #portdbapi.auxdbmodule = cache.sqlite.database in /etc/portage/modules.</p>"
+							"<p>Remember to update the cache by running emerge --regen after each sync.</p>"
 					      ) );
 	
 	adjustSize();
@@ -70,8 +69,6 @@ void IntroDlg::back()
 
 void IntroDlg::next()
 {
-// 	if ( QWizard::indexOf(this->currentPage()) == 0 )
-// 		KMessageBox::enableAllMessages();
 }
 
 void IntroDlg::reject()
@@ -81,29 +78,6 @@ void IntroDlg::reject()
 
 void IntroDlg::accept()
 {
-	// Backup all portage files changeable by kuroo
-// 	if ( cbBackup->isOn() ) {
-// 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
-// 		QString filePackageKeywords( KuroolitoConfig::filePackageKeywords() );
-// 		KIO::file_copy( filePackageKeywords, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
-// 		              -1, true, false, false );
-// 		QString filePackageUserUnMask( KuroolitoConfig::filePackageUserUnMask() );
-// 		KIO::file_copy( filePackageUserUnMask, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
-// 		                -1, true, false, false );
-// 		QString filePackageUserMask( KuroolitoConfig::filePackageUserMask() );
-// 		KIO::file_copy( filePackageUserMask, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
-// 		                -1, true, false, false );
-// 		QString filePackageUserUse( KuroolitoConfig::filePackageUserUse() );
-// 		KIO::file_copy( filePackageUserUse, lobalSingleton::Instance()->kurooDir() + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
-// 		                -1, true, false, false );
-// 		QString fileWorld( KuroolitoConfig::fileWorld() );
-// 		KIO::file_copy( fileWorld, lobalSingleton::Instance()->kurooDir() + "backup/" + fileWorld.section( "/", -1 ) + dt,
-// 		                -1, true, false, false );
-// 		QString fileMakeConf( KuroolitoConfig::fileMakeConf() );
-// 		KIO::file_copy( fileMakeConf, lobalSingleton::Instance()->kurooDir() + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
-// 		                -1, true, false, false );
-// 	}
-	
 	KMessageBox::enableAllMessages();
 	QWizard::accept();
 }

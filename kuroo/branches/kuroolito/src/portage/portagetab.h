@@ -60,10 +60,10 @@ private slots:
 	void				slotClearFilter();
 	void				slotListPackages();
 	
-	void				slotPackage();
+// 	void				slotPackage();
 	
 private:
-	void				processPackage( bool viewInspector );
+	void				processPackage();
 	
 private:
 	

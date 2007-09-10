@@ -102,7 +102,6 @@ KuroolitoInit::KuroolitoInit( QObject *parent, const char *name )
 	SignalistSingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
-// 	FileWatcherSingleton::Instance()->init( this );
 }
 
 KuroolitoInit::~KuroolitoInit()

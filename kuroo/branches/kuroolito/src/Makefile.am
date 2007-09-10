@@ -26,9 +26,6 @@ messages: rc.cpp
 kdelnkdir = $(kde_appsdir)/System
 kdelnk_DATA = kuroolito.desktop
 
-# this is to set set autostart of kuroo_watcher
-autostartdir = $(datadir)/autostart
-
 # headers for kuroo
 noinst_HEADERS = common.h kurooiface.h kuroolito.h kuroolito_part.h singleton.h \
 	systemtray.h
@@ -43,7 +40,8 @@ kuroolito_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
 kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/core/libcore.la $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_KFILE)
+	$(top_builddir)/src/core/libcore.la $(LIB_KDECORE) $(LIB_KDEPRINT) \
+	$(LIB_KFILE)
 
 #########################################################################
 # KPART SECTION

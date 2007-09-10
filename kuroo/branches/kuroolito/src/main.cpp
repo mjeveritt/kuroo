@@ -43,10 +43,6 @@ int main( int argc, char **argv )
 	KAboutData about("kuroolito", I18N_NOOP("Kuroolito"), version, description,
 	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "info@kuroo.org");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "info@kuroo.org");
-	about.addCredit("Jan Schnackenberg", I18N_NOOP("German translation"), "jan@schnackenberg.org");
-	about.addCredit("Matteo Azzali", I18N_NOOP("Italian translation"), "kaioth@tiscalinet.it");
-	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
-	about.addCredit("Konrad Mantorski", I18N_NOOP("Polish translation"), "konrad@mantorski.com");
 	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroolito icons"), "design@bartelme.at");
 	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
 	about.addCredit("Björn Balazs", I18N_NOOP("OpenUsability"), "B@lazs.de");

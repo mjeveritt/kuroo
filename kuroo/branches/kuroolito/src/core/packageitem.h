@@ -78,7 +78,7 @@ private:
 	QListView						*m_parent;
 	
 	// Is the mouse pointer over this package
-	bool							m_isMouseOver;
+// 	bool							m_isMouseOver;
 	
 	// Keep track of package's index in parent listview
 	int								m_index;

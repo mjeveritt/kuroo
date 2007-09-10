@@ -33,7 +33,7 @@
  */
 PackageItem::PackageItem( QListView* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
-	m_parent( parent ), m_index( 0 ), m_isMouseOver( false ),
+	m_parent( parent ), m_index( 0 ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
@@ -43,7 +43,7 @@ PackageItem::PackageItem( QListView* parent, const char* name, const QString& id
 
 PackageItem::PackageItem( QListViewItem* parent, const char* name, const QString& id, const QString& category, const QString& description, const int status )
 	: KListViewItem( parent, name ),
-	m_parent( parent->listView() ), m_index( 0 ), m_isMouseOver( false ),
+	m_parent( parent->listView() ), m_index( 0 ),
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {

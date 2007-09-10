@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "settings.h"
-#include "kuroo.h"
+#include "kuroolito.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>

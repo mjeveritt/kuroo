@@ -23,11 +23,9 @@
 #include "threadweaver.h"
 #include "systemtray.h"
 #include "kurooinit.h"
-#include "kuroo.h"
-#include "statusbar.h"
+#include "kuroolito.h"
 #include "introdlg.h"
 #include "portagetab.h"
-// #include "packageinspector.h"
 
 KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, const QStringList& )
     : KParts::ReadWritePart( parent, name ),

@@ -8,7 +8,6 @@
 #define DEBUG_PREFIX "ThreadWeaver"
 
 #include "common.h"
-#include "statusbar.h"
 #include "threadweaver.h"
 
 #include <qapplication.h>

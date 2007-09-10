@@ -26,7 +26,6 @@
 #include <kparts/part.h>
 #include <kparts/factory.h>
 
-// class KActionMenu;
 class KAction;
 class KConfigDialog;
 class KURL;
@@ -36,7 +35,6 @@ class KuroolitoInit;
 class Message;
 class Queue;
 class Results;
-class SystemTray;
 
 class KuroolitoPart : public KParts::ReadWritePart
 {
@@ -67,12 +65,9 @@ private slots:
 	void 				slotPreferences();
 	
 private:
-	SystemTray			*systemTray;
-	Message 			*kurooMessage;
 	KuroolitoInit 		*kurooInit;
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
-	bool 				m_shuttingDown;
 	KAction             *actionRefreshPortage, *actionRefreshUpdates;
 	PortageTab 			*viewPortage;
 };

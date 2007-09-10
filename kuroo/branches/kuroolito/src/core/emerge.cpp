@@ -19,7 +19,6 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "statusbar.h"
 
 #include <qtextcodec.h>
 

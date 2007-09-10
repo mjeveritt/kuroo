@@ -20,7 +20,6 @@
 
 #include "common.h"
 #include "threadweaver.h"
-#include "systemtray.h"
 #include "kurooinit.h"
 #include "kuroolito.h"
 #include "introdlg.h"
@@ -46,6 +45,8 @@
 #include <kuser.h>
 #include <kio/job.h>
 #include <klibloader.h>
+#include <kiconloader.h>
+#include <ksystemtray.h>
 
 /**
  * @class Kuroolito
@@ -93,9 +94,9 @@ Kuroolito::Kuroolito()
         return;
     }
 	
-	systemTray = new SystemTray( this );
+	KSystemTray *systemTray = new KSystemTray( this );
 	systemTray->show();
-	systemTray->setPixmap( ImagesSingleton::Instance()->icon( KUROO_READY ) );
+	systemTray->setPixmap( KGlobal::iconLoader()->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true ) );
 	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 }
 

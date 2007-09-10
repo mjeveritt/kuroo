@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>526</width>
-            <height>317</height>
+            <height>367</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -164,7 +164,7 @@
                 <property name="minimumSize">
                     <size>
                         <width>300</width>
-                        <height>100</height>
+                        <height>200</height>
                     </size>
                 </property>
                 <property name="margin">
@@ -187,7 +187,7 @@
                 <property name="sizeHint">
                     <size>
                         <width>20</width>
-                        <height>21</height>
+                        <height>20</height>
                     </size>
                 </property>
             </spacer>

@@ -21,7 +21,6 @@
 #include "kuroolito_part.h"
 #include "common.h"
 #include "threadweaver.h"
-#include "systemtray.h"
 #include "kurooinit.h"
 #include "kuroolito.h"
 #include "introdlg.h"

@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 static const char description[] = I18N_NOOP("Browser for Gentoo Portage");
-static const char version[] = "0.10.0_100907_db47";
+static const char version[] = "0.10.1_100907_db47";
 
 static KCmdLineOptions options[] =
 {

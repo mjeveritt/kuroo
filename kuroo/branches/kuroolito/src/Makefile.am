@@ -27,11 +27,10 @@ kdelnkdir = $(kde_appsdir)/System
 kdelnk_DATA = kuroolito.desktop
 
 # headers for kuroo
-noinst_HEADERS = common.h kurooiface.h kuroolito.h kuroolito_part.h singleton.h \
-	systemtray.h
+noinst_HEADERS = common.h kurooiface.h kuroolito.h kuroolito_part.h singleton.h
 
 # source for kuroo
-kuroolito_SOURCES = kuroolito.cpp main.cpp systemtray.cpp
+kuroolito_SOURCES = kuroolito.cpp main.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
@@ -39,8 +38,8 @@ METASOURCES = AUTO
 kuroolito_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
-kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la \
-	$(top_builddir)/src/core/libcore.la $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_KFILE)
+kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la $(LIB_KDECORE) \
+	$(LIB_KDEPRINT) $(LIB_KFILE)
 
 #########################################################################
 # KPART SECTION

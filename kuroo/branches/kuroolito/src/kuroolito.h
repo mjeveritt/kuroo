@@ -38,10 +38,6 @@ class KURL;
 class IntroDlg;
 class KCmdLineArgs;
 class KuroolitoInit;
-class Message;
-class Queue;
-class Results;
-class SystemTray;
 
 /**
  * @class Kuroolito
@@ -63,7 +59,6 @@ private:
 	
 private:
 	KParts::ReadWritePart *m_part;
-	SystemTray			*systemTray;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;

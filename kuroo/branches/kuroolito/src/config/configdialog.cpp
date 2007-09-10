@@ -19,7 +19,6 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "systemtray.h"
 #include "configdialog.h"
 #include "options1.h"
 
@@ -45,64 +44,15 @@
  * Parses make.conf and tries to keep user-format when saving back settings.
  */
 ConfigDialog::ConfigDialog( QWidget *parent, const char* name, KConfigSkeleton *config )
-	: KConfigDialog( parent, name, config ), m_isDefault( false )
+	: KConfigDialog( parent, name, config )
 {
 	setWFlags( WDestructiveClose );
 	
 	Options1* opt1 = new Options1( this, i18n("General") );
-// 	Options2* opt2 = new Options2( this, i18n("make.conf") );
-// 	Options7* opt7 = new Options7( this, i18n("Etc-update warnings") );
-	
 	addPage( opt1, i18n("General"), "kuroo", i18n("General preferences") );
-// 	addPage( opt2, i18n("make.conf"), "kuroo_makeconf", i18n("Edit your make.conf file") );
-// 	addPage( opt7, i18n("Etc-update warnings"), "messagebox_warning", i18n("Edit your etc-update warning file list") );
-	
-// 	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
-// 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
-	
-// 	parseMakeConf();
 }
 
 ConfigDialog::~ConfigDialog()
 {}
-
-/**
- * Reset to defaults.
- */
-void ConfigDialog::slotDefaults()
-{
-	DEBUG_LINE_INFO;
-// 	parseMakeConf();
-	show();
-}
-
-/**
- * Save settings when user press "Apply".
- */
-void ConfigDialog::slotSaveAll()
-{
-// 	DEBUG_LINE_INFO;
-// 	switch( activePageIndex() ) {
-// 		
-// 		// Activate the systray directly (not needing restarting kuroo)
-// 		case 0: {
-// 			if ( KuroolitoConfig::isSystrayEnabled() )
-// 				SystemTray::instance()->activate();
-// 			else
-// 				SystemTray::instance()->inactivate();
-// 			
-// 			SignalistSingleton::Instance()->fontChanged();
-// 			break;
-// 		}
-// 		
-// 		case 1:
-// 			if ( !saveMakeConf() ) {
-// 				parseMakeConf();
-// 				show();
-// 				KMessageBox::error( this, i18n("Failed to save %1. Please run as root.").arg( KuroolitoConfig::fileMakeConf() ), i18n("Saving"));
-// 			}
-// 	}
-}
-
 
 #include "configdialog.moc"

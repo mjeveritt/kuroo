@@ -41,16 +41,9 @@ public:
 	~ConfigDialog();
 	
 private:
-// 	const QStringList 	readMakeConf();
-// 	void 				parseMakeConf();
-// 	bool 				saveMakeConf();
 	
 private slots:
-	void 				slotSaveAll();
-	void				slotDefaults();
-	
-private:
-	bool				m_isDefault;
+
 };
 
 #endif

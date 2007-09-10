@@ -56,15 +56,7 @@ public:
 	virtual ~Kuroolito();
 	
 private slots:
-// 	void 				introWizard();
-// 	void 				slotPreferences();
-// 	void				slotBusy();
-// 	bool 				queryClose();
-// 	bool 				queryExit();
 	void 				slotQuit();
-// 	void				slotWait();
-// 	void 				slotTerminate();
-// 	void				slotWhatsThis( int tabIndex );
 	
 private:
 	void 				setupActions();
@@ -72,11 +64,6 @@ private:
 private:
 	KParts::ReadWritePart *m_part;
 	SystemTray			*systemTray;
-	Results 			*kurooResults;
-	Queue 				*kurooQueue;
-	Message 			*kurooMessage;
-	KuroolitoInit 		*kurooInit;
-	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
 	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;

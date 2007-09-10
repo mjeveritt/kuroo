@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>502</width>
-            <height>305</height>
+            <width>526</width>
+            <height>317</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -31,9 +31,6 @@
         <grid>
             <property name="name">
                 <cstring>unnamed</cstring>
-            </property>
-            <property name="spacing">
-                <number>0</number>
             </property>
             <widget class="QFrame" row="0" column="0" rowspan="3" colspan="1">
                 <property name="name">
@@ -135,6 +132,40 @@
                     </size>
                 </property>
             </spacer>
+            <spacer row="0" column="3">
+                <property name="name">
+                    <cstring>spacer20_4_2_2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>MinimumExpanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>48</width>
+                        <height>21</height>
+                    </size>
+                </property>
+            </spacer>
+            <spacer row="2" column="2">
+                <property name="name">
+                    <cstring>spacer19_4_2_2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>21</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
             <widget class="QLayoutWidget" row="0" column="2" rowspan="2" colspan="1">
                 <property name="name">
                     <cstring>layout21</cstring>
@@ -168,59 +199,8 @@
                             <string></string>
                         </property>
                     </widget>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>spacer6</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </spacer>
                 </grid>
             </widget>
-            <spacer row="2" column="2">
-                <property name="name">
-                    <cstring>spacer19_4_2_2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>21</width>
-                        <height>10</height>
-                    </size>
-                </property>
-            </spacer>
-            <spacer row="0" column="3">
-                <property name="name">
-                    <cstring>spacer20_4_2_2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>MinimumExpanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>48</width>
-                        <height>21</height>
-                    </size>
-                </property>
-            </spacer>
         </grid>
     </widget>
 </widget>

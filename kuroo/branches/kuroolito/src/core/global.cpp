@@ -56,7 +56,7 @@ const QString Global::kurooDir()
  */
 const QRegExp Global::rxEmerge()
 {
-	if ( KuroolitoConfig::portageVersion21() )
+// 	if ( KuroolitoConfig::portageVersion21() )
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
 		                "((\\S+)/(\\S+))"
 		                "(?:\\s*\\[([^\\]]*)\\])?"
@@ -64,13 +64,13 @@ const QRegExp Global::rxEmerge()
 		                "(?:\\s*USE=\"([^\"]*)\")?"
 		                "(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
 		                "(?:\\s(\\d*,?\\d*)\\skB)?" );
-	else
-		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
-		                "((\\S+)/(\\S+))"
-		                "(?:\\s*\\[([^\\]]*)\\])?"
-		                "(?:\\s*\\[([^\\]]*)\\])?"
-		                "((?:\\s*[\\(\\-\\+]+\\w+[\\)%]?)*)"
-		                "(?:\\s(\\d*,?\\d*)\\skB)?" );
+// 	else
+// 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
+// 		                "((\\S+)/(\\S+))"
+// 		                "(?:\\s*\\[([^\\]]*)\\])?"
+// 		                "(?:\\s*\\[([^\\]]*)\\])?"
+// 		                "((?:\\s*[\\(\\-\\+]+\\w+[\\)%]?)*)"
+// 		                "(?:\\s(\\d*,?\\d*)\\skB)?" );
 }
 
 /**

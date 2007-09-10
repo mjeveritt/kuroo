@@ -48,12 +48,10 @@ public:
 	virtual void					setPackageIndex( int index );	
 	virtual bool					isInstalled();
 	virtual bool					isInPortage();
-	virtual bool					isQueued();
 	virtual bool					isInWorld();
 	
 	void							setInstalled();
 	void							setDescription( const QString& description );
-	void							setQueued( bool isQueued );
 	bool							isFirstPackage();
 	bool							isLastPackage();
 	

@@ -43,8 +43,6 @@ KuroolitoPart::KuroolitoPart( QWidget *parentWidget, const char *widgetName, QOb
 	viewPortage = new PortageTab( parentWidget );
 	setWidget( viewPortage );
 	
-	viewPortage->setMinimumSize(600,600);
-	
 	if ( !KuroolitoDBSingleton::Instance()->isPortageEmpty() )
 		viewPortage->slotReload();
 	else

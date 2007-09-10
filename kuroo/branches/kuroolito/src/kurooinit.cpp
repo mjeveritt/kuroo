@@ -146,19 +146,13 @@ void KuroolitoInit::slotCollectOutput2( KProcIO* eProc )
 	QString line;
 	while ( eProc->readln( line, true ) >= 0 ) {
 		GlobalSingleton::Instance()->addSqliteFile( line );
-		kdWarning(0) << "line=" << line << LINE_INFO;
+		kdDebug() << "line=" << line << endl;
 	}
 }
 
 void KuroolitoInit::slotEmergeInfo( KProcess* )
 {
 	foreach ( m_emergeInfoLines ) {
-		
-		if ( (*it).startsWith( "Portage 2.0" ) )
-			KuroolitoConfig::setPortageVersion21( false );
-		else
-			KuroolitoConfig::setPortageVersion21( true );
-		
 		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
 			QString arch = (*it).section( "\"", 1, 1 );
 			

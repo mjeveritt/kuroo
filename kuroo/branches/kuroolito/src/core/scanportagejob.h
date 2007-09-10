@@ -47,15 +47,11 @@ private:
 	bool 								doJob();
 	void 								completeJob();
 
-	QString								formatSize( const QString& size );
-
 private:
 	QRegExp								rxAtom;
 
 	DbConnection* const 				m_db;
-	
-	QMap<QString, QString> 				m_mapCache;
-	
+
 	struct Data {
 		QString							description;
 		QString							homepage;

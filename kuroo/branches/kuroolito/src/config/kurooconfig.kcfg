@@ -3,13 +3,7 @@
 	<kcfg>
 	<kcfgfile name="kuroolitorc"/> 
 	<group name="general">
-		<entry name="portageVersion21" type="Bool">
-			<default>false</default>
-		</entry>
-		<entry name="saveLog" type="Bool">
-		</entry>
-		<entry name="verboseLog" type="Bool">
-		</entry>
+		
 		<entry name="updateDeep" type="Bool">
 			<default>false</default>
 		</entry>
@@ -21,15 +15,12 @@
 		<entry name="installedColumn" type="Bool">
 			<default>false</default>
 		</entry>
-		<entry name="isSystrayEnabled" type="Bool">
-			<default>true</default>
-		</entry>
+
 		<entry name="init" type="Bool">
 		</entry>
 		<entry name="wizard" type="Bool">
 		</entry>
-		<entry name="viewUnmerges" type="Bool">
-		</entry>
+
 		<entry name="version" type="String">
 		</entry>
 		<entry name="hardVersion" type="String">
@@ -46,9 +37,7 @@
 		<entry name="DirPortage" type="String">
 			<default>/usr/portage</default>
 		</entry>
-		<entry name="DirPortageOverlay" type="String">
-			<default>/usr/portage/overlay</default>
-		</entry>
+
 		<entry name="DirDbPkg" type="String">
 			<default>/var/db/pkg</default>
 		</entry>
@@ -94,8 +83,6 @@
 		</entry>
 		<entry name="noMatchColor" type="Color">
 			<default>255, 159, 144</default>
-		</entry>
-		<entry name="logFont" type="Font">
 		</entry>
 	</group>
 </kcfg>

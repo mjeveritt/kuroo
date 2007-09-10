@@ -83,12 +83,8 @@ void ToolTip::maybeTip( const QPoint& pos )
 				
 			case 2 :
 				if ( packageItem->isInWorld() )
-					tipText = i18n( "%1 is present in World profile" ).arg( package );
+					tipText = i18n( "%1 is in World list" ).arg( package );
 				break;
-		
-			case 3 :
-				if ( packageItem->isQueued() )
-					tipText = i18n( "%1 is present in Queue" ).arg( package );
 		}
 		
 		tip( destRect, tipText );

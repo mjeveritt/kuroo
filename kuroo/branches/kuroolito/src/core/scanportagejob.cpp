@@ -349,24 +349,4 @@ void ScanPortageJob::scanInstalledPackages()
 	setStatus( "ScanInstalled", i18n("Done.") );
 }
 
-/**
- * Format package size nicely 
- * @fixme: Check out KIO_EXPORT QString KIO::convertSize
- * @param size 
- * @return total		as "xxx kB"
- */
-QString ScanPortageJob::formatSize( const QString& size )
-{
-	KLocale *loc = KGlobal::locale();
-	QString total;
-	
-	uint num = ("0" + size).toInt();
-	if ( num < 1024 )
-		total = "1 kB ";
-	else
-		total = loc->formatNumber((double)(num / 1024), 0) + " kB ";
-	
-	return total;
-}
-
 #include "scanportagejob.moc"

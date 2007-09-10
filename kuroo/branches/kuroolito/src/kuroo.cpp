@@ -59,7 +59,7 @@ Kuroolito::Kuroolito()
 	// set the shell's ui resource file
     setXMLFile("kuroolito/kuroolito_shellui.rc");
 	
-// 	setMinimumSize(600,600);
+	setMinimumSize( 600, 600 );
 	
     // then, setup our actions
     setupActions();
@@ -67,25 +67,29 @@ Kuroolito::Kuroolito()
     // this routine will find and load our Part.  it finds the Part by
     // name which is a bad idea usually.. but it's alright in this
     // case since our Part is made for this Shell
-    KLibFactory *factory = KLibLoader::self()->factory("libkuroolitopart");
-    if (factory) {
+    KLibFactory *factory = KLibLoader::self()->factory( "libkuroolitopart" );
+    if ( factory ) {
+		
         // now that the Part is loaded, we cast it to a Part to get
         // our hands on it
         m_part = static_cast<KParts::ReadWritePart *>(factory->create(this, "kuroolito_part", "KParts::ReadWritePart" ));
 
         if (m_part) {
+			
             // tell the KParts::MainWindow that this is indeed the main widget
-            setCentralWidget(m_part->widget());
+            setCentralWidget( m_part->widget() );
 
             // and integrate the part's GUI with the shell's
-            createGUI(m_part);
+            createGUI( m_part );
         }
     }
     else {
+		
         // if we couldn't find our Part, we exit since the Shell by
         // itself can't do anything useful
-        KMessageBox::error(this, i18n("Could not find our part."));
+        KMessageBox::error( this, i18n("Could not find our part.") );
         kapp->quit();
+		
         // we return here, cause kapp->quit() only means "exit the
         // next time we enter the event loop...
         return;

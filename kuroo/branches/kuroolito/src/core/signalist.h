@@ -47,8 +47,8 @@ public:
 	void 		scanPortageComplete();
 	void		scanUpdatesComplete();
 	void		loadUpdatesComplete();
-	void		scanHistoryComplete();
-	void		packageQueueChanged();
+// 	void		scanHistoryComplete();
+// 	void		packageQueueChanged();
 	void		packageClicked( const QString& package );
 	void		fontChanged();
 	
@@ -59,9 +59,9 @@ signals:
 	void 		signalScanInstalledComplete();
 	void 		signalScanUpdatesComplete();
 	void 		signalLoadUpdatesComplete();
-	void 		signalEmergeQueue();
+// 	void 		signalEmergeQueue();
 	void		signalSyncDone();
-	void 		signalScanHistoryComplete();
+// 	void 		signalScanHistoryComplete();
 	void		signalPackageQueueChanged();
 	void		signalPackageClicked( const QString& package );
 	void		signalFontChanged();

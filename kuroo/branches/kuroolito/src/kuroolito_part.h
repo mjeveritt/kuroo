@@ -73,7 +73,6 @@ private:
 	KConfigDialog 		*prefDialog;
 	IntroDlg 			*wizardDialog;
 	bool 				m_shuttingDown;
-// 	KActionMenu			*actionRefreshPortage, *actionRefreshUpdates;
 	KAction             *actionRefreshPortage, *actionRefreshUpdates;
 	PortageTab 			*viewPortage;
 };

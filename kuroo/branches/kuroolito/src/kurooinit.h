@@ -39,7 +39,6 @@ public:
 	
 	void 			firstTimeWizard();
 	void 			getEnvironment();
-// 	void			checkUser();
 	
 private slots:
 	void			slotCollectOutput( KProcIO* eProc );

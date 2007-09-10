@@ -68,9 +68,6 @@ PortageTab::PortageTab( QWidget* parent )
 	// Button actions.
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
-	// Toggle Queue button between "add/remove" when after queue has been edited
-	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageQueueChanged() ), this, SLOT( slotButtons() ) );
-	
 	// Reload view after changes.
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotReload() ) );
 	
@@ -79,10 +76,7 @@ PortageTab::PortageTab( QWidget* parent )
 	
 	// Enable/disable buttons
 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
-	
-	// Load Inspector with current package info
-// 	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
-	
+
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
 	
@@ -150,19 +144,11 @@ void PortageTab::slotBusy()
  */
 void PortageTab::slotButtons()
 {
-// 	if ( m_packageInspector->isVisible() )
-// 		return;
-// 	else {
-		filterGroup->setDisabled( false );
-		searchFilter->setDisabled( false );
-		pbClearFilter->setDisabled( false );
-// 	}
-	
-	// No current package, disable all buttons
-// 	if ( !packagesView->currentPackage() ) {
-// 		pbAdvanced->setDisabled( true );
-// 		return;
-// 	}
+	filterGroup->setDisabled( false );
+	searchFilter->setDisabled( false );
+	pbClearFilter->setDisabled( false );
+
+	processPackage();
 }
 
 
@@ -270,19 +256,6 @@ void PortageTab::slotRefresh()
 			PortageSingleton::Instance()->slotRefresh();
 	}
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Package slots
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// void PortageTab::slotPackage()
-// {
-// 	if ( m_packageInspector->isVisible() )
-// 		processPackage();
-// 	else
-// 		processPackage( false );
-// }
 
 /**
  * Process package and all it's versions.

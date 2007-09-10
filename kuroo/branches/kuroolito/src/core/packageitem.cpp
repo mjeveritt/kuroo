@@ -372,18 +372,6 @@ void PackageItem::setInstalled()
 }
 
 /**
- * Mark package as queued. Emit signal only if status is changed.
- * @param isQueued
- */
-void PackageItem::setQueued( bool isQueued )
-{
-	if ( m_isQueued != isQueued ) {
-		m_isQueued = isQueued;
-		SignalistSingleton::Instance()->packageQueueChanged();
-	}
-}
-
-/**
  * Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
  * @return true if first
  */
@@ -417,15 +405,6 @@ bool PackageItem::isInstalled()
 bool PackageItem::isInPortage()
 {
 	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
-}
-
-/**
- * Is this package is in the emerge queue?
- * @return true/false
- */
-bool PackageItem::isQueued()
-{
-	return m_isQueued;
 }
 
 bool PackageItem::isInWorld()

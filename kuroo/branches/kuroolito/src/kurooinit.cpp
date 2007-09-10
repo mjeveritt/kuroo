@@ -128,7 +128,8 @@ void KuroolitoInit::getEnvironment()
 	KProcIO* eProc1 = new KProcIO( codec );
 	eProc1->setUseShell( true, "/bin/bash" );
 	*eProc1 << "find" << KuroolitoConfig::dirEdbDep() << "-name" << "*.sqlite";
-	if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+	
+	if ( !eProc1->start( KProcess::NotifyOnExit, KProcess::All ) ) {
 		kdError(0) << QString( "Cannot run 'find %1 -name *.sqlite', quitting!" ).arg( KuroolitoConfig::dirEdbDep() ) << LINE_INFO;
 		exit(0);
 	}

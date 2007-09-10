@@ -2,7 +2,7 @@
 *   Copyright (C) 2005 by Jakob Petsovits                                 *
 *   jpetso@gmx.at                                                         *
 *   Copyright (C) 2005 by Karye                                           *
-*   karye@users.sourceforge.net                                           *
+*   info@kuroo.org                                                        *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *

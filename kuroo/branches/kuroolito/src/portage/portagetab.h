@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
+ *   Copyright (C) 2007 by Karye                                           *
+ *   info@kuroo.org                                                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,10 +56,7 @@ private slots:
 	void				slotPackage();
 	
 private:
-	
-	// Listview which has focus
-	int					m_focusWidget;
-	
+
 	// Delay package view until all text in entered in the text-filter
 	int					m_delayFilters;
 	

@@ -1,6 +1,6 @@
 /**************************************************************************
 *   Copyright (C) 2004 by                                                 *
-*   karye@users.sourceforge.net                                           *
+*   info@kuroo.org                                                        *
 *   Stefan Bogner <bochi@online.ms>                                       *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *

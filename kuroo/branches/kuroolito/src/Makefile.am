@@ -14,11 +14,6 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 
 SUBDIRS = config intro core portage konqtest1
 
-# embedded sqlite as library
-# SQLITE_SUBDIR = sqlite
-# LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
-# sqlite_includes = -I$(top_srcdir)/sqlite
-
 # makes pot translation files
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui" -o -name "*.kcfg"` > rc.cpp
@@ -39,7 +34,7 @@ noinst_HEADERS = common.h kurooiface.h kuroolito.h kuroolito_part.h singleton.h 
 	systemtray.h
 
 # source for kuroo
-kuroolito_SOURCES = kuroolito.cpp main.cpp
+kuroolito_SOURCES = kuroolito.cpp main.cpp systemtray.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
@@ -47,8 +42,8 @@ METASOURCES = AUTO
 kuroolito_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
-kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la $(LIB_KDEPRINT) \
-	$(LIB_KFILE) $(LIB_KDECORE)
+kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la \
+	$(top_builddir)/src/core/libcore.la $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_KFILE)
 
 #########################################################################
 # KPART SECTION
@@ -56,7 +51,7 @@ kuroolito_LDADD = $(top_builddir)/src/config/libconfig.la $(LIB_KDEPRINT) \
 kde_module_LTLIBRARIES = libkuroolitopart.la
 
 # the Part's source, library search path, and link libraries
-libkuroolitopart_la_SOURCES = kuroolito_part.cpp kurooinit.cpp systemtray.cpp
+libkuroolitopart_la_SOURCES = kuroolito_part.cpp kurooinit.cpp
 libkuroolitopart_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(SQLITE_LIBS) $(all_libraries)
 libkuroolitopart_la_LIBADD = $(top_builddir)/src/portage/libportage.la \

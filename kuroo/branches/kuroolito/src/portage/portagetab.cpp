@@ -51,6 +51,10 @@
 PortageTab::PortageTab( QWidget* parent )
 	: PortageBase( parent ), m_delayFilters( 0 )
 {
+	KCompletion *comp = searchFilter->completionObject();
+	 
+	// Connect to the return pressed signal - optional
+	connect( searchFilter, SIGNAL( returnPressed( const QString& ) ), comp, SLOT( addItem( const QString& ) ) );
 
 	// Connect the filters
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );

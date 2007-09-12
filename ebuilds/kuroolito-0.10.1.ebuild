@@ -14,7 +14,7 @@ IUSE="debug -arts"
 RDEPEND=">dev-python/pysqlite-2"
 
 pkg_postinst() {
-    elog "You must uncomment line 'portdbapi.auxdbmodule = cache.sqlite.database' in /etc/portage/modules"
+	elog "You must uncomment line 'portdbapi.auxdbmodule = cache.sqlite.database' in /etc/portage/modules"
 	elog "Remember to run 'emerge --regen' to update Portage cache after each sync"
 }
 

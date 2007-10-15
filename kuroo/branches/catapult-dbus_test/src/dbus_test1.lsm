@@ -1,0 +1,16 @@
+Begin3
+Title:          dbus_test1 -- Some description
+Version:        0.1
+Entered-date:   
+Description:    
+Keywords:       KDE Qt
+Author:         Karim Ryde <karim@bredband.net>
+Maintained-by:  Karim Ryde <karim@bredband.net>
+Home-page:      
+Alternate-site: 
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/utils
+                xxxxxx  dbus_test1-0.1.tar.gz
+                xxx     dbus_test1-0.1.lsm
+Platform:       Linux. Needs KDE
+Copying-policy: GPL
+End

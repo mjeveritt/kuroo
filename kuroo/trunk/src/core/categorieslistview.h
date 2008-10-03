@@ -36,31 +36,48 @@ public:
 	CategoriesView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesView();
 
-	class CategoryItem;
+	/**
+	 * @class CategoriesView::CategoryItem
+	 * @short Highlight empty category.
+	 */
+	class CategoryItem : public QListViewItem
+	{
+		public:
+			CategoryItem( QListView* parent, const char* name, const QString &id );
 	
-	CategoryItem*							currentCategory();
-	const QString							currentCategoryId();
+			inline void 		setOn( const bool& on ) { m_on = on; repaint(); }
+			inline const QString& 	id() const { return m_id; }
+			inline const QString& 	name() const { return m_name; }
+	
+		protected:
+			QString			m_id, m_name;
+			bool 			m_on;
+			void 			paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
+	};
+	
+	inline CategoryItem*				currentCategory() const { return dynamic_cast<CategoryItem*>( this->currentItem() ); }
+	const QString					currentCategoryId() const;
 	
 protected slots:
-	void									slotStoreFocus( QListViewItem* item );
+	void						slotStoreFocus( QListViewItem* item );
 	
 protected:
-	void									restoreFocus( bool isFiltered );
+	void						restoreFocus( const bool& isFiltered );
 	
 protected:
 	
 	// Category that has focus
-	QString									m_focus;
+	QString						m_focus;
 	
 	// Index of categoris in listview
-	QDict<CategoryItem>						m_categoryIndex;
+	QDict<CategoryItem>				m_categoryIndex;
 
 	// Vector containing all categories
 	typedef QValueVector<CategoryItem*>		Categories;
-	Categories			 					categories;
+	Categories			 		categories;
 	
 signals:
-	void									categoriesChanged();
+	void						categoriesChanged();
 };
 
 /**
@@ -74,8 +91,8 @@ public:
 	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
 	~CategoriesListView();
 	
-	void									init();
-	void 									loadCategories( const QStringList& categoriesList, bool isFiltered );
+	void						init();
+	void 						loadCategories( const QStringList& categoriesList, bool isFiltered );
 };
 
 /**
@@ -89,15 +106,15 @@ public:
 	SubCategoriesListView( QWidget *parent = 0, const char *name = 0 );
 	~SubCategoriesListView();
 	
-	void									init();
-	void 									loadCategories( const QStringList& categoriesList );
+	void						init();
+	void 						loadCategories( const QStringList& categoriesList );
 	
 private:
 	
 	// Vector containing all sub-categories
 	typedef std::map<int, QString>			SubCategory;
 	typedef std::vector<SubCategory>		AllSubCategories;
-	AllSubCategories			 			allSubCategories;
+	AllSubCategories			 	allSubCategories;
 };
 
 #endif

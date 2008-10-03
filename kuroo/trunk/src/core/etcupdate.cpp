@@ -26,6 +26,7 @@
 #include <kio/job.h>
 #include <kinputdialog.h>
 #include <kdirwatch.h>
+#include <errno.h>
 
 /**
  * @class EtcUpdate
@@ -117,27 +118,14 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 	}
 }
 
-/**
- * Return found configuration files.
- */
-QStringList EtcUpdate::confFilesList()
-{
-	return m_etcFilesList;
-}
-
-/**
- * Return backup files found in /var/cache/kuroo/backup/configuration.
- */
-QStringList EtcUpdate::backupFilesList()
-{
-	return m_backupFilesList;
-}
 
 /**
  * Launch diff tool with first etc-file in list.
  */
-void EtcUpdate::runDiff( const QString& source, const QString& destination, bool isNew )
+void EtcUpdate::runDiff( const QString& source, const QString& destination, const bool& isNew )
 {
+	struct stat st;
+
 	if ( !source.isEmpty() ) {
 		m_changed = false;
 		m_source = source;
@@ -170,11 +158,18 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, bool
 		else {
 			LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( m_destination ), KUROO );
 			
+			// get the original file mode
+			memset(&st, 0, sizeof(st));
+			m_mergedMode = -1;
+			if( !(stat( m_destination, &st ) < 0) ) {
+				m_mergedMode = (int)st.st_mode;
+			}
+
 			// Watch for changes
 			m_mergingFile->addFile( m_destination );
 			
 			// Make temporary backup of original conf file
-			KIO::file_copy( m_destination, backupPath + "merging.orig" , -1, true, false, false );
+			KIO::file_copy( m_destination, backupPath + "merging.orig" , m_mergedMode, true, false, false );
 		}
 	}
 }
@@ -190,22 +185,34 @@ void EtcUpdate::slotChanged()
  */
 void EtcUpdate::slotCleanupDiff( KProcess* proc )
 {
+
+	//Unregister the watcher
 	m_mergingFile->removeFile( m_destination );
 
 	if ( m_changed ) {
-	
+		
 		QDateTime dt = QDateTime::currentDateTime();
 		QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/";
 		QString backupPathDir = backupPath + dt.toString( "yyyyMMdd_hhmm" ) + "/";
 		QDir d( backupPathDir );
-		if ( !d.exists() )
+		if ( !d.exists() ) {
+			QDir bc( backupPath );
+			if( !bc.exists() )
+				bc.mkdir( backupPath );
 			d.mkdir( backupPathDir );
+		}
 		
 		// Make backup of original file
 		QString destination = m_destination;
 		destination.replace( "/", ":" );
-		KIO::file_copy( backupPath + "merging.orig", backupPathDir + destination + ".orig", -1, true, false, false );
-		KIO::file_copy( m_destination, backupPathDir + destination, -1, true, false, true );
+
+		//Change this to a move instead of copy so we don't leave the temp file around
+		KIO::file_move( backupPath + "merging.orig", backupPathDir + destination + ".orig", m_mergedMode, true, false, false );
+		KIO::file_copy( m_destination, backupPathDir + destination, m_mergedMode, true, false, true );
+
+		//This is only necessary because it seems that kdiff3 rewrites the mode.
+		KIO::chmod( m_destination, m_mergedMode );
+
 		KIO::file_delete( m_source );
 		
 		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_source )

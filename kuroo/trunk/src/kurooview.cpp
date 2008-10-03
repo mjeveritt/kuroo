@@ -51,9 +51,9 @@
  * Highlights icon-texts when changes are mades in the page.
  */
 KurooView::KurooView( QWidget *parent, const char *name )
-	: KurooViewBase( parent, name ),
-	DCOPObject( "kurooIface" ),
-	viewPortage( 0 ), viewQueue( 0 ), viewHistory( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
+	: DCOPObject( "kurooIface" ),
+	KurooViewBase( parent, name ),
+	viewPortage( 0 ), viewHistory( 0 ), viewQueue( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	m_isHistoryRestored( false )
 {
 	setMinimumSize( QSize(750, 550) );

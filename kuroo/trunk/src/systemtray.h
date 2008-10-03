@@ -44,6 +44,12 @@ public:
 private slots:
 	void 				slotPreferences();
 	void				slotBusy( bool busy );
+	void				slotPause();
+	void				slotUnpause();
+
+private:
+	int				m_menuPause;
+	int				m_menuUnpause;
 
 signals:
 	void				signalPreferences();

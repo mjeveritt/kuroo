@@ -37,9 +37,8 @@ const int diffTime = 10;
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const int status, int duration )
-	: PackageItem( parent, name, id, category, QString::null, status ), m_package( category + "/" + name ),
-	m_duration( duration ),	m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
-	m_bar( 0 )
+	: PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
+	m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
 {
 	setQueued( true );
 	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
@@ -48,9 +47,8 @@ QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category,
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration )
-	: PackageItem( parent, name, id, category, QString::null, status ), m_package( category + "/" + name ),
-	m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_progress( 0 ),
-	m_bar( 0 )
+	: PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
+	m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
 {
 	setQueued( true );
 	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );

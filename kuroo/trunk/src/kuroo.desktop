@@ -1,12 +1,15 @@
 [Desktop Entry]
+Categories=Settings;PackageManager;
 Comment=KDE frontend to Gentoo portage
 Comment[en_US]=KDE frontend to Gentoo portage
 Comment[nb]=KDE-grensesnitt for Gentoo Portage
+Comment[es]=Frente gráfico para KDE de Portage
 Encoding=UTF-8
 Exec=kdesu -t -d --nonewdcop -u root -c kuroo -caption "%c" %i %m
 GenericName=KDE frontend to Gentoo portage
 GenericName[en_US]=KDE frontend to Gentoo portage
 GenericName[nb]=KDE-grensesnitt for Gentoo Portage
+GenericName[es]=Frente gráfico para KDE de Portage
 Icon=kuroo
 MimeType=
 Name=Kuroo
@@ -15,5 +18,3 @@ Path=
 StartupNotify=true
 Terminal=false
 Type=Application
-X-KDE-SubstituteUID=false
-X-KDE-Username=Kuroo

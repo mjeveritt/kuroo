@@ -33,7 +33,6 @@
 */
 PackageVersion::PackageVersion( PackageItem* package, const QString& version )
 	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_size( QString::null), m_isHardMasked( false ),
-	m_isOriginalHardMasked( false ), m_isUserMasked( false ), m_isUnMasked( false ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere
@@ -41,7 +40,8 @@ PackageVersion::PackageVersion( PackageItem* package, const QString& version )
 	// Regexp for a version suffix, like in freetts-1.2_beta
 	rxSuffix("_(alpha|beta|pre|rc|p)(\\d*)(?:-r\\d+)?$"),
 	// Regexp for a trailing character, like in util-linux-2.12i
-	rxTrailingChar("\\d([a-z])(?:_(?:alpha|beta|pre|rc|p)\\d*)?(?:-r\\d+)?$")
+	rxTrailingChar("\\d([a-z])(?:_(?:alpha|beta|pre|rc|p)\\d*)?(?:-r\\d+)?$"),
+	m_isOriginalHardMasked( false ), m_isUserMasked( false ), m_isUnMasked( false )
 {
 }
 

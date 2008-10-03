@@ -1,3 +1,20 @@
+0.81:
+===================================================================================
+BUGFIXES:
+#61
+#243
+#248
+
+ENHANCEMENTS:
+Solved a glitch wich would show a filter related error when no updates are available.
+fetchrestricted for eclean is not needed unless destructive is used too (solved)
+eclean bug: Does not exists minutes measure. Changing default to hours.
+Added possibility to set custom buffer size in number of lines.
+Removed included SQLite support in favor of a external SQLite library.
+Updated credits of About box
+
+
+Older Versions:
 20-10-06
 Only kdiff3 is supported as merge tool.
 Fix for history view: parsing elog dir after emerge complete.

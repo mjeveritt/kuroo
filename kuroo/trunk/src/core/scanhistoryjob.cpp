@@ -189,4 +189,9 @@ bool ScanHistoryJob::doJob()
 	return true;
 }
 
+QString ScanHistoryJob::escapeString(const QString& str) const {
+	QString result=str;
+	return result.replace('\'', "''");
+}
+
 #include "scanhistoryjob.moc"

@@ -42,7 +42,7 @@ public:
 	void					emergePackageComplete( const QString& package, int order, int total );
 	bool					isQueueBusy();
 	void					clearCache();
-	int						size();
+	int					size();
 	void					insertInCache( const QString& id );
 	void					deleteFromCache( const QString& id );
 	bool					isQueued( const QString& id );
@@ -53,6 +53,8 @@ public:
 	void 					addPackageIdList( const QStringList& packageIdList );
 	void					installQueue( const QStringList& packageList );
 	void					setRemoveInstalled( bool removeInstalled );
+	void					pauseEmerge();
+	void					unpauseEmerge();
 	
 public slots:
 	void					slotOneStep();
@@ -71,7 +73,7 @@ private:
 	bool					m_isQueueBusy;
 	
 	// Cache contaning packages in Queue
-	QMap<QString, bool>		m_queueCache;
+	QMap<QString, bool>			m_queueCache;
 	
 	// Timer for installation progress
 	QTimer*					m_internalTimer;

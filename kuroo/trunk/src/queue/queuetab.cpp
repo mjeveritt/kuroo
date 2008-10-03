@@ -49,7 +49,7 @@
  * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
-	: QueueBase( parent ), m_packageInspector( packageInspector ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null )
+	: QueueBase( parent ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null ), m_packageInspector( packageInspector )
 {
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
@@ -118,6 +118,16 @@ QueueTab::~QueueTab()
 		KurooConfig::setRemove( true );
 	else
 		KurooConfig::setRemove( false );
+
+	if ( cbBackupPkg->isChecked() )
+		KurooConfig::setBackupPkg( true );
+	else
+		KurooConfig::setBackupPkg( false );
+                        
+        if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+          cbSkipHousekeeping->setDisabled( false );
+        else
+          cbSkipHousekeeping->setDisabled( true );
 }
 
 /**
@@ -146,7 +156,18 @@ void QueueTab::slotInit()
 		cbRemove->setChecked( true );
 	else
 		cbRemove->setChecked( false );
-	
+
+	if ( KurooConfig::backupPkg() )
+		cbBackupPkg->setChecked( true );
+	else
+		cbBackupPkg->setChecked( false );
+        
+        if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+           cbSkipHousekeeping->setDisabled( false );
+        else
+           cbSkipHousekeeping->setDisabled( true );
+         
+
 	slotRemoveInstalled();
 	
 	QToolTip::add( cbDownload, i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
@@ -161,6 +182,9 @@ void QueueTab::slotInit()
 	                                  "Portage will normally merge those files only once to prevent the user"
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+
+	QToolTip::add( cbBackupPkg, i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+	                                  "but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
 	
 	// Keyboard shortcuts
 	KAccel* pAccel = new KAccel( this );
@@ -180,9 +204,12 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( 
-			"The emerge queue quickly shows which packages are currently being installed."
-			"" )
+	QWhatsThis::display( i18n( "<qt>"
+			"The emerge queue quickly shows which packages listed for installation.<br>"
+			"Since many applications depend on each other, any attempt to install a certain software package might result in the installation "
+			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br><br>"
+			"If you want to find out what Portage would install when you ask it to install a certain package, press 'Check Installation'.<br>"
+			"When all dependencies are press 'Start Installation'.</qt>" )
 			, QCursor::pos(), this );
 }
 
@@ -273,6 +300,7 @@ void QueueTab::slotBusy()
 		cbNoWorld->setDisabled( true );
 		pbCheck->setDisabled( true );
 		pbGo->setDisabled( true );
+                cbSkipHousekeeping->setDisabled( true );
 	}
 	else
 		slotButtons();
@@ -283,61 +311,73 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
-	if ( m_packageInspector->isVisible() )
-		return;
-	
-	// Kuroo is busy emerging toggle to "abort"
-	if ( EmergeSingleton::Instance()->isRunning() ) {
-		pbGo->setText( i18n( "Abort Installation" ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-	}
-	else {
-		pbGo->setText( i18n( "Step &2: Start Installation" ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-	}
-	
-	// No package selected, disable all buttons
-	if ( queueView->selectedId().isEmpty() ) {
-		pbRemove->setDisabled( true );
-		pbAdvanced->setDisabled( true );
-		return;
-	}
-	
-	// Queue is not empty - enable button "Remove all" and "Check Installation"
-	cbDownload->setDisabled( false );
-	
-	// When emerging packages do not allow user to change the queue
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
-		pbRemove->setDisabled( true );
-		pbClear->setDisabled( true );
-		pbCheck->setDisabled( true );
-	}
-	else {
-		pbRemove->setDisabled( false );
-		pbClear->setDisabled( false );
-		pbCheck->setDisabled( false );
-	}
-	
-	// User is su and packages in queue are "checked" - enable checkboxes
-	if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
-		pbGo->setDisabled( false );
-		cbForceConf->setDisabled( false );
-		cbNoWorld->setDisabled( false );
-		cbRemove->setDisabled( false );
-	}
-	else {
-		pbGo->setDisabled( true );
-		cbForceConf->setDisabled( true );
-		cbNoWorld->setDisabled( true );
-		cbRemove->setDisabled( true );
-	}
-	
-	m_packageInspector->setDisabled( false );
-	pbAdvanced->setDisabled( false );
+        if ( m_packageInspector->isVisible() )
+                return;
+        
+        // Kuroo is busy emerging toggle to "abort"
+        if ( EmergeSingleton::Instance()->isRunning() ) {
+                pbGo->setText( i18n( "Abort Installation" ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+                connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+        }
+        else {
+                pbGo->setText( i18n( "Step &2: Start Installation" ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+                connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+                if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+                  cbSkipHousekeeping->setDisabled( false );
+                else
+                  cbSkipHousekeeping->setDisabled( true );
+        }
+        
+        // No package selected, disable all buttons
+        if ( queueView->selectedIds().isEmpty() ) {
+                pbRemove->setDisabled( true );
+                pbAdvanced->setDisabled( true );
+                return;
+        }
+        
+
+        
+        // Queue is not empty - enable button "Remove all" and "Check Installation"
+        cbDownload->setDisabled( false );
+        
+        // When emerging packages do not allow user to change the queue
+        if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+                pbRemove->setDisabled( true );
+                pbClear->setDisabled( true );
+                pbCheck->setDisabled( true );
+                cbSkipHousekeeping->setDisabled( true );
+        }
+        else {
+                pbRemove->setDisabled( false );
+                pbClear->setDisabled( false );
+                pbCheck->setDisabled( false );
+                if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+                  cbSkipHousekeeping->setDisabled( false );
+                else
+                  cbSkipHousekeeping->setDisabled( true );
+         }
+                
+        
+        // User is su and packages in queue are "checked" - enable checkboxes
+        if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
+                pbGo->setDisabled( false );
+                cbForceConf->setDisabled( false );
+                cbNoWorld->setDisabled( false );
+                cbRemove->setDisabled( false );
+        }
+        else {
+                pbGo->setDisabled( true );
+                cbForceConf->setDisabled( true );
+                cbNoWorld->setDisabled( true );
+                cbRemove->setDisabled( true );
+        }
+        
+        m_packageInspector->setDisabled( false );
+        pbAdvanced->setDisabled( false );
 }
 
 
@@ -352,6 +392,8 @@ void QueueTab::slotCheck()
 {
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
+	if( cbUpdate->isChecked() )
+		packageList.prepend( "-uN" );
 	EmergeSingleton::Instance()->pretend( packageList );
 }
 
@@ -367,6 +409,11 @@ void QueueTab::slotGo()
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
 	
+        if ( cbSkipHousekeeping->isChecked() )
+          EmergeSingleton::Instance()->setSkipHousekeeping(true);
+        else
+          EmergeSingleton::Instance()->setSkipHousekeeping(false);
+        
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {
@@ -386,6 +433,8 @@ void QueueTab::slotGo()
 			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes: {
+					if( cbUpdate->isChecked() )
+						packageList.prepend( "-uN" );
 					
 					// Force portage to reinstall files protected in CONFIG_PROTECT
 					if ( cbForceConf->isChecked() )
@@ -414,6 +463,11 @@ void QueueTab::slotStop()
 			case KMessageBox::Yes : 
 				EmergeSingleton::Instance()->stop();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
+				// added an explicit busy switch to allow someone to continue once
+				// an abort has happened. 20070223 - aga
+				SignalistSingleton::Instance()->setKurooBusy(false);
+				// added a log entry for the abort
+				LogSingleton::Instance()->writeLog( i18n("Emerge aborted by user."), KUROO );
 		}
 }
 
@@ -433,7 +487,7 @@ void QueueTab::slotRemove()
 	if ( isVisible() )
 		m_packageInspector->hide();
 	
-	QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+	QueueSingleton::Instance()->removePackageIdList( queueView->selectedIds() );
 }
 
 /**
@@ -506,7 +560,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	if ( !item )
 		return;
 	
-	const QStringList selectedIdList = queueView->selectedId();
+	const QStringList selectedIdsList = queueView->selectedIds();
 	
 	enum Actions { ADDWORLD, DELWORLD };
 	
@@ -539,7 +593,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 	switch( menu.exec( point ) ) {
 			
 		case REMOVE:
-			QueueSingleton::Instance()->removePackageIdList( queueView->selectedId() );
+			QueueSingleton::Instance()->removePackageIdList( queueView->selectedIds() );
 			break;
 		
 		case DETAILS:
@@ -548,7 +602,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		
 		case ADDWORLD: {
 			QStringList packageList;
-			foreach ( selectedIdList )
+			foreach ( selectedIdsList )
 				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
 			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
@@ -556,7 +610,7 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		
 		case DELWORLD: {
 			QStringList packageList;
-			foreach ( selectedIdList )
+			foreach ( selectedIdsList )
 				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
 			PortageSingleton::Instance()->removeFromWorld( packageList );
 		}

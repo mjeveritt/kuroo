@@ -13,6 +13,12 @@
 		<entry name="updateDeep" type="Bool">
 			<default>false</default>
 		</entry>
+		<entry name="updateBuilddeps" type="Bool">
+		        <default>false</default>
+		</entry>
+		<entry name="updateNewUse" type="Bool">
+			<default>false</default>
+		</entry>
 		<entry name="updateDependency" type="Bool">
 			<default>true</default>
 		</entry>
@@ -97,6 +103,33 @@
 		</entry>
 		<entry name="logFont" type="Font">
 		</entry>
+		<entry name="logLines" type="Int">
+			<default>2000</default>
+		</entry>
+		<entry name="EnableEclean" type="Bool">
+			<default>false</default>
+		</entry>
+		<entry name="EcleanDistfiles" type="Bool">
+			<default>true</default>
+		</entry>
+		<entry name="EcleanBackups" type="Bool">
+			<default>true</default>
+		</entry>
+		<entry name="EcleanFetchRestrict" type="Bool">
+			<default>true</default>
+		</entry>
+		<entry name="EcleanSizeLimit" type="String">
+			<default>0</default>
+		</entry>
+		<entry name="EcleanTimeLimit" type="String">
+			<default>1h</default>
+		</entry>
+		<entry name="ecleanDestructive" type="Bool">
+		        <default>false</default>
+		</entry>
+		<entry name="revdepEnabled" type="Bool">
+		        <default>false</default>
+		</entry>
 	</group>
 	<group name="queue">
 		<entry name="forceConf" type="Bool">
@@ -111,6 +144,9 @@
 		<entry name="remove" type="Bool">
 			<default>false</default>
 		</entry>
+		<entry name="backupPkg" type="Bool">
+			<default>false</default>
+		</entry>
 	</group>
 	<group name="warnings">
 		<entry name="etcFiles" type="String">
@@ -123,7 +159,7 @@
 	<group name="make.conf">
 		<entry name="AcceptKeywords" type="String">
 		</entry>
-		<entry name="AutoClean" type="String">
+		<entry name="AutoClean" type="Bool">
 		</entry>
 		<entry name="BuildPrefix" type="String">
 		</entry>
@@ -147,6 +183,36 @@
 		</entry>
 		<entry name="DirDist" type="String">
 		</entry>
+		<entry name="ElogWarn" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogError" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogLog" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogInfo" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogQa" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysSave" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysMail" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysSyslog" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysCustom" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysSaveSum" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogSysMailSum" type="Bool"><default>false</default>
+		</entry>
+		<entry name="ElogMailURI" type="String">
+		</entry>
+		<entry name="ElogMailFromURI" type="String">
+		</entry>
+		<entry name="ElogSubject" type="String">
+		</entry>
+		<entry name="ElogCustomCmd" type="String">
+		</entry>
 		<entry name="Features" type="String">
 		</entry>
 		<entry name="FetchCommand" type="String">
@@ -159,7 +225,7 @@
 		</entry>
 		<entry name="MakeOpts" type="String">
 		</entry>
-		<entry name="NoColor" type="String">
+		<entry name="NoColor" type="Bool">
 		</entry>
 		<entry name="DirPkgTmp" type="String">
 		</entry>

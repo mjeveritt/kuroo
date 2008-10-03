@@ -27,6 +27,8 @@
 
 #include <kglobal.h>
 
+const QString Global::kuroo_dir=QString("/var/cache/kuroo/");
+
 /**
  * @class Global
  * @short Some useful global methods.
@@ -43,18 +45,15 @@ void Global::init( QObject *parent )
 	m_parent = parent;
 }
 
-/**
- * Kuroo home directory
+/** Gets Kuroo's working directory
+ *
  */
-const QString Global::kurooDir()
-{
-	return "/var/cache/kuroo/";
-}
+const QString Global::kurooDir() const { return kuroo_dir; }
 
 /**
  * Regexp to parse emerge output.
  */
-const QRegExp Global::rxEmerge()
+const QRegExp Global::rxEmerge() const
 {
 	if ( KurooConfig::portageVersion21() )
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
@@ -77,7 +76,7 @@ const QRegExp Global::rxEmerge()
  * Parse out category, package name and version parts from package.
  * @param sring to parse out cpv from
  */
-const QStringList Global::parsePackage( const QString& packageString )
+const QStringList Global::parsePackage( const QString& packageString ) const
 {
 	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*"
 	            "("
@@ -124,33 +123,9 @@ void Global::setColorTheme()
 }
 
 /**
- * Kuroo widget id so MessageBox's can be made modal.
- */
-const long& Global::kurooViewId()
-{
-	return	m_wId;
-}
-
-/**
- * Return KDE background color-theme.
- */
-const QString& Global::bgHexColor()
-{
-	return m_bgColor;
-}
-
-/**
- * Return KDE foreground color-theme.
- */
-const QString& Global::fgHexColor()
-{
-	return m_fgColor;
-}
-
-/**
  * Return duration in seconds formated as "d hh.mm.ss".
  */
-const QString Global::formatTime( long duration )
+const QString Global::formatTime( const long& duration ) const
 {
 	KLocale *loc = KGlobal::locale();
 	QString totalDays;

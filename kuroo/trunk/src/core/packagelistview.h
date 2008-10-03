@@ -35,32 +35,37 @@ class PackageListView : public KListView
 {
 Q_OBJECT
 public:
-    PackageListView( QWidget *parent = 0, const char *name = 0 );
-    ~PackageListView();
+	PackageListView( QWidget *parent = 0, const char *name = 0 );
+	~PackageListView();
 
 public:
 	virtual	void				resetListView();
-	virtual	PackageItem* 		packageItemById( const QString& id );
-	virtual const QString		currentId();
-	int							currentItemStatus();
-	virtual PackageItem* 		currentPackage();
-	virtual const QStringList	selectedId();
-	virtual const QStringList	selectedPackages();
-	virtual const QStringList	allId();
-	virtual const QStringList	allPackages();
-	virtual const QString		count();
-	void						nextPackage( bool isPrevious );
+	virtual	PackageItem* 			packageItemById( const QString& id ) const;
+	virtual const QString			currentId() const;
+	int					currentItemStatus() const;
+	
+	virtual PackageItem* 			currentPackage() const;
+	virtual const QStringList		selectedIds() const;
+	virtual const QStringList		selectedPackages() const;
+	virtual const QStringList		allId() const;
+	virtual const QStringList		allPackages() const;
+	/**
+	 * Total number of packages in listview.
+	 * @return QString
+	 */
+	inline virtual const QString		count() const { return QString::number( m_packageIndex.count() ); }
+	void					nextPackage( const bool& isPrevious );
 	
 protected slots:
-// 	void						rollOver( QListViewItem* item );
-	void						setPackageFocus( const QString& id );
+// 	void					rollOver( QListViewItem* item );
+	void					setPackageFocus( const QString& id );
 	virtual void 				indexPackage( const QString& id, PackageItem *item );
 	
 protected:
 	QDict<PackageItem>			m_packageIndex;
 	
 signals:
-// 	void						signalCurrentChanged();
+// 	void					signalCurrentChanged();
 	
 private:
 	QListViewItem* 				lastItem;

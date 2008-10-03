@@ -108,7 +108,8 @@ enum Icons {
 		VERSION_INSTALLED,
 		QUEUED_COLUMN,
 		INSTALLED_COLUMN,
-		WORLD_COLUMN
+		WORLD_COLUMN,
+		QUICKPKG
 };
 
 // The "maskedness" of a package version.

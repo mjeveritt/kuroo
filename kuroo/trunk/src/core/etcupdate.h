@@ -41,9 +41,15 @@ public:
     ~EtcUpdate();
 
 	void				init( QObject *parent = 0 );
-	QStringList			confFilesList();
-	QStringList			backupFilesList();
-	void				runDiff( const QString& source, const QString& destination, bool isNew );
+	/**
+	 * Return found configuration files.
+	 */
+	inline QStringList		confFilesList() const { return m_etcFilesList; }
+	/**
+	 * Return backup files found in /var/cache/kuroo/backup/configuration.
+	 */
+	inline QStringList		backupFilesList() const { return m_backupFilesList; }
+	void				runDiff( const QString& source, const QString& destination, const bool& isNew );
 	
 public slots:
 	void				slotEtcUpdate();
@@ -62,7 +68,7 @@ private:
 	QObject*			m_parent;
 	KProcIO*			eProc;
 	
-	QStringList 		m_configProtectList;
+	QStringList 			m_configProtectList;
 	QString				m_configProtectDir;
 	
 	// List of etc-files for merging
@@ -74,6 +80,7 @@ private:
 	QString				m_source, m_destination;
 	
 	bool				m_changed;
+	int				m_mergedMode;
 	
 	KDirWatch			*m_mergingFile;
 };

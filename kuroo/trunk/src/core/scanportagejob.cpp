@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "scanportagejob.h"
-#include "../sqlite/sqlite3.h"
+#include <sqlite3.h>
 
 #include <fstream>
 #include <string>
@@ -163,16 +163,24 @@ bool ScanPortageJob::doJob()
 				return false;
 			}
 			
-			QString category = ( *itCategory ) .section( "-", 0, 0 );
+			QString category = ( *itCategory ).section( "-", 0, 0 );
 			QString subCategory = ( *itCategory ).section( "-", 1, 1 );
 			
+			if( lastCategory.isEmpty() ) {
+				//if this is our first pass and lastCategory is empty, check the database for this category to avoid inserting a duplicate
+				const QStringList lines = KurooDBSingleton::Instance()->query( QString(
+							"SELECT name FROM category_temp WHERE name = '%1';").arg( category ), m_db );
+				if( !lines.isEmpty() ) {
+					lastCategory = category;
+				}
+			}
 			if ( lastCategory != category )
 				idCategory = KurooDBSingleton::Instance()->insert( QString( 
 					"INSERT INTO category_temp (name) VALUES ('%1');" ).arg( category ), m_db );
 			
 			int idSubCategory = KurooDBSingleton::Instance()->insert(QString( 
 				"INSERT INTO subCategory_temp (name, idCategory) VALUES ('%1', '%2');")
-    			.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
+			.arg( subCategory ).arg( QString::number( idCategory ) ), m_db);
 			
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -493,12 +501,15 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 		}
 	}
 	file.close();
-	
+/*
+//This is too difficult at the moment, since the change to Manifest2 format in GLEP 44, we don't have files/digest-* files
+//to read.  The data that we need is in the Manifest2 file, but the lines no longer say the ebuild/version number, instead
+//it has a file name, so we would have to parse the ebuid to find out what lines to read from the Manifest2 file.
 	// Get package size. Try in cache first.
 	QString size = cacheFind( category + "/" + name + "-" + version ) ;
-	if ( !size.isEmpty() )
+	if ( !size.isEmpty() ) {
 		info.size = formatSize( size );
-	else {
+	} else {
 		QString path = KurooConfig::dirPortage() + "/" + category + "/" + name + "/files/digest-" + name + "-" + version;
 		file.setName( path );
 		if ( file.open( IO_ReadOnly ) ) {
@@ -515,6 +526,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 		else
 			kdError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
 	}
+*/
 	
 	return info;
 }

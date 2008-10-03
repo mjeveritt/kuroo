@@ -36,13 +36,14 @@ public:
     ~Images();
 
 	void 			init( QObject *parent = 0 );
-	const QPixmap&	icon( int image );
+	const QPixmap&	icon( const int& image );
 	
 private:
 	QObject*		m_parent;
 	QPixmap			pxCategory, pxNew, pxUnmerged, pxPackage, pxInstalled, pxQueued, pxDetails, pxRemove, pxWorld, pxWarning;
 	QPixmap			pxEmpty, pxKuroo, pxEmerging, pxQueuedColumn, pxWorldColumn, pxVersionInstalled, pxInstalledColumn;
 	QPixmap			pxViewPackages, pxViewQueue, pxViewHistory, pxViewMerge, pxViewLog;
+	QPixmap			pxQuickPkg;
 };
 
 #endif

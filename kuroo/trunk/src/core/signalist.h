@@ -36,11 +36,21 @@ public:
     ~Signalist();
 
 	void		init( QObject *parent = 0 );
-	void		setKurooReady( bool isReady );
-	bool		isKurooReady();
-	void		setKurooBusy( bool busy );
-	void		scanAborted();
-	bool		isKurooBusy();
+	void		setKurooReady( const bool& isReady );
+	/**
+	 * Return kuroo ready state.
+	 */
+	inline bool	isKurooReady() const { return m_isReady; }
+	void		setKurooBusy( const bool& busy );
+	/**
+	 * Job wasn't successful.
+	 */
+	inline void	scanAborted() { setKurooBusy( false ); }
+	/**
+	 * Kuroo is busy while scanning for packages or emerging.
+	 * @return busy
+	 */
+	inline bool	isKurooBusy() const { return m_busy; }
 	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();

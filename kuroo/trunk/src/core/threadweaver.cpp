@@ -12,11 +12,25 @@
 #include "threadweaver.h"
 
 #include <qapplication.h>
+#include <qregexp.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
 
-
+QRegExp ThreadWeaver::DependentJob::rxAtom = QRegExp(	
+		"^"    									// Start of the string
+		"(!)?" 									// "Block these packages" flag, only occurring in ebuilds
+		"(~|(?:<|>|=|<=|>=))?" 							// greater-than/less-than/equal, or "all revisions" prefix
+		"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   				// category and subcategory
+		"((?:[a-z]|[A-Z]|[0-9]|-(?=\\d+dpi)|-(?!\\d)|\\+|_)+)" 			// package name
+		"("           								// start of the version part
+		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 						// base version number, including wildcard version matching (*)
+		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 					// version suffix
+		"(?:-r\\d*)?"  								// revision
+		"\\*?)?$"          							// end of the (optional) version part and the atom string
+	);
 /**
  * @class ThreadWeaver
  * @short For creating threaded objects.
@@ -258,7 +272,8 @@ ThreadWeaver::Job::~Job()
 void ThreadWeaver::Job::setProgressTotalSteps( uint steps )
 {
 	if ( steps == 0 ) {
-		kdWarning(0) << "You can't set steps to 0!" << LINE_INFO;
+		//This isn't really an error, just a special case
+		//kdWarning(0) << "You can't set steps to 0!" << LINE_INFO;
 		QApplication::postEvent( this, new ProgressEvent( -2 ) );
 		steps = 1;
 	}
@@ -321,6 +336,70 @@ ThreadWeaver::DependentJob::DependentJob( QObject *dependent, const char *name )
 	connect( dependent, SIGNAL(destroyed()), SLOT(abort()) );
 
 	QApplication::postEvent( dependent, new QCustomEvent( JobStartedEvent ) );
+}
+
+bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
+	DEBUG_LINE_INFO;
+	QDir mergeDir( dirPath );
+	//TODO make sure this doesn't exist before we enter
+	QFile tempFile( dirPath + ".temp" );
+	QTextStream tempStream( &tempFile );
+	if( !tempFile.open( IO_WriteOnly ) ) {
+		kdDebug(0) << "Opened " << tempFile.name() << " for writing." << LINE_INFO;
+		//TODO handle failure
+		return false;
+	}
+
+	const QFileInfoList* infos = mergeDir.entryInfoList();
+	QStringList lines;
+	QFileInfoListIterator iter( *infos );
+	QFileInfo *fi;
+	while ( (fi = iter.current()) != 0 ) {
+		kdDebug(0) << "Processing " << fi->filePath() << LINE_INFO;
+		if( fi->isDir() ) {
+			kdDebug(0) << fi->filePath() << " is a dir." << LINE_INFO;
+			if( fi->filePath().endsWith( "/." ) || fi->filePath().endsWith( "/.." ) ) {
+				kdDebug(0) << fi->filePath() << " is ., skipping." << LINE_INFO;
+			} else {
+				kdDebug(0) << "Would recurse into " << fi->filePath() << LINE_INFO;
+				//TODO handle failure
+				if( !mergeDirIntoFile( fi->filePath() ) ) {
+					return false;
+				}
+			}
+		}
+
+		QFile entryFile( fi->absFilePath() );
+		QTextStream streamFile( &entryFile );
+		if ( !entryFile.open( IO_ReadOnly ) ) {
+			kdError(0) << "Parsing " << dirPath << ". Reading: " << fi->absFilePath() << LINE_INFO;
+		} else {
+			while ( !streamFile.atEnd() )
+				lines += streamFile.readLine();
+			entryFile.close();
+		}
+
+		//Save the file as we go
+		foreach( lines ) {
+			tempStream << *it << "\n";
+		}
+
+		if( !entryFile.remove() ) {
+			//TODO handle failure
+			return false;
+		}
+		++iter;
+	}
+	tempFile.close();
+	//By the time we get out of here the directory should be empty, or else. . .
+	if( mergeDir.rmdir( dirPath ) ) {
+		//TODO handle failure
+		return false;
+	}
+
+	//And write the new file in it's place
+	KIO::file_move( dirPath + ".temp", dirPath, -1, true, false, false );
+	return true;
 }
 
 void ThreadWeaver::DependentJob::completeJob()

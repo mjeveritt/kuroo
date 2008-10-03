@@ -41,47 +41,47 @@ public:
 	~ScanPortageJob();
 
 private:
-	void								scanInstalledPackages();
-	bool 								doJob();
-	void 								completeJob();
-	Info								scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
-	QString								formatSize( const QString& size );
+	void						scanInstalledPackages();
+	bool 						doJob();
+	void 						completeJob();
+	Info						scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
+	QString						formatSize( const QString& size );
 	
-	void								loadCache();
-	QString								cacheFind( const QString& package );
+	void						loadCache();
+	QString						cacheFind( const QString& package );
 	
 private:
-	QRegExp								rxAtom;
+	QRegExp						rxAtom;
 
 	DbConnection* const 				m_db;
 	
 	QMap<QString, QString> 				m_mapCache;
 	
 	struct Data {
-		QString							description;
-		QString							homepage;
-		QString							status;
-		QString							licenses;
-		QString							useFlags;
-		QString							slot;
-		QString							size;
-		QString							keywords;
+		QString					description;
+		QString					homepage;
+		QString					status;
+		QString					licenses;
+		QString					useFlags;
+		QString					slot;
+		QString					size;
+		QString					keywords;
 	};
-	typedef QMap<QString, Data>			PortageVersions;
+	typedef QMap<QString, Data>		PortageVersions;
 	struct Versions {
-		QString							status;
-		QString							description;
-		QString							path;
-		PortageVersions					versions;
+		QString					status;
+		QString					description;
+		QString					path;
+		PortageVersions				versions;
 	};
 	typedef QMap<QString, Versions>		PortagePackages;
 	struct Categories {
-		QString							idCategory;
-		QString							idSubCategory;
-		PortagePackages					packages;
+		QString					idCategory;
+		QString					idSubCategory;
+		PortagePackages				packages;
 	};
 	typedef QMap<QString, Categories>	PortageCategories;
-	PortageCategories					m_categories;
+	PortageCategories				m_categories;
 };
 
 #endif

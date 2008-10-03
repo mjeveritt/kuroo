@@ -27,7 +27,7 @@
 #include <qsemaphore.h>      //stack allocated
 #include <qstringlist.h>     //stack allocated
 
-#include "../sqlite/sqlite3.h"
+#include <sqlite3.h>
 
 class Package;
 class DbConnection;
@@ -56,9 +56,9 @@ public:
 	virtual QStringList query( const QString& /* statement */) = 0;
 	virtual QString		singleQuery( const QString& /* statement */) = 0;
 	virtual int 		insert( const QString& /* statement */) = 0;
-	const bool 			isInitialized() const { return m_initialized; }
+	inline const bool 	isInitialized() const { return m_initialized; }
 	virtual bool 		isConnected() const = 0;
-	virtual const 		QString lastError() const { return "None"; }
+	inline virtual const 	QString lastError() const { return "None"; }
 	
 protected:
 	bool 				m_initialized;
@@ -72,9 +72,9 @@ public:
 	~SqliteConnection();
 	
 	QStringList 		query( const QString& /* statement */ );
-	QString		 		singleQuery( const QString& /* statement */ );
-	int 				insert( const QString& /* statement */ );
-	bool 				isConnected()const { return true; }
+	QString		 	singleQuery( const QString& /* statement */ );
+	int 			insert( const QString& /* statement */ );
+	inline bool 		isConnected()const { return true; }
 	
 private:
 	static void 		sqlite_rand( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ );
@@ -92,10 +92,10 @@ public:
 	const 				DbConfig *getDbConfig() const { return m_dbConfig; }
 	void 				createDbConnections();
 	
-	DbConnection*		getDbConnection();
+	DbConnection*			getDbConnection();
 	void 				putDbConnection( const DbConnection* /* conn */ );
 	
-	QString 			escapeString( QString string ) { return string.replace('\'', "''"); }
+	QString 			escapeString( const QString&) const;
 	
 private:
 	static const int 	POOL_SIZE = 10;
@@ -121,7 +121,7 @@ public:
 	 * Check db integrity and create new db if necessary.
 	 */
 	QString 				init( QObject *parent = 0 );
-	QString 				escapeString( QString string ) { return m_dbConnPool->escapeString(string); }
+	inline QString 				escapeString( const QString& string) const { return m_dbConnPool->escapeString(string); }
 	
 	/**
 	* This method returns a static DbConnection for components that want to use
@@ -217,17 +217,17 @@ public:
 	const QStringList 		allMergeHistory();
 	const QStringList 		allStatistic();
 	
-	void					resetUpdates();
-	void					resetInstalled();
-	void					resetQueue();
-	void					addEmergeInfo( const QString& einfo );
-	void					addBackup( const QString& source, const QString& destination );
+	void				resetUpdates();
+	void				resetInstalled();
+	void				resetQueue();
+	void				addEmergeInfo( const QString& einfo );
+	void				addBackup( const QString& source, const QString& destination );
 	
 private:
-	QObject*				m_parent;
+	QObject*			m_parent;
 
-	DbConnectionPool *m_dbConnPool;
-	bool 					m_monitor;
+	DbConnectionPool		*m_dbConnPool;
+	bool 				m_monitor;
 };
 
 #endif /* KUROODB_H */

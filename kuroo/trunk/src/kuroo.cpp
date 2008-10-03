@@ -54,9 +54,9 @@
  */
 Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
-	kurooInit( new KurooInit( this, "KurooInit" ) ),
+	systemTray( new SystemTray( this ) ),
 	kurooMessage( new Message( this ) ),
-	m_view( new KurooView( this, "KurooView" ) ), systemTray( new SystemTray( this ) ),
+	kurooInit( new KurooInit( this, "KurooInit" ) ), m_view( new KurooView( this, "KurooView" ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
 	GlobalSingleton::Instance()->setColorTheme();

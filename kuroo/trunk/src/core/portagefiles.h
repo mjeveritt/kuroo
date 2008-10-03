@@ -32,7 +32,7 @@ class PortageFiles : public QObject
 Q_OBJECT	
 public:
 	PortageFiles( QObject *m_parent = 0 );
-    ~PortageFiles();
+	~PortageFiles();
 
 	void			init( QObject *parent = 0 );
 	void			refresh( int mask );

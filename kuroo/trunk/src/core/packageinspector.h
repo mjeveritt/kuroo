@@ -37,8 +37,11 @@ public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 	
-	void							edit( PackageItem* portagePackage, int view );
-	bool							isParentView( int view );
+	void							edit( PackageItem* portagePackage, const int& view );
+	/**
+	 * Return the caller.
+	 */
+	inline bool						isParentView( const int& view ) const { return m_view == view; }
 	void							showHardMaskInfo();
 	
 	InspectorBase					*dialog;

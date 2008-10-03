@@ -187,9 +187,9 @@ void KurooInit::slotEmergeInfo( KProcess* )
 		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
 			QString arch = (*it).section( "\"", 1, 1 );
 			
-			// When testing we have two keywords, only pick ~arch
+			// When testing we have two keywords, only pick one
 			if ( arch.contains( "~" ) )
-				arch = "~" + arch.section( "~", 1, 1 );
+				arch = arch.section( "~", 1, 1 );
 			
 			KurooConfig::setArch( arch );
 		}
@@ -200,6 +200,9 @@ void KurooInit::slotEmergeInfo( KProcess* )
 // 		if ( (*it).startsWith( "USE=" ) )
 // 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
+	
+	kdDebug() << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	
 	KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }

@@ -49,6 +49,8 @@ public:
     
 	void					startTimer();
 	void					stopTimer();
+	void					pauseTimers();
+	void					unpauseTimers();
 	long					elapsedTime();
     void					clearElapsedTime();
     

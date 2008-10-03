@@ -47,7 +47,7 @@ enum Positions {
  * @param packages  The package that will be filtered out.
  */
 DependAtom::DependAtom( PackageItem* portagePackage )
-	: m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null ),
+	: m_portagePackage( portagePackage ),
 	rxAtom(	
 	       	"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
@@ -59,7 +59,8 @@ DependAtom::DependAtom( PackageItem* portagePackage )
 	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
 	       	"(?:-r\\d*)?"  								// revision
 	       	"\\*?)?$"          							// end of the (optional) version part and the atom string
-		)
+		), m_matches( false ), m_callsign( false ),
+	m_category( QString::null )
 {
 }
 
@@ -183,14 +184,5 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 } // end of matchingVersions()
 
 
-/**
- * Return true if the atom begins with a call sign ("!") which means that
- * this package is blocking another one. This is only used inside ebuilds,
- * where it looks, for example, like DEPEND="!app-cdr/dvdrtools".
- * If there is no call sign, the function returns false.
- */
-bool DependAtom::isBlocking()
-{
-	return m_callsign;
-}
+
 

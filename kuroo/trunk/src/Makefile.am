@@ -14,10 +14,6 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 
 SUBDIRS = config intro core history logs portage queue
 
-# embedded sqlite as library
-SQLITE_SUBDIR = sqlite
-LIB_SQLITE_LOCAL = $(top_builddir)/sqlite/libsqlite.la
-sqlite_includes = -I$(top_srcdir)/sqlite
 
 # makes pot translation files
 messages: rc.cpp
@@ -43,9 +39,9 @@ noinst_HEADERS = kurooview.h kurooiface.h singleton.h mainwindow.h statusbar.h \
 	systemtray.h message.h common.h
 
 # source for kuroo
-kuroo_SOURCES = kurooiface.skel kuroo.cpp main.cpp kurooview.cpp mainwindow.cpp \
-	statusbar.cpp kurooinit.cpp systemtray.cpp message.cpp messagebase.ui \
-	kurooviewbase.ui
+kuroo_SOURCES = kuroo.cpp kurooiface.skel kurooinit.cpp kurooview.cpp \
+	kurooviewbase.ui main.cpp mainwindow.cpp message.cpp messagebase.ui statusbar.cpp \
+	systemtray.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
@@ -56,7 +52,7 @@ kuroo_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
 	$(top_builddir)/src/config/libconfig.la $(top_builddir)/src/queue/libqueue.la \
 	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
-	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KDEPRINT) $(LIB_KFILE) \
-	$(LIB_KDECORE) $(LIB_SQLITE) $(LIB_SQLITE_LOCAL)
+	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KFILE) \
+	$(LIB_KDECORE) $(SQLITE_LIBS)
 
 

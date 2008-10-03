@@ -58,7 +58,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
  * History watches for changes in emerge.log and parses new entries to register emerges and unmerges of packages in database.
  */
 History::History( QObject *m_parent )
-	: QObject( m_parent ), isEmerging( false ), logWatcher( 0 )
+	: QObject( m_parent ), logWatcher( 0 ), isEmerging( false )
 {}
 
 History::~History()

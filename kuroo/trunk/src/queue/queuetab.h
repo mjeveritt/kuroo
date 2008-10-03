@@ -35,7 +35,7 @@ class QueueTab : public QueueBase
 Q_OBJECT
 public:
 	QueueTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
-    ~QueueTab();
+	~QueueTab();
 
 public slots:
 	void				slotReload( bool hasCheckedQueue );
@@ -73,7 +73,7 @@ private:
 	QString				m_initialQueueTime;
 	
 	// The package inspector
-	PackageInspector	*m_packageInspector;
+	PackageInspector		*m_packageInspector;
 };
 
 #endif

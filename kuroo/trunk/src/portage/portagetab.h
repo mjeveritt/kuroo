@@ -40,7 +40,7 @@ class PortageTab : public PortageBase
 Q_OBJECT
 public:
 	PortageTab( QWidget *parent = 0, PackageInspector *packageInspector = 0 );
-    ~PortageTab();
+	~PortageTab();
 	
 public slots:
 	void				slotReload();
@@ -63,7 +63,8 @@ private slots:
 	void				slotClearFilter();
 	void				slotListPackages();
 	
-	void				slotQueue();
+	void				slotEnqueue();
+	void				slotDequeue();
 	void				slotUninstall();
 	
 	void				slotAdvanced();
@@ -76,19 +77,19 @@ private:
 private:
 	
 	// Listview which has focus
-	int					m_focusWidget;
+	int				m_focusWidget;
 	
 	// Delay package view until all text in entered in the text-filter
-	int					m_delayFilters;
+	int				m_delayFilters;
 	
 	// rmb
 	KPopupMenu 			*menu;
 	
 	// The package inspector
-	PackageInspector	*m_packageInspector;
+	PackageInspector		*m_packageInspector;
 	
 	// Lists all package versions for uninstalling
-	UninstallInspector	*m_uninstallInspector;
+	UninstallInspector		*m_uninstallInspector;
 	
 signals:
 	void				signalChanged();

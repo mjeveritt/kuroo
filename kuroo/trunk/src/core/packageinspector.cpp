@@ -47,16 +47,16 @@
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for viewing and editing all advanced package settings.
- * 
+ *
  * Builds a tabbed-dialog to view all relevant info for current package.
  * This dialog is used both in Packages view and Queue view.
  */
 PackageInspector::PackageInspector( QWidget *parent )
 : KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Package details" ), false, i18n( "Package details" ), 
                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel, KDialogBase::Apply, false ), 
-	m_category( QString::null ), m_package( QString::null ), m_portagePackage( 0 ),
 	m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
-	m_isVirginState( true ), m_stabilityBefore( 0 ), m_versionBefore( QString::null ), m_hardMaskComment( QString::null )
+	m_isVirginState( true ), m_category( QString::null ), m_package( QString::null ),
+	m_hardMaskComment( QString::null ), m_portagePackage( 0 ), m_stabilityBefore( 0 ), m_versionBefore( QString::null )
 {
 	dialog = new InspectorBase( this );
 	setMainWidget( dialog );
@@ -98,13 +98,6 @@ PackageInspector::PackageInspector( QWidget *parent )
 PackageInspector::~PackageInspector()
 {}
 
-/**
- * Return the caller.
- */
-bool PackageInspector::isParentView( int view )
-{
-	return m_view == view;
-}
 
 /**
  * Update the Inspector gui with new versions and data.
@@ -226,7 +219,7 @@ void PackageInspector::slotQueue()
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PackageItem* portagePackage, int view )
+void PackageInspector::edit( PackageItem* portagePackage, const int& view )
 {
 	m_view = view;
 	m_portagePackage = portagePackage;
@@ -386,7 +379,7 @@ void PackageInspector::slotApply()
 			m_pretendUseLines.clear();
 			QTextCodec *codec = QTextCodec::codecForName("utf8");
 			KProcIO* eProc = new KProcIO( codec );
-			*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+			*eProc << "emerge" << "--columns" << "--nospinner" << "--color=n" << "-pv" << m_category + "/" + m_package;
 			m_useList = useList;
 
 			connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParseTempUse( KProcess* ) ) );
@@ -620,6 +613,9 @@ void PackageInspector::slotSetUseFlags( QListViewItem* useItem )
 			useItem->setText( 0, use.replace( QRegExp("^\\-"), "+" ) );
 			if ( !useItem->text(0).startsWith( "+" ) )
 				useItem->setText( 0, use.insert( 0, "+" ) );
+		case ( QCheckListItem::NoChange ) :
+			//Do Nothing
+			;
 		
 	}
 	
@@ -887,7 +883,7 @@ void PackageInspector::slotCalculateUse()
 	m_pretendUseLines.clear();
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
-	*eProc << "emerge" << "--columns" << "--nospinner" << "--nocolor" << "-pv" << m_category + "/" + m_package;
+	*eProc << "emerge" << "--columns" << "--nospinner" << "--color=n" << "-pv" << m_category + "/" + m_package;
 	
 	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotParsePackageUse( KProcess* ) ) );
 	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectPretendOutput( KProcIO* ) ) );

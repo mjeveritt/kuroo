@@ -39,26 +39,53 @@ class Emerge : public QObject
 Q_OBJECT
 public:
 	Emerge( QObject *m_parent = 0 );
-    ~Emerge();
+	~Emerge();
 
 	void						init( QObject *parent = 0 );
 	void						inputText( const QString& text );
 	bool						stop();
-	bool 						isRunning();
+	bool 						isRunning() const;
 	
 	bool 						pretend( const QStringList& packageList );
 	bool 						queue( const QStringList& packageList );
 	bool 						unmerge( const QStringList& packageList );
+	bool						quickpkg( const QStringList& packageList );
 	bool						sync();
 	bool						checkUpdates();
+	/**
+	 * Are we paused?
+	 * @return bool
+	 */
+	inline bool					isPaused() const { return m_isPaused; }
+	/**
+	 * Can we pasue?
+	 * @return bool
+	 */
+	inline bool					canPause() const { return m_pausable; }
 	
-	const EmergePackageList		packageList();
-	const QString				packageMessage();
+	/**
+	 * @return list of packages parsed out from emerge output.
+	 */
+	inline const 	EmergePackageList 		packageList() const { return m_emergePackageList; }
+	const 	QString					packageMessage();
+	/**
+	 * Set Skip Housekeeping
+	 */
+	inline void					setSkipHousekeeping(const bool& x) { m_skipHousekeeping = x;}
+
+public slots:
+	void						slotPause();
+	void						slotUnpause();
 	
 private:
 	void						cleanup();
 	bool						countEtcUpdates( const QString& line );
 	void						askUnmaskPackage( const QString& packageKeyword );
+	/**
+	 * Do we Skip housekeeping?
+	 * @return bool
+	 */
+	inline bool					skipHousekeeping() const { return m_skipHousekeeping; }
 	
 private slots:
 	void 						slotEmergeOutput( KProcIO *proc );
@@ -68,6 +95,11 @@ private slots:
 	void 						slotCleanupSync( KProcess *proc );
 	void 						slotCleanupCheckUpdates( KProcess *proc );
 	void						slotTryEmerge();
+	void						slotBackupComplete( KProcess *proc );
+	void						slotEmergeDistfilesComplete( KProcess* proc );
+        void						slotEClean2Complete( KProcess* proc );
+        void						slotRevdepRebuildComplete( KProcess* proc );
+
 	
 signals:
 	void						signalEmergeComplete();
@@ -75,9 +107,24 @@ signals:
 private:
 	QObject*					m_parent;
 	KProcIO*					eProc;
-	
+	KProcIO*                                        eClean1;
+        KProcIO*                                        eClean2;
+        KProcIO*                                        ioRevdepRebuild;
+        
 	// Used to collect ewarn and einfo messages spaning multiple lines
 	bool						m_completedFlag;
+
+	// Used to track a quickpkg backup
+	bool						m_backupComplete;
+	bool						m_backingUp;
+
+	// Can we pause this eProc?
+	bool						m_pausable;
+	bool						m_isPaused;
+
+	// should we be ecleaning?
+	bool						m_doeclean;
+        bool                                            m_dorevdeprebuild;
 	
 	// Package with the important message
 	QString						m_importantMessagePackage;
@@ -102,6 +149,8 @@ private:
 	
 	// Count of etc-updates files to merge
 	int							m_etcUpdateCount;
+        
+        bool                                            m_skipHousekeeping;
 };
 
 #endif

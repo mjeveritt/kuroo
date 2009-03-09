@@ -25,6 +25,7 @@
 #include <sys/stat.h>
 #include <grp.h>
 #include <pwd.h>
+#include <stdlib.h>
 
 #include <qdir.h>
 #include <qtextcodec.h>

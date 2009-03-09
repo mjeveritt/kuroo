@@ -304,7 +304,9 @@ msgstr ""
 msgid ""
 "\n"
 "Eclean of distfiles started"
-msgstr "Eclean se ha iniciado"
+msgstr ""
+"\n"
+"Eclean se ha iniciado"
 
 #: core/emerge.cpp:591 core/emerge.cpp:691
 msgid "Cleaning distfiles..."
@@ -327,7 +329,9 @@ msgstr ""
 "Revdep-rebuild ejecutándose..."
 
 #: core/emerge.cpp:621 core/emerge.cpp:720 core/emerge.cpp:761
-msgid "Running revdep-rebuild..."
+msgid ""
+"\n"
+"Running revdep-rebuild..."
 msgstr ""
 "\n"
 "Ejecutando revdep-rebuild..."

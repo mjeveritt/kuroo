@@ -21,6 +21,8 @@
 #include "settings.h"
 #include "kuroo.h"
 
+#include <stdlib.h>
+
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kaboutdata.h>

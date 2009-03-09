@@ -24,6 +24,8 @@
 #include "packageitem.h"
 #include "packagelistview.h"
 
+#include <stdlib.h>
+
 #include <qheader.h>
 
 #include <klistview.h>
@@ -294,14 +296,19 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		else
 			size = formatSize( size );
 
-		if ( idDepend == "0" ) {
+		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, status.toInt(), duration );
 			item->setOpen( true );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->packageItemById( idDepend ) );
-			if ( itemDepend )
+			if ( itemDepend ) {
 				item = new QueueItem( itemDepend, category, name, id, status.toInt(), duration );
+			}
+			else {
+				item = new QueueItem( this, category, name, id, status.toInt(), duration );
+				item->setOpen( true );
+			}
 		}
 		
 		// Add version to be emerged

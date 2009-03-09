@@ -25,6 +25,7 @@
 #include <unistd.h>               //usleep()
 #include <grp.h>
 #include <pwd.h>
+#include <stdlib.h>
 
 #include <qfile.h>
 #include <qimage.h>

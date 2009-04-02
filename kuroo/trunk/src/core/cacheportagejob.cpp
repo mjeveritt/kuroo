@@ -30,7 +30,7 @@
 /**
  * @class CachePortageJob
  * @short Thread to cache package information from the Portage directory to speed up portage refreshing.
- * 
+ *
  * Portage cache is scanned for package sizes, and stored in portage cache map and in the database.
  */
 CachePortageJob::CachePortageJob( QObject* parent )
@@ -60,13 +60,13 @@ bool CachePortageJob::doJob()
 		kdError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
 		return false;
 	}
-	
+
 	int count( 0 );
 	QMap <QString, QString> mapCache;
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
-	
+
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
 	if ( packageCount == "0" )
@@ -74,34 +74,34 @@ bool CachePortageJob::doJob()
 	else
 		setProgressTotalSteps( packageCount.toInt() );
 	setStatus( "CachePortage", i18n("Collecting package information...") );
-	
+
 	// Get list of categories in Portage and Overlays
 	QStringList pathList = KurooConfig::dirPortage();
 	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlay() );
 	foreach ( pathOverlays )
 		pathList += *it;
-	
+
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
 			kdWarning(0) << "Creating cache. Can not access " << *itPath << LINE_INFO;
 			continue;
 		}
-		
+
 		QStringList categoryList = dCategory.entryList();
 		QStringList::Iterator itCategoryEnd = categoryList.end();
 		for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-			
+
 			if ( *itCategory == "." || *itCategory == ".." )
 				continue;
-			
+
 			// Abort the scan
 			if ( isAborted() ) {
 				kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
-			
+
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
 			dPackage.setSorting( QDir::Name );
@@ -109,10 +109,10 @@ bool CachePortageJob::doJob()
 				QStringList packageList = dPackage.entryList();
 				QStringList::Iterator itPackageEnd = packageList.end();
 				for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
-					
+
 					if ( *itPackage == "." || *itPackage == ".." )
 						continue;
-					
+
 					// Abort the scan
 					if ( isAborted() ) {
 						kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
@@ -120,11 +120,12 @@ bool CachePortageJob::doJob()
 						return false;
 					}
 					QString package = *itCategory + "/" + *itPackage;
-					
+
 					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						QString packageName = parts[1];
-						
+
+//TODO: /files/digest-* doesn't seem to exist anymore, maybe we could read from 'Manifest' instead?
 						// Get package size
 						QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;
 						QFile file( path );
@@ -140,7 +141,7 @@ bool CachePortageJob::doJob()
 					}
 					else
 						kdWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
-					
+
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
 						setProgress( count );
@@ -148,12 +149,12 @@ bool CachePortageJob::doJob()
 			}
 			else
 				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/" << *itCategory << LINE_INFO;
-			
+
 		}
 	}
 	KurooDBSingleton::Instance()->query( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'packageCount';")
 	                                     .arg( count ), m_db );
-	
+
 	// Store cache in DB
 	KurooDBSingleton::Instance()->query( "DELETE FROM cache;", m_db );
 	KurooDBSingleton::Instance()->query( "BEGIN TRANSACTION;", m_db );
@@ -163,7 +164,7 @@ bool CachePortageJob::doJob()
 		                                      arg( itMap.key() ).arg( itMap.data() ), m_db );
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
-	
+
 	setStatus( "CachePortage", i18n("Done.") );
 	setProgress( 0 );
 	DEBUG_LINE_INFO;

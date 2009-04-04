@@ -221,6 +221,7 @@ bool KurooDB::isValid()
  */
 void KurooDB::createTables ( DbConnection *conn )
 {
+	kdDebug(0) << "Creating tables" << LINE_INFO;
 	query ( "CREATE TABLE dbInfo ( "
 	        "meta VARCHAR(64), "
 	        "data VARCHAR(64) );"

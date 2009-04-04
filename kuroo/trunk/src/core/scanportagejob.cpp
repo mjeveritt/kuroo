@@ -134,7 +134,7 @@ bool ScanPortageJob::doJob()
 	                                          	, m_db );
 
 	// Gather all path = portage and overlays
-	QStringList pathList = KurooConfig::dirPortage();
+	QStringList pathList = KurooConfig::dirPortage() + "/metadata/cache/";
 	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlay() );
 	foreach ( pathOverlays ) {
 		pathList += *it;
@@ -143,9 +143,10 @@ bool ScanPortageJob::doJob()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 
+		kdDebug(0) << "Scanning Portage. Reading categories from " << *itPath << LINE_INFO;
 		//TODO: This is where I need to start removing deps on /var/cache/edb
-		if ( !dCategory.cd( KurooConfig::dirPortage() + *itPath ) ) {
-			kdWarning(0) << "Scanning Portage. Can not access " << KurooConfig::dirPortage() + *itPath  << LINE_INFO;
+		if ( !dCategory.cd( *itPath ) ) {
+			kdWarning(0) << "Scanning Portage. Can not access " << *itPath  << LINE_INFO;
 			continue;
 		}
 
@@ -155,7 +156,7 @@ bool ScanPortageJob::doJob()
 		QStringList categoryList = dCategory.entryList();
 		for ( QStringList::Iterator itCategory = categoryList.begin(), itCategoryEnd = categoryList.end(); itCategory != itCategoryEnd; ++itCategory ) {
 
-			if ( ! (itCategory->contains( '-' ) || *itCategory == "virtual" ) )
+			if ( ! ((*itCategory).contains( '-' ) || *itCategory == "virtual" ) )
 				continue;
 
 			// Abort the scan
@@ -165,8 +166,9 @@ bool ScanPortageJob::doJob()
 				return false;
 			}
 
-			QString category = itCategory->section( "-", 0, 0 );
-			QString subCategory = itCategory->section( "-", 1, 1 );
+			kdDebug(0) << "Scanning Portage. Reading category " << *itCategory << LINE_INFO;
+			QString category = (*itCategory).section( "-", 0, 0 );
+			QString subCategory = (*itCategory).section( "-", 1, 1 );
 
 			if( lastCategory.isEmpty() ) {
 				//if this is our first pass and lastCategory is empty, check the database for this category to avoid inserting a duplicate
@@ -189,12 +191,13 @@ bool ScanPortageJob::doJob()
 			dPackage.setSorting( QDir::Name );
 
 			if ( dPackage.cd( *itPath + "/" + *itCategory) ) {
+				kdDebug(0) << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory << LINE_INFO;
 
 				QStringList packageList = dPackage.entryList();
 				QString status, lastPackage;
 				for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 
-					if ( *itPackage == "." || *itPackage == ".." || itPackage->contains("MERGING") )
+					if ( *itPackage == "." || *itPackage == ".." || *itPackage == "metadata.xml" || (*itPackage).contains("MERGING") )
 						continue;
 
 					// Abort the scan
@@ -204,6 +207,7 @@ bool ScanPortageJob::doJob()
 						return false;
 					}
 
+					kdDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
 					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						QString name = parts[1];
@@ -247,7 +251,7 @@ bool ScanPortageJob::doJob()
 				}
 			}
 			else
-				kdWarning(0) << "Scanning Portage. Can not access " << KurooConfig::dirPortage() << *itPath << *itCategory << LINE_INFO;
+				kdWarning(0) << "Scanning Portage. Can not access " << *itPath << *itCategory << LINE_INFO;
 
 			lastCategory = category;
 		}
@@ -417,7 +421,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 {
 //WARN: This won't work for anything but /usr/portage for now!
 	Info info;
-	QFile file( path + "/metadata/cache/" + category + "/" + name + "-" + version );
+	QFile file( path + "/" + category + "/" + name + "-" + version );
 
 	if ( !file.open( IO_ReadOnly ) ) {
 		kdWarning(0) << "Scanning Portage cache. Failed reading: " << path << "/" << category << "/" << name << "-" << version << LINE_INFO;

@@ -91,7 +91,7 @@ bool CachePortageJob::doJob()
 		QStringList categoryList = dCategory.entryList();
 		QStringList::Iterator itCategoryEnd = categoryList.end();
 		for ( QStringList::Iterator itCategory = categoryList.begin(); itCategory != itCategoryEnd; ++itCategory ) {
-
+			//TODO: Filter out distfiles, eclass, licences, metadata, packages, profiles, scripts
 			if ( *itCategory == "." || *itCategory == ".." )
 				continue;
 
@@ -105,7 +105,7 @@ bool CachePortageJob::doJob()
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
 			dPackage.setSorting( QDir::Name );
-			if ( dPackage.cd( KurooConfig::dirEdbDep() + *itPath + "/" + *itCategory ) ) {
+			if ( dPackage.cd( *itPath + "/metadata/cache/" + *itCategory ) ) {
 				QStringList packageList = dPackage.entryList();
 				QStringList::Iterator itPackageEnd = packageList.end();
 				for ( QStringList::Iterator itPackage = packageList.begin(); itPackage != itPackageEnd; ++itPackage ) {
@@ -127,7 +127,8 @@ bool CachePortageJob::doJob()
 
 //TODO: /files/digest-* doesn't seem to exist anymore, maybe we could read from 'Manifest' instead?
 						// Get package size
-						QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;
+						mapCache.insert( package, "12345" );
+						/*QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;
 						QFile file( path );
 						if ( file.open( IO_ReadOnly ) ) {
 							std::ifstream in( path );
@@ -137,7 +138,7 @@ bool CachePortageJob::doJob()
 							file.close();
 						}
 						else
-							kdWarning(0) << "Creating cache. Reading: " << path << LINE_INFO;
+							kdWarning(0) << "Creating cache. Reading: " << path << LINE_INFO;*/
 					}
 					else
 						kdWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
@@ -148,7 +149,7 @@ bool CachePortageJob::doJob()
 				}
 			}
 			else
-				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/" << *itCategory << LINE_INFO;
+				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/metadata/cache/" << *itCategory << LINE_INFO;
 
 		}
 	}

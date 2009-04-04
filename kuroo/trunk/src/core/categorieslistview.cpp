@@ -28,7 +28,7 @@
 #include <kglobal.h>
 
 CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
-	: QListViewItem( parent, name ), m_on( false ), m_id( id ), m_name( name )
+	: QListViewItem( parent, name ), m_id( id ), m_name( name ), m_on( false )
 {}
 
 /**
@@ -58,7 +58,7 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg
  * @short Base class for category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
-	: KListView( parent, name ), categories( 0 ), m_focus( i18n("All") )
+	: KListView( parent, name ), m_focus( i18n("All") ), categories( 0 )
 {
 	setFullWidth( true );
 	setFrameShape( QFrame::NoFrame );

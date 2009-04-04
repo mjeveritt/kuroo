@@ -149,7 +149,7 @@ for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
 
 /// Announce a line
 #define LINE_INFO " ( " << k_funcinfo << "Line: " << __LINE__ << " )" << endl
-#define DEBUG_LINE_INFO kdDebug() << LINE_INFO
+#define DEBUG_LINE_INFO kdDebug(0) << LINE_INFO
 
 #endif
 

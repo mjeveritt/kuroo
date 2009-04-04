@@ -202,7 +202,7 @@ void KurooInit::slotEmergeInfo( KProcess* )
 // 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
 	
-	kdDebug() << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	kdDebug(0) << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
 	
 	KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;

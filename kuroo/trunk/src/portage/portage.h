@@ -32,7 +32,7 @@ class Portage : public QObject
 Q_OBJECT
 public:
 	Portage( QObject *m_parent = 0 );
-    ~Portage();
+	~Portage();
 	
 	void						init( QObject *parent = 0 );
 	

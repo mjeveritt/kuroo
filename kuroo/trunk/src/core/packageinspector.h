@@ -36,70 +36,70 @@ Q_OBJECT
 public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
-	
-	void							edit( PackageItem* portagePackage, const int& view );
+
+	void				edit( PackageItem* portagePackage, const int& view );
 	/**
 	 * Return the caller.
 	 */
-	inline bool						isParentView( const int& view ) const { return m_view == view; }
-	void							showHardMaskInfo();
-	
-	InspectorBase					*dialog;
-	
+	inline bool			isParentView( const int& view ) const { return m_view == view; }
+	void				showHardMaskInfo();
+
+	InspectorBase			*dialog;
+
 private:
-	void							updateVersionData();
-	void							rollbackSettings();
-	void							loadUseFlagDescription();
-	void							loadChangeLog();
-	
+	void				updateVersionData();
+	void				rollbackSettings();
+	void				loadUseFlagDescription();
+	void				loadChangeLog();
+
 private slots:
-	void							slotHardMaskInfo();
-	void							slotPreviousPackage();
-	void							slotNextPackage();
-	void							showSettings();
-	void							slotRefreshTabs();
-	void							slotLoadInstalledFiles( const QString& version );
-	void							slotApply();
-	void							slotCancel();
-	void							slotOk();
-	void							slotSetStability( int rbStability );
-	void							slotSetSpecificVersion( const QString& version );
-	void							slotSetUseFlags( QListViewItem* useItem );
-	void							slotLoadEbuild( const QString& version );
-	void							slotLoadDependencies( const QString& version );
-	void							slotLoadUseFlags( const QString& version );
-	void							slotCalculateUse();
-	void							slotCollectPretendOutput( KProcIO* eProc );
-	void							slotParsePackageUse( KProcess* eProc );
-	void							slotParseTempUse( KProcess* eProc );
-	void							slotQueue();
-	void							slotWorld();
-	
+	void				slotHardMaskInfo();
+	void				slotPreviousPackage();
+	void				slotNextPackage();
+	void				showSettings();
+	void				slotRefreshTabs();
+	void				slotLoadInstalledFiles( const QString& version );
+	void				slotApply();
+	void				slotCancel();
+	void				slotOk();
+	void				slotSetStability( int rbStability );
+	void				slotSetSpecificVersion( const QString& version );
+	void				slotSetUseFlags( QListViewItem* useItem );
+	void				slotLoadEbuild( const QString& version );
+	void				slotLoadDependencies( const QString& version );
+	void				slotLoadUseFlags( const QString& version );
+	void				slotCalculateUse();
+	void				slotCollectPretendOutput( KProcIO* eProc );
+	void				slotParsePackageUse( KProcess* eProc );
+	void				slotParseTempUse( KProcess* eProc );
+	void				slotQueue();
+	void				slotWorld();
+
 private:
-	
+
 	// Wiew that called the Inspector
-	int								m_view;
-	
+	int				m_view;
+
 	// Keep track when user changes any version masking settings
-	bool							m_versionSettingsChanged;
-	
+	bool				m_versionSettingsChanged;
+
 	// Keep track when user changes use settings
-	bool							m_useSettingsChanged;
-	
+	bool				m_useSettingsChanged;
+
 	// Is this package settings untouched
-	bool							m_isVirginState;
-	
-	QString							m_id, m_category, m_package, m_hardMaskComment;
-	QMap<QString, QString>			m_useMap;
-	PackageItem* 					m_portagePackage;
-	int								m_stabilityBefore;
-	QString							m_versionBefore;
-	QStringList						m_pretendUseLines;
-	QStringList 					m_useList;
-	
+	bool				m_isVirginState;
+
+	QString				m_id, m_category, m_package, m_hardMaskComment;
+	QMap<QString, QString>		m_useMap;
+	PackageItem* 			m_portagePackage;
+	int				m_stabilityBefore;
+	QString				m_versionBefore;
+	QStringList			m_pretendUseLines;
+	QStringList 			m_useList;
+
 signals:
-	void							signalNextPackage( bool up );
-	void							signalPackageChanged();
+	void				signalNextPackage( bool up );
+	void				signalPackageChanged();
 };
 
 #endif

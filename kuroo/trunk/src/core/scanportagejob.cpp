@@ -226,7 +226,8 @@ bool ScanPortageJob::doJob()
 							m_categories[ *itCategory ].packages[ name ];
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
-							m_categories[ *itCategory ].packages[ name ].path = *itPath;
+							m_categories[ *itCategory ].packages[ name ].path = (*itPath).section( "/metadata/cache", 0, 0 );
+							kdDebug(0) << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path << LINE_INFO;
 						}
 
 						// Insert version in portage

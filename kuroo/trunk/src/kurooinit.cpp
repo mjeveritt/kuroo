@@ -22,6 +22,7 @@
 #include "kurooinit.h"
 #include "introdlg.h"
 
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <grp.h>
 #include <pwd.h>
@@ -40,7 +41,7 @@
 /**
  * @class KurooInit
  * @short KurooInit checks that kuroo environment is correctly setup.
- * 
+ *
  * And launch intro wizard whenever a new version of kuroo is installed.
  * Set ownership for directories and files to portage:portage.
  * Check that user is in portage group.
@@ -49,7 +50,7 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	: QObject( parent, name ), wizardDialog( 0 )
 {
 	getEnvironment();
-	
+
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( GlobalSingleton::Instance()->kurooDir() );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() )
@@ -57,16 +58,16 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	else
 		if ( !KUser().isSuperUser() )
 			checkUser();
-	
+
 	// Get portage groupid to set directories and files owned by portage
 	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
 	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
-	
+
 	// Setup kuroo environment
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
 		KurooConfig::setSaveLog( false );
-		
+
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
 			if ( !d.mkdir(GlobalSingleton::Instance()->kurooDir()) ) {
@@ -78,11 +79,11 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
 				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
 			}
-			
+
 			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
 		}
 	}
-	
+
 	// Check that backup directory exists and set correct permissions
 	QString backupDir = GlobalSingleton::Instance()->kurooDir() + "backup";
 	if ( !d.cd( backupDir ) ) {
@@ -97,42 +98,42 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
 		}
 	}
-	
+
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
 	KurooConfig::writeConfig();
-	
+
 	// Initialize the log
 	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
 		chmod( logFile, 0660 );
 		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
 	}
-	
+
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
 	QString database = GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
-	
+
 	// Check for conflicting db design or new install
 	if ( KurooConfig::version().section( "_db", 1, 1 ) != dbVersion ) {
-		
+
 		// Backup history if there's old db version
 		if ( !dbVersion.isEmpty() ) {
 			KurooDBSingleton::Instance()->backupDb();
 			remove( database );
 			kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
-			
+
 			// and recreate with new structure
 			KurooDBSingleton::Instance()->init( this );
 		}
-		
+
 		KurooDBSingleton::Instance()->setKurooDbMeta( "kurooVersion", KurooConfig::version().section( "_db", 1, 1 ) );
 	}
-	
+
 	// Give permissions to portage:portage to access the db also
 	chmod( databaseFile, 0660 );
 	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
-	
+
 	// Initialize singletons objects
 	GlobalSingleton::Instance()->init( this );
 	ImagesSingleton::Instance()->init( this );
@@ -160,7 +161,7 @@ void KurooInit::getEnvironment()
 	QTextCodec *codec = QTextCodec::codecForName("utf8");
 	KProcIO* eProc = new KProcIO( codec );
 	*eProc << "emerge" << "--info";
-	
+
 	if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
 		kdError(0) << "Cannot run emerge --info, quitting!" << LINE_INFO;
 		exit(0);
@@ -179,31 +180,31 @@ void KurooInit::slotCollectOutput( KProcIO* eProc )
 void KurooInit::slotEmergeInfo( KProcess* )
 {
 	foreach ( m_emergeInfoLines ) {
-		
+
 		if ( (*it).startsWith( "Portage 2.0" ) )
 			KurooConfig::setPortageVersion21( false );
 		else
 			KurooConfig::setPortageVersion21( true );
-		
+
 		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
 			QString arch = (*it).section( "\"", 1, 1 );
-			
+
 			// When testing we have two keywords, only pick one
 			if ( arch.contains( "~" ) )
 				arch = arch.section( "~", 1, 1 );
-			
+
 			KurooConfig::setArch( arch );
 		}
-		
+
 		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
 			KurooConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
-		
+
 // 		if ( (*it).startsWith( "USE=" ) )
 // 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
 	}
-	
+
 	kdDebug(0) << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
-	
+
 	KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }
@@ -216,12 +217,12 @@ void KurooInit::slotEmergeInfo( KProcess* )
 void KurooInit::firstTimeWizard()
 {
 	IntroDlg wizardDialog;
-	
+
 	if ( wizardDialog.exec() != QDialog::Accepted )
 		exit(0);
 	else
 		KurooConfig::setWizard( false );
-	
+
 	KurooConfig::setInit( true );
 }
 
@@ -235,7 +236,7 @@ void KurooInit::checkUser()
 		if ( *it == "portage" )
 			return;
 	}
-	
+
 	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
 	                       i18n("User permissions") );
 	exit(0);

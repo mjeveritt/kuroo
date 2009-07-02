@@ -20,9 +20,10 @@
 
 #include "common.h"
 
-#include <math.h>                 //DbConnection::sqlite_power()
-#include <time.h>                 //query()
-#include <unistd.h>               //usleep()
+#include <math.h>		//DbConnection::sqlite_power()
+#include <time.h>		//query()
+#include <unistd.h>		//usleep()
+#include <stdlib.h>		//RAND_MAX
 #include <grp.h>
 #include <pwd.h>
 #include <stdlib.h>

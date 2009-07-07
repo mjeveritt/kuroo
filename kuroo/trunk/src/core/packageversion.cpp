@@ -26,7 +26,7 @@
 /**
  * @class PackageVersion
  * @short Class for comparing versions.
- * 
+ *
 * Initialize the version with its version string.
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
@@ -80,27 +80,27 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 {
 	// this* is for this->version, that* is for otherVersion
 	QString thisNum, thatNum;
-	
+
 	// Numerical representation of the suffix.
 	// Higher number means higher precedence.
 	long thisSuffix, thatSuffix;
-	
+
 	// Revision number. 0 means the version doesn't have a revision.
 	int thisRevision, thatRevision;
-	
+
 	// Numerical representation for possible trailing characters.
 	int thisTrailingChar, thatTrailingChar;
-	
+
 	uint pos; // multi-purpose position integer
-	
+
 	// start index of revision, suffix, and trailing character
 	int revisionPos, suffixPos, trailingCharPos;
-	
+
 	// Retrieve revision, suffix and their positions in the version string
 	thisRevision = PackageVersion::revisionNumber( m_version, &revisionPos );
 	thisSuffix = PackageVersion::suffixNumber( m_version, &suffixPos );
 	thisTrailingChar = PackageVersion::trailingCharNumber( m_version, &trailingCharPos );
-	
+
 	// determine the first non-base-version character
 	if ( trailingCharPos != -1 )
 		pos = trailingCharPos;
@@ -110,15 +110,15 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 		pos = revisionPos;
 	else
 		pos = m_version.length();
-	
+
 	// So, now we have a version string stripped of suffix and revision
 	QString thisBaseVersion( m_version.left(pos) );
-	
+
 	// Same procedure for the other version string
 	thatRevision = PackageVersion::revisionNumber( otherVersion, &revisionPos );
 	thatSuffix = PackageVersion::suffixNumber( otherVersion, &suffixPos );
 	thatTrailingChar = PackageVersion::trailingCharNumber( otherVersion, &trailingCharPos );
-	
+
 	// determine the first non-base-version character
 	if ( trailingCharPos != -1 )
 		pos = trailingCharPos;
@@ -128,23 +128,23 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 		pos = revisionPos;
 	else
 		pos = m_version.length();
-	
+
 	// So, now we have a version string stripped of suffix and revision
 	QString thatBaseVersion( otherVersion.left(pos) );
-	
+
 	// Ok, let's compare the remaining version strings.
 	// This is done by step-by-step comparing the number parts
 	// of this->version and the otherVersion.
 	// For example: in "1.2.3" vs. "1.3.4", first "1" is compared with "1",
 	// then "2" is compared with "3", and the third part isn't considered.
-	
+
 	pos = 0; // pos is the start index for number searches
 	do {
 		rxNumber.search( m_version, pos );
 		thisNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
 		rxNumber.search( otherVersion, pos );
 		thatNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
-		
+
 		// Fix so '0.1.0 > 0.09.0' as '0.10.0 > 0.09.0'
 		if ( thisNum.length() > thatNum.length() ) {
 			if ( thisNum.startsWith( "0" ) )
@@ -154,10 +154,10 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 			if ( thatNum.startsWith( "0" ) )
 				thisNum = thisNum.leftJustify( thatNum.length(), '0' );
 		}
-		
+
 		if ( thisNum.isEmpty() || thatNum.isEmpty() )
 			return false; // should not happen, just to make sure
-		
+
 		// the current version number parts differ
 		if ( thisNum != thatNum ) {
 			if ( thisNum.toInt() > thatNum.toInt() ) // this->version is newer:
@@ -166,9 +166,9 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 					return false;
 		}
 		else {
-			// thisNum == thatNum 
+			// thisNum == thatNum
 			pos += thisNum.length();
-			
+
 			// check if any base-version string ends here
 			// both versions end here
 			if ( thisBaseVersion.length() <= pos && thatBaseVersion.length() <= pos ) {
@@ -209,7 +209,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	while ( true );
 	// infinite loops are prevented by the <= instead of ==
 	// at the length checks
-	
+
 } // end of isNewerThan()
 
 /**
@@ -242,18 +242,18 @@ int PackageVersion::stability( const QString& arch ) const
 {
 	if ( m_isHardMasked == true )
 		return HARDMASKED;
-	
+
 	// check for additional keywords
 	if ( !m_acceptedKeywords.empty() ) {
 		QString pureArch( arch );
 		pureArch.remove( '~' );
-		
+
 		// The following checks are not completely correct, as they only check
 		// against arch instead of all version keywords. Should be sufficient
 		// for normal use though, as people are not supposed to add anything
 		// but ~arch or -arch to ACCEPT_KEYWORDS/package.keywords.
 		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin(); keywordIterator != m_acceptedKeywords.end(); keywordIterator++ ) {
-			
+
 			// Accept masked and stable packages
 			// when the accepted keyword is ~arch or ~*
 			if ( ( *keywordIterator == "~*" || *keywordIterator == "~" + arch ) && ( m_keywords.contains( "~" + pureArch ) || m_keywords.contains( pureArch ) ) ) {
@@ -261,7 +261,7 @@ int PackageVersion::stability( const QString& arch ) const
 			}
 			// Accept packages when the accepted keyword is -arch and keywords contain -arch!
 			else
-				if ( (*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ) || ( *keywordIterator == "-*" && m_keywords.contains("-*") )) ) {
+				if ( ((*keywordIterator == ("-" + arch)) && (m_keywords.contains( "-" + arch ))) || ( (*keywordIterator == "-*") && (m_keywords.contains("-*")) ) ) {
 					return STABLE;
 				}
 				// Don't accept packages when the accepted keyword is -arch only
@@ -281,7 +281,7 @@ int PackageVersion::stability( const QString& arch ) const
 							}
 			}
 	}
-	
+
 	// check if the architecture is in there "as is"
 	if ( m_keywords.contains( arch ) )
 		return STABLE;
@@ -320,11 +320,11 @@ int PackageVersion::revisionNumber( const QString& versionString, int* foundPos 
 {
 	// search for a possible revision
 	int pos = rxRevision.search( versionString );
-	
+
 	// return the position inside the string
 	if ( foundPos != NULL )
 		*foundPos = pos;
-	
+
 	// no revision, which is essentially the same as -r0
 	if ( pos == -1 ) {
 		return 0;
@@ -354,10 +354,10 @@ long PackageVersion::suffixNumber( const QString& versionString, int* foundPos )
 {
 	// search for a possible suffix
 	int pos = rxSuffix.search( versionString );
-	
+
 	if ( foundPos != NULL ) // return the position inside the string
 		*foundPos = pos;
-	
+
 	if ( pos == -1 ) { // no suffix, which means no change in importance
 		return 0;
 	}
@@ -368,7 +368,7 @@ long PackageVersion::suffixNumber( const QString& versionString, int* foundPos )
 		QString suffix = (const_cast<PackageVersion*>(this))->rxSuffix.cap(1);
 		int suffixNumber = (const_cast<PackageVersion*>(this))->rxSuffix.cap(2).toInt(); // X in, say "_betaX"
 		// if it's just "_beta" (which is allowed), toInt("") returns 0.
-		
+
 		// The big numbers are needed because some people use stuff like
 		// _p20041130 which is more than an integer can handle
 		if ( suffix == "alpha" ) // alpha release
@@ -405,10 +405,10 @@ int PackageVersion::trailingCharNumber( const QString& versionString, int* found
 	if ( pos != -1 )
 		pos++; // because the regexp starts one character left
 	// of the actual position
-	
+
 	if ( foundPos != NULL ) // return the position inside the string
 		*foundPos = pos;
-	
+
 	if ( pos == -1 ) // no trailing character, so return 0
 		return 0;
 	else // has a trailing character, get its number

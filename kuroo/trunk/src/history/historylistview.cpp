@@ -57,7 +57,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	addColumn( i18n("Date") );
 	addColumn( i18n("Duration") );
 	addColumn( i18n("Emerge log file") );
-	
+
 	setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated( true );
@@ -66,11 +66,11 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	setColumnWidthMode( 0, QListView::Manual );
 	setColumnWidthMode( 1, QListView::Manual );
 	setColumnWidthMode( 2, QListView::Manual );
-	
+
 	setColumnWidth( 0, 300 );
 	setColumnWidth( 1, 80 );
 	setResizeMode( QListView::LastColumn );
-	
+
 	setSorting( -1 );
 }
 
@@ -83,7 +83,7 @@ HistoryListView::~HistoryListView()
 QString HistoryListView::current()
 {
 	QListViewItem *item = currentItem();
-	
+
 	if ( item && item->parent() )
 		return item->text(0);
 	else
@@ -97,25 +97,25 @@ QStringList HistoryListView::selected()
 {
 	QStringList packageList;
 	QListViewItemIterator it(this);
-	
+
 	for ( ; it.current(); ++it )
 		if ( it.current()->parent() && it.current()->isSelected() )
 			packageList += it.current()->text(0);
-		
+
 	return packageList;
 }
 
-/** 
+/**
  * Populate listview with log entries
  */
 void HistoryListView::loadFromDB( int days )
 {
 	clear();
 	m_itemMap.clear();
-	
+
 	QDateTime dtLimit = QDateTime::currentDateTime();
 	dtLimit = dtLimit.addDays( -days );
-	
+
 	const QStringList historyList = KurooDBSingleton::Instance()->allHistory();
 	foreach ( historyList ) {
 		QString timeStamp = *it++;
@@ -123,29 +123,29 @@ void HistoryListView::loadFromDB( int days )
 		QString duration = *it++;
 		QString einfo = *it;
 		einfo.replace( "&gt;", ">" ).replace( "&lt;", "<" );
-		
+
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
 		QString packageString = parts[1] + "-" + parts[2] + " (" + parts[0].section( "-", 0, 0 ) + "/" +  parts[0].section( "-", 1, 1 ) + ")";
-		
+
 		// Convert emerge date to local date format
 		QDateTime dt;
 		dt.setTime_t( timeStamp.toUInt() );
 		QString emergeDate = m_loc->formatDate( dt.date() );
-		
+
 		if ( dt >= dtLimit ) {
-		
+
 			// Convert emerge duration (in seconds) to local time format
 			QTime t( 0, 0, 0 );
 			t = t.addSecs( duration.toUInt() );
 			QString emergeDuration = m_loc->formatTime( t, true, true );
-			
-			if ( !duration.isEmpty() || KurooConfig::viewUnmerges() && !package.isEmpty() ) {
+
+			if ( !duration.isEmpty() || (KurooConfig::viewUnmerges() && !package.isEmpty()) ) {
 				if ( !m_itemMap.contains( emergeDate ) ) {
 					HistoryItem *item = new HistoryItem( this, emergeDate );
 					item->setOpen( true );
 					m_itemMap[ emergeDate ] = item;
 				}
-				
+
 				HistoryItem *item = new HistoryItem( m_itemMap[ emergeDate ], packageString );
 				if ( duration.isEmpty() )
 					item->setPixmap( 0, ImagesSingleton::Instance()->icon( UNMERGED ) );
@@ -157,7 +157,7 @@ void HistoryListView::loadFromDB( int days )
 			}
 		}
 	}
-	
+
 	// Count emerge/unmerge events
 	QListViewItem * myChild = firstChild();
 	if ( myChild ) {
@@ -167,7 +167,7 @@ void HistoryListView::loadFromDB( int days )
 			myChild = myChild->nextSibling();
 		}
 	}
-	
+
 	emit signalHistoryLoaded();
 }
 

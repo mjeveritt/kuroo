@@ -1324,20 +1324,20 @@ int SqliteConnection::insert ( const QString& statement )
 			return 0;
 		}
 	}
-	return sqlite3_last_insert_rowid ( m_db );
+	return sqlite3_last_insert_rowid( m_db );
 }
 
 // this implements a RAND() function compatible with the MySQL RAND() (0-param-form without seed)
-void SqliteConnection::sqlite_rand ( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ )
+void SqliteConnection::sqlite_rand( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ )
 {
-	sqlite3_result_double ( context, static_cast<double> ( KApplication::random() ) / ( RAND_MAX + 1.0 ) );
+	sqlite3_result_double( context, static_cast<double> ( KApplication::random() ) / ( RAND_MAX + 1.0 ) );
 }
 
 // this implements a POWER() function compatible with the MySQL POWER()
-void SqliteConnection::sqlite_power ( sqlite3_context *context, int argc, sqlite3_value **argv )
+void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3_value **argv )
 {
-	Q_ASSERT ( argc==2 );
-	if ( sqlite3_value_type ( argv[0] ) == SQLITE_NULL || sqlite3_value_type ( argv[1] ) == SQLITE_NULL )
+	Q_ASSERT( argc == 2 );
+	if ( sqlite3_value_type( argv[0] ) == SQLITE_NULL || sqlite3_value_type ( argv[1] ) == SQLITE_NULL )
 	{
 		sqlite3_result_null ( context );
 		return;

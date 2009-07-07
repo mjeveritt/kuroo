@@ -126,7 +126,7 @@ static const QString TESTING_STRING( QString::number( TESTING ) );
 static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 
-typedef struct Info {
+struct Info {
 	QString slot;
 	QString homepage;
 	QString licenses;

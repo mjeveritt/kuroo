@@ -1324,6 +1324,7 @@ int SqliteConnection::insert ( const QString& statement )
 			return 0;
 		}
 	}
+	//TODO fix 64-bit int truncation
 	return sqlite3_last_insert_rowid( m_db );
 }
 

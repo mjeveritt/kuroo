@@ -249,7 +249,7 @@ public:
 	{
 		friend class ThreadWeaver;         //access to m_thread
 		friend class ThreadWeaver::Thread; //access to m_aborted
-	
+
 	public:
 		/**
 		 * Like-named jobs are queued and run FIFO. Always allocate Jobs on the
@@ -257,15 +257,15 @@ public:
 		 */
 		Job( const char *name );
 		~Job();
-	
+
 		/**
 		 * These are used by @class DependentJob, but are made available for
 		 * your use should you need them.
 		 */
 		enum EventType { JobFinishedEvent = ThreadWeaver::JobEvent, JobStartedEvent };
-	
+
 		const char *name() const { return m_name; }
-	
+
 		/**
 		 * If this returns true then in the worst case the entire amaroK UI is
 		 * frozen waiting for your Job to abort! You should check for this
@@ -276,50 +276,50 @@ public:
 		 * they return true from doJob()
 		 */
 		bool isAborted() const { return m_aborted; }
-	
+
 		///convenience function
 		bool wasSuccessful() const { return !m_aborted; }
-	
+
 		/**
 		 * Calls QThread::msleep( int )
 		 */
 		void msleep( int ms ) { m_thread->msleep( ms ); }
-	
+
 		/**
 		 * You should set @param description if you set progress information
 		 * do this in the ctor, or it won't have an effect
 		 */
 		void setDescription( const QString& description ) { m_description = description; }
-	
+
 		/**
 		 * If you set progress information, you should set this too, changing it when appropriate
 		 */
 		void setStatus( const QString& id, const QString& status );
-	
+
 		/**
 		 * This shows the progressBar too, the user will be able to abort
 		 * the thread
 		 */
 		void setProgressTotalSteps( uint steps );
-	
+
 		/**
 		 * Does a thread-safe update of the progressBar
 		 */
 		void setProgress( uint progress );
 		void setProgress100Percent() { setProgress( m_totalSteps ); }
-	
+
 		/**
 		 * Convenience function, increments the progress by 1
 		 */
 		void incrementProgress();
-	
+
 		/**
 		 * Sometimes you want to hide the progressBar etc. generally you
 		 * should show one, but perhaps you are a reimplemented class
 		 * that doesn't want one?
 		 */
 		//void setVisible( bool );
-	
+
 	protected:
 		/**
 		 * Executed inside the thread, this should be reimplemented to do the
@@ -388,17 +388,17 @@ public:
 	{
 	public:
 		DependentJob( QObject *dependent, const char *name );
-	
+
 		virtual void completeJob();
-	
+
 		bool mergeDirIntoFile( QString dirPath );
 		QObject *dependent() { return m_dependent; }
-	
+
 	private:
 		const QGuardedPtr<QObject> m_dependent;
-	
+
 	protected:
-		DISABLE_GENERATED_MEMBER_FUNCTIONS_4( DependentJob );
+		DISABLE_GENERATED_MEMBER_FUNCTIONS_4( DependentJob )
 		static QRegExp rxAtom;
 	};
 

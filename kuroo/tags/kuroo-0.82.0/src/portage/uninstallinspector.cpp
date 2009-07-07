@@ -45,25 +45,25 @@ UninstallInspector::~UninstallInspector()
 void UninstallInspector::view( const QStringList& packageList )
 {
 	m_dialog->uninstallView->clear();
-	
+
 	const QStringList systemFilesList = QStringList::split( " ", KurooConfig::systemFiles() );
 	bool isPartOfSystem( false );
-	
+
 	for ( QStringList::ConstIterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 		QString id = *itPackage++;
 		QString package = *itPackage;
-		
+
 		QCheckListItem* itemPackage = new QCheckListItem( m_dialog->uninstallView, package, QCheckListItem::CheckBoxController );
 		itemPackage->setOpen( true );
 		itemPackage->setOn( true );
-		
+
 		// Warn if package is included in gentoo base system profile
 		foreach ( systemFilesList )
 			if ( *it == package ) {
 				itemPackage->setPixmap( 0, ImagesSingleton::Instance()->icon( WARNING ) );
 				isPartOfSystem = true;
 			}
-		
+
 		// List all versions if more that one installed version is found
 		const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInstalled( id );
 		if ( versionsList.size() > 1 )
@@ -72,7 +72,7 @@ void UninstallInspector::view( const QStringList& packageList )
 				itemVersion->setOn( true );
 			}
 	}
-	
+
 	if ( isPartOfSystem ) {
 		m_dialog->uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
 		                                          "This may be damaging to your system!</b></font>") );
@@ -80,7 +80,7 @@ void UninstallInspector::view( const QStringList& packageList )
 	}
 	else
 		m_dialog->uninstallWarning->hide();
-	
+
 	show();
 }
 
@@ -90,21 +90,25 @@ void UninstallInspector::view( const QStringList& packageList )
 void UninstallInspector::slotOk()
 {
 	QStringList packageList;
-	
+
 	QListViewItemIterator it( m_dialog->uninstallView );
 	while ( it.current() ) {
-		
+
 		if ( dynamic_cast<QCheckListItem*>( it.current() )->state() == QCheckListItem::On )
+		{
 			if ( it.current()->parent() ) {
 				if ( dynamic_cast<QCheckListItem*>( it.current()->parent() )->state() != QCheckListItem::On )
 					packageList += "=" + it.current()->parent()->text(0) + "-" + it.current()->text(0);
 			}
 			else
+			{
 				packageList += it.current()->text(0);
-		
+			}
+		}
+
 		++it;
 	}
-	
+
 	EmergeSingleton::Instance()->unmerge( packageList );
 	hide();
 }

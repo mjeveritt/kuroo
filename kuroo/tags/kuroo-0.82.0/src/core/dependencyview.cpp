@@ -51,14 +51,14 @@ public:
 	DependencyItem( KListView* parent, const char* name, int index, int format );
 	DependencyItem( KListViewItem* parent, const char* name, int index, int format );
 	~DependencyItem();
-	
+
 protected:
 	void 			paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-	virtual int     compare( QListViewItem* i, int col, bool ascending ) const;
-	int				index() { return m_index; };
-	
+	virtual int		compare( QListViewItem* i/*, int col*/, bool ascending ) const;
+	int			index() { return m_index; };
+
 private:
-	int				m_index, m_format;
+	int			m_index, m_format;
 };
 
 DependencyView::DependencyItem::DependencyItem( KListView* parent, const char* name, int index, int format )
@@ -75,14 +75,14 @@ DependencyView::DependencyItem::~DependencyItem()
 /**
  * Order items first inserted as top-item.
  */
-int DependencyView::DependencyItem::compare( QListViewItem* item, int col, bool ascending ) const
+int DependencyView::DependencyItem::compare( QListViewItem* item/*, int col*/, bool ascending ) const
 {
 	int a = m_index;
 	int b = dynamic_cast<DependencyItem*>( item )->index();
-	
+
 	if ( a == b )
 		return 0;
-	
+
 	if ( ascending )
 		return a > b ? 1 : -1;
 	else
@@ -96,28 +96,28 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
 {
 	QColorGroup m_cg( cg );
 	QFont font( p->font() );
-	
+
 	switch ( m_format ) {
 		case ( DEPENDENCY_HEADER ) :
 			font.setBold( true );
 			break;
-		
+
 		case ( DEPENDENCY_OPERATOR ) :
 			font.setItalic( true );
 			m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 			break;
-		
+
 		case ( DEPENDENCY_USE ) :
 			font.setItalic( true );
 			m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 			break;
-		
+
 // 		case ( DEPENDENCY_PACKAGE ) :
 // 			font.setUnderline( true );
 // 			m_cg.setColor( QColorGroup::Text, m_cg.link() );
 // 			break;
 	}
-	
+
 	p->setFont( font );
 	KListViewItem::paintCell( p, m_cg, column, width, alignment );
 }
@@ -133,7 +133,7 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QColorGroup &
  */
 DependencyView::DependencyView( QWidget *parent, const char *name )
 	: KListView( parent, name ),
-	rxAtom(	
+	rxAtom(
 			"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
 			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
@@ -149,7 +149,7 @@ DependencyView::DependencyView( QWidget *parent, const char *name )
 	addColumn( i18n( "Dependency" ) );
 	setResizeMode( QListView::LastColumn );
 	setSorting( -1 );
-	
+
 // 	connect( this, SIGNAL( executed( QListViewItem* ) ), this, SLOT( slotPackageClicked( QListViewItem* ) ) );
 }
 
@@ -163,18 +163,18 @@ DependencyView::~DependencyView()
 void DependencyView::slotPackageClicked( QListViewItem* item )
 {
 	QString atom( item->text(0) );
-	
+
 	kdDebug() << "atom=" << atom << LINE_INFO;
-	
+
 	// Do the regexp match, which also prepares for text capture
 	if ( !rxAtom.exactMatch( atom ) )
 		return;
-	
+
 	QString package	= rxAtom.cap( POS_PACKAGE );
 	QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-	
+
 	kdDebug() << "package=" << package << LINE_INFO;
-	
+
 	SignalistSingleton::Instance()->packageClicked( category + " " + package );
 }
 
@@ -187,67 +187,67 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 	int index( 0 );
 	DependencyItem *parent, *lastDepend;
 	QString lastWord;
-	
+
 	foreach ( dependAtomsList ) {
 		QString word( *it );
 		index++;
-		
+
 		// Insert Depend-headers
 		if ( word == "DEPEND=" ) {
 			parent = new DependencyItem( this, i18n("Compile-time dependencies"), index, DEPENDENCY_HEADER );
 			parent->setOpen( true );
 			continue;
 		}
-		
+
 		if ( word == "RDEPEND=" ) {
 			parent = new DependencyItem( this, i18n("Runtime dependencies"), index, DEPENDENCY_HEADER );
 			parent->setOpen( true );
 			continue;
 		}
-		
+
 		if ( word == "PDEPEND=" ) {
 			parent = new DependencyItem( this, i18n("Post-merge dependencies"), index, DEPENDENCY_HEADER );
 			parent->setOpen( true );
 			continue;
 		}
-		
+
 		// Safety check
 		if ( !parent )
 			continue;
-			
-		// Indent one step 
+
+		// Indent one step
 		if ( word == "(" ) {
 			if ( word != lastWord )
 				parent = lastDepend;
 			else
 				parent = new DependencyItem( parent, parent->text(0), index, DEPENDENCY_OPERATOR );
-			
+
 			parent->setOpen( true );
 			lastWord = word;
 			continue;
 		}
 		lastWord = word;
-		
+
 		// Remove one indent step
 		if ( word == ")" ) {
 			if ( parent->parent() )
 				parent = dynamic_cast<DependencyItem*>( parent->parent() );
 			continue;
 		}
-		
+
 		// OR-header
 		if ( word == "||" ) {
 			lastDepend = new DependencyItem( parent, i18n("Depend on either:"), index, DEPENDENCY_OPERATOR );
 			lastDepend->setOpen( true );
 			continue;
 		}
-		
+
 		// Insert package
 		if ( word.contains( "/" ) ) {
 			lastDepend = new DependencyItem( parent, word, index, DEPENDENCY_PACKAGE );
 			continue;
 		}
-		
+
 		// Insert use
 		word.remove( '?' );
 		if ( word.startsWith("!") ) {
@@ -257,7 +257,7 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 		else
 			lastDepend = new DependencyItem( parent, i18n("With USE-flag %1:").arg( word ), index, DEPENDENCY_USE );
 	}
-	
+
 	setSorting( 0, Qt::Descending );
 	sort();
 }

@@ -32,14 +32,14 @@ class QTimer;
 class Queue : public QObject
 {
 Q_OBJECT
-	
+
 public:
 	Queue( QObject *m_parent = 0 );
 	~Queue();
-	
+
 	void					init( QObject *parent = 0 );
-	void					emergePackageStart( const QString& package, int order, int total );
-	void					emergePackageComplete( const QString& package, int order, int total );
+	void					emergePackageStart( const QString& package/*, int order, int total*/ );
+	void					emergePackageComplete( const QString& package/*, int order, int total*/ );
 	bool					isQueueBusy();
 	void					clearCache();
 	int					size();
@@ -55,29 +55,29 @@ public:
 	void					setRemoveInstalled( bool removeInstalled );
 	void					pauseEmerge();
 	void					unpauseEmerge();
-	
+
 public slots:
 	void					slotOneStep();
 	void					slotClearQueue();
-	
+
 signals:
 	void					signalQueueChanged( bool hasCheckedQueue );
 	void					signalPackageAdvance();
 	void					signalPackageStart( const QString& id );
 	void					signalPackageComplete( const QString& id );
-	
+
 private:
 	QObject					*m_parent;
-	
+
 	// Queue is busy emerging
 	bool					m_isQueueBusy;
-	
+
 	// Cache contaning packages in Queue
 	QMap<QString, bool>			m_queueCache;
-	
+
 	// Timer for installation progress
 	QTimer*					m_internalTimer;
-	
+
 	// Clear queue after installation?
 	bool					m_removeInstalled;
 };

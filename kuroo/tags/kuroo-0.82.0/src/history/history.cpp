@@ -32,24 +32,24 @@ class UpdateStatisticsJob : public ThreadWeaver::DependentJob
 {
 public:
 UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
-	
+
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM statistic;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
-		
+
 		EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
 		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
 		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
 			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" )
 			                                      .arg( itMap.data().emergeTime() ).arg( itMap.data().count() ).arg( itMap.key() ), m_db );
 		}
-		
+
 		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
-	
+
 };
 
 /**
@@ -71,18 +71,18 @@ History::~History()
 void History::init( QObject *parent )
 {
 	m_parent = parent;
-	
+
 	m_log.setName( KurooConfig::fileEmergeLog() );
 	if ( !m_log.open( IO_ReadOnly ) )
 		kdError(0) << "Reading " << KurooConfig::fileEmergeLog() << LINE_INFO;
 	else
 		stream.setDevice( &m_log );
-	
+
 	scanELog();
 	loadTimeStatistics();
-	
+
 	connect( SignalistSingleton::Instance(), SIGNAL( signalScanHistoryComplete() ), this, SLOT( slotScanHistoryCompleted() ) );
-	
+
 	logWatcher = new KDirWatch( this );
 	logWatcher->addFile( KurooConfig::fileEmergeLog() );
 }
@@ -112,7 +112,7 @@ bool History::slotRefresh()
 	QString lastDate = KurooDBSingleton::Instance()->getKurooDbMeta( "scanTimeStamp" );
 	if ( lastDate.isEmpty() )
 		lastDate = "0";
-	
+
 	// Collect all recent entries in emerge log
 	QStringList emergeLines;
 	QRegExp rx( "\\d+" );
@@ -154,25 +154,25 @@ void History::slotParse()
 	QStringList emergeLines;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
 	QRegExp rxPackage( "(\\()(\\d+)(\\s+of\\s+)(\\d+)(\\)\\s+)(\\S+/\\S+)" );
-	
+
 	while ( !stream.atEnd() )
 		emergeLines += stream.readLine() + " ";
-	
+
 	foreach ( emergeLines ) {
 		QString line = *it;
-		
+
 		if ( !line.isEmpty() ) {
 			QString emergeLine = line.section( rxTimeStamp, 1, 1 );
 			emergeLine = emergeLine.section( QRegExp( "(!!! )|(>>> )|(=== )|(\\*\\*\\* )|(::: )" ), 1, 1 );
-			
+
 			// For translation
 			emergeLine.replace( " to ", i18n(" to ") );
 			emergeLine.replace( " of ", i18n(" of ") );
-			
+
 			// Is it a regular emerge or something else
 			if ( QRegExp("(\\s|\\S)*(\\*\\*\\* emerge)(\\s|\\S)*" ).exactMatch( line ) ) {
 				isEmerging = true;
-				
+
 				// Not emerging - just downloading the packages
 				if ( line.contains( QRegExp("fetch-all-uri") ) )
 					isEmerging = false;
@@ -181,16 +181,16 @@ void History::slotParse()
 			// Parse out nice statusbar text
 			if ( line.contains( QRegExp("(\\) )(Cleaning)|(Compiling/Merging)|(Post-Build Cleaning)") ) ) {
 				QString logLine = "(" + emergeLine.section( "::", 0, 0 ).remove( "(" );
-				
+
 				logLine.replace( "Compiling/Merging", i18n( "Compiling/Merging" ) );
 				logLine.replace( "Post-Build Cleaning", i18n( "Post-Build Cleaning" ) );
 				logLine.replace( "Cleaning", i18n( "Cleaning" ) );
-				
+
 				KurooStatusBar::instance()->setProgressStatus( QString::null, logLine );
 				LogSingleton::Instance()->writeLog( logLine, EMERGELOG );
 			}
 			else
-				
+
 			// Catch emerge session start
 			if ( line.contains( "Started emerge on" ) ) {
 				DEBUG_LINE_INFO;
@@ -198,38 +198,40 @@ void History::slotParse()
 				LogSingleton::Instance()->writeLog( line.section( rxTimeStamp, 1, 1 ), EMERGELOG );
 			}
 			else
-				
+
 			// Emerge has started, signal queue to launch progressbar for this package
 			if ( line.contains( ">>> emerge" ) && isEmerging ) {
 				DEBUG_LINE_INFO;
 				if ( rxPackage.search( line ) > -1 ) {
-					int order = rxPackage.cap(2).toInt();
-					int total = rxPackage.cap(4).toInt();
+					//int order = rxPackage.cap(2).toInt();
+					//int total = rxPackage.cap(4).toInt();
 					QString package = rxPackage.cap(6);
-					QueueSingleton::Instance()->emergePackageStart( package, order, total );
+					//TODO Figure out what order and total were intended for
+					QueueSingleton::Instance()->emergePackageStart( package/*, order, total */);
 				}
 				else
 					kdWarning(0) << QString("Can not parse package emerge start in %1: %2")
 					.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
 			}
-			else 
+			else
 
 			// Emerge has completed, signal queue to mark package as installed
 			if ( line.contains( "::: completed emerge " ) && isEmerging ) {
 				scanELog();
-				
+
 				if ( rxPackage.search( line ) > -1 ) {
-					int order = rxPackage.cap(2).toInt();
-					int total = rxPackage.cap(4).toInt();
+					//int order = rxPackage.cap(2).toInt();
+					//int total = rxPackage.cap(4).toInt();
 					QString package = rxPackage.cap(6);
-					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
+					//TODO Figure out what order and total were intended for
+					QueueSingleton::Instance()->emergePackageComplete( package/*, order, total */);
 					PortageSingleton::Instance()->addInstalledPackage( package );
 					emit signalHistoryChanged();
 				}
 				else
 					kdWarning(0) << QString("Can not parse package emerge complete in %1: %2")
 									.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
-				
+
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
@@ -265,11 +267,11 @@ void History::slotParse()
 			if ( emergeLine.contains( "terminating." ) ) {
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n( "Done." ) );
 				LogSingleton::Instance()->writeLog( i18n( "Done." ), EMERGELOG );
-				
+
 				if ( syncDone ) {
 					syncDone = false;
 					SignalistSingleton::Instance()->syncDone();
-					
+
 					// Store this sync duration for progressbar estimate
 					KurooDBSingleton::Instance()->setKurooDbMeta( "syncDuration", QString::number( m_syncTime.secsTo( QTime::currentTime() ) ) );
 				}
@@ -280,13 +282,13 @@ void History::slotParse()
 				emergeLine.replace( "Finished. Cleaning up", i18n( "Finished. Cleaning up" ) );
 				emergeLine.replace( "exiting successfully", i18n( "Exiting successfully" ) );
 				emergeLine.replace( "terminating", i18n( "Terminating" ) );
-				
+
 				KurooStatusBar::instance()->setProgressStatus( QString::null, emergeLine );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
 			}
 		}
 	}
-	
+
 	// Update history
 	if ( !emergeLines.isEmpty() )
 		slotScanHistory( emergeLines );
@@ -307,7 +309,7 @@ void History::updateStatistics()
 void History::appendEmergeInfo()
 {
 	DEBUG_LINE_INFO;
-	
+
 	QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
 	if ( !einfo.isEmpty() )
 		KurooDBSingleton::Instance()->addEmergeInfo( einfo );
@@ -328,7 +330,7 @@ const QStringList History::allMergeHistory()
 void History::loadTimeStatistics()
 {
 	DEBUG_LINE_INFO;
-	
+
 	m_statisticsMap.clear();
 	const QStringList timePackageList = KurooDBSingleton::Instance()->allStatistic();
 	foreach ( timePackageList ) {
@@ -380,7 +382,7 @@ void History::scanELog()
 	QDir eLogDir( KurooConfig::dirELog() );
 	eLogDir.setFilter( QDir::Files | QDir::NoSymLinks );
 	eLogDir.setSorting( QDir::Time );
-	
+
 	eLog elog;
 	m_eLogs.clear();
 	const QFileInfoList* elogList = eLogDir.entryInfoList();

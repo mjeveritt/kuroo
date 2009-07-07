@@ -55,10 +55,10 @@ public:
 
 	virtual QStringList query( const QString& /* statement */) = 0;
 	virtual QString		singleQuery( const QString& /* statement */) = 0;
-	virtual int 		insert( const QString& /* statement */) = 0;
-	inline const bool 	isInitialized() const { return m_initialized; }
-	virtual bool 		isConnected() const = 0;
-	inline virtual const 	QString lastError() const { return "None"; }
+	virtual int		insert( const QString& /* statement */) = 0;
+	inline bool		isInitialized() const { return m_initialized; }
+	virtual bool		isConnected() const = 0;
+	inline virtual const	QString lastError() const { return "None"; }
 
 protected:
 	bool 				m_initialized;
@@ -73,7 +73,7 @@ public:
 
 	QStringList 		query( const QString& /* statement */ );
 	QString		 	singleQuery( const QString& /* statement */ );
-	int 			insert( const QString& /* statement */ );
+	int			insert( const QString& /* statement */ );
 	inline bool 		isConnected()const { return true; }
 
 private:

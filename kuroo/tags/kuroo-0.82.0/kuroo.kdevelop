@@ -3,7 +3,7 @@
   <general>
     <author>karye</author>
     <email>karye@users.sourceforge.net</email>
-    <version>0.82</version>
+    <version>0.82.0</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -12,10 +12,10 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts/>
     <versioncontrol>kdevsubversion</versioncontrol>
-    <defaultencoding/>
+    <defaultencoding></defaultencoding>
     <projectname>kuroo</projectname>
   </general>
   <kdevfileview>
@@ -25,8 +25,6 @@
       <group pattern="*.png" name="Icons" />
       <group pattern="*.po;*.ts" name="Translations" />
       <group pattern="*" name="Others" />
-      <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
@@ -76,10 +74,10 @@
     <general>
       <dbgshell>libtool</dbgshell>
       <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -103,26 +101,37 @@
     <make>
       <envvars>
         <envvar value="2.5" name="WANT_AUTOCONF" />
-        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
+        <envvar value="1.6" name="WANT_AUTOMAKE" />
       </envvars>
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <runmultiplejobs>false</runmultiplejobs>
     </make>
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>src/kuroo</mainprogram>
-      <programargs/>
+      <mainprogram>kuroo</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
       <runarguments>
         <kuroo/>
       </runarguments>
+      <debugarguments>
+        <kuroo/>
+      </debugarguments>
+      <cwd>
+        <kuroo>/home/aschenck/Desktop/kuroo/kuroo/trunk/debug/./src</kuroo>
+      </cwd>
+      <globaldebugarguments></globaldebugarguments>
+      <globalcwd>debug</globalcwd>
+      <useglobalprogram>false</useglobalprogram>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
@@ -143,15 +152,13 @@
         <cxxcompilerbinary/>
         <f77compilerbinary/>
         <cflags/>
-        <cxxflags>-O0 -g3</cxxflags>
+        <cxxflags>-O0 -pedantic -Wall -g3</cxxflags>
         <f77flags/>
       </default>
     </configurations>
   </kdevautoproject>
   <kdevcppsupport>
-    <references>
-      <pcs>automatic_%2Fhome%2Faschenck%2FDesktop%2Ftrunk</pcs>
-    </references>
+    <references/>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>
@@ -180,7 +187,7 @@
       <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -213,8 +220,9 @@
     </filetemplates>
   </cppsupportpart>
   <ctagspart>
-    <customArguments/>
-    <customTagfilePath/>
+    <customArguments></customArguments>
+    <customTagfilePath>tags</customTagfilePath>
+    <activeTagsFiles/>
   </ctagspart>
   <kdevdocumentation>
     <projectdoc>

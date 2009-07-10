@@ -140,19 +140,19 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	
 	pos = 0; // pos is the start index for number searches
 	do {
-		rxNumber.search( m_version, pos );
+        rxNumber.indexIn( m_version, pos );
 		thisNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
-		rxNumber.search( otherVersion, pos );
+        rxNumber.indexIn( otherVersion, pos );
 		thatNum = ( const_cast<PackageVersion*>(this) )->rxNumber.cap(0);
 		
 		// Fix so '0.1.0 > 0.09.0' as '0.10.0 > 0.09.0'
 		if ( thisNum.length() > thatNum.length() ) {
 			if ( thisNum.startsWith( "0" ) )
-				thatNum = thatNum.leftJustify( thisNum.length(), '0' );
+				thatNum = thatNum.leftJustified( thisNum.length(), '0' );
 		}
 		else {
 			if ( thatNum.startsWith( "0" ) )
-				thisNum = thisNum.leftJustify( thatNum.length(), '0' );
+				thisNum = thisNum.leftJustified( thatNum.length(), '0' );
 		}
 		
 		if ( thisNum.isEmpty() || thatNum.isEmpty() )
@@ -319,7 +319,7 @@ int PackageVersion::stability( const QString& arch ) const
 int PackageVersion::revisionNumber( const QString& versionString, int* foundPos ) const
 {
 	// search for a possible revision
-	int pos = rxRevision.search( versionString );
+    int pos = rxRevision.indexIn( versionString );
 	
 	// return the position inside the string
 	if ( foundPos != NULL )
@@ -353,7 +353,7 @@ int PackageVersion::revisionNumber( const QString& versionString, int* foundPos 
 long PackageVersion::suffixNumber( const QString& versionString, int* foundPos ) const
 {
 	// search for a possible suffix
-	int pos = rxSuffix.search( versionString );
+    int pos = rxSuffix.indexIn( versionString );
 	
 	if ( foundPos != NULL ) // return the position inside the string
 		*foundPos = pos;
@@ -401,7 +401,7 @@ long PackageVersion::suffixNumber( const QString& versionString, int* foundPos )
 int PackageVersion::trailingCharNumber( const QString& versionString, int* foundPos ) const
 {
 	// search for a possible trailing character
-	int pos = rxTrailingChar.search( versionString );
+    int pos = rxTrailingChar.indexIn( versionString );
 	if ( pos != -1 )
 		pos++; // because the regexp starts one character left
 	// of the actual position
@@ -412,7 +412,7 @@ int PackageVersion::trailingCharNumber( const QString& versionString, int* found
 	if ( pos == -1 ) // no trailing character, so return 0
 		return 0;
 	else // has a trailing character, get its number
-		return (int) versionString.at(pos).latin1();
+		return (int) versionString.at(pos).toLatin1();
 }
 
 

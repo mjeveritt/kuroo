@@ -21,9 +21,9 @@
 #ifndef PACKAGELISTVIEW_H
 #define PACKAGELISTVIEW_H
 
-#include <klistview.h>
-
-#include <qdict.h>
+#include <QTreeWidget>
+#include <QMap>
+#include <QList>
 
 class PackageItem;
 
@@ -31,7 +31,7 @@ class PackageItem;
  * @class PackageListView
  * @short Base class for packages listviews.
  */
-class PackageListView : public KListView
+class PackageListView : public QTreeWidget
 {
 Q_OBJECT
 public:
@@ -57,18 +57,18 @@ public:
 	void					nextPackage( const bool& isPrevious );
 	
 protected slots:
-// 	void					rollOver( QListViewItem* item );
+// 	void					rollOver( QTreeWidgetItem* item );
 	void					setPackageFocus( const QString& id );
 	virtual void 				indexPackage( const QString& id, PackageItem *item );
 	
 protected:
-	QDict<PackageItem>			m_packageIndex;
+    QMap< QString, PackageItem*>			m_packageIndex;
 	
 signals:
 // 	void					signalCurrentChanged();
 	
 private:
-	QListViewItem* 				lastItem;
+    QTreeWidgetItem* 				lastItem;
 };
 
 #endif

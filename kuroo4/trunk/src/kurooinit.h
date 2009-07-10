@@ -21,7 +21,8 @@
 #ifndef KUROOINIT_H
 #define KUROOINIT_H
 
-#include <qobject.h>
+#include <QObject>
+#include <KProcess>
 
 class IntroDlg;
 
@@ -33,7 +34,7 @@ class KurooInit : public QObject
 {
 Q_OBJECT
 public:
-	KurooInit( QObject *parent = 0, const char *name = 0 );
+    KurooInit( QObject *parent = 0, const QString& name = 0 );
     ~KurooInit();
 	
 	void 			firstTimeWizard();
@@ -41,8 +42,8 @@ public:
 	void			checkUser();
 	
 private slots:
-	void			slotCollectOutput( KProcIO* eProc );
-	void			slotEmergeInfo( KProcess* );
+    void			slotCollectOutput( KProcess* eProc );
+    void			slotEmergeInfo( KProcess* );
 	
 private:
 	IntroDlg 		*wizardDialog;

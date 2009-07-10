@@ -24,60 +24,58 @@
 #include <stdlib.h>
 
 #include <kapplication.h>
-#include <dcopclient.h>
+//#include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-static const char description[] = I18N_NOOP("Frontend to Gentoo Portage");
+//static const char description[] = I18N_NOOP();
 static const char version[] = "0.82";
-
-static KCmdLineOptions options[] =
-{
-	{ "option <argument>", I18N_NOOP("Initialize Kuroo with init"), 0 }, KCmdLineLastOption
-};
 
 int main( int argc, char **argv )
 {
-	kdDebug() << "Kuroo version=" << version << endl;
+	kDebug() << "Kuroo version=" << version;
 	
-	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
-	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "info@kuroo.org");
-	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "info@kuroo.org");
-	about.addAuthor("David C. Manuelda", I18N_NOOP("Main developer and maintainer"), "StormByte@gmail.com");
-	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
-	about.addCredit("Jan Schnackenberg", I18N_NOOP("German translation"), "jan@schnackenberg.org");
-	about.addCredit("Alexander Reiterer", I18N_NOOP("German translation"), "alexander.reiterer@tuwien.ac.at");
-	about.addCredit("Martin Baranski", I18N_NOOP("German translation"), "eagle@eagle-cage.de");
-	about.addCredit("Matteo Azzali", I18N_NOOP("Italian translation"), "kaioth@tiscalinet.it");
-	about.addCredit("Alexander N. Sørnes", I18N_NOOP("Norwegian translation"), "alex@thehandofagony.com");
-	about.addCredit("Konrad Mantorski", I18N_NOOP("Polish translation"), "konrad@mantorski.com");
-	about.addCredit("Wolfgang Bartelme", I18N_NOOP("Kuroo icons"), "design@bartelme.at");
-	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
-	about.addCredit("Björn Balazs", I18N_NOOP("OpenUsability"), "B@lazs.de");
-	about.addCredit("Florian Graessle", I18N_NOOP("OpenUsability"), "holehan@gmx.de");
+    KAboutData about("kuroo","kuroo", ki18n("Kuroo"), version, ki18n("Frontend to Gentoo Portage"),
+    KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
+    about.addAuthor(ki18n("Karye"), ki18n("Original author and maintainer"), "info@kuroo.org");
+    about.addAuthor(ki18n("David C. Manuelda"), ki18n("Main developer and maintainer"), "StormByte@gmail.com");
+    about.addCredit(ki18n("Gombault Damien"), ki18n("French translation"), "desintegr@gmail.com");
+    about.addCredit(ki18n("Jan Schnackenberg"), ki18n("German translation"), "jan@schnackenberg.org");
+    about.addCredit(ki18n("Alexander Reiterer"), ki18n("German translation"), "alexander.reiterer@tuwien.ac.at");
+    about.addCredit(ki18n("Martin Baranski"), ki18n("German translation"), "eagle@eagle-cage.de");
+    about.addCredit(ki18n("Matteo Azzali"), ki18n("Italian translation"), "kaioth@tiscalinet.it");
+    about.addCredit(ki18n("Alexander N. Sørnes"), ki18n("Norwegian translation"), "alex@thehandofagony.com");
+    about.addCredit(ki18n("Konrad Mantorski"), ki18n("Polish translation"), "konrad@mantorski.com");
+    about.addCredit(ki18n("Wolfgang Bartelme"), ki18n("Kuroo icons"), "design@bartelme.at");
+    about.addCredit(ki18n("Jakob Petsovits"), ki18n("Portage version code"), "jpetso@gmx.at");
+    about.addCredit(ki18n("Björn Balazs"), ki18n("OpenUsability"), "B@lazs.de");
+    about.addCredit(ki18n("Florian Graessle"), ki18n("OpenUsability"), "holehan@gmx.de");
 	about.setHomepage("http://kuroo.org");
-	
+
 	KCmdLineArgs::init( argc, argv, &about );
+    KCmdLineOptions options;
+    options.add("option <argument>", ki18n("Initialize Kuroo with init") );
 	KCmdLineArgs::addCmdLineOptions( options );
+
 	KApplication app;
 	
-    // register ourselves as a dcop client
+    /*// register ourselves as a dcop client
 	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
-		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
+		kDebug() << I18N_NOOP("Kuroo is already running!");
 		exit(0);
 	}
 	
-	app.dcopClient()->registerAs( app.name(), false );
+    app.dcopClient()->registerAs( app.name(), false );*/
 	
 	KurooConfig::setHardVersion( version );
-	KurooConfig::writeConfig();
+    //KurooConfig::writeConfig();
 	
-	app.dcopClient()->setAcceptCalls( true );
+    //app.dcopClient()->setAcceptCalls( true );
 	
 	// see if we are starting with session management
-	if ( app.isRestored() ) {
+	if ( app.isSessionRestored() ) {
 		RESTORE( Kuroo );
 	}
 	else {

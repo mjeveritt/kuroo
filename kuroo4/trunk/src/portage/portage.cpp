@@ -26,6 +26,8 @@
 #include <kmessagebox.h>
 
 #include <unistd.h>
+//Added by qt3to4:
+#include <Q3TextStream>
 
 /**
  * @class AddInstalledPackageJob
@@ -40,7 +42,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			kWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -53,7 +55,7 @@ public:
 		
 		if ( id.isEmpty() ) {
 			
-			kdWarning(0) << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
+			kWarning(0) << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
@@ -98,7 +100,7 @@ public:
 		
 		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kdWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			kWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
 		}
 		QString category = parts[0];
@@ -109,7 +111,7 @@ public:
 			"name = '%1' AND category = '%2' LIMIT 1;").arg( name ).arg( category ), m_db );
 		
 		if ( id.isEmpty() ) {
-			kdWarning(0) << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
+			kWarning(0) << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
@@ -305,7 +307,7 @@ bool Portage::slotScan()
 			break;
 		
 		if ( maxLoops-- == 0 ) {
-			kdWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
+			kWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
 			break;
 		}
 	}
@@ -349,16 +351,16 @@ void Portage::loadWorld()
 	m_mapWorld.clear();
 	
 	QFile file( KurooConfig::fileWorld() );
-	if ( file.open( IO_ReadOnly ) ) {
-		QTextStream stream( &file );
+	if ( file.open( QIODevice::ReadOnly ) ) {
+		Q3TextStream stream( &file );
 		while ( !stream.atEnd() ) {
 			QString package = stream.readLine();
-			m_mapWorld[ package.stripWhiteSpace() ] = QString::null;
+			m_mapWorld[ package.trimmed() ] = QString::null;
 		}
 		emit signalWorldChanged();
 	}
 	else
-		kdError(0) << "Loading packages in world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
+		kError(0) << "Loading packages in world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
 }
 
 /**
@@ -379,8 +381,8 @@ void Portage::appendWorld( const QStringList& packageList )
 {
 	// Check is world is writable
 	QFile file( KurooConfig::fileWorld() );
-	if ( !file.open( IO_WriteOnly ) ) {
-		kdError(0) << "Adding packages to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+	if ( !file.open( QIODevice::WriteOnly ) ) {
+		kError(0) << "Adding packages to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
 		return;
 	}
 	
@@ -388,11 +390,11 @@ void Portage::appendWorld( const QStringList& packageList )
 	QMap<QString, QString> map = m_mapWorld;
 	
 	// Add/update package into world map
-	foreach ( packageList )
-		m_mapWorld.insert( *it, QString::null );
+    foreach ( QString pkg, packageList )
+        m_mapWorld.insert( pkg, QString::null );
 	
 	// Update world file
-	QTextStream stream( &file );
+	Q3TextStream stream( &file );
 	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
 		stream << it.key() << "\n";
 	file.close();
@@ -408,17 +410,17 @@ void Portage::removeFromWorld( const QStringList& packageList )
 {
 	// Check is world is writable
 	QFile file( KurooConfig::fileWorld() );
-	if ( !file.open( IO_WriteOnly ) ) {
-		kdError(0) << "Removing packages from world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+	if ( !file.open( QIODevice::WriteOnly ) ) {
+		kError(0) << "Removing packages from world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
 		return;
 	}
 	
 	// Make a copy of world map
-	foreach ( packageList )
-		m_mapWorld.remove( *it );
+    foreach( QString pkg, packageList )
+        m_mapWorld.remove( pkg );
 	
 	// Update world file
-	QTextStream stream( &file );
+	Q3TextStream stream( &file );
 	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
 		stream << it.key() << "\n";
 	file.close();
@@ -438,8 +440,8 @@ void Portage::removeFromWorld( const QStringList& packageList )
 void Portage::pretendPackageList( const QStringList& packageIdList )
 {	
 	QStringList packageList;
-	foreach ( packageIdList )
-		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
+    foreach ( QString id, packageIdList )
+        packageList += KurooDBSingleton::Instance()->category( id ) + "/" + KurooDBSingleton::Instance()->package( id );
 	
 	EmergeSingleton::Instance()->pretend( packageList );
 }
@@ -452,8 +454,8 @@ void Portage::pretendPackageList( const QStringList& packageIdList )
 void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
 {
 	QStringList packageList;
-	foreach ( packageIdList )
-		packageList += KurooDBSingleton::Instance()->category( *it ) + "/" + KurooDBSingleton::Instance()->package( *it );
+    foreach ( QString id, packageIdList )
+        packageList += KurooDBSingleton::Instance()->category( id ) + "/" + KurooDBSingleton::Instance()->package( id );
 	
 	EmergeSingleton::Instance()->unmerge( packageList );
 }

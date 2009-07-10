@@ -21,43 +21,43 @@
 #ifndef VERSIONVIEW_H
 #define VERSIONVIEW_H
 
-#include <klistview.h>
+#include <QTreeWidget>
 
-class VersionView : public KListView
+class VersionView : public QTreeWidget
 {
 Q_OBJECT
 public:
-    VersionView( QWidget *parent = 0, const char *name = 0 );
+    VersionView( QWidget *parent = 0, const QString& name = 0 );
     ~VersionView();
 
     /**
      * @class VersionViewItem
      * @short Subclass for formating text.
      */
-    class 		VersionItem : public KListViewItem
+    class 		VersionItem : public QTreeWidgetItem
     {
 	    public:
-		    VersionItem( QListView* parent, const char* version, const bool& isInstalled, const int& stability );
+            VersionItem( QTreeWidget* parent, const QString& version, const bool& isInstalled, const int& stability );
 		    ~VersionItem();
 	
 		    inline bool	isInstalled() { return m_isInstalled; }
 	
 	    protected:
-		    void 	paintCell( QPainter *p, const QColorGroup &cg, const int& column, const int& width, const int& alignment );
+            void 	paintCell( QPainter *p, const QPalette& palette, const int& column, const int& width, const int& alignment );
 	
 	    private:
 		    bool	m_isInstalled;
 		    int		m_stability;
     };
 	
-	void		insertItem( const char* version, const char* stability, const char* size, const bool& isInstalled );
+    void		insertItem( const QString& version, const QString& stability, const QString& size, const bool& isInstalled );
 	void		usedForInstallation( const QString& version );
-	inline int	hasUpdate() const { return m_installedIndex - m_emergeIndex; }
+    inline bool	hasUpdate() const { return m_installedIndex != m_emergeIndex; }
 	inline QString 	updateVersion() const { return m_emergeVersion; }
 	
 private:
 	QString		m_emergeVersion;
-	int			m_installedIndex, m_emergeIndex;
+    QModelIndex	m_installedIndex, m_emergeIndex;
 };
 
 #endif

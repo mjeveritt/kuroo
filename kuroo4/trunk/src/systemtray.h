@@ -21,22 +21,22 @@
 #ifndef SYSTEMTRAY_H
 #define SYSTEMTRAY_H
 
-#include <ksystemtray.h>
+#include <KSystemTrayIcon>
 
 
 /**
  * @class SystemTray
  * @short Singleton object that creates the kuroo systemtray icon and actions.
  */
-class SystemTray : public KSystemTray
+class SystemTray : public KSystemTrayIcon
 {
 Q_OBJECT
 	static SystemTray* s_instance;
-	
+
 public:
     SystemTray( QWidget *parent = 0 );
     ~SystemTray();
-	
+
 	static SystemTray* 	instance() { return s_instance; }
 	void				activate();
 	void				inactivate();

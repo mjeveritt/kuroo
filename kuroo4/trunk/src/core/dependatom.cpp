@@ -24,6 +24,7 @@
 #include "dependatom.h"
 #include "packageversion.h"
 #include "packageitem.h"
+#include <QList>
 
 // capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
 enum Positions {
@@ -82,7 +83,7 @@ DependAtom::~DependAtom()
  */
 bool DependAtom::parse( const QString& atom )
 {
-// 	kdDebug() << "atom=" << atom << LINE_INFO;
+// 	kDebug() << "atom=" << atom << LINE_INFO;
 	
 	// Do the regexp match, which also prepares for text capture
 	if ( !rxAtom.exactMatch( atom ) ) {
@@ -118,9 +119,9 @@ bool DependAtom::parse( const QString& atom )
  * The searched packages are the ones from the package list.
  * If no matching package versions are found, an empty list is returned.
  */
-QValueList<PackageVersion*> DependAtom::matchingVersions()
+QList<PackageVersion*> DependAtom::matchingVersions()
 {
-	QValueList<PackageVersion*> matchingVersions;
+        QList<PackageVersion*> matchingVersions;
 	
 	if ( m_package == NULL || !m_matches )
 		return matchingVersions; // return an empty list
@@ -157,14 +158,14 @@ QValueList<PackageVersion*> DependAtom::matchingVersions()
 		matchAllRevisions = true;
 	}
 	
-	QValueList<PackageVersion*> versions = m_portagePackage->versionList();
+        QList<PackageVersion*> versions = m_portagePackage->versionList();
 
-// 	kdDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan << endl;
+// 	kDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
 	
 	// So, let's iterate through the versions to check if they match or not
-	for ( QValueList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+        for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 		
-// 		kdDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
+// 		kDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
 		
 		if ( ( matchAllVersions ) ||

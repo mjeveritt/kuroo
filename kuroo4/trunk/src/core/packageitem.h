@@ -21,28 +21,27 @@
 #ifndef PACKAGEITEM_H
 #define PACKAGEITEM_H
 
-#include <klistview.h>
-
-#include <qobject.h>
+#include <QObject>
+#include <QTreeWidget>
 
 class PackageVersion;
 class DependAtom;
 
 /**
  * @class PackageItem
- * @short KListViewItem subclass
+ * @short QTreeWidget subclass
  */
-class PackageItem : public KListViewItem
+class PackageItem : public QTreeWidgetItem
 {
 public:
-	PackageItem( QListView *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
-	PackageItem( QListViewItem *parent, const char* name, const QString& id, const QString& category, const QString& description, const int status );
+        PackageItem( QTreeWidget *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
+        PackageItem( QTreeWidgetItem *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
 	~PackageItem();
 	/**
 	 * Package status describing if this package is installed or not.
 	 * @return status
 	 */
-	inline const int					status() const { return m_status; }
+    inline int					status() const { return m_status; }
 	/**
 	 * Package db id.
 	 * @return id
@@ -92,15 +91,15 @@ public:
 	void 							initVersions();
 	/**
 	 * Return list of versions.
-	 * @return QValueList<PackageVersion*>
+         * @return QList<PackageVersion*>
 	 */
-	inline QValueList<PackageVersion*> 			versionList()const  { return m_versions; }
+        inline QList<PackageVersion*> 			versionList()const  { return m_versions; }
 	/**
 	 * Return map of versions - faster find.
 	 * @return QMap<QString, PackageVersion*>
 	 */
 	inline QMap<QString,PackageVersion*> 			versionMap() const { return m_versionMap; }
-	QValueList<PackageVersion*> 				sortedVersionList();
+        QList<PackageVersion*> 				sortedVersionList();
 	void							resetDetailedInfo();
 
 	void							parsePackageVersions();
@@ -128,13 +127,13 @@ public:
 	 * Returns list emergeable versions in html-format.
 	 */
 	inline const QString&					linesEmerge() const { return m_linesEmerge; }
-	inline const bool					isInArch() const { return m_isInArch; }
+    inline bool					isInArch() const { return m_isInArch; }
 	
 protected:
-	void			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+        void paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment );
 	
 private:
-	QListView						*m_parent;
+        QTreeWidget						*m_parent;
 	
 	// Is the mouse pointer over this package
 	bool							m_isMouseOver;
@@ -167,7 +166,7 @@ private:
 	bool							m_isInitialized;
 	
 	// Valuelist with all versions and their data
-	QValueList<PackageVersion*>				m_versions;
+        QList<PackageVersion*>				m_versions;
 	
 	// Alternatively map with all versions and their data
 	QMap<QString, PackageVersion*>				m_versionMap;

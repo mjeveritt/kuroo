@@ -26,8 +26,8 @@
 #include "packageversion.h"
 #include "dependatom.h"
 
-#include <qheader.h>
-#include <qmap.h>
+#include <QMap>
+#include <QTreeWidget>
 
 #include <kconfig.h>
 #include <kmessagebox.h>
@@ -37,33 +37,33 @@
  * @class PortageListView::PortageItem
  * @short Package item with all versions.
  */
-PortageListView::PortageItem::PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, 
+PortageListView::PortageItem::PortageItem( QTreeWidget* parent, const QString& name, const QString &id, const QString& category,
                                            const QString& description, const int status )
 	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
 {
-	if ( this->isVisible() && QueueSingleton::Instance()->isQueued( id ) )
+    if ( !this->isHidden() && QueueSingleton::Instance()->isQueued( id ) )
 		setQueued( true );
 }
 
 /**
  * Set icons when package is visible.
  */
-void PortageListView::PortageItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
+void PortageListView::PortageItem::paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment )
 {
-	if ( this->isVisible() ) {
+    if ( !this->isHidden() ) {
 		
 		if ( column == 3 ) {
 			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
 				setQueued( true );
-				setPixmap( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
+                setIcon( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
 			}
 			else {
 				setQueued( false );
-				setPixmap( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
+                setIcon( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
 			}
 		}
 		
-		PackageItem::paintCell( painter, colorgroup, column, width, alignment );
+        PackageItem::paintCell( painter, palette, column, width, alignment );
 	}
 }
 
@@ -77,40 +77,42 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name )
 {
 	// Setup geometry
-	addColumn( i18n( "Package" ), 150 );
-	addColumn( "" );
-	addColumn( "", 25 );
-	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
-	setColumnAlignment( 2, Qt::AlignHCenter );
-	addColumn( QString::null, 25 );
-	header()->setLabel( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ), "" );
-	setColumnAlignment( 2, Qt::AlignHCenter );
-	addColumn( i18n( "Update" ), 80 );
-	addColumn( i18n( "Description" ), 200 );
+    QTreeWidgetItem header;
+    header.setText( 0, i18n( "Package" ) );
+    header.setText( 1, "" );
+    //header.setText( 2, "" );
+    header.setIcon( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ) );
+    //header.setTextAlignment( 2, Qt::AlignHCenter );
+    header.setIcon( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ) );
+    //setColumnAlignment( 2, Qt::AlignHCenter );
+    header.setText( 4, i18n( "Update" ) );
+    header.setText( 5, i18n( "Description" ) );
+
+    setHeaderItem( &header );
 	
-	setColumnWidthMode( 0, QListView::Manual );
-	setColumnWidthMode( 1, QListView::Manual );
-	setColumnWidthMode( 2, QListView::Manual );
-	setColumnWidthMode( 3, QListView::Manual );
-	setColumnWidthMode( 4, QListView::Manual );
+    /*setColumnWidthMode( 0, QTreeWidget::Manual );
+    setColumnWidthMode( 1, QTreeWidget::Manual );
+    setColumnWidthMode( 2, QTreeWidget::Manual );
+    setColumnWidthMode( 3, QTreeWidget::Manual );
+    setColumnWidthMode( 4, QTreeWidget::Manual );*/
 	
 	setProperty( "selectionMode", "Extended" );
-	setShowSortIndicator( true );
-	setItemMargin( 1 );
+    //setShowSortIndicator( true );
+    //setItemMargin( 1 );
 	setRootIsDecorated( false );
-	setFullWidth( true );
+    //setFullWidth( true );
 	
 	if ( KurooConfig::installedColumn() ) {
-		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
-		setColumnAlignment( 1, Qt::AlignHCenter );
+        header.setIcon( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ) );
+        //setColumnAlignment( 1, Qt::AlignHCenter );
 		setColumnWidth( 1, 25 );
 	}
 	else
 		hideColumn( 1 );
 	
-	header()->setResizeEnabled( false, 1 );
-	header()->setResizeEnabled( false, 2 );
-	header()->setResizeEnabled( false, 3 );
+    /*header.setResizeEnabled( false, 1 );
+    header.setResizeEnabled( false, 2 );
+    header.setResizeEnabled( false, 3 );*/
 	
 	// Refresh packages when packages are added/removed to Queue or get installed
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
@@ -118,7 +120,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	// Create text-widget warning for "No packages found.."
 	noHitsWarning = new KTextBrowser( this );
 	noHitsWarning->setGeometry( QRect( 20, 50, 400, 300 ) );
-	noHitsWarning->setFrameShape( QFrame::NoFrame );
+    //noHitsWarning->setFrameShape( Q3Frame::NoFrame );
 }
 
 PortageListView::~PortageListView()
@@ -159,9 +161,9 @@ PortageListView::PortageItem* PortageListView::currentPortagePackage()
 void PortageListView::setHeader( const QString& total )
 {
 	if ( !total.isEmpty() )
-		header()->setLabel( 0, i18n("Package") + " (" + total + ")" );
+        headerItem()->setText( 0, i18n("Package") + " (" + total + ")" );
 	else
-		header()->setLabel( 0, i18n("Package") );
+        headerItem()->setText( 0, i18n("Package") );
 }
 
 /**
@@ -176,19 +178,20 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	QString currentId = this->currentId();
 
 	// Disable sorting for faster inserting. Packages are already sorted alfabetically.
-	setSorting( -1 );
+    //setSorting( -1 );
 	resetListView();
 	setHeader( QString::null );
 	
 	// Don't load all packages, only first ROWLIMIT
 	int packageCount = packageList.size() / 6;
-	foreach ( packageList ) {
-		QString id = *it++;
-		QString name = *it++;
-		QString category = *it++;
-		QString description = *it++;
-		QString status = *it++;
-		QString update = *it;
+    QListIterator<QString> it( packageList );
+    while( it.hasNext() ) {
+        QString id = it.next();
+        QString name = it.next();
+        QString category = it.next();
+        QString description = it.next();
+        QString status = it.next();
+        QString update = it.next();
 
 		PortageItem* item = new PortageItem( this, name, id, category, description, status.toInt() );
 		item->setText( 4, update );
@@ -196,17 +199,18 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		
 		indexPackage( id, item );
 	}
-	setSorting( 0 );
+    //setSorting( 0 );
 	setHeader( QString::number( packageCount ) );
 	setPackageFocus( currentId );
 	
 	// Cannot have current changed for only one package so emit manually
-	if ( packageCount == 1 )
-		emit currentChanged( 0 );
+    if ( packageCount == 1 ) {
+		//emit currentChanged( 0 );
+    }
 	
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kdDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): " << endl;
+// 	kDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): ";
 	
 	return packageCount;
 }

@@ -23,11 +23,11 @@
 
 #include <qobject.h>
 
-#include "portagebase.h"
+#include "ui_portagebase.h"
 #include "scanportagejob.h"
 
 class CategoriesListView;
-class KPopupMenu;
+class KMenu;
 class PackageInspector;
 class UninstallInspector;
 
@@ -35,7 +35,7 @@ class UninstallInspector;
  * @class PortageTab
  * @short Package view with filters.
  */
-class PortageTab : public PortageBase
+class PortageTab : public QWidget, public Ui::PortageBase
 {
 Q_OBJECT
 public:
@@ -69,7 +69,7 @@ private slots:
 	
 	void				slotAdvanced();
 	void				slotPackage();
-	void				contextMenu( KListView* listView, QListViewItem* item, const QPoint& point );
+    void				contextMenu( QTreeWidget* listView, QTreeWidgetItem* item, const QPoint& point );
 	
 private:
 	void				processPackage( bool viewInspector );
@@ -83,7 +83,7 @@ private:
 	int				m_delayFilters;
 	
 	// rmb
-	KPopupMenu 			*menu;
+	KMenu 			*menu;
 	
 	// The package inspector
 	PackageInspector		*m_packageInspector;

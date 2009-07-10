@@ -21,15 +21,14 @@
 #ifndef DEPENDENCYVIEW_H
 #define DEPENDENCYVIEW_H
 
-#include <qregexp.h>
-
-#include <klistview.h>
+#include <QRegExp>
+#include <QTreeWidget>
 
 /**
  * @class DependencyView
  * @short Listview to build dependency-tree view.
  */
-class DependencyView : public KListView
+class DependencyView : public QTreeWidget
 {
 Q_OBJECT
 public:
@@ -41,7 +40,7 @@ public:
 	void			insertDependAtoms( const QStringList& dependAtomsList );
 	
 private slots:
-	void			slotPackageClicked( QListViewItem* item );
+        void			slotPackageClicked( QTreeWidgetItem* item );
 	
 private:
 	

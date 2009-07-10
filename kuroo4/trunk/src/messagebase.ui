@@ -1,55 +1,55 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>MessageBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>MessageBase</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>361</width>
-            <height>228</height>
-        </rect>
-    </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>messageLabel</cstring>
-            </property>
-            <property name="margin">
-                <number>4</number>
-            </property>
-            <property name="text">
-                <string>Warning!</string>
-            </property>
-        </widget>
-        <widget class="KTextBrowser" row="1" column="0">
-            <property name="name">
-                <cstring>messageText</cstring>
-            </property>
-            <property name="textFormat">
-                <enum>RichText</enum>
-            </property>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>ktextbrowser.h</includehint>
-</includehints>
-</UI>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MessageBase</class>
+ <widget class="QWidget" name="MessageBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>361</width>
+    <height>228</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form1</string>
+  </property>
+  <layout class="QGridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QLabel" name="messageLabel">
+     <property name="text">
+      <string>Warning!</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="margin">
+      <number>4</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="KTextBrowser" name="messageText"/>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KTextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>ktextbrowser.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">ktextbrowser.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

@@ -45,15 +45,15 @@ public:
 	/**
 	 * Kuroo widget id so MessageBox's can be made modal.
 	 */
-	inline const long&		kurooViewId() const { return	m_wId; }
+        //inline const WId&		kurooViewId() const { return	m_wId; }
 	/**
 	 * Return KDE background color-theme.
 	 */
-	inline const QString&		bgHexColor() const { return m_bgColor; }
+    //inline const QString&		bgHexColor() const { return m_bgColor; }
 	/**
 	 * Return KDE foreground color-theme.
 	 */
-	inline const QString&		fgHexColor() const { return m_fgColor; }
+    //inline const QString&		fgHexColor() const { return m_fgColor; }
 	const QString 			formatTime( const long& ) const;
 	
 private:
@@ -61,11 +61,11 @@ private:
 	QObject*				m_parent;
 	
 	// Kuroo widget id so MessageBox's can be made modal
-	long					m_wId;
+      //  WId					m_wId;
 	
-	QString					m_bgColor;
+    /*QString					m_bgColor;
 	
-	QString					m_fgColor;
+    QString					m_fgColor;*/
 };
 
 #endif

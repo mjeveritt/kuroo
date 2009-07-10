@@ -21,7 +21,7 @@
 #include "common.h"
 #include "mainwindow.h"
 
-#include <qobjectlist.h>
+#include <qobject.h>
 
 #include <kdebug.h>
 
@@ -29,9 +29,10 @@
  * @class MainWindow
  * @short Subclassed KMainWindow to accomodate statusBar containing progressbar.
  */
-MainWindow::MainWindow( QWidget *parent, const char *name )
-	: KMainWindow( parent, name ), sb( 0 )
+MainWindow::MainWindow( QWidget *parent, const QString& name )
+	: KMainWindow( parent ), sb( 0 )
 {
+    //setCaption("")
 }
 
 MainWindow::~MainWindow()

@@ -25,9 +25,9 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qfileinfo.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 /**
  * @class ScanHistoryJob
@@ -62,7 +62,7 @@ void ScanHistoryJob::completeJob()
 bool ScanHistoryJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
-		kdError(0) << "Parsing emerge.log. Can not connect to database" << LINE_INFO;
+		kError(0) << "Parsing emerge.log. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 	
@@ -79,41 +79,41 @@ bool ScanHistoryJob::doJob()
 	eLog elog;
 	QString einfo;
 	
-	foreach ( m_logLines ) {
+    foreach ( QString line, m_logLines ) {
 		
 		// Abort the scan
 		if ( isAborted() ) {
-			kdWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
+			kWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
 		
-		QString emergeLine = QString(*it).section( rxTimeStamp, 1, 1 );
-		timeStamp = QString(*it).section( ": " + emergeLine, 0, 0 );
+        QString emergeLine = QString( line ).section( rxTimeStamp, 1, 1 );
+        timeStamp = QString( line ).section( ": " + emergeLine, 0, 0 );
 		
 		if ( emergeLine.contains( ">>> emerge" ) ) {
 			uint emergeStart = timeStamp.toUInt();
 			
 			// Collect package and timestamp in map to match for completion
 			QString package;
-			if ( rxPackage.search( emergeLine ) > -1 ) {
+            if ( rxPackage.indexIn( emergeLine ) > -1 ) {
 				package = rxPackage.cap(2);
 				logMap[ package ] = emergeStart;
 			}
 			else
-				kdWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
+				kWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
 		}
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
 				QString package;
-				if ( rxPackage.search( emergeLine ) > -1 ) {
+                if ( rxPackage.indexIn( emergeLine ) > -1 ) {
 					package = rxPackage.cap(2);
 				
 					// Find matching package emerge start entry in map and calculate the emerge duration
 					QMap<QString, uint>::iterator itLogMap = logMap.find( package );
 					if ( itLogMap != logMap.end() ) {
 						isStatisticUpdated = true;
-						uint emergeStart = itLogMap.data();
+                        uint emergeStart = itLogMap.value();
 						uint emergeCompleted = timeStamp.toUInt();
 						int secTime = emergeCompleted - emergeStart;
 						logMap.erase( itLogMap );
@@ -133,10 +133,10 @@ bool ScanHistoryJob::doJob()
 							else
 								einfo = "";
 							
-// 							kdDebug() << "elog.package=" << elog.package << endl;
-// 							kdDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
-// 							kdDebug() << "emergeStart=" << emergeStart << LINE_INFO;
-// 							kdDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
+// 							kDebug() << "elog.package=" << elog.package;
+// 							kDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
+// 							kDebug() << "emergeStart=" << emergeStart << LINE_INFO;
+// 							kDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
 						}
 						
 						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
@@ -150,8 +150,8 @@ bool ScanHistoryJob::doJob()
 								emergeTimeMap.insert( categoryNameString, pItem );
 							}
 							else {
-								itMap.data().add( secTime );
-								itMap.data().inc();
+                                itMap.value().add( secTime );
+                                itMap.value().inc();
 							}
 							
 // 							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
@@ -161,11 +161,11 @@ bool ScanHistoryJob::doJob()
 							    .arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
 						}
 						else
-							kdWarning(0) << "Parsing emerge.log. Can not parse: " << package << LINE_INFO;
+							kWarning(0) << "Parsing emerge.log. Can not parse: " << package << LINE_INFO;
 					}
 				}
 				else
-					kdWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
+					kWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
 			}
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {

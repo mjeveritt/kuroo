@@ -57,13 +57,13 @@ protected:
 class PortageListView::PortageItem : public PackageItem
 {
 public:
-	PortageItem( QListView* parent, const char* name, const QString &id, const QString& category, const QString& description, const int status );
+    PortageItem( QTreeWidget* parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
 	
 private:
-	void							paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+    void							paintCell( QPainter* painter, const QPalette& colorgroup, int column, int width, int alignment );
 	
 protected:
-	QListView						*m_parent;
+    QTreeWidget						*m_parent;
 };
 
 #endif

@@ -38,7 +38,7 @@ class ConfigDialog : public KConfigDialog
 Q_OBJECT
 
 public:
-	ConfigDialog( QWidget *parent, const char *name, KConfigSkeleton *config );
+    ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleton *config );
 	~ConfigDialog();
 	
 private:

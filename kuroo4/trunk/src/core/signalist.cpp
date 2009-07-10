@@ -68,7 +68,7 @@ void Signalist::setKurooBusy( const bool& busy )
 	}
 	else {
 		busySession++;
-		QApplication::setOverrideCursor( KCursor::workingCursor() );
+		QApplication::setOverrideCursor( Qt::BusyCursor );
 	}
 	
 	if ( busySession == 0 ) {

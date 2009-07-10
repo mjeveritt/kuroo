@@ -31,6 +31,9 @@
 #include <qfile.h>
 #include <qimage.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3TextStream>
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -40,6 +43,7 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <kcursor.h>
+#include <krandom.h>
 
 /**
  * @class KurooDB
@@ -77,13 +81,13 @@ QString KurooDB::init ( QObject *parent )
 
 DbConnection *KurooDB::getStaticDbConnection()
 {
-// 	kdDebug() << "KurooDB::getStaticDbConnection-------------" << LINE_INFO;
+// 	kDebug() << "KurooDB::getStaticDbConnection-------------" << LINE_INFO;
 	return m_dbConnPool->getDbConnection();
 }
 
 void KurooDB::returnStaticDbConnection ( DbConnection *conn )
 {
-// 	kdDebug() << "--------------KurooDB::returnStaticDbConnection " << LINE_INFO;
+// 	kDebug() << "--------------KurooDB::returnStaticDbConnection " << LINE_INFO;
 	m_dbConnPool->putDbConnection ( conn );
 }
 
@@ -99,7 +103,7 @@ void KurooDB::destroy()
  */
 QStringList KurooDB::query ( const QString& statement, DbConnection *conn )
 {
-// 	kdDebug() << "Query-start: " << statement << LINE_INFO;
+// 	kDebug() << "Query-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
 
 	DbConnection *dbConn;
@@ -115,7 +119,7 @@ QStringList KurooDB::query ( const QString& statement, DbConnection *conn )
 
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kdDebug() << "SQL-query (" << duration << "s): " << statement << LINE_INFO;
+// 	kDebug() << "SQL-query (" << duration << "s): " << statement << LINE_INFO;
 
 	return values;
 }
@@ -127,7 +131,7 @@ QStringList KurooDB::query ( const QString& statement, DbConnection *conn )
  */
 QString KurooDB::singleQuery ( const QString& statement, DbConnection *conn )
 {
-// 	kdDebug() << "Query-start: " << statement << LINE_INFO;
+// 	kDebug() << "Query-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
 
 	DbConnection *dbConn;
@@ -143,7 +147,7 @@ QString KurooDB::singleQuery ( const QString& statement, DbConnection *conn )
 
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kdDebug() << "SQL-query (" << duration << "s): " << statement << LINE_INFO;
+// 	kDebug() << "SQL-query (" << duration << "s): " << statement << LINE_INFO;
 
 	return value;
 }
@@ -155,7 +159,7 @@ QString KurooDB::singleQuery ( const QString& statement, DbConnection *conn )
  */
 int KurooDB::insert ( const QString& statement, DbConnection *conn )
 {
-// 	kdDebug() << "insert-start: " << statement << LINE_INFO;
+// 	kDebug() << "insert-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
 
 	DbConnection *dbConn;
@@ -171,7 +175,7 @@ int KurooDB::insert ( const QString& statement, DbConnection *conn )
 
 // 	clock_t finish = clock();
 // 	const double duration = (double) (finish - start) / CLOCKS_PER_SEC;
-// 	kdDebug() << "SQL-insert (" << duration << "s): " << statement << LINE_INFO;
+// 	kDebug() << "SQL-insert (" << duration << "s): " << statement << LINE_INFO;
 
 	return id;
 }
@@ -222,7 +226,7 @@ bool KurooDB::isValid()
  */
 void KurooDB::createTables ( DbConnection *conn )
 {
-	kdDebug(0) << "Creating tables" << LINE_INFO;
+	kDebug(0) << "Creating tables" << LINE_INFO;
 	query ( "CREATE TABLE dbInfo ( "
 	        "meta VARCHAR(64), "
 	        "data VARCHAR(64) );"
@@ -350,13 +354,13 @@ void KurooDB::createTables ( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
-	const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
+    /*const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	if ( !historyData.isEmpty() )
 	{
 		QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
-		if ( file.open ( IO_WriteOnly ) )
+		if ( file.open ( QIODevice::WriteOnly ) )
 		{
-			QTextStream stream ( &file );
+			Q3TextStream stream ( &file );
 			foreach ( historyData )
 			{
 				QString timestamp = *it++;
@@ -366,16 +370,16 @@ void KurooDB::backupDb()
 			file.close();
 		}
 		else
-			kdError ( 0 ) << QString ( "Creating backup of history. Writing: %1." ).arg ( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
+			kError ( 0 ) << QString ( "Creating backup of history. Writing: %1." ).arg ( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
 	}
 
 	const QStringList mergeData = query ( "SELECT timestamp, source, destination FROM mergeHistory;" );
 	if ( !mergeData.isEmpty() )
 	{
 		QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
-		if ( file.open ( IO_WriteOnly ) )
+		if ( file.open ( QIODevice::WriteOnly ) )
 		{
-			QTextStream stream ( &file );
+			Q3TextStream stream ( &file );
 			foreach ( mergeData )
 			{
 				QString timestamp = *it++;
@@ -386,8 +390,8 @@ void KurooDB::backupDb()
 			file.close();
 		}
 		else
-			kdError ( 0 ) << QString ( "Creating backup of history. Writing: %1." ).arg ( KurooConfig::fileMergeBackup() ) << LINE_INFO;
-	}
+			kError ( 0 ) << QString ( "Creating backup of history. Writing: %1." ).arg ( KurooConfig::fileMergeBackup() ) << LINE_INFO;
+    }*/
 }
 
 /**
@@ -395,12 +399,12 @@ void KurooDB::backupDb()
  */
 void KurooDB::restoreBackup()
 {
-	// Restore einfo into table history
+    /*// Restore einfo into table history
 	QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
-	QTextStream stream ( &file );
+	Q3TextStream stream ( &file );
 	QStringList lines;
-	if ( !file.open ( IO_ReadOnly ) )
-		kdError ( 0 ) << QString ( "Restoring backup of history. Reading: %1." ).arg ( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
+	if ( !file.open ( QIODevice::ReadOnly ) )
+		kError ( 0 ) << QString ( "Restoring backup of history. Reading: %1." ).arg ( KurooConfig::fileHistoryBackup() ) << LINE_INFO;
 	else
 	{
 		while ( !stream.atEnd() )
@@ -423,8 +427,8 @@ void KurooDB::restoreBackup()
 	file.setName ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
 	stream.setDevice ( &file );
 	lines.clear();
-	if ( !file.open ( IO_ReadOnly ) )
-		kdError ( 0 ) << QString ( "Restoring backup of history. Reading: %1." ).arg ( KurooConfig::fileMergeBackup() ) << LINE_INFO;
+	if ( !file.open ( QIODevice::ReadOnly ) )
+		kError ( 0 ) << QString ( "Restoring backup of history. Reading: %1." ).arg ( KurooConfig::fileMergeBackup() ) << LINE_INFO;
 	else
 	{
 		while ( !stream.atEnd() )
@@ -443,7 +447,7 @@ void KurooDB::restoreBackup()
 			singleQuery ( "INSERT INTO mergeHistory (timestamp, source, destination) "
 			              "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
 		}
-	}
+    }*/
 }
 
 
@@ -505,8 +509,8 @@ const QStringList KurooDB::portageCategories ( int filter, const QString& text )
 	int len;
 
 	// Allow for multiple words match
-	QString textString = escapeString ( text.simplifyWhiteSpace() );
-	QStringList textStringList = QStringList::split ( " ", textString );
+	QString textString = escapeString ( text.simplified() );
+    QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
@@ -550,8 +554,8 @@ const QStringList KurooDB::portageSubCategories ( const QString& categoryId, int
 	int len;
 
 	// Allow for multiple words match
-	QString textString = escapeString ( text.simplifyWhiteSpace() );
-	QStringList textStringList = QStringList::split ( " ", textString );
+	QString textString = escapeString ( text.simplified() );
+    QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
@@ -606,8 +610,8 @@ const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categor
 	int len;
 
 	// Allow for multiple words match
-	QString textString = escapeString ( text.simplifyWhiteSpace() );
-	QStringList textStringList = QStringList::split ( " ", textString );
+	QString textString = escapeString ( text.simplified() );
+    QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
@@ -706,7 +710,7 @@ const QString KurooDB::package ( const QString& id )
 	if ( !name.isEmpty() )
 		return name;
 	else
-		kdWarning ( 0 ) << QString ( "Can not find package in database for id %1." ).arg ( id ) << LINE_INFO;
+		kWarning ( 0 ) << QString ( "Can not find package in database for id %1." ).arg ( id ) << LINE_INFO;
 
 	return QString::null;
 }
@@ -722,7 +726,7 @@ const QString KurooDB::category ( const QString& id )
 	if ( !category.isEmpty() )
 		return category;
 	else
-		kdWarning ( 0 ) << QString ( "Can not find category in database for id %1." ).arg ( id ) << LINE_INFO;
+		kWarning ( 0 ) << QString ( "Can not find category in database for id %1." ).arg ( id ) << LINE_INFO;
 
 	return QString::null;
 }
@@ -744,11 +748,11 @@ const QString KurooDB::packageId ( const QString& package )
 		if ( !id.isEmpty() )
 			return id;
 		else
-			kdWarning ( 0 ) << QString ( "Can not find id in database for package %1/%2." ).arg ( category ).arg ( name ) << LINE_INFO;
+			kWarning ( 0 ) << QString ( "Can not find id in database for package %1/%2." ).arg ( category ).arg ( name ) << LINE_INFO;
 
 	}
 	else
-		kdWarning ( 0 ) << "Querying for package id. Can not parse: " << package << LINE_INFO;
+		kWarning ( 0 ) << "Querying for package id. Can not parse: " << package << LINE_INFO;
 
 	return QString::null;
 }
@@ -1105,23 +1109,21 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection ( SqliteConfig* config )
 		: DbConnection ( config )
 {
-	const QCString path = QString ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas() ).local8Bit();
+    const Q3CString path = QString ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas() ).toLocal8Bit();
 
 	// Open database file and check for correctness
 	m_initialized = false;
 	QFile file ( path );
-	if ( file.open ( IO_ReadOnly ) )
-	{
-		QString format;
-		file.readLine ( format, 50 );
+    if ( file.open ( QIODevice::ReadOnly ) ) {
+        QString format( file.readLine( 50 ) );
 
 		if ( !format.startsWith ( "SQLite format 3" ) )
-			kdWarning ( 0 ) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
+			kWarning ( 0 ) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
 
 		else
 			if ( sqlite3_open ( path, &m_db ) != SQLITE_OK )
 			{
-				kdWarning ( 0 ) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
+				kWarning ( 0 ) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
 				sqlite3_close ( m_db );
 			}
 			else
@@ -1162,11 +1164,11 @@ QStringList SqliteConnection::query ( const QString& statement )
 	sqlite3_stmt* stmt;
 
 	//compile SQL program to virtual machine
-	error = sqlite3_prepare ( m_db, statement.utf8(), statement.length(), &stmt, &tail );
+    error = sqlite3_prepare ( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
 
 	if ( error != SQLITE_OK )
 	{
-		kdWarning ( 0 ) << " sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+		kWarning ( 0 ) << " sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
 		values = QStringList();
 	}
 	else
@@ -1183,16 +1185,16 @@ QStringList SqliteConnection::query ( const QString& statement )
 			{
 				if ( busyCnt++ > 99 )
 				{
-					kdWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
+					kWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
 				::usleep ( 100000 ); // Sleep 100 msec
-				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
+				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
 				continue;
 			}
 
 			if ( error == SQLITE_MISUSE ) {
-				kdWarning ( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
+				kWarning ( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
 				break;
 			}
 
@@ -1209,7 +1211,7 @@ QStringList SqliteConnection::query ( const QString& statement )
 
 		if ( error != SQLITE_DONE )
 		{
-			kdWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+			kWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
 			values = QStringList();
 		}
 	}
@@ -1225,10 +1227,10 @@ QString SqliteConnection::singleQuery ( const QString& statement )
 	sqlite3_stmt* stmt;
 
 	//compile SQL program to virtual machine
-	error = sqlite3_prepare ( m_db, statement.utf8(), statement.length(), &stmt, &tail );
+    error = sqlite3_prepare ( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
 
 	if ( error != SQLITE_OK )
-		kdWarning ( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+		kWarning ( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
 	else
 	{
 		int busyCnt ( 0 );
@@ -1242,16 +1244,16 @@ QString SqliteConnection::singleQuery ( const QString& statement )
 			{
 				if ( busyCnt++ > 99 )
 				{
-					kdWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
+					kWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
 				::usleep ( 100000 ); // Sleep 100 msec
-				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
+				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
 				continue;
 			}
 
 			if ( error == SQLITE_MISUSE ) {
-				kdWarning ( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
+				kWarning ( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
 				break;
 			}
 
@@ -1266,7 +1268,7 @@ QString SqliteConnection::singleQuery ( const QString& statement )
 
 		if ( error != SQLITE_DONE )
 		{
-			kdWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+			kWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
 			value = QString::null;
 		}
 	}
@@ -1281,10 +1283,10 @@ int SqliteConnection::insert ( const QString& statement )
 	sqlite3_stmt* stmt;
 
 	//compile SQL program to virtual machine
-	error = sqlite3_prepare ( m_db, statement.utf8(), statement.utf8().length(), &stmt, &tail );
+    error = sqlite3_prepare ( m_db, statement.toUtf8(), statement.toUtf8().length(), &stmt, &tail );
 
 	if ( error != SQLITE_OK )
-		kdWarning ( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on insert: " << statement << LINE_INFO;
+		kWarning ( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on insert: " << statement << LINE_INFO;
 	else
 	{
 		int busyCnt ( 0 );
@@ -1298,16 +1300,16 @@ int SqliteConnection::insert ( const QString& statement )
 			{
 				if ( busyCnt++ > 99 )
 				{
-					kdWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
+					kWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
 				::usleep ( 100000 ); // Sleep 100 msec
-				kdDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on insert: " << statement << LINE_INFO;
+				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on insert: " << statement << LINE_INFO;
 				continue;
 			}
 
 			if ( error == SQLITE_MISUSE ) {
-				kdWarning ( 0 ) << "sqlite3_step: MISUSE on insert: " << statement << LINE_INFO;
+				kWarning ( 0 ) << "sqlite3_step: MISUSE on insert: " << statement << LINE_INFO;
 				break;
 			}
 
@@ -1320,7 +1322,7 @@ int SqliteConnection::insert ( const QString& statement )
 
 		if ( error != SQLITE_DONE )
 		{
-			kdWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on insert: " << statement << LINE_INFO;
+			kWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on insert: " << statement << LINE_INFO;
 			return 0;
 		}
 	}
@@ -1330,7 +1332,7 @@ int SqliteConnection::insert ( const QString& statement )
 // this implements a RAND() function compatible with the MySQL RAND() (0-param-form without seed)
 void SqliteConnection::sqlite_rand ( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ )
 {
-	sqlite3_result_double ( context, static_cast<double> ( KApplication::random() ) / ( RAND_MAX + 1.0 ) );
+	sqlite3_result_double ( context, static_cast<double> ( KRandom::random() ) / ( RAND_MAX + 1.0 ) );
 }
 
 // this implements a POWER() function compatible with the MySQL POWER()
@@ -1356,30 +1358,30 @@ SqliteConfig::SqliteConfig ( const QString& dbfile )
  */
 DbConnectionPool::DbConnectionPool() : m_semaphore ( POOL_SIZE )
 {
-	m_semaphore += POOL_SIZE;
+    m_semaphore.acquire( POOL_SIZE ); //+=
 	DbConnection *dbConn;
 	m_dbConfig = new SqliteConfig ( KurooConfig::databas() );
 	dbConn = new SqliteConnection ( static_cast<SqliteConfig*> ( m_dbConfig ) );
 
-	enqueue ( dbConn );
-	m_semaphore--;
+    enqueue( dbConn );
+    m_semaphore.release(1); //--
 }
 
 DbConnectionPool::~DbConnectionPool()
 {
-	m_semaphore += POOL_SIZE;
-	DbConnection *conn;
+    m_semaphore.acquire( POOL_SIZE );
 	bool vacuum = true;
 
-	while ( ( conn = dequeue() ) != 0 )
+    while( !isEmpty() )
 	{
+        DbConnection *conn = dequeue();
 		if ( vacuum )
 		{
 			vacuum = false;
-			kdDebug() << "Running VACUUM" << LINE_INFO;
+			kDebug() << "Running VACUUM" << LINE_INFO;
 			conn->query ( "VACUUM;" );
 		}
-		delete conn;
+        delete conn;
 	}
 	delete m_dbConfig;
 }
@@ -1391,21 +1393,21 @@ void DbConnectionPool::createDbConnections()
 		DbConnection *dbConn;
 		dbConn = new SqliteConnection ( static_cast<SqliteConfig*> ( m_dbConfig ) );
 		enqueue ( dbConn );
-		m_semaphore--;
+        m_semaphore.release(1);
 	}
-	kdDebug() << "Create. Available db connections: " << m_semaphore.available() << LINE_INFO;
+	kDebug() << "Create. Available db connections: " << m_semaphore.available() << LINE_INFO;
 }
 
 DbConnection *DbConnectionPool::getDbConnection()
 {
-	m_semaphore++;
+    m_semaphore.acquire(1);
 	return dequeue();
 }
 
-void DbConnectionPool::putDbConnection ( const DbConnection *conn )
+void DbConnectionPool::putDbConnection ( DbConnection *conn )
 {
 	enqueue ( conn );
-	m_semaphore--;
+    m_semaphore.release(1);
 }
 
 QString DbConnectionPool::escapeString ( const QString& str ) const

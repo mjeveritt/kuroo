@@ -18,18 +18,14 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <stdlib.h>
+#include <QResizeEvent>
+#include <kprogressdialog.h>
 #include "common.h"
 #include "queuelistview.h"
 #include "tooltip.h"
 #include "packageitem.h"
 #include "packagelistview.h"
-
-#include <stdlib.h>
-
-#include <qheader.h>
-
-#include <klistview.h>
-#include <kprogress.h>
 
 // Tweak for time taken unpacking and installing single package.
 const int diffTime = 10;
@@ -38,24 +34,26 @@ const int diffTime = 10;
  * @class QueueListView::QueueItem
  * @short Package item with progressbar
  */
-QueueListView::QueueItem::QueueItem( QListView* parent, const QString& category, const QString& name, const QString& id, const int status, int duration )
+QueueListView::QueueItem::QueueItem( QTreeWidget* parent, const QString& category, const QString& name, const QString& id, const int status, int duration )
 	: PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
 	m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
 {
 	setQueued( true );
 	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
-	m_bar = new KProgress( duration, parent->viewport() );
+    m_bar = new QProgressBar( parent->viewport() );
+    m_bar->setMaximum( duration );
 	m_bar->hide();
 }
 
 QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration )
-	: PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
-	m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
+    : PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
+    m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
 {
-	setQueued( true );
-	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
-	m_bar = new KProgress( duration, parent->listView()->viewport() );
-	m_bar->hide();
+    setQueued( true );
+    setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
+    m_bar = new QProgressBar( parent->treeWidget()->viewport() );
+    m_bar->setMaximum( duration );
+    m_bar->hide();
 }
 
 QueueListView::QueueItem::~QueueItem()
@@ -76,7 +74,6 @@ void QueueListView::QueueItem::setStart()
 {
 	m_isComplete = false;
 	m_isChecked = true;
-	repaint();
 }
 
 /**
@@ -86,11 +83,10 @@ void QueueListView::QueueItem::setComplete()
 {
 	m_progress = m_duration;
 	m_isComplete = true;
-	m_bar->setTextEnabled( true );
-	m_bar->setTotalSteps( 100 );
-	m_bar->setProgress( 100 );
+    m_bar->setTextVisible( true );
+    m_bar->setMaximum( 100 );
+    m_bar->setValue( 100 );
 	setInstalled();
-	repaint();
 }
 
 /**
@@ -120,14 +116,14 @@ int QueueListView::QueueItem::remainingDuration()
 void QueueListView::QueueItem::oneStep()
 {
 	if ( m_progress < m_duration )
-		m_bar->setProgress( m_progress++ );
+        m_bar->setValue( m_progress++ );
 	else
 		if ( m_progress++ == m_duration ) {
-			m_bar->setTotalSteps( 0 );
-			m_bar->setTextEnabled( false );
+            m_bar->setMaximum( 0 );
+            m_bar->setTextVisible( false );
 		}
 		else
-			m_bar->advance( 3 );
+            m_bar->setValue( m_bar->value() + 3 );
 }
 
 /**
@@ -147,11 +143,11 @@ void QueueListView::QueueItem::hideBar()
 /**
  * Reimplemented to paint the progressbar inside column 3 in the listview.
  */
-void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment )
+/*void QueueListView::QueueItem::paintCell( QPainter* painter, const QPalette& colorgroup, int column, int width, int alignment )
 {
 	if ( column == 6 && m_isChecked ) {
 		QRect rect = listView()->itemRect( this );
-		QHeader *head = listView()->header();
+		Q3Header *head = listView()->header();
 		rect.setLeft( head->sectionPos( 6 ) - head->offset() );
 		rect.setWidth( head->sectionSize( 6 ) );
 		m_bar->setGeometry( rect );
@@ -159,7 +155,7 @@ void QueueListView::QueueItem::paintCell( QPainter* painter, const QColorGroup& 
 	}
 
 	PackageItem::paintCell( painter, colorgroup, column, width, alignment );
-}
+}*/
 
 /**
  * @class QueueListView
@@ -169,45 +165,47 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), m_id( QString::null )
 {
 	// Setup geometry
-	addColumn( i18n( "Package" ), 320 );
-	addColumn( "" );
-	addColumn( "", 25 );
-	header()->setLabel( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ), "" );
-	setColumnAlignment( 2, Qt::AlignHCenter );
-	addColumn( i18n( "Version" ), 100 );
-	addColumn( i18n( "Duration" ), 100 );
-	addColumn( i18n( "Size" ), 100 );
-	addColumn( i18n( "Progress" ), 70 );
+    QTreeWidgetItem header;
+    header.setText( 0, i18n( "Package" ) );
+    header.setText( 1, "" );
+    header.setIcon( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ) );
+    //setColumnAlignment( 2, Qt::AlignHCenter );
+    header.setText( 3, i18n( "Version") );
+    header.setText( 4, i18n( "Duration") );
+    header.setText( 5, i18n( "Size") );
+    header.setText( 6, i18n( "Progress") );
 	
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
-	setFullWidth( true );
+    //setFullWidth( true );
 
-	setColumnWidthMode( 0, QListView::Manual );
-	setColumnWidthMode( 1, QListView::Manual );
-	setColumnWidthMode( 2, QListView::Manual );
-	setColumnWidthMode( 3, QListView::Manual );
-	setColumnWidthMode( 4, QListView::Manual );
-	setColumnWidthMode( 5, QListView::Manual );
-	setColumnWidthMode( 6, QListView::Manual );
+    /*setColumnWidthMode( 0, QTreeWidget::Manual );
+    setColumnWidthMode( 1, QTreeWidget::Manual );
+    setColumnWidthMode( 2, QTreeWidget::Manual );
+    setColumnWidthMode( 3, QTreeWidget::Manual );
+    setColumnWidthMode( 4, QTreeWidget::Manual );
+    setColumnWidthMode( 5, QTreeWidget::Manual );
+    setColumnWidthMode( 6, QTreeWidget::Manual );*/
 	
-	setColumnAlignment( 5, Qt::AlignRight );
+    //setColumnAlignment( 5, Qt::AlignRight );
 	
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
-	setSorting( -1, false );
+    //setSorting( -1, false );
 	
 	if ( KurooConfig::installedColumn() ) {
-		header()->setLabel( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ), "" );
-		setColumnAlignment( 1, Qt::AlignHCenter );
-		setColumnWidth( 1, 25 );
+        header.setIcon( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ) );
+        //setColumnAlignment( 1, Qt::AlignHCenter );
+        //setColumnWidth( 1, 25 );
 	}
 	else
 		hideColumn( 1 );
 	
-	header()->setResizeEnabled( false, 1 );
-	header()->setResizeEnabled( false, 2 );
+    /*header.setResizeEnabled( false, 1 );
+    header.setResizeEnabled( false, 2 );*/
+
+    setHeaderItem( &header );
 	
-	connect( this, SIGNAL( collapsed( QListViewItem* ) ), this, SLOT( slotHideBars( QListViewItem* ) ) );
+    connect( this, SIGNAL( collapsed( QTreeWidgetItem* ) ), this, SLOT( slotHideBars( QTreeWidgetItem* ) ) );
 }
 
 QueueListView::~QueueListView()
@@ -218,9 +216,11 @@ QueueListView::~QueueListView()
  */
 void QueueListView::slotPackageUp()
 {
-	QListViewItem* packageItem = currentItem();
-	if ( packageItem->itemAbove() )
-		packageItem->itemAbove()->moveItem( packageItem );
+    //FIXME: move item
+    /*QTreeWidgetItem* packageItem = currentItem();
+    if( itemAbove( packageItem ) )
+        itemAbove( packageItem );
+        move( packageItem );*/
 }
 
 /**
@@ -228,9 +228,9 @@ void QueueListView::slotPackageUp()
  */
 void QueueListView::slotPackageDown()
 {
-	QListViewItem* packageItem = currentItem();
-	if ( packageItem->itemBelow() )
-		packageItem->moveItem( packageItem->itemBelow() );
+    /*QTreeWidgetItem* packageItem = currentItem();
+    if ( itemBelow( packageItem ) )
+        packageItem->moveItem( itemBelow( packageItem ) );*/
 }
 
 /** 
@@ -240,10 +240,10 @@ void QueueListView::slotPackageDown()
 const QStringList QueueListView::allPackagesNoChildren()
 {
 	QStringList packageList;
-	QListViewItem* myChild = firstChild();
-	while ( myChild ) {
-		packageList += dynamic_cast<QueueItem*>(myChild)->package();
-		myChild = myChild->nextSibling();
+    QTreeWidgetItemIterator it( this );
+    while ( *it ) {
+        packageList += dynamic_cast<QueueItem*>(*it)->package();
+        it++;
 	}
 	return packageList;
 }
@@ -255,11 +255,11 @@ const QStringList QueueListView::allPackagesNoChildren()
 const QStringList QueueListView::allEndUserPackages()
 {
 	QStringList packageList;
-	QListViewItem* myChild = firstChild();
-	while ( myChild ) {
-		packageList += dynamic_cast<QueueItem*>(myChild)->package();
-		packageList += myChild->text(3);
-		myChild = myChild->nextSibling();
+    QTreeWidgetItemIterator it( this );
+    while ( *it ) {
+        packageList += dynamic_cast<QueueItem*>(*it)->package();
+        packageList += (*it)->text(3);
+        it++;
 	}
 	return packageList;
 }
@@ -278,14 +278,15 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	// Get list of update packages with info
 	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
 	int packageCount = packageList.size() / 7;
-	foreach ( packageList ) {
-		QString id = *it++;
-		QString category = *it++;
-		QString name = *it++;
-		QString status = *it++;
-		QString idDepend = *it++;
-		QString size = *it++;
-		QString version = *it;
+    QListIterator<QString> it( packageList );
+    while( it.hasNext() ) {
+        QString id = it.next();
+        QString category = it.next();
+        QString name = it.next();
+        QString status = it.next();
+        QString idDepend = it.next();
+        QString size = it.next();
+        QString version = it.next();
 		
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
@@ -298,7 +299,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, status.toInt(), duration );
-			item->setOpen( true );
+            item->setExpanded( true );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->packageItemById( idDepend ) );
@@ -307,7 +308,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			}
 			else {
 				item = new QueueItem( this, category, name, id, status.toInt(), duration );
-				item->setOpen( true );
+                item->setExpanded( true );
 			}
 		}
 		
@@ -341,8 +342,8 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	setPackageFocus( QString::null );
 	
 	// Cannot have current changed for only one package so emit manually
-	if ( packageCount == 1 )
-		emit currentChanged( 0 );
+    /*if ( packageCount == 1 )
+        emit currentChanged( 0 );*/
 }
 
 /**
@@ -353,10 +354,10 @@ void QueueListView::viewportResizeEvent( QResizeEvent* )
 	setColumnWidth( 6, 70 );
 	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + columnWidth(5) + 70;
 	
-	if ( KurooConfig::installedColumn() )
+    /*if ( KurooConfig::installedColumn() )
 		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );
 	else
-		setColumnWidth( 0, this->visibleWidth() - totalWidth );
+        setColumnWidth( 0, this->visibleWidth() - totalWidth );*/
 }
 
 
@@ -371,10 +372,10 @@ void QueueListView::viewportResizeEvent( QResizeEvent* )
 long QueueListView::totalDuration()
 {
 	long totalSeconds( 0 );
-	QListViewItemIterator it( this );
-	while ( it.current() ) {
-		if ( !dynamic_cast<QueueItem*>( it.current() )->isComplete() )
-			totalSeconds += dynamic_cast<QueueItem*>( it.current() )->remainingDuration();
+    QTreeWidgetItemIterator it( this );
+    while ( *it ) {
+        if ( !dynamic_cast<QueueItem*>( *it )->isComplete() )
+            totalSeconds += dynamic_cast<QueueItem*>( *it )->remainingDuration();
 		++it;
 	}
 	return totalSeconds;
@@ -475,12 +476,12 @@ void QueueListView::slotPackageProgress()
  * Hide dependency packages progressbar when collapsing the tree.
  * @param the end-user package
  */
-void QueueListView::slotHideBars( QListViewItem* item )
+void QueueListView::slotHideBars( QTreeWidgetItem* item )
 {
-	QListViewItem* myChild = item->firstChild();
-	while ( myChild ) {
-		dynamic_cast<QueueItem*>( myChild )->hideBar();
-		myChild = myChild->nextSibling();
+    QTreeWidgetItemIterator it( item );
+    while ( *it ) {
+        dynamic_cast<QueueItem*>( *it )->hideBar();
+        it++;
 	}
 }
 

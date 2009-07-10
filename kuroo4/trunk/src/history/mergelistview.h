@@ -21,19 +21,19 @@
 #ifndef MERGELISTVIEW_H
 #define MERGELISTVIEW_H
 
-#include <klistview.h>
+#include <QTreeWidget>
 
-class KListViewItem;
+class QTreeWidgetItem;
 
 /**
  * @class MergeListView
  * @short Specialized listview for merge history.
  */
-class MergeListView : public KListView
+class MergeListView : public QTreeWidget
 {
 Q_OBJECT
 public:
-	MergeListView(QWidget *parent = 0, const char *name = 0);
+    MergeListView(QWidget *parent = 0, const QString& name = 0);
 	~MergeListView();
 	
 	class			MergeItem;
@@ -55,12 +55,12 @@ private:
  * @class MergeItem
  * @short ListViewItem with merge files.
  */
-class MergeListView::MergeItem : public KListViewItem
+class MergeListView::MergeItem : public QTreeWidgetItem
 {
 public:
-	MergeItem( QListView* parent, const char* date );
-	MergeItem( QListView* parent, const char* source, const char* destination );
-	MergeItem( MergeItem* parent, const char* source, const char* destination );
+    MergeItem( QTreeWidget* parent, const QString& date );
+    MergeItem( QTreeWidget* parent, const QString& source, const QString& destination );
+    MergeItem( MergeItem* parent, const QString& source, const QString& destination );
 	
 	QString			source();
 	QString			destination();

@@ -21,36 +21,37 @@
 #include "common.h"
 #include "categorieslistview.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qpainter.h>
+#include <Q3Frame>
+#include <QTreeWidget>
 
-#include <klistview.h>
 #include <kglobal.h>
 
-CategoriesView::CategoryItem::CategoryItem( QListView* parent, const char* name, const QString &id )
-	: QListViewItem( parent, name ), m_id( id ), m_name( name ), m_on( false )
+CategoriesView::CategoryItem::CategoryItem( QTreeWidget* parent, const QString& name, const QString &id )
+: QTreeWidgetItem( parent, QStringList(name) ), m_id( id ), m_name( name ), m_on( false )
 {}
 
 /**
  * Paint empty categories in italic and grey when empty.
  */
-void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+void CategoriesView::CategoryItem::paintCell( QPainter *p, int column, int width, int alignment )
 {
-	QColorGroup m_cg( cg );
 	QFont font( p->font() );
-	
+
 	if ( !m_on ) {
 		font.setItalic( true );
 		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, m_cg.dark() );
+		//m_cg.setColor( QColorGroup::Text, m_cg.dark() );
 	}
 	else {
 		font.setItalic( false );
 		p->setFont( font );
-		m_cg.setColor( QColorGroup::Text, m_cg.text() );
+		//m_cg.setColor( QColorGroup::Text, m_cg.text() );
 	}
-	
-	QListViewItem::paintCell( p, m_cg, column, width, alignment );
+
+	//setTextAlignment( alignment );
+	//QTreeWidgetItem::paintCell( p, m_cg, column, width, alignment );
 }
 
 /**
@@ -58,13 +59,13 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, const QColorGroup &cg
  * @short Base class for category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
-	: KListView( parent, name ), m_focus( i18n("All") ), categories( 0 )
+: QTreeWidget( parent /*, name*/ ), m_focus( i18n("All") ), categories( 0 )
 {
-	setFullWidth( true );
-	setFrameShape( QFrame::NoFrame );
-	setSorting( -1 );
-	
-	connect( this, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotStoreFocus( QListViewItem* ) ) );
+	//setFullWidth( true );
+	setFrameShape( Q3Frame::NoFrame );
+	//setSorting( -1 );
+
+	connect( this, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotStoreFocus( QTreeWidgetItem* ) ) );
 }
 
 CategoriesView::~CategoriesView()
@@ -74,7 +75,7 @@ CategoriesView::~CategoriesView()
  * Retreive focus category when a new category is made current.
  * @categoryItem*
  */
-void CategoriesView::slotStoreFocus( QListViewItem* item )
+void CategoriesView::slotStoreFocus( QTreeWidgetItem* item )
 {
 	m_focus = item->text(0);
 }
@@ -85,16 +86,18 @@ void CategoriesView::slotStoreFocus( QListViewItem* item )
  */
 void CategoriesView::restoreFocus( const bool& isFiltered )
 {
-	CategoryItem* focusCategory = m_categoryIndex.find( m_focus );
-	if ( !focusCategory )
-		focusCategory = dynamic_cast<CategoryItem*>( firstChild() );
-	
-	setCurrentItem( focusCategory );
-	setSelected( focusCategory, true );
-	
+	QMultiHash<QString, CategoryItem>::iterator focusCategory = m_categoryIndex.find( m_focus );
+	if( focusCategory == m_categoryIndex.end() ) {
+		focusCategory = m_categoryIndex.begin(); //firstChild()
+	}
+
+	setCurrentItem( &focusCategory.value() );
+	setItemSelected( &focusCategory.value(), true );
+
 	// Emit manually 'currentChanged' if triggered by filter
-	if ( isFiltered )
-		emit currentChanged( focusCategory );
+	/*if ( isFiltered ) {
+		emit currentChanged( &focusCategory.value() );
+	}*/
 
 }
 
@@ -119,7 +122,7 @@ const QString CategoriesView::currentCategoryId() const
 /**
  * @class CategoriesListView
  * @short Categories listview.
- * 
+ *
  * Specialized listview for viewing categories.
  * First all available categories are inserted.
  * When a category has no subcategory it is marked in gray and italic = off.
@@ -127,8 +130,8 @@ const QString CategoriesView::currentCategoryId() const
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
-	addColumn( i18n( "Category" ) );
-	header()->setLabel( header()->count() - 1, i18n("Category") );
+	setHeaderLabels( QStringList( i18n( "Category" ) ) );
+	//header()->setLabel( header()->count() - 1, i18n("Category") );
 }
 
 CategoriesListView::~CategoriesListView()
@@ -142,25 +145,24 @@ void CategoriesListView::init()
 {
 	categories.clear();
 	clear();
-	
+
 	// Get all available categories
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
 	int i = allCategoriesList.size() - 1;
 	categories.resize( i + 1 );
-	
+
 	// Insert categories in reverse order to get them in alfabetical order
-	CategoryItem* item;
 	m_categoryIndex.clear();
 	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
-		item = new CategoryItem( this, *it, QString::number( i ) );
+		CategoryItem* item = new CategoryItem( this, *it, QString::number( i ) );
 		categories[i] = item;
-		m_categoryIndex.insert( *it, item );
+		m_categoryIndex.insert( *it, *item );
 		i--;
 	}
-	
+
 	// Insert the meta-category All first as id = 0
-	item = new CategoryItem( this, i18n("All"), "0" );
-	m_categoryIndex.insert( i18n("All"), item );
+	CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
+	m_categoryIndex.insert( i18n("All"), *item );
 	item->setOn( true );
 	categories[0] = item;
 }
@@ -174,11 +176,11 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 	// Set all categories off = empty
 	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it )
 		(*it)->setOn( false );
-	
+
 	// Enable found categories from query
-	foreach ( categoriesList )
-		categories[ (*it).toInt() ]->setOn( true );
-	
+	foreach ( QString cat, categoriesList )
+		categories[ cat.toInt() ]->setOn( true );
+
 	// After all categories are loaded try restoring last known focus-category
 	restoreFocus( isFiltered );
 }
@@ -186,14 +188,13 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 /**
  * @class SubCategoriesListView
  * @short Subcategories listview.
- * 
+ *
  * Specialized listview to view available subcategories and marking empty as off.
  */
 SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
-	addColumn( i18n("Subcategory") );
-	header()->setLabel( header()->count() - 1, i18n("Subcategory") );
+	setHeaderLabels( QStringList( i18n( "Subcategory" ) ) );
 }
 
 SubCategoriesListView::~SubCategoriesListView()
@@ -206,21 +207,21 @@ void SubCategoriesListView::init()
 {
 	categories.clear();
 	allSubCategories.clear();
-	
+
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allSubCategories();
 	int size = allCategoriesList.size() / 3 + 1;
 
 	// Prepend the meta-category All at id = 0
 	allSubCategories.resize( size );
 	categories.resize( size );
-	allSubCategories[0].insert( std::pair<int, QString>(0, i18n("All")) );
-	
+	allSubCategories[0].insert( 0, i18n("All") );
+
 	// Insert all in matrix
-	foreach ( allCategoriesList ) {
+	for(QStringList::const_iterator it = allCategoriesList.constBegin(); it != allCategoriesList.constEnd(); ++it) {
 		int idCategory = (*it++).toInt();
 		int idSubCategory = (*it++).toInt();
 		QString name = *it;
-		allSubCategories[idCategory].insert( std::pair<int, QString>(idSubCategory, name) );
+		allSubCategories[idCategory].insert( idSubCategory, name );
 	}
 }
 
@@ -234,52 +235,48 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	static int idCategory( -1 );
 	if ( idCategory != categoriesList.first().toInt() )
 		idCategory = categoriesList.first().toInt();
-	
+
 	clear(); // @warning: categoryItem cannot be used anymore
-	CategoryItem* item;
-	
-	// Insert empty item to get focus to work on last before last item
-	// @fixme: find better solution
-	item = new CategoryItem( this, QString::null, "0" );
-	
+
 	// When meta-category is selected skip to show only meta-subcategory
 	m_categoryIndex.clear();
 	if ( idCategory != 0 ) {
-	
-		// Insert all subcategories in reverse order to get them alfabetically listed, and set them off = empty
-		for ( SubCategory::reverse_iterator it = allSubCategories[idCategory].rbegin(); it != allSubCategories[idCategory].rend(); ++it ) {
-			QString id = QString::number( (*it).first );
-			QString name = (*it).second;
+                QMapIterator<int, QString> it(allSubCategories[idCategory]);
+		it.toBack();
+		while (it.hasPrevious()) {
+			it.previous();
+                        QString id = QString::number( it.key() );
+                        QString name = it.value();
 
 			// Skip empty subcategory
 			if ( !name.isEmpty() ) {
-				item = new CategoryItem( this, name, id );
-				categories[(*it).first] = item;
-				m_categoryIndex.insert( name, item );
+				CategoryItem* item = new CategoryItem( this, name, id );
+                                categories[it.key()] = item;
+				m_categoryIndex.insert( name, *item );
 			}
 		}
-		
+
 		// Insert meta-subcategory
-		item = new CategoryItem( this, i18n("All"), "0" );
-		m_categoryIndex.insert( i18n("All"), item );
+		CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
+		m_categoryIndex.insert( i18n("All"), *item );
 		categories[0] = item;
-		
+
 		// Enable subcategories from query. Skip first which is the category
 		for( QStringList::ConstIterator it = ++( categoriesList.begin() ), end = categoriesList.end(); it != end; ++it ) {
 			if ( categories[(*it).toInt()] )
 				categories[(*it).toInt()]->setOn( true );
 		}
-		
+
 		// After all categories are loaded try restoring last known focus-category
 		restoreFocus( false );
 	}
 	else {
-	
+
 		// Insert meta-subcategory
-		item = new CategoryItem( this, i18n("All"), "0" );
-		m_categoryIndex.insert( i18n("All"), item );
+		CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
+                m_categoryIndex.insert( i18n("All"), *item );
 		item->setOn( true );
-		
+
 		// After all categories are loaded try restoring last known focus-category
 		restoreFocus( false );
 	}

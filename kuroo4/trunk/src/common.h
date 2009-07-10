@@ -126,7 +126,7 @@ static const QString TESTING_STRING( QString::number( TESTING ) );
 static const QString HARDMASKED_STRING( QString::number( HARDMASKED ) );
 static const QString NOTAVAILABLE_STRING( QString::number( NOTAVAILABLE ) );
 
-typedef struct Info {
+struct Info {
 	QString slot;
 	QString homepage;
 	QString licenses;
@@ -136,20 +136,9 @@ typedef struct Info {
 	QString size;
 };
 
-/**
- * Use this to const-iterate over QStringLists, if you like.
- * Watch out for the definition of last in the scope of your for.
- *
- *     QStringList strings;
- *     foreach( strings )
- *         debug() << *it << endl;
- */
-#define foreach( x ) \
-for( QStringList::ConstIterator it = x.begin(), end = x.end(); it != end; ++it )
-
 /// Announce a line
 #define LINE_INFO " ( " << k_funcinfo << "Line: " << __LINE__ << " )" << endl
-#define DEBUG_LINE_INFO kdDebug(0) << LINE_INFO
+#define DEBUG_LINE_INFO kDebug(0) << LINE_INFO
 
 #endif
 

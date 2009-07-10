@@ -22,26 +22,26 @@
 #include "packageitem.h"
 #include "common.h"
 
-#include <qheader.h>
+#include <q3header.h>
 
-#include <klistview.h>
+#include <QTreeWidget>
 
 /**
  * @class ToolTip
  * @short Creates tooltip for icons in views.
  */
-ToolTip::ToolTip( KListView* pWidget, QToolTipGroup* group )
-	: QToolTip( pWidget->viewport(), group ), m_pParent( pWidget )
+/*ToolTip::ToolTip( QTreeWidget* pWidget )
+    : m_pParent( pWidget )
 {}
 
 ToolTip::~ToolTip()
-{}
+{}*/
 
 /**
  * View Tooltip for the icons.
  * @param pos	mouse position
  */
-void ToolTip::maybeTip( const QPoint& pos )
+/*void ToolTip::maybeTip( const QPoint& pos )
 {
 	PackageItem* packageItem = dynamic_cast<PackageItem*>( m_pParent->itemAt( pos ) );
 	
@@ -93,6 +93,6 @@ void ToolTip::maybeTip( const QPoint& pos )
 		
 		tip( destRect, tipText );
 	}
-}
+}*/
 
 

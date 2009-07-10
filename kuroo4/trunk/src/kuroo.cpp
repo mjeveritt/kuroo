@@ -30,19 +30,19 @@
 
 #include <unistd.h>
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qtimer.h>
 #include <qcheckbox.h>
 
 #include <kdeversion.h>
 #include <kstatusbar.h>
-#include <kaccel.h>
+//#include <kaccel.h>
 #include <kfiledialog.h>
 #include <kstdaccel.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
 #include <kuser.h>
@@ -64,7 +64,7 @@ Kuroo::Kuroo()
 	setCentralWidget( m_view );
 	setupActions();
 	statusBar();
-	setupGUI();
+    //setupGUI();
 		
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() )
@@ -112,7 +112,7 @@ Kuroo::~Kuroo()
 
 void Kuroo::slotWhatsThis( int tabIndex )
 {
-	kdDebug() << "tabIndex=" << tabIndex << LINE_INFO;
+	kDebug() << "tabIndex=" << tabIndex << LINE_INFO;
 	
 	if ( tabIndex == 5 )
 		whatsThis();
@@ -124,22 +124,22 @@ void Kuroo::slotWhatsThis( int tabIndex )
  */
 void Kuroo::setupActions()
 {
-	KStdAction::quit( this, SLOT( slotQuit() ), actionCollection() );
-	KStdAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
+    /*KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+    KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
-	(void) new KAction( i18n("&Release information"), 0, KShortcut( CTRL + Key_W ),
+	(void) new KAction( i18n("&Release information"), 0, KShortcut( Qt::CTRL + Qt::Key_W ),
 	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
 	
-	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( CTRL + Key_P ),
+	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( Qt::CTRL + Qt::Key_P ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	
-	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( CTRL + Key_U ),
+	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( Qt::CTRL + Qt::Key_U ),
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
-	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( CTRL + Key_S ),
-	                          			this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
+	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( Qt::CTRL + Qt::Key_S ),
+                                        this, SLOT( slotSync() ), actionCollection(), "sync_portage" );*/
 	
-	createGUI();
+    //createGUI();
 }
 
 /**
@@ -209,7 +209,7 @@ void Kuroo::slotPreferences()
 		prefDialog = new ConfigDialog( m_view, i18n( "settings" ), KurooConfig::self() );
 	prefDialog->show();
 	prefDialog->raise();
-	prefDialog->setActiveWindow();
+    //prefDialog->setActiveWindow();
 }
 
 /**

@@ -6,11 +6,11 @@
 #define THREADWEAVER_H
 
 #include <qevent.h>   //baseclass
-#include <qguardedptr.h>
 #include <qmap.h>
 #include <qobject.h>
 #include <qthread.h>
-#include <qvaluelist.h>
+#include <QList>
+#include <QPointer>
 
 
 #define DISABLE_GENERATED_MEMBER_FUNCTIONS_3( T ) \
@@ -91,7 +91,7 @@ class ThreadWeaver : public QObject
 {
 	class Thread;
 	friend class Thread;
-	typedef QValueList<Thread*> ThreadList;
+	typedef QList<Thread*> ThreadList;
 
 public:
 	// capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
@@ -118,7 +118,7 @@ public:
 
 	class Job;
 	friend class Job;
-	typedef QValueList<Job*> JobList;
+	typedef QList<Job*> JobList;
 
 	static ThreadWeaver *instance();
 
@@ -164,23 +164,23 @@ public:
 	 *
 	 * @return how many jobs were aborted, or -1 if no thread was found
 	 */
-	int abortAllJobsNamed( const QCString &name );
+    int abortAllJobsNamed( const QString &name );
 
 	/**
 	 * @return true if a Job with name is queued or is running
 	 */
-	bool isJobPending( const QCString &name ) { return jobCount( name ) > 0; }
+    bool isJobPending( const QString &name ) { return jobCount( name ) > 0; }
 
 	/**
 	 * @return the number of jobs running, pending, aborted and otherwise.
 	 */
-	uint jobCount( const QCString &name );
+    uint jobCount( const QString &name );
 
 private:
 	ThreadWeaver();
 	~ThreadWeaver();
 
-	enum EventType { JobEvent = 20202, OverrideCursorEvent, RestoreOverrideCursorEvent };
+    enum Type { JobEvent = 20202, OverrideCursorEvent, RestoreOverrideCursorEvent };
 
 	virtual bool event( QEvent* );
 
@@ -245,27 +245,27 @@ public:
 	 * Do your cleanup in the destructor not completeJob(), as completeJob()
 	 * doesn't have to be called.
 	 */
-	class Job : public JobBase, public QCustomEvent
+	class Job : public JobBase, public QEvent
 	{
 		friend class ThreadWeaver;         //access to m_thread
 		friend class ThreadWeaver::Thread; //access to m_aborted
-	
+
 	public:
 		/**
 		 * Like-named jobs are queued and run FIFO. Always allocate Jobs on the
 		 * heap, ThreadWeaver will take ownership of the memory.
 		 */
-		Job( const char *name );
+        Job( const QString& name );
 		~Job();
-	
+
 		/**
 		 * These are used by @class DependentJob, but are made available for
 		 * your use should you need them.
 		 */
 		enum EventType { JobFinishedEvent = ThreadWeaver::JobEvent, JobStartedEvent };
-	
-		const char *name() const { return m_name; }
-	
+
+        const QString name() const { return m_name; }
+
 		/**
 		 * If this returns true then in the worst case the entire amaroK UI is
 		 * frozen waiting for your Job to abort! You should check for this
@@ -276,50 +276,50 @@ public:
 		 * they return true from doJob()
 		 */
 		bool isAborted() const { return m_aborted; }
-	
+
 		///convenience function
 		bool wasSuccessful() const { return !m_aborted; }
-	
+
 		/**
 		 * Calls QThread::msleep( int )
 		 */
 		void msleep( int ms ) { m_thread->msleep( ms ); }
-	
+
 		/**
 		 * You should set @param description if you set progress information
 		 * do this in the ctor, or it won't have an effect
 		 */
 		void setDescription( const QString& description ) { m_description = description; }
-	
+
 		/**
 		 * If you set progress information, you should set this too, changing it when appropriate
 		 */
 		void setStatus( const QString& id, const QString& status );
-	
+
 		/**
 		 * This shows the progressBar too, the user will be able to abort
 		 * the thread
 		 */
 		void setProgressTotalSteps( uint steps );
-	
+
 		/**
 		 * Does a thread-safe update of the progressBar
 		 */
 		void setProgress( uint progress );
 		void setProgress100Percent() { setProgress( m_totalSteps ); }
-	
+
 		/**
 		 * Convenience function, increments the progress by 1
 		 */
 		void incrementProgress();
-	
+
 		/**
 		 * Sometimes you want to hide the progressBar etc. generally you
 		 * should show one, but perhaps you are a reimplemented class
 		 * that doesn't want one?
 		 */
 		//void setVisible( bool );
-	
+
 	protected:
 		/**
 		 * Executed inside the thread, this should be reimplemented to do the
@@ -336,10 +336,10 @@ public:
 		virtual void completeJob() = 0;
 
 		/// be sure to call the base function in your reimplementation
-		virtual void customEvent( QCustomEvent* );
+		virtual void customEvent( QEvent* );
 
 	private:
-		char const * const m_name;
+        const QString& m_name;
 		Thread *m_thread;
 
 	protected: //FIXME
@@ -363,7 +363,7 @@ public:
 	 * This Job type is dependent on a QObject instance, if that instance is
 	 * deleted, this Job will be aborted and safely deleted.
 	 *
-	 * ThreadWeaver::DependentJob (and Job, the baseclass) is a QCustomEvent,
+	 * ThreadWeaver::DependentJob (and Job, the baseclass) is a QEvent,
 	 * and completeJob() is reimplemented to send the job to the dependent.
 	 * Of course you can still reimplement completeJob() yourself.
 	 *
@@ -371,7 +371,7 @@ public:
 	 * the Job (not after it has started unfortunately), and a JobFinishedEvent
 	 * after the Job has finished.
 	 *
-	 * The dependent is a QGuardedPtr, so you can reference the pointer returned
+	 * The dependent is a QPointer, so you can reference the pointer returned
 	 * from dependent() safely provided you always test for 0 first. However
 	 * safest of all is to not rely on that pointer at all! Pass required
 	 * data-members with the job, only operate on the dependent in
@@ -388,15 +388,15 @@ public:
 	{
 	public:
 		DependentJob( QObject *dependent, const char *name );
-	
+
 		virtual void completeJob();
-	
+
 		bool mergeDirIntoFile( QString dirPath );
 		QObject *dependent() { return m_dependent; }
-	
+
 	private:
-		const QGuardedPtr<QObject> m_dependent;
-	
+		const QPointer<QObject> m_dependent;
+
 	protected:
 		DISABLE_GENERATED_MEMBER_FUNCTIONS_4( DependentJob );
 		static QRegExp rxAtom;

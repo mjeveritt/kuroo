@@ -18,6 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/stat.h>
+
+#include <q3widgetstack.h>
+#include <qpainter.h>
+#include <qlayout.h>
+#include <qcolor.h>
+#include <QPixmap>
+#include <qbitmap.h>
+
+#include <ktextbrowser.h>
+#include <kmessagebox.h>
+#include <kuser.h>
+#include <kcursor.h>
+
 #include "common.h"
 #include "kurooview.h"
 #include "portagetab.h"
@@ -27,21 +41,8 @@
 #include "historytab.h"
 #include "mergetab.h"
 #include "packagelistview.h"
-#include "kurooviewbase.h"
+#include "ui_kurooviewbase.h"
 #include "packageinspector.h"
-
-#include <sys/stat.h>
-
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qcolor.h>
-#include <qwidgetstack.h>
-#include <qbitmap.h>
-
-#include <ktextbrowser.h>
-#include <kmessagebox.h>
-#include <kuser.h>
-#include <kcursor.h>
 
 /**
  * @class KurooView
@@ -50,34 +51,35 @@
  * Insert all 5 pages in a widgetStack, connects icon-menu buttons to corresponding pages (tabs).
  * Highlights icon-texts when changes are mades in the page.
  */
-KurooView::KurooView( QWidget *parent, const char *name )
-	: DCOPObject( "kurooIface" ),
-	KurooViewBase( parent, name ),
+KurooView::KurooView( QWidget *parent, const char *name ) :
+    //DCOPObject( "kurooIface" ),
+    QWidget( parent ),
 	viewPortage( 0 ), viewHistory( 0 ), viewQueue( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	m_isHistoryRestored( false )
 {
+    setupUi( this );
 	setMinimumSize( QSize(750, 550) );
 	
-	viewMenu->setCursor( KCursor::handCursor() );
+	viewMenu->setCursor( Qt::PointingHandCursor );
 	
 	// Create the package inspector
 	packageInspector = new PackageInspector( this );
 	
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
-	viewStack->addWidget( viewPortage, VIEW_PORTAGE );
+    viewStack->addWidget( viewPortage ); //VIEW_PORTAGE
 	
 	viewQueue = new QueueTab( this, packageInspector );
-	viewStack->addWidget( viewQueue, VIEW_QUEUE );
+    viewStack->addWidget( viewQueue ); //VIEW_QUEUE
 	
 	viewHistory = new HistoryTab( this );
-	viewStack->addWidget( viewHistory, VIEW_HISTORY );
+    viewStack->addWidget( viewHistory ); //VIEW_HISTORY
 	
 	viewMerge = new MergeTab( this );
-	viewStack->addWidget( viewMerge, VIEW_MERGE );
+    viewStack->addWidget( viewMerge ); //VIEW_MERGE
 	
 	viewLogs = new LogsTab( this );
-	viewStack->addWidget( viewLogs, VIEW_LOG );
+    viewStack->addWidget( viewLogs ); //VIEW_LOG
 	
 	// Create menu-icons for the pages
 	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PORTAGE ), i18n("Packages") );
@@ -100,7 +102,7 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
 	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
 	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
-	connect( viewMenu, SIGNAL( currentChanged( QListBoxItem* ) ), this, SLOT( slotResetMenu( QListBoxItem* ) ) );
+    connect( viewMenu, SIGNAL( currentChanged( QListWidgetItem* ) ), this, SLOT( slotResetMenu( QListWidgetItem* ) ) );
 }
 
 KurooView::~KurooView()
@@ -114,8 +116,8 @@ void KurooView::slotShowView()
 	if ( packageInspector->isVisible() )
 		packageInspector->hide();
 	
-	int tabIndex = viewMenu->currentItem() + 1;
-	viewStack->raiseWidget( tabIndex );
+    /*int tabIndex = viewMenu->currentItem()-> + 1;
+    viewStack->raiseWidget( tabIndex );*/
 }
 
 /**
@@ -148,17 +150,15 @@ void KurooView::slotInit()
 			disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 			
 			switch( KMessageBox::warningYesNo( this,
-				i18n( "<qt>Kuroo database needs refreshing!<br>"
-				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialiazing Kuroo"), i18n("Refresh"), i18n("Skip"), 0 ) ) {
-
-				case KMessageBox::Yes:
-					SignalistSingleton::Instance()->setKurooReady( true );
-					PortageSingleton::Instance()->slotRefresh();
-					break;
-
-				default:
-					KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
-					slotCheckPortage();
+                i18n("<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system has changed.</qt>"),
+                i18n("Initialiazing Kuroo"), KGuiItem( i18n("Refresh") ), KGuiItem( i18n("Skip") ) ) ) {
+            case KMessageBox::Yes:
+                SignalistSingleton::Instance()->setKurooReady( true );
+                PortageSingleton::Instance()->slotRefresh();
+                break;
+            default:
+                KurooDBSingleton::Instance()->setKurooDbMeta( "scanTimeStamp", QString::number( QDateTime::currentDateTime().toTime_t() ) );
+                slotCheckPortage();
 			}
 		}
 	}
@@ -201,7 +201,7 @@ void KurooView::slotCheckPortage()
  */
 void KurooView::slotEmergePretend( QString package )
 {
-	EmergeSingleton::Instance()->pretend( package );
+    EmergeSingleton::Instance()->pretend( QStringList( package ) );
 }
 
 /**
@@ -211,7 +211,7 @@ void KurooView::slotPortageUpdated()
 {
 	if ( !iconPackages->isChanged() && !iconPackages->isSelected() ) {
 		iconPackages->setChanged( true );
-		viewMenu->triggerUpdate( true );
+        //viewMenu->triggerUpdate( true );
 	}
 }
 
@@ -222,7 +222,7 @@ void KurooView::slotQueueUpdated()
 {
 	if ( !iconQueue->isChanged() && !iconQueue->isSelected() ) {
 		iconQueue->setChanged( true );
-		viewMenu->triggerUpdate( true );
+        //viewMenu->triggerUpdate( true );
 	}
 }
 
@@ -233,7 +233,7 @@ void KurooView::slotHistoryUpdated()
 {
 	if ( !iconHistory->isChanged() && !iconHistory->isSelected() ) {
 		iconHistory->setChanged( true );
-		viewMenu->triggerUpdate( true );
+        //viewMenu->triggerUpdate( true );
 	}
 }
 
@@ -244,7 +244,7 @@ void KurooView::slotMergeUpdated()
 {
 	if ( !iconMerge->isChanged() && !iconMerge->isSelected() ) {
 		iconMerge->setChanged( true );
-		viewMenu->triggerUpdate( true );
+        //viewMenu->triggerUpdate( true );
 	}
 }
 
@@ -255,17 +255,17 @@ void KurooView::slotLogUpdated()
 {
 	if ( !iconLog->isChanged() && !iconLog->isSelected() ) {
 		iconLog->setChanged( true );
-		viewMenu->triggerUpdate( true );
+        //viewMenu->triggerUpdate( true );
 	}
 }
 
 /**
  * Clear the highlighting menu text back to normal when visits the view.
  */
-void KurooView::slotResetMenu( QListBoxItem* menuItem )
+void KurooView::slotResetMenu( QListWidgetItem* menuItem )
 {
 	dynamic_cast<IconListItem*>( menuItem )->setChanged( false );
-	viewMenu->triggerUpdate( true );
+    //viewMenu->triggerUpdate( true );
 }
 
 
@@ -273,8 +273,8 @@ void KurooView::slotResetMenu( QListBoxItem* menuItem )
 // Create menu icons and highlight menutext when changes.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text )
-	: QListBoxItem( listbox ), m_modified( false )
+KurooView::IconListItem::IconListItem( QListWidget *listWidget, const QPixmap &pixmap, const QString &text )
+    : QListWidgetItem( listWidget ), m_modified( false )
 {
 	mPixmap = pixmap;
 	if ( mPixmap.isNull() )
@@ -287,14 +287,15 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 void KurooView::IconListItem::paint( QPainter *painter )
 {
 	if ( isSelected() ) {
-		painter->setPen( listBox()->colorGroup().highlightedText() );
+        //painter->setPen( listWidget()->colorGroup().highlightedText() );
 		m_modified = false;
 	}
 	else {
-		if ( m_modified )
-			painter->setPen( listBox()->colorGroup().link() );
-		else
-			painter->setPen( listBox()->colorGroup().text() );
+        if ( m_modified ) {
+            //painter->setPen( listWidget()->colorGroup().link() );
+        } else {
+            //painter->setPen( listWidget()->colorGroup().text() );
+        }
 	}
 	
 	QFontMetrics fm = painter->fontMetrics();
@@ -302,13 +303,14 @@ void KurooView::IconListItem::paint( QPainter *painter )
 	int wp = mPixmap.width();
 	int hp = mPixmap.height();
 	
-	painter->drawPixmap( ( listBox()->maxItemWidth()-wp ) / 2, 5, mPixmap );
+    //painter->drawPixmap( ( listWidget()->maxItemWidth()-wp ) / 2, 5, mPixmap );
 	
-	if ( !text().isEmpty() )
-		painter->drawText( 0, hp + 7, listBox()->maxItemWidth(), ht, Qt::AlignCenter, text() );
+    if ( !text().isEmpty() ) {
+        //painter->drawText( 0, hp + 7, listWidget()->maxItemWidth(), ht, Qt::AlignCenter, text() );
+    }
 }
 
-int KurooView::IconListItem::height( const QListBox *lb ) const
+int KurooView::IconListItem::height( const QListWidget *lb ) const
 {
 	if ( text().isEmpty() )
 		return mPixmap.height();
@@ -318,12 +320,12 @@ int KurooView::IconListItem::height( const QListBox *lb ) const
 	}
 }
 
-int KurooView::IconListItem::width( const QListBox *lb ) const
+int KurooView::IconListItem::width( const QListWidget *lb ) const
 {
 	int wt = lb->fontMetrics().boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).width() + 10;
 	int wp = mPixmap.width() + 10;
-	int w  = QMAX( wt, wp );
-	return QMAX( w, mMinimumWidth );
+	int w  = qMax( wt, wp );
+	return qMax( w, mMinimumWidth );
 }
 
 const QPixmap &KurooView::IconListItem::defaultPixmap()
@@ -337,7 +339,7 @@ const QPixmap &KurooView::IconListItem::defaultPixmap()
 		p.drawRect ( 0, 0, pix->width(), pix->height() );
 		p.end();
 		
-		QBitmap mask( pix->width(), pix->height(), true );
+        QBitmap mask( pix->width(), pix->height() );
 		mask.fill( Qt::black );
 		p.begin( &mask );
 		p.setPen( Qt::white );

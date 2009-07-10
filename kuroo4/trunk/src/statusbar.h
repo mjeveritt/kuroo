@@ -22,8 +22,9 @@
 #define STATUSBAR_H
 
 #include <kstatusbar.h>
-#include <kprogress.h>
-#include <qobject.h>
+#include <kprogressdialog.h>
+#include <QObject>
+#include <QLabel>
 
 class QTimer;
 
@@ -35,30 +36,30 @@ class KurooStatusBar : public KStatusBar
 {
 Q_OBJECT
 	static KurooStatusBar* s_instance;
-	
+
 public:
 	KurooStatusBar( QWidget *parent = 0 );
     ~KurooStatusBar();
-	
+
 	static 					KurooStatusBar* instance() { return s_instance; }
-	
+
 	void 					setProgressStatus( const QString& id, const QString& text );
-    
+
 	void					setTotalSteps( int total );
 	void					updateTotalSteps( int total );
-    
+
 	void					startTimer();
 	void					stopTimer();
 	void					pauseTimers();
 	void					unpauseTimers();
 	long					elapsedTime();
     void					clearElapsedTime();
-    
+
     void					startProgress();
-    
+
     void					setThreadTotalSteps( int total );
     void 					setProgress( int steps );
-	
+
 public slots:
 	void					slotOneStep();
 	void					slotAdvance();
@@ -66,10 +67,10 @@ public slots:
 private slots:
 	void					slotLastMessage();
     void					slotUpdateTime();
-    
+
 private:
 	QMap<QString, QString> 	m_messageMap;
-	KProgress 				*statusBarProgress;
+	QProgressBar 				*statusBarProgress;
 	QLabel 					*statusBarLabel;
 	QTimer 					*m_internalTimer, *m_diffTimer;
 	long						m_timerSteps;

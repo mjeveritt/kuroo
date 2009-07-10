@@ -29,19 +29,19 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
+#include <q3buttongroup.h>
+#include <q3groupbox.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kuser.h>
-#include <kaccel.h>
+//#include <kaccel.h>
 #include <kiconloader.h>
 
 /**
@@ -49,25 +49,26 @@
  * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
-	: QueueBase( parent ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null ), m_packageInspector( packageInspector )
+    : QWidget( parent ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null ), m_packageInspector( packageInspector )
 {
+    setupUi( this );
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 	
 	// Rmb actions.
-	connect( queueView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ), 
-	         this, SLOT( contextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+    connect( queueView, SIGNAL( contextMenu( QTreeWidget*, QTreeWidgetItem*, const QPoint& ) ),
+             this, SLOT( contextMenu( QTreeWidget*, QTreeWidgetItem*, const QPoint& ) ) );
 	
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
 	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-	connect( queueView, SIGNAL( doubleClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
+    connect( queueView, SIGNAL( doubleClicked( QTreeWidgetItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
 	
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
-	connect( queueView, SIGNAL( currentChanged( QListViewItem* ) ), this, SLOT( slotPackage() ) );
+    connect( queueView, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotPackage() ) );
 	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Lock/unlock if kuroo is busy
@@ -135,7 +136,7 @@ QueueTab::~QueueTab()
  */
 void QueueTab::slotInit()
 {
-	queueFrame->setPaletteBackgroundColor( colorGroup().base() );
+    //queueFrame->setPaletteBackgroundColor( colorGroup().base() );
 	
 	if ( KurooConfig::forceConf() )
 		cbForceConf->setChecked( true );
@@ -170,33 +171,33 @@ void QueueTab::slotInit()
 
 	slotRemoveInstalled();
 	
-	QToolTip::add( cbDownload, i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
+    cbDownload->setToolTip( i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
 	                                  "just perform fetches for all packages (the main package as well as all dependencies), "
 	                                  "grabbing all potential files.</td></tr></table></qt>" ) );
 	
-	QToolTip::add( cbNoWorld, i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+    cbNoWorld->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
 	                                  "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
 	
-	QToolTip::add( cbForceConf, i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
+    cbForceConf->setToolTip( i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
 	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
 	                                  "Portage will normally merge those files only once to prevent the user"
 	                                  "from dealing with the same config multiple times. "
 	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
 
-	QToolTip::add( cbBackupPkg, i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+    cbBackupPkg->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
 	                                  "but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
 	
 	// Keyboard shortcuts
-	KAccel* pAccel = new KAccel( this );
+    /*KAccel* pAccel = new KAccel( this );
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
-	                Qt::Key_Return, this, SLOT( slotAdvanced() ) );
+                    Qt::Key_Return, this, SLOT( slotAdvanced() ) );*/
 	
-	pbRemove->setIconSet( SmallIconSet("remove") );
-	pbClear->setIconSet( SmallIconSet("remove_all") );
-	pbAdvanced->setIconSet( SmallIconSet("options") );
-	pbCheck->setIconSet( SmallIconSet("gear") );
-	pbGo->setIconSet( SmallIconSet("launch") );
-	pbWhatsThis->setIconSet( SmallIconSet("info") );
+    pbRemove->setIcon( QIcon("list-remove") );
+    pbClear->setIcon( QIcon("remove_all") );
+    pbAdvanced->setIcon( QIcon("options") );
+    pbCheck->setIcon( QIcon("gear") );
+    pbGo->setIcon( QIcon("launch") );
+    pbWhatsThis->setIcon( QIcon("document-properties") );
 }
 
 /**
@@ -204,7 +205,7 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( "<qt>"
+	Q3WhatsThis::display( i18n( "<qt>"
 			"The emerge queue quickly shows which packages listed for installation.<br>"
 			"Since many applications depend on each other, any attempt to install a certain software package might result in the installation "
 			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br><br>"
@@ -419,7 +420,7 @@ void QueueTab::slotGo()
 	if ( cbDownload->isChecked() ) {
 		switch( KMessageBox::questionYesNoList( this, 
 			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
-			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
+			KStandardGuiItem::yes(), KStandardGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes:
 					packageList.prepend( "--fetch-all-uri" );
@@ -430,7 +431,7 @@ void QueueTab::slotGo()
 	else {
 		switch( KMessageBox::questionYesNoList( this, 
 			i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
-			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
+			KStandardGuiItem::yes(), KStandardGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
 				
 				case KMessageBox::Yes: {
 					if( cbUpdate->isChecked() )
@@ -555,16 +556,17 @@ void QueueTab::processPackage( bool viewInspector )
  * @param item
  * @param point
  */
-void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point )
+void QueueTab::contextMenu( QTreeWidget*, QTreeWidgetItem *item, const QPoint& point )
 {
-	if ( !item )
+    //FIXME: port contextMenu to KDE4
+    /*if ( !item )
 		return;
 	
 	const QStringList selectedIdsList = queueView->selectedIds();
 	
 	enum Actions { ADDWORLD, DELWORLD };
 	
-	KPopupMenu menu( this );
+	KMenu menu( this );
 	
 	int menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n( "Remove" ), REMOVE );
 	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
@@ -602,19 +604,19 @@ void QueueTab::contextMenu( KListView*, QListViewItem *item, const QPoint& point
 		
 		case ADDWORLD: {
 			QStringList packageList;
-			foreach ( selectedIdsList )
-				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
+            foreach ( QString id, selectedIdsList )
+                packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
 			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
 		}
 		
 		case DELWORLD: {
 			QStringList packageList;
-			foreach ( selectedIdsList )
-				packageList += queueView->packageItemById( *it )->category() + "/" + queueView->packageItemById( *it )->name();
+            foreach ( QString id, selectedIdsList )
+                packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
 			PortageSingleton::Instance()->removeFromWorld( packageList );
 		}
-	}
+    }*/
 }
 
 #include "queuetab.moc"

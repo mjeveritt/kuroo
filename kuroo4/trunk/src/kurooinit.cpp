@@ -36,7 +36,7 @@
 #include <kuser.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
-#include <kprocio.h>
+#include <KProcess>
 
 /**
  * @class KurooInit
@@ -46,8 +46,8 @@
  * Set ownership for directories and files to portage:portage.
  * Check that user is in portage group.
  */
-KurooInit::KurooInit( QObject *parent, const char *name )
-	: QObject( parent, name ), wizardDialog( 0 )
+KurooInit::KurooInit( QObject *parent, const QString& name )
+    : QObject( parent ), wizardDialog( 0 )
 {
 	getEnvironment();
 
@@ -76,8 +76,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 				                            "Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
-				chmod( GlobalSingleton::Instance()->kurooDir(), 0770 );
-				chown( GlobalSingleton::Instance()->kurooDir(), portageGid->gr_gid, portageUid->pw_uid );
+                chmod( GlobalSingleton::Instance()->kurooDir().toAscii(), 0770 );
+                chown( GlobalSingleton::Instance()->kurooDir().toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 			}
 
 			d.setCurrent( GlobalSingleton::Instance()->kurooDir() );
@@ -94,19 +94,19 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 			exit(0);
 		}
 		else {
-			chmod( backupDir, 0770 );
-			chown( backupDir, portageGid->gr_gid, portageUid->pw_uid );
+            chmod( backupDir.toAscii(), 0770 );
+            chown( backupDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 		}
 	}
 
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
-	KurooConfig::writeConfig();
+    //KurooConfig::writeConfig(); //HACK: port KConfig
 
 	// Initialize the log
 	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
-		chmod( logFile, 0660 );
-		chown( logFile, portageGid->gr_gid, portageUid->pw_uid );
+        chmod( logFile.toAscii(), 0660 );
+        chown( logFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 	}
 
 	// Initialize the database
@@ -120,8 +120,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 		// Backup history if there's old db version
 		if ( !dbVersion.isEmpty() ) {
 			KurooDBSingleton::Instance()->backupDb();
-			remove( database );
-			kdWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
+            remove( database.toAscii() );
+			kWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 
 			// and recreate with new structure
 			KurooDBSingleton::Instance()->init( this );
@@ -131,8 +131,8 @@ KurooInit::KurooInit( QObject *parent, const char *name )
 	}
 
 	// Give permissions to portage:portage to access the db also
-	chmod( databaseFile, 0660 );
-	chown( databaseFile, portageGid->gr_gid, portageUid->pw_uid );
+    chmod( databaseFile.toAscii(), 0660 );
+    chown( databaseFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 
 	// Initialize singletons objects
 	GlobalSingleton::Instance()->init( this );
@@ -158,36 +158,35 @@ KurooInit::~KurooInit()
 void KurooInit::getEnvironment()
 {
 	DEBUG_LINE_INFO;
-	QTextCodec *codec = QTextCodec::codecForName("utf8");
-	KProcIO* eProc = new KProcIO( codec );
-	*eProc << "emerge" << "--info";
-
-	if ( !eProc->start( KProcess::NotifyOnExit, KProcess::All ) ) {
-		kdError(0) << "Cannot run emerge --info, quitting!" << LINE_INFO;
+    //QTextCodec *codec = QTextCodec::codecForName("utf8");
+    KProcess* eProc = new KProcess();
+    *eProc << "emerge" << "--info";
+    if ( !eProc->startDetached() ) {
+		kError(0) << "Cannot run emerge --info, quitting!" << LINE_INFO;
 		exit(0);
 	}
-	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotEmergeInfo( KProcess* ) ) );
-	connect( eProc, SIGNAL( readReady( KProcIO* ) ), this, SLOT( slotCollectOutput( KProcIO* ) ) );
+    connect( eProc, SIGNAL( finished( KProcess* ) ), this, SLOT( slotEmergeInfo( KProcess* ) ) );
+    connect( eProc, SIGNAL( readyReadStandardOutput( KProcess* ) ), this, SLOT( slotCollectOutput( KProcess* ) ) );
 }
 
-void KurooInit::slotCollectOutput( KProcIO* eProc )
+void KurooInit::slotCollectOutput( KProcess* eProc )
 {
-	QString line;
-	while ( eProc->readln( line, true ) >= 0 )
-		m_emergeInfoLines += line;
+    QByteArray line;
+    while( !( line = eProc->readLine() ).isEmpty() )
+        m_emergeInfoLines += QString( line );
 }
 
 void KurooInit::slotEmergeInfo( KProcess* )
 {
-	foreach ( m_emergeInfoLines ) {
+    foreach ( QString line, m_emergeInfoLines ) {
 
-		if ( (*it).startsWith( "Portage 2.0" ) )
+        if ( line.startsWith( "Portage 2.0" ) )
 			KurooConfig::setPortageVersion21( false );
 		else
 			KurooConfig::setPortageVersion21( true );
 
-		if ( (*it).startsWith( "ACCEPT_KEYWORDS=" ) ) {
-			QString arch = (*it).section( "\"", 1, 1 );
+        if ( line.startsWith( "ACCEPT_KEYWORDS=" ) ) {
+            QString arch = line.section( "\"", 1, 1 );
 
 			// When testing we have two keywords, only pick one
 			if ( arch.contains( "~" ) )
@@ -196,16 +195,16 @@ void KurooInit::slotEmergeInfo( KProcess* )
 			KurooConfig::setArch( arch );
 		}
 
-		if ( (*it).startsWith( "CONFIG_PROTECT=" ) )
-			KurooConfig::setConfigProtectList( (*it).section( "\"", 1, 1 ) );
+        if ( line.startsWith( "CONFIG_PROTECT=" ) )
+            KurooConfig::setConfigProtectList( line.section( "\"", 1, 1 ) );
 
-// 		if ( (*it).startsWith( "USE=" ) )
-// 			KurooConfig::setUse( (*it).section( "\"", 1, 1 ) );
+// 		if ( line.startsWith( "USE=" ) )
+// 			KurooConfig::setUse( line.section( "\"", 1, 1 ) );
 	}
 
-	kdDebug(0) << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	kDebug(0) << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
 
-	KurooConfig::writeConfig();
+    //KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }
 
@@ -232,8 +231,8 @@ void KurooInit::firstTimeWizard()
 void KurooInit::checkUser()
 {
 	QStringList userGroups = KUser().groupNames();
-	foreach( userGroups ) {
-		if ( *it == "portage" )
+    foreach( QString user, userGroups ) {
+        if ( user == "portage" )
 			return;
 	}
 

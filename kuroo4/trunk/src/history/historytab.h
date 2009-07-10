@@ -21,13 +21,13 @@
 #ifndef HISTORYTAB_H
 #define HISTORYTAB_H
 
-#include "historybase.h"
+#include "ui_historybase.h"
 
 /**
  * @class HistoryTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
  */
-class HistoryTab : public HistoryBase
+class HistoryTab : public QWidget, public Ui::HistoryBase
 {
 Q_OBJECT
 public:
@@ -36,9 +36,9 @@ public:
 
 private slots:
 	void 		slotInit();
-	
+
 	void		slotWhatsThis();
-	
+
 	void		slotReload();
 	void		slotReload( int limit );
 	void		slotClearFilter();

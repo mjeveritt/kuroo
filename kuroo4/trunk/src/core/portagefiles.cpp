@@ -26,6 +26,8 @@
 #include "LoadPackageUserHardMaskJob.h"
 #include "LoadPackageUserUnMaskJob.h"
 
+#include <Q3TextStream>
+
 /**
  * @class: SavePackageKeywordsJob
  * @short: Thread for loading packages unmasked by user.
@@ -41,22 +43,23 @@ public:
 			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
 			"WHERE package.id = packageKeywords.idPackage;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
+			kWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageKeywords() );
-		QTextStream stream( &file );
-		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+		Q3TextStream stream( &file );
+		if ( !file.open( QIODevice::WriteOnly ) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
 		}
-		
-		foreach ( lines ) {
-			QString category = *it++;
-			QString package = *it++;
-			QString keywords = *it;
+
+        QStringListIterator it( lines );
+        while( it.hasNext() ) {
+            QString category = it.next();
+            QString package = it.next();
+            QString keywords = it.next();
 			if ( !package.isEmpty() )
 				stream << category << "/" << package << " " << keywords << "\n";
 		}
@@ -83,20 +86,20 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
+			kWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserMask() );
-		QTextStream stream( &file );
-		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+		Q3TextStream stream( &file );
+		if ( !file.open( QIODevice::WriteOnly ) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
 		}
 		
-		foreach ( lines )
-			stream << *it << "\n";
+        foreach( QString line, lines )
+            stream << line << "\n";
 		
 		file.close();
 		return true;
@@ -120,20 +123,20 @@ public:
 		
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
+			kWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
 				.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserUnMask() );
-		QTextStream stream( &file );
-		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+		Q3TextStream stream( &file );
+		if ( !file.open( QIODevice::WriteOnly ) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
 		}
 		
-		foreach ( lines )
-			stream << *it << "\n";
+        foreach ( QString line, lines )
+            stream << line << "\n";
 		
 		file.close();
 		return true;
@@ -159,23 +162,24 @@ public:
 			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
 			"WHERE package.id = packageUse.idPackage;" );
 		if ( lines.isEmpty() ) {
-			kdWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
 		
 		QFile file( KurooConfig::filePackageUserUse() );
-		QTextStream stream( &file );
-		if ( !file.open( IO_WriteOnly ) ) {
-			kdError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+		Q3TextStream stream( &file );
+		if ( !file.open( QIODevice::WriteOnly ) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;
 		}
-		
-		foreach ( lines ) {
-			QString category = *it++;
-			QString package = *it++;
-			QString use = *it;
+
+        QStringListIterator it( lines );
+        while( it.hasNext() ) {
+            QString category = it.next();
+            QString package = it.next();
+            QString use = it.next();
 			QString tmpuse = use;
-			if ( !tmpuse.remove( " ", false).isEmpty() )
+            if ( !tmpuse.remove(" ").isEmpty() )
 				stream << category << "/" << package << " " << use << "\n";
 		}
 		

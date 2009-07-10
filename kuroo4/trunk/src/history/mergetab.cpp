@@ -25,12 +25,12 @@
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qheader.h>
-#include <qwhatsthis.h>
+#include <q3header.h>
+#include <q3whatsthis.h>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
-#include <klistviewsearchline.h>
+#include <KTreeWidgetSearchLine>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
@@ -39,14 +39,14 @@
  * @short Tabpage for emerge log browser.
  */
 MergeTab::MergeTab( QWidget* parent )
-	: MergeBase( parent )
+    : QWidget( parent )
 {
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 	
-	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+    pbClearFilter->setIcon( QIcon("locationbar_erase") );
 	
-	mergeFilter->setListView( mergeView );
+    mergeFilter->setTreeWidget( mergeView );
 
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
@@ -74,9 +74,9 @@ MergeTab::~MergeTab()
  */
 void MergeTab::slotInit()
 {
-	pbWhatsThis->setIconSet( SmallIconSet("info") );
-	unmergeView->header()->setLabel( 0, i18n("New Configuration file") );
-	mergeView->header()->setLabel( 0, i18n("Merged Configuration file") );
+    pbWhatsThis->setIcon( QIcon("document-properties") );
+    unmergeView->setHeaderLabel( i18n("New Configuration file") );
+    mergeView->setHeaderLabel( i18n("Merged Configuration file") );
 	pbMerge->setDisabled( true );
 	pbView->setDisabled( true );
 	slotReload();
@@ -87,7 +87,7 @@ void MergeTab::slotInit()
  */
 void MergeTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( "<qt>"
+	Q3WhatsThis::display( i18n( "<qt>"
 			"This tab keeps track of all configuration files that need to be merged.<br>"
 			"Your system is scanned automatically for configuration files after completed installation.<br>"
 			"Select a file to merge and press 'Merge changes'. KDiff3 will then open with old and new files. "
@@ -130,7 +130,7 @@ void MergeTab::slotClearFilter()
  */
 void MergeTab::slotButtonView()
 {
-	QListViewItem *item = mergeView->currentItem();
+    QTreeWidgetItem *item = mergeView->currentItem();
 	if ( item && item->parent() ) {
 		unmergeView->clearSelection();
 		pbView->setDisabled( false );
@@ -147,7 +147,7 @@ void MergeTab::slotButtonView()
  */
 void MergeTab::slotButtonMerge()
 {
-	QListViewItem *item = unmergeView->currentItem();
+    QTreeWidgetItem *item = unmergeView->currentItem();
 	if ( item ) {
 		mergeView->clearSelection();
 		pbMerge->setDisabled( false );
@@ -164,7 +164,7 @@ void MergeTab::slotButtonMerge()
  */
 void MergeTab::slotViewFile()
 {
-	QListViewItem *item = mergeView->currentItem();
+    QTreeWidgetItem *item = mergeView->currentItem();
 	if ( !item || !item->parent() )
 		return;
 	
@@ -179,7 +179,7 @@ void MergeTab::slotViewFile()
  */
 void MergeTab::slotMergeFile()
 {
-	QListViewItem *item = unmergeView->currentItem();
+    QTreeWidgetItem *item = unmergeView->currentItem();
 	if ( !item && item->parent() )
 		return;
 	

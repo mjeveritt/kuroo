@@ -32,7 +32,7 @@ class MainWindow : public KMainWindow
 {
 Q_OBJECT
 public:
-    MainWindow( QWidget *parent = 0, const char *name = 0 );
+    MainWindow( QWidget *parent = 0, const QString& name = 0 );
     ~MainWindow();
 
 	KurooStatusBar 	*statusBar();

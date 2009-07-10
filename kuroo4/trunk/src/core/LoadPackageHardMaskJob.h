@@ -38,7 +38,7 @@ public:
 		// Collect all mask dependatoms
 		QFileInfo fileInfo( KurooConfig::filePackageHardMask() );
 		if( fileInfo.isDir() ) {
-			kdDebug(0) << KurooConfig::filePackageHardMask() << " is a dir" << LINE_INFO;
+			kDebug(0) << KurooConfig::filePackageHardMask() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageHardMask() ) ) {
 				return false;
 			}
@@ -46,8 +46,8 @@ public:
 		QFile file( KurooConfig::filePackageHardMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
-		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing package.mask. Reading: " << KurooConfig::filePackageHardMask() << LINE_INFO;
+		if ( !file.open( QIODevice::ReadOnly ) )
+			kError(0) << "Parsing package.mask. Reading: " << KurooConfig::filePackageHardMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -77,7 +77,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).section( "#", 1, 1 ).replace('\'', "''").replace('%', "&#37;").utf8();
+                    commentLines += (*it).section( "#", 1, 1 ).replace('\'', "''").replace('%', "&#37;").toUtf8();
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -90,7 +90,7 @@ public:
 							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
+							kWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
 							.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KurooDBSingleton::Instance()->insert( QString( 
@@ -99,7 +99,7 @@ public:
 
 					}
 					else
-						kdWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+						kWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
 				}
 			}

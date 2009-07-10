@@ -46,8 +46,8 @@ public:
 		KurooDBSingleton::Instance()->insert( "INSERT INTO queue_temp SELECT * FROM queue;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
-		foreach ( m_packageIdList )
-			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" ).arg(*it), m_db );
+        foreach( QString id,  m_packageIdList )
+            KurooDBSingleton::Instance()->insert( QString( "INSERT INTO queue_temp (idPackage, idDepend) VALUES ('%1', '0');" ).arg(id), m_db );
 		
 		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		
@@ -80,9 +80,9 @@ public:
 	
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-		foreach ( m_packageIdList )
+        foreach ( QString id, m_packageIdList )
 			KurooDBSingleton::Instance()->singleQuery( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
-			                                     		.arg(*it).arg(*it), m_db );
+                                                        .arg(id).arg(id), m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 		return true;
 	}
@@ -112,8 +112,8 @@ public:
 		QMap<QString, int> endUserPackageMap;
 		const QStringList endUserPackageList = KurooDBSingleton::Instance()->query( "SELECT idPackage FROM queue WHERE idDepend = '0';", m_db );
 		
-		foreach ( endUserPackageList )
-			endUserPackageMap.insert( *it, 0 );
+        foreach ( QString id, endUserPackageList )
+            endUserPackageMap.insert( id, 0 );
 		
 		KurooDBSingleton::Instance()->query("DELETE FROM queue;");
 		
@@ -126,7 +126,7 @@ public:
 				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 			
 			if ( id.isEmpty() ) {
-				kdWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
+				kWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
 								.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 				return false;
 			}
@@ -240,7 +240,7 @@ void Queue::clearCache()
 void Queue::insertInCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
+		kWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
 		return;
 	}
 	m_queueCache.insert( id, false );
@@ -253,7 +253,7 @@ void Queue::insertInCache( const QString& id )
 void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kdWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
+		kWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
 		return;
 	}
 	m_queueCache.remove( id );
@@ -390,7 +390,7 @@ void Queue::slotClearQueue()
 		// Collect only 100% complete packages
 		QStringList idList;
 		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap ) {
-			if ( itMap.data() )
+            if ( itMap.value() )
 				idList += itMap.key();
 		}
 		if ( !idList.isEmpty() )

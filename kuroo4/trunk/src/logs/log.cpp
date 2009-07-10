@@ -24,6 +24,8 @@
 
 #include <qdatetime.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3TextStream>
 
 #include <ktextbrowser.h>
 #include <kuser.h>
@@ -57,10 +59,10 @@ const QString Log::init( QObject *parent )
 	m_parent = parent;
 	
 	QString logName = GlobalSingleton::Instance()->kurooDir() + "kuroo.log";
-	kdDebug(0) << logName << "\n";
-	m_logFile.setName( logName );
-	if( !m_logFile.open( IO_WriteOnly ) ) {
-		kdError(0) << "Writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
+	kDebug(0) << logName << "\n";
+    m_logFile.setFileName( logName );
+	if( !m_logFile.open( QIODevice::WriteOnly ) ) {
+		kError(0) << "Writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
 		KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg( GlobalSingleton::Instance()->kurooDir() ), i18n("Saving"));
 		return QString::null;
 	}
@@ -77,8 +79,7 @@ KIO::Job* Log::backupLog()
 	if ( m_saveLog && m_saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
 		KIO::Job *cpjob = KIO::file_copy( GlobalSingleton::Instance()->kurooDir() + "kuroo.log", 
-		                                  GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log", 
-		                                  -1, true, false, false );
+                                          GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log");
 		return cpjob;
 	}
 	else
@@ -105,7 +106,7 @@ void Log::setGui( KTextBrowser* logBrowserGui, QCheckBox* verboseLogGui, QCheckB
 void Log::writeLog( const QString& output, int logType )
 {
 	QString line(output);
-	line.utf8().replace( '\'', "''" );
+    line.toUtf8().replace( '\'', "''" );
 	
 	switch ( logType ) {
 		
@@ -130,7 +131,7 @@ void Log::writeLog( const QString& output, int logType )
 		}
 		
 		case TOLOG: {
-			QTextStream st( &m_logFile );
+			Q3TextStream st( &m_logFile );
 			st << line << "\n";
 			m_logFile.flush();
 			break;
@@ -144,7 +145,7 @@ void Log::writeLog( const QString& output, int logType )
 }
 
 void Log::addText(const QString& str) {
-	//kdDebug(0) << "Max Buffer Lines: " << buffer_MaxLines << "\n";
+	//kDebug(0) << "Max Buffer Lines: " << buffer_MaxLines << "\n";
 	if (numLines > buffer_MaxLines) {
 		m_logBrowser->clear();
 		numLines=0;

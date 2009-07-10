@@ -42,40 +42,40 @@ void Images::init( QObject *parent )
 {
 	m_parent = parent;
 	
-	KIconLoader *ldr = KGlobal::iconLoader();
+	KIconLoader *ldr = KIconLoader::global();
 	
-	pxKuroo = ldr->loadIcon( "kuroo", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
-	pxEmerging = ldr->loadIcon( "kuroo1", KIcon::NoGroup, KIcon::SizeSmallMedium, KIcon::DefaultState, NULL, true );
+    pxKuroo = ldr->loadIcon( QString("kuroo"), KIconLoader::Small );
+    pxEmerging = ldr->loadIcon( "kuroo1", KIconLoader::Small );
 	
-	pxCategory = ldr->loadIcon( "kuroo_category", KIcon::Small );
-	pxNew = ldr->loadIcon( "kuroo_new", KIcon::Small );
-	pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIcon::Small );
+    pxCategory = ldr->loadIcon( "kuroo_category", KIconLoader::Small );
+    pxNew = ldr->loadIcon( "kuroo_new", KIconLoader::Small );
+    pxUnmerged = ldr->loadIcon( "kuroo_unmerged", KIconLoader::Small );
 	
-	pxPackage = ldr->loadIcon( "kuroo_package", KIcon::Small );
-	pxInstalled = ldr->loadIcon( "kuroo_stable", KIcon::Small );
+    pxPackage = ldr->loadIcon( "kuroo_package", KIconLoader::Small );
+    pxInstalled = ldr->loadIcon( "kuroo_stable", KIconLoader::Small );
 	
-	pxQueued = ldr->loadIcon( "kuroo_queue", KIcon::Small );
-	pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIcon::Small );
+    pxQueued = ldr->loadIcon( "kuroo_queue", KIconLoader::Small );
+    pxQueuedColumn = ldr->loadIcon( "kuroo_queue_column", KIconLoader::Small );
 	
-	pxWorld = ldr->loadIcon( "kuroo_world", KIcon::Small );
-	pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIcon::Small );
+    pxWorld = ldr->loadIcon( "kuroo_world", KIconLoader::Small );
+    pxWorldColumn = ldr->loadIcon( "kuroo_world_column", KIconLoader::Small );
 	
-	pxDetails = ldr->loadIcon( "options", KIcon::Small );
-	pxRemove = ldr->loadIcon( "remove", KIcon::Small );
+    pxDetails = ldr->loadIcon( "options", KIconLoader::Small );
+    pxRemove = ldr->loadIcon( "list-remove", KIconLoader::Small );
 	
-	pxEmpty = ldr->loadIcon( "kuroo_empty", KIcon::Small );
-	pxWarning = ldr->loadIcon( "kuroo_warning", KIcon::Small );
+    pxEmpty = ldr->loadIcon( "kuroo_empty", KIconLoader::Small );
+    pxWarning = ldr->loadIcon( "kuroo_warning", KIconLoader::Small );
 
-	pxQuickPkg = ldr->loadIcon( "kuroo_quickpkg", KIcon::Small );
+    pxQuickPkg = ldr->loadIcon( "kuroo_quickpkg", KIconLoader::Small );
 	
-	pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIcon::Small );
-	pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIcon::Small );
+    pxVersionInstalled = ldr->loadIcon( "kuroo_version_installed", KIconLoader::Small );
+    pxInstalledColumn = ldr->loadIcon( "kuroo_installed_column", KIconLoader::Small );
 	
-	pxViewPackages =  ldr->loadIcon( "kuroo", KIcon::Panel );
-	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIcon::Panel );
-	pxViewHistory = ldr->loadIcon( "kuroo_history", KIcon::Panel );
-	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIcon::Panel );
-	pxViewLog = ldr->loadIcon( "kuroo_log", KIcon::Panel );
+	pxViewPackages =  ldr->loadIcon( "kuroo", KIconLoader::Panel );
+	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIconLoader::Panel );
+	pxViewHistory = ldr->loadIcon( "kuroo_history", KIconLoader::Panel );
+	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIconLoader::Panel );
+	pxViewLog = ldr->loadIcon( "kuroo_log", KIconLoader::Panel );
 }
 
 /**

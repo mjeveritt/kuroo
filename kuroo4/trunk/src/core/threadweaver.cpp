@@ -7,17 +7,20 @@
 #define QT_FATAL_ASSERT
 #define DEBUG_PREFIX "ThreadWeaver"
 
-#include "common.h"
-#include "statusbar.h"
-#include "threadweaver.h"
-
-#include <qapplication.h>
-#include <qregexp.h>
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QApplication>
+#include <QRegExp>
+#include <QFileInfo>
+#include <QDir>
+#include <QCustomEvent>
+#include <QEvent>
+#include <Q3TextStream>
 
 #include <kcursor.h>
 #include <kdebug.h>
+
+#include "common.h"
+#include "statusbar.h"
+#include "threadweaver.h"
 
 QRegExp ThreadWeaver::DependentJob::rxAtom = QRegExp(	
 		"^"    									// Start of the string
@@ -37,20 +40,20 @@ QRegExp ThreadWeaver::DependentJob::rxAtom = QRegExp(
  */
 ThreadWeaver::ThreadWeaver()
 {
-// 	kdDebug() << "ThreadWeaver::ThreadWeaver " << LINE_INFO;
+// 	kDebug() << "ThreadWeaver::ThreadWeaver " << LINE_INFO;
     startTimer( 60 * 1000 ); // prunes the thread pool every 5 minutes
 }
 
 ThreadWeaver::~ThreadWeaver()
 {
 	for ( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it ) {
-// 		kdDebug() << "ThreadWeaver::~ThreadWeaver Waiting on thread..." << LINE_INFO;
+// 		kDebug() << "ThreadWeaver::~ThreadWeaver Waiting on thread..." << LINE_INFO;
 		(*it)->wait();
-// 		kdDebug() << "ThreadWeaver::~ThreadWeaver finished" << LINE_INFO;
+// 		kDebug() << "ThreadWeaver::~ThreadWeaver finished" << LINE_INFO;
 	}
 }
 
-uint ThreadWeaver::jobCount( const QCString &name )
+uint ThreadWeaver::jobCount( const QString &name )
 {
 	uint count = 0;
 
@@ -84,8 +87,8 @@ int ThreadWeaver::queueJobs( const JobList &jobs )
 
 	m_jobs += jobs;
 
-	const QCString name = jobs.front()->name();
-	const uint count = jobCount( name );
+    const QString name = jobs.front()->name();
+    const int count = jobCount( name );
 
 	if ( count == jobs.count() )
 		gimmeThread()->runJob( jobs.front() );
@@ -95,7 +98,7 @@ int ThreadWeaver::queueJobs( const JobList &jobs )
 
 void ThreadWeaver::onlyOneJob( Job *job )
 {
-	const QCString name = job->name();
+    const QString name = job->name();
 
 	// first cause all current jobs with this name to be aborted
 	abortAllJobsNamed( name );
@@ -111,7 +114,7 @@ void ThreadWeaver::onlyOneJob( Job *job )
 		gimmeThread()->runJob( job );
 }
 
-int ThreadWeaver::abortAllJobsNamed( const QCString &name )
+int ThreadWeaver::abortAllJobsNamed( const QString &name )
 {
 	int count(0);
 
@@ -127,7 +130,7 @@ int ThreadWeaver::abortAllJobsNamed( const QCString &name )
 ThreadWeaver::Thread* ThreadWeaver::gimmeThread()
 {
 	for ( ThreadList::ConstIterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
-		if ( !(*it)->running() && (*it)->job() == 0 )
+        if ( !(*it)->isRunning() && (*it)->job() == 0 )
 			return *it;
 
 	Thread *thread = new Thread;
@@ -141,22 +144,22 @@ bool ThreadWeaver::event( QEvent *e )
 	{
 	case JobEvent: {
 		Job *job = (Job*)e;
-		const QCString name = job->name();
+        const QString& name = job->name();
 		Thread *thread = job->m_thread;
 
 		QApplication::postEvent(
 				ThreadWeaver::instance(),
-				new QCustomEvent( ThreadWeaver::RestoreOverrideCursorEvent ) );
+                new QEvent( (QEvent::Type)RestoreOverrideCursorEvent ) );
 
 		if ( !job->isAborted() ) {
-// 			kdDebug() << "Job completed" << ": " << name << LINE_INFO;
+// 			kDebug() << "Job completed" << ": " << name << LINE_INFO;
 			job->completeJob();
 		}
 		else 
-			kdWarning(0) << "Job aborted" << ": " << name << LINE_INFO;
+			kWarning(0) << "Job aborted" << ": " << name << LINE_INFO;
 
-		m_jobs.remove( job );
-// 		kdDebug() << "Jobs pending: " << jobCount( name ) << LINE_INFO;
+        m_jobs.removeAll( job );
+// 		kDebug() << "Jobs pending: " << jobCount( name ) << LINE_INFO;
 
 		for( JobList::ConstIterator it = m_jobs.begin(), end = m_jobs.end(); it != end; ++it )
 			if ( name == (*it)->name() ) {
@@ -171,7 +174,7 @@ bool ThreadWeaver::event( QEvent *e )
 	}
 
 	case QEvent::Timer:
-// 		kdDebug() << "Threads in pool: " << m_threads.count() << LINE_INFO;
+// 		kDebug() << "Threads in pool: " << m_threads.count() << LINE_INFO;
 
 // 		for( ThreadList::Iterator it = m_threads.begin(), end = m_threads.end(); it != end; ++it )
 // 			if ( (*it)->readyForTrash() ) {
@@ -182,7 +185,7 @@ bool ThreadWeaver::event( QEvent *e )
 		break;
 
 	case OverrideCursorEvent:
-		QApplication::setOverrideCursor( KCursor::workingCursor() );
+		QApplication::setOverrideCursor( Qt::BusyCursor );
 		break;
 
 	case RestoreOverrideCursorEvent:
@@ -221,7 +224,7 @@ void ThreadWeaver::Thread::runJob( Job *job )
 		
 		QApplication::postEvent(
 				ThreadWeaver::instance(),
-				new QCustomEvent( ThreadWeaver::OverrideCursorEvent ) );
+                new QEvent( (QEvent::Type)OverrideCursorEvent ) );
 	}
 }
 
@@ -242,10 +245,10 @@ void ThreadWeaver::Thread::run()
 
 /// @class ProgressEvent
 /// @short Used by ThreadWeaver::Job internally
-class ProgressEvent : public QCustomEvent {
+class ProgressEvent : public QEvent {
 public:
 	ProgressEvent( int progress )
-			: QCustomEvent( 30303 )
+            : QEvent( (QEvent::Type)30303 )
 			, progress( progress ) {}
 
 	const int progress;
@@ -254,8 +257,8 @@ public:
 
 
 /// @class ThreadWeaver::Job
-ThreadWeaver::Job::Job( const char *name )
-		: QCustomEvent( ThreadWeaver::JobEvent )
+ThreadWeaver::Job::Job( const QString& name )
+        : QEvent( (QEvent::Type)JobEvent )
 		, m_name( name )
 		, m_thread( 0 )
 		, m_percentDone( 0 )
@@ -265,15 +268,15 @@ ThreadWeaver::Job::Job( const char *name )
 
 ThreadWeaver::Job::~Job()
 {
-	if ( m_thread->running() && m_thread->job() == this )
-		kdWarning(0) << "Deleting a job before its thread has finished with it!" << LINE_INFO;
+    if ( m_thread->isRunning() && m_thread->job() == this )
+		kWarning(0) << "Deleting a job before its thread has finished with it!" << LINE_INFO;
 }
 
 void ThreadWeaver::Job::setProgressTotalSteps( uint steps )
 {
 	if ( steps == 0 ) {
 		//This isn't really an error, just a special case
-		//kdWarning(0) << "You can't set steps to 0!" << LINE_INFO;
+		//kWarning(0) << "You can't set steps to 0!" << LINE_INFO;
 		QApplication::postEvent( this, new ProgressEvent( -2 ) );
 		steps = 1;
 	}
@@ -308,7 +311,7 @@ void ThreadWeaver::Job::incrementProgress()
 	setProgress( m_progressDone + 1 );
 }
 
-void ThreadWeaver::Job::customEvent( QCustomEvent *e )
+void ThreadWeaver::Job::customEvent( QEvent *e )
 {
 	int progress = static_cast<ProgressEvent*>(e)->progress;
 	
@@ -335,7 +338,7 @@ ThreadWeaver::DependentJob::DependentJob( QObject *dependent, const char *name )
 {
 	connect( dependent, SIGNAL(destroyed()), SLOT(abort()) );
 
-	QApplication::postEvent( dependent, new QCustomEvent( JobStartedEvent ) );
+    QApplication::postEvent( dependent, new QEvent( (QEvent::Type)JobStartedEvent ) );
 }
 
 bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
@@ -343,36 +346,34 @@ bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
 	QDir mergeDir( dirPath );
 	//TODO make sure this doesn't exist before we enter
 	QFile tempFile( dirPath + ".temp" );
-	QTextStream tempStream( &tempFile );
-	if( !tempFile.open( IO_WriteOnly ) ) {
-		kdDebug(0) << "Opened " << tempFile.name() << " for writing." << LINE_INFO;
+	Q3TextStream tempStream( &tempFile );
+	if( !tempFile.open( QIODevice::WriteOnly ) ) {
+        kDebug(0) << "Opened " << tempFile.fileName() << " for writing." << LINE_INFO;
 		//TODO handle failure
 		return false;
 	}
 
-	const QFileInfoList* infos = mergeDir.entryInfoList();
+    QList<QFileInfo> infos = mergeDir.entryInfoList();
 	QStringList lines;
-	QFileInfoListIterator iter( *infos );
-	QFileInfo *fi;
-	while ( (fi = iter.current()) != 0 ) {
-		kdDebug(0) << "Processing " << fi->filePath() << LINE_INFO;
-		if( fi->isDir() ) {
-			kdDebug(0) << fi->filePath() << " is a dir." << LINE_INFO;
-			if( fi->filePath().endsWith( "/." ) || fi->filePath().endsWith( "/.." ) ) {
-				kdDebug(0) << fi->filePath() << " is ., skipping." << LINE_INFO;
+    foreach( QFileInfo fi, infos ) {
+        kDebug(0) << "Processing " << fi.filePath() << LINE_INFO;
+        if( fi.isDir() ) {
+            kDebug(0) << fi.filePath() << " is a dir." << LINE_INFO;
+            if( fi.filePath().endsWith( "/." ) || fi.filePath().endsWith( "/.." ) ) {
+                kDebug(0) << fi.filePath() << " is ., skipping." << LINE_INFO;
 			} else {
-				kdDebug(0) << "Would recurse into " << fi->filePath() << LINE_INFO;
+                kDebug(0) << "Would recurse into " << fi.filePath() << LINE_INFO;
 				//TODO handle failure
-				if( !mergeDirIntoFile( fi->filePath() ) ) {
+                if( !mergeDirIntoFile( fi.filePath() ) ) {
 					return false;
 				}
 			}
 		}
 
-		QFile entryFile( fi->absFilePath() );
-		QTextStream streamFile( &entryFile );
-		if ( !entryFile.open( IO_ReadOnly ) ) {
-			kdError(0) << "Parsing " << dirPath << ". Reading: " << fi->absFilePath() << LINE_INFO;
+        QFile entryFile( fi.absoluteFilePath() );
+		Q3TextStream streamFile( &entryFile );
+		if ( !entryFile.open( QIODevice::ReadOnly ) ) {
+            kError(0) << "Parsing " << fi.filePath() << LINE_INFO;
 		} else {
 			while ( !streamFile.atEnd() )
 				lines += streamFile.readLine();
@@ -380,15 +381,14 @@ bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
 		}
 
 		//Save the file as we go
-		foreach( lines ) {
-			tempStream << *it << "\n";
+        foreach( QString line, lines ) {
+            tempStream << line << "\n";
 		}
 
 		if( !entryFile.remove() ) {
 			//TODO handle failure
 			return false;
 		}
-		++iter;
 	}
 	tempFile.close();
 	//By the time we get out of here the directory should be empty, or else. . .
@@ -398,7 +398,7 @@ bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
 	}
 
 	//And write the new file in it's place
-	KIO::file_move( dirPath + ".temp", dirPath, -1, true, false, false );
+	KIO::file_move( dirPath + ".temp", dirPath, -1, KIO::Overwrite | KIO::HideProgressInfo );
 	return true;
 }
 

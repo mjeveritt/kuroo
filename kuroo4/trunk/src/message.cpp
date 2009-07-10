@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "message.h"
-#include "messagebase.h"
+#include "ui_messagebase.h"
 
 #include <qlabel.h>
 #include <qclipboard.h>
@@ -35,17 +35,19 @@ Message* Message::s_instance = 0;
  * @short Convenience singleton dialog for simple messages to user.
  */
 Message::Message( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n("Message"), false, i18n("Message"), KDialogBase::Ok | KDialogBase::User1, KDialogBase::Ok, false ),
+    : KDialog( parent ),
 	base( 0 ), m_text( QString::null )
 {
+    //i18n("Message"), false, i18n("Message"), KDialogBase::Ok | KDialogBase::User1, KDialogBase::Ok, false
 	s_instance = this;
-	base = new MessageBase( this );
+    base = new Ui::MessageBase();
+    base->setupUi( this );
 	
-	setButtonText( KDialogBase::User1, i18n("Copy text to clipboard") );
-	showButtonCancel( false );
+    setButtonText( KDialog::User1, i18n("Copy text to clipboard") );
+    //showButtonCancel( false );
 	
 // 	base->messageText->setTextFormat( Qt::LogText );
-	setMainWidget( base );
+    setMainWidget( this );
 }
 
 Message::~Message()

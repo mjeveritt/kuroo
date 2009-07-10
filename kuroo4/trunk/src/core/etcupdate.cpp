@@ -21,7 +21,7 @@
 #include "common.h"
 #include "message.h"
 
-#include <kprocio.h>
+#include <k3procio.h>
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kinputdialog.h>
@@ -36,7 +36,7 @@
  * Launches the exernal diff-tool for selected files.
  */
 EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
-	: QObject( m_parent, name )
+    : QObject( m_parent/*, name*/ )
 {}
 
 EtcUpdate::~EtcUpdate()
@@ -49,8 +49,8 @@ void EtcUpdate::init( QObject *parent )
 {
 	m_parent = parent;
 	
-	eProc = new KProcIO();
-	connect( eProc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCleanupDiff( KProcess* ) ) );
+	eProc = new K3ProcIO();
+	connect( eProc, SIGNAL( processExited( K3Process* ) ), this, SLOT( slotCleanupDiff( K3Process* ) ) );
 	
 	m_mergingFile = new KDirWatch( this );
 	connect( m_mergingFile, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged() ) );
@@ -63,16 +63,16 @@ void EtcUpdate::slotEtcUpdate()
 {
 	DEBUG_LINE_INFO;
 	if ( KurooConfig::etcUpdateTool().isEmpty() )
-		KMessageBox::informationWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
+        KMessageBox::information( 0, i18n( "Please specify merge tool in settings!" ), i18n( "Kuroo" ) );
 	else {
 		m_etcFilesList.clear();
 		m_backupFilesList.clear();
 		
 		// First collect old merged files
-		m_configProtectList = GlobalSingleton::Instance()->kurooDir() + "backup/configuration";
+        m_configProtectList = QStringList( GlobalSingleton::Instance()->kurooDir() + QString("backup/configuration") );
 		
 		// Then scan for new unmerged files
-		m_configProtectList += QStringList::split( " ", KurooConfig::configProtectList() );
+        m_configProtectList += KurooConfig::configProtectList().split( " " );
 		
 		// Launch scan slave
 		slotFinished();
@@ -86,7 +86,7 @@ void EtcUpdate::slotFinished()
 {
 	if ( m_configProtectList.count() > 0 ) {
 		m_configProtectDir = m_configProtectList.first();
-		KIO::ListJob* job = KIO::listRecursive( KURL( m_configProtectDir ), false );
+		KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), false );
 		connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
 		connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
 		m_configProtectList.pop_front();
@@ -102,16 +102,12 @@ void EtcUpdate::slotFinished()
 void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 {
 	QString configFile;
-	for ( KIO::UDSEntryList::ConstIterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt) {
-		for ( KIO::UDSEntry::ConstIterator it = (*entryIt).begin(); it != (*entryIt).end(); it++ ) {
-			if ( (*it).m_uds == KIO::UDS_NAME )
-				configFile = (*it).m_str;
-		}
+    foreach( KIO::UDSEntry entry, entries ) {
+        configFile = entry.stringValue( KIO::UDSEntry::UDS_NAME );
 		
 		if ( configFile.contains( QRegExp( "\\d{8}_\\d{4}/" ) ) && !configFile.endsWith( ".orig" ) ) {
 			m_backupFilesList += m_configProtectDir + "/" + configFile;
-		}
-		else {
+        } else {
 			if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
 				m_etcFilesList += m_configProtectDir + "/" + configFile;
 		}
@@ -134,10 +130,12 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		
 		// Check for etc-files warnings
 		QString etcWarning;
-		const QStringList etcFilesWarningsList = QStringList::split( " ", KurooConfig::etcFiles() );
-		foreach ( etcFilesWarningsList )
-			if ( *it == m_destination )
+        const QStringList etcFilesWarningsList = KurooConfig::etcFiles().split( " " );
+        foreach( QString file, etcFilesWarningsList ) {
+            if ( file == m_destination ) {
 				etcWarning = i18n("<font color=red>Warning!<br>%1 has been edited by you.</font><br>").arg( m_destination );
+            }
+        }
 
 		eProc->resetAll();
 // 		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
@@ -148,12 +146,11 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		else
 			*eProc << "-o" << backupPath + "merging";
 		
-		eProc->start( KProcess::NotifyOnExit, true );
+		eProc->start( K3Process::NotifyOnExit, true );
 		
 		if ( !eProc->isRunning() ) {
 			LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
-			KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n( "%1 could not start!" )
-									.arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
+            KMessageBox::sorry( 0, i18n( "%1 could not start!" ).arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
 		}
 		else {
 			LogSingleton::Instance()->writeLog( i18n("Merging changes in \'%1\'.").arg( m_destination ), KUROO );
@@ -161,7 +158,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 			// get the original file mode
 			memset(&st, 0, sizeof(st));
 			m_mergedMode = -1;
-			if( !(stat( m_destination, &st ) < 0) ) {
+            if( !(stat( m_destination.toAscii(), &st ) < 0) ) {
 				m_mergedMode = (int)st.st_mode;
 			}
 
@@ -169,7 +166,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 			m_mergingFile->addFile( m_destination );
 			
 			// Make temporary backup of original conf file
-			KIO::file_copy( m_destination, backupPath + "merging.orig" , m_mergedMode, true, false, false );
+			KIO::file_copy( m_destination, backupPath + "merging.orig" , m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
 		}
 	}
 }
@@ -183,7 +180,7 @@ void EtcUpdate::slotChanged()
  * After diff tool completed, close all.
  * @param proc
  */
-void EtcUpdate::slotCleanupDiff( KProcess* proc )
+void EtcUpdate::slotCleanupDiff( K3Process* proc )
 {
 
 	//Unregister the watcher
@@ -207,8 +204,8 @@ void EtcUpdate::slotCleanupDiff( KProcess* proc )
 		destination.replace( "/", ":" );
 
 		//Change this to a move instead of copy so we don't leave the temp file around
-		KIO::file_move( backupPath + "merging.orig", backupPathDir + destination + ".orig", m_mergedMode, true, false, false );
-		KIO::file_copy( m_destination, backupPathDir + destination, m_mergedMode, true, false, true );
+		KIO::file_move( backupPath + "merging.orig", backupPathDir + destination + ".orig", m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
+		KIO::file_copy( m_destination, backupPathDir + destination, m_mergedMode, KIO::Overwrite );
 
 		//This is only necessary because it seems that kdiff3 rewrites the mode.
 		KIO::chmod( m_destination, m_mergedMode );

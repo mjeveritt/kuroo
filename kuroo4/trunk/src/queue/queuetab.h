@@ -20,17 +20,14 @@
 #ifndef QUEUETAB_H
 #define QUEUETAB_H
 
-#include <queuebase.h>
-
-class KListView;
-class QListViewItem;
-class PackageInspector;
+#include <ui_queuebase.h>
+#include "packageinspector.h"
 
 /**
  * @class QueueTab
  * @short Tab page for the installation queue.
  */
-class QueueTab : public QueueBase
+class QueueTab : public QWidget, public Ui::QueueBase
 {
 Q_OBJECT
 public:
@@ -62,7 +59,7 @@ private slots:
 	void				slotRemoveInstalled();
 	void				slotAdvanced();
 	void				slotPackage();
-	void				contextMenu( KListView *listView, QListViewItem *item, const QPoint &point );
+    void				contextMenu( QTreeWidget *listView, QTreeWidgetItem *item, const QPoint &point );
 	
 private:
 	

@@ -25,7 +25,8 @@
 #include <qpalette.h>
 #include <qdatetime.h>
 
-#include <kglobal.h>
+#include <KGlobal>
+#include <kglobalsettings.h>
 
 const QString Global::kuroo_dir=QString("/var/cache/kuroo/");
 
@@ -100,7 +101,7 @@ const QStringList Global::parsePackage( const QString& packageString ) const
 	}
 
 	// Now package name and version
-	if ( rx.search( nameVersion ) != -1 ) {
+    if ( rx.indexIn( nameVersion ) != -1 ) {
 		QString name = nameVersion.section( rx.cap( 1 ), 0, 0 );
 		list << name;
 		list << nameVersion.section( name + "-", 1 );
@@ -115,11 +116,11 @@ const QStringList Global::parsePackage( const QString& packageString ) const
  */
 void Global::setColorTheme()
 {
-	QColor c = KGlobalSettings::highlightColor();
+    /*QColor c = QPalette::highlightColor();
 	m_bgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
 	
 	c = KGlobalSettings::highlightedTextColor();
-	m_fgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
+    m_fgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );*/
 }
 
 /**

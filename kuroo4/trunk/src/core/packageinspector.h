@@ -21,16 +21,16 @@
 #ifndef PACKAGEINSPECTOR_H
 #define PACKAGEINSPECTOR_H
 
-#include "inspectorbase.h"
-#include "portagelistview.h"
+#include <KDialog>
 
-#include <kdialogbase.h>
+#include "ui_inspectorbase.h"
+#include "portagelistview.h"
 
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
  */
-class PackageInspector : public KDialogBase
+class PackageInspector : public KDialog
 {
 Q_OBJECT
 public:
@@ -44,13 +44,15 @@ public:
 	inline bool			isParentView( const int& view ) const { return m_view == view; }
 	void				showHardMaskInfo();
 
-	InspectorBase			*dialog;
+    Ui::InspectorBase   inspector;
+    QWidget*            dialog;
 
 private:
 	void				updateVersionData();
 	void				rollbackSettings();
 	void				loadUseFlagDescription();
 	void				loadChangeLog();
+    void                askApplySettings();
 
 private slots:
 	void				slotHardMaskInfo();
@@ -64,14 +66,14 @@ private slots:
 	void				slotOk();
 	void				slotSetStability( int rbStability );
 	void				slotSetSpecificVersion( const QString& version );
-	void				slotSetUseFlags( QListViewItem* useItem );
+    void				slotSetUseFlags( QTreeWidgetItem* useItem );
 	void				slotLoadEbuild( const QString& version );
 	void				slotLoadDependencies( const QString& version );
 	void				slotLoadUseFlags( const QString& version );
 	void				slotCalculateUse();
-	void				slotCollectPretendOutput( KProcIO* eProc );
-	void				slotParsePackageUse( KProcess* eProc );
-	void				slotParseTempUse( KProcess* eProc );
+	void				slotCollectPretendOutput( K3ProcIO* eProc );
+	void				slotParsePackageUse( K3Process* eProc );
+	void				slotParseTempUse( K3Process* eProc );
 	void				slotQueue();
 	void				slotWorld();
 

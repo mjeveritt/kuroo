@@ -59,14 +59,13 @@ void FileWatcher::slotChanged( const QString& path )
 {
 	if ( path == KurooConfig::dirDbPkg() + "/sys-apps" ) {
 		QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
-		dPortageApp.setNameFilter( "portage-*" );
+        dPortageApp.setNameFilters( QStringList("portage-*") );
 		dPortageApp.setSorting( QDir::Time );
 		QString portage = dPortageApp.entryList().first();
 		
 		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
 			KurooConfig::setPortageVersion21( true );
-			KMessageBox::sorryWId( GlobalSingleton::Instance()->kurooViewId(), i18n("Portage version is upgraded to 2.1. "
-										"Please refresh package view."), i18n("Portage version") );
+            KMessageBox::sorry( 0, i18n("Portage version is upgraded to 2.1. Please refresh package view."), i18n("Portage version") );
 		}
 	}
 // 	else

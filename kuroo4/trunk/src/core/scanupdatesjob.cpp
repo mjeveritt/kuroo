@@ -24,9 +24,9 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qfileinfo.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -64,12 +64,12 @@ void ScanUpdatesJob::completeJob()
 bool ScanUpdatesJob::doJob()
 {
 	if ( !m_db->isConnected() ) {
-		kdError(0) << "Scanning updates. Can not connect to database" << LINE_INFO;
+		kError(0) << "Scanning updates. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 	
 	if ( m_packageList.isEmpty() )
-		kdWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
+		kWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
 	
 	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );
@@ -99,7 +99,7 @@ bool ScanUpdatesJob::doJob()
 
 		// Abort the scan
 		if ( isAborted() ) {
-			kdWarning(0) << "Scanning updates. Scan aborted!" << LINE_INFO;
+			kWarning(0) << "Scanning updates. Scan aborted!" << LINE_INFO;
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}
@@ -112,7 +112,7 @@ bool ScanUpdatesJob::doJob()
 			(*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 		
 		if ( id.isEmpty() ) {
-			kdWarning(0) << QString("Scanning updates. Can not find id in database for package %1/%2.")
+			kWarning(0) << QString("Scanning updates. Can not find id in database for package %1/%2.")
 				.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
 		}
 		else {

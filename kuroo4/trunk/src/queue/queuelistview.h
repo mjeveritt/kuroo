@@ -23,9 +23,7 @@
 
 #include "packagelistview.h"
 #include "packageitem.h"
-
-class PackageItem;
-class KProgress;
+#include "QProgressBar"
 
 /**
  * @class QueueListView
@@ -59,7 +57,7 @@ private:
 	void 					addSize( const QString& size );
 	
 private slots:
-	void					slotHideBars( QListViewItem* item );
+    void					slotHideBars( QTreeWidgetItem* item );
 	
 signals:
 	void					signalPackageEmerged();
@@ -80,8 +78,8 @@ private:
 class QueueListView::QueueItem : public PackageItem
 {
 public:
-	QueueItem( QListView* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
-	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
+    QueueItem( QTreeWidget* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
+    QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	~QueueItem();
 	
 	QString			package();
@@ -94,12 +92,12 @@ public:
 	void			hideBar();
 	
 protected:
-	void 			paintCell( QPainter* painter, const QColorGroup& colorgroup, int column, int width, int alignment );
+    void 			paintCell( QPainter* painter, const QPalette& colorgroup, int column, int width, int alignment );
 	
 private:
 	
 	// Individual package progressbar
-	KProgress* 		m_bar;
+    QProgressBar* 		m_bar;
 	
 	// Current emerge progress in seconds
 	int				m_progress;

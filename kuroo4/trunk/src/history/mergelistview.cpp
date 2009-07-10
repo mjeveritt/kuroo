@@ -21,24 +21,26 @@
 #include "common.h"
 #include "mergelistview.h"
 
-#include <klistview.h>
+#include <QTreeWidget>
 
 /**
  * @class MergeItem
  * @short ListViewItem with merge files.
  */
-MergeListView::MergeItem::MergeItem( QListView* parent, const char* date )
-	: KListViewItem( parent, date )
-{}
+MergeListView::MergeItem::MergeItem( QTreeWidget* parent, const QString& date )
+    : QTreeWidgetItem( parent )
+{
+    setText( 0, date );
+}
 
-MergeListView::MergeItem::MergeItem( QListView* parent, const char* source, const char* destination )
-	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
+MergeListView::MergeItem::MergeItem( QTreeWidget* parent, const QString& source, const QString& destination )
+    : QTreeWidgetItem( parent ), m_source( source ), m_destination( destination )
 {
 	setText( 0 , m_source );
 }
 
-MergeListView::MergeItem::MergeItem( MergeItem* parent, const char* source, const char* destination )
-	: KListViewItem( parent, QString::null ), m_source( source ), m_destination( destination )
+MergeListView::MergeItem::MergeItem( MergeItem* parent, const QString& source, const QString& destination )
+    : QTreeWidgetItem( parent ), m_source( source ), m_destination( destination )
 {
 	setText( 0 , m_source.section( QRegExp( "\\d{8}_\\d{4}/" ), 1, 1 ).replace( ":" , "/" ) );
 }
@@ -57,22 +59,22 @@ QString MergeListView::MergeItem::destination()
  * @class MergeListView
  * @short Specialized listview for emerge history.
  */
-MergeListView::MergeListView( QWidget *parent, const char *name )
-	: KListView( parent, name ), m_loc( KGlobal::locale() )
+MergeListView::MergeListView( QWidget *parent, const QString& name )
+    : QTreeWidget( parent ), m_loc( KGlobal::locale() )
 {
-	addColumn( i18n("Configuration file") );
+    setHeaderLabel( i18n("Configuration file") );
 	
 	setProperty( "selectionMode", "Extended" );
-	setFrameShape( QFrame::NoFrame );
+    //setFrameShape( Q3Frame::NoFrame );
 	setRootIsDecorated( true );
-	setFullWidth( true );
+    //setFullWidth( true );
 
 	setColumnWidth( 0, 300 );
 	setColumnWidth( 1, 300 );
-	setColumnWidthMode( 0, QListView::Manual );
-	setResizeMode( QListView::LastColumn );
+    //setColumnWidthMode( 0, QTreeWidget::Manual );
+    //setResizeMode( QTreeWidget::LastColumn );
 	
-	setSorting( -1 );
+    //setSorting( -1 );
 }
 
 MergeListView::~MergeListView()
@@ -86,8 +88,8 @@ void MergeListView::loadConfFiles( const QStringList& filesList )
 	clear();
 	m_itemMap.clear();
 	
-	foreach ( filesList ) {
-		QString source = *it;
+    foreach ( QString file, filesList ) {
+        QString source = file;
 		QString destination = source;
 		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
 		new MergeItem( this, source, destination );
@@ -103,8 +105,8 @@ void MergeListView::loadBackupFiles( const QStringList& filesList )
 	m_itemMap.clear();
 	
 	// Find dates
-	foreach ( filesList ) {
-		QString date = (*it).section( "/", -2, -2 ).mid(0,8);
+    foreach ( QString file, filesList ) {
+        QString date = file.section( "/", -2, -2 ).mid(0,8);
 		if ( !m_itemMap.contains( date ) )
 			m_itemMap[ date ] = NULL;
 	}
@@ -115,13 +117,12 @@ void MergeListView::loadBackupFiles( const QStringList& filesList )
 		QString localDate = m_loc->formatDate( QDate( date.mid(0,4).toInt(), date.mid(4,2).toInt(), date.mid(6,2).toInt() ) );
 		
 		MergeItem *item = new MergeItem( this, localDate );
-		item->setOpen( true );
+        item->setExpanded( true );
 		m_itemMap[ date ] = item;
 	}
 	
 	// Insert files
-	foreach ( filesList ) {
-		QString source = *it;
+    foreach ( QString source, filesList ) {
 		QString date = source.section( "/", -2, -2 ).mid(0,8);
 		new MergeItem( m_itemMap[ date ], source, source + ".orig" );
 	}

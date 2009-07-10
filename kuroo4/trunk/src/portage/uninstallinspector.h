@@ -21,15 +21,14 @@
 #ifndef UNINSTALLINSPECTOR_H
 #define UNINSTALLINSPECTOR_H
 
-#include <kdialogbase.h>
-
-class UninstallBase;
+#include <KDialog>
+#include "ui_uninstallbase.h"
 
 /**
  * @class UninstallInspector
  * @short Dialog for selected package and version to uninstall.
  */
-class UninstallInspector : public KDialogBase
+class UninstallInspector : public KDialog
 {
 Q_OBJECT
 public:
@@ -42,7 +41,8 @@ private slots:
 	void			slotOk();
 	
 private:
-	UninstallBase* 	m_dialog;
+    Ui::UninstallBase m_uninstallbase;
+    QWidget* 	m_dialog;
 };
 
 #endif

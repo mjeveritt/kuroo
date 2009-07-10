@@ -21,7 +21,7 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-typedef struct EmergePackage {
+struct EmergePackage {
 	QString category;
 	QString package;
 	QString name;
@@ -32,6 +32,6 @@ typedef struct EmergePackage {
 	QString size;
 };
 
-typedef QValueList<EmergePackage> EmergePackageList;
+typedef QList<EmergePackage> EmergePackageList;
 
 #endif

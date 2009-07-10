@@ -57,7 +57,7 @@ bool CachePortageJob::doJob()
 {
 	DEBUG_LINE_INFO;
 	if ( !m_db->isConnected() ) {
-		kdError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
+		kError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
 		return false;
 	}
 
@@ -76,15 +76,16 @@ bool CachePortageJob::doJob()
 	setStatus( "CachePortage", i18n("Collecting package information...") );
 
 	// Get list of categories in Portage and Overlays
-	QStringList pathList = KurooConfig::dirPortage();
-	const QStringList pathOverlays = QStringList::split( " ", KurooConfig::dirPortageOverlay() );
-	foreach ( pathOverlays )
-		pathList += *it;
+	QStringList pathList = KurooConfig::dirPortage().split(" ");
+	const QStringList pathOverlays =KurooConfig::dirPortageOverlay().split(" ");
+	foreach ( QString path, pathOverlays ) {
+		pathList += path;
+	}
 
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
-			kdWarning(0) << "Creating cache. Can not access " << *itPath << LINE_INFO;
+			kWarning(0) << "Creating cache. Can not access " << *itPath << LINE_INFO;
 			continue;
 		}
 
@@ -97,7 +98,7 @@ bool CachePortageJob::doJob()
 
 			// Abort the scan
 			if ( isAborted() ) {
-				kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
+				kWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
 			}
@@ -115,7 +116,7 @@ bool CachePortageJob::doJob()
 
 					// Abort the scan
 					if ( isAborted() ) {
-						kdWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
+						kWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
 					}
@@ -130,7 +131,7 @@ bool CachePortageJob::doJob()
 						mapCache.insert( package, "12345" );
 						/*QString path = *itPath + "/" + *itCategory + "/" + packageName + "/files/digest-" + *itPackage;
 						QFile file( path );
-						if ( file.open( IO_ReadOnly ) ) {
+						if ( file.open( QIODevice::ReadOnly ) ) {
 							std::ifstream in( path );
 							std::string word;
 							while ( in >> word );
@@ -138,10 +139,10 @@ bool CachePortageJob::doJob()
 							file.close();
 						}
 						else
-							kdWarning(0) << "Creating cache. Reading: " << path << LINE_INFO;*/
+							kWarning(0) << "Creating cache. Reading: " << path << LINE_INFO;*/
 					}
 					else
-						kdWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
+						kWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
 
 					// Post scan count progress
 					if ( (++count % 100) == 0 )
@@ -149,7 +150,7 @@ bool CachePortageJob::doJob()
 				}
 			}
 			else
-				kdWarning(0) << "Creating cache. Can not access " << *itPath << "/metadata/cache/" << *itCategory << LINE_INFO;
+				kWarning(0) << "Creating cache. Can not access " << *itPath << "/metadata/cache/" << *itCategory << LINE_INFO;
 
 		}
 	}
@@ -162,7 +163,7 @@ bool CachePortageJob::doJob()
 	QMap< QString, QString >::iterator itMapEnd = mapCache.end();
 	for ( QMap< QString, QString >::iterator itMap = mapCache.begin(); itMap != itMapEnd; ++itMap )
 		KurooDBSingleton::Instance()->insert( QString("INSERT INTO cache (package, size) VALUES ('%1', '%2');").
-		                                      arg( itMap.key() ).arg( itMap.data() ), m_db );
+		                                      arg( itMap.key() ).arg( itMap.value() ), m_db );
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 

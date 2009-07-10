@@ -21,13 +21,14 @@
 #include "common.h"
 #include "versionview.h"
 
-#include <qpainter.h>
+#include <QPainter>
+#include <QTreeWidget>
 
-#include <klistview.h>
-
-VersionView::VersionItem::VersionItem( QListView* parent, const char* version, const bool& isInstalled, const int& stability )
-	: KListViewItem( parent, version ), m_isInstalled( isInstalled ), m_stability( stability )
-{}
+VersionView::VersionItem::VersionItem( QTreeWidget* parent, const QString& version, const bool& isInstalled, const int& stability )
+    : QTreeWidgetItem( parent ), m_isInstalled( isInstalled ), m_stability( stability )
+{
+    setText( 0, version );
+}
 
 VersionView::VersionItem::~VersionItem()
 {}
@@ -35,9 +36,9 @@ VersionView::VersionItem::~VersionItem()
 /**
  * Paint the installed version in dark green.
  */
-void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, const int& column, const int& width, const int& alignment )
+void VersionView::VersionItem::paintCell( QPainter *p, const QPalette &palette, const int& column, const int& width, const int& alignment )
 {
-	QColorGroup m_cg( cg );
+    QPalette m_palette( palette );
 	QFont font( p->font() );
 	
 	if ( m_isInstalled )
@@ -50,38 +51,36 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QColorGroup &cg, co
 	
 		case ( HARDMASKED ) :
 			font.setItalic( true );
-			m_cg.setColor( QColorGroup::Text, Qt::darkRed );
+            m_palette.setColor( QPalette::Text, Qt::darkRed );
 	}
 		
-	p->setFont( font );
-	KListViewItem::paintCell( p, m_cg, column, width, alignment );
+    setFont( column, font );
+    setForeground( column, m_palette.foreground() );
+    setTextAlignment( column, alignment );
 }
 
 /**
  * @class VersionView
  * @short Version listview.
  */
-VersionView::VersionView( QWidget *parent, const char *name )
-	: KListView( parent, name ), m_emergeVersion( QString::null ), m_installedIndex( 0 ), m_emergeIndex( 0 )
+VersionView::VersionView( QWidget *parent, const QString& name )
+    : QTreeWidget( parent ), m_emergeVersion( QString::null )
 {
-	addColumn( " " );
-	addColumn( i18n( "Version" ) );
-	addColumn( i18n( "Stability" ) );
-	addColumn( i18n( "Size" ) );
+    setHeaderLabels( QStringList() << " " << i18n( "Version" ) << i18n( "Stability" ) <<  i18n( "Size" ) );
 	setColumnWidth( 1, 100 );
 	setColumnWidth( 2, 100 );
 	setColumnWidth( 3, 70 );
-	setColumnAlignment( 3, Qt::AlignRight );
-	setResizeMode( QListView::LastColumn );
-	setSorting( -1 );
-	setSelectionMode( QListView::NoSelection );
+    //setColumnAlignment( 3, Qt::AlignRight );
+    //setResizeMode( QTreeWidget::LastColumn );
+    //setSorting( -1 );
+    setSelectionMode( QTreeWidget::NoSelection );
 }
 
 VersionView::~VersionView()
 {
 }
 
-void VersionView::insertItem( const char* version, const char* stability, const char* size, const bool& isInstalled )
+void VersionView::insertItem( const QString& version, const QString& stability, const QString& size, const bool& isInstalled )
 {
 	VersionItem* item;
 	if ( stability == i18n("Testing") )
@@ -103,16 +102,16 @@ void VersionView::insertItem( const char* version, const char* stability, const 
  */
 void VersionView::usedForInstallation( const QString& version )
 {
-	QListViewItem* myChild = firstChild();
-	while ( myChild ) {
-		if ( dynamic_cast<VersionItem*>( myChild )->isInstalled() )
-			m_installedIndex = itemIndex( myChild );
+    QTreeWidgetItemIterator it( this );
+    while( *it ) {
+        if( dynamic_cast<VersionItem*>( *it )->isInstalled() )
+            m_installedIndex = indexFromItem( *it );
 		
-		if ( myChild->text(1) == version ) {
-			myChild->setPixmap( 0, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
-			m_emergeIndex = itemIndex( myChild );
+        if ( (*it)->text(1) == version ) {
+            (*it)->setIcon( 0, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+            m_emergeIndex = indexFromItem( *it );
 		}
-		myChild = myChild->nextSibling();
+        it++;
 	}
 	
 	m_emergeVersion = version;

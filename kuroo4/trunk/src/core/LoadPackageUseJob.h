@@ -35,7 +35,7 @@ public:
 		
 		QFileInfo fileInfo( KurooConfig::filePackageUserUse() );
 		if( fileInfo.isDir() ) {
-			kdDebug(0) << KurooConfig::filePackageUserUse() << " is a dir" << LINE_INFO;
+			kDebug(0) << KurooConfig::filePackageUserUse() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageUserUse() ) ) {
 				return false;
 			}
@@ -44,8 +44,8 @@ public:
 		QFile file( KurooConfig::filePackageUserUse() );
 		QTextStream stream( &file );
 		QStringList linesUse;
-		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::filePackageUserUse() << LINE_INFO;
+		if ( !file.open( QIODevice::ReadOnly ) )
+			kError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::filePackageUserUse() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
@@ -65,17 +65,17 @@ public:
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
 		
 		for ( QStringList::Iterator it = linesUse.begin(), end = linesUse.end(); it != end; ++it ) {
-			if( !(*it).stripWhiteSpace().startsWith( "#" ) && !(*it).stripWhiteSpace().isEmpty() ) {
+			if( !(*it).trimmed().startsWith( "#" ) && !(*it).trimmed().isEmpty() ) {
 				QString category = (*it).section( '/', 0, 0 );
 				QString name = ( (*it).section( '/', 1 ) ).section( ' ', 0, 0 );
 				QString use = (*it).section( ' ', 1 );
-				use.simplifyWhiteSpace();
+				use.simplified();
 				
 				QString id = KurooDBSingleton::Instance()->singleQuery( 
 					"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 				
 				if ( id.isEmpty() )
-					kdWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
+					kWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
 						.arg( category ).arg( name ) << LINE_INFO;
 				else
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )

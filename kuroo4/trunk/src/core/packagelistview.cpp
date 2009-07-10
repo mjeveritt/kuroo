@@ -18,31 +18,31 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <QTreeWidget>
+
 #include "common.h"
 #include "packagelistview.h"
 #include "packageitem.h"
 #include "tooltip.h"
-
-#include <qlistview.h>
-#include <qheader.h>
 
 /**
  * @class PackageListView
  * @short Base class for listViews containing packages.
  */
 PackageListView::PackageListView( QWidget* parent, const char* name )
-	: KListView( parent, name ), lastItem( 0 )
+    : QTreeWidget( parent ), lastItem( 0 )
 {
-	setFrameShape( QFrame::NoFrame );
-	setSelectionModeExt( FileManager );
-	header()->setStretchEnabled( false );
+    //setText( 0, name );
+    //setFrameShape( Q3Frame::NoFrame );
+    //setSelectionModeExt( FileManager );
+    //header()->setStretchEnabled( false );
 	
 	// Update visible items when world is changed
 	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
 	
 // 	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
 	
-	new ToolTip( this );
+    //new ToolTip( this );
 }
 
 PackageListView::~PackageListView()
@@ -87,10 +87,11 @@ PackageItem* PackageListView::currentPackage() const  { return dynamic_cast<Pack
  */
 PackageItem* PackageListView::packageItemById( const QString& id ) const
 {
-	if ( id.isEmpty() || !m_packageIndex[id] )
+    if ( id.isEmpty() || !m_packageIndex.contains(id) ) {
 		return NULL;
-	else
-		return m_packageIndex[id];
+    } else {
+        return m_packageIndex[id];
+    }
 }
 
 /**
@@ -113,12 +114,8 @@ const QString PackageListView::currentId() const
 const QStringList PackageListView::selectedIds() const
 {
 	QStringList idList;
-	QListViewItemIterator it( (PackageListView*)&(*this) );
-	while ( it.current() ) {
-		QListViewItem *item = it.current();
-		if ( item->isSelected() )
-			idList += dynamic_cast<PackageItem*>( item )->id();
-		++it;
+    foreach( QTreeWidgetItem* item, selectedItems() ) {
+        idList += dynamic_cast<PackageItem*>(item)->id();
 	}
 	return idList;
 }
@@ -130,13 +127,9 @@ const QStringList PackageListView::selectedIds() const
 const QStringList PackageListView::selectedPackages() const
 {
 	QStringList packageList;
-	QListViewItemIterator it( (PackageListView*)&(*this) );
-	while ( it.current() ) {
-		QListViewItem *item = it.current();
-		if ( item->isSelected() )
-			packageList += dynamic_cast<PackageItem*>( item )->name();
-		++it;
-	}
+    foreach( QTreeWidgetItem* item, selectedItems() ) {
+        packageList += dynamic_cast<PackageItem*>(item)->name();
+    }
 	return packageList;
 }
 
@@ -147,10 +140,8 @@ const QStringList PackageListView::selectedPackages() const
 const QStringList PackageListView::allId() const
 {
 	QStringList idList;
-	QListViewItemIterator it( (PackageListView*)&(*this) );
-	while ( it.current() ) {
-		idList += dynamic_cast<PackageItem*>( it.current() )->id();
-		++it;
+    for( int i=0; i<topLevelItemCount(); i++ ) {
+        idList += dynamic_cast<PackageItem*>(topLevelItem(i))->id();
 	}
 	return idList;
 }
@@ -162,10 +153,8 @@ const QStringList PackageListView::allId() const
 const QStringList PackageListView::allPackages() const
 {
 	QStringList packageList;
-	QListViewItemIterator it( (PackageListView*)&(*this) );
-	while ( it.current() ) {
-		packageList += dynamic_cast<PackageItem*>( it.current() )->name();
-		++it;
+    for( int i=0; i<topLevelItemCount(); i++ ) {
+        packageList += dynamic_cast<PackageItem*>(topLevelItem(i))->name();
 	}
 	return packageList;
 }
@@ -177,14 +166,14 @@ const QStringList PackageListView::allPackages() const
 void PackageListView::setPackageFocus( const QString& id )
 {
 	if ( id.isEmpty() || !m_packageIndex[id] ) {
-		setCurrentItem( firstChild() );
-		setSelected( firstChild(), true );
+        setCurrentItem( topLevelItem(0) );
+        currentItem()->setSelected( true );
 	}
 	else {
 		PackageItem* item = m_packageIndex[id];
 		setCurrentItem( item );
-		setSelected( item, true );
-		ensureItemVisible( item );
+        item->setSelected( true );
+        //ensureItemVisible( item );
 	}
 }
 
@@ -209,22 +198,26 @@ void PackageListView::indexPackage( const QString& id, PackageItem *item )
 void PackageListView::nextPackage( const bool& isPrevious )
 {
 	if ( isVisible() ) {
-		QListViewItem* item = currentItem();
+        QTreeWidgetItem* item = currentItem();
 		if ( isPrevious ) {
-			if ( item->itemAbove() ) {
-				item = item->itemAbove();
-				ensureItemVisible( item );
+            if ( itemAbove(item) ) {
+                item = itemAbove(item);
+                //ensureItemVisible( item ); //scrollTo
 				setCurrentItem( item );
-				selectAll( false );
+                for( int i=0; i<topLevelItemCount(); i++ ) {
+                    topLevelItem(i)->setSelected(false);
+                }
 				item->setSelected( true );
 			}
 		}
 		else {
-			if ( item->itemBelow() ) {
-				item = item->itemBelow();
-				ensureItemVisible( item );
+            if( itemBelow( item ) ) {
+                item = itemBelow( item );
+                //ensureItemVisible( item ); //scrollTo
 				setCurrentItem( item );
-				selectAll( false );
+                for( int i=0; i<topLevelItemCount(); i++ ) {
+                    topLevelItem(i)->setSelected(false);
+                }
 				item->setSelected( true );
 			}
 		}

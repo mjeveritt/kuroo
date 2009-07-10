@@ -21,13 +21,13 @@
 #ifndef MERGETAB_H
 #define MERGETAB_H
 
-#include "mergebase.h"
+#include "ui_mergebase.h"
 
 /**
  * @class MergeTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
  */
-class MergeTab : public MergeBase
+class MergeTab : public QWidget, public Ui::MergeBase
 {
 Q_OBJECT
 public:

@@ -23,7 +23,7 @@
 
 #include <qdir.h>            //stack allocated
 #include <qobject.h>         //baseclass
-#include <qptrqueue.h>       //baseclass
+#include <QQueue>       //baseclass
 #include <qsemaphore.h>      //stack allocated
 #include <qstringlist.h>     //stack allocated
 
@@ -56,9 +56,9 @@ public:
 	virtual QStringList query( const QString& /* statement */) = 0;
 	virtual QString		singleQuery( const QString& /* statement */) = 0;
 	virtual int 		insert( const QString& /* statement */) = 0;
-	inline const bool 	isInitialized() const { return m_initialized; }
+	bool 	isInitialized() const { return m_initialized; }
 	virtual bool 		isConnected() const = 0;
-	inline virtual const 	QString lastError() const { return "None"; }
+	virtual const 	QString lastError() const { return "None"; }
 
 protected:
 	bool 				m_initialized;
@@ -83,7 +83,7 @@ private:
 	sqlite3* 			m_db;
 };
 
-class DbConnectionPool : QPtrQueue<DbConnection>
+class DbConnectionPool : QQueue<DbConnection*>
 {
 public:
 	DbConnectionPool();
@@ -93,7 +93,7 @@ public:
 	void 				createDbConnections();
 
 	DbConnection*			getDbConnection();
-	void 				putDbConnection( const DbConnection* /* conn */ );
+    void 				putDbConnection( DbConnection* conn );
 
 	QString 			escapeString( const QString&) const;
 

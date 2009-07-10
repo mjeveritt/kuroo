@@ -21,13 +21,13 @@
 #ifndef LOGSTAB_H
 #define LOGSTAB_H
 
-#include "logsbase.h"
+#include "ui_logsbase.h"
 
 /**
  * @class LogsTab
  * @short Tabpage for emerge log browser.
  */
-class LogsTab : public LogsBase
+class LogsTab : public QWidget, public Ui::LogsBase
 {
 Q_OBJECT
 public:

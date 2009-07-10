@@ -24,9 +24,9 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qfile.h>
-#include <qvaluevector.h>
+#include <QVector>
 
-class KProcIO;
+class K3ProcIO;
 class PackageEmergeTime;
 class QString;
 class KDirWatch;
@@ -37,7 +37,7 @@ struct eLog {
 };
 
 typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
-typedef QValueVector<eLog> eLogVector;
+typedef QVector<eLog> eLogVector;
 
 /**
  * @class History
@@ -60,39 +60,39 @@ public:
 	const QStringList		allMergeHistory();
 	void					scanELog();
 	eLogVector				getELogs();
-	
+
 public slots:
 	void					slotInit();
 	void					slotScanHistoryCompleted();
 	bool					slotRefresh();
-	
+
 private slots:
 	void					slotScanHistory( const QStringList& lines );
 	void					slotParse();
 
 private:
 	QObject*				m_parent;
-	
+
 	// Watches the emerge.log file
 	KDirWatch				*logWatcher;
-	
+
 	// Map with packages emerge duration
 	EmergeTimeMap			m_statisticsMap;
-	
+
 	// The emerge.log
 	QFile 					m_log;
-	
+
 	// Stream for emerge.log
 	QTextStream 			stream;
-	
+
 	// Is kuroo emerging or just downloading the package
 	bool					isEmerging;
-	
+
 	// To keep track of sync time
 	QTime					m_syncTime;
-	
+
 	eLogVector				m_eLogs;
-	
+
 signals:
 	void					signalScanHistoryCompleted();
 	void					signalHistoryChanged();

@@ -23,7 +23,7 @@
 
 #include "packageversion.h"
 
-#include <qvaluelist.h>
+#include <QList>
 
 class QRegExp;
 
@@ -44,7 +44,7 @@ public:
 	
 	bool parse( const QString& atom );
 	
-	QValueList<PackageVersion*> matchingVersions();
+        QList<PackageVersion*> matchingVersions();
 	
 	/**
 	 * Return true if the atom begins with a call sign ("!") which means that

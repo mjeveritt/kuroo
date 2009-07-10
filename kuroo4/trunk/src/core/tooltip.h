@@ -21,9 +21,8 @@
 #ifndef TOOLTIP_H
 #define TOOLTIP_H
 
-#include <qtooltip.h>
-
-#include <klistview.h>
+#include <QTreeWidget>
+#include <QToolTip>
 
 /**
  * @class ToolTip
@@ -32,13 +31,13 @@
 class ToolTip : public QToolTip
 {
 public:
-	ToolTip( KListView *pWidget, QToolTipGroup *group = 0 );
+    ToolTip( QTreeWidget* pWidget );
 	virtual ~ToolTip();
 	
 	void 		maybeTip( const QPoint &pos );
 	
 private:
-	KListView 	*m_pParent;
+    QTreeWidget 	*m_pParent;
 };
 
 #endif

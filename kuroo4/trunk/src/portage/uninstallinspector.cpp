@@ -20,18 +20,19 @@
 
 #include "common.h"
 #include "uninstallinspector.h"
-#include "uninstallbase.h"
+#include "ui_uninstallbase.h"
 
-#include <klistview.h>
+#include <QTreeWidget>
 
 /**
  * @class UninstallInspector
  * @short Dialog for selected package and version to uninstall.
  */
 UninstallInspector::UninstallInspector( QWidget *parent )
-	: KDialogBase( KDialogBase::Swallow, 0, parent, i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false )
+    : KDialog( parent )
 {
-	m_dialog = new UninstallBase( this );
+    //i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
+    m_uninstallbase.setupUi( m_dialog );
 	setMainWidget( m_dialog );
 }
 
@@ -44,42 +45,48 @@ UninstallInspector::~UninstallInspector()
  */
 void UninstallInspector::view( const QStringList& packageList )
 {
-	m_dialog->uninstallView->clear();
+    m_uninstallbase.uninstallView->clear();
 	
-	const QStringList systemFilesList = QStringList::split( " ", KurooConfig::systemFiles() );
+    const QStringList systemFilesList = KurooConfig::systemFiles().split(" ");
 	bool isPartOfSystem( false );
 	
 	for ( QStringList::ConstIterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 		QString id = *itPackage++;
 		QString package = *itPackage;
 		
-		QCheckListItem* itemPackage = new QCheckListItem( m_dialog->uninstallView, package, QCheckListItem::CheckBoxController );
-		itemPackage->setOpen( true );
-		itemPackage->setOn( true );
+        QTreeWidgetItem* itemPackage = new QTreeWidgetItem( m_uninstallbase.uninstallView );
+        itemPackage->setText( 0, package );
+        itemPackage->setFlags( Qt::ItemIsUserCheckable );
+        itemPackage->setExpanded( true );
+        itemPackage->setCheckState( 0, Qt::Checked );
 		
 		// Warn if package is included in gentoo base system profile
-		foreach ( systemFilesList )
-			if ( *it == package ) {
-				itemPackage->setPixmap( 0, ImagesSingleton::Instance()->icon( WARNING ) );
+        foreach ( QString file, systemFilesList )
+            if ( file == package ) {
+                itemPackage->setIcon( 0, ImagesSingleton::Instance()->icon( WARNING ) );
 				isPartOfSystem = true;
 			}
 		
 		// List all versions if more that one installed version is found
 		const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInstalled( id );
 		if ( versionsList.size() > 1 )
-			foreach ( versionsList ) {
-				QCheckListItem* itemVersion = new QCheckListItem( itemPackage, *it, QCheckListItem::CheckBox );
-				itemVersion->setOn( true );
+            foreach( QString version, versionsList ) {
+                QTreeWidgetItem* itemVersion = new QTreeWidgetItem( itemPackage );
+                itemPackage->setText( 0, version );
+                itemPackage->setFlags( Qt::ItemIsUserCheckable );
+                //itemVersion->setEnabled( true );
+                itemPackage->setCheckState( 0, Qt::Checked );
 			}
 	}
 	
 	if ( isPartOfSystem ) {
-		m_dialog->uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
+        m_uninstallbase.uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
 		                                          "This may be damaging to your system!</b></font>") );
-		m_dialog->uninstallWarning->show();
+        m_uninstallbase.uninstallWarning->show();
 	}
-	else
-		m_dialog->uninstallWarning->hide();
+    else {
+        m_uninstallbase.uninstallWarning->hide();
+    }
 	
 	show();
 }
@@ -91,16 +98,15 @@ void UninstallInspector::slotOk()
 {
 	QStringList packageList;
 	
-	QListViewItemIterator it( m_dialog->uninstallView );
-	while ( it.current() ) {
-		
-		if ( dynamic_cast<QCheckListItem*>( it.current() )->state() == QCheckListItem::On )
-			if ( it.current()->parent() ) {
-				if ( dynamic_cast<QCheckListItem*>( it.current()->parent() )->state() != QCheckListItem::On )
-					packageList += "=" + it.current()->parent()->text(0) + "-" + it.current()->text(0);
+    QTreeWidgetItemIterator it( m_uninstallbase.uninstallView );
+    while ( *it ) {
+        if ( (*it)->checkState(0) == Qt::Checked )
+            if ( (*it)->parent() ) {
+                if ( (*it)->parent()->checkState(0) == Qt::Unchecked )
+                    packageList += "=" + (*it)->parent()->text(0) + "-" + (*it)->text(0);
 			}
 			else
-				packageList += it.current()->text(0);
+                packageList += (*it)->text(0);
 		
 		++it;
 	}

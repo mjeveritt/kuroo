@@ -37,7 +37,7 @@ public:
 		// Collect all mask dependatoms
 		QFileInfo fileInfo( KurooConfig::filePackageKeywords() );
 		if( fileInfo.isDir() ) {
-			kdDebug(0) << KurooConfig::filePackageKeywords() << " is a dir" << LINE_INFO;
+			kDebug(0) << KurooConfig::filePackageKeywords() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageKeywords() ) ) {
 				return false;
 			}
@@ -45,8 +45,8 @@ public:
 		QFile file( KurooConfig::filePackageKeywords() );
 		QTextStream stream( &file );
 		QStringList linesPackage;
-		if ( !file.open( IO_ReadOnly ) )
-			kdWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::filePackageKeywords() << LINE_INFO;
+		if ( !file.open( QIODevice::ReadOnly ) )
+			kWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::filePackageKeywords() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -70,10 +70,10 @@ public:
 		for ( QStringList::Iterator it = linesPackage.begin(), end = linesPackage.end(); it != end; ++it ) {
 			
 			// set the atom string
-			QStringList tokens = QStringList::split( ' ', *it );
+            QStringList tokens = (*it).split(' ');
 			QString package = tokens[0];
 			
-			if( !(*it).stripWhiteSpace().startsWith( "#" ) && !(*it).stripWhiteSpace().isEmpty() ) {
+			if( !(*it).trimmed().startsWith( "#" ) && !(*it).trimmed().isEmpty() ) {
 				if ( rxAtom.exactMatch( package ) ) {
 
 					// Get the captured strings
@@ -95,7 +95,7 @@ public:
 						"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 					
 					if ( id.isEmpty() )
-						kdWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
+						kWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
 						.arg( category ).arg( name ) << LINE_INFO;
 					else
 						KurooDBSingleton::Instance()->insert( QString( 
@@ -103,7 +103,7 @@ public:
 										.arg( id ).arg( keywords ), m_db );
 				}
 				else
-					kdWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+					kWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
 						.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			}
 			

@@ -26,10 +26,11 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
+#include <QTextStream>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
-#include <klistviewsearchline.h>
+#include <KTreeWidgetSearchLine>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
@@ -38,14 +39,14 @@
  * @short Tabpage for emerge log browser.
  */
 HistoryTab::HistoryTab( QWidget* parent )
-	: HistoryBase( parent )
 {
+    setupUi( this );
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 	
-	pbClearFilter->setIconSet( SmallIconSet("locationbar_erase") );
+    pbClearFilter->setIcon( QIcon("locationbar_erase") );
 	
-	historyFilter->setListView( historyView );
+    historyFilter->setTreeWidget( historyView );
 	
 	// Connect button and checkbox
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
@@ -81,7 +82,7 @@ HistoryTab::~HistoryTab()
  */
 void HistoryTab::slotInit()
 {
-	pbWhatsThis->setIconSet( SmallIconSet("info") );
+    pbWhatsThis->setIcon( QIcon("document-properties") );
 	
 	pbView->setDisabled( true );
 	
@@ -96,11 +97,10 @@ void HistoryTab::slotInit()
  */
 void HistoryTab::slotWhatsThis()
 {
-	QWhatsThis::display( i18n( "<qt>"
+    QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
 			"The emerge history keeps track of emerged/unemerged packages.<br>"
 			"Activate the log function in your /etc/make.conf if you want to trace those messages. "
-			"Select an entry and press 'View emerge log'.</qt>" )
-			, QCursor::pos(), this );
+            "Select an entry and press 'View emerge log'.</qt>" ), this );
 }
 
 /**
@@ -108,7 +108,7 @@ void HistoryTab::slotWhatsThis()
  */
 void HistoryTab::slotReload()
 {
-	slotReload( cbDays->currentItem() );
+    slotReload( cbDays->currentIndex() );
 }
 
 void HistoryTab::slotReload( int limit )
@@ -155,7 +155,7 @@ void HistoryTab::slotViewUnmerges( bool on )
  */
 void HistoryTab::slotButtonView()
 {
-	QListViewItem *item = historyView->currentItem();
+    QTreeWidgetItem *item = historyView->currentItem();
 	if ( item && item->parent() )
 		pbView->setDisabled( false );
 	else
@@ -167,7 +167,7 @@ void HistoryTab::slotButtonView()
  */
 void HistoryTab::slotViewInfo()
 {
-	QListViewItem *item = historyView->currentItem();
+    QTreeWidgetItem *item = historyView->currentItem();
 	if ( !item )
 		return;
 	
@@ -176,8 +176,8 @@ void HistoryTab::slotViewInfo()
 		QString logText;
 		QString eLogFile( KurooConfig::dirELog() + "/" + dynamic_cast<HistoryListView::HistoryItem*>( item )->einfo() );
 		QFile logFile( eLogFile );
-		if ( logFile.open( IO_ReadOnly ) ) {
-			QTextStream stream( &logFile );
+		if ( logFile.open( QIODevice::ReadOnly ) ) {
+            QTextStream stream( &logFile );
 			while ( !stream.atEnd() )
 				logText += stream.readLine() + "<br>";
 			logFile.close();
@@ -185,10 +185,9 @@ void HistoryTab::slotViewInfo()
 			Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
 		}
 		else {
-			kdError(0) << "Reading: " << eLogFile << LINE_INFO;
-			KMessageBox::error( this, i18n("Can not find elog for this emerge. Please check elog settings in /etc/make.conf.\n"
-										   "Error reading:\n" + eLogFile
-										  ), i18n("emerge elog") );
+			kError(0) << "Reading: " << eLogFile << LINE_INFO;
+            KMessageBox::error( this, i18n("Can not find elog for this emerge. Please check elog settings in /etc/make.conf.\nError reading:\n") + eLogFile
+                                , i18n("emerge elog") );
 		}
 	}
 }

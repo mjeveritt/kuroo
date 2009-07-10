@@ -36,9 +36,9 @@
  * 
  * @todo: view log-file content instead, let user select how many lines to view.
  */
-LogsTab::LogsTab( QWidget* parent )
-	: LogsBase( parent )
+LogsTab::LogsTab( QWidget* parent ) : QWidget( parent )
 {
+    setupUi( this );
 	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
 	
 	// Enable/disable this view and buttons when kuroo is busy
@@ -65,7 +65,7 @@ LogsTab::~LogsTab()
 	else
 		KurooConfig::setVerboseLog( false );
 	
-	KurooConfig::writeConfig();
+    //FIXME: KurooConfig::writeConfig();
 }
 
 /**

@@ -40,18 +40,18 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 {
 	s_instance = this;
 
-	statusBarProgress = new KProgress( this, "statusBarProgress" );
-	statusBarProgress->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 
-	                                               0, 0, statusBarProgress->sizePolicy().hasHeightForWidth() ) );
+    statusBarProgress = new QProgressBar( this );
+    /*statusBarProgress->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0,
+                                                   0, 0, statusBarProgress->sizePolicy().hasHeightForWidth() ) );*/
 	
-	statusBarLabel = new QLabel( this, "statusBarLabel" );
-	statusBarLabel->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)5, 
-	                                            0, 0, statusBarLabel->sizePolicy().hasHeightForWidth() ) );
+    statusBarLabel = new QLabel( "statusBarLabel", this );
+    /*statusBarLabel->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)5,
+                                                0, 0, statusBarLabel->sizePolicy().hasHeightForWidth() ) );*/
 	
-	addWidget( statusBarLabel, 1, 1 );
-	addWidget( statusBarProgress, 0, true );
+    addWidget( statusBarLabel );
+    addWidget( statusBarProgress );
 	
-	statusBarProgress->setTotalSteps( 100 );
+    statusBarProgress->setMaximum( 100 );
 	statusBarProgress->hide();
 	
 	// Clock timer for showing progress when emerging packages.
@@ -82,7 +82,7 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 		statusBarLabel->setText( message );
 	}
 	else {
-		m_messageMap.erase( id );
+        m_messageMap.remove( id );
 		statusBarLabel->setText( message );
 		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 	}
@@ -96,7 +96,7 @@ void KurooStatusBar::slotLastMessage()
 	QMap<QString, QString>::Iterator it = m_messageMap.end();
 	if ( m_messageMap.size() > 0 ) {
 		it--;
-		statusBarLabel->setText( it.data() );
+        statusBarLabel->setText( it.value() );
 	}
 	else
 		statusBarLabel->setText( i18n("Done.") );
@@ -107,11 +107,11 @@ void KurooStatusBar::slotLastMessage()
  */
 void KurooStatusBar::setTotalSteps( int total )
 {
-	kdDebug() << "total=" << total << LINE_INFO;
+	kDebug() << "total=" << total << LINE_INFO;
 	
     stopTimer();
-	statusBarProgress->setTextEnabled( true );
-	statusBarProgress->setTotalSteps( total );
+    statusBarProgress->setTextVisible( true );
+    statusBarProgress->setMaximum( total );
 	
 	if ( total == 0 )
 		statusBarProgress->hide();
@@ -125,9 +125,9 @@ void KurooStatusBar::setTotalSteps( int total )
 
 void KurooStatusBar::updateTotalSteps( int total )
 {
-    statusBarProgress->setTotalSteps( m_timerSteps + total );
+    statusBarProgress->setMaximum( m_timerSteps + total );
     m_diffTimer->stop();
-    statusBarProgress->setTextEnabled( true );
+    statusBarProgress->setTextVisible( true );
     disconnect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
     connect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
 }
@@ -137,8 +137,8 @@ void KurooStatusBar::updateTotalSteps( int total )
  */
 void KurooStatusBar::setThreadTotalSteps( int total )
 {
-	statusBarProgress->setTextEnabled( true );
-	statusBarProgress->setTotalSteps( total );
+    statusBarProgress->setTextVisible( true );
+    statusBarProgress->setMaximum( total );
 	
 	if ( total == 0 )
 		statusBarProgress->hide();
@@ -153,7 +153,7 @@ void KurooStatusBar::setThreadTotalSteps( int total )
  */
 void KurooStatusBar::setProgress( int steps )
 {
-	statusBarProgress->setProgress( steps );
+    statusBarProgress->setValue( steps );
 }
 
 /**
@@ -172,9 +172,9 @@ void KurooStatusBar::stopTimer()
 {
     disconnect( m_internalTimer, SIGNAL( timeout() ), this, SLOT( slotOneStep() ) );
 	m_diffTimer->stop();
-	statusBarProgress->setProgress( 0 );
-	statusBarProgress->setTotalSteps( 100 );
-	statusBarProgress->setTextEnabled( true );
+    statusBarProgress->setValue( 0 );
+    statusBarProgress->setMaximum( 100 );
+    statusBarProgress->setTextVisible( true );
 	statusBarProgress->hide();
 	DEBUG_LINE_INFO;
 }
@@ -185,7 +185,7 @@ void KurooStatusBar::stopTimer()
 void KurooStatusBar::slotOneStep()
 {
     setProgress( m_timerSteps );
-	if ( m_timerSteps > statusBarProgress->totalSteps() ) {
+    if ( m_timerSteps > statusBarProgress->maximum() ) {
 		stopTimer();
 		startProgress();
 	}
@@ -214,8 +214,8 @@ void KurooStatusBar::clearElapsedTime()
 void KurooStatusBar::startProgress()
 {
 	statusBarProgress->show();
-	statusBarProgress->setTotalSteps( 0 );
-	statusBarProgress->setTextEnabled( false );
+    statusBarProgress->setMaximum( 0 );
+    statusBarProgress->setTextVisible( false );
 	m_diffTimer->start( 1000 );
 }
 
@@ -244,7 +244,7 @@ void KurooStatusBar::unpauseTimers()
 void KurooStatusBar::slotAdvance()
 {
     m_timerSteps++;
-	statusBarProgress->advance( 2 );
+    statusBarProgress->setValue( statusBarProgress->value() + 2 );
 }
 
 #include "statusbar.moc"

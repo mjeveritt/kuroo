@@ -36,7 +36,7 @@ public:
 		// Collect all mask dependatoms from /etc/portage/package.mask
 		QFileInfo fileInfo( KurooConfig::filePackageUserMask() );
 		if( fileInfo.isDir() ) {
-			kdDebug(0) << KurooConfig::filePackageUserMask() << " is a dir" << LINE_INFO;
+			kDebug(0) << KurooConfig::filePackageUserMask() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageUserMask() ) ) {
 				return false;
 			}
@@ -45,8 +45,8 @@ public:
 		QFile file( KurooConfig::filePackageUserMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
-		if ( !file.open( IO_ReadOnly ) )
-			kdError(0) << "Parsing user package.mask. Reading: " << KurooConfig::filePackageUserMask() << LINE_INFO;
+		if ( !file.open( QIODevice::ReadOnly ) )
+			kError(0) << "Parsing user package.mask. Reading: " << KurooConfig::filePackageUserMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -76,7 +76,7 @@ public:
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").utf8();
+                    commentLines += (*it).replace('\'', "''").replace('%', "&#37;").toUtf8();
 				}
 				else {
 					if ( rxAtom.exactMatch( *it ) ) {
@@ -89,7 +89,7 @@ public:
 							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
-							kdWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
+							kWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
 								.arg( category ).arg( name ) << LINE_INFO;
 						else
 							KurooDBSingleton::Instance()->insert( QString( 
@@ -98,7 +98,7 @@ public:
 						
 					}
 					else
-						kdWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
+						kWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
 							.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 				}
 			}

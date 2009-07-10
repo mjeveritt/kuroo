@@ -21,7 +21,7 @@
 #ifndef _KUROOVIEW_H_
 #define _KUROOVIEW_H_
 
-#include "kurooviewbase.h"
+#include "ui_kurooviewbase.h"
 
 #include <qwidget.h>
 
@@ -38,7 +38,7 @@ class PackageInspector;
  * @class KurooView
  * @short Create the gui content with icon-menu and pages.
  */
-class KurooView : public KurooViewBase, public kurooIface
+class KurooView : public QWidget, public Ui::KurooViewBase //, public kurooIface
 {
 Q_OBJECT
 public:
@@ -67,7 +67,7 @@ private slots:
 	void				slotHistoryUpdated();
 	void				slotMergeUpdated();
 	void 				slotLogUpdated();
-	void				slotResetMenu( QListBoxItem* menuItem );
+    void				slotResetMenu( QListWidgetItem* menuItem );
 	void 				slotShowView();
 	
 private:
@@ -77,12 +77,12 @@ private:
 	bool				m_isHistoryRestored;
 };
 
-class KurooView::IconListItem : public QListBoxItem
+class KurooView::IconListItem : public QListWidgetItem
 {
 public:
-	IconListItem( QListBox *listbox, const QPixmap &pixmap, const QString &text );
-	virtual int 		height( const QListBox *lb ) const;
-	virtual int 		width( const QListBox *lb ) const;
+    IconListItem( QListWidget *listbox, const QPixmap &pixmap, const QString &text );
+    virtual int 		height( const QListWidget *lb ) const;
+    virtual int 		width( const QListWidget *lb ) const;
 	int 				expandMinimumWidth( int width );
 	void 				setChanged( bool modified );
 	bool 				isChanged();

@@ -6,11 +6,9 @@ EAPI="2"
 
 ARTS_REQUIRED="never"
 
-LANGS="de es fr it nb pl ru"
+inherit kde
 
-inherit kde eutils
-
-DESCRIPTION="Kuroo is a KDE Portage frontend"
+DESCRIPTION="KDE frontend to Gentoo Portage"
 HOMEPAGE="http://sourceforge.net/projects/kuroo"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 LICENSE="GPL-2"
@@ -20,8 +18,8 @@ KEYWORDS="~x86 ~ppc ~sparc ~amd64"
 IUSE=""
 
 RDEPEND="app-portage/gentoolkit
-		kde-misc/kdiff3
-		dev-db/sqlite
-		kde-base/kdesu"
+	kde-misc/kdiff3
+	dev-db/sqlite
+	kde-base/kdesu"
 
 need-kde 3.5

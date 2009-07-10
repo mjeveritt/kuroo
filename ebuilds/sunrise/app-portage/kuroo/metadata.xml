@@ -3,7 +3,7 @@
 <pkgmetadata>
 	<herd>kde</herd>
 	<longdescription lang="en">
-		Kuroo is a KDE Portage frontend.
+		KDE frontend to Gentoo Portage.
 	</longdescription>
 </pkgmetadata>
 

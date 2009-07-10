@@ -25,6 +25,8 @@
       <group pattern="*.png" name="Icons" />
       <group pattern="*.po;*.ts" name="Translations" />
       <group pattern="*" name="Others" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
@@ -158,7 +160,11 @@
     </configurations>
   </kdevautoproject>
   <kdevcppsupport>
-    <references/>
+    <references>
+      <pcs>Qt3</pcs>
+      <pcs>automatic_%2Fhome%2Faschenck%2FDesktop%2Ftrunk</pcs>
+      <pcs>KDElibs%203.5</pcs>
+    </references>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>
@@ -233,18 +239,18 @@
   </kdevdocumentation>
   <dist>
     <custom>false</custom>
-    <bzip>false</bzip>
-    <archname/>
-    <appname>kuroo.kdevelop</appname>
-    <version/>
-    <release/>
-    <vendor/>
-    <licence/>
-    <summary/>
-    <group/>
-    <packager/>
-    <description/>
-    <changelog/>
+    <bzip>true</bzip>
+    <archname>%n</archname>
+    <appname>kuroo-0.82.0</appname>
+    <version></version>
+    <release></release>
+    <vendor></vendor>
+    <licence></licence>
+    <summary></summary>
+    <group></group>
+    <packager></packager>
+    <description></description>
+    <changelog></changelog>
     <devpackage>false</devpackage>
     <docspackage>false</docspackage>
     <appicon>false</appicon>
@@ -253,6 +259,6 @@
     <useRPM>false</useRPM>
     <ftpkde>false</ftpkde>
     <appskde>false</appskde>
-    <url/>
+    <url></url>
   </dist>
 </kdevelop>

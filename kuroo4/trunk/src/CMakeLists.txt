@@ -1,0 +1,66 @@
+include_directories(
+${CMAKE_SOURCE_DIR}/src
+${CMAKE_SOURCE_DIR}/src/config
+${CMAKE_SOURCE_DIR}/src/core
+${CMAKE_SOURCE_DIR}/src/history
+${CMAKE_SOURCE_DIR}/src/intro
+${CMAKE_SOURCE_DIR}/src/logs
+${CMAKE_SOURCE_DIR}/src/portage
+${CMAKE_SOURCE_DIR}/src/queue
+#include ui_*base.h
+${CMAKE_BINARY_DIR}/src
+${CMAKE_BINARY_DIR}/src/config
+${CMAKE_BINARY_DIR}/src/core
+${CMAKE_BINARY_DIR}/src/history
+${CMAKE_BINARY_DIR}/src/intro
+${CMAKE_BINARY_DIR}/src/logs
+${CMAKE_BINARY_DIR}/src/portage
+${CMAKE_BINARY_DIR}/src/queue
+
+${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} 
+)
+
+#core
+set(core_sources core/cacheportagejob.cpp core/categorieslistview.cpp core/dependatom.cpp core/dependencyview.cpp core/emerge.cpp core/etcupdate.cpp core/filewatcher.cpp core/global.cpp core/images.cpp core/packageinspector.cpp core/packageitem.cpp core/packagelistview.cpp core/packageversion.cpp core/portagedb.cpp core/portagefiles.cpp core/scanhistoryjob.cpp core/scanportagejob.cpp core/scanupdatesjob.cpp core/signalist.cpp core/threadweaver.cpp core/tooltip.cpp core/versionview.cpp )
+kde4_add_ui_files(core_sources core/inspectorbase.ui)
+
+#history
+set(history_sources history/history.cpp history/historylistview.cpp history/historytab.cpp history/mergelistview.cpp history/mergetab.cpp )
+kde4_add_ui_files(history_sources history/historybase.ui history/mergebase.ui)                                     
+
+#portage
+set(portage_sources portage/portage.cpp portage/portagelistview.cpp portage/portagetab.cpp portage/uninstallinspector.cpp )        
+kde4_add_ui_files(portage_sources portage/uninstallbase.ui portage/portagebase.ui)                                 
+
+#config     
+set(config_sources config/configdialog.cpp )                                                             
+kde4_add_ui_files(config_sources config/options1.ui config/options2.ui config/options7.ui config/options8.ui)                 
+kde4_add_kcfg_files(config_sources config/settings.kcfgc )                                               
+       
+#queue              
+set(queue_sources queue/queue.cpp queue/queuelistview.cpp queue/queuetab.cpp )    
+kde4_add_ui_files(queue_sources queue/queuebase.ui)                   
+
+#intro                 
+set(intro_sources intro/introdlg.cpp )                                
+kde4_add_ui_files(intro_sources intro/intro.ui)                       
+      
+#logs          
+set(logs_sources logs/log.cpp logs/logstab.cpp )
+kde4_add_ui_files(logs_sources logs/logsbase.ui)                    
+
+#kuroo
+set(kuroo_sources kuroo.cpp kurooinit.cpp kurooview.cpp main.cpp mainwindow.cpp message.cpp statusbar.cpp systemtray.cpp)
+kde4_add_ui_files(kuroo_sources kurooviewbase.ui messagebase.ui)
+
+kde4_add_executable(kuroo 
+  ${core_sources} ${history_sources} ${portage_sources} ${config_sources} ${queue_sources} ${intro_sources} ${logs_sources} ${kuroo_sources})
+
+target_link_libraries(kuroo ${KDE4_KDEUI_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDE3SUPPORT_LIBS} sqlite3 )
+
+########### install ###############
+#install(TARGETS kuroo ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(FILES  DESTINATION ${DATA_INSTALL_DIR}/autostart)
+#install(FILES  config/kurooconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+#install(FILES  kurooui.rc DESTINATION ${DATA_INSTALL_DIR}/kuroo)
+#install(FILES  kuroo.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/System)

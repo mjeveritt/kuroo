@@ -1,0 +1,7 @@
+*.files
+*.cmake
+*.moc
+.directory
+CMake[^L]*
+Makefile
+trunk/build/

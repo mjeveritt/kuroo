@@ -23,7 +23,6 @@
 #include "historylistview.h"
 
 #include <QTreeWidget>
-#include <Q3Frame>
 
 /**
  * @class HistoryItem
@@ -63,7 +62,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	setHeaderItem( header );
 
 	setProperty( "selectionMode", "Extended" );
-	setFrameShape( Q3Frame::NoFrame );
+    //setFrameShape( Q3Frame::NoFrame );
 	setRootIsDecorated( true );
 	//setFullWidth( true );
 
@@ -127,7 +126,7 @@ void HistoryListView::loadFromDB( int days )
 		QString einfo = *it;
 		einfo.replace( "&gt;", ">" ).replace( "&lt;", "<" );
 
-		QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
+        QStringList parts = parsePackage( package );
 		QString packageString = parts[1] + "-" + parts[2] + " (" + parts[0].section( "-", 0, 0 ) + "/" +  parts[0].section( "-", 1, 1 ) + ")";
 
 		// Convert emerge date to local date format

@@ -20,7 +20,7 @@
 
 #include <sys/stat.h>
 
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qcolor.h>

@@ -18,21 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "common.h"
-#include "threadweaver.h"
-#include "systemtray.h"
-#include "kurooinit.h"
-#include "kuroo.h"
-#include "statusbar.h"
-#include "introdlg.h"
-#include "portagetab.h"
-#include "logstab.h"
-
 #include <unistd.h>
 
-#include <q3dragobject.h>
 #include <qpainter.h>
-#include <q3paintdevicemetrics.h>
 #include <qtimer.h>
 #include <qcheckbox.h>
 
@@ -48,6 +36,16 @@
 #include <kuser.h>
 #include <kio/job.h>
 
+#include "common.h"
+#include "threadweaver.h"
+#include "systemtray.h"
+#include "kurooinit.h"
+#include "kuroo.h"
+#include "statusbar.h"
+#include "introdlg.h"
+#include "portagetab.h"
+#include "logstab.h"
+
 /**
  * @class Kuroo
  * @short Main kde window with menus, system tray icon and statusbar.
@@ -59,7 +57,7 @@ Kuroo::Kuroo()
 	kurooInit( new KurooInit( this, "KurooInit" ) ), m_view( new KurooView( this, "KurooView" ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-	GlobalSingleton::Instance()->setColorTheme();
+    kDebug() << "Initializing Kuroo GUI";
 			
 	setCentralWidget( m_view );
 	setupActions();
@@ -138,8 +136,6 @@ void Kuroo::setupActions()
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( Qt::CTRL + Qt::Key_S ),
                                         this, SLOT( slotSync() ), actionCollection(), "sync_portage" );*/
-	
-    //createGUI();
 }
 
 /**

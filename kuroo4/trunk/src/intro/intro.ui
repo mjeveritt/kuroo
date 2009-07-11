@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Intro</class>
- <widget class="Q3Wizard" name="Intro">
+ <widget class="QWizard" name="Intro">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>Kuroo</string>
   </property>
-  <widget class="QWidget" name="page1">
+  <widget class="QWizardPage" name="page1">
    <attribute name="title">
     <string>Release information</string>
    </attribute>
@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0" rowspan="3">
-     <widget class="Q3Frame" name="frame3_5_2_2">
+     <widget class="QFrame" name="frame3_5_2_2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
@@ -109,7 +109,7 @@
     <item row="0" column="2" rowspan="2">
      <layout class="QGridLayout">
       <item row="2" column="0">
-       <widget class="Q3Frame" name="frame17">
+       <widget class="QFrame" name="frame17">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -121,7 +121,7 @@
           <number>0</number>
          </property>
          <item row="1" column="1">
-          <widget class="K3ActiveLabel" name="backupFiles" native="true">
+          <widget class="QLabel" name="backupFiles" native="true">
            <property name="minimumSize">
             <size>
              <width>450</width>
@@ -166,7 +166,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="K3ActiveLabel" name="introText" native="true">
+       <widget class="QLabel" name="introText" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -241,29 +241,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Wizard</class>
-   <extends>QDialog</extends>
-   <header>q3wizard.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>K3ActiveLabel</class>
-   <extends>QWidget</extends>
-   <header>k3activelabel.h</header>
-  </customwidget>
- </customwidgets>
- <includes>
-  <include location="local">kactivelabel.h</include>
-  <include location="local">kactivelabel.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

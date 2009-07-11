@@ -56,7 +56,6 @@ typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
 typedef Singleton<FileWatcher> FileWatcherSingleton;
-typedef Singleton<Global> GlobalSingleton;
 
 // The package status
 enum PackageStatus {

@@ -100,14 +100,14 @@ void UninstallInspector::slotOk()
 	
     QTreeWidgetItemIterator it( m_uninstallbase.uninstallView );
     while ( *it ) {
-        if ( (*it)->checkState(0) == Qt::Checked )
+        if ( (*it)->checkState(0) == Qt::Checked ) {
             if ( (*it)->parent() ) {
                 if ( (*it)->parent()->checkState(0) == Qt::Unchecked )
                     packageList += "=" + (*it)->parent()->text(0) + "-" + (*it)->text(0);
-			}
-			else
+            } else {
                 packageList += (*it)->text(0);
-		
+            }
+        }
 		++it;
 	}
 	

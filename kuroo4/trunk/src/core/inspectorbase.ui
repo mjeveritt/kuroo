@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="Q3Frame" name="topFrame">
+    <widget class="QFrame" name="topFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Ignored" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="Q3Frame" name="headerFrame">
+       <widget class="QFrame" name="headerFrame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -209,7 +209,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout">
          <item row="0" column="0">
-          <widget class="Q3GroupBox" name="groupVersionsView">
+          <widget class="KButtonGroup" name="groupVersionsView">
            <property name="maximumSize">
             <size>
              <width>32767</width>
@@ -285,7 +285,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="Q3ButtonGroup" name="groupSelectStability">
+          <widget class="KButtonGroup" name="groupSelectStability">
            <property name="whatsThis">
             <string>When you want to install a package that isn't available for your system, you will receive this masking error. You should try installing a different application that is available for your system or wait until the package is put available. There is always a reason why a package is masked:
 
@@ -295,12 +295,6 @@
     * package.mask means that the package has been found corrupt, unstable or worse and has been deliberately marked as do-not-use.
     * profile means that the package has been found not suitable for your profile. The application might break your system if you installed it or is just not compatible with the profile you use.
 </string>
-           </property>
-           <property name="title">
-            <string>For this package always install:</string>
-           </property>
-           <property name="exclusive">
-            <bool>true</bool>
            </property>
            <layout class="QGridLayout">
             <property name="margin">
@@ -317,9 +311,6 @@
               <property name="checked">
                <bool>true</bool>
               </property>
-              <attribute name="buttonGroup">
-               <string/>
-              </attribute>
              </widget>
             </item>
             <item row="1" column="0">
@@ -330,9 +321,6 @@
               <property name="shortcut">
                <string>Alt+N</string>
               </property>
-              <attribute name="buttonGroup">
-               <string/>
-              </attribute>
              </widget>
             </item>
             <item row="2" column="0">
@@ -343,9 +331,6 @@
               <property name="shortcut">
                <string>Alt+K</string>
               </property>
-              <attribute name="buttonGroup">
-               <string/>
-              </attribute>
              </widget>
             </item>
             <item row="3" column="0">
@@ -534,9 +519,6 @@ and do not update further</string>
        </item>
        <item row="1" column="0">
         <widget class="QTreeWidget" name="useView">
-         <attribute name="headerVisible">
-          <bool>false</bool>
-         </attribute>
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
@@ -740,24 +722,6 @@ and do not update further</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KUrlLabel</class>
    <extends>QLabel</extends>

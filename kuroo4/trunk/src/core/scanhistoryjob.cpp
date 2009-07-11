@@ -25,9 +25,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <q3header.h>
 #include <qfileinfo.h>
-#include <q3textstream.h>
 
 /**
  * @class ScanHistoryJob
@@ -139,7 +137,7 @@ bool ScanHistoryJob::doJob()
 // 							kDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
 						}
 						
-						QStringList parts = GlobalSingleton::Instance()->parsePackage( package );
+                        QStringList parts = parsePackage( package );
 						if ( !parts.isEmpty() ) {
 							QString categoryNameString = parts[0] + "/" + parts[1];
 

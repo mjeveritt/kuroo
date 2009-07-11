@@ -24,8 +24,7 @@
 
 #include <qdatetime.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include <ktextbrowser.h>
 #include <kuser.h>
@@ -58,12 +57,12 @@ const QString Log::init( QObject *parent )
 {
 	m_parent = parent;
 	
-	QString logName = GlobalSingleton::Instance()->kurooDir() + "kuroo.log";
+    QString logName = kurooDir + "kuroo.log";
 	kDebug(0) << logName << "\n";
     m_logFile.setFileName( logName );
 	if( !m_logFile.open( QIODevice::WriteOnly ) ) {
-		kError(0) << "Writing: " << GlobalSingleton::Instance()->kurooDir() << "kuroo.log" << LINE_INFO;
-		KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg( GlobalSingleton::Instance()->kurooDir() ), i18n("Saving"));
+        kError(0) << "Writing: " << kurooDir << "kuroo.log" << LINE_INFO;
+        KMessageBox::error(0, i18n("Writing %1kuroo.log.").arg( kurooDir ), i18n("Saving"));
 		return QString::null;
 	}
 	else
@@ -78,8 +77,8 @@ KIO::Job* Log::backupLog()
 {
 	if ( m_saveLog && m_saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
-		KIO::Job *cpjob = KIO::file_copy( GlobalSingleton::Instance()->kurooDir() + "kuroo.log", 
-                                          GlobalSingleton::Instance()->kurooDir() + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log");
+        KIO::Job *cpjob = KIO::file_copy( kurooDir + "kuroo.log",
+                                          kurooDir + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log");
 		return cpjob;
 	}
 	else
@@ -131,7 +130,7 @@ void Log::writeLog( const QString& output, int logType )
 		}
 		
 		case TOLOG: {
-			Q3TextStream st( &m_logFile );
+            QTextStream st( &m_logFile );
 			st << line << "\n";
 			m_logFile.flush();
 			break;

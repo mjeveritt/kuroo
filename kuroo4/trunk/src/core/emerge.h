@@ -26,9 +26,7 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qfile.h>
-
-class K3ProcIO;
-class K3Process;
+#include <kprocess.h>
 
 /**
  * @class Emerge
@@ -88,17 +86,17 @@ private:
 	inline bool					skipHousekeeping() const { return m_skipHousekeeping; }
 	
 private slots:
-	void 						slotEmergeOutput( K3ProcIO *proc );
-	void 						slotCleanupQueue( K3Process *proc );
-	void 						slotCleanupPretend( K3Process *proc );
-	void 						slotCleanupUnmerge( K3Process *proc );
-	void 						slotCleanupSync( K3Process *proc );
-	void 						slotCleanupCheckUpdates( K3Process *proc );
+    void 						slotEmergeOutput();
+    void 						slotCleanupQueue();
+    void 						slotCleanupPretend();
+    void 						slotCleanupUnmerge();
+    void 						slotCleanupSync();
+    void 						slotCleanupCheckUpdates();
 	void						slotTryEmerge();
-	void						slotBackupComplete( K3Process *proc );
-	void						slotEmergeDistfilesComplete( K3Process* proc );
-        void						slotEClean2Complete( K3Process* proc );
-        void						slotRevdepRebuildComplete( K3Process* proc );
+    void						slotBackupComplete();
+    void						slotEmergeDistfilesComplete();
+    void						slotEClean2Complete();
+    void						slotRevdepRebuildComplete();
 
 	
 signals:
@@ -106,10 +104,10 @@ signals:
 	
 private:
 	QObject*					m_parent;
-	K3ProcIO*					eProc;
-	K3ProcIO*                                        eClean1;
-        K3ProcIO*                                        eClean2;
-        K3ProcIO*                                        ioRevdepRebuild;
+    KProcess*					eProc;
+    KProcess*                   eClean1;
+    KProcess*                   eClean2;
+    KProcess*                   ioRevdepRebuild;
         
 	// Used to collect ewarn and einfo messages spaning multiple lines
 	bool						m_completedFlag;

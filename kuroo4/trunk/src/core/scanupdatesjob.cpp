@@ -24,9 +24,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <q3header.h>
 #include <qfileinfo.h>
-#include <q3textstream.h>
 
 #include <kapplication.h>
 #include <kconfig.h>

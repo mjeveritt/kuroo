@@ -34,7 +34,7 @@
     </attribute>
     <layout class="QVBoxLayout">
      <item>
-      <widget class="Q3GroupBox" name="kcfg_EnableEclean">
+      <widget class="QGroupBox" name="kcfg_EnableEclean">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -63,7 +63,7 @@
         <item>
          <layout class="QVBoxLayout">
           <item>
-           <widget class="Q3GroupBox" name="groupBox2">
+           <widget class="QGroupBox" name="groupBox2">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -144,7 +144,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="Q3GroupBox" name="groupBox3">
+         <widget class="QGroupBox" name="groupBox3">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -323,7 +323,7 @@
     </attribute>
     <layout class="QGridLayout">
      <item row="0" column="0">
-      <widget class="Q3GroupBox" name="kcfg_revdepEnabled">
+      <widget class="QGroupBox" name="kcfg_revdepEnabled">
        <property name="title">
         <string>Revdep Rebuild</string>
        </property>
@@ -372,14 +372,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

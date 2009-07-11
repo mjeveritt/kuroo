@@ -24,7 +24,6 @@
 
 #include <qtextcodec.h>
 
-#include <k3procio.h>
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <kdeversion.h>
@@ -40,13 +39,10 @@
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent ), m_completedFlag( false ), m_importantMessagePackage( QString::null ), m_packageMessage( QString::null )
 {
-	QTextCodec *codec = QTextCodec::codecForName("utf8");
-	eProc = new K3ProcIO( codec );
-	eProc->setUseShell( true, "/bin/bash" );
-	
-	#if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-	eProc->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-	#endif
+    //QTextCodec *codec = QTextCodec::codecForName("utf8");
+    eProc = new KProcess();
+    //eProc->setUseShell( true, "/bin/bash" );
+//	eProc->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
 }
 
 Emerge::~Emerge()
@@ -68,8 +64,8 @@ void Emerge::init( QObject *parent )
  */
 void Emerge::inputText( const QString& text )
 {
-	if ( eProc->isRunning() ) {
-		eProc->writeStdin( text, true );
+    if ( eProc->state() == QProcess::Running ) {
+        eProc->write( text.toAscii() );
 		LogSingleton::Instance()->writeLog( text, KUROO );
 	}
 	else
@@ -82,7 +78,7 @@ void Emerge::inputText( const QString& text )
  */
 bool Emerge::stop()
 {
-	if ( eProc->isRunning() && eProc->kill(9) ) {
+    if ( eProc->state() == QProcess::Running && kill( eProc->pid(), 9 /*FIXME: magic number*/ ) ) {
 		kWarning(0) << "Emerge process killed!" << LINE_INFO;
 		return true;
 	}
@@ -94,7 +90,7 @@ bool Emerge::stop()
  * Checks if emerge is running.
  * @return true if emerging, false otherwise.
  */
-bool Emerge::isRunning() const { return eProc->isRunning(); }
+bool Emerge::isRunning() const { return eProc->state() == QProcess::Running; }
 
 /**
  * Emerge list of packages.
@@ -119,7 +115,7 @@ bool Emerge::queue( const QStringList& packageList )
 		m_etcUpdateCount = 0;
 		
 		m_emergePackageList.clear();
-		eProc->resetAll();
+        eProc->close(); ////eProc->resetAll();
 		*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
                 
                 if( KurooConfig::updateBuilddeps() )
@@ -130,14 +126,14 @@ bool Emerge::queue( const QStringList& packageList )
                         *eProc << package;
                 }
 		
-		eProc->start( K3Process::OwnGroup, true );
-		connect( eProc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupQueue(K3Process*) ) );
+        eProc->start(); // KProcess::OwnGroup, true
+        connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+        connect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupQueue() ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		
-		if ( !eProc->isRunning() ) {
+        if ( !eProc->state() == QProcess::Running ) {
 			LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
-			slotCleanupQueue( eProc );
+            slotCleanupQueue();
 			ret =  false;
 		}
 		else {
@@ -162,13 +158,13 @@ bool Emerge::queue( const QStringList& packageList )
  */
 void Emerge::slotPause()
 {
-	if ( !eProc->isRunning() || !m_pausable ) {
+    if ( !eProc->state() == QProcess::Running || !m_pausable ) {
 		LogSingleton::Instance()->writeLog( i18n("\nEmerge is not running or cannot be paused..."), ERROR );
 	}
 	else {
 		KurooStatusBar::instance()->pauseTimers();
 		QueueSingleton::Instance()->pauseEmerge();
-		eProc->kill(SIGSTOP);
+        kill( eProc->pid(), SIGSTOP );
 		m_isPaused = true;
 	}
 }
@@ -184,7 +180,7 @@ void Emerge::slotUnpause()
 	KurooStatusBar::instance()->setProgressStatus("Emerge", i18n("Installing packages in queue...") );
 	KurooStatusBar::instance()->unpauseTimers();
 	QueueSingleton::Instance()->unpauseEmerge();
-	eProc->kill(SIGCONT);
+    kill( eProc->pid(), SIGCONT );
 	m_isPaused = false;
 }
 
@@ -198,7 +194,7 @@ bool Emerge::quickpkg( const QStringList& packageList )
 	bool ret = false;
 	m_lastEmergeList = packageList;
 
-	eProc->resetAll();
+    eProc->close(); //eProc->resetAll();
 	*eProc << "quickpkg";
 	
 	// Add the packages
@@ -206,7 +202,7 @@ bool Emerge::quickpkg( const QStringList& packageList )
             *eProc << package;
         }
 
-	eProc->start( K3Process::OwnGroup, true );
+    eProc->start(); // K3Process::OwnGroup, true
 	connect( eProc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
 
 	if ( m_backingUp ) 
@@ -218,9 +214,9 @@ bool Emerge::quickpkg( const QStringList& packageList )
 
 	SignalistSingleton::Instance()->setKurooBusy( true );
 
-	if ( !eProc->isRunning() ) {
+    if ( !eProc->state() == QProcess::Running ) {
 		LogSingleton::Instance()->writeLog( i18n("\nError: Quickpkg didn't start. "), ERROR );
-		slotCleanupQueue( eProc );
+        slotCleanupQueue();
 	}
 	else {
 		LogSingleton::Instance()->writeLog( i18n("Quickpkg %1 started...").arg( packageList.join(" ") ), KUROO );
@@ -247,30 +243,26 @@ bool Emerge::pretend( const QStringList& packageList )
 	m_etcUpdateCount = 0;
 	
 	m_emergePackageList.clear();
-	eProc->resetAll();
+    eProc->close(); //eProc->resetAll();
 	*eProc << "emerge" << "--nospinner" << "--color=n" << "--columns" << "-pv";
         
-        if( KurooConfig::updateBuilddeps() )
-          *eProc << "--with-bdeps=y";
-	
-	// Add argument for each of the attached packages
-        foreach( QString package, packageList ) {
-                *eProc << package;
-        }
-	
-	if ( !eProc->start( K3Process::OwnGroup, true ) ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
-		return false;
-	}
-	else {
-		connect( eProc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupPretend(K3Process*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge pretend %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking installation queue...") );
-		KurooStatusBar::instance()->startProgress();
-		return true;
-	}
+    if( KurooConfig::updateBuilddeps() )
+        *eProc << "--with-bdeps=y";
+
+    // Add argument for each of the attached packages
+    foreach( QString package, packageList ) {
+        *eProc << package;
+    }
+
+    eProc->start( /*K3Process::OwnGroup, true*/ );
+    connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    connect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupPretend() ) );
+    SignalistSingleton::Instance()->setKurooBusy( true );
+    LogSingleton::Instance()->writeLog( i18n("\nEmerge pretend %1 started...").arg( packageList.join(" ") ), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking installation queue...") );
+    KurooStatusBar::instance()->startProgress();
+    return true;
+
 }
 
 /**
@@ -286,7 +278,7 @@ bool Emerge::unmerge( const QStringList& packageList )
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
-	eProc->resetAll();
+    eProc->close(); //resetAll();
 	*eProc << "emerge" << "--unmerge" << "--color=n" << "--nospinner";
 	
 	// Add argument for each of the attached packages
@@ -294,19 +286,14 @@ bool Emerge::unmerge( const QStringList& packageList )
                 *eProc << package;
         }
 	
-	if ( !eProc->start( K3Process::OwnGroup, true ) ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
-		return false;
-	}
-	else {
-		connect( eProc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupUnmerge(K3Process*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
-		LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( packageList.join(" ") ), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
-		KurooStatusBar::instance()->startProgress();
-		return true;
-	}
+    eProc->start();
+    connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    connect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupUnmerge() ) );
+    SignalistSingleton::Instance()->setKurooBusy( true );
+    LogSingleton::Instance()->writeLog( i18n("\nUnmerge %1 started...").arg( packageList.join(" ") ), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Uninstalling packages...") );
+    KurooStatusBar::instance()->startProgress();
+    return true;
 }
 
 /**
@@ -320,22 +307,18 @@ bool Emerge::sync()
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
-	eProc->resetAll();
+    eProc->close(); //resetAll();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--color=n" << "--nospinner";
 	
-	if ( !eProc->start( K3Process::OwnGroup, true ) ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
-		return false;
-	}
-	else {
-		connect( eProc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupSync(K3Process*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
-		KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
-		return true;
-	}
+    eProc->start( /*K3Process::OwnGroup, true*/ );
+
+    connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    connect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupSync() ) );
+    SignalistSingleton::Instance()->setKurooBusy( true );
+    LogSingleton::Instance()->writeLog( i18n("\nEmerge synchronize Portage Tree started..."), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Synchronizing portage tree...") );
+    KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
+    return true;
 }
 
 /**
@@ -349,7 +332,7 @@ bool Emerge::checkUpdates()
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
-	eProc->resetAll();
+    eProc->close(); //resetAll();
 	*eProc << "emerge" << "-pvu" << "--color=n" << "--nospinner" << "--columns";
 	
 	// Add deep if checked in gui
@@ -364,19 +347,14 @@ bool Emerge::checkUpdates()
 	
 	*eProc << "world";
 
-	if ( !eProc->start( K3Process::OwnGroup, true ) ) {
-		LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start."), ERROR );
-		return false;
-	}
-	else {
-		connect( eProc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( eProc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupCheckUpdates(K3Process*) ) );
-		SignalistSingleton::Instance()->setKurooBusy( true );
-		LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
-		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
-		KurooStatusBar::instance()->startProgress();
-		return true;
-	}
+    eProc->start( /*K3Process::OwnGroup, true*/ );
+    connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    connect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupCheckUpdates() ) );
+    SignalistSingleton::Instance()->setKurooBusy( true );
+    LogSingleton::Instance()->writeLog( i18n("\nEmerge check package updates started..."), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Checking for package updates...") );
+    KurooStatusBar::instance()->startProgress();
+    return true;
 }
 
 /**
@@ -384,12 +362,11 @@ bool Emerge::checkUpdates()
  * @param proc	
  */
 
-void Emerge::slotEmergeOutput( K3ProcIO *proc )
+void Emerge::slotEmergeOutput()
 {
 	QString line;	
-	QRegExp rxPackage = GlobalSingleton::Instance()->rxEmerge();
-	
-	while ( proc->readln( line, true ) >= 0 ) {
+    QRegExp rxPackage = rxEmerge();
+    while( !( line = eProc->readLine() ).isEmpty() ) {
 		int logDone( 0 );
 		
 		////////////////////////////////////////////////////////////////////////////////
@@ -537,85 +514,63 @@ void Emerge::cleanup()
 	}
 
 	/* if m_doclean then perform an eclean */
-        if( m_doeclean )
-        {
-          if( KurooConfig::ecleanDistfiles() )
-          {
-		  QString ecleanCOMMAND;
-            QTextCodec *codec = QTextCodec::codecForName("utf8");
-            eClean1 = new K3ProcIO( codec );
-	    eClean1->setUseShell( true, "/bin/bash" );
-	
-            #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-	    eClean1->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-	    #endif
-            eClean1->resetAll();
-            *eClean1 << "eclean";
-	    ecleanCOMMAND="eclean ";
-            if( !KurooConfig::ecleanTimeLimit().isEmpty() ) {
-              *eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
-	      ecleanCOMMAND+="-t";
-	      ecleanCOMMAND+=KurooConfig::ecleanTimeLimit();
-	      ecleanCOMMAND+=" ";
-            }
-            if( KurooConfig::ecleanDestructive() )
-            {
-              *eClean1 << "--destructive";
-	      ecleanCOMMAND+="--destructive ";
-	      
-            }
-            *eClean1 << "--nocolor";
-	    ecleanCOMMAND+="--nocolor ";
-            
-            if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
-            {
-              *eClean1 << "--fetch-restricted";
-	      ecleanCOMMAND+="--fetch-restricted ";
-            }
-	    *eClean1 << "distfiles ";
-            if( KurooConfig::ecleanSizeLimit().isEmpty() )
-            {
-              *eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
-	      ecleanCOMMAND+="-s"+KurooConfig::ecleanSizeLimit()+" ";
-            }
-	    ecleanCOMMAND+="distfiles";
-	    kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
-            if ( !eClean1->start( K3Process::OwnGroup, true ) ) {
-                  LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );
-                  m_doeclean = false;
-                  delete eClean1;
-            }
-            else {
-                  connect( eClean1, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-                  connect( eClean1, SIGNAL( processExited(K3Process*) ), this, SLOT( slotEmergeDistfilesComplete(K3Process*) ) );
-                  SignalistSingleton::Instance()->setKurooBusy( true );
-                  LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles started"), KUROO );
-                  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Cleaning distfiles...") );
-                  KurooStatusBar::instance()->startProgress();
-                  m_doeclean = false;
-            }
-          }
-        } /* end mclean section */
-        else if( m_dorevdeprebuild )
-        {
-          QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
-          ioRevdepRebuild = new K3ProcIO( revdepcodec );
-	  ioRevdepRebuild->setUseShell( false, NULL );
-          #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-	  ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-	  #endif
-          ioRevdepRebuild->resetAll();
-          *ioRevdepRebuild << "revdep-rebuild";
-          *ioRevdepRebuild << "--no-color";
-          *ioRevdepRebuild << "--ignore";
-          if( !ioRevdepRebuild->start( K3Process::OwnGroup, true ) )
-          {
-            LogSingleton::Instance()->writeLog( i18n("\nError: revdep-rebuild failed to start."), ERROR );
-            m_dorevdeprebuild = false;
-            delete ioRevdepRebuild;
-          }
-          else
-          {
+        if( m_doeclean ) {
+            if( KurooConfig::ecleanDistfiles() ) {
+                QString ecleanCOMMAND;
+                //QTextCodec *codec = QTextCodec::codecForName("utf8");
+                eClean1 = new KProcess();
+                //eClean1->setUseShell( true, "/bin/bash" );
+                //eClean1->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+                eClean1->close(); //resetAll();
+                *eClean1 << "eclean";
+                ecleanCOMMAND="eclean ";
+                if( !KurooConfig::ecleanTimeLimit().isEmpty() ) {
+                    *eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
+                    ecleanCOMMAND+="-t";
+                    ecleanCOMMAND+=KurooConfig::ecleanTimeLimit();
+                    ecleanCOMMAND+=" ";
+                }
+                if( KurooConfig::ecleanDestructive() )
+                {
+                    *eClean1 << "--destructive";
+                    ecleanCOMMAND+="--destructive ";
+                }
+                *eClean1 << "--nocolor";
+                ecleanCOMMAND+="--nocolor ";
+
+                if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
+                {
+                    *eClean1 << "--fetch-restricted";
+                    ecleanCOMMAND+="--fetch-restricted ";
+                }
+                *eClean1 << "distfiles ";
+                if( KurooConfig::ecleanSizeLimit().isEmpty() )
+                {
+                    *eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
+                    ecleanCOMMAND+="-s"+KurooConfig::ecleanSizeLimit()+" ";
+                }
+                ecleanCOMMAND+="distfiles";
+                kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
+                eClean1->start( /*K3Process::OwnGroup, true*/ );
+
+                connect( eClean1, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
+                connect( eClean1, SIGNAL( processExited(K3Process*) ), this, SLOT( slotEmergeDistfilesComplete(K3Process*) ) );
+                SignalistSingleton::Instance()->setKurooBusy( true );
+                LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles started"), KUROO );
+                KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Cleaning distfiles...") );
+                KurooStatusBar::instance()->startProgress();
+                m_doeclean = false;
+            } /* end mclean section */
+        } else if( m_dorevdeprebuild ) {
+            //QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
+            ioRevdepRebuild = new KProcess();
+            //ioRevdepRebuild->setUseShell( false, NULL );
+            //ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+            ioRevdepRebuild->close(); //resetAll();
+            *ioRevdepRebuild << "revdep-rebuild";
+            *ioRevdepRebuild << "--no-color";
+            *ioRevdepRebuild << "--ignore";
+            ioRevdepRebuild->start( /*K3Process::OwnGroup, true*/ );
             connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
             connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
             SignalistSingleton::Instance()->setKurooBusy( true );
@@ -623,24 +578,23 @@ void Emerge::cleanup()
             KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
             KurooStatusBar::instance()->startProgress();
             m_dorevdeprebuild = false;
-          }
         } /* end revdeprebuild section */
-}
+    }
 
 
 /**
  * Revdep-rebuild Complete
  * @param proc
  */
-void Emerge::slotRevdepRebuildComplete( K3Process* ioRevdepRebuild )
+void Emerge::slotRevdepRebuildComplete()
 {
-  disconnect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-  disconnect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
-  LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuildcomplete"), KUROO );
-  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
-  KurooStatusBar::instance()->stopTimer();
-  SignalistSingleton::Instance()->setKurooBusy( false );
-  delete ioRevdepRebuild; // cleanup that memory
+    disconnect( ioRevdepRebuild, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( ioRevdepRebuild, SIGNAL( finished() ), this, SLOT( slotRevdepRebuildComplete() ) );
+    LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuildcomplete"), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
+    KurooStatusBar::instance()->stopTimer();
+    SignalistSingleton::Instance()->setKurooBusy( false );
+    delete ioRevdepRebuild; // cleanup that memory
 }
 
 
@@ -648,206 +602,172 @@ void Emerge::slotRevdepRebuildComplete( K3Process* ioRevdepRebuild )
  * Run an eclean for packages if necessary
  * @param proc
  */
-void Emerge::slotEmergeDistfilesComplete( K3Process* eClean1 )
+void Emerge::slotEmergeDistfilesComplete()
 {
-  disconnect( eClean1, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-  disconnect( eClean1, SIGNAL( processExited(K3Process*) ), this, SLOT( slotEmergeDistfilesComplete(K3Process*) ) );
-  LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles complete"), KUROO );
-  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
-  KurooStatusBar::instance()->stopTimer();
-  SignalistSingleton::Instance()->setKurooBusy( false );
-  delete eClean1; // cleanup that memory
-  
-  if( KurooConfig::ecleanDistfiles() )
-  {
-    QTextCodec *codec = QTextCodec::codecForName("utf8");
-    eClean2 = new K3ProcIO( codec );
-    eClean2->setUseShell( true, "/bin/bash" );
+    disconnect( eClean1, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eClean1, SIGNAL( finished() ), this, SLOT( slotEmergeDistfilesComplete() ) );
+    LogSingleton::Instance()->writeLog( i18n("\nEclean of distfiles complete"), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
+    KurooStatusBar::instance()->stopTimer();
+    SignalistSingleton::Instance()->setKurooBusy( false );
+    delete eClean1; // cleanup that memory
 
-    #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-    eClean2->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-    #endif
-
-    eClean2->resetAll();
-    *eClean2 << "eclean";
-    if( KurooConfig::ecleanTimeLimit().isEmpty() )
+    if( KurooConfig::ecleanDistfiles() )
     {
-      *eClean2 << "-t" << KurooConfig::ecleanTimeLimit();
-    }
-    
+        //QTextCodec *codec = QTextCodec::codecForName("utf8");
+        eClean2 = new KProcess();
+        //eClean2->setUseShell( true, "/bin/bash" );
+        //eClean2->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+        eClean2->close();
+        *eClean2 << "eclean";
+        if( KurooConfig::ecleanTimeLimit().isEmpty() )
+        {
+            *eClean2 << "-t" << KurooConfig::ecleanTimeLimit();
+        }
 
-    *eClean2 << "--nocolor" << "packages";
-    
-    if ( !eClean2->start( K3Process::OwnGroup, true ) ) {
-          LogSingleton::Instance()->writeLog( i18n("\nError: Eclean didn't start."), ERROR );
-          KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done") );
-          KurooStatusBar::instance()->stopTimer();
-          delete eClean2;
-          return;
-    }
-    else {
-          connect( eClean2, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-          connect( eClean2, SIGNAL( processExited(K3Process*) ), this, SLOT( slotEClean2Complete(K3Process*) ) );
-          SignalistSingleton::Instance()->setKurooBusy( true );
-          LogSingleton::Instance()->writeLog( i18n("\nEclean of packages started"), KUROO );
-          KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Cleaning distfiles...") );
-          KurooStatusBar::instance()->startProgress();
-          return;
-    }
-  }
-  else if( m_dorevdeprebuild )
-  {
-    QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
-    ioRevdepRebuild = new K3ProcIO( revdepcodec );
-    ioRevdepRebuild->setUseShell( false, NULL );
-    #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-    ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-    #endif
-    ioRevdepRebuild->resetAll();
-    *ioRevdepRebuild << "revdep-rebuild";
-    *ioRevdepRebuild << "--no-color";
-    *ioRevdepRebuild << "--ignore";
-    if( !ioRevdepRebuild->start( K3Process::OwnGroup, true ) )
+        *eClean2 << "--nocolor" << "packages";
+
+       eClean2->start( /*K3Process::OwnGroup, true*/ );
+       connect( eClean2, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+       connect( eClean2, SIGNAL( finished() ), this, SLOT( slotEClean2Complete() ) );
+       SignalistSingleton::Instance()->setKurooBusy( true );
+       LogSingleton::Instance()->writeLog( i18n("\nEclean of packages started"), KUROO );
+       KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Cleaning distfiles...") );
+       KurooStatusBar::instance()->startProgress();
+       return;
+   } else if( m_dorevdeprebuild ) {
+       //QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
+       ioRevdepRebuild = new KProcess();
+       //ioRevdepRebuild->setUseShell( false, NULL );
+       //ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+       ioRevdepRebuild->close();
+       *ioRevdepRebuild << "revdep-rebuild";
+       *ioRevdepRebuild << "--no-color";
+       *ioRevdepRebuild << "--ignore";
+       ioRevdepRebuild->start();
+
+       connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
+       connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
+       SignalistSingleton::Instance()->setKurooBusy( true );
+       LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuild Running..."), KUROO );
+       KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
+       KurooStatusBar::instance()->startProgress();
+       m_dorevdeprebuild = false;
+   } /* end revdeprebuild section */
+
+}
+
+void Emerge::slotEClean2Complete()
+{
+    disconnect( eClean2, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eClean2, SIGNAL( finished() ), this, SLOT( slotEClean2Complete() ) );
+    LogSingleton::Instance()->writeLog( i18n("\nEcleaning packages complete"), KUROO );
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Ready") );
+    KurooStatusBar::instance()->stopTimer();
+    SignalistSingleton::Instance()->setKurooBusy( false );
+    delete eClean2;
+    if( m_dorevdeprebuild )
     {
-      LogSingleton::Instance()->writeLog( i18n("\nError: revdep-rebuild failed to start."), ERROR );
-      m_dorevdeprebuild = false;
-      delete ioRevdepRebuild;
+        //QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
+        ioRevdepRebuild = new KProcess();
+        //ioRevdepRebuild->setUseShell( false, NULL );
+        //ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+        ioRevdepRebuild->close();
+        *ioRevdepRebuild << "revdep-rebuild";
+        *ioRevdepRebuild << "--no-color";
+        *ioRevdepRebuild << "--ignore";
+        ioRevdepRebuild->start();
+        connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
+        connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
+        SignalistSingleton::Instance()->setKurooBusy( true );
+        LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuild Running..."), KUROO );
+        KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
+        KurooStatusBar::instance()->startProgress();
+        m_dorevdeprebuild = false;
+    } /* end revdeprebuild section */
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
+void Emerge::slotBackupComplete()
+{
+    disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eProc, SIGNAL( finished() ), this, SLOT( slotBackupComplete() ) );
+    HistorySingleton::Instance()->updateStatistics();
+    m_backupComplete = 1;
+    Emerge::queue(m_lastEmergeList);
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
+void Emerge::slotCleanupQueue()
+{
+    disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupQueue() ) );
+    cleanup();
+    HistorySingleton::Instance()->updateStatistics();
+    m_pausable = false;
+    emit signalEmergeComplete();
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
+void Emerge::slotCleanupPretend()
+{
+    disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupQueue() ) );
+    cleanup();
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
+void Emerge::slotCleanupUnmerge()
+{
+    disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupUnmerge() ) );
+    cleanup();
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
+void Emerge::slotCleanupSync()
+{
+    disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupSync() ) );
+    cleanup();
+}
+
+/**
+ * Disconnect signals and signal termination to main thread.
+ * @param proc	
+ */
+void Emerge::slotCleanupCheckUpdates()
+{
+    disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+    disconnect( eProc, SIGNAL( finished() ), this, SLOT( slotCleanupCheckUpdates() ) );
+
+    KurooStatusBar::instance()->stopTimer();
+    KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
+    SignalistSingleton::Instance()->scanUpdatesComplete();
+
+    if ( !m_blocks.isEmpty() ) {
+        if ( !m_importantMessage.isEmpty() )
+            m_importantMessage += "<br>";
+        m_importantMessage += m_blocks.join("<br>");
     }
-    else
-    {
-      connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-      connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
-      SignalistSingleton::Instance()->setKurooBusy( true );
-      LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuild Running..."), KUROO );
-      KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
-      KurooStatusBar::instance()->startProgress();
-      m_dorevdeprebuild = false;
-    }
-  } /* end revdeprebuild section */
-        
-}
 
-void Emerge::slotEClean2Complete(K3Process* eClean2)
-{
-  disconnect( eClean2, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-  disconnect( eClean2, SIGNAL( processExited(K3Process*) ), this, SLOT( slotEClean2Complete(K3Process*) ) );
-  LogSingleton::Instance()->writeLog( i18n("\nEcleaning packages complete"), KUROO );
-  KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Ready") );
-  KurooStatusBar::instance()->stopTimer();
-  SignalistSingleton::Instance()->setKurooBusy( false );
-  delete eClean2;
-  if( m_dorevdeprebuild )
-  {
-    QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
-    ioRevdepRebuild = new K3ProcIO( revdepcodec );
-    ioRevdepRebuild->setUseShell( false, NULL );
-    #if KDE_VERSION >= KDE_MAKE_VERSION(3,5,2)
-    ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-    #endif
-    ioRevdepRebuild->resetAll();
-    *ioRevdepRebuild << "revdep-rebuild";
-    *ioRevdepRebuild << "--no-color";
-    *ioRevdepRebuild << "--ignore";
-    if( !ioRevdepRebuild->start( K3Process::OwnGroup, true ) )
-    {
-      LogSingleton::Instance()->writeLog( i18n("\nError: revdep-rebuild failed to start."), ERROR );
-      m_dorevdeprebuild = false;
-      delete ioRevdepRebuild;
-    }
-    else
-    {
-      connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-      connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
-      SignalistSingleton::Instance()->setKurooBusy( true );
-      LogSingleton::Instance()->writeLog( i18n("\nRevdep-rebuild Running..."), KUROO );
-      KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Running revdep-rebuild...") );
-      KurooStatusBar::instance()->startProgress();
-      m_dorevdeprebuild = false;
-    }
-  } /* end revdeprebuild section */
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
-void Emerge::slotBackupComplete( K3Process* proc )
-{
-	disconnect( proc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotBackupComplete(K3Process*) ) );
-	HistorySingleton::Instance()->updateStatistics();
-	m_backupComplete = 1;
-	Emerge::queue(m_lastEmergeList);
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
-void Emerge::slotCleanupQueue( K3Process* proc )
-{
-	disconnect( proc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupQueue(K3Process*) ) );
-	cleanup();
-	HistorySingleton::Instance()->updateStatistics();
-	m_pausable = false;
-	emit signalEmergeComplete();
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
-void Emerge::slotCleanupPretend( K3Process* proc )
-{
-	disconnect( proc, SIGNAL(readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-	disconnect( proc, SIGNAL(processExited(K3Process*) ), this, SLOT( slotCleanupPretend(K3Process*) ) );
-	cleanup();
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
-void Emerge::slotCleanupUnmerge( K3Process* proc )
-{
-	disconnect( proc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupUnmerge(K3Process*) ) );
-	cleanup();
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
-void Emerge::slotCleanupSync( K3Process* proc )
-{
-	disconnect( proc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupSync(K3Process*) ) );
-	cleanup();
-}
-
-/**
- * Disconnect signals and signal termination to main thread.
- * @param proc	
- */
-void Emerge::slotCleanupCheckUpdates( K3Process* proc )
-{
-	disconnect( proc, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-	disconnect( proc, SIGNAL( processExited(K3Process*) ), this, SLOT( slotCleanupCheckUpdates(K3Process*) ) );
-	
-	KurooStatusBar::instance()->stopTimer();
-	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
-	SignalistSingleton::Instance()->scanUpdatesComplete();
-	
-	if ( !m_blocks.isEmpty() ) {
-		if ( !m_importantMessage.isEmpty() )
-			m_importantMessage += "<br>";
-		m_importantMessage += m_blocks.join("<br>");
-	}
-	
-	if ( !m_importantMessage.isEmpty() )
-		Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );
+    if ( !m_importantMessage.isEmpty() )
+        Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );
 }
 
 /**
@@ -856,54 +776,54 @@ void Emerge::slotCleanupCheckUpdates( K3Process* proc )
  */
 void Emerge::askUnmaskPackage( const QString& packageKeyword )
 {
-	QString package = packageKeyword.section( "(masked by: ", 0, 0 );
-	QString keyword = ( packageKeyword.section( "(masked by: ", 1, 1) ).section( " keyword", 0, 0 );
-	
-	if ( packageKeyword.contains( "missing keyword" ) ) {
-		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-		m_importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
-		                         "Ask the architecture porting team to test the package or test it for them and report your "
-		                         "findings on Gentoo bugzilla website.");
+    QString package = packageKeyword.section( "(masked by: ", 0, 0 );
+    QString keyword = ( packageKeyword.section( "(masked by: ", 1, 1) ).section( " keyword", 0, 0 );
+
+    if ( packageKeyword.contains( "missing keyword" ) ) {
+        m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+        m_importantMessage += i18n("<b>missing keyword</b> means that the application has not been tested on your architecture yet.<br>"
+                                   "Ask the architecture porting team to test the package or test it for them and report your "
+                                   "findings on Gentoo bugzilla website.");
         KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "Missing Keyword") );
-	}
-	else {
-		if ( keyword.contains( "-*" ) ) {
-			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-			m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
-			                         "If you believe the package does work file a bug at Gentoo bugzilla website.");
+    }
+    else {
+        if ( keyword.contains( "-*" ) ) {
+            m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+            m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
+                                       "If you believe the package does work file a bug at Gentoo bugzilla website.");
             KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "-* Keyword" ) );
-		}
-		else {
-			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
-				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
-				
+        }
+        else {
+            if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
+                LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
+
                 switch ( KMessageBox::questionYesNoWId( NULL,
                                                         i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ),
                                                         i18n("Information"), KGuiItem( i18n("Unmask") ), KGuiItem( i18n("Cancel") ) ) ) {
-					case KMessageBox::Yes :
-						KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
-						PortageFilesSingleton::Instance()->savePackageUserUnMask();
-						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-						break;
-				}
-			}
-			else {
-				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
-				
+                case KMessageBox::Yes :
+                    KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
+                    PortageFilesSingleton::Instance()->savePackageUserUnMask();
+                    disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+                    connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+                    break;
+                }
+            }
+            else {
+                LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
+
                 switch ( KMessageBox::questionYesNoWId( NULL,
                                                         i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ),
                                                         i18n("Information"), KGuiItem( i18n("Unmask") ), KGuiItem( i18n("Cancel") ) ) ) {
-					case KMessageBox::Yes :
-						KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
-						PortageFilesSingleton::Instance()->savePackageKeywords();
-						disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-						connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-						break;
-				}
-			}
-		}
-	}
+                case KMessageBox::Yes :
+                    KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
+                    PortageFilesSingleton::Instance()->savePackageKeywords();
+                    disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+                    connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+                    break;
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -911,8 +831,8 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
  */
 void Emerge::slotTryEmerge()
 {
-	pretend( m_lastEmergeList );
-	disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+    pretend( m_lastEmergeList );
+    disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 }
 
 /**
@@ -922,18 +842,18 @@ void Emerge::slotTryEmerge()
  */
 bool Emerge::countEtcUpdates( const QString& line )
 {
-	// count etc-files to merge
-	if ( line.contains(" need updating") ) {
-		QString tmp = line.section("config files", 0, 0);
-		QRegExp rx("^\\d+\\)");
+    // count etc-files to merge
+    if ( line.contains(" need updating") ) {
+        QString tmp = line.section("config files", 0, 0);
+        QRegExp rx("^\\d+\\)");
         int pos = rx.indexIn(tmp);
-		if ( pos > -1 )
-			m_etcUpdateCount += ( rx.cap(1) ).toInt();
-		
-		return true;
-	}
-	else
-		return false;
+        if ( pos > -1 )
+            m_etcUpdateCount += ( rx.cap(1) ).toInt();
+
+        return true;
+    }
+    else
+        return false;
 }
 
 #include "emerge.moc"

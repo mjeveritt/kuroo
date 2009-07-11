@@ -276,11 +276,6 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>K3ListViewSearchLine</class>
-   <extends>QWidget</extends>
-   <header>k3listviewsearchline.h</header>
-  </customwidget>
-  <customwidget>
    <class>HistoryListView</class>
    <extends>QWidget</extends>
    <header>historylistview.h</header>

@@ -31,12 +31,12 @@
 
 #include <qlayout.h>
 #include <qsplitter.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qtimer.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qradiobutton.h>
 
 #include <kpushbutton.h>
@@ -152,7 +152,7 @@ void PortageTab::slotInit()
  */
 void PortageTab::slotWhatsThis()
 {
-	Q3WhatsThis::display( i18n( "<qt>"
+    QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
 			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br>"
 			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
 			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
@@ -165,8 +165,7 @@ void PortageTab::slotWhatsThis()
 			"of that application if you have altered those after the installation. "
 			"However, a big warning applies: Portage will not check if the package you want to remove is required by another package. "
 			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br><br>"
-			"Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" )
-			, QCursor::pos(), this );
+            "Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" ), this );
 }
 
 /**
@@ -292,7 +291,7 @@ void PortageTab::slotReload()
     connect( categoriesView, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotListSubCategories() ) );
     connect( subcategoriesView, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotListPackages() ) );
 	
-	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), false );
+    categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selected(), searchFilter->text() ), false );
 }
 
 void PortageTab::slotFillFilter( const QString& text )
@@ -316,7 +315,7 @@ void PortageTab::slotActivateFilters()
 {
 	--m_delayFilters;
 	if ( m_delayFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selectedId(), searchFilter->text() ), true );
+        categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selected(), searchFilter->text() ), true );
 }
 
 /**
@@ -325,7 +324,7 @@ void PortageTab::slotActivateFilters()
 void PortageTab::slotListSubCategories()
 {
 	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoriesView->currentCategoryId(), 
-		filterGroup->selectedId(), searchFilter->text() ) );
+        filterGroup->selected(), searchFilter->text() ) );
 }
 
 /**
@@ -336,7 +335,7 @@ void PortageTab::slotListPackages()
 	int numberOfTerms=0; //For singular or plural message
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
-		subcategoriesView->currentCategoryId(), filterGroup->selectedId(), searchFilter->text() ) ) == 0 ) {
+        subcategoriesView->currentCategoryId(), filterGroup->selected(), searchFilter->text() ) ) == 0 ) {
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();

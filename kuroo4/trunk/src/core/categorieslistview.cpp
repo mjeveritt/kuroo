@@ -21,9 +21,7 @@
 #include "common.h"
 #include "categorieslistview.h"
 
-#include <q3header.h>
 #include <qpainter.h>
-#include <Q3Frame>
 #include <QTreeWidget>
 
 #include <kglobal.h>
@@ -62,7 +60,7 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 : QTreeWidget( parent /*, name*/ ), m_focus( i18n("All") ), categories( 0 )
 {
 	//setFullWidth( true );
-	setFrameShape( Q3Frame::NoFrame );
+    //setFrameShape( Q3Frame::NoFrame );
 	//setSorting( -1 );
 
 	connect( this, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotStoreFocus( QTreeWidgetItem* ) ) );

@@ -18,7 +18,7 @@
     <number>5</number>
    </property>
    <item>
-    <widget class="Q3GroupBox" name="portage_2_2_2">
+    <widget class="QGroupBox" name="portage_2_2_2">
      <property name="title">
       <string>Emerge check update options</string>
      </property>
@@ -107,7 +107,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="portage_2_3">
+    <widget class="QGroupBox" name="portage_2_3">
      <property name="title">
       <string>Kuroo options</string>
      </property>
@@ -145,7 +145,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="portage_2_3_2">
+    <widget class="QGroupBox" name="portage_2_3_2">
      <property name="title">
       <string>Package options</string>
      </property>
@@ -193,11 +193,11 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox7">
+    <widget class="QGroupBox" name="groupBox7">
      <property name="title">
       <string>Package filter options</string>
      </property>
-     <widget class="Q3GroupBox" name="colorsBox">
+     <widget class="QGroupBox" name="colorsBox">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -214,9 +214,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
       </property>
       <property name="flat">
        <bool>false</bool>
-      </property>
-      <property name="frameShape">
-       <enum>Q3GroupBox::NoFrame</enum>
       </property>
       <layout class="QGridLayout">
        <property name="margin">
@@ -326,7 +323,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox12">
+    <widget class="QGroupBox" name="groupBox12">
      <property name="title">
       <string>Log Browser</string>
      </property>
@@ -432,12 +429,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KFontRequester</class>
    <extends>QWidget</extends>

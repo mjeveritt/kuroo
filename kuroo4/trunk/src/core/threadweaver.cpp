@@ -13,7 +13,6 @@
 #include <QDir>
 #include <QCustomEvent>
 #include <QEvent>
-#include <Q3TextStream>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -208,7 +207,7 @@ ThreadWeaver::Thread::Thread()
 
 ThreadWeaver::Thread::~Thread()
 {
-	Q_ASSERT( finished() );
+    Q_ASSERT( isFinished() );
 }
 
 void ThreadWeaver::Thread::runJob( Job *job )
@@ -346,7 +345,7 @@ bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
 	QDir mergeDir( dirPath );
 	//TODO make sure this doesn't exist before we enter
 	QFile tempFile( dirPath + ".temp" );
-	Q3TextStream tempStream( &tempFile );
+    QTextStream tempStream( &tempFile );
 	if( !tempFile.open( QIODevice::WriteOnly ) ) {
         kDebug(0) << "Opened " << tempFile.fileName() << " for writing." << LINE_INFO;
 		//TODO handle failure
@@ -371,7 +370,7 @@ bool ThreadWeaver::DependentJob::mergeDirIntoFile( QString dirPath ) {
 		}
 
         QFile entryFile( fi.absoluteFilePath() );
-		Q3TextStream streamFile( &entryFile );
+        QTextStream streamFile( &entryFile );
 		if ( !entryFile.open( QIODevice::ReadOnly ) ) {
             kError(0) << "Parsing " << fi.filePath() << LINE_INFO;
 		} else {

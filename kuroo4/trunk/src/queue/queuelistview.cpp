@@ -322,7 +322,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		if ( duration == diffTime )
 			item->setText( 4, i18n("na") );
 		else
-			item->setText( 4, GlobalSingleton::Instance()->formatTime( duration ) );
+            item->setText( 4, formatTime( duration ) );
 		
 		// Add download size = tarball size
 		if ( size.isEmpty() )

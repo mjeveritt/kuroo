@@ -21,18 +21,18 @@
 #ifndef INTRODLG_H
 #define INTRODLG_H
 
-#include <Q3Wizard>
+#include <QWizard>
 #include "ui_intro.h"
 
 /**
  * @class IntroDlg
  * @short Kuroo introductory wizard.
  */
-class IntroDlg : public Q3Wizard, public Ui::Intro
+class IntroDlg : public QWizard, public Ui::Intro
 {
 Q_OBJECT
 public:
-	IntroDlg( QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0 );
+    IntroDlg( QWidget* parent = 0 );
 	~IntroDlg();
 
 private:

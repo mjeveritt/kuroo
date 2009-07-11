@@ -25,9 +25,8 @@
 #include <qobject.h>
 
 #include <kio/job.h>
+#include <KDirWatch>
 
-class K3ProcIO;
-class KDirWatch;
 
 /**
  * @class EtcUpdate
@@ -58,7 +57,7 @@ private slots:
 	void				slotChanged();
 	void				slotFinished();
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
-	void				slotCleanupDiff( K3Process* );
+    void				slotCleanupDiff();
 	
 signals:
 	void				signalEtcFileMerged();
@@ -66,7 +65,7 @@ signals:
 	
 private:
 	QObject*			m_parent;
-	K3ProcIO*			eProc;
+    KProcess*			eProc;
 	
 	QStringList 			m_configProtectList;
 	QString				m_configProtectDir;

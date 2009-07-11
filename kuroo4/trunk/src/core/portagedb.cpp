@@ -31,9 +31,6 @@
 #include <qfile.h>
 #include <qimage.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -76,7 +73,7 @@ QString KurooDB::init ( QObject *parent )
 
 	m_dbConnPool->createDbConnections();
 
-	return GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas();
+    return kurooDir + KurooConfig::databas();
 }
 
 DbConnection *KurooDB::getStaticDbConnection()
@@ -738,7 +735,7 @@ const QString KurooDB::category ( const QString& id )
  */
 const QString KurooDB::packageId ( const QString& package )
 {
-	QStringList parts = GlobalSingleton::Instance()->parsePackage ( package );
+    QStringList parts = parsePackage ( package );
 	if ( !parts.isEmpty() )
 	{
 		QString category = parts[0];
@@ -1109,7 +1106,7 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection ( SqliteConfig* config )
 		: DbConnection ( config )
 {
-    const Q3CString path = QString ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::databas() ).toLocal8Bit();
+    const QString path = QString ( kurooDir + KurooConfig::databas() ).toLocal8Bit();
 
 	// Open database file and check for correctness
 	m_initialized = false;
@@ -1121,7 +1118,7 @@ SqliteConnection::SqliteConnection ( SqliteConfig* config )
 			kWarning ( 0 ) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
 
 		else
-			if ( sqlite3_open ( path, &m_db ) != SQLITE_OK )
+            if ( sqlite3_open ( path.toAscii(), &m_db ) != SQLITE_OK )
 			{
 				kWarning ( 0 ) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
 				sqlite3_close ( m_db );
@@ -1135,7 +1132,7 @@ SqliteConnection::SqliteConnection ( SqliteConfig* config )
 
 		// Remove old db file; create new
 		QFile::remove ( path );
-		if ( sqlite3_open ( path, &m_db ) == SQLITE_OK )
+        if ( sqlite3_open ( path.toAscii(), &m_db ) == SQLITE_OK )
 			m_initialized = true;
 	}
 	else

@@ -26,10 +26,7 @@
 #include <qfile.h>
 #include <QVector>
 
-class K3ProcIO;
 class PackageEmergeTime;
-class QString;
-class KDirWatch;
 
 struct eLog {
 	QString package;

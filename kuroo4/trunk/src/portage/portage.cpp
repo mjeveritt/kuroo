@@ -26,8 +26,7 @@
 #include <kmessagebox.h>
 
 #include <unistd.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 /**
  * @class AddInstalledPackageJob
@@ -40,7 +39,7 @@ public:
 	
 	virtual bool doJob() {
 		
-		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
+        QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
 			kWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
@@ -98,7 +97,7 @@ public:
 	virtual bool doJob() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
-		QStringList parts = GlobalSingleton::Instance()->parsePackage( m_package );
+        QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
 			kWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
 			return false;
@@ -352,7 +351,7 @@ void Portage::loadWorld()
 	
 	QFile file( KurooConfig::fileWorld() );
 	if ( file.open( QIODevice::ReadOnly ) ) {
-		Q3TextStream stream( &file );
+        QTextStream stream( &file );
 		while ( !stream.atEnd() ) {
 			QString package = stream.readLine();
 			m_mapWorld[ package.trimmed() ] = QString::null;
@@ -394,7 +393,7 @@ void Portage::appendWorld( const QStringList& packageList )
         m_mapWorld.insert( pkg, QString::null );
 	
 	// Update world file
-	Q3TextStream stream( &file );
+    QTextStream stream( &file );
 	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
 		stream << it.key() << "\n";
 	file.close();
@@ -420,7 +419,7 @@ void Portage::removeFromWorld( const QStringList& packageList )
         m_mapWorld.remove( pkg );
 	
 	// Update world file
-	Q3TextStream stream( &file );
+    QTextStream stream( &file );
 	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
 		stream << it.key() << "\n";
 	file.close();

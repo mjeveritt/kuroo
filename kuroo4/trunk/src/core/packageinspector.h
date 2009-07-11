@@ -22,6 +22,7 @@
 #define PACKAGEINSPECTOR_H
 
 #include <KDialog>
+#include <KProcess>
 
 #include "ui_inspectorbase.h"
 #include "portagelistview.h"
@@ -30,7 +31,7 @@
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
  */
-class PackageInspector : public KDialog
+class PackageInspector : public KDialog, public Ui::InspectorBase
 {
 Q_OBJECT
 public:
@@ -43,9 +44,6 @@ public:
 	 */
 	inline bool			isParentView( const int& view ) const { return m_view == view; }
 	void				showHardMaskInfo();
-
-    Ui::InspectorBase   inspector;
-    QWidget*            dialog;
 
 private:
 	void				updateVersionData();
@@ -71,9 +69,9 @@ private slots:
 	void				slotLoadDependencies( const QString& version );
 	void				slotLoadUseFlags( const QString& version );
 	void				slotCalculateUse();
-	void				slotCollectPretendOutput( K3ProcIO* eProc );
-	void				slotParsePackageUse( K3Process* eProc );
-	void				slotParseTempUse( K3Process* eProc );
+    void				slotCollectPretendOutput();
+    void				slotParsePackageUse();
+    void				slotParseTempUse();
 	void				slotQueue();
 	void				slotWorld();
 
@@ -98,6 +96,8 @@ private:
 	QString				m_versionBefore;
 	QStringList			m_pretendUseLines;
 	QStringList 			m_useList;
+
+    KProcess* eProc;
 
 signals:
 	void				signalNextPackage( bool up );

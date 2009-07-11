@@ -26,8 +26,6 @@
 #include "LoadPackageUserHardMaskJob.h"
 #include "LoadPackageUserUnMaskJob.h"
 
-#include <Q3TextStream>
-
 /**
  * @class: SavePackageKeywordsJob
  * @short: Thread for loading packages unmasked by user.
@@ -49,7 +47,7 @@ public:
 		}
 		
 		QFile file( KurooConfig::filePackageKeywords() );
-		Q3TextStream stream( &file );
+        QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			return false;
@@ -92,7 +90,7 @@ public:
 		}
 		
 		QFile file( KurooConfig::filePackageUserMask() );
-		Q3TextStream stream( &file );
+        QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
 			return false;
@@ -129,7 +127,7 @@ public:
 		}
 		
 		QFile file( KurooConfig::filePackageUserUnMask() );
-		Q3TextStream stream( &file );
+        QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
 			return false;
@@ -167,7 +165,7 @@ public:
 		}
 		
 		QFile file( KurooConfig::filePackageUserUse() );
-		Q3TextStream stream( &file );
+        QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
 			return false;

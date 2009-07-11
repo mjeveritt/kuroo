@@ -29,10 +29,10 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
-#include <q3buttongroup.h>
-#include <q3groupbox.h>
+#include <qbuttongroup.h>
+#include <qgroupbox.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
@@ -205,13 +205,12 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotWhatsThis()
 {
-	Q3WhatsThis::display( i18n( "<qt>"
+    QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
 			"The emerge queue quickly shows which packages listed for installation.<br>"
 			"Since many applications depend on each other, any attempt to install a certain software package might result in the installation "
 			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br><br>"
 			"If you want to find out what Portage would install when you ask it to install a certain package, press 'Check Installation'.<br>"
-			"When all dependencies are press 'Start Installation'.</qt>" )
-			, QCursor::pos(), this );
+            "When all dependencies are press 'Start Installation'.</qt>" ), this );
 }
 
 /**
@@ -260,7 +259,7 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	// Enable the gui
 	slotBusy();
 	
-	m_initialQueueTime = GlobalSingleton::Instance()->formatTime( queueView->totalDuration() );
+    m_initialQueueTime = formatTime( queueView->totalDuration() );
     KurooStatusBar::instance()->clearElapsedTime();
 	slotQueueSummary();
 }
@@ -275,9 +274,9 @@ void QueueTab::slotQueueSummary()
 			queueBrowserLines += i18n( "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
 			queueBrowserLines += i18n( "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
 			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>" )
-		.arg( GlobalSingleton::Instance()->formatTime( KurooStatusBar::instance()->elapsedTime() ) );
+        .arg( formatTime( KurooStatusBar::instance()->elapsedTime() ) );
 			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>" )
-		.arg( GlobalSingleton::Instance()->formatTime( queueView->totalDuration() ) );
+        .arg( formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
 

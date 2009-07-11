@@ -29,7 +29,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qevent.h>
-#include <q3textstream.h>
 
 #include <kglobal.h>
 
@@ -209,7 +208,7 @@ bool ScanPortageJob::doJob()
 					}
 
 					kDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
-					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+                    QStringList parts = parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						QString name = parts[1];
 						QString version = parts[2];
@@ -376,7 +375,7 @@ void ScanPortageJob::scanInstalledPackages()
 				if ( *itPackage == "." || *itPackage == ".." || ( *itPackage ).contains("MERGING") )
 					continue;
 
-				QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+                QStringList parts = parsePackage( *itPackage );
 				if ( !parts.isEmpty() ) {
 					QString name = parts[1];
 					QString version = parts[2];
@@ -439,7 +438,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	}
 
 	QString line;
-	Q3TextStream stream( &file );
+    QTextStream stream( &file );
 	int lineNumber(0);
 
 	// Check portage version and read out the package info strings

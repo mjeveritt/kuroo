@@ -123,7 +123,7 @@ QList<PackageVersion*> DependAtom::matchingVersions()
 {
         QList<PackageVersion*> matchingVersions;
 	
-	if ( m_package == NULL || !m_matches )
+    if ( m_package.isEmpty() || !m_matches )
 		return matchingVersions; // return an empty list
 	
 	if ( m_portagePackage->category() != m_category || m_portagePackage->name() != m_package )

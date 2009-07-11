@@ -21,51 +21,13 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <qobject.h>
+#include <QRegExp>
+#include <QStringList>
 
-class QRegExp;
-class QWidget;
-
-/**
- * @class Global
- * @short Some useful global methods.
- */
-class Global : public QObject
-{
-Q_OBJECT
-public:
-    Global( QObject *parent = 0 );
-    ~Global();
-	
-	void 				init( QObject *parent = 0 );
-	const QString			kurooDir() const;
-	const QRegExp			rxEmerge() const;
-	const QStringList 		parsePackage( const QString& packageString ) const;
-	void 				setColorTheme();
-	/**
-	 * Kuroo widget id so MessageBox's can be made modal.
-	 */
-        //inline const WId&		kurooViewId() const { return	m_wId; }
-	/**
-	 * Return KDE background color-theme.
-	 */
-    //inline const QString&		bgHexColor() const { return m_bgColor; }
-	/**
-	 * Return KDE foreground color-theme.
-	 */
-    //inline const QString&		fgHexColor() const { return m_fgColor; }
-	const QString 			formatTime( const long& ) const;
-	
-private:
-	static const QString			kuroo_dir;
-	QObject*				m_parent;
-	
-	// Kuroo widget id so MessageBox's can be made modal
-      //  WId					m_wId;
-	
-    /*QString					m_bgColor;
-	
-    QString					m_fgColor;*/
-};
+//TODO: dispatch in relevant module
+const QString kurooDir = QString("/var/cache/kuroo/"); //->KConfig
+const QRegExp			rxEmerge(); //->Emerge
+const QStringList 		parsePackage( const QString& packageString ); //->KurooDB
+const QString 			formatTime( const long& ); //->Queue
 
 #endif

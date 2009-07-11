@@ -18,13 +18,12 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <QTreeWidget>
+
 #include "tooltip.h"
 #include "packageitem.h"
 #include "common.h"
 
-#include <q3header.h>
-
-#include <QTreeWidget>
 
 /**
  * @class ToolTip

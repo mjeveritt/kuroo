@@ -23,10 +23,9 @@
 #include "mergelistview.h"
 #include "mergetab.h"
 
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <q3header.h>
-#include <q3whatsthis.h>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QWhatsThis>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -87,13 +86,12 @@ void MergeTab::slotInit()
  */
 void MergeTab::slotWhatsThis()
 {
-	Q3WhatsThis::display( i18n( "<qt>"
+    QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
 			"This tab keeps track of all configuration files that need to be merged.<br>"
 			"Your system is scanned automatically for configuration files after completed installation.<br>"
 			"Select a file to merge and press 'Merge changes'. KDiff3 will then open with old and new files. "
 			"After saving changes in KDiff3 the configuration file will be removed. "
-			"Old merged changes can then be reviewed in the right list.</qt>" )
-			, QCursor::pos(), this );
+            "Old merged changes can then be reviewed in the right list.</qt>" ), this );
 }
 
 /**

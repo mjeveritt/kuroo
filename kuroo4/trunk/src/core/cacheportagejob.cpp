@@ -122,7 +122,7 @@ bool CachePortageJob::doJob()
 					}
 					QString package = *itCategory + "/" + *itPackage;
 
-					QStringList parts = GlobalSingleton::Instance()->parsePackage( *itPackage );
+                    QStringList parts = parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						QString packageName = parts[1];
 

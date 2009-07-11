@@ -42,11 +42,12 @@ public:
 	void			checkUser();
 	
 private slots:
-    void			slotCollectOutput( KProcess* eProc );
-    void			slotEmergeInfo( KProcess* );
+    void			slotCollectOutput();
+    void			slotEmergeInfo( int status );
 	
 private:
-	IntroDlg 		*wizardDialog;
+    KProcess*       eProc;
+    IntroDlg 		*wizardDialog;
 	QStringList		m_emergeInfoLines;
 };
 

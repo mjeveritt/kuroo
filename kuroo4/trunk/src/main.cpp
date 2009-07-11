@@ -1,22 +1,22 @@
-/***************************************************************************
- *   Copyright (C) 2005 by Karye                                           *
- *   karye@users.sourceforge.net                                           *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+/*
+ *   Copyright (C) 2005 by Karye
+ *   karye@users.sourceforge.net
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
 #include "settings.h"
 #include "kuroo.h"
@@ -24,19 +24,17 @@
 #include <stdlib.h>
 
 #include <kapplication.h>
-//#include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-//static const char description[] = I18N_NOOP();
 static const char version[] = "0.82";
 
 int main( int argc, char **argv )
 {
 	kDebug() << "Kuroo version=" << version;
-	
+
     KAboutData about("kuroo","kuroo", ki18n("Kuroo"), version, ki18n("Frontend to Gentoo Portage"),
     KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
     about.addAuthor(ki18n("Karye"), ki18n("Original author and maintainer"), "info@kuroo.org");
@@ -53,35 +51,20 @@ int main( int argc, char **argv )
     about.addCredit(ki18n("Björn Balazs"), ki18n("OpenUsability"), "B@lazs.de");
     about.addCredit(ki18n("Florian Graessle"), ki18n("OpenUsability"), "holehan@gmx.de");
 	about.setHomepage("http://kuroo.org");
-
 	KCmdLineArgs::init( argc, argv, &about );
-    KCmdLineOptions options;
-    options.add("option <argument>", ki18n("Initialize Kuroo with init") );
-	KCmdLineArgs::addCmdLineOptions( options );
 
 	KApplication app;
 	
-    /*// register ourselves as a dcop client
-	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
-		kDebug() << I18N_NOOP("Kuroo is already running!");
-		exit(0);
-	}
-	
-    app.dcopClient()->registerAs( app.name(), false );*/
-	
-	KurooConfig::setHardVersion( version );
+    //KurooConfig::setHardVersion( version );
     //KurooConfig::writeConfig();
-	
-    //app.dcopClient()->setAcceptCalls( true );
 	
 	// see if we are starting with session management
 	if ( app.isSessionRestored() ) {
 		RESTORE( Kuroo );
+    } else {
+        Kuroo *mainWindow = new Kuroo();
+        mainWindow->show();
 	}
-	else {
-		Kuroo *widget = new Kuroo;
-		widget->show();
-	}
-	
+
 	return app.exec();
 }

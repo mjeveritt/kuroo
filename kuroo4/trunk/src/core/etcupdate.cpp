@@ -21,7 +21,6 @@
 #include "common.h"
 #include "message.h"
 
-#include <k3procio.h>
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kinputdialog.h>
@@ -49,8 +48,8 @@ void EtcUpdate::init( QObject *parent )
 {
 	m_parent = parent;
 	
-	eProc = new K3ProcIO();
-	connect( eProc, SIGNAL( processExited( K3Process* ) ), this, SLOT( slotCleanupDiff( K3Process* ) ) );
+    eProc = new KProcess();
+    connect( eProc, SIGNAL(  finished() ), this, SLOT( slotCleanupDiff() ) );
 	
 	m_mergingFile = new KDirWatch( this );
 	connect( m_mergingFile, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged() ) );
@@ -69,7 +68,7 @@ void EtcUpdate::slotEtcUpdate()
 		m_backupFilesList.clear();
 		
 		// First collect old merged files
-        m_configProtectList = QStringList( GlobalSingleton::Instance()->kurooDir() + QString("backup/configuration") );
+        m_configProtectList = QStringList( kurooDir + QString("backup/configuration") );
 		
 		// Then scan for new unmerged files
         m_configProtectList += KurooConfig::configProtectList().split( " " );
@@ -126,7 +125,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		m_changed = false;
 		m_source = source;
 		m_destination = destination;
-		QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/";
+        QString backupPath = kurooDir + "backup/configuration/";
 		
 		// Check for etc-files warnings
 		QString etcWarning;
@@ -137,7 +136,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
             }
         }
 
-		eProc->resetAll();
+        eProc->close();
 // 		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
 		*eProc << "kdiff3" << m_source << m_destination;
 		
@@ -146,9 +145,9 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		else
 			*eProc << "-o" << backupPath + "merging";
 		
-		eProc->start( K3Process::NotifyOnExit, true );
+        eProc->start( /*K3Process::NotifyOnExit, true*/ );
 		
-		if ( !eProc->isRunning() ) {
+        if ( eProc->state() == QProcess::NotRunning ) {
 			LogSingleton::Instance()->writeLog( i18n( "%1 didn't start." ).arg( KurooConfig::etcUpdateTool() ), ERROR );
             KMessageBox::sorry( 0, i18n( "%1 could not start!" ).arg( KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
 		}
@@ -180,7 +179,7 @@ void EtcUpdate::slotChanged()
  * After diff tool completed, close all.
  * @param proc
  */
-void EtcUpdate::slotCleanupDiff( K3Process* proc )
+void EtcUpdate::slotCleanupDiff()
 {
 
 	//Unregister the watcher
@@ -189,7 +188,7 @@ void EtcUpdate::slotCleanupDiff( K3Process* proc )
 	if ( m_changed ) {
 		
 		QDateTime dt = QDateTime::currentDateTime();
-		QString backupPath = GlobalSingleton::Instance()->kurooDir() + "backup/configuration/";
+        QString backupPath = kurooDir + "backup/configuration/";
 		QString backupPathDir = backupPath + dt.toString( "yyyyMMdd_hhmm" ) + "/";
 		QDir d( backupPathDir );
 		if ( !d.exists() ) {
@@ -213,7 +212,7 @@ void EtcUpdate::slotCleanupDiff( K3Process* proc )
 		KIO::file_delete( m_source );
 		
 		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_source )
-				.arg( GlobalSingleton::Instance()->kurooDir() + "backup" ), KUROO );
+                .arg( kurooDir + "backup" ), KUROO );
 		
 		KurooDBSingleton::Instance()->addBackup( m_source, m_destination );
 		emit signalEtcFileMerged();

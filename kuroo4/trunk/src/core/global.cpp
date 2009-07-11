@@ -21,40 +21,15 @@
 #include "common.h"
 #include "global.h"
 
-#include <qwidget.h>
-#include <qpalette.h>
 #include <qdatetime.h>
 
 #include <KGlobal>
 #include <kglobalsettings.h>
 
-const QString Global::kuroo_dir=QString("/var/cache/kuroo/");
-
-/**
- * @class Global
- * @short Some useful global methods.
- */
-Global::Global( QObject *parent )
-	: QObject( parent )
-{}
-
-Global::~Global()
-{}
-
-void Global::init( QObject *parent )
-{
-	m_parent = parent;
-}
-
-/** Gets Kuroo's working directory
- *
- */
-const QString Global::kurooDir() const { return kuroo_dir; }
-
 /**
  * Regexp to parse emerge output.
  */
-const QRegExp Global::rxEmerge() const
+const QRegExp rxEmerge()
 {
 	if ( KurooConfig::portageVersion21() )
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
@@ -77,7 +52,7 @@ const QRegExp Global::rxEmerge() const
  * Parse out category, package name and version parts from package.
  * @param sring to parse out cpv from
  */
-const QStringList Global::parsePackage( const QString& packageString ) const
+const QStringList parsePackage( const QString& packageString )
 {
 	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*"
 	            "("
@@ -112,21 +87,9 @@ const QStringList Global::parsePackage( const QString& packageString ) const
 }
 
 /**
- * Kuroo widget parameters.
- */
-void Global::setColorTheme()
-{
-    /*QColor c = QPalette::highlightColor();
-	m_bgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );
-	
-	c = KGlobalSettings::highlightedTextColor();
-    m_fgColor = QString::number( c.red(), 16 ) + QString::number( c.green(), 16 ) + QString::number( c.blue(), 16 );*/
-}
-
-/**
  * Return duration in seconds formated as "d hh.mm.ss".
  */
-const QString Global::formatTime( const long& duration ) const
+const QString formatTime( const long& duration )
 {
 	KLocale *loc = KGlobal::locale();
 	QString totalDays;
@@ -142,5 +105,3 @@ const QString Global::formatTime( const long& duration ) const
 	emergeTime = emergeTime.addSecs( totalSeconds );
 	return totalDays + loc->formatTime( emergeTime, true, true );
 }
-
-#include "global.moc"

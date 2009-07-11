@@ -36,9 +36,6 @@ public:
 	~IntroDlg();
 
 private:
-	void 	back();
-	void 	next();
-	void 	reject();
 	void 	accept();
 
 };

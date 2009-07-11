@@ -57,7 +57,7 @@ private slots:
 	void				slotChanged();
 	void				slotFinished();
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
-    void				slotCleanupDiff();
+    void				slotCleanupDiff( int );
 	
 signals:
 	void				signalEtcFileMerged();

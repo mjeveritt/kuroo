@@ -42,7 +42,6 @@ private slots:
 	
 private:
     Ui::UninstallBase m_uninstallbase;
-    QWidget* 	m_dialog;
 };
 
 #endif

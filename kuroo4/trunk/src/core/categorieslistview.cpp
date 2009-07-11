@@ -63,7 +63,7 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
     //setFrameShape( Q3Frame::NoFrame );
 	//setSorting( -1 );
 
-	connect( this, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotStoreFocus( QTreeWidgetItem* ) ) );
+    connect( this, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotStoreFocus( QTreeWidgetItem*,QTreeWidgetItem* ) ) );
 }
 
 CategoriesView::~CategoriesView()
@@ -73,9 +73,9 @@ CategoriesView::~CategoriesView()
  * Retreive focus category when a new category is made current.
  * @categoryItem*
  */
-void CategoriesView::slotStoreFocus( QTreeWidgetItem* item )
+void CategoriesView::slotStoreFocus( QTreeWidgetItem* current,QTreeWidgetItem* previous )
 {
-	m_focus = item->text(0);
+    m_focus = current->text(0);
 }
 
 /**

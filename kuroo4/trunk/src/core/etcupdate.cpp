@@ -49,7 +49,7 @@ void EtcUpdate::init( QObject *parent )
 	m_parent = parent;
 	
     eProc = new KProcess();
-    connect( eProc, SIGNAL(  finished() ), this, SLOT( slotCleanupDiff() ) );
+    connect( eProc, SIGNAL( finished( int ) ), this, SLOT( slotCleanupDiff( int ) ) );
 	
 	m_mergingFile = new KDirWatch( this );
 	connect( m_mergingFile, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged() ) );
@@ -179,7 +179,7 @@ void EtcUpdate::slotChanged()
  * After diff tool completed, close all.
  * @param proc
  */
-void EtcUpdate::slotCleanupDiff()
+void EtcUpdate::slotCleanupDiff( int status )
 {
 
 	//Unregister the watcher
@@ -211,8 +211,7 @@ void EtcUpdate::slotCleanupDiff()
 
 		KIO::file_delete( m_source );
 		
-		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_source )
-                .arg( kurooDir + "backup" ), KUROO );
+        LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2." ).arg( m_source ).arg( kurooDir + "backup" ), KUROO );
 		
 		KurooDBSingleton::Instance()->addBackup( m_source, m_destination );
 		emit signalEtcFileMerged();

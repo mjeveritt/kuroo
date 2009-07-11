@@ -67,8 +67,7 @@ KurooInit::KurooInit( QObject *parent, const QString& name )
 	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
 
 	// Setup kuroo environment
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if ( args->getOption("option") == "init" || KurooConfig::init() ) {
+    if ( KurooConfig::init() ) {
 		KurooConfig::setSaveLog( false );
 
 		// Create DirHome dir and set permissions so common user can run Kuroo
@@ -213,15 +212,11 @@ void KurooInit::slotEmergeInfo( int status )
  */
 void KurooInit::firstTimeWizard()
 {
-    IntroDlg wizardDialog( this );
+    IntroDlg wizardDialog;
     kDebug() << "Running Wizard";
-    if ( wizardDialog.exec() != QDialog::Accepted ) {
-		exit(0);
-    } else {
-		KurooConfig::setWizard( false );
-    }
-
-	KurooConfig::setInit( true );
+    wizardDialog.show();
+    KurooConfig::setWizard( false );
+    KurooConfig::setInit( true );
 }
 
 /**

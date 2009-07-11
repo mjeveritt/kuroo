@@ -54,8 +54,7 @@ m_hardMaskComment( QString::null ), m_portagePackage( 0 ), m_stabilityBefore( 0 
 {
     /*KDialog::Swallow, 0,, i18n( "Package details" ), false, i18n( "Package details" ),
                KDialog::Ok | KDialog::Apply | KDialog::Cancel, KDialog::Apply, false ),*/
-    setupUi( this );
-    setMainWidget( this );
+    setupUi( mainWidget() );
     adjustSize();
 
     // Get use flag description @fixme: load local description
@@ -82,7 +81,7 @@ m_hardMaskComment( QString::null ), m_portagePackage( 0 ), m_stabilityBefore( 0 
 
     connect( infoHardMasked, SIGNAL( leftClickedUrl( const QString& ) ), SLOT( slotHardMaskInfo() ) );
 
-    connect( useView, SIGNAL( clicked( QTreeWidgetItem* ) ), this, SLOT( slotSetUseFlags( QTreeWidgetItem* ) ) );
+    connect( useView, SIGNAL( itemClicked(QTreeWidgetItem*,int) ), this, SLOT( slotSetUseFlags( QTreeWidgetItem*,int ) ) );
 
     connect( pbUse, SIGNAL( clicked() ), this, SLOT( slotCalculateUse() ) );
 
@@ -576,9 +575,9 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
  * Toggle use flag state to add or remove.
  * @param: useItem
  */
-void PackageInspector::slotSetUseFlags( QTreeWidgetItem* useItem )
+void PackageInspector::slotSetUseFlags( QTreeWidgetItem* useItem, int column )
 {
-    if ( !useItem )
+    if ( !useItem ) //is it possible ?
         return;
 
     QString use = useItem->text( 0 );

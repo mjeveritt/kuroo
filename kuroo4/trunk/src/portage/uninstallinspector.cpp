@@ -32,8 +32,7 @@ UninstallInspector::UninstallInspector( QWidget *parent )
     : KDialog( parent )
 {
     //i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
-    m_uninstallbase.setupUi( m_dialog );
-	setMainWidget( m_dialog );
+    m_uninstallbase.setupUi( mainWidget() );
 }
 
 UninstallInspector::~UninstallInspector()

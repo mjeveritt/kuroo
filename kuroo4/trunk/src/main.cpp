@@ -50,8 +50,8 @@ int main( int argc, char **argv )
     about.addCredit(ki18n("Jakob Petsovits"), ki18n("Portage version code"), "jpetso@gmx.at");
     about.addCredit(ki18n("Björn Balazs"), ki18n("OpenUsability"), "B@lazs.de");
     about.addCredit(ki18n("Florian Graessle"), ki18n("OpenUsability"), "holehan@gmx.de");
-	about.setHomepage("http://kuroo.org");
-	KCmdLineArgs::init( argc, argv, &about );
+    about.setHomepage("http://kuroo.org");
+    KCmdLineArgs::init( argc, argv, &about );
 
 	KApplication app;
 	

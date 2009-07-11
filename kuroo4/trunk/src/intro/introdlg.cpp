@@ -42,51 +42,24 @@ IntroDlg::IntroDlg( QWidget* parent )
 {
 	setupUi(this);
     setWindowTitle( "Kuroo-" + KurooConfig::hardVersion() );
-    QWizard::backButton()->hide();
-    QWizard::finishButton()->setText( i18n("Ok") );
-    QWizard::showPage( page1 );
-    QWizard::setHelpEnabled( page1, false );
-    setFinishEnabled( page1, true );
+    button( QWizard::BackButton )->hide();
+    button( QWizard::FinishButton )->setText( i18n("Ok") );
+    page1->show(); //should be already shown
+    page1->setFinalPage( true );
 
-	introText->setText(   	"<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
-					  i18n( "Kuroo - A KDE Portage frontend that allows you to do most common "
-							"software maintenance tasks on gentoo systems</p>"
-							"<br>"
-					        "<a href=http://trac.kuroo.org/kuroo/wiki/TellUs>We love to hear from you. "
-					        "Tell us what you think of Kuroo!</a><br>"
-					      ) );
+    introText->setText("<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
+                       i18n("Kuroo - A KDE Portage frontend that allows you to do most common software maintenance tasks on gentoo systems</p>"));
 
-	backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></tr>" )
-                        .arg( kurooDir + "backup/" ) +
-						"<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
-						"<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
-						"<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
-						"<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
-						"<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
-						"<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>"
-						);
-
+    backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></tr>" ).arg( kurooDir + "backup/" ) +
+                          "<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
+                          "<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
+                          "<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
+                          "<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
+                          "<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
+                          "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" );
 	adjustSize();
 }
-
-IntroDlg::~IntroDlg()
-{}
-
-void IntroDlg::back()
-{
-    QWizard::back();
-}
-
-void IntroDlg::next()
-{
-// 	if ( QWizard::indexOf(this->currentPage()) == 0 )
-// 		KMessageBox::enableAllMessages();
-}
-
-void IntroDlg::reject()
-{
-    QWizard::reject();
-}
+IntroDlg::~IntroDlg() {}
 
 void IntroDlg::accept()
 {

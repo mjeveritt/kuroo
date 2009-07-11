@@ -26,15 +26,16 @@
 
 #include <kdeversion.h>
 #include <kstatusbar.h>
-//#include <kaccel.h>
 #include <kfiledialog.h>
 #include <kstdaccel.h>
-#include <kaction.h>
-#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
 #include <kuser.h>
 #include <kio/job.h>
+
+#include <kaction.h>
+#include <kstandardaction.h>
+#include <KActionCollection>
 
 #include "common.h"
 #include "threadweaver.h"
@@ -122,7 +123,7 @@ void Kuroo::slotWhatsThis( int tabIndex )
  */
 void Kuroo::setupActions()
 {
-    /*KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+    KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
     KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
 	(void) new KAction( i18n("&Release information"), 0, KShortcut( Qt::CTRL + Qt::Key_W ),
@@ -135,7 +136,7 @@ void Kuroo::setupActions()
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( Qt::CTRL + Qt::Key_S ),
-                                        this, SLOT( slotSync() ), actionCollection(), "sync_portage" );*/
+                                        this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
 }
 
 /**

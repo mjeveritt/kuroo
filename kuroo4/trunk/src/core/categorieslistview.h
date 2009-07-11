@@ -60,7 +60,7 @@ public:
 	const QString					currentCategoryId() const;
 
 protected slots:
-	void						slotStoreFocus( QTreeWidgetItem* item );
+    void						slotStoreFocus( QTreeWidgetItem* current,QTreeWidgetItem* previous );
 
 protected:
 	void						restoreFocus( const bool& isFiltered );

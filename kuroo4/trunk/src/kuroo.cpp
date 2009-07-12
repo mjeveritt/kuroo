@@ -55,7 +55,7 @@ Kuroo::Kuroo()
 	: MainWindow( 0, "Kuroo" ),
 	systemTray( new SystemTray( this ) ),
 	kurooMessage( new Message( this ) ),
-	kurooInit( new KurooInit( this, "KurooInit" ) ), m_view( new KurooView( this, "KurooView" ) ),
+    kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
     kDebug() << "Initializing Kuroo GUI";
@@ -123,6 +123,7 @@ void Kuroo::slotWhatsThis( int tabIndex )
  */
 void Kuroo::setupActions()
 {
+    /*actionCollection() is not defined in this context !
     KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
     KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 	
@@ -136,7 +137,7 @@ void Kuroo::setupActions()
 	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 	
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( Qt::CTRL + Qt::Key_S ),
-                                        this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
+                                        this, SLOT( slotSync() ), actionCollection(), "sync_portage" );*/
 }
 
 /**
@@ -144,13 +145,13 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy()
 {
-	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
-		actionRefreshPortage->setEnabled( false );
-		actionRefreshUpdates->setEnabled( false );
+    if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
+        /*actionRefreshPortage->setEnabled( false );
+        actionRefreshUpdates->setEnabled( false );*/
 	}
 	else {
-		actionRefreshPortage->setEnabled( true );
-		actionRefreshUpdates->setEnabled( true );
+        /*actionRefreshPortage->setEnabled( true );
+        actionRefreshUpdates->setEnabled( true );*/
 		
 		// Make sure progressbar is stopped!
 		KurooStatusBar::instance()->stopTimer();
@@ -158,17 +159,17 @@ void Kuroo::slotBusy()
 	
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
 	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
-		actionSyncPortage->setEnabled( false );
+        //actionSyncPortage->setEnabled( false );
 	}
 	else {
-		actionSyncPortage->setEnabled( true );
+        //actionSyncPortage->setEnabled( true );
 	}
 	
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
-		actionRefreshPortage->setEnabled( false );
+        /*actionRefreshPortage->setEnabled( false );
 		actionRefreshUpdates->setEnabled( false );
-		actionSyncPortage->setEnabled( false );
+        actionSyncPortage->setEnabled( false );*/
 	}
 }
 

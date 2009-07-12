@@ -21,11 +21,9 @@
 #ifndef _KUROOVIEW_H_
 #define _KUROOVIEW_H_
 
-#include "ui_kurooviewbase.h"
-
 #include <qwidget.h>
-
-#include <kurooiface.h>
+#include <KPageDialog>
+//#include <kurooiface.h>
 
 class PortageTab;
 class QueueTab;
@@ -38,11 +36,11 @@ class PackageInspector;
  * @class KurooView
  * @short Create the gui content with icon-menu and pages.
  */
-class KurooView : public QWidget, public Ui::KurooViewBase //, public kurooIface
+class KurooView : public KPageDialog
 {
 Q_OBJECT
 public:
-	KurooView( QWidget *parent, const char *name );
+    KurooView( QWidget *parent );
 	~KurooView();
 	
 	PortageTab*			viewPortage;
@@ -50,51 +48,21 @@ public:
 	QueueTab*			viewQueue;
 	LogsTab* 			viewLogs;
 	MergeTab*			viewMerge;
-	PackageInspector	*packageInspector;
+    PackageInspector*   packageInspector;
 	
 	void 				slotEmergePretend( QString package );
-	
-public:
-	class 				IconListItem;
-	
+
 public slots:
 	void 				slotInit();
 
 private slots:
 	void 				slotCheckPortage();
-	void 				slotPortageUpdated();
-	void 				slotQueueUpdated();
-	void				slotHistoryUpdated();
-	void				slotMergeUpdated();
-	void 				slotLogUpdated();
-    void				slotResetMenu( QListWidgetItem* menuItem );
+    //void				slotResetMenu( QListWidgetItem* menuItem );
 	void 				slotShowView();
 	
 private:
-	IconListItem		*iconPackages, *iconQueue, *iconHistory, *iconLog, *iconMerge/*, *iconWhatsThis*/;
-	
 	// True if history needs to be recreated from scratch
 	bool				m_isHistoryRestored;
-};
-
-class KurooView::IconListItem : public QListWidgetItem
-{
-public:
-    IconListItem( QListWidget *listbox, const QPixmap &pixmap, const QString &text );
-    virtual int 		height( const QListWidget *lb ) const;
-    virtual int 		width( const QListWidget *lb ) const;
-	int 				expandMinimumWidth( int width );
-	void 				setChanged( bool modified );
-	bool 				isChanged();
-	
-protected:
-	const QPixmap 		&defaultPixmap();
-	void 				paint( QPainter *painter );
-	
-private:
-	bool 				m_modified;
-	QPixmap 			mPixmap;
-	int 				mMinimumWidth;
 };
 
 #endif // _KUROOVIEW_H_

@@ -59,7 +59,7 @@ HistoryTab::HistoryTab( QWidget* parent )
 	// Load history view after scan completed
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotReload() ) );
 	
-	connect( historyView, SIGNAL( selectionChanged() ), this, SLOT( slotButtonView() ) );
+    connect( historyView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewInfo() ) );
 	
 	slotInit();
@@ -182,7 +182,7 @@ void HistoryTab::slotViewInfo()
 				logText += stream.readLine() + "<br>";
 			logFile.close();
 		
-			Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
+            //Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
 		}
 		else {
 			kError(0) << "Reading: " << eLogFile << LINE_INFO;

@@ -55,11 +55,11 @@ void PortageListView::PortageItem::paintCell( QPainter* painter, const QPalette&
 		if ( column == 3 ) {
 			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
 				setQueued( true );
-                setIcon( 3, ImagesSingleton::Instance()->icon( QUEUED ) );
+                setIcon( 3, KIcon("kuroo_queued") );
 			}
 			else {
 				setQueued( false );
-                setIcon( 3, ImagesSingleton::Instance()->icon( EMPTY ) );
+                setIcon( 3, KIcon("kuroo_empty") );
 			}
 		}
 		
@@ -81,9 +81,9 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
     header.setText( 0, i18n( "Package" ) );
     header.setText( 1, "" );
     //header.setText( 2, "" );
-    header.setIcon( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ) );
+    header.setIcon( 2, KIcon("kuroo_world_column") );
     //header.setTextAlignment( 2, Qt::AlignHCenter );
-    header.setIcon( 3, ImagesSingleton::Instance()->icon( QUEUED_COLUMN ) );
+    header.setIcon( 3, KIcon("kuroo_queued_column") );
     //setColumnAlignment( 2, Qt::AlignHCenter );
     header.setText( 4, i18n( "Update" ) );
     header.setText( 5, i18n( "Description" ) );
@@ -103,7 +103,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
     //setFullWidth( true );
 	
 	if ( KurooConfig::installedColumn() ) {
-        header.setIcon( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ) );
+        header.setIcon( 1, KIcon("kuroo_installed_column") );
         //setColumnAlignment( 1, Qt::AlignHCenter );
 		setColumnWidth( 1, 25 );
 	}
@@ -115,7 +115,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
     header.setResizeEnabled( false, 3 );*/
 	
 	// Refresh packages when packages are added/removed to Queue or get installed
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
+    //connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( undefined triggerUpdate() ) );
 	
 	// Create text-widget warning for "No packages found.."
 	noHitsWarning = new KTextBrowser( this );

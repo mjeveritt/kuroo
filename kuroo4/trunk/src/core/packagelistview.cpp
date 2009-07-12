@@ -38,7 +38,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
     //header()->setStretchEnabled( false );
 	
 	// Update visible items when world is changed
-	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( triggerUpdate() ) );
+    //connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( undefined triggerUpdate() ) );
 	
 // 	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
 	

@@ -150,9 +150,9 @@ void HistoryListView::loadFromDB( int days )
 
 				HistoryItem *item = new HistoryItem( m_itemMap[ emergeDate ], packageString );
 				if ( duration.isEmpty() )
-					item->setIcon( 0, ImagesSingleton::Instance()->icon( UNMERGED ) );
+                    item->setIcon( 0, KIcon("kuroo_unmerged") );
 				else {
-					item->setIcon( 0, ImagesSingleton::Instance()->icon( NEW ) );
+                    item->setIcon( 0, KIcon("kuroo_new") );
 					item->setText( 1, emergeDuration );
 					item->setEinfo( einfo );
 				}

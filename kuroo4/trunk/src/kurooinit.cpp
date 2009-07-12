@@ -46,7 +46,7 @@
  * Set ownership for directories and files to portage:portage.
  * Check that user is in portage group.
  */
-KurooInit::KurooInit( QObject *parent, const QString& name )
+KurooInit::KurooInit( QObject *parent )
     : QObject( parent ), wizardDialog( 0 )
 {
     kDebug() << "Initializing Kuroo Environment";
@@ -163,7 +163,7 @@ void KurooInit::getEnvironment()
     eProc = new KProcess();
     *eProc << "emerge" << "--info";
     eProc->start();
-    connect( eProc, SIGNAL( finished(int) ), this, SLOT( slotEmergeInfo(int) ) );
+    connect( eProc, SIGNAL( finished(int) ), this, SLOT( slotEmergeInfo() ) );
     connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectOutput() ) );
 }
 
@@ -174,7 +174,7 @@ void KurooInit::slotCollectOutput()
         m_emergeInfoLines += QString( line );
 }
 
-void KurooInit::slotEmergeInfo( int status )
+void KurooInit::slotEmergeInfo()
 {
     kDebug() << "Parsing emerge --info";
     foreach( QString line, m_emergeInfoLines ) {
@@ -214,8 +214,11 @@ void KurooInit::firstTimeWizard()
 {
     IntroDlg wizardDialog;
     kDebug() << "Running Wizard";
-    wizardDialog.show();
-    KurooConfig::setWizard( false );
+    if( wizardDialog.exec() == QDialog::Accepted ) {
+        KurooConfig::setWizard( false );
+    } else {
+        exit(0); //is this the correct way to exit ?
+    }
     KurooConfig::setInit( true );
 }
 

@@ -54,8 +54,8 @@ MergeTab::MergeTab( QWidget* parent )
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotReload() ) );
 		
-	connect( unmergeView, SIGNAL( selectionChanged() ), this, SLOT( slotButtonMerge() ) );
-	connect( mergeView, SIGNAL( selectionChanged() ), this, SLOT( slotButtonView() ) );
+    connect( unmergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonMerge() ) );
+    connect( mergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
 	
 	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );

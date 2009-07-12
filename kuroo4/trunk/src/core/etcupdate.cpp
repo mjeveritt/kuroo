@@ -87,7 +87,7 @@ void EtcUpdate::slotFinished()
 		m_configProtectDir = m_configProtectList.first();
 		KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), false );
 		connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
-		connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
+        //connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
 		m_configProtectList.pop_front();
 	}
 	else {

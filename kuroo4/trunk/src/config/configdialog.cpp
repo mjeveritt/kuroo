@@ -64,7 +64,7 @@ ConfigDialog::ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleto
 	addPage( &opt7, i18n("Etc-update warnings"), QString("messagebox_warning"), i18n("Edit your etc-update warning file list") );
 	addPage( &opt8, i18n("Housekeeping"), QString("kuroo_housekeeping"), i18n("Control automatic file cleanup and rebuilding") );
 
-	connect( this, SIGNAL( settingsChanged() ), this, SLOT( slotSaveAll() ) );
+    connect( this, SIGNAL( settingsChanged(QString) ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
 
 	parseMakeConf();
@@ -143,23 +143,22 @@ const QStringList ConfigDialog::readMakeConf()
 				continue;
 			}
 
-			QString line = line.simplified();
+            line = line.simplified();
 			if ( line.contains( "=" ) ) {
-
 				linesConcatenated += extendedLine;
 				extendedLine = line.section( QRegExp("\\\\s*$"), 0, 0 ).simplified();
 
 				linesConcatenated += linesCommented;
 				linesCommented.clear();
-			}
-			else
+            } else {
 				extendedLine += " " + line.section( QRegExp("\\\\s*$"), 0, 0 ).simplified();
+            }
 		}
 
 		linesConcatenated += extendedLine;
-	}
-	else
+    } else {
 		kError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
+    }
 
 	return linesConcatenated;
 }

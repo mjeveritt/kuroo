@@ -263,7 +263,7 @@ bool Portage::slotRefresh()
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
-		ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+        //ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
 	}
 	else
 		slotScan();

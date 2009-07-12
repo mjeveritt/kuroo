@@ -34,7 +34,7 @@ class KurooInit : public QObject
 {
 Q_OBJECT
 public:
-    KurooInit( QObject *parent = 0, const QString& name = 0 );
+    KurooInit( QObject *parent = 0 );
     ~KurooInit();
 	
 	void 			firstTimeWizard();
@@ -43,7 +43,7 @@ public:
 	
 private slots:
     void			slotCollectOutput();
-    void			slotEmergeInfo( int status );
+    void			slotEmergeInfo();
 	
 private:
     KProcess*       eProc;

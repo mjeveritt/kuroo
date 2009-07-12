@@ -42,7 +42,7 @@ void Images::init( QObject *parent )
 {
 	m_parent = parent;
 	
-	KIconLoader *ldr = KIconLoader::global();
+    /*KIconLoader *ldr = KIconLoader::global();
 	
     pxKuroo = ldr->loadIcon( QString("kuroo"), KIconLoader::Small );
     pxEmerging = ldr->loadIcon( "kuroo1", KIconLoader::Small );
@@ -75,14 +75,14 @@ void Images::init( QObject *parent )
 	pxViewQueue = ldr->loadIcon( "kuroo_queue", KIconLoader::Panel );
 	pxViewHistory = ldr->loadIcon( "kuroo_history", KIconLoader::Panel );
 	pxViewMerge = ldr->loadIcon( "kuroo_etc", KIconLoader::Panel );
-	pxViewLog = ldr->loadIcon( "kuroo_log", KIconLoader::Panel );
+    pxViewLog = ldr->loadIcon( "kuroo_log", KIconLoader::Panel );*/
 }
 
 /**
  * Deliver icons.
  * @return pointer to pixmap
  */
-const QPixmap& Images::icon( const int& image )
+/*const QPixmap& Images::icon( const int& image )
 {
 	switch ( image ) {
 		
@@ -177,6 +177,6 @@ const QPixmap& Images::icon( const int& image )
 			return pxEmpty;
 			break;
 	}
-}
+}*/
 
 #include "images.moc"

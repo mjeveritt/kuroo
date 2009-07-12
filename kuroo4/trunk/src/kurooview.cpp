@@ -20,7 +20,6 @@
 
 #include <sys/stat.h>
 
-#include <QStackedWidget>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qcolor.h>
@@ -51,58 +50,46 @@
  * Insert all 5 pages in a widgetStack, connects icon-menu buttons to corresponding pages (tabs).
  * Highlights icon-texts when changes are mades in the page.
  */
-KurooView::KurooView( QWidget *parent, const char *name ) :
+KurooView::KurooView( QWidget *parent ) :
     //DCOPObject( "kurooIface" ),
-    QWidget( parent ),
+    KPageDialog( parent ),
 	viewPortage( 0 ), viewHistory( 0 ), viewQueue( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	m_isHistoryRestored( false )
 {
-    setupUi( this );
-	setMinimumSize( QSize(750, 550) );
-	
-	viewMenu->setCursor( Qt::PointingHandCursor );
-	
-	// Create the package inspector
-	packageInspector = new PackageInspector( this );
+    // Create the package inspector //defined to be able to hide it on page change
+    packageInspector = new PackageInspector( this );
 	
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
-    viewStack->addWidget( viewPortage ); //VIEW_PORTAGE
+    KPageWidgetItem* pagePortage = addPage( viewPortage, i18n("Packages") );
+    pagePortage->setIcon( KIcon("kuroo_view_portage") );
 	
 	viewQueue = new QueueTab( this, packageInspector );
-    viewStack->addWidget( viewQueue ); //VIEW_QUEUE
+    KPageWidgetItem* pageQueue = addPage( viewQueue, i18n("Queue") );
+    pageQueue->setIcon( KIcon("kuroo_view_queue") );
 	
 	viewHistory = new HistoryTab( this );
-    viewStack->addWidget( viewHistory ); //VIEW_HISTORY
+    KPageWidgetItem* pageHistory = addPage( viewHistory, i18n("History") );
+    pageHistory->setIcon( KIcon("kuroo_view_history") );
 	
 	viewMerge = new MergeTab( this );
-    viewStack->addWidget( viewMerge ); //VIEW_MERGE
+    KPageWidgetItem* pageMerge = addPage( viewMerge, i18n("Configuration") );
+    pageMerge->setIcon( KIcon("kuroo_view_history") );
 	
 	viewLogs = new LogsTab( this );
-    viewStack->addWidget( viewLogs ); //VIEW_LOG
-	
-	// Create menu-icons for the pages
-	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PORTAGE ), i18n("Packages") );
-	iconQueue = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_QUEUE ), i18n("Queue") );
-	iconHistory = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_HISTORY ), i18n("History") );
-	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Configuration") );
-	iconLog = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_LOG ), i18n("Log") );
-	
+    KPageWidgetItem* pageLogs = addPage( viewLogs, i18n("Log") );
+    pageLogs->setIcon( KIcon("kuroo_view_log") );
+		
 	// Connect menu-icons to the pages
-	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
-	viewMenu->setCurrentItem( 0 );
+    /*connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
+    viewMenu->setCurrentItem( 0 );*/
 	
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( viewLogs->logBrowser, viewLogs->verboseLog, viewLogs->saveLog );
 	
 	// Confirm changes in views with bleue text menu
-	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
-	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotHistoryUpdated() ) );
-	connect( viewMerge, SIGNAL( signalMergeChanged() ), this, SLOT( slotMergeUpdated() ) );
-	connect( LogSingleton::Instance(), SIGNAL( signalLogChanged() ), this, SLOT( slotLogUpdated() ) );
-    connect( viewMenu, SIGNAL( currentChanged( QListWidgetItem* ) ), this, SLOT( slotResetMenu( QListWidgetItem* ) ) );
+    //connect( viewMenu, SIGNAL( currentChanged( QListWidgetItem* ) ), this, SLOT( slotResetMenu( QListWidgetItem* ) ) );
 }
 
 KurooView::~KurooView()
@@ -205,85 +192,19 @@ void KurooView::slotEmergePretend( QString package )
 }
 
 /**
- * Highlight menutext in bleue.
- */
-void KurooView::slotPortageUpdated()
-{
-	if ( !iconPackages->isChanged() && !iconPackages->isSelected() ) {
-		iconPackages->setChanged( true );
-        //viewMenu->triggerUpdate( true );
-	}
-}
-
-/**
- * Highlight menutext in bleue.
- */
-void KurooView::slotQueueUpdated()
-{
-	if ( !iconQueue->isChanged() && !iconQueue->isSelected() ) {
-		iconQueue->setChanged( true );
-        //viewMenu->triggerUpdate( true );
-	}
-}
-
-/**
- * Highlight menutext in bleue.
- */
-void KurooView::slotHistoryUpdated()
-{
-	if ( !iconHistory->isChanged() && !iconHistory->isSelected() ) {
-		iconHistory->setChanged( true );
-        //viewMenu->triggerUpdate( true );
-	}
-}
-
-/**
- * Highlight menutext in bleue.
- */
-void KurooView::slotMergeUpdated()
-{
-	if ( !iconMerge->isChanged() && !iconMerge->isSelected() ) {
-		iconMerge->setChanged( true );
-        //viewMenu->triggerUpdate( true );
-	}
-}
-
-/**
- * Highlight menutext in bleue.
- */
-void KurooView::slotLogUpdated()
-{
-	if ( !iconLog->isChanged() && !iconLog->isSelected() ) {
-		iconLog->setChanged( true );
-        //viewMenu->triggerUpdate( true );
-	}
-}
-
-/**
  * Clear the highlighting menu text back to normal when visits the view.
  */
-void KurooView::slotResetMenu( QListWidgetItem* menuItem )
+/*void KurooView::slotResetMenu( QListWidgetItem* menuItem )
 {
 	dynamic_cast<IconListItem*>( menuItem )->setChanged( false );
     //viewMenu->triggerUpdate( true );
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Create menu icons and highlight menutext when changes.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-KurooView::IconListItem::IconListItem( QListWidget *listWidget, const QPixmap &pixmap, const QString &text )
-    : QListWidgetItem( listWidget ), m_modified( false )
-{
-	mPixmap = pixmap;
-	if ( mPixmap.isNull() )
-		mPixmap = defaultPixmap();
-	
-	setText( text );
-	mMinimumWidth = 100;
-}
-
+/*Using standard KPageDialog now
 void KurooView::IconListItem::paint( QPainter *painter )
 {
 	if ( isSelected() ) {
@@ -361,6 +282,6 @@ bool KurooView::IconListItem::isChanged()
 {
 	return m_modified;
 }
-
+*/
 #include "kurooview.moc"
 

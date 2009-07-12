@@ -57,9 +57,9 @@ private slots:
 	void				slotRemove();
 	void				slotClear();
 	void				slotRemoveInstalled();
-	void				slotAdvanced();
+    void				slotAdvanced();
 	void				slotPackage();
-    void				contextMenu( QTreeWidget *listView, QTreeWidgetItem *item, const QPoint &point );
+    void				slotContextMenu();
 	
 private:
 	

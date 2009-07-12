@@ -168,7 +168,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
     QTreeWidgetItem header;
     header.setText( 0, i18n( "Package" ) );
     header.setText( 1, "" );
-    header.setIcon( 2, ImagesSingleton::Instance()->icon( WORLD_COLUMN ) );
+    header.setIcon( 2, KIcon("kuroo_world_column") );
     //setColumnAlignment( 2, Qt::AlignHCenter );
     header.setText( 3, i18n( "Version") );
     header.setText( 4, i18n( "Duration") );
@@ -193,7 +193,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
     //setSorting( -1, false );
 	
 	if ( KurooConfig::installedColumn() ) {
-        header.setIcon( 1, ImagesSingleton::Instance()->icon( INSTALLED_COLUMN ) );
+        header.setIcon( 1, KIcon("kuroo_installed_column") );
         //setColumnAlignment( 1, Qt::AlignHCenter );
         //setColumnWidth( 1, 25 );
 	}
@@ -205,7 +205,7 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 
     setHeaderItem( &header );
 	
-    connect( this, SIGNAL( collapsed( QTreeWidgetItem* ) ), this, SLOT( slotHideBars( QTreeWidgetItem* ) ) );
+    connect( this, SIGNAL( itemCollapsed(QTreeWidgetItem*) ), this, SLOT( slotHideBars( QTreeWidgetItem* ) ) );
 }
 
 QueueListView::~QueueListView()

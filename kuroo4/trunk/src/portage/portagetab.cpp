@@ -72,14 +72,14 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
 	
-	// Rmb actions.
-    connect( packagesView, SIGNAL( contextMenu( QTreeWidget*, QTreeWidgetItem*, const QPoint& ) ),
-             this, SLOT( contextMenu( QTreeWidget*, QTreeWidgetItem*, const QPoint& ) ) );
+    // Rmb actions.
+    connect( packagesView, SIGNAL( customContextMenuRequested(QPoint) ),
+             this, SLOT( slotContextMenu() ) );
 	
 	// Button actions.
 	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
-    connect( packagesView, SIGNAL( doubleClicked( QTreeWidgetItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
+    connect( packagesView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 	
@@ -94,10 +94,10 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 	
 	// Enable/disable buttons
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
+    connect( packagesView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( selectionChanged() ), this, SLOT( slotPackage() ) );
+    connect( packagesView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotPackage() ) );
 	
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -600,7 +600,7 @@ void PortageTab::processPackage( bool viewInspector )
  * @param item
  * @param point
  */
-void PortageTab::contextMenu( QTreeWidget*, QTreeWidgetItem* item, const QPoint& point )
+void PortageTab::slotContextMenu()
 {
 	DEBUG_LINE_INFO;
     //port KMenu to KDE4

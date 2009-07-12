@@ -67,10 +67,10 @@ private slots:
 	void				slotDequeue();
 	void				slotUninstall();
 	
-	void				slotAdvanced();
+    void				slotAdvanced();
 	void				slotPackage();
-    void				contextMenu( QTreeWidget* listView, QTreeWidgetItem* item, const QPoint& point );
-	
+    void				slotContextMenu();
+
 private:
 	void				processPackage( bool viewInspector );
 	
@@ -93,6 +93,7 @@ private:
 	
 signals:
 	void				signalChanged();
+
 };
 
 #endif

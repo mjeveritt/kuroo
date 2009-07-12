@@ -35,23 +35,17 @@ Message* Message::s_instance = 0;
  * @short Convenience singleton dialog for simple messages to user.
  */
 Message::Message( QWidget *parent )
-    : KDialog( parent ),
-	base( 0 ), m_text( QString::null )
+    : KDialog( parent ), m_text( QString::null )
 {
+    setupUi( mainWidget() );
     //i18n("Message"), false, i18n("Message"), KDialogBase::Ok | KDialogBase::User1, KDialogBase::Ok, false
 	s_instance = this;
-    base = new Ui::MessageBase();
-    base->setupUi( this );
-	
     setButtonText( KDialog::User1, i18n("Copy text to clipboard") );
     //showButtonCancel( false );
 	
 // 	base->messageText->setTextFormat( Qt::LogText );
-    setMainWidget( this );
 }
-
-Message::~Message()
-{}
+Message::~Message() {}
 
 /**
  * Show dialog with message content.
@@ -68,14 +62,14 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
 	QString m_text = text;
 	m_text.replace( "<br>", "\x000a" );
 	
-	base->messageText->setText( text );
+    messageText->setText( text );
 	setInitialSize( QSize(600, 300) );
 	show();
 }
 
 void Message::setLabel( const QString& label )
 {
-	base->messageLabel->setText( label );
+    messageLabel->setText( label );
 }
 
 void Message::slotUser1()

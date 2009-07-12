@@ -27,10 +27,11 @@
 /**
  * Dialog for simple messages to user.
  */
-class Message : public KDialog
+//CLEAN: just use KDialog
+class Message : public KDialog, public Ui::MessageBase
 {
 Q_OBJECT
-	static Message* s_instance;
+    static Message* s_instance;
 public:
 	Message( QWidget *parent = 0 );
     ~Message();
@@ -45,7 +46,6 @@ private slots:
 	void			slotUser1();
 
 private:
-    Ui::MessageBase 	*base;
 	QString			m_text;
 };
 

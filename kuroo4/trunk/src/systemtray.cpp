@@ -95,7 +95,7 @@ void SystemTray::slotUnpause()
 void SystemTray::slotBusy( bool busy )
 {
 	if ( busy && isVisible() ) {
-        setIcon( ImagesSingleton::Instance()->icon( KUROO_EMERGING ) );
+        setIcon( KIcon("kuroo_emerging") );
         if( EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {
             //contextMenu()->setItemEnabled( m_menuUnpause, true );
         } else if( !EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {
@@ -103,7 +103,7 @@ void SystemTray::slotBusy( bool busy )
         }
 	}
 	else {
-        setIcon( ImagesSingleton::Instance()->icon( KUROO_READY ) );
+        setIcon( KIcon("kuroo_ready") );
         if( EmergeSingleton::Instance()->canPause() && EmergeSingleton::Instance()->isPaused() ) {
             //contextMenu()->setItemEnabled( m_menuUnpause, true );
         } else {

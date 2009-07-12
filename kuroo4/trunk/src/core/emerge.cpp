@@ -766,8 +766,8 @@ void Emerge::slotCleanupCheckUpdates()
         m_importantMessage += m_blocks.join("<br>");
     }
 
-    if ( !m_importantMessage.isEmpty() )
-        Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );
+    /*if ( !m_importantMessage.isEmpty() )
+        Message::instance()->prompt( i18n("Important"), i18n("Please check log for more information!"), m_importantMessage );*/
 }
 
 /**

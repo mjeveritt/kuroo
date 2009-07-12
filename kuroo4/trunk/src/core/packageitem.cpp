@@ -78,14 +78,14 @@ void PackageItem::paintCell( QPainter* painter, const QPalette& palette, int col
 			
 			case 0 : {
 				if ( m_status & PACKAGE_AVAILABLE )
-                    setIcon( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
+                    setIcon( 0, KIcon("kuroo_package") );
 				else {
 					if ( KurooConfig::installedColumn() ) {
-                        setIcon( 0, ImagesSingleton::Instance()->icon( PACKAGE ) );
-                        setIcon( 1, ImagesSingleton::Instance()->icon( VERSION_INSTALLED ) );
+                        setIcon( 0, KIcon("kuroo_package") );
+                        setIcon( 1, KIcon("kuroo_version_installed") );
 					}
 					else
-                        setIcon( 0, ImagesSingleton::Instance()->icon( INSTALLED ) );
+                        setIcon( 0, KIcon("installed") );
 					
 					if ( m_status & PACKAGE_OLD ) {
 						font.setItalic( true );
@@ -99,11 +99,11 @@ void PackageItem::paintCell( QPainter* painter, const QPalette& palette, int col
 			case 2 : {
 				if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
 					m_inWorld = true;
-                    setIcon( 2, ImagesSingleton::Instance()->icon( WORLD ) );
+                    setIcon( 2, KIcon("kuroo_world") );
 				}
 				else {
 					m_inWorld = false;
-                    setIcon( 2, ImagesSingleton::Instance()->icon( EMPTY ) );
+                    setIcon( 2, KIcon("kuroo_empty") );
 				}
 			}
 		}

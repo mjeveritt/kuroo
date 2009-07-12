@@ -62,7 +62,7 @@ void UninstallInspector::view( const QStringList& packageList )
 		// Warn if package is included in gentoo base system profile
         foreach ( QString file, systemFilesList )
             if ( file == package ) {
-                itemPackage->setIcon( 0, ImagesSingleton::Instance()->icon( WARNING ) );
+                itemPackage->setIcon( 0, KIcon("kuroo_warning") );
 				isPartOfSystem = true;
 			}
 		

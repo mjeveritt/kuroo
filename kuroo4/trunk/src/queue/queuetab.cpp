@@ -56,20 +56,20 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 	
 	// Rmb actions.
-    connect( queueView, SIGNAL( contextMenu( QTreeWidget*, QTreeWidgetItem*, const QPoint& ) ),
-             this, SLOT( contextMenu( QTreeWidget*, QTreeWidgetItem*, const QPoint& ) ) );
+    connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ),
+             this, SLOT( contextMenu(QPoint) ) );
 	
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
 	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-    connect( queueView, SIGNAL( doubleClicked( QTreeWidgetItem*, const QPoint&, int ) ), this, SLOT( slotAdvanced() ) );
+    connect( queueView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
 	
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 	
-    connect( queueView, SIGNAL( currentChanged( QTreeWidgetItem* ) ), this, SLOT( slotPackage() ) );
-	connect( queueView, SIGNAL( selectionChanged() ), this, SLOT( slotButtons() ) );
+    connect( queueView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotPackage() ) );
+    connect( queueView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtons() ) );
 	
 	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
@@ -555,7 +555,7 @@ void QueueTab::processPackage( bool viewInspector )
  * @param item
  * @param point
  */
-void QueueTab::contextMenu( QTreeWidget*, QTreeWidgetItem *item, const QPoint& point )
+void QueueTab::slotContextMenu()
 {
     //FIXME: port contextMenu to KDE4
     /*if ( !item )

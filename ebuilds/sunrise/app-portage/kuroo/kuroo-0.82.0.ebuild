@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
-
 ARTS_REQUIRED="never"
 
 inherit kde
@@ -14,12 +12,14 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="3.5"
-KEYWORDS="~x86 ~ppc ~sparc ~amd64"
+KEYWORDS="~amd64 ~ppc ~sparc ~x86"
 IUSE=""
 
-RDEPEND="app-portage/gentoolkit
+DEPEND="dev-db/sqlite"
+
+RDEPEND="${DEPEND}
+	app-portage/gentoolkit
 	kde-misc/kdiff3
-	dev-db/sqlite
 	kde-base/kdesu"
 
 need-kde 3.5

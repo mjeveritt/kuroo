@@ -1,10 +1,10 @@
 # ChangeLog for app-portage/kuroo
 # Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/www/viewcvs.gentoo.org/raw_cvs/gentoo-x86/app-portage/kuroo/Attic/ChangeLog,v 1.31 2009/02/21 04:22:56 darkside dead $
+# $Header: $
 
-  08 Jul 2009; <aschenck@gentoo.org> kuroo-0.82.0.ebuild:
-  New version that works with current stable and unstable Portages. 
-  Updated ebuild to use EAPI 2 and fix bug #236772.
+  14 Jul 2009; Andrew Schenck (galiven) <galiven@users.sourceforge.net>
+  kuroo-0.82.0.ebuild:
+  New version that works with current stable and unstable Portages.
 
   22 May 2008; Ingmar Vanhassel <ingmar@gentoo.org> kuroo-0.80.2-r1.ebuild,
   kuroo-0.81_rc1.ebuild:
@@ -16,7 +16,7 @@
   26 Apr 2008; nixnut <nixnut@gentoo.org> kuroo-0.81_rc1.ebuild:
   Stable on ppc wrt bug 218768
 
-  26 Apr 2008; Dawid Węgliński <cla@gentoo.org> kuroo-0.81_rc1.ebuild:
+  26 Apr 2008; Dawid WÄgliÅski <cla@gentoo.org> kuroo-0.81_rc1.ebuild:
   Stable on x86 (bug #218768)
 
   21 Apr 2008; Ferris McCormick <fmccor@gentoo.org> kuroo-0.81_rc1.ebuild:
@@ -75,7 +75,7 @@
   color=n . - Disabled size cache and scanning because of changes in portage.
   Removed obsolete ebuilds.
 
-  19 Feb 2007; Raúl Porcel <armin76@gentoo.org> kuroo-0.80.2-r1.ebuild:
+  19 Feb 2007; RaÃºl Porcel <armin76@gentoo.org> kuroo-0.80.2-r1.ebuild:
   x86 stable wrt bug 144084
 
 *kuroo-0.80.2-r1 (16 Aug 2006)

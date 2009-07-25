@@ -34,19 +34,19 @@ class DependAtom;
 class PackageItem : public QTreeWidgetItem
 {
 public:
-        PackageItem( QTreeWidget *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
-        PackageItem( QTreeWidgetItem *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
+	PackageItem( QTreeWidget *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
+	PackageItem( QTreeWidgetItem *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
 	~PackageItem();
 	/**
 	 * Package status describing if this package is installed or not.
 	 * @return status
 	 */
-    inline int					status() const { return m_status; }
+	inline int								status() const { return m_status; }
 	/**
 	 * Package db id.
 	 * @return id
 	 */
-	inline const QString& 					id() const { return m_id; }
+	inline const QString&					id() const { return m_id; }
 	/**
 	 * Package name as kuroo in app-portage/kuroo.
 	 * @return name
@@ -56,53 +56,53 @@ public:
 	 * Accessor for category.
 	 * @return the package category.
 	 */
-	inline const QString& 					category() const { return m_category; }
+	inline const QString&					category() const { return m_category; }
 	/**
 	 * Package description.
 	 * @return description
 	 */
 	inline const QString&					description() const { return m_description; }
-	
-	virtual void						setPackageIndex( const int& index );	
-	virtual bool						isInstalled() const;
-	virtual bool						isInPortage() const;
+
+	virtual void							setPackageIndex( const int& index );
+	virtual bool							isInstalled() const;
+	virtual bool							isInPortage() const;
 	/**
 	 * Is this package is in the emerge queue?
 	 * @return true/false
 	 */
-	inline virtual bool					isQueued() const { return m_isQueued; }
+	inline virtual bool						isQueued() const { return m_isQueued; }
 	/**
 	 * Is this package in world?
 	 * @return true/false
 	 */
-	inline virtual bool					isInWorld() const { return m_inWorld; }
-	
-// 	void							setRollOver( bool isMouseOver );
-	void							setInstalled();
-	void							setDescription( const QString& description );
-	void							setQueued( const bool& isQueued );
-	bool							isFirstPackage() const;
+	inline virtual bool						isInWorld() const { return m_inWorld; }
+
+//	void									setRollOver( bool isMouseOver );
+	void									setInstalled();
+	void									setDescription( const QString& description );
+	void									setQueued( const bool& isQueued );
+	bool									isFirstPackage() const;
 	/**
 	 * Is this the last package?
 	 * @return true if last
 	 */
-	inline bool						isLastPackage() const  { return ( m_index == 1 ); }
-	
-	void 							initVersions();
+	inline bool								isLastPackage() const  { return ( m_index == 1 ); }
+
+	void									initVersions();
 	/**
 	 * Return list of versions.
-         * @return QList<PackageVersion*>
+	 * @return QList<PackageVersion*>
 	 */
-        inline QList<PackageVersion*> 			versionList()const  { return m_versions; }
+	inline QList<PackageVersion*>			versionList()const  { return m_versions; }
 	/**
 	 * Return map of versions - faster find.
 	 * @return QMap<QString, PackageVersion*>
 	 */
-	inline QMap<QString,PackageVersion*> 			versionMap() const { return m_versionMap; }
-        QList<PackageVersion*> 				sortedVersionList();
-	void							resetDetailedInfo();
+	inline QMap<QString,PackageVersion*>	versionMap() const { return m_versionMap; }
+	QList<PackageVersion*>					sortedVersionList();
+	void									resetDetailedInfo();
 
-	void							parsePackageVersions();
+	void									parsePackageVersions();
 	/**
 	 * Return versions list together with stability info etc...
 	 */
@@ -127,67 +127,67 @@ public:
 	 * Returns list emergeable versions in html-format.
 	 */
 	inline const QString&					linesEmerge() const { return m_linesEmerge; }
-    inline bool					isInArch() const { return m_isInArch; }
-	
+	inline bool								isInArch() const { return m_isInArch; }
+
 protected:
-        void paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment );
-	
+	void paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment );
+
 private:
-        QTreeWidget						*m_parent;
-	
+	QTreeWidget								*m_parent;
+
 	// Is the mouse pointer over this package
-	bool							m_isMouseOver;
-	
+	bool									m_isMouseOver;
+
 	// Keep track of package's index in parent listview
-	int							m_index;
-	
+	int										m_index;
+
 	// Package's db id
-	QString							m_id;
-	
+	QString									m_id;
+
 	// Package name-string
-	QString							m_name;
-	
+	QString									m_name;
+
 	// Is package INSTALLED or OLD ( INSTALLED but not in Portage anymore )
-	int							m_status;
-	
+	int										m_status;
+
 	// Package description
-	QString							m_description;
-	
+	QString									m_description;
+
 	// Keep track of package's category
-	QString							m_category;
-	
+	QString									m_category;
+
 	// True if package is in installation queue
-	bool							m_isQueued;
-	
+	bool									m_isQueued;
+
 	// True if package is in world file
-	bool							m_inWorld;
-	
+	bool									m_inWorld;
+
 	// True if package and its versions has been initialized with all data
-	bool							m_isInitialized;
-	
+	bool									m_isInitialized;
+
 	// Valuelist with all versions and their data
-        QList<PackageVersion*>				m_versions;
-	
+	QList<PackageVersion*>					m_versions;
+
 	// Alternatively map with all versions and their data
-	QMap<QString, PackageVersion*>				m_versionMap;
-	
+	QMap<QString, PackageVersion*>			m_versionMap;
+
 	// Atom object needed for versions stability
-	DependAtom* 						atom;
+	DependAtom*								atom;
 
 	// Formatted string
-	QString							m_linesInstalled, m_linesAvailable, m_linesEmerge;
-	
+	QString									m_linesInstalled, m_linesAvailable, m_linesEmerge;
+
 	// Version used by emerge
-	QString							m_emergeVersion;
-	
+	QString									m_emergeVersion;
+
 	// Latest versions homepage supposed to be most current
-	QString							m_homepage;
-	
+	QString									m_homepage;
+
 	// Versions list together with stability info etc...
-	QStringList						m_versionsDataList;
-	
+	QStringList								m_versionsDataList;
+
 	// Is this package available in this arch?
-	bool							m_isInArch;
+	bool									m_isInArch;
 };
 
 #endif

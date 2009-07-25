@@ -35,25 +35,27 @@ const int diffTime = 10;
  * @short Package item with progressbar
  */
 QueueListView::QueueItem::QueueItem( QTreeWidget* parent, const QString& category, const QString& name, const QString& id, const int status, int duration )
+	: PackageItem( parent, name, id, category, QString::null, status ),
+	m_bar( 0 ), m_progress( 0 ), m_duration( duration ),
+	m_isChecked( false ), m_isComplete( false ),
+	m_package( category + "/" + name )
+{
+	setQueued( true );
+	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
+	m_bar = new QProgressBar( parent->viewport() );
+	m_bar->setMaximum( duration );
+	m_bar->hide();
+}
+
+QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration )
 	: PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
 	m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
 {
 	setQueued( true );
 	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
-    m_bar = new QProgressBar( parent->viewport() );
-    m_bar->setMaximum( duration );
+	m_bar = new QProgressBar( parent->treeWidget()->viewport() );
+	m_bar->setMaximum( duration );
 	m_bar->hide();
-}
-
-QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration )
-    : PackageItem( parent, name, id, category, QString::null, status ), m_bar( 0 ),
-    m_progress( 0 ), m_duration( duration ), m_isChecked( false ), m_isComplete( false ), m_package( category + "/" + name )
-{
-    setQueued( true );
-    setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
-    m_bar = new QProgressBar( parent->treeWidget()->viewport() );
-    m_bar->setMaximum( duration );
-    m_bar->hide();
 }
 
 QueueListView::QueueItem::~QueueItem()
@@ -83,9 +85,9 @@ void QueueListView::QueueItem::setComplete()
 {
 	m_progress = m_duration;
 	m_isComplete = true;
-    m_bar->setTextVisible( true );
-    m_bar->setMaximum( 100 );
-    m_bar->setValue( 100 );
+	m_bar->setTextVisible( true );
+	m_bar->setMaximum( 100 );
+	m_bar->setValue( 100 );
 	setInstalled();
 }
 
@@ -116,14 +118,14 @@ int QueueListView::QueueItem::remainingDuration()
 void QueueListView::QueueItem::oneStep()
 {
 	if ( m_progress < m_duration )
-        m_bar->setValue( m_progress++ );
+		m_bar->setValue( m_progress++ );
 	else
 		if ( m_progress++ == m_duration ) {
-            m_bar->setMaximum( 0 );
-            m_bar->setTextVisible( false );
+			m_bar->setMaximum( 0 );
+			m_bar->setTextVisible( false );
 		}
 		else
-            m_bar->setValue( m_bar->value() + 3 );
+			m_bar->setValue( m_bar->value() + 3 );
 }
 
 /**
@@ -165,47 +167,55 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	: PackageListView( parent, name ), m_id( QString::null )
 {
 	// Setup geometry
-    QTreeWidgetItem header;
-    header.setText( 0, i18n( "Package" ) );
-    header.setText( 1, "" );
-    header.setIcon( 2, KIcon("kuroo_world_column") );
-    //setColumnAlignment( 2, Qt::AlignHCenter );
-    header.setText( 3, i18n( "Version") );
-    header.setText( 4, i18n( "Duration") );
-    header.setText( 5, i18n( "Size") );
-    header.setText( 6, i18n( "Progress") );
-	
+	//QTreeWidgetItem header;
+	headerItem()->setData( 0, Qt::Horizontal, i18n( "Package" ) );
+//	header.setText( 0, i18n( "Package" ) );
+	headerItem()->setData( 1, Qt::Horizontal, "" );
+//	header.setText( 1, "" );
+	headerItem()->setData( 2, Qt::Horizontal, KIcon("kuroo_world_column") );
+//	header.setIcon( 2, KIcon("kuroo_world_column") );
+	//setColumnAlignment( 2, Qt::AlignHCenter );
+	headerItem()->setData( 3, Qt::Horizontal, i18n( "Version" ) );
+//	header.setText( 3, i18n( "Version") );
+	headerItem()->setData( 4, Qt::Horizontal, i18n( "Duration" ) );
+//	header.setText( 4, i18n( "Duration") );
+	headerItem()->setData( 5, Qt::Horizontal, i18n( "Size" ) );
+//	header.setText( 5, i18n( "Size") );
+	headerItem()->setData( 6, Qt::Horizontal, i18n( "Progress" ) );
+//	header.setText( 6, i18n( "Progress") );
+
 	setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
-    //setFullWidth( true );
+	//setFullWidth( true );
 
-    /*setColumnWidthMode( 0, QTreeWidget::Manual );
-    setColumnWidthMode( 1, QTreeWidget::Manual );
-    setColumnWidthMode( 2, QTreeWidget::Manual );
-    setColumnWidthMode( 3, QTreeWidget::Manual );
-    setColumnWidthMode( 4, QTreeWidget::Manual );
-    setColumnWidthMode( 5, QTreeWidget::Manual );
-    setColumnWidthMode( 6, QTreeWidget::Manual );*/
-	
-    //setColumnAlignment( 5, Qt::AlignRight );
-	
+	/*setColumnWidthMode( 0, QTreeWidget::Manual );
+	setColumnWidthMode( 1, QTreeWidget::Manual );
+	setColumnWidthMode( 2, QTreeWidget::Manual );
+	setColumnWidthMode( 3, QTreeWidget::Manual );
+	setColumnWidthMode( 4, QTreeWidget::Manual );
+	setColumnWidthMode( 5, QTreeWidget::Manual );
+	setColumnWidthMode( 6, QTreeWidget::Manual );*/
+
+	//setColumnAlignment( 5, Qt::AlignRight );
+
 	// Settings in kuroorc may conflict and enable sorting. Make sure it is deleted first.
-    //setSorting( -1, false );
-	
+	//setSorting( -1, false );
+
 	if ( KurooConfig::installedColumn() ) {
-        header.setIcon( 1, KIcon("kuroo_installed_column") );
-        //setColumnAlignment( 1, Qt::AlignHCenter );
-        //setColumnWidth( 1, 25 );
+		headerItem()->setData( 1, Qt::Horizontal, KIcon("kuroo_installed_column") );
+//		header.setIcon( 1, KIcon("kuroo_installed_column") );
+		//setColumnAlignment( 1, Qt::AlignHCenter );
+		//setColumnWidth( 1, 25 );
 	}
 	else
 		hideColumn( 1 );
-	
-    /*header.setResizeEnabled( false, 1 );
-    header.setResizeEnabled( false, 2 );*/
 
-    setHeaderItem( &header );
-	
-    connect( this, SIGNAL( itemCollapsed(QTreeWidgetItem*) ), this, SLOT( slotHideBars( QTreeWidgetItem* ) ) );
+	/*header.setResizeEnabled( false, 1 );
+	header.setResizeEnabled( false, 2 );*/
+
+	//setHeaderItem( &header );
+
+	connect( this, SIGNAL( itemCollapsed(QTreeWidgetItem*) ), this, SLOT( slotHideBars( QTreeWidgetItem* ) ) );
 }
 
 QueueListView::~QueueListView()
@@ -216,11 +226,11 @@ QueueListView::~QueueListView()
  */
 void QueueListView::slotPackageUp()
 {
-    //FIXME: move item
-    /*QTreeWidgetItem* packageItem = currentItem();
-    if( itemAbove( packageItem ) )
-        itemAbove( packageItem );
-        move( packageItem );*/
+	//FIXME: move item
+	/*QTreeWidgetItem* packageItem = currentItem();
+	if( itemAbove( packageItem ) )
+		itemAbove( packageItem );
+		move( packageItem );*/
 }
 
 /**
@@ -228,38 +238,38 @@ void QueueListView::slotPackageUp()
  */
 void QueueListView::slotPackageDown()
 {
-    /*QTreeWidgetItem* packageItem = currentItem();
-    if ( itemBelow( packageItem ) )
-        packageItem->moveItem( itemBelow( packageItem ) );*/
+	/*QTreeWidgetItem* packageItem = currentItem();
+	if ( itemBelow( packageItem ) )
+		packageItem->moveItem( itemBelow( packageItem ) );*/
 }
 
-/** 
+/**
  * All packages in listview by name - no children
  * @return packageList
  */
 const QStringList QueueListView::allPackagesNoChildren()
 {
 	QStringList packageList;
-    QTreeWidgetItemIterator it( this );
-    while ( *it ) {
-        packageList += dynamic_cast<QueueItem*>(*it)->package();
-        it++;
+	QTreeWidgetItemIterator it( this );
+	while ( *it ) {
+		packageList += dynamic_cast<QueueItem*>(*it)->package();
+		it++;
 	}
 	return packageList;
 }
 
-/** 
+/**
  * All packages in listview by name - no children
  * @return packageList
  */
 const QStringList QueueListView::allEndUserPackages()
 {
 	QStringList packageList;
-    QTreeWidgetItemIterator it( this );
-    while ( *it ) {
-        packageList += dynamic_cast<QueueItem*>(*it)->package();
-        packageList += (*it)->text(3);
-        it++;
+	QTreeWidgetItemIterator it( this );
+	while ( *it ) {
+		packageList += dynamic_cast<QueueItem*>(*it)->package();
+		packageList += (*it)->text(3);
+		it++;
 	}
 	return packageList;
 }
@@ -272,25 +282,25 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 {
 	QueueItem* item;
 	m_sumSize = 0;
-	
+
 	resetListView();
-	
+
 	// Get list of update packages with info
 	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
 	int packageCount = packageList.size() / 7;
-    QListIterator<QString> it( packageList );
-    while( it.hasNext() ) {
-        QString id = it.next();
-        QString category = it.next();
-        QString name = it.next();
-        QString status = it.next();
-        QString idDepend = it.next();
-        QString size = it.next();
-        QString version = it.next();
-		
+	QListIterator<QString> it( packageList );
+	while( it.hasNext() ) {
+		QString id = it.next();
+		QString category = it.next();
+		QString name = it.next();
+		QString status = it.next();
+		QString idDepend = it.next();
+		QString size = it.next();
+		QString version = it.next();
+
 		// Get package emerge duration from statistics
 		int duration = HistorySingleton::Instance()->packageTime( category + "/" + name ).toInt() + diffTime;
-		
+
 		// If version get size
 		if ( size.isEmpty() || size == "0" )
 			size = KurooDBSingleton::Instance()->versionSize( id, version );
@@ -299,7 +309,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 		if ( idDepend.isEmpty() || idDepend == "0" ) {
 			item = new QueueItem( this, category, name, id, status.toInt(), duration );
-            item->setExpanded( true );
+			item->setExpanded( true );
 		}
 		else {
 			QueueItem* itemDepend = dynamic_cast<QueueItem*>( this->packageItemById( idDepend ) );
@@ -308,22 +318,22 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			}
 			else {
 				item = new QueueItem( this, category, name, id, status.toInt(), duration );
-                item->setExpanded( true );
+				item->setExpanded( true );
 			}
 		}
-		
+
 		// Add version to be emerged
 		if ( version.isEmpty() )
 			item->setText( 3, i18n("na") );
 		else
 			item->setText( 3, version );
-		
+
 		// Add emerge duration
 		if ( duration == diffTime )
 			item->setText( 4, i18n("na") );
 		else
-            item->setText( 4, formatTime( duration ) );
-		
+			item->setText( 4, formatTime( duration ) );
+
 		// Add download size = tarball size
 		if ( size.isEmpty() )
 			item->setText( 5, i18n("na") );
@@ -331,19 +341,19 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			item->setText( 5, size );
 			addSize( size );
 		}
-		
+
 		item->setPretended( hasCheckedQueue );
-		
+
 		indexPackage( id, item );
-		
+
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( id );
 	}
 	setPackageFocus( QString::null );
-	
+
 	// Cannot have current changed for only one package so emit manually
-    /*if ( packageCount == 1 )
-        emit currentChanged( 0 );*/
+	/*if ( packageCount == 1 )
+		emit currentChanged( 0 );*/
 }
 
 /**
@@ -353,11 +363,11 @@ void QueueListView::viewportResizeEvent( QResizeEvent* )
 {
 	setColumnWidth( 6, 70 );
 	int totalWidth = columnWidth(2) + columnWidth(3) + columnWidth(4) + columnWidth(5) + 70;
-	
-    /*if ( KurooConfig::installedColumn() )
+
+	/*if ( KurooConfig::installedColumn() )
 		setColumnWidth( 0, this->visibleWidth() - totalWidth - 25 );
 	else
-        setColumnWidth( 0, this->visibleWidth() - totalWidth );*/
+		setColumnWidth( 0, this->visibleWidth() - totalWidth );*/
 }
 
 
@@ -367,15 +377,15 @@ void QueueListView::viewportResizeEvent( QResizeEvent* )
 
 /**
  * Get total emerge duration in format hh:mm:ss.
- * @return totalDuration 
+ * @return totalDuration
  */
 long QueueListView::totalDuration()
 {
 	long totalSeconds( 0 );
-    QTreeWidgetItemIterator it( this );
-    while ( *it ) {
-        if ( !dynamic_cast<QueueItem*>( *it )->isComplete() )
-            totalSeconds += dynamic_cast<QueueItem*>( *it )->remainingDuration();
+	QTreeWidgetItemIterator it( this );
+	while ( *it ) {
+		if ( !dynamic_cast<QueueItem*>( *it )->isComplete() )
+			totalSeconds += dynamic_cast<QueueItem*>( *it )->remainingDuration();
 		++it;
 	}
 	return totalSeconds;
@@ -383,7 +393,7 @@ long QueueListView::totalDuration()
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 /////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -399,7 +409,7 @@ void QueueListView::addSize( const QString& size )
 
 /**
  * Get sum of packages sizes.
- * @return sumSize 
+ * @return sumSize
  */
 const QString QueueListView::totalSize()
 {
@@ -407,8 +417,8 @@ const QString QueueListView::totalSize()
 }
 
 /**
- * Format package size nicely 
- * @param size 
+ * Format package size nicely
+ * @param size
  * @return total		as "xxx kB"
  */
 const QString QueueListView::formatSize( const QString& sizeString )
@@ -417,12 +427,12 @@ const QString QueueListView::formatSize( const QString& sizeString )
 	QString total;
 	QString tmp ( sizeString );
 	int size = tmp.remove(',').toInt();
-	
+
 	if ( size == 0 )
 		total = "0 kB ";
 	else
 		total = loc->formatNumber( (double)size, 0 ) + " kB ";
-	
+
 	return total;
 }
 
@@ -438,9 +448,9 @@ void QueueListView::slotPackageStart( const QString& id )
 	}
 	else
 		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setStart();
-	
+
 	m_id = id;
-	
+
 	// Update kuroo statusbar with remaining emerge duration
 	KurooStatusBar::instance()->updateTotalSteps( totalDuration() );
 }
@@ -457,7 +467,7 @@ void QueueListView::slotPackageComplete( const QString& id )
 	}
 	else
 		dynamic_cast<QueueItem*>( m_packageIndex[id] )->setComplete();
-	
+
 	m_id = QString::null;
 }
 
@@ -478,10 +488,10 @@ void QueueListView::slotPackageProgress()
  */
 void QueueListView::slotHideBars( QTreeWidgetItem* item )
 {
-    QTreeWidgetItemIterator it( item );
-    while ( *it ) {
-        dynamic_cast<QueueItem*>( *it )->hideBar();
-        it++;
+	QTreeWidgetItemIterator it( item );
+	while ( *it ) {
+		dynamic_cast<QueueItem*>( *it )->hideBar();
+		it++;
 	}
 }
 

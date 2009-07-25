@@ -32,26 +32,27 @@
  * @short Base class for package.
  */
 PackageItem::PackageItem( QTreeWidget* parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status )
-    : QTreeWidgetItem( parent ),
+	: QTreeWidgetItem( parent ),
 	m_parent( parent ), m_isMouseOver( false ), m_index( 0 ),
-	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ),
+	m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
-    QTreeWidgetItem::setText( 0, name );
-    if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+	QTreeWidgetItem::setText( 0, name );
+	if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
 		m_inWorld = true;
 }
 
 
 PackageItem::PackageItem( QTreeWidgetItem* parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status )
-    : QTreeWidgetItem( parent ),
-    m_parent( parent->treeWidget() ), m_isMouseOver( false ), m_index( 0 ),
-    m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
-    m_isInitialized( false )
+	: QTreeWidgetItem( parent ),
+	m_parent( parent->treeWidget() ), m_isMouseOver( false ), m_index( 0 ),
+	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
+	m_isInitialized( false )
 {
-    QTreeWidgetItem::setText( 0, name );
-    if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
-        m_inWorld = true;
+	QTreeWidgetItem::setText( 0, name );
+	if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
+		m_inWorld = true;
 }
 
 PackageItem::~PackageItem()
@@ -62,54 +63,54 @@ PackageItem::~PackageItem()
  */
 void PackageItem::paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment )
 {
-    if ( !this->isHidden() ) {
-        QPalette m_palette( palette );
+	if ( !this->isHidden() ) {
+		QPalette m_palette( palette );
 		QFont font( painter->font() );
-		
+
 // 		if ( m_isMouseOver ) {
 // 			font.setBold( true );
 // 			painter->setFont( font );
 // 			m_colorgroup.setColor( QColorGroup::Base, m_colorgroup.dark() );
 // 			QListViewItem::paintCell( painter, m_colorgroup, column, width, alignment );
 // 		}
-		
+
 		// Optimizing - check only relevant columns
 		switch ( column ) {
-			
+
 			case 0 : {
 				if ( m_status & PACKAGE_AVAILABLE )
-                    setIcon( 0, KIcon("kuroo_package") );
+					setIcon( 0, KIcon("kuroo_package") );
 				else {
 					if ( KurooConfig::installedColumn() ) {
-                        setIcon( 0, KIcon("kuroo_package") );
-                        setIcon( 1, KIcon("kuroo_version_installed") );
+						setIcon( 0, KIcon("kuroo_package") );
+						setIcon( 1, KIcon("kuroo_version_installed") );
 					}
 					else
-                        setIcon( 0, KIcon("installed") );
-					
+						setIcon( 0, KIcon("installed") );
+
 					if ( m_status & PACKAGE_OLD ) {
 						font.setItalic( true );
 						painter->setFont( font );
-                        m_palette.setColor( QPalette::Text, palette.color(QPalette::Dark) );
+						m_palette.setColor( QPalette::Text, palette.color(QPalette::Dark) );
 					}
 				}
 				break;
 			}
-			
+
 			case 2 : {
 				if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
 					m_inWorld = true;
-                    setIcon( 2, KIcon("kuroo_world") );
+					setIcon( 2, KIcon("kuroo_world") );
 				}
 				else {
 					m_inWorld = false;
-                    setIcon( 2, KIcon("kuroo_empty") );
+					setIcon( 2, KIcon("kuroo_empty") );
 				}
 			}
 		}
-		
-        setForeground( column, m_palette.foreground() );
-        setTextAlignment( column, alignment );
+
+		setForeground( column, m_palette.foreground() );
+		setTextAlignment( column, alignment );
 	}
 }
 
@@ -127,12 +128,12 @@ void PackageItem::initVersions()
 	if ( !m_isInitialized ) {
 		m_versions.clear();
 		m_versionMap.clear();
-	
+
 		// Get list of accepted keywords, eg if package is "untesting"
 		QString acceptedKeywords = KurooDBSingleton::Instance()->packageKeywordsAtom( id() );
 		const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInfo( id() );
-        for(QStringList::const_iterator it = versionsList.constBegin(); it != versionsList.constEnd(); ++it ) {
-            QString versionString = *it++;
+		for(QStringList::const_iterator it = versionsList.constBegin(); it != versionsList.constEnd(); ++it ) {
+			QString versionString = *it++;
 			QString description = *it++;
 			QString homepage = *it++;
 			QString status = *it++;
@@ -141,77 +142,77 @@ void PackageItem::initVersions()
 			QString slot = *it++;
 			QString keywords = *it++;
 			QString size = *it;
-			
+
 			PackageVersion* version = new PackageVersion( this, versionString );
 			version->setDescription( description );
 			version->setHomepage( homepage );
-            version->setLicenses( licenses.split(" ") );
-            version->setUseflags( useFlags.split(" ") );
+			version->setLicenses( licenses.split(" ") );
+			version->setUseflags( useFlags.split(" ") );
 			version->setSlot( slot );
-            version->setKeywords( keywords.split(" ") );
-            version->setAcceptedKeywords( acceptedKeywords.split(" ") );
+			version->setKeywords( keywords.split(" ") );
+			version->setAcceptedKeywords( acceptedKeywords.split(" ") );
 			version->setSize( size );
-			
+
 			if ( status == PACKAGE_INSTALLED_STRING )
 				version->setInstalled( true );
-			
+
 			m_versions.append( version );
 			m_versionMap.insert( versionString, version );
 		}
-		
+
 		// Now that we have all available versions, sort out masked ones and leaving unmasked.
-		
+
 		// Check if any of this package versions are hardmasked
 		atom = new DependAtom( this );
 		const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 	// 	kDebug() << "atomHardMaskedList=" << atomHardMaskedList;
-        foreach( QString mask, atomHardMaskedList ) {
-			
+		foreach( QString mask, atomHardMaskedList ) {
+
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 			// and get the matching versions
-            if ( atom->parse( mask ) ) {
-                QList<PackageVersion*> versions = atom->matchingVersions();
-                QList<PackageVersion*>::iterator versionIterator;
+			if ( atom->parse( mask ) ) {
+				QList<PackageVersion*> versions = atom->matchingVersions();
+				QList<PackageVersion*>::iterator versionIterator;
 				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 					( *versionIterator )->setHardMasked( true );
 			}
 		}
 		delete atom;
-		
+
 		// Check if any of this package versions are user-masked
 		atom = new DependAtom( this );
 		const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 	// 	kDebug() << "atomUserMaskedList=" << atomUserMaskedList;
-        foreach( QString mask, atomUserMaskedList ) {
-			
+		foreach( QString mask, atomUserMaskedList ) {
+
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 			// and get the matching versions
-            if ( atom->parse( mask ) ) {
-                QList<PackageVersion*> versions = atom->matchingVersions();
-                QList<PackageVersion*>::iterator versionIterator;
+			if ( atom->parse( mask ) ) {
+				QList<PackageVersion*> versions = atom->matchingVersions();
+				QList<PackageVersion*>::iterator versionIterator;
 				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 					( *versionIterator )->setUserMasked( true );
 			}
 		}
 		delete atom;
-		
+
 		// Check if any of this package versions are unmasked
 		atom = new DependAtom( this );
 		const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
 	// 	kDebug() << "atomUnmaskedList=" << atomUnmaskedList;
-        foreach( QString mask, atomUnmaskedList ) {
-			
+		foreach( QString mask, atomUnmaskedList ) {
+
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
 			// and get the matching versions
-            if ( atom->parse( mask ) ) {
-                QList<PackageVersion*> versions = atom->matchingVersions();
-                QList<PackageVersion*>::iterator versionIterator;
+			if ( atom->parse( mask ) ) {
+				QList<PackageVersion*> versions = atom->matchingVersions();
+				QList<PackageVersion*>::iterator versionIterator;
 				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
 					( *versionIterator )->setUnMasked( true );
 			}
 		}
 		delete atom;
-	
+
 		// This package has collected all it's data
 		m_isInitialized = true;
 	}
@@ -226,15 +227,15 @@ void PackageItem::initVersions()
  */
 QList<PackageVersion*> PackageItem::sortedVersionList()
 {
-    QList<PackageVersion*> sortedVersions;
-    QList<PackageVersion*>::iterator sortedVersionIterator;
-	
-    for( QList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+	QList<PackageVersion*> sortedVersions;
+	QList<PackageVersion*>::iterator sortedVersionIterator;
+
+	for( QList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
 		if ( versionIterator == m_versions.begin() ) {
 			sortedVersions.append( *versionIterator );
 			continue; // if there is only one version, it can't be compared
 		}
-		
+
 		// reverse iteration through the sorted version list
 		sortedVersionIterator = sortedVersions.end();
 		while ( true ) {
@@ -242,7 +243,7 @@ QList<PackageVersion*> PackageItem::sortedVersionList()
 				sortedVersions.prepend( *versionIterator );
 				break;
 			}
-			
+
 			sortedVersionIterator--;
 			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
 				sortedVersionIterator++; // insert after the compared one, not before
@@ -261,20 +262,20 @@ void PackageItem::parsePackageVersions()
 {
 	if ( !m_isInitialized )
 		initVersions();
-	
+
 	m_versionsDataList.clear();
 	m_linesAvailable = QString::null;
 	m_linesEmerge = QString::null;
 	m_linesInstalled = QString::null;
-	
+
 	// Iterate sorted versions list
 	QString version;
-    QList<PackageVersion*> sortedVersions = sortedVersionList();
-    QList<PackageVersion*>::iterator sortedVersionIterator;
+	QList<PackageVersion*> sortedVersions = sortedVersionList();
+	QList<PackageVersion*>::iterator sortedVersionIterator;
 	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
-		
+
 		version = (*sortedVersionIterator)->version();
-		
+
 		// Mark official version stability for version listview
 		QString stability;
 		if ( (*sortedVersionIterator)->isNotArch() )
@@ -297,13 +298,13 @@ void PackageItem::parsePackageVersions()
 				}
 			}
 		}
-		
-// 		kDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() << 
+
+// 		kDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() <<
 // 			" stability=" << stability << LINE_INFO;
-		
+
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();
-		
+
 		// Create nice summary showing installed packages
 		if ( (*sortedVersionIterator)->isInstalled() ) {
 			m_versionsDataList << "1";
@@ -312,7 +313,7 @@ void PackageItem::parsePackageVersions()
 		}
 		else
 			m_versionsDataList << "0";
-		
+
 		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
 			m_emergeVersion = (*sortedVersionIterator)->version();
@@ -325,12 +326,12 @@ void PackageItem::parsePackageVersions()
 			else
 				m_linesAvailable.prepend( version + ", " );
 		}
-		
+
 		// Get description and homepage from most recent version = assuming most correct
 		m_description = (*sortedVersionIterator)->description();
 		m_homepage = (*sortedVersionIterator)->homepage();
 	}
-	
+
 	// Remove trailing commas
 	m_linesInstalled.truncate( m_linesInstalled.length() - 2 );
 	m_linesAvailable.truncate( m_linesAvailable.length() - 2 );
@@ -384,7 +385,7 @@ void PackageItem::setQueued( const bool& isQueued )
  */
 bool PackageItem::isFirstPackage() const
 {
-    return ( m_index == m_parent->topLevelItemCount() );
+	return ( m_index == m_parent->topLevelItemCount() );
 }
 
 /**

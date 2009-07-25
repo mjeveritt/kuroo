@@ -60,10 +60,10 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 : QTreeWidget( parent /*, name*/ ), m_focus( i18n("All") ), categories( 0 )
 {
 	//setFullWidth( true );
-    //setFrameShape( Q3Frame::NoFrame );
+	//setFrameShape( Q3Frame::NoFrame );
 	//setSorting( -1 );
 
-    connect( this, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotStoreFocus( QTreeWidgetItem*,QTreeWidgetItem* ) ) );
+	connect( this, SIGNAL( currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) ), this, SLOT( slotStoreFocus( QTreeWidgetItem*,QTreeWidgetItem* ) ) );
 }
 
 CategoriesView::~CategoriesView()
@@ -73,9 +73,13 @@ CategoriesView::~CategoriesView()
  * Retreive focus category when a new category is made current.
  * @categoryItem*
  */
-void CategoriesView::slotStoreFocus( QTreeWidgetItem* current,QTreeWidgetItem* previous )
+void CategoriesView::slotStoreFocus( QTreeWidgetItem* current, QTreeWidgetItem* previous )
 {
-    m_focus = current->text(0);
+	//WARN: This shouldn't ever be null, need to fix
+	if (NULL != current)
+	{
+		m_focus = current->text(0);
+	}
 }
 
 /**
@@ -239,17 +243,17 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	// When meta-category is selected skip to show only meta-subcategory
 	m_categoryIndex.clear();
 	if ( idCategory != 0 ) {
-                QMapIterator<int, QString> it(allSubCategories[idCategory]);
+		QMapIterator<int, QString> it(allSubCategories[idCategory]);
 		it.toBack();
 		while (it.hasPrevious()) {
 			it.previous();
-                        QString id = QString::number( it.key() );
-                        QString name = it.value();
+			QString id = QString::number( it.key() );
+			QString name = it.value();
 
 			// Skip empty subcategory
 			if ( !name.isEmpty() ) {
 				CategoryItem* item = new CategoryItem( this, name, id );
-                                categories[it.key()] = item;
+				categories[it.key()] = item;
 				m_categoryIndex.insert( name, *item );
 			}
 		}
@@ -272,7 +276,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 
 		// Insert meta-subcategory
 		CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
-                m_categoryIndex.insert( i18n("All"), *item );
+		m_categoryIndex.insert( i18n("All"), *item );
 		item->setOn( true );
 
 		// After all categories are loaded try restoring last known focus-category

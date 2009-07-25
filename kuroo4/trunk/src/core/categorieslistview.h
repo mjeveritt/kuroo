@@ -46,7 +46,7 @@ public:
 		public:
 			CategoryItem( QTreeWidget* parent, const QString& name, const QString &id );
 
-			inline void 		setOn( const bool& on ) { m_on = on; /*repaint();*/ }
+			inline void				setOn( const bool& on ) { m_on = on; /*repaint();*/ }
 			inline const QString& 	id() const { return m_id; }
 			inline const QString& 	name() const { return m_name; }
 
@@ -56,11 +56,11 @@ public:
 			void 			paintCell( QPainter *p, int column, int width, int alignment );
 	};
 
-	inline CategoryItem*				currentCategory() const { return dynamic_cast<CategoryItem*>( this->currentItem() ); }
-	const QString					currentCategoryId() const;
+	inline CategoryItem*		currentCategory() const { return dynamic_cast<CategoryItem*>( this->currentItem() ); }
+	const QString				currentCategoryId() const;
 
 protected slots:
-    void						slotStoreFocus( QTreeWidgetItem* current,QTreeWidgetItem* previous );
+	void						slotStoreFocus( QTreeWidgetItem* current, QTreeWidgetItem* previous );
 
 protected:
 	void						restoreFocus( const bool& isFiltered );
@@ -68,17 +68,17 @@ protected:
 protected:
 
 	// Category that has focus
-	QString						m_focus;
+	QString								m_focus;
 
 	// Index of categoris in listview
-	QMultiHash<QString, CategoryItem>				m_categoryIndex;
+	QMultiHash<QString, CategoryItem>	m_categoryIndex;
 
 	// Vector containing all categories
 	typedef QVector<CategoryItem*>		Categories;
-	Categories			 		categories;
+	Categories							categories;
 
 signals:
-	void						categoriesChanged();
+	void								categoriesChanged();
 };
 
 /**
@@ -113,9 +113,9 @@ public:
 private:
 
 	// Vector containing all sub-categories
-        typedef QMultiMap<int, QString>			SubCategory;
+	typedef QMultiMap<int, QString>		SubCategory;
 	typedef QVector<SubCategory>		AllSubCategories;
-	AllSubCategories			 	allSubCategories;
+	AllSubCategories					allSubCategories;
 };
 
 #endif

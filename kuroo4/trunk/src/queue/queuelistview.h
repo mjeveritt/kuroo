@@ -37,36 +37,36 @@ public:
 	~QueueListView();
 
 	class					QueueItem;
-	
+
 	const QStringList		allPackagesNoChildren();
 	const QStringList		allEndUserPackages();
 	void 					insertPackageList( bool hasCheckedQueue );
 	long			 		totalDuration();
 	const QString		 	totalSize();
-	
+
 public slots:
 	void					slotPackageUp();
 	void					slotPackageDown();
 	void					slotPackageComplete( const QString& id );
 	void					slotPackageStart( const QString& id );
 	void					slotPackageProgress();
-	
+
 private:
 	void					viewportResizeEvent( QResizeEvent* );
 	const QString		 	formatSize( const QString& sizeString );
 	void 					addSize( const QString& size );
-	
+
 private slots:
-    void					slotHideBars( QTreeWidgetItem* item );
-	
+	void					slotHideBars( QTreeWidgetItem* item );
+
 signals:
 	void					signalPackageEmerged();
-	
+
 private:
 
-	// Total sum of all package emerge duration 
+	// Total sum of all package emerge duration
 	int 					m_sumSize;
-	
+
 	// Current emerging package
 	QString					m_id;
 };
@@ -78,10 +78,10 @@ private:
 class QueueListView::QueueItem : public PackageItem
 {
 public:
-    QueueItem( QTreeWidget* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
-    QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
+	QueueItem( QTreeWidget* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
+	QueueItem( QueueItem* parent, const QString& category, const QString& name, const QString &id, const int status, int duration );
 	~QueueItem();
-	
+
 	QString			package();
 	void			setComplete();
 	bool			isComplete();
@@ -90,27 +90,27 @@ public:
 	void			oneStep();
 	void			setPretended( bool isChecked );
 	void			hideBar();
-	
+
 protected:
-    void 			paintCell( QPainter* painter, const QPalette& colorgroup, int column, int width, int alignment );
-	
+	void 			paintCell( QPainter* painter, const QPalette& colorgroup, int column, int width, int alignment );
+
 private:
-	
+
 	// Individual package progressbar
-    QProgressBar* 		m_bar;
-	
+	QProgressBar* 	m_bar;
+
 	// Current emerge progress in seconds
 	int				m_progress;
-	
+
 	// Total emerge duration
 	int				m_duration;
-	
+
 	// Is this package ok by "emerge --pretend"
 	bool			m_isChecked;
-	
+
 	// Is this package progress = 100% eg completed
 	bool			m_isComplete;
-	
+
 	QString			m_package;
 };
 

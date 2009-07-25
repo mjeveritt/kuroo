@@ -207,7 +207,7 @@ ThreadWeaver::Thread::Thread()
 
 ThreadWeaver::Thread::~Thread()
 {
-    Q_ASSERT( isFinished() );
+        Q_ASSERT( isFinished() );
 }
 
 void ThreadWeaver::Thread::runJob( Job *job )

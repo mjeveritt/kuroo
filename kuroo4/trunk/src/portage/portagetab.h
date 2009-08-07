@@ -77,19 +77,19 @@ private:
 private:
 	
 	// Listview which has focus
-	int				m_focusWidget;
+	int					m_focusWidget;
 	
 	// Delay package view until all text in entered in the text-filter
-	int				m_delayFilters;
+	int					m_delayFilters;
 	
 	// rmb
-	KMenu 			*menu;
+	KMenu				*menu;
 	
 	// The package inspector
-	PackageInspector		*m_packageInspector;
+	PackageInspector	*m_packageInspector;
 	
 	// Lists all package versions for uninstalling
-	UninstallInspector		*m_uninstallInspector;
+	UninstallInspector	*m_uninstallInspector;
 	
 signals:
 	void				signalChanged();

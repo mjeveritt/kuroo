@@ -82,7 +82,7 @@ DbConnection *KurooDB::getStaticDbConnection()
 	return m_dbConnPool->getDbConnection();
 }
 
-void KurooDB::returnStaticDbConnection ( DbConnection *conn )
+void KurooDB::returnStaticDbConnection( DbConnection *conn )
 {
 // 	kDebug() << "--------------KurooDB::returnStaticDbConnection " << LINE_INFO;
 	m_dbConnPool->putDbConnection ( conn );
@@ -98,7 +98,7 @@ void KurooDB::destroy()
  * @param statement SQL program to execute. Only one SQL statement is allowed.
  * @return          The queried data, or QStringList() on error.
  */
-QStringList KurooDB::query ( const QString& statement, DbConnection *conn )
+QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 {
 // 	kDebug() << "Query-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
@@ -126,7 +126,7 @@ QStringList KurooDB::query ( const QString& statement, DbConnection *conn )
  * @param statement SQL program to execute. Only one SQL statement is allowed.
  * @return          The queried data, or QStringList() on error.
  */
-QString KurooDB::singleQuery ( const QString& statement, DbConnection *conn )
+QString KurooDB::singleQuery( const QString& statement, DbConnection *conn )
 {
 // 	kDebug() << "Query-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
@@ -154,7 +154,7 @@ QString KurooDB::singleQuery ( const QString& statement, DbConnection *conn )
  * @param statement SQL statement to execute. Only one SQL statement is allowed.
  * @return          The rowid of the inserted item.
  */
-int KurooDB::insert ( const QString& statement, DbConnection *conn )
+int KurooDB::insert( const QString& statement, DbConnection *conn )
 {
 // 	kDebug() << "insert-start: " << statement << LINE_INFO;
 // 	clock_t start = clock();
@@ -221,7 +221,7 @@ bool KurooDB::isValid()
 /**
  * Create all necessary tables.
  */
-void KurooDB::createTables ( DbConnection *conn )
+void KurooDB::createTables( DbConnection *conn )
 {
 	kDebug(0) << "Creating tables" << LINE_INFO;
 	query ( "CREATE TABLE dbInfo ( "
@@ -500,7 +500,7 @@ const QStringList KurooDB::allSubCategories()
  * @param filter	packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text		search string
  */
-const QStringList KurooDB::portageCategories ( int filter, const QString& text )
+const QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	int len;
@@ -544,7 +544,7 @@ const QStringList KurooDB::portageCategories ( int filter, const QString& text )
  * @param filter		packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text			search string
  */
-const QStringList KurooDB::portageSubCategories ( const QString& categoryId, int filter, const QString& text )
+const QStringList KurooDB::portageSubCategories( const QString& categoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	QStringList resultList ( categoryId );
@@ -596,18 +596,18 @@ const QStringList KurooDB::portageSubCategories ( const QString& categoryId, int
 
 /**
  * Return all packages which are matching the filter and the text in this category-subcategory.
- * @param categoryId 	category id
- * @param subCategoryId subcategory id
+ * @param categoryId	category id
+ * @param subCategoryId	subcategory id
  * @param filter		packages status as PACKAGE_AVAILABLE, PACKAGE_INSTALLED or PACKAGE_UPDATES
  * @param text			search string
  */
-const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
+const QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
 	int len;
 
 	// Allow for multiple words match
-	QString textString = escapeString ( text.simplified() );
+	QString textString = escapeString( text.simplified() );
     QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
@@ -619,7 +619,7 @@ const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categor
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
-		textQuery = " AND ( " + textQuery.right ( len - 5 ) + " ) ";
+		textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
 	}
 
 	switch ( filter )
@@ -656,14 +656,14 @@ const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categor
 					filterQuery = " WHERE package.status & " + PACKAGE_UPDATES_STRING;
 			}
 
-			return query ( " SELECT id, name, category, description, status, updateVersion "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 			               " FROM package "
 			               + filterQuery + textQuery + " ORDER BY name DESC;" );
 		}
 		else
 		{
 
-			return query ( " SELECT id, name, category, description, status, updateVersion "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 			               " FROM package "
 			               " WHERE idSubCategory = '" + subCategoryId + "'"
 			               + filterQuery + textQuery + " ORDER BY name DESC;" );
@@ -674,7 +674,7 @@ const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categor
 		if ( subCategoryId == "0" )
 		{
 
-			return query ( " SELECT id, name, category, description, status, updateVersion "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 			               " FROM package "
 			               " WHERE idCategory = '" + categoryId + "'"
 			               + filterQuery + textQuery + " ORDER BY name DESC;" );
@@ -682,7 +682,7 @@ const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categor
 		else
 		{
 
-			return query ( " SELECT id, name, category, description, status, updateVersion "
+			return query( " SELECT id, name, category, description, status, updateVersion "
 			               " FROM package "
 			               " WHERE idCategory = '" + categoryId + "'"
 			               " AND idSubCategory = '" + subCategoryId + "'"
@@ -700,14 +700,14 @@ const QStringList KurooDB::portagePackagesBySubCategory ( const QString& categor
  * Return package name, eg kuroo in app-portage/kuroo.
  * @param id
  */
-const QString KurooDB::package ( const QString& id )
+const QString KurooDB::package( const QString& id )
 {
-	QString name = singleQuery ( "SELECT name FROM package WHERE id = '" + id + "' LIMIT 1;" );
+	QString name = singleQuery( "SELECT name FROM package WHERE id = '" + id + "' LIMIT 1;" );
 
 	if ( !name.isEmpty() )
 		return name;
 	else
-		kWarning ( 0 ) << QString ( "Can not find package in database for id %1." ).arg ( id ) << LINE_INFO;
+		kWarning( 0 ) << QString ( "Can not find package in database for id %1." ).arg ( id ) << LINE_INFO;
 
 	return QString::null;
 }
@@ -716,40 +716,40 @@ const QString KurooDB::package ( const QString& id )
  * Return category name, eg app-portage in app-portage/kuroo.
  * @param id
  */
-const QString KurooDB::category ( const QString& id )
+const QString KurooDB::category( const QString& id )
 {
-	QString category = singleQuery ( "SELECT category FROM package WHERE id = '" + id + "' LIMIT 1;" );
+	QString category = singleQuery( "SELECT category FROM package WHERE id = '" + id + "' LIMIT 1;" );
 
 	if ( !category.isEmpty() )
 		return category;
 	else
-		kWarning ( 0 ) << QString ( "Can not find category in database for id %1." ).arg ( id ) << LINE_INFO;
+		kWarning( 0 ) << QString ( "Can not find category in database for id %1." ).arg ( id ) << LINE_INFO;
 
 	return QString::null;
 }
 
 /**
  * Return package when searching by category-subcategory and name.
- * @param category 		category-subcategory
+ * @param category		category-subcategory
  * @param name
  */
-const QString KurooDB::packageId ( const QString& package )
+const QString KurooDB::packageId( const QString& package )
 {
-    QStringList parts = parsePackage ( package );
+	QStringList parts = parsePackage( package );
 	if ( !parts.isEmpty() )
 	{
 		QString category = parts[0];
 		QString name = parts[1];
-		QString id = singleQuery ( "SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;" );
+		QString id = singleQuery( "SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;" );
 
 		if ( !id.isEmpty() )
 			return id;
 		else
-			kWarning ( 0 ) << QString ( "Can not find id in database for package %1/%2." ).arg ( category ).arg ( name ) << LINE_INFO;
+			kWarning( 0 ) << QString( "Can not find id in database for package %1/%2." ).arg( category ).arg( name ) << LINE_INFO;
 
 	}
 	else
-		kWarning ( 0 ) << "Querying for package id. Can not parse: " << package << LINE_INFO;
+		kWarning( 0 ) << "Querying for package id. Can not parse: " << package << LINE_INFO;
 
 	return QString::null;
 }
@@ -758,9 +758,9 @@ const QString KurooDB::packageId ( const QString& package )
  * Return all versions for this package.
  * @param id
  */
-const QStringList KurooDB::packageVersionsInstalled ( const QString& idPackage )
+const QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
 {
-	return query ( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
+	return query( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
 	               " AND status = '" + PACKAGE_INSTALLED_STRING + "'"
 	               " ORDER BY version.name;" );
 }
@@ -769,9 +769,9 @@ const QStringList KurooDB::packageVersionsInstalled ( const QString& idPackage )
  * Return all versions and their info for this package.
  * @param id
  */
-const QStringList KurooDB::packageVersionsInfo ( const QString& idPackage )
+const QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
-	return query ( " SELECT name, description, homepage, status, licenses, useFlags, slot, keywords, size "
+	return query( " SELECT name, description, homepage, status, licenses, useFlags, slot, keywords, size "
 	               " FROM version WHERE idPackage = '" + idPackage + "'"
 	               " ORDER BY version.name;" );
 }
@@ -781,9 +781,9 @@ const QStringList KurooDB::packageVersionsInfo ( const QString& idPackage )
  * @param idPackage
  * @param version
  */
-const QString KurooDB::versionSize ( const QString& idPackage, const QString& version )
+const QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
-	return singleQuery ( " SELECT size, status FROM version WHERE idPackage = '" + idPackage + "'"
+	return singleQuery( " SELECT size, status FROM version WHERE idPackage = '" + idPackage + "'"
 	                     " AND name = '" + version + "' LIMIT 1;" );
 }
 
@@ -791,9 +791,9 @@ const QString KurooDB::versionSize ( const QString& idPackage, const QString& ve
  * Return hardmask dependAtom and the gentoo dev comment.
  * @param id
  */
-const QStringList KurooDB::packageHardMaskInfo ( const QString& id )
+const QStringList KurooDB::packageHardMaskInfo( const QString& id )
 {
-	return query ( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
+	return query( "SELECT dependAtom, comment FROM packageHardMask WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
@@ -801,60 +801,60 @@ const QStringList KurooDB::packageHardMaskInfo ( const QString& id )
  * @param idPackage
  * @param version
  */
-const QString KurooDB::packagePath ( const QString& id )
+const QString KurooDB::packagePath( const QString& id )
 {
-	return singleQuery ( "SELECT path FROM package WHERE id = '" + id + "' LIMIT 1;" );
+	return singleQuery( "SELECT path FROM package WHERE id = '" + id + "' LIMIT 1;" );
 }
 
 /**
  * Return package hardmask depend atom.
  * @param id
  */
-const QStringList KurooDB::packageHardMaskAtom ( const QString& id )
+const QStringList KurooDB::packageHardMaskAtom( const QString& id )
 {
-	return query ( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
+	return query( "SELECT dependAtom FROM packageHardMask WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Return package user-mask depend atom.
  * @param id
  */
-const QStringList KurooDB::packageUserMaskAtom ( const QString& id )
+const QStringList KurooDB::packageUserMaskAtom( const QString& id )
 {
-	return query ( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
+	return query( "SELECT dependAtom FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Return package unmask depend atom.
  * @param id
  */
-const QStringList KurooDB::packageUnMaskAtom ( const QString& id )
+const QStringList KurooDB::packageUnMaskAtom( const QString& id )
 {
-	return query ( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
+	return query( "SELECT dependAtom FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Return package keyword atom.
  * @param id
  */
-const QString KurooDB::packageKeywordsAtom ( const QString& id )
+const QString KurooDB::packageKeywordsAtom( const QString& id )
 {
-	return singleQuery ( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "' LIMIT 1;" );
+	return singleQuery( "SELECT keywords FROM packageKeywords WHERE idPackage = '" + id + "' LIMIT 1;" );
 }
 
-const QString KurooDB::packageUse ( const QString& id )
+const QString KurooDB::packageUse( const QString& id )
 {
-	return singleQuery ( "SELECT use FROM packageUse where idPackage = '" + id + "' LIMIT 1;" );
+	return singleQuery( "SELECT use FROM packageUse where idPackage = '" + id + "' LIMIT 1;" );
 }
 
 /**
  * Is the package in package.keywords?
  * @param id
  */
-bool KurooDB::isPackageUnTesting ( const QString& id )
+bool KurooDB::isPackageUnTesting( const QString& id )
 {
-	QString keywords = singleQuery ( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "' LIMIT 1;" );
-	if ( keywords.contains ( QRegExp ( "(~\\*)|(~" + KurooConfig::arch() + ")" ) ) )
+	QString keywords = singleQuery( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "' LIMIT 1;" );
+	if ( keywords.contains( QRegExp( "(~\\*)|(~" + KurooConfig::arch() + ")" ) ) )
 		return true;
 	else
 		return false;
@@ -864,10 +864,10 @@ bool KurooDB::isPackageUnTesting ( const QString& id )
  * Is the package available in package.keywords?
  * @param id
  */
-bool KurooDB::isPackageAvailable ( const QString& id )
+bool KurooDB::isPackageAvailable( const QString& id )
 {
-	QString keywords = singleQuery ( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "' LIMIT 1;" );
-	if ( keywords.contains ( QRegExp ( "(\\-\\*)|(\\-" + KurooConfig::arch() + ")" ) ) )
+	QString keywords = singleQuery( "SELECT keywords FROM packageKeywords where idPackage = '" + id + "' LIMIT 1;" );
+	if ( keywords.contains( QRegExp( "(\\-\\*)|(\\-" + KurooConfig::arch() + ")" ) ) )
 		return true;
 	else
 		return false;
@@ -877,127 +877,127 @@ bool KurooDB::isPackageAvailable ( const QString& id )
  * Is the package in package.unmask? @fixme: better way to check for existens.
  * @param id
  */
-bool KurooDB::isPackageUnMasked ( const QString& id )
+bool KurooDB::isPackageUnMasked( const QString& id )
 {
-	return !query ( "SELECT dependAtom FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
+	return !query( "SELECT dependAtom FROM packageUnmask where idPackage = '" + id + "';" ).isEmpty();
 }
 
 /**
  * Add use flags for this package.
  * @param id
  */
-void KurooDB::setPackageUse ( const QString& id, const QString& useFlags )
+void KurooDB::setPackageUse( const QString& id, const QString& useFlags )
 {
-	singleQuery ( "REPLACE INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
+	singleQuery( "REPLACE INTO packageUse (idPackage, use) VALUES ('" + id + "', '" + useFlags + "');" );
 }
 
-void KurooDB::setPackageUnMasked ( const QString& id )
+void KurooDB::setPackageUnMasked( const QString& id )
 {
-	singleQuery ( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-	              "'" + category ( id ) + "/" + package ( id ) + "');" );
+	singleQuery( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+				  "'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
  * Add package in package.unmask. @fixme: check category and package?
  * @param id
  */
-void KurooDB::setPackageUnMasked ( const QString& id, const QString& version )
+void KurooDB::setPackageUnMasked( const QString& id, const QString& version )
 {
-	singleQuery ( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
-	              "'=" + category ( id ) + "/" + package ( id ) + "-" + version + "');" );
+	singleQuery( "REPLACE INTO packageUnmask (idPackage, dependAtom) VALUES ('" + id + "', "
+				  "'=" + category( id ) + "/" + package( id ) + "-" + version + "');" );
 }
 
 /**
  * Add package in package.mask. @fixme: check category and package?
  * @param id
  */
-void KurooDB::setPackageUserMasked ( const QString& id )
+void KurooDB::setPackageUserMasked( const QString& id )
 {
-	singleQuery ( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
-	              "'" + category ( id ) + "/" + package ( id ) + "');" );
+	singleQuery( "REPLACE INTO packageUserMask (idPackage, dependAtom) VALUES ('" + id + "', "
+				  "'" + category( id ) + "/" + package( id ) + "');" );
 }
 
 /**
  * Set package as testing, eg add keyword ~*.
  * @param id
  */
-void KurooDB::setPackageUnTesting ( const QString& id )
+void KurooDB::setPackageUnTesting( const QString& id )
 {
-	QString keywords = packageKeywordsAtom ( id );
+	QString keywords = packageKeywordsAtom( id );
 
 	// Aready testing skip!
-	if ( keywords.contains ( QRegExp ( "(~\\*)|(~" + KurooConfig::arch() + ")" ) ) )
+	if ( keywords.contains( QRegExp( "(~\\*)|(~" + KurooConfig::arch() + ")" ) ) )
 		return;
 
 	if ( keywords.isEmpty() )
-		insert ( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
+		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '~*');" );
 	else
-		singleQuery ( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '" + keywords + " ~*' WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Set package as available, eg add keywords '-* -arch'
  */
-void KurooDB::setPackageAvailable ( const QString& id )
+void KurooDB::setPackageAvailable( const QString& id )
 {
-	QString keywords = packageKeywordsAtom ( id );
+	QString keywords = packageKeywordsAtom( id );
 
 	// Already available skip!
-	if ( keywords.contains ( QRegExp ( "(\\-\\*)|(\\-" + KurooConfig::arch() + ")" ) ) )
+	if ( keywords.contains( QRegExp( "(\\-\\*)|(\\-" + KurooConfig::arch() + ")" ) ) )
 		return;
 
 	if ( keywords.isEmpty() )
-		insert ( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '-* -" + KurooConfig::arch() + "');" );
+		insert( "INSERT INTO packageKeywords (idPackage, keywords) VALUES ('" + id + "', '-* -" + KurooConfig::arch() + "');" );
 	else
-		singleQuery ( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '" + keywords + " -* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Clear testing keyword from package.
  * @param id
  */
-void KurooDB::clearPackageUnTesting ( const QString& id )
+void KurooDB::clearPackageUnTesting( const QString& id )
 {
-	QString keywords = packageKeywordsAtom ( id );
+	QString keywords = packageKeywordsAtom( id );
 
 	// If only testing keywords - remove it, else set only available keywords
-	if ( !keywords.contains ( QRegExp ( "(\\-\\*)|(\\-" + KurooConfig::arch() + ")" ) ) )
-		singleQuery ( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	if ( !keywords.contains( QRegExp( "(\\-\\*)|(\\-" + KurooConfig::arch() + ")" ) ) )
+		singleQuery( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		singleQuery ( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
+		singleQuery( "UPDATE packageKeywords SET keywords = '-* -" + KurooConfig::arch() + "' WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Removing available keywords for package.
  * @param id
  */
-void KurooDB::clearPackageAvailable ( const QString& id )
+void KurooDB::clearPackageAvailable( const QString& id )
 {
-	QString keywords = packageKeywordsAtom ( id );
+	QString keywords = packageKeywordsAtom( id );
 
 	// If only available keywords - remove it, else set only testing keyword
-	if ( !keywords.contains ( QRegExp ( "(~\\*)|(~" + KurooConfig::arch() + ")" ) ) )
-		singleQuery ( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
+	if ( !keywords.contains( QRegExp( "(~\\*)|(~" + KurooConfig::arch() + ")" ) ) )
+		singleQuery( "DELETE FROM packageKeywords WHERE idPackage = '" + id + "';" );
 	else
-		singleQuery ( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
+		singleQuery( "UPDATE packageKeywords SET keywords = '~*' WHERE idPackage = '" + id + "';" );;
 }
 
 /**
  * Clear package from package.unmask.
  * @param id
  */
-void KurooDB::clearPackageUnMasked ( const QString& id )
+void KurooDB::clearPackageUnMasked( const QString& id )
 {
-	singleQuery ( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
+	singleQuery( "DELETE FROM packageUnmask WHERE idPackage = '" + id + "';" );
 }
 
 /**
  * Clear package from package.mask.
  * @param id
  */
-void KurooDB::clearPackageUserMasked ( const QString& id )
+void KurooDB::clearPackageUserMasked( const QString& id )
 {
-	singleQuery ( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
+	singleQuery( "DELETE FROM packageUserMask WHERE idPackage = '" + id + "';" );
 }
 
 
@@ -1010,7 +1010,7 @@ void KurooDB::clearPackageUserMasked ( const QString& id )
  */
 const QStringList KurooDB::allQueuePackages()
 {
-	return query ( " SELECT package.id, package.category, package.name, "
+	return query( " SELECT package.id, package.category, package.name, "
 	               " package.status, queue.idDepend, queue.size, queue.version "
 	               " FROM queue, package "
 	               " WHERE queue.idPackage = package.id "
@@ -1022,7 +1022,7 @@ const QStringList KurooDB::allQueuePackages()
  */
 const QStringList KurooDB::allQueueId()
 {
-	return query ( "SELECT idPackage FROM queue;" );
+	return query( "SELECT idPackage FROM queue;" );
 }
 
 /**
@@ -1030,7 +1030,7 @@ const QStringList KurooDB::allQueueId()
  */
 const QStringList KurooDB::allHistory()
 {
-	return query ( "SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;" );
+	return query( "SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;" );
 }
 
 /**
@@ -1038,7 +1038,7 @@ const QStringList KurooDB::allHistory()
  */
 const QStringList KurooDB::allMergeHistory()
 {
-	return query ( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;" );
+	return query( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;" );
 }
 
 /**
@@ -1046,7 +1046,7 @@ const QStringList KurooDB::allMergeHistory()
  */
 const QStringList KurooDB::allStatistic()
 {
-	return query ( "SELECT package, time, count FROM statistic ORDER BY id ASC;" );
+	return query( "SELECT package, time, count FROM statistic ORDER BY id ASC;" );
 }
 
 /**
@@ -1054,7 +1054,7 @@ const QStringList KurooDB::allStatistic()
  */
 void KurooDB::resetUpdates()
 {
-	singleQuery ( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
+	singleQuery( "UPDATE package SET updateVersion = '' WHERE updateVersion != '';" );
 }
 
 /**
@@ -1062,17 +1062,17 @@ void KurooDB::resetUpdates()
  */
 void KurooDB::resetInstalled()
 {
-	singleQuery ( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
+	singleQuery( "UPDATE package set installed = '" + PACKAGE_AVAILABLE_STRING + "';" );
 }
 
 void KurooDB::resetQueue()
 {
-	singleQuery ( "DELETE FROM queue;" );
+	singleQuery( "DELETE FROM queue;" );
 }
 
-void KurooDB::addEmergeInfo ( const QString& einfo )
+void KurooDB::addEmergeInfo( const QString& einfo )
 {
-	singleQuery ( QString ( "UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);" ).arg ( escapeString ( einfo ) ) );
+	singleQuery( QString ( "UPDATE history SET einfo = '%1' WHERE id = (SELECT MAX(id) FROM history);" ).arg ( escapeString ( einfo ) ) );
 }
 
 /**
@@ -1080,11 +1080,11 @@ void KurooDB::addEmergeInfo ( const QString& einfo )
  * @param source
  * @param destination
  */
-void KurooDB::addBackup ( const QString& source, const QString& destination )
+void KurooDB::addBackup( const QString& source, const QString& destination )
 {
-	QDateTime currentTime ( QDateTime::currentDateTime() );
-	insert ( QString ( "INSERT INTO mergeHistory ( timestamp, source, destination ) VALUES ('%1', '%2', '%3');" )
-	         .arg ( QString::number ( currentTime.toTime_t() ) ).arg ( source ).arg ( destination ) );
+	QDateTime currentTime( QDateTime::currentDateTime() );
+	insert( QString ( "INSERT INTO mergeHistory ( timestamp, source, destination ) VALUES ('%1', '%2', '%3');" )
+			 .arg( QString::number( currentTime.toTime_t() ) ).arg( source ).arg( destination ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1093,7 +1093,7 @@ void KurooDB::addBackup ( const QString& source, const QString& destination )
 
 /**
  */
-DbConnection::DbConnection ( DbConfig* config )
+DbConnection::DbConnection( DbConfig* config )
 		: m_config ( config )
 {}
 
@@ -1103,25 +1103,25 @@ DbConnection::~DbConnection()
 /**
  * Sqlite methods
  */
-SqliteConnection::SqliteConnection ( SqliteConfig* config )
-		: DbConnection ( config )
+SqliteConnection::SqliteConnection( SqliteConfig* config )
+		: DbConnection( config )
 {
-    const QString path = QString ( kurooDir + KurooConfig::databas() ).toLocal8Bit();
+	const QString path = QString( kurooDir + KurooConfig::databas() ).toLocal8Bit();
 
 	// Open database file and check for correctness
 	m_initialized = false;
-	QFile file ( path );
-    if ( file.open ( QIODevice::ReadOnly ) ) {
+	QFile file( path );
+	if ( file.open( QIODevice::ReadOnly ) ) {
         QString format( file.readLine( 50 ) );
 
-		if ( !format.startsWith ( "SQLite format 3" ) )
-			kWarning ( 0 ) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
+		if ( !format.startsWith( "SQLite format 3" ) )
+			kWarning( 0 ) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
 
 		else
-            if ( sqlite3_open ( path.toAscii(), &m_db ) != SQLITE_OK )
+			if ( sqlite3_open( path.toAscii(), &m_db ) != SQLITE_OK )
 			{
-				kWarning ( 0 ) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
-				sqlite3_close ( m_db );
+				kWarning( 0 ) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
+				sqlite3_close( m_db );
 			}
 			else
 				m_initialized = true;
@@ -1131,29 +1131,29 @@ SqliteConnection::SqliteConnection ( SqliteConfig* config )
 	{
 
 		// Remove old db file; create new
-		QFile::remove ( path );
-        if ( sqlite3_open ( path.toAscii(), &m_db ) == SQLITE_OK )
+		QFile::remove( path );
+		if ( sqlite3_open( path.toAscii(), &m_db ) == SQLITE_OK )
 			m_initialized = true;
 	}
 	else
 	{
-		if ( sqlite3_create_function ( m_db, "rand", 0, SQLITE_UTF8, NULL, sqlite_rand, NULL, NULL ) != SQLITE_OK )
+		if ( sqlite3_create_function( m_db, "rand", 0, SQLITE_UTF8, NULL, sqlite_rand, NULL, NULL ) != SQLITE_OK )
 			m_initialized = false;
-		if ( sqlite3_create_function ( m_db, "power", 2, SQLITE_UTF8, NULL, sqlite_power, NULL, NULL ) != SQLITE_OK )
+		if ( sqlite3_create_function( m_db, "power", 2, SQLITE_UTF8, NULL, sqlite_power, NULL, NULL ) != SQLITE_OK )
 			m_initialized = false;
 	}
 
 	//optimization for speeding up SQLite
-	query ( "PRAGMA default_synchronous = OFF;" );
+	query( "PRAGMA default_synchronous = OFF;" );
 }
 
 SqliteConnection::~SqliteConnection()
 {
 	if ( m_db )
-		sqlite3_close ( m_db );
+		sqlite3_close( m_db );
 }
 
-QStringList SqliteConnection::query ( const QString& statement )
+QStringList SqliteConnection::query( const QString& statement )
 {
 	QStringList values;
 	int error;
@@ -1161,37 +1161,37 @@ QStringList SqliteConnection::query ( const QString& statement )
 	sqlite3_stmt* stmt;
 
 	//compile SQL program to virtual machine
-    error = sqlite3_prepare ( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
+	error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
 
 	if ( error != SQLITE_OK )
 	{
-		kWarning ( 0 ) << " sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+		kWarning( 0 ) << " sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 		values = QStringList();
 	}
 	else
 	{
-		int busyCnt ( 0 );
-		int number = sqlite3_column_count ( stmt );
+		int busyCnt( 0 );
+		int number = sqlite3_column_count( stmt );
 
 		//execute virtual machine by iterating over rows
 		while ( true )
 		{
-			error = sqlite3_step ( stmt );
+			error = sqlite3_step( stmt );
 
 			if ( error == SQLITE_BUSY )
 			{
 				if ( busyCnt++ > 99 )
 				{
-					kWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
+					kWarning( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
-				::usleep ( 100000 ); // Sleep 100 msec
+				::usleep( 100000 ); // Sleep 100 msec
 				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
 				continue;
 			}
 
 			if ( error == SQLITE_MISUSE ) {
-				kWarning ( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
+				kWarning( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
 				break;
 			}
 
@@ -1200,15 +1200,15 @@ QStringList SqliteConnection::query ( const QString& statement )
 
 			//iterate over columns
 			for ( int i = 0; i < number; i++ )
-				values << QString::fromUtf8 ( ( const char* ) sqlite3_column_text ( stmt, i ) );
+				values << QString::fromUtf8( ( const char* ) sqlite3_column_text( stmt, i ) );
 		}
 
 		//deallocate vm ressources
-		sqlite3_finalize ( stmt );
+		sqlite3_finalize( stmt );
 
 		if ( error != SQLITE_DONE )
 		{
-			kWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+			kWarning( 0 ) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 			values = QStringList();
 		}
 	}
@@ -1216,7 +1216,7 @@ QStringList SqliteConnection::query ( const QString& statement )
 	return values;
 }
 
-QString SqliteConnection::singleQuery ( const QString& statement )
+QString SqliteConnection::singleQuery( const QString& statement )
 {
 	QString value;
 	int error;
@@ -1224,48 +1224,48 @@ QString SqliteConnection::singleQuery ( const QString& statement )
 	sqlite3_stmt* stmt;
 
 	//compile SQL program to virtual machine
-    error = sqlite3_prepare ( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
+	error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
 
 	if ( error != SQLITE_OK )
-		kWarning ( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+		kWarning( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 	else
 	{
-		int busyCnt ( 0 );
+		int busyCnt( 0 );
 
 		//execute virtual machine
 		while ( true )
 		{
-			error = sqlite3_step ( stmt );
+			error = sqlite3_step( stmt );
 
 			if ( error == SQLITE_BUSY )
 			{
 				if ( busyCnt++ > 99 )
 				{
-					kWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
+					kWarning( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
-				::usleep ( 100000 ); // Sleep 100 msec
+				::usleep( 100000 ); // Sleep 100 msec
 				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
 				continue;
 			}
 
 			if ( error == SQLITE_MISUSE ) {
-				kWarning ( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
+				kWarning( 0 ) << "sqlite3_step: MISUSE on query: " << statement << LINE_INFO;
 				break;
 			}
 
 			if ( error == SQLITE_DONE || error == SQLITE_ERROR )
 				break;
 
-			value = QString::fromUtf8 ( ( const char* ) sqlite3_column_text ( stmt, 0 ) );
+			value = QString::fromUtf8( ( const char* ) sqlite3_column_text ( stmt, 0 ) );
 		}
 
 		//deallocate vm ressources
-		sqlite3_finalize ( stmt );
+		sqlite3_finalize( stmt );
 
 		if ( error != SQLITE_DONE )
 		{
-			kWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on query: " << statement << LINE_INFO;
+			kWarning( 0 ) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on query: " << statement << LINE_INFO;
 			value = QString::null;
 		}
 	}
@@ -1273,40 +1273,40 @@ QString SqliteConnection::singleQuery ( const QString& statement )
 	return value;
 }
 
-int SqliteConnection::insert ( const QString& statement )
+int SqliteConnection::insert( const QString& statement )
 {
 	int error;
 	const char* tail;
 	sqlite3_stmt* stmt;
 
 	//compile SQL program to virtual machine
-    error = sqlite3_prepare ( m_db, statement.toUtf8(), statement.toUtf8().length(), &stmt, &tail );
+	error = sqlite3_prepare( m_db, statement.toUtf8(), statement.toUtf8().length(), &stmt, &tail );
 
 	if ( error != SQLITE_OK )
-		kWarning ( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg ( m_db ) << " on insert: " << statement << LINE_INFO;
+		kWarning( 0 ) << "sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on insert: " << statement << LINE_INFO;
 	else
 	{
-		int busyCnt ( 0 );
+		int busyCnt( 0 );
 
 		//execute virtual machine by iterating over rows
 		while ( true )
 		{
-			error = sqlite3_step ( stmt );
+			error = sqlite3_step( stmt );
 
 			if ( error == SQLITE_BUSY )
 			{
 				if ( busyCnt++ > 99 )
 				{
-					kWarning ( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
+					kWarning( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
-				::usleep ( 100000 ); // Sleep 100 msec
+				::usleep( 100000 ); // Sleep 100 msec
 				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on insert: " << statement << LINE_INFO;
 				continue;
 			}
 
 			if ( error == SQLITE_MISUSE ) {
-				kWarning ( 0 ) << "sqlite3_step: MISUSE on insert: " << statement << LINE_INFO;
+				kWarning( 0 ) << "sqlite3_step: MISUSE on insert: " << statement << LINE_INFO;
 				break;
 			}
 
@@ -1315,50 +1315,50 @@ int SqliteConnection::insert ( const QString& statement )
 		}
 
 		//deallocate vm ressources
-		sqlite3_finalize ( stmt );
+		sqlite3_finalize( stmt );
 
 		if ( error != SQLITE_DONE )
 		{
-			kWarning ( 0 ) << "sqlite_step error: " << sqlite3_errmsg ( m_db ) << " on insert: " << statement << LINE_INFO;
+			kWarning( 0 ) << "sqlite_step error: " << sqlite3_errmsg( m_db ) << " on insert: " << statement << LINE_INFO;
 			return 0;
 		}
 	}
-	return sqlite3_last_insert_rowid ( m_db );
+	return sqlite3_last_insert_rowid( m_db );
 }
 
 // this implements a RAND() function compatible with the MySQL RAND() (0-param-form without seed)
-void SqliteConnection::sqlite_rand ( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ )
+void SqliteConnection::sqlite_rand( sqlite3_context *context, int /*argc*/, sqlite3_value ** /*argv*/ )
 {
-	sqlite3_result_double ( context, static_cast<double> ( KRandom::random() ) / ( RAND_MAX + 1.0 ) );
+	sqlite3_result_double( context, static_cast<double>( KRandom::random() ) / ( RAND_MAX + 1.0 ) );
 }
 
 // this implements a POWER() function compatible with the MySQL POWER()
-void SqliteConnection::sqlite_power ( sqlite3_context *context, int argc, sqlite3_value **argv )
+void SqliteConnection::sqlite_power( sqlite3_context *context, int argc, sqlite3_value **argv )
 {
 	Q_ASSERT ( argc==2 );
-	if ( sqlite3_value_type ( argv[0] ) == SQLITE_NULL || sqlite3_value_type ( argv[1] ) == SQLITE_NULL )
+	if ( sqlite3_value_type( argv[0] ) == SQLITE_NULL || sqlite3_value_type( argv[1] ) == SQLITE_NULL )
 	{
-		sqlite3_result_null ( context );
+		sqlite3_result_null( context );
 		return;
 	}
-	double a = sqlite3_value_double ( argv[0] );
-	double b = sqlite3_value_double ( argv[1] );
-	sqlite3_result_double ( context, pow ( a,b ) );
+	double a = sqlite3_value_double( argv[0] );
+	double b = sqlite3_value_double( argv[1] );
+	sqlite3_result_double( context, pow( a,b ) );
 }
 
-SqliteConfig::SqliteConfig ( const QString& dbfile )
-		: m_dbfile ( dbfile )
+SqliteConfig::SqliteConfig( const QString& dbfile )
+		: m_dbfile( dbfile )
 {}
 
 /**
  * Connections pool with thread support
  */
-DbConnectionPool::DbConnectionPool() : m_semaphore ( POOL_SIZE )
+DbConnectionPool::DbConnectionPool() : m_semaphore( POOL_SIZE )
 {
     m_semaphore.acquire( POOL_SIZE ); //+=
 	DbConnection *dbConn;
-	m_dbConfig = new SqliteConfig ( KurooConfig::databas() );
-	dbConn = new SqliteConnection ( static_cast<SqliteConfig*> ( m_dbConfig ) );
+	m_dbConfig = new SqliteConfig( KurooConfig::databas() );
+	dbConn = new SqliteConnection( static_cast<SqliteConfig*>( m_dbConfig ) );
 
     enqueue( dbConn );
     m_semaphore.release(1); //--
@@ -1376,7 +1376,7 @@ DbConnectionPool::~DbConnectionPool()
 		{
 			vacuum = false;
 			kDebug() << "Running VACUUM" << LINE_INFO;
-			conn->query ( "VACUUM;" );
+			conn->query( "VACUUM;" );
 		}
         delete conn;
 	}
@@ -1388,8 +1388,8 @@ void DbConnectionPool::createDbConnections()
 	for ( int i = 0; i < POOL_SIZE - 1; i++ )
 	{
 		DbConnection *dbConn;
-		dbConn = new SqliteConnection ( static_cast<SqliteConfig*> ( m_dbConfig ) );
-		enqueue ( dbConn );
+		dbConn = new SqliteConnection( static_cast<SqliteConfig*>( m_dbConfig ) );
+		enqueue( dbConn );
         m_semaphore.release(1);
 	}
 	kDebug() << "Create. Available db connections: " << m_semaphore.available() << LINE_INFO;
@@ -1401,16 +1401,16 @@ DbConnection *DbConnectionPool::getDbConnection()
 	return dequeue();
 }
 
-void DbConnectionPool::putDbConnection ( DbConnection *conn )
+void DbConnectionPool::putDbConnection( DbConnection *conn )
 {
-	enqueue ( conn );
+	enqueue( conn );
     m_semaphore.release(1);
 }
 
-QString DbConnectionPool::escapeString ( const QString& str ) const
+QString DbConnectionPool::escapeString( const QString& str ) const
 {
 	QString result=str;
-	return result.replace ( '\'', "''" );
+	return result.replace( '\'', "''" );
 }
 
 #include "portagedb.moc"

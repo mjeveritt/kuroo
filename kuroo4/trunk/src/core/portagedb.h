@@ -121,7 +121,7 @@ public:
 	 * Check db integrity and create new db if necessary.
 	 */
 	QString 				init( QObject *parent = 0 );
-	inline QString 				escapeString( const QString& string) const { return m_dbConnPool->escapeString(string); }
+	inline QString 			escapeString( const QString& string) const { return m_dbConnPool->escapeString(string); }
 
 	/**
 	* This method returns a static DbConnection for components that want to use
@@ -164,9 +164,9 @@ public:
 	//////////////////////////////////////////////////////////////////////////////
 	const QStringList		allCategories();
 	const QStringList		allSubCategories();
-	const QStringList 		portageCategories( int filter, const QString& text );
-	const QStringList 		portageSubCategories( const QString& categoryId, int filter, const QString& text );
-	const QStringList 		portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
+	const QStringList		portageCategories( int filter, const QString& text );
+	const QStringList		portageSubCategories( const QString& categoryId, int filter, const QString& text );
+	const QStringList		portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text );
 	const QString		 	packageId( const QString& package );
 
 
@@ -217,17 +217,17 @@ public:
 	const QStringList 		allMergeHistory();
 	const QStringList 		allStatistic();
 
-	void				resetUpdates();
-	void				resetInstalled();
-	void				resetQueue();
-	void				addEmergeInfo( const QString& einfo );
-	void				addBackup( const QString& source, const QString& destination );
+	void					resetUpdates();
+	void					resetInstalled();
+	void					resetQueue();
+	void					addEmergeInfo( const QString& einfo );
+	void					addBackup( const QString& source, const QString& destination );
 
 private:
-	QObject*			m_parent;
+	QObject*				m_parent;
 
 	DbConnectionPool		*m_dbConnPool;
-	bool 				m_monitor;
+	bool					m_monitor;
 };
 
 #endif /* KUROODB_H */

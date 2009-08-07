@@ -40,7 +40,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	// Update visible items when world is changed
 	//connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( undefined triggerUpdate() ) );
 
-	connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
+	//connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
 
 	//new ToolTip( this );
 }
@@ -167,7 +167,8 @@ void PackageListView::setPackageFocus( const QString& id )
 {
 	if ( id.isEmpty() || !m_packageIndex[id] ) {
 		setCurrentItem( topLevelItem(0) );
-		currentItem()->setSelected( true );
+		if( NULL != currentItem() )
+			currentItem()->setSelected( true );
 	}
 	else {
 		PackageItem* item = m_packageIndex[id];

@@ -141,7 +141,7 @@ void HistoryListView::loadFromDB( int days )
 			t = t.addSecs( duration.toUInt() );
 			QString emergeDuration = m_loc->formatTime( t, true, true );
 
-			if ( !duration.isEmpty() || KurooConfig::viewUnmerges() && !package.isEmpty() ) {
+			if ( !duration.isEmpty() || (KurooConfig::viewUnmerges() && !package.isEmpty()) ) {
 				if ( !m_itemMap.contains( emergeDate ) ) {
 					HistoryItem *item = new HistoryItem( this, emergeDate );
 					//item->setOpen( true );

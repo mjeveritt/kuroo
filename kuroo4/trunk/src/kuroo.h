@@ -53,33 +53,33 @@ Q_OBJECT
 public:
 	Kuroo();
 	virtual ~Kuroo();
-	
+
 private slots:
-	void 				introWizard();
-	void 				slotPreferences();
+	void				introWizard();
+	void				slotPreferences();
 	void				slotBusy();
 	void				slotSync();
-	bool 				queryClose();
-	bool 				queryExit();
-	void 				slotQuit();
+	bool				queryClose();
+	bool				queryExit();
+	void				slotQuit();
 	void				slotWait();
-	void 				slotTerminate();
+	void				slotTerminate();
 	void				slotWhatsThis( int tabIndex );
-	
+
 private:
-	void 				setupActions();
-	
+	void				setupActions();
+
 private:
 	SystemTray			*systemTray;
-	Results 			*kurooResults;
-	Queue 				*kurooQueue;
-	Message 			*kurooMessage;
-	KurooInit 			*kurooInit;
-	KurooView 			*m_view;
-	KConfigDialog 			*prefDialog;
-	IntroDlg 			*wizardDialog;
-	bool 				m_shuttingDown;
-    //KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
+	Results				*kurooResults;
+	Queue				*kurooQueue;
+	Message				*kurooMessage;
+	KurooInit			*kurooInit;
+	KurooView			*m_view;
+	KConfigDialog		*prefDialog;
+	IntroDlg			*wizardDialog;
+	bool				m_shuttingDown;
+	KAction				*actionReleaseInfo, *actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

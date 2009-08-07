@@ -32,13 +32,13 @@ class MainWindow : public KMainWindow
 {
 Q_OBJECT
 public:
-    MainWindow( QWidget *parent = 0, const QString& name = 0 );
-    ~MainWindow();
+	MainWindow( QWidget *parent = 0, const QString& name = 0 );
+	~MainWindow();
 
-	KurooStatusBar 	*statusBar();
+	KurooStatusBar	*statusBar();
 
 private:
-	KurooStatusBar 	*sb;
+	KurooStatusBar	*sb;
 };
 
 #endif

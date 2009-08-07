@@ -49,35 +49,35 @@
  * @short Page for the installation queue.
  */
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
-    : QWidget( parent ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null ), m_packageInspector( packageInspector )
+	: QWidget( parent ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null ), m_packageInspector( packageInspector )
 {
-    setupUi( this );
+	setupUi( this );
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
-	
+
 	// Rmb actions.
-    connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ),
-             this, SLOT( contextMenu(QPoint) ) );
-	
+	connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ),
+			 this, SLOT( slotContextMenu(QPoint) ) );
+
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
 	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-    connect( queueView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
-	
+	connect( queueView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
+
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
-	
-    connect( queueView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotPackage() ) );
-    connect( queueView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtons() ) );
-	
+
+	connect( queueView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotPackage() ) );
+	connect( queueView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtons() ) );
+
 	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
-	
+
 	// Reload view after changes in queue.
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotReload( bool ) ) );
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotRefresh() ) );
-	
+
 	// Forward emerge start/stop/completed to package progressbar.
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageStart( const QString& ) ), queueView, SLOT( slotPackageStart( const QString& ) ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), queueView, SLOT( slotPackageComplete( const QString& ) ) );
@@ -86,12 +86,12 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	// Update Queue summary timer
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageAdvance() ), this, SLOT( slotQueueSummary() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), this, SLOT( slotQueueSummary() ) );
-	
+
 	// Recalculate package when user change settings in Inspector
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
 	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
 	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
-	
+
 	slotInit();
 }
 
@@ -104,17 +104,17 @@ QueueTab::~QueueTab()
 		KurooConfig::setForceConf( true );
 	else
 		KurooConfig::setForceConf( false );
-	
+
 	if ( cbDownload->isChecked() )
 		KurooConfig::setDownload( true );
 	else
 		KurooConfig::setDownload( false );
-	
+
 	if ( cbNoWorld->isChecked() )
 		KurooConfig::setNoWorld( true );
 	else
 		KurooConfig::setNoWorld( false );
-	
+
 	if ( cbRemove->isChecked() )
 		KurooConfig::setRemove( true );
 	else
@@ -124,11 +124,11 @@ QueueTab::~QueueTab()
 		KurooConfig::setBackupPkg( true );
 	else
 		KurooConfig::setBackupPkg( false );
-                        
-        if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-          cbSkipHousekeeping->setDisabled( false );
-        else
-          cbSkipHousekeeping->setDisabled( true );
+
+		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+		  cbSkipHousekeeping->setDisabled( false );
+		else
+		  cbSkipHousekeeping->setDisabled( true );
 }
 
 /**
@@ -136,23 +136,23 @@ QueueTab::~QueueTab()
  */
 void QueueTab::slotInit()
 {
-    //queueFrame->setPaletteBackgroundColor( colorGroup().base() );
-	
+	//queueFrame->setPaletteBackgroundColor( colorGroup().base() );
+
 	if ( KurooConfig::forceConf() )
 		cbForceConf->setChecked( true );
 	else
 		cbForceConf->setChecked( false );
-	
+
 	if ( KurooConfig::download() )
 		cbDownload->setChecked( true );
 	else
 		cbDownload->setChecked( false );
-	
+
 	if ( KurooConfig::noWorld() )
 		cbNoWorld->setChecked( true );
 	else
 		cbNoWorld->setChecked( false );
-	
+
 	if ( KurooConfig::remove() )
 		cbRemove->setChecked( true );
 	else
@@ -162,42 +162,42 @@ void QueueTab::slotInit()
 		cbBackupPkg->setChecked( true );
 	else
 		cbBackupPkg->setChecked( false );
-        
-        if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-           cbSkipHousekeeping->setDisabled( false );
-        else
-           cbSkipHousekeeping->setDisabled( true );
-         
+
+		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+		   cbSkipHousekeeping->setDisabled( false );
+		else
+		   cbSkipHousekeeping->setDisabled( true );
+
 
 	slotRemoveInstalled();
-	
-    cbDownload->setToolTip( i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
-	                                  "just perform fetches for all packages (the main package as well as all dependencies), "
-	                                  "grabbing all potential files.</td></tr></table></qt>" ) );
-	
-    cbNoWorld->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
-	                                  "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
-	
-    cbForceConf->setToolTip( i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
-	                                  "inside of a CONFIG_PROTECT directory has been merged already. "
-	                                  "Portage will normally merge those files only once to prevent the user"
-	                                  "from dealing with the same config multiple times. "
-	                                  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
 
-    cbBackupPkg->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
-	                                  "but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
-	
+	cbDownload->setToolTip( i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
+									  "just perform fetches for all packages (the main package as well as all dependencies), "
+									  "grabbing all potential files.</td></tr></table></qt>" ) );
+
+	cbNoWorld->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+									  "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+
+	cbForceConf->setToolTip( i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
+									  "inside of a CONFIG_PROTECT directory has been merged already. "
+									  "Portage will normally merge those files only once to prevent the user"
+									  "from dealing with the same config multiple times. "
+									  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+
+	cbBackupPkg->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
+									  "but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
+
 	// Keyboard shortcuts
-    /*KAccel* pAccel = new KAccel( this );
+	/*KAccel* pAccel = new KAccel( this );
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
-                    Qt::Key_Return, this, SLOT( slotAdvanced() ) );*/
-	
-    pbRemove->setIcon( QIcon("list-remove") );
-    pbClear->setIcon( QIcon("remove_all") );
-    pbAdvanced->setIcon( QIcon("options") );
-    pbCheck->setIcon( QIcon("gear") );
-    pbGo->setIcon( QIcon("launch") );
-    pbWhatsThis->setIcon( QIcon("document-properties") );
+					Qt::Key_Return, this, SLOT( slotAdvanced() ) );*/
+
+	pbRemove->setIcon( QIcon("list-remove") );
+	pbClear->setIcon( QIcon("remove_all") );
+	pbAdvanced->setIcon( QIcon("options") );
+	pbCheck->setIcon( QIcon("gear") );
+	pbGo->setIcon( QIcon("launch") );
+	pbWhatsThis->setIcon( QIcon("document-properties") );
 }
 
 /**
@@ -205,12 +205,12 @@ void QueueTab::slotInit()
  */
 void QueueTab::slotWhatsThis()
 {
-    QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
+	QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
 			"The emerge queue quickly shows which packages listed for installation.<br>"
 			"Since many applications depend on each other, any attempt to install a certain software package might result in the installation "
 			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br><br>"
 			"If you want to find out what Portage would install when you ask it to install a certain package, press 'Check Installation'.<br>"
-            "When all dependencies are press 'Start Installation'.</qt>" ), this );
+			"When all dependencies are press 'Start Installation'.</qt>" ), this );
 }
 
 /**
@@ -221,7 +221,7 @@ void QueueTab::slotNextPackage( bool isNext )
 {
 	if ( !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
-	
+
 	queueView->nextPackage( isNext );
 }
 
@@ -247,20 +247,20 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 	// Reenable the inspector after queue changes
 // 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
-	
+
 	// If user is not su emerge pretend will not set packages as checked
 	m_hasCheckedQueue = hasCheckedQueue;
 	if ( m_hasCheckedQueue && !KUser().isSuperUser() )
 		m_hasCheckedQueue = false;
-	
+
 	// Load all packages
 	slotRefresh();
-	
+
 	// Enable the gui
 	slotBusy();
-	
-    m_initialQueueTime = formatTime( queueView->totalDuration() );
-    KurooStatusBar::instance()->clearElapsedTime();
+
+	m_initialQueueTime = formatTime( queueView->totalDuration() );
+	KurooStatusBar::instance()->clearElapsedTime();
 	slotQueueSummary();
 }
 
@@ -274,9 +274,9 @@ void QueueTab::slotQueueSummary()
 			queueBrowserLines += i18n( "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
 			queueBrowserLines += i18n( "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
 			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>" )
-        .arg( formatTime( KurooStatusBar::instance()->elapsedTime() ) );
+		.arg( formatTime( KurooStatusBar::instance()->elapsedTime() ) );
 			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>" )
-        .arg( formatTime( queueView->totalDuration() ) );
+		.arg( formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
 
@@ -300,7 +300,7 @@ void QueueTab::slotBusy()
 		cbNoWorld->setDisabled( true );
 		pbCheck->setDisabled( true );
 		pbGo->setDisabled( true );
-                cbSkipHousekeeping->setDisabled( true );
+				cbSkipHousekeeping->setDisabled( true );
 	}
 	else
 		slotButtons();
@@ -311,73 +311,73 @@ void QueueTab::slotBusy()
  */
 void QueueTab::slotButtons()
 {
-        if ( m_packageInspector->isVisible() )
-                return;
-        
-        // Kuroo is busy emerging toggle to "abort"
-        if ( EmergeSingleton::Instance()->isRunning() ) {
-                pbGo->setText( i18n( "Abort Installation" ) );
-                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-                connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-        }
-        else {
-                pbGo->setText( i18n( "Step &2: Start Installation" ) );
-                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-                disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-                connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-                if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-                  cbSkipHousekeeping->setDisabled( false );
-                else
-                  cbSkipHousekeeping->setDisabled( true );
-        }
-        
-        // No package selected, disable all buttons
-        if ( queueView->selectedIds().isEmpty() ) {
-                pbRemove->setDisabled( true );
-                pbAdvanced->setDisabled( true );
-                return;
-        }
-        
+		if ( m_packageInspector->isVisible() )
+				return;
 
-        
-        // Queue is not empty - enable button "Remove all" and "Check Installation"
-        cbDownload->setDisabled( false );
-        
-        // When emerging packages do not allow user to change the queue
-        if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
-                pbRemove->setDisabled( true );
-                pbClear->setDisabled( true );
-                pbCheck->setDisabled( true );
-                cbSkipHousekeeping->setDisabled( true );
-        }
-        else {
-                pbRemove->setDisabled( false );
-                pbClear->setDisabled( false );
-                pbCheck->setDisabled( false );
-                if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-                  cbSkipHousekeeping->setDisabled( false );
-                else
-                  cbSkipHousekeeping->setDisabled( true );
-         }
-                
-        
-        // User is su and packages in queue are "checked" - enable checkboxes
-        if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
-                pbGo->setDisabled( false );
-                cbForceConf->setDisabled( false );
-                cbNoWorld->setDisabled( false );
-                cbRemove->setDisabled( false );
-        }
-        else {
-                pbGo->setDisabled( true );
-                cbForceConf->setDisabled( true );
-                cbNoWorld->setDisabled( true );
-                cbRemove->setDisabled( true );
-        }
-        
-        m_packageInspector->setDisabled( false );
-        pbAdvanced->setDisabled( false );
+		// Kuroo is busy emerging toggle to "abort"
+		if ( EmergeSingleton::Instance()->isRunning() ) {
+				pbGo->setText( i18n( "Abort Installation" ) );
+				disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+				disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+				connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+		}
+		else {
+				pbGo->setText( i18n( "Step &2: Start Installation" ) );
+				disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+				disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+				connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+				if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+				  cbSkipHousekeeping->setDisabled( false );
+				else
+				  cbSkipHousekeeping->setDisabled( true );
+		}
+
+		// No package selected, disable all buttons
+		if ( queueView->selectedIds().isEmpty() ) {
+				pbRemove->setDisabled( true );
+				pbAdvanced->setDisabled( true );
+				return;
+		}
+
+
+
+		// Queue is not empty - enable button "Remove all" and "Check Installation"
+		cbDownload->setDisabled( false );
+
+		// When emerging packages do not allow user to change the queue
+		if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ) {
+				pbRemove->setDisabled( true );
+				pbClear->setDisabled( true );
+				pbCheck->setDisabled( true );
+				cbSkipHousekeeping->setDisabled( true );
+		}
+		else {
+				pbRemove->setDisabled( false );
+				pbClear->setDisabled( false );
+				pbCheck->setDisabled( false );
+				if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+				  cbSkipHousekeeping->setDisabled( false );
+				else
+				  cbSkipHousekeeping->setDisabled( true );
+		 }
+
+
+		// User is su and packages in queue are "checked" - enable checkboxes
+		if ( m_hasCheckedQueue && KUser().isSuperUser() ) {
+				pbGo->setDisabled( false );
+				cbForceConf->setDisabled( false );
+				cbNoWorld->setDisabled( false );
+				cbRemove->setDisabled( false );
+		}
+		else {
+				pbGo->setDisabled( true );
+				cbForceConf->setDisabled( true );
+				cbNoWorld->setDisabled( true );
+				cbRemove->setDisabled( true );
+		}
+
+		m_packageInspector->setDisabled( false );
+		pbAdvanced->setDisabled( false );
 }
 
 
@@ -405,22 +405,22 @@ void QueueTab::slotGo()
 	// If emerge is running I'm the abort function
 	if ( EmergeSingleton::Instance()->isRunning() )
 		slotStop();
-	
+
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
-	
-        if ( cbSkipHousekeeping->isChecked() )
-          EmergeSingleton::Instance()->setSkipHousekeeping(true);
-        else
-          EmergeSingleton::Instance()->setSkipHousekeeping(false);
-        
+
+		if ( cbSkipHousekeeping->isChecked() )
+		  EmergeSingleton::Instance()->setSkipHousekeeping(true);
+		else
+		  EmergeSingleton::Instance()->setSkipHousekeeping(false);
+
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
 	if ( cbDownload->isChecked() ) {
-		switch( KMessageBox::questionYesNoList( this, 
+		switch( KMessageBox::questionYesNoList( this,
 			i18n("Do you want to Download following packages?"), packageList, i18n("Installation queue"),
 			KStandardGuiItem::yes(), KStandardGuiItem::no(), "dontAskAgainDownload", KMessageBox::Dangerous ) ) {
-				
+
 				case KMessageBox::Yes:
 					packageList.prepend( "--fetch-all-uri" );
 					QueueSingleton::Instance()->installQueue( packageList );
@@ -428,26 +428,26 @@ void QueueTab::slotGo()
 			}
 	}
 	else {
-		switch( KMessageBox::questionYesNoList( this, 
+		switch( KMessageBox::questionYesNoList( this,
 			i18n("Do you want to install following packages?"), packageList, i18n("Installation queue"),
 			KStandardGuiItem::yes(), KStandardGuiItem::no(), "dontAskAgainInstall", KMessageBox::Dangerous ) ) {
-				
+
 				case KMessageBox::Yes: {
 					if( cbUpdate->isChecked() )
 						packageList.prepend( "-uN" );
-					
+
 					// Force portage to reinstall files protected in CONFIG_PROTECT
 					if ( cbForceConf->isChecked() )
 						packageList.prepend( "--noconfmem" );
-					
+
 					// Emerge as normal, but do not add the packages to the world profile for later updating.
 					if ( cbNoWorld->isChecked() )
 						packageList.prepend( "--oneshot" );
-						
+
 					QueueSingleton::Instance()->installQueue( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 				}
-				
+
 			}
 	}
 }
@@ -459,8 +459,8 @@ void QueueTab::slotStop()
 {
 	switch ( KMessageBox::warningYesNo( this,
 		i18n( "Do you want to abort the running installation?" ) ) ) {
-			
-			case KMessageBox::Yes : 
+
+			case KMessageBox::Yes :
 				EmergeSingleton::Instance()->stop();
 				KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done.") );
 				// added an explicit busy switch to allow someone to continue once
@@ -486,7 +486,7 @@ void QueueTab::slotRemove()
 {
 	if ( isVisible() )
 		m_packageInspector->hide();
-	
+
 	QueueSingleton::Instance()->removePackageIdList( queueView->selectedIds() );
 }
 
@@ -497,7 +497,7 @@ void QueueTab::slotClear()
 {
 	if ( isVisible() )
 		m_packageInspector->hide();
-	
+
 	QueueSingleton::Instance()->reset();
 }
 
@@ -520,9 +520,9 @@ void QueueTab::slotAdvanced()
 	pbCheck->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 	pbGo->setDisabled( true );
-	
+
 	if ( queueView->currentPackage() )
-	     processPackage( true );
+		 processPackage( true );
 }
 
 void QueueTab::slotPackage()
@@ -541,7 +541,7 @@ void QueueTab::processPackage( bool viewInspector )
 	// Queue view is hidden don't update
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
-	
+
 	// Initialize the portage package object with package and it's versions data
 	queueView->currentPackage()->parsePackageVersions();
 
@@ -555,67 +555,67 @@ void QueueTab::processPackage( bool viewInspector )
  * @param item
  * @param point
  */
-void QueueTab::slotContextMenu()
+void QueueTab::slotContextMenu(QPoint)
 {
-    //FIXME: port contextMenu to KDE4
-    /*if ( !item )
+	//FIXME: port contextMenu to KDE4
+	/*if ( !item )
 		return;
-	
+
 	const QStringList selectedIdsList = queueView->selectedIds();
-	
+
 	enum Actions { ADDWORLD, DELWORLD };
-	
+
 	KMenu menu( this );
-	
+
 	int menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n( "Remove" ), REMOVE );
 	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
-	
+
 	int menuItem3;
 	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
 		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
 	else
 		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
 	menu.setItemEnabled( menuItem3, false );
-	
+
 	// No change to Queue when busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
 		menu.setItemEnabled( menuItem1, false );
-	
+
 	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() )
 		menu.setItemEnabled( menuItem3, true );
-	
+
 	if ( m_packageInspector->isVisible() ) {
 		menu.setItemEnabled( menuItem1, false );
 		menu.setItemEnabled( menuItem2, false );
 		menu.setItemEnabled( menuItem3, false );
 	}
-	
+
 	switch( menu.exec( point ) ) {
-			
+
 		case REMOVE:
 			QueueSingleton::Instance()->removePackageIdList( queueView->selectedIds() );
 			break;
-		
+
 		case DETAILS:
 			slotAdvanced();
 			break;
-		
+
 		case ADDWORLD: {
 			QStringList packageList;
-            foreach ( QString id, selectedIdsList )
-                packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
+			foreach ( QString id, selectedIdsList )
+				packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
 			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
 		}
-		
+
 		case DELWORLD: {
 			QStringList packageList;
-            foreach ( QString id, selectedIdsList )
-                packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
+			foreach ( QString id, selectedIdsList )
+				packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
 			PortageSingleton::Instance()->removeFromWorld( packageList );
 		}
-    }*/
+	}*/
 }
 
 #include "queuetab.moc"

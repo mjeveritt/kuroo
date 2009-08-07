@@ -38,19 +38,19 @@ public:
     PackageInspector( QWidget *parent = 0 );
     ~PackageInspector();
 
-	void				edit( PackageItem* portagePackage, const int& view );
+	void					edit( PackageItem* portagePackage, const int& view );
 	/**
 	 * Return the caller.
 	 */
-	inline bool			isParentView( const int& view ) const { return m_view == view; }
-	void				showHardMaskInfo();
+	inline bool				isParentView( const int& view ) const { return m_view == view; }
+	void					showHardMaskInfo();
 
 private:
-	void				updateVersionData();
-	void				rollbackSettings();
-	void				loadUseFlagDescription();
-	void				loadChangeLog();
-    void                askApplySettings();
+	void					updateVersionData();
+	void					rollbackSettings();
+	void					loadUseFlagDescription();
+	void					loadChangeLog();
+	void			        askApplySettings();
 
 private slots:
 	void				slotHardMaskInfo();
@@ -78,30 +78,30 @@ private slots:
 private:
 
 	// Wiew that called the Inspector
-	int				m_view;
+	int						m_view;
 
 	// Keep track when user changes any version masking settings
-	bool				m_versionSettingsChanged;
+	bool					m_versionSettingsChanged;
 
 	// Keep track when user changes use settings
-	bool				m_useSettingsChanged;
+	bool					m_useSettingsChanged;
 
 	// Is this package settings untouched
-	bool				m_isVirginState;
+	bool					m_isVirginState;
 
-	QString				m_id, m_category, m_package, m_hardMaskComment;
-	QMap<QString, QString>		m_useMap;
-	PackageItem* 			m_portagePackage;
-	int				m_stabilityBefore;
-	QString				m_versionBefore;
-	QStringList			m_pretendUseLines;
-	QStringList 			m_useList;
+	QString					m_id, m_category, m_package, m_hardMaskComment;
+	QMap<QString, QString>	m_useMap;
+	PackageItem*			m_portagePackage;
+	int						m_stabilityBefore;
+	QString					m_versionBefore;
+	QStringList				m_pretendUseLines;
+	QStringList				m_useList;
 
     KProcess* eProc;
 
 signals:
-	void				signalNextPackage( bool up );
-	void				signalPackageChanged();
+	void					signalNextPackage( bool up );
+	void					signalPackageChanged();
 };
 
 #endif

@@ -40,16 +40,16 @@ class KurooView : public KPageDialog
 {
 Q_OBJECT
 public:
-    KurooView( QWidget *parent );
+	KurooView( QWidget *parent );
 	~KurooView();
-	
+
 	PortageTab*			viewPortage;
 	HistoryTab*			viewHistory;
 	QueueTab*			viewQueue;
 	LogsTab* 			viewLogs;
 	MergeTab*			viewMerge;
-    PackageInspector*   packageInspector;
-	
+	PackageInspector*	packageInspector;
+
 	void 				slotEmergePretend( QString package );
 
 public slots:
@@ -57,9 +57,9 @@ public slots:
 
 private slots:
 	void 				slotCheckPortage();
-    //void				slotResetMenu( QListWidgetItem* menuItem );
+	//void				slotResetMenu( QListWidgetItem* menuItem );
 	void 				slotShowView();
-	
+
 private:
 	// True if history needs to be recreated from scratch
 	bool				m_isHistoryRestored;

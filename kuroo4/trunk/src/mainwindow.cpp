@@ -32,7 +32,7 @@
 MainWindow::MainWindow( QWidget *parent, const QString& name )
 	: KMainWindow( parent ), sb( 0 )
 {
-    //setCaption("")
+	//setCaption("");
 }
 
 MainWindow::~MainWindow()

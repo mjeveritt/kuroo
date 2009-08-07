@@ -261,7 +261,8 @@ int PackageVersion::stability( const QString& arch ) const
 			}
 			// Accept packages when the accepted keyword is -arch and keywords contain -arch!
 			else
-				if ( (*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ) || ( *keywordIterator == "-*" && m_keywords.contains("-*") )) ) {
+				if ( ((*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ))
+					|| ( *keywordIterator == "-*" && m_keywords.contains("-*") )) ) {
 					return STABLE;
 				}
 				// Don't accept packages when the accepted keyword is -arch only

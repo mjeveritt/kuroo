@@ -39,10 +39,10 @@ public:
 	~PackageListView();
 
 public:
-	virtual	void				resetListView();
+	virtual	void					resetListView();
 	virtual	PackageItem* 			packageItemById( const QString& id ) const;
 	virtual const QString			currentId() const;
-	int					currentItemStatus() const;
+	int								currentItemStatus() const;
 
 	virtual PackageItem* 			currentPackage() const;
 	virtual const QStringList		selectedIds() const;
@@ -53,19 +53,19 @@ public:
 	 * Total number of packages in listview.
 	 * @return QString
 	 */
-	inline virtual const QString		count() const { return QString::number( m_packageIndex.count() ); }
-	void					nextPackage( const bool& isPrevious );
+	inline virtual const QString	count() const { return QString::number( m_packageIndex.count() ); }
+	void							nextPackage( const bool& isPrevious );
 
 protected slots:
-// 	void					rollOver( QTreeWidgetItem* item );
-	void					setPackageFocus( const QString& id );
-	virtual void 				indexPackage( const QString& id, PackageItem *item );
+// 	void							rollOver( QTreeWidgetItem* item );
+	void							setPackageFocus( const QString& id );
+	virtual void					indexPackage( const QString& id, PackageItem *item );
 
 protected:
-	QMap< QString, PackageItem*>			m_packageIndex;
+	QMap< QString, PackageItem*>	m_packageIndex;
 
 signals:
-// 	void					signalCurrentChanged();
+//	void							signalCurrentChanged();
 
 private:
 	QTreeWidgetItem* 				lastItem;

@@ -37,15 +37,15 @@ public:
 public slots:
 	void				slotReload( bool hasCheckedQueue );
 	void				slotQueueSummary();
-	
+
 private:
 	void				processPackage( bool viewInspector );
-	
+
 private slots:
 	void				slotInit();
-	
+
 	void				slotWhatsThis();
-	
+
 	void				slotRefresh();
 	void				slotNextPackage( bool isNext );
 	void				slotBusy();
@@ -57,20 +57,20 @@ private slots:
 	void				slotRemove();
 	void				slotClear();
 	void				slotRemoveInstalled();
-    void				slotAdvanced();
+	void				slotAdvanced();
 	void				slotPackage();
-    void				slotContextMenu();
-	
+	void				slotContextMenu(QPoint);
+
 private:
-	
+
 	// Packages loaded in Queue are a pretend result
 	bool				m_hasCheckedQueue;
-	
+
 	// Remember the initial emerge duration before installation started
 	QString				m_initialQueueTime;
-	
+
 	// The package inspector
-	PackageInspector		*m_packageInspector;
+	PackageInspector	*m_packageInspector;
 };
 
 #endif

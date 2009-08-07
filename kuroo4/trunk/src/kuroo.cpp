@@ -51,41 +51,40 @@
  * @class Kuroo
  * @short Main kde window with menus, system tray icon and statusbar.
  */
-Kuroo::Kuroo()
-	: MainWindow( 0, "Kuroo" ),
+Kuroo::Kuroo() : MainWindow( 0, "Kuroo" ),
 	systemTray( new SystemTray( this ) ),
 	kurooMessage( new Message( this ) ),
-    kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
+	kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-    kDebug() << "Initializing Kuroo GUI";
-			
+	kDebug() << "Initializing Kuroo GUI" << LINE_INFO;
+
 	setCentralWidget( m_view );
 	setupActions();
 	statusBar();
-    //setupGUI();
-		
+	//setupGUI();
+
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() )
 		systemTray->activate();
-	
+
 	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
-	
+
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
-	
+
 	// when the last window is closed, the application should quit
 	connect( kapp, SIGNAL( lastWindowClosed() ), kapp, SLOT( quit() ) );
-	
+
 	// Kuroo must initialize with db first
 	SignalistSingleton::Instance()->setKurooReady( false );
-	
+
 	// Initialize with settings in make.conf
 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
 	if ( !prefDialog )
 		prefDialog = new ConfigDialog( m_view, i18n( "settings" ), KurooConfig::self() );
-	
+
 	// Zack Rusin's delayed initialization technique
 	QTimer::singleShot( 0, m_view, SLOT( slotInit() ) );
 }
@@ -101,7 +100,7 @@ Kuroo::~Kuroo()
 			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
-		
+
 		if ( maxLoops-- == 0 ) {
 			KMessageBox::error( 0, i18n("Kuroo is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
 			break;
@@ -112,7 +111,7 @@ Kuroo::~Kuroo()
 void Kuroo::slotWhatsThis( int tabIndex )
 {
 	kDebug() << "tabIndex=" << tabIndex << LINE_INFO;
-	
+
 	if ( tabIndex == 5 )
 		whatsThis();
 }
@@ -123,21 +122,23 @@ void Kuroo::slotWhatsThis( int tabIndex )
  */
 void Kuroo::setupActions()
 {
-    /*actionCollection() is not defined in this context !
-    KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
-    KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
-	
-	(void) new KAction( i18n("&Release information"), 0, KShortcut( Qt::CTRL + Qt::Key_W ),
-	                    				this, SLOT( introWizard() ), actionCollection(), "information" );
-	
+	KStandardAction::quit( this, SLOT( slotQuit() ), 0 );
+	KStandardAction::preferences( this, SLOT( slotPreferences() ), 0 );
+
+	/*actionReleaseInfo = new KAction(, 0,
+									this, SLOT( introWizard() ), actionCollection(), "information" );
+	actionReleaseInfo->setText( i18n("&Release information") );
+	actionReleaseInfo->setShortcut( KShortcut( Qt::CTRL + Qt::Key_W ) );
+
 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( Qt::CTRL + Qt::Key_P ),
-	                                    PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
-	
+										PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( Qt::CTRL + Qt::Key_U ),
-	                                    PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
-	
+										PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
+
 	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( Qt::CTRL + Qt::Key_S ),
-                                        this, SLOT( slotSync() ), actionCollection(), "sync_portage" );*/
+										this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
+	*/
 }
 
 /**
@@ -145,31 +146,31 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy()
 {
-    if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
-        /*actionRefreshPortage->setEnabled( false );
-        actionRefreshUpdates->setEnabled( false );*/
+	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
+		/*actionRefreshPortage->setEnabled( false );
+		actionRefreshUpdates->setEnabled( false );*/
 	}
 	else {
-        /*actionRefreshPortage->setEnabled( true );
-        actionRefreshUpdates->setEnabled( true );*/
-		
+		/*actionRefreshPortage->setEnabled( true );
+		actionRefreshUpdates->setEnabled( true );*/
+
 		// Make sure progressbar is stopped!
 		KurooStatusBar::instance()->stopTimer();
 	}
-	
-	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() || 
-	     !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
-        //actionSyncPortage->setEnabled( false );
+
+	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ||
+		 !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+		//actionSyncPortage->setEnabled( false );
 	}
 	else {
-        //actionSyncPortage->setEnabled( true );
+		//actionSyncPortage->setEnabled( true );
 	}
-	
+
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
-        /*actionRefreshPortage->setEnabled( false );
+		/*actionRefreshPortage->setEnabled( false );
 		actionRefreshUpdates->setEnabled( false );
-        actionSyncPortage->setEnabled( false );*/
+		actionSyncPortage->setEnabled( false );*/
 	}
 }
 
@@ -182,16 +183,16 @@ void Kuroo::slotSync()
 	QDateTime t;
 	QString timeStamp( KurooDBSingleton::Instance()->getKurooDbMeta( "syncTimeStamp" ) );
 	QString lastSyncDate( QString::null );
-	
+
 	if ( !timeStamp.isEmpty() ) {
 		t.setTime_t( timeStamp.toUInt() );
 		lastSyncDate = loc->formatDateTime(t);
 	}
-	
-	switch( KMessageBox::questionYesNo( this, 
+
+	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to synchronize portage?<br>"
-		      "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
-			     
+			  "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
+
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
 	}
@@ -207,7 +208,7 @@ void Kuroo::slotPreferences()
 		prefDialog = new ConfigDialog( m_view, i18n( "settings" ), KurooConfig::self() );
 	prefDialog->show();
 	prefDialog->raise();
-    //prefDialog->setActiveWindow();
+	//prefDialog->setActiveWindow();
 }
 
 /**
@@ -217,7 +218,7 @@ void Kuroo::introWizard()
 {
 	if ( !wizardDialog )
 		wizardDialog = new IntroDlg( this );
-	
+
 	wizardDialog->show();
 }
 
@@ -234,7 +235,7 @@ bool Kuroo::queryClose()
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -266,11 +267,11 @@ void Kuroo::slotQuit()
 void Kuroo::slotWait()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
-		switch( KMessageBox::questionYesNo( this, 
+		switch( KMessageBox::questionYesNo( this,
 			i18n("<qt>Kuroo is busy<br><br>"
-			     "Do you want to quit?<br>"
-			     "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
-				     
+				 "Do you want to quit?<br>"
+				 "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
+
 			case KMessageBox::Yes: {
 				ThreadWeaver::instance()->abortAllJobsNamed( "DBJob" );
 				ThreadWeaver::instance()->abortAllJobsNamed( "CachePortageJob" );

@@ -33,37 +33,38 @@ static const char version[] = "0.82";
 
 int main( int argc, char **argv )
 {
-	kDebug() << "Kuroo version=" << version;
-
-    KAboutData about("kuroo","kuroo", ki18n("Kuroo"), version, ki18n("Frontend to Gentoo Portage"),
-    KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
-    about.addAuthor(ki18n("Karye"), ki18n("Original author and maintainer"), "info@kuroo.org");
-    about.addAuthor(ki18n("David C. Manuelda"), ki18n("Main developer and maintainer"), "StormByte@gmail.com");
-    about.addCredit(ki18n("Gombault Damien"), ki18n("French translation"), "desintegr@gmail.com");
-    about.addCredit(ki18n("Jan Schnackenberg"), ki18n("German translation"), "jan@schnackenberg.org");
-    about.addCredit(ki18n("Alexander Reiterer"), ki18n("German translation"), "alexander.reiterer@tuwien.ac.at");
-    about.addCredit(ki18n("Martin Baranski"), ki18n("German translation"), "eagle@eagle-cage.de");
-    about.addCredit(ki18n("Matteo Azzali"), ki18n("Italian translation"), "kaioth@tiscalinet.it");
-    about.addCredit(ki18n("Alexander N. Sørnes"), ki18n("Norwegian translation"), "alex@thehandofagony.com");
-    about.addCredit(ki18n("Konrad Mantorski"), ki18n("Polish translation"), "konrad@mantorski.com");
-    about.addCredit(ki18n("Wolfgang Bartelme"), ki18n("Kuroo icons"), "design@bartelme.at");
-    about.addCredit(ki18n("Jakob Petsovits"), ki18n("Portage version code"), "jpetso@gmx.at");
-    about.addCredit(ki18n("Björn Balazs"), ki18n("OpenUsability"), "B@lazs.de");
-    about.addCredit(ki18n("Florian Graessle"), ki18n("OpenUsability"), "holehan@gmx.de");
-    about.setHomepage("http://kuroo.org");
-    KCmdLineArgs::init( argc, argv, &about );
+	KAboutData about("kuroo", 0, ki18n("Kuroo"), version, ki18n("Frontend to Gentoo Portage"),
+			KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
+	about.addAuthor(ki18n("Karye"), ki18n("Original author and maintainer"), "info@kuroo.org");
+	about.addAuthor(ki18n("David C. Manuelda"), ki18n("Main developer and maintainer"), "StormByte@gmail.com");
+	about.addCredit(ki18n("Gombault Damien"), ki18n("French translation"), "desintegr@gmail.com");
+	about.addCredit(ki18n("Jan Schnackenberg"), ki18n("German translation"), "jan@schnackenberg.org");
+	about.addCredit(ki18n("Alexander Reiterer"), ki18n("German translation"), "alexander.reiterer@tuwien.ac.at");
+	about.addCredit(ki18n("Martin Baranski"), ki18n("German translation"), "eagle@eagle-cage.de");
+	about.addCredit(ki18n("Matteo Azzali"), ki18n("Italian translation"), "kaioth@tiscalinet.it");
+	about.addCredit(ki18n("Alexander N. Sørnes"), ki18n("Norwegian translation"), "alex@thehandofagony.com");
+	about.addCredit(ki18n("Konrad Mantorski"), ki18n("Polish translation"), "konrad@mantorski.com");
+	about.addCredit(ki18n("Wolfgang Bartelme"), ki18n("Kuroo icons"), "design@bartelme.at");
+	about.addCredit(ki18n("Jakob Petsovits"), ki18n("Portage version code"), "jpetso@gmx.at");
+	about.addCredit(ki18n("Björn Balazs"), ki18n("OpenUsability"), "B@lazs.de");
+	about.addCredit(ki18n("Florian Graessle"), ki18n("OpenUsability"), "holehan@gmx.de");
+	about.setHomepage("http://kuroo.org");
+	KCmdLineArgs::init( argc, argv, &about );
 
 	KApplication app;
-	
-    //KurooConfig::setHardVersion( version );
-    //KurooConfig::writeConfig();
-	
+
+	kDebug(0) << "Kuroo version=" << version;
+
+	//KurooConfig::setHardVersion( version );
+	//KurooConfig::writeConfig();
+
 	// see if we are starting with session management
 	if ( app.isSessionRestored() ) {
 		RESTORE( Kuroo );
-    } else {
-        Kuroo *mainWindow = new Kuroo();
-        mainWindow->show();
+	} else {
+		Kuroo *mainWindow = new Kuroo();
+		mainWindow->setObjectName( "kuroo" );
+		mainWindow->show();
 	}
 
 	return app.exec();

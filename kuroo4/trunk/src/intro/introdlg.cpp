@@ -42,10 +42,13 @@ IntroDlg::IntroDlg( QWidget* parent )
 {
 	setupUi(this);
     setWindowTitle( "Kuroo-" + KurooConfig::hardVersion() );
-    button( QWizard::BackButton )->hide();
-    button( QWizard::FinishButton )->setText( i18n("Ok") );
-    page1->show(); //should be already shown
-    page1->setFinalPage( true );
+	setOption( NoBackButtonOnStartPage, true );
+	//button( BackButton )->hide();
+	setButtonText( FinishButton, i18n("Ok") );
+	//QWizard::showPage( page1 );
+	setOption( HaveHelpButton, false );
+	//QWizard::setHelpEnabled( page1, false );
+	//setFinishEnabled( page1, true );
 
     introText->setText("<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
                        i18n("Kuroo - A KDE Portage frontend that allows you to do most common software maintenance tasks on gentoo systems</p>"));

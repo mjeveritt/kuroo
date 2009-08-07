@@ -47,73 +47,73 @@
  * Check that user is in portage group.
  */
 KurooInit::KurooInit( QObject *parent )
-    : QObject( parent ), wizardDialog( 0 )
+	: QObject( parent ), wizardDialog( 0 )
 {
-    kDebug() << "Initializing Kuroo Environment";
+	kDebug() << "Initializing Kuroo Environment" << LINE_INFO;
 	getEnvironment();
 
 	// Run intro if new version is installed or no DirHome directory is detected.
-    QDir d( kurooDir );
-    if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
+	QDir d( kurooDir );
+	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		firstTimeWizard();
-    } else {
-        if ( !KUser().isSuperUser() ) {
+	} else {
+		if ( !KUser().isSuperUser() ) {
 			checkUser();
-        }
-    }
+		}
+	}
 
 	// Get portage groupid to set directories and files owned by portage
 	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
 	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
 
 	// Setup kuroo environment
-    if ( KurooConfig::init() ) {
+	if ( KurooConfig::init() ) {
 		KurooConfig::setSaveLog( false );
 
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
-            if ( !d.mkdir( kurooDir ) ) {
+			if ( !d.mkdir( kurooDir ) ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
-				                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
-				                            "Please try again!</qt>"), i18n("Initialization") );
+											"You must start Kuroo with kdesu first time for a secure initialization.<br>"
+											"Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
-                chmod( kurooDir.toAscii(), 0770 );
-                chown( kurooDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+				chmod( kurooDir.toAscii(), 0770 );
+				chown( kurooDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 			}
 
-            d.setCurrent( kurooDir );
+			d.setCurrent( kurooDir );
 		}
 	}
 
 	// Check that backup directory exists and set correct permissions
-    QString backupDir = kurooDir + "backup";
+	QString backupDir = kurooDir + "backup";
 	if ( !d.cd( backupDir ) ) {
 		if ( !d.mkdir( backupDir ) ) {
 			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
-			                            "You must start Kuroo with kdesu first time for a secure initialization.<br>"
-			                            "Please try again!</qt>"), i18n("Initialization") );
+										"You must start Kuroo with kdesu first time for a secure initialization.<br>"
+										"Please try again!</qt>"), i18n("Initialization") );
 			exit(0);
 		}
 		else {
-            chmod( backupDir.toAscii(), 0770 );
-            chown( backupDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+			chmod( backupDir.toAscii(), 0770 );
+			chown( backupDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 		}
 	}
 
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
-    //KurooConfig::writeConfig(); //HACK: port KConfig
+	//KurooConfig::writeConfig(); //HACK: port KConfig
 
 	// Initialize the log
 	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
-        chmod( logFile.toAscii(), 0660 );
-        chown( logFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+		chmod( logFile.toAscii(), 0660 );
+		chown( logFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 	}
 
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-    QString database = kurooDir + KurooConfig::databas();
+	QString database = kurooDir + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 
 	// Check for conflicting db design or new install
@@ -122,7 +122,7 @@ KurooInit::KurooInit( QObject *parent )
 		// Backup history if there's old db version
 		if ( !dbVersion.isEmpty() ) {
 			KurooDBSingleton::Instance()->backupDb();
-            remove( database.toAscii() );
+			remove( database.toAscii() );
 			kWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
 
 			// and recreate with new structure
@@ -133,8 +133,8 @@ KurooInit::KurooInit( QObject *parent )
 	}
 
 	// Give permissions to portage:portage to access the db also
-    chmod( databaseFile.toAscii(), 0660 );
-    chown( databaseFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+	chmod( databaseFile.toAscii(), 0660 );
+	chown( databaseFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 
 	// Initialize singletons objects
 	ImagesSingleton::Instance()->init( this );
@@ -159,49 +159,50 @@ KurooInit::~KurooInit()
 void KurooInit::getEnvironment()
 {
 	DEBUG_LINE_INFO;
-    //QTextCodec *codec = QTextCodec::codecForName("utf8");
-    eProc = new KProcess();
-    *eProc << "emerge" << "--info";
-    eProc->start();
-    connect( eProc, SIGNAL( finished(int) ), this, SLOT( slotEmergeInfo() ) );
-    connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectOutput() ) );
+	//QTextCodec *codec = QTextCodec::codecForName("utf8");
+	eProc = new KProcess();
+	*eProc << "emerge" << "--info";
+	eProc->setOutputChannelMode( KProcess::OnlyStdoutChannel );
+	connect( eProc, SIGNAL( finished(int) ), this, SLOT( slotEmergeInfo() ) );
+	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectOutput() ) );
+	eProc->start();
 }
 
 void KurooInit::slotCollectOutput()
 {
-    QByteArray line;
-    while( !( line = eProc->readLine() ).isEmpty() )
-        m_emergeInfoLines += QString( line );
+	QByteArray line;
+	while( !( line = eProc->readLine() ).isEmpty() )
+		m_emergeInfoLines += QString( line );
 }
 
 void KurooInit::slotEmergeInfo()
 {
-    kDebug() << "Parsing emerge --info";
-    foreach( QString line, m_emergeInfoLines ) {
-        if ( line.startsWith( "Portage 2.0" ) ) {
+	kDebug() << "Parsing emerge --info" << LINE_INFO;
+	foreach( QString line, m_emergeInfoLines ) {
+		if ( line.startsWith( "Portage 2.0" ) ) {
 			KurooConfig::setPortageVersion21( false );
-        } else {
+		} else {
 			KurooConfig::setPortageVersion21( true );
-        }
+		}
 
-        if ( line.startsWith( "ACCEPT_KEYWORDS=" ) ) {
-            QString arch = line.section( "\"", 1, 1 );
+		if ( line.startsWith( "ACCEPT_KEYWORDS=" ) ) {
+			QString arch = line.section( "\"", 1, 1 );
 
 			// When testing we have two keywords, only pick one
-            if( arch.contains( "~" ) ) {
+			if( arch.contains( "~" ) ) {
 				arch = arch.section( "~", 1, 1 );
-            }
+			}
 
 			KurooConfig::setArch( arch );
 		}
 
-        if ( line.startsWith( "CONFIG_PROTECT=" ) )
-            KurooConfig::setConfigProtectList( line.section( "\"", 1, 1 ) );
+		if ( line.startsWith( "CONFIG_PROTECT=" ) )
+			KurooConfig::setConfigProtectList( line.section( "\"", 1, 1 ) );
 	}
 
 	kDebug(0) << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
 
-    //KurooConfig::writeConfig();
+	//KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
 }
 
@@ -212,14 +213,14 @@ void KurooInit::slotEmergeInfo()
  */
 void KurooInit::firstTimeWizard()
 {
-    IntroDlg wizardDialog;
-    kDebug() << "Running Wizard";
-    if( wizardDialog.exec() == QDialog::Accepted ) {
-        KurooConfig::setWizard( false );
-    } else {
-        exit(0); //is this the correct way to exit ?
-    }
-    KurooConfig::setInit( true );
+	IntroDlg wizardDialog;
+	kDebug() << "Running Wizard" << LINE_INFO;
+	if( wizardDialog.exec() == QDialog::Accepted ) {
+		KurooConfig::setWizard( false );
+	} else {
+		exit(0); //is this the correct way to exit ?
+	}
+	KurooConfig::setInit( true );
 }
 
 /**
@@ -228,13 +229,13 @@ void KurooInit::firstTimeWizard()
 void KurooInit::checkUser()
 {
 	QStringList userGroups = KUser().groupNames();
-    foreach( QString user, userGroups ) {
-        if ( user == "portage" )
+	foreach( QString user, userGroups ) {
+		if ( user == "portage" )
 			return;
 	}
 
 	KMessageBox::error( 0, i18n("You don't have enough permissions to run kuroo.\nPlease add yourself into portage group!"),
-	                       i18n("User permissions") );
+						   i18n("User permissions") );
 	exit(0);
 }
 

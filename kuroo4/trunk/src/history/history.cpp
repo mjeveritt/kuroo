@@ -22,16 +22,17 @@
 #include "packageemergetime.h"
 #include "scanhistoryjob.h"
 #include "cacheportagejob.h"
+#include "threadweaver/ThreadWeaver.h"
 
 #include <qdatetime.h>
 #include <kdirwatch.h>
 
-class UpdateStatisticsJob : public ThreadWeaver::DependentJob
+class UpdateStatisticsJob : public ThreadWeaver::Job
 {
 public:
-UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+UpdateStatisticsJob( QObject *dependent ) : Job( dependent) {}
 
-	virtual bool doJob() {
+    virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM statistic;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -45,7 +46,7 @@ UpdateStatisticsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {
 
 		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
+        return;
 	}
 
 };
@@ -139,7 +140,7 @@ bool History::slotRefresh()
 void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanHistoryJob( this, lines ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new ScanHistoryJob( this, lines ) );
 }
 
 /**
@@ -295,7 +296,7 @@ void History::slotParse()
 void History::updateStatistics()
 {
 	DEBUG_LINE_INFO;
-    //ThreadWeaver::instance()->queueJob( new UpdateStatisticsJob( this ) );
+    //ThreadWeaver::Weaver::instance()->enqueue( new UpdateStatisticsJob( this ) );
 }
 
 /**

@@ -33,12 +33,12 @@
 #include <kuser.h>
 #include <kio/job.h>
 
-#include <kaction.h>
-#include <kstandardaction.h>
+#include <KAction>
 #include <KActionCollection>
+#include <KStandardAction>
 
 #include "common.h"
-#include "threadweaver.h"
+#include "threadweaver/ThreadWeaver.h"
 #include "systemtray.h"
 #include "kurooinit.h"
 #include "kuroo.h"
@@ -51,7 +51,7 @@
  * @class Kuroo
  * @short Main kde window with menus, system tray icon and statusbar.
  */
-Kuroo::Kuroo() : MainWindow( 0, "Kuroo" ),
+Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 	systemTray( new SystemTray( this ) ),
 	kurooMessage( new Message( this ) ),
 	kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
@@ -59,14 +59,14 @@ Kuroo::Kuroo() : MainWindow( 0, "Kuroo" ),
 {
 	kDebug() << "Initializing Kuroo GUI" << LINE_INFO;
 
-	setCentralWidget( m_view );
+    setCentralWidget( m_view );
 	setupActions();
-	statusBar();
-	//setupGUI();
+    setStatusBar( new KurooStatusBar( this ) );
 
 	// Add system tray icon
-	if ( KurooConfig::isSystrayEnabled() )
+    if ( KurooConfig::isSystrayEnabled() ) {
 		systemTray->activate();
+    }
 
 	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
@@ -94,9 +94,9 @@ Kuroo::Kuroo() : MainWindow( 0, "Kuroo" ),
  */
 Kuroo::~Kuroo()
 {
-	int maxLoops( 99 );
+    /*int maxLoops( 99 );
 	while ( true ) {
-		if ( ThreadWeaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::instance()->isJobPending( "CachePortageJob" ) )
+        if ( ThreadWeaver::Weaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Weaver::instance()->isJobPending( "CachePortageJob" ) )
 			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
@@ -105,17 +105,8 @@ Kuroo::~Kuroo()
 			KMessageBox::error( 0, i18n("Kuroo is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
 			break;
 		}
-	}
+    }*/
 }
-
-void Kuroo::slotWhatsThis( int tabIndex )
-{
-	kDebug() << "tabIndex=" << tabIndex << LINE_INFO;
-
-	if ( tabIndex == 5 )
-		whatsThis();
-}
-
 
 /**
  * Build mainwindow menus and toolbar.
@@ -130,7 +121,7 @@ void Kuroo::setupActions()
 	actionReleaseInfo->setText( i18n("&Release information") );
 	actionReleaseInfo->setShortcut( KShortcut( Qt::CTRL + Qt::Key_W ) );
 
-	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), 0, KShortcut( Qt::CTRL + Qt::Key_P ),
+    actionRefreshPortage = new KAction( KIcon("refresh_portage"), i18n("&Refresh Packages"), 0, KShortcut( Qt::CTRL + Qt::Key_P ),
 										PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( Qt::CTRL + Qt::Key_U ),
@@ -273,8 +264,8 @@ void Kuroo::slotWait()
 				 "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 
 			case KMessageBox::Yes: {
-				ThreadWeaver::instance()->abortAllJobsNamed( "DBJob" );
-				ThreadWeaver::instance()->abortAllJobsNamed( "CachePortageJob" );
+                /*ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "DBJob" );
+                ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "CachePortageJob" );*/
 				QTimer::singleShot( 500, this, SLOT( slotTerminate() ) );
 			}
 		}

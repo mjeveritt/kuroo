@@ -23,7 +23,7 @@ ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
 add_definitions(-DQT3_SUPPORT_WARNINGS)
 
 #core
-set(core_sources core/cacheportagejob.cpp core/categorieslistview.cpp core/dependatom.cpp core/dependencyview.cpp core/emerge.cpp core/etcupdate.cpp core/filewatcher.cpp core/global.cpp core/images.cpp core/packageinspector.cpp core/packageitem.cpp core/packagelistview.cpp core/packageversion.cpp core/portagedb.cpp core/portagefiles.cpp core/scanhistoryjob.cpp core/scanportagejob.cpp core/scanupdatesjob.cpp core/signalist.cpp core/threadweaver.cpp core/tooltip.cpp core/versionview.cpp )
+set(core_sources core/cacheportagejob.cpp core/categorieslistview.cpp core/dependatom.cpp core/dependencyview.cpp core/emerge.cpp core/etcupdate.cpp core/filewatcher.cpp core/global.cpp core/packageinspector.cpp core/packageitem.cpp core/packagelistview.cpp core/packageversion.cpp core/portagedb.cpp core/portagefiles.cpp core/scanhistoryjob.cpp core/scanportagejob.cpp core/scanupdatesjob.cpp core/signalist.cpp core/tooltip.cpp core/versionview.cpp )
 kde4_add_ui_files(core_sources core/inspectorbase.ui)
 
 #history
@@ -53,12 +53,12 @@ kde4_add_ui_files(logs_sources logs/logsbase.ui)
 
 #kuroo
 set(kuroo_sources kuroo.cpp kurooinit.cpp kurooview.cpp main.cpp mainwindow.cpp message.cpp statusbar.cpp systemtray.cpp)
-kde4_add_ui_files(kuroo_sources kurooviewbase.ui messagebase.ui)
+kde4_add_ui_files(kuroo_sources messagebase.ui)
 
 kde4_add_executable(kuroo 
   ${core_sources} ${history_sources} ${portage_sources} ${config_sources} ${queue_sources} ${intro_sources} ${logs_sources} ${kuroo_sources})
 
-target_link_libraries(kuroo ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} sqlite3 )
+target_link_libraries(kuroo ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_THREADWEAVER_LIBS} sqlite3 )
 
 ########### install ###############
 #install(TARGETS kuroo ${INSTALL_TARGETS_DEFAULT_ARGS})

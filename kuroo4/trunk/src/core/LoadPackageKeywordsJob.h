@@ -20,18 +20,18 @@
 
 #include "common.h"
 #include "portagefiles.h"
-#include "threadweaver.h"
+#include <threadweaver/Job.h>
 
 /**
  * @class: LoadPackageKeywordsJob
  * @short: Thread for loading packages keyword-unmasked by user.
  */
-class LoadPackageKeywordsJob : public ThreadWeaver::DependentJob
+class LoadPackageKeywordsJob : public ThreadWeaver::Job
 {
 public:
-	LoadPackageKeywordsJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+    LoadPackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		DEBUG_LINE_INFO;
 		
 		// Collect all mask dependatoms
@@ -39,7 +39,7 @@ public:
 		if( fileInfo.isDir() ) {
 			kDebug(0) << KurooConfig::filePackageKeywords() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageKeywords() ) ) {
-				return false;
+                return;
 			}
 		}
 		QFile file( KurooConfig::filePackageKeywords() );
@@ -55,9 +55,9 @@ public:
 		
 		// Something is wrong, no files found, get outta here
 		if ( linesPackage.isEmpty() )
-			return false;
+            return;
 		
-		setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
+        //setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageKeywords_temp ( "
@@ -74,14 +74,10 @@ public:
 			QString package = tokens[0];
 			
 			if( !(*it).trimmed().startsWith( "#" ) && !(*it).trimmed().isEmpty() ) {
-				if ( rxAtom.exactMatch( package ) ) {
-
-					// Get the captured strings
-					QString category = rxAtom.cap( ThreadWeaver::POS_CATEGORY ) + "-" + rxAtom.cap( ThreadWeaver::POS_SUBCATEGORY );
-					QString name = rxAtom.cap( ThreadWeaver::POS_PACKAGE );
-					QString keywords;
-					
-					// extract this line's keywords
+                PortageAtom atom( package );
+                if ( atom.isValid() ) {
+                    // extract this line's keywords
+                    QString keywords;
 					QStringList::iterator tokenIterator = tokens.begin();
 					tokenIterator++;
 					while ( tokenIterator != tokens.end() ) {
@@ -92,11 +88,11 @@ public:
 					keywords = "~" + KurooConfig::arch();
 	
 					QString id = KurooDBSingleton::Instance()->singleQuery( 
-						"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+                        "SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
 					
 					if ( id.isEmpty() )
 						kWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
-						.arg( category ).arg( name ) << LINE_INFO;
+                        .arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
 					else
 						KurooDBSingleton::Instance()->insert( QString( 
 							"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
@@ -117,11 +113,11 @@ public:
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageKeywords_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		setStatus( "PackageKeywords", i18n("Done.") );
-		return true;
+        //setStatus( "PackageKeywords", i18n("Done.") );
+        return;
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_KEYWORDS_SCANNED );
+        PortageFilesSingleton::Instance()->refresh( PACKAGE_KEYWORDS_SCANNED );
 	}
 };

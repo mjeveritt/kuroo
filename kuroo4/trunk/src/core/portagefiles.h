@@ -22,6 +22,7 @@
 #define PORTAGEFILES_H
 
 #include <qobject.h>
+#include "dependatom.h" //define atom regexp
 
 /**
  * @class PortageFiles
@@ -54,5 +55,21 @@ signals:
 private:
 	QObject*		m_parent;
 };
+
+    enum PortageFilesAction {
+        PACKAGE_KEYWORDS_SCANNED,
+        PACKAGE_HARDMASK_SCANNED,
+        PACKAGE_USER_MASK_SCANNED,
+        PACKAGE_USER_UNMASK_SCANNED,
+        PACKAGE_USER_USE_SCANNED,
+        PACKAGE_KEYWORDS_SAVED,
+        PACKAGE_USER_MASK_SAVED,
+        PACKAGE_USER_UNMASK_SAVED,
+        PACKAGE_USER_USE_SAVED
+    };
+
+    bool mergeDirIntoFile( QString dirPath );
+    //setProgressTotalSteps -> QApplication::postEvent( this, new ProgressEvent( percent ) );
+    //setStatus -> QApplication::postEvent( this, new ProgressEvent( status ) );
 
 #endif

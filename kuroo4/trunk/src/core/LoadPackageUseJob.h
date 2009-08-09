@@ -20,24 +20,24 @@
 
 #include "common.h"
 #include "portagefiles.h"
-#include "threadweaver.h"
+#include <threadweaver/Job.h>
 
 /**
  * @class: LoadPackageUseJob
  * @short: Thread for loading packages use into db.
  */
-class LoadPackageUseJob : public ThreadWeaver::DependentJob
+class LoadPackageUseJob : public ThreadWeaver::Job
 {
 public:
-	LoadPackageUseJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+    LoadPackageUseJob( QObject *dependent ) : Job( dependent ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		
 		QFileInfo fileInfo( KurooConfig::filePackageUserUse() );
 		if( fileInfo.isDir() ) {
 			kDebug(0) << KurooConfig::filePackageUserUse() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageUserUse() ) ) {
-				return false;
+                return;
 			}
 		}
 
@@ -54,7 +54,7 @@ public:
 		
 		// Something is wrong, no files found, get outta here
 		if ( linesUse.isEmpty() )
-			return false;
+            return;
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUse_temp ( "
@@ -91,10 +91,10 @@ public:
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUse_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
+        return;
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_USER_USE_SCANNED );
+        //PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_USER_USE_SCANNED );
 	}
 };

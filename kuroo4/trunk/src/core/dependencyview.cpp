@@ -138,19 +138,7 @@ void DependencyView::DependencyItem::paintCell( QPainter *p, const QPalette &pal
  * @short Listview to build dependency-tree view.
  */
 DependencyView::DependencyView( QWidget *parent, const char *name )
-        : QTreeWidget( parent ),
-	rxAtom(	
-			"^"    										// Start of the string
-			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
-			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
-			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory
-			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-			"("           								// start of the version part
-			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-			"(?:-r\\d*)?"  								// revision
-			"\\*?)?$"          							// end of the (optional) version part and the atom string
-		)
+        : QTreeWidget( parent )
 {
     //QTreeWidget::setText( 0, name );
     setHeaderLabel( i18n( "Dependency" ) );
@@ -168,20 +156,9 @@ DependencyView::~DependencyView()
  */
 void DependencyView::slotPackageClicked( QTreeWidgetItem* item )
 {
-	QString atom( item->text(0) );
-	
-	kDebug() << "atom=" << atom << LINE_INFO;
-	
-	// Do the regexp match, which also prepares for text capture
-	if ( !rxAtom.exactMatch( atom ) )
-		return;
-	
-	QString package	= rxAtom.cap( POS_PACKAGE );
-	QString category = rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
-	
-	kDebug() << "package=" << package << LINE_INFO;
-	
-	SignalistSingleton::Instance()->packageClicked( category + " " + package );
+    PortageAtom atom( item->text(0) );
+    if( !atom.isValid() ) return;
+    SignalistSingleton::Instance()->packageClicked( atom.category() + " " + atom.package() );
 }
 
 /**

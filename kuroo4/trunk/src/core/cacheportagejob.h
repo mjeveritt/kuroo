@@ -21,8 +21,7 @@
 #ifndef CACHEPORTAGEJOB_H
 #define CACHEPORTAGEJOB_H
 
-#include "threadweaver.h"
-
+#include <threadweaver/Job.h>
 #include <qobject.h>
 
 class DbConnection;
@@ -31,7 +30,7 @@ class DbConnection;
  * @class CachePortageJob
  * @short Thread to cache package information from the Portage directory to speed up portage view refreshing.
  */
-class CachePortageJob : public ThreadWeaver::DependentJob
+class CachePortageJob : public ThreadWeaver::Job
 {
 Q_OBJECT
 public:

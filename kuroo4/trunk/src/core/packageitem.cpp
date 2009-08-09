@@ -163,7 +163,7 @@ void PackageItem::initVersions()
 		// Now that we have all available versions, sort out masked ones and leaving unmasked.
 
 		// Check if any of this package versions are hardmasked
-		atom = new DependAtom( this );
+        atom = new PortageAtom( this );
 		const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 	// 	kDebug() << "atomHardMaskedList=" << atomHardMaskedList;
 		foreach( QString mask, atomHardMaskedList ) {
@@ -180,7 +180,7 @@ void PackageItem::initVersions()
 		delete atom;
 
 		// Check if any of this package versions are user-masked
-		atom = new DependAtom( this );
+        atom = new PortageAtom( this );
 		const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 	// 	kDebug() << "atomUserMaskedList=" << atomUserMaskedList;
 		foreach( QString mask, atomUserMaskedList ) {
@@ -197,7 +197,7 @@ void PackageItem::initVersions()
 		delete atom;
 
 		// Check if any of this package versions are unmasked
-		atom = new DependAtom( this );
+        atom = new PortageAtom( this );
 		const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
 	// 	kDebug() << "atomUnmaskedList=" << atomUnmaskedList;
 		foreach( QString mask, atomUnmaskedList ) {

@@ -18,19 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
 #ifndef _KUROO_H_
 #define _KUROO_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <KApplication>
+#include "KXmlGuiWindow"
 
-#include "configdialog.h"
-#include "mainwindow.h"
 #include "kurooview.h"
-
-#include <kapplication.h>
+#include "configdialog.h"
 
 class KAction;
 class KConfigDialog;
@@ -47,7 +42,7 @@ class SystemTray;
  * @class Kuroo
  * @short Main kde window with menus, system tray icon and statusbar.
  */
-class Kuroo : public MainWindow
+class Kuroo : public KXmlGuiWindow
 {
 Q_OBJECT
 public:
@@ -78,8 +73,9 @@ private:
 	KurooView			*m_view;
 	KConfigDialog		*prefDialog;
 	IntroDlg			*wizardDialog;
+    KurooStatusBar 	    *sb;
 	bool				m_shuttingDown;
-	KAction				*actionReleaseInfo, *actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
+    KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

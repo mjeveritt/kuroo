@@ -41,7 +41,7 @@
  * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob( QObject* parent )
-	: ThreadWeaver::DependentJob( parent, "DBJob" ),
+    : ThreadWeaver::Job( parent ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {}
 
@@ -49,8 +49,8 @@ ScanPortageJob::~ScanPortageJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
-	if ( isAborted() )
-		SignalistSingleton::Instance()->scanAborted();
+    /*if ( isAborted() )
+        SignalistSingleton::Instance()->scanAborted();*/
 }
 
 /**
@@ -65,7 +65,7 @@ void ScanPortageJob::completeJob()
  * Scan Portage cache for packages in portage tree. Inserting found packages in db.
  * @return success
  */
-bool ScanPortageJob::doJob()
+void ScanPortageJob::run()
 {
 	DEBUG_LINE_INFO;
 	int count( 0 );
@@ -75,17 +75,17 @@ bool ScanPortageJob::doJob()
 
 	if ( !m_db->isConnected() ) {
 		kError(0) << "Scanning Portage. Can not connect to database" << LINE_INFO;
-		return false;
+        return;
 	}
 
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
-	if ( packageCount == "0" )
+    /*if ( packageCount == "0" )
 		setProgressTotalSteps( 25000 );
 	else
 		setProgressTotalSteps( packageCount.toInt() );
 
-	setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );
+    setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );*/
 
 	// Load Portage cache files to speed up portage scan
 	loadCache();
@@ -159,12 +159,12 @@ bool ScanPortageJob::doJob()
 			if ( ! ((*itCategory).contains( '-' ) || *itCategory == "virtual" ) )
 				continue;
 
-			// Abort the scan
+            /*// Abort the scan
 			if ( isAborted() ) {
 				kWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
 				KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
-				return false;
-			}
+                return;
+            }*/
 
 			kDebug(0) << "Scanning Portage. Reading category " << *itCategory << LINE_INFO;
 			QString category = (*itCategory).section( "-", 0, 0 );
@@ -200,12 +200,12 @@ bool ScanPortageJob::doJob()
 					if ( *itPackage == "." || *itPackage == ".." || *itPackage == "metadata.xml" || (*itPackage).contains("MERGING") )
 						continue;
 
-					// Abort the scan
+                    /*// Abort the scan
 					if ( isAborted() ) {
 						kWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
 						KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
-						return false;
-					}
+                        return;
+                    }*/
 
 					kDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
                     QStringList parts = parsePackage( *itPackage );
@@ -247,8 +247,8 @@ bool ScanPortageJob::doJob()
 						kWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << *itPackage << LINE_INFO;
 
 					// Post scan count progress
-					if ( ( ++count % 100 ) == 0 )
-						setProgress( count );
+                    /*if ( ( ++count % 100 ) == 0 )
+                        setProgress( count );*/
 				}
 			}
 			else
@@ -336,9 +336,9 @@ bool ScanPortageJob::doJob()
 	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
 	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE version_temp;", m_db );
 
-	setStatus( "ScanPortage", i18n("Done.") );
-	setProgressTotalSteps( 0 );
-	return true;
+    /*setStatus( "ScanPortage", i18n("Done.") );
+    setProgressTotalSteps( 0 );*/
+    return;
 }
 
 /**
@@ -353,7 +353,7 @@ void ScanPortageJob::scanInstalledPackages()
 	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) )
 		kWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << LINE_INFO;
 
-	setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
+    //setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
 
 	// Get list of categories for installed packages
 	QStringList categoryList = dCategory.entryList();
@@ -407,7 +407,7 @@ void ScanPortageJob::scanInstalledPackages()
 		else
 			kWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
 	}
-	setStatus( "ScanInstalled", i18n("Done.") );
+    //setStatus( "ScanInstalled", i18n("Done.") );
 }
 
 /**

@@ -34,7 +34,7 @@
  * Portage cache is scanned for package sizes, and stored in portage cache map and in the database.
  */
 CachePortageJob::CachePortageJob( QObject* parent )
-	: ThreadWeaver::DependentJob( parent, "CachePortageJob" ),
+    : ThreadWeaver::Job( parent ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
 }
@@ -69,11 +69,11 @@ bool CachePortageJob::doJob()
 
 	// Get a count of total packages for proper progress
 	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
-	if ( packageCount == "0" )
+    /*if ( packageCount == "0" )
 		setProgressTotalSteps( 35000 );
 	else
-		setProgressTotalSteps( packageCount.toInt() );
-	setStatus( "CachePortage", i18n("Collecting package information...") );
+        setProgressTotalSteps( packageCount.toInt() );*/
+    //setStatus( "CachePortage", i18n("Collecting package information...") );
 
 	// Get list of categories in Portage and Overlays
 	QStringList pathList = KurooConfig::dirPortage().split(" ");
@@ -96,12 +96,12 @@ bool CachePortageJob::doJob()
 			if ( *itCategory == "." || *itCategory == ".." )
 				continue;
 
-			// Abort the scan
+            /*// Abort the scan
 			if ( isAborted() ) {
 				kWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
-			}
+            }*/
 
 			// Get list of packages in this category
 			dPackage.setFilter( QDir::Files | QDir::NoSymLinks );
@@ -114,12 +114,12 @@ bool CachePortageJob::doJob()
 					if ( *itPackage == "." || *itPackage == ".." )
 						continue;
 
-					// Abort the scan
+                    /*// Abort the scan
 					if ( isAborted() ) {
 						kWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
-					}
+                    }*/
 					QString package = *itCategory + "/" + *itPackage;
 
                     QStringList parts = parsePackage( *itPackage );
@@ -145,8 +145,8 @@ bool CachePortageJob::doJob()
 						kWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
 
 					// Post scan count progress
-					if ( (++count % 100) == 0 )
-						setProgress( count );
+                    /*if ( (++count % 100) == 0 )
+                        setProgress( count );*/
 				}
 			}
 			else
@@ -167,8 +167,8 @@ bool CachePortageJob::doJob()
 
 	KurooDBSingleton::Instance()->query("COMMIT TRANSACTION;", m_db );
 
-	setStatus( "CachePortage", i18n("Done.") );
-	setProgress( 0 );
+    //setStatus( "CachePortage", i18n("Done.") );
+    //setProgress( 0 );
 	DEBUG_LINE_INFO;
 	return true;
 }

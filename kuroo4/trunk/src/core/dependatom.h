@@ -24,8 +24,7 @@
 #include "packageversion.h"
 
 #include <QList>
-
-class QRegExp;
+#include <QRegExp>
 
 /**
  * This class is the provides capabilities to parse DEPEND atoms and get
@@ -33,14 +32,14 @@ class QRegExp;
  * DEPEND atoms are the strings in files like package.keywords, and are
  * also (all should we say mainly) used in ebuilds to describe dependencies.
  *
- * @class DependAtom
- * @short  A depend atom parser and matching package retriever.
+ * @class PortageAtom
+ * @short  An atom parser and matching package retriever.
  */
-class DependAtom
-{
+class PortageAtom { //Atom already defined in kapp.h
 public:
-	DependAtom( PackageItem* portagePackage );
-	~DependAtom();
+    PortageAtom( PackageItem* portagePackage=0 );
+    PortageAtom( const QString& atom );
+    ~PortageAtom();
 	
 	bool parse( const QString& atom );
 	
@@ -53,6 +52,9 @@ public:
 	 * If there is no call sign, the function returns false.
 	 */
 	inline bool isBlocking() const { return m_callsign; }
+    inline bool isValid() const { return m_matches; }
+    inline const QString category() const { return m_category; }
+    inline const QString package() const { return m_package; }
 	
 private:
 	// A pointer to the portage tree from which the packages are retrieved.

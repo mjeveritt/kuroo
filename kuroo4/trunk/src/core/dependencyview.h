@@ -41,11 +41,7 @@ public:
 	
 private slots:
         void			slotPackageClicked( QTreeWidgetItem* item );
-	
-private:
-	
-	// The regular expression for the whole atom.
-	QRegExp rxAtom;
+
 };
 
 #endif

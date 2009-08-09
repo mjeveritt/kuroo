@@ -35,7 +35,7 @@
  * @short Thread for loading 'emerge -uDpv World' output into db.
  */
 ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
-	: ThreadWeaver::DependentJob( parent, "DBJob" ),
+    : ThreadWeaver::Job( parent ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList )
 {}
 
@@ -43,8 +43,8 @@ ScanUpdatesJob::~ScanUpdatesJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
-	if ( isAborted() )
-		SignalistSingleton::Instance()->scanAborted();
+    /*if ( isAborted() )
+        SignalistSingleton::Instance()->scanAborted();*/
 }
 
 /**
@@ -59,18 +59,18 @@ void ScanUpdatesJob::completeJob()
  * Insert found updates into db.
  * @return success
  */
-bool ScanUpdatesJob::doJob()
+void ScanUpdatesJob::run()
 {
 	if ( !m_db->isConnected() ) {
 		kError(0) << "Scanning updates. Can not connect to database" << LINE_INFO;
-		return false;
+        return;
 	}
 	
 	if ( m_packageList.isEmpty() )
 		kWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
 	
-	setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
-	setProgressTotalSteps( m_packageList.count() );
+    /*setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
+    setProgressTotalSteps( m_packageList.count() );*/
 	int count(0);
 
 	// Temporary tables to avoid locking main table
@@ -96,14 +96,14 @@ bool ScanUpdatesJob::doJob()
 	for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 
 		// Abort the scan
-		if ( isAborted() ) {
+        /*if ( isAborted() ) {
 			kWarning(0) << "Scanning updates. Scan aborted!" << LINE_INFO;
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
-		}
+        }*/
 		
 		// count is also ordering number
-		setProgress( count++ );
+        //setProgress( count++ );
 		
 		// Find id for this category in db
 		QString id = KurooDBSingleton::Instance()->singleQuery( " SELECT id FROM package WHERE name = '" + 
@@ -138,9 +138,9 @@ bool ScanUpdatesJob::doJob()
 	KurooDBSingleton::Instance()->insert( "INSERT INTO package SELECT * FROM package_temp;", m_db );
 	KurooDBSingleton::Instance()->singleQuery( "DROP TABLE package_temp;", m_db );
 	
-	setStatus( "ScanUpdates", i18n( "Done." ) );
-	setProgressTotalSteps( 0 );
-	return true;
+    /*setStatus( "ScanUpdates", i18n( "Done." ) );
+    setProgressTotalSteps( 0 );*/
+    return;
 }
 
 #include "scanupdatesjob.moc"

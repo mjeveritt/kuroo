@@ -21,7 +21,7 @@
 #ifndef SCANUPDATESJOB_H
 #define SCANUPDATESJOB_H
 
-#include "threadweaver.h"
+#include "threadweaver/Job.h"
 
 #include <qobject.h>
 
@@ -31,7 +31,7 @@ class DbConnection;
  * @class ScanUpdatesJob
  * @short Thread for loading emerge -uDrxPortageVersion World output into db.
  */
-class ScanUpdatesJob : public ThreadWeaver::DependentJob
+class ScanUpdatesJob : public ThreadWeaver::Job
 {
 Q_OBJECT
 public:
@@ -39,7 +39,7 @@ public:
 	~ScanUpdatesJob();
 
 private:
-	bool 						doJob();
+    void 						run();
 	void 						completeJob();
 	
 private:

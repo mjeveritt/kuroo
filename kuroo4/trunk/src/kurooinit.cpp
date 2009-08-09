@@ -136,8 +136,7 @@ KurooInit::KurooInit( QObject *parent )
 	chmod( databaseFile.toAscii(), 0660 );
 	chown( databaseFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
 
-	// Initialize singletons objects
-	ImagesSingleton::Instance()->init( this );
+    // Initialize singletons objects
 	SignalistSingleton::Instance()->init( this );
 	EmergeSingleton::Instance()->init( this );
 	EtcUpdateSingleton::Instance()->init( this );
@@ -159,7 +158,6 @@ KurooInit::~KurooInit()
 void KurooInit::getEnvironment()
 {
 	DEBUG_LINE_INFO;
-	//QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcess();
 	*eProc << "emerge" << "--info";
 	eProc->setOutputChannelMode( KProcess::OnlyStdoutChannel );

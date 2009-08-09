@@ -22,6 +22,7 @@
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
 #include "scanupdatesjob.h"
+#include "threadweaver/ThreadWeaver.h"
 
 #include <kmessagebox.h>
 
@@ -32,17 +33,17 @@
  * @class AddInstalledPackageJob
  * @short Thread for registrating packages as installed in db.
  */
-class AddInstalledPackageJob : public ThreadWeaver::DependentJob
+class AddInstalledPackageJob : public ThreadWeaver::Job
 {
 public:
-	AddInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+    AddInstalledPackageJob( QObject *dependent, const QString& package ) : Job( dependent ), m_package( package ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		
         QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
 			kWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
-			return false;
+            return;
 		}
 		QString category = parts[0];
 		QString name = parts[1];
@@ -58,7 +59,7 @@ public:
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-			return false;
+            return;
 		}
 		else {
 			KurooDBSingleton::Instance()->query( QString( "UPDATE package SET status = '%1' WHERE id = '%2';" )
@@ -73,7 +74,7 @@ public:
 			                                     .arg( id ).arg( version + " (D)" ).arg( version + " (U)" ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-			return true;
+            return;
 		}
 	}
 	
@@ -89,18 +90,18 @@ private:
  * @class RemoveInstalledPackageJob
  * @short Thread for removing packages as installed in db.
  */
-class RemoveInstalledPackageJob : public ThreadWeaver::DependentJob
+class RemoveInstalledPackageJob : public ThreadWeaver::Job
 {
 public:
-	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : DependentJob( dependent, "DBJob" ), m_package( package ) {}
+    RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : Job( dependent ), m_package( package ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
         QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
 			kWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
-			return false;
+            return;
 		}
 		QString category = parts[0];
 		QString name = parts[1];
@@ -114,7 +115,7 @@ public:
 				.arg( category ).arg( name ) << LINE_INFO;
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-			return false;
+            return;
 		}
 		else {
 			
@@ -140,7 +141,7 @@ public:
 			                                     		.arg( PACKAGE_AVAILABLE_STRING ).arg( id ).arg( version ), m_db );
 			
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-			return true;
+            return;
 		}
 	}
 	
@@ -156,13 +157,13 @@ private:
  * @class CheckUpdatesPackageJob
  * @short Thread for marking packages as updates or downgrades.
  */
-class CheckUpdatesPackageJob : public ThreadWeaver::DependentJob
+class CheckUpdatesPackageJob : public ThreadWeaver::Job
 {
 public:
-	CheckUpdatesPackageJob( QObject *dependent, const QString& id, const QString& updateVersion, int hasUpdate ) : DependentJob( dependent, "DBJob" ), 
+    CheckUpdatesPackageJob( QObject *dependent, const QString& id, const QString& updateVersion, int hasUpdate ) : Job( dependent ),
 		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
 		if ( m_hasUpdate == 0 ) {
@@ -181,7 +182,7 @@ public:
 		}
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
+        return;
 	}
 	
 	virtual void completeJob() {
@@ -263,7 +264,7 @@ bool Portage::slotRefresh()
 	// Update cache if empty
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
-        //ThreadWeaver::instance()->queueJob( new CachePortageJob( this ) );
+        //ThreadWeaver::Weaver::instance()->enqueue( new CachePortageJob( this ) );
 	}
 	else
 		slotScan();
@@ -312,7 +313,7 @@ bool Portage::slotScan()
 	}
 	
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanPortageJob( this ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new ScanPortageJob( this ) );
 	
 	return true;
 }
@@ -466,7 +467,7 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
  */
 void Portage::addInstalledPackage( const QString& package )
 {
-	ThreadWeaver::instance()->queueJob( new AddInstalledPackageJob( this, package ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new AddInstalledPackageJob( this, package ) );
 }
 
 /**
@@ -475,7 +476,7 @@ void Portage::addInstalledPackage( const QString& package )
  */
 void Portage::removeInstalledPackage( const QString& package )
 {
-	ThreadWeaver::instance()->queueJob( new RemoveInstalledPackageJob( this, package ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new RemoveInstalledPackageJob( this, package ) );
 }
 
 /**
@@ -495,7 +496,7 @@ bool Portage::slotRefreshUpdates()
 bool Portage::slotLoadUpdates()
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::instance()->queueJob( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
 	return true;
 }
 
@@ -504,7 +505,7 @@ bool Portage::slotLoadUpdates()
  */
 void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
 {
-	ThreadWeaver::instance()->queueJob( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
 }
 
 #include "portage.moc"

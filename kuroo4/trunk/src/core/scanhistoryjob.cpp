@@ -32,7 +32,7 @@
  * @short Thread for parsing emerge/unmerge/sync entries found in emerge.log.
  */
 ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
-	: ThreadWeaver::DependentJob( parent, "DBJob" ),
+    : ThreadWeaver::Job( parent ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines )
 {}
 
@@ -40,8 +40,8 @@ ScanHistoryJob::~ScanHistoryJob()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
-	if ( isAborted() )
-		SignalistSingleton::Instance()->scanAborted();
+    /*if ( isAborted() )
+        SignalistSingleton::Instance()->scanAborted();*/
 }
 
 /**
@@ -57,11 +57,11 @@ void ScanHistoryJob::completeJob()
  * add emerge duration and increment emerge counts.
  * @return success
  */
-bool ScanHistoryJob::doJob()
+void ScanHistoryJob::run()
 {
 	if ( !m_db->isConnected() ) {
 		kError(0) << "Parsing emerge.log. Can not connect to database" << LINE_INFO;
-		return false;
+        return;
 	}
 	
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
@@ -80,11 +80,11 @@ bool ScanHistoryJob::doJob()
     foreach ( QString line, m_logLines ) {
 		
 		// Abort the scan
-		if ( isAborted() ) {
+        /*if ( isAborted() ) {
 			kWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
-			return false;
-		}
+            return;
+        }*/
 		
         QString emergeLine = QString( line ).section( rxTimeStamp, 1, 1 );
         timeStamp = QString( line ).section( ": " + emergeLine, 0, 0 );
@@ -184,7 +184,7 @@ bool ScanHistoryJob::doJob()
 	if ( !syncTimeStamp.isEmpty() )
 		KurooDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
 	
-	return true;
+    return;
 }
 
 QString ScanHistoryJob::escapeString(const QString& str) const {

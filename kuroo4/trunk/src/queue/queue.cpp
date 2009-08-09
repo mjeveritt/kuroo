@@ -19,7 +19,8 @@
 ***************************************************************************/
 
 #include "common.h"
-#include "threadweaver.h"
+#include "threadweaver/ThreadWeaver.h"
+#include "threadweaver/Job.h"
 
 #include <qtimer.h>
 
@@ -27,13 +28,13 @@
  * @class AddQueuePackageIdListJob
  * @short Thread for adding packages to the queue in db.
  */
-class AddQueuePackageIdListJob : public ThreadWeaver::DependentJob
+class AddQueuePackageIdListJob : public ThreadWeaver::Job
 {
 public:
-	AddQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), 
+    AddQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : Job( dependent ),
 		m_packageIdList( packageIdList ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE queue_temp ( "
 		                                    		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -57,7 +58,7 @@ public:
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE queue_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
+        return;
 	}
 	
 	virtual void completeJob() {
@@ -72,19 +73,19 @@ private:
  * @class RemoveQueuePackageIdListJob
  * @short Thread for removing packages from the queue in db.
  */
-class RemoveQueuePackageIdListJob : public ThreadWeaver::DependentJob
+class RemoveQueuePackageIdListJob : public ThreadWeaver::Job
 {
 public:
-	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : DependentJob( dependent, "DBJob" ), 
+    RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : Job( dependent ),
 		m_packageIdList( packageIdList ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
         foreach ( QString id, m_packageIdList )
 			KurooDBSingleton::Instance()->singleQuery( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
                                                         .arg(id).arg(id), m_db );
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
+        return;
 	}
 	
 	virtual void completeJob() {
@@ -99,13 +100,13 @@ private:
  * @class AddResultsPackageListJob
  * @short Thread for adding packages to results in db. Used by emerge.
  */
-class AddResultsPackageListJob : public ThreadWeaver::DependentJob
+class AddResultsPackageListJob : public ThreadWeaver::Job
 {
 public:
-	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : DependentJob( dependent, "DBJob" ), 
+    AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : Job( dependent ),
 		m_packageList( packageList ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		
 		// Collect end-user packages
@@ -128,7 +129,7 @@ public:
 			if ( id.isEmpty() ) {
 				kWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
 								.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
-				return false;
+                return;
 			}
 			
 			// We found a dependency, add it
@@ -145,7 +146,7 @@ public:
 			}
 		}
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		return true;
+        return;
 	}
 	
 	virtual void completeJob() {
@@ -335,7 +336,7 @@ bool Queue::isQueueBusy()
 void Queue::addPackageList( const EmergePackageList &packageList )
 {
 	if ( !packageList.isEmpty() )
-		ThreadWeaver::instance()->queueJob( new AddResultsPackageListJob( this, packageList ) );
+        ThreadWeaver::Weaver::instance()->enqueue( new AddResultsPackageListJob( this, packageList ) );
 }
 
 /**
@@ -344,7 +345,7 @@ void Queue::addPackageList( const EmergePackageList &packageList )
  */
 void Queue::removePackageIdList( const QStringList& packageIdList )
 {
-	ThreadWeaver::instance()->queueJob( new RemoveQueuePackageIdListJob( this, packageIdList ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new RemoveQueuePackageIdListJob( this, packageIdList ) );
 }
 
 /**
@@ -353,7 +354,7 @@ void Queue::removePackageIdList( const QStringList& packageIdList )
  */
 void Queue::addPackageIdList( const QStringList& packageIdList )
 {
-	ThreadWeaver::instance()->queueJob( new AddQueuePackageIdListJob( this, packageIdList ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new AddQueuePackageIdListJob( this, packageIdList ) );
 }
 
 /**

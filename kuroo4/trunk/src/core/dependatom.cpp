@@ -26,15 +26,7 @@
 #include "packageitem.h"
 #include <QList>
 
-// capture positions inside the regexp. (like m_rxAtom.cap(POS_CALLSIGN))
-enum Positions {
-		POS_CALLSIGN = 1,
-		POS_PREFIX,
-		POS_CATEGORY,
-		POS_SUBCATEGORY,
-		POS_PACKAGE,
-		POS_VERSION
-};
+//CLEAN: rename files to atom
 
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
@@ -42,14 +34,14 @@ enum Positions {
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
 
 /**
- * @class DependAtom
+ * @class PortageAtom
  * @short Class that parse and compare depend atoms.
  * Initialize this object.
  * @param packages  The package that will be filtered out.
  */
-DependAtom::DependAtom( PackageItem* portagePackage )
+PortageAtom::PortageAtom( PackageItem* portagePackage )
 	: m_portagePackage( portagePackage ),
-	rxAtom(	
+    rxAtom(
 	       	"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
 			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
@@ -65,7 +57,12 @@ DependAtom::DependAtom( PackageItem* portagePackage )
 {
 }
 
-DependAtom::~DependAtom()
+PortageAtom::PortageAtom( const QString& atom ) {
+    PortageAtom();
+    parse( atom );
+}
+
+PortageAtom::~PortageAtom()
 {
 }
 
@@ -81,7 +78,7 @@ DependAtom::~DependAtom()
  *              will not be considered valid in any case.
  * @return  true if the atom is valid, false otherwise.
  */
-bool DependAtom::parse( const QString& atom )
+bool PortageAtom::parse( const QString& atom )
 {
 // 	kDebug() << "atom=" << atom << LINE_INFO;
 	
@@ -92,11 +89,11 @@ bool DependAtom::parse( const QString& atom )
 	}
 	
 	// Get the captured strings
-	m_callsign	= rxAtom.cap( POS_CALLSIGN ).isEmpty() ? false : true;
-	m_prefix	= rxAtom.cap( POS_PREFIX );
-	m_package	= rxAtom.cap( POS_PACKAGE );
-	m_version	= rxAtom.cap( POS_VERSION );
-	m_category	= rxAtom.cap( POS_CATEGORY ) + "-" + rxAtom.cap( POS_SUBCATEGORY );
+    m_callsign	= rxAtom.cap( 0 ).isEmpty() ? false : true;
+    m_prefix	= rxAtom.cap( 1 );
+    m_category	= rxAtom.cap( 2 ) + "-" + rxAtom.cap( 3 );
+    m_package	= rxAtom.cap( 4 );
+    m_version	= rxAtom.cap( 5 );
 	
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
@@ -119,7 +116,7 @@ bool DependAtom::parse( const QString& atom )
  * The searched packages are the ones from the package list.
  * If no matching package versions are found, an empty list is returned.
  */
-QList<PackageVersion*> DependAtom::matchingVersions()
+QList<PackageVersion*> PortageAtom::matchingVersions()
 {
         QList<PackageVersion*> matchingVersions;
 	
@@ -160,12 +157,12 @@ QList<PackageVersion*> DependAtom::matchingVersions()
 	
         QList<PackageVersion*> versions = m_portagePackage->versionList();
 
-// 	kDebug() << "DependAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
+// 	kDebug() << "PortageAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
 	
 	// So, let's iterate through the versions to check if they match or not
         for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 		
-// 		kDebug() << "DependAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<  
+// 		kDebug() << "PortageAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
 		
 		if ( ( matchAllVersions ) ||

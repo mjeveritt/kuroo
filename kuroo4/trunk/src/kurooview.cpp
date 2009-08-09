@@ -40,7 +40,6 @@
 #include "historytab.h"
 #include "mergetab.h"
 #include "packagelistview.h"
-#include "ui_kurooviewbase.h"
 #include "packageinspector.h"
 
 /**
@@ -52,15 +51,15 @@
  */
 KurooView::KurooView( QWidget *parent ) :
 	//DCOPObject( "kurooIface" ),
-	KPageDialog( parent ),
+    KPageWidget( parent ),
 	viewPortage( 0 ), viewHistory( 0 ), viewQueue( 0 ), viewLogs( 0 ), viewMerge( 0 ), packageInspector( 0 ),
 	m_isHistoryRestored( false )
 {
-	// Create the package inspector //defined to be able to hide it on page change
-	packageInspector = new PackageInspector( this );
+    setFaceType( List );
 
-	addPage( new QLabel( "dummy label to prove the page shows up" ), "test page" );
-
+    // Create the package inspector //Matt: defined here to be able to hide it on page change
+    packageInspector = new PackageInspector( this );
+	
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
 	KPageWidgetItem* pagePortage = addPage( viewPortage, i18n("Packages") );
@@ -96,9 +95,7 @@ KurooView::KurooView( QWidget *parent ) :
 	// Confirm changes in views with bleue text menu
 	//connect( viewMenu, SIGNAL( currentChanged( QListWidgetItem* ) ), this, SLOT( slotResetMenu( QListWidgetItem* ) ) );
 }
-
-KurooView::~KurooView()
-{}
+KurooView::~KurooView() {}
 
 /**
  * Activate corresponding page when clicking on icon in menu.

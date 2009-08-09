@@ -91,7 +91,7 @@ bool PackageVersion::isNewerThan( const QString& otherVersion ) const
 	// Numerical representation for possible trailing characters.
 	int thisTrailingChar, thatTrailingChar;
 	
-	uint pos; // multi-purpose position integer
+    int pos; // multi-purpose position integer
 	
 	// start index of revision, suffix, and trailing character
 	int revisionPos, suffixPos, trailingCharPos;
@@ -261,8 +261,7 @@ int PackageVersion::stability( const QString& arch ) const
 			}
 			// Accept packages when the accepted keyword is -arch and keywords contain -arch!
 			else
-				if ( ((*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ))
-					|| ( *keywordIterator == "-*" && m_keywords.contains("-*") )) ) {
+                if( (*keywordIterator == "-" + arch && m_keywords.contains( "-" + arch ) ) || ( *keywordIterator == "-*" && m_keywords.contains("-*") ) ) {
 					return STABLE;
 				}
 				// Don't accept packages when the accepted keyword is -arch only

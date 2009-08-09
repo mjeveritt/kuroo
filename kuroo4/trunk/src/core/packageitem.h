@@ -23,9 +23,10 @@
 
 #include <QObject>
 #include <QTreeWidget>
+#include "dependatom.h"
 
 class PackageVersion;
-class DependAtom;
+
 
 /**
  * @class PackageItem
@@ -172,7 +173,7 @@ private:
 	QMap<QString, PackageVersion*>			m_versionMap;
 
 	// Atom object needed for versions stability
-	DependAtom*								atom;
+    PortageAtom* 						atom;
 
 	// Formatted string
 	QString									m_linesInstalled, m_linesAvailable, m_linesEmerge;

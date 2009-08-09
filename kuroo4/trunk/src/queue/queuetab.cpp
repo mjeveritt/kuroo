@@ -56,8 +56,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 
 	// Rmb actions.
-	connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ),
-			 this, SLOT( slotContextMenu(QPoint) ) );
+    connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( slotContextMenu() ) );
 
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );

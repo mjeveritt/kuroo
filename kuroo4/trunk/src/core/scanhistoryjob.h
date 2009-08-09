@@ -21,7 +21,7 @@
 #ifndef SCANHISTORYJOB_H
 #define SCANHISTORYJOB_H
 
-#include "threadweaver.h"
+#include "threadweaver/Job.h"
 
 #include <qobject.h>
 
@@ -35,7 +35,7 @@ typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
  * @class ScanHistoryJob
  * @short Thread for parsing emerge/unmerge entries found in emerge.log.
  */
-class ScanHistoryJob : public ThreadWeaver::DependentJob
+class ScanHistoryJob : public ThreadWeaver::Job
 {
 Q_OBJECT
 public:
@@ -43,7 +43,7 @@ public:
 	~ScanHistoryJob();
 
 private:
-	bool 						doJob();
+    void 						run();
 	void 						completeJob();
 	
 	QString 					escapeString( const QString&) const;

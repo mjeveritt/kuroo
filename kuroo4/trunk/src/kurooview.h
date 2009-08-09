@@ -36,7 +36,7 @@ class PackageInspector;
  * @class KurooView
  * @short Create the gui content with icon-menu and pages.
  */
-class KurooView : public KPageDialog
+class KurooView : public KPageWidget
 {
 Q_OBJECT
 public:

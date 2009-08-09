@@ -21,7 +21,7 @@
 #ifndef SCANPORTAGEJOB_H
 #define SCANPORTAGEJOB_H
 
-#include "threadweaver.h"
+#include "threadweaver/Job.h"
 
 #include <qobject.h>
 
@@ -33,7 +33,7 @@ typedef QMap<QString, QString> InstalledMap;
  * @class ScanPortageJob
  * @short Thread for scanning local portage tree.
  */
-class ScanPortageJob : public ThreadWeaver::DependentJob
+class ScanPortageJob : public ThreadWeaver::Job
 {
 Q_OBJECT
 public:
@@ -42,7 +42,7 @@ public:
 
 private:
 	void						scanInstalledPackages();
-	bool 						doJob();
+    void 						run();
 	void 						completeJob();
 	Info						scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
 	QString						formatSize( const QString& size );

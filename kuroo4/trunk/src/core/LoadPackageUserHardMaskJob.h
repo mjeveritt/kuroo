@@ -20,25 +20,25 @@
 
 #include "common.h"
 #include "portagefiles.h"
-#include "threadweaver.h"
+#include <threadweaver/Job.h>
 
 /**
  * @class: LoadPackageUserMaskJob
  * @short: Thread for loading user masked packages into db.
  */
-class LoadPackageUserMaskJob : public ThreadWeaver::DependentJob
+class LoadPackageUserMaskJob : public ThreadWeaver::Job
 {
 public:
-	LoadPackageUserMaskJob( QObject *dependent ) : DependentJob( dependent, "DBJob" ) {}
+    LoadPackageUserMaskJob( QObject *dependent ) : Job( dependent ) {}
 	
-	virtual bool doJob() {
+    virtual void run() {
 		
 		// Collect all mask dependatoms from /etc/portage/package.mask
 		QFileInfo fileInfo( KurooConfig::filePackageUserMask() );
 		if( fileInfo.isDir() ) {
 			kDebug(0) << KurooConfig::filePackageUserMask() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageUserMask() ) ) {
-				return false;
+                return;
 			}
 		}
 
@@ -55,9 +55,9 @@ public:
 		
 		// Something is wrong, no files found, get outta here
 		if ( linesDependAtom.isEmpty() )
-			return false;
+            return;
 		
-		setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
+        //setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
 		
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUserMask_temp ( "
@@ -79,18 +79,14 @@ public:
                     commentLines += (*it).replace('\'', "''").replace('%', "&#37;").toUtf8();
 				}
 				else {
-					if ( rxAtom.exactMatch( *it ) ) {
-						
-						// Get the captured strings
-						QString category = rxAtom.cap( ThreadWeaver::POS_CATEGORY ) + "-" + rxAtom.cap( ThreadWeaver::POS_SUBCATEGORY );
-						QString name = rxAtom.cap( ThreadWeaver::POS_PACKAGE );
-						
+                    PortageAtom atom( *it );
+                    if ( atom.isValid() ) {
 						QString id = KurooDBSingleton::Instance()->singleQuery( 
-							"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
+                            "SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
 						
 						if ( id.isEmpty() )
 							kWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
-								.arg( category ).arg( name ) << LINE_INFO;
+                                .arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
 						else
 							KurooDBSingleton::Instance()->insert( QString( 
 								"INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
@@ -112,11 +108,11 @@ public:
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUserMask_temp;", m_db );
 		
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-		setStatus( "PackageUserMask", i18n("Done.") );
-		return true;
+        //setStatus( "PackageUserMask", i18n("Done.") );
+        return;
 	}
 	
 	virtual void completeJob() {
-		PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_USER_MASK_SCANNED );
+        //PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_USER_MASK_SCANNED );
 	}
 };

@@ -1,0 +1,8 @@
+ebuild parsing -> homepage/use/license/slot/keywords
+keywords resolution -> set available versions, updates
+optimize scan/display + full text fuzzy? search
+edit uses, world
+layman support
+uninstall
+merge configuration
+package usage statistics 

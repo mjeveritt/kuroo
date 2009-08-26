@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PortageBase</class>
+ <widget class="QWidget" name="PortageBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>787</width>
+    <height>477</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QVBoxLayout" name="_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="KButtonGroup" name="filterGroup">
+       <property name="title">
+        <string/>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="margin">
+         <number>5</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="radioAll">
+          <property name="text">
+           <string>&amp;All</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+A</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="buttonGroupId" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioAvailable">
+          <property name="text">
+           <string>Available</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioInstalled">
+          <property name="text">
+           <string>I&amp;nstalled</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+N</string>
+          </property>
+          <property name="buttonGroupId" stdset="0">
+           <number>2</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioWorld">
+          <property name="text">
+           <string>World</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioUpdate">
+          <property name="text">
+           <string>&amp;Update</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+U</string>
+          </property>
+          <property name="buttonGroupId" stdset="0">
+           <number>4</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="searchLine"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QSplitter" name="browserSplitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QHBoxLayout" name="categoryLayout">
+       <item>
+        <widget class="QListView" name="categoryView"/>
+       </item>
+       <item>
+        <widget class="QListView" name="subcategoryView"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QSplitter" name="packageSplitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QTableView" name="packageView"/>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="summaryLayout">
+        <item>
+         <widget class="KTextBrowser" name="summaryBrowser">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="packageGroup">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pbInstall">
+            <property name="toolTip">
+             <string>Add/Remove selected packages to the Installation Queue</string>
+            </property>
+            <property name="text">
+             <string>Install</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+Q</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pbUninstall">
+            <property name="toolTip">
+             <string>Uninstall selected packages...</string>
+            </property>
+            <property name="text">
+             <string>Uninstall</string>
+            </property>
+            <property name="shortcut">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KButtonGroup</class>
+   <extends>QGroupBox</extends>
+   <header>kbuttongroup.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>ktextbrowser.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">ktextbrowser.h</include>
+  <include location="local">kpushbutton.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

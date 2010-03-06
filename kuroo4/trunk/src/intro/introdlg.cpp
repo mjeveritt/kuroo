@@ -40,26 +40,22 @@
  */
 IntroDlg::IntroDlg( QWidget* parent )
 {
-	setupUi(this);
-    setWindowTitle( "Kuroo-" + KurooConfig::hardVersion() );
+	setupUi( this );
+	setWindowTitle( "Kuroo-" + KurooConfig::hardVersion() );
 	setOption( NoBackButtonOnStartPage, true );
-	//button( BackButton )->hide();
 	setButtonText( FinishButton, i18n("Ok") );
-	//QWizard::showPage( page1 );
 	setOption( HaveHelpButton, false );
-	//QWizard::setHelpEnabled( page1, false );
-	//setFinishEnabled( page1, true );
 
-    introText->setText("<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
-                       i18n("Kuroo - A KDE Portage frontend that allows you to do most common software maintenance tasks on gentoo systems</p>"));
+	introText->setText("<h2>Kuroo-" + KurooConfig::hardVersion().section( "_", 0, 0 ) + "</h2><p>" +
+					   i18n("Kuroo - A KDE Portage frontend that allows you to do most common software maintenance tasks on gentoo systems</p>"));
 
-    backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></tr>" ).arg( kurooDir + "backup/" ) +
-                          "<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
-                          "<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
-                          "<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
-                          "<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
-                          "<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
-                          "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" );
+	backupFiles->setText( i18n( "<qt><table width=100%><tr><td>Make copies into %1 of following files:</td></tr>", kurooDir + "backup/" ) +
+						  "<tr><td>" + KurooConfig::filePackageKeywords() + "</td></tr>" +
+						  "<tr><td>" + KurooConfig::filePackageUserUnMask() + "</td></tr>" +
+						  "<tr><td>" + KurooConfig::filePackageUserMask() + "</td></tr>" +
+						  "<tr><td>" + KurooConfig::filePackageUserUse() + "</td></tr>" +
+						  "<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
+						  "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>" );
 	adjustSize();
 }
 IntroDlg::~IntroDlg() {}
@@ -67,30 +63,30 @@ IntroDlg::~IntroDlg() {}
 void IntroDlg::accept()
 {
 	// Backup all portage files changeable by kuroo
-    if ( cbBackup->isChecked() ) {
+	if ( cbBackup->isChecked() ) {
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
 		QString filePackageKeywords( KurooConfig::filePackageKeywords() );
-        KIO::file_copy( filePackageKeywords, kurooDir + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
+		KIO::file_copy( filePackageKeywords, kurooDir + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
 				-1, KIO::Overwrite | KIO::HideProgressInfo);
 		QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
-        KIO::file_copy( filePackageUserUnMask, kurooDir + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
+		KIO::file_copy( filePackageUserUnMask, kurooDir + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString filePackageUserMask( KurooConfig::filePackageUserMask() );
-        KIO::file_copy( filePackageUserMask, kurooDir + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
+		KIO::file_copy( filePackageUserMask, kurooDir + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
-        KIO::file_copy( filePackageUserUse, kurooDir + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
+		KIO::file_copy( filePackageUserUse, kurooDir + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString fileWorld( KurooConfig::fileWorld() );
-        KIO::file_copy( fileWorld, kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt,
+		KIO::file_copy( fileWorld, kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt,
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString fileMakeConf( KurooConfig::fileMakeConf() );
-        KIO::file_copy( fileMakeConf, kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
+		KIO::file_copy( fileMakeConf, kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 	}
 
 	KMessageBox::enableAllMessages();
-    QWizard::accept();
+	QWizard::accept();
 }
 
 #include "introdlg.moc"

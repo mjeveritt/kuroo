@@ -61,10 +61,10 @@ ConfigDialog::ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleto
 
 	addPage( &opt1, i18n("General"), QString("kuroo"), i18n("General preferences") );
 	addPage( &opt2, i18n("make.conf"), QString("kuroo_makeconf"), i18n("Edit your make.conf file") );
-	addPage( &opt7, i18n("Etc-update warnings"), QString("messagebox_warning"), i18n("Edit your etc-update warning file list") );
+	addPage( &opt7, i18n("Etc-update warnings"), QString("dialog-warning"), i18n("Edit your etc-update warning file list") );
 	addPage( &opt8, i18n("Housekeeping"), QString("kuroo_housekeeping"), i18n("Control automatic file cleanup and rebuilding") );
 
-    connect( this, SIGNAL( settingsChanged(QString) ), this, SLOT( slotSaveAll() ) );
+	connect( this, SIGNAL( settingsChanged(QString) ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
 
 	parseMakeConf();
@@ -124,7 +124,7 @@ const QStringList ConfigDialog::readMakeConf()
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
 
 	if ( makeconf.open( QIODevice::ReadOnly ) ) {
-        QTextStream stream( &makeconf );
+		QTextStream stream( &makeconf );
 		QStringList lines;
 
 		// Collect all lines except comments
@@ -143,22 +143,22 @@ const QStringList ConfigDialog::readMakeConf()
 				continue;
 			}
 
-            line = line.simplified();
+			line = line.simplified();
 			if ( line.contains( "=" ) ) {
 				linesConcatenated += extendedLine;
 				extendedLine = line.section( QRegExp("\\\\s*$"), 0, 0 ).simplified();
 
 				linesConcatenated += linesCommented;
 				linesCommented.clear();
-            } else {
+			} else {
 				extendedLine += " " + line.section( QRegExp("\\\\s*$"), 0, 0 ).simplified();
-            }
+			}
 		}
 
 		linesConcatenated += extendedLine;
-    } else {
+	} else {
 		kError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
-    }
+	}
 
 	return linesConcatenated;
 }
@@ -628,12 +628,12 @@ bool ConfigDialog::saveMakeConf()
 	foreach ( line, linesConcatenated ) {
 
 		if ( line.contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
-					      "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-		                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
-					      "PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
-					      "RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
-					      "PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
-			                      "PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
+						  "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
+									  "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
+						  "PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
+						  "RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
+						  "PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
+								  "PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
 
 			if ( rxLine.indexIn( line ) > -1 )
 				keywords[ rxLine.cap(1) ] = rxLine.cap(4);
@@ -727,9 +727,9 @@ bool ConfigDialog::saveMakeConf()
 
 	keywords[ "RSYNC_TIMEOUT" ] = KurooConfig::rsyncTimeOut();
 
-        QString elog_value = "";
-        if( KurooConfig::elogWarn() ) elog_value.append("warn");
-        if( KurooConfig::elogError() ) elog_value.append("error");
+	QString elog_value = "";
+	if( KurooConfig::elogWarn() ) elog_value.append("warn");
+	if( KurooConfig::elogError() ) elog_value.append("error");
 	if( KurooConfig::elogLog() ) elog_value.append("log");
 	if( KurooConfig::elogInfo() ) elog_value.append("info");
 	if( KurooConfig::elogQa() ) elog_value.append("qa");
@@ -752,7 +752,7 @@ bool ConfigDialog::saveMakeConf()
 
 	// Write back everything
 	if ( file.open( QIODevice::WriteOnly ) ) {
-        QTextStream stream( &file );
+		QTextStream stream( &file );
 
 		bool top( true );
 		foreach ( line, linesConcatenated ) {
@@ -764,17 +764,17 @@ bool ConfigDialog::saveMakeConf()
 				top = false;
 
 			if ( line.contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
-			                              "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-			                              "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
-			                              "PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|"
-			                              "RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
-                                                      "PORTAGE_ELOG_CLASSES|PORTAGE_ELOG_SYSTEM|PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
-			                              "PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
+										  "DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
+										  "CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
+										  "PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|"
+										  "RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
+										  "PORTAGE_ELOG_CLASSES|PORTAGE_ELOG_SYSTEM|PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
+										  "PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
 
 				if ( rxLine.indexIn( line ) > -1 ) {
 					QString keyword = rxLine.cap(1);
 					if ( !keywords[ keyword ].isEmpty() )
-    					stream << keyword << "=\"" << keywords[ keyword ] << "\"\n";
+						stream << keyword << "=\"" << keywords[ keyword ] << "\"\n";
 					keywords.take( keyword );
 				}
 			}

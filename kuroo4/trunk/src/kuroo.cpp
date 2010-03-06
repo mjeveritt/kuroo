@@ -59,14 +59,15 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 {
 	kDebug() << "Initializing Kuroo GUI" << LINE_INFO;
 
-    setCentralWidget( m_view );
+	setCentralWidget( m_view );
 	setupActions();
-    setStatusBar( new KurooStatusBar( this ) );
+	setStatusBar( new KurooStatusBar( this ) );
 
 	// Add system tray icon
-    if ( KurooConfig::isSystrayEnabled() ) {
+	if ( KurooConfig::isSystrayEnabled() ) {
 		systemTray->activate();
-    }
+	}
+
 
 	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
@@ -94,9 +95,9 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
  */
 Kuroo::~Kuroo()
 {
-    /*int maxLoops( 99 );
+	/*int maxLoops( 99 );
 	while ( true ) {
-        if ( ThreadWeaver::Weaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Weaver::instance()->isJobPending( "CachePortageJob" ) )
+		if ( ThreadWeaver::Weaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Weaver::instance()->isJobPending( "CachePortageJob" ) )
 			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
@@ -105,7 +106,7 @@ Kuroo::~Kuroo()
 			KMessageBox::error( 0, i18n("Kuroo is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
 			break;
 		}
-    }*/
+	}*/
 }
 
 /**
@@ -113,23 +114,42 @@ Kuroo::~Kuroo()
  */
 void Kuroo::setupActions()
 {
-	KStandardAction::quit( this, SLOT( slotQuit() ), 0 );
-	KStandardAction::preferences( this, SLOT( slotPreferences() ), 0 );
+	KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
+	KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 
-	/*actionReleaseInfo = new KAction(, 0,
+	KAction* actionReleaseInfo = new KAction( i18n("&Release information"), this );
+	actionReleaseInfo->setShortcut( KShortcut( Qt::CTRL + Qt::Key_W ) );
+	actionCollection()->addAction( "information", actionReleaseInfo );
+	connect( actionReleaseInfo, SIGNAL(triggered(bool)), this, SLOT(introWizard()) );
+	/*
+	actionReleaseInfo = new KAction(, 0,
 									this, SLOT( introWizard() ), actionCollection(), "information" );
 	actionReleaseInfo->setText( i18n("&Release information") );
-	actionReleaseInfo->setShortcut( KShortcut( Qt::CTRL + Qt::Key_W ) );
+	actionReleaseInfo->setShortcut(  );
+    */
+	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), this );
+	actionRefreshPortage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_P ) );
+		//PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	actionCollection()->addAction( "refresh_portage", actionRefreshPortage );
+	connect( actionRefreshPortage, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefresh() ) );
 
-    actionRefreshPortage = new KAction( KIcon("refresh_portage"), i18n("&Refresh Packages"), 0, KShortcut( Qt::CTRL + Qt::Key_P ),
-										PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), this );
+	actionRefreshUpdates->setShortcut( KShortcut( Qt::CTRL + Qt::Key_U ));
+	actionCollection()->addAction( "refresh_updates", actionRefreshUpdates );
+	connect( actionRefreshUpdates, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefreshUpdates()) );
 
+	actionSyncPortage = new KAction( i18n("&Sync Portage"), this );
+	actionSyncPortage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_S ) );
+	actionCollection()->addAction( "sync_portage", actionSyncPortage );
+	connect( actionSyncPortage, SIGNAL(triggered(bool)), this, SLOT( slotSync() ) );
+	/*
 	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( Qt::CTRL + Qt::Key_U ),
 										PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 
-	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, KShortcut( Qt::CTRL + Qt::Key_S ),
-										this, SLOT( slotSync() ), actionCollection(), "sync_portage" );
-	*/
+	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, ,
+										, ,  );
+										*/
+	setupGUI( Default, "kurooui.rc" );
 }
 
 /**
@@ -264,8 +284,8 @@ void Kuroo::slotWait()
 				 "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 
 			case KMessageBox::Yes: {
-                /*ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "DBJob" );
-                ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "CachePortageJob" );*/
+				/*ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "DBJob" );
+				ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "CachePortageJob" );*/
 				QTimer::singleShot( 500, this, SLOT( slotTerminate() ) );
 			}
 		}

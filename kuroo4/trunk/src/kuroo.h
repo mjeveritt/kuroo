@@ -22,7 +22,8 @@
 #define _KUROO_H_
 
 #include <KApplication>
-#include "KXmlGuiWindow"
+#include <KXmlGuiWindow>
+#include <KMenuBar>
 
 #include "kurooview.h"
 #include "configdialog.h"
@@ -37,6 +38,7 @@ class Message;
 class Queue;
 class Results;
 class SystemTray;
+class KurooStatusBar;
 
 /**
  * @class Kuroo
@@ -59,7 +61,8 @@ private slots:
 	void				slotQuit();
 	void				slotWait();
 	void				slotTerminate();
-	void				slotWhatsThis( int tabIndex );
+	//TODO: What happened to this?
+	//void				slotWhatsThis( int tabIndex );
 
 private:
 	void				setupActions();
@@ -73,9 +76,9 @@ private:
 	KurooView			*m_view;
 	KConfigDialog		*prefDialog;
 	IntroDlg			*wizardDialog;
-    KurooStatusBar 	    *sb;
+	KurooStatusBar		*sb;
 	bool				m_shuttingDown;
-    KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
+	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

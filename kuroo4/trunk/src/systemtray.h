@@ -22,6 +22,8 @@
 #define SYSTEMTRAY_H
 
 #include <KSystemTrayIcon>
+#include <KStatusNotifierItem>
+#include <QAction>
 
 
 /**
@@ -34,8 +36,8 @@ Q_OBJECT
 	static SystemTray* s_instance;
 
 public:
-    SystemTray( QWidget *parent = 0 );
-    ~SystemTray();
+	SystemTray( QWidget *parent = 0 );
+	~SystemTray();
 
 	static SystemTray* 	instance() { return s_instance; }
 	void				activate();
@@ -48,8 +50,8 @@ private slots:
 	void				slotUnpause();
 
 private:
-	int				m_menuPause;
-	int				m_menuUnpause;
+	QAction*			m_menuPause;
+	QAction*			m_menuUnpause;
 
 signals:
 	void				signalPreferences();

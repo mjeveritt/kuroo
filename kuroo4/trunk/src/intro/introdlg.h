@@ -32,7 +32,7 @@ class IntroDlg : public QWizard, public Ui::Intro
 {
 Q_OBJECT
 public:
-    IntroDlg( QWidget* parent = 0 );
+	IntroDlg( QWidget* parent = 0 );
 	~IntroDlg();
 
 private:

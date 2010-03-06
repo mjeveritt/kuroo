@@ -55,7 +55,7 @@ int main( int argc, char **argv )
 
 	kDebug(0) << "Kuroo version=" << version;
 
-	//KurooConfig::setHardVersion( version );
+	KurooConfig::setHardVersion( version );
 	//KurooConfig::writeConfig();
 
 	// see if we are starting with session management

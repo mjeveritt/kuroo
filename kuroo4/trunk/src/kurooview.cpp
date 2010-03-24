@@ -1,21 +1,21 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *	Copyright (C) 2005 by Karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
 #include <sys/stat.h>
@@ -62,7 +62,11 @@ KurooView::KurooView( QWidget *parent ) :
 
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
+	//kdDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	KPageWidgetItem* pagePortage = addPage( viewPortage, i18n("Packages") );
+	//kdDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	pagePortage->setIcon( KIcon("kuroo_view_portage") );
 
 	viewQueue = new QueueTab( this, packageInspector );
@@ -81,19 +85,18 @@ KurooView::KurooView( QWidget *parent ) :
 	KPageWidgetItem* pageLogs = addPage( viewLogs, i18n("Log") );
 	pageLogs->setIcon( KIcon("kuroo_view_log") );
 
-	KPageWidgetItem* testPage = addPage( new QLabel( "dummy label to prove the page shows up" ), "test page" );
-
 	// Connect menu-icons to the pages
 	connect( this, SIGNAL( currentPageChanged( KPageWidgetItem*, KPageWidgetItem*) ), SLOT( slotShowView() ) );
-	//setCurrentPage( pagePortage );
-	setCurrentPage( testPage );
+	setCurrentPage( pagePortage );
+	//kDebug() << "categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( viewLogs->logBrowser, viewLogs->verboseLog, viewLogs->saveLog );
 
 	// Confirm changes in views with bleue text menu
-	//connect( viewMenu, SIGNAL( currentChanged( QListWidgetItem* ) ), this, SLOT( slotResetMenu( QListWidgetItem* ) ) );
+	//connect( this, SIGNAL( currentChanged( KPageWidgetItem* ) ), this, SLOT( slotResetMenu( KPageWidgetItem* ) ) );
 }
 KurooView::~KurooView() {}
 
@@ -114,6 +117,8 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
+	//kDebug() << "categoriesView.minWidth=" << viewPortage->categoriesView->minimumWidth() <<
+	//			"actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 
 	// Check is history is empty, then maybe this is also a fresh install with empty db
@@ -196,7 +201,7 @@ void KurooView::slotEmergePretend( QString package )
 /**
  * Clear the highlighting menu text back to normal when visits the view.
  */
-/*void KurooView::slotResetMenu( QListWidgetItem* menuItem )
+/*void KurooView::slotResetMenu( KPageWidgetItem* menuItem )
 {
 	dynamic_cast<IconListItem*>( menuItem )->setChanged( false );
 	//viewMenu->triggerUpdate( true );

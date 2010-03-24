@@ -1,22 +1,22 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *	Copyright (C) 2004 by karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
 
 #include <QTreeWidget>
 
@@ -40,7 +40,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	// Update visible items when world is changed
 	//connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( undefined triggerUpdate() ) );
 
-	//connect( this, SIGNAL( onItem( QListViewItem* ) ), this, SLOT( rollOver( QListViewItem* ) ) );
+	connect( this, SIGNAL( onItem( QTreeWidgetItem* ) ), this, SLOT( rollOver( QTreeWidgetItem* ) ) );
 
 	//new ToolTip( this );
 }
@@ -51,13 +51,13 @@ PackageListView::~PackageListView()
 /**
  * Create mouse-over effect.
  */
-// void PackageListView::rollOver( QListViewItem* item )
-// {
-// 	dynamic_cast<PackageItem*>( item )->setRollOver( true );
-// 	if ( lastItem )
-// 		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
-// 	lastItem = item;
-// }
+void PackageListView::rollOver( QTreeWidgetItem* item )
+{
+	dynamic_cast<PackageItem*>( item )->setRollOver( true );
+	if ( lastItem )
+		dynamic_cast<PackageItem*>( lastItem )->setRollOver( false );
+	lastItem = item;
+}
 
 /**
  * Clear this listView and package index.
@@ -87,7 +87,7 @@ PackageItem* PackageListView::currentPackage() const  { return dynamic_cast<Pack
  */
 PackageItem* PackageListView::packageItemById( const QString& id ) const
 {
-	if ( id.isEmpty() || !m_packageIndex.contains(id) ) {
+	if ( id.isEmpty() || !m_packageIndex.contains( id ) ) {
 		return NULL;
 	} else {
 		return m_packageIndex[id];
@@ -140,8 +140,8 @@ const QStringList PackageListView::selectedPackages() const
 const QStringList PackageListView::allId() const
 {
 	QStringList idList;
-	for( int i=0; i<topLevelItemCount(); i++ ) {
-		idList += dynamic_cast<PackageItem*>(topLevelItem(i))->id();
+	for( int i = 0; i < topLevelItemCount(); i++ ) {
+		idList += dynamic_cast<PackageItem*>(topLevelItem( i ))->id();
 	}
 	return idList;
 }
@@ -153,8 +153,8 @@ const QStringList PackageListView::allId() const
 const QStringList PackageListView::allPackages() const
 {
 	QStringList packageList;
-	for( int i=0; i<topLevelItemCount(); i++ ) {
-		packageList += dynamic_cast<PackageItem*>(topLevelItem(i))->name();
+	for( int i = 0; i < topLevelItemCount(); i++ ) {
+		packageList += dynamic_cast<PackageItem*>(topLevelItem( i ))->name();
 	}
 	return packageList;
 }

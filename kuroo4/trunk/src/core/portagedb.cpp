@@ -514,11 +514,15 @@ const QStringList KurooDB::portageCategories( int filter, const QString& text )
 	{
 		while ( !textStringList.isEmpty() )
 		{
-			textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
+			if (textStringList.first().length() > 0)
+				textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
-		textQuery = " AND ( " + textQuery.right ( len - 5 ) + " ) ";
+		if (len > 0)
+			textQuery = " AND ( " + textQuery.right ( len - 5 ) + " ) ";
+		else
+			textQuery = "";
 	}
 
 	switch ( filter )
@@ -615,11 +619,15 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 	{
 		while ( !textStringList.isEmpty() )
 		{
-			textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
+			if (textStringList.first().length() > 0)
+				textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
 			textStringList.pop_front();
 		}
 		len = textQuery.length();
-		textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
+		if (len > 0)
+			textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
+		else
+			textQuery = "";
 	}
 
 	switch ( filter )

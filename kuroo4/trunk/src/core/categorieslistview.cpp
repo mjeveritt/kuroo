@@ -1,22 +1,22 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *	Copyright (C) 2004 by karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
 
 #include "common.h"
 #include "categorieslistview.h"
@@ -48,7 +48,7 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, int column, int width
 		//m_cg.setColor( QColorGroup::Text, m_cg.text() );
 	}
 
-	//setTextAlignment( alignment );
+	setTextAlignment( 0, alignment );
 	//QTreeWidgetItem::paintCell( p, m_cg, column, width, alignment );
 }
 
@@ -57,11 +57,13 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, int column, int width
  * @short Base class for category listview.
  */
 CategoriesView::CategoriesView( QWidget *parent, const char *name )
-: QTreeWidget( parent /*, name*/ ), m_focus( i18n("All") ), categories( 0 )
+: QTreeWidget( parent/*, name */), m_focus( i18n("All") ), categories( 0 )
 {
 	//setFullWidth( true );
-	//setFrameShape( Q3Frame::NoFrame );
-	//setSorting( -1 );
+	setFrameShape( QFrame::NoFrame );
+	setSortingEnabled( false );
+	//kdDebug() << "CategoriesView.Constructor minimumWidth=" << minimumWidth()
+	//			<< "actual width" << width() << LINE_INFO;
 
 	connect( this, SIGNAL( currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) ), this, SLOT( slotStoreFocus( QTreeWidgetItem*,QTreeWidgetItem* ) ) );
 }
@@ -134,6 +136,8 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 {
 	setHeaderLabels( QStringList( i18n( "Category" ) ) );
 	//header()->setLabel( header()->count() - 1, i18n("Category") );
+	//kdDebug() << "CategoriesListView.constructor minimumWidth=" << minimumWidth()
+	//			<< "actual width" << width() << LINE_INFO;
 }
 
 CategoriesListView::~CategoriesListView()
@@ -145,28 +149,35 @@ CategoriesListView::~CategoriesListView()
  */
 void CategoriesListView::init()
 {
+	kdDebug() << "CategoriesListView.init minimumWidth=" << minimumWidth()
+				<< "actual width=" << width() << LINE_INFO;
+
 	categories.clear();
 	clear();
 
-	// Get all available categories
+	// Get all available categories (including "All" meta category)
 	const QStringList allCategoriesList = KurooDBSingleton::Instance()->allCategories();
-	int i = allCategoriesList.size() - 1;
-	categories.resize( i + 1 );
-
-	// Insert categories in reverse order to get them in alfabetical order
-	m_categoryIndex.clear();
-	for( QStringList::ConstIterator it = --( allCategoriesList.end() ), end = allCategoriesList.begin(); it != end; --it ) {
-		CategoryItem* item = new CategoryItem( this, *it, QString::number( i ) );
-		categories[i] = item;
-		m_categoryIndex.insert( *it, *item );
-		i--;
-	}
+	categories.resize( allCategoriesList.size() );
 
 	// Insert the meta-category All first as id = 0
+	m_categoryIndex.clear();
 	CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
 	m_categoryIndex.insert( i18n("All"), *item );
 	item->setOn( true );
 	categories[0] = item;
+
+	int i = 1;
+	// We have to skip the first since it's the "All" meta category, and we've already added it manually
+	for( QStringList::ConstIterator it = allCategoriesList.begin() + 1, end = allCategoriesList.end(); it != end; ++it ) {
+		item = new CategoryItem( this, *it, QString::number( i ) );
+		categories[i] = item;
+		m_categoryIndex.insert( *it, *item );
+		i++;
+	}
+
+	//TODO: these don't work we need a better solution
+	//resizeColumnToContents( 0 );
+	//setColumnWidth( 0, 75 );
 }
 
 /**
@@ -239,14 +250,18 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 		idCategory = categoriesList.first().toInt();
 
 	clear(); // @warning: categoryItem cannot be used anymore
+	m_categoryIndex.clear();
+
+	// Insert meta-subcategory
+	CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
+	m_categoryIndex.insert( i18n("All"), *item );
 
 	// When meta-category is selected skip to show only meta-subcategory
-	m_categoryIndex.clear();
 	if ( idCategory != 0 ) {
+		categories[0] = item;	//Meta sub-category
 		QMapIterator<int, QString> it(allSubCategories[idCategory]);
-		it.toBack();
-		while (it.hasPrevious()) {
-			it.previous();
+		while (it.hasNext()) {
+			it.next();
 			QString id = QString::number( it.key() );
 			QString name = it.value();
 
@@ -258,30 +273,21 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 			}
 		}
 
-		// Insert meta-subcategory
-		CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
-		m_categoryIndex.insert( i18n("All"), *item );
-		categories[0] = item;
-
 		// Enable subcategories from query. Skip first which is the category
 		for( QStringList::ConstIterator it = ++( categoriesList.begin() ), end = categoriesList.end(); it != end; ++it ) {
 			if ( categories[(*it).toInt()] )
 				categories[(*it).toInt()]->setOn( true );
 		}
-
-		// After all categories are loaded try restoring last known focus-category
-		restoreFocus( false );
 	}
 	else {
-
-		// Insert meta-subcategory
-		CategoryItem* item = new CategoryItem( this, i18n("All"), "0" );
-		m_categoryIndex.insert( i18n("All"), *item );
 		item->setOn( true );
-
-		// After all categories are loaded try restoring last known focus-category
-		restoreFocus( false );
 	}
+
+	//TODO: this doesn't work, we need to find a better solution
+	//resizeColumnToContents( 0 );
+
+	// After all categories are loaded try restoring last known focus-category
+	restoreFocus( false );
 }
 
 #include "categorieslistview.moc"

@@ -1,21 +1,21 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *	Copyright (C) 2005 by Karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
 #include <unistd.h>
@@ -158,12 +158,12 @@ void Kuroo::setupActions()
 void Kuroo::slotBusy()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
-		/*actionRefreshPortage->setEnabled( false );
-		actionRefreshUpdates->setEnabled( false );*/
+		actionRefreshPortage->setEnabled( false );
+		actionRefreshUpdates->setEnabled( false );
 	}
 	else {
-		/*actionRefreshPortage->setEnabled( true );
-		actionRefreshUpdates->setEnabled( true );*/
+		actionRefreshPortage->setEnabled( true );
+		actionRefreshUpdates->setEnabled( true );
 
 		// Make sure progressbar is stopped!
 		KurooStatusBar::instance()->stopTimer();
@@ -171,17 +171,17 @@ void Kuroo::slotBusy()
 
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ||
 		 !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
-		//actionSyncPortage->setEnabled( false );
+		actionSyncPortage->setEnabled( false );
 	}
 	else {
-		//actionSyncPortage->setEnabled( true );
+		actionSyncPortage->setEnabled( true );
 	}
 
 	// No db no fun!
 	if ( !SignalistSingleton::Instance()->isKurooReady() ) {
-		/*actionRefreshPortage->setEnabled( false );
+		actionRefreshPortage->setEnabled( false );
 		actionRefreshUpdates->setEnabled( false );
-		actionSyncPortage->setEnabled( false );*/
+		actionSyncPortage->setEnabled( false );
 	}
 }
 

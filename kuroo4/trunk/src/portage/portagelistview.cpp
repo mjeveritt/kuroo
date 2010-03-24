@@ -1,22 +1,22 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *	Copyright (C) 2004 by karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
 
 #include "common.h"
 #include "portagelistview.h"
@@ -28,6 +28,7 @@
 
 #include <QMap>
 #include <QTreeWidget>
+#include <QHeaderView>
 
 #include <kconfig.h>
 #include <kmessagebox.h>
@@ -83,6 +84,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	headerItem()->setText( 1, "" );
 	//header.setText( 2, "" );
 	headerItem()->setIcon( 2, KIcon("kuroo_world_column") );
+	headerItem()->setTextAlignment( 2, Qt::AlignHCenter );
 	//header.setTextAlignment( 2, Qt::AlignHCenter );
 	headerItem()->setIcon( 3, KIcon("kuroo_queued_column") );
 	//setColumnAlignment( 2, Qt::AlignHCenter );
@@ -91,13 +93,22 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 
 	//setHeaderItem( &header );
 
+	//TODO: These don't have any effect, need to find something that works
+	/*resizeColumnToContents( 0 );
+	resizeColumnToContents( 1 );
+	resizeColumnToContents( 2 );
+	resizeColumnToContents( 3 );
+	resizeColumnToContents( 4 );*/
 	/*setColumnWidthMode( 0, QTreeWidget::Manual );
 	setColumnWidthMode( 1, QTreeWidget::Manual );
 	setColumnWidthMode( 2, QTreeWidget::Manual );
 	setColumnWidthMode( 3, QTreeWidget::Manual );
 	setColumnWidthMode( 4, QTreeWidget::Manual );*/
 
-	setProperty( "selectionMode", "Extended" );
+	setSelectionMode( QAbstractItemView::ExtendedSelection );
+	//setProperty( "selectionMode", "Extended" );
+	setSortingEnabled( true );
+	header()->setSortIndicatorShown( true );
 	//setShowSortIndicator( true );
 	//setItemMargin( 1 );
 	setRootIsDecorated( false );
@@ -111,17 +122,18 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	else
 		hideColumn( 1 );
 
-	/*header.setResizeEnabled( false, 1 );
-	header.setResizeEnabled( false, 2 );
-	header.setResizeEnabled( false, 3 );*/
+
+	header()->setResizeMode( 1, QHeaderView::Fixed );
+	header()->setResizeMode( 2, QHeaderView::Fixed );
+	header()->setResizeMode( 3, QHeaderView::Fixed );
 
 	// Refresh packages when packages are added/removed to Queue or get installed
-	//connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( undefined triggerUpdate() ) );
+	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
 
 	// Create text-widget warning for "No packages found.."
 	noHitsWarning = new KTextBrowser( this );
 	noHitsWarning->setGeometry( QRect( 20, 50, 400, 300 ) );
-	//noHitsWarning->setFrameShape( Q3Frame::NoFrame );
+	noHitsWarning->setFrameShape( QFrame::NoFrame );
 }
 
 PortageListView::~PortageListView()
@@ -180,7 +192,7 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 	QString currentId = this->currentId();
 
 	// Disable sorting for faster inserting. Packages are already sorted alphabetically.
-	//setSorting( -1 );
+	setSortingEnabled( false );
 	resetListView();
 	setHeader( QString::null );
 
@@ -201,12 +213,14 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 
 		indexPackage( id, item );
 	}
-	//setSorting( 0 );
+	setSortingEnabled( true );
+	sortItems( 0, Qt::AscendingOrder );
 	setHeader( QString::number( packageCount ) );
 	setPackageFocus( currentId );
 
 	// Cannot have current changed for only one package so emit manually
 	if ( packageCount == 1 ) {
+		emit currentChanged( QModelIndex(), QModelIndex() );
 		//emit currentChanged( 0 );
 	}
 

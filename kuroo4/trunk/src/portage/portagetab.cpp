@@ -1,21 +1,21 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *	Copyright (C) 2005 by Karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
 #include "common.h"
@@ -64,6 +64,8 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 )
 {
 	setupUi( this );
+	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
+	//		<< "actual width=" << categoriesView->width() << LINE_INFO;
 	// Connect What's this button
 // 	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
@@ -279,12 +281,14 @@ void PortageTab::slotButtons()
  */
 void PortageTab::slotReload()
 {
-// 	m_packageInspector->setDisabled( true );
+ 	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 
 	disconnect( categoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListSubCategories() ) );
 	disconnect( subcategoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListPackages() ) );
 
+	//kdDebug() << "PortageTab.slotReload categoriesView.minWidth=" << categoriesView->minimumWidth()
+	//		<< "actual width" << categoriesView->width() << LINE_INFO;
 	categoriesView->init();
 	subcategoriesView->init();
 
@@ -332,7 +336,7 @@ void PortageTab::slotListSubCategories()
  */
 void PortageTab::slotListPackages()
 {
-	int numberOfTerms=0; //For singular or plural message
+	int numberOfTerms = 0; //For singular or plural message
 	// Disable all buttons if query result is empty
 	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
 				subcategoriesView->currentCategoryId(), filterGroup->selected(), searchFilter->text() ) ) == 0 ) {
@@ -340,23 +344,23 @@ void PortageTab::slotListPackages()
 		slotButtons();
 		summaryBrowser->clear();
 		if (radioUpdates->isChecked())
-			numberOfTerms=-1;
+			numberOfTerms = -1;
 		else {
 		/*** We check number of terms to pass to showNoHitsWarning **/
 			QChar space((char)32);
 			bool iscounted=false;
-			for (int i=0; i<searchFilter->text().length(); i++) {
-				if (searchFilter->text()[i]!=space) {
+			for (int i = 0; i < searchFilter->text().length(); i++) {
+				if (searchFilter->text()[i] != space) {
 					if (!iscounted) numberOfTerms++;
-					iscounted=true;
+					iscounted = true;
 				}
 				else {
-					iscounted=false;
+					iscounted = false;
 				}
 			}
 		}
 		kDebug(0) << numberOfTerms << LINE_INFO;
-		packagesView->showNoHitsWarning( true , numberOfTerms);
+		packagesView->showNoHitsWarning( true , numberOfTerms );
 
 		// Highlight text filter background in red if query failed
 		/*if ( !searchFilter->text().isEmpty() )
@@ -365,7 +369,7 @@ void PortageTab::slotListPackages()
 			searchFilter->setPaletteBackgroundColor( Qt::white );*/
 	}
 	else {
-		packagesView->showNoHitsWarning( false , numberOfTerms);
+		packagesView->showNoHitsWarning( false , numberOfTerms );
 
 		// Highlight text filter background in green if query successful
 		/*if ( !searchFilter->text().isEmpty() )

@@ -63,27 +63,27 @@ IntroDlg::~IntroDlg() {}
 void IntroDlg::accept()
 {
 	// Backup all portage files changeable by kuroo
-	if ( cbBackup->isChecked() ) {
-		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
-		QString filePackageKeywords( KurooConfig::filePackageKeywords() );
-		KIO::file_copy( filePackageKeywords, kurooDir + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
-				-1, KIO::Overwrite | KIO::HideProgressInfo);
-		QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
-		KIO::file_copy( filePackageUserUnMask, kurooDir + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
-				-1, KIO::Overwrite | KIO::HideProgressInfo );
-		QString filePackageUserMask( KurooConfig::filePackageUserMask() );
-		KIO::file_copy( filePackageUserMask, kurooDir + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
-				-1, KIO::Overwrite | KIO::HideProgressInfo );
-		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
-		KIO::file_copy( filePackageUserUse, kurooDir + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
-				-1, KIO::Overwrite | KIO::HideProgressInfo );
-		QString fileWorld( KurooConfig::fileWorld() );
-		KIO::file_copy( fileWorld, kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt,
-				-1, KIO::Overwrite | KIO::HideProgressInfo );
-		QString fileMakeConf( KurooConfig::fileMakeConf() );
-		KIO::file_copy( fileMakeConf, kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
-				-1, KIO::Overwrite | KIO::HideProgressInfo );
-	}
+// 	if ( cbBackup->isChecked() ) {
+// 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
+// 		QString filePackageKeywords( KurooConfig::filePackageKeywords() );
+// 		KIO::file_copy( filePackageKeywords, kurooDir + "backup/" + filePackageKeywords.section( "/", -1 ) + dt,
+// 				-1, KIO::Overwrite | KIO::HideProgressInfo);
+// 		QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
+// 		KIO::file_copy( filePackageUserUnMask, kurooDir + "backup/" + filePackageUserUnMask.section( "/", -1 ) + dt,
+// 				-1, KIO::Overwrite | KIO::HideProgressInfo );
+// 		QString filePackageUserMask( KurooConfig::filePackageUserMask() );
+// 		KIO::file_copy( filePackageUserMask, kurooDir + "backup/" + filePackageUserMask.section( "/", -1 ) + dt,
+// 				-1, KIO::Overwrite | KIO::HideProgressInfo );
+// 		QString filePackageUserUse( KurooConfig::filePackageUserUse() );
+// 		KIO::file_copy( filePackageUserUse, kurooDir + "backup/" + filePackageUserUse.section( "/", -1 ) + dt,
+// 				-1, KIO::Overwrite | KIO::HideProgressInfo );
+// 		QString fileWorld( KurooConfig::fileWorld() );
+// 		KIO::file_copy( fileWorld, kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt,
+// 				-1, KIO::Overwrite | KIO::HideProgressInfo );
+// 		QString fileMakeConf( KurooConfig::fileMakeConf() );
+// 		KIO::file_copy( fileMakeConf, kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
+// 				-1, KIO::Overwrite | KIO::HideProgressInfo );
+// 	}
 
 	KMessageBox::enableAllMessages();
 	QWizard::accept();

@@ -121,15 +121,15 @@ PortageTab::~PortageTab()
 void PortageTab::slotInit()
 {
 	// Get color theme
-	//portageFrame->setPaletteBackgroundColor( colorGroup().base() );
+	portageFrame->setPaletteBackgroundColor( colorGroup().base() );
 
 	// Change select-color in summaryBrowser to get contrast
 	QPalette summaryPalette;
-	/*QColorGroup summaryColorGroup( colorGroup() );
+	QColorGroup summaryColorGroup( colorGroup() );
 	summaryColorGroup.setColor( QColorGroup::HighlightedText, colorGroup().dark() );
 	summaryPalette.setActive( summaryColorGroup );
 	summaryPalette.setInactive( summaryColorGroup );
-	summaryPalette.setDisabled( summaryColorGroup );*/
+	summaryPalette.setDisabled( summaryColorGroup );
 	summaryBrowser->setPalette( summaryPalette );
 
 	// Keyboard shortcuts
@@ -346,7 +346,7 @@ void PortageTab::slotListPackages()
 		if (radioUpdates->isChecked())
 			numberOfTerms = -1;
 		else {
-		/*** We check number of terms to pass to showNoHitsWarning **/
+			/*** We check number of terms to pass to showNoHitsWarning **/
 			QChar space((char)32);
 			bool iscounted=false;
 			for (int i = 0; i < searchFilter->text().length(); i++) {
@@ -362,20 +362,21 @@ void PortageTab::slotListPackages()
 		kDebug(0) << numberOfTerms << LINE_INFO;
 		packagesView->showNoHitsWarning( true , numberOfTerms );
 
+		//TODO: This forces white instead of using the current color-scheme default
 		// Highlight text filter background in red if query failed
-		/*if ( !searchFilter->text().isEmpty() )
+		if ( !searchFilter->text().isEmpty() )
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
 		else
-			searchFilter->setPaletteBackgroundColor( Qt::white );*/
+			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
 	else {
 		packagesView->showNoHitsWarning( false , numberOfTerms );
 
 		// Highlight text filter background in green if query successful
-		/*if ( !searchFilter->text().isEmpty() )
+		if ( !searchFilter->text().isEmpty() )
 			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );
 		else
-			searchFilter->setPaletteBackgroundColor( Qt::white );*/
+			searchFilter->setPaletteBackgroundColor( Qt::white );
 	}
 }
 
@@ -521,8 +522,8 @@ void PortageTab::processPackage( bool viewInspector )
 	QString lines = "<table width=100% border=0 cellpadding=0>";
 			lines += "<tr><td";
 			//"bgcolor=#" + GlobalSingleton::Instance()->bgHexColor();
-			lines += " colspan=2><b><font color=#";
-			//lines += GlobalSingleton::Instance()->fgHexColor() + ">"
+			lines += " colspan=2><b>";
+			//lines += "<font color=#" + GlobalSingleton::Instance()->fgHexColor() + ">"
 			lines += "<font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
 			lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
 			lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
@@ -533,61 +534,63 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += "\">" + packagesView->currentPackage()->homepage() + "</a></td></tr>";
 	}
 	else
-		lines += i18n("%1Package not available in Portage tree anymore!%2")
-					.arg("<tr><td colspan=2><font color=darkRed><b>")
-					.arg("</b></font></td></tr>");
+		lines += "<tr><td colspan=2><font color=darkRed><b>"
+				+ i18n("Package not available in Portage tree anymore!")
+				+ "</b></font></td></tr>";
 
 	// Construct installed verions line
 	if ( !linesInstalled.isEmpty() )
-		linesInstalled = i18n("%1Installed&nbsp;version:%2%3%4")
-						.arg("<tr><td width=10%><b>")
-						.arg("</b></font></td><td width=90%>")
-						.arg( linesInstalled )
-						.arg("</td></tr>");
+		linesInstalled = "<tr><td width=10%><b>"
+						+ i18n("Installed&nbsp;version:")
+						+ "</b></font></td><td width=90%>"
+						+ linesInstalled
+						+ "</td></tr>";
 	else
-		linesInstalled = i18n("%1Installed&nbsp;version:%2%3%4")
-						.arg("<tr><td width=10%><b>")
-						.arg("</b></font></td><td width=90%>")
-						.arg("Not installed")
-						.arg("</td></tr>");
+		linesInstalled = "<tr><td width=10%><b>"
+						+ i18n("Installed&nbsp;version:")
+						+ "</b></font></td><td width=90%>"
+						+ "Not installed"
+						+ "</td></tr>";
 
 	if ( packagesView->currentPackage()->isInPortage() ) {
 
 		// Construct emerge version line
 		if ( !linesEmerge.isEmpty() ) {
-			linesEmerge = i18n("%1Emerge&nbsp;version:%2%3%4")
-				.arg("<tr><td width=10%><b>")
-				.arg("</b></td><td width=90%>")
-				.arg( linesEmerge )
-				.arg("</td></tr>");
+			linesEmerge = "<tr><td width=10%><b>"
+						+ i18n("Emerge&nbsp;version:")
+						+ "</b></td><td width=90%>"
+						+ linesEmerge
+						+ "</td></tr>";
 		}
 		else {
 			if ( packagesView->currentPackage()->isInArch() && linesAvailable.isEmpty() )
-				linesEmerge = i18n("%1Emerge&nbsp;version:%2No version available on %3%4")
-				.arg("<tr><td width=10%><b>")
-				.arg("</font></td><td width=90%><font color=darkRed>")
-				.arg( KurooConfig::arch() )
-				.arg("</b></td></tr>");
+				linesEmerge = "<tr><td width=10%><b>"
+							+ i18n("Emerge&nbsp;version:")
+							+ "</font></td><td width=90%><font color=darkRed>"
+							+ i18n("No version available on")
+							+ KurooConfig::arch()
+							+ "</b></td></tr>";
 			else
-				linesEmerge = i18n("%1Emerge&nbsp;version:%2No version available - please check package details%3")
-				.arg("<tr><td width=10%><b>")
-				.arg("</font></td><td width=90%><font color=darkRed>")
-				.arg("</font></b></td></tr>");
+				linesEmerge = "<tr><td width=10%><b>"
+							+ i18n("Emerge&nbsp;version:")
+							+ "</font></td><td width=90%><font color=darkRed>"
+							+ i18n("No version available - please check package details")
+							+ "</font></b></td></tr>";
 		}
 
 		// Construct available versions line
 		if ( !linesAvailable.isEmpty() )
-			linesAvailable = i18n("%1Available&nbsp;versions:%2%3%4")
-			.arg("<tr><td width=10%><b>")
-			.arg("</b></td><td width=90%>")
-			.arg( linesAvailable )
-			.arg("</b></td></tr>");
+			linesAvailable = "<tr><td width=10%><b>"
+							+ i18n("Available&nbsp;versions:")
+							+ "</b></td><td width=90%>"
+							+ linesAvailable
+							+ "</b></td></tr>";
 		else
-			linesAvailable = i18n("%1Available&nbsp;versions:%2No versions available on %3%4")
-			.arg("<tr><td width=10%><b>")
-			.arg("</td><td width=90%><font color=darkRed>")
-			.arg( KurooConfig::arch() )
-			.arg("</font></b></td></tr>");
+			linesAvailable = "<tr><td width=10%><b>"
+						+ i18n("Available&nbsp;versions:")
+						+ "</td><td width=90%><font color=darkRed>"
+						+ i18n("No versions available on %1", KurooConfig::arch())
+						+ "</font></b></td></tr>";
 
 		summaryBrowser->setText( lines + linesInstalled + linesEmerge + linesAvailable + "</table>");
 	}

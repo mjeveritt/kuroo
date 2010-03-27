@@ -43,25 +43,25 @@ HistoryTab::HistoryTab( QWidget* parent )
     setupUi( this );
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
-	
-    pbClearFilter->setIcon( QIcon("locationbar_erase") );
-	
+
+    pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
+
     historyFilter->setTreeWidget( historyView );
-	
+
 	// Connect button and checkbox
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
-	
+
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
 	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
-	
+
 	// Load history view after scan completed
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotReload() ) );
-	
+
     connect( historyView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewInfo() ) );
-	
+
 	slotInit();
 }
 
@@ -82,10 +82,10 @@ HistoryTab::~HistoryTab()
  */
 void HistoryTab::slotInit()
 {
-    pbWhatsThis->setIcon( QIcon("document-properties") );
-	
+	pbWhatsThis->setIcon( KIcon("help-about") );
+
 	pbView->setDisabled( true );
-	
+
 	if ( KurooConfig::viewUnmerges() )
 		viewUnmerges->setChecked( true );
 	else
@@ -114,28 +114,28 @@ void HistoryTab::slotReload()
 void HistoryTab::slotReload( int limit )
 {
 	int days;
-	
+
 	switch ( limit ) {
 		case 0 :
 			days = 7;
 			break;
-			
+
 		case 1:
 			days = 30;
 			break;
-			
+
 		case 2:
 			days = 180;
 			break;
-			
+
 		case 3:
 			days = 365;
 			break;
-			
+
 		case 4:
 			days = 10000;
 	}
-	
+
 	historyView->loadFromDB( days );
 }
 
@@ -170,9 +170,9 @@ void HistoryTab::slotViewInfo()
     QTreeWidgetItem *item = historyView->currentItem();
 	if ( !item )
 		return;
-	
+
 	if ( !( item->text(2) ).isEmpty() ) {
-		
+
 		QString logText;
 		QString eLogFile( KurooConfig::dirELog() + "/" + dynamic_cast<HistoryListView::HistoryItem*>( item )->einfo() );
 		QFile logFile( eLogFile );
@@ -181,7 +181,7 @@ void HistoryTab::slotViewInfo()
 			while ( !stream.atEnd() )
 				logText += stream.readLine() + "<br>";
 			logFile.close();
-		
+
             //Message::instance()->prompt( i18n("Emerge log"), i18n("Installation message for %1:").arg( item->text(0) ), logText );
 		}
 		else {

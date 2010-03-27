@@ -67,22 +67,27 @@ KurooView::KurooView( QWidget *parent ) :
 	KPageWidgetItem* pagePortage = addPage( viewPortage, i18n("Packages") );
 	//kdDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
 	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
-	pagePortage->setIcon( KIcon("kuroo_view_portage") );
+	pagePortage->setHeader( "" );
+	pagePortage->setIcon( KIcon("kuroo") );
 
 	viewQueue = new QueueTab( this, packageInspector );
 	KPageWidgetItem* pageQueue = addPage( viewQueue, i18n("Queue") );
+	pageQueue->setHeader( "" );
 	pageQueue->setIcon( KIcon("kuroo_view_queue") );
 
 	viewHistory = new HistoryTab( this );
 	KPageWidgetItem* pageHistory = addPage( viewHistory, i18n("History") );
+	pageHistory->setHeader( "" );
 	pageHistory->setIcon( KIcon("kuroo_view_history") );
 
 	viewMerge = new MergeTab( this );
 	KPageWidgetItem* pageMerge = addPage( viewMerge, i18n("Configuration") );
-	pageMerge->setIcon( KIcon("kuroo_view_history") );
+	pageMerge->setHeader( "" );
+	pageMerge->setIcon( KIcon("kuroo_view_configuration") );
 
 	viewLogs = new LogsTab( this );
 	KPageWidgetItem* pageLogs = addPage( viewLogs, i18n("Log") );
+	pageLogs->setHeader( "" );
 	pageLogs->setIcon( KIcon("kuroo_view_log") );
 
 	// Connect menu-icons to the pages

@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+*   Copyright (C) 2005 by Karye   *
+*   karye@users.sourceforge.net   *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
 
 #include "common.h"
 #include "statusbar.h"
@@ -45,9 +45,9 @@
 #include <kiconloader.h>
 
 /**
- * @class QueueTab
- * @short Page for the installation queue.
- */
+* @class QueueTab
+* @short Page for the installation queue.
+*/
 QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	: QWidget( parent ), m_hasCheckedQueue( false ), m_initialQueueTime( QString::null ), m_packageInspector( packageInspector )
 {
@@ -56,7 +56,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 
 	// Rmb actions.
-    connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( slotContextMenu() ) );
+	connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( slotContextMenu() ) );
 
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
@@ -95,8 +95,8 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 }
 
 /**
- * Save listview geometry.
- */
+* Save listview geometry.
+*/
 QueueTab::~QueueTab()
 {
 	if ( cbForceConf->isChecked() )
@@ -125,14 +125,14 @@ QueueTab::~QueueTab()
 		KurooConfig::setBackupPkg( false );
 
 		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-		  cbSkipHousekeeping->setDisabled( false );
+		cbSkipHousekeeping->setDisabled( false );
 		else
-		  cbSkipHousekeeping->setDisabled( true );
+		cbSkipHousekeeping->setDisabled( true );
 }
 
 /**
- * Initialize Queue view.
- */
+* Initialize Queue view.
+*/
 void QueueTab::slotInit()
 {
 	//queueFrame->setPaletteBackgroundColor( colorGroup().base() );
@@ -163,28 +163,28 @@ void QueueTab::slotInit()
 		cbBackupPkg->setChecked( false );
 
 		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-		   cbSkipHousekeeping->setDisabled( false );
+		cbSkipHousekeeping->setDisabled( false );
 		else
-		   cbSkipHousekeeping->setDisabled( true );
+		cbSkipHousekeeping->setDisabled( true );
 
 
 	slotRemoveInstalled();
 
 	cbDownload->setToolTip( i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
-									  "just perform fetches for all packages (the main package as well as all dependencies), "
-									  "grabbing all potential files.</td></tr></table></qt>" ) );
+									"just perform fetches for all packages (the main package as well as all dependencies), "
+									"grabbing all potential files.</td></tr></table></qt>" ) );
 
 	cbNoWorld->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
-									  "but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+									"but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
 
 	cbForceConf->setToolTip( i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
-									  "inside of a CONFIG_PROTECT directory has been merged already. "
-									  "Portage will normally merge those files only once to prevent the user"
-									  "from dealing with the same config multiple times. "
-									  "This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
+									"inside of a CONFIG_PROTECT directory has been merged already. "
+									"Portage will normally merge those files only once to prevent the user"
+									"from dealing with the same config multiple times. "
+									"This flag will cause the file to always be merged.</td></tr></table></qt>" ) );
 
 	cbBackupPkg->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
-									  "but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
+									"but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
 
 	// Keyboard shortcuts
 	/*KAccel* pAccel = new KAccel( this );
@@ -196,12 +196,12 @@ void QueueTab::slotInit()
 	pbAdvanced->setIcon( QIcon("options") );
 	pbCheck->setIcon( QIcon("gear") );
 	pbGo->setIcon( QIcon("launch") );
-	pbWhatsThis->setIcon( QIcon("document-properties") );
+	pbWhatsThis->setIcon( KIcon("help-about") );
 }
 
 /**
- * What's this info explaning this tabs functionality.
- */
+* What's this info explaning this tabs functionality.
+*/
 void QueueTab::slotWhatsThis()
 {
 	QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
@@ -213,9 +213,9 @@ void QueueTab::slotWhatsThis()
 }
 
 /**
- * Forward signal from next-buttons.
- * @param isNext
- */
+* Forward signal from next-buttons.
+* @param isNext
+*/
 void QueueTab::slotNextPackage( bool isNext )
 {
 	if ( !m_packageInspector->isParentView( VIEW_QUEUE ) )
@@ -230,8 +230,8 @@ void QueueTab::slotNextPackage( bool isNext )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Reload queue when package view is changed, fex when package is removed.
- */
+* Reload queue when package view is changed, fex when package is removed.
+*/
 void QueueTab::slotRefresh()
 {
 	if ( !QueueSingleton::Instance()->isQueueBusy() )
@@ -239,8 +239,8 @@ void QueueTab::slotRefresh()
 }
 
 /**
- * Load Queue packages.
- */
+* Load Queue packages.
+*/
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	// Reenable the inspector after queue changes
@@ -264,18 +264,16 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 }
 
 /**
- * View current queue summary.
- */
+* View current queue summary.
+*/
 void QueueTab::slotQueueSummary()
 {
 	queueBrowser->clear();
 	QString queueBrowserLines(   i18n( "<table width=100% border=0 cellpadding=0><tr><td colspan=2><b>Summary</b></td></tr>" ) );
-			queueBrowserLines += i18n( "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>" ).arg( queueView->count() );
-			queueBrowserLines += i18n( "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>" ).arg( m_initialQueueTime );
-			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>" )
-		.arg( formatTime( KurooStatusBar::instance()->elapsedTime() ) );
-			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>" )
-		.arg( formatTime( queueView->totalDuration() ) );
+			queueBrowserLines += i18n( "<tr><td width=10%>Number&nbsp;of&nbsp;packages:</td><td> %1</td></tr>", queueView->count() );
+			queueBrowserLines += i18n( "<tr><td width=10%>Initial&nbsp;estimated&nbsp;time:</td><td> %1</td></tr>", m_initialQueueTime );
+			queueBrowserLines += i18n( "<tr><td width=10%>Elapsed&nbsp;time:</td><td> %1</td></tr>", formatTime( KurooStatusBar::instance()->elapsedTime() ) );
+			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>", formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
 
@@ -285,8 +283,8 @@ void QueueTab::slotQueueSummary()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Disable/enable buttons when kuroo busy signal is received.
- */
+* Disable/enable buttons when kuroo busy signal is received.
+*/
 void QueueTab::slotBusy()
 {
 	// No db or queue is empty - no fun!
@@ -306,8 +304,8 @@ void QueueTab::slotBusy()
 }
 
 /**
- * Disable buttons if no package is selected or kuroo is busy emerging.
- */
+* Disable buttons if no package is selected or kuroo is busy emerging.
+*/
 void QueueTab::slotButtons()
 {
 		if ( m_packageInspector->isVisible() )
@@ -326,9 +324,9 @@ void QueueTab::slotButtons()
 				disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 				connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 				if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-				  cbSkipHousekeeping->setDisabled( false );
+				cbSkipHousekeeping->setDisabled( false );
 				else
-				  cbSkipHousekeeping->setDisabled( true );
+				cbSkipHousekeeping->setDisabled( true );
 		}
 
 		// No package selected, disable all buttons
@@ -355,10 +353,10 @@ void QueueTab::slotButtons()
 				pbClear->setDisabled( false );
 				pbCheck->setDisabled( false );
 				if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-				  cbSkipHousekeeping->setDisabled( false );
+				cbSkipHousekeeping->setDisabled( false );
 				else
-				  cbSkipHousekeeping->setDisabled( true );
-		 }
+				cbSkipHousekeeping->setDisabled( true );
+		}
 
 
 		// User is su and packages in queue are "checked" - enable checkboxes
@@ -385,8 +383,8 @@ void QueueTab::slotButtons()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Emerge all packages in the installation queue.
- */
+* Emerge all packages in the installation queue.
+*/
 void QueueTab::slotCheck()
 {
 	// Only user-end packages not the dependencies
@@ -397,8 +395,8 @@ void QueueTab::slotCheck()
 }
 
 /**
- * Emerge all packages in the installation queue.
- */
+* Emerge all packages in the installation queue.
+*/
 void QueueTab::slotGo()
 {
 	// If emerge is running I'm the abort function
@@ -409,9 +407,9 @@ void QueueTab::slotGo()
 	QStringList packageList = queueView->allPackagesNoChildren();
 
 		if ( cbSkipHousekeeping->isChecked() )
-		  EmergeSingleton::Instance()->setSkipHousekeeping(true);
+		EmergeSingleton::Instance()->setSkipHousekeeping(true);
 		else
-		  EmergeSingleton::Instance()->setSkipHousekeeping(false);
+		EmergeSingleton::Instance()->setSkipHousekeeping(false);
 
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
@@ -452,8 +450,8 @@ void QueueTab::slotGo()
 }
 
 /**
- * Kill the running emerge process.
- */
+* Kill the running emerge process.
+*/
 void QueueTab::slotStop()
 {
 	switch ( KMessageBox::warningYesNo( this,
@@ -471,16 +469,16 @@ void QueueTab::slotStop()
 }
 
 /**
- * Launch emerge pretend of packages in queue.
- */
+* Launch emerge pretend of packages in queue.
+*/
 void QueueTab::slotPretend()
 {
 	PortageSingleton::Instance()->pretendPackageList( queueView->allId() );
 }
 
 /**
- * Remove package from Queue.
- */
+* Remove package from Queue.
+*/
 void QueueTab::slotRemove()
 {
 	if ( isVisible() )
@@ -490,8 +488,8 @@ void QueueTab::slotRemove()
 }
 
 /**
- * Remove package from Queue.
- */
+* Remove package from Queue.
+*/
 void QueueTab::slotClear()
 {
 	if ( isVisible() )
@@ -501,16 +499,16 @@ void QueueTab::slotClear()
 }
 
 /**
- * Remove package from Queue.
- */
+* Remove package from Queue.
+*/
 void QueueTab::slotRemoveInstalled()
 {
 	QueueSingleton::Instance()->setRemoveInstalled( cbRemove->isChecked() );
 }
 
 /**
- * Open advanced dialog with: ebuild, versions, use flags...
- */
+* Open advanced dialog with: ebuild, versions, use flags...
+*/
 void QueueTab::slotAdvanced()
 {
 	DEBUG_LINE_INFO;
@@ -521,7 +519,7 @@ void QueueTab::slotAdvanced()
 	pbGo->setDisabled( true );
 
 	if ( queueView->currentPackage() )
-		 processPackage( true );
+		processPackage( true );
 }
 
 void QueueTab::slotPackage()
@@ -533,8 +531,8 @@ void QueueTab::slotPackage()
 }
 
 /**
- * Process package and view in Inspector.
- */
+* Process package and view in Inspector.
+*/
 void QueueTab::processPackage( bool viewInspector )
 {
 	// Queue view is hidden don't update
@@ -550,10 +548,10 @@ void QueueTab::processPackage( bool viewInspector )
 }
 
 /**
- * Popup menu for current package.
- * @param item
- * @param point
- */
+* Popup menu for current package.
+* @param item
+* @param point
+*/
 void QueueTab::slotContextMenu(QPoint)
 {
 	//FIXME: port contextMenu to KDE4

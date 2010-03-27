@@ -43,23 +43,23 @@ MergeTab::MergeTab( QWidget* parent )
     setupUi( this );
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
-	
-    pbClearFilter->setIcon( QIcon("locationbar_erase") );
-	
+
+    pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
+
     mergeFilter->setTreeWidget( mergeView );
 
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
-	
+
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotReload() ) );
-		
+
     connect( unmergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonMerge() ) );
     connect( mergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
-	
+
 	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );
-	
+
 	slotInit();
 }
 
@@ -74,7 +74,7 @@ MergeTab::~MergeTab()
  */
 void MergeTab::slotInit()
 {
-    pbWhatsThis->setIcon( QIcon("document-properties") );
+	pbWhatsThis->setIcon( KIcon("help-about") );
     unmergeView->setHeaderLabel( i18n("New Configuration file") );
     mergeView->setHeaderLabel( i18n("Merged Configuration file") );
 	pbMerge->setDisabled( true );
@@ -112,10 +112,10 @@ void MergeTab::slotLoadConfFiles()
 	DEBUG_LINE_INFO;
 	QStringList confFilesList = EtcUpdateSingleton::Instance()->confFilesList();
 	unmergeView->loadConfFiles( confFilesList );
-	
+
 	QStringList backupFilesList = EtcUpdateSingleton::Instance()->backupFilesList();
 	mergeView->loadBackupFiles( backupFilesList );
-	
+
 	emit signalMergeChanged();
 }
 
@@ -166,10 +166,10 @@ void MergeTab::slotViewFile()
     QTreeWidgetItem *item = mergeView->currentItem();
 	if ( !item || !item->parent() )
 		return;
-	
+
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
 	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
-	
+
 	EtcUpdateSingleton::Instance()->runDiff( source, destination, false );
 }
 
@@ -181,10 +181,10 @@ void MergeTab::slotMergeFile()
     QTreeWidgetItem *item = unmergeView->currentItem();
 	if ( !item && item->parent() )
 		return;
-	
+
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
 	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
-	
+
 	EtcUpdateSingleton::Instance()->runDiff( source, destination, true );
 }
 

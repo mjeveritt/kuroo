@@ -23,22 +23,22 @@
 #include <threadweaver/Job.h>
 
 /**
- * @class: LoadPackageUserMaskJob
- * @short: Thread for loading user masked packages into db.
- */
+* @class: LoadPackageUserMaskJob
+* @short: Thread for loading user masked packages into db.
+*/
 class LoadPackageUserMaskJob : public ThreadWeaver::Job
 {
 public:
-    LoadPackageUserMaskJob( QObject *dependent ) : Job( dependent ) {}
-	
-    virtual void run() {
-		
+	LoadPackageUserMaskJob( QObject *dependent ) : Job( dependent ) {}
+
+	virtual void run() {
+
 		// Collect all mask dependatoms from /etc/portage/package.mask
 		QFileInfo fileInfo( KurooConfig::filePackageUserMask() );
 		if( fileInfo.isDir() ) {
 			kDebug(0) << KurooConfig::filePackageUserMask() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageUserMask() ) ) {
-                return;
+				return;
 			}
 		}
 
@@ -52,46 +52,46 @@ public:
 				linesDependAtom += stream.readLine();
 			file.close();
 		}
-		
+
 		// Something is wrong, no files found, get outta here
 		if ( linesDependAtom.isEmpty() )
-            return;
-		
-        //setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
-		
+			return;
+
+		//setStatus( "PackageUserMask", i18n("Collecting user masked packages...") );
+
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUserMask_temp ( "
-		                                    		"idPackage INTEGER UNIQUE, "
-		                                    		"dependAtom VARCHAR(255), "
-		                                    		"comment BLOB );"
-		                                    		, m_db);
-		
+													"idPackage INTEGER UNIQUE, "
+													"dependAtom VARCHAR(255), "
+													"comment BLOB );"
+													, m_db);
+
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
-		
+
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
-			
+
 			// Collect comment lines above the dependatom
 			if ( (*it).isEmpty() )
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-                    commentLines += (*it).replace('\'', "''").replace('%', "&#37;").toUtf8();
+					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").toUtf8();
 				}
 				else {
-                    PortageAtom atom( *it );
-                    if ( atom.isValid() ) {
-						QString id = KurooDBSingleton::Instance()->singleQuery( 
-                            "SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
-						
+					PortageAtom atom( *it );
+					if ( atom.isValid() ) {
+						QString id = KurooDBSingleton::Instance()->singleQuery(
+							"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
+
 						if ( id.isEmpty() )
 							kWarning(0) << QString("Parsing user package.mask. Can not find id in database for package %1/%2.")
-                                .arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
+								.arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( 
+							KurooDBSingleton::Instance()->insert( QString(
 								"INSERT INTO packageUserMask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
-						
+
 					}
 					else
 						kWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
@@ -101,18 +101,18 @@ public:
 		}
 		file.close();
 		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
-		
+
 		// Move content from temporary table to installedPackages
 		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUserMask;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUserMask SELECT * FROM packageUserMask_temp;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUserMask_temp;", m_db );
-		
+
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-        //setStatus( "PackageUserMask", i18n("Done.") );
-        return;
-	}
-	
-	virtual void completeJob() {
-        //PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_USER_MASK_SCANNED );
+		//setStatus( "PackageUserMask", i18n("Done.") );
+//         return;
+// 	}
+//
+// 	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_MASK_SCANNED );
 	}
 };

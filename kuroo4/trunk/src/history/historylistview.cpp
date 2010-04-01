@@ -1,22 +1,22 @@
 /***************************************************************************
- *Copyright (C) 2004 by karye												*
- *karye@users.sourceforge.net												*
- *																			*
- *This program is free software; you can redistribute it and/or modify		*
- *it under the terms of the GNU General Public License as published by		*
- *the Free Software Foundation; either version 2 of the License, or			*
- *(at your option) any later version.										*
- *																			*
- *This program is distributed in the hope that it will be useful,			*
- *but WITHOUT ANY WARRANTY; without even the implied warranty of			*
- *MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the				*
- *GNU General Public License for more details.								*
- *																			*
- *You should have received a copy of the GNU General Public License			*
- *along with this program; if not, write to the								*
- *Free Software Foundation, Inc.,											*
- *59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.					*
- ***************************************************************************/
+*	Copyright (C) 2004 by karye												*
+*	karye@users.sourceforge.net												*
+*																			*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+***************************************************************************/
 
 #include "common.h"
 #include "packageemergetime.h"
@@ -25,9 +25,9 @@
 #include <QTreeWidget>
 
 /**
- * @class HistoryItem
- * @short ListViewItem for package emerge/unmerges date
- */
+* @class HistoryItem
+* @short ListViewItem for package emerge/unmerges date
+*/
 HistoryListView::HistoryItem::HistoryItem( QTreeWidget* parent, const QString& date )
 : QTreeWidgetItem( parent, QStringList(date) )
 {}
@@ -48,9 +48,9 @@ QString HistoryListView::HistoryItem::einfo()
 }
 
 /**
- * @class HistoryListView
- * @short Specialized listview for emerge history.
- */
+* @class HistoryListView
+* @short Specialized listview for emerge history.
+*/
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	: QTreeWidget( parent /*, name*/ ), m_loc( KGlobal::locale() )
 {
@@ -63,7 +63,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 
 	setSelectionMode( QAbstractItemView::ExtendedSelection );
 	//setProperty( "selectionMode", "Extended" );
-    setFrameShape( QFrame::NoFrame );
+	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated( true );
 	//setFullWidth( true );
 
@@ -83,8 +83,8 @@ HistoryListView::~HistoryListView()
 {}
 
 /**
- * @return current entry.
- */
+* @return current entry.
+*/
 QString HistoryListView::current()
 {
 	QTreeWidgetItem *item = currentItem();
@@ -96,8 +96,8 @@ QString HistoryListView::current()
 }
 
 /**
- * @return list of selected packages.
- */
+* @return list of selected packages.
+*/
 QStringList HistoryListView::selected()
 {
 	QStringList packageList;
@@ -110,8 +110,8 @@ QStringList HistoryListView::selected()
 }
 
 /**
- * Populate listview with log entries
- */
+* Populate listview with log entries
+*/
 void HistoryListView::loadFromDB( int days )
 {
 	clear();
@@ -120,15 +120,15 @@ void HistoryListView::loadFromDB( int days )
 	QDateTime dtLimit = QDateTime::currentDateTime();
 	dtLimit = dtLimit.addDays( -days );
 
-	const QList<QString> historyList = KurooDBSingleton::Instance()->allHistory();
-	for( QList<QString>::const_iterator it = historyList.begin(); it != historyList.end(); ++it ) {
+	const QStringList historyList = KurooDBSingleton::Instance()->allHistory();
+	for( QStringList::ConstIterator it = historyList.begin(), end = historyList.end(); it != end; ++it ) {
 		QString timeStamp = *it++;
 		QString package = *it++;
 		QString duration = *it++;
 		QString einfo = *it;
 		einfo.replace( "&gt;", ">" ).replace( "&lt;", "<" );
 
-        QStringList parts = parsePackage( package );
+		QStringList parts = parsePackage( package );
 		QString packageString = parts[1] + "-" + parts[2] + " (" + parts[0].section( "-", 0, 0 ) + "/" +  parts[0].section( "-", 1, 1 ) + ")";
 
 		// Convert emerge date to local date format
@@ -143,7 +143,7 @@ void HistoryListView::loadFromDB( int days )
 			t = t.addSecs( duration.toUInt() );
 			QString emergeDuration = m_loc->formatTime( t, true, true );
 
-            if ( !duration.isEmpty() || ( KurooConfig::viewUnmerges() && !package.isEmpty() ) ) {
+			if ( !duration.isEmpty() || ( KurooConfig::viewUnmerges() && !package.isEmpty() ) ) {
 				if ( !m_itemMap.contains( emergeDate ) ) {
 					HistoryItem *item = new HistoryItem( this, emergeDate );
 					item->setExpanded( true );//->setOpen( true );
@@ -152,9 +152,9 @@ void HistoryListView::loadFromDB( int days )
 
 				HistoryItem *item = new HistoryItem( m_itemMap[ emergeDate ], packageString );
 				if ( duration.isEmpty() )
-                    item->setIcon( 0, KIcon("kuroo_unmerged") );
+					item->setIcon( 0, KIcon("kuroo_unmerged") );
 				else {
-                    item->setIcon( 0, KIcon("kuroo_new") );
+					item->setIcon( 0, KIcon("kuroo_new") );
 					item->setText( 1, emergeDuration );
 					item->setEinfo( einfo );
 				}

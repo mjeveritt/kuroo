@@ -38,7 +38,7 @@ PackageListView::PackageListView( QWidget* parent, const char* name )
 	header()->setResizeMode( QHeaderView::Interactive );
 
 	// Update visible items when world is changed
-	//connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( undefined triggerUpdate() ) );
+	connect( PortageSingleton::Instance(), SIGNAL( signalWorldChanged() ), this, SLOT( undefined triggerUpdate() ) );
 
 	connect( this, SIGNAL( onItem( QTreeWidgetItem* ) ), this, SLOT( rollOver( QTreeWidgetItem* ) ) );
 
@@ -73,13 +73,19 @@ void PackageListView::resetListView()
  * Current package status.
  * @return status
  */
-int PackageListView::currentItemStatus() const  { return currentPackage()->status(); }
+int PackageListView::currentItemStatus() const
+{
+	return currentPackage()->status();
+}
 
 /**
  * The current package.
  * @return PackageItem*
  */
-PackageItem* PackageListView::currentPackage() const  { return dynamic_cast<PackageItem*>( this->currentItem() ); }
+PackageItem* PackageListView::currentPackage() const
+{
+	return dynamic_cast<PackageItem*>( this->currentItem() );
+}
 
 /**
  * Return PackageItem from listview index.
@@ -166,7 +172,7 @@ const QStringList PackageListView::allPackages() const
 void PackageListView::setPackageFocus( const QString& id )
 {
 	if ( id.isEmpty() || !m_packageIndex[id] ) {
-		setCurrentItem( topLevelItem(0) );
+		setCurrentItem( topLevelItem( 0 ) );
 		if( NULL != currentItem() )
 			currentItem()->setSelected( true );
 	}
@@ -201,12 +207,12 @@ void PackageListView::nextPackage( const bool& isPrevious )
 	if ( isVisible() ) {
 		QTreeWidgetItem* item = currentItem();
 		if ( isPrevious ) {
-			if ( itemAbove(item) ) {
-				item = itemAbove(item);
+			if ( itemAbove( item ) ) {
+				item = itemAbove( item );
 				//ensureItemVisible( item ); //scrollTo
 				setCurrentItem( item );
 				for( int i=0; i<topLevelItemCount(); i++ ) {
-					topLevelItem(i)->setSelected(false);
+					topLevelItem( i )->setSelected( false );
 				}
 				item->setSelected( true );
 			}
@@ -217,7 +223,7 @@ void PackageListView::nextPackage( const bool& isPrevious )
 				//ensureItemVisible( item ); //scrollTo
 				setCurrentItem( item );
 				for( int i=0; i<topLevelItemCount(); i++ ) {
-					topLevelItem(i)->setSelected(false);
+					topLevelItem( i )->setSelected( false );
 				}
 				item->setSelected( true );
 			}

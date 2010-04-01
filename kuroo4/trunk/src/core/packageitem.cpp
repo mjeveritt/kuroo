@@ -38,11 +38,22 @@ PackageItem::PackageItem( QTreeWidget* parent, const QString& name, const QStrin
 	m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
-	QTreeWidgetItem::setText( 0, name );
+	setText( 0, name );
+	//TODO: Tihs is probably not the most efficient place to put this
+	if ( m_status & PACKAGE_AVAILABLE )
+		setIcon( 0, KIcon("kuroo_package") );
+	else {
+		if ( KurooConfig::installedColumn() ) {
+			setIcon( 0, KIcon("kuroo_package") );
+			setIcon( 1, KIcon("kuroo_version_installed") );
+		}
+		else
+			setIcon( 0, KIcon("kuroo_stable") );
+
+	}
 	if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
 		m_inWorld = true;
 }
-
 
 PackageItem::PackageItem( QTreeWidgetItem* parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status )
 	: QTreeWidgetItem( parent ),
@@ -50,7 +61,7 @@ PackageItem::PackageItem( QTreeWidgetItem* parent, const QString& name, const QS
 	m_id( id ), m_name( name ), m_status( status ), m_description( description ), m_category( category ), m_isQueued( false ), m_inWorld( false ),
 	m_isInitialized( false )
 {
-	QTreeWidgetItem::setText( 0, name );
+	setText( 0, name );
 	if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
 		m_inWorld = true;
 }

@@ -43,20 +43,20 @@ public:
 private:
 	void						scanInstalledPackages();
     void 						run();
-	void 						completeJob();
+	//void 						completeJob();
 	Info						scanInfo( const QString& path, const QString& category, const QString& name, const QString& version );
 	QString						formatSize( const QString& size );
-	
+
 	void						loadCache();
 	QString						cacheFind( const QString& package );
-	
+
 private:
 	QRegExp						rxAtom;
 
 	DbConnection* const 				m_db;
-	
+
 	QMap<QString, QString> 				m_mapCache;
-	
+
 	struct Data {
 		QString					description;
 		QString					homepage;

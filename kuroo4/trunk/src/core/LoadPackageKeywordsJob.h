@@ -23,23 +23,23 @@
 #include <threadweaver/Job.h>
 
 /**
- * @class: LoadPackageKeywordsJob
- * @short: Thread for loading packages keyword-unmasked by user.
- */
+* @class: LoadPackageKeywordsJob
+* @short: Thread for loading packages keyword-unmasked by user.
+*/
 class LoadPackageKeywordsJob : public ThreadWeaver::Job
 {
 public:
-    LoadPackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
-	
-    virtual void run() {
+	LoadPackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
+
+	virtual void run() {
 		DEBUG_LINE_INFO;
-		
+
 		// Collect all mask dependatoms
 		QFileInfo fileInfo( KurooConfig::filePackageKeywords() );
 		if( fileInfo.isDir() ) {
 			kDebug(0) << KurooConfig::filePackageKeywords() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageKeywords() ) ) {
-                return;
+				return;
 			}
 		}
 		QFile file( KurooConfig::filePackageKeywords() );
@@ -52,32 +52,32 @@ public:
 				linesPackage += stream.readLine();
 			file.close();
 		}
-		
+
 		// Something is wrong, no files found, get outta here
 		if ( linesPackage.isEmpty() )
-            return;
-		
-        //setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
-		
+			return;
+
+		//setStatus( "PackageKeywords", i18n("Collecting user package keywords...") );
+
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageKeywords_temp ( "
-		                                    		"idPackage INTEGER UNIQUE, "
-		                                    		"keywords VARCHAR(255) );"
-		                                    		, m_db);
-		
+													"idPackage INTEGER UNIQUE, "
+													"keywords VARCHAR(255) );"
+													, m_db);
+
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
-		
+
 		for ( QStringList::Iterator it = linesPackage.begin(), end = linesPackage.end(); it != end; ++it ) {
-			
+
 			// set the atom string
-            QStringList tokens = (*it).split(' ');
+			QStringList tokens = (*it).split(' ');
 			QString package = tokens[0];
-			
+
 			if( !(*it).trimmed().startsWith( "#" ) && !(*it).trimmed().isEmpty() ) {
-                PortageAtom atom( package );
-                if ( atom.isValid() ) {
-                    // extract this line's keywords
-                    QString keywords;
+				PortageAtom atom( package );
+				if ( atom.isValid() ) {
+					// extract this line's keywords
+					QString keywords;
 					QStringList::iterator tokenIterator = tokens.begin();
 					tokenIterator++;
 					while ( tokenIterator != tokens.end() ) {
@@ -86,15 +86,15 @@ public:
 					}
 					if ( keywords.isEmpty() )
 					keywords = "~" + KurooConfig::arch();
-	
-					QString id = KurooDBSingleton::Instance()->singleQuery( 
-                        "SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
-					
+
+					QString id = KurooDBSingleton::Instance()->singleQuery(
+						"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
+
 					if ( id.isEmpty() )
 						kWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
-                        .arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
+						.arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
 					else
-						KurooDBSingleton::Instance()->insert( QString( 
+						KurooDBSingleton::Instance()->insert( QString(
 							"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
 										.arg( id ).arg( keywords ), m_db );
 				}
@@ -102,22 +102,22 @@ public:
 					kWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
 						.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
 			}
-			
+
 		}
 		file.close();
 		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
-		
+
 		// Move content from temporary table to installedPackages
 		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageKeywords;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageKeywords SELECT * FROM packageKeywords_temp;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageKeywords_temp;", m_db );
-		
+
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-        //setStatus( "PackageKeywords", i18n("Done.") );
-        return;
-	}
-	
-	virtual void completeJob() {
-        PortageFilesSingleton::Instance()->refresh( PACKAGE_KEYWORDS_SCANNED );
+		//setStatus( "PackageKeywords", i18n("Done.") );
+// 		return;
+// 	}
+//
+// 	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_KEYWORDS_SCANNED );
 	}
 };

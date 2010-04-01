@@ -44,13 +44,13 @@ public:
 
 private:
     void 						run();
-	void 						completeJob();
-	
+	//void 						completeJob();
+
 	QString 					escapeString( const QString&) const;
-	
+
 private:
 	DbConnection* const			m_db;
-	
+
 	// Log lines to parse
 	QStringList 				m_logLines;
 };

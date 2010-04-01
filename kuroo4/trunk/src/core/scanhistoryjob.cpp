@@ -45,14 +45,6 @@ ScanHistoryJob::~ScanHistoryJob()
 }
 
 /**
- * Inform gui thread that scan is completed.
- */
-void ScanHistoryJob::completeJob()
-{
-	SignalistSingleton::Instance()->scanHistoryComplete();
-}
-
-/** 
  * If new entries are found in emerge.log insert them into history and,
  * add emerge duration and increment emerge counts.
  * @return success
@@ -63,11 +55,11 @@ void ScanHistoryJob::run()
 		kError(0) << "Parsing emerge.log. Can not connect to database" << LINE_INFO;
         return;
 	}
-	
+
 	EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
-	
+
 	KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
-	
+
 	// Parse emerge.log lines
 	QString timeStamp, syncTimeStamp;
 	QRegExp rxTimeStamp( "\\d+:\\s" );
@@ -76,22 +68,22 @@ void ScanHistoryJob::run()
 	bool isStatisticUpdated( false );
 	eLog elog;
 	QString einfo;
-	
+
     foreach ( QString line, m_logLines ) {
-		
+
 		// Abort the scan
         /*if ( isAborted() ) {
 			kWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
             return;
         }*/
-		
+
         QString emergeLine = QString( line ).section( rxTimeStamp, 1, 1 );
         timeStamp = QString( line ).section( ": " + emergeLine, 0, 0 );
-		
+
 		if ( emergeLine.contains( ">>> emerge" ) ) {
 			uint emergeStart = timeStamp.toUInt();
-			
+
 			// Collect package and timestamp in map to match for completion
 			QString package;
             if ( rxPackage.indexIn( emergeLine ) > -1 ) {
@@ -106,7 +98,7 @@ void ScanHistoryJob::run()
 				QString package;
                 if ( rxPackage.indexIn( emergeLine ) > -1 ) {
 					package = rxPackage.cap(2);
-				
+
 					// Find matching package emerge start entry in map and calculate the emerge duration
 					QMap<QString, uint>::iterator itLogMap = logMap.find( package );
 					if ( itLogMap != logMap.end() ) {
@@ -115,28 +107,28 @@ void ScanHistoryJob::run()
 						uint emergeCompleted = timeStamp.toUInt();
 						int secTime = emergeCompleted - emergeStart;
 						logMap.erase( itLogMap );
-						
+
 						// Find matching elog file
 						eLogVector eLogs = HistorySingleton::Instance()->getELogs();
 						if ( eLogs.size() > 0 ) {
-							
+
 							elog = eLogs.last();
 							while ( eLogs.size() > 0 && elog.timestamp < emergeStart ) {
 								elog = eLogs.last();
 								eLogs.pop_back();
 							}
-							
+
 							if ( elog.timestamp >= emergeStart && elog.timestamp <= emergeCompleted )
 								einfo = elog.package;
 							else
 								einfo = "";
-							
+
 // 							kDebug() << "elog.package=" << elog.package;
 // 							kDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
 // 							kDebug() << "emergeStart=" << emergeStart << LINE_INFO;
 // 							kDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
 						}
-						
+
                         QStringList parts = parsePackage( package );
 						if ( !parts.isEmpty() ) {
 							QString categoryNameString = parts[0] + "/" + parts[1];
@@ -151,9 +143,9 @@ void ScanHistoryJob::run()
                                 itMap.value().add( secTime );
                                 itMap.value().inc();
 							}
-							
+
 // 							QString einfo = EmergeSingleton::Instance()->packageMessage().utf8();
-							KurooDBSingleton::Instance()->insert( QString( 
+							KurooDBSingleton::Instance()->insert( QString(
 								"INSERT INTO history (package, timestamp, time, einfo, emerge) "
 								"VALUES ('%1', '%2', '%3', '%4','true');" )
 							    .arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
@@ -177,14 +169,14 @@ void ScanHistoryJob::run()
 			}
 	}
 	KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
-	
+
 	if ( isStatisticUpdated )
 		HistorySingleton::Instance()->setStatisticsMap( emergeTimeMap );
-	
+
 	if ( !syncTimeStamp.isEmpty() )
 		KurooDBSingleton::Instance()->singleQuery( QString("UPDATE dbInfo SET data = '%1' WHERE meta = 'syncTimeStamp';").arg( syncTimeStamp ), m_db );
-	
-    return;
+
+	SignalistSingleton::Instance()->scanHistoryComplete();
 }
 
 QString ScanHistoryJob::escapeString(const QString& str) const {

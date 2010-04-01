@@ -40,11 +40,11 @@ public:
 
 private:
     void 						run();
-	void 						completeJob();
-	
+	//void 						completeJob();
+
 private:
 	DbConnection* const 		m_db;
-	
+
 	// Package object list
 	EmergePackageList 			m_packageList;
 };

@@ -44,21 +44,16 @@ CachePortageJob::~CachePortageJob()
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 }
 
-void CachePortageJob::completeJob()
-{
-	SignalistSingleton::Instance()->cachePortageComplete();
-}
-
 /**
  * Scan for package size found in digest files.
  * @return success
  */
-bool CachePortageJob::doJob()
+void CachePortageJob::run()
 {
 	DEBUG_LINE_INFO;
 	if ( !m_db->isConnected() ) {
 		kError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
-		return false;
+		return;// false;
 	}
 
 	int count( 0 );
@@ -170,7 +165,12 @@ bool CachePortageJob::doJob()
     //setStatus( "CachePortage", i18n("Done.") );
     //setProgress( 0 );
 	DEBUG_LINE_INFO;
-	return true;
+// 	return true;
+// }
+//
+// void CachePortageJob::completeJob()
+// {
+	SignalistSingleton::Instance()->cachePortageComplete();
 }
 
 #include "cacheportagejob.moc"

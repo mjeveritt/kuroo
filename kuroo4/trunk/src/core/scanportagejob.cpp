@@ -54,14 +54,6 @@ ScanPortageJob::~ScanPortageJob()
 }
 
 /**
- * Inform gui thread that scan is completed.
- */
-void ScanPortageJob::completeJob()
-{
-	SignalistSingleton::Instance()->scanPortageComplete();
-}
-
-/**
  * Scan Portage cache for packages in portage tree. Inserting found packages in db.
  * @return success
  */
@@ -338,7 +330,8 @@ void ScanPortageJob::run()
 
     /*setStatus( "ScanPortage", i18n("Done.") );
     setProgressTotalSteps( 0 );*/
-    return;
+
+	SignalistSingleton::Instance()->scanPortageComplete();
 }
 
 /**

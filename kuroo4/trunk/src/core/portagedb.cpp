@@ -1038,7 +1038,7 @@ const QStringList KurooDB::allQueueId()
  */
 const QStringList KurooDB::allHistory()
 {
-	return query( "SELECT timestamp, package, time, einfo FROM history ORDER BY id ASC;" );
+	return query( "SELECT timestamp, package, time, einfo FROM history ORDER BY id DESC;" );
 }
 
 /**
@@ -1046,7 +1046,7 @@ const QStringList KurooDB::allHistory()
  */
 const QStringList KurooDB::allMergeHistory()
 {
-	return query( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id ASC;" );
+	return query( "SELECT timestamp, source, destination FROM mergeHistory ORDER BY id DESC;" );
 }
 
 /**

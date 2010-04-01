@@ -85,7 +85,7 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	//header.setText( 2, "" );
 	headerItem()->setText( 2, "" );
 	headerItem()->setIcon( 2, KIcon("kuroo_world_column") );
-	headerItem()->setTextAlignment( 2, Qt::AlignHCenter );
+	//headerItem()->setTextAlignment( 2, Qt::AlignHCenter );
 	setColumnWidth( 2, 25 );
 	//header.setTextAlignment( 2, Qt::AlignHCenter );
 	//setColumnAlignment( 2, Qt::AlignHCenter );
@@ -119,7 +119,6 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	//setFullWidth( true );
 
 	if ( KurooConfig::installedColumn() ) {
-		headerItem()->setText( 1, "" );
 		headerItem()->setIcon( 1, KIcon("kuroo_installed_column") );
 		//setColumnAlignment( 1, Qt::AlignHCenter );
 		setColumnWidth( 1, 25 );

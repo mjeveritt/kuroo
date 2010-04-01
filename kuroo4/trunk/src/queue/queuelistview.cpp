@@ -1,21 +1,21 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+*	Copyright (C) 2004 by karye												*
+*	karye@users.sourceforge.net												*
+*																			*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
 #include <stdlib.h>
@@ -42,6 +42,7 @@ QueueListView::QueueItem::QueueItem( QTreeWidget* parent, const QString& categor
 {
 	setQueued( true );
 	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
+	setTextAlignment( 5, Qt::AlignRight );
 	m_bar = new QProgressBar( parent->viewport() );
 	m_bar->setMaximum( duration );
 	m_bar->hide();
@@ -53,6 +54,7 @@ QueueListView::QueueItem::QueueItem( QueueItem* parent, const QString& category,
 {
 	setQueued( true );
 	setText( 0, name + " (" + category.section( "-", 0, 0 ) + "/" +  category.section( "-", 1, 1 ) + ")" );
+	setTextAlignment( 5, Qt::AlignRight );
 	m_bar = new QProgressBar( parent->treeWidget()->viewport() );
 	m_bar->setMaximum( duration );
 	m_bar->hide();
@@ -168,23 +170,26 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 {
 	// Setup geometry
 	//QTreeWidgetItem header;
-	headerItem()->setData( 0, Qt::Horizontal, i18n( "Package" ) );
+	headerItem()->setText( 0, i18n( "Package" ) );
 //	header.setText( 0, i18n( "Package" ) );
-	headerItem()->setData( 1, Qt::Horizontal, "" );
+	headerItem()->setText( 1, "" );
 //	header.setText( 1, "" );
-	headerItem()->setData( 2, Qt::Horizontal, KIcon("kuroo_world_column") );
+	headerItem()->setText( 2, "" );
+	headerItem()->setIcon( 2, KIcon("kuroo_world_column") );
+	setColumnWidth( 2, 25 );
 //	header.setIcon( 2, KIcon("kuroo_world_column") );
 	//setColumnAlignment( 2, Qt::AlignHCenter );
-	headerItem()->setData( 3, Qt::Horizontal, i18n( "Version" ) );
+	headerItem()->setText( 3, i18n( "Version" ) );
 //	header.setText( 3, i18n( "Version") );
-	headerItem()->setData( 4, Qt::Horizontal, i18n( "Duration" ) );
+	headerItem()->setText( 4, i18n( "Duration" ) );
 //	header.setText( 4, i18n( "Duration") );
-	headerItem()->setData( 5, Qt::Horizontal, i18n( "Size" ) );
+	headerItem()->setText( 5, i18n( "Size" ) );
 //	header.setText( 5, i18n( "Size") );
-	headerItem()->setData( 6, Qt::Horizontal, i18n( "Progress" ) );
+	headerItem()->setText( 6, i18n( "Progress" ) );
 //	header.setText( 6, i18n( "Progress") );
 
-	setProperty( "selectionMode", "Extended" );
+	setSelectionMode( QAbstractItemView::ExtendedSelection );
+	//setProperty( "selectionMode", "Extended" );
 	setRootIsDecorated( true );
 	//setFullWidth( true );
 
@@ -202,14 +207,16 @@ QueueListView::QueueListView( QWidget* parent, const char* name )
 	//setSorting( -1, false );
 
 	if ( KurooConfig::installedColumn() ) {
-		headerItem()->setData( 1, Qt::Horizontal, KIcon("kuroo_installed_column") );
+		headerItem()->setIcon( 1, KIcon("kuroo_installed_column") );
 //		header.setIcon( 1, KIcon("kuroo_installed_column") );
 		//setColumnAlignment( 1, Qt::AlignHCenter );
-		//setColumnWidth( 1, 25 );
+		setColumnWidth( 1, 25 );
 	}
 	else
 		hideColumn( 1 );
 
+	header()->setResizeMode( 1, QHeaderView::Fixed );
+	header()->setResizeMode( 2, QHeaderView::Fixed );
 	/*header.setResizeEnabled( false, 1 );
 	header.setResizeEnabled( false, 2 );*/
 

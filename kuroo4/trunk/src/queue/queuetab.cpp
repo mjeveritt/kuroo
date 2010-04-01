@@ -1,22 +1,22 @@
 /***************************************************************************
-*   Copyright (C) 2005 by Karye   *
-*   karye@users.sourceforge.net   *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *	Copyright (C) 2005 by Karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
 
 #include "common.h"
 #include "statusbar.h"
@@ -191,12 +191,12 @@ void QueueTab::slotInit()
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
 					Qt::Key_Return, this, SLOT( slotAdvanced() ) );*/
 
-	pbRemove->setIcon( QIcon("list-remove") );
-	pbClear->setIcon( QIcon("remove_all") );
-	pbAdvanced->setIcon( QIcon("options") );
-	pbCheck->setIcon( QIcon("gear") );
-	pbGo->setIcon( QIcon("launch") );
-	pbWhatsThis->setIcon( KIcon("help-about") );
+	pbRemove->setIcon( KIcon( "list-remove" ) );
+	pbClear->setIcon( KIcon( "edit-clear" ) );
+	//pbAdvanced->setIcon( KIcon( "options" ) );
+	pbCheck->setIcon( KIcon( "run-build" ) );
+	pbGo->setIcon( KIcon(  "run-build-install" ) );
+	pbWhatsThis->setIcon( KIcon( "help-about" ) );
 }
 
 /**
@@ -297,7 +297,7 @@ void QueueTab::slotBusy()
 		cbNoWorld->setDisabled( true );
 		pbCheck->setDisabled( true );
 		pbGo->setDisabled( true );
-				cbSkipHousekeeping->setDisabled( true );
+		cbSkipHousekeeping->setDisabled( true );
 	}
 	else
 		slotButtons();
@@ -406,10 +406,10 @@ void QueueTab::slotGo()
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
 
-		if ( cbSkipHousekeeping->isChecked() )
-		EmergeSingleton::Instance()->setSkipHousekeeping(true);
-		else
-		EmergeSingleton::Instance()->setSkipHousekeeping(false);
+	if ( cbSkipHousekeeping->isChecked() )
+		EmergeSingleton::Instance()->setSkipHousekeeping( true );
+	else
+		EmergeSingleton::Instance()->setSkipHousekeeping( false );
 
 	// Only download? prepend --fetch-all-uri
 	// Else, let's install the user-end packages
@@ -539,12 +539,16 @@ void QueueTab::processPackage( bool viewInspector )
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_QUEUE ) )
 		return;
 
-	// Initialize the portage package object with package and it's versions data
-	queueView->currentPackage()->parsePackageVersions();
+	//TODO: This test wasn't needed before, it would be nice to get rid of it again
+	if (queueView->currentPackage())
+	{
+		// Initialize the portage package object with package and it's versions data
+		queueView->currentPackage()->parsePackageVersions();
 
-	// Refresh inspector if visible
-	if ( viewInspector )
-		m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
+		// Refresh inspector if visible
+		if ( viewInspector )
+			m_packageInspector->edit( queueView->currentPackage(), VIEW_QUEUE );
+	}
 }
 
 /**

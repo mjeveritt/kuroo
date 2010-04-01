@@ -38,9 +38,9 @@ public:
     ~CachePortageJob();
 
 private:
-	bool 						doJob();
-	void 						completeJob();
-	
+	virtual void				run();
+	//void 						completeJob();
+
 private:
 	DbConnection* const 		m_db;
 };

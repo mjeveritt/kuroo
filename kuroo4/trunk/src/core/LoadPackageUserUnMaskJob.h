@@ -23,22 +23,22 @@
 #include <threadweaver/Job.h>
 
 /**
- * @class: LoadPackageUserUnMaskJob
- * @short: Thread for loading packages unmasked by user.
- */
+* @class: LoadPackageUserUnMaskJob
+* @short: Thread for loading packages unmasked by user.
+*/
 class LoadPackageUserUnMaskJob : public ThreadWeaver::Job
 {
 public:
-    LoadPackageUserUnMaskJob( QObject *dependent ) : Job( dependent ) {}
-	
-    virtual void run() {
-		
+	LoadPackageUserUnMaskJob( QObject *dependent ) : Job( dependent ) {}
+
+	virtual void run() {
+
 		// Collect all unmask dependatoms
 		QFileInfo fileInfo( KurooConfig::filePackageUserUnMask() );
 		if( fileInfo.isDir() ) {
 			kDebug(0) << KurooConfig::filePackageUserUnMask() << " is a dir" << LINE_INFO;
 			if( !mergeDirIntoFile( KurooConfig::filePackageUserUnMask() ) ) {
-                return;
+				return;
 			}
 		}
 
@@ -52,46 +52,46 @@ public:
 				linesDependAtom += stream.readLine();
 			file.close();
 		}
-		
+
 		// Something is wrong, no files found, get outta here
 		if ( linesDependAtom.isEmpty() )
-            return;
-		
-        //setStatus( "PackageUserUnMask", i18n("Collecting user unmasked packages...") );
-		
+			return;
+
+		//setStatus( "PackageUserUnMask", i18n("Collecting user unmasked packages...") );
+
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE packageUnmask_temp ( "
 													"idPackage INTEGER UNIQUE, "
 													"dependAtom VARCHAR(255), "
-		                                    		"comment BLOB );"
+													"comment BLOB );"
 													, m_db);
-		
+
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
-		
+
 		QStringList commentLines;
 		for ( QStringList::Iterator it = linesDependAtom.begin(), end = linesDependAtom.end(); it != end; ++it ) {
-			
+
 			// Collect comment lines above the dependatom
 			if ( (*it).isEmpty() )
 				commentLines.clear();
 			else {
 				if ( (*it).startsWith( "#" ) ) {
-                    commentLines += (*it).replace('\'', "''").replace('%', "&#37;").toUtf8();
+					commentLines += (*it).replace('\'', "''").replace('%', "&#37;").toUtf8();
 				}
 				else {
-                    PortageAtom atom( *it );
-                    if ( atom.isValid() ) {
-						QString id = KurooDBSingleton::Instance()->singleQuery( 
-                            "SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
-						
+					PortageAtom atom( *it );
+					if ( atom.isValid() ) {
+						QString id = KurooDBSingleton::Instance()->singleQuery(
+							"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
+
 						if ( id.isEmpty() )
 							kWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
-                            .arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
+							.arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
 						else
-							KurooDBSingleton::Instance()->insert( QString( 
+							KurooDBSingleton::Instance()->insert( QString(
 								"INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "\n" ) ), m_db );
-						
+
 					}
 					else
 						kWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
@@ -101,18 +101,18 @@ public:
 		}
 		file.close();
 		KurooDBSingleton::Instance()->singleQuery( "COMMIT TRANSACTION;", m_db );
-		
+
 		// Move content from temporary table to installedPackages
 		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM packageUnmask;", m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO packageUnmask SELECT * FROM packageUnmask_temp;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "DROP TABLE packageUnmask_temp;", m_db );
-		
+
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
-        //setStatus( "PackageUserUnMask", i18n("Done.") );
-        return;
-	}
-	
-	virtual void completeJob() {
-        //PortageFilesSingleton::Instance()->refresh( ThreadWeaver::PACKAGE_USER_UNMASK_SCANNED );
+		//setStatus( "PackageUserUnMask", i18n("Done.") );
+//         return;
+// 	}
+//
+// 	virtual void completeJob() {
+		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_UNMASK_SCANNED );
 	}
 };

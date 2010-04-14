@@ -157,17 +157,13 @@ void Kuroo::setupActions()
  */
 void Kuroo::slotBusy()
 {
-	if ( SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning() ) {
-		actionRefreshPortage->setEnabled( false );
-		actionRefreshUpdates->setEnabled( false );
-	}
-	else {
-		actionRefreshPortage->setEnabled( true );
-		actionRefreshUpdates->setEnabled( true );
-
+	bool isBusy = (SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning());
+	if ( !isBusy ) {
 		// Make sure progressbar is stopped!
 		KurooStatusBar::instance()->stopTimer();
 	}
+	actionRefreshPortage->setEnabled( !isBusy );
+	actionRefreshUpdates->setEnabled( !isBusy );
 
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ||
 		 !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {

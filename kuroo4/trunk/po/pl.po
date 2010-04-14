@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-25 11:07-0700\n"
-"PO-Revision-Date: 2006-05-12 16:38+0200\n"
-"Last-Translator: Karim Ryde <karim@bredband.net>\n"
+"PO-Revision-Date: 2011-04-08 19:50+0200\n"
+"Last-Translator: Maciej Baranski <getrox.sc@gmail.com>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,7 +71,7 @@ msgstr "Zależy od:"
 
 #: core/dependencyview.cpp:237
 msgid "Without USE-flag %1:"
-msgstr ""
+msgstr "Bez USE-flagi %1:"
 
 #: core/dependencyview.cpp:240
 #, fuzzy
@@ -107,7 +107,7 @@ msgstr "Instalowanie pakietów z kolejki..."
 msgid ""
 "\n"
 "Emerge is not running or cannot be paused..."
-msgstr ""
+msgstr "Zadne emergowanie w roku lub nie moze byc zatrzymane..."
 
 #: core/emerge.cpp:178
 #, fuzzy
@@ -267,7 +267,7 @@ msgstr " wybrane pakiety"
 
 #: core/emerge.cpp:665
 msgid "Ready"
-msgstr ""
+msgstr "Gotowe"
 
 #: core/emerge.cpp:783 core/emerge.cpp:791
 msgid "%1 is not available on your architecture %2!<br><br>"
@@ -528,11 +528,11 @@ msgstr "&Konfiguruj Kuroo..."
 
 #: systemtray.cpp:46
 msgid "Pause Emerge"
-msgstr ""
+msgstr "Zatrzymaj Emerge"
 
 #: systemtray.cpp:47
 msgid "Unpause Emerge"
-msgstr ""
+msgstr "Wznów Emerge"
 
 #: queue/queuetab.cpp:173
 msgid ""
@@ -929,7 +929,7 @@ msgstr ""
 
 #: statusbar.cpp:229
 msgid "Paused..."
-msgstr ""
+msgstr "Zatrzymano..."
 
 #: history/history.cpp:167
 msgid " to "

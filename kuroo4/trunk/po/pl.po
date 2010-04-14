@@ -107,7 +107,9 @@ msgstr "Instalowanie pakietów z kolejki..."
 msgid ""
 "\n"
 "Emerge is not running or cannot be paused..."
-msgstr "Zadne emergowanie w roku lub nie moze byc zatrzymane..."
+msgstr ""
+"\n"
+"Zadne emergowanie w roku lub nie moze byc zatrzymane..."
 
 #: core/emerge.cpp:178
 #, fuzzy

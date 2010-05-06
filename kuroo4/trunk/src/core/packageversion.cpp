@@ -291,7 +291,7 @@ int PackageVersion::stability( const QString& arch ) const
 			return TESTING;
 		// if arch is masked, check if a stable version is in there
 		else
-			if ( ( arch[0] == '~' ) && ( m_keywords.contains( arch.mid(1) ) ) )
+			if ( arch.count() > 0 && (arch[0] == QChar('~') ) && ( m_keywords.contains( arch.mid(1) ) ) )
 				return STABLE;
 			// well, no such arch in the version info
 			else

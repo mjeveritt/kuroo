@@ -64,6 +64,8 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 )
 {
 	setupUi( this );
+	this->splitterH->setStretchFactor(0, 1);
+	this->splitterH->setStretchFactor(1, 6);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
 	//		<< "actual width=" << categoriesView->width() << LINE_INFO;
 	// Connect What's this button

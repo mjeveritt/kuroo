@@ -1,22 +1,24 @@
-/***************************************************************************
- *	Copyright (C) 2005 by Karye												*
- *	karye@users.sourceforge.net												*
- *																			*
+/********************************************************************************
+ *	Copyright (C) 2005 by Karye						*
+ *	karye@users.sourceforge.net						*
+ *										*
  *	This program is free software; you can redistribute it and/or modify	*
  *	it under the terms of the GNU General Public License as published by	*
- *	the Free Software Foundation; either version 2 of the License, or		*
- *	(at your option) any later version.										*
- *																			*
- *	This program is distributed in the hope that it will be useful,			*
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
- *	GNU General Public License for more details.							*
- *																			*
- *	You should have received a copy of the GNU General Public License		*
- *	along with this program; if not, write to the							*
- *	Free Software Foundation, Inc.,											*
- *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
- ***************************************************************************/
+ *	the Free Software Foundation; either version 2 of the License, or	*
+ *	(at your option) any later version.					*
+ *										*
+ *	This program is distributed in the hope that it will be useful,		*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of		*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		*
+ *	GNU General Public License for more details.				*
+ *										*
+ *	You should have received a copy of the GNU General Public License	*
+ *	along with this program; if not, write to the				*
+ *	Free Software Foundation, Inc.,						*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.		*
+ ********************************************************************************/
+
+#include <unistd.h>
 
 #include "common.h"
 #include "search.h"
@@ -39,15 +41,15 @@
 #include <qwhatsthis.h>
 #include <qradiobutton.h>
 
-#include <kpushbutton.h>
+/*#include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kmenu.h>
 #include <KDialog>
-#include <kmessagebox.h>
 #include <kuser.h>
 #include <klineedit.h>
-#include <kiconloader.h>
+#include <kiconloader.h>*/
 //#include <kaccel.h>
+#include <kmessagebox.h>
 
 enum Focus {
 		CATEGORYLIST,
@@ -123,15 +125,23 @@ PortageTab::~PortageTab()
 void PortageTab::slotInit()
 {
 	// Get color theme
-	portageFrame->setPaletteBackgroundColor( colorGroup().base() );
+	QPalette p;
+	p.setColor(portageFrame->backgroundRole(), palette().base().color());
+	portageFrame->setPalette(p);
 
 	// Change select-color in summaryBrowser to get contrast
+	QColorGroup colorGroup = QColorGroup(palette());
 	QPalette summaryPalette;
-	QColorGroup summaryColorGroup( colorGroup() );
-	summaryColorGroup.setColor( QColorGroup::HighlightedText, colorGroup().dark() );
-	summaryPalette.setActive( summaryColorGroup );
+	QColorGroup summaryColorGroup( colorGroup );
+	summaryColorGroup.setColor( QColorGroup::HighlightedText, palette().dark().color() );
+
+	/*summaryPalette.setActive( summaryColorGroup );
 	summaryPalette.setInactive( summaryColorGroup );
-	summaryPalette.setDisabled( summaryColorGroup );
+	summaryPalette.setDisabled( summaryColorGroup );*/
+	summaryPalette.setColor(QPalette::Active, QPalette::NoRole, summaryColorGroup.color(QPalette::Active, QPalette::NoRole));
+	summaryPalette.setColor(QPalette::Inactive, QPalette::NoRole, summaryColorGroup.color(QPalette::Inactive, QPalette::NoRole));
+	summaryPalette.setColor(QPalette::Disabled, QPalette::NoRole, summaryColorGroup.color(QPalette::Disabled, QPalette::NoRole));
+
 	summaryBrowser->setPalette( summaryPalette );
 
 	// Keyboard shortcuts
@@ -142,8 +152,8 @@ void PortageTab::slotInit()
 	// Initialize the uninstall dialog
 	m_uninstallInspector = new UninstallInspector( this );
 
-	pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
-	pbQueue->setIcon( KIcon("kuroo_queue") );
+	pbClearFilter->setIcon( KIcon::fromTheme("edit-clear-locationbar-ltr") );
+	pbQueue->setIcon( KIcon::fromTheme("kuroo_queue") );
 	pbUninstall->setIcon( KIcon("list-remove") );
 	//TODO: There is no icon in the pics folder for this, and I can't find any stock icon named options, so
 	//I'm turning it off for now.
@@ -269,7 +279,7 @@ void PortageTab::slotButtons()
 	}
 
 	// If user is su enable uninstall
-	if ( packagesView->currentPackage()->isInstalled() && KUser().isSuperUser() )
+	if ( packagesView->currentPackage()->isInstalled() && ::getuid() == 0 )
 		pbUninstall->setDisabled( false );
 	else
 		pbUninstall->setDisabled( true );
@@ -369,18 +379,39 @@ void PortageTab::slotListPackages()
 		//TODO: This forces white instead of using the current color-scheme default
 		// Highlight text filter background in red if query failed
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
+		{
+			//searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::noMatchColor() ) );
+			QPalette p;
+			p.setColor(searchFilter->backgroundRole(), QColor(KurooConfig::noMatchColor()));
+			searchFilter->setPalette(p);
+
+		}
 		else
-			searchFilter->setPaletteBackgroundColor( Qt::white );
+		{
+			//searchFilter->setPaletteBackgroundColor( Qt::white );
+			QPalette p;
+			p.setColor(searchFilter->backgroundRole(), Qt::white);
+			searchFilter->setPalette(p);
+		}
 	}
 	else {
 		packagesView->showNoHitsWarning( false , numberOfTerms );
 
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
-			searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );
+		{
+			//searchFilter->setPaletteBackgroundColor( QColor( KurooConfig::matchColor() ) );
+			QPalette p;
+			p.setColor(searchFilter->backgroundRole(), QColor(KurooConfig::matchColor()));
+			searchFilter->setPalette(p);
+		}
 		else
-			searchFilter->setPaletteBackgroundColor( Qt::white );
+		{
+			//searchFilter->setPaletteBackgroundColor( Qt::white );
+			QPalette p;
+			p.setColor(searchFilter->backgroundRole(), Qt::white);
+			searchFilter->setPalette(p);
+		}
 	}
 }
 
@@ -433,7 +464,7 @@ void PortageTab::slotDequeue()
  */
 void PortageTab::slotUninstall()
 {
-	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || !KUser().isSuperUser() ) {
+	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || ::getuid() != 0 ) {
 		const QStringList selectedIdsList = packagesView->selectedIds();
 
 		// Pick only installed packages

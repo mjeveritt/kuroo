@@ -152,8 +152,8 @@ void PortageTab::slotInit()
 	// Initialize the uninstall dialog
 	m_uninstallInspector = new UninstallInspector( this );
 
-	pbClearFilter->setIcon( KIcon::fromTheme("edit-clear-locationbar-ltr") );
-	pbQueue->setIcon( KIcon::fromTheme("kuroo_queue") );
+	pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
+	pbQueue->setIcon( KIcon("kuroo_queue") );
 	pbUninstall->setIcon( KIcon("list-remove") );
 	//TODO: There is no icon in the pics folder for this, and I can't find any stock icon named options, so
 	//I'm turning it off for now.

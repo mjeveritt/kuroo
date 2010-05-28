@@ -87,27 +87,27 @@ private:
 	
 private slots:
     void 						slotEmergeOutput();
-    void 						slotCleanupQueue();
-    void 						slotCleanupPretend();
-    void 						slotCleanupUnmerge();
-    void 						slotCleanupSync();
-    void 						slotCleanupCheckUpdates();
+    void 						slotCleanupQueue(int, QProcess::ExitStatus);
+    void 						slotCleanupPretend(int, QProcess::ExitStatus);
+    void 						slotCleanupUnmerge(int, QProcess::ExitStatus);
+    void 						slotCleanupSync(int, QProcess::ExitStatus);
+    void 						slotCleanupCheckUpdates(int, QProcess::ExitStatus);
 	void						slotTryEmerge();
-    void						slotBackupComplete();
-    void						slotEmergeDistfilesComplete();
-    void						slotEClean2Complete();
-    void						slotRevdepRebuildComplete();
+    void						slotBackupComplete(int, QProcess::ExitStatus);
+    void						slotEmergeDistfilesComplete(int, QProcess::ExitStatus);
+    void						slotEClean2Complete(int, QProcess::ExitStatus);
+    void						slotRevdepRebuildComplete(int, QProcess::ExitStatus);
 
 	
 signals:
 	void						signalEmergeComplete();
 	
 private:
-	QObject*					m_parent;
-    KProcess*					eProc;
-    KProcess*                   eClean1;
-    KProcess*                   eClean2;
-    KProcess*                   ioRevdepRebuild;
+	QObject* m_parent;
+	KProcess* eProc;
+	KProcess* eClean1;
+	KProcess* eClean2;
+	KProcess* ioRevdepRebuild;
         
 	// Used to collect ewarn and einfo messages spaning multiple lines
 	bool						m_completedFlag;
@@ -145,10 +145,14 @@ private:
 	// List of parsed packages
 	EmergePackageList			m_emergePackageList;
 	
+	//Remembers the beginning of lines before they are fully read.
+	QByteArray				m_buffer;
+	
 	// Count of etc-updates files to merge
 	int							m_etcUpdateCount;
         
         bool                                            m_skipHousekeeping;
+	void cleanupQueue();
 };
 
 #endif

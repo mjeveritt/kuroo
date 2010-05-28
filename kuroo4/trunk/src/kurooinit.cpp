@@ -102,7 +102,7 @@ KurooInit::KurooInit( QObject *parent )
 	}
 
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
-	//KurooConfig::writeConfig(); //HACK: port KConfig
+	KurooConfig::self()->writeConfig();
 
 	// Initialize the log
 	QString logFile = LogSingleton::Instance()->init( this );

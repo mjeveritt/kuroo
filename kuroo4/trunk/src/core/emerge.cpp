@@ -243,7 +243,9 @@ bool Emerge::pretend( const QStringList& packageList )
 	m_etcUpdateCount = 0;
 	
 	m_emergePackageList.clear();
-	eProc->close(); //eProc->resetAll();
+	eProc->close();
+	eProc->clearProgram();
+
 	*eProc << "emerge" << "--nospinner" << "--color=n" << "--columns" << "-pv";
 	
 	if( KurooConfig::updateBuilddeps() )
@@ -277,7 +279,8 @@ bool Emerge::unmerge( const QStringList& packageList )
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
-	eProc->close(); //resetAll();
+	eProc->close();
+	eProc->clearProgram();
 	*eProc << "emerge" << "--unmerge" << "--color=n" << "--nospinner";
 	
 	// Add argument for each of the attached packages
@@ -306,7 +309,8 @@ bool Emerge::sync()
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
-	eProc->close(); //resetAll();
+	eProc->close();
+	eProc->clearProgram();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--color=n" << "--nospinner";
 	
 	eProc->start( /*K3Process::OwnGroup, true*/ );
@@ -331,7 +335,8 @@ bool Emerge::checkUpdates()
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 	
-	eProc->close(); //resetAll();
+	eProc->close();
+	eProc->clearProgram();
 	*eProc << "emerge" << "-pvu" << "--color=n" << "--nospinner" << "--columns";
 	
 	// Add deep if checked in gui

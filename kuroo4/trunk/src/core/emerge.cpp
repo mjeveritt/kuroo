@@ -115,6 +115,7 @@ bool Emerge::queue( const QStringList& packageList )
 
 		m_emergePackageList.clear();
 		eProc->close(); ////eProc->resetAll();
+		eProc->clearProgram();
 		*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
 		
 		if( KurooConfig::updateBuilddeps() )

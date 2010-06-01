@@ -48,6 +48,7 @@ Emerge::Emerge( QObject* m_parent )
 
 Emerge::~Emerge()
 {
+	disconnect(eProc, SIGNAL(finished(int, QProcess::ExitStatus)));
 	delete eProc;
 	eProc = 0;
 }
@@ -108,13 +109,13 @@ bool Emerge::queue( const QStringList& packageList )
 	else {
 		m_backupComplete = false;
 		m_blocks.clear();
-		m_importantMessage = QString::null;
-		m_unmasked = QString::null;
+		m_importantMessage.clear();
+		m_unmasked.clear();
 		m_lastEmergeList = packageList;
 		m_etcUpdateCount = 0;
 
 		m_emergePackageList.clear();
-		eProc->close(); ////eProc->resetAll();
+		eProc->close();
 		eProc->clearProgram();
 		*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
 		
@@ -145,6 +146,7 @@ bool Emerge::queue( const QStringList& packageList )
 			m_pausable = true;
 
 			LogSingleton::Instance()->writeLog( i18n("\nEmerge %1 started...").arg( packageList.join(" ") ), KUROO );
+			kDebug() << i18n("\nEmerge %1 started...").arg( packageList.join(" "));
 			KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Installing packages in queue...") );
 			KurooStatusBar::instance()->startTimer();
 
@@ -518,6 +520,7 @@ const QString Emerge::packageMessage()
  */
 void Emerge::cleanup()
 {
+	kDebug() << "cleaning up !";
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n("Done.") );
 	SignalistSingleton::Instance()->setKurooBusy( false );

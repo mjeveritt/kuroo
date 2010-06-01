@@ -111,30 +111,29 @@ void PackageInspector::updateVersionData()
     // Iterate sorted version list
     QString installedVersion;
     QStringList versionList, versionInstalledList;
-    QStringListIterator it( m_portagePackage->versionDataList() );
-    while( it.hasNext() ) {
-
-        // Parse out version and data
-        QString version = it.next();
-        QString stability = it.next();
-        QString size = it.next();
+    QStringList versionDataList = m_portagePackage->versionDataList();
+    kDebug() << m_portagePackage->versionDataList();
+    
+    // Parse out version and data
+    QString version = versionDataList[0];
+    QString stability = versionDataList[1];
+    QString size = versionDataList[2];
 
         // Collect installed version in "Installed files" tab
-        bool isInstalled;
-        if ( it.peekNext() == "1" ) {
-            isInstalled = true;
-            installedVersion = version;
-            versionInstalledList.prepend( version );
-        }
-        else
-            isInstalled = false;
-
-        // Collect in inverse order to fill dropdown menus correctly
-        versionList.prepend( version );
-
-        // Insert version in versionview
-        versionsView->insertItem( version, stability, size, isInstalled );
+    bool isInstalled;
+    if ( versionDataList[3] == "1" ) {
+        isInstalled = true;
+        installedVersion = version;
+        versionInstalledList.prepend( version );
     }
+    else
+        isInstalled = false;
+
+    // Collect in inverse order to fill dropdown menus correctly
+    versionList.prepend( version );
+
+    // Insert version in versionview
+    versionsView->insertItem( version, stability, size, isInstalled );
 
     // Insert all versions in dropdown-menus
     cbVersionsEbuild->addItems( versionList );
@@ -466,7 +465,8 @@ void PackageInspector::slotHardMaskInfo()
 void PackageInspector::showSettings()
 {
     // Get user mask specific version
-    QString userMaskVersion = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id ).first();
+    QStringList userMaskVersions = KurooDBSingleton::Instance()->packageUserMaskAtom( m_id );
+    QString userMaskVersion = userMaskVersions.isEmpty() ? "" : userMaskVersions.first();
 
     // Enable stability radiobutton
     if ( !userMaskVersion.isEmpty() ) {

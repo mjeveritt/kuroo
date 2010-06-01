@@ -32,7 +32,7 @@
 * a PackageVersion object.
 */
 PackageVersion::PackageVersion( PackageItem* package, const QString& version )
-	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_size( QString::null), m_isHardMasked( false ),
+	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_isHardMasked( false ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),
 	// Regexp for a revision number, which are everywhere

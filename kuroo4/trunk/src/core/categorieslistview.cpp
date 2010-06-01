@@ -246,7 +246,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 {
 	// Get the category id
 	static int idCategory( -1 );
-	if ( idCategory != categoriesList.first().toInt() )
+	if ( !categoriesList.isEmpty() && idCategory != categoriesList.first().toInt() )
 		idCategory = categoriesList.first().toInt();
 
 	clear(); // @warning: categoryItem cannot be used anymore

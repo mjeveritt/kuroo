@@ -324,9 +324,9 @@ void QueueTab::slotButtons()
 				disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
 				connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
 				if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
-				cbSkipHousekeeping->setDisabled( false );
+					cbSkipHousekeeping->setDisabled( false );
 				else
-				cbSkipHousekeeping->setDisabled( true );
+					cbSkipHousekeeping->setDisabled( true );
 		}
 
 		// No package selected, disable all buttons
@@ -444,7 +444,6 @@ void QueueTab::slotGo()
 					QueueSingleton::Instance()->installQueue( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 				}
-
 			}
 	}
 }

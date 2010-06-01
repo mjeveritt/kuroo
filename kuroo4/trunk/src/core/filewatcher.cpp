@@ -59,9 +59,9 @@ void FileWatcher::slotChanged( const QString& path )
 {
 	if ( path == KurooConfig::dirDbPkg() + "/sys-apps" ) {
 		QDir dPortageApp( KurooConfig::dirDbPkg() + "/sys-apps" );
-        dPortageApp.setNameFilters( QStringList("portage-*") );
+        	dPortageApp.setNameFilters( QStringList("portage-*") );
 		dPortageApp.setSorting( QDir::Time );
-		QString portage = dPortageApp.entryList().first();
+		QString portage = dPortageApp.entryList().isEmpty() ? "" : dPortageApp.entryList().first();
 		
 		if ( portage.section( "portage-", 1, 1 ).startsWith( "2.1" ) ) {
 			KurooConfig::setPortageVersion21( true );

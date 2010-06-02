@@ -132,13 +132,14 @@ bool Emerge::queue( const QStringList& packageList )
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		eProc->start(); // KProcess::OwnGroup, true
 
-		if ( eProc->state() != QProcess::Running ) {
+		//FIXME: process could be in QProcess::Starting state.
+		/*if ( eProc->state() != QProcess::Running ) {
 			LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
 				cleanupQueue();
 
 			return false;
 		}
-		else {
+		else*/ {
 			if( KurooConfig::enableEclean() && !skipHousekeeping())
 				m_doeclean = true;
 			if( KurooConfig::revdepEnabled() && !skipHousekeeping())
@@ -417,6 +418,7 @@ void Emerge::slotEmergeOutput()
 			emergePackage.installedVersion = rxPackage.cap(6);
 			emergePackage.useFlags = rxPackage.cap(7).simplified();
 			emergePackage.size = rxPackage.cap(8);
+			kDebug() << emergePackage.size;
 			m_emergePackageList.prepend( emergePackage );
 		}
 		
@@ -542,7 +544,7 @@ void Emerge::cleanup()
 			eClean1 = new KProcess();
 			//eClean1->setUseShell( true, "/bin/bash" );
 			//eClean1->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-			eClean1->close(); //resetAll();
+			//eClean1->close(); //resetAll();
 			*eClean1 << "eclean";
 			ecleanCOMMAND="eclean ";
 			if( !KurooConfig::ecleanTimeLimit().isEmpty() ) {

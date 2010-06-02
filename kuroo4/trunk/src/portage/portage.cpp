@@ -96,8 +96,6 @@ public:
 	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : Job( dependent ), m_package( package ) {}
 
 	virtual void run() {
-		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
-
 		QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
 			kWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
@@ -106,6 +104,8 @@ public:
 		QString category = parts[0];
 		QString name = parts[1];
 		QString version = parts[2];
+
+		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 
 		QString id = KurooDBSingleton::Instance()->singleQuery( QString( "SELECT id FROM package WHERE "
 			"name = '%1' AND category = '%2' LIMIT 1;").arg( name ).arg( category ), m_db );

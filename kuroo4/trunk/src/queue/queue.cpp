@@ -112,7 +112,7 @@ public:
 		foreach ( QString id, endUserPackageList )
 			endUserPackageMap.insert( id, 0 );
 
-		KurooDBSingleton::Instance()->query("DELETE FROM queue;");
+		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
 
 		// Iterate the emerge pretend package list
 		QString idPackage;

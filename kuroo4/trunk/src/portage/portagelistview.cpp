@@ -95,32 +95,13 @@ PortageListView::PortageListView( QWidget* parent, const char* name )
 	headerItem()->setText( 4, i18n( "Update" ) );
 	headerItem()->setText( 5, i18n( "Description" ) );
 
-	//setHeaderItem( &header );
-
-	//TODO: These don't have any effect, need to find something that works
-	/*resizeColumnToContents( 0 );
-	resizeColumnToContents( 1 );
-	resizeColumnToContents( 2 );
-	resizeColumnToContents( 3 );
-	resizeColumnToContents( 4 );*/
-	/*setColumnWidthMode( 0, QTreeWidget::Manual );
-	setColumnWidthMode( 1, QTreeWidget::Manual );
-	setColumnWidthMode( 2, QTreeWidget::Manual );
-	setColumnWidthMode( 3, QTreeWidget::Manual );
-	setColumnWidthMode( 4, QTreeWidget::Manual );*/
-
 	setSelectionMode( QAbstractItemView::ExtendedSelection );
-	//setProperty( "selectionMode", "Extended" );
 	setSortingEnabled( true );
 	header()->setSortIndicatorShown( true );
-	//setShowSortIndicator( true );
-	//setItemMargin( 1 );
 	setRootIsDecorated( false );
-	//setFullWidth( true );
 
 	if ( KurooConfig::installedColumn() ) {
 		headerItem()->setIcon( 1, KIcon("kuroo_installed_column") );
-		//setColumnAlignment( 1, Qt::AlignHCenter );
 		setColumnWidth( 1, 25 );
 	}
 	else
@@ -228,10 +209,12 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		//emit currentChanged( 0 );
 	}
 
+
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
 // 	kDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): ";
 
+	resizeColumnToContents( 0 );
 	return packageCount;
 }
 

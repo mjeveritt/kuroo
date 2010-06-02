@@ -279,8 +279,8 @@ bool Emerge::pretend( const QStringList& packageList )
 bool Emerge::unmerge( const QStringList& packageList )
 {
 	m_blocks.clear();
-	m_importantMessage = QString::null;
 	m_etcUpdateCount = 0;
+	m_importantMessage.clear();
 	m_emergePackageList.clear();
 	
 	eProc->close();

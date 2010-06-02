@@ -33,6 +33,7 @@ UninstallInspector::UninstallInspector( QWidget *parent )
 {
     //i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
     m_uninstallbase.setupUi( mainWidget() );
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
 }
 
 UninstallInspector::~UninstallInspector()
@@ -44,49 +45,52 @@ UninstallInspector::~UninstallInspector()
  */
 void UninstallInspector::view( const QStringList& packageList )
 {
-    m_uninstallbase.uninstallView->clear();
-	
-    const QStringList systemFilesList = KurooConfig::systemFiles().split(" ");
+	m_uninstallbase.uninstallView->clear();
+
+	const QStringList systemFilesList = KurooConfig::systemFiles().split(" ");
 	bool isPartOfSystem( false );
-	
+
 	for ( QStringList::ConstIterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 		QString id = *itPackage++;
 		QString package = *itPackage;
-		
-        QTreeWidgetItem* itemPackage = new QTreeWidgetItem( m_uninstallbase.uninstallView );
-        itemPackage->setText( 0, package );
-        itemPackage->setFlags( Qt::ItemIsUserCheckable );
-        itemPackage->setExpanded( true );
-        itemPackage->setCheckState( 0, Qt::Checked );
-		
+
+		QTreeWidgetItem* itemPackage = new QTreeWidgetItem( m_uninstallbase.uninstallView );
+		itemPackage->setText( 0, package );
+		itemPackage->setFlags( Qt::ItemIsUserCheckable );
+		itemPackage->setExpanded( true );
+		itemPackage->setCheckState( 0, Qt::Checked );
+		itemPackage->setDisabled(false);
+
 		// Warn if package is included in gentoo base system profile
-        foreach ( QString file, systemFilesList )
-            if ( file == package ) {
-                itemPackage->setIcon( 0, KIcon("kuroo_warning") );
+		foreach ( QString file, systemFilesList ) {
+			if ( file == package ) {
+				itemPackage->setIcon( 0, KIcon("kuroo_warning") );
 				isPartOfSystem = true;
 			}
-		
+		}
+
 		// List all versions if more that one installed version is found
 		const QStringList versionsList = KurooDBSingleton::Instance()->packageVersionsInstalled( id );
-		if ( versionsList.size() > 1 )
-            foreach( QString version, versionsList ) {
-                QTreeWidgetItem* itemVersion = new QTreeWidgetItem( itemPackage );
-                itemPackage->setText( 0, version );
-                itemPackage->setFlags( Qt::ItemIsUserCheckable );
-                //itemVersion->setEnabled( true );
-                itemPackage->setCheckState( 0, Qt::Checked );
+		if ( versionsList.size() > 1 ) {
+			foreach( QString version, versionsList ) {
+				QTreeWidgetItem* itemVersion = new QTreeWidgetItem( itemPackage );
+				itemVersion->setText( 0, version );
+				itemVersion->setFlags( Qt::ItemIsUserCheckable );
+				itemVersion->setDisabled( false );
+				itemVersion->setCheckState( 0, Qt::Checked );
 			}
+		}
 	}
-	
+
 	if ( isPartOfSystem ) {
-        m_uninstallbase.uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
+		m_uninstallbase.uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
 		                                          "This may be damaging to your system!</b></font>") );
-        m_uninstallbase.uninstallWarning->show();
+		m_uninstallbase.uninstallWarning->show();
 	}
-    else {
-        m_uninstallbase.uninstallWarning->hide();
-    }
-	
+	else {
+		m_uninstallbase.uninstallWarning->hide();
+	}
+
 	show();
 }
 
@@ -95,21 +99,23 @@ void UninstallInspector::view( const QStringList& packageList )
  */
 void UninstallInspector::slotOk()
 {
+	kDebug() << "Unmerging packages :";
 	QStringList packageList;
-	
-    QTreeWidgetItemIterator it( m_uninstallbase.uninstallView );
-    while ( *it ) {
-        if ( (*it)->checkState(0) == Qt::Checked ) {
-            if ( (*it)->parent() ) {
-                if ( (*it)->parent()->checkState(0) == Qt::Unchecked )
-                    packageList += "=" + (*it)->parent()->text(0) + "-" + (*it)->text(0);
-            } else {
-                packageList += (*it)->text(0);
-            }
-        }
+
+	QTreeWidgetItemIterator it( m_uninstallbase.uninstallView );
+	while ( *it ) {
+		if ( (*it)->checkState(0) == Qt::Checked ) {
+			if ( (*it)->parent() ) {
+				if ( (*it)->parent()->checkState(0) == Qt::Unchecked )
+					packageList += "=" + (*it)->parent()->text(0) + "-" + (*it)->text(0);
+			} else {
+				kDebug() << "	*" << (*it)->text(0);
+				packageList += (*it)->text(0);
+			}
+		}
 		++it;
 	}
-	
+
 	EmergeSingleton::Instance()->unmerge( packageList );
 	hide();
 }

@@ -36,7 +36,7 @@ kde4_add_ui_files(portage_sources portage/uninstallbase.ui portage/portagebase.u
 
 #config
 set(config_sources config/configdialog.cpp )
-kde4_add_ui_files(config_sources config/options1.ui config/options2.ui config/options7.ui config/options8.ui)
+kde4_add_ui_files(config_sources config/options1.ui config/options2.ui config/options3.ui config/options4.ui)
 kde4_add_kcfg_files(config_sources config/settings.kcfgc )
 
 #queue

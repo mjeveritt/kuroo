@@ -52,6 +52,8 @@ KurooInit::KurooInit( QObject *parent )
 	kDebug() << "Initializing Kuroo Environment" << LINE_INFO;
 	getEnvironment();
 
+	checkEtcFiles();
+
 	// Run intro if new version is installed or no DirHome directory is detected.
 	QDir d( kurooDir );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
@@ -237,4 +239,79 @@ void KurooInit::checkUser()
 	exit(0);
 }
 
+void KurooInit::checkEtcFiles()
+{
+	QStringList paths;
+	paths	<< "FilePackageUserUnMask" << "/etc/portage/package.unmask"
+		<< "FilePackageKeywords" << "/etc/portage/package.keywords"
+		<< "FilePackageUserMask" << "/etc/portage/package.mask"
+		<< "FilePackageUserUse" << "/etc/portage/package.use";
+
+	for(int i = 0; i < paths.count(); ++i)
+	{
+		QStringList list;
+		QString configOption = paths[i];
+		QString path = paths[++i];
+		QFileInfo fInfo(path);
+		
+		if (!fInfo.exists())
+		{
+			QFile file(path);
+			file.open(QIODevice::ReadWrite);
+			file.close();
+			list << path;
+		}
+		else if (fInfo.isDir())
+		{
+			QDir dir(path);
+			dir.setFilter(QDir::Files | QDir::NoSymLinks);
+			QFileInfoList fiList = dir.entryInfoList();
+			for (int j = 0; j < fiList.size(); ++j)
+			{
+				QFileInfo fileInfo = fiList.at(j);
+				//kDebug() << "Found" << fileInfo.absoluteFilePath();
+				list << fileInfo.absoluteFilePath();
+			}
+			if (list.isEmpty())
+			{
+				QFile file(path.append("/all"));
+				file.open(QIODevice::ReadWrite);
+				file.close();
+				list << path;
+			}
+		}
+		else if (fInfo.isFile())
+		{
+			list << path;
+		}
+
+		//kDebug() << configOption << ":" << list;
+		//TODO:check if default file exists.
+		if (configOption == "FilePackageUserUnMask")
+		{
+			KurooConfig::setFilePackageUserUnMask(list);
+			if (KurooConfig::defaultFilePackageUserUnMask() == ""/* || !QFileInfo::exists(KurooConfig::defaultFilePackageUserUnMask())*/)
+				KurooConfig::setDefaultFilePackageUserUnMask(list[0]);
+		}
+		if (configOption == "FilePackageKeywords")
+		{
+			KurooConfig::setFilePackageKeywords(list);
+			if (KurooConfig::defaultFilePackageKeywords() == ""/* || !QFileInfo::exists(KurooConfig::defaultFilePackageUserUnMask())*/)
+				KurooConfig::setDefaultFilePackageKeywords(list[0]);
+		}
+		if (configOption == "FilePackageUserMask")
+		{
+			KurooConfig::setFilePackageUserMask(list);
+			if (KurooConfig::defaultFilePackageUserMask() == ""/* || !QFileInfo::exists(KurooConfig::defaultFilePackageUserUnMask())*/)
+				KurooConfig::setDefaultFilePackageUserMask(list[0]);
+		}
+		if (configOption == "FilePackageUserUse")
+		{
+			KurooConfig::setFilePackageUserUse(list);
+			if (KurooConfig::defaultFilePackageUserUse() == ""/* || !QFileInfo::exists(KurooConfig::defaultFilePackageUserUnMask())*/)
+				KurooConfig::setDefaultFilePackageUserUse(list[0]);
+		}
+			
+	}
+}
 #include "kurooinit.moc"

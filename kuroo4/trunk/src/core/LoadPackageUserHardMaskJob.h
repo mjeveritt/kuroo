@@ -34,19 +34,19 @@ public:
 	virtual void run() {
 
 		// Collect all mask dependatoms from /etc/portage/package.mask
-		QFileInfo fileInfo( KurooConfig::filePackageUserMask() );
+		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserMask() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::filePackageUserMask() << " is a dir" << LINE_INFO;
-			if( !mergeDirIntoFile( KurooConfig::filePackageUserMask() ) ) {
+			kDebug(0) << KurooConfig::defaultFilePackageUserMask() << " is a dir" << LINE_INFO;
+			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageUserMask() ) ) {
 				return;
 			}
 		}
 
-		QFile file( KurooConfig::filePackageUserMask() );
+		QFile file( KurooConfig::defaultFilePackageUserMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kError(0) << "Parsing user package.mask. Reading: " << KurooConfig::filePackageUserMask() << LINE_INFO;
+			kError(0) << "Parsing user package.mask. Reading: " << KurooConfig::defaultFilePackageUserMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -95,7 +95,7 @@ public:
 					}
 					else
 						kWarning(0) << QString("Parsing user package.mask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+							.arg( KurooConfig::defaultFilePackageUserMask() ) << LINE_INFO;
 				}
 			}
 		}

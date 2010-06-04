@@ -102,16 +102,17 @@ public:
 		const QStringList lines = KurooDBSingleton::Instance()->query(
 			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
 			"WHERE package.id = packageKeywords.idPackage;" );
+		kDebug() << "Found" << lines;
 		if ( lines.isEmpty() ) {
 			kWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
-				.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+				.arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
 			return;
 		}
 
-		QFile file( KurooConfig::filePackageKeywords() );
+		QFile file( KurooConfig::defaultFilePackageKeywords() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append ) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
 			return;
 		}
 
@@ -147,14 +148,14 @@ public:
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
 		if ( lines.isEmpty() ) {
 			kWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
-				.arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+				.arg( KurooConfig::defaultFilePackageUserMask() ) << LINE_INFO;
 			return;
 		}
 
-		QFile file( KurooConfig::filePackageUserMask() );
+		QFile file( KurooConfig::defaultFilePackageUserMask() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserMask() ) << LINE_INFO;
+		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserMask() ) << LINE_INFO;
 			return;
 		}
 
@@ -184,14 +185,14 @@ public:
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
 			kWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
-				.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+				.arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
 			return;
 		}
 
-		QFile file( KurooConfig::filePackageUserUnMask() );
+		QFile file( KurooConfig::defaultFilePackageUserUnMask() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
 			return;
 		}
 
@@ -222,14 +223,14 @@ public:
 			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
 			"WHERE package.id = packageUse.idPackage;" );
 		if ( lines.isEmpty() ) {
-			kWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+			kWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::defaultFilePackageUserUse() ) << LINE_INFO;
 			return;
 		}
 
-		QFile file( KurooConfig::filePackageUserUse() );
+		QFile file( KurooConfig::defaultFilePackageUserUse() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::filePackageUserUse() ) << LINE_INFO;
+		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append) ) {
+			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUse() ) << LINE_INFO;
 			return;
 		}
 
@@ -275,11 +276,11 @@ void PortageFiles::refresh( int mask )
 	switch ( mask ) {
 		case PACKAGE_KEYWORDS_SCANNED:
 			LogSingleton::Instance()->writeLog( i18n("Completed scanning for package keywords in %1.")
-												.arg( KurooConfig::filePackageKeywords() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageKeywords() ), KUROO );
 			break;
 		case PACKAGE_USER_UNMASK_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for unmasked packages in %1.")
-												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageUserUnMask() ), KUROO );
 			break;
 		case PACKAGE_HARDMASK_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for hardmasked packages in %1.")
@@ -287,29 +288,29 @@ void PortageFiles::refresh( int mask )
 			break;
 		case PACKAGE_USER_MASK_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning for user masked packages in %1.")
-												.arg( KurooConfig::filePackageUserMask() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageUserMask() ), KUROO );
 			break;
 		case PACKAGE_KEYWORDS_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving package keywords in %1.")
-												.arg( KurooConfig::filePackageKeywords() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageKeywords() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
 		case PACKAGE_USER_MASK_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user masked packages in %1.")
-												.arg( KurooConfig::filePackageUserMask() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageUserMask() ), KUROO );
 			emit signalPortageFilesChanged();
 			break;
 		case PACKAGE_USER_UNMASK_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user unmasked packages in %1.")
-												.arg( KurooConfig::filePackageUserUnMask() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageUserUnMask() ), KUROO );
 			break;
 		case PACKAGE_USER_USE_SCANNED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed scanning user package use flags in %1.")
-												.arg( KurooConfig::filePackageUserUse() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageUserUse() ), KUROO );
 			break;
 		case PACKAGE_USER_USE_SAVED:
 			LogSingleton::Instance()->writeLog(  i18n("Completed saving user package use in %1.")
-												.arg( KurooConfig::filePackageUserUse() ), KUROO );
+												.arg( KurooConfig::defaultFilePackageUserUse() ), KUROO );
 	}
 }
 

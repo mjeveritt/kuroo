@@ -23,11 +23,10 @@
 
 #include <kconfigdialog.h>
 
-class QComboBox;
-class QGroupBox;
-class QVBox;
-class Options2;
-class Options8;
+#include "ui_options1.h"
+#include "ui_options2.h"
+#include "ui_options3.h"
+#include "ui_options4.h"
 
 /**
  * @class ConfigDialog
@@ -52,6 +51,10 @@ private slots:
 	
 private:
 	bool				m_isDefault;
+	Ui::Options1 form1;
+	Ui::Options2 form2;
+	Ui::Options3 form3;
+	Ui::Options4 form4;
 };
 
 #endif

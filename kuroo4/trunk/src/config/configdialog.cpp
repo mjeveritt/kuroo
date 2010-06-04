@@ -21,10 +21,6 @@
 #include "common.h"
 #include "systemtray.h"
 #include "configdialog.h"
-#include "ui_options1.h"
-#include "ui_options2.h"
-#include "ui_options7.h"
-#include "ui_options8.h"
 
 #include <qtextstream.h>
 #include <qdir.h>
@@ -56,19 +52,63 @@ ConfigDialog::ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleto
 
 	setFaceType(KPageDialog::Tabbed);
 	
-	QDialog *opt1 = new QDialog(); { Ui::Options1 form1; form1.setupUi( opt1 ); } //, i18n("General") );
-	QDialog *opt2 = new QDialog(); { Ui::Options2 form2; form2.setupUi( opt2 ); } //, i18n("make.conf") );
-	QDialog *opt7 = new QDialog(); { Ui::Options7 form7; form7.setupUi( opt7 ); } //, i18n("Etc-update warnings") );
-	QDialog *opt8 = new QDialog(); { Ui::Options8 form8; form8.setupUi( opt8 ); } //, i18n("Housekeeping") );
+	QDialog *opt1 = new QDialog();
+	form1.setupUi( opt1 ); //, i18n("General") );
+	QDialog *opt2 = new QDialog();
+	form2.setupUi( opt2 ); //, i18n("make.conf") );
+	QDialog *opt3 = new QDialog();
+	form3.setupUi( opt3 ); //, i18n("Etc-update warnings") );
+	QDialog *opt4 = new QDialog();
+	form4.setupUi( opt4 ); //, i18n("Housekeeping") );
 
 	addPage( opt1, i18n("General"), QString("kuroo"), i18n("General preferences") );
 	addPage( opt2, i18n("make.conf"), QString("kuroo_makeconf"), i18n("Edit your make.conf file") );
-	addPage( opt7, i18n("Etc-update warnings"), QString("dialog-warning"), i18n("Edit your etc-update warning file list") );
-	addPage( opt8, i18n("Housekeeping"), QString("kuroo_housekeeping"), i18n("Control automatic file cleanup and rebuilding") );
+	addPage( opt3, i18n("Etc-update warnings"), QString("dialog-warning"), i18n("Edit your etc-update warning file list") );
+	addPage( opt4, i18n("Housekeeping"), QString("kuroo_housekeeping"), i18n("Control automatic file cleanup and rebuilding") );
 
 	connect( this, SIGNAL( settingsChanged(QString) ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
 
+	int selected = 0;
+	for(int i = 0; i < KurooConfig::filePackageKeywords().count(); ++i)
+	{
+		QString f = KurooConfig::filePackageKeywords()[i];
+		if (f == KurooConfig::defaultFilePackageKeywords())
+			selected = i;
+		form1.keywords->addItem(f);
+	}
+	form1.keywords->setCurrentIndex(selected);
+	
+	selected = 0;
+	for(int i = 0; i < KurooConfig::filePackageUserUse().count(); ++i)
+	{
+		QString f = KurooConfig::filePackageUserUse()[i];
+		if (f == KurooConfig::defaultFilePackageUserUse())
+			selected = i;
+		form1.use->addItem(f);
+	}
+	form1.use->setCurrentIndex(selected);
+	
+	selected = 0;
+	for(int i = 0; i < KurooConfig::filePackageUserMask().count(); ++i)
+	{
+		QString f = KurooConfig::filePackageUserMask()[i];
+		if (f == KurooConfig::defaultFilePackageUserMask())
+			selected = i;
+		form1.mask->addItem(f);
+	}
+	form1.mask->setCurrentIndex(selected);
+	
+	selected = 0;
+	for(int i = 0; i < KurooConfig::filePackageUserUnMask().count(); ++i)
+	{
+		QString f = KurooConfig::filePackageUserUnMask()[i];
+		if (f == KurooConfig::defaultFilePackageUserUnMask())
+			selected = i;
+		form1.unmask->addItem(f);
+	}
+	form1.unmask->setCurrentIndex(selected);
+	
 	parseMakeConf();
 }
 
@@ -113,6 +153,11 @@ void ConfigDialog::slotSaveAll()
 				KMessageBox::error( this, i18n("Failed to save %1. Please run as root.").arg( KurooConfig::fileMakeConf() ), i18n("Saving"));
 			}
 	}*/
+
+	KurooConfig::setDefaultFilePackageKeywords(form1.keywords->currentText());
+	KurooConfig::setDefaultFilePackageUserUse(form1.use->currentText());
+	KurooConfig::setDefaultFilePackageUserMask(form1.mask->currentText());
+	KurooConfig::setDefaultFilePackageUserUnMask(form1.unmask->currentText());
 }
 
 /**

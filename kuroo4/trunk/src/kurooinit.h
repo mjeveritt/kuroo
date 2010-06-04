@@ -49,6 +49,7 @@ private:
     KProcess*       eProc;
     IntroDlg 		*wizardDialog;
 	QStringList		m_emergeInfoLines;
+	void	checkEtcFiles();
 };
 
 #endif

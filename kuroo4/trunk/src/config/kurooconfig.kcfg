@@ -74,20 +74,32 @@
 		<entry name="FileMakeConf" type="String">
 			<default>/etc/make.conf</default>
 		</entry>
-		<entry name="FilePackageUserUnMask" type="String">
-			<default>/etc/portage/package.unmask</default>
+		<entry name="FilePackageUserUnMask" type="StringList">
+			<!--<default>/etc/portage/package.unmask</default>-->
 		</entry>
-		<entry name="FilePackageKeywords" type="String">
-			<default>/etc/portage/package.keywords</default>
+		<entry name="FilePackageKeywords" type="StringList">
+			<!--<default>/etc/portage/package.keywords</default>-->
 		</entry>
-		<entry name="FilePackageUserMask" type="String">
-			<default>/etc/portage/package.mask</default>
+		<entry name="FilePackageUserMask" type="StringList">
+			<!--<default>/etc/portage/package.mask</default>-->
 		</entry>
 		<entry name="FilePackageHardMask" type="String">
 			<default>/usr/portage/profiles/package.mask</default>
 		</entry>
-		<entry name="FilePackageUserUse" type="String">
-			<default>/etc/portage/package.use</default>
+		<entry name="FilePackageUserUse" type="StringList">
+			<!--<default>/etc/portage/package.use</default>-->
+		</entry>
+		<entry name="DefaultFilePackageUserUnMask" type="String">
+			<default></default>
+		</entry>
+		<entry name="DefaultFilePackageKeywords" type="String">
+			<default></default>
+		</entry>
+		<entry name="DefaultFilePackageUserMask" type="String">
+			<default></default>
+		</entry>
+		<entry name="DefaultFilePackageUserUse" type="String">
+			<default></default>
 		</entry>
 		<entry name="FileEmergeLog" type="String">
 			<default>/var/log/emerge.log</default>

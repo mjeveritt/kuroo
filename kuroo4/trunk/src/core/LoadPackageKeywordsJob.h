@@ -35,18 +35,18 @@ public:
 		DEBUG_LINE_INFO;
 
 		// Collect all mask dependatoms
-		QFileInfo fileInfo( KurooConfig::filePackageKeywords() );
+		QFileInfo fileInfo( KurooConfig::defaultFilePackageKeywords() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::filePackageKeywords() << " is a dir" << LINE_INFO;
-			if( !mergeDirIntoFile( KurooConfig::filePackageKeywords() ) ) {
+			kDebug(0) << KurooConfig::defaultFilePackageKeywords() << " is a dir" << LINE_INFO;
+			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageKeywords() ) ) {
 				return;
 			}
 		}
-		QFile file( KurooConfig::filePackageKeywords() );
+		QFile file( KurooConfig::defaultFilePackageKeywords() );
 		QTextStream stream( &file );
 		QStringList linesPackage;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::filePackageKeywords() << LINE_INFO;
+			kWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::defaultFilePackageKeywords() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -100,7 +100,7 @@ public:
 				}
 				else
 					kWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
-						.arg( KurooConfig::filePackageKeywords() ) << LINE_INFO;
+						.arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
 			}
 
 		}

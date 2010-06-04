@@ -834,38 +834,34 @@ void Emerge::askUnmaskPackage( const QString& packageKeyword )
 				"findings on Gentoo bugzilla website.");
 		KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "Missing Keyword") );
 	}
-	else {
-		if ( keyword.contains( "-*" ) ) {
-			m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
-			m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
-						"If you believe the package does work file a bug at Gentoo bugzilla website.");
-			KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "-* Keyword" ) );
+	else if ( keyword.contains( "-*" ) ) {
+		m_importantMessage += i18n("%1 is not available on your architecture %2!<br><br>").arg( package ).arg( KurooConfig::arch() );
+		m_importantMessage += i18n("<br><b>-* keyword</b> means that the application does not work on your architecture.<br>"
+					"If you believe the package does work file a bug at Gentoo bugzilla website.");
+		KMessageBox::information( 0, "<qt>" + m_importantMessage + "</qt>", i18n( "-* Keyword" ) );
+	}
+	else if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
+		LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
+
+		if (KMessageBox::questionYesNoWId( NULL,
+						i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ),
+						i18n("Information"), KGuiItem( i18n("Unmask") ), KGuiItem( i18n("Cancel") ) ) == KMessageBox::Yes) {
+			KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
+			PortageFilesSingleton::Instance()->savePackageUserUnMask();
+			disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+			connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 		}
-		else {
-			if ( !keyword.contains( KurooConfig::arch() ) && keyword.contains( "package.mask" ) ) {
-				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.unmask\"."), ERROR );
+	}
+	else {
+		LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
 
-				if (KMessageBox::questionYesNoWId( NULL,
-								i18n("<qt>Cannot emerge masked package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ),
-								i18n("Information"), KGuiItem( i18n("Unmask") ), KGuiItem( i18n("Cancel") ) ) == KMessageBox::Yes) {
-					KurooDBSingleton::Instance()->setPackageUnMasked( KurooDBSingleton::Instance()->packageId( package ) );
-					PortageFilesSingleton::Instance()->savePackageUserUnMask();
-					disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-					connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-				}
-			}
-			else {
-				LogSingleton::Instance()->writeLog( i18n("Please add package to \"package.keywords\"."), ERROR );
-
-				if (KMessageBox::questionYesNoWId( NULL,
-								i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ),
-								i18n("Information"), KGuiItem( i18n("Unmask") ), KGuiItem( i18n("Cancel") ) ) == KMessageBox::Yes) {
-					KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
-					PortageFilesSingleton::Instance()->savePackageKeywords();
-					disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-					connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
-				}
-			}
+		if (KMessageBox::questionYesNoWId( NULL,
+						i18n("<qt>Cannot emerge testing package!<br>Do you want to unmask <b>%1</b>?</qt>").arg( package ),
+						i18n("Information"), KGuiItem( i18n("Unmask") ), KGuiItem( i18n("Cancel") ) ) == KMessageBox::Yes) {
+			KurooDBSingleton::Instance()->setPackageUnTesting( KurooDBSingleton::Instance()->packageId( package ) );
+			PortageFilesSingleton::Instance()->savePackageKeywords();
+			disconnect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
+			connect( PortageFilesSingleton::Instance(), SIGNAL( signalPortageFilesChanged() ), this, SLOT( slotTryEmerge() ) );
 		}
 	}
 }

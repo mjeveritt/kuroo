@@ -33,19 +33,19 @@ public:
 
 	virtual void run() {
 
-		QFileInfo fileInfo( KurooConfig::filePackageUserUse() );
+		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserUse() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::filePackageUserUse() << " is a dir" << LINE_INFO;
-			if( !mergeDirIntoFile( KurooConfig::filePackageUserUse() ) ) {
+			kDebug(0) << KurooConfig::defaultFilePackageUserUse() << " is a dir" << LINE_INFO;
+			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageUserUse() ) ) {
 				return;
 			}
 		}
 
-		QFile file( KurooConfig::filePackageUserUse() );
+		QFile file( KurooConfig::defaultFilePackageUserUse() );
 		QTextStream stream( &file );
 		QStringList linesUse;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::filePackageUserUse() << LINE_INFO;
+			kError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::defaultFilePackageUserUse() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();

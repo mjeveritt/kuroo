@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Options7</class>
- <widget class="QWidget" name="Options7">
+ <class>Options3</class>
+ <widget class="QWidget" name="Options3">
   <property name="geometry">
    <rect>
     <x>0</x>

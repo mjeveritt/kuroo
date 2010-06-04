@@ -34,19 +34,19 @@ public:
 	virtual void run() {
 
 		// Collect all unmask dependatoms
-		QFileInfo fileInfo( KurooConfig::filePackageUserUnMask() );
+		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserUnMask() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::filePackageUserUnMask() << " is a dir" << LINE_INFO;
-			if( !mergeDirIntoFile( KurooConfig::filePackageUserUnMask() ) ) {
+			kDebug(0) << KurooConfig::defaultFilePackageUserUnMask() << " is a dir" << LINE_INFO;
+			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageUserUnMask() ) ) {
 				return;
 			}
 		}
 
-		QFile file( KurooConfig::filePackageUserUnMask() );
+		QFile file( KurooConfig::defaultFilePackageUserUnMask() );
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kError(0) << "Parsing package.unmask. Reading: " << KurooConfig::filePackageUserUnMask() << LINE_INFO;
+			kError(0) << "Parsing package.unmask. Reading: " << KurooConfig::defaultFilePackageUserUnMask() << LINE_INFO;
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -95,7 +95,7 @@ public:
 					}
 					else
 						kWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::filePackageUserUnMask() ) << LINE_INFO;
+							.arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
 				}
 			}
 		}

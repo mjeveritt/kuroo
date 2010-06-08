@@ -23,7 +23,12 @@ ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
 add_definitions(-DQT3_SUPPORT_WARNINGS)
 
 #core
-set(core_sources core/cacheportagejob.cpp core/categorieslistview.cpp core/dependatom.cpp core/dependencyview.cpp core/emerge.cpp core/etcupdate.cpp core/filewatcher.cpp core/global.cpp core/packageinspector.cpp core/packageitem.cpp core/packagelistview.cpp core/packageversion.cpp core/portagedb.cpp core/portagefiles.cpp core/scanhistoryjob.cpp core/scanportagejob.cpp core/scanupdatesjob.cpp core/signalist.cpp core/tooltip.cpp core/versionview.cpp )
+set(core_sources core/cacheportagejob.cpp core/categorieslistview.cpp
+	core/dependatom.cpp core/dependencyview.cpp core/emerge.cpp
+	core/etcupdate.cpp core/filewatcher.cpp core/global.cpp
+	core/packageinspector.cpp core/packageitem.cpp
+	core/packagelistview.cpp core/packagelistmodel.cpp
+	core/packagelistitem.cpp core/packageversion.cpp core/portagedb.cpp core/portagefiles.cpp core/scanhistoryjob.cpp core/scanportagejob.cpp core/scanupdatesjob.cpp core/signalist.cpp core/tooltip.cpp core/versionview.cpp )
 kde4_add_ui_files(core_sources core/inspectorbase.ui)
 
 #history

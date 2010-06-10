@@ -30,6 +30,8 @@
 #include "versionview.h"
 #include "uninstallinspector.h"
 #include "ui_portagebase.h"
+#include "packagelistmodel.h"
+#include "packagelistitem.h"
 
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -66,6 +68,14 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 )
 {
 	setupUi( this );
+	PackageListModel *m = new PackageListModel(this);
+	/*QHeaderView *hv = new QHeaderView(Qt::Horizontal, packagesView2);
+	hv->setModel(m);
+	packagesView2->setHeader(hv);*/
+	packagesView2->setModel(m);
+	QHeaderView *hh = packagesView2->horizontalHeader();
+	hh->setStretchLastSection(true);
+
 	this->splitterH->setStretchFactor(0, 1);
 	this->splitterH->setStretchFactor(1, 6);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
@@ -193,7 +203,7 @@ void PortageTab::slotNextPackage( bool isNext )
 	if ( !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
 
-	packagesView->nextPackage( isNext );
+	//packagesView->nextPackage( isNext );
 }
 
 
@@ -352,8 +362,28 @@ void PortageTab::slotListPackages()
 {
 	int numberOfTerms = 0; //For singular or plural message
 	// Disable all buttons if query result is empty
-	if ( packagesView->addSubCategoryPackages( KurooDBSingleton::Instance()->portagePackagesBySubCategory( categoriesView->currentCategoryId(),
-				subcategoriesView->currentCategoryId(), filterGroup->selected(), searchFilter->text() ) ) == 0 ) {
+	QStringList dbres = KurooDBSingleton::Instance()->portagePackagesBySubCategory(categoriesView->currentCategoryId(),
+										       subcategoriesView->currentCategoryId(),
+										       filterGroup->selected(),
+										       searchFilter->text());
+
+	QList<PackageListItem*> items;
+	int packageCount = dbres.size() / 6;
+	QListIterator<QString> it( dbres );
+	while( it.hasNext() ) {
+		QString id = it.next();
+		QString name = it.next();
+		QString category = it.next();
+		QString description = it.next();
+		QString status = it.next();
+		QString update = it.next();
+
+		items << new PackageListItem(name, id, category, description, status.toInt(), update, packagesView2);
+	}
+	dynamic_cast<PackageListModel*>(packagesView2->model())->setPackages(items);
+	packagesView2->resizeColumnsToContents();
+
+	if ( packagesView->addSubCategoryPackages(dbres) == 0 ) {
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();

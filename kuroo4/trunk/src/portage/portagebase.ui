@@ -325,25 +325,13 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <item row="0" column="1">
+       <item row="1" column="1">
         <widget class="QSplitter" name="splitterV">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <widget class="PortageListView" name="packagesView" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>250</width>
-            <height>200</height>
-           </size>
-          </property>
-         </widget>
+	 <widget class="QTableView" name="packagesView2"/>
+         <widget class="PortageListView" name="packagesView"/>
          <widget class="QFrame" name="portageFrame">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -464,7 +452,7 @@
          </widget>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item row="1" column="0">
         <widget class="Line" name="line2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -514,12 +502,6 @@
    <class>SubCategoriesListView</class>
    <extends>QWidget</extends>
    <header>categorieslistview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PortageListView</class>
-   <extends>QWidget</extends>
-   <header>portagelistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

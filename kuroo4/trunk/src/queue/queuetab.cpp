@@ -22,7 +22,7 @@
 #include "statusbar.h"
 #include "queuetab.h"
 #include "queuelistitem.h"
-#include "queuelistview2.h"
+#include "queuelistview.h"
 #include "packageinspector.h"
 #include "versionview.h"
 #include "packageversion.h"

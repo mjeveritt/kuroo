@@ -1,69 +1,33 @@
-/***************************************************************************
- *	Copyright (C) 2004 by karye												*
- *	karye@users.sourceforge.net												*
- *																			*
- *	This program is free software; you can redistribute it and/or modify	*
- *	it under the terms of the GNU General Public License as published by	*
- *	the Free Software Foundation; either version 2 of the License, or		*
- *	(at your option) any later version.										*
- *																			*
- *	This program is distributed in the hope that it will be useful,			*
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
- *	GNU General Public License for more details.							*
- *																			*
- *	You should have received a copy of the GNU General Public License		*
- *	along with this program; if not, write to the							*
- *	Free Software Foundation, Inc.,											*
- *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
- ***************************************************************************/
+#ifndef PORTAGE_LIST_VIEW
+#define PORTAGE_LIST_VIEW
 
-#ifndef PORTAGELISTVIEW_H
-#define PORTAGELISTVIEW_H
+#include <QTreeView>
+#include <QStringList>
 
-#include "packagelistview.h"
-#include "packageitem.h"
+class PackageListItem;
 
-class PackageVersion;
-class DependAtom;
-class KTextBrowser;
-
-/**
- * @class PortageListView
- * @short Installed packages listview.
- */
-class PortageListView : public PackageListView
+class PortageListView : public QTreeView
 {
-Q_OBJECT
+	Q_OBJECT
 public:
-	PortageListView( QWidget *parent = 0, const char *name = 0 );
+	PortageListView(QWidget *parent = 0);
 	~PortageListView();
 
-	class 							PortageItem;
+	void setPackages(const QStringList&);
+	QList<PackageListItem*> selectedPackages() const;
+	PackageListItem* currentPackage();
+	PackageListItem* packageItemById(const QString& id);
+	QStringList selectedPackagesByIds();
 
-	void							showNoHitsWarning( const bool& noHits , const int& number_of_terms);
-	PortageListView::PortageItem* 	currentPortagePackage();
-	void							setHeader( const QString& text );
-	int 							addSubCategoryPackages( const QStringList& packageList );
+signals:
+	void selectionChangedSignal();
 
 protected:
-	KTextBrowser 					*noHitsWarning;
-};
-
-/**
- * @class PortageListView::PortageItem
- * @short Package item with all versions.
- */
-class PortageListView::PortageItem : public PackageItem
-{
-public:
-    PortageItem( QTreeWidget* parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
-
+	void selectionChanged(const QItemSelection&, const QItemSelection&);
 private:
-    void							paintCell( QPainter* painter, const QPalette& colorgroup, int column, int width, int alignment );
+	QList<PackageListItem*> m_selectedPackages;
+	QMap<QString, PackageListItem*> m_packageIndex;
 
-protected:
-    QTreeWidget						*m_parent;
 };
 
 #endif

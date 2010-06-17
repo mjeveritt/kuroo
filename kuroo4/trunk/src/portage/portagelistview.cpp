@@ -1,189 +1,80 @@
-/***************************************************************************
- *	Copyright (C) 2004 by karye												*
- *	karye@users.sourceforge.net												*
- *																			*
- *	This program is free software; you can redistribute it and/or modify	*
- *	it under the terms of the GNU General Public License as published by	*
- *	the Free Software Foundation; either version 2 of the License, or		*
- *	(at your option) any later version.										*
- *																			*
- *	This program is distributed in the hope that it will be useful,			*
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
- *	GNU General Public License for more details.							*
- *																			*
- *	You should have received a copy of the GNU General Public License		*
- *	along with this program; if not, write to the							*
- *	Free Software Foundation, Inc.,											*
- *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
- ***************************************************************************/
+#include <QHeaderView>
 
 #include "common.h"
 #include "portagelistview.h"
-#include "packageitem.h"
-#include "tooltip.h"
-#include "packagelistview.h"
-#include "packageversion.h"
-#include "dependatom.h"
+#include "packagelistmodel.h"
+#include "packagelistitem.h"
 
-#include <QMap>
-#include <QTreeWidget>
-#include <QHeaderView>
-
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <ktextbrowser.h>
-
-/**
- * @class PortageListView::PortageItem
- * @short Package item with all versions.
- */
-PortageListView::PortageItem::PortageItem( QTreeWidget* parent, const QString& name, const QString &id, const QString& category,
-										   const QString& description, const int status )
-	: PackageItem( parent, name, id, category, description, status ), m_parent( parent )
+PortageListView::PortageListView(QWidget *parent)
+ : QTreeView(parent)
 {
-	if ( !this->isHidden() && QueueSingleton::Instance()->isQueued( id ) )
-		setQueued( true );
-}
+	PackageListModel *m = new PackageListModel(this);
+	setModel(m);
+	QHeaderView *hh = header();
+	hh->setStretchLastSection(true);
+	hh->resizeSections(QHeaderView::ResizeToContents);
+	setRootIsDecorated(false);
 
-/**
- * Set icons when package is visible.
- */
-void PortageListView::PortageItem::paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment )
-{
-	if ( !this->isHidden() ) {
-
-		if ( column == 3 ) {
-			if ( QueueSingleton::Instance()->isQueued( id() ) ) {
-				setQueued( true );
-				setIcon( 3, KIcon("kuroo_queued") );
-			}
-			else {
-				setQueued( false );
-				setIcon( 3, KIcon("kuroo_empty") );
-			}
-		}
-
-		PackageItem::paintCell( painter, palette, column, width, alignment );
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @class PortageListView
- * @short All packages listview.
- */
-PortageListView::PortageListView( QWidget* parent, const char* name )
-	: PackageListView( parent, name )
-{
-	// Setup geometry
-	//QTreeWidgetItem *header = headerItem();
-	headerItem()->setText( 0, i18n( "Package" ) );
-	//header.setText( 0, i18n( "Package" ) );
-	headerItem()->setText( 1, "" );
-	//header.setText( 2, "" );
-	headerItem()->setText( 2, "" );
-	headerItem()->setIcon( 2, KIcon("kuroo_world_column") );
-	//headerItem()->setTextAlignment( 2, Qt::AlignHCenter );
-	setColumnWidth( 2, 25 );
-	//header.setTextAlignment( 2, Qt::AlignHCenter );
-	//setColumnAlignment( 2, Qt::AlignHCenter );
-	headerItem()->setText( 3, "" );
-	headerItem()->setIcon( 3, KIcon("kuroo_queued_column") );
-	setColumnWidth( 3, 25 );
-	headerItem()->setText( 4, i18n( "Update" ) );
-	headerItem()->setText( 5, i18n( "Description" ) );
-
-	setSelectionMode( QAbstractItemView::ExtendedSelection );
-	setSortingEnabled( true );
-	header()->setSortIndicatorShown( true );
-	setRootIsDecorated( false );
-
-	if ( KurooConfig::installedColumn() ) {
-		headerItem()->setIcon( 1, KIcon("kuroo_installed_column") );
-		setColumnWidth( 1, 25 );
-	}
-	else
-		hideColumn( 1 );
-
-
-	header()->setResizeMode( 1, QHeaderView::Fixed );
-	header()->setResizeMode( 2, QHeaderView::Fixed );
-	header()->setResizeMode( 3, QHeaderView::Fixed );
-
-	// Refresh packages when packages are added/removed to Queue or get installed
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( triggerUpdate() ) );
-
-	// Create text-widget warning for "No packages found.."
-	noHitsWarning = new KTextBrowser( this );
-	noHitsWarning->setGeometry( QRect( 20, 50, 400, 300 ) );
-	noHitsWarning->setFrameShape( QFrame::NoFrame );
+	setSelectionBehavior(QAbstractItemView::SelectRows);
+	setSelectionMode(QAbstractItemView::ExtendedSelection);
+	setAlternatingRowColors(true);
 }
 
 PortageListView::~PortageListView()
 {}
 
-/**
- * Show warning text when package view is empty.
- * @param show/hide
- */
-void PortageListView::showNoHitsWarning( const bool& noHits, const int& number_of_terms )
+void PortageListView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
-	if ( noHits ) {
-		if (number_of_terms < 0)
-			noHitsWarning->setText( i18n( "<font color=darkRed size=+1><b>No updates were found</font><br><font color=darkRed>There are no updates available at the moment. Please synchronize portage if you haven't already done so and try again.</b></font>" ) );
-		else
-			noHitsWarning->setText( i18np( "<font color=darkRed size=+1><b>No packages were found using this filter term</font><br><font color=darkRed>Please modify the filter term you have chosen!<br>Try using a more general filter term, so kuroo can find matching packages.</b></font>",
-										  "<font color=darkRed size=+1><b>No packages were found using these filter term</font><br><font color=darkRed>Please modify the filter terms you have chosen!<br>Try using more general filter terms, so kuroo can find matching packages.</b></font>", number_of_terms ) );
-		noHitsWarning->show();
+	foreach(const QModelIndex index, deselected.indexes())
+	{
+		if (index.column() == 0 && index.data().canConvert(QVariant::String))
+		{
+			//PackageListItem *item = dynamic_cast<PackageListModel*>(model())->packages().at(index.row());
+			for(int j = 0; j < m_selectedPackages.count(); j++)
+				if (m_selectedPackages[j]->name() == index.data().toString())
+					m_selectedPackages.removeAt(j);
+		}
 	}
-	else {
-		noHitsWarning->setText( "" );
-		noHitsWarning->hide();
+	foreach(const QModelIndex index, selected.indexes())
+	{
+		if (index.column() == 0 && index.data().canConvert(QVariant::String))
+		{
+			PackageListItem *item = dynamic_cast<PackageListModel*>(model())->packages().at(index.row());
+			m_selectedPackages << item;
+		}
 	}
+
+	emit selectionChangedSignal();
 }
 
-/**
- * Current package with focus.
- * @return name
- */
-PortageListView::PortageItem* PortageListView::currentPortagePackage()
+QList<PackageListItem*> PortageListView::selectedPackages() const
 {
-	return dynamic_cast<PortageItem*>( PackageListView::currentPackage() );
+	return m_selectedPackages;
 }
 
-/**
- * View package total in package name section header.
- * @param total
- */
-void PortageListView::setHeader( const QString& total )
+PackageListItem* PortageListView::currentPackage()
 {
-	if ( !total.isEmpty() )
-		headerItem()->setText( 0, i18n("Package") + " (" + total + ")" );
-	else
-		headerItem()->setText( 0, i18n("Package") );
+	return dynamic_cast<PackageListModel*>(model())->packages().at(currentIndex().row());
 }
 
-/**
- * Populate listview with content of this category.
- * @param package
- */
-int PortageListView::addSubCategoryPackages( const QStringList& packageList )
+PackageListItem* PortageListView::packageItemById(const QString& id)
 {
-// 	clock_t start = clock();
+	return m_packageIndex[id];
+}
 
-	// Store package focus
-	QString currentId = this->currentId();
+QStringList PortageListView::selectedPackagesByIds()
+{
+	QStringList ret;
+	foreach(PackageListItem *item, m_selectedPackages)
+		ret << item->id();
+	
+	return ret;
+}
 
-	// Disable sorting for faster inserting. Packages are already sorted alphabetically.
-	setSortingEnabled( false );
-	resetListView();
-	setHeader( QString::null );
-
-	// Don't load all packages, only first ROWLIMIT
-	int packageCount = packageList.size() / 6;
-	QListIterator<QString> it( packageList );
+void PortageListView::setPackages(const QStringList& packages)
+{
+	QList<PackageListItem*> items;
+	QListIterator<QString> it(packages);
 	while( it.hasNext() ) {
 		QString id = it.next();
 		QString name = it.next();
@@ -192,30 +83,13 @@ int PortageListView::addSubCategoryPackages( const QStringList& packageList )
 		QString status = it.next();
 		QString update = it.next();
 
-		PortageItem* item = new PortageItem( this, name, id, category, description, status.toInt() );
-		item->setText( 4, update );
-		item->setText( 5, description );
-
-		indexPackage( id, item );
-	}
-	setSortingEnabled( true );
-	sortItems( 0, Qt::AscendingOrder );
-	setHeader( QString::number( packageCount ) );
-	setPackageFocus( currentId );
-
-	// Cannot have current changed for only one package so emit manually
-	if ( packageCount == 1 ) {
-		emit currentChanged( QModelIndex(), QModelIndex() );
-		//emit currentChanged( 0 );
+		items << new PackageListItem(name, id, category, description, status.toInt(), update, this);
+		m_packageIndex.insert(id, items.last());
 	}
 
-
-// 	clock_t finish = clock();
-// 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kDebug() << "PortageListView::addSubCategoryPackages SQL-query (" << duration << "s): ";
-
-	resizeColumnToContents( 0 );
-	return packageCount;
+	dynamic_cast<PackageListModel*>(model())->setPackages(items);
+	
+	QHeaderView *hh = header();
+	//hh->setStretchLastSection(true);
+	hh->resizeSections(QHeaderView::ResizeToContents);
 }
-
-#include "portagelistview.moc"

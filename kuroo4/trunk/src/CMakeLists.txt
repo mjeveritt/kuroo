@@ -38,7 +38,7 @@ kde4_add_ui_files(history_sources history/historybase.ui history/mergebase.ui)
 #portage
 set(portage_sources portage/portage.cpp
 	portage/portagetab.cpp portage/uninstallinspector.cpp
-	portage/portagelistview2.cpp)
+	portage/portagelistview.cpp)
 kde4_add_ui_files(portage_sources portage/uninstallbase.ui portage/portagebase.ui)
 
 #config
@@ -48,7 +48,7 @@ kde4_add_kcfg_files(config_sources config/settings.kcfgc )
 
 #queue
 set(queue_sources queue/queue.cpp queue/queuetab.cpp
-	queue/queuelistmodel.cpp queue/queuelistview2.cpp
+	queue/queuelistmodel.cpp queue/queuelistview.cpp
 	queue/queuelistitem.cpp)
 kde4_add_ui_files(queue_sources queue/queuebase.ui)
 

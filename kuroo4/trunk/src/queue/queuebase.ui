@@ -98,7 +98,7 @@
        <item>
         <layout class="QVBoxLayout">
          <item>
-          <widget class="QueueListView2" name="queueView"/>
+          <widget class="QueueListView" name="queueView"/>
          </item>
          <item>
           <layout class="QHBoxLayout">
@@ -449,9 +449,9 @@
    <header>ktextbrowser.h</header>
   </customwidget>
   <customwidget>
-   <class>QueueListView2</class>
+   <class>QueueListView</class>
    <extends>QTreeView</extends>
-   <header>queuelistview2.h</header>
+   <header>queuelistview.h</header>
   </customwidget>
  </customwidgets>
  <includes>

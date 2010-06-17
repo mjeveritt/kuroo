@@ -64,11 +64,11 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-	connect( queueView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
+	connect( queueView, SIGNAL( itemDoubleClicked() ), this, SLOT( slotAdvanced() ) );
 
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 
-	connect( queueView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotPackage() ) );
+	connect( queueView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotPackage() ) );
 	connect( queueView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
 
 	// Lock/unlock if kuroo is busy
@@ -525,7 +525,7 @@ void QueueTab::slotAdvanced()
 
 void QueueTab::slotPackage()
 {
-	if ( m_packageInspector->isVisible() )
+	if (m_packageInspector->isVisible())
 		processPackage( true );
 	else
 		processPackage( false );

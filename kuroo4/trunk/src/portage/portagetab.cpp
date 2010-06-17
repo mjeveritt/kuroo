@@ -87,7 +87,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	//TODO:reimplement
-	//connect( packagesView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
+	connect( packagesView, SIGNAL( doubleClickedSignal(PackageListItem*) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 
@@ -523,7 +523,7 @@ void PortageTab::slotPackage()
  * Process package and all it's versions.
  * Update summary and Inspector.
  */
-void PortageTab::processPackage( bool viewInspector )
+void PortageTab::processPackage(bool viewInspector)
 {
 	if ( m_packageInspector->isVisible() && !m_packageInspector->isParentView( VIEW_PORTAGE ) )
 		return;
@@ -558,7 +558,7 @@ void PortageTab::processPackage( bool viewInspector )
 
 	// Initialize the portage package object with the current package and it's versions data
 	PackageListItem *package = packagesView->currentPackage();
-	//packagesView->currentPackage()->parsePackageVersions();
+	package->parsePackageVersions();
 	QString linesInstalled = package->linesInstalled();
 	QString linesAvailable = package->linesAvailable();
 	QString linesEmerge = package->linesEmerge();
@@ -807,4 +807,3 @@ void PortageTab::slotContextMenu()
 }
 
 #include "portagetab.moc"
-

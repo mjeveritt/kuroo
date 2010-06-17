@@ -27,9 +27,11 @@ public:
 	void nextPackage( const bool& isPrevious );
 signals:
 	void selectionChangedSignal();
+	void itemDoubleClicked();
 
 protected:
 	void selectionChanged(const QItemSelection&, const QItemSelection&);
+	void mouseDoubleClickEvent(QMouseEvent*);
 private:
 	QList<QueueListItem*> m_selectedPackages;
 	QMap<QString, QueueListItem*> m_packageIndex;

@@ -93,3 +93,15 @@ void PortageListView::setPackages(const QStringList& packages)
 	//hh->setStretchLastSection(true);
 	hh->resizeSections(QHeaderView::ResizeToContents);
 }
+
+void PortageListView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+	QModelIndex index = indexAt(event->globalPos());
+	if (!index.isValid())
+		return;
+	PackageListItem *item = static_cast<PackageListItem*>(index.internalPointer());
+	if (!item)
+		return;
+
+	emit doubleClickedSignal(item);
+}

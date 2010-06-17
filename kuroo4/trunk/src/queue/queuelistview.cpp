@@ -55,7 +55,7 @@ QList<QueueListItem*> QueueListView::selectedPackages() const
 
 QueueListItem* QueueListView::currentPackage()
 {
-	return dynamic_cast<QueueListModel*>(model())->packages().at(currentIndex().row());
+	return static_cast<QueueListItem*>(currentIndex().internalPointer());
 }
 
 QueueListItem* QueueListView::packageItemById(const QString& id)
@@ -68,7 +68,7 @@ QStringList QueueListView::selectedPackagesByIds()
 	QStringList ret;
 	foreach(QueueListItem *item, m_selectedPackages)
 		ret << item->id();
-	
+
 	return ret;
 }
 
@@ -84,6 +84,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	m_sumSize = 0;
 
 	//resetListView();//FIXME
+	m_selectedPackages.clear();
 
 	// Get list of update packages with info
 	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
@@ -175,7 +176,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 /**
  * Get total emerge duration in format hh:mm:ss.
- * @return totalDuration
+ @return totalDuration
  */
 long QueueListView::totalDuration()
 {
@@ -295,3 +296,8 @@ void QueueListView::indexPackage( const QString& id, QueueListItem *item )
 	}
 }
 
+void QueueListView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+	Q_UNUSED(event)
+	emit itemDoubleClicked();
+}

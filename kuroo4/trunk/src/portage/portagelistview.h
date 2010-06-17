@@ -21,9 +21,11 @@ public:
 
 signals:
 	void selectionChangedSignal();
+	void doubleClickedSignal(PackageListItem*);
 
 protected:
 	void selectionChanged(const QItemSelection&, const QItemSelection&);
+	void mouseDoubleClickEvent(QMouseEvent*);
 private:
 	QList<PackageListItem*> m_selectedPackages;
 	QMap<QString, PackageListItem*> m_packageIndex;

@@ -24,7 +24,7 @@
 #include "common.h"
 #include "queuelistview.h"
 #include "tooltip.h"
-#include "packageitem.h"
+#include "packagelistitem.h"
 #include "packagelistview.h"
 
 // Tweak for time taken unpacking and installing single package.

@@ -1,19 +1,20 @@
-#ifndef PACKAGE_LIST_MODEL
-#define PACKAGE_LIST_MODEL
+#ifndef QUEUE_LIST_MODEL
+#define QUEUE_LIST_MODEL
 
+#include <QObject>
 #include <QAbstractItemModel>
 #include <QList>
 
-class PackageListItem;
+class QueueListItem;
 
-class PackageListModel : public QAbstractItemModel
+class QueueListModel : public QAbstractItemModel
 {
 	Q_OBJECT
 public:
-	PackageListModel(QObject *parent = 0);
-	~PackageListModel();
+	QueueListModel(QObject *parent = 0);
+	~QueueListModel();
 
-	void setPackages(QList<PackageListItem*>&);
+	void setPackages(QList<QueueListItem*>&);
 
 	// Declaration of pure virtual methods to be implemented.
 	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -28,10 +29,10 @@ public:
 	virtual QVariant headerData (int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 	bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
-	QList<PackageListItem*> packages();
+	QList<QueueListItem*> packages();
 
 private:
-	QList<PackageListItem*> m_packages;
+	QList<QueueListItem*> m_packages;
 };
 
 #endif

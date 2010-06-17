@@ -31,18 +31,18 @@
  */
 class QueueListView : public PackageListView
 {
-Q_OBJECT
+	Q_OBJECT
 public:
 	QueueListView( QWidget* parent = 0, const char* name = 0 );
 	~QueueListView();
 
 	class					QueueItem;
 
-	const QStringList		allPackagesNoChildren();
-	const QStringList		allEndUserPackages();
+	const QStringList			allPackagesNoChildren();
+	const QStringList			allEndUserPackages();
 	void 					insertPackageList( bool hasCheckedQueue );
 	long			 		totalDuration();
-	const QString		 	totalSize();
+	const QString		 		totalSize();
 
 public slots:
 	void					slotPackageUp();
@@ -53,7 +53,7 @@ public slots:
 
 private:
 	void					viewportResizeEvent( QResizeEvent* );
-	const QString		 	formatSize( const QString& sizeString );
+	const QString		 		formatSize( const QString& sizeString );
 	void 					addSize( const QString& size );
 
 private slots:
@@ -85,7 +85,7 @@ public:
 	QString			package();
 	void			setComplete();
 	bool			isComplete();
-	int				remainingDuration();
+	int			remainingDuration();
 	void			setStart();
 	void			oneStep();
 	void			setPretended( bool isChecked );

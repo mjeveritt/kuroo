@@ -13,14 +13,21 @@ PackageListModel::PackageListModel(QObject *parent)
 
 PackageListModel::~PackageListModel()
 {
+	while (!m_packages.isEmpty())
+		delete m_packages.takeLast();
+}
 
+QList<PackageListItem*> PackageListModel::packages()
+{
+	return m_packages;
 }
 
 void PackageListModel::setPackages(QList<PackageListItem*>& packages)
 {
 	// Remove all rows
 	beginRemoveRows(QModelIndex(), 0, rowCount());
-	m_packages.clear();
+	while (!m_packages.isEmpty())
+		delete m_packages.takeLast();
 	endRemoveRows();
 	beginInsertRows(QModelIndex(), 0, packages.count() - 1);
 	m_packages = packages;
@@ -48,24 +55,25 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 			return QVariant(KIcon("kuroo_package"));
 		else if (role == Qt::DecorationRole)
 			return QVariant(KIcon("kuroo_stable"));
-		return QVariant();
+		break;
 	case 1:
-		if (role == Qt::DecorationRole && QueueSingleton::Instance()->isQueued(p->id()))
-			return QVariant(KIcon("kuroo_queued"));
-
-		return QVariant();
-	case 2:
 		if (role == Qt::DecorationRole && p->isInWorld())
 			return QVariant(KIcon("kuroo_queued"));
 
-		return QVariant();
+	case 2:
+		if (role == Qt::DecorationRole && QueueSingleton::Instance()->isQueued(p->id()))
+			return QVariant(KIcon("kuroo_queued"));
+
+		break;
 	case 3:
 		if (role == Qt::DisplayRole)
 			return QVariant(p->update());
-		return QVariant();
+		break;
 	case 4:
 		if (role == Qt::DisplayRole)
 			return QVariant(p->description());
+		break;
+	default:
 		return QVariant();
 	}
 	
@@ -76,6 +84,12 @@ QModelIndex PackageListModel::index(int row, int column, const QModelIndex& pare
 {
 	Q_UNUSED(parent)
 	return createIndex(row, column, row);
+}
+
+bool PackageListModel::hasChildren(const QModelIndex& parent) const
+{
+	Q_UNUSED(parent)
+	return false;
 }
 
 QModelIndex PackageListModel::parent(const QModelIndex& index) const
@@ -100,24 +114,26 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 	case 0:
 		if (role == Qt::DisplayRole)
 			return QVariant(i18n(QString("Package (%1)").arg(rowCount())));
-		return QVariant();
+		break;
 	case 1:
 		if (role == Qt::DecorationRole)
 			return QVariant(KIcon("kuroo_world_column"));
-		return QVariant();
+		break;
 	case 2:
 		if (role == Qt::DecorationRole)
 			return QVariant(KIcon("kuroo_queued_column"));
-		return QVariant();
+		break;
 	case 3:
 		if (role == Qt::DisplayRole)
 			return QVariant("Update");
-		return QVariant();
+		break;
 	case 4:
 		if (role == Qt::DisplayRole)
 			return QVariant("Description");
-		return QVariant();
+		break;
 	default:
 		return QVariant();
 	}
+	
+	return QVariant();
 }

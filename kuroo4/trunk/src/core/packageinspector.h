@@ -27,29 +27,31 @@
 #include "ui_inspectorbase.h"
 #include "portagelistview.h"
 
+class PackageListItem;
+
 /**
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
  */
 class PackageInspector : public KDialog, public Ui::InspectorBase
 {
-Q_OBJECT
+	Q_OBJECT
 public:
-    PackageInspector( QWidget *parent = 0 );
-    ~PackageInspector();
+	PackageInspector( QWidget *parent = 0 );
+	~PackageInspector();
 
-	void					edit( PackageItem* portagePackage, const int& view );
+	void				edit( PackageListItem* portagePackage, const int& view );
 	/**
 	 * Return the caller.
 	 */
-	inline bool				isParentView( const int& view ) const { return m_view == view; }
-	void					showHardMaskInfo();
+	inline bool			isParentView( const int& view ) const { return m_view == view; }
+	void				showHardMaskInfo();
 
 private:
-	void					updateVersionData();
-	void					rollbackSettings();
-	void					loadUseFlagDescription();
-	void					loadChangeLog();
+	void				updateVersionData();
+	void				rollbackSettings();
+	void				loadUseFlagDescription();
+	void				loadChangeLog();
 	void			        askApplySettings();
 
 private slots:
@@ -78,7 +80,7 @@ private slots:
 private:
 
 	// Wiew that called the Inspector
-	int						m_view;
+	int					m_view;
 
 	// Keep track when user changes any version masking settings
 	bool					m_versionSettingsChanged;
@@ -91,8 +93,8 @@ private:
 
 	QString					m_id, m_category, m_package, m_hardMaskComment;
 	QMap<QString, QString>	m_useMap;
-	PackageItem*			m_portagePackage;
-	int						m_stabilityBefore;
+	PackageListItem*			m_portagePackage;
+	int					m_stabilityBefore;
 	QString					m_versionBefore;
 	QStringList				m_pretendUseLines;
 	QStringList				m_useList;

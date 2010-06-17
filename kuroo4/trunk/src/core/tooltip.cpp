@@ -21,7 +21,7 @@
 #include <QTreeWidget>
 
 #include "tooltip.h"
-#include "packageitem.h"
+#include "packagelistitem.h"
 #include "common.h"
 
 

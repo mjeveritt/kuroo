@@ -26,8 +26,8 @@ add_definitions(-DQT3_SUPPORT_WARNINGS)
 set(core_sources core/cacheportagejob.cpp core/categorieslistview.cpp
 	core/dependatom.cpp core/dependencyview.cpp core/emerge.cpp
 	core/etcupdate.cpp core/filewatcher.cpp core/global.cpp
-	core/packageinspector.cpp core/packageitem.cpp
-	core/packagelistview.cpp core/packagelistmodel.cpp
+	core/packageinspector.cpp
+	core/packagelistmodel.cpp
 	core/packagelistitem.cpp core/packageversion.cpp core/portagedb.cpp core/portagefiles.cpp core/scanhistoryjob.cpp core/scanportagejob.cpp core/scanupdatesjob.cpp core/signalist.cpp core/tooltip.cpp core/versionview.cpp )
 kde4_add_ui_files(core_sources core/inspectorbase.ui)
 
@@ -36,7 +36,9 @@ set(history_sources history/history.cpp history/historylistview.cpp history/hist
 kde4_add_ui_files(history_sources history/historybase.ui history/mergebase.ui)
 
 #portage
-set(portage_sources portage/portage.cpp portage/portagelistview.cpp portage/portagetab.cpp portage/uninstallinspector.cpp )
+set(portage_sources portage/portage.cpp
+	portage/portagetab.cpp portage/uninstallinspector.cpp
+	portage/portagelistview2.cpp)
 kde4_add_ui_files(portage_sources portage/uninstallbase.ui portage/portagebase.ui)
 
 #config
@@ -45,7 +47,9 @@ kde4_add_ui_files(config_sources config/options1.ui config/options2.ui config/op
 kde4_add_kcfg_files(config_sources config/settings.kcfgc )
 
 #queue
-set(queue_sources queue/queue.cpp queue/queuelistview.cpp queue/queuetab.cpp )
+set(queue_sources queue/queue.cpp queue/queuetab.cpp
+	queue/queuelistmodel.cpp queue/queuelistview2.cpp
+	queue/queuelistitem.cpp)
 kde4_add_ui_files(queue_sources queue/queuebase.ui)
 
 #intro

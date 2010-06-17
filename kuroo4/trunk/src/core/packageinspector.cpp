@@ -39,6 +39,7 @@
 #include "packageversion.h"
 #include "versionview.h"
 #include "dependencyview.h"
+#include "packagelistitem.h"
 
 /**
  * @class PackageInspector
@@ -216,7 +217,7 @@ void PackageInspector::slotQueue()
  * Activate Inspector with current package.
  * @param portagePackage
  */
-void PackageInspector::edit( PackageItem* portagePackage, const int& view )
+void PackageInspector::edit( PackageListItem* portagePackage, const int& view )
 {
     m_view = view;
     m_portagePackage = portagePackage;

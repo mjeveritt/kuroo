@@ -37,7 +37,7 @@
  */
 class PortageAtom { //Atom already defined in kapp.h
 public:
-    PortageAtom( PackageItem* portagePackage=0 );
+    PortageAtom( PackageListItem* portagePackage=0 );
     PortageAtom( const QString& atom );
     ~PortageAtom();
 	
@@ -58,7 +58,7 @@ public:
 	
 private:
 	// A pointer to the portage tree from which the packages are retrieved.
-	PackageItem* m_portagePackage;
+	PackageListItem* m_portagePackage;
 	
 	// The regular expression for the whole atom.
 	QRegExp rxAtom;

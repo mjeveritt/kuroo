@@ -21,7 +21,8 @@
 #include "common.h"
 #include "statusbar.h"
 #include "queuetab.h"
-#include "queuelistview.h"
+#include "queuelistitem.h"
+#include "queuelistview2.h"
 #include "packageinspector.h"
 #include "versionview.h"
 #include "packageversion.h"
@@ -68,7 +69,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 
 	connect( queueView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( slotPackage() ) );
-	connect( queueView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtons() ) );
+	connect( queueView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
 
 	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
@@ -124,9 +125,9 @@ QueueTab::~QueueTab()
 	else
 		KurooConfig::setBackupPkg( false );
 
-		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+	if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
 		cbSkipHousekeeping->setDisabled( false );
-		else
+	else
 		cbSkipHousekeeping->setDisabled( true );
 }
 
@@ -162,9 +163,9 @@ void QueueTab::slotInit()
 	else
 		cbBackupPkg->setChecked( false );
 
-		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
+	if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
 		cbSkipHousekeeping->setDisabled( false );
-		else
+	else
 		cbSkipHousekeeping->setDisabled( true );
 
 
@@ -330,7 +331,7 @@ void QueueTab::slotButtons()
 		}
 
 		// No package selected, disable all buttons
-		if ( queueView->selectedIds().isEmpty() ) {
+		if ( queueView->selectedPackagesByIds().isEmpty() ) {
 				pbRemove->setDisabled( true );
 				pbAdvanced->setDisabled( true );
 				return;
@@ -389,6 +390,7 @@ void QueueTab::slotCheck()
 {
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
+	kDebug() << packageList;
 	if( cbUpdate->isChecked() )
 		packageList.prepend( "-uN" );
 	EmergeSingleton::Instance()->pretend( packageList );
@@ -483,7 +485,7 @@ void QueueTab::slotRemove()
 	if ( isVisible() )
 		m_packageInspector->hide();
 
-	QueueSingleton::Instance()->removePackageIdList( queueView->selectedIds() );
+	QueueSingleton::Instance()->removePackageIdList( queueView->selectedPackagesByIds() );
 }
 
 /**
@@ -561,7 +563,7 @@ void QueueTab::slotContextMenu(QPoint)
 	/*if ( !item )
 		return;
 
-	const QStringList selectedIdsList = queueView->selectedIds();
+	const QStringList selectedIdsList = queueView->selectedPackagesByIds();
 
 	enum Actions { ADDWORLD, DELWORLD };
 
@@ -594,7 +596,7 @@ void QueueTab::slotContextMenu(QPoint)
 	switch( menu.exec( point ) ) {
 
 		case REMOVE:
-			QueueSingleton::Instance()->removePackageIdList( queueView->selectedIds() );
+			QueueSingleton::Instance()->removePackageIdList( queueView->selectedPackagesByIds() );
 			break;
 
 		case DETAILS:

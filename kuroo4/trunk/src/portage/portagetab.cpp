@@ -23,7 +23,6 @@
 #include "common.h"
 #include "search.h"
 #include "categorieslistview.h"
-#include "portagelistview.h"
 #include "portagetab.h"
 #include "packageinspector.h"
 #include "packageversion.h"
@@ -68,14 +67,6 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	m_packageInspector( packageInspector ), m_uninstallInspector( 0 )
 {
 	setupUi( this );
-	PackageListModel *m = new PackageListModel(this);
-	/*QHeaderView *hv = new QHeaderView(Qt::Horizontal, packagesView2);
-	hv->setModel(m);
-	packagesView2->setHeader(hv);*/
-	packagesView2->setModel(m);
-	QHeaderView *hh = packagesView2->horizontalHeader();
-	hh->setStretchLastSection(true);
-
 	this->splitterH->setStretchFactor(0, 1);
 	this->splitterH->setStretchFactor(1, 6);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
@@ -89,13 +80,14 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
 
 	// Rmb actions.
-	connect( packagesView, SIGNAL( customContextMenuRequested(QPoint) ),
-			 this, SLOT( slotContextMenu() ) );
+	//connect( packagesView, SIGNAL( customContextMenuRequested(QPoint) ),
+	//		 this, SLOT( slotContextMenu() ) );
 
 	// Button actions.
 	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
-	connect( packagesView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
+	//TODO:reimplement
+	//connect( packagesView, SIGNAL( itemDoubleClicked(QTreeWidgetItem*,int) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 
@@ -110,10 +102,10 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 
 	// Enable/disable buttons
-	connect( packagesView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtons() ) );
+	connect( packagesView2, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
 
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotPackage() ) );
+	connect( packagesView2, SIGNAL( selectionChangedSignal() ), this, SLOT( slotPackage() ) );
 
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -255,7 +247,7 @@ void PortageTab::slotButtons()
 	}
 
 	// No current package, disable all buttons
-	if ( !packagesView->currentPackage() ) {
+	if ( packagesView2->selectedPackages().isEmpty()) {
 		pbQueue->setDisabled( true );
 		pbAdvanced->setDisabled( true );
 		pbUninstall->setDisabled( true );
@@ -275,10 +267,10 @@ void PortageTab::slotButtons()
 		pbQueue->setDisabled( false );
 
 	// Toggle queue button between add/remove
-	if ( packagesView->currentPackage()->isInPortage() ) {
+	if ( packagesView2->currentPackage()->isInPortage() ) {
 		pbQueue->setDisabled( false );
 
-		if ( packagesView->currentPackage()->isQueued() )
+		if ( packagesView2->currentPackage()->isQueued() )
 			pbQueue->setText( i18n("Remove from Queue") );
 		else
 			pbQueue->setText( i18n("Add to Queue") );
@@ -289,7 +281,7 @@ void PortageTab::slotButtons()
 	}
 
 	// If user is su enable uninstall
-	if ( packagesView->currentPackage()->isInstalled() && ::getuid() == 0 )
+	if ( packagesView2->currentPackage()->isInstalled() && ::getuid() == 0 )
 		pbUninstall->setDisabled( false );
 	else
 		pbUninstall->setDisabled( true );
@@ -367,23 +359,8 @@ void PortageTab::slotListPackages()
 										       filterGroup->selected(),
 										       searchFilter->text());
 
-	QList<PackageListItem*> items;
-	int packageCount = dbres.size() / 6;
-	QListIterator<QString> it( dbres );
-	while( it.hasNext() ) {
-		QString id = it.next();
-		QString name = it.next();
-		QString category = it.next();
-		QString description = it.next();
-		QString status = it.next();
-		QString update = it.next();
-
-		items << new PackageListItem(name, id, category, description, status.toInt(), update, packagesView2);
-	}
-	dynamic_cast<PackageListModel*>(packagesView2->model())->setPackages(items);
-	packagesView2->resizeColumnsToContents();
-
-	if ( packagesView->addSubCategoryPackages(dbres) == 0 ) {
+	packagesView2->setPackages(dbres);
+	if ( dbres.count() == 0) {
 		m_packageInspector->hide();
 		slotButtons();
 		summaryBrowser->clear();
@@ -404,7 +381,8 @@ void PortageTab::slotListPackages()
 			}
 		}
 		kDebug(0) << numberOfTerms << LINE_INFO;
-		packagesView->showNoHitsWarning( true , numberOfTerms );
+		//FIXME:implement this
+		//packagesView2->showNoHitsWarning( true , numberOfTerms );
 
 		//TODO: This forces white instead of using the current color-scheme default
 		// Highlight text filter background in red if query failed
@@ -425,7 +403,8 @@ void PortageTab::slotListPackages()
 		}
 	}
 	else {
-		packagesView->showNoHitsWarning( false , numberOfTerms );
+		//FIXME:implement this
+		//packagesView2->showNoHitsWarning( false , numberOfTerms );
 
 		// Highlight text filter background in green if query successful
 		if ( !searchFilter->text().isEmpty() )
@@ -473,10 +452,10 @@ void PortageTab::slotRefresh()
 void PortageTab::slotEnqueue()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		const QStringList selectedIdsList = packagesView->selectedIds();
+		const QStringList selectedIdsList = packagesView2->selectedPackagesByIds();
 		QStringList packageIdList;
 		foreach( QString id, selectedIdsList )
-			if ( packagesView->packageItemById( id )->isInPortage() && !packagesView->packageItemById( id )->isQueued() )
+			if ( packagesView2->packageItemById( id )->isInPortage() && !packagesView2->packageItemById( id )->isQueued() )
 				packageIdList += id;
 		QueueSingleton::Instance()->addPackageIdList( packageIdList );
 	}
@@ -485,7 +464,7 @@ void PortageTab::slotEnqueue()
 void PortageTab::slotDequeue()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		QueueSingleton::Instance()->removePackageIdList( packagesView->selectedIds() );
+		QueueSingleton::Instance()->removePackageIdList( packagesView2->selectedPackagesByIds() );
 	}
 }
 
@@ -495,14 +474,14 @@ void PortageTab::slotDequeue()
 void PortageTab::slotUninstall()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() || ::getuid() != 0 ) {
-		const QStringList selectedIdsList = packagesView->selectedIds();
+		const QStringList selectedIdsList = packagesView2->selectedPackagesByIds();
 
 		// Pick only installed packages
 		QStringList packageList;
 		foreach ( QString id, selectedIdsList ) {
-			if ( packagesView->packageItemById( id )->isInstalled() ) {
+			if ( packagesView2->packageItemById( id )->isInstalled() ) {
 				packageList += id;
-				packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
+				packageList += packagesView2->packageItemById( id )->category() + "/" + packagesView2->packageItemById( id )->name();
 			}
 		}
 
@@ -528,7 +507,7 @@ void PortageTab::slotAdvanced()
 	searchFilter->setDisabled( true );
 	pbClearFilter->setDisabled( true );
 
-	if ( packagesView->currentPackage() )
+	if ( packagesView2->currentPackage() )
 		processPackage( true );
 }
 
@@ -552,7 +531,7 @@ void PortageTab::processPackage( bool viewInspector )
 	summaryBrowser->clear();
 
 	// Multiple packages selected
-	const QStringList selectedIdsList = packagesView->selectedIds();
+	const QStringList selectedIdsList = packagesView2->selectedPackagesByIds();
 	int count = selectedIdsList.size();
 	if ( count > 1 ) {
 
@@ -565,9 +544,9 @@ void PortageTab::processPackage( bool viewInspector )
 		lines += QString::number( count )+ i18n(" packages selected") + "</b></font></td></tr>";
 		lines += "<tr><td>";
 		foreach ( QString id, selectedIdsList ) {
-			lines += packagesView->packageItemById( id )->name();
-			lines += " (" + packagesView->packageItemById( id )->category().section( "-", 0, 0 ) + "/";
-			lines += packagesView->packageItemById( id )->category().section( "-", 1, 1 ) + "), ";
+			lines += packagesView2->packageItemById( id )->name();
+			lines += " (" + packagesView2->packageItemById( id )->category().section( "-", 0, 0 ) + "/";
+			lines += packagesView2->packageItemById( id )->category().section( "-", 1, 1 ) + "), ";
 		}
 		lines = lines.left( lines.length() - 2 );
 		lines += "</td></tr>";
@@ -578,10 +557,11 @@ void PortageTab::processPackage( bool viewInspector )
 	}
 
 	// Initialize the portage package object with the current package and it's versions data
-	packagesView->currentPackage()->parsePackageVersions();
-	QString linesInstalled = packagesView->currentPackage()->linesInstalled();
-	QString linesAvailable = packagesView->currentPackage()->linesAvailable();
-	QString linesEmerge = packagesView->currentPackage()->linesEmerge();
+	PackageListItem *package = packagesView2->currentPackage();
+	//packagesView->currentPackage()->parsePackageVersions();
+	QString linesInstalled = package->linesInstalled();
+	QString linesAvailable = package->linesAvailable();
+	QString linesEmerge = package->linesEmerge();
 
 	// Build summary html-view
 	QString lines = "<table width=100% border=0 cellpadding=0>";
@@ -589,14 +569,14 @@ void PortageTab::processPackage( bool viewInspector )
 			//"bgcolor=#" + GlobalSingleton::Instance()->bgHexColor();
 			lines += " colspan=2><b>";
 			//lines += "<font color=#" + GlobalSingleton::Instance()->fgHexColor() + ">"
-			lines += "<font size=+1>" + packagesView->currentPackage()->name() + "</font> ";
-			lines += "(" + packagesView->currentPackage()->category().section( "-", 0, 0 ) + "/";
-			lines += packagesView->currentPackage()->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
+			lines += "<font size=+1>" + package->name() + "</font> ";
+			lines += "(" + package->category().section( "-", 0, 0 ) + "/";
+			lines += package->category().section( "-", 1, 1 ) + ")</font></b></td></tr>";
 
-	if ( packagesView->currentPackage()->isInPortage() ) {
-		lines += "<tr><td colspan=2>" + packagesView->currentPackage()->description() + "</td></tr>";
-		lines += "<tr><td colspan=2>" + i18n("<b>Homepage: </b>") + "<a href=\"" + packagesView->currentPackage()->homepage();
-		lines += "\">" + packagesView->currentPackage()->homepage() + "</a></td></tr>";
+	if ( package->isInPortage() ) {
+		lines += "<tr><td colspan=2>" + package->description() + "</td></tr>";
+		lines += "<tr><td colspan=2>" + i18n("<b>Homepage: </b>") + "<a href=\"" + package->homepage();
+		lines += "\">" + package->homepage() + "</a></td></tr>";
 	}
 	else
 		lines += "<tr><td colspan=2><font color=darkRed><b>"
@@ -617,7 +597,7 @@ void PortageTab::processPackage( bool viewInspector )
 						+ "Not installed"
 						+ "</td></tr>";
 
-	if ( packagesView->currentPackage()->isInPortage() ) {
+	if ( package->isInPortage() ) {
 
 		// Construct emerge version line
 		if ( !linesEmerge.isEmpty() ) {
@@ -628,7 +608,7 @@ void PortageTab::processPackage( bool viewInspector )
 						+ "</td></tr>";
 		}
 		else {
-			if ( packagesView->currentPackage()->isInArch() && linesAvailable.isEmpty() )
+			if ( package->isInArch() && linesAvailable.isEmpty() )
 				linesEmerge = "<tr><td width=10%><b>"
 							+ i18n("Emerge&nbsp;version:")
 							+ "</font></td><td width=90%><font color=darkRed>"
@@ -664,7 +644,7 @@ void PortageTab::processPackage( bool viewInspector )
 
 	// Refresh inspector if visible
 	if ( viewInspector )
-		m_packageInspector->edit( packagesView->currentPackage(), VIEW_PORTAGE );
+		m_packageInspector->edit( package, VIEW_PORTAGE );
 }
 
 /**

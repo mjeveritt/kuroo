@@ -31,7 +31,7 @@
 * Protected so that only PortagePackage can construct
 * a PackageVersion object.
 */
-PackageVersion::PackageVersion( PackageItem* package, const QString& version )
+PackageVersion::PackageVersion( PackageListItem* package, const QString& version )
 	: m_package( package ), m_version( version ), m_installed( false ), m_overlay( false ), m_isHardMasked( false ),
 	// Regexp for a simple number, for use as a version number part
 	rxNumber("\\d+"),

@@ -25,7 +25,7 @@
 #include <qstringlist.h>
 #include <qregexp.h>
 
-class PackageItem;
+class PackageListItem;
 
 /**
 * A PackageVersion specializing in Portage.
@@ -36,7 +36,7 @@ class PackageItem;
 class PackageVersion
 {
 public:
-	friend class PackageItem;
+	friend class PackageListItem;
 	
 	bool isAvailable() const;
 	bool isNotArch() const;
@@ -84,7 +84,7 @@ public:
 	void setUnMasked( bool isUnMasked );
 	
 protected:
-	PackageVersion( PackageItem* package, const QString& version );
+	PackageVersion( PackageListItem* package, const QString& version );
 	virtual ~PackageVersion();
 	
 private:
@@ -93,7 +93,7 @@ private:
 	int trailingCharNumber( const QString& versionString, int* foundPos = NULL ) const;
 	
 	/** The package containing this version. */
-	PackageItem* m_package;
+	PackageListItem* m_package;
 	
 	// Info retrievable by retrieving QFileInfos for ebuilds
 	// (without parsing their contents):

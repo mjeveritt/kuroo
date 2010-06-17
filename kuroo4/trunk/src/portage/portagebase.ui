@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>604</width>
-    <height>487</height>
+    <height>502</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -330,8 +330,7 @@
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-	 <widget class="QTableView" name="packagesView2"/>
-         <widget class="PortageListView" name="packagesView"/>
+         <widget class="PortageListView2" name="packagesView2"/>
          <widget class="QFrame" name="portageFrame">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -503,6 +502,11 @@
    <extends>QWidget</extends>
    <header>categorieslistview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PortageListView2</class>
+   <extends>QTreeView</extends>
+   <header>portagelistview2.h</header>
   </customwidget>
  </customwidgets>
  <includes>

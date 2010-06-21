@@ -4,6 +4,7 @@
 #include "queuelistview.h"
 #include "queuelistmodel.h"
 #include "queuelistitem.h"
+#include "queuelistdelegate.h"
 
 const int diffTime = 10;
 
@@ -12,6 +13,7 @@ QueueListView::QueueListView(QWidget *parent)
 {
 	QueueListModel *m = new QueueListModel(this);
 	setModel(m);
+	setItemDelegateForColumn(5, new QueueListDelegate(this));
 	QHeaderView *hh = header();
 	hh->setStretchLastSection(true);
 	hh->resizeSections(QHeaderView::ResizeToContents);
@@ -85,6 +87,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 	//resetListView();//FIXME
 	m_selectedPackages.clear();
+	m_packageIndex.clear();
 
 	// Get list of update packages with info
 	const QStringList packageList = KurooDBSingleton::Instance()->allQueuePackages();
@@ -97,6 +100,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString status = it.next();
 		QString idDepend = it.next();
 		QString size = it.next();
+		kDebug() << "Got size =" << size;
 		QString version = it.next();
 
 		// Get package emerge duration from statistics
@@ -111,17 +115,10 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		item = new QueueListItem(name, id, category, status.toInt(), duration, this);
 
 		if ( !idDepend.isEmpty() && idDepend != "0" ) {
-			item = new QueueListItem(name, id, category, status.toInt(), duration, this);
-			
 			item->setParentId(idDepend);
-			kDebug() << item->name() << "depends on package id" << idDepend;
 			
 			if (m_packageIndex.contains(idDepend))
-			{
-				kDebug() << "contains" << idDepend;
-				kDebug() << idDepend << "==>" << m_packageIndex[idDepend]->name();
 				m_packageIndex[idDepend]->appendChild(item);
-			}
 			else
 				orphans << item;
 		}
@@ -149,7 +146,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		if ( size.isEmpty() )
 			item->setSize(i18n("na"));
 		else {
-			item->setSize(formatSize(size));
+			item->setSize(size);
 			addSize(size);
 		}
 
@@ -172,6 +169,8 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	
 	QHeaderView *hh = header();
 	hh->resizeSections(QHeaderView::ResizeToContents);
+
+	//expandAll();
 }
 
 /**
@@ -261,8 +260,8 @@ const QString QueueListView::formatSize( const QString& sizeString )
 {
 	KLocale *loc = KGlobal::locale();
 	QString total;
-	QString tmp ( sizeString );
-	int size = tmp.remove(',').toInt();
+	QString tmp = sizeString;
+	int size = tmp.remove(",").toInt();
 
 	if ( size == 0 )
 		total = "0 kB ";
@@ -300,4 +299,33 @@ void QueueListView::mouseDoubleClickEvent(QMouseEvent *event)
 {
 	Q_UNUSED(event)
 	emit itemDoubleClicked();
+}
+
+void QueueListView::hasStarted(const QString& id)
+{
+	m_packageIndex[id]->setHasStarted(true);
+}
+
+void QueueListView::slotPackageStart(const QString& id)
+{
+	m_currentEmergingId = id;
+	m_packageIndex[id]->setHasStarted(true);
+}
+
+void QueueListView::slotPackageProgress()
+{
+	if (m_currentEmergingId != "" && m_packageIndex[m_currentEmergingId] != NULL)
+	{
+		m_packageIndex[m_currentEmergingId]->oneStep();
+	}
+}
+
+void QueueListView::slotPackageComplete(const QString& id)
+{
+	if (id == m_currentEmergingId)
+	{
+		m_packageIndex[id]->setHasStarted(false);
+		m_packageIndex[id]->setIsComplete(true);
+		m_currentEmergingId = "";
+	}
 }

@@ -79,7 +79,12 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 		break;
 	case 3:
 		if (role == Qt::DisplayRole)
-			return QVariant(p->duration());
+		{
+			if (p->duration() < 0)
+				return QVariant(i18n("na"));
+			else
+				return QVariant(formatTime(p->duration()));
+		}
 
 		break;
 	case 4:

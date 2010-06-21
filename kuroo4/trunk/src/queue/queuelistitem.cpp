@@ -12,6 +12,9 @@ QueueListItem::QueueListItem(const QString& name, const QString& id, const QStri
 	setDuration(duration);
 	m_parentId = "";
 	m_parent = NULL;
+	m_hasStarted = false;
+	m_isComplete = false;
+	m_steps = 0;
 }
 
 QueueListItem::~QueueListItem()
@@ -35,13 +38,13 @@ void QueueListItem::setSize(const QString& s)
 	m_size = s;
 }
 
-QString QueueListItem::duration()
+/*QString QueueListItem::duration()
 {
 	if (m_duration == -1)
 		return i18n("na");
 	
 	return formatTime(m_duration);
-}
+}*/
 
 void QueueListItem::setParentId(const QString& pid)
 {
@@ -59,3 +62,18 @@ void QueueListItem::setParentItem(QueueListItem* item)
 	m_parent = item;
 }
 
+void QueueListItem::setHasStarted(bool h)
+{
+	m_hasStarted = h;
+}
+
+void QueueListItem::setIsComplete(bool h)
+{
+	m_isComplete = h;
+}
+
+void QueueListItem::oneStep()
+{
+	m_steps++;
+	//TODO:update index in view.
+}

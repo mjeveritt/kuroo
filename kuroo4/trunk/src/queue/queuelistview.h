@@ -25,6 +25,13 @@ public:
 	const QStringList allId() const;
 	const QString count() const { return QString::number( m_packageIndex.count() ); }
 	void nextPackage( const bool& isPrevious );
+	void hasStarted(const QString&);
+
+public slots:
+	void slotPackageStart(const QString&);
+	void slotPackageProgress();
+	void slotPackageComplete(const QString&);
+
 signals:
 	void selectionChangedSignal();
 	void itemDoubleClicked();
@@ -40,6 +47,7 @@ private:
 	const QString formatSize( const QString& sizeString );
 	void addSize( const QString& size );
 	void indexPackage( const QString& id, QueueListItem *item );
+	QString m_currentEmergingId;
 
 };
 #endif

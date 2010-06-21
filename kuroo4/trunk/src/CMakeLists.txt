@@ -49,7 +49,8 @@ kde4_add_kcfg_files(config_sources config/settings.kcfgc )
 #queue
 set(queue_sources queue/queue.cpp queue/queuetab.cpp
 	queue/queuelistmodel.cpp queue/queuelistview.cpp
-	queue/queuelistitem.cpp)
+	queue/queuelistitem.cpp
+	queue/queuelistdelegate.cpp)
 kde4_add_ui_files(queue_sources queue/queuebase.ui)
 
 #intro

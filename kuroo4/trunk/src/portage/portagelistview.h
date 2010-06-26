@@ -18,6 +18,7 @@ public:
 	PackageListItem* currentPackage();
 	PackageListItem* packageItemById(const QString& id);
 	QStringList selectedPackagesByIds();
+	void nextPackage(const bool isPrevious);
 
 signals:
 	void selectionChangedSignal();

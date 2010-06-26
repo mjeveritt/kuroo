@@ -106,3 +106,24 @@ void PortageListView::mouseDoubleClickEvent(QMouseEvent *event)
 
 	emit doubleClickedSignal(item);
 }
+
+/**
+ * Move to next package in listview.
+ * @param isPrevious true is previous, false is next
+ */
+void PortageListView::nextPackage( const bool isPrevious )
+{
+	if ( isVisible() ) {
+		QModelIndex item;
+		if ( isPrevious )
+			item = moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
+		else
+			item = moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
+		
+		if (item.isValid()) {
+			scrollTo(item);
+			setCurrentIndex(item);
+		}
+	}
+}
+

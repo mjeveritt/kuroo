@@ -1,9 +1,9 @@
-
 #include <KIcon>
 
 #include "common.h"
 #include "queuelistmodel.h"
 #include "queuelistitem.h"
+#include "queuelistview.h"
 
 QueueListModel::QueueListModel(QObject *parent)
  : QAbstractItemModel(parent)
@@ -202,4 +202,18 @@ QVariant QueueListModel::headerData(int section, Qt::Orientation orientation, in
 	}
 
 	return QVariant();
+}
+
+void QueueListModel::updateItem(QueueListItem *item, QueueListView *listView)
+{
+	QModelIndexList mList = persistentIndexList();
+	foreach(QModelIndex index, mList)
+	{
+		if (index.isValid() && index.internalPointer() == item && index.column() == 5)
+		{
+			listView->update(index);
+			return;
+		}
+	}
+
 }

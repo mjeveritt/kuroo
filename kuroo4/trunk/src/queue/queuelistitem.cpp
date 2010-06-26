@@ -1,5 +1,8 @@
 #include "common.h"
 #include "queuelistitem.h"
+#include "queuelistview.h"
+#include "queuelistmodel.h"
+
 
 QueueListItem::QueueListItem(QObject *parent)
  : PackageListItem(parent)
@@ -15,6 +18,8 @@ QueueListItem::QueueListItem(const QString& name, const QString& id, const QStri
 	m_hasStarted = false;
 	m_isComplete = false;
 	m_steps = 0;
+
+	m_testTimer = 0;
 }
 
 QueueListItem::~QueueListItem()
@@ -64,16 +69,43 @@ void QueueListItem::setParentItem(QueueListItem* item)
 
 void QueueListItem::setHasStarted(bool h)
 {
+	if (duration() <= 0)
+	{
+		m_testTimer = new QTimer(this);
+		m_testTimer->start(100);
+		connect(m_testTimer, SIGNAL(timeout()), this, SLOT(oneStep()));
+	}
 	m_hasStarted = h;
 }
 
 void QueueListItem::setIsComplete(bool h)
 {
+	m_testTimer->stop();
 	m_isComplete = h;
 }
 
 void QueueListItem::oneStep()
 {
-	m_steps++;
-	//TODO:update index in view.
+	m_steps += duration() < 0 ? 2 : 1;
+
+	QueueListView *listView = dynamic_cast<QueueListView*>(parent());
+	QueueListModel *model = dynamic_cast<QueueListModel*>(listView->model());
+
+	model->updateItem(this, listView);
+	/*
+	if (!listView)
+	{
+		kDebug() << "No Update";
+		return;
+	}
+	QModelIndex index = listView->rootIndex();
+	if (!index.isValid())
+		kDebug() << "Root index is not valid";
+	bool start = true;
+	while (index.isValid() || start)
+	{
+		start = false;
+		foreach(QModelIndex i, model->children(index))
+	}*/
 }
+

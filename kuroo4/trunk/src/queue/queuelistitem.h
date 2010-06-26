@@ -2,11 +2,13 @@
 #define QUEUE_LIST_ITEM_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "packagelistitem.h"
 
 class QueueListItem : public PackageListItem
 {
+	Q_OBJECT
 public:
 	QueueListItem(QObject *parent = 0);
 	QueueListItem(const QString& name, const QString& id, const QString& category, const int status, const int duration, QObject *parent = 0);
@@ -32,6 +34,8 @@ public:
 	void setParentItem(QueueListItem* item);
 	void setHasStarted(bool);
 	void setIsComplete(bool);
+
+public slots:
 	void oneStep();
 
 private:
@@ -44,6 +48,7 @@ private:
 	bool m_hasStarted;
 	bool m_isComplete;
 	int m_steps;
+	QTimer *m_testTimer;
 };
 
 #endif

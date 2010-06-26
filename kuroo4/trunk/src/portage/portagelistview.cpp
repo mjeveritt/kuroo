@@ -39,8 +39,9 @@ void PortageListView::selectionChanged(const QItemSelection& selected, const QIt
 	{
 		if (index.column() == 0 && index.data().canConvert(QVariant::String))
 		{
-			PackageListItem *item = dynamic_cast<PackageListModel*>(model())->packages().at(index.row());
-			m_selectedPackages << item;
+			PackageListItem *item = static_cast<PackageListItem*>(index.internalPointer());
+			if (item)
+				m_selectedPackages << item;
 		}
 	}
 
@@ -54,7 +55,7 @@ QList<PackageListItem*> PortageListView::selectedPackages() const
 
 PackageListItem* PortageListView::currentPackage()
 {
-	return dynamic_cast<PackageListModel*>(model())->packages().at(currentIndex().row());
+	return static_cast<PackageListItem*>(currentIndex().internalPointer());
 }
 
 PackageListItem* PortageListView::packageItemById(const QString& id)

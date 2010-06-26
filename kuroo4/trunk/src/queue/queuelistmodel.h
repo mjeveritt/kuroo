@@ -6,6 +6,7 @@
 #include <QList>
 
 class QueueListItem;
+class QueueListView;
 
 class QueueListModel : public QAbstractItemModel
 {
@@ -30,6 +31,8 @@ public:
 	bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
 	QList<QueueListItem*> packages();
+	
+	void updateItem(QueueListItem *item, QueueListView *listView);
 
 private:
 	QList<QueueListItem*> m_packages;

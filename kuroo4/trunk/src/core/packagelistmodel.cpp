@@ -45,7 +45,10 @@ int PackageListModel::columnCount(const QModelIndex& parent) const
 
 QVariant PackageListModel::data(const QModelIndex& index, int role) const
 {
-	PackageListItem *p = m_packages[index.row()];
+	PackageListItem *p = static_cast<PackageListItem*>(index.internalPointer());
+	if (!p)
+		return QVariant();
+
 	switch(index.column())
 	{
 	case 0:
@@ -83,7 +86,10 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 QModelIndex PackageListModel::index(int row, int column, const QModelIndex& parent) const
 {
 	Q_UNUSED(parent)
-	return createIndex(row, column, row);
+	if (row < m_packages.count())
+		return createIndex(row, column, m_packages[row]);
+	else
+		return QModelIndex();
 }
 
 bool PackageListModel::hasChildren(const QModelIndex& parent) const

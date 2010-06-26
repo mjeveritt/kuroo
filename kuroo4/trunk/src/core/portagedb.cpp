@@ -507,22 +507,28 @@ const QStringList KurooDB::portageCategories( int filter, const QString& text )
 
 	// Allow for multiple words match
 	QString textString = escapeString ( text.simplified() );
-    QStringList textStringList = textString.split(" ");
+	QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
 	{
+		int i = 0;
 		while ( !textStringList.isEmpty() )
 		{
 			if (textStringList.first().length() > 0)
-				textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
-			textStringList.pop_front();
+			{
+				if (i++ != 0)
+					textQuery += " AND";
+				textQuery += " (meta LIKE '%" + textStringList.takeFirst() + "%')";
+			}
+			else
+				textStringList.takeFirst();
 		}
-		len = textQuery.length();
+		/*len = textQuery.length();
 		if (len > 0)
-			textQuery = " AND ( " + textQuery.right ( len - 5 ) + " ) ";
+			textQuery = "( " + textQuery.right ( len - 5 ) + " ) ";
 		else
-			textQuery = "";
+			textQuery = "";*/
 	}
 
 	switch ( filter )
@@ -607,12 +613,15 @@ const QStringList KurooDB::portageSubCategories( const QString& categoryId, int 
  */
 const QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
+	//FIXME:temporary workaround.
+	if (filter == -1)
+		filter = 1;
 	QString filterQuery, textQuery;
 	int len;
 
 	// Allow for multiple words match
 	QString textString = escapeString( text.simplified() );
-    QStringList textStringList = textString.split(" ");
+	QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
@@ -620,14 +629,14 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 		while ( !textStringList.isEmpty() )
 		{
 			if (textStringList.first().length() > 0)
-				textQuery += " AND meta LIKE '%" + textStringList.first() + "%' ";
+				textQuery += " AND (meta LIKE '%" + textStringList.first() + "%')";
 			textStringList.pop_front();
 		}
-		len = textQuery.length();
+		/*len = textQuery.length();
 		if (len > 0)
 			textQuery = " AND ( " + textQuery.right( len - 5 ) + " ) ";
 		else
-			textQuery = "";
+			textQuery = "";*/
 	}
 
 	switch ( filter )
@@ -649,7 +658,6 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 
 		if ( subCategoryId == "0" )
 		{
-
 			switch ( filter )
 			{
 				case PACKAGE_AVAILABLE:

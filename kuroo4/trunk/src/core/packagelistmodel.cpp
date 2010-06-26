@@ -29,6 +29,11 @@ void PackageListModel::setPackages(QList<PackageListItem*>& packages)
 	while (!m_packages.isEmpty())
 		delete m_packages.takeLast();
 	endRemoveRows();
+	if (packages.count() <= 0)
+	{
+		m_packages.clear();
+		return;
+	}
 	beginInsertRows(QModelIndex(), 0, packages.count() - 1);
 	m_packages = packages;
 	endInsertRows();

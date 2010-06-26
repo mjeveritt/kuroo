@@ -69,6 +69,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	setupUi( this );
 	this->splitterH->setStretchFactor(0, 1);
 	this->splitterH->setStretchFactor(1, 6);
+	filterGroup->setSelected(0);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
 	//		<< "actual width=" << categoriesView->width() << LINE_INFO;
 	// Connect What's this button
@@ -311,7 +312,7 @@ void PortageTab::slotReload()
 	connect( categoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListSubCategories() ) );
 	connect( subcategoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListPackages() ) );
 
-	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selected(), searchFilter->text() ), false );
+	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() ), false );
 }
 
 void PortageTab::slotFillFilter( const QString& text )
@@ -335,7 +336,7 @@ void PortageTab::slotActivateFilters()
 {
 	--m_delayFilters;
 	if ( m_delayFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( filterGroup->selected(), searchFilter->text() ), true );
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() ), true );
 }
 
 /**
@@ -344,7 +345,7 @@ void PortageTab::slotActivateFilters()
 void PortageTab::slotListSubCategories()
 {
 	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoriesView->currentCategoryId(),
-		filterGroup->selected(), searchFilter->text() ) );
+		1 << filterGroup->selected(), searchFilter->text() ) );
 }
 
 /**
@@ -356,7 +357,7 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	QStringList dbres = KurooDBSingleton::Instance()->portagePackagesBySubCategory(categoriesView->currentCategoryId(),
 										       subcategoriesView->currentCategoryId(),
-										       filterGroup->selected(),
+										       1 << filterGroup->selected(),
 										       searchFilter->text());
 
 	packagesView->setPackages(dbres);

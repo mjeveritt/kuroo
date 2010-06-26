@@ -180,19 +180,6 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QRadioButton" name="radioUpdates">
-          <property name="text">
-           <string>&amp;Updates</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+U</string>
-          </property>
-          <property name="buttonGroupId" stdset="0">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1">
          <widget class="QRadioButton" name="radioInstalled">
           <property name="text">
@@ -203,6 +190,19 @@
           </property>
           <property name="buttonGroupId" stdset="0">
            <number>2</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QRadioButton" name="radioUpdates">
+          <property name="text">
+           <string>&amp;Updates</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+U</string>
+          </property>
+          <property name="buttonGroupId" stdset="0">
+           <number>4</number>
           </property>
          </widget>
         </item>

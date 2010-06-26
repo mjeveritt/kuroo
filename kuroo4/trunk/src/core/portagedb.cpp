@@ -512,14 +512,11 @@ const QStringList KurooDB::portageCategories( int filter, const QString& text )
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
 	{
-		int i = 0;
 		while ( !textStringList.isEmpty() )
 		{
 			if (textStringList.first().length() > 0)
 			{
-				if (i++ != 0)
-					textQuery += " AND";
-				textQuery += " (meta LIKE '%" + textStringList.takeFirst() + "%')";
+				textQuery += " AND (meta LIKE '%" + textStringList.takeFirst() + "%')";
 			}
 			else
 				textStringList.takeFirst();
@@ -533,6 +530,8 @@ const QStringList KurooDB::portageCategories( int filter, const QString& text )
 
 	switch ( filter )
 	{
+		//FIXME:Temporary workaround
+		case -1:
 		case PACKAGE_AVAILABLE:
 			filterQuery = " WHERE package.status & " + PACKAGE_ALL_STRING;
 			break;
@@ -581,6 +580,8 @@ const QStringList KurooDB::portageSubCategories( const QString& categoryId, int 
 
 		switch ( filter )
 		{
+			//FIXME:Temporary workaround
+			case -1:
 			case PACKAGE_AVAILABLE:
 				filterQuery = " AND package.status & " + PACKAGE_ALL_STRING;
 				break;
@@ -613,9 +614,7 @@ const QStringList KurooDB::portageSubCategories( const QString& categoryId, int 
  */
 const QStringList KurooDB::portagePackagesBySubCategory( const QString& categoryId, const QString& subCategoryId, int filter, const QString& text )
 {
-	//FIXME:temporary workaround.
-	if (filter == -1)
-		filter = 1;
+	kDebug() << "filter = " << filter;
 	QString filterQuery, textQuery;
 	int len;
 
@@ -641,6 +640,8 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 
 	switch ( filter )
 	{
+		//FIXME:Temporary workaround
+		case -1:
 		case PACKAGE_AVAILABLE:
 			filterQuery = " AND package.status & " + PACKAGE_ALL_STRING;
 			break;
@@ -660,6 +661,8 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 		{
 			switch ( filter )
 			{
+				//FIXME:Temporary workaround
+				case -1:
 				case PACKAGE_AVAILABLE:
 					filterQuery = " WHERE package.status & " + PACKAGE_ALL_STRING;
 					break;

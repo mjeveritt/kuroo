@@ -52,7 +52,6 @@
  * @short Main kde window with menus, system tray icon and statusbar.
  */
 Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
-	systemTray( new SystemTray( this ) ),
 	kurooMessage( new Message( this ) ),
 	kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
@@ -65,12 +64,10 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() ) {
-		systemTray->activate();
+		systemTray = new SystemTray( this );
+		connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
+		connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
 	}
-
-
-	connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
-	connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
 
 	// Lock/unlock if kuroo is busy.
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );

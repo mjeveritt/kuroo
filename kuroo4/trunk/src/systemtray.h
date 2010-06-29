@@ -21,7 +21,7 @@
 #ifndef SYSTEMTRAY_H
 #define SYSTEMTRAY_H
 
-#include <KSystemTrayIcon>
+//#include <KSystemTrayIcon>
 #include <KStatusNotifierItem>
 #include <QAction>
 
@@ -30,7 +30,7 @@
  * @class SystemTray
  * @short Singleton object that creates the kuroo systemtray icon and actions.
  */
-class SystemTray : public KSystemTrayIcon
+class SystemTray : public KStatusNotifierItem
 {
 Q_OBJECT
 	static SystemTray* s_instance;
@@ -39,9 +39,8 @@ public:
 	SystemTray( QWidget *parent = 0 );
 	~SystemTray();
 
-	static SystemTray* 	instance() { return s_instance; }
-	void				activate();
-	void				inactivate();
+	static SystemTray* 		instance() { return s_instance; }
+	//void				inactivate();
 
 private slots:
 	void 				slotPreferences();

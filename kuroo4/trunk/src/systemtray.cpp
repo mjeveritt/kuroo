@@ -35,12 +35,12 @@ SystemTray* SystemTray::s_instance = 0;
  * The user can disable the systemtray icon in settings.
  */
 SystemTray::SystemTray( QWidget *parent )
-	//: KStatusNotifierItem( parent )
-	: KSystemTrayIcon( parent )
+	: KStatusNotifierItem( parent )
+	//: KSystemTrayIcon( parent )
 {
 	s_instance = this;
-	//setToolTip( KIcon("kuroo_ready"), i18n("Kuroo - Portage frontend"), "" );
-	setToolTip( i18n( "Kuroo - Portage Frontend" ) );
+	setToolTip( KIcon("kuroo_ready"), i18n("Kuroo - Portage frontend"), "" );
+	//setToolTip( i18n( "Kuroo - Portage Frontend" ) );
 
 	contextMenu()->addAction( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
 	m_menuPause = contextMenu()->addAction( i18n("Pause Emerge"), this, SLOT( slotPause() ) );
@@ -58,7 +58,7 @@ SystemTray::~SystemTray()
 {
 }
 
-void SystemTray::activate()
+/*void SystemTray::activate()
 {
 	slotBusy( false );
 	//setStatus( KStatusNotificationItem::Active );
@@ -68,8 +68,8 @@ void SystemTray::activate()
 void SystemTray::inactivate()
 {
 	//setStatus( KStatusNotifierItem::Passive );
-	hide();
-}
+	//hide();
+}*/
 
 void SystemTray::slotPreferences()
 {
@@ -81,8 +81,6 @@ void SystemTray::slotPause()
 	if( EmergeSingleton::Instance()->canPause() ) {
 		m_menuPause->setEnabled( false );
 		m_menuUnpause->setEnabled( true );
-		//contextMenu()->setItemEnabled( m_menuPause, false );
-		//contextMenu()->setItemEnabled( m_menuUnpause, true );
 		EmergeSingleton::Instance()->slotPause();
 	}
 }
@@ -92,8 +90,6 @@ void SystemTray::slotUnpause()
 	if( EmergeSingleton::Instance()->canPause() ) {
 		m_menuPause->setEnabled( true );
 		m_menuUnpause->setEnabled( false );
-		//contextMenu()->setItemEnabled( m_menuPause, true );
-		//contextMenu()->setItemEnabled( m_menuUnpause, false );
 		EmergeSingleton::Instance()->slotUnpause();
 	}
 }
@@ -104,29 +100,21 @@ void SystemTray::slotUnpause()
  */
 void SystemTray::slotBusy( bool busy )
 {
-	//TODO: Removed isVisible from here, should make sure it's really not needed
 	if ( busy ) {
-		setIcon( KIcon( "kuroo_emerging" ) );
-		//setIconByPixmap( KIcon("kuroo_emerging") );
+		setIconByPixmap( KIcon("kuroo_emerging") );
 		if( EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {
 			m_menuUnpause->setEnabled( true );
-			//contextMenu()->setItemEnabled( m_menuUnpause, true );
 		} else if( !EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {
 			m_menuPause->setEnabled( true );
-			//contextMenu()->setItemEnabled( m_menuPause, true );
 		}
 	}
 	else {
-		setIcon( KIcon( "kuroo" ) );
-		//setIconByPixmap( KIcon("kuroo_ready") );
+		setIconByPixmap( KIcon("kuroo") );
 		if( EmergeSingleton::Instance()->canPause() && EmergeSingleton::Instance()->isPaused() ) {
 			m_menuUnpause->setEnabled( true );
-			//contextMenu()->setItemEnabled( m_menuUnpause, true );
 		} else {
 			m_menuPause->setEnabled( false );
 			m_menuUnpause->setEnabled( false );
-			//contextMenu()->setItemEnabled( m_menuPause, false );
-			//contextMenu()->setItemEnabled( m_menuUnpause, false );
 		}
 	}
 }

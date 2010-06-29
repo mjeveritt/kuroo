@@ -21,6 +21,7 @@ public:
 	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
 	virtual QModelIndex parent(const QModelIndex& index) const;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+	virtual void sort(int column, Qt::SortOrder order);
 	
 	// Some virtual methods to reimplement.
 	
@@ -32,6 +33,9 @@ public:
 
 private:
 	QList<PackageListItem*> m_packages;
+
+	static bool packageLessThan(PackageListItem *p1, PackageListItem *p2);
+	static bool packageMoreThan(PackageListItem *p1, PackageListItem *p2);
 };
 
 #endif

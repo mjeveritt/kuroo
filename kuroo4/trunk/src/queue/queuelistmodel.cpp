@@ -217,3 +217,35 @@ void QueueListModel::updateItem(QueueListItem *item, QueueListView *listView)
 	}
 
 }
+
+bool QueueListModel::packageLessThan(PackageListItem *p1, PackageListItem *p2)
+{
+	return p1->name() < p2->name();
+}
+
+bool QueueListModel::packageMoreThan(PackageListItem *p1, PackageListItem *p2)
+{
+	return p1->name() > p2->name();
+}
+
+void QueueListModel::sort(int column, Qt::SortOrder order)
+{
+	if (column != 0)
+		return;
+
+	sortTree(m_packages, order);
+}
+
+void QueueListModel::sortTree(QList<QueueListItem*> items, Qt::SortOrder order)
+{
+	foreach(QueueListItem *item, items)
+	{
+		sortTree(item->children(), order);
+	}
+	
+	if (order == Qt::AscendingOrder)
+		qSort(items.begin(), items.end(), packageLessThan);
+	else
+		qSort(items.begin(), items.end(), packageMoreThan);
+
+}

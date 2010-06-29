@@ -14,6 +14,7 @@ PortageListView::PortageListView(QWidget *parent)
 	hh->setStretchLastSection(true);
 	hh->resizeSections(QHeaderView::ResizeToContents);
 	setRootIsDecorated(false);
+	//setSortingEnabled(true);
 
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -93,6 +94,8 @@ void PortageListView::setPackages(const QStringList& packages)
 	QHeaderView *hh = header();
 	//hh->setStretchLastSection(true);
 	hh->resizeSections(QHeaderView::ResizeToContents);
+
+	sortByColumn(0, Qt::AscendingOrder);
 }
 
 void PortageListView::mouseDoubleClickEvent(QMouseEvent *event)

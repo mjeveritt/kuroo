@@ -170,6 +170,8 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	QHeaderView *hh = header();
 	hh->resizeSections(QHeaderView::ResizeToContents);
 
+	sortByColumn(0, Qt::AscendingOrder);
+
 	//expandAll();
 }
 

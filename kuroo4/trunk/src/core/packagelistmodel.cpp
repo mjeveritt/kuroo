@@ -148,3 +148,24 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 	
 	return QVariant();
 }
+
+bool PackageListModel::packageLessThan(PackageListItem *p1, PackageListItem *p2)
+{
+	return p1->name() < p2->name();
+}
+
+bool PackageListModel::packageMoreThan(PackageListItem *p1, PackageListItem *p2)
+{
+	return p1->name() > p2->name();
+}
+
+void PackageListModel::sort(int column, Qt::SortOrder order)
+{
+	if (column != 0)
+		return;
+
+	if (order == Qt::AscendingOrder)
+		qSort(m_packages.begin(), m_packages.end(), packageLessThan);
+	else
+		qSort(m_packages.begin(), m_packages.end(), packageMoreThan);
+}

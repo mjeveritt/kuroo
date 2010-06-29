@@ -85,7 +85,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	//		 this, SLOT( slotContextMenu() ) );
 
 	// Button actions.
-	connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+	//connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
 	//TODO:reimplement
 	connect( packagesView, SIGNAL( doubleClickedSignal(PackageListItem*) ), this, SLOT( slotAdvanced() ) );
@@ -268,15 +268,27 @@ void PortageTab::slotButtons()
 		pbQueue->setDisabled( false );
 
 	// Toggle queue button between add/remove
-	if ( packagesView->currentPackage()->isInPortage() ) {
+	if ( packagesView->currentPackage() && packagesView->currentPackage()->isInPortage() ) {
 		pbQueue->setDisabled( false );
 
 		if ( packagesView->currentPackage()->isQueued() )
+		{
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
 			pbQueue->setText( i18n("Remove from Queue") );
+		}
 		else
+		{
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			pbQueue->setText( i18n("Add to Queue") );
+		}
 	}
 	else {
+		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
 		pbQueue->setText( i18n("Add to Queue") );
 		pbQueue->setDisabled( true );
 	}
@@ -456,10 +468,17 @@ void PortageTab::slotEnqueue()
 		const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
 		QStringList packageIdList;
 		foreach( QString id, selectedIdsList )
+		{
 			if ( packagesView->packageItemById( id )->isInPortage() && !packagesView->packageItemById( id )->isQueued() )
+			{
 				packageIdList += id;
+				packagesView->packageItemById( id )->setQueued(true);
+			}
+		}
 		QueueSingleton::Instance()->addPackageIdList( packageIdList );
 	}
+
+	slotButtons();
 }
 
 void PortageTab::slotDequeue()
@@ -467,6 +486,8 @@ void PortageTab::slotDequeue()
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
 		QueueSingleton::Instance()->removePackageIdList( packagesView->selectedPackagesByIds() );
 	}
+
+	slotButtons();
 }
 
 /**

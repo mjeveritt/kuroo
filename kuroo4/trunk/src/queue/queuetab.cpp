@@ -169,8 +169,6 @@ void QueueTab::slotInit()
 		cbSkipHousekeeping->setDisabled( true );
 
 
-	slotRemoveInstalled();
-
 	cbDownload->setToolTip( i18n(  "<qt><table width=300><tr><td>Instead of doing any package building, "
 									"just perform fetches for all packages (the main package as well as all dependencies), "
 									"grabbing all potential files.</td></tr></table></qt>" ) );
@@ -236,7 +234,10 @@ void QueueTab::slotNextPackage( bool isNext )
 void QueueTab::slotRefresh()
 {
 	if ( !QueueSingleton::Instance()->isQueueBusy() )
+	{
+		slotRemoveInstalled();
 		queueView->insertPackageList( m_hasCheckedQueue );
+	}
 	
 	slotBusy();
 }

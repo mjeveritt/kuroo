@@ -56,7 +56,9 @@ QList<PackageListItem*> PortageListView::selectedPackages() const
 
 PackageListItem* PortageListView::currentPackage()
 {
-	return static_cast<PackageListItem*>(currentIndex().internalPointer());
+	if (m_selectedPackages.count() != 1)
+		return NULL;
+	return m_selectedPackages.at(0);
 }
 
 PackageListItem* PortageListView::packageItemById(const QString& id)

@@ -211,12 +211,14 @@ const QStringList QueueListView::allPackagesNoChildren()
 
 const QStringList QueueListView::allId() const
 {
-	QStringList idList;
-	//TODO:impement me!
-	/*for( int i = 0; i < topLevelItemCount(); i++ ) {
-		idList += dynamic_cast<PackageItem*>(topLevelItem( i ))->id();
-	}*/
-	return idList;
+	QStringList packageList;
+	//QList<QueueListItem*> packages = dynamic_cast<QueueListModel*>(model())->packages();
+	foreach(QString id, m_packageIndex.keys())
+	{
+		packageList << id;
+	}
+
+	return packageList;
 }
 
 void QueueListView::nextPackage( const bool& isPrevious )

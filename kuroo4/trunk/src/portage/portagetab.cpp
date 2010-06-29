@@ -559,6 +559,9 @@ void PortageTab::processPackage(bool viewInspector)
 
 	// Initialize the portage package object with the current package and it's versions data
 	PackageListItem *package = packagesView->currentPackage();
+	if (!package)
+		return;
+
 	package->parsePackageVersions();
 	QString linesInstalled = package->linesInstalled();
 	QString linesAvailable = package->linesAvailable();

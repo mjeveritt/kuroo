@@ -238,7 +238,6 @@ void QueueTab::slotRefresh()
 	if ( !QueueSingleton::Instance()->isQueueBusy() )
 		queueView->insertPackageList( m_hasCheckedQueue );
 	
-	// Enable the gui
 	slotBusy();
 }
 
@@ -248,7 +247,7 @@ void QueueTab::slotRefresh()
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
 	// Reenable the inspector after queue changes
-// 	m_packageInspector->setDisabled( true );
+	//m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 
 	// If user is not su emerge pretend will not set packages as checked
@@ -337,10 +336,10 @@ void QueueTab::slotButtons()
 	if ( queueView->selectedPackagesByIds().isEmpty() ) {
 		pbRemove->setDisabled( true );
 		pbAdvanced->setDisabled( true );
-		return;
 	}
 
-
+	if (KurooDBSingleton::Instance()->isQueueEmpty())
+		return;
 
 	// Queue is not empty - enable button "Remove all" and "Check Installation"
 	cbDownload->setDisabled( false );

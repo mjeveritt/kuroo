@@ -89,6 +89,7 @@ void PortageListView::setPackages(const QStringList& packages)
 
 		items << new PackageListItem(name, id, category, description, status.toInt(), update, this);
 		m_packageIndex.insert(id, items.last());
+		m_packageIndex[id]->setPackageIndex(m_packageIndex.count());
 	}
 
 	dynamic_cast<PackageListModel*>(model())->setPackages(items);
@@ -102,9 +103,10 @@ void PortageListView::setPackages(const QStringList& packages)
 
 void PortageListView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-	QModelIndex index = indexAt(event->globalPos());
+	QModelIndex index = indexAt(event->pos());
 	if (!index.isValid())
 		return;
+	
 	PackageListItem *item = static_cast<PackageListItem*>(index.internalPointer());
 	if (!item)
 		return;
@@ -126,6 +128,7 @@ void PortageListView::nextPackage( const bool isPrevious )
 			item = moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
 		
 		if (item.isValid()) {
+			//kDebug() << static_cast<PackageListItem*>(item.internalPointer())->index();
 			scrollTo(item);
 			setCurrentIndex(item);
 		}

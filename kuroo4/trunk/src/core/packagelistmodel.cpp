@@ -17,7 +17,7 @@ PackageListModel::~PackageListModel()
 		delete m_packages.takeLast();
 }
 
-QList<PackageListItem*> PackageListModel::packages()
+QList<PackageListItem*> PackageListModel::packages() const
 {
 	return m_packages;
 }
@@ -67,6 +67,7 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 	case 1:
 		if (role == Qt::DecorationRole && p->isInWorld())
 			return QVariant(KIcon("kuroo_queued"));
+		break;
 
 	case 2:
 		if (role == Qt::DecorationRole && QueueSingleton::Instance()->isQueued(p->id()))
@@ -124,7 +125,7 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 	{
 	case 0:
 		if (role == Qt::DisplayRole)
-			return QVariant(i18n(QString("Package (%1)").arg(rowCount())));
+			return QVariant(i18n(QString("Packages (%1)").arg(rowCount())));
 		break;
 	case 1:
 		if (role == Qt::DecorationRole)

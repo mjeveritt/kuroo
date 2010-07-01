@@ -32,6 +32,7 @@ public:
 	LoadPackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
 
 	virtual void run() {
+		kDebug() << "Updating KEYWORDS DATABASE !!!!";
 		DEBUG_LINE_INFO;
 
 		// Collect all mask dependatoms
@@ -85,7 +86,7 @@ public:
 						tokenIterator++;
 					}
 					if ( keywords.isEmpty() )
-					keywords = "~" + KurooConfig::arch();
+						keywords = "~" + KurooConfig::arch();
 
 					QString id = KurooDBSingleton::Instance()->singleQuery(
 						"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );

@@ -7,6 +7,7 @@
 
 #include "dependatom.h"
 #include "packageversion.h"
+#include "portagelistview.h"
 
 class PackageListItem : public QObject
 {
@@ -33,9 +34,8 @@ public:
 	inline bool isInArch() const { return m_isInArch; }
 	inline const QStringList& versionDataList() const { return m_versionsDataList; }
 	inline const QString& emergeVersion() const { return m_emergeVersion; }
-	//TODO:fix isFirst and isLast
-	inline bool isLastPackage() const  { return (m_index == 1); }
-	bool isFirstPackage() const {return false;}
+	bool isLastPackage() const  { return (m_index == 1); }
+	inline bool isFirstPackage() const  { return (m_index == dynamic_cast<PortageListView*>(parent())->packages().count()); }
 	inline QMap<QString, PackageVersion*> versionMap() const { return m_versionMap; }
 	
 	void initVersions();
@@ -46,6 +46,8 @@ public:
 	bool isInstalled() const;
 	
 	void resetDetailedInfo();
+
+	void setPackageIndex(const int idx);
 
 private:
 	QString m_name;

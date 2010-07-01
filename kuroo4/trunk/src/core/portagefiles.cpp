@@ -111,7 +111,8 @@ public:
 
 		QFile file( KurooConfig::defaultFilePackageKeywords() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append ) ) {
+
+		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
 			return;
 		}
@@ -154,7 +155,7 @@ public:
 
 		QFile file( KurooConfig::defaultFilePackageUserMask() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append) ) {
+		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserMask() ) << LINE_INFO;
 			return;
 		}
@@ -191,7 +192,7 @@ public:
 
 		QFile file( KurooConfig::defaultFilePackageUserUnMask() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append) ) {
+		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
 			return;
 		}
@@ -229,7 +230,7 @@ public:
 
 		QFile file( KurooConfig::defaultFilePackageUserUse() );
 		QTextStream stream( &file );
-		if ( !file.open( QIODevice::WriteOnly | QIODevice::Append) ) {
+		if ( !file.open( QIODevice::WriteOnly ) ) {
 			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUse() ) << LINE_INFO;
 			return;
 		}

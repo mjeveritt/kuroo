@@ -4,6 +4,8 @@
 #include <QTreeView>
 #include <QStringList>
 
+#include "packagelistmodel.h"
+
 class PackageListItem;
 
 class PortageListView : public QTreeView
@@ -19,6 +21,8 @@ public:
 	PackageListItem* packageItemById(const QString& id);
 	QStringList selectedPackagesByIds();
 	void nextPackage(const bool isPrevious);
+
+	QList<PackageListItem*> packages() const {return dynamic_cast<PackageListModel*>(model())->packages();}
 
 signals:
 	void selectionChangedSignal();

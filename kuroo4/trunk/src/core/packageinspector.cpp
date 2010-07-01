@@ -87,6 +87,10 @@ PackageInspector::PackageInspector( QWidget *parent ) : KDialog( parent ),
 
     connect( pbUse, SIGNAL( clicked() ), this, SLOT( slotCalculateUse() ) );
 
+    /*connect(rbStable, SIGANL(activated()), this, SLOT(setStable()));
+    connect(rbTesting, SIGANL(activated()), this, SLOT(setTesting()));
+    connect(rbMasked, SIGANL(activated()), this, SLOT(setMasked()));
+*/
     // Listen to Queue and World checkboxes
     connect( cbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
     connect( cbWorld, SIGNAL( clicked() ), this, SLOT( slotWorld() ) );
@@ -173,15 +177,8 @@ void PackageInspector::updateVersionData()
     }
 
     // Toggle checkboxes if package in World and Queue
-    if ( m_portagePackage->isInWorld() )
-        cbWorld->setChecked( true );
-    else
-        cbWorld->setChecked( false );
-
-    if ( m_portagePackage->isQueued() )
-        cbQueue->setChecked( true );
-    else
-        cbQueue->setChecked( false );
+    cbWorld->setChecked(m_portagePackage->isInWorld());
+    cbQueue->setChecked(m_portagePackage->isQueued());
 }
 
 /**
@@ -367,12 +364,12 @@ void PackageInspector::slotApply()
             //recalculate use flags
             m_pretendUseLines.clear();
             eProc = new KProcess();
+            eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
             *eProc << "emerge" << "--columns" << "--nospinner" << "--color=n" << "-pv" << m_category + "/" + m_package;
             m_useList = useList;
-
-            connect( eProc, SIGNAL( finished() ), this, SLOT( slotParseTempUse() ) );
+            connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotParsePackageUse() ) );
             connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectPretendOutput() ) );
-            eProc->start( /*K3Process::NotifyOnExit, true*/ );
+            eProc->start();
             SignalistSingleton::Instance()->setKurooBusy( true );
 
             if ( !eProc->state() != QProcess::Running )
@@ -504,6 +501,7 @@ void PackageInspector::showSettings()
  */
 void PackageInspector::slotSetStability( int rbStability )
 {
+    kDebug() << "slotSetStability";
     switch ( rbStability ) {
 
         // User wants only stable package
@@ -551,6 +549,8 @@ void PackageInspector::slotSetStability( int rbStability )
         cbVersionsSpecific->setDisabled( false );
 
     }
+    PortageFilesSingleton::Instance()->savePackageUserUnMask();
+    PortageFilesSingleton::Instance()->savePackageKeywords();
 
     enableButtonApply( true );
     m_versionSettingsChanged = true;
@@ -874,20 +874,22 @@ void PackageInspector::slotCalculateUse()
 {
     m_pretendUseLines.clear();
     eProc = new KProcess();
+    eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
     *eProc << "emerge" << "--columns" << "--nospinner" << "--color=n" << "-pv" << m_category + "/" + m_package;
 
-    connect( eProc, SIGNAL( finished() ), this, SLOT( slotParsePackageUse() ) );
-    connect( eProc, SIGNAL( readyReadStandardError() ), this, SLOT( slotCollectPretendOutput() ) );
-    eProc->start( /*K3Process::NotifyOnExit, true*/ );
+    connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotParsePackageUse() ) );
+    connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectPretendOutput() ) );
+    eProc->start();
+
     SignalistSingleton::Instance()->setKurooBusy( true );
 
-    if ( eProc->state() != QProcess::Running ) {
+    if ( eProc->state() != QProcess::Starting && eProc->state() != QProcess::Running) {
         LogSingleton::Instance()->writeLog( i18n("\nError: Could not calculate use flag for package %1/%2.")
                                             .arg( m_category ).arg( m_package ), ERROR );
         slotParsePackageUse();
     }
     else
-        setDisabled( true );
+	    setDisabled(true);
 }
 
 /**
@@ -1042,6 +1044,21 @@ void PackageInspector::slotParsePackageUse()
 
     if ( KUser().isSuperUser() || EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy())
         useView->setDisabled( false );
+}
+
+void PackageInspector::setStable()
+{
+
+}
+
+void PackageInspector::setTesting()
+{
+
+}
+
+void PackageInspector::setMasked()
+{
+
 }
 
 #include "packageinspector.moc"

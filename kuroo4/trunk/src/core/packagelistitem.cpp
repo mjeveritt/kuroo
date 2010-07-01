@@ -14,8 +14,8 @@ PackageListItem::PackageListItem(const QString& name, const QString& id, const Q
    m_description(description),
    m_update(update),
    m_status(status),
-   m_isQueued(false),
-   m_isInitialized(false)
+   m_isInitialized(false),
+   m_isQueued(false)
 {
 	if (PortageSingleton::Instance()->isInWorld(m_category + "/" + m_name))
 		m_isInWorld = true;
@@ -277,4 +277,9 @@ void PackageListItem::setQueued(const bool isQueued)
 void PackageListItem::resetDetailedInfo()
 {
 	m_isInitialized = false;
+}
+
+void PackageListItem::setPackageIndex(const int idx)
+{
+	m_index = idx;
 }

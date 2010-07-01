@@ -55,6 +55,7 @@ PortageAtom::PortageAtom( PackageListItem* portagePackage )
 		), m_matches( false ), m_callsign( false ),
 	m_category( QString::null )
 {
+	//parse(portagePackage->name());
 }
 
 PortageAtom::PortageAtom( const QString& atom ) {

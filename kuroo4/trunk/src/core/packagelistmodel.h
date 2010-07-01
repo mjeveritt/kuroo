@@ -29,7 +29,7 @@ public:
 	virtual QVariant headerData (int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 	bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
-	QList<PackageListItem*> packages();
+	QList<PackageListItem*> packages() const;
 
 private:
 	QList<PackageListItem*> m_packages;

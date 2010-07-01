@@ -76,6 +76,9 @@ private slots:
     void				slotParseTempUse();
 	void				slotQueue();
 	void				slotWorld();
+	void setStable();
+	void setTesting();
+	void setMasked();
 
 private:
 

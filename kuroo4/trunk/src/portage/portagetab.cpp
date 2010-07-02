@@ -87,13 +87,12 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Button actions.
 	//connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
-	//TODO:reimplement
 	connect( packagesView, SIGNAL( doubleClickedSignal(PackageListItem*) ), this, SLOT( slotAdvanced() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
 
 	// Toggle Queue button between "add/remove" when after queue has been edited
-	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotInitButtons() ) );
+	//connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotButtons() ) );
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageQueueChanged() ), this, SLOT( slotButtons() ) );
 
 	// Reload view after changes.
@@ -102,11 +101,11 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 
-	// Enable/disable buttons
-	connect( packagesView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
-
 	// Load Inspector with current package info
 	connect( packagesView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotPackage() ) );
+
+	// Enable/disable buttons
+	connect( packagesView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
 
 	// Connect changes made in Inspector to this view so it gets updated
 	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
@@ -268,11 +267,13 @@ void PortageTab::slotButtons()
 		pbQueue->setDisabled( false );
 
 	// Toggle queue button between add/remove
-	if ( packagesView->currentPackage() && packagesView->currentPackage()->isInPortage() ) {
+	if ( packagesView->currentPackage()) {
 		pbQueue->setDisabled( false );
 
-		if ( packagesView->currentPackage()->isQueued() )
+		//if ( packagesView->currentPackage()->isQueued() )
+		if ( QueueSingleton::Instance()->isQueued(packagesView->currentPackage()->id()))
 		{
+			kDebug() << packagesView->currentPackage()->name() << "is queued";
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
 			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
@@ -280,6 +281,7 @@ void PortageTab::slotButtons()
 		}
 		else
 		{
+			kDebug() << packagesView->currentPackage()->name() << "is NOT queued";
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
 			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
@@ -289,6 +291,7 @@ void PortageTab::slotButtons()
 	else {
 		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+		connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 		pbQueue->setText( i18n("Add to Queue") );
 		pbQueue->setDisabled( true );
 	}
@@ -484,7 +487,13 @@ void PortageTab::slotEnqueue()
 void PortageTab::slotDequeue()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
-		QueueSingleton::Instance()->removePackageIdList( packagesView->selectedPackagesByIds() );
+		const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
+		foreach( QString id, selectedIdsList )
+		{
+			packagesView->packageItemById( id )->setQueued(false);
+		}
+
+		QueueSingleton::Instance()->removePackageIdList( selectedIdsList );
 	}
 
 	slotButtons();

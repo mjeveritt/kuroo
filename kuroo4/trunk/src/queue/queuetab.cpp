@@ -488,7 +488,7 @@ void QueueTab::slotRemove()
 	if ( isVisible() )
 		m_packageInspector->hide();
 
-	QueueSingleton::Instance()->removePackageIdList( queueView->selectedPackagesByIds() );
+	QueueSingleton::Instance()->removePackageIdList(queueView->selectedPackagesByIds());
 }
 
 /**

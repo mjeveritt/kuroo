@@ -152,7 +152,7 @@ void KurooView::slotInit()
 				i18n("<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system has changed.</qt>"),
 				i18n("Initialiazing Kuroo"), KGuiItem( i18n("Refresh") ), KGuiItem( i18n("Skip") ) ) ) {
 			case KMessageBox::Yes:
-				SignalistSingleton::Instance()->setKurooReady( true );
+				SignalistSingleton::Instance()->setKurooBusy( true );
 				PortageSingleton::Instance()->slotRefresh();
 				break;
 			default:

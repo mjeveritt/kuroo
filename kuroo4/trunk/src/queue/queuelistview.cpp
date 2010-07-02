@@ -172,6 +172,8 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 	sortByColumn(0, Qt::AscendingOrder);
 
+	SignalistSingleton::Instance()->packageQueueChanged();	
+
 	//expandAll();
 }
 
@@ -221,6 +223,11 @@ const QStringList QueueListView::allId() const
 	}
 
 	return packageList;
+}
+
+QList<QueueListItem*> QueueListView::allPackages() const
+{
+	return m_packageIndex.values();
 }
 
 void QueueListView::nextPackage( const bool& isPrevious )

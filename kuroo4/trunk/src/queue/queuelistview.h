@@ -26,6 +26,7 @@ public:
 	const QString count() const { return QString::number( m_packageIndex.count() ); }
 	void nextPackage( const bool& isPrevious );
 	void hasStarted(const QString&);
+	QList<QueueListItem*> allPackages() const;
 
 public slots:
 	void slotPackageStart(const QString&);

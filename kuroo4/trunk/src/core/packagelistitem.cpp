@@ -270,7 +270,7 @@ void PackageListItem::setQueued(const bool isQueued)
 {
 	if ( m_isQueued != isQueued ) {
 		m_isQueued = isQueued;
-		SignalistSingleton::Instance()->packageQueueChanged();
+		//SignalistSingleton::Instance()->packageQueueChanged();
 	}
 }
 

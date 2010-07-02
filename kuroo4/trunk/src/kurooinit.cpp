@@ -148,7 +148,8 @@ KurooInit::KurooInit( QObject *parent )
 	PortageFilesSingleton::Instance()->init( this );
 	FileWatcherSingleton::Instance()->init( this );
 	
-	//PortageFilesSingleton::Instance()->loadPackageFiles();
+	//Load packages in case /etc/portage.* changed
+	PortageFilesSingleton::Instance()->loadPackageFiles();
 }
 
 KurooInit::~KurooInit()

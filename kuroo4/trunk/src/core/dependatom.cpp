@@ -45,6 +45,24 @@ PortageAtom::PortageAtom( PackageListItem* portagePackage )
 	       	"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
 			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
+			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory FIXME:What about 'virtual' category ?
+			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+			//FIXME:this will take -9999 version in the package name. See /usr/lib/portage/pym/portage/versions.py that has a better regexp.
+			"("           								// start of the version part
+			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+	       	"(?:-r\\d*)?"  								// revision
+	       	"\\*?)?$"          							// end of the (optional) version part and the atom string
+		), m_matches( false ), m_callsign( false ),
+	m_category( QString::null )
+{
+}
+
+PortageAtom::PortageAtom( const QString& atom )
+    : rxAtom(
+	       	"^"    										// Start of the string
+			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
+			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
 			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory
 			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
 			"("           								// start of the version part
@@ -55,10 +73,6 @@ PortageAtom::PortageAtom( PackageListItem* portagePackage )
 		), m_matches( false ), m_callsign( false ),
 	m_category( QString::null )
 {
-	//parse(portagePackage->name());
-}
-
-PortageAtom::PortageAtom( const QString& atom ) {
     PortageAtom();
     parse( atom );
 }
@@ -90,11 +104,16 @@ bool PortageAtom::parse( const QString& atom )
 	}
 	
 	// Get the captured strings
-    m_callsign	= rxAtom.cap( 0 ).isEmpty() ? false : true;
-    m_prefix	= rxAtom.cap( 1 );
-    m_category	= rxAtom.cap( 2 ) + "-" + rxAtom.cap( 3 );
-    m_package	= rxAtom.cap( 4 );
-    m_version	= rxAtom.cap( 5 );
+	m_callsign	= rxAtom.cap( 1 ).isEmpty() ? false : true;
+	//kDebug() << m_callsign;
+	m_prefix	= rxAtom.cap( 2 );
+	//kDebug() << m_prefix;
+	m_category	= rxAtom.cap( 3 ) + "-" + rxAtom.cap( 4 );
+	//kDebug() << m_category;
+	m_package	= rxAtom.cap( 5 );
+	//kDebug() << m_package;
+	m_version	= rxAtom.cap( 6 );
+	//kDebug() << m_version;
 	
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {

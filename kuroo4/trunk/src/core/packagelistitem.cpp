@@ -184,23 +184,26 @@ void PackageListItem::parsePackageVersions()
 
 		// Mark official version stability for version listview
 		QString stability;
-		if ( (*sortedVersionIterator)->isNotArch() )
-			stability = i18n("Not on %1").arg( KurooConfig::arch() );
+		if ( (*sortedVersionIterator)->isNotArch() ) {
+			stability = i18n( "Not on %1", KurooConfig::arch() );
+		}
 		else {
 			if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
-				stability = i18n("Hardmasked");
+				stability = i18n( "Hardmasked" );
 				version = "<font color=darkRed><i>" + version + "</i></font>";
 			}
 			else {
 				if ( (*sortedVersionIterator)->isOriginalTesting() ) {
-					stability = i18n("Testing");
+					stability = i18n( "Testing" );
 					version = "<i>" + version + "</i>";
 				}
 				else {
-					if ( (*sortedVersionIterator)->isAvailable() )
-						stability = i18n("Stable");
-					else
-						stability = i18n("Not available");
+					if ( (*sortedVersionIterator)->isAvailable() ) {
+						stability = i18n( "Stable" );
+					}
+					else {
+						stability = i18n( "Not available" );
+					}
 				}
 			}
 		}
@@ -217,8 +220,9 @@ void PackageListItem::parsePackageVersions()
 			version = "<b>" + version + "</b>";
 			m_linesInstalled.prepend( version + " (" + stability + "), " );
 		}
-		else
+		else {
 			m_versionsDataList << "0";
+		}
 
 		// Collect all available packages except those not in users arch
 		if ( (*sortedVersionIterator)->isAvailable() ) {
@@ -227,10 +231,12 @@ void PackageListItem::parsePackageVersions()
 			m_linesAvailable.prepend( version + ", " );
 		}
 		else {
-			if ( (*sortedVersionIterator)->isNotArch() )
+			if ( (*sortedVersionIterator)->isNotArch() ) {
 				m_isInArch = false;
-			else
+			}
+			else {
 				m_linesAvailable.prepend( version + ", " );
+			}
 		}
 
 		// Get description and homepage from most recent version = assuming most correct

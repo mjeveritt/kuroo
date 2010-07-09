@@ -1,22 +1,22 @@
 /***************************************************************************
- *	Copyright (C) 2005 by Karye												*
- *	karye@users.sourceforge.net												*
- *																			*
- *	This program is free software; you can redistribute it and/or modify	*
- *	it under the terms of the GNU General Public License as published by	*
- *	the Free Software Foundation; either version 2 of the License, or		*
- *	(at your option) any later version.										*
- *																			*
- *	This program is distributed in the hope that it will be useful,			*
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
- *	GNU General Public License for more details.							*
- *																			*
- *	You should have received a copy of the GNU General Public License		*
- *	along with this program; if not, write to the							*
- *	Free Software Foundation, Inc.,											*
- *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
- ***************************************************************************/
+*	Copyright (C) 2005 by Karye												*
+*	karye@users.sourceforge.net												*
+*																			*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+***************************************************************************/
 
 #include <unistd.h>
 
@@ -48,9 +48,9 @@
 #include "logstab.h"
 
 /**
- * @class Kuroo
- * @short Main kde window with menus, system tray icon and statusbar.
- */
+* @class Kuroo
+* @short Main kde window with menus, system tray icon and statusbar.
+*/
 Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 	kurooMessage( new Message( this ) ),
 	kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
@@ -88,8 +88,8 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 }
 
 /**
- * If necessary wait for job to finish before terminating.
- */
+* If necessary wait for job to finish before terminating.
+*/
 Kuroo::~Kuroo()
 {
 	/*int maxLoops( 99 );
@@ -107,8 +107,8 @@ Kuroo::~Kuroo()
 }
 
 /**
- * Build mainwindow menus and toolbar.
- */
+* Build mainwindow menus and toolbar.
+*/
 void Kuroo::setupActions()
 {
 	KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
@@ -123,7 +123,7 @@ void Kuroo::setupActions()
 									this, SLOT( introWizard() ), actionCollection(), "information" );
 	actionReleaseInfo->setText( i18n("&Release information") );
 	actionReleaseInfo->setShortcut(  );
-    */
+	*/
 	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), this );
 	actionRefreshPortage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_P ) );
 		//PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
@@ -150,8 +150,8 @@ void Kuroo::setupActions()
 }
 
 /**
- * Disable buttons when kuroo is busy.
- */
+* Disable buttons when kuroo is busy.
+*/
 void Kuroo::slotBusy()
 {
 	bool isBusy = (SignalistSingleton::Instance()->isKurooBusy() || EmergeSingleton::Instance()->isRunning());
@@ -163,7 +163,7 @@ void Kuroo::slotBusy()
 	actionRefreshUpdates->setEnabled( !isBusy );
 
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ||
-		 !KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+		!KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
 	}
 	else {
@@ -179,8 +179,8 @@ void Kuroo::slotBusy()
 }
 
 /**
- * Launch emerge portage sync.
- */
+* Launch emerge portage sync.
+*/
 void Kuroo::slotSync()
 {
 	KLocale *loc = KGlobal::locale();
@@ -195,7 +195,7 @@ void Kuroo::slotSync()
 
 	switch( KMessageBox::questionYesNo( this,
 		i18n( "<qt>Do you want to synchronize portage?<br>"
-			  "This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1" ).arg( lastSyncDate ) ) ) {
+			"This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1", lastSyncDate ) ) ) {
 
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
@@ -203,8 +203,8 @@ void Kuroo::slotSync()
 }
 
 /**
- * Open kuroo preferences window.
- */
+* Open kuroo preferences window.
+*/
 void Kuroo::slotPreferences()
 {
 	prefDialog = KConfigDialog::exists( i18n( "settings" ) );
@@ -216,8 +216,8 @@ void Kuroo::slotPreferences()
 }
 
 /**
- * Show the wizard.
- */
+* Show the wizard.
+*/
 void Kuroo::introWizard()
 {
 	if ( !wizardDialog )
@@ -227,8 +227,8 @@ void Kuroo::introWizard()
 }
 
 /**
- * Hide or minimize kuroo window when clicking in close button.
- */
+* Hide or minimize kuroo window when clicking in close button.
+*/
 bool Kuroo::queryClose()
 {
 	if ( !m_shuttingDown ) {
@@ -244,17 +244,17 @@ bool Kuroo::queryClose()
 }
 
 /**
- * Bye, bye!
- */
+* Bye, bye!
+*/
 bool Kuroo::queryExit()
 {
 	return true;
 }
 
 /**
- * Backup emerge and merge history entries to text file.
- * Wait for the backup of the log is completed before terminating.
- */
+* Backup emerge and merge history entries to text file.
+* Wait for the backup of the log is completed before terminating.
+*/
 void Kuroo::slotQuit()
 {
 	KurooDBSingleton::Instance()->backupDb();
@@ -266,15 +266,15 @@ void Kuroo::slotQuit()
 }
 
 /**
- * Abort any running threads.
- */
+* Abort any running threads.
+*/
 void Kuroo::slotWait()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		switch( KMessageBox::questionYesNo( this,
 			i18n("<qt>Kuroo is busy<br><br>"
-				 "Do you want to quit?<br>"
-				 "All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
+				"Do you want to quit?<br>"
+				"All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 
 			case KMessageBox::Yes: {
 				/*ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "DBJob" );
@@ -288,8 +288,8 @@ void Kuroo::slotWait()
 }
 
 /**
- * Terminate kuroo.
- */
+* Terminate kuroo.
+*/
 void Kuroo::slotTerminate()
 {
 	m_shuttingDown = true;

@@ -27,39 +27,39 @@
 #include <kglobalsettings.h>
 
 /**
- * Regexp to parse emerge output.
- */
+* Regexp to parse emerge output.
+*/
 const QRegExp rxEmerge()
 {
 	if ( KurooConfig::portageVersion21() )
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
-		                "((\\S+)/(\\S+))"
-		                "(?:\\s*\\[([^\\]]*)\\])?"
-		                "(?:\\s*\\[([^\\]]*)\\])?"
-		                "(?:\\s*USE=\"([^\"]*)\")?"
-		                "(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
-		                "(?:\\s*(\\d*(,\\d*)*)\\skB)?" );
+						"((\\S+)/(\\S+))"
+						"(?:\\s*\\[([^\\]]*)\\])?"
+						"(?:\\s*\\[([^\\]]*)\\])?"
+						"(?:\\s*USE=\"([^\"]*)\")?"
+						"(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
+						"(?:\\s*(\\d*(,\\d*)*)\\skB)?" );
 	else
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
-		                "((\\S+)/(\\S+))"
-		                "(?:\\s*\\[([^\\]]*)\\])?"
-		                "(?:\\s*\\[([^\\]]*)\\])?"
-		                "((?:\\s*[\\(\\-\\+]+\\w+[\\)%]?)*)"
-		                "(?:\\s(\\d*,?\\d*)\\skB)?" );
+						"((\\S+)/(\\S+))"
+						"(?:\\s*\\[([^\\]]*)\\])?"
+						"(?:\\s*\\[([^\\]]*)\\])?"
+						"((?:\\s*[\\(\\-\\+]+\\w+[\\)%]?)*)"
+						"(?:\\s(\\d*,?\\d*)\\skB)?" );
 }
 
 /**
- * Parse out category, package name and version parts from package.
- * @param sring to parse out cpv from
- */
+* Parse out category, package name and version parts from package.
+* @param sring to parse out cpv from
+*/
 const QStringList parsePackage( const QString& packageString )
 {
 	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*"
-	            "("
-	            "(-(?:\\d+\\.)*\\d+[a-z]?)"
-	            "(?:_(?=alpha|beta|pre|rc|p)\\d*)?"
-	            "(?:-r\\d*)?"
-	            ")" );
+				"("
+				"(-(?:\\d+\\.)*\\d+[a-z]?)"
+				"(?:_(?=alpha|beta|pre|rc|p)\\d*)?"
+				"(?:-r\\d*)?"
+				")" );
 	QStringList list;
 	QString nameVersion;
 	QString package( packageString );
@@ -76,7 +76,7 @@ const QStringList parsePackage( const QString& packageString )
 	}
 
 	// Now package name and version
-    if ( rx.indexIn( nameVersion ) != -1 ) {
+	if ( rx.indexIn( nameVersion ) != -1 ) {
 		QString name = nameVersion.section( rx.cap( 1 ), 0, 0 );
 		list << name;
 		list << nameVersion.section( name + "-", 1 );
@@ -87,20 +87,21 @@ const QStringList parsePackage( const QString& packageString )
 }
 
 /**
- * Return duration in seconds formated as "d hh.mm.ss".
- */
+* Return duration in seconds formated as "d hh.mm.ss".
+*/
 const QString formatTime( const long& duration )
 {
 	KLocale *loc = KGlobal::locale();
 	QString totalDays;
 	unsigned durationDays, totalSeconds;
-	
+
 	durationDays = duration / 86400;
 	totalSeconds = duration % 86400;
-	
-	if ( durationDays > 0 )
-		totalDays = i18n( "%1d " ).arg( QString::number( durationDays ) );
-	
+
+	if ( durationDays > 0 ) {
+		totalDays = i18n( "%1d ", QString::number( durationDays ) );
+	}
+
 	QTime emergeTime( 0, 0, 0 );
 	emergeTime = emergeTime.addSecs( totalSeconds );
 	return totalDays + loc->formatTime( emergeTime, true, true );

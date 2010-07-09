@@ -26,70 +26,76 @@
 
 
 /**
- * @class ToolTip
- * @short Creates tooltip for icons in views.
- */
+* @class ToolTip
+* @short Creates tooltip for icons in views.
+*/
 /*ToolTip::ToolTip( QTreeWidget* pWidget )
-    : m_pParent( pWidget )
+	: m_pParent( pWidget )
 {}
 
 ToolTip::~ToolTip()
 {}*/
 
 /**
- * View Tooltip for the icons.
- * @param pos	mouse position
- */
+* View Tooltip for the icons.
+* @param pos	mouse position
+*/
 /*void ToolTip::maybeTip( const QPoint& pos )
 {
 	PackageItem* packageItem = dynamic_cast<PackageItem*>( m_pParent->itemAt( pos ) );
-	
+
 	if ( packageItem ) {
 		QString package = packageItem->text( 0 );
-		
-      	// Get the section the mouse is in
+
+		// Get the section the mouse is in
 		int section = m_pParent->header()->sectionAt( pos.x() );
-		
-      	// Get the rect of the whole item (the row for the tip)
+
+		// Get the rect of the whole item (the row for the tip)
 		QRect itemRect = m_pParent->itemRect( packageItem );
-		
-      	// Get the rect of the whole section (the column for the tip)
+
+		// Get the rect of the whole section (the column for the tip)
 		QRect headerRect = m_pParent->header()->sectionRect( section );
-		
-      	// "Intersect" row and column to get exact rect for the tip
+
+		// "Intersect" row and column to get exact rect for the tip
 		QRect destRect( headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height() );
-		
+
 		QString tipText;
-		
+
 		switch ( section ) {
-		
+
 			case 0 : {
-				if ( packageItem->isInstalled() )
-					tipText = i18n( "%1 is installed" ).arg( package );
+				if ( packageItem->isInstalled() ) {
+					tipText = i18n( "%1 is installed", package );
+				}
 				else {
-						if ( packageItem->isInPortage() )
-							tipText = i18n( "%1 is not installed" ).arg( package );
-						else
-							tipText = i18n( "%1 not in Portage" ).arg( package );
+						if ( packageItem->isInPortage() ) {
+							tipText = i18n( "%1 is not installed", package );
+						}
+						else {
+							tipText = i18n( "%1 not in Portage", package );
+						}
 				}
 				break;
 			}
-			
+
 			case 1 :
-				if ( packageItem->isInstalled() )
-					tipText = i18n( "%1 is installed" ).arg( package );
+				if ( packageItem->isInstalled() ) {
+					tipText = i18n( "%1 is installed", package );
+				}
 				break;
-				
+
 			case 2 :
-				if ( packageItem->isInWorld() )
-					tipText = i18n( "%1 is present in World profile" ).arg( package );
+				if ( packageItem->isInWorld() ) {
+					tipText = i18n( "%1 is present in World profile", package );
+				}
 				break;
-		
+
 			case 3 :
-				if ( packageItem->isQueued() )
-					tipText = i18n( "%1 is present in Queue" ).arg( package );
+				if ( packageItem->isQueued() ) {
+					tipText = i18n( "%1 is present in Queue", package );
+				}
 		}
-		
+
 		tip( destRect, tipText );
 	}
 }*/

@@ -530,10 +530,12 @@ void Emerge::cleanup()
 
 
 	if ( !m_unmasked.isEmpty() ) {
-		if ( KUser().isSuperUser() )
+		if ( KUser().isSuperUser() ) {
 			askUnmaskPackage( m_unmasked );
-		else
+		}
+		else {
 			KMessageBox::information( 0, i18n( "You must run Kuroo as root to unmask packages!" ), i18n( "Auto-unmasking packages" ) );
+		}
 	}
 
 	/* if m_doclean then perform an eclean */
@@ -546,33 +548,33 @@ void Emerge::cleanup()
 			//eClean1->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
 			//eClean1->close(); //resetAll();
 			*eClean1 << "eclean";
-			ecleanCOMMAND="eclean ";
+			ecleanCOMMAND = "eclean ";
 			if( !KurooConfig::ecleanTimeLimit().isEmpty() ) {
 				*eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
-				ecleanCOMMAND+="-t";
-				ecleanCOMMAND+=KurooConfig::ecleanTimeLimit();
-				ecleanCOMMAND+=" ";
+				ecleanCOMMAND += "-t";
+				ecleanCOMMAND += KurooConfig::ecleanTimeLimit();
+				ecleanCOMMAND += " ";
 			}
 			if( KurooConfig::ecleanDestructive() )
 			{
 				*eClean1 << "--destructive";
-				ecleanCOMMAND+="--destructive ";
+				ecleanCOMMAND += "--destructive ";
 			}
 			*eClean1 << "--nocolor";
-			ecleanCOMMAND+="--nocolor ";
+			ecleanCOMMAND += "--nocolor ";
 
 			if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
 			{
 				*eClean1 << "--fetch-restricted";
-				ecleanCOMMAND+="--fetch-restricted ";
+				ecleanCOMMAND += "--fetch-restricted ";
 			}
 			*eClean1 << "distfiles ";
 			if( KurooConfig::ecleanSizeLimit().isEmpty() )
 			{
 				*eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
-				ecleanCOMMAND+="-s"+KurooConfig::ecleanSizeLimit()+" ";
+				ecleanCOMMAND += "-s" + KurooConfig::ecleanSizeLimit() + " ";
 			}
-			ecleanCOMMAND+="distfiles";
+			ecleanCOMMAND += "distfiles";
 			kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
 			eClean1->start( /*K3Process::OwnGroup, true*/ );
 

@@ -1,22 +1,22 @@
 /***************************************************************************
- *	Copyright (C) 2004 by karye												*
- *	karye@users.sourceforge.net												*
- *																			*
- *	This program is free software; you can redistribute it and/or modify	*
- *	it under the terms of the GNU General Public License as published by	*
- *	the Free Software Foundation; either version 2 of the License, or		*
- *	(at your option) any later version.										*
- *																			*
- *	This program is distributed in the hope that it will be useful,			*
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
- *	GNU General Public License for more details.							*
- *																			*
- *	You should have received a copy of the GNU General Public License		*
- *	along with this program; if not, write to the							*
- *	Free Software Foundation, Inc.,											*
- *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
- ***************************************************************************/
+*	Copyright (C) 2004 by karye												*
+*	karye@users.sourceforge.net												*
+*																			*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+***************************************************************************/
 
 #include "common.h"
 #include "packageitem.h"
@@ -28,9 +28,9 @@
 #include <QTreeWidget>
 
 /**
- * @class PackageItem
- * @short Base class for package.
- */
+* @class PackageItem
+* @short Base class for package.
+*/
 PackageItem::PackageItem( QTreeWidget* parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status )
 	: QTreeWidgetItem( parent ),
 	m_parent( parent ), m_isMouseOver( false ), m_index( 0 ),
@@ -70,8 +70,8 @@ PackageItem::~PackageItem()
 {}
 
 /**
- * Set icons when package is visible.
- */
+* Set icons when package is visible.
+*/
 void PackageItem::paintCell( QPainter* painter, const QPalette& palette, int column, int width, int alignment )
 {
 	if ( !this->isHidden() ) {
@@ -132,8 +132,8 @@ void PackageItem::resetDetailedInfo()
 }
 
 /**
- * Initialize the package with all its versions and info. Executed when PortageItem get focus first time.
- */
+* Initialize the package with all its versions and info. Executed when PortageItem get focus first time.
+*/
 void PackageItem::initVersions()
 {
 	if ( !m_isInitialized ) {
@@ -174,7 +174,7 @@ void PackageItem::initVersions()
 		// Now that we have all available versions, sort out masked ones and leaving unmasked.
 
 		// Check if any of this package versions are hardmasked
-        atom = new PortageAtom( this );
+		atom = new PortageAtom( this );
 		const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
 	// 	kDebug() << "atomHardMaskedList=" << atomHardMaskedList;
 		foreach( QString mask, atomHardMaskedList ) {
@@ -191,7 +191,7 @@ void PackageItem::initVersions()
 		delete atom;
 
 		// Check if any of this package versions are user-masked
-        atom = new PortageAtom( this );
+		atom = new PortageAtom( this );
 		const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
 	// 	kDebug() << "atomUserMaskedList=" << atomUserMaskedList;
 		foreach( QString mask, atomUserMaskedList ) {
@@ -208,7 +208,7 @@ void PackageItem::initVersions()
 		delete atom;
 
 		// Check if any of this package versions are unmasked
-        atom = new PortageAtom( this );
+		atom = new PortageAtom( this );
 		const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
 	// 	kDebug() << "atomUnmaskedList=" << atomUnmaskedList;
 		foreach( QString mask, atomUnmaskedList ) {
@@ -231,11 +231,11 @@ void PackageItem::initVersions()
 
 
 /**
- * Return a list of PackageVersion objects sorted by their version numbers,
- * with the oldest version at the beginning and the latest version at the end
- * of the list.
- * @return sortedVersions
- */
+* Return a list of PackageVersion objects sorted by their version numbers,
+* with the oldest version at the beginning and the latest version at the end
+* of the list.
+* @return sortedVersions
+*/
 QList<PackageVersion*> PackageItem::sortedVersionList()
 {
 	QList<PackageVersion*> sortedVersions;
@@ -267,8 +267,8 @@ QList<PackageVersion*> PackageItem::sortedVersionList()
 }
 
 /**
- * Parse sorted list of versions for stability, installed, emerge versions ...
- */
+* Parse sorted list of versions for stability, installed, emerge versions ...
+*/
 void PackageItem::parsePackageVersions()
 {
 	if ( !m_isInitialized )
@@ -289,23 +289,26 @@ void PackageItem::parsePackageVersions()
 
 		// Mark official version stability for version listview
 		QString stability;
-		if ( (*sortedVersionIterator)->isNotArch() )
-			stability = i18n("Not on %1").arg( KurooConfig::arch() );
+		if ( (*sortedVersionIterator)->isNotArch() ) {
+			stability = i18n( "Not on %1", KurooConfig::arch() );
+		}
 		else {
 			if ( (*sortedVersionIterator)->isOriginalHardMasked() ) {
-				stability = i18n("Hardmasked");
+				stability = i18n( "Hardmasked" );
 				version = "<font color=darkRed><i>" + version + "</i></font>";
 			}
 			else {
 				if ( (*sortedVersionIterator)->isOriginalTesting() ) {
-					stability = i18n("Testing");
+					stability = i18n( "Testing" );
 					version = "<i>" + version + "</i>";
 				}
 				else {
-					if ( (*sortedVersionIterator)->isAvailable() )
-						stability = i18n("Stable");
-					else
-						stability = i18n("Not available");
+					if ( (*sortedVersionIterator)->isAvailable() ) {
+						stability = i18n( "Stable" );
+					}
+					else {
+						stability = i18n( "Not available" );
+					}
 				}
 			}
 		}
@@ -360,9 +363,9 @@ void PackageItem::setRollOver( bool isMouseOver )
 }
 
 /**
- * Register package index in parent listView.
- * @param index
- */
+* Register package index in parent listView.
+* @param index
+*/
 void PackageItem::setPackageIndex( const int& index )
 {
 	m_index = index;
@@ -379,9 +382,9 @@ void PackageItem::setInstalled()
 }
 
 /**
- * Mark package as queued. Emit signal only if status is changed.
- * @param isQueued
- */
+* Mark package as queued. Emit signal only if status is changed.
+* @param isQueued
+*/
 void PackageItem::setQueued( const bool& isQueued )
 {
 	if ( m_isQueued != isQueued ) {
@@ -391,27 +394,27 @@ void PackageItem::setQueued( const bool& isQueued )
 }
 
 /**
- * Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
- * @return true if first
- */
+* Is this the first package in the listview. Since they are inserted in reverse order it means has the highest index.
+* @return true if first
+*/
 bool PackageItem::isFirstPackage() const
 {
 	return ( m_index == m_parent->topLevelItemCount() );
 }
 
 /**
- * Is this package installed.
- * @return true if yes
- */
+* Is this package installed.
+* @return true if yes
+*/
 bool PackageItem::isInstalled() const
 {
 	return ( m_status & ( PACKAGE_INSTALLED | PACKAGE_UPDATES | PACKAGE_OLD ) );
 }
 
 /**
- * Is this package available in Portage tree?
- * @return true if yes
- */
+* Is this package available in Portage tree?
+* @return true if yes
+*/
 bool PackageItem::isInPortage() const
 {
 	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );

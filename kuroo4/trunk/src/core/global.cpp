@@ -83,7 +83,7 @@ const QStringList parsePackage( const QString& packageString )
 		return list;
 	}
 	else
-		return QStringList::QStringList();
+		return QStringList();
 }
 
 /**

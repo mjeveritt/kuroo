@@ -94,9 +94,9 @@ private slots:
     void 						slotCleanupCheckUpdates(int, QProcess::ExitStatus);
 	void						slotTryEmerge();
     void						slotBackupComplete(int, QProcess::ExitStatus);
-    void						slotEmergeDistfilesComplete(int, QProcess::ExitStatus);
+    void						slotEmergeDistfilesComplete();
     void						slotEClean2Complete(int, QProcess::ExitStatus);
-    void						slotRevdepRebuildComplete(int, QProcess::ExitStatus);
+    void						slotRevdepRebuildComplete();
 
 	
 signals:

@@ -41,6 +41,8 @@ Emerge::Emerge( QObject* m_parent )
 {
 	eProc = new KProcess();
 	eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+	ioRevdepRebuild = NULL;
+	eClean1 = NULL;
 }
 
 Emerge::~Emerge()
@@ -534,65 +536,70 @@ void Emerge::cleanup()
 	}
 
 	/* if m_doclean then perform an eclean */
-	if( m_doeclean ) {
-		if( KurooConfig::ecleanDistfiles() ) {
-			QString ecleanCOMMAND;
-			//QTextCodec *codec = QTextCodec::codecForName("utf8");
+	if( m_doeclean && KurooConfig::ecleanDistfiles() ) {
+		QString ecleanCOMMAND;
+		if (!eClean1)
 			eClean1 = new KProcess();
-			//eClean1->setUseShell( true, "/bin/bash" );
-			//eClean1->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-			//eClean1->close(); //resetAll();
-			*eClean1 << "eclean";
-			ecleanCOMMAND = "eclean ";
-			if( !KurooConfig::ecleanTimeLimit().isEmpty() ) {
-				*eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
-				ecleanCOMMAND += "-t";
-				ecleanCOMMAND += KurooConfig::ecleanTimeLimit();
-				ecleanCOMMAND += " ";
-			}
-			if( KurooConfig::ecleanDestructive() )
-			{
-				*eClean1 << "--destructive";
-				ecleanCOMMAND += "--destructive ";
-			}
-			*eClean1 << "--nocolor";
-			ecleanCOMMAND += "--nocolor ";
+		eClean1->close();
+		eClean1->clearProgram();
 
-			if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
-			{
-				*eClean1 << "--fetch-restricted";
-				ecleanCOMMAND += "--fetch-restricted ";
-			}
-			*eClean1 << "distfiles ";
-			if( KurooConfig::ecleanSizeLimit().isEmpty() )
-			{
-				*eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
-				ecleanCOMMAND += "-s" + KurooConfig::ecleanSizeLimit() + " ";
-			}
-			ecleanCOMMAND += "distfiles";
-			kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
-			eClean1->start( /*K3Process::OwnGroup, true*/ );
+		*eClean1 << "eclean";
+		ecleanCOMMAND = "eclean ";
+		if( !KurooConfig::ecleanTimeLimit().isEmpty() ) {
+			*eClean1 << "-t" << KurooConfig::ecleanTimeLimit();
+			ecleanCOMMAND += "-t";
+			ecleanCOMMAND += KurooConfig::ecleanTimeLimit();
+			ecleanCOMMAND += " ";
+		}
+		if( KurooConfig::ecleanDestructive() )
+		{
+			*eClean1 << "--destructive";
+			ecleanCOMMAND += "--destructive ";
+		}
+		*eClean1 << "--nocolor";
+		ecleanCOMMAND += "--nocolor ";
 
-			connect( eClean1, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-			connect( eClean1, SIGNAL( processExited(K3Process*) ), this, SLOT( slotEmergeDistfilesComplete(K3Process*) ) );
-			SignalistSingleton::Instance()->setKurooBusy( true );
-			LogSingleton::Instance()->writeLog( i18n( "\nEclean of distfiles started" ), KUROO );
-			KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Cleaning distfiles..." ) );
-			KurooStatusBar::instance()->startProgress();
-			m_doeclean = false;
-		} /* end mclean section */
+		if( KurooConfig::ecleanFetchRestrict() && KurooConfig::ecleanDestructive())
+		{
+			*eClean1 << "--fetch-restricted";
+			ecleanCOMMAND += "--fetch-restricted ";
+		}
+		*eClean1 << "distfiles ";
+		if( KurooConfig::ecleanSizeLimit().isEmpty() )
+		{
+			*eClean1 << "-s" << KurooConfig::ecleanSizeLimit();
+			ecleanCOMMAND += "-s" + KurooConfig::ecleanSizeLimit() + " ";
+		}
+		ecleanCOMMAND += "distfiles";
+		kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
+		
+		eClean1->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+
+		connect( eClean1, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+		connect( eClean1, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEmergeDistfilesComplete() ) );
+		
+		eClean1->start();
+
+		SignalistSingleton::Instance()->setKurooBusy( true );
+		LogSingleton::Instance()->writeLog( i18n( "\nEclean of distfiles started" ), KUROO );
+		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Cleaning distfiles..." ) );
+		KurooStatusBar::instance()->startProgress();
+		m_doeclean = false;
 	} else if( m_dorevdeprebuild ) {
-		//QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
-		ioRevdepRebuild = new KProcess();
-		//ioRevdepRebuild->setUseShell( false, NULL );
-		//ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
-		ioRevdepRebuild->close(); //resetAll();
+		if (!ioRevdepRebuild)
+			ioRevdepRebuild = new KProcess();
+		ioRevdepRebuild->close();
+		ioRevdepRebuild->clearProgram();
 		*ioRevdepRebuild << "revdep-rebuild";
 		*ioRevdepRebuild << "--no-color";
 		*ioRevdepRebuild << "--ignore";
-		ioRevdepRebuild->start( /*K3Process::OwnGroup, true*/ );
-		connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
+
+		connect( ioRevdepRebuild, SIGNAL( readReadyStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+		connect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
+		
+		ioRevdepRebuild->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+		ioRevdepRebuild->start();
+		
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuild Running..." ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Running revdep-rebuild..." ) );
@@ -606,7 +613,7 @@ void Emerge::cleanup()
  * Revdep-rebuild Complete
  * @param proc
  */
-void Emerge::slotRevdepRebuildComplete(int, QProcess::ExitStatus)
+void Emerge::slotRevdepRebuildComplete()
 {
 	disconnect( ioRevdepRebuild, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	disconnect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
@@ -622,7 +629,7 @@ void Emerge::slotRevdepRebuildComplete(int, QProcess::ExitStatus)
  * Run an eclean for packages if necessary
  * @param proc
  */
-void Emerge::slotEmergeDistfilesComplete(int, QProcess::ExitStatus)
+void Emerge::slotEmergeDistfilesComplete()
 {
 	disconnect( eClean1, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	disconnect( eClean1, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEmergeDistfilesComplete(int, QProcess::ExitStatus) ) );

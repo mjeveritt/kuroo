@@ -39,11 +39,8 @@
 Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent ), m_completedFlag( false ), m_importantMessagePackage( QString::null ), m_packageMessage( QString::null )
 {
-	//QTextCodec *codec = QTextCodec::codecForName("utf8");
 	eProc = new KProcess();
 	eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
-	//eProc->setUseShell( true, "/bin/bash" );
-//	eProc->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
 }
 
 Emerge::~Emerge()
@@ -130,16 +127,15 @@ bool Emerge::queue( const QStringList& packageList )
 		connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 		connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
-		eProc->start(); // KProcess::OwnGroup, true
+		eProc->start();
 
-		//FIXME: process could be in QProcess::Starting state.
-		/*if ( eProc->state() != QProcess::Running ) {
+		if ( eProc->state() == QProcess::NotRunning ) {
 			LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
 				cleanupQueue();
 
 			return false;
 		}
-		else*/ {
+		else {
 			if( KurooConfig::enableEclean() && !skipHousekeeping())
 				m_doeclean = true;
 			if( KurooConfig::revdepEnabled() && !skipHousekeeping())
@@ -168,7 +164,7 @@ void Emerge::slotPause()
 	else {
 		KurooStatusBar::instance()->pauseTimers();
 		QueueSingleton::Instance()->pauseEmerge();
-		kill( eProc->pid(), SIGSTOP ); //FIXME:KProcess::stop() ??
+		kill( eProc->pid(), SIGSTOP );
 		m_isPaused = true;
 	}
 }
@@ -184,7 +180,7 @@ void Emerge::slotUnpause()
 	KurooStatusBar::instance()->setProgressStatus("Emerge", i18n( "Installing packages in queue..." ) );
 	KurooStatusBar::instance()->unpauseTimers();
 	QueueSingleton::Instance()->unpauseEmerge();
-	kill( eProc->pid(), SIGCONT ); //FIXME:KProcess::continue() ??
+	kill( eProc->pid(), SIGCONT );
 	m_isPaused = false;
 }
 
@@ -198,7 +194,8 @@ bool Emerge::quickpkg( const QStringList& packageList )
 	bool ret = false;
 	m_lastEmergeList = packageList;
 
-	eProc->close(); //eProc->resetAll();
+	eProc->close();
+	eProc->clearProgram();
 	*eProc << "quickpkg";
 
 	// Add the packages
@@ -218,7 +215,7 @@ bool Emerge::quickpkg( const QStringList& packageList )
 
 	SignalistSingleton::Instance()->setKurooBusy( true );
 
-	if ( !eProc->state() == QProcess::Running ) {
+	if ( eProc->state() == QProcess::NotRunning ) {
 		LogSingleton::Instance()->writeLog( i18n( "\nError: Quickpkg didn't start. " ), ERROR );
 		cleanupQueue();
 	}
@@ -260,7 +257,7 @@ bool Emerge::pretend( const QStringList& packageList )
 		*eProc << package;
 	}
 
-	eProc->start( /*K3Process::OwnGroup, true*/ );
+	eProc->start();
 	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupPretend(int, QProcess::ExitStatus) ) );
 	SignalistSingleton::Instance()->setKurooBusy( true );
@@ -317,7 +314,7 @@ bool Emerge::sync()
 	eProc->clearProgram();
 	*eProc << "emerge" << "--sync" << "--quiet" << "--color=n" << "--nospinner";
 
-	eProc->start( /*K3Process::OwnGroup, true*/ );
+	eProc->start();
 
 	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupSync(int, QProcess::ExitStatus) ) );
@@ -355,7 +352,7 @@ bool Emerge::checkUpdates()
 
 	*eProc << "world";
 
-	eProc->start( /*K3Process::OwnGroup, true*/ );
+	eProc->start();
 	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupCheckUpdates(int, QProcess::ExitStatus) ) );
 	SignalistSingleton::Instance()->setKurooBusy( true );
@@ -402,8 +399,6 @@ void Emerge::slotEmergeOutput()
 
 		if ( line.isEmpty() )
 			continue;
-
-// 		kDebug() << "line=" << line << LINE_INFO;
 
 		////////////////////////////////////////////////////////////////////////////
 		// Parse out package and info

@@ -270,7 +270,6 @@ void PortageTab::slotButtons()
 	if ( packagesView->currentPackage()) {
 		pbQueue->setDisabled( false );
 
-		//if ( packagesView->currentPackage()->isQueued() )
 		if ( QueueSingleton::Instance()->isQueued(packagesView->currentPackage()->id()))
 		{
 			kDebug() << packagesView->currentPackage()->name() << "is queued";
@@ -287,6 +286,10 @@ void PortageTab::slotButtons()
 			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			pbQueue->setText( i18n("Add to Queue") );
 		}
+		if (packagesView->currentPackage()->isInstalled() && ::getuid() == 0)
+			pbUninstall->setDisabled( false );
+		else
+			pbUninstall->setDisabled( true );
 	}
 	else {
 		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
@@ -294,13 +297,8 @@ void PortageTab::slotButtons()
 		connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 		pbQueue->setText( i18n("Add to Queue") );
 		pbQueue->setDisabled( true );
-	}
-
-	// If user is su enable uninstall
-	if ( packagesView->currentPackage()->isInstalled() && ::getuid() == 0 )
-		pbUninstall->setDisabled( false );
-	else
 		pbUninstall->setDisabled( true );
+	}
 }
 
 

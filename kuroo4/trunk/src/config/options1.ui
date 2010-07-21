@@ -6,17 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>702</height>
+    <width>633</width>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form1</string>
   </property>
-  <layout class="QVBoxLayout">
-   <property name="margin">
-    <number>5</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="portage_2_2_2">
      <property name="title">
@@ -53,10 +50,6 @@ This can make your install times increase greatly and should be used with care.<
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout">
         <item>
          <widget class="QCheckBox" name="kcfg_updateDeep">
           <property name="text">
@@ -105,56 +98,18 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
    <item>
     <widget class="QGroupBox" name="portage_2_3">
      <property name="title">
-      <string>Kuroo options</string>
+      <string>Options</string>
      </property>
-     <layout class="QGridLayout">
-      <item row="0" column="1">
-       <spacer name="spacer2_2_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>146</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="kcfg_isSystrayEnabled">
-        <property name="text">
-         <string>Dock kuroo in system tray (close does not e&amp;xit kuroo)</string>
-        </property>
-        <property name="shortcut">
-         <string>Alt+X</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="portage_2_3_2">
-     <property name="title">
-      <string>Package options</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
         <item>
-         <widget class="QCheckBox" name="kcfg_installedColumn">
+         <widget class="QCheckBox" name="kcfg_isSystrayEnabled">
           <property name="text">
-           <string>&amp;Show installed packages in separate column</string>
+           <string>Dock kuroo in system tray (close does not e&amp;xit kuroo)</string>
           </property>
           <property name="shortcut">
-           <string>Alt+S</string>
+           <string>Alt+X</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -162,7 +117,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
          </widget>
         </item>
         <item>
-         <spacer name="spacer2_2_4">
+         <spacer name="spacer2_2_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -171,7 +126,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>106</width>
+            <width>146</width>
             <height>20</height>
            </size>
           </property>
@@ -180,14 +135,51 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="textLabel1_3">
-        <property name="text">
-         <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QCheckBox" name="kcfg_installedColumn">
+            <property name="text">
+             <string>&amp;Show installed packages in separate column</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+S</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacer2_2_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>106</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="textLabel1_3">
+          <property name="text">
+           <string>&lt;i&gt;Restart for changes to take effect.&lt;/i&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -262,172 +254,144 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
      <property name="title">
       <string>Package filter options</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_10">
       <item>
-       <widget class="QGroupBox" name="colorsBox">
-        <property name="enabled">
-         <bool>true</bool>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="KColorButton" name="kcfg_noMatchColor">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>64</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>64</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Click to select the color of the OSD text.</string>
+          </property>
+          <property name="whatsThis">
+           <string>The color of the OSD text.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="color">
+           <color>
+            <red>255</red>
+            <green>159</green>
+            <blue>144</blue>
+           </color>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="textLabel2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="whatsThis">
+           <string>The color of the OSD text.</string>
+          </property>
+          <property name="text">
+           <string>No matching packages found</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="title">
-         <string/>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLabel" name="textLabel2_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>1</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="whatsThis">
-              <string>The color of the OSD background.</string>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="text">
-              <string>Matching packages found</string>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="KColorButton" name="kcfg_matchColor">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>2</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>64</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Click to select the background color of the OSD.</string>
-             </property>
-             <property name="whatsThis">
-              <string>The color of the OSD background.</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="color">
-              <color>
-               <red>126</red>
-               <green>255</green>
-               <blue>112</blue>
-              </color>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="textLabel2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>1</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="whatsThis">
-              <string>The color of the OSD text.</string>
-             </property>
-             <property name="text">
-              <string>No matching packages found</string>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="KColorButton" name="kcfg_noMatchColor">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>64</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>64</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Click to select the color of the OSD text.</string>
-             </property>
-             <property name="whatsThis">
-              <string>The color of the OSD text.</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="color">
-              <color>
-               <red>255</red>
-               <green>159</green>
-               <blue>144</blue>
-              </color>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="KColorButton" name="kcfg_matchColor">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>64</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Click to select the background color of the OSD.</string>
+          </property>
+          <property name="whatsThis">
+           <string>The color of the OSD background.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="color">
+           <color>
+            <red>126</red>
+            <green>255</green>
+            <blue>112</blue>
+           </color>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="textLabel2_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="whatsThis">
+           <string>The color of the OSD background.</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Matching packages found</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -437,40 +401,7 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
      <property name="title">
       <string>Log Browser</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="textLabel2_3">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>1</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="whatsThis">
-           <string>The color of the OSD text.</string>
-          </property>
-          <property name="text">
-           <string>Log browser text font</string>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KFontRequester" name="kcfg_logFont">
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
@@ -509,6 +440,39 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
           </property>
           <property name="value">
            <number>2000</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="textLabel2_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="whatsThis">
+           <string>The color of the OSD text.</string>
+          </property>
+          <property name="text">
+           <string>Log browser text font</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KFontRequester" name="kcfg_logFont">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
           </property>
          </widget>
         </item>

@@ -1131,12 +1131,12 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 	m_initialized = false;
 	QFile file( path );
 	if ( file.open( QIODevice::ReadOnly ) ) {
-        QString format( file.readLine( 50 ) );
+		QString format( file.readLine( 50 ) );
 
 		if ( !format.startsWith( "SQLite format 3" ) )
 			kWarning( 0 ) << "Database versions incompatible. Removing and rebuilding database." << LINE_INFO;
-
 		else
+		{
 			if ( sqlite3_open( path.toAscii(), &m_db ) != SQLITE_OK )
 			{
 				kWarning( 0 ) << "Database file corrupt. Removing and rebuilding database." << LINE_INFO;
@@ -1144,6 +1144,7 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 			}
 			else
 				m_initialized = true;
+		}
 	}
 
 	if ( !m_initialized )

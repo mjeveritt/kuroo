@@ -21,9 +21,10 @@
 #include "common.h"
 #include "systemtray.h"
 
-#include <qtooltip.h>
+#include <QToolTip>
 
-#include <kmenu.h>
+#include <KMenu>
+#include <KIcon>
 
 SystemTray* SystemTray::s_instance = 0;
 
@@ -36,11 +37,10 @@ SystemTray* SystemTray::s_instance = 0;
  */
 SystemTray::SystemTray( QWidget *parent )
 	: KStatusNotifierItem( parent )
-	//: KSystemTrayIcon( parent )
 {
 	s_instance = this;
-	setToolTip( KIcon("kuroo_ready"), i18n("Kuroo - Portage frontend"), "" );
-	//setToolTip( i18n( "Kuroo - Portage Frontend" ) );
+	setToolTip( KIcon("kuroo"), i18n("Kuroo - Portage frontend"), "" );
+	setCategory(KStatusNotifierItem::ApplicationStatus);
 
 	contextMenu()->addAction( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
 	m_menuPause = contextMenu()->addAction( i18n("Pause Emerge"), this, SLOT( slotPause() ) );
@@ -48,14 +48,13 @@ SystemTray::SystemTray( QWidget *parent )
 
 	m_menuPause->setEnabled( false );
 	m_menuUnpause->setEnabled( false );
-	//contextMenu()->setItemEnabled( m_menuPause, false );
-	//contextMenu()->setItemEnabled( m_menuUnpause, false );
 
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy(bool) ), this, SLOT( slotBusy(bool) ) );
 }
 
 SystemTray::~SystemTray()
 {
+
 }
 
 /*void SystemTray::activate()

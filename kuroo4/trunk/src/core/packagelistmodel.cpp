@@ -8,7 +8,6 @@
 PackageListModel::PackageListModel(QObject *parent)
  : QAbstractItemModel(parent)
 {
-
 }
 
 PackageListModel::~PackageListModel()

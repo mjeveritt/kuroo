@@ -14,7 +14,8 @@ PortageListView::PortageListView(QWidget *parent)
 	hh->setStretchLastSection(true);
 	hh->resizeSections(QHeaderView::ResizeToContents);
 	setRootIsDecorated(false);
-	//setSortingEnabled(true);
+	setUniformRowHeights(true);
+	setAllColumnsShowFocus(true);
 
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);

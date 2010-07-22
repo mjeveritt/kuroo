@@ -59,7 +59,7 @@ void Signalist::setKurooReady( const bool& isReady )
 void Signalist::setKurooBusy( const bool& busy )
 {
 	static int busySession(0);
-	
+
 	if ( !busy ) {
 		if ( busySession > 0 ) {
 			busySession--;
@@ -70,7 +70,9 @@ void Signalist::setKurooBusy( const bool& busy )
 		busySession++;
 		QApplication::setOverrideCursor( Qt::BusyCursor );
 	}
-	
+
+	kDebug() << "setting busy =" << busy << "busySession =" << busySession;
+
 	if ( busySession == 0 ) {
 		m_busy = false;
 		emit signalKurooBusy( false );
@@ -97,6 +99,30 @@ void Signalist::syncDone()
 void Signalist::scanStarted()
 {
 	setKurooBusy( true );
+	emit signalScanStarted();
+}
+
+/**
+ * Kuroo is busy scanning portage.
+ */
+void Signalist::scanPortageStarted()
+{
+	setKurooBusy( true );
+	emit signalScanPortageStarted();
+}
+
+/**
+ * Kuroo is busy scanning updates.
+ */
+void Signalist::scanUpdatesStarted()
+{
+	setKurooBusy( true );
+	emit signalScanUpdatesStarted();
+}
+
+void Signalist::scanProgress(int steps)
+{
+	emit signalScanProgress(steps);
 }
 
 /**

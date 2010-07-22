@@ -29,7 +29,7 @@ void QueueListModel::setPackages(QList<QueueListItem*>& packages)
 	while (!m_packages.isEmpty())
 		delete m_packages.takeLast();
 	endRemoveRows();
-	
+
 	// Set packages
 	QList<QueueListItem*> tmp;
 	foreach(QueueListItem* item, packages)
@@ -93,8 +93,6 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 
 		break;
 	case 5:
-		//TODO:implement me!
-		//Duration in a status bar
 		if (role == Qt::DisplayRole)
 			return QVariant(QString());
 

@@ -26,6 +26,8 @@
 #include <QObject>
 #include <QLabel>
 
+#include "signalist.h"
+
 class QTimer;
 
 /**
@@ -58,15 +60,20 @@ public:
     void					startProgress();
 
     void					setThreadTotalSteps( int total );
-    void 					setProgress( int steps );
 
 public slots:
 	void					slotOneStep();
 	void					slotAdvance();
+	void 					setProgress(int);
 
 private slots:
 	void					slotLastMessage();
-    void					slotUpdateTime();
+	void					slotUpdateTime();
+	void slotScanStarted();
+	void slotScanPortageStarted();
+	void slotScanUpdatesStarted();
+	void slotScanPortageComplete();
+	void slotScanUpdatesComplete();
 
 private:
 	QMap<QString, QString> 	m_messageMap;

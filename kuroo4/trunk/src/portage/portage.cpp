@@ -313,7 +313,6 @@ bool Portage::slotScan()
 		}
 	}
 
-	SignalistSingleton::Instance()->scanStarted();
 	ThreadWeaver::Weaver::instance()->enqueue( new ScanPortageJob( this ) );
 
 	return true;

@@ -33,7 +33,7 @@ class Signalist : public QObject
 Q_OBJECT
 public:
 	Signalist( QObject *m_parent = 0 );
-    ~Signalist();
+	~Signalist();
 
 	void		init( QObject *parent = 0 );
 	void		setKurooReady( const bool& isReady );
@@ -51,7 +51,6 @@ public:
 	 * @return busy
 	 */
 	inline bool	isKurooBusy() const { return m_busy; }
-	void		scanStarted();
 	void		syncDone();
 	void		cachePortageComplete();
 	void 		scanPortageComplete();
@@ -61,6 +60,10 @@ public:
 	void		packageQueueChanged();
 	void		packageClicked( const QString& package );
 	void		fontChanged();
+	void		scanProgress(int);
+	void		scanPortageStarted();
+	void		scanUpdatesStarted();
+	void		scanStarted();
 	
 signals:
 	void		signalKurooBusy( bool b );
@@ -75,6 +78,10 @@ signals:
 	void		signalPackageQueueChanged();
 	void		signalPackageClicked( const QString& package );
 	void		signalFontChanged();
+	void		signalScanPortageStarted();
+	void		signalScanUpdatesStarted();
+	void		signalScanStarted();
+	void		signalScanProgress(int);
 	
 private:
 	QObject*	m_parent;

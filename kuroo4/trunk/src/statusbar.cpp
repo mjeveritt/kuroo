@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "statusbar.h"
+#include "signalist.h"
 
 #include <qlabel.h>
 #include <qtimer.h>
@@ -56,10 +57,46 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	// Progress timer for activities when total duration is not specified.
 	m_diffTimer = new QTimer( this );
 	connect( m_diffTimer, SIGNAL( timeout() ), this, SLOT( slotAdvance() ) );
+
+	connect(SignalistSingleton::Instance(), SIGNAL(signalScanPortageStarted()), this, SLOT(slotScanPortageStarted()));
+	connect(SignalistSingleton::Instance(), SIGNAL(signalScanUpdatesStarted()), this, SLOT(slotScanUpdatesStarted()));
+	//connect(SignalistSingleton::Instance(), SIGNAL(signalScanProgress(int)), this, SLOT(slotAdvance()));
+	connect(SignalistSingleton::Instance(), SIGNAL(signalScanPortageComplete()), this, SLOT(slotScanPortageComplete()));
+	connect(SignalistSingleton::Instance(), SIGNAL(signalScanUpdatesComplete()), this, SLOT(slotScanUpdatesComplete()));
 }
 
 KurooStatusBar::~KurooStatusBar()
 {}
+
+void KurooStatusBar::slotScanPortageStarted()
+{
+	kDebug() << "PORTAGE";
+	setProgressStatus( "ScanPortage", i18n( "Refreshing Portage packages view..." ) );
+	startProgress();
+}
+
+void KurooStatusBar::slotScanUpdatesStarted()
+{
+	kDebug() << "UPDATES";
+	setProgressStatus( "Updates", i18n( "Checking for package updates..." ) );
+	startProgress();
+}
+
+void KurooStatusBar::slotScanStarted()
+{
+}
+
+void KurooStatusBar::slotScanPortageComplete()
+{
+	setProgressStatus("ScanPortage", i18n( "Done." ));
+	setTotalSteps(0);
+}
+
+void KurooStatusBar::slotScanUpdatesComplete()
+{
+	setProgressStatus("Updates", i18n( "Done." ));
+	setTotalSteps(0);
+}
 
 /**
 * Set label text in statusbar.

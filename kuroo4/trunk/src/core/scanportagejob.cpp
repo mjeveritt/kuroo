@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "scanportagejob.h"
+#include "signalist.h"
 #include <sqlite3.h>
 
 #include <fstream>
@@ -60,7 +61,7 @@ ScanPortageJob::~ScanPortageJob()
 void ScanPortageJob::run()
 {
 	DEBUG_LINE_INFO;
-	int count( 0 );
+	int count = 0;
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
 	dCategory.setSorting( QDir::Name );
@@ -70,14 +71,7 @@ void ScanPortageJob::run()
         return;
 	}
 
-	// Get a count of total packages for proper progress
-	QString packageCount = KurooDBSingleton::Instance()->singleQuery( "SELECT data FROM dbInfo WHERE meta = 'packageCount' LIMIT 1;", m_db );
-    /*if ( packageCount == "0" )
-		setProgressTotalSteps( 25000 );
-	else
-		setProgressTotalSteps( packageCount.toInt() );
-
-    setStatus( "ScanPortage", i18n("Refreshing Portage packages view...") );*/
+	SignalistSingleton::Instance()->scanPortageStarted();
 
 	// Load Portage cache files to speed up portage scan
 	loadCache();
@@ -125,20 +119,20 @@ void ScanPortageJob::run()
 	                                          	, m_db );
 
 	// Gather all path = portage and overlays
-    QStringList pathList;
-    pathList += KurooConfig::dirPortage() + "/metadata/cache/";
-    const QStringList pathOverlays = KurooConfig::dirPortageOverlay().split(" ");
-    foreach ( QString path, pathOverlays ) {
-        pathList += path;
+	QStringList pathList;
+	pathList += KurooConfig::dirPortage() + "/metadata/cache/";
+	const QStringList pathOverlays = KurooConfig::dirPortageOverlay().split(" ");
+	foreach ( QString path, pathOverlays ) {
+		pathList += path;
 	}
 
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 
-		kDebug(0) << "Scanning Portage. Reading categories from " << *itPath << LINE_INFO;
+		//kDebug(0) << "Scanning Portage. Reading categories from " << *itPath << LINE_INFO;
 		//TODO: This is where I need to start removing deps on /var/cache/edb
 		if ( !dCategory.cd( *itPath ) ) {
-			kWarning(0) << "Scanning Portage. Can not access " << *itPath  << LINE_INFO;
+			//kWarning(0) << "Scanning Portage. Can not access " << *itPath  << LINE_INFO;
 			continue;
 		}
 
@@ -158,7 +152,7 @@ void ScanPortageJob::run()
                 return;
             }*/
 
-			kDebug(0) << "Scanning Portage. Reading category " << *itCategory << LINE_INFO;
+			//kDebug(0) << "Scanning Portage. Reading category " << *itCategory << LINE_INFO;
 			QString category = (*itCategory).section( "-", 0, 0 );
 			QString subCategory = (*itCategory).section( "-", 1, 1 );
 
@@ -183,7 +177,7 @@ void ScanPortageJob::run()
 			dPackage.setSorting( QDir::Name );
 
 			if ( dPackage.cd( *itPath + "/" + *itCategory) ) {
-				kDebug(0) << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory << LINE_INFO;
+				//kDebug(0) << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory << LINE_INFO;
 
 				QStringList packageList = dPackage.entryList();
 				QString status, lastPackage;
@@ -199,8 +193,8 @@ void ScanPortageJob::run()
                         return;
                     }*/
 
-					kDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
-                    QStringList parts = parsePackage( *itPackage );
+					//kDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
+					QStringList parts = parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						QString name = parts[1];
 						QString version = parts[2];
@@ -219,7 +213,7 @@ void ScanPortageJob::run()
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
 							m_categories[ *itCategory ].packages[ name ].path = (*itPath).section( "/metadata/cache", 0, 0 );
-							kDebug(0) << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path << LINE_INFO;
+							//kDebug(0) << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path << LINE_INFO;
 						}
 
 						// Insert version in portage
@@ -239,14 +233,14 @@ void ScanPortageJob::run()
 						kWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << *itPackage << LINE_INFO;
 
 					// Post scan count progress
-                    /*if ( ( ++count % 100 ) == 0 )
-                        setProgress( count );*/
+					//if ( ( ++count % 100 ) == 0 )
 				}
 			}
 			else
 				kWarning(0) << "Scanning Portage. Can not access " << *itPath << *itCategory << LINE_INFO;
 
 			lastCategory = category;
+			SignalistSingleton::Instance()->scanProgress(++count);
 		}
 	}
 
@@ -405,9 +399,9 @@ void ScanPortageJob::scanInstalledPackages()
 
 /**
  * Collect info about this ebuild. Based on Jakob Petsovits code.
- * @param path		base path to portage directory (like /usr/portage)
+ * @param path		base path to portage directory (like /usr/portage/metadata/cache)
  * @param category	category name (like app-portage)
- * @param package	package name (like kuroo)
+ * @param name		package name (like kuroo)
  * @param version
  * @return  false if the file can't be opened, true otherwise.
  */
@@ -431,7 +425,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	}
 
 	QString line;
-    QTextStream stream( &file );
+	QTextStream stream( &file );
 	int lineNumber(0);
 
 	// Check portage version and read out the package info strings

@@ -36,19 +36,21 @@ void PackageListModel::setPackages(QList<PackageListItem*>& packages)
 	beginInsertRows(QModelIndex(), 0, packages.count() - 1);
 	m_packages = packages;
 	endInsertRows();
-	kDebug() << "Insert" << m_packages.count() << "packages";
-	//insertRows(0, m_packages.count());
 }
 
 // Implementation of pure virtual methods to be implemented.
 int PackageListModel::columnCount(const QModelIndex& parent) const
 {
-	Q_UNUSED(parent)
+	if (parent.isValid())
+		return 0;
 	return 5;
 }
 
 QVariant PackageListModel::data(const QModelIndex& index, int role) const
 {
+	if (!index.isValid())
+		return QVariant();
+
 	PackageListItem *p = static_cast<PackageListItem*>(index.internalPointer());
 	if (!p)
 		return QVariant();
@@ -91,7 +93,7 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 QModelIndex PackageListModel::index(int row, int column, const QModelIndex& parent) const
 {
 	Q_UNUSED(parent)
-	if (row < m_packages.count())
+	if (row >= 0 && row < m_packages.count())
 		return createIndex(row, column, m_packages[row]);
 	else
 		return QModelIndex();
@@ -111,7 +113,9 @@ QModelIndex PackageListModel::parent(const QModelIndex& index) const
 
 int PackageListModel::rowCount(const QModelIndex& parent) const
 {
-	Q_UNUSED(parent)
+	if (parent.isValid())
+		return 0;
+
 	return m_packages.count();
 }
 

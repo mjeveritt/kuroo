@@ -8,18 +8,18 @@
 PortageListView::PortageListView(QWidget *parent)
  : QTreeView(parent)
 {
-	PackageListModel *m = new PackageListModel(this);
-	setModel(m);
-	QHeaderView *hh = header();
-	hh->setStretchLastSection(true);
-	hh->resizeSections(QHeaderView::ResizeToContents);
 	setRootIsDecorated(false);
 	setUniformRowHeights(true);
 	setAllColumnsShowFocus(true);
-
-	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
+	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setAlternatingRowColors(true);
+	
+	PackageListModel *m = new PackageListModel(this);
+	QHeaderView *hh = header();
+	hh->setStretchLastSection(true);
+	hh->resizeSections(QHeaderView::ResizeToContents);
+	setModel(m);
 }
 
 PortageListView::~PortageListView()
@@ -31,7 +31,6 @@ void PortageListView::selectionChanged(const QItemSelection& selected, const QIt
 	{
 		if (index.column() == 0 && index.data().canConvert(QVariant::String))
 		{
-			//PackageListItem *item = dynamic_cast<PackageListModel*>(model())->packages().at(index.row());
 			for(int j = 0; j < m_selectedPackages.count(); j++)
 				if (m_selectedPackages[j]->name() == index.data().toString())
 					m_selectedPackages.removeAt(j);

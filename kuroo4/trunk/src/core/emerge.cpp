@@ -357,10 +357,9 @@ bool Emerge::checkUpdates()
 	eProc->start();
 	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupCheckUpdates(int, QProcess::ExitStatus) ) );
-	SignalistSingleton::Instance()->setKurooBusy( true );
+	SignalistSingleton::Instance()->scanUpdatesStarted();
 	LogSingleton::Instance()->writeLog( i18n( "\nEmerge check package updates started..." ), KUROO );
-	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Checking for package updates..." ) );
-	KurooStatusBar::instance()->startProgress();
+	//KurooStatusBar::instance()->startProgress();
 	return true;
 }
 
@@ -809,7 +808,7 @@ void Emerge::slotCleanupCheckUpdates(int exitCode, QProcess::ExitStatus status)
 	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupCheckUpdates(int, QProcess::ExitStatus) ) );
 
 	KurooStatusBar::instance()->stopTimer();
-	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Done." ) );
+	//KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Done." ) );
 	SignalistSingleton::Instance()->scanUpdatesComplete();
 
 	if ( !m_blocks.isEmpty() ) {

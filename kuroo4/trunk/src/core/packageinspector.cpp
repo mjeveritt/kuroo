@@ -665,9 +665,20 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 	if ( inspectorTabs->currentIndex() == 1 ) {
 		QStringList useList;
 
-		QMap<QString, PackageVersion*>::iterator itMap = m_portagePackage->versionMap().find( version );
-		if ( itMap != m_portagePackage->versionMap().end() )
+		QMap<QString, PackageVersion*> map = m_portagePackage->versionMap();
+		if (map.contains(version))
+			useList = map.value(version)->useflags();
+		
+		/*QMap<QString, PackageVersion*>::iterator itMap = map.find( version );
+		if ( itMap != map.end() )
+		{
+			//kDebug() << "Executing the bad line with :";
 			useList = itMap.value()->useflags();
+			kDebug() << useList;
+		}
+		else
+			kDebug() << "Not executing the bad line";
+		*/
 
 		// Get user set package use flags
 		QStringList packageUseList = KurooDBSingleton::Instance()->packageUse( m_id ).split(" ");
@@ -684,9 +695,11 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 			}
 
 			QString lines;
-			QMap<QString, QString>::iterator itMap = m_useMap.find( use );
+			/*QMap<QString, QString>::iterator itMap = m_useMap.find( use );
 			if ( itMap != m_useMap.end() )
-				lines = itMap.value();
+				lines = itMap.value();*/
+			if (m_useMap.contains(use))
+				lines = m_useMap.value(use);
 
 			// Split long description into multiple lines
 			QStringList description;
@@ -1002,9 +1015,12 @@ void PackageInspector::slotParsePackageUse()
 	foreach ( QString pretend, pretendUseList ) {
 		QString lines;
 		QString useFlag = pretend.remove( QRegExp("^\\+|^-|^\\(-|^\\(\\+|\\*$|\\*\\)$|\\)$") );
-		QMap<QString, QString>::iterator itMap = m_useMap.find( useFlag );
+		if (m_useMap.contains(useFlag))
+			lines = m_useMap.value(useFlag);
+
+		/*QMap<QString, QString>::iterator itMap = m_useMap.find( useFlag );
 		if ( itMap != m_useMap.end() )
-			lines = itMap.value();
+			lines = itMap.value();*/
 
 		// Split long description into multiple lines
 		QStringList description;

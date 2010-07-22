@@ -53,9 +53,9 @@ public:
 	const QString& description() const;
 	const QString& homepage() const;
 	const QString& slot() const;
-	QStringList& licenses();
-	QStringList& keywords();
-	QStringList& useflags();
+	const QStringList& licenses() const;
+	const QStringList& keywords() const;
+	const QStringList& useflags() const;
 	QStringList& acceptedKeywords();
 	QString size() const;
 	bool hasDetailedInfo() const;

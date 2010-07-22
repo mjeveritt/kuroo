@@ -551,7 +551,7 @@ void PackageVersion::setSlot( const QString& slot )
 /**
 * Get the licenses used for this package.
 */
-QStringList& PackageVersion::licenses()
+const QStringList& PackageVersion::licenses() const
 {
 	return m_licenses;
 }
@@ -567,7 +567,7 @@ void PackageVersion::setLicenses( const QStringList& licenses )
 /**
 * Get the keywords of this package.
 */
-QStringList& PackageVersion::keywords()
+const QStringList& PackageVersion::keywords() const
 {
 	return m_keywords;
 }
@@ -583,7 +583,7 @@ void PackageVersion::setKeywords( const QStringList& keywords )
 /**
 * Get the USE flags that this package can use.
 */
-QStringList& PackageVersion::useflags()
+const QStringList& PackageVersion::useflags() const
 {
 	return m_useflags;
 }

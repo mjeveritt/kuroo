@@ -320,7 +320,8 @@ void QueueListView::hasStarted(const QString& id)
 void QueueListView::slotPackageStart(const QString& id)
 {
 	m_currentEmergingId = id;
-	m_packageIndex[id]->setHasStarted(true);
+	if (m_packageIndex.contains(id))
+		m_packageIndex[id]->setHasStarted(true);
 }
 
 void QueueListView::slotPackageProgress()

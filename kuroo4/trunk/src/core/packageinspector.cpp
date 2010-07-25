@@ -119,26 +119,34 @@ void PackageInspector::updateVersionData()
 	QStringList versionDataList = m_portagePackage->versionDataList();
 	kDebug() << m_portagePackage->versionDataList();
 
-	// Parse out version and data
-	QString version = versionDataList[0];
-	QString stability = versionDataList[1];
-	QString size = versionDataList[2];
+	QStringList::iterator it;
+
+	for (it = versionDataList.begin(); it != versionDataList.end(); ++it)
+	{
+		// Parse out version and data
+		QString version = *it;
+		it++;
+		QString stability = *it; 
+		it++;
+		QString size = *it;
+		it++;
 
 		// Collect installed version in "Installed files" tab
-	bool isInstalled;
-	if ( versionDataList[3] == "1" ) {
-		isInstalled = true;
-		installedVersion = version;
-		versionInstalledList.prepend( version );
+		bool isInstalled;
+		if ( *it == "1" ) {
+			isInstalled = true;
+			installedVersion = version;
+			versionInstalledList.prepend( version );
+		}
+		else
+			isInstalled = false;
+
+		// Collect in inverse order to fill dropdown menus correctly
+		versionList.prepend( version );
+
+		// Insert version in versionview
+		versionsView->insertItem( version, stability, size, isInstalled );
 	}
-	else
-		isInstalled = false;
-
-	// Collect in inverse order to fill dropdown menus correctly
-	versionList.prepend( version );
-
-	// Insert version in versionview
-	versionsView->insertItem( version, stability, size, isInstalled );
 
 	// Insert all versions in dropdown-menus
 	cbVersionsEbuild->addItems( versionList );
@@ -669,17 +677,6 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 		if (map.contains(version))
 			useList = map.value(version)->useflags();
 		
-		/*QMap<QString, PackageVersion*>::iterator itMap = map.find( version );
-		if ( itMap != map.end() )
-		{
-			//kDebug() << "Executing the bad line with :";
-			useList = itMap.value()->useflags();
-			kDebug() << useList;
-		}
-		else
-			kDebug() << "Not executing the bad line";
-		*/
-
 		// Get user set package use flags
 		QStringList packageUseList = KurooDBSingleton::Instance()->packageUse( m_id ).split(" ");
 
@@ -695,9 +692,6 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 			}
 
 			QString lines;
-			/*QMap<QString, QString>::iterator itMap = m_useMap.find( use );
-			if ( itMap != m_useMap.end() )
-				lines = itMap.value();*/
 			if (m_useMap.contains(use))
 				lines = m_useMap.value(use);
 

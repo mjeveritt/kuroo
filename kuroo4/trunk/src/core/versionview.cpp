@@ -27,37 +27,36 @@
 VersionView::VersionItem::VersionItem( QTreeWidget* parent, const QString& version, const bool& isInstalled, const int& stability )
     : QTreeWidgetItem( parent ), m_isInstalled( isInstalled ), m_stability( stability )
 {
-    setText( 0, version );
+	setText( 0, version );
+
+	QFont font;
+	QPalette palette;
+
+	if ( m_isInstalled )
+		font.setBold( true );
+	
+	switch ( m_stability )
+	{
+	case ( TESTING ) :
+		font.setItalic( true );
+		break;
+
+	case ( HARDMASKED ) :
+		font.setItalic( true );
+		palette.setColor( QPalette::Text, Qt::darkRed );
+	}
+
+	setFont( 1, font );
+	setFont( 2, font );
+	setFont( 3, font );
+	//setForeground( 0, palette.foreground() );
+	//setForeground( 1, palette.foreground() );
+	//setForeground( 2, palette.foreground() );
+	//setForeground( 3, palette.foreground() );
 }
 
 VersionView::VersionItem::~VersionItem()
 {}
-
-/**
- * Paint the installed version in dark green.
- */
-void VersionView::VersionItem::paintCell( QPainter *p, const QPalette &palette, const int& column, const int& width, const int& alignment )
-{
-    QPalette m_palette( palette );
-	QFont font( p->font() );
-	
-	if ( m_isInstalled )
-		font.setBold( true );
-	
-	switch ( m_stability ) {
-		case ( TESTING ) :
-			font.setItalic( true );
-			break;
-	
-		case ( HARDMASKED ) :
-			font.setItalic( true );
-            m_palette.setColor( QPalette::Text, Qt::darkRed );
-	}
-		
-    setFont( column, font );
-    setForeground( column, m_palette.foreground() );
-    setTextAlignment( column, alignment );
-}
 
 /**
  * @class VersionView
@@ -66,14 +65,15 @@ void VersionView::VersionItem::paintCell( QPainter *p, const QPalette &palette, 
 VersionView::VersionView( QWidget *parent, const QString& name )
     : QTreeWidget( parent ), m_emergeVersion( QString::null )
 {
-    setHeaderLabels( QStringList() << " " << i18n( "Version" ) << i18n( "Stability" ) <<  i18n( "Size" ) );
+	setHeaderLabels( QStringList() << " " << i18n( "Version" ) << i18n( "Stability" ) <<  i18n( "Size" ) );
 	setColumnWidth( 1, 100 );
 	setColumnWidth( 2, 100 );
 	setColumnWidth( 3, 70 );
-    //setColumnAlignment( 3, Qt::AlignRight );
-    //setResizeMode( QTreeWidget::LastColumn );
-    //setSorting( -1 );
-    setSelectionMode( QTreeWidget::NoSelection );
+	setRootIsDecorated(false);
+	//setColumnAlignment( 3, Qt::AlignRight );
+	//setResizeMode( QTreeWidget::LastColumn );
+	//setSorting( -1 );
+	setSelectionMode( QTreeWidget::NoSelection );
 }
 
 VersionView::~VersionView()
@@ -94,6 +94,9 @@ void VersionView::insertItem( const QString& version, const QString& stability, 
 	item->setText( 1, version );
 	item->setText( 2, stability );
 	item->setText( 3, size );
+
+	QHeaderView *hv = header();
+	hv->setResizeMode(0, QHeaderView::ResizeToContents);
 }
 
 /**

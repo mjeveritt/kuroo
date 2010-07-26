@@ -90,13 +90,15 @@ void VersionView::insertItem( const QString& version, const QString& stability, 
 			item = new VersionItem( this, " ", isInstalled, HARDMASKED );
 		else
 			item = new VersionItem( this, " ", isInstalled, 0 );
-			
+
 	item->setText( 1, version );
 	item->setText( 2, stability );
 	item->setText( 3, size );
 
 	QHeaderView *hv = header();
 	hv->setResizeMode(0, QHeaderView::ResizeToContents);
+	hv->setResizeMode(1, QHeaderView::ResizeToContents);
+	hv->setResizeMode(2, QHeaderView::ResizeToContents);
 }
 
 /**

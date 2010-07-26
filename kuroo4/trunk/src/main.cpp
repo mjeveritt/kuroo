@@ -24,6 +24,7 @@
 #include <stdlib.h>
 
 #include <kapplication.h>
+#include <kuniqueapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -51,7 +52,7 @@ int main( int argc, char **argv )
 	about.setHomepage("http://kuroo.org");
 	KCmdLineArgs::init( argc, argv, &about );
 
-	KApplication app;
+	KUniqueApplication app;
 
 	kDebug(0) << "Kuroo version=" << version;
 

@@ -41,12 +41,6 @@ SystemTray::SystemTray( QWidget *parent )
 	s_instance = this;
 	setToolTip( KIcon("kuroo"), i18n("Kuroo - Portage frontend"), "" );
 	setCategory(KStatusNotifierItem::ApplicationStatus);
-	KIconLoader *il = KIconLoader::global();
-	kDebug() << il->iconPath("kuroo", 0);
-	kDebug() << il->loadIcon("kuroo", KIconLoader::NoGroup).size();
-	
-	setIconByPixmap(QPixmap(il->iconPath("kuroo", 0)));
-	kDebug() << iconName();
 
 	contextMenu()->addAction( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
 	m_menuPause = contextMenu()->addAction( i18n("Pause Emerge"), this, SLOT( slotPause() ) );
@@ -106,7 +100,7 @@ void SystemTray::slotUnpause()
 void SystemTray::slotBusy( bool busy )
 {
 	if ( busy ) {
-		setIconByPixmap( KIcon("kuroo_emerging") );
+		setIconByName( "kuroo_emerging" );
 		if( EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {
 			m_menuUnpause->setEnabled( true );
 		} else if( !EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {
@@ -114,7 +108,7 @@ void SystemTray::slotBusy( bool busy )
 		}
 	}
 	else {
-		setIconByPixmap( KIcon("kuroo") );
+		setIconByName( "kuroo" );
 		if( EmergeSingleton::Instance()->canPause() && EmergeSingleton::Instance()->isPaused() ) {
 			m_menuUnpause->setEnabled( true );
 		} else {

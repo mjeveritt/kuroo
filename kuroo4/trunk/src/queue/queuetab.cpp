@@ -57,7 +57,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 
 	// Rmb actions.
-	connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( slotContextMenu() ) );
+	connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( slotContextMenu(QPoint) ) );
 
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
@@ -238,7 +238,7 @@ void QueueTab::slotRefresh()
 		slotRemoveInstalled();
 		queueView->insertPackageList( m_hasCheckedQueue );
 	}
-	
+
 	slotBusy();
 }
 

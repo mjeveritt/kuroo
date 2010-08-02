@@ -73,7 +73,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
 	//		<< "actual width=" << categoriesView->width() << LINE_INFO;
 	// Connect What's this button
- 	connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) );
+ 	//connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) ); //this one appears to be stale
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 
 	// Connect the filters

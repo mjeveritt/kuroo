@@ -85,9 +85,13 @@ void EtcUpdate::slotFinished()
 {
 	if ( m_configProtectList.count() > 0 ) {
 		m_configProtectDir = m_configProtectList.first();
-		KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), false );
-		connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
-		//connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
+		//The Slave was causing a 'kuroo(5827)/kio (KIOJob) KIO::SlaveInterface::dispatch: error  111   "/var/cache/kuroo/backup/configuration"' message
+		//so don't do it if the dir doesn't exist
+		if (QFile::exists( m_configProtectDir )) {
+			KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), false );
+			connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
+			//connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
+		}
 		m_configProtectList.pop_front();
 	}
 	else {
@@ -181,7 +185,6 @@ void EtcUpdate::slotChanged()
 */
 void EtcUpdate::slotCleanupDiff( int status )
 {
-
 	//Unregister the watcher
 	m_mergingFile->removeFile( m_destination );
 

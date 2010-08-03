@@ -40,7 +40,9 @@ Emerge::Emerge( QObject* m_parent )
 	: QObject( m_parent ), m_completedFlag( false ), m_importantMessagePackage( QString::null ), m_packageMessage( QString::null )
 {
 	eProc = new KProcess();
-	eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+	//use merged mode because emerge seems to output everything on stdout when there's any error (like a slot conflict)
+	//including all the useful information
+	eProc->setOutputChannelMode( KProcess::MergedChannels );
 	ioRevdepRebuild = NULL;
 	eClean1 = NULL;
 }
@@ -571,12 +573,12 @@ void Emerge::cleanup()
 		}
 		ecleanCOMMAND += "distfiles";
 		kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
-		
+
 		eClean1->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 
 		connect( eClean1, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 		connect( eClean1, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEmergeDistfilesComplete() ) );
-		
+
 		eClean1->start();
 
 		SignalistSingleton::Instance()->setKurooBusy( true );
@@ -595,10 +597,10 @@ void Emerge::cleanup()
 
 		connect( ioRevdepRebuild, SIGNAL( readReadyStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 		connect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
-		
+
 		ioRevdepRebuild->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 		ioRevdepRebuild->start();
-		
+
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuild Running..." ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Running revdep-rebuild..." ) );

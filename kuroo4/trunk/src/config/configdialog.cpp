@@ -68,7 +68,7 @@ ConfigDialog::ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleto
 
 	connect( this, SIGNAL( settingsChanged(QString) ), this, SLOT( slotSaveAll() ) );
 	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefaults() ) );
-
+/*
 	int selected = 0;
 	for(int i = 0; i < KurooConfig::filePackageKeywords().count(); ++i)
 	{
@@ -108,7 +108,7 @@ ConfigDialog::ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleto
 		form1.unmask->addItem(f);
 	}
 	form1.unmask->setCurrentIndex(selected);
-
+*/
 	parseMakeConf();
 }
 
@@ -154,10 +154,11 @@ void ConfigDialog::slotSaveAll()
 			}
 	}*/
 
-	KurooConfig::setDefaultFilePackageKeywords( form1.keywords->currentText() );
+	/*KurooConfig::setDefaultFilePackageKeywords( form1.keywords->currentText() );
 	KurooConfig::setDefaultFilePackageUserUse( form1.use->currentText() );
 	KurooConfig::setDefaultFilePackageUserMask( form1.mask->currentText() );
 	KurooConfig::setDefaultFilePackageUserUnMask( form1.unmask->currentText() );
+	*/
 }
 
 /**

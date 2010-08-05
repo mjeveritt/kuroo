@@ -69,7 +69,7 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 		break;
 	case 1:
 		if (role == Qt::DecorationRole && p->isInWorld())
-			return QVariant(KIcon("kuroo_queued"));
+			return QVariant(KIcon("kuroo_world"));
 
 		break;
 	case 2:
@@ -98,7 +98,7 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 
 		break;
 	}
-	
+
 	return QVariant();
 }
 
@@ -159,7 +159,7 @@ int QueueListModel::rowCount(const QModelIndex& parent) const
 
 	if (!parent.isValid())
 		return m_packages.count();
-	
+
 	QueueListItem *item = static_cast<QueueListItem*>(parent.internalPointer());
 	return item->children().count();
 }
@@ -168,7 +168,7 @@ QVariant QueueListModel::headerData(int section, Qt::Orientation orientation, in
 {
 	if (orientation != Qt::Horizontal)
 		return QVariant();
-	
+
 	switch (section)
 	{
 	case 0:
@@ -240,7 +240,7 @@ void QueueListModel::sortTree(QList<QueueListItem*> items, Qt::SortOrder order)
 	{
 		sortTree(item->children(), order);
 	}
-	
+
 	if (order == Qt::AscendingOrder)
 		qSort(items.begin(), items.end(), packageLessThan);
 	else

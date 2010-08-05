@@ -67,12 +67,12 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 		break;
 	case 1:
 		if (role == Qt::DecorationRole && p->isInWorld())
-			return QVariant(KIcon("kuroo_queued"));
+			return QVariant(KIcon("kuroo_world"));
 		break;
 
 	case 2:
 		if (role == Qt::DecorationRole && QueueSingleton::Instance()->isQueued(p->id()))
-			return QVariant(KIcon("kuroo_queued"));
+			return QVariant(KIcon("kuroo_queue"));
 
 		break;
 	case 3:
@@ -86,7 +86,7 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 	default:
 		return QVariant();
 	}
-	
+
 	return QVariant();
 }
 
@@ -123,7 +123,7 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 {
 	if (orientation != Qt::Horizontal)
 		return QVariant();
-	
+
 	switch (section)
 	{
 	case 0:
@@ -149,7 +149,7 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 	default:
 		return QVariant();
 	}
-	
+
 	return QVariant();
 }
 

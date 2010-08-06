@@ -69,9 +69,9 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	setupUi( this );
 
 	//TODO: use saveState and restoreState eventually
-	QList<int> sizes;
-	sizes << 215 << width() - 215;
-	splitterH->setSizes( sizes );
+	//QList<int> sizes;
+	//sizes << 215 << width() - 215;
+	//splitterH->setSizes( sizes );
 
 	filterGroup->setSelected(0);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()

@@ -23,6 +23,7 @@
 
 #include <qpainter.h>
 #include <QTreeWidget>
+#include <QScrollBar>
 
 #include <kglobal.h>
 
@@ -134,10 +135,17 @@ const QString CategoriesView::currentCategoryId() const
 CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
+	setRootIsDecorated(false);
+	setUniformRowHeights(true);
+	setAllColumnsShowFocus(true);
 	setHeaderLabels( QStringList( i18n( "Category" ) ) );
 	//header()->setLabel( header()->count() - 1, i18n("Category") );
-	//kdDebug() << "CategoriesListView.constructor minimumWidth=" << minimumWidth()
-	//			<< "actual width" << width() << LINE_INFO;
+	kdDebug() << "CategoriesListView.constructor minimumWidth=" << minimumWidth()
+				<< "actual width" << width() << LINE_INFO;
+	QHeaderView *hh = header();
+	hh->setResizeMode(0, QHeaderView::ResizeToContents);
+	//hh->resizeSections(QHeaderView::ResizeToContents);
+	//hh->resizeMode(QHeaderView::ResizeToContents);
 }
 
 CategoriesListView::~CategoriesListView()
@@ -175,9 +183,10 @@ void CategoriesListView::init()
 		i++;
 	}
 
-	//TODO: these don't work we need a better solution
-	//resizeColumnToContents( 0 );
-	//setColumnWidth( 0, 75 );
+	QHeaderView *hh = header();
+	kDebug() << "[BEFORE] columnWidth =" << columnWidth(0);
+	hh->setResizeMode(0, QHeaderView::ResizeToContents);
+	kDebug() << "[AFTER] columnWidth =" << columnWidth(0);
 }
 
 /**
@@ -196,6 +205,19 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 
 	// After all categories are loaded try restoring last known focus-category
 	restoreFocus( isFiltered );
+
+	QHeaderView *hh = header();
+	kDebug() << "[BEFORE] columnWidth =" << columnWidth(0);
+	hh->setResizeMode(0, QHeaderView::ResizeToContents);
+	kDebug() << "[AFTER] columnWidth =" << columnWidth(0);
+}
+
+QSize CategoriesListView::sizeHint() const
+{
+	int width=0;
+	for (int i = 0; i < columnCount(); ++i)
+		width += 2 + columnWidth(i);
+	return QSize(width - 2 + (verticalScrollBar()->isVisible() ? 16 : 0), 100);
 }
 
 /**
@@ -207,7 +229,13 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
 	: CategoriesView( parent, name )
 {
+	setRootIsDecorated(false);
+	setUniformRowHeights(true);
+	setAllColumnsShowFocus(true);
 	setHeaderLabels( QStringList( i18n( "Subcategory" ) ) );
+	QHeaderView *hh = header();
+	hh->resizeMode(QHeaderView::ResizeToContents);
+	hh->resizeMode(QHeaderView::ResizeToContents);
 }
 
 SubCategoriesListView::~SubCategoriesListView()
@@ -236,6 +264,12 @@ void SubCategoriesListView::init()
 		QString name = *it;
 		allSubCategories[idCategory].insert( idSubCategory, name );
 	}
+	
+	QHeaderView *hh = header();
+	hh->resizeSections(QHeaderView::ResizeToContents);
+	hh->resizeMode(QHeaderView::ResizeToContents);
+	//resizeColumnToContents( 0 );
+	//setColumnWidth( 0, 25 );
 }
 
 /**
@@ -283,11 +317,24 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 		item->setOn( true );
 	}
 
+	QHeaderView *hh = header();
+	hh->resizeSections(QHeaderView::ResizeToContents);
+	hh->resizeMode(QHeaderView::ResizeToContents);
 	//TODO: this doesn't work, we need to find a better solution
 	//resizeColumnToContents( 0 );
+	//setColumnWidth( 0, 25 );
 
 	// After all categories are loaded try restoring last known focus-category
 	restoreFocus( false );
 }
+
+QSize SubCategoriesListView::sizeHint() const
+{
+	int width=0;
+	for (int i = 0; i < columnCount(); ++i)
+		width += 2 + columnWidth(i);
+	return QSize(width - 2 + (verticalScrollBar()->isVisible() ? 16 : 0), 100);
+}
+
 
 #include "categorieslistview.moc"

@@ -94,6 +94,8 @@ public:
 
 	void						init();
 	void 						loadCategories( const QStringList& categoriesList, bool isFiltered );
+	QSize 						sizeHint() const;
+
 };
 
 /**
@@ -109,13 +111,14 @@ public:
 
 	void						init();
 	void 						loadCategories( const QStringList& categoriesList );
+	QSize						sizeHint() const;
 
 private:
 
 	// Vector containing all sub-categories
 	typedef QMultiMap<int, QString>		SubCategory;
 	typedef QVector<SubCategory>		AllSubCategories;
-	AllSubCategories					allSubCategories;
+	AllSubCategories			allSubCategories;
 };
 
 #endif

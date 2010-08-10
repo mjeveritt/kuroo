@@ -1,5 +1,6 @@
 #include "common.h"
 #include "packagelistitem.h"
+#include "queuelistview.h"
 #include "packageversion.h"
 
 PackageListItem::PackageListItem(QObject *parent)
@@ -288,4 +289,18 @@ void PackageListItem::resetDetailedInfo()
 void PackageListItem::setPackageIndex(const int idx)
 {
 	m_index = idx;
+}
+
+bool PackageListItem::isFirstPackage() const
+{
+	PortageListView* plv = dynamic_cast<PortageListView*>(parent());
+	QueueListView* qlv = dynamic_cast<QueueListView*>(parent());
+
+	if (plv)
+		return (m_index == plv->packages().count());
+
+	if (qlv)
+		return (m_index == qlv->allPackages().count());
+	
+	return true;
 }

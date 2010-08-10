@@ -64,7 +64,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-	connect( queueView, SIGNAL( itemDoubleClicked() ), this, SLOT( slotAdvanced() ) );
+	connect( queueView, SIGNAL( itemDoubleClicked(QueueListItem*) ), this, SLOT( slotAdvanced() ) );
 
 	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
 

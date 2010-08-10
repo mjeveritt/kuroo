@@ -186,7 +186,7 @@ void PackageInspector::updateVersionData()
 
 	// Toggle checkboxes if package in World and Queue
 	cbWorld->setChecked(m_portagePackage->isInWorld());
-	cbQueue->setChecked(m_portagePackage->isQueued());
+	cbQueue->setChecked(QueueSingleton::Instance()->isQueued(m_portagePackage->id()));
 }
 
 /**
@@ -230,7 +230,7 @@ void PackageInspector::edit( PackageListItem* portagePackage, const int& view )
 	m_category = m_portagePackage->category();
 	updateVersionData();
 
-	// Actions that superuser privileges
+	// Actions that need superuser privileges
 	if ( !KUser().isSuperUser() ) {
 		enableButtonApply( false );
 		groupSelectStability->setDisabled( true );

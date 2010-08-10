@@ -232,34 +232,18 @@ QList<QueueListItem*> QueueListView::allPackages() const
 
 void QueueListView::nextPackage( const bool& isPrevious )
 {
-	//TODO:implement me!
-	/*
 	if ( isVisible() ) {
-		QTreeWidgetItem* item = currentItem();
-		if ( isPrevious ) {
-			if ( itemAbove( item ) ) {
-				item = itemAbove( item );
-				//ensureItemVisible( item ); //scrollTo
-				setCurrentItem( item );
-				for( int i=0; i<topLevelItemCount(); i++ ) {
-					topLevelItem( i )->setSelected( false );
-				}
-				item->setSelected( true );
-			}
-		}
-		else {
-			if( itemBelow( item ) ) {
-				item = itemBelow( item );
-				//ensureItemVisible( item ); //scrollTo
-				setCurrentItem( item );
-				for( int i=0; i<topLevelItemCount(); i++ ) {
-					topLevelItem( i )->setSelected( false );
-				}
-				item->setSelected( true );
-			}
+		QModelIndex item;
+		if ( isPrevious )
+			item = moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
+		else
+			item = moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
+
+		if (item.isValid()) {
+			scrollTo(item);
+			setCurrentIndex(item);
 		}
 	}
-	*/
 }
 
 /**
@@ -308,8 +292,15 @@ void QueueListView::indexPackage( const QString& id, QueueListItem *item )
 
 void QueueListView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-	Q_UNUSED(event)
-	emit itemDoubleClicked();
+	QModelIndex index = indexAt(event->pos());
+	if (!index.isValid())
+		return;
+	
+	QueueListItem *item = static_cast<QueueListItem*>(index.internalPointer());
+	if (!item)
+		return;
+
+	emit itemDoubleClicked(item);
 }
 
 void QueueListView::hasStarted(const QString& id)

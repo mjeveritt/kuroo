@@ -39,7 +39,6 @@
 #include "logstab.h"
 #include "historytab.h"
 #include "mergetab.h"
-#include "packagelistview.h"
 #include "packageinspector.h"
 
 /**

@@ -35,11 +35,12 @@ public slots:
 
 signals:
 	void selectionChangedSignal();
-	void itemDoubleClicked();
+	void itemDoubleClicked(QueueListItem*);
 
 protected:
 	void selectionChanged(const QItemSelection&, const QItemSelection&);
 	void mouseDoubleClickEvent(QMouseEvent*);
+
 private:
 	QList<QueueListItem*> m_selectedPackages;
 	QMap<QString, QueueListItem*> m_packageIndex;

@@ -35,7 +35,7 @@ public:
 	inline const QStringList& versionDataList() const { return m_versionsDataList; }
 	inline const QString& emergeVersion() const { return m_emergeVersion; }
 	bool isLastPackage() const  { return (m_index == 1); }
-	inline bool isFirstPackage() const  { return (m_index == dynamic_cast<PortageListView*>(parent())->packages().count()); }
+	bool isFirstPackage() const;
 	inline QMap<QString, PackageVersion*> versionMap() const { return m_versionMap; }
 	
 	void initVersions();

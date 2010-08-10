@@ -17,7 +17,6 @@ QueueListView::QueueListView(QWidget *parent)
 	QHeaderView *hh = header();
 	hh->setStretchLastSection(true);
 	hh->resizeSections(QHeaderView::ResizeToContents);
-	//setRootIsDecorated(false);
 
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -100,7 +99,6 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		QString status = it.next();
 		QString idDepend = it.next();
 		QString size = it.next();
-		kDebug() << "Got size =" << size;
 		QString version = it.next();
 
 		// Get package emerge duration from statistics
@@ -216,7 +214,6 @@ const QStringList QueueListView::allPackagesNoChildren()
 const QStringList QueueListView::allId() const
 {
 	QStringList packageList;
-	//QList<QueueListItem*> packages = dynamic_cast<QueueListModel*>(model())->packages();
 	foreach(QString id, m_packageIndex.keys())
 	{
 		packageList << id;

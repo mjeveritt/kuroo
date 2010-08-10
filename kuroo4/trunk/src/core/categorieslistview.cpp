@@ -184,9 +184,7 @@ void CategoriesListView::init()
 	}
 
 	QHeaderView *hh = header();
-	kDebug() << "[BEFORE] columnWidth =" << columnWidth(0);
 	hh->setResizeMode(0, QHeaderView::ResizeToContents);
-	kDebug() << "[AFTER] columnWidth =" << columnWidth(0);
 }
 
 /**
@@ -207,9 +205,7 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 	restoreFocus( isFiltered );
 
 	QHeaderView *hh = header();
-	kDebug() << "[BEFORE] columnWidth =" << columnWidth(0);
 	hh->setResizeMode(0, QHeaderView::ResizeToContents);
-	kDebug() << "[AFTER] columnWidth =" << columnWidth(0);
 }
 
 QSize CategoriesListView::sizeHint() const

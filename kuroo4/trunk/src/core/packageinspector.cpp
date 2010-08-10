@@ -117,7 +117,6 @@ void PackageInspector::updateVersionData()
 	QString installedVersion;
 	QStringList versionList, versionInstalledList;
 	QStringList versionDataList = m_portagePackage->versionDataList();
-	kDebug() << m_portagePackage->versionDataList();
 
 	QStringList::iterator it;
 
@@ -510,7 +509,6 @@ void PackageInspector::showSettings()
 */
 void PackageInspector::slotSetStability( int rbStability )
 {
-	kDebug() << "slotSetStability";
 	switch ( rbStability ) {
 
 		// User wants only stable package

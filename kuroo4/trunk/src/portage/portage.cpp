@@ -22,7 +22,6 @@
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
 #include "scanupdatesjob.h"
-#include "threadweaver/ThreadWeaver.h"
 
 #include <kmessagebox.h>
 
@@ -265,7 +264,9 @@ bool Portage::slotRefresh()
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
 		//This seems important, not sure why it was commented out
-		ThreadWeaver::Weaver::instance()->enqueue( new CachePortageJob( this ) );
+		CachePortageJob *job = new CachePortageJob( this );
+		connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+		ThreadWeaver::Weaver::instance()->enqueue(job);
 	}
 	else
 		slotScan();
@@ -313,7 +314,9 @@ bool Portage::slotScan()
 		}
 	}
 
-	ThreadWeaver::Weaver::instance()->enqueue( new ScanPortageJob( this ) );
+	ScanPortageJob *job = new ScanPortageJob( this );
+	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	ThreadWeaver::Weaver::instance()->enqueue(job);
 
 	return true;
 }
@@ -467,7 +470,9 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
 */
 void Portage::addInstalledPackage( const QString& package )
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new AddInstalledPackageJob( this, package ) );
+	AddInstalledPackageJob *job = new AddInstalledPackageJob( this, package );
+	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
 /**
@@ -476,7 +481,9 @@ void Portage::addInstalledPackage( const QString& package )
 */
 void Portage::removeInstalledPackage( const QString& package )
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new RemoveInstalledPackageJob( this, package ) );
+	RemoveInstalledPackageJob *job = new RemoveInstalledPackageJob( this, package );
+	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
 /**
@@ -496,7 +503,9 @@ bool Portage::slotRefreshUpdates()
 bool Portage::slotLoadUpdates()
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ThreadWeaver::Weaver::instance()->enqueue( new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() ) );
+	ScanUpdatesJob *job = new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() );
+	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	ThreadWeaver::Weaver::instance()->enqueue(job);
 	return true;
 }
 
@@ -505,7 +514,14 @@ bool Portage::slotLoadUpdates()
 */
 void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate ) );
+	CheckUpdatesPackageJob *job = new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate );
+	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	ThreadWeaver::Weaver::instance()->enqueue(job);
+}
+
+void Portage::slotWeaverDone(ThreadWeaver::Job *job)
+{
+	delete job;
 }
 
 #include "portage.moc"

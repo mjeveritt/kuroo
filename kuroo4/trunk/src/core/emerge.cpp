@@ -357,6 +357,8 @@ bool Emerge::checkUpdates()
 	*eProc << "world";
 
 	eProc->start();
+	if (eProc->state() == QProcess::NotRunning)
+		return false;
 	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupCheckUpdates(int, QProcess::ExitStatus) ) );
 	SignalistSingleton::Instance()->scanUpdatesStarted();

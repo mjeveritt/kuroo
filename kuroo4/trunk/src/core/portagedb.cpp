@@ -100,7 +100,7 @@ void KurooDB::destroy()
  */
 QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 {
-// 	kDebug() << "Query-start: " << statement << LINE_INFO;
+// 	kDebug() << "Query-start:" << statement << LINE_INFO;
 // 	clock_t start = clock();
 
 	DbConnection *dbConn;
@@ -116,7 +116,7 @@ QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kDebug() << "SQL-query (" << duration << "s): " << statement << LINE_INFO;
+// 	kDebug() << "Query-end:" << statement << LINE_INFO;
 
 	return values;
 }
@@ -128,7 +128,7 @@ QStringList KurooDB::query( const QString& statement, DbConnection *conn )
  */
 QString KurooDB::singleQuery( const QString& statement, DbConnection *conn )
 {
-// 	kDebug() << "Query-start: " << statement << LINE_INFO;
+// 	kDebug() << "Query-start:" << statement << LINE_INFO;
 // 	clock_t start = clock();
 
 	DbConnection *dbConn;
@@ -144,7 +144,7 @@ QString KurooDB::singleQuery( const QString& statement, DbConnection *conn )
 
 // 	clock_t finish = clock();
 // 	const double duration = (double) ( finish - start ) / CLOCKS_PER_SEC;
-// 	kDebug() << "SQL-query (" << duration << "s): " << statement << LINE_INFO;
+// 	kDebug() << "Query-end:" << statement << LINE_INFO;
 
 	return value;
 }
@@ -1410,21 +1410,23 @@ void DbConnectionPool::createDbConnections()
 		DbConnection *dbConn;
 		dbConn = new SqliteConnection( static_cast<SqliteConfig*>( m_dbConfig ) );
 		enqueue( dbConn );
-        m_semaphore.release(1);
+		m_semaphore.release(1);
 	}
 	kDebug() << "Create. Available db connections: " << m_semaphore.available() << LINE_INFO;
 }
 
 DbConnection *DbConnectionPool::getDbConnection()
 {
-    m_semaphore.acquire(1);
+//	kDebug() << "Get a DB connection from" << m_semaphore.available() << "available.";
+	m_semaphore.acquire(1);
 	return dequeue();
 }
 
 void DbConnectionPool::putDbConnection( DbConnection *conn )
 {
+//	kDebug() << "Put a DB connection in" << m_semaphore.available() << "available.";
 	enqueue( conn );
-    m_semaphore.release(1);
+	m_semaphore.release(1);
 }
 
 QString DbConnectionPool::escapeString( const QString& str ) const

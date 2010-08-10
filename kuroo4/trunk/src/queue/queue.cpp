@@ -125,6 +125,8 @@ public:
 			if ( id.isEmpty() ) {
 				kWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
 								.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
+				
+				KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 				return;
 			}
 

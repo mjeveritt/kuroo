@@ -140,7 +140,9 @@ bool History::slotRefresh()
 void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
-    ThreadWeaver::Weaver::instance()->enqueue( new ScanHistoryJob( this, lines ) );
+	ScanHistoryJob *job = new ScanHistoryJob(this, lines);
+	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
 /**
@@ -396,6 +398,11 @@ void History::scanELog()
 eLogVector History::getELogs()
 {
 	return m_eLogs;
+}
+
+void History::slotWeaverDone(ThreadWeaver::Job *job)
+{
+	delete job;
 }
 
 #include "history.moc"

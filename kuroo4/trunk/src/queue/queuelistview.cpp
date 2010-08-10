@@ -336,7 +336,7 @@ void QueueListView::slotPackageComplete(const QString& id)
 {
 	if (id == m_currentEmergingId)
 	{
-		m_packageIndex[id]->setHasStarted(false);
+		//m_packageIndex[id]->setHasStarted(false);
 		m_packageIndex[id]->setIsComplete(true);
 		m_currentEmergingId = "";
 	}

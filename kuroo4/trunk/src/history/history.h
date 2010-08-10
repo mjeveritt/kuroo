@@ -66,6 +66,7 @@ public slots:
 private slots:
 	void					slotScanHistory( const QStringList& lines );
 	void					slotParse();
+	void					slotWeaverDone(ThreadWeaver::Job*);
 
 private:
 	QObject*				m_parent;

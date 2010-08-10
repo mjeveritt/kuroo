@@ -80,7 +80,12 @@ void QueueListItem::setHasStarted(bool h)
 
 void QueueListItem::setIsComplete(bool h)
 {
-	m_testTimer->stop();
+	if (m_testTimer)
+	{
+		m_testTimer->stop();
+		delete m_testTimer;
+		m_testTimer = 0;
+	}
 	m_isComplete = h;
 }
 

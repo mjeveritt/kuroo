@@ -28,7 +28,7 @@ void QueueListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 		}
 		else if (!item->hasStarted())
 		{
-	 		progressBarOption.maximum = 0;
+	 		progressBarOption.maximum = 100;
 	 		progressBarOption.progress = 0;
 	 		progressBarOption.textVisible = true;
 		}

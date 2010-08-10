@@ -276,7 +276,6 @@ void PortageTab::slotButtons()
 
 		if ( QueueSingleton::Instance()->isQueued(packagesView->currentPackage()->id()))
 		{
-			kDebug() << packagesView->currentPackage()->name() << "is queued";
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
 			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
@@ -284,13 +283,45 @@ void PortageTab::slotButtons()
 		}
 		else
 		{
-			kDebug() << packagesView->currentPackage()->name() << "is NOT queued";
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
 			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
 			pbQueue->setText( i18n("Add to Queue") );
 		}
 		if (packagesView->currentPackage()->isInstalled() && ::getuid() == 0)
+			pbUninstall->setDisabled( false );
+		else
+			pbUninstall->setDisabled( true );
+	}
+	else if (packagesView->selectedPackages().count() > 1) {
+		pbQueue->setDisabled( false );
+		int queued = 0, installed = 0;
+		foreach(PackageListItem *item, packagesView->selectedPackages())
+		{
+			if (QueueSingleton::Instance()->isQueued(item->id()))
+				queued++;
+			if (item->isInstalled() && ::getuid() == 0)
+				installed++;
+		}
+		
+		// If all in queue, button is dequeue
+		if (packagesView->selectedPackages().count() == queued)
+		{
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			pbQueue->setText( i18n("Remove from Queue") );
+		}
+		else // If none or some in queue, button is queue.
+		{
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			pbQueue->setText( i18n("Add to Queue") );
+		}
+
+		// If all or some installed, button uninstall is active
+		if (installed > 0)
 			pbUninstall->setDisabled( false );
 		else
 			pbUninstall->setDisabled( true );

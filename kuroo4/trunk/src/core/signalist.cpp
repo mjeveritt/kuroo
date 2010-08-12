@@ -34,7 +34,9 @@
  */
 Signalist::Signalist( QObject* m_parent )
 	: QObject( m_parent ), m_busy( false ), m_isReady( false )
-{}
+{
+	connect(this, SIGNAL(signalCursor(bool)), this, SLOT(slotCursor(bool)));
+}
 
 Signalist::~Signalist()
 {}
@@ -61,19 +63,17 @@ void Signalist::setKurooReady( const bool& isReady )
  */
 void Signalist::setKurooBusy( const bool& busy )
 {
-	Q_UNUSED(busy)
-	//assert(QThread::currentThread() == qApp->thread());
 	static int busySession(0);
 
 	if ( !busy ) {
 		if ( busySession > 0 ) {
 			busySession--;
-			//QApplication::restoreOverrideCursor();
+			emit signalCursor(true);
 		}
 	}
 	else {
 		busySession++;
-		//QApplication::setOverrideCursor( Qt::BusyCursor );
+		emit signalCursor(false);
 	}
 
 	if ( busySession == 0 ) {
@@ -86,7 +86,21 @@ void Signalist::setKurooBusy( const bool& busy )
 	}
 }
 
-
+/**
+ * This slot is called by setKurooBusy() to enable or disable the busy cursor.
+ * This is separated from setKurooBusy() so that threads don't execute code inside the GUI thread
+ * 
+ * @param restore if True, rstores the previous cursor. Set the busy cursor if false. \
+ * 	  (See QApplication::setOverrideCursor() and QApplication::restoreOverrideCursor() documentation)
+ */
+void Signalist::slotCursor(bool restore)
+{
+	assert(QThread::currentThread() == qApp->thread());
+	if (restore)
+		QApplication::restoreOverrideCursor();
+	else
+		QApplication::setOverrideCursor( Qt::BusyCursor );
+}
 
 /**
  * Kuroo is done syncing.

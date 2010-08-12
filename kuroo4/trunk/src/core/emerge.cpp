@@ -128,31 +128,31 @@ bool Emerge::queue( const QStringList& packageList )
 			*eProc << package;
 		}
 
-		connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		eProc->start();
 
 		if ( eProc->state() == QProcess::NotRunning ) {
 			LogSingleton::Instance()->writeLog( i18n("\nError: Emerge didn't start. "), ERROR );
-				cleanupQueue();
+			cleanupQueue();
 
 			return false;
 		}
-		else {
-			if( KurooConfig::enableEclean() && !skipHousekeeping())
-				m_doeclean = true;
-			if( KurooConfig::revdepEnabled() && !skipHousekeeping())
-				m_dorevdeprebuild = true;
-			m_pausable = true;
+		
+		connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+		connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
+		
+		if( KurooConfig::enableEclean() && !skipHousekeeping())
+			m_doeclean = true;
+		if( KurooConfig::revdepEnabled() && !skipHousekeeping())
+			m_dorevdeprebuild = true;
+		m_pausable = true;
 
-			LogSingleton::Instance()->writeLog( i18n( "\nEmerge %1 started...", packageList.join(" ") ), KUROO );
-			kDebug() << i18n( "\nEmerge %1 started...", packageList.join(" ") );
-			KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Installing packages in queue..." ) );
-			KurooStatusBar::instance()->startTimer();
+		LogSingleton::Instance()->writeLog( i18n( "\nEmerge %1 started...", packageList.join(" ") ), KUROO );
+		kDebug() << i18n( "\nEmerge %1 started...", packageList.join(" ") );
+		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Installing packages in queue..." ) );
+		KurooStatusBar::instance()->startTimer();
 
-			return true;
-		}
+		return true;
 	}
 }
 

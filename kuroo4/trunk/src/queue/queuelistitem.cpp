@@ -97,20 +97,5 @@ void QueueListItem::oneStep()
 	QueueListModel *model = dynamic_cast<QueueListModel*>(listView->model());
 
 	model->updateItem(this, listView);
-	/*
-	if (!listView)
-	{
-		kDebug() << "No Update";
-		return;
-	}
-	QModelIndex index = listView->rootIndex();
-	if (!index.isValid())
-		kDebug() << "Root index is not valid";
-	bool start = true;
-	while (index.isValid() || start)
-	{
-		start = false;
-		foreach(QModelIndex i, model->children(index))
-	}*/
 }
 

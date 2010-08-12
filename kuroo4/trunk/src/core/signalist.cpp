@@ -24,6 +24,9 @@
 
 #include <kcursor.h>
 
+#include <assert.h>
+#include <QThread>
+
 /**
  * @class Signalist
  * @short Object which forwards signals, so they can picked up systemwide.
@@ -58,20 +61,20 @@ void Signalist::setKurooReady( const bool& isReady )
  */
 void Signalist::setKurooBusy( const bool& busy )
 {
+	Q_UNUSED(busy)
+	//assert(QThread::currentThread() == qApp->thread());
 	static int busySession(0);
 
 	if ( !busy ) {
 		if ( busySession > 0 ) {
 			busySession--;
-			QApplication::restoreOverrideCursor();
+			//QApplication::restoreOverrideCursor();
 		}
 	}
 	else {
 		busySession++;
-		QApplication::setOverrideCursor( Qt::BusyCursor );
+		//QApplication::setOverrideCursor( Qt::BusyCursor );
 	}
-
-	kDebug() << "setting busy =" << busy << "busySession =" << busySession;
 
 	if ( busySession == 0 ) {
 		m_busy = false;

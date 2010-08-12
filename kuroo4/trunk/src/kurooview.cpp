@@ -19,12 +19,14 @@
  ***************************************************************************/
 
 #include <sys/stat.h>
+#include <assert.h>
 
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qcolor.h>
 #include <QPixmap>
 #include <qbitmap.h>
+#include <QThread>
 
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
@@ -147,6 +149,7 @@ void KurooView::slotInit()
 		if ( !HistorySingleton::Instance()->slotRefresh() ) {
 			disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 
+			assert(QThread::currentThread() == qApp->thread());
 			switch( KMessageBox::warningYesNo( this,
 				i18n("<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system has changed.</qt>"),
 				i18n("Initialiazing Kuroo"), KGuiItem( i18n("Refresh") ), KGuiItem( i18n("Skip") ) ) ) {

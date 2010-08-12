@@ -18,13 +18,16 @@
  *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
-#include "common.h"
-#include "systemtray.h"
+#include <assert.h>
 
 #include <QToolTip>
+#include <QThread>
 
 #include <KMenu>
 #include <KIcon>
+
+#include "common.h"
+#include "systemtray.h"
 
 SystemTray* SystemTray::s_instance = 0;
 
@@ -106,6 +109,7 @@ void SystemTray::slotUnpause()
  */
 void SystemTray::slotBusy( bool busy )
 {
+	assert(QThread::currentThread() == qApp->thread());
 	if ( busy ) {
 		setIconByName( "kuroo_emerging" );
 		if( EmergeSingleton::Instance()->isPaused() && EmergeSingleton::Instance()->canPause() ) {

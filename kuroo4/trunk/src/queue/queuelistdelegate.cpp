@@ -1,4 +1,6 @@
 #include <QApplication>
+#include <QThread>
+#include <assert.h>
 
 #include "queuelistdelegate.h"
 #include "queuelistitem.h"
@@ -7,6 +9,7 @@
 
 void QueueListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+	assert(QThread::currentThread() == qApp->thread());
 	QueueListItem *item = static_cast<QueueListItem*>(index.internalPointer());
 	if (item && index.column() == 5)
 	{

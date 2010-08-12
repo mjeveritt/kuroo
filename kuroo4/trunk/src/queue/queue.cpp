@@ -73,7 +73,9 @@ class RemoveQueuePackageIdListJob : public ThreadWeaver::Job
 {
 public:
 	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : Job( dependent ),
-		m_packageIdList( packageIdList ) {}
+		m_packageIdList( packageIdList ) {
+		kDebug() << packageIdList;
+		}
 
 	virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();

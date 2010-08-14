@@ -90,7 +90,7 @@ void Signalist::setKurooBusy( const bool& busy )
  * This slot is called by setKurooBusy() to enable or disable the busy cursor.
  * This is separated from setKurooBusy() so that threads don't execute code inside the GUI thread
  * 
- * @param restore if True, rstores the previous cursor. Set the busy cursor if false. \
+ * @param restore if True, restores the previous cursor. Set the busy cursor if false. \
  * 	  (See QApplication::setOverrideCursor() and QApplication::restoreOverrideCursor() documentation)
  */
 void Signalist::slotCursor(bool restore)
@@ -200,6 +200,11 @@ void Signalist::packageClicked( const QString& package )
 void Signalist::fontChanged()
 {
 	emit signalFontChanged();
+}
+
+void Signalist::emergeAborted()
+{
+	emit signalEmergeAborted();
 }
 
 #include "signalist.moc"

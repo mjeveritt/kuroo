@@ -18,6 +18,7 @@ QueueListItem::QueueListItem(const QString& name, const QString& id, const QStri
 	m_hasStarted = false;
 	m_isComplete = false;
 	m_steps = 0;
+	m_pretended = false;
 
 	m_testTimer = 0;
 }
@@ -87,6 +88,11 @@ void QueueListItem::setIsComplete(bool h)
 		m_testTimer = 0;
 	}
 	m_isComplete = h;
+
+	QueueListView *listView = dynamic_cast<QueueListView*>(parent());
+	QueueListModel *model = dynamic_cast<QueueListModel*>(listView->model());
+
+	listView->update(model->index(packageIndex() - 1, 5));
 }
 
 void QueueListItem::oneStep()
@@ -96,6 +102,10 @@ void QueueListItem::oneStep()
 	QueueListView *listView = dynamic_cast<QueueListView*>(parent());
 	QueueListModel *model = dynamic_cast<QueueListModel*>(listView->model());
 
-	model->updateItem(this, listView);
+	listView->update(model->index(packageIndex() - 1, 5));
 }
 
+void QueueListItem::setPretended(bool p)
+{
+	m_pretended = p;
+}

@@ -469,6 +469,7 @@ void QueueTab::slotStop()
 				SignalistSingleton::Instance()->setKurooBusy(false);
 				// added a log entry for the abort
 				LogSingleton::Instance()->writeLog( i18n("Emerge aborted by user."), KUROO );
+				SignalistSingleton::Instance()->emergeAborted();
 		}
 }
 

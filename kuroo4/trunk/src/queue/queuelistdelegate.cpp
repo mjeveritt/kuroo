@@ -11,7 +11,7 @@ void QueueListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 {
 	assert(QThread::currentThread() == qApp->thread());
 	QueueListItem *item = static_cast<QueueListItem*>(index.internalPointer());
-	if (item && index.column() == 5)
+	if (item && index.column() == 5 && item->pretended())
 	{
 		int progress;
 		if (item->duration() > 0)

@@ -16,7 +16,8 @@ QueueListView::QueueListView(QWidget *parent)
 	setItemDelegateForColumn(5, new QueueListDelegate(this));
 	QHeaderView *hh = header();
 	hh->setStretchLastSection(true);
-	hh->resizeSections(QHeaderView::ResizeToContents);
+	hh->setResizeMode(QHeaderView::ResizeToContents);
+	hh->setResizeMode(5, QHeaderView::Stretch);
 
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -148,7 +149,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 			addSize(size);
 		}
 
-		//item->setPretended( hasCheckedQueue );
+		item->setPretended( hasCheckedQueue );
 
 		indexPackage( id, item );
 
@@ -157,22 +158,13 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		
 		items << item;
 	}
-	//setPackageFocus( QString::null );
 
 	// Cannot have current changed for only one package so emit manually
 	/*if ( packageCount == 1 )
 		emit currentChanged( 0 );*/
 
 	dynamic_cast<QueueListModel*>(model())->setPackages(items);
-	
-	QHeaderView *hh = header();
-	hh->resizeSections(QHeaderView::ResizeToContents);
-
-	sortByColumn(0, Qt::AscendingOrder);
-
 	SignalistSingleton::Instance()->packageQueueChanged();	
-
-	//expandAll();
 }
 
 /**
@@ -283,7 +275,7 @@ void QueueListView::indexPackage( const QString& id, QueueListItem *item )
 {
 	if ( !id.isEmpty() ) {
 		m_packageIndex.insert( id, item );
-		//m_packageIndex[id]->setPackageIndex( m_packageIndex.count() );
+		m_packageIndex[id]->setPackageIndex( m_packageIndex.count() );
 	}
 }
 
@@ -302,7 +294,7 @@ void QueueListView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void QueueListView::hasStarted(const QString& id)
 {
-	m_packageIndex[id]->setHasStarted(true);
+	slotPackageStart(id);
 }
 
 void QueueListView::slotPackageStart(const QString& id)
@@ -315,17 +307,15 @@ void QueueListView::slotPackageStart(const QString& id)
 void QueueListView::slotPackageProgress()
 {
 	if (m_currentEmergingId != "" && m_packageIndex[m_currentEmergingId] != NULL)
-	{
 		m_packageIndex[m_currentEmergingId]->oneStep();
-	}
 }
 
 void QueueListView::slotPackageComplete(const QString& id)
 {
 	if (id == m_currentEmergingId)
 	{
-		//m_packageIndex[id]->setHasStarted(false);
 		m_packageIndex[id]->setIsComplete(true);
 		m_currentEmergingId = "";
 	}
 }
+

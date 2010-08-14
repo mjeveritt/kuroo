@@ -64,6 +64,7 @@ public:
 	void		scanPortageStarted();
 	void		scanUpdatesStarted();
 	void		scanStarted();
+	void		emergeAborted();
 
 private slots:
 	void 		slotCursor(bool);
@@ -86,6 +87,7 @@ signals:
 	void		signalScanStarted();
 	void		signalScanProgress(int);
 	void 		signalCursor(bool);
+	void		signalEmergeAborted();
 	
 private:
 	QObject*	m_parent;

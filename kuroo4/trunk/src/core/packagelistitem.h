@@ -48,6 +48,7 @@ public:
 	void resetDetailedInfo();
 
 	void setPackageIndex(const int idx);
+	int packageIndex() const {return m_index;}
 
 private:
 	QString m_name;

@@ -27,6 +27,7 @@ public:
 	bool hasStarted() const {return m_hasStarted;}
 	bool isComplete() const {return m_isComplete;}
 	int steps() const {return m_steps;}
+	bool pretended() const {return m_pretended;}
 
 	void setParentId(const QString&);
 	void appendChild(QueueListItem*);
@@ -34,6 +35,7 @@ public:
 	void setParentItem(QueueListItem* item);
 	void setHasStarted(bool);
 	void setIsComplete(bool);
+	void setPretended(bool);
 
 public slots:
 	void oneStep();
@@ -47,6 +49,7 @@ private:
 	QueueListItem* m_parent;
 	bool m_hasStarted;
 	bool m_isComplete;
+	bool m_pretended;
 	int m_steps;
 	QTimer *m_testTimer;
 };

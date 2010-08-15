@@ -25,10 +25,16 @@ QList<QueueListItem*> QueueListModel::packages()
 void QueueListModel::setPackages(QList<QueueListItem*>& packages)
 {
 	// Remove all rows
-	beginRemoveRows(QModelIndex(), 0, rowCount());
-	while (!m_packages.isEmpty())
-		delete m_packages.takeLast();
-	endRemoveRows();
+	if (rowCount() > 0)
+	{
+		beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+		while (!m_packages.isEmpty())
+			delete m_packages.takeLast();
+		endRemoveRows();
+	}
+
+	if (packages.count() <= 0)
+		return;
 
 	// Set packages
 	QList<QueueListItem*> tmp;

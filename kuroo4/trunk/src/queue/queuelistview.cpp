@@ -85,7 +85,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	QList<QueueListItem*> orphans;
 	m_sumSize = 0;
 
-	//resetListView();//FIXME
+//	reset();//FIXME
 	m_selectedPackages.clear();
 	m_packageIndex.clear();
 

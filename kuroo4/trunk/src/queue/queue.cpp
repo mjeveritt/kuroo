@@ -74,7 +74,6 @@ class RemoveQueuePackageIdListJob : public ThreadWeaver::Job
 public:
 	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : Job( dependent ),
 		m_packageIdList( packageIdList ) {
-		kDebug() << packageIdList;
 		}
 
 	virtual void run() {
@@ -303,6 +302,7 @@ void Queue::unpauseEmerge()
 */
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
+	m_isQueueBusy = false;
 	m_internalTimer->stop();
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )
@@ -380,6 +380,7 @@ void Queue::setRemoveInstalled( bool removeInstalled )
 */
 void Queue::slotClearQueue()
 {
+	kDebug() << "Clearing Queue";
 	// Queue is not busy anymore - off course
 	m_isQueueBusy = false;
 
@@ -388,6 +389,7 @@ void Queue::slotClearQueue()
 
 	if ( m_removeInstalled ) {
 
+		kDebug() << "Removing installed";
 		// Collect only 100% complete packages
 		QStringList idList;
 		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap ) {

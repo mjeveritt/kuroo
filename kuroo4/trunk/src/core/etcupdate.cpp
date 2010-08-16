@@ -151,6 +151,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		}
 
 		eProc->close();
+		eProc->clearProgram();
 		*eProc << "kompare" << m_source << m_destination;
 
 		/*if ( isNew )

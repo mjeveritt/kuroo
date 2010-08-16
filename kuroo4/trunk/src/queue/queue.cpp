@@ -42,7 +42,8 @@ public:
 													"idDepend INTEGER, "
 													"use VARCHAR(255), "
 													"size VARCHAR(32), "
-													"version VARCHAR(32) );"
+													"version VARCHAR(32) ); "
+													//"installed BOOL NOT NULL DEFAULT 0 );"
 													, m_db );
 		KurooDBSingleton::Instance()->insert( "INSERT INTO queue_temp SELECT * FROM queue;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -79,8 +80,11 @@ public:
 	virtual void run() {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		foreach ( QString id, m_packageIdList )
+		{
 			KurooDBSingleton::Instance()->singleQuery( QString( "DELETE FROM queue WHERE ( idPackage = '%1' OR idDepend = '%2' );" )
 														.arg(id).arg(id), m_db );
+			QueueSingleton::Instance()->deleteFromCache(id);
+		}
 		KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 // 		return;
 // 	}
@@ -189,8 +193,9 @@ void Queue::init( QObject *parent )
 */
 void Queue::refresh( bool hasCheckedQueue )
 {
-	clearCache();
+	//clearCache();
 	emit signalQueueChanged( hasCheckedQueue );
+	SignalistSingleton::Instance()->packageQueueChanged();
 }
 
 /**
@@ -199,6 +204,7 @@ void Queue::refresh( bool hasCheckedQueue )
 void Queue::reset()
 {
 	KurooDBSingleton::Instance()->resetQueue();
+	clearCache();
 	refresh( false );
 }
 
@@ -224,6 +230,14 @@ bool Queue::isQueued( const QString& id )
 	return m_queueCache.contains( id );
 }
 
+bool Queue::hasCompleted(const QString& id)
+{
+	if (isQueued(id))
+		return m_queueCache[id];
+
+	return false;
+}
+
 /**
 * Clear Queue.
 * @param id
@@ -243,7 +257,7 @@ void Queue::insertInCache( const QString& id )
 		kWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
 		return;
 	}
-	m_queueCache.insert( id, false );
+	m_queueCache.insert( id, hasCompleted(id) );
 }
 
 /**
@@ -253,9 +267,10 @@ void Queue::insertInCache( const QString& id )
 void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
+		kDebug() << "Package id is empty, skipping!" << LINE_INFO;
 		return;
 	}
+	kDebug() << "deleted from cache (" << id << ")";
 	m_queueCache.remove( id );
 }
 
@@ -302,7 +317,7 @@ void Queue::unpauseEmerge()
 */
 void Queue::emergePackageComplete( const QString& package, int order, int total )
 {
-	m_isQueueBusy = false;
+	//m_isQueueBusy = false;
 	m_internalTimer->stop();
 	QString id = KurooDBSingleton::Instance()->packageId( package );
 	if ( isQueued( id ) )

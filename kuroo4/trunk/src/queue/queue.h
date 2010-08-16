@@ -55,7 +55,8 @@ public:
 	void					setRemoveInstalled( bool removeInstalled );
 	void					pauseEmerge();
 	void					unpauseEmerge();
-	
+	bool					hasCompleted(const QString& id);
+
 public slots:
 	void					slotOneStep();
 	void					slotClearQueue();

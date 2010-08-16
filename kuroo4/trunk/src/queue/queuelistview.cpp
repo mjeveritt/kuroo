@@ -150,6 +150,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		}
 
 		item->setPretended( hasCheckedQueue );
+		item->setIsComplete(QueueSingleton::Instance()->hasCompleted(id));
 
 		indexPackage( id, item );
 

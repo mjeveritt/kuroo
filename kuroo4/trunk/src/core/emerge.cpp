@@ -767,7 +767,7 @@ void Emerge::slotCleanupPretend(int exitCode, QProcess::ExitStatus status)
 	Q_UNUSED(status)
 
 	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
+	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupPretend(int, QProcess::ExitStatus) ) );
 	cleanup();
 }
 

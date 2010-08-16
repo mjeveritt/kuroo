@@ -97,7 +97,7 @@ void QueueListItem::setIsComplete(bool h)
 
 void QueueListItem::oneStep()
 {
-	m_steps += duration() < 0 ? 2 : 1;
+	m_steps += duration() <= 0 ? 2 : 1;
 
 	QueueListView *listView = dynamic_cast<QueueListView*>(parent());
 	QueueListModel *model = dynamic_cast<QueueListModel*>(listView->model());

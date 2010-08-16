@@ -15,7 +15,7 @@ void QueueListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 	{
 		int progress;
 		if (item->duration() > 0)
-			progress = MIN(item->steps()/item->duration()*100, 100);
+			progress = MIN((item->steps()/item->duration())*100, 100);
 		else
 			progress = item->steps();
 
@@ -37,7 +37,7 @@ void QueueListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 		}
 		else
 		{
-			progressBarOption.maximum = item->duration() > 0 ? item->duration() : 0;
+			progressBarOption.maximum = item->duration() > 0 ? 100 : 0;
 	 		progressBarOption.progress = progress;
 	 		progressBarOption.textVisible = item->duration() > 0 ? true : false;
 		}

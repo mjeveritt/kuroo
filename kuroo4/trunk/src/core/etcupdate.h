@@ -49,15 +49,16 @@ public:
 	 */
 	inline QStringList		backupFilesList() const { return m_backupFilesList; }
 	void				runDiff( const QString& source, const QString& destination, const bool& isNew );
+	void				startScan();
 	
 public slots:
 	void				slotEtcUpdate();
 	
 private slots:
 	void				slotChanged();
-	void				slotFinished();
+	void				slotFinished(KJob* j = 0);
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
-    void				slotCleanupDiff( int );
+	void				slotCleanupDiff();
 	
 signals:
 	void				signalEtcFileMerged();
@@ -65,7 +66,7 @@ signals:
 	
 private:
 	QObject*			m_parent;
-    KProcess*			eProc;
+	KProcess*			eProc;
 	
 	QStringList 			m_configProtectList;
 	QString				m_configProtectDir;
@@ -77,6 +78,7 @@ private:
 	QStringList			m_etcFilesList;
 	
 	QString				m_source, m_destination;
+	QList<KJob*>			m_jobList;
 	
 	bool				m_changed;
 	int				m_mergedMode;

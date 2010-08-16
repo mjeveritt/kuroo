@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "message.h"
+#include <assert.h>
 
 #include <kmessagebox.h>
 #include <kio/job.h>
@@ -49,7 +50,7 @@ void EtcUpdate::init( QObject *parent )
 	m_parent = parent;
 
 	eProc = new KProcess();
-	connect( eProc, SIGNAL( finished( int ) ), this, SLOT( slotCleanupDiff( int ) ) );
+	connect( eProc, SIGNAL( finished( int ) ), this, SLOT( slotCleanupDiff() ) );
 
 	m_mergingFile = new KDirWatch( this );
 	connect( m_mergingFile, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged() ) );
@@ -73,6 +74,8 @@ void EtcUpdate::slotEtcUpdate()
 		// Then scan for new unmerged files
 		m_configProtectList += KurooConfig::configProtectList().split( " " );
 
+		kDebug() << m_configProtectList;
+
 		// Launch scan slave
 		slotFinished();
 	}
@@ -81,22 +84,27 @@ void EtcUpdate::slotEtcUpdate()
 /**
 * Scan each confProtect dirs.
 */
-void EtcUpdate::slotFinished()
+void EtcUpdate::slotFinished(KJob* j)
 {
+	if (j)
+	{
+		//delete j; //FIXME: deleting jobs when they are finished makes problems...
+	}
+	
 	if ( m_configProtectList.count() > 0 ) {
-		m_configProtectDir = m_configProtectList.first();
+		m_configProtectDir = m_configProtectList.takeFirst();
 		//The Slave was causing a 'kuroo(5827)/kio (KIOJob) KIO::SlaveInterface::dispatch: error  111   "/var/cache/kuroo/backup/configuration"' message
 		//so don't do it if the dir doesn't exist
 		if (QFile::exists( m_configProtectDir )) {
-			KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), false );
+			KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), KIO::DefaultFlags, true);
 			connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
-			//connect( job, SIGNAL( result( KIO::Job* ) ), SLOT( slotFinished() ) );
+			connect( job, SIGNAL( result( KJob* ) ), SLOT( slotFinished(KJob*) ) );
 		}
-		m_configProtectList.pop_front();
+		else
+			slotFinished();
 	}
-	else {
+	else
 		emit signalScanCompleted();
-	}
 }
 
 /**
@@ -112,7 +120,9 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 			m_backupFilesList += m_configProtectDir + "/" + configFile;
 		} else {
 			if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
+			{
 				m_etcFilesList += m_configProtectDir + "/" + configFile;
+			}
 		}
 	}
 }
@@ -141,15 +151,14 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		}
 
 		eProc->close();
-// 		*eProc << KurooConfig::etcUpdateTool() << m_source << m_destination;
-		*eProc << "kdiff3" << m_source << m_destination;
+		*eProc << "kompare" << m_source << m_destination;
 
-		if ( isNew )
+		/*if ( isNew )
 			*eProc << "-o" << m_destination;
 		else
 			*eProc << "-o" << backupPath + "merging";
-
-		eProc->start( /*K3Process::NotifyOnExit, true*/ );
+		*/
+		eProc->start();
 
 		if ( eProc->state() == QProcess::NotRunning ) {
 			LogSingleton::Instance()->writeLog( i18n( "%1 didn't start.", KurooConfig::etcUpdateTool() ), ERROR );
@@ -183,7 +192,7 @@ void EtcUpdate::slotChanged()
 * After diff tool completed, close all.
 * @param proc
 */
-void EtcUpdate::slotCleanupDiff( int status )
+void EtcUpdate::slotCleanupDiff()
 {
 	//Unregister the watcher
 	m_mergingFile->removeFile( m_destination );

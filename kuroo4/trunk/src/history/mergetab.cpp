@@ -40,13 +40,14 @@
 MergeTab::MergeTab( QWidget* parent )
     : QWidget( parent )
 {
-    setupUi( this );
+	setupUi( this );
+	
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 
-    pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
+	pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
 
-    mergeFilter->setTreeWidget( mergeView );
+	mergeFilter->setTreeWidget( mergeView );
 
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
 	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
@@ -54,8 +55,8 @@ MergeTab::MergeTab( QWidget* parent )
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotReload() ) );
 
-    connect( unmergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonMerge() ) );
-    connect( mergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
+	connect( unmergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonMerge() ) );
+	connect( mergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
 
 	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
 	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );
@@ -75,8 +76,10 @@ MergeTab::~MergeTab()
 void MergeTab::slotInit()
 {
 	pbWhatsThis->setIcon( KIcon("help-about") );
-    unmergeView->setHeaderLabel( i18n("New Configuration file") );
-    mergeView->setHeaderLabel( i18n("Merged Configuration file") );
+	unmergeView->setHeaderLabel( i18n("New Configuration file") );
+	mergeView->setHeaderLabel( i18n("Merged Configuration file") );
+	mergeView->setSelectionMode(QAbstractItemView::SingleSelection);
+	unmergeView->setSelectionMode(QAbstractItemView::SingleSelection);
 	pbMerge->setDisabled( true );
 	pbView->setDisabled( true );
 	slotReload();
@@ -87,12 +90,12 @@ void MergeTab::slotInit()
  */
 void MergeTab::slotWhatsThis()
 {
-    QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
+	QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
 			"This tab keeps track of all configuration files that need to be merged.<br>"
 			"Your system is scanned automatically for configuration files after completed installation.<br>"
-			"Select a file to merge and press 'Merge changes'. KDiff3 will then open with old and new files. "
-			"After saving changes in KDiff3 the configuration file will be removed. "
-            "Old merged changes can then be reviewed in the right list.</qt>" ), this );
+			"Select a file to merge and press 'Merge changes'. Kompare will then open with old and new files. "
+			"After saving changes in Kompare the configuration file will be removed. "
+			"Old merged changes can then be reviewed in the right list.</qt>" ), this );
 }
 
 /**
@@ -129,7 +132,7 @@ void MergeTab::slotClearFilter()
  */
 void MergeTab::slotButtonView()
 {
-    QTreeWidgetItem *item = mergeView->currentItem();
+	QTreeWidgetItem *item = mergeView->currentItem();
 	if ( item && item->parent() ) {
 		unmergeView->clearSelection();
 		pbView->setDisabled( false );
@@ -146,7 +149,7 @@ void MergeTab::slotButtonView()
  */
 void MergeTab::slotButtonMerge()
 {
-    QTreeWidgetItem *item = unmergeView->currentItem();
+	QTreeWidgetItem *item = unmergeView->currentItem();
 	if ( item ) {
 		mergeView->clearSelection();
 		pbMerge->setDisabled( false );
@@ -178,7 +181,7 @@ void MergeTab::slotViewFile()
  */
 void MergeTab::slotMergeFile()
 {
-    QTreeWidgetItem *item = unmergeView->currentItem();
+	QTreeWidgetItem *item = unmergeView->currentItem();
 	if ( !item && item->parent() )
 		return;
 

@@ -88,8 +88,8 @@ void MergeListView::loadConfFiles( const QStringList& filesList )
 	clear();
 	m_itemMap.clear();
 	
-    foreach ( QString file, filesList ) {
-        QString source = file;
+	foreach ( QString file, filesList ) {
+		QString source = file;
 		QString destination = source;
 		destination.remove( QRegExp("\\._cfg\\d\\d\\d\\d_") );
 		new MergeItem( this, source, destination );

@@ -132,9 +132,8 @@ void UninstallInspector::slotOk()
 		++it;
 	}
 
-	kDebug() << "Will unmerge :" << packageList;
-	//if (!packageList->isEmpty())
-		//EmergeSingleton::Instance()->unmerge( packageList );
+	if (!packageList->isEmpty())
+		EmergeSingleton::Instance()->unmerge( packageList );
 	hide();
 }
 

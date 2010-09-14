@@ -39,6 +39,7 @@ public:
 
 private slots:
 	void			slotOk();
+	void			slotItemActivated(QTreeWidgetItem*, int);
 	
 private:
     Ui::UninstallBase m_uninstallbase;

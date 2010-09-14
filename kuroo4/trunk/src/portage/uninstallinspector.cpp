@@ -34,10 +34,23 @@ UninstallInspector::UninstallInspector( QWidget *parent )
     //i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
     m_uninstallbase.setupUi( mainWidget() );
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    connect(m_uninstallbase.uninstallView, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(slotItemActivated(QTreeWidgetItem*, int)));
 }
 
 UninstallInspector::~UninstallInspector()
 {}
+
+void UninstallInspector::slotItemActivated(QTreeWidgetItem* item, int col)
+{
+	if (item->childCount() == 0)
+		return;
+
+	bool active = (item->checkState(0) == Qt::Checked);
+
+	QTreeWidgetItem *child = 0;
+	for(int i = 0; (child = item->child(i)); i++)
+		child->setDisabled(!active);
+}
 
 /**
  * Open dialog and list package and versions installed.
@@ -104,10 +117,13 @@ void UninstallInspector::slotOk()
 
 	QTreeWidgetItemIterator it( m_uninstallbase.uninstallView );
 	while ( *it ) {
-		if ( (*it)->checkState(0) == Qt::Checked ) {
+		if ( (*it)->checkState(0) == Qt::Checked && (*it)->childCount() == 0) {
 			if ( (*it)->parent() ) {
-				if ( (*it)->parent()->checkState(0) == Qt::Unchecked )
+				if ( (*it)->parent()->checkState(0) == Qt::Checked )
+				{
+					kDebug() << "	*" << (*it)->parent()->text(0) + "-" + (*it)->text(0);
 					packageList += "=" + (*it)->parent()->text(0) + "-" + (*it)->text(0);
+				}
 			} else {
 				kDebug() << "	*" << (*it)->text(0);
 				packageList += (*it)->text(0);
@@ -116,7 +132,9 @@ void UninstallInspector::slotOk()
 		++it;
 	}
 
-	EmergeSingleton::Instance()->unmerge( packageList );
+	kDebug() << "Will unmerge :" << packageList;
+	//if (!packageList->isEmpty())
+		//EmergeSingleton::Instance()->unmerge( packageList );
 	hide();
 }
 

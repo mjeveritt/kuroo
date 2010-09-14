@@ -17,8 +17,8 @@ PortageListView::PortageListView(QWidget *parent)
 	
 	PackageListModel *m = new PackageListModel(this);
 	QHeaderView *hh = header();
+	hh->setResizeMode(QHeaderView::ResizeToContents);
 	hh->setStretchLastSection(true);
-	hh->resizeSections(QHeaderView::ResizeToContents);
 	setModel(m);
 }
 
@@ -94,9 +94,9 @@ void PortageListView::setPackages(const QStringList& packages)
 
 	dynamic_cast<PackageListModel*>(model())->setPackages(items);
 	
-	QHeaderView *hh = header();
+	//QHeaderView *hh = header();
 	//hh->setStretchLastSection(true);
-	hh->resizeSections(QHeaderView::ResizeToContents);
+	//hh->resizeSections(QHeaderView::ResizeToContents);
 
 	sortByColumn(0, Qt::AscendingOrder);
 }

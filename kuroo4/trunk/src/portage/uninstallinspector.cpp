@@ -132,7 +132,7 @@ void UninstallInspector::slotOk()
 		++it;
 	}
 
-	if (!packageList->isEmpty())
+	if (!packageList.isEmpty())
 		EmergeSingleton::Instance()->unmerge( packageList );
 	hide();
 }

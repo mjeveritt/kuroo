@@ -69,11 +69,9 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 		if (role == Qt::DecorationRole && p->isInWorld())
 			return QVariant(KIcon("kuroo_world"));
 		break;
-
 	case 2:
 		if (role == Qt::DecorationRole && QueueSingleton::Instance()->isQueued(p->id()))
 			return QVariant(KIcon("kuroo_queue"));
-
 		break;
 	case 3:
 		if (role == Qt::DisplayRole)
@@ -84,7 +82,8 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 			return QVariant(p->description());
 		break;
 	default:
-		return QVariant();
+		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		break;
 	}
 
 	return QVariant();
@@ -101,8 +100,12 @@ QModelIndex PackageListModel::index(int row, int column, const QModelIndex& pare
 
 bool PackageListModel::hasChildren(const QModelIndex& parent) const
 {
-	Q_UNUSED(parent)
-	return false;
+	//parent.isValid is true for actual items, which don't have children (we're flat), but false for the root
+	//which needs to return true here
+	if (parent.isValid())
+		return false;
+
+	return true;
 }
 
 QModelIndex PackageListModel::parent(const QModelIndex& index) const
@@ -128,7 +131,7 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 	{
 	case 0:
 		if (role == Qt::DisplayRole)
-			return QVariant(i18n(QString("Packages (%1)").arg(rowCount())));
+			return QVariant(i18n("Packages (%1)", rowCount()));
 		break;
 	case 1:
 		if (role == Qt::DecorationRole)
@@ -147,7 +150,8 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 			return QVariant("Description");
 		break;
 	default:
-		return QVariant();
+		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		break;
 	}
 
 	return QVariant();

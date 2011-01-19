@@ -61,6 +61,7 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
+
 	QueueListItem *p = static_cast<QueueListItem*>(index.internalPointer());
 	switch(index.column())
 	{
@@ -103,6 +104,9 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 			return QVariant(QString());
 
 		break;
+	default:
+		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		break;
 	}
 
 	return QVariant();
@@ -113,10 +117,14 @@ QModelIndex QueueListModel::index(int row, int column, const QModelIndex& parent
 	if (row < 0)
 		return QModelIndex();
 
-	if (!parent.isValid() && row < m_packages.count())
-		return createIndex(row, column, m_packages.at(row));
-	else if (!parent.isValid())
-		return QModelIndex();
+	if (!parent.isValid() )
+	{
+		if (row < m_packages.count()) {
+			return createIndex(row, column, m_packages.at(row));
+		} else {
+			return QModelIndex();
+		}
+	}
 
 	QueueListItem *item = static_cast<QueueListItem*>(parent.internalPointer());
 	if (item && row < item->children().count())
@@ -130,11 +138,18 @@ QModelIndex QueueListModel::index(int row, int column, const QModelIndex& parent
 
 bool QueueListModel::hasChildren(const QModelIndex& parent) const
 {
-	QueueListItem *item = static_cast<QueueListItem*>(parent.internalPointer());
-	if (item)
-		return (item->children().count() > 0);
+	if (parent.isValid())
+	{
+		//if the parent is valid then check it's children count
+		QueueListItem *item = static_cast<QueueListItem*>(parent.internalPointer());
+		if (item)
+			return (item->children().count() > 0);
+		else
+			return false;
+	}
 	else
-		return false;
+		//otherwise it's a root, so return true
+		return true;
 }
 
 QModelIndex QueueListModel::parent(const QModelIndex& index) const
@@ -149,6 +164,7 @@ QModelIndex QueueListModel::parent(const QModelIndex& index) const
 		parents = m_packages;
 	else
 		parents = item->parentItem()->parentItem()->children();
+
 	foreach(QueueListItem *p, parents)
 	{
 		i++;
@@ -202,7 +218,8 @@ QVariant QueueListModel::headerData(int section, Qt::Orientation orientation, in
 			return QVariant("Progress");
 		break;
 	default:
-		return QVariant();
+		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		break;
 	}
 
 	return QVariant();

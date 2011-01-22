@@ -22,11 +22,12 @@
 #include "message.h"
 #include "ui_messagebase.h"
 
-#include <qlabel.h>
-#include <qclipboard.h>
+#include <QLabel>
+#include <QClipboard>
+#include <QScrollBar>
 
-#include <ktextbrowser.h>
-#include <kapplication.h>
+#include <KTextBrowser>
+#include <KApplication>
 
 Message* Message::s_instance = 0;
 
@@ -35,15 +36,20 @@ Message* Message::s_instance = 0;
  * @short Convenience singleton dialog for simple messages to user.
  */
 Message::Message( QWidget *parent )
-    : KDialog( parent ), m_text( QString::null )
+    : KDialog( parent )
 {
-    setupUi( mainWidget() );
-    //i18n("Message"), false, i18n("Message"), KDialogBase::Ok | KDialogBase::User1, KDialogBase::Ok, false
+	setupUi( mainWidget() );
+	//i18n("Message"), false, i18n("Message"), , , false
+	//enable the OK button and an extra button which we will use to copy the text to the clipboard
+	setButtons( Ok | User1 );
+	setDefaultButton( Ok );
 	s_instance = this;
-    setButtonText( KDialog::User1, i18n("Copy text to clipboard") );
-    //showButtonCancel( false );
-	
-// 	base->messageText->setTextFormat( Qt::LogText );
+	setButtonText( User1, i18n("Copy text to clipboard") );
+	showButton( User1, true );
+	showButton( Cancel, false );
+
+	//setTextFormat is deprecated, but I can't find a replacement
+	//messageText->setTextFormat( Qt::LogText );
 }
 Message::~Message() {}
 
@@ -56,6 +62,8 @@ Message::~Message() {}
 void Message::prompt( const QString& caption, const QString& label, const QString& text )
 {
 	m_text = text;
+	//store the current scroll position so we can re-apply it after changing the text
+	int scrollValue = messageText->verticalScrollBar()->value();
 	setCaption( caption );
 	setLabel( "<b>" + label + "</b>" );
 	
@@ -63,6 +71,13 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
 	m_text.replace( "<br>", "\x000a" );
 	
     messageText->setText( text );
+	//provided the text didn't get shorter since the last time the dialog was opened
+	//(this happens if logrotate rotates the log), set the scroll position to the
+	//previous position
+	if (messageText->verticalScrollBar()->maximum() >= scrollValue)
+	{
+		messageText->verticalScrollBar()->setValue( scrollValue );
+	}
 	setInitialSize( QSize(600, 300) );
 	show();
 }

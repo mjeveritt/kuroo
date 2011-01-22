@@ -22,13 +22,13 @@
 #include "historylistview.h"
 #include "logstab.h"
 
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qsplitter.h>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QSplitter>
 
-#include <ktextbrowser.h>
-#include <kmessagebox.h>
-#include <kinputdialog.h>
+#include <KTextBrowser>
+#include <KMessageBox>
+#include <KInputDialog>
 
 /**
  * @class LogsTab
@@ -38,12 +38,12 @@
  */
 LogsTab::LogsTab( QWidget* parent ) : QWidget( parent )
 {
-    setupUi( this );
+	setupUi( this );
 	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
-	
+
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
-	
+
 	connect( SignalistSingleton::Instance(), SIGNAL( signalFontChanged() ), this, SLOT( slotSetFont() ) );
 	
 // 	logBrowser->setTextFormat( Qt::LogText ); // Text doesn't wrap in log mode!
@@ -59,13 +59,13 @@ LogsTab::~LogsTab()
 		KurooConfig::setSaveLog( true );
 	else
 		KurooConfig::setSaveLog( false );
-	
+
 	if ( verboseLog->isChecked() )
 		KurooConfig::setVerboseLog( true );
 	else
 		KurooConfig::setVerboseLog( false );
-	
-    //FIXME: KurooConfig::writeConfig();
+
+	KurooConfig::self()->writeConfig();
 }
 
 /**
@@ -77,12 +77,12 @@ void LogsTab::init()
 		saveLog->setChecked( true );
 	else
 		saveLog->setChecked( false );
-	
+
 	if ( KurooConfig::verboseLog() )
 		verboseLog->setChecked( true );
 	else
 		verboseLog->setChecked( false );
-	
+
 	slotSetFont();
 }
 

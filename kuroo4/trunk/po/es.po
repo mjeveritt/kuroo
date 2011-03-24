@@ -192,7 +192,9 @@ msgid ""
 msgstr ""
 "<qt>Ésta pestaña hace un seguimiento de todos los archivos de configuración que se han emergido."
 "<br>El sistema busca automáticamente los archivos de configuración una vez finalizada la instalación".
-"<br>Elige un archivo para mezclar y pulsa "
+"<br>Elige un archivo para mezclar y pulsa 'Confirmar cambios'."
+"Se abrirá Kompare con el archivo antiguo y el nuevo. Después de guardar los cambios en "
+"Kompare, el archivo de configuración se borrará. Los cambios antiguos podrán verse en la lista de la derecha</qt>"
 
 
 #: history/historylistview.cpp:59
@@ -215,7 +217,7 @@ msgid ""
 msgstr ""
 "<qt>El historial hace un seguimiento de los paquetes instalados/desinstalados."
 "<br>Activa la función de registro (log) en el archivo /etc/make.conf si quieres "
-"almacenar estos mensajes. Elije una entrada y pulsa 'Ver registro de instalación'"
+"almacenar estos mensajes. Elije una entrada y pulsa 'Ver registro de instalación'</qt>"
 
 #: history/historytab.cpp:194
 msgid "Emerge log"

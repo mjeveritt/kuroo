@@ -190,10 +190,10 @@ msgid ""
 "Kompare the configuration file will be removed. Old merged changes can then "
 "be reviewed in the right list.</qt>"
 msgstr ""
-"<qt>Ésta pestaña hace un seguimiento de todos los archivos de configuración que se han emergido.
-<br>El sistema busca automáticamente los archivos de configuración una vez finalizada la instalación.
-<br>Elige un archivo para mezclar y pulsa 
-"
+"<qt>Ésta pestaña hace un seguimiento de todos los archivos de configuración que se han emergido."
+"<br>El sistema busca automáticamente los archivos de configuración una vez finalizada la instalación".
+"<br>Elige un archivo para mezclar y pulsa "
+
 
 #: history/historylistview.cpp:59
 msgid "Date"
@@ -213,9 +213,9 @@ msgid ""
 "<br>Activate the log function in your /etc/make.conf if you want to trace "
 "those messages. Select an entry and press 'View emerge log'.</qt>"
 msgstr ""
-"<qt>El historial hace un seguimiento de los paquetes instalados/desinstalados.
-<br>Activa la función de registro (log) en el archivo /etc/make.conf si quieres 
-almacenar estos mensajes. Elije una entrada y pulsa 'Ver registro de instalación'"
+"<qt>El historial hace un seguimiento de los paquetes instalados/desinstalados."
+"<br>Activa la función de registro (log) en el archivo /etc/make.conf si quieres "
+"almacenar estos mensajes. Elije una entrada y pulsa 'Ver registro de instalación'"
 
 #: history/historytab.cpp:194
 msgid "Emerge log"

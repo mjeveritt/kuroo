@@ -78,7 +78,7 @@ private slots:
 private:
 	QMap<QString, QString> 	m_messageMap;
 	QProgressBar 				*statusBarProgress;
-	QLabel 					*statusBarLabel;
+	//QLabel 					*statusBarLabel;
 	QTimer 					*m_internalTimer, *m_diffTimer;
 	long						m_timerSteps;
 };

@@ -5,6 +5,7 @@
 #include <QAbstractItemModel>
 #include <QList>
 
+class PackageListItem;
 class QueueListItem;
 class QueueListView;
 

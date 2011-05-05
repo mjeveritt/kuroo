@@ -42,13 +42,10 @@ KurooStatusBar::KurooStatusBar( QWidget *parent )
 	s_instance = this;
 
 	statusBarProgress = new QProgressBar( this );
-	//statusBarLabel = new QLabel( this );
 
-	//addWidget(statusBarLabel, 5);
-	//add a blank widget so that the progress bar doesn't take up the whole space
-	//I tried to find a QSpacer but there wasn't one
-	addPermanentWidget( new QWidget(), 5 );
-	addPermanentWidget( statusBarProgress, 1);
+	addPermanentWidget( statusBarProgress, 1 );
+	statusBarProgress->setAlignment( Qt::AlignRight );
+	statusBarProgress->setFixedWidth( 200 );
 
 	statusBarProgress->setMaximum( 100 );
 	statusBarProgress->hide();
@@ -107,7 +104,6 @@ void KurooStatusBar::slotScanUpdatesComplete()
 void KurooStatusBar::setProgressStatus( const QString& id, const QString& message )
 {
 	if ( id.isEmpty() ) {
-		//statusBarLabel->setText( message );
 		showMessage( message, 2000 );
 		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 		return;
@@ -115,12 +111,10 @@ void KurooStatusBar::setProgressStatus( const QString& id, const QString& messag
 
 	if ( !m_messageMap.contains( id ) ) {
 		m_messageMap.insert( id, message );
-		//statusBarLabel->setText( message );
 		showMessage( message );
 	}
 	else {
 		m_messageMap.remove( id );
-		//statusBarLabel->setText( message );
 		showMessage( message, 2000 );
 		QTimer::singleShot( 2000, this, SLOT( slotLastMessage() ) );
 	}
@@ -134,10 +128,8 @@ void KurooStatusBar::slotLastMessage()
 	QMap<QString, QString>::Iterator it = m_messageMap.end();
 	if ( m_messageMap.size() > 0 ) {
 		it--;
-		//statusBarLabel->setText( it.value() );
 		showMessage( it.value() );
 	} else {
-		//statusBarLabel->setText( i18n("Done.") );
 		showMessage( i18n("Done.") );
 	}
 }
@@ -266,7 +258,6 @@ void KurooStatusBar::pauseTimers()
 {
 	m_diffTimer->stop();
 	m_internalTimer->stop();
-	//statusBarLabel->setText( i18n("Paused...") );
 	showMessage( i18n("Paused...") );
 }
 

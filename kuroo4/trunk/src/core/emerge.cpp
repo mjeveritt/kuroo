@@ -137,10 +137,10 @@ bool Emerge::queue( const QStringList& packageList )
 
 			return false;
 		}
-		
+
 		connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 		connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
-		
+
 		if( KurooConfig::enableEclean() && !skipHousekeeping())
 			m_doeclean = true;
 		if( KurooConfig::revdepEnabled() && !skipHousekeeping())

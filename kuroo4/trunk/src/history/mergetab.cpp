@@ -41,7 +41,7 @@ MergeTab::MergeTab( QWidget* parent )
     : QWidget( parent )
 {
 	setupUi( this );
-	
+
 	// Connect What's this button
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 

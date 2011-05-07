@@ -1,21 +1,21 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+*	Copyright (C) 2004 by karye												*
+*	karye@users.sourceforge.net												*
+*																			*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
 #include "common.h"
@@ -86,17 +86,12 @@ void EtcUpdate::slotEtcUpdate()
 */
 void EtcUpdate::slotFinished(KJob* j)
 {
-	if (j)
-	{
-		//delete j; //FIXME: deleting jobs when they are finished makes problems...
-	}
-	
 	if ( m_configProtectList.count() > 0 ) {
 		m_configProtectDir = m_configProtectList.takeFirst();
 		//The Slave was causing a 'kuroo(5827)/kio (KIOJob) KIO::SlaveInterface::dispatch: error  111   "/var/cache/kuroo/backup/configuration"' message
 		//so don't do it if the dir doesn't exist
 		if (QFile::exists( m_configProtectDir )) {
-			KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), KIO::DefaultFlags, true);
+			KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), KIO::HideProgressInfo, true);
 			connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
 			connect( job, SIGNAL( result( KJob* ) ), SLOT( slotFinished(KJob*) ) );
 		}
@@ -118,15 +113,12 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 
 		if ( configFile.contains( QRegExp( "\\d{8}_\\d{4}/" ) ) && !configFile.endsWith( ".orig" ) ) {
 			m_backupFilesList += m_configProtectDir + "/" + configFile;
-		} else {
-			if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
-			{
-				m_etcFilesList += m_configProtectDir + "/" + configFile;
-			}
+		} else if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
+		{
+			m_etcFilesList += m_configProtectDir + "/" + configFile;
 		}
 	}
 }
-
 
 /**
 * Launch diff tool with first etc-file in list.

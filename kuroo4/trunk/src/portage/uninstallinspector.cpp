@@ -96,7 +96,7 @@ void UninstallInspector::view( const QStringList& packageList )
 	}
 
 	if ( isPartOfSystem ) {
-		m_uninstallbase.uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br>"
+		m_uninstallbase.uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br/>"
 		                                          "This may be damaging to your system!</b></font>") );
 		m_uninstallbase.uninstallWarning->show();
 	}

@@ -194,7 +194,7 @@ void Kuroo::slotSync()
 	}
 
 	switch( KMessageBox::questionYesNo( this,
-		i18n( "<qt>Do you want to synchronize portage?<br>"
+		i18n( "<qt>Do you want to synchronize portage?<br/>"
 			"This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1", lastSyncDate ) ) ) {
 
 		case KMessageBox::Yes:
@@ -272,8 +272,8 @@ void Kuroo::slotWait()
 {
 	if ( SignalistSingleton::Instance()->isKurooBusy() ) {
 		switch( KMessageBox::questionYesNo( this,
-			i18n("<qt>Kuroo is busy<br><br>"
-				"Do you want to quit?<br>"
+			i18n("<qt>Kuroo is busy<br/><br/>"
+				"Do you want to quit?<br/>"
 				"All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 
 			case KMessageBox::Yes: {

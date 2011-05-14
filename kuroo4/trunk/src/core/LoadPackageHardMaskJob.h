@@ -91,7 +91,7 @@ public:
 						else
 							KurooDBSingleton::Instance()->insert( QString(
 								"INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
-								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br>" ) ), m_db );
+								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br/>" ) ), m_db );
 
 					} else {
 						kWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )

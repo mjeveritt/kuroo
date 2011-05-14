@@ -138,7 +138,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 		const QStringList etcFilesWarningsList = KurooConfig::etcFiles().split( " " );
 		foreach( QString file, etcFilesWarningsList ) {
 			if ( file == m_destination ) {
-				etcWarning = i18n( "<font color=red>Warning!<br>%1 has been edited by you.</font><br>", m_destination );
+				etcWarning = i18n( "<font color=red>Warning!<br/>%1 has been edited by you.</font><br/>", m_destination );
 			}
 		}
 

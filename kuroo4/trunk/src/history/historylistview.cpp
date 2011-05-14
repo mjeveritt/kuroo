@@ -39,7 +39,7 @@ HistoryListView::HistoryItem::HistoryItem( HistoryItem* parent, const QString& p
 void HistoryListView::HistoryItem::setEinfo( const QString& einfo )
 {
 	m_einfo = einfo;
-	setText( 2, m_einfo.section( "<br>", 0, 0 ) );
+	setText( 2, m_einfo.section( "<br/>", 0, 0 ) );
 }
 
 QString HistoryListView::HistoryItem::einfo()

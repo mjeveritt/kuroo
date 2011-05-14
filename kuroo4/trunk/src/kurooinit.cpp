@@ -1,21 +1,21 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Karye   *
- *   karye@users.sourceforge.net   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *	Copyright (C) 2005 by Karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
 #include "common.h"
@@ -75,8 +75,8 @@ KurooInit::KurooInit( QObject *parent )
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
 			if ( !d.mkdir( kurooDir ) ) {
-				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br>"
-											"You must start Kuroo with kdesu first time for a secure initialization.<br>"
+				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br/>"
+											"You must start Kuroo with kdesu first time for a secure initialization.<br/>"
 											"Please try again!</qt>"), i18n("Initialization") );
 				exit(0);
 			} else {
@@ -92,8 +92,8 @@ KurooInit::KurooInit( QObject *parent )
 	QString backupDir = kurooDir + "backup";
 	if ( !d.cd( backupDir ) ) {
 		if ( !d.mkdir( backupDir ) ) {
-			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br>"
-										"You must start Kuroo with kdesu first time for a secure initialization.<br>"
+			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br/>"
+										"You must start Kuroo with kdesu first time for a secure initialization.<br/>"
 										"Please try again!</qt>"), i18n("Initialization") );
 			exit(0);
 		}
@@ -147,7 +147,7 @@ KurooInit::KurooInit( QObject *parent )
 	QueueSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
 	FileWatcherSingleton::Instance()->init( this );
-	
+
 	//Load packages in case /etc/portage.* changed
 	//PortageFilesSingleton::Instance()->loadPackageFiles();
 }
@@ -256,7 +256,7 @@ void KurooInit::checkEtcFiles()
 		QString configOption = paths[i];
 		QString path = paths[++i];
 		QFileInfo fInfo(path);
-		
+
 		if (!fInfo.exists())
 		{
 			QFile file(path);
@@ -314,7 +314,7 @@ void KurooInit::checkEtcFiles()
 			if (KurooConfig::defaultFilePackageUserUse() == ""/* || !QFileInfo::exists(KurooConfig::defaultFilePackageUserUnMask())*/)
 				KurooConfig::setDefaultFilePackageUserUse(list[0]);
 		}
-			
+
 	}
 }
 #include "kurooinit.moc"

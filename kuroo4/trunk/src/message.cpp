@@ -66,11 +66,13 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
 	int scrollValue = messageText->verticalScrollBar()->value();
 	setCaption( caption );
 	setLabel( "<b>" + label + "</b>" );
-	
+
 	QString m_text = text;
-	m_text.replace( "<br>", "\x000a" );
-	
-    messageText->setText( text );
+	m_text.replace( "<br>", "<br/>");
+	//fix issue with the log containing '<script>'
+	m_text.replace( "<script>", "&lt;script&gt;");
+
+    messageText->setHtml( m_text );
 	//provided the text didn't get shorter since the last time the dialog was opened
 	//(this happens if logrotate rotates the log), set the scroll position to the
 	//previous position

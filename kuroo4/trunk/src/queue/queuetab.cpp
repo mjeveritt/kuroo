@@ -26,6 +26,7 @@
 #include "packageinspector.h"
 #include "versionview.h"
 #include "packageversion.h"
+#include "ui_queuebase.h"
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -204,10 +205,10 @@ void QueueTab::slotInit()
 void QueueTab::slotWhatsThis()
 {
 	QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
-			"The emerge queue quickly shows which packages listed for installation.<br>"
+			"The emerge queue quickly shows which packages listed for installation.<br/>"
 			"Since many applications depend on each other, any attempt to install a certain software package might result in the installation "
-			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br><br>"
-			"If you want to find out what Portage would install when you ask it to install a certain package, press 'Check Installation'.<br>"
+			"of several dependencies as well. Don't worry, Portage handles dependencies well.<br/><br/>"
+			"If you want to find out what Portage would install when you ask it to install a certain package, press 'Check Installation'.<br/>"
 			"When all dependencies are press 'Start Installation'.</qt>" ), this );
 }
 
@@ -233,6 +234,7 @@ void QueueTab::slotNextPackage( bool isNext )
 */
 void QueueTab::slotRefresh()
 {
+	DEBUG_LINE_INFO;
 	if ( !QueueSingleton::Instance()->isQueueBusy() )
 	{
 		slotRemoveInstalled();
@@ -247,6 +249,7 @@ void QueueTab::slotRefresh()
 */
 void QueueTab::slotReload( bool hasCheckedQueue )
 {
+	DEBUG_LINE_INFO;
 	// Reenable the inspector after queue changes
 	//m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );

@@ -91,8 +91,8 @@ void MergeTab::slotInit()
 void MergeTab::slotWhatsThis()
 {
 	QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
-			"This tab keeps track of all configuration files that need to be merged.<br>"
-			"Your system is scanned automatically for configuration files after completed installation.<br>"
+			"This tab keeps track of all configuration files that need to be merged.<br/>"
+			"Your system is scanned automatically for configuration files after completed installation.<br/>"
 			"Select a file to merge and press 'Merge changes'. Kompare will then open with old and new files. "
 			"After saving changes in Kompare the configuration file will be removed. "
 			"Old merged changes can then be reviewed in the right list.</qt>" ), this );

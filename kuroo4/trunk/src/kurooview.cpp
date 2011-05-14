@@ -123,6 +123,7 @@ void KurooView::slotShowView()
  */
 void KurooView::slotInit()
 {
+	DEBUG_LINE_INFO;
 	//kDebug() << "categoriesView.minWidth=" << viewPortage->categoriesView->minimumWidth() <<
 	//			"actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
@@ -131,8 +132,8 @@ void KurooView::slotInit()
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		m_isHistoryRestored = true;
 
-		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
-											  "Kuroo will now first scan your emerge log to create the emerge history.<br>"
+		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br/>"
+											  "Kuroo will now first scan your emerge log to create the emerge history.<br/>"
 											  "Next, package information in Portage will be collected.</qt>"),
 										i18n( "Initialiazing Kuroo") );
 		HistorySingleton::Instance()->slotRefresh();
@@ -151,7 +152,7 @@ void KurooView::slotInit()
 
 			assert(QThread::currentThread() == qApp->thread());
 			switch( KMessageBox::warningYesNo( this,
-				i18n("<qt>Kuroo database needs refreshing!<br>Emerge log shows that your system has changed.</qt>"),
+				i18n("<qt>Kuroo database needs refreshing!<br/>Emerge log shows that your system has changed.</qt>"),
 				i18n("Initialiazing Kuroo"), KGuiItem( i18n("Refresh") ), KGuiItem( i18n("Skip") ) ) ) {
 			case KMessageBox::Yes:
 				PortageSingleton::Instance()->slotRefresh();

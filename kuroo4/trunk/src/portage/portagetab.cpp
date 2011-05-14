@@ -1,22 +1,22 @@
-/********************************************************************************
- *	Copyright (C) 2005 by Karye						*
- *	karye@users.sourceforge.net						*
- *										*
+/****************************************************************************
+ *	Copyright (C) 2005 by Karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
  *	This program is free software; you can redistribute it and/or modify	*
  *	it under the terms of the GNU General Public License as published by	*
- *	the Free Software Foundation; either version 2 of the License, or	*
- *	(at your option) any later version.					*
- *										*
- *	This program is distributed in the hope that it will be useful,		*
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of		*
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		*
- *	GNU General Public License for more details.				*
- *										*
- *	You should have received a copy of the GNU General Public License	*
- *	along with this program; if not, write to the				*
- *	Free Software Foundation, Inc.,						*
- *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.		*
- ********************************************************************************/
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ****************************************************************************/
 
 #include <unistd.h>
 
@@ -170,18 +170,18 @@ void PortageTab::slotInit()
 void PortageTab::slotWhatsThis()
 {
 	QWhatsThis::showText( QCursor::pos(), i18n( "<qt>"
-			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br>"
+			"This tab gives an overview of all packages available: in Portage, installed packages as well as package updates.<br/>"
 			"To keep your system in perfect shape (and not to mention install the latest security updates) you need to update your system regularly. "
 			"Since Portage only checks the ebuilds in your Portage tree you first have to sync your Portage tree: "
-			"Select 'Sync Portage' in the Portage menu.<br>"
+			"Select 'Sync Portage' in the Portage menu.<br/>"
 			"After syncing Kuroo will search for newer version of the applications you have installed. "
-			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br>"
-			"If you want to update every single package on your system, check the Deep checkbox in Kuroo Preferences.<br><br>"
+			"However, it will only verify the versions for the applications you have explicitly installed - not the dependencies.<br/>"
+			"If you want to update every single package on your system, check the Deep checkbox in Kuroo Preferences.<br/><br/>"
 			"When you want to remove a software package from your system, select a package and press 'Uninstall'. "
 			"This will tell Portage to remove all files installed by that package from your system except the configuration files "
 			"of that application if you have altered those after the installation. "
 			"However, a big warning applies: Portage will not check if the package you want to remove is required by another package. "
-			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br><br>"
+			"It will however warn you when you want to remove an important package that breaks your system if you unmerge it.<br/><br/>"
 			"Use the package Inspector to manage package specific version and use-flag settings: press 'Details' to open the Inspector.</qt>" ), this );
 }
 
@@ -298,7 +298,7 @@ void PortageTab::slotButtons()
 			if (item->isInstalled() && ::getuid() == 0)
 				installed++;
 		}
-		
+
 		// If all in queue, button is dequeue
 		if (packagesView->selectedPackages().count() == queued)
 		{

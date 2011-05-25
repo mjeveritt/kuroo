@@ -1,3 +1,23 @@
+/***************************************************************************
+ *	Copyright (C) 2010 by cazou88											*
+ *	cazou88@users.sourceforge.net											*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
+
 #include <QHeaderView>
 
 #include "common.h"
@@ -80,6 +100,7 @@ QStringList QueueListView::selectedPackagesByIds()
  */
 void QueueListView::insertPackageList( bool hasCheckedQueue )
 {
+	DEBUG_LINE_INFO;
 	QueueListItem* item;
 	QList<QueueListItem*> items;
 	QList<QueueListItem*> orphans;
@@ -115,13 +136,13 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 		if ( !idDepend.isEmpty() && idDepend != "0" ) {
 			item->setParentId(idDepend);
-			
+
 			if (m_packageIndex.contains(idDepend))
 				m_packageIndex[idDepend]->appendChild(item);
 			else
 				orphans << item;
 		}
-		
+
 		for(int i = 0; i < orphans.count(); i++)
 		{
 			QueueListItem *orphan = orphans.at(i);
@@ -156,7 +177,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( id );
-		
+
 		items << item;
 	}
 
@@ -165,7 +186,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		emit currentChanged( 0 );*/
 
 	dynamic_cast<QueueListModel*>(model())->setPackages(items);
-	SignalistSingleton::Instance()->packageQueueChanged();	
+	SignalistSingleton::Instance()->packageQueueChanged();
 }
 
 /**
@@ -285,7 +306,7 @@ void QueueListView::mouseDoubleClickEvent(QMouseEvent *event)
 	QModelIndex index = indexAt(event->pos());
 	if (!index.isValid())
 		return;
-	
+
 	QueueListItem *item = static_cast<QueueListItem*>(index.internalPointer());
 	if (!item)
 		return;
@@ -315,7 +336,8 @@ void QueueListView::slotPackageComplete(const QString& id)
 {
 	if (id == m_currentEmergingId)
 	{
-		m_packageIndex[id]->setIsComplete(true);
+		if (m_packageIndex.contains(id))
+			m_packageIndex[id]->setIsComplete(true);
 		m_currentEmergingId = "";
 	}
 }

@@ -82,7 +82,12 @@ QueueListItem* QueueListView::currentPackage()
 
 QueueListItem* QueueListView::packageItemById(const QString& id)
 {
-	return m_packageIndex[id];
+	//QMap will insert a default-constructed value if it doesn't already exist
+	if (m_packageIndex.contains(id)) {
+		return m_packageIndex[id];
+	} else {
+		return NULL;
+	}
 }
 
 QStringList QueueListView::selectedPackagesByIds()
@@ -328,7 +333,7 @@ void QueueListView::slotPackageStart(const QString& id)
 
 void QueueListView::slotPackageProgress()
 {
-	if (m_currentEmergingId != "" && m_packageIndex[m_currentEmergingId] != NULL)
+	if (m_currentEmergingId != "" && m_packageIndex.contains(m_currentEmergingId))
 		m_packageIndex[m_currentEmergingId]->oneStep();
 }
 

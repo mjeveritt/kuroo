@@ -14,7 +14,7 @@ PortageListView::PortageListView(QWidget *parent)
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setAlternatingRowColors(true);
-	
+
 	PackageListModel *m = new PackageListModel(this);
 	QHeaderView *hh = header();
 	hh->setResizeMode(QHeaderView::ResizeToContents);
@@ -63,7 +63,12 @@ PackageListItem* PortageListView::currentPackage()
 
 PackageListItem* PortageListView::packageItemById(const QString& id)
 {
-	return m_packageIndex[id];
+	//QMap will insert a default-constructed value if it doesn't already exist
+	if (m_packageIndex.contains(id)) {
+		return m_packageIndex[id];
+	} else {
+		return NULL;
+	}
 }
 
 QStringList PortageListView::selectedPackagesByIds()
@@ -71,7 +76,7 @@ QStringList PortageListView::selectedPackagesByIds()
 	QStringList ret;
 	foreach(PackageListItem *item, m_selectedPackages)
 		ret << item->id();
-	
+
 	return ret;
 }
 
@@ -93,7 +98,7 @@ void PortageListView::setPackages(const QStringList& packages)
 	}
 
 	dynamic_cast<PackageListModel*>(model())->setPackages(items);
-	
+
 	//QHeaderView *hh = header();
 	//hh->setStretchLastSection(true);
 	//hh->resizeSections(QHeaderView::ResizeToContents);
@@ -106,7 +111,7 @@ void PortageListView::mouseDoubleClickEvent(QMouseEvent *event)
 	QModelIndex index = indexAt(event->pos());
 	if (!index.isValid())
 		return;
-	
+
 	PackageListItem *item = static_cast<PackageListItem*>(index.internalPointer());
 	if (!item)
 		return;

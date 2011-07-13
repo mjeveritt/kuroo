@@ -46,7 +46,7 @@
 /**
  * @class KurooView
  * @short Gui content with icon-menu and pages.
- * 
+ *
  * Insert all 5 pages in a widgetStack, connects icon-menu buttons to corresponding pages (tabs).
  * Highlights icon-texts when changes are mades in the page.
  */
@@ -57,43 +57,43 @@ KurooView::KurooView( QWidget *parent, const char *name )
 	m_isHistoryRestored( false )
 {
 	setMinimumSize( QSize(750, 550) );
-	
+
 	viewMenu->setCursor( KCursor::handCursor() );
-	
+
 	// Create the package inspector
 	packageInspector = new PackageInspector( this );
-	
+
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
 	viewStack->addWidget( viewPortage, VIEW_PORTAGE );
-	
+
 	viewQueue = new QueueTab( this, packageInspector );
 	viewStack->addWidget( viewQueue, VIEW_QUEUE );
-	
+
 	viewHistory = new HistoryTab( this );
 	viewStack->addWidget( viewHistory, VIEW_HISTORY );
-	
+
 	viewMerge = new MergeTab( this );
 	viewStack->addWidget( viewMerge, VIEW_MERGE );
-	
+
 	viewLogs = new LogsTab( this );
 	viewStack->addWidget( viewLogs, VIEW_LOG );
-	
+
 	// Create menu-icons for the pages
 	iconPackages = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_PORTAGE ), i18n("Packages") );
 	iconQueue = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_QUEUE ), i18n("Queue") );
 	iconHistory = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_HISTORY ), i18n("History") );
 	iconMerge = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_MERGE ), i18n("Configuration") );
 	iconLog = new IconListItem( viewMenu, ImagesSingleton::Instance()->icon( VIEW_LOG ), i18n("Log") );
-	
+
 	// Connect menu-icons to the pages
 	connect( viewMenu, SIGNAL( selectionChanged() ), SLOT( slotShowView() ) );
 	viewMenu->setCurrentItem( 0 );
-	
+
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
 	LogSingleton::Instance()->setGui( viewLogs->logBrowser, viewLogs->verboseLog, viewLogs->saveLog );
-	
+
 	// Confirm changes in views with bleue text menu
 	connect( PortageSingleton::Instance(), SIGNAL( signalPortageChanged() ), this, SLOT( slotPortageUpdated() ) );
 	connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged(bool) ), this, SLOT( slotQueueUpdated() ) );
@@ -113,7 +113,7 @@ void KurooView::slotShowView()
 {
 	if ( packageInspector->isVisible() )
 		packageInspector->hide();
-	
+
 	int tabIndex = viewMenu->currentItem() + 1;
 	viewStack->raiseWidget( tabIndex );
 }
@@ -124,29 +124,29 @@ void KurooView::slotShowView()
 void KurooView::slotInit()
 {
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
-	
+
 	// Check is history is empty, then maybe this is also a fresh install with empty db
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		m_isHistoryRestored = true;
-		
+
 		KMessageBox::information( this, i18n( "<qt>Kuroo database is empty!<br>"
 		                                      "Kuroo will now first scan your emerge log to create the emerge history.<br>"
-		                                      "Next, package information in Portage will be collected.</qt>"), 
+		                                      "Next, package information in Portage will be collected.</qt>"),
 		                                i18n( "Initialiazing Kuroo") );
 		HistorySingleton::Instance()->slotRefresh();
 	}
 	else {
-		
+
 		// Load packages if db is not empty
 		if ( !KurooDBSingleton::Instance()->isPortageEmpty() ) {
 			viewPortage->slotReload();
 			viewQueue->slotReload( false );
 		}
-		
+
 		// Check if kuroo db needs updating
 		if ( !HistorySingleton::Instance()->slotRefresh() ) {
 			disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
-			
+
 			switch( KMessageBox::warningYesNo( this,
 				i18n( "<qt>Kuroo database needs refreshing!<br>"
 				     "Emerge log shows that your system has changed.</qt>"), i18n("Initialiazing Kuroo"), i18n("Refresh"), i18n("Skip"), 0 ) ) {
@@ -172,31 +172,31 @@ void KurooView::slotCheckPortage()
 {
 	DEBUG_LINE_INFO;
 	disconnect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
-	
+
 	// Restore backup after db is recreated because of new version
 	if ( m_isHistoryRestored ) {
 		HistorySingleton::Instance()->updateStatistics();
 		m_isHistoryRestored = false;
 	}
-	
+
 	DEBUG_LINE_INFO;
-	
+
 	if ( KurooDBSingleton::Instance()->isPortageEmpty() )
 		PortageSingleton::Instance()->slotRefresh();
 	else {
-		
+
 		// Ready to roll
 		SignalistSingleton::Instance()->setKurooReady( true );
 	}
 	DEBUG_LINE_INFO;
-	
+
 	// Warn user that emerge need root permissions - many rmb actions are disabled
 	if ( !KUser().isSuperUser() )
 		KMessageBox::information( this, i18n("You must run Kuroo as root to emerge packages!"), i18n("Information"), "dontAskAgainNotRoot" );
 }
 
 /**
- * Dcop interface to emerge pretend process 
+ * Dcop interface to emerge pretend process
  * @param packageList	list of packages to emerge
  */
 void KurooView::slotEmergePretend( QString package )
@@ -205,7 +205,7 @@ void KurooView::slotEmergePretend( QString package )
 }
 
 /**
- * Highlight menutext in bleue.
+ * Highlight menutext in blue.
  */
 void KurooView::slotPortageUpdated()
 {
@@ -216,7 +216,7 @@ void KurooView::slotPortageUpdated()
 }
 
 /**
- * Highlight menutext in bleue.
+ * Highlight menutext in blue.
  */
 void KurooView::slotQueueUpdated()
 {
@@ -227,7 +227,7 @@ void KurooView::slotQueueUpdated()
 }
 
 /**
- * Highlight menutext in bleue.
+ * Highlight menutext in blue.
  */
 void KurooView::slotHistoryUpdated()
 {
@@ -238,7 +238,7 @@ void KurooView::slotHistoryUpdated()
 }
 
 /**
- * Highlight menutext in bleue.
+ * Highlight menutext in blue.
  */
 void KurooView::slotMergeUpdated()
 {
@@ -249,7 +249,7 @@ void KurooView::slotMergeUpdated()
 }
 
 /**
- * Highlight menutext in bleue.
+ * Highlight menutext in blue.
  */
 void KurooView::slotLogUpdated()
 {
@@ -279,7 +279,7 @@ KurooView::IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
 	mPixmap = pixmap;
 	if ( mPixmap.isNull() )
 		mPixmap = defaultPixmap();
-	
+
 	setText( text );
 	mMinimumWidth = 100;
 }
@@ -296,14 +296,14 @@ void KurooView::IconListItem::paint( QPainter *painter )
 		else
 			painter->setPen( listBox()->colorGroup().text() );
 	}
-	
+
 	QFontMetrics fm = painter->fontMetrics();
 	int ht = fm.boundingRect( 0, 0, 0, 0, Qt::AlignCenter, text() ).height();
 	int wp = mPixmap.width();
 	int hp = mPixmap.height();
-	
+
 	painter->drawPixmap( ( listBox()->maxItemWidth()-wp ) / 2, 5, mPixmap );
-	
+
 	if ( !text().isEmpty() )
 		painter->drawText( 0, hp + 7, listBox()->maxItemWidth(), ht, Qt::AlignCenter, text() );
 }
@@ -336,17 +336,17 @@ const QPixmap &KurooView::IconListItem::defaultPixmap()
 		p.setPen( Qt::red );
 		p.drawRect ( 0, 0, pix->width(), pix->height() );
 		p.end();
-		
+
 		QBitmap mask( pix->width(), pix->height(), true );
 		mask.fill( Qt::black );
 		p.begin( &mask );
 		p.setPen( Qt::white );
 		p.drawRect ( 0, 0, pix->width(), pix->height() );
 		p.end();
-		
+
 		pix->setMask( mask );
 	}
-	
+
 	return *pix;
 }
 

@@ -7,12 +7,9 @@ bin_PROGRAMS = kuroo
 # set the include path for X, qt, KDE and subdirs
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/config \
 	-I$(top_srcdir)/src/core -I$(top_srcdir)/src/history -I$(top_srcdir)/src/intro \
-	-I$(top_srcdir)/src/logs -I$(top_srcdir)/src/portage -I$(top_srcdir)/src/queue \
-	-I$(top_builddir)/src/ -I$(top_builddir)/src/queue -I$(top_builddir)/src/intro \
-	-I$(top_builddir)/src/history -I$(top_builddir)/src/core -I$(top_builddir)/src/config \
-	-I$(top_builddir)/src/portage -I$(top_builddir)/src/logs $(all_includes)
+	-I$(top_srcdir)/src/logs -I$(top_srcdir)/src/portage -I$(top_srcdir)/src/queue $(all_includes)
 
-SUBDIRS = config intro core history logs portage queue
+SUBDIRS = config core history intro logs portage queue
 
 
 # makes pot translation files
@@ -49,10 +46,10 @@ METASOURCES = AUTO
 kuroo_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # kuroo links
-kuroo_LDADD = $(top_builddir)/src/history/libhistory.la \
-	$(top_builddir)/src/config/libconfig.la $(top_builddir)/src/queue/libqueue.la \
+kuroo_LDADD = $(top_builddir)/src/queue/libqueue.la \
 	$(top_builddir)/src/portage/libportage.la $(top_builddir)/src/logs/liblogs.la \
-	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/core/libcore.la $(LIB_KFILE) \
-	$(LIB_KDECORE) $(SQLITE_LIBS)
+	$(top_builddir)/src/intro/libintro.la $(top_builddir)/src/history/libhistory.la \
+	$(top_builddir)/src/core/libcore.la $(top_builddir)/src/config/libconfig.la $(LIB_KDECORE) $(LIB_KFILE) \
+	$(SQLITE_LIBS)
 
 

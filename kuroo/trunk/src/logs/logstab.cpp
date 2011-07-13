@@ -33,19 +33,19 @@
 /**
  * @class LogsTab
  * @short Tabpage for emerge log browser, emerge history and portage directories sizes.
- * 
+ *
  * @todo: view log-file content instead, let user select how many lines to view.
  */
 LogsTab::LogsTab( QWidget* parent )
 	: LogsBase( parent )
 {
 	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
-	
+
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
-	
+
 	connect( SignalistSingleton::Instance(), SIGNAL( signalFontChanged() ), this, SLOT( slotSetFont() ) );
-	
+
 // 	logBrowser->setTextFormat( Qt::LogText ); // Text doesn't wrap in log mode!
 	init();
 }
@@ -59,13 +59,13 @@ LogsTab::~LogsTab()
 		KurooConfig::setSaveLog( true );
 	else
 		KurooConfig::setSaveLog( false );
-	
+
 	if ( verboseLog->isChecked() )
 		KurooConfig::setVerboseLog( true );
 	else
 		KurooConfig::setVerboseLog( false );
-	
-	KurooConfig::writeConfig();
+
+	KurooConfig::self()->writeConfig();
 }
 
 /**
@@ -77,12 +77,12 @@ void LogsTab::init()
 		saveLog->setChecked( true );
 	else
 		saveLog->setChecked( false );
-	
+
 	if ( KurooConfig::verboseLog() )
 		verboseLog->setChecked( true );
 	else
 		verboseLog->setChecked( false );
-	
+
 	slotSetFont();
 }
 

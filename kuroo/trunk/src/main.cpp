@@ -41,9 +41,10 @@ static KCmdLineOptions options[] =
 int main( int argc, char **argv )
 {
 	kdDebug() << "Kuroo version=" << version << endl;
-	
+
 	KAboutData about("kuroo", I18N_NOOP("Kuroo"), version, description,
-	KAboutData::License_GPL, "(C) 2006 karye", 0, 0, "info@kuroo.org");
+	KAboutData::License_GPL, "(C) 2009 karye", 0, 0, "info@kuroo.org");
+	about.addAuthor("Andrew Schenck", I18N_NOOP("New maintainer"), "galiven@users.sourceforge.net");
 	about.addAuthor("Karye", I18N_NOOP("Original author and maintainer"), "info@kuroo.org");
 	about.addAuthor("David C. Manuelda", I18N_NOOP("Main developer and maintainer"), "StormByte@gmail.com");
 	about.addCredit("Gombault Damien", I18N_NOOP("French translation"), "desintegr@gmail.com");
@@ -57,25 +58,26 @@ int main( int argc, char **argv )
 	about.addCredit("Jakob Petsovits", I18N_NOOP("Portage version code"), "jpetso@gmx.at");
 	about.addCredit("Björn Balazs", I18N_NOOP("OpenUsability"), "B@lazs.de");
 	about.addCredit("Florian Graessle", I18N_NOOP("OpenUsability"), "holehan@gmx.de");
-	about.setHomepage("http://kuroo.org");
-	
+	about.setHomepage("http://sourceforge.net/projects/kuroo");
+
 	KCmdLineArgs::init( argc, argv, &about );
 	KCmdLineArgs::addCmdLineOptions( options );
 	KApplication app;
-	
-    // register ourselves as a dcop client
+
+	// check if another instance is running
 	if ( app.dcopClient()->isApplicationRegistered("kuroo") )  {
 		kdDebug() << I18N_NOOP("Kuroo is already running!") << endl;
 		exit(0);
 	}
-	
+
+	// register ourselves as a dcop client
 	app.dcopClient()->registerAs( app.name(), false );
-	
+
 	KurooConfig::setHardVersion( version );
-	KurooConfig::writeConfig();
-	
+	KurooConfig::self()->writeConfig();
+
 	app.dcopClient()->setAcceptCalls( true );
-	
+
 	// see if we are starting with session management
 	if ( app.isRestored() ) {
 		RESTORE( Kuroo );
@@ -84,6 +86,6 @@ int main( int argc, char **argv )
 		Kuroo *widget = new Kuroo;
 		widget->show();
 	}
-	
+
 	return app.exec();
 }

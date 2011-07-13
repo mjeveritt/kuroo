@@ -56,7 +56,7 @@ const QString Global::kurooDir() const { return kuroo_dir; }
 const QRegExp Global::rxEmerge() const
 {
 	if ( KurooConfig::portageVersion21() )
-		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
+		return QRegExp( "^\\[ebuild([\\s\\w~]*)\\]\\s+"
 		                "((\\S+)/(\\S+))"
 		                "(?:\\s*\\[([^\\]]*)\\])?"
 		                "(?:\\s*\\[([^\\]]*)\\])?"

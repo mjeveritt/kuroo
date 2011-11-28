@@ -21,6 +21,7 @@
 #include "common.h"
 #include "historylistview.h"
 #include "historytab.h"
+#include "ui_historybase.h"
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
@@ -51,6 +52,7 @@ HistoryTab::HistoryTab( QWidget* parent )
 	// Connect button and checkbox
 	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
 	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
+	connect( historyView, SIGNAL( itemDoubleClicked(HistoryItem*) ), this, SLOT( slotViewInfo() ) );
 
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );

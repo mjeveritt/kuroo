@@ -109,6 +109,19 @@ QStringList HistoryListView::selected()
 	return packageList;
 }
 
+void HistoryListView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+	QModelIndex index = indexAt(event->pos());
+	if (!index.isValid())
+		return;
+
+	HistoryItem *item = static_cast<HistoryItem*>(index.internalPointer());
+	if (!item)
+		return;
+
+	emit itemDoubleClicked(item);
+}
+
 /**
 * Populate listview with log entries
 */

@@ -107,7 +107,7 @@ const QStringList Global::parsePackage( const QString& packageString ) const
 		return list;
 	}
 	else
-		return QStringList::QStringList();
+		return QStringList();
 }
 
 /**

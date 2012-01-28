@@ -1264,7 +1264,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 					kWarning( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
-				::usleep( 100000 ); // Sleep 100 msec
+				::usleep( 1000000 ); // Sleep 1000 msec
 				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
 				continue;
 			}

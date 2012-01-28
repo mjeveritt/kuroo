@@ -28,23 +28,24 @@
 #include "packageversion.h"
 #include "ui_queuebase.h"
 
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QComboBox>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QToolTip>
+#include <QWhatsThis>
 
-#include <kpushbutton.h>
-#include <ktextbrowser.h>
-#include <kdialog.h>
-#include <klineedit.h>
-#include <kmessagebox.h>
-#include <kmenu.h>
-#include <kuser.h>
+#include <KPushButton>
+#include <KTextBrowser>
+#include <KDialog>
+#include <KLineEdit>
+#include <KMessageBox>
+#include <KMenu>
+#include <KUser>
 //#include <kaccel.h>
-#include <kiconloader.h>
+#include <KIconLoader>
+#include <KAction>
 
 /**
 * @class QueueTab
@@ -58,12 +59,24 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
 
 	// Rmb actions.
-	connect( queueView, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( slotContextMenu(QPoint) ) );
+	queueView->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect( queueView, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( slotContextMenu(const QPoint&) ) );
+
+	m_removeFromQueue = new KAction( KIcon( "list-remove" ), i18n( "&Remove"), this );
+	connect( m_removeFromQueue, SIGNAL(triggered(bool)), this, SLOT(slotRemove()));
+	m_removeFromWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Remove From &World"), this );
+	connect( m_removeFromWorld, SIGNAL(triggered(bool)), this, SLOT( slotRemoveWorld()));
+	m_addToWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Add To &World"), this );
+	connect( m_addToWorld, SIGNAL(triggered(bool)), this, SLOT( slotAddWorld()));
+	m_clearQueue = new KAction( KIcon( "edit-clear" ), i18n( "Remove &All"), this );
+	connect( m_clearQueue, SIGNAL( triggered(bool) ), this, SLOT( slotClear() ) );
+	m_packageDetails = new KAction( i18n( "&Details"), this );
+	connect( m_packageDetails, SIGNAL( triggered(bool) ), this, SLOT( slotAdvanced() ) );
 
 	// Button actions.
 	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
-	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
+	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
 	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
 	connect( queueView, SIGNAL( itemDoubleClicked(QueueListItem*) ), this, SLOT( slotAdvanced() ) );
 
@@ -186,6 +199,7 @@ void QueueTab::slotInit()
 	cbBackupPkg->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
 									"but use quickpkg to make a backup of the installed ebuilds before merging.</td></tr></table></qt>" ) );
 
+	//TODO: port to kde4
 	// Keyboard shortcuts
 	/*KAccel* pAccel = new KAccel( this );
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
@@ -283,7 +297,6 @@ void QueueTab::slotQueueSummary()
 			queueBrowserLines += i18n( "<tr><td width=10%>Estimated&nbsp;time&nbsp;remaining:</td><td> %1</td></tr></table>", formatTime( queueView->totalDuration() ) );
 	queueBrowser->setText( queueBrowserLines );
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Toggle button slots
@@ -383,7 +396,6 @@ void QueueTab::slotButtons()
 	m_packageInspector->setDisabled( false );
 	pbAdvanced->setDisabled( false );
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Package slots
@@ -496,7 +508,7 @@ void QueueTab::slotRemove()
 }
 
 /**
-* Remove package from Queue.
+* Remove all packages from Queue.
 */
 void QueueTab::slotClear()
 {
@@ -538,6 +550,32 @@ void QueueTab::slotPackage()
 		processPackage( false );
 }
 
+void QueueTab::slotAddWorld()
+{
+	if ( isVisible() )
+		m_packageInspector->hide();
+
+	const QStringList selectedIdsList = queueView->selectedPackagesByIds();
+
+	QStringList packageList;
+	foreach ( QString id, selectedIdsList )
+		packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
+	PortageSingleton::Instance()->appendWorld( packageList );
+}
+
+void QueueTab::slotRemoveWorld()
+{
+	if ( isVisible() )
+		m_packageInspector->hide();
+
+	const QStringList selectedIdsList = queueView->selectedPackagesByIds();
+
+	QStringList packageList;
+	foreach ( QString id, selectedIdsList )
+		packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
+	PortageSingleton::Instance()->removeFromWorld( packageList );
+}
+
 /**
 * Process package and view in Inspector.
 */
@@ -564,67 +602,42 @@ void QueueTab::processPackage( bool viewInspector )
 * @param item
 * @param point
 */
-void QueueTab::slotContextMenu(QPoint)
+void QueueTab::slotContextMenu(const QPoint &point)
 {
-	//FIXME: port contextMenu to KDE4
-	/*if ( !item )
-		return;
+	QModelIndex item = queueView->indexAt(point);
 
-	const QStringList selectedIdsList = queueView->selectedPackagesByIds();
+	if ( !item.isValid() )
+		return;
 
 	enum Actions { ADDWORLD, DELWORLD };
 
 	KMenu menu( this );
 
-	int menuItem1 = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n( "Remove" ), REMOVE );
-	int menuItem2 = menu.insertItem( ImagesSingleton::Instance()->icon( DETAILS ), i18n( "Details..." ), DETAILS );
+	menu.addAction( m_removeFromQueue );
+	menu.addAction( m_packageDetails );
 
-	int menuItem3;
-	if ( !dynamic_cast<PackageItem*>( item )->isInWorld() )
-		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
-	else
-		menuItem3 = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
-	menu.setItemEnabled( menuItem3, false );
+	// Allow editing of World when superuser
+	PackageListItem* internalItem = static_cast<PackageListItem*>( item.internalPointer() );
+	if ( !internalItem->isInWorld() ) {
+		menu.addAction( m_addToWorld );
+		m_addToWorld->setEnabled( KUser().isSuperUser() );
+	} else {
+		menu.addAction( m_removeFromWorld );
+		m_removeFromWorld->setEnabled( KUser().isSuperUser() );
+	}
 
 	// No change to Queue when busy
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() )
-		menu.setItemEnabled( menuItem1, false );
-
-	// Allow editing of World when superuser
-	if ( KUser().isSuperUser() )
-		menu.setItemEnabled( menuItem3, true );
+		m_removeFromQueue->setDisabled(true);
 
 	if ( m_packageInspector->isVisible() ) {
-		menu.setItemEnabled( menuItem1, false );
-		menu.setItemEnabled( menuItem2, false );
-		menu.setItemEnabled( menuItem3, false );
+		m_removeFromQueue->setDisabled(true);
+		m_packageDetails->setDisabled(true);
+		m_addToWorld->setDisabled(true);
+		m_removeFromWorld->setDisabled(true);
 	}
 
-	switch( menu.exec( point ) ) {
-
-		case REMOVE:
-			QueueSingleton::Instance()->removePackageIdList( queueView->selectedPackagesByIds() );
-			break;
-
-		case DETAILS:
-			slotAdvanced();
-			break;
-
-		case ADDWORLD: {
-			QStringList packageList;
-			foreach ( QString id, selectedIdsList )
-				packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
-			PortageSingleton::Instance()->appendWorld( packageList );
-			break;
-		}
-
-		case DELWORLD: {
-			QStringList packageList;
-			foreach ( QString id, selectedIdsList )
-				packageList += queueView->packageItemById( id )->category() + "/" + queueView->packageItemById( id )->name();
-			PortageSingleton::Instance()->removeFromWorld( packageList );
-		}
-	}*/
+	menu.exec(queueView->viewport()->mapToGlobal(point));
 }
 
 #include "queuetab.moc"

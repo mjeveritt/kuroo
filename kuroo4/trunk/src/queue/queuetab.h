@@ -22,6 +22,7 @@
 
 #include "ui_queuebase.h"
 #include "packageinspector.h"
+#include <KAction>
 
 /**
  * @class QueueTab
@@ -59,7 +60,9 @@ private slots:
 	void				slotRemoveInstalled();
 	void				slotAdvanced();
 	void				slotPackage();
-	void				slotContextMenu(QPoint);
+	void				slotAddWorld();
+	void				slotRemoveWorld();
+	void				slotContextMenu(const QPoint&);
 
 private:
 
@@ -71,6 +74,9 @@ private:
 
 	// The package inspector
 	PackageInspector	*m_packageInspector;
+
+	// Actions for the context menu
+	KAction				*m_packageDetails, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_clearQueue;
 };
 
 #endif

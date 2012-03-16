@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <QHeaderView>
+#include <QMouseEvent>
 
 #include "common.h"
 #include "queuelistview.h"

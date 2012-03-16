@@ -61,7 +61,7 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 	header->setText( 2, i18n("Emerge log file") );
 	setHeaderItem( header );
 
-	setSelectionMode( QAbstractItemView::ExtendedSelection );
+	//setSelectionMode( QAbstractItemView::ExtendedSelection );
 	//setProperty( "selectionMode", "Extended" );
 	setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated( true );
@@ -77,6 +77,8 @@ HistoryListView::HistoryListView( QWidget *parent, const char *name )
 
 	setSortingEnabled( false );
 	//setSorting( -1 );
+
+	setAlternatingRowColors( true );
 }
 
 HistoryListView::~HistoryListView()

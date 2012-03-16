@@ -62,7 +62,7 @@ IntroDlg::IntroDlg( QWidget* parent )
 		backupFilesText += "<tr><td>" + f + "</td></tr>";
 	backupFilesText += "<tr><td>" + KurooConfig::fileWorld() + "</td></tr>" +
 			   "<tr><td>" + KurooConfig::fileMakeConf() + "</td></tr></table></qt>";
-	
+
 	backupFiles->setText(backupFilesText);
 	adjustSize();
 }

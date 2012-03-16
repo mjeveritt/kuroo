@@ -275,6 +275,9 @@ void QueueTab::slotReload( bool hasCheckedQueue )
 
 	// Load all packages
 	slotRefresh();
+	if (hasCheckedQueue) {
+		queueView->expandToDepth(2);
+	}
 
 	// Enable the gui
 	slotBusy();

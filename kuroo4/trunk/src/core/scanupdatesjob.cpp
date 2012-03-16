@@ -63,7 +63,7 @@ void ScanUpdatesJob::run()
 
 	/*setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );*/
-	int count(0);
+//	int count(0);
 
 	// Temporary tables to avoid locking main table
 	KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE package_temp ( "

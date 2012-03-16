@@ -503,7 +503,7 @@ const QStringList KurooDB::allSubCategories()
 const QStringList KurooDB::portageCategories( int filter, const QString& text )
 {
 	QString filterQuery, textQuery;
-	int len;
+//	int len;
 
 	// Allow for multiple words match
 	QString textString = escapeString ( text.simplified() );
@@ -616,7 +616,7 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 {
 	kDebug() << "filter = " << filter;
 	QString filterQuery, textQuery;
-	int len;
+//	int len;
 
 	// Allow for multiple words match
 	QString textString = escapeString( text.simplified() );

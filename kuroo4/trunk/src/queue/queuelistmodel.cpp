@@ -57,6 +57,7 @@ void QueueListModel::setPackages(QList<QueueListItem*>& packages)
 		return;
 
 	// Set packages
+	//NOTE: This only puts top-level packages in the QList
 	QList<QueueListItem*> tmp;
 	foreach(QueueListItem* item, packages)
 	{

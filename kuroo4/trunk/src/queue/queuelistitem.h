@@ -12,14 +12,14 @@ class QueueListItem : public PackageListItem
 public:
 	QueueListItem(QObject *parent = 0);
 	QueueListItem(const QString& name, const QString& id, const QString& category, const int status, const int duration, QObject *parent = 0);
-	
+
 	~QueueListItem();
 
 	void setVersion(const QString&);
 	void setSize(const QString&);
 	void setDuration(int);
-	//QString duration();
 	int duration() const {return m_duration;}
+	int remainingDuration() const {if(m_hasStarted) {return m_duration - m_steps;} else {return m_duration;}}
 	QString version() const {return m_version;}
 	QString size() const {return m_size;}
 	QString parentId() const {return m_parentId;}

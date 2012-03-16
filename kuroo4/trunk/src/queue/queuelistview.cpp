@@ -202,13 +202,20 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 long QueueListView::totalDuration()
 {
 	long totalSeconds = 0;
-	//TODO:Implement me
-	/*QTreeWidgetItemIterator it( this );
-	while ( *it ) {
-		if ( !dynamic_cast<QueueItem*>( *it )->isComplete() )
-			totalSeconds += dynamic_cast<QueueItem*>( *it )->remainingDuration();
-		++it;
-	}*/
+	QList<QueueListItem*> packages = dynamic_cast<QueueListModel*>(model())->packages();
+	foreach(QueueListItem *item, packages)
+	{
+		foreach(QueueListItem *child, item->children())
+		{
+			if (!child->isComplete()) {
+				totalSeconds += child->remainingDuration();
+			}
+		}
+		if (!item->isComplete())
+		{
+			totalSeconds += item->remainingDuration();
+		}
+	}
 	return totalSeconds;
 }
 

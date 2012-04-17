@@ -28,19 +28,19 @@
 #include <pwd.h>
 #include <stdlib.h>
 
-#include <qfile.h>
-#include <qimage.h>
-#include <qtimer.h>
+#include <QFile>
+#include <QImage>
+#include <QTimer>
 
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kglobal.h>
+#include <KApplication>
+#include <KConfig>
+#include <KGlobal>
 #include <kio/job.h>
-#include <kstandarddirs.h>
-#include <kurl.h>
+#include <KStandardDirs>
+#include <KUrl>
 #include <kio/netaccess.h>
-#include <kcursor.h>
-#include <krandom.h>
+#include <KCursor>
+#include <KRandom>
 
 /**
  * @class KurooDB
@@ -1205,7 +1205,7 @@ QStringList SqliteConnection::query( const QString& statement )
 					kWarning( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
-				::usleep( 100000 ); // Sleep 100 msec
+				::usleep( 1000000 ); // Sleep 1000 msec
 				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on query: " << statement << LINE_INFO;
 				continue;
 			}
@@ -1320,7 +1320,7 @@ int SqliteConnection::insert( const QString& statement )
 					kWarning( 0 ) << "Busy-counter has reached maximum. Aborting this sql statement!" << LINE_INFO;
 					break;
 				}
-				::usleep( 100000 ); // Sleep 100 msec
+				::usleep( 1000000 ); // Sleep 1000 msec
 				kDebug() << "sqlite3_step: BUSY counter: " << busyCnt << " on insert: " << statement << LINE_INFO;
 				continue;
 			}

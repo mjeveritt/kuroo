@@ -18,20 +18,20 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qtextcodec.h>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QTextCodec>
 #include <QTreeWidget>
 
-#include <ktabwidget.h>
-#include <kactionselector.h>
-#include <ktextbrowser.h>
-#include <kmessagebox.h>
-#include <kuser.h>
-#include <kurllabel.h>
+#include <KTabWidget>
+#include <KActionSelector>
+#include <KTextBrowser>
+#include <KMessageBox>
+#include <KUser>
+#include <KUrlLabel>
 
 #include "common.h"
 #include "packageinspector.h"
@@ -99,7 +99,6 @@ PackageInspector::PackageInspector( QWidget *parent ) : KDialog( parent ),
 PackageInspector::~PackageInspector()
 {}
 
-
 /**
 * Update the Inspector gui with new versions and data.
 */
@@ -125,7 +124,7 @@ void PackageInspector::updateVersionData()
 		// Parse out version and data
 		QString version = *it;
 		it++;
-		QString stability = *it; 
+		QString stability = *it;
 		it++;
 		QString size = *it;
 		it++;
@@ -674,7 +673,7 @@ void PackageInspector::slotLoadUseFlags( const QString& version )
 		QMap<QString, PackageVersion*> map = m_portagePackage->versionMap();
 		if (map.contains(version))
 			useList = map.value(version)->useflags();
-		
+
 		// Get user set package use flags
 		QStringList packageUseList = KurooDBSingleton::Instance()->packageUse( m_id ).split(" ");
 
@@ -836,8 +835,8 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 		}
 		else {
 			kError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;
-			// 			dependencyBrowser->setText( i18n("%1No dependencies found.%2",
-			// 			                                    "<font color=darkRed><b>", "</b></font>" ) );
+			/*dependencyBrowser->setText( "<font color=darkRed><b>" + i18n("No dependencies found.") +
+												"</b></font>" );*/
 		}
 	}
 }
@@ -866,7 +865,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 		}
 		else {
 			kError(0) << "Loading installed files list. Reading: " << filename << LINE_INFO;
-			installedFilesBrowser->setText( "<font color=darkRed><b>" + i18n( "No installed files found.%2" ) + "</b></font>" );
+			installedFilesBrowser->setText( "<font color=darkRed><b>" + i18n( "No installed files found." ) + "</b></font>" );
 		}
 	}
 }

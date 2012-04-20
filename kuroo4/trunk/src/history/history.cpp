@@ -298,7 +298,7 @@ void History::slotParse()
 void History::updateStatistics()
 {
 	DEBUG_LINE_INFO;
-    //ThreadWeaver::Weaver::instance()->enqueue( new UpdateStatisticsJob( this ) );
+    ThreadWeaver::Weaver::instance()->enqueue( new UpdateStatisticsJob( this ) );
 }
 
 /**

@@ -1,21 +1,21 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+*	Copyright (C) 2004 by karye												*
+*	karye@users.sourceforge.net												*
+*																			*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
 #include "common.h"
@@ -29,12 +29,12 @@
  * @short Dialog for selected package and version to uninstall.
  */
 UninstallInspector::UninstallInspector( QWidget *parent )
-    : KDialog( parent )
+	: KDialog( parent )
 {
-    //i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
-    m_uninstallbase.setupUi( mainWidget() );
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
-    connect(m_uninstallbase.uninstallView, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(slotItemActivated(QTreeWidgetItem*, int)));
+	//i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
+	m_uninstallbase.setupUi( mainWidget() );
+	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+	connect(m_uninstallbase.uninstallView, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(slotItemActivated(QTreeWidgetItem*, int)));
 }
 
 UninstallInspector::~UninstallInspector()
@@ -97,7 +97,7 @@ void UninstallInspector::view( const QStringList& packageList )
 
 	if ( isPartOfSystem ) {
 		m_uninstallbase.uninstallWarning->setText( i18n("<font color=red><b>You are uninstalling packages part of your system profile!<br/>"
-		                                          "This may be damaging to your system!</b></font>") );
+												"This may be damaging to your system!</b></font>") );
 		m_uninstallbase.uninstallWarning->show();
 	}
 	else {

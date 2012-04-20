@@ -127,11 +127,11 @@ public:
 			if ( installedVersionCount == "1" ) {
 
 				// Mark package as uninstalled
-				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET status = '%1' WHERE id = '%3'")
+				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET status = '%1' WHERE id = '%2'")
 															.arg( PACKAGE_AVAILABLE_STRING ).arg( id ), m_db );
 
 				// Delete package if "old" = not in official Portage anymore
-				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET status = '%1' WHERE status = '%1' AND id = '%2';" )
+				KurooDBSingleton::Instance()->singleQuery( QString( "UPDATE package SET status = '%1' WHERE status = '%2' AND id = '%3';" )
 															.arg( PACKAGE_DELETED_STRING ).arg( PACKAGE_OLD_STRING ).arg( id ), m_db );
 			}
 

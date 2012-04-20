@@ -1,21 +1,21 @@
 /**************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*   From Amarok code.                                                     *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+*	Copyright (C) 2004 by karye												*
+*	karye@users.sourceforge.net												*
+*	From Amarok code.														*
+*	This program is free software; you can redistribute it and/or modify	*
+*	it under the terms of the GNU General Public License as published by	*
+*	the Free Software Foundation; either version 2 of the License, or		*
+*	(at your option) any later version.										*
+*																			*
+*	This program is distributed in the hope that it will be useful,			*
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+*	GNU General Public License for more details.							*
+*																			*
+*	You should have received a copy of the GNU General Public License		*
+*	along with this program; if not, write to the							*
+*	Free Software Foundation, Inc.,											*
+*	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
 #include "common.h"
@@ -73,7 +73,7 @@ QString KurooDB::init ( QObject *parent )
 
 	m_dbConnPool->createDbConnections();
 
-    return kurooDir + KurooConfig::databas();
+	return kurooDir + KurooConfig::databas();
 }
 
 DbConnection *KurooDB::getStaticDbConnection()
@@ -96,7 +96,7 @@ void KurooDB::destroy()
 /**
  * Executes a SQL query on the already opened database
  * @param statement SQL program to execute. Only one SQL statement is allowed.
- * @return          The queried data, or QStringList() on error.
+ * @return		The queried data, or QStringList() on error.
  */
 QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 {
@@ -124,7 +124,7 @@ QStringList KurooDB::query( const QString& statement, DbConnection *conn )
 /**
  * Executes a SQL query on the already opened database
  * @param statement SQL program to execute. Only one SQL statement is allowed.
- * @return          The queried data, or QStringList() on error.
+ * @return		The queried data, or QStringList() on error.
  */
 QString KurooDB::singleQuery( const QString& statement, DbConnection *conn )
 {
@@ -152,7 +152,7 @@ QString KurooDB::singleQuery( const QString& statement, DbConnection *conn )
 /**
  * Executes a SQL insert on the already opened database
  * @param statement SQL statement to execute. Only one SQL statement is allowed.
- * @return          The rowid of the inserted item.
+ * @return		The rowid of the inserted item.
  */
 int KurooDB::insert( const QString& statement, DbConnection *conn )
 {
@@ -199,7 +199,7 @@ bool KurooDB::isQueueEmpty()
 bool KurooDB::isUpdatesEmpty()
 {
 	QString values = singleQuery ( QString ( "SELECT COUNT(id) FROM package where status = '%1' LIMIT 0, 1;" )
-	                               .arg ( PACKAGE_UPDATES_STRING ) );
+									.arg ( PACKAGE_UPDATES_STRING ) );
 	return values.isEmpty() ? true : values == "0";
 }
 
@@ -225,117 +225,117 @@ void KurooDB::createTables( DbConnection *conn )
 {
 	kDebug(0) << "Creating tables" << LINE_INFO;
 	query ( "CREATE TABLE dbInfo ( "
-	        "meta VARCHAR(64), "
-	        "data VARCHAR(64) );"
-	        , conn );
+			"meta VARCHAR(64), "
+			"data VARCHAR(64) );"
+			, conn );
 
 	query ( " INSERT INTO dbInfo (meta, data) VALUES ('syncTimeStamp', '0');", conn );
 	query ( " INSERT INTO dbInfo (meta, data) VALUES ('packageCount', '0');", conn );
 	query ( " INSERT INTO dbInfo (meta, data) VALUES ('scanDuration', '100');", conn );
 
 	query ( "CREATE TABLE category ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "name VARCHAR(32) UNIQUE );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"name VARCHAR(32) UNIQUE );"
+			, conn );
 
 	query ( "CREATE TABLE subCategory ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "name VARCHAR(32), "
-	        "idCategory INTEGER );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"name VARCHAR(32), "
+			"idCategory INTEGER );"
+			, conn );
 
 	query ( "CREATE TABLE package ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "idCategory INTEGER, "
-	        "idSubCategory INTEGER, "
-	        "category VARCHAR(32), "
-	        "name VARCHAR(32), "
-	        "description VARCHAR(255), "
-	        "path VARCHAR(64), "
-	        "status INTEGER, "
-	        "meta VARCHAR(255), "
-	        "updateVersion VARCHAR(32) ); "
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"idCategory INTEGER, "
+			"idSubCategory INTEGER, "
+			"category VARCHAR(32), "
+			"name VARCHAR(32), "
+			"description VARCHAR(255), "
+			"path VARCHAR(64), "
+			"status INTEGER, "
+			"meta VARCHAR(255), "
+			"updateVersion VARCHAR(32) ); "
+			, conn );
 
 	query ( "CREATE TABLE version ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "idPackage INTEGER, "
-	        "name VARCHAR(32), "
-	        "description VARCHAR(255), "
-	        "homepage VARCHAR(128), "
-	        "licenses VARCHAR(64), "
-	        "useFlags VARCHAR(255), "
-	        "slot VARCHAR(32), "
-	        "size VARCHAR(32), "
-	        "status INTEGER, "
-	        "keywords VARCHAR(32) );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"idPackage INTEGER, "
+			"name VARCHAR(32), "
+			"description VARCHAR(255), "
+			"homepage VARCHAR(128), "
+			"licenses VARCHAR(64), "
+			"useFlags VARCHAR(255), "
+			"slot VARCHAR(32), "
+			"size VARCHAR(32), "
+			"status INTEGER, "
+			"keywords VARCHAR(32) );"
+			, conn );
 
 	query ( "CREATE TABLE queue ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "idPackage INTEGER, "
-	        "idDepend INTEGER, "
-	        "use VARCHAR(255), "
-	        "size VARCHAR(32), "
-	        "version VARCHAR(32) );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"idPackage INTEGER, "
+			"idDepend INTEGER, "
+			"use VARCHAR(255), "
+			"size VARCHAR(32), "
+			"version VARCHAR(32) );"
+			, conn );
 
 	query ( "CREATE TABLE history ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "package VARCHAR(32), "
-	        "timestamp VARCHAR(10), "
-	        "time INTEGER, "
-	        "einfo BLOB, "
-	        "emerge BOOL );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"package VARCHAR(32), "
+			"timestamp VARCHAR(10), "
+			"time INTEGER, "
+			"einfo BLOB, "
+			"emerge BOOL );"
+			, conn );
 
 	query ( "CREATE TABLE mergeHistory ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "timestamp VARCHAR(10), "
-	        "source VARCHAR(255), "
-	        "destination VARCHAR(255) );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"timestamp VARCHAR(10), "
+			"source VARCHAR(255), "
+			"destination VARCHAR(255) );"
+			, conn );
 
 	query ( " CREATE TABLE statistic ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "package VARCHAR(32), "
-	        "time INTEGER, "
-	        "count INTEGER );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"package VARCHAR(32), "
+			"time INTEGER, "
+			"count INTEGER );"
+			, conn );
 
 	query ( "CREATE TABLE cache ( "
-	        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-	        "package VARCHAR(32), "
-	        "size VARCHAR(10) );"
-	        , conn );
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			"package VARCHAR(32), "
+			"size VARCHAR(10) );"
+			, conn );
 
 	query ( "CREATE TABLE packageHardMask ( "
-	        "idPackage INTEGER, "
-	        "dependAtom VARCHAR(255), "
-	        "comment BLOB );"
-	        , conn );
+			"idPackage INTEGER, "
+			"dependAtom VARCHAR(255), "
+			"comment BLOB );"
+			, conn );
 
 	query ( "CREATE TABLE packageUserMask ( "
-	        "idPackage INTEGER UNIQUE, "
-	        "dependAtom VARCHAR(255), "
-	        "comment BLOB );"
-	        , conn );
+			"idPackage INTEGER UNIQUE, "
+			"dependAtom VARCHAR(255), "
+			"comment BLOB );"
+			, conn );
 
 	query ( "CREATE TABLE packageUnmask ( "
-	        "idPackage INTEGER UNIQUE, "
-	        "dependAtom VARCHAR(255), "
-	        "comment BLOB );"
-	        , conn );
+			"idPackage INTEGER UNIQUE, "
+			"dependAtom VARCHAR(255), "
+			"comment BLOB );"
+			, conn );
 
 	query ( "CREATE TABLE packageKeywords ( "
-	        "idPackage INTEGER UNIQUE, "
-	        "keywords VARCHAR(255) );"
-	        , conn );
+			"idPackage INTEGER UNIQUE, "
+			"keywords VARCHAR(255) );"
+			, conn );
 
 	query ( "CREATE TABLE packageUse ( "
-	        "idPackage INTEGER UNIQUE, "
-	        "use VARCHAR(255) );"
-	        , conn );
+			"idPackage INTEGER UNIQUE, "
+			"use VARCHAR(255) );"
+			, conn );
 
 	query ( "CREATE INDEX index_name_package ON package(name);", conn );
 	query ( "CREATE INDEX index_category_package ON package(category);", conn );
@@ -351,7 +351,7 @@ void KurooDB::createTables( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
-    /*const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
+	/*const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	if ( !historyData.isEmpty() )
 	{
 		QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
@@ -388,7 +388,7 @@ void KurooDB::backupDb()
 		}
 		else
 			kError ( 0 ) << QString ( "Creating backup of history. Writing: %1." ).arg ( KurooConfig::fileMergeBackup() ) << LINE_INFO;
-    }*/
+	}*/
 }
 
 /**
@@ -396,7 +396,7 @@ void KurooDB::backupDb()
  */
 void KurooDB::restoreBackup()
 {
-    /*// Restore einfo into table history
+	/*// Restore einfo into table history
 	QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
 	Q3TextStream stream ( &file );
 	QStringList lines;
@@ -442,9 +442,9 @@ void KurooDB::restoreBackup()
 			QString source = rxMergeLine.cap ( 2 );
 			QString destination = rxMergeLine.cap ( 3 );
 			singleQuery ( "INSERT INTO mergeHistory (timestamp, source, destination) "
-			              "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
+						  "VALUES ('" + timestamp + "', '" + source + "', '" + destination + "');" );
 		}
-    }*/
+	}*/
 }
 
 
@@ -561,7 +561,7 @@ const QStringList KurooDB::portageSubCategories( const QString& categoryId, int 
 
 	// Allow for multiple words match
 	QString textString = escapeString ( text.simplified() );
-    QStringList textStringList = textString.split(" ");
+	QStringList textStringList = textString.split(" ");
 
 	// Concatenate all search words
 	if ( !textStringList.isEmpty() )
@@ -595,7 +595,7 @@ const QStringList KurooDB::portageSubCategories( const QString& categoryId, int 
 		}
 
 		resultList += query ( " SELECT DISTINCT idSubCategory FROM package WHERE idCategory = '"
-		                      + categoryId + "'" + filterQuery + textQuery + " ; " );
+							  + categoryId + "'" + filterQuery + textQuery + " ; " );
 	}
 
 	// Add meta-subcategory when query is successful
@@ -676,16 +676,16 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 			}
 
 			return query( " SELECT id, name, category, description, status, updateVersion "
-			               " FROM package "
-			               + filterQuery + textQuery + " ORDER BY name DESC;" );
+							" FROM package "
+							+ filterQuery + textQuery + " ORDER BY name DESC;" );
 		}
 		else
 		{
 
 			return query( " SELECT id, name, category, description, status, updateVersion "
-			               " FROM package "
-			               " WHERE idSubCategory = '" + subCategoryId + "'"
-			               + filterQuery + textQuery + " ORDER BY name DESC;" );
+							" FROM package "
+							" WHERE idSubCategory = '" + subCategoryId + "'"
+							+ filterQuery + textQuery + " ORDER BY name DESC;" );
 		}
 	}
 	else
@@ -694,18 +694,18 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 		{
 
 			return query( " SELECT id, name, category, description, status, updateVersion "
-			               " FROM package "
-			               " WHERE idCategory = '" + categoryId + "'"
-			               + filterQuery + textQuery + " ORDER BY name DESC;" );
+							" FROM package "
+							" WHERE idCategory = '" + categoryId + "'"
+							+ filterQuery + textQuery + " ORDER BY name DESC;" );
 		}
 		else
 		{
 
 			return query( " SELECT id, name, category, description, status, updateVersion "
-			               " FROM package "
-			               " WHERE idCategory = '" + categoryId + "'"
-			               " AND idSubCategory = '" + subCategoryId + "'"
-			               + filterQuery + textQuery + " ORDER BY name DESC;" );
+							" FROM package "
+							" WHERE idCategory = '" + categoryId + "'"
+							" AND idSubCategory = '" + subCategoryId + "'"
+							+ filterQuery + textQuery + " ORDER BY name DESC;" );
 		}
 	}
 }
@@ -780,8 +780,8 @@ const QString KurooDB::packageId( const QString& package )
 const QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
 {
 	return query( " SELECT name FROM version WHERE idPackage = '" + idPackage + "'"
-	               " AND status = '" + PACKAGE_INSTALLED_STRING + "'"
-	               " ORDER BY version.name;" );
+					" AND status = '" + PACKAGE_INSTALLED_STRING + "'"
+					" ORDER BY version.name;" );
 }
 
 /**
@@ -791,8 +791,8 @@ const QStringList KurooDB::packageVersionsInstalled( const QString& idPackage )
 const QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 {
 	return query( " SELECT name, description, homepage, status, licenses, useFlags, slot, keywords, size "
-	               " FROM version WHERE idPackage = '" + idPackage + "'"
-	               " ORDER BY version.name;" );
+					" FROM version WHERE idPackage = '" + idPackage + "'"
+					" ORDER BY version.name;" );
 }
 
 /**
@@ -803,7 +803,7 @@ const QStringList KurooDB::packageVersionsInfo( const QString& idPackage )
 const QString KurooDB::versionSize( const QString& idPackage, const QString& version )
 {
 	return singleQuery( " SELECT size, status FROM version WHERE idPackage = '" + idPackage + "'"
-	                     " AND name = '" + version + "' LIMIT 1;" );
+						 " AND name = '" + version + "' LIMIT 1;" );
 }
 
 /**
@@ -1030,10 +1030,10 @@ void KurooDB::clearPackageUserMasked( const QString& id )
 const QStringList KurooDB::allQueuePackages()
 {
 	return query( " SELECT package.id, package.category, package.name, "
-	               " package.status, queue.idDepend, queue.size, queue.version "
-	               " FROM queue, package "
-	               " WHERE queue.idPackage = package.id "
-	               " ORDER BY queue.idDepend;" );
+					" package.status, queue.idDepend, queue.size, queue.version "
+					" FROM queue, package "
+					" WHERE queue.idPackage = package.id "
+					" ORDER BY queue.idDepend;" );
 }
 
 /**
@@ -1375,30 +1375,30 @@ SqliteConfig::SqliteConfig( const QString& dbfile )
  */
 DbConnectionPool::DbConnectionPool() : m_semaphore( POOL_SIZE )
 {
-    m_semaphore.acquire( POOL_SIZE ); //+=
+	m_semaphore.acquire( POOL_SIZE ); //+=
 	DbConnection *dbConn;
 	m_dbConfig = new SqliteConfig( KurooConfig::databas() );
 	dbConn = new SqliteConnection( static_cast<SqliteConfig*>( m_dbConfig ) );
 
-    enqueue( dbConn );
-    m_semaphore.release(1); //--
+	enqueue( dbConn );
+	m_semaphore.release(1); //--
 }
 
 DbConnectionPool::~DbConnectionPool()
 {
-    m_semaphore.acquire( POOL_SIZE );
+	m_semaphore.acquire( POOL_SIZE );
 	bool vacuum = true;
 
-    while( !isEmpty() )
+	while( !isEmpty() )
 	{
-        DbConnection *conn = dequeue();
+		DbConnection *conn = dequeue();
 		if ( vacuum )
 		{
 			vacuum = false;
 			kDebug() << "Running VACUUM" << LINE_INFO;
 			conn->query( "VACUUM;" );
 		}
-        delete conn;
+		delete conn;
 	}
 	delete m_dbConfig;
 }

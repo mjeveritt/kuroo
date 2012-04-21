@@ -34,7 +34,7 @@ QueueListItem::QueueListItem(const QString& name, const QString& id, const QStri
  : PackageListItem(name, id, category, QString(), status, QString(), parent), m_parentId( "" ), m_parent(NULL), m_hasStarted(false)
  , m_isComplete(false), m_pretended(false), m_steps(0), m_testTimer(0)
 {
-	kDebug() << "QueueListItem " << name << " constructed with duration " << duration;
+	kDebug() << "QueueListItem " << name << " constructed";
 	setDuration(duration);
 }
 
@@ -52,7 +52,6 @@ void QueueListItem::setVersion(const QString& v)
 
 void QueueListItem::setDuration(int d)
 {
-	kDebug() << "QueueListItem " << name() << " duration set to " << d;
 	m_duration = d;
 }
 
@@ -60,14 +59,6 @@ void QueueListItem::setSize(const QString& s)
 {
 	m_size = s;
 }
-
-/*QString QueueListItem::duration()
-{
-	if (m_duration == -1)
-		return i18n("na");
-
-	return formatTime(m_duration);
-}*/
 
 void QueueListItem::setParentId(const QString& pid)
 {

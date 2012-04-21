@@ -38,7 +38,7 @@ public:
 	void setVersion(const QString&);
 	void setSize(const QString&);
 	void setDuration(int);
-	int duration() const { kDebug() << "duration() called on " << name() << " returning " << m_duration;return m_duration;}
+	int duration() const {return m_duration;}
 	int remainingDuration() const {if(m_hasStarted) {return m_duration - m_steps;} else {return m_duration;}}
 	QString version() const {return m_version;}
 	QString size() const {return m_size;}

@@ -233,7 +233,6 @@ bool Emerge::quickpkg( const QStringList& packageList )
 	return ret;
 }
 
-
 /**
  * Emerge pretend list of packages.
  * @param packageList
@@ -371,7 +370,6 @@ bool Emerge::checkUpdates()
  * Parse emerge process output for messages and packages.
  * @param proc
  */
-
 void Emerge::slotEmergeOutput()
 {
 	QRegExp rxPackage = rxEmerge();
@@ -388,7 +386,7 @@ void Emerge::slotEmergeOutput()
 		lines[0] = m_buffer.append(lines[0]);
 		m_buffer = lines.takeLast();
 	}
-	foreach ( QByteArray baline, lines) {
+	foreach (QByteArray baline, lines) {
 		QString line(baline);
 		int logDone = 0;
 

@@ -175,10 +175,16 @@ bool QueueListModel::hasChildren(const QModelIndex& parent) const
 
 QModelIndex QueueListModel::parent(const QModelIndex& index) const
 {
+	if (!index.isValid())
+	{
+		return QModelIndex();
+	}
 	QueueListItem *item = static_cast<QueueListItem*>(index.internalPointer());
 	if (item == NULL || item->parentItem() == NULL)
 		return QModelIndex();
 
+	return createIndex(item->parentItem()->packageIndex(), 0, item->parentItem());
+	//This was the old code, which occassionally crashed on item->parentItem()->parentItem()->children()
 	int i = 0;
 	QList<QueueListItem*> parents;
 	if (item->parentItem()->parentItem() == NULL)

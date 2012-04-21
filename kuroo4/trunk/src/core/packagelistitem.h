@@ -25,6 +25,7 @@
 #include <QString>
 #include <QMap>
 
+#include "common.h"
 #include "dependatom.h"
 #include "packageversion.h"
 #include "portagelistview.h"
@@ -46,7 +47,7 @@ public:
 	QString						homepage() const {return m_homepage;}
 	int							status() const {return m_status;}
 	bool						isInWorld() const {return m_isInWorld;}
-	bool						isQueued() const {return m_isQueued;}
+	bool						isQueued() const {return QueueSingleton::Instance()->isQueued(m_id);}
 	inline QList<PackageVersion*> versionList() const {return m_versions;}
 	inline const QString&		linesInstalled() const { return m_linesInstalled; }
 	inline const QString&		linesAvailable() const { return m_linesAvailable; }
@@ -108,7 +109,6 @@ private:
 
 	// Is this package available in this arch?
 	bool						m_isInArch;
-	bool						m_isQueued;
 };
 
 #endif

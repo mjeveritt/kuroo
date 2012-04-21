@@ -28,6 +28,7 @@
 
 class CategoriesListView;
 class KMenu;
+class KAction;
 class PackageInspector;
 class UninstallInspector;
 
@@ -66,10 +67,13 @@ private slots:
 	void				slotEnqueue();
 	void				slotDequeue();
 	void				slotUninstall();
+	void				slotAddWorld();
+	void				slotRemoveWorld();
+	void				slotBackup();
 
     void				slotAdvanced();
 	void				slotPackage();
-    void				slotContextMenu();
+    void				slotContextMenu( const QPoint &point);
 
 private:
 	void				processPackage( bool viewInspector );
@@ -90,6 +94,9 @@ private:
 
 	// Lists all package versions for uninstalling
 	UninstallInspector	*m_uninstallInspector;
+
+	// Actions for the context menu
+	KAction				*m_packageDetails, *m_addToQueue, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_uninstallPackage, *m_quickPackage;
 
 signals:
 	void				signalChanged();

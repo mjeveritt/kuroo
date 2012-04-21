@@ -32,25 +32,27 @@
 #include "packagelistmodel.h"
 #include "packagelistitem.h"
 
-#include <qlayout.h>
-#include <qsplitter.h>
-#include <qgroupbox.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qtimer.h>
-#include <qwhatsthis.h>
-#include <qradiobutton.h>
+#include <QLayout>
+#include <QSplitter>
+#include <QGroupBox>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QButtonGroup>
+#include <QTimer>
+#include <QWhatsThis>
+#include <QRadioButton>
 
 /*#include <kpushbutton.h>
 #include <ktextbrowser.h>
-#include <kmenu.h>
 #include <KDialog>
 #include <kuser.h>
 #include <klineedit.h>
 #include <kiconloader.h>*/
 //#include <kaccel.h>
-#include <kmessagebox.h>
+#include <KAction>
+#include <KMenu>
+#include <KMessageBox>
+#include <kuser.h>
 
 enum Focus {
 		CATEGORYLIST,
@@ -80,8 +82,23 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
 
 	// Rmb actions.
-	//connect( packagesView, SIGNAL( customContextMenuRequested(QPoint) ),
-	//		 this, SLOT( slotContextMenu() ) );
+	packagesView->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect( packagesView, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( slotContextMenu(const QPoint&) ) );
+
+	m_addToQueue = new KAction( KIcon( "kuroo_queue" ), i18n( "&Add to Queue"), this );
+	connect( m_addToQueue, SIGNAL( triggered(bool) ), this, SLOT( slotEnqueue() ) );
+	m_removeFromQueue = new KAction( KIcon( "kuroo_queue" ), i18n( "&Remove from Queue"), this );
+	connect( m_removeFromQueue, SIGNAL(triggered(bool)), this, SLOT(slotDequeue() ));
+	m_addToWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Add To &World"), this );
+	connect( m_addToWorld, SIGNAL(triggered(bool)), this, SLOT( slotAddWorld()));
+	m_removeFromWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Remove From &World"), this );
+	connect( m_removeFromWorld, SIGNAL(triggered(bool)), this, SLOT( slotRemoveWorld()));
+	m_packageDetails = new KAction( i18n( "&Details"), this );
+	connect( m_packageDetails, SIGNAL( triggered(bool) ), this, SLOT( slotAdvanced() ) );
+	m_uninstallPackage = new KAction( KIcon( "list-remove" ), i18n( "&Uninstall" ), this );
+	connect( m_uninstallPackage, SIGNAL( triggered(bool) ), this, SLOT( slotUninstall() ) );
+	m_quickPackage = new KAction( KIcon( "kuroo_quickpkg"), i18n( "Backup Package"), this );
+	connect( m_quickPackage, SIGNAL( triggered(bool) ), this, SLOT( slotBackup() ) );
 
 	// Button actions.
 	//connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
@@ -503,7 +520,6 @@ void PortageTab::slotEnqueue()
 			if ( packagesView->packageItemById( id )->isInPortage() && !packagesView->packageItemById( id )->isQueued() )
 			{
 				packageIdList += id;
-				packagesView->packageItemById( id )->setQueued(true);
 			}
 		}
 		QueueSingleton::Instance()->addPackageIdList( packageIdList );
@@ -516,11 +532,6 @@ void PortageTab::slotDequeue()
 {
 	if ( !EmergeSingleton::Instance()->isRunning() || !SignalistSingleton::Instance()->isKurooBusy() ) {
 		const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
-		foreach( QString id, selectedIdsList )
-		{
-			packagesView->packageItemById( id )->setQueued(false);
-		}
-
 		QueueSingleton::Instance()->removePackageIdList( selectedIdsList );
 	}
 
@@ -546,6 +557,35 @@ void PortageTab::slotUninstall()
 
 		m_uninstallInspector->view( packageList );
 	}
+}
+
+void PortageTab::slotAddWorld()
+{
+	const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
+	QStringList packageList;
+	foreach ( QString id, selectedIdsList )
+		packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
+	PortageSingleton::Instance()->appendWorld( packageList );
+}
+
+void PortageTab::slotRemoveWorld()
+{
+	const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
+	QStringList packageList;
+	foreach ( QString id, selectedIdsList )
+		packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
+	PortageSingleton::Instance()->removeFromWorld( packageList );
+}
+
+void PortageTab::slotBackup()
+{
+	const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
+	QStringList packageList;
+	foreach( QString id, selectedIdsList ) {
+		if( packagesView->packageItemById( id )->isInstalled() && packagesView->packageItemById( id )->isInPortage() )
+			packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
+	}
+	EmergeSingleton::Instance()->quickpkg( packageList );
 }
 
 
@@ -724,14 +764,14 @@ void PortageTab::processPackage( bool viewInspector )
  * @param item
  * @param point
  */
-void PortageTab::slotContextMenu()
+void PortageTab::slotContextMenu(const QPoint &point)
 {
-	DEBUG_LINE_INFO;
-	//port KMenu to KDE4
-	/*if ( !item )
+	QModelIndex item = packagesView->indexAt(point);
+
+	if ( !item.isValid() )
 		return;
 
-	const QStringList selectedIdsList = packagesView->selectedIds();
+	const QStringList selectedIdsList = packagesView->selectedPackagesByIds();
 
 	bool hasQueuedItems = false;
 	bool hasUnqueuedItemsInPortage = false;
@@ -741,7 +781,7 @@ void PortageTab::slotContextMenu()
 	bool hasInstalledAndInPortagePackages = false;
 
 	foreach( QString id, selectedIdsList ) {
-		PackageItem *currentItem = packagesView->packageItemById( id );
+		PackageListItem *currentItem = packagesView->packageItemById( id );
 
 		if( currentItem->isQueued() ) {
 			hasQueuedItems = true;
@@ -760,13 +800,25 @@ void PortageTab::slotContextMenu()
 		if( hasQueuedItems && hasUnqueuedItemsInPortage && hasItemsInWorld && hasItemsOutOfWorld
 			&& hasInstalledPackages && hasInstalledAndInPortagePackages )
 			break;	//stop the loop if we already have everything
-
 	}
-
-	enum Actions { ADDQUEUE, DELQUEUE, UNINSTALL, ADDWORLD, DELWORLD, QUICKPACKAGE };
 
 	KMenu menu( this );
 
+	menu.addAction( m_addToQueue );
+	m_addToQueue->setEnabled(hasUnqueuedItemsInPortage);
+	menu.addAction( m_removeFromQueue );
+	m_removeFromQueue->setEnabled(hasQueuedItems);
+	menu.addAction(m_packageDetails);
+	m_packageDetails->setEnabled( selectedIdsList.count() == 1 );
+	menu.addAction(m_addToWorld);
+	m_addToWorld->setEnabled(false);	//default to false, enable later if super user
+	menu.addAction(m_removeFromWorld);
+	m_removeFromWorld->setEnabled(false);	//default to false, enable later if super user
+	menu.addAction(m_uninstallPackage);
+	m_uninstallPackage->setEnabled(hasInstalledPackages);
+	menu.addAction(m_quickPackage);
+	m_quickPackage->setEnabled(hasInstalledAndInPortagePackages);
+	/*
 	int enqueueMenuItem;
 	enqueueMenuItem = menu.addAction( ImagesSingleton::Instance()->icon( QUEUED ), i18n("&Add to queue"), ADDQUEUE );
 	menu.setEnabled( enqueueMenuItem, hasUnqueuedItemsInPortage );
@@ -781,11 +833,11 @@ void PortageTab::slotContextMenu()
 
 	int addWorldMenuItem;
 	addWorldMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
-	menu.setItemEnabled( addWorldMenuItem, false );	//default to false, enable later if super user
+	menu.setItemEnabled( addWorldMenuItem, false );
 
 	int delWorldMenuItem;
 	delWorldMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
-	menu.setItemEnabled( delWorldMenuItem, false );	//default to false, enable later if super user
+	menu.setItemEnabled( delWorldMenuItem, false );
 
 	int uninstallMenuItem;
 	uninstallMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( REMOVE ), i18n("&Uninstall"), UNINSTALL );
@@ -804,34 +856,50 @@ void PortageTab::slotContextMenu()
 	kDebug() << "hasItemsOutOfWorld=" << hasItemsOutOfWorld;
 	kDebug() << "hasInstalledPackages=" << hasInstalledPackages;
 	kDebug() << "hasInstalledAndInPortagePackages=" << hasInstalledAndInPortagePackages;
-
+*/
 	bool busy = EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy();
 	if ( busy ) {
-		menu.setItemEnabled( enqueueMenuItem, false );
-		menu.setItemEnabled( dequeueMenuItem, false );
-		menu.setItemEnabled( backupMenuItem, false );
+		//menu.setItemEnabled( enqueueMenuItem, false );
+		//menu.setItemEnabled( dequeueMenuItem, false );
+		//menu.setItemEnabled( backupMenuItem, false );
+		m_addToQueue->setDisabled(true);
+		m_removeFromQueue->setDisabled(true);
+		m_quickPackage->setDisabled(true);
 	}
 
 	// No uninstall when emerging or no privileges
-	if ( busy || !KUser().isSuperUser() )
-		menu.setItemEnabled( uninstallMenuItem, false );
+	if ( busy || !KUser().isSuperUser() ) {
+		//menu.setItemEnabled( uninstallMenuItem, false );
+		m_uninstallPackage->setDisabled(true);
+	}
 
 	// Allow editing of World when superuser
 	if ( KUser().isSuperUser() ) {
-		menu.setItemEnabled( addWorldMenuItem, hasItemsOutOfWorld );
-		menu.setItemEnabled( delWorldMenuItem, hasItemsInWorld );
+		//menu.setItemEnabled( addWorldMenuItem, hasItemsOutOfWorld );
+		//menu.setItemEnabled( delWorldMenuItem, hasItemsInWorld );
+		m_addToWorld->setEnabled(hasItemsOutOfWorld);
+		m_removeFromWorld->setEnabled(hasItemsInWorld);
 	}
 
 	if ( m_packageInspector->isVisible() ) {
-		menu.setItemEnabled( enqueueMenuItem, false );
-		menu.setItemEnabled( dequeueMenuItem, false );
-		menu.setItemEnabled( detailsMenuItem, false );
-		menu.setItemEnabled( addWorldMenuItem, false );
-		menu.setItemEnabled( delWorldMenuItem, false );
-		menu.setItemEnabled( uninstallMenuItem, false );
-		menu.setItemEnabled( backupMenuItem, false );
+// 		menu.setItemEnabled( enqueueMenuItem, false );
+// 		menu.setItemEnabled( dequeueMenuItem, false );
+// 		menu.setItemEnabled( detailsMenuItem, false );
+// 		menu.setItemEnabled( addWorldMenuItem, false );
+// 		menu.setItemEnabled( delWorldMenuItem, false );
+// 		menu.setItemEnabled( uninstallMenuItem, false );
+// 		menu.setItemEnabled( backupMenuItem, false );
+		m_addToQueue->setDisabled(true);
+		m_removeFromQueue->setDisabled(true);
+		m_packageDetails->setDisabled(true);
+		m_addToWorld->setDisabled(true);
+		m_removeFromWorld->setDisabled(true);
+		m_uninstallPackage->setDisabled(true);
+		m_quickPackage->setDisabled(true);
 	}
 
+	menu.exec(packagesView->viewport()->mapToGlobal(point));
+/*
 	switch( menu.exec( point ) ) {
 
 		case ADDQUEUE:
@@ -851,28 +919,14 @@ void PortageTab::slotContextMenu()
 			break;
 
 		case ADDWORLD: {
-			QStringList packageList;
-			foreach ( QString id, selectedIdsList )
-				packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
-			PortageSingleton::Instance()->appendWorld( packageList );
 			break;
 		}
 
 		case DELWORLD: {
-			QStringList packageList;
-			foreach ( QString id, selectedIdsList )
-				packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
-			PortageSingleton::Instance()->removeFromWorld( packageList );
 			break;
 		}
 
 		case QUICKPACKAGE: {
-			QStringList packageList;
-			foreach( QString id, selectedIdsList ) {
-				if( packagesView->packageItemById( id )->isInstalled() && packagesView->packageItemById( id )->isInPortage() )
-					packageList += packagesView->packageItemById( id )->category() + "/" + packagesView->packageItemById( id )->name();
-			}
-			EmergeSingleton::Instance()->quickpkg( packageList );
 			break;
 		}
 	}*/

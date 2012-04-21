@@ -1,10 +1,37 @@
+/***************************************************************************
+ *	Copyright (C) 2010 by cazou88											*
+ *	cazou88@users.sourceforge.net											*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
+
 #include "common.h"
 #include "packagelistitem.h"
 #include "queuelistview.h"
 #include "packageversion.h"
 
 PackageListItem::PackageListItem(QObject *parent)
- : QObject(parent)
+ : QObject(parent),
+   m_name(""),
+   m_id(""),
+   m_category(""),
+   m_description(""),
+   m_update(""),
+   m_status(0),
+   m_isInitialized(false)
 {}
 
 PackageListItem::PackageListItem(const QString& name, const QString& id, const QString& category, const QString& description, const int status, const QString& update, QObject *parent)
@@ -15,8 +42,7 @@ PackageListItem::PackageListItem(const QString& name, const QString& id, const Q
    m_description(description),
    m_update(update),
    m_status(status),
-   m_isInitialized(false),
-   m_isQueued(false)
+   m_isInitialized(false)
 {
 	if (PortageSingleton::Instance()->isInWorld(m_category + "/" + m_name))
 		m_isInWorld = true;
@@ -25,7 +51,9 @@ PackageListItem::PackageListItem(const QString& name, const QString& id, const Q
 }
 
 PackageListItem::~PackageListItem()
-{}
+{
+	kDebug() << "Destroying PackageListItem " << m_name;
+}
 
 /**
  * Initialize the package with all its versions and info. Executed when PortageItem get focus first time.
@@ -269,18 +297,6 @@ bool PackageListItem::isInPortage() const
 	return ( m_status & ( PACKAGE_AVAILABLE | PACKAGE_INSTALLED | PACKAGE_UPDATES ) );
 }
 
-/**
- * Mark package as queued. Emit signal only if status is changed.
- * @param isQueued
- */
-void PackageListItem::setQueued(const bool isQueued)
-{
-	if ( m_isQueued != isQueued ) {
-		m_isQueued = isQueued;
-		//SignalistSingleton::Instance()->packageQueueChanged();
-	}
-}
-
 void PackageListItem::resetDetailedInfo()
 {
 	m_isInitialized = false;
@@ -301,6 +317,6 @@ bool PackageListItem::isFirstPackage() const
 
 	if (qlv)
 		return (m_index == qlv->allPackages().count());
-	
+
 	return true;
 }

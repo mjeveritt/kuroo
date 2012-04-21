@@ -1,3 +1,23 @@
+/***************************************************************************
+ *	Copyright (C) 2010 by cazou88											*
+ *	cazou88@users.sourceforge.net											*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
+
 #include "common.h"
 #include "queuelistitem.h"
 #include "queuelistview.h"
@@ -5,26 +25,22 @@
 
 
 QueueListItem::QueueListItem(QObject *parent)
- : PackageListItem(parent)
+ : PackageListItem(parent), m_parentId( "" ), m_parent(NULL), m_hasStarted(false)
+ , m_isComplete(false), m_pretended(false), m_steps(0), m_testTimer(0)
 {
 }
 
 QueueListItem::QueueListItem(const QString& name, const QString& id, const QString& category, const int status, const int duration, QObject *parent)
- : PackageListItem(name, id, category, QString(), status, QString(), parent)
+ : PackageListItem(name, id, category, QString(), status, QString(), parent), m_parentId( "" ), m_parent(NULL), m_hasStarted(false)
+ , m_isComplete(false), m_pretended(false), m_steps(0), m_testTimer(0)
 {
+	kDebug() << "QueueListItem " << name << " constructed with duration " << duration;
 	setDuration(duration);
-	m_parentId = "";
-	m_parent = NULL;
-	m_hasStarted = false;
-	m_isComplete = false;
-	m_steps = 0;
-	m_pretended = false;
-
-	m_testTimer = 0;
 }
 
 QueueListItem::~QueueListItem()
 {
+	kDebug() << "Destroying QueueListItem " << name();
 	foreach(QueueListItem *i, m_children)
 		delete i;
 }
@@ -36,6 +52,7 @@ void QueueListItem::setVersion(const QString& v)
 
 void QueueListItem::setDuration(int d)
 {
+	kDebug() << "QueueListItem " << name() << " duration set to " << d;
 	m_duration = d;
 }
 
@@ -48,7 +65,7 @@ void QueueListItem::setSize(const QString& s)
 {
 	if (m_duration == -1)
 		return i18n("na");
-	
+
 	return formatTime(m_duration);
 }*/
 

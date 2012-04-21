@@ -602,7 +602,6 @@ void QueueTab::processPackage( bool viewInspector )
 
 /**
 * Popup menu for current package.
-* @param item
 * @param point
 */
 void QueueTab::slotContextMenu(const QPoint &point)
@@ -611,8 +610,6 @@ void QueueTab::slotContextMenu(const QPoint &point)
 
 	if ( !item.isValid() )
 		return;
-
-	enum Actions { ADDWORLD, DELWORLD };
 
 	KMenu menu( this );
 

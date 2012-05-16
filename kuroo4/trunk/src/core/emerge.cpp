@@ -416,8 +416,9 @@ void Emerge::slotEmergeOutput()
 			emergePackage.installedVersion = rxPackage.cap(6);
 			emergePackage.useFlags = rxPackage.cap(7).simplified();
 			emergePackage.size = rxPackage.cap(8);
-			kDebug() << emergePackage.size;
-			m_emergePackageList.prepend( emergePackage );
+			//kDebug() << emergePackage.size;
+			//Fix bug #3163827 order of queue items
+			m_emergePackageList.append( emergePackage );
 		}
 
 		////////////////////////////////////////////////////////////////////////

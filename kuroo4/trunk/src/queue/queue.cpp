@@ -193,7 +193,8 @@ void Queue::init( QObject *parent )
 */
 void Queue::refresh( bool hasCheckedQueue )
 {
-	//clearCache();
+	//This seems to fix the big crash bug. #3166840 or #3027148
+	clearCache();
 	emit signalQueueChanged( hasCheckedQueue );
 	SignalistSingleton::Instance()->packageQueueChanged();
 }

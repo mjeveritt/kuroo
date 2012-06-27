@@ -21,10 +21,10 @@
 #include "common.h"
 #include "global.h"
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <KGlobal>
-#include <kglobalsettings.h>
+#include <KGlobalSettings>
 
 /**
 * Regexp to parse emerge output.
@@ -70,8 +70,7 @@ const QStringList parsePackage( const QString& packageString )
 	if ( package.contains( '/' ) ) {
 		list << package.section( "/", 0, 0 );
 		nameVersion = package.section( "/", 1, 1 );
-	}
-	else {
+	} else {
 		list << QString::null;
 		nameVersion = package;
 	}
@@ -82,8 +81,7 @@ const QStringList parsePackage( const QString& packageString )
 		list << name;
 		list << nameVersion.section( name + "-", 1 );
 		return list;
-	}
-	else
+	} else
 		return QStringList();
 }
 

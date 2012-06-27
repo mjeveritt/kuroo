@@ -48,8 +48,11 @@ void QueueListModel::setPackages(QList<QueueListItem*>& packages)
 	if (rowCount() > 0)
 	{
 		beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+		//Fix bug #3163827 order of queue items
+		//I think this bug has to do with deleting the parent before deleting the child items,
+		//so if I get the order right it should go away, currently that means changing the order randomly
 		while (!m_packages.isEmpty())
-			delete m_packages.takeLast();
+			delete m_packages.takeFirst();//.takeLast();
 		endRemoveRows();
 	}
 

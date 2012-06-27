@@ -27,7 +27,7 @@
 //TODO: dispatch in relevant module
 const QString kurooDir = QString("/var/cache/kuroo/"); //->KConfig
 const QRegExp			rxEmerge(); //->Emerge
-const QStringList 		parsePackage( const QString& packageString ); //->KurooDB
+const QStringList 		parsePackage( const QString& packageString );
 const QString 			formatTime( const long& ); //->Queue
 
 #endif

@@ -27,11 +27,11 @@
 #include <string>
 #include <vector>
 
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qevent.h>
+#include <QDir>
+#include <QFileInfo>
+#include <QEvent>
 
-#include <kglobal.h>
+#include <KGlobal>
 
 /**
  * @class ScanPortageJob
@@ -120,7 +120,7 @@ void ScanPortageJob::run()
 
 	// Gather all path = portage and overlays
 	QStringList pathList;
-	pathList += KurooConfig::dirPortage() + "/metadata/cache/";
+	pathList += KurooConfig::dirPortage() + "/metadata/md5-cache/";
 	const QStringList pathOverlays = KurooConfig::dirPortageOverlay().split(" ");
 	foreach ( QString path, pathOverlays ) {
 		pathList += path;
@@ -142,6 +142,7 @@ void ScanPortageJob::run()
 		QStringList categoryList = dCategory.entryList();
 		for ( QStringList::Iterator itCategory = categoryList.begin(), itCategoryEnd = categoryList.end(); itCategory != itCategoryEnd; ++itCategory ) {
 
+			//Filter out distfiles, eclass, licenses, metadata, packages, profiles, scripts
 			if ( ! ((*itCategory).contains( '-' ) || *itCategory == "virtual" ) )
 				continue;
 
@@ -183,6 +184,7 @@ void ScanPortageJob::run()
 				QString status, lastPackage;
 				for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 
+					//That metadata.xml seems idempotent, it only exists in the real tree, not the cache tree
 					if ( *itPackage == "." || *itPackage == ".." || *itPackage == "metadata.xml" || (*itPackage).contains("MERGING") )
 						continue;
 
@@ -196,6 +198,7 @@ void ScanPortageJob::run()
 					//kDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
 					QStringList parts = parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
+						//parts[0] is category
 						QString name = parts[1];
 						QString version = parts[2];
 
@@ -212,7 +215,7 @@ void ScanPortageJob::run()
 							m_categories[ *itCategory ].packages[ name ];
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
-							m_categories[ *itCategory ].packages[ name ].path = (*itPath).section( "/metadata/cache", 0, 0 );
+							m_categories[ *itCategory ].packages[ name ].path = (*itPath).section( "/metadata/md5-cache", 0, 0 );
 							//kDebug(0) << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path << LINE_INFO;
 						}
 
@@ -399,7 +402,7 @@ void ScanPortageJob::scanInstalledPackages()
 
 /**
  * Collect info about this ebuild. Based on Jakob Petsovits code.
- * @param path		base path to portage directory (like /usr/portage/metadata/cache)
+ * @param path		base path to portage directory (like /usr/portage/metadata/md5-cache)
  * @param category	category name (like app-portage)
  * @param name		package name (like kuroo)
  * @param version
@@ -426,76 +429,76 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 
 	QString line;
 	QTextStream stream( &file );
-	int lineNumber(0);
 
 	// Check portage version and read out the package info strings
 // 	if ( KurooConfig::portageVersion21() ) {
 //
-// 		// We are on portage version post 2.1
-// 		while ( !stream.atEnd() ) {
-// 			line = stream.readLine();
-//
-// 			if ( line.startsWith( "LICENSE=" ) )
-// 				info.licenses = line.section("LICENSE=", 1, 1).replace('\'', "''").replace('%', "&#37;");
-// 			else
-// 				if ( line.startsWith( "KEYWORDS=" ) )
-// 					info.keywords = line.section("KEYWORDS=", 1, 1);
-// 				else
-// 					if ( line.startsWith( "SLOT=" ) )
-// 						info.slot = line.section("SLOT=", 1, 1);
-// 					else
-// 						if ( line.startsWith( "DESCRIPTION=" ) )
-// 							info.description = line.section("DESCRIPTION=", 1, 1).replace('\'', "''").replace('%', "&#37;");
-// 						else
-// 							if ( line.startsWith( "IUSE=" ) )
-// 								info.useFlags = line.section("IUSE=", 1, 1);
-// 							else
-// 								if ( line.startsWith( "HOMEPAGE=" ) )
-// 									info.homepage = line.section("HOMEPAGE=", 1, 1).replace('\'', "''").replace('%', "&#37;");
-// 		}
-// 	}
-// 	else {
-//WARN: Portage seems to have down-graded to the older style flat cache file for the cache in the repository (/usr/portage).  Other caches (layman) may behave differently
-		// We are on portage version pre 2.1
+		// We are on portage version post 2.1
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
-			lineNumber++;
 
-			// each line has a fixed meaning, as it seems.
-			// so iterate through the lines.
-			switch( lineNumber ) {
-				case 1: // compile? dependency stuff
-					break;
-				case 2: // runtime? dependency stuff
-					break;
-				case 3: // the package slot
-					info.slot = line;
-					break;
-				case 4: // file location, starting with mirror://
-					break;
-				case 5: // empty?
-					break;
-				case 6: // DirHome page
-					info.homepage = line.replace('\'', "''").replace('%', "&#37;");
-					break;
-				case 7: // licenses
-					info.licenses = line.replace('\'', "''").replace('%', "&#37;");
-					break;
-				case 8: // description
-					info.description = line.replace('\'', "''").replace('%', "&#37;");
-					break;
-				case 9: // keywords
-					info.keywords = line;
-					break;
-				case 10: // inherited eclasses?
-					break;
-				case 11: // useFlags
-					info.useFlags = line;
-					break;
-				default:
-					break;
-			}
+			if ( line.startsWith( "LICENSE=" ) )
+				info.licenses = line.section("LICENSE=", 1, 1).replace('\'', "''").replace('%', "&#37;");
+			else
+				if ( line.startsWith( "KEYWORDS=" ) )
+					info.keywords = line.section("KEYWORDS=", 1, 1);
+				else
+					if ( line.startsWith( "SLOT=" ) )
+						info.slot = line.section("SLOT=", 1, 1);
+					else
+						if ( line.startsWith( "DESCRIPTION=" ) )
+							info.description = line.section("DESCRIPTION=", 1, 1).replace('\'', "''").replace('%', "&#37;");
+						else
+							if ( line.startsWith( "IUSE=" ) )
+								info.useFlags = line.section("IUSE=", 1, 1);
+							else
+								if ( line.startsWith( "HOMEPAGE=" ) )
+									info.homepage = line.section("HOMEPAGE=", 1, 1).replace('\'', "''").replace('%', "&#37;");
 		}
+//	}
+//	else {
+	//int lineNumber(0);
+//WARN: Portage seems to have down-graded to the older style flat cache file for the cache in the repository (/usr/portage).  Other caches (layman) may behave differently
+		// We are on portage version pre 2.1
+// 		while ( !stream.atEnd() ) {
+// 			line = stream.readLine();
+// 			lineNumber++;
+//
+// 			// each line has a fixed meaning, as it seems.
+// 			// so iterate through the lines.
+// 			switch( lineNumber ) {
+// 				case 1: // compile? dependency stuff
+// 					break;
+// 				case 2: // runtime? dependency stuff
+// 					break;
+// 				case 3: // the package slot
+// 					info.slot = line;
+// 					break;
+// 				case 4: // file location, starting with mirror://
+// 					break;
+// 				case 5: // empty?
+// 					break;
+// 				case 6: // DirHome page
+// 					info.homepage = line.replace('\'', "''").replace('%', "&#37;");
+// 					break;
+// 				case 7: // licenses
+// 					info.licenses = line.replace('\'', "''").replace('%', "&#37;");
+// 					break;
+// 				case 8: // description
+// 					info.description = line.replace('\'', "''").replace('%', "&#37;");
+// 					break;
+// 				case 9: // keywords
+// 					info.keywords = line;
+// 					break;
+// 				case 10: // inherited eclasses?
+// 					break;
+// 				case 11: // useFlags
+// 					info.useFlags = line;
+// 					break;
+// 				default:
+// 					break;
+// 			}
+// 		}
 //	}
 	file.close();
 /*

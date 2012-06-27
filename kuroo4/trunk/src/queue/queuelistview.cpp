@@ -112,7 +112,7 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 	QList<QueueListItem*> orphans;
 	m_sumSize = 0;
 
-//	reset();//FIXME
+	reset();//FIXME: I don't know why this is labeled fixme
 	m_selectedPackages.clear();
 	m_packageIndex.clear();
 

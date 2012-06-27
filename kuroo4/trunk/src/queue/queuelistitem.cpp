@@ -67,7 +67,7 @@ void QueueListItem::setParentId(const QString& pid)
 
 void QueueListItem::appendChild(QueueListItem* item)
 {
-	m_children << item;
+	m_children << item;//.prepend(item);//
 	item->setParentItem(this);
 }
 

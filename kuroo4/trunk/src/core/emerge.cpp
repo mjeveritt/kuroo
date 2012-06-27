@@ -417,8 +417,7 @@ void Emerge::slotEmergeOutput()
 			emergePackage.useFlags = rxPackage.cap(7).simplified();
 			emergePackage.size = rxPackage.cap(8);
 			//kDebug() << emergePackage.size;
-			//Fix bug #3163827 order of queue items
-			m_emergePackageList.append( emergePackage );
+			m_emergePackageList.prepend( emergePackage );
 		}
 
 		////////////////////////////////////////////////////////////////////////

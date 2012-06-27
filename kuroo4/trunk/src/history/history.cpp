@@ -223,6 +223,7 @@ void History::slotParse()
 					int total = rxPackage.cap(4).toInt();
 					QString package = rxPackage.cap(6);
 					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
+					//TODO: This causes a full reload of PackageListView
 					PortageSingleton::Instance()->addInstalledPackage( package );
 					emit signalHistoryChanged();
 				}

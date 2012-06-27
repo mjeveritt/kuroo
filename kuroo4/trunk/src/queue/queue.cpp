@@ -119,13 +119,14 @@ public:
 
 		KurooDBSingleton::Instance()->query("DELETE FROM queue;", m_db);
 
-		// Iterate the emerge pretend package list
+		//idPackage will contain the most recent package we found that was in endUserPackageList
 		QString idPackage;
+		// Iterate the emerge pretend package list
 		EmergePackageList::ConstIterator itEnd = m_packageList.end();
 		for ( EmergePackageList::ConstIterator it = m_packageList.begin(); it != itEnd; ++it ) {
 
 			QString id = KurooDBSingleton::Instance()->singleQuery(
-				" SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
+				"SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 
 			if ( id.isEmpty() ) {
 				kWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
@@ -205,7 +206,6 @@ void Queue::refresh( bool hasCheckedQueue )
 void Queue::reset()
 {
 	KurooDBSingleton::Instance()->resetQueue();
-	clearCache();
 	refresh( false );
 }
 

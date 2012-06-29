@@ -530,8 +530,6 @@ const QStringList KurooDB::portageCategories( int filter, const QString& text )
 
 	switch ( filter )
 	{
-		//FIXME:Temporary workaround
-		case -1:
 		case PACKAGE_AVAILABLE:
 			filterQuery = " WHERE package.status & " + PACKAGE_ALL_STRING;
 			break;
@@ -580,8 +578,6 @@ const QStringList KurooDB::portageSubCategories( const QString& categoryId, int 
 
 		switch ( filter )
 		{
-			//FIXME:Temporary workaround
-			case -1:
 			case PACKAGE_AVAILABLE:
 				filterQuery = " AND package.status & " + PACKAGE_ALL_STRING;
 				break;
@@ -640,8 +636,6 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 
 	switch ( filter )
 	{
-		//FIXME:Temporary workaround
-		case -1:
 		case PACKAGE_AVAILABLE:
 			filterQuery = " AND package.status & " + PACKAGE_ALL_STRING;
 			break;
@@ -661,8 +655,6 @@ const QStringList KurooDB::portagePackagesBySubCategory( const QString& category
 		{
 			switch ( filter )
 			{
-				//FIXME:Temporary workaround
-				case -1:
 				case PACKAGE_AVAILABLE:
 					filterQuery = " WHERE package.status & " + PACKAGE_ALL_STRING;
 					break;

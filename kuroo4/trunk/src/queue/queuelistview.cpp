@@ -184,7 +184,8 @@ void QueueListView::insertPackageList( bool hasCheckedQueue )
 		// Inform all other listviews that this package is in queue
 		QueueSingleton::Instance()->insertInCache( id );
 
-		items << item;
+		//Fix bug #3163827 order of queue items
+		items.prepend( item );
 	}
 
 	// Cannot have current changed for only one package so emit manually

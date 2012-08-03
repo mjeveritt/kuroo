@@ -6,7 +6,7 @@ EAPI=4
 
 inherit subversion kde4-base
 
-DESCRIPTION="Grophical Portage frontend based on KDE4/Qt4"
+DESCRIPTION="Graphical Portage frontend based on KDE4/Qt4"
 HOMEPAGE="http://kuroo.sourceforge.net/"
 SRC_URI=""
 ESVN_REPO_URI="http://kuroo.svn.sourceforge.net/svnroot/kuroo/kuroo4/trunk"

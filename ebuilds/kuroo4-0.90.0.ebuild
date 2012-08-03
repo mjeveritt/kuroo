@@ -6,7 +6,7 @@ EAPI=4
 
 inherit kde4-base
 
-DESCRIPTION="Grophical Portage frontend based on KDE4/Qt4"
+DESCRIPTION="Graphical Portage frontend based on KDE4/Qt4"
 HOMEPAGE="http://kuroo.sourceforge.net/"
 SRC_URI="mirror://sourceforge/kuroo/${P}.tar.gz"
 

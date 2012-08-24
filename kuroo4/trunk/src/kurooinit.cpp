@@ -81,7 +81,7 @@ KurooInit::KurooInit( QObject *parent )
 				exit(0);
 			} else {
 				chmod( kurooDir.toAscii(), 0770 );
-				chown( kurooDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+				KIO::chown( KUrl(kurooDir), portageGid->gr_name, portageUid->pw_name);
 			}
 
 			d.setCurrent( kurooDir );
@@ -99,7 +99,7 @@ KurooInit::KurooInit( QObject *parent )
 		}
 		else {
 			chmod( backupDir.toAscii(), 0770 );
-			chown( backupDir.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+			KIO::chown( KUrl(backupDir), portageGid->gr_name, portageUid->pw_name);
 		}
 	}
 
@@ -110,7 +110,7 @@ KurooInit::KurooInit( QObject *parent )
 	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
 		chmod( logFile.toAscii(), 0660 );
-		chown( logFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+		KIO::chown( KUrl(logFile), portageGid->gr_name, portageUid->pw_name );
 	}
 
 	// Initialize the database
@@ -136,7 +136,7 @@ KurooInit::KurooInit( QObject *parent )
 
 	// Give permissions to portage:portage to access the db also
 	chmod( databaseFile.toAscii(), 0660 );
-	chown( databaseFile.toAscii(), portageGid->gr_gid, portageUid->pw_uid );
+	KIO::chown( KUrl(databaseFile), portageGid->gr_name, portageUid->pw_name );
 
     // Initialize singletons objects
 	SignalistSingleton::Instance()->init( this );
@@ -149,7 +149,7 @@ KurooInit::KurooInit( QObject *parent )
 	FileWatcherSingleton::Instance()->init( this );
 
 	//Load packages in case /etc/portage.* changed
-	//PortageFilesSingleton::Instance()->loadPackageFiles();
+	PortageFilesSingleton::Instance()->loadPackageFiles();
 }
 
 KurooInit::~KurooInit()

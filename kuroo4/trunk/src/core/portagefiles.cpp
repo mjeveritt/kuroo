@@ -324,14 +324,17 @@ void PortageFiles::loadPackageFiles()
 	DEBUG_LINE_INFO;
 
 	SignalistSingleton::Instance()->setKurooBusy(true);
-	KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Loading portage files"));
+
+	if (NULL != KurooStatusBar::instance())
+		KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Loading portage files"));
 	ThreadWeaver::Weaver::instance()->enqueue( new LoadPackageHardMaskJob( this ) );
 	loadPackageUserMask();
 	loadPackageUnmask();
 	loadPackageKeywords();
 	loadPackageUse();
 	SignalistSingleton::Instance()->setKurooBusy(false);
-	KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done."));
+	if (NULL != KurooStatusBar::instance())
+		KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done."));
 }
 
 void PortageFiles::loadPackageKeywords()

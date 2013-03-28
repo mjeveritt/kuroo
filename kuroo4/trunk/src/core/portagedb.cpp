@@ -60,7 +60,7 @@ KurooDB::~KurooDB()
  * Set write permission for regular user.
  * @return database file
  */
-QString KurooDB::init ( QObject *parent )
+QString KurooDB::init( QObject *parent )
 {
 	m_parent = parent;
 
@@ -1141,7 +1141,6 @@ SqliteConnection::SqliteConnection( SqliteConfig* config )
 
 	if ( !m_initialized )
 	{
-
 		// Remove old db file; create new
 		QFile::remove( path );
 		if ( sqlite3_open( path.toAscii(), &m_db ) == SQLITE_OK )

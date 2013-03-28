@@ -30,28 +30,28 @@
  */
 class PortageFiles : public QObject
 {
-Q_OBJECT	
+Q_OBJECT
 public:
 	PortageFiles( QObject *m_parent = 0 );
 	~PortageFiles();
 
 	void			init( QObject *parent = 0 );
 	void			refresh( int mask );
-	
+
 	void 			loadPackageFiles();
 	void			loadPackageKeywords();
 	void 			loadPackageUnmask();
 	void			loadPackageUserMask();
 	void			loadPackageUse();
-	
+
 	void			savePackageKeywords();
 	void 			savePackageUserUnMask();
 	void			savePackageUserMask();
 	void			savePackageUse();
-	
+
 signals:
 	void			signalPortageFilesChanged();
-	
+
 private:
 	QObject*		m_parent;
 };

@@ -47,6 +47,7 @@ EtcUpdate::~EtcUpdate()
 
 void EtcUpdate::init( QObject *parent )
 {
+	DEBUG_LINE_INFO;
 	m_parent = parent;
 
 	eProc = new KProcess();

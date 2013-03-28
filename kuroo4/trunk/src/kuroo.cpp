@@ -191,6 +191,8 @@ void Kuroo::slotSync()
 	if ( !timeStamp.isEmpty() ) {
 		t.setTime_t( timeStamp.toUInt() );
 		lastSyncDate = loc->formatDateTime(t);
+	} else {
+		lastSyncDate = "never";
 	}
 
 	switch( KMessageBox::questionYesNo( this,

@@ -1,22 +1,22 @@
 /***************************************************************************
-*   Copyright (C) 2004 by karye                                           *
-*   karye@users.sourceforge.net                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *	Copyright (C) 2004 by karye												*
+ *	karye@users.sourceforge.net												*
+ *																			*
+ *	This program is free software; you can redistribute it and/or modify	*
+ *	it under the terms of the GNU General Public License as published by	*
+ *	the Free Software Foundation; either version 2 of the License, or		*
+ *	(at your option) any later version.										*
+ *																			*
+ *	This program is distributed in the hope that it will be useful,			*
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of			*
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			*
+ *	GNU General Public License for more details.							*
+ *																			*
+ *	You should have received a copy of the GNU General Public License		*
+ *	along with this program; if not, write to the							*
+ *	Free Software Foundation, Inc.,											*
+ *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
+ ***************************************************************************/
 
 #include "common.h"
 #include "portagefiles.h"
@@ -274,44 +274,46 @@ void PortageFiles::init( QObject *parent )
 */
 void PortageFiles::refresh( int mask )
 {
-	switch ( mask ) {
-		case PACKAGE_KEYWORDS_SCANNED:
-			LogSingleton::Instance()->writeLog( i18n( "Completed scanning for package keywords in %1.",
-													KurooConfig::defaultFilePackageKeywords() ), KUROO );
-			break;
-		case PACKAGE_USER_UNMASK_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed scanning for unmasked packages in %1.",
-													KurooConfig::defaultFilePackageUserUnMask() ), KUROO );
-			break;
-		case PACKAGE_HARDMASK_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed scanning for hardmasked packages in %1.",
-													KurooConfig::filePackageHardMask() ), KUROO );
-			break;
-		case PACKAGE_USER_MASK_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed scanning for user masked packages in %1.",
-													KurooConfig::defaultFilePackageUserMask() ), KUROO );
-			break;
-		case PACKAGE_KEYWORDS_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed saving package keywords in %1.",
-													KurooConfig::defaultFilePackageKeywords() ), KUROO );
-			emit signalPortageFilesChanged();
-			break;
-		case PACKAGE_USER_MASK_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed saving user masked packages in %1.",
-													KurooConfig::defaultFilePackageUserMask() ), KUROO );
-			emit signalPortageFilesChanged();
-			break;
-		case PACKAGE_USER_UNMASK_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed saving user unmasked packages in %1.",
-													KurooConfig::defaultFilePackageUserUnMask() ), KUROO );
-			break;
-		case PACKAGE_USER_USE_SCANNED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed scanning user package use flags in %1.",
-													KurooConfig::defaultFilePackageUserUse() ), KUROO );
-			break;
-		case PACKAGE_USER_USE_SAVED:
-			LogSingleton::Instance()->writeLog(  i18n( "Completed saving user package use in %1.",
-													KurooConfig::defaultFilePackageUserUse() ), KUROO );
+	if (LogSingleton::Instance()) {
+		switch ( mask ) {
+			case PACKAGE_KEYWORDS_SCANNED:
+				LogSingleton::Instance()->writeLog( i18n( "Completed scanning for package keywords in %1.",
+														KurooConfig::defaultFilePackageKeywords() ), KUROO );
+				break;
+			case PACKAGE_USER_UNMASK_SCANNED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed scanning for unmasked packages in %1.",
+														KurooConfig::defaultFilePackageUserUnMask() ), KUROO );
+				break;
+			case PACKAGE_HARDMASK_SCANNED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed scanning for hardmasked packages in %1.",
+														KurooConfig::filePackageHardMask() ), KUROO );
+				break;
+			case PACKAGE_USER_MASK_SCANNED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed scanning for user masked packages in %1.",
+														KurooConfig::defaultFilePackageUserMask() ), KUROO );
+				break;
+			case PACKAGE_KEYWORDS_SAVED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed saving package keywords in %1.",
+														KurooConfig::defaultFilePackageKeywords() ), KUROO );
+				emit signalPortageFilesChanged();
+				break;
+			case PACKAGE_USER_MASK_SAVED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed saving user masked packages in %1.",
+														KurooConfig::defaultFilePackageUserMask() ), KUROO );
+				emit signalPortageFilesChanged();
+				break;
+			case PACKAGE_USER_UNMASK_SAVED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed saving user unmasked packages in %1.",
+														KurooConfig::defaultFilePackageUserUnMask() ), KUROO );
+				break;
+			case PACKAGE_USER_USE_SCANNED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed scanning user package use flags in %1.",
+														KurooConfig::defaultFilePackageUserUse() ), KUROO );
+				break;
+			case PACKAGE_USER_USE_SAVED:
+				LogSingleton::Instance()->writeLog(  i18n( "Completed saving user package use in %1.",
+														KurooConfig::defaultFilePackageUserUse() ), KUROO );
+		}
 	}
 }
 

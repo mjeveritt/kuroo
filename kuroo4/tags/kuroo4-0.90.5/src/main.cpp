@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-static const char version[] = "";
+static const char version[] = "0.90.5";
 
 int main( int argc, char **argv )
 {

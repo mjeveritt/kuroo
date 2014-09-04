@@ -22,19 +22,18 @@
 #include "systemtray.h"
 #include "configdialog.h"
 
-#include <qtextstream.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QTextStream>
+#include <QDir>
+#include <QFile>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
 
-#include <kconfigdialog.h>
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <ktextedit.h>
-#include <kuser.h>
+#include <KConfigDialog>
+#include <KConfig>
+#include <KMessageBox>
+#include <KTextEdit>
+#include <KUser>
 
 #include "log.h"
 
@@ -162,14 +161,18 @@ void ConfigDialog::slotSaveAll()
 }
 
 /**
-* Read '/etc/make.conf' into stringList by taking into account the different kind of extended lines.
+* Read 'make.conf' into stringList by taking into account the different kind of extended lines.
 * @return linesConcatenated
 */
 const QStringList ConfigDialog::readMakeConf()
 {
 	QStringList linesConcatenated;
-	QFile makeconf( KurooConfig::fileMakeConf() );
 	QRegExp rx( "\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
+	if ( !QFile::exists( KurooConfig::fileMakeConf() ) ) {
+		kError(0) << KurooConfig::fileMakeConf() << " doesn't exist. Trying /etc/portage/make.conf" << LINE_INFO;
+		KurooConfig::setFileMakeConf(QLatin1String( "/etc/portage/make.conf" ));
+	}
+	QFile makeconf( KurooConfig::fileMakeConf() );
 
 	if ( makeconf.open( QIODevice::ReadOnly ) ) {
 		QTextStream stream( &makeconf );
@@ -205,7 +208,7 @@ const QStringList ConfigDialog::readMakeConf()
 
 		linesConcatenated += extendedLine;
 	} else {
-		kError(0) << "Reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
+		kError(0) << "Error reading: " << KurooConfig::fileMakeConf() << LINE_INFO;
 	}
 
 	return linesConcatenated;

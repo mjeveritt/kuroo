@@ -9,7 +9,7 @@ else
 	exit $E_WRONGARGS
 fi
 
-svn cp https://kuroo.svn.sourceforge.net/svnroot/kuroo/kuroo4/trunk https://kuroo.svn.sourceforge.net/svnroot/kuroo/kuroo4/tags/${branch_name}
+svn cp https://svn.code.sf.net/p/kuroo/code/kuroo4/trunk https://svn.code.sf.net/p/kuroo/code/kuroo4/tags/${branch_name}
 
 cd tags
 
@@ -21,4 +21,6 @@ sed -e "s/static const char version\[\] = \"kuroo-9999\";/static const char vers
 
 svn ci main.cpp -m "Making a new release for ${branch_name}"
 
+cd ../..
 
+tar cvzf ../${branch_name}.tar.gz ${branch_name}

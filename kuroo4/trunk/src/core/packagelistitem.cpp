@@ -52,7 +52,7 @@ PackageListItem::PackageListItem(const QString& name, const QString& id, const Q
 
 PackageListItem::~PackageListItem()
 {
-	kDebug() << "Destroying PackageListItem " << m_name;
+	//kDebug() << "Destroying PackageListItem " << m_name;
 }
 
 /**

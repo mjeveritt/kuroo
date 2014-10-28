@@ -202,7 +202,7 @@ private:
 * @class Portage
 * @short Object handling the Portage tree.
 *
-* @todo: Register world packages in db.
+* @todo: Register @world packages in db.
 */
 Portage::Portage( QObject *m_parent )
 	: QObject( m_parent )
@@ -240,7 +240,7 @@ void Portage::slotChanged()
 }
 
 /**
-* Reload world when new package is installed/removed in case user not using --oneshot.
+* Reload @world when new package is installed/removed in case user not using --oneshot.
 */
 void Portage::slotPackageChanged()
 {
@@ -347,7 +347,7 @@ void Portage::slotScanCompleted()
 ////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* Load packages in world file. @fixme: optimize this...
+* Load packages in @world file. @fixme: optimize this...
 */
 void Portage::loadWorld()
 {
@@ -363,11 +363,11 @@ void Portage::loadWorld()
 		emit signalWorldChanged();
 	}
 	else
-		kError(0) << "Loading packages in world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
+		kError(0) << "Loading packages in @world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
 }
 
 /**
-* Check if this package in is world file.
+* Check if this package in is @world file.
 * @param package
 * @return true/false
 */
@@ -377,26 +377,26 @@ bool Portage::isInWorld( const QString& package )
 }
 
 /**
-* Add package to world file.
+* Add package to @world file.
 * @param package
 */
 void Portage::appendWorld( const QStringList& packageList )
 {
-	// Check is world is writable
+	// Check is @world is writable
 	QFile file( KurooConfig::fileWorld() );
 	if ( !file.open( QIODevice::WriteOnly ) ) {
-		kError(0) << "Adding packages to world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		kError(0) << "Adding packages to @world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
 		return;
 	}
 
-	// Make a copy of world map
+	// Make a copy of @world map
 	QMap<QString, QString> map = m_mapWorld;
 
-	// Add/update package into world map
+	// Add/update package into @world map
 	foreach ( QString pkg, packageList )
 		m_mapWorld.insert( pkg, QString::null );
 
-	// Update world file
+	// Update @world file
 	QTextStream stream( &file );
 	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
 		stream << it.key() << "\n";
@@ -406,23 +406,23 @@ void Portage::appendWorld( const QStringList& packageList )
 }
 
 /**
-* Remove package from world file.
+* Remove package from @world file.
 * @param package
 */
 void Portage::removeFromWorld( const QStringList& packageList )
 {
-	// Check is world is writable
+	// Check is @world is writable
 	QFile file( KurooConfig::fileWorld() );
 	if ( !file.open( QIODevice::WriteOnly ) ) {
-		kError(0) << "Removing packages from world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		kError(0) << "Removing packages from @world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
 		return;
 	}
 
-	// Make a copy of world map
+	// Make a copy of @world map
 	foreach( QString pkg, packageList )
 		m_mapWorld.remove( pkg );
 
-	// Update world file
+	// Update @world file
 	QTextStream stream( &file );
 	for ( QMap<QString, QString>::ConstIterator it = m_mapWorld.begin(), end = m_mapWorld.end(); it != end; ++it )
 		stream << it.key() << "\n";

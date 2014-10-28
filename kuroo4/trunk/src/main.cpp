@@ -23,21 +23,24 @@
 
 #include <stdlib.h>
 
-#include <kapplication.h>
-#include <kuniqueapplication.h>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KApplication>
+#include <KUniqueApplication>
+#include <KAboutData>
+#include <KCmdLineArgs>
+#include <KLocale>
+#include <KDebug>
 
-static const char version[] = "kuroo-9999";
+static const char version[] = "kuroo-0.90.5";
 
 int main( int argc, char **argv )
 {
 	KAboutData about("kuroo", 0, ki18n("Kuroo"), version, ki18n("Frontend to Gentoo Portage"),
 			KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
+	about.addAuthor(ki18n("Andrew Schenck"), ki18n("Maintainer"), "galiven@users.sourceforge.net");
 	about.addAuthor(ki18n("Karye"), ki18n("Original author and maintainer"), "info@kuroo.org");
-	about.addAuthor(ki18n("David C. Manuelda"), ki18n("Main developer and maintainer"), "StormByte@gmail.com");
+	about.addAuthor(ki18n("David C. Manuelda"), ki18n("Previous developer and maintainer"), "StormByte@gmail.com");
+	about.addAuthor(ki18n("Matthias Faconneau"), ki18n("Developer, port to KDE4"), "faconneau@users.sourceforge.net");
+	about.addAuthor(ki18n("Detlev Casanova"), ki18n("Developer, port to KDE4"), "cazou88@users.sourceforge.net");
 	about.addCredit(ki18n("Gombault Damien"), ki18n("French translation"), "desintegr@gmail.com");
 	about.addCredit(ki18n("Jan Schnackenberg"), ki18n("German translation"), "jan@schnackenberg.org");
 	about.addCredit(ki18n("Alexander Reiterer"), ki18n("German translation"), "alexander.reiterer@tuwien.ac.at");
@@ -49,12 +52,12 @@ int main( int argc, char **argv )
 	about.addCredit(ki18n("Jakob Petsovits"), ki18n("Portage version code"), "jpetso@gmx.at");
 	about.addCredit(ki18n("Björn Balazs"), ki18n("OpenUsability"), "B@lazs.de");
 	about.addCredit(ki18n("Florian Graessle"), ki18n("OpenUsability"), "holehan@gmx.de");
-	about.setHomepage("http://kuroo.org");
+	about.setHomepage("http://kuroo.sourceforge.net");
 	KCmdLineArgs::init( argc, argv, &about );
 
 	KUniqueApplication app;
 
-	kDebug(0) << "Kuroo version=" << version;
+	kDebug() << "Kuroo version=" << version;
 
 	KurooConfig::setHardVersion( version );
 	//KurooConfig::writeConfig();

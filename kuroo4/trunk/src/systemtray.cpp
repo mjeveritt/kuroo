@@ -47,14 +47,13 @@ SystemTray::SystemTray( QWidget *parent )
 	setIconByName( "kuroo" );
 	setCategory( KStatusNotifierItem::ApplicationStatus );
 	setStatus( KStatusNotifierItem::Active );
-	setToolTip( KIcon("kuroo"), i18n("Kuroo - Portage frontend"), "" );
+	setToolTipTitle( i18n("Kuroo - Portage frontend") );
 	//setting associated widget as recommended in http://techbase.kde.org/Development/Tutorials/PortToKStatusNotifierItem
 	setAssociatedWidget( parent );
 
 	contextMenu()->addAction( i18n("&Configure Kuroo..."), this, SLOT( slotPreferences() ) );
 	m_menuPause = contextMenu()->addAction( i18n("Pause Emerge"), this, SLOT( slotPause() ) );
 	m_menuUnpause = contextMenu()->addAction( i18n("Unpause Emerge"), this, SLOT( slotUnpause() ) );
-	//TODO: Add Quit menu item that signals quitSelected which is listened to in kuroo.cpp:68
 
 	m_menuPause->setEnabled( false );
 	m_menuUnpause->setEnabled( false );

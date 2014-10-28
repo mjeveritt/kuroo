@@ -65,7 +65,6 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() ) {
 		systemTray = new SystemTray( this );
-		connect( systemTray, SIGNAL( quitSelected() ), this, SLOT( slotQuit() ) );
 		connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
 	}
 
@@ -250,6 +249,11 @@ bool Kuroo::queryClose()
 */
 bool Kuroo::queryExit()
 {
+	DEBUG_LINE_INFO;
+	//Quit from the system tray icon calls this instead of the quit action on the main window
+	if ( !m_shuttingDown ) {
+		slotQuit();
+	}
 	return true;
 }
 
@@ -259,6 +263,7 @@ bool Kuroo::queryExit()
 */
 void Kuroo::slotQuit()
 {
+	kDebug() << "Cleaning up after ourselves" << LINE_INFO;
 	KurooDBSingleton::Instance()->backupDb();
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )

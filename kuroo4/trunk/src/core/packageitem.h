@@ -73,7 +73,7 @@ public:
 	 */
 	inline virtual bool						isQueued() const { return m_isQueued; }
 	/**
-	 * Is this package in world?
+	 * Is this package in @world?
 	 * @return true/false
 	 */
 	inline virtual bool						isInWorld() const { return m_inWorld; }
@@ -160,7 +160,7 @@ private:
 	// True if package is in installation queue
 	bool									m_isQueued;
 
-	// True if package is in world file
+	// True if package is in @world file
 	bool									m_inWorld;
 
 	// True if package and its versions has been initialized with all data

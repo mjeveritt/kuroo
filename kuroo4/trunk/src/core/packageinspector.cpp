@@ -342,7 +342,7 @@ void PackageInspector::slotApply()
 		PortageFilesSingleton::Instance()->savePackageUserMask();
 		PortageFilesSingleton::Instance()->savePackageUserUnMask();
 
-		// Check if this version is in updates. If not add it! (Only for packages in world).
+		// Check if this version is in updates. If not add it! (Only for packages in @world).
 		if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_package ) )
 			PortageSingleton::Instance()->checkUpdates( m_id, versionsView->updateVersion(), versionsView->hasUpdate() );
 	}

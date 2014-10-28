@@ -188,7 +188,7 @@ void QueueTab::slotInit()
 									"grabbing all potential files.</td></tr></table></qt>" ) );
 
 	cbNoWorld->setToolTip( i18n(   "<qt><table width=300><tr><td>Emerge as normal, "
-									"but do not add the packages to the world profile for later updating.</td></tr></table></qt>" ) );
+									"but do not add the packages to the @world profile for later updating.</td></tr></table></qt>" ) );
 
 	cbForceConf->setToolTip( i18n( "<qt><table width=300><tr><td>Causes portage to disregard merge records indicating that a config file"
 									"inside of a CONFIG_PROTECT directory has been merged already. "
@@ -460,7 +460,7 @@ void QueueTab::slotGo()
 					if ( cbForceConf->isChecked() )
 						packageList.prepend( "--noconfmem" );
 
-					// Emerge as normal, but do not add the packages to the world profile for later updating.
+					// Emerge as normal, but do not add the packages to the @world profile for later updating.
 					if ( cbNoWorld->isChecked() )
 						packageList.prepend( "--oneshot" );
 

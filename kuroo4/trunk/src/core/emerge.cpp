@@ -120,9 +120,6 @@ bool Emerge::queue( const QStringList& packageList )
 		eProc->clearProgram();
 		*eProc << "emerge" << "--nospinner" << "--columns" << "--color=n";
 
-		if( KurooConfig::updateBuilddeps() )
-			*eProc << "--with-bdeps=y";
-
 		// Add emerge options and packages
 		foreach( QString package, packageList ) {
 			*eProc << package;
@@ -252,9 +249,6 @@ bool Emerge::pretend( const QStringList& packageList )
 
 	*eProc << "emerge" << "--nospinner" << "--color=n" << "--columns" << "-pv";
 
-	if( KurooConfig::updateBuilddeps() )
-		*eProc << "--with-bdeps=y";
-
 	// Add argument for each of the attached packages
 	foreach( QString package, packageList ) {
 		*eProc << package;
@@ -329,7 +323,7 @@ bool Emerge::sync()
 }
 
 /**
- * Check for updates of world and system.
+ * Check for updates of @world and system.
  * @return success
  */
 bool Emerge::checkUpdates()
@@ -353,7 +347,7 @@ bool Emerge::checkUpdates()
 	if( KurooConfig::updateBuilddeps() )
 		*eProc << "--with-bdeps=y";
 
-	*eProc << "world";
+	*eProc << "@world";
 
 	eProc->start();
 	if (eProc->state() == QProcess::NotRunning)

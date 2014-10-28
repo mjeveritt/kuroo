@@ -832,11 +832,11 @@ void PortageTab::slotContextMenu(const QPoint &point)
 	menu.setItemEnabled( detailsMenuItem, selectedIdsList.count() == 1 );
 
 	int addWorldMenuItem;
-	addWorldMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to world" ), ADDWORLD );
+	addWorldMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Add to @world" ), ADDWORLD );
 	menu.setItemEnabled( addWorldMenuItem, false );
 
 	int delWorldMenuItem;
-	delWorldMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from world" ), DELWORLD );
+	delWorldMenuItem = menu.insertItem( ImagesSingleton::Instance()->icon( WORLD ), i18n( "Remove from @world" ), DELWORLD );
 	menu.setItemEnabled( delWorldMenuItem, false );
 
 	int uninstallMenuItem;

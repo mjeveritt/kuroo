@@ -66,7 +66,7 @@ QString KurooDB::init( QObject *parent )
 
 	m_dbConnPool = new DbConnectionPool();
 	DbConnection *dbConn = m_dbConnPool->getDbConnection();
-	m_dbConnPool->putDbConnection ( dbConn );
+	m_dbConnPool->putDbConnection( dbConn );
 
 	if ( !dbConn->isInitialized() || !isValid() )
 		createTables();
@@ -211,11 +211,11 @@ bool KurooDB::isHistoryEmpty()
 
 bool KurooDB::isValid()
 {
-	QStringList values1 = query ( "SELECT COUNT(id) FROM category LIMIT 0, 1;" );
-	QStringList values2 = query ( "SELECT COUNT(id) FROM package LIMIT 0, 1;" );
+	QString value1 = singleQuery ( "SELECT COUNT(id) FROM category LIMIT 0, 1;" );
+	QString value2 = singleQuery ( "SELECT COUNT(id) FROM package LIMIT 0, 1;" );
 	//A lot of times when the database gets corrupted, it has one value int it, and we know that there should
 	//always be more than one.
-	return ( !values1.isEmpty() && values1[0].toInt() != 1 && !values2.isEmpty() && values2[0].toInt() != 1 );
+	return ( !value1.isEmpty() && value1.toInt() != 1 && !value2.isEmpty() && value2.toInt() != 1 );
 }
 
 /**
@@ -351,17 +351,19 @@ void KurooDB::createTables( DbConnection *conn )
  */
 void KurooDB::backupDb()
 {
-	/*const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
+	const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	if ( !historyData.isEmpty() )
 	{
-		QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
+		QFile file ( kurooDir + KurooConfig::fileHistoryBackup() );
 		if ( file.open ( QIODevice::WriteOnly ) )
 		{
-			Q3TextStream stream ( &file );
-			foreach ( historyData )
+			QTextStream stream ( &file );
+			QStringList::const_iterator i = historyData.begin();
+			QStringList::const_iterator e = historyData.end();
+			while ( i != e )
 			{
-				QString timestamp = *it++;
-				QString einfo = *it;
+				QString timestamp = *i++;
+				QString einfo = *i++;
 				stream << timestamp << ":" << einfo << "\n";
 			}
 			file.close();
@@ -373,22 +375,25 @@ void KurooDB::backupDb()
 	const QStringList mergeData = query ( "SELECT timestamp, source, destination FROM mergeHistory;" );
 	if ( !mergeData.isEmpty() )
 	{
-		QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileMergeBackup() );
+		QFile file ( kurooDir + KurooConfig::fileMergeBackup() );
 		if ( file.open ( QIODevice::WriteOnly ) )
 		{
-			Q3TextStream stream ( &file );
-			foreach ( mergeData )
+			QTextStream stream ( &file );
+			QStringList::const_iterator i = mergeData.begin();
+			QStringList::const_iterator e = mergeData.end();
+			//foreach ( mergeData )
+			while ( i != e )
 			{
-				QString timestamp = *it++;
-				QString source = *it++;
-				QString destination = *it;
+				QString timestamp = *i++;
+				QString source = *i++;
+				QString destination = *i++;
 				stream << timestamp << ":" << source << ":" << destination << "\n";
 			}
 			file.close();
 		}
 		else
 			kError ( 0 ) << QString ( "Creating backup of history. Writing: %1." ).arg ( KurooConfig::fileMergeBackup() ) << LINE_INFO;
-	}*/
+	}
 }
 
 /**

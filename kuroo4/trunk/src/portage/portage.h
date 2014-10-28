@@ -74,7 +74,7 @@ signals:
 private:
 	QObject*					m_parent;
 	
-	// All packages in the world profile
+	// All packages in the @world profile
 	QMap<QString, QString>		m_mapWorld;
 };
 

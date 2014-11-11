@@ -32,13 +32,14 @@
 const QRegExp rxEmerge()
 {
 	if ( KurooConfig::portageVersion21() ) {
-		return QRegExp( "^\\[ebuild([\\s\\w~]*)\\]\\s+"
+		return QRegExp( "^\\[ebuild([\\s\\w~#]*)\\]\\s+"
 						"((\\S+)/(\\S+))"
 						"(?:\\s*\\[([^\\]]*)\\])?"
 						"(?:\\s*\\[([^\\]]*)\\])?"
 						"(?:\\s*USE=\"([^\"]*)\")?"
 						"(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
-						"(?:\\s*(\\d*(,\\d*)*)\\skB)?" );
+						"(?:\\s*\\w+=\"(?:[^\"]*)\")*"		//Capture and discard all extra use-expands
+						"(?:\\s*(\\d*(,\\d*)*)\\s(?:Ki|k)B)?" );
 	} else {
 		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
 						"((\\S+)/(\\S+))"

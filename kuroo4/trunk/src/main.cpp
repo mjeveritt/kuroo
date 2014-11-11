@@ -35,7 +35,7 @@ static const char version[] = "kuroo-0.90.5";
 int main( int argc, char **argv )
 {
 	KAboutData about("kuroo", 0, ki18n("Kuroo"), version, ki18n("Frontend to Gentoo Portage"),
-			KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
+	KAboutData::License_GPL, ki18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
 	about.addAuthor(ki18n("Andrew Schenck"), ki18n("Maintainer"), "galiven@users.sourceforge.net");
 	about.addAuthor(ki18n("Karye"), ki18n("Original author and maintainer"), "info@kuroo.org");
 	about.addAuthor(ki18n("David C. Manuelda"), ki18n("Previous developer and maintainer"), "StormByte@gmail.com");

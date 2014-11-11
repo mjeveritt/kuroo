@@ -286,7 +286,7 @@ const QString QueueListView::formatSize( const QString& sizeString )
 	if ( size == 0 )
 		total = "0 kB ";
 	else
-		total = loc->formatNumber( (double)size, 0 ) + " kB ";
+		total = loc->formatNumber( (double)size, 0 ) + " KiB ";
 
 	return total;
 }

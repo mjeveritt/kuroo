@@ -41,40 +41,57 @@
  */
 PortageAtom::PortageAtom( PackageListItem* portagePackage )
 	: m_portagePackage( portagePackage ),
-    rxAtom(
-	       	"^"    										// Start of the string
+	rxAtom(
+			"^"    										// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
 			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
-			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory FIXME:What about 'virtual' category ?
+			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+|virtual)/"   	// category and subcategory FIXME:What about 'virtual' category ?
 			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
 			//FIXME:this will take -9999 version in the package name. See /usr/lib/portage/pym/portage/versions.py that has a better regexp.
 			"("           								// start of the version part
 			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-	       	"(?:-r\\d*)?"  								// revision
-	       	"\\*?)?$"          							// end of the (optional) version part and the atom string
-		), m_matches( false ), m_callsign( false ),
-	m_category( QString::null )
+			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+			"(?:-r\\d*)?"  								// revision
+			"\\*?)?$"          							// end of the (optional) version part and the atom string
+		),
+	rxVersion(
+		"^"
+		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+		"("           								// start of the version part
+		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+		"(?:-r\\d*)?"  								// revision
+		"\\*?)$"          							// end of the (optional) version part and the atom string
+	), m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
 }
 
 PortageAtom::PortageAtom( const QString& atom )
-    : rxAtom(
-	       	"^"    										// Start of the string
-			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
-			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
-			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/"   	// category and subcategory
-			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-			"("           								// start of the version part
-			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-	       	"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-	       	"(?:-r\\d*)?"  								// revision
-	       	"\\*?)?$"          							// end of the (optional) version part and the atom string
-		), m_matches( false ), m_callsign( false ),
-	m_category( QString::null )
+	: rxAtom(
+			"^"											// Start of the string
+			"(!)?"										// "Block these packages" flag, only occurring in ebuilds
+			"(~|(?:<|>|=|<=|>=))?"						// greater-than/less-than/equal, or "all revisions" prefix
+			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+|virtual)/"	// category and subcategory
+			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)"			// package name
+			"("											// start of the version part
+			"(?:-\\d*(?:\\.\\d+)*[a-z]?)"				// base version number, including wildcard version matching (*)
+			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?"			// version suffix
+			"(?:-r\\d*)?"								// revision
+			"\\*?)?$"									// end of the (optional) version part and the atom string
+		),
+	rxVersion(
+		"^"
+		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+		"("           								// start of the version part
+		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+		"(?:-r\\d*)?"  								// revision
+		"\\*?)$"          							// end of the (optional) version part and the atom string
+	), m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
-    PortageAtom();
-    parse( atom );
+	PortageAtom();
+	rxAtom.setMinimal(true);	//Versions without a . in them were greedily matched into the package name
+	parse( atom );
 }
 
 PortageAtom::~PortageAtom()
@@ -96,13 +113,14 @@ PortageAtom::~PortageAtom()
 bool PortageAtom::parse( const QString& atom )
 {
 // 	kDebug() << "atom=" << atom << LINE_INFO;
-	
+
 	// Do the regexp match, which also prepares for text capture
 	if ( !rxAtom.exactMatch( atom ) ) {
+		kdDebug() << atom << " didn't match the regex exactly.";
 		m_matches = false;
 		return false;
 	}
-	
+
 	// Get the captured strings
 	m_callsign	= rxAtom.cap( 1 ).isEmpty() ? false : true;
 	//kDebug() << m_callsign;
@@ -114,22 +132,31 @@ bool PortageAtom::parse( const QString& atom )
 	//kDebug() << m_package;
 	m_version	= rxAtom.cap( 6 );
 	//kDebug() << m_version;
-	
+
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
+		//Try to fix it with the second regex
+		if ( rxVersion.exactMatch( m_package ) ) {
+			m_package = rxVersion.cap( 1 );
+			m_version = rxVersion.cap( 2 );
+		}
+	}
+
+	// Additional check: If there is a version, there also must be a prefix
+	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
+		kdDebug() << atom << " has prefix, category, pagkage, and version " << m_prefix << m_category << m_package << m_version;
 		m_matches = false;
 		return false;
 	}
-	
+
 	// Strip the hyphen at the start of the version, except when it's a "*"
 	if ( !m_version.isEmpty() && m_version[0] == '-' )
 		m_version = m_version.mid(1);
-	
+
 	// Not yet returned false, so it's a valid atom
 	m_matches = true;
 	return true;
 }
-
 
 /**
  * Retrieve the set of package versions that is matching the atom.
@@ -138,69 +165,65 @@ bool PortageAtom::parse( const QString& atom )
  */
 QList<PackageVersion*> PortageAtom::matchingVersions()
 {
-        QList<PackageVersion*> matchingVersions;
-	
-    if ( m_package.isEmpty() || !m_matches )
+	QList<PackageVersion*> matchingVersions;
+
+	if ( m_package.isEmpty() || !m_matches )
 		return matchingVersions; // return an empty list
-	
+
 	if ( m_portagePackage->category() != m_category || m_portagePackage->name() != m_package )
 		return matchingVersions; // return an empty list
 
 	bool matchAllVersions( false );
 	if ( m_version.isEmpty() || m_version == "*" )
 		matchAllVersions = true;
-	
+
 	bool matchBaseVersion( false );
 	if ( m_version.endsWith("*") ) {
-		
+
 		// remove the trailing star
 		m_version = m_version.left( m_version.length() - 1 );
 		matchBaseVersion = true;
 	}
-	
+
 	// When this is set true, it will match all versions
 	// with exactly the same version string as the parsed one.
 	bool matchEqual = m_prefix.endsWith("=");
-	
+
 	// When this is set true, it will match all versions greater than
 	// (but not equalling) the parsed version from the atom.
 	// When false, it will match all versions less than
 	// (but not equalling, too) the parsed version.
 	bool matchGreaterThan = m_prefix.startsWith(">");
-	
+
 	// Match '~' prefix for this exact version and all its revisions
 	bool matchAllRevisions( false );
 	if ( m_prefix.startsWith("~") ) {
 		matchEqual = true;
 		matchAllRevisions = true;
 	}
-	
-        QList<PackageVersion*> versions = m_portagePackage->versionList();
+
+	QList<PackageVersion*> versions = m_portagePackage->versionList();
 
 // 	kDebug() << "PortageAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
-	
+
 	// So, let's iterate through the versions to check if they match or not
-        for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
-		
+	for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+
 // 		kDebug() << "PortageAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
-		
+
 		if ( ( matchAllVersions ) ||
-		     ( matchBaseVersion   && (*versionIterator)->version().startsWith( m_version ) ) ||
-		     ( matchEqual         && (*versionIterator)->version() == m_version ) ||
-		     ( matchAllRevisions  && (*versionIterator)->version().startsWith( m_version + "-r" ) ) ||
-		     ( matchGreaterThan   && (*versionIterator)->isNewerThan( m_version ) ) ||
-		     ( !matchEqual        && !matchGreaterThan && (*versionIterator)->isOlderThan( m_version ) ) )
+			( matchBaseVersion   && (*versionIterator)->version().startsWith( m_version ) ) ||
+			( matchEqual         && (*versionIterator)->version() == m_version ) ||
+			( matchAllRevisions  && (*versionIterator)->version().startsWith( m_version + "-r" ) ) ||
+			( matchGreaterThan   && (*versionIterator)->isNewerThan( m_version ) ) ||
+			( !matchEqual        && !matchGreaterThan && (*versionIterator)->isOlderThan( m_version ) ) )
 		{
 			matchingVersions.append( (PackageVersion*) *versionIterator );
 			continue;
 		}
 	}
-	
+
 	return matchingVersions;
-	
+
 } // end of matchingVersions()
-
-
-
-

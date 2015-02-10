@@ -339,6 +339,9 @@ void KurooDB::createTables( DbConnection *conn )
 
 	query ( "CREATE INDEX index_name_package ON package(name);", conn );
 	query ( "CREATE INDEX index_category_package ON package(category);", conn );
+	query ( "CREATE INDEX index_history_timestamp ON history(timestamp);", conn );
+	query ( "CREATE INDEX index_package_id ON package(id);", conn );
+	query ( "CREATE INDEX index_version_packageId ON version(packageId);", conn );
 }
 
 

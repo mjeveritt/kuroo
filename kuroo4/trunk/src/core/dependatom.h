@@ -63,6 +63,9 @@ private:
 	// The regular expression for the whole atom.
 	QRegExp rxAtom;
 	
+	// The regular expression for just the package name and version.
+	QRegExp rxVersion;
+	
 	// This is set to the result of parse().
 	bool m_matches;
 	

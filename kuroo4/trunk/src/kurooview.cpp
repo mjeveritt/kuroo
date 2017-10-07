@@ -20,6 +20,7 @@
 
 #include <sys/stat.h>
 #include <assert.h>
+#include <unistd.h>		//usleep()
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -63,10 +64,10 @@ KurooView::KurooView( QWidget *parent ) :
 
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
-	//kdDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//kDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
 	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	KPageWidgetItem* pagePortage = addPage( viewPortage, i18n("Packages") );
-	//kdDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//kDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
 	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	pagePortage->setHeader( "" );
 	pagePortage->setIcon( KIcon("kuroo") );
@@ -128,6 +129,7 @@ void KurooView::slotInit()
 	//			"actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 
+	::sleep( 10 );	//allow db to load
 	// Check if history is empty, then maybe this is also a fresh install with empty db
 	if ( KurooDBSingleton::Instance()->isHistoryEmpty() ) {
 		m_isHistoryRestored = true;

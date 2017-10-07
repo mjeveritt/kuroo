@@ -1,3 +1,4 @@
+#include <QProcess>
 /***************************************************************************
 *   Copyright (C) 2004 by karye                                           *
 *   karye@users.sourceforge.net                                           *
@@ -74,7 +75,7 @@ public:
 public slots:
 	void						slotPause();
 	void						slotUnpause();
-	
+
 private:
 	void						cleanup();
 	bool						countEtcUpdates( const QString& line );
@@ -84,7 +85,7 @@ private:
 	 * @return bool
 	 */
 	inline bool					skipHousekeeping() const { return m_skipHousekeeping; }
-	
+
 private slots:
     void 						slotEmergeOutput();
     void 						slotCleanupQueue(int, QProcess::ExitStatus);

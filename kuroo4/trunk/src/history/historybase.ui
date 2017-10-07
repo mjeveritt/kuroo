@@ -10,9 +10,6 @@
     <height>408</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form3</string>
-  </property>
   <layout class="QGridLayout">
    <property name="margin">
     <number>0</number>
@@ -123,9 +120,6 @@
       <widget class="QCheckBox" name="viewUnmerges">
        <property name="text">
         <string>Show &amp;unmerges</string>
-       </property>
-       <property name="shortcut">
-        <string>Alt+U</string>
        </property>
       </widget>
      </item>

@@ -1,3 +1,4 @@
+#include <QColorGroup>
 /****************************************************************************
  *	Copyright (C) 2005 by Karye												*
  *	karye@users.sourceforge.net												*
@@ -148,17 +149,17 @@ void PortageTab::slotInit()
 	portageFrame->setPalette(p);
 
 	// Change select-color in summaryBrowser to get contrast
-	QColorGroup colorGroup = QColorGroup(palette());
+	//QColorGroup colorGroup = QColorGroup(palette());
 	QPalette summaryPalette;
-	QColorGroup summaryColorGroup( colorGroup );
-	summaryColorGroup.setColor( QColorGroup::HighlightedText, palette().dark().color() );
+	//QColorGroup summaryColorGroup( colorGroup );
+	summaryPalette.setColor( QPalette::HighlightedText, palette().dark().color() );
 
 	/*summaryPalette.setActive( summaryColorGroup );
 	summaryPalette.setInactive( summaryColorGroup );
 	summaryPalette.setDisabled( summaryColorGroup );*/
-	summaryPalette.setColor(QPalette::Active, QPalette::NoRole, summaryColorGroup.color(QPalette::Active, QPalette::NoRole));
-	summaryPalette.setColor(QPalette::Inactive, QPalette::NoRole, summaryColorGroup.color(QPalette::Inactive, QPalette::NoRole));
-	summaryPalette.setColor(QPalette::Disabled, QPalette::NoRole, summaryColorGroup.color(QPalette::Disabled, QPalette::NoRole));
+	summaryPalette.setColor(QPalette::Active, QPalette::NoRole, palette().color(QPalette::Active, QPalette::NoRole));
+	summaryPalette.setColor(QPalette::Inactive, QPalette::NoRole, palette().color(QPalette::Inactive, QPalette::NoRole));
+	summaryPalette.setColor(QPalette::Disabled, QPalette::NoRole, palette().color(QPalette::Disabled, QPalette::NoRole));
 
 	summaryBrowser->setPalette( summaryPalette );
 

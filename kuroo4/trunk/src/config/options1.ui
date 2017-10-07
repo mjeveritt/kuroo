@@ -10,9 +10,6 @@
     <height>451</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form1</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="portage_2_2_2">
@@ -26,9 +23,6 @@
          <widget class="QCheckBox" name="kcfg_updateNewUse">
           <property name="text">
            <string>&amp;New Use</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+N</string>
           </property>
          </widget>
         </item>
@@ -45,18 +39,12 @@ This can make your install times increase greatly and should be used with care.<
           <property name="text">
            <string>&amp;Build Dependancies</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+B</string>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="kcfg_updateDeep">
           <property name="text">
            <string>&amp;Deep</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+D</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -108,9 +96,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
           <property name="text">
            <string>Dock kuroo in system tray (close does not e&amp;xit kuroo)</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+X</string>
-          </property>
           <property name="checked">
            <bool>false</bool>
           </property>
@@ -142,9 +127,6 @@ Refresh Updates for changes to take effect.&lt;/i&gt;</string>
            <widget class="QCheckBox" name="kcfg_installedColumn">
             <property name="text">
              <string>&amp;Show installed packages in separate column</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+S</string>
             </property>
             <property name="checked">
              <bool>false</bool>

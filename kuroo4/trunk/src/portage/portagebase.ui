@@ -13,9 +13,6 @@
   <property name="focusPolicy">
    <enum>Qt::StrongFocus</enum>
   </property>
-  <property name="windowTitle">
-   <string>Form2</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -106,9 +103,6 @@
           <property name="text">
            <string>&amp;All Packages</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+A</string>
-          </property>
           <property name="checked">
            <bool>true</bool>
           </property>
@@ -122,9 +116,6 @@
           <property name="text">
            <string>I&amp;nstalled Packages</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+N</string>
-          </property>
           <property name="buttonGroupId" stdset="0">
            <number>2</number>
           </property>
@@ -134,9 +125,6 @@
          <widget class="QRadioButton" name="radioUpdates">
           <property name="text">
            <string>&amp;Updates</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+U</string>
           </property>
           <property name="buttonGroupId" stdset="0">
            <number>4</number>
@@ -376,9 +364,6 @@
               </property>
               <property name="text">
                <string>Add to &amp;Queue</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+Q</string>
               </property>
              </widget>
             </item>

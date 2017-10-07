@@ -22,9 +22,6 @@
     <height>32767</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Form1</string>
-  </property>
   <layout class="QGridLayout">
    <property name="margin">
     <number>0</number>
@@ -305,9 +302,6 @@
               <property name="text">
                <string>Stab&amp;le Version</string>
               </property>
-              <property name="shortcut">
-               <string>Alt+L</string>
-              </property>
               <property name="checked">
                <bool>true</bool>
               </property>
@@ -318,18 +312,12 @@
               <property name="text">
                <string>Testi&amp;ng Version</string>
               </property>
-              <property name="shortcut">
-               <string>Alt+N</string>
-              </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QRadioButton" name="rbMasked">
               <property name="text">
                <string>Mas&amp;ked Version</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+K</string>
               </property>
              </widget>
             </item>
@@ -371,9 +359,6 @@
                 <property name="text">
                  <string>Install onl&amp;y specific version 
 and do not update further</string>
-                </property>
-                <property name="shortcut">
-                 <string>Alt+Y</string>
                 </property>
                </widget>
               </item>
@@ -454,9 +439,6 @@ and do not update further</string>
            </property>
            <property name="text">
             <string>C&amp;alculate Use Flags</string>
-           </property>
-           <property name="shortcut">
-            <string>Alt+A</string>
            </property>
           </widget>
          </item>

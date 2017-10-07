@@ -129,7 +129,7 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 
 		break;
 	default:
-		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		kDebug() << "Error: invalid column!" << LINE_INFO;
 		break;
 	}
 
@@ -248,7 +248,7 @@ QVariant QueueListModel::headerData(int section, Qt::Orientation orientation, in
 			return QVariant("Progress");
 		break;
 	default:
-		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		kDebug() << "Error: invalid column!" << LINE_INFO;
 		break;
 	}
 

@@ -16,9 +16,6 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle">
-   <string>Form1</string>
-  </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
     <number>0</number>
@@ -130,9 +127,6 @@
              <property name="text">
               <string>Remove package from Q&amp;ueue after installation</string>
              </property>
-             <property name="shortcut">
-              <string>Alt+U</string>
-             </property>
             </widget>
            </item>
           </layout>
@@ -168,9 +162,6 @@
            <property name="text">
             <string>Remove &amp;All</string>
            </property>
-           <property name="shortcut">
-            <string>Alt+A</string>
-           </property>
            <property name="autoDefault">
             <bool>false</bool>
            </property>
@@ -189,9 +180,6 @@
            </property>
            <property name="text">
             <string>&amp;Remove</string>
-           </property>
-           <property name="shortcut">
-            <string>Alt+R</string>
            </property>
            <property name="autoDefault">
             <bool>false</bool>
@@ -368,18 +356,12 @@
           <property name="text">
            <string>Use &amp;Update flag on emerge calls (-uN)</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+U</string>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="cbDownload">
           <property name="text">
            <string>Download all packa&amp;ges before installing them (--fetch-all-uri)</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+G</string>
           </property>
          </widget>
         </item>
@@ -388,9 +370,6 @@
           <property name="text">
            <string>Force reinstall of config files (--&amp;noconfmem)</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+N</string>
-          </property>
          </widget>
         </item>
         <item>
@@ -398,18 +377,12 @@
           <property name="text">
            <string>Do not add the pac&amp;kages to the world profile (--oneshot)</string>
           </property>
-          <property name="shortcut">
-           <string>Alt+K</string>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="cbBackupPkg">
           <property name="text">
            <string>&amp;Backup packages before merging.</string>
-          </property>
-          <property name="shortcut">
-           <string>Alt+B</string>
           </property>
          </widget>
         </item>

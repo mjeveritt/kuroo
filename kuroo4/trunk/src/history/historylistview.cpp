@@ -23,6 +23,7 @@
 #include "historylistview.h"
 
 #include <QTreeWidget>
+#include <QMouseEvent>
 
 /**
 * @class HistoryItem

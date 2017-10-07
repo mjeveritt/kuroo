@@ -91,9 +91,10 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 */
 Kuroo::~Kuroo()
 {
-	/*int maxLoops( 99 );
+	int maxLoops( 99 );
 	while ( true ) {
-		if ( ThreadWeaver::Weaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Weaver::instance()->isJobPending( "CachePortageJob" ) )
+		//if ( ThreadWeaver::Weaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Weaver::instance()->isJobPending( "CachePortageJob" ) )
+		if (!ThreadWeaver::Weaver::instance()->isIdle())
 			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
@@ -102,7 +103,7 @@ Kuroo::~Kuroo()
 			KMessageBox::error( 0, i18n("Kuroo is not responding. Attempting to terminate kuroo!"), i18n("Terminating") );
 			break;
 		}
-	}*/
+	}
 }
 
 /**
@@ -284,8 +285,8 @@ void Kuroo::slotWait()
 				"All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 
 			case KMessageBox::Yes: {
-				/*ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "DBJob" );
-				ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "CachePortageJob" );*/
+				ThreadWeaver::Weaver::instance()->requestAbort();//AllJobsNamed( "DBJob" );
+				//ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "CachePortageJob" );
 				QTimer::singleShot( 500, this, SLOT( slotTerminate() ) );
 			}
 		}

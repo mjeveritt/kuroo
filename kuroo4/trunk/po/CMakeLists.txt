@@ -9,7 +9,7 @@ IF(NOT GETTEXT_MSGFMT_EXECUTABLE)
 	NOTE: msgfmt not found. Translations will *not* be installed
 ------------")
 ELSE(NOT GETTEXT_MSGFMT_EXECUTABLE)
-
+	#macro_log_feature(gettext_msgfmt_executable)	#suggested by kde-dev-scripts/cmakelint.pl
 	SET(catalogname kuroo)
 
 	ADD_CUSTOM_TARGET(translations ALL)

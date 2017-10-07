@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 #include <kmessagebox.h>
 #include <kio/job.h>
 

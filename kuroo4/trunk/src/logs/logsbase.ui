@@ -10,9 +10,6 @@
     <height>375</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form3</string>
-  </property>
   <layout class="QGridLayout">
    <property name="margin">
     <number>0</number>
@@ -46,9 +43,6 @@
        <property name="text">
         <string>Ver&amp;bose</string>
        </property>
-       <property name="shortcut">
-        <string>Alt+B</string>
-       </property>
        <property name="checked">
         <bool>false</bool>
        </property>
@@ -58,9 +52,6 @@
       <widget class="QCheckBox" name="saveLog">
        <property name="text">
         <string>Save log on e&amp;xit</string>
-       </property>
-       <property name="shortcut">
-        <string>Alt+X</string>
        </property>
        <property name="checked">
         <bool>false</bool>

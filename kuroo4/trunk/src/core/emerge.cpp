@@ -159,7 +159,7 @@ bool Emerge::queue( const QStringList& packageList )
  */
 void Emerge::slotPause()
 {
-	if ( !eProc->state() == QProcess::Running || !m_pausable ) {
+	if ( !(eProc->state() == QProcess::Running) || !m_pausable ) {
 		LogSingleton::Instance()->writeLog( i18n( "\nEmerge is not running or cannot be paused..." ), ERROR );
 	}
 	else {
@@ -638,7 +638,7 @@ void Emerge::slotEmergeDistfilesComplete()
 		//QTextCodec *codec = QTextCodec::codecForName("utf8");
 		eClean2 = new KProcess();
 		//eClean2->setUseShell( true, "/bin/bash" );
-		//eClean2->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+		//eClean2->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
 		eClean2->close();
 		*eClean2 << "eclean";
 		if( KurooConfig::ecleanTimeLimit().isEmpty() )
@@ -648,7 +648,7 @@ void Emerge::slotEmergeDistfilesComplete()
 
 		*eClean2 << "--nocolor" << "packages";
 
-		eClean2->start( /*K3Process::OwnGroup, true*/ );
+		eClean2->start( /*KProcess::OwnGroup, true*/ );
 		connect( eClean2, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
 		connect( eClean2, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEClean2Complete(int, QProcess::ExitStatus) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
@@ -660,7 +660,7 @@ void Emerge::slotEmergeDistfilesComplete()
 		//QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
 		ioRevdepRebuild = new KProcess();
 		//ioRevdepRebuild->setUseShell( false, NULL );
-		//ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+		//ioRevdepRebuild->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
 		ioRevdepRebuild->close();
 		*ioRevdepRebuild << "revdep-rebuild";
 		*ioRevdepRebuild << "--no-color";
@@ -668,7 +668,7 @@ void Emerge::slotEmergeDistfilesComplete()
 		ioRevdepRebuild->start();
 
 		connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(K3Process*) ) );
+		connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(KProcess*) ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuild Running..." ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Running revdep-rebuild..." ) );
@@ -694,7 +694,7 @@ void Emerge::slotEClean2Complete(int exitCode, QProcess::ExitStatus status)
 		//QTextCodec *revdepcodec = QTextCodec::codecForName("utf8");
 		ioRevdepRebuild = new KProcess();
 		//ioRevdepRebuild->setUseShell( false, NULL );
-		//ioRevdepRebuild->setComm( K3Process::Communication( K3Process::Stdout | K3Process::MergedStderr | K3Process::Stdin ) );
+		//ioRevdepRebuild->setComm( KProcess::Communication( KProcess::Stdout | KProcess::MergedStderr | KProcess::Stdin ) );
 		ioRevdepRebuild->close();
 		*ioRevdepRebuild << "revdep-rebuild";
 		*ioRevdepRebuild << "--no-color";
@@ -882,11 +882,11 @@ bool Emerge::countEtcUpdates( const QString& line )
 {
 	// count etc-files to merge
 	if ( line.contains( " need updating" ) ) {
-	QString tmp = line.section( "config files", 0, 0 );
-	QRegExp rx("^\\d+\\)");
-	int pos = rx.indexIn(tmp);
-	if ( pos > -1 )
-		m_etcUpdateCount += ( rx.cap(1) ).toInt();
+		QString tmp = line.section( "config files", 0, 0 );
+		QRegExp rx("^\\d+\\)");
+		int pos = rx.indexIn(tmp);
+		if ( pos > -1 )
+			m_etcUpdateCount += ( rx.cap(1) ).toInt();
 
 		return true;
 	}

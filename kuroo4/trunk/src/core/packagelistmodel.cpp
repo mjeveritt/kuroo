@@ -101,7 +101,7 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 			return QVariant(p->description());
 		break;
 	default:
-		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		kDebug() << "Error: invalid column!" << LINE_INFO;
 		break;
 	}
 
@@ -169,7 +169,7 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 			return QVariant("Description");
 		break;
 	default:
-		kdDebug() << "Error: invalid column!" << LINE_INFO;
+		kDebug() << "Error: invalid column!" << LINE_INFO;
 		break;
 	}
 

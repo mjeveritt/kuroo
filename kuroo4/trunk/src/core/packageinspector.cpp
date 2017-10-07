@@ -378,7 +378,7 @@ void PackageInspector::slotApply()
 			eProc->start();
 			SignalistSingleton::Instance()->setKurooBusy( true );
 
-			if ( !eProc->state() != QProcess::Running ) {
+			if ( eProc->state() != QProcess::Running ) {
 				LogSingleton::Instance()->writeLog( i18n( "\nError: Could not calculate use flag for package %1/%2.",
 														m_category, m_package ), ERROR );
 			}

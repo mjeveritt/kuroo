@@ -188,9 +188,6 @@
            <property name="text">
             <string>Backup all user editable porta&amp;ge files before proceeding.</string>
            </property>
-           <property name="shortcut">
-            <string>Alt+G</string>
-           </property>
            <property name="checked">
             <bool>true</bool>
            </property>

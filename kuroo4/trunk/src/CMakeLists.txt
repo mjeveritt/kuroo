@@ -20,7 +20,7 @@ ${CMAKE_BINARY_DIR}/src/queue
 ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
 )
 
-add_definitions( -DQT3_SUPPORT_WARNINGS )
+#add_definitions( -DQT3_SUPPORT_WARNINGS )
 
 #core
 set(core_sources

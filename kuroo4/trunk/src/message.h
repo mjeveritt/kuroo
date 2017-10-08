@@ -21,7 +21,7 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <kdialog.h>
+#include <KDialog>
 #include "ui_messagebase.h"
 
 /**

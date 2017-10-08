@@ -24,6 +24,7 @@
 
 #include <QTreeWidget>
 #include <QMouseEvent>
+#include <QFrame>
 
 /**
 * @class HistoryItem

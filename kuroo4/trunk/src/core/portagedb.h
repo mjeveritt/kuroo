@@ -21,11 +21,11 @@
 #ifndef PORTAGEDB_H
 #define PORTAGEDB_H
 
-#include <qdir.h>            //stack allocated
-#include <qobject.h>         //baseclass
+#include <QDir>            //stack allocated
+#include <QObject>         //baseclass
 #include <QQueue>       //baseclass
-#include <qsemaphore.h>      //stack allocated
-#include <qstringlist.h>     //stack allocated
+#include <QSemaphore>	//stack allocated
+#include <QStringList>     //stack allocated
 
 #include <sqlite3.h>
 

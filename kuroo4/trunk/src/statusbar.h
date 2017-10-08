@@ -21,8 +21,8 @@
 #ifndef STATUSBAR_H
 #define STATUSBAR_H
 
-#include <kstatusbar.h>
-#include <kprogressdialog.h>
+#include <KStatusBar>
+#include <KProgressDialog>
 #include <QObject>
 #include <QLabel>
 

@@ -27,11 +27,11 @@
 #include <QPushButton>
 #include <QWhatsThis>
 
-#include <ktextbrowser.h>
-#include <kmessagebox.h>
+#include <KTextBrowser>
+#include <KMessageBox>
 #include <KTreeWidgetSearchLine>
-#include <kiconloader.h>
-#include <kpushbutton.h>
+#include <KIconLoader>
+#include <KPushButton>
 
 /**
  * @class MergeTab

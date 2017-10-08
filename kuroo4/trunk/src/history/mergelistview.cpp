@@ -65,7 +65,7 @@ MergeListView::MergeListView( QWidget *parent, const QString& name )
     setHeaderLabel( i18n("Configuration file") );
 	
 	setProperty( "selectionMode", "Extended" );
-    //setFrameShape( Q3Frame::NoFrame );
+    //setFrameShape( QFrame::NoFrame );
 	setRootIsDecorated( true );
     //setFullWidth( true );
 

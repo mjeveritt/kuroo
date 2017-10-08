@@ -24,6 +24,7 @@
 #include <qpainter.h>
 #include <QTreeWidget>
 #include <QScrollBar>
+#include <QFrame>
 
 #include <kglobal.h>
 

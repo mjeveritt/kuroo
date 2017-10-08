@@ -198,7 +198,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabVersions">
       <attribute name="title">
        <string>Versi&amp;ons</string>
       </attribute>
@@ -400,7 +400,7 @@ and do not update further</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabUse">
       <attribute name="title">
        <string>&amp;Use Flags</string>
       </attribute>
@@ -513,7 +513,7 @@ and do not update further</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabChangeLog">
       <attribute name="title">
        <string>Ch&amp;angeLog</string>
       </attribute>
@@ -526,7 +526,7 @@ and do not update further</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabEbuild">
       <attribute name="title">
        <string>E&amp;build</string>
       </attribute>
@@ -579,7 +579,7 @@ and do not update further</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabDependencies">
       <attribute name="title">
        <string>Dependencies</string>
       </attribute>
@@ -642,7 +642,7 @@ and do not update further</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabInstalledFiles">
       <attribute name="title">
        <string>I&amp;nstalled Files</string>
       </attribute>
@@ -705,14 +705,20 @@ and do not update further</string>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KUrlLabel</class>
-   <extends>QLabel</extends>
-   <header>kurllabel.h</header>
-  </customwidget>
-  <customwidget>
    <class>KTextBrowser</class>
    <extends>QTextBrowser</extends>
    <header>ktextbrowser.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KButtonGroup</class>
+   <extends>QGroupBox</extends>
+   <header>kbuttongroup.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KUrlLabel</class>
+   <extends>QLabel</extends>
+   <header>kurllabel.h</header>
   </customwidget>
   <customwidget>
    <class>VersionView</class>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>584</height>
+    <height>641</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,7 +31,7 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="TabBuild">
       <attribute name="title">
        <string>&amp;Build</string>
       </attribute>
@@ -279,7 +279,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabAdvancedBuild">
       <attribute name="title">
        <string>Advan&amp;ced build</string>
       </attribute>
@@ -580,7 +580,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="TabDirectories">
       <attribute name="title">
        <string>D&amp;irectories</string>
       </attribute>
@@ -786,7 +786,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabConfigurations">
       <attribute name="title">
        <string>Confi&amp;gurations</string>
       </attribute>
@@ -923,7 +923,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabNetwork">
       <attribute name="title">
        <string>&amp;Network</string>
       </attribute>
@@ -1082,7 +1082,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabSync">
       <attribute name="title">
        <string>&amp;Sync</string>
       </attribute>
@@ -1231,7 +1231,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="TabPage">
+     <widget class="QWidget" name="TabLogging">
       <attribute name="title">
        <string>Logging</string>
       </attribute>
@@ -1562,7 +1562,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <resources/>
  <connections/>
 </ui>

@@ -31,6 +31,7 @@
 #include <QFile>
 #include <QImage>
 #include <QTimer>
+#include <QTextStream>
 
 #include <KApplication>
 #include <KConfig>
@@ -406,7 +407,7 @@ void KurooDB::restoreBackup()
 {
 	/*// Restore einfo into table history
 	QFile file ( GlobalSingleton::Instance()->kurooDir() + KurooConfig::fileHistoryBackup() );
-	Q3TextStream stream ( &file );
+	QTextStream stream ( &file );
 	QStringList lines;
 	if ( !file.open ( QIODevice::ReadOnly ) )
 		kError ( 0 ) << QString ( "Restoring backup of history. Reading: %1." ).arg ( KurooConfig::fileHistoryBackup() ) << LINE_INFO;

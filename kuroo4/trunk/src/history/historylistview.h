@@ -22,6 +22,7 @@
 #define HISTORYLISTVIEW_H
 
 #include <QTreeWidget>
+#include <QMouseEvent>
 
 class Package;
 class PackageEmergeTime;

@@ -22,7 +22,8 @@
 #include "portagefiles.h"
 #include <threadweaver/Job.h>
 
-#include <qfileinfo.h>
+#include <QFileInfo>
+#include <QTextStream>
 
 /**
 * @class: LoadPackageMaskJob

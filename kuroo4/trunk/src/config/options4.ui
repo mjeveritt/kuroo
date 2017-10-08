@@ -25,7 +25,7 @@
      <verstretch>224</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="TabEclean">
     <attribute name="title">
      <string>E&amp;Clean</string>
     </attribute>
@@ -302,7 +302,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="TabRevdepRebuild">
     <attribute name="title">
      <string>Revdep Re&amp;build</string>
     </attribute>
@@ -356,7 +356,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <resources/>
  <connections/>
 </ui>

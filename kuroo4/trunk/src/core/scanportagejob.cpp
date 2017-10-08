@@ -30,6 +30,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEvent>
+#include <QTextStream>
 
 #include <KGlobal>
 

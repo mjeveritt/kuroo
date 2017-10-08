@@ -26,6 +26,7 @@
 #include "LoadPackageUseJob.h"
 #include "LoadPackageUserHardMaskJob.h"
 #include "LoadPackageUserUnMaskJob.h"
+#include <QTextStream>
 
 bool mergeDirIntoFile( QString dirPath ) {
 	//DEBUG_LINE_INFO;

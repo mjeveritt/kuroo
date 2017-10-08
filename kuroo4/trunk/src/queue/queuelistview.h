@@ -23,6 +23,7 @@
 
 #include <QTreeView>
 #include <QStringList>
+#include <QMouseEvent>
 
 class QueueListItem;
 

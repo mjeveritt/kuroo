@@ -25,6 +25,7 @@
 #include <qstringlist.h>
 #include <qfile.h>
 #include <QVector>
+#include <QTextStream>
 
 class PackageEmergeTime;
 

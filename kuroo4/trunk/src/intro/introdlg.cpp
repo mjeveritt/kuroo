@@ -19,14 +19,14 @@
 ***************************************************************************/
 
 #include <QWizard>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QToolTip>
+#include <QLabel>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <k3activelabel.h>
-#include <kmessagebox.h>
+#include <KLocale>
+#include <KDebug>
+#include <KMessageBox>
 #include <kio/job.h>
 
 #include "singleton.h"

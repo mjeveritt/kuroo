@@ -23,17 +23,17 @@
 #include "historytab.h"
 #include "ui_historybase.h"
 
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qwhatsthis.h>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QComboBox>
+#include <QWhatsThis>
 #include <QTextStream>
 
-#include <ktextbrowser.h>
-#include <kmessagebox.h>
+#include <KTextBrowser>
+#include <KMessageBox>
 #include <KTreeWidgetSearchLine>
-#include <kiconloader.h>
-#include <kpushbutton.h>
+#include <KIconLoader>
+#include <KPushButton>
 
 /**
 * @class HistoryTab

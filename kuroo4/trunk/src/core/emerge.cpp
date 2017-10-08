@@ -362,7 +362,6 @@ bool Emerge::checkUpdates()
 
 /**
  * Parse emerge process output for messages and packages.
- * @param proc
  */
 void Emerge::slotEmergeOutput()
 {
@@ -606,7 +605,6 @@ void Emerge::cleanup()
 
 /**
  * Revdep-rebuild Complete
- * @param proc
  */
 void Emerge::slotRevdepRebuildComplete()
 {
@@ -667,8 +665,8 @@ void Emerge::slotEmergeDistfilesComplete()
 		*ioRevdepRebuild << "--ignore";
 		ioRevdepRebuild->start();
 
-		connect( ioRevdepRebuild, SIGNAL( readReady(K3ProcIO*) ), this, SLOT( slotEmergeOutput(K3ProcIO*) ) );
-		connect( ioRevdepRebuild, SIGNAL( processExited(K3Process*) ), this, SLOT( slotRevdepRebuildComplete(KProcess*) ) );
+		connect( ioRevdepRebuild, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+		connect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuild Running..." ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Running revdep-rebuild..." ) );

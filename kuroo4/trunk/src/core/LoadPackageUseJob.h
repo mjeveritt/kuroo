@@ -21,6 +21,7 @@
 #include "common.h"
 #include "portagefiles.h"
 #include <threadweaver/Job.h>
+#include <QTextStream>
 
 /**
 * @class: LoadPackageUseJob

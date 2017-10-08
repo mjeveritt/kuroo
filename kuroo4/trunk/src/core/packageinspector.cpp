@@ -25,6 +25,7 @@
 #include <QLineEdit>
 #include <QTextCodec>
 #include <QTreeWidget>
+#include <QTextStream>
 
 #include <KTabWidget>
 #include <KActionSelector>

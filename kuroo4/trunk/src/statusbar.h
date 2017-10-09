@@ -21,10 +21,9 @@
 #ifndef STATUSBAR_H
 #define STATUSBAR_H
 
+#include <QProgressBar>
+
 #include <KStatusBar>
-#include <KProgressDialog>
-#include <QObject>
-#include <QLabel>
 
 #include "signalist.h"
 

@@ -25,14 +25,11 @@
 
 #include <QCheckBox>
 #include <QPushButton>
-#include <QComboBox>
 #include <QWhatsThis>
 #include <QTextStream>
 
-#include <KTextBrowser>
 #include <KMessageBox>
 #include <KTreeWidgetSearchLine>
-#include <KIconLoader>
 #include <KPushButton>
 
 /**

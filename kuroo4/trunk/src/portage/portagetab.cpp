@@ -33,19 +33,11 @@
 #include "packagelistmodel.h"
 #include "packagelistitem.h"
 
-#include <QLayout>
-#include <QSplitter>
-#include <QGroupBox>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QButtonGroup>
 #include <QTimer>
 #include <QWhatsThis>
-#include <QRadioButton>
 
 /*#include <kpushbutton.h>
 #include <ktextbrowser.h>
-#include <KDialog>
 #include <klineedit.h>
 #include <kiconloader.h>*/
 //#include <kaccel.h>

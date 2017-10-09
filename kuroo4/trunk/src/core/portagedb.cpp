@@ -29,18 +29,10 @@
 #include <stdlib.h>
 
 #include <QFile>
-#include <QImage>
-#include <QTimer>
 #include <QTextStream>
 
-#include <KApplication>
-#include <KConfig>
-#include <KGlobal>
 #include <kio/job.h>
-#include <KStandardDirs>
-#include <KUrl>
 #include <kio/netaccess.h>
-#include <KCursor>
 #include <KRandom>
 
 /**

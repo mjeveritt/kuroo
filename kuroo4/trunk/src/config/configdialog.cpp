@@ -23,17 +23,12 @@
 #include "configdialog.h"
 
 #include <QTextStream>
-#include <QDir>
 #include <QFile>
 #include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
 
 #include <KConfigDialog>
 #include <KConfig>
 #include <KMessageBox>
-#include <KTextEdit>
-#include <KUser>
 
 #include "log.h"
 

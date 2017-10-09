@@ -23,7 +23,6 @@
 
 #include <stdlib.h>
 
-#include <KApplication>
 #include <KUniqueApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>

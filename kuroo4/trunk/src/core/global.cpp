@@ -21,10 +21,8 @@
 #include "common.h"
 #include "global.h"
 
-#include <QDateTime>
 
 #include <KGlobal>
-#include <KGlobalSettings>
 
 /**
 * Regexp to parse emerge output.

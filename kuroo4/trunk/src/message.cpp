@@ -22,12 +22,9 @@
 #include "message.h"
 #include "ui_messagebase.h"
 
-#include <QLabel>
 #include <QClipboard>
 #include <QScrollBar>
 
-#include <KTextBrowser>
-#include <KApplication>
 
 Message* Message::s_instance = 0;
 

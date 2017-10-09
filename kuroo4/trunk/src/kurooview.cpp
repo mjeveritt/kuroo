@@ -23,16 +23,12 @@
 #include <unistd.h>		//usleep()
 
 #include <QPainter>
-#include <QLayout>
-#include <QColor>
 #include <QPixmap>
 #include <QBitmap>
 #include <QThread>
 
-#include <KTextBrowser>
 #include <KMessageBox>
 #include <KUser>
-#include <KCursor>
 
 #include "common.h"
 #include "kurooview.h"

@@ -18,21 +18,13 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
-#include <QComboBox>
 #include <QCheckBox>
-#include <QRadioButton>
 #include <QPushButton>
-#include <QLineEdit>
-#include <QTextCodec>
 #include <QTreeWidget>
 #include <QTextStream>
 
-#include <KTabWidget>
-#include <KActionSelector>
-#include <KTextBrowser>
 #include <KMessageBox>
 #include <KUser>
-#include <KUrlLabel>
 
 #include "common.h"
 #include "packageinspector.h"

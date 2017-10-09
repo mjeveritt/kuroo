@@ -25,7 +25,6 @@
 #include <string>
 
 #include <QDir>
-#include <QFileInfo>
 
 /**
  * @class CachePortageJob

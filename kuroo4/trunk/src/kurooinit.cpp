@@ -28,13 +28,9 @@
 #include <pwd.h>
 
 #include <QDir>
-#include <QTextCodec>
 
-#include <KCmdLineArgs>
-#include <KStringHandler>
 #include <KUser>
 #include <KMessageBox>
-#include <KInputDialog>
 #include <KProcess>
 
 /**

@@ -20,11 +20,9 @@
 
 #include <assert.h>
 
-#include <QToolTip>
 #include <QThread>
 
 #include <KMenu>
-#include <KIcon>
 
 #include "common.h"
 #include "systemtray.h"

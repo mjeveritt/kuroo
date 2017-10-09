@@ -1,5 +1,4 @@
 #include <QHeaderView>
-#include <QEvent>
 #include <QMouseEvent>
 
 #include "common.h"

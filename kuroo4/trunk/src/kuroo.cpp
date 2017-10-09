@@ -20,16 +20,12 @@
 
 #include <unistd.h>
 
-#include <QPainter>
 #include <QTimer>
 #include <QCheckBox>
 
 #include <kdeversion.h>
-#include <KStatusBar>
-#include <KFileDialog>
 #include <KStandardShortcut>
 #include <KMessageBox>
-#include <KTabWidget>
 #include <KUser>
 #include <kio/job.h>
 

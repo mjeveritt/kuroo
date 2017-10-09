@@ -21,7 +21,6 @@
 #ifndef PACKAGEITEM_H
 #define PACKAGEITEM_H
 
-#include <QObject>
 #include <QTreeWidget>
 #include "dependatom.h"
 

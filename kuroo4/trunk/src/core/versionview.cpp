@@ -21,7 +21,6 @@
 #include "common.h"
 #include "versionview.h"
 
-#include <QPainter>
 #include <QTreeWidget>
 
 VersionView::VersionItem::VersionItem( QTreeWidget* parent, const QString& version, const bool& isInstalled, const int& stability )

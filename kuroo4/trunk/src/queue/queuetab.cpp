@@ -29,22 +29,13 @@
 #include "ui_queuebase.h"
 
 #include <QCheckBox>
-#include <QRadioButton>
-#include <QComboBox>
-#include <QButtonGroup>
-#include <QGroupBox>
-#include <QToolTip>
 #include <QWhatsThis>
 
 #include <KPushButton>
-#include <KTextBrowser>
-#include <KDialog>
-#include <KLineEdit>
 #include <KMessageBox>
 #include <KMenu>
 #include <KUser>
 //#include <kaccel.h>
-#include <KIconLoader>
 #include <KAction>
 
 /**

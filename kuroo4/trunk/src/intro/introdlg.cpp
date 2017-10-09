@@ -21,8 +21,6 @@
 #include <QWizard>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QToolTip>
-#include <QLabel>
 
 #include <KLocale>
 #include <KDebug>

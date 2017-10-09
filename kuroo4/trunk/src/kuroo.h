@@ -23,7 +23,6 @@
 
 #include <KApplication>
 #include <KXmlGuiWindow>
-#include <KMenuBar>
 
 #include "kurooview.h"
 #include "configdialog.h"

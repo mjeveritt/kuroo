@@ -27,10 +27,7 @@
 #include <QPushButton>
 #include <QWhatsThis>
 
-#include <KTextBrowser>
-#include <KMessageBox>
 #include <KTreeWidgetSearchLine>
-#include <KIconLoader>
 #include <KPushButton>
 
 /**

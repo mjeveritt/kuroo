@@ -22,8 +22,9 @@
 #define _KUROOVIEW_H_
 
 #include <QWidget>
-#include <KPageDialog>
 //#include <kurooiface.h>
+
+#include <KPageWidget>
 
 class PortageTab;
 class QueueTab;

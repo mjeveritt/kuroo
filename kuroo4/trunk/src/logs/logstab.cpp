@@ -24,10 +24,7 @@
 
 #include <QCheckBox>
 #include <QPushButton>
-#include <QSplitter>
 
-#include <KTextBrowser>
-#include <KMessageBox>
 #include <KInputDialog>
 
 /**

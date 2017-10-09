@@ -26,7 +26,6 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QFile>
 #include <KProcess>
 
 /**

@@ -21,7 +21,6 @@
 #ifndef DEPENDENCYVIEW_H
 #define DEPENDENCYVIEW_H
 
-#include <QRegExp>
 #include <QTreeWidget>
 
 /**

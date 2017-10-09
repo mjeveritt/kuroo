@@ -22,7 +22,7 @@
 #ifndef ETCUPDATE_H
 #define ETCUPDATE_H
 
-#include <qobject.h>
+#include <QObject>
 
 #include <kio/job.h>
 #include <KDirWatch>

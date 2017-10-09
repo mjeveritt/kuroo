@@ -23,7 +23,7 @@
 #include "cacheportagejob.h"
 #include "scanupdatesjob.h"
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <unistd.h>
 #include <QTextStream>

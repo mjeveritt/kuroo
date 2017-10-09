@@ -46,14 +46,13 @@
 /*#include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <KDialog>
-#include <kuser.h>
 #include <klineedit.h>
 #include <kiconloader.h>*/
 //#include <kaccel.h>
 #include <KAction>
 #include <KMenu>
 #include <KMessageBox>
-#include <kuser.h>
+#include <KUser>
 
 enum Focus {
 		CATEGORYLIST,

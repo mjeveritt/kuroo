@@ -22,8 +22,8 @@
 #include "statusbar.h"
 #include "signalist.h"
 
-#include <qlabel.h>
-#include <qtimer.h>
+#include <QLabel>
+#include <QTimer>
 
 KurooStatusBar* KurooStatusBar::s_instance = 0;
 

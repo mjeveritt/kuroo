@@ -24,10 +24,10 @@
 
 #include "package.h"
 
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <kprocess.h>
+#include <QObject>
+#include <QStringList>
+#include <QFile>
+#include <KProcess>
 
 /**
  * @class Emerge

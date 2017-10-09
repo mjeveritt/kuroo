@@ -27,14 +27,14 @@
 #include <grp.h>
 #include <pwd.h>
 
-#include <qdir.h>
-#include <qtextcodec.h>
+#include <QDir>
+#include <QTextCodec>
 
-#include <kcmdlineargs.h>
-#include <kstringhandler.h>
-#include <kuser.h>
-#include <kmessagebox.h>
-#include <kinputdialog.h>
+#include <KCmdLineArgs>
+#include <KStringHandler>
+#include <KUser>
+#include <KMessageBox>
+#include <KInputDialog>
 #include <KProcess>
 
 /**

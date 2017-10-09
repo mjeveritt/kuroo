@@ -21,7 +21,7 @@
 #ifndef _KUROOVIEW_H_
 #define _KUROOVIEW_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include <KPageDialog>
 //#include <kurooiface.h>
 

@@ -22,10 +22,10 @@
 #include "message.h"
 #include <assert.h>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kio/job.h>
-#include <kinputdialog.h>
-#include <kdirwatch.h>
+#include <KInputDialog>
+#include <KDirWatch>
 #include <errno.h>
 
 /**

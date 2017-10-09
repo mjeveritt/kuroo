@@ -20,9 +20,9 @@
 
 #include <unistd.h>
 
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qcheckbox.h>
+#include <QPainter>
+#include <QTimer>
+#include <QCheckBox>
 
 #include <kdeversion.h>
 #include <KStatusBar>

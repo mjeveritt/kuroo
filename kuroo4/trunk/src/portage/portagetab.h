@@ -26,7 +26,6 @@
 #include "ui_portagebase.h"
 #include "scanportagejob.h"
 
-class CategoriesListView;
 class KMenu;
 class KAction;
 class PackageInspector;

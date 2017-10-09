@@ -29,9 +29,7 @@
 
 class KAction;
 class KConfigDialog;
-class KUrl;
 class IntroDlg;
-class KCmdLineArgs;
 class KurooInit;
 class Message;
 class Queue;

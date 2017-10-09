@@ -25,12 +25,12 @@
 #include <qcheckbox.h>
 
 #include <kdeversion.h>
-#include <kstatusbar.h>
-#include <kfiledialog.h>
-#include <kstdaccel.h>
-#include <kmessagebox.h>
-#include <ktabwidget.h>
-#include <kuser.h>
+#include <KStatusBar>
+#include <KFileDialog>
+#include <KStandardShortcut>
+#include <KMessageBox>
+#include <KTabWidget>
+#include <KUser>
 #include <kio/job.h>
 
 #include <KAction>

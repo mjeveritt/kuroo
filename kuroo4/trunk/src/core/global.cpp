@@ -30,7 +30,7 @@
 const QRegExp rxEmerge()
 {
 	if ( KurooConfig::portageVersion21() ) {
-		return QRegExp( "^\\[ebuild([\\s\\w~#]*)\\]\\s+"
+		return QRegExp( "^\\[ebuild([\\s\\w~#*]*)\\]\\s+"	//Also allow * for merging hardmasked packages
 						"((\\S+)/(\\S+))"
 						"(?:\\s*\\[([^\\]]*)\\])?"
 						"(?:\\s*\\[([^\\]]*)\\])?"

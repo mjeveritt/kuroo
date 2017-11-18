@@ -20,16 +20,17 @@
 
 #include <unistd.h>
 
+#include <QDebug>
+#include <QAction>
 #include <QTimer>
 #include <QCheckBox>
 
-#include <kdeversion.h>
+//#include <kdeversion.h>
 #include <KStandardShortcut>
 #include <KMessageBox>
 #include <KUser>
 #include <kio/job.h>
 
-#include <KAction>
 #include <KActionCollection>
 #include <KStandardAction>
 
@@ -52,7 +53,7 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 	kurooInit( new KurooInit( this ) ), m_view( new KurooView( this ) ),
 	prefDialog( 0 ), wizardDialog( 0 ), m_shuttingDown( false )
 {
-	kDebug() << "Initializing Kuroo GUI" << LINE_INFO;
+	qDebug() << "Initializing Kuroo GUI";
 
 	setCentralWidget( m_view );
 	setupActions();
@@ -61,7 +62,7 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 	// Add system tray icon
 	if ( KurooConfig::isSystrayEnabled() ) {
 		systemTray = new SystemTray( this );
-		connect( systemTray, SIGNAL( signalPreferences() ), this, SLOT( slotPreferences() ) );
+		connect(systemTray, &SystemTray::signalPreferences, this, &Kuroo::slotPreferences);
 	}
 
 	// Lock/unlock if kuroo is busy.
@@ -110,36 +111,36 @@ void Kuroo::setupActions()
 	KStandardAction::quit( this, SLOT( slotQuit() ), actionCollection() );
 	KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 
-	KAction* actionReleaseInfo = new KAction( i18n("&Release information"), this );
-	actionReleaseInfo->setShortcut( KShortcut( Qt::CTRL + Qt::Key_W ) );
+	QAction * actionReleaseInfo = new QAction( i18n("&Release information"), this );
+	actionReleaseInfo->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_W ) );
 	actionCollection()->addAction( "information", actionReleaseInfo );
-	connect( actionReleaseInfo, SIGNAL(triggered(bool)), this, SLOT(introWizard()) );
+	connect(actionReleaseInfo, &QAction::triggered, this, &Kuroo::introWizard);
 	/*
-	actionReleaseInfo = new KAction(, 0,
+	actionReleaseInfo = new QAction(, 0,
 									this, SLOT( introWizard() ), actionCollection(), "information" );
 	actionReleaseInfo->setText( i18n("&Release information") );
 	actionReleaseInfo->setShortcut(  );
 	*/
-	actionRefreshPortage = new KAction( i18n("&Refresh Packages"), this );
-	actionRefreshPortage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_P ) );
+	actionRefreshPortage = new QAction( i18n("&Refresh Packages"), this );
+	actionRefreshPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_P ) );
 		//PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	actionCollection()->addAction( "refresh_portage", actionRefreshPortage );
 	connect( actionRefreshPortage, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefresh() ) );
 
-	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), this );
-	actionRefreshUpdates->setShortcut( KShortcut( Qt::CTRL + Qt::Key_U ));
+	actionRefreshUpdates = new QAction( i18n("&Refresh Updates"), this );
+	actionRefreshUpdates->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_U ));
 	actionCollection()->addAction( "refresh_updates", actionRefreshUpdates );
 	connect( actionRefreshUpdates, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefreshUpdates()) );
 
-	actionSyncPortage = new KAction( i18n("&Sync Portage"), this );
-	actionSyncPortage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_S ) );
+	actionSyncPortage = new QAction( i18n("&Sync Portage"), this );
+	actionSyncPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_S ) );
 	actionCollection()->addAction( "sync_portage", actionSyncPortage );
-	connect( actionSyncPortage, SIGNAL(triggered(bool)), this, SLOT( slotSync() ) );
+	connect(actionSyncPortage, &QAction::triggered, this, &Kuroo::slotSync);
 	/*
-	actionRefreshUpdates = new KAction( i18n("&Refresh Updates"), 0, KShortcut( Qt::CTRL + Qt::Key_U ),
+	actionRefreshUpdates = new QAction( i18n("&Refresh Updates"), 0, QKeySequence( Qt::CTRL + Qt::Key_U ),
 										PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 
-	actionSyncPortage = new KAction( i18n("&Sync Portage"), 0, ,
+	actionSyncPortage = new QAction( i18n("&Sync Portage"), 0, ,
 										, ,  );
 										*/
 	setupGUI( Default, "kurooui.rc" );
@@ -179,7 +180,7 @@ void Kuroo::slotBusy()
 */
 void Kuroo::slotSync()
 {
-	KLocale *loc = KGlobal::locale();
+	KLocale *loc = KLocale::global();
 	QDateTime t;
 	QString timeStamp( KurooDBSingleton::Instance()->getKurooDbMeta( "syncTimeStamp" ) );
 	QString lastSyncDate( QString::null );
@@ -260,11 +261,11 @@ bool Kuroo::queryExit()
 */
 void Kuroo::slotQuit()
 {
-	kDebug() << "Cleaning up after ourselves" << LINE_INFO;
+	qDebug() << "Cleaning up after ourselves";
 	KurooDBSingleton::Instance()->backupDb();
 	KIO::Job *backupLogJob = LogSingleton::Instance()->backupLog();
 	if ( backupLogJob != NULL )
-		connect( backupLogJob, SIGNAL( result( KIO::Job* ) ), SLOT( slotWait() ) );
+		connect(backupLogJob, &KIO::Job::result, this, &Kuroo::slotWait);
 	else
 		slotWait();
 }
@@ -300,4 +301,3 @@ void Kuroo::slotTerminate()
 	close();
 }
 
-#include "kuroo.moc"

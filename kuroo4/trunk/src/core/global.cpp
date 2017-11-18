@@ -22,7 +22,6 @@
 #include "global.h"
 
 
-#include <KGlobal>
 
 /**
 * Regexp to parse emerge output.
@@ -89,7 +88,7 @@ const QStringList parsePackage( const QString& packageString )
 */
 const QString formatTime( const long& duration )
 {
-	KLocale *loc = KGlobal::locale();
+	KLocale *loc = KLocale::global();
 	QString totalDays;
 	unsigned durationDays, totalSeconds;
 

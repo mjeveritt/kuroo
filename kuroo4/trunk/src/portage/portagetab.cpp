@@ -1,4 +1,3 @@
-#include <QColorGroup>
 /****************************************************************************
  *	Copyright (C) 2005 by Karye												*
  *	karye@users.sourceforge.net												*
@@ -35,16 +34,17 @@
 
 #include <QTimer>
 #include <QWhatsThis>
+#include <QAction>
+#include <QMenu>
 
-/*#include <kpushbutton.h>
-#include <ktextbrowser.h>
-#include <klineedit.h>
+/*#include <QPushButton>
+#include <QTextBrowser>
+#include <QLineEdit>
 #include <kiconloader.h>*/
 //#include <kaccel.h>
-#include <KAction>
-#include <KMenu>
 #include <KMessageBox>
 #include <KUser>
+#include <KButtonGroup>
 
 enum Focus {
 		CATEGORYLIST,
@@ -64,40 +64,40 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 
 	filterGroup->setSelected(0);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
-	//		<< "actual width=" << categoriesView->width() << LINE_INFO;
+	//		<< "actual width=" << categoriesView->width();
 	// Connect What's this button
  	//connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) ); //this one appears to be stale
-	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	connect(pbWhatsThis, &QPushButton::clicked, this, &PortageTab::slotWhatsThis);
 
 	// Connect the filters
-	connect( filterGroup, SIGNAL( released( int ) ), this, SLOT( slotFilters() ) );
-	connect( searchFilter, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotFilters() ) );
+	connect(filterGroup, &KButtonGroup::released, this, &PortageTab::slotFilters);
+	connect(searchFilter, &QLineEdit::textChanged, this, &PortageTab::slotFilters);
 
 	// Rmb actions.
 	packagesView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect( packagesView, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( slotContextMenu(const QPoint&) ) );
+	connect(packagesView, &PortageListView::customContextMenuRequested, this, &PortageTab::slotContextMenu);
 
-	m_addToQueue = new KAction( KIcon( "kuroo_queue" ), i18n( "&Add to Queue"), this );
-	connect( m_addToQueue, SIGNAL( triggered(bool) ), this, SLOT( slotEnqueue() ) );
-	m_removeFromQueue = new KAction( KIcon( "kuroo_queue" ), i18n( "&Remove from Queue"), this );
-	connect( m_removeFromQueue, SIGNAL(triggered(bool)), this, SLOT(slotDequeue() ));
-	m_addToWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Add To &World"), this );
-	connect( m_addToWorld, SIGNAL(triggered(bool)), this, SLOT( slotAddWorld()));
-	m_removeFromWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Remove From &World"), this );
-	connect( m_removeFromWorld, SIGNAL(triggered(bool)), this, SLOT( slotRemoveWorld()));
-	m_packageDetails = new KAction( i18n( "&Details"), this );
-	connect( m_packageDetails, SIGNAL( triggered(bool) ), this, SLOT( slotAdvanced() ) );
-	m_uninstallPackage = new KAction( KIcon( "list-remove" ), i18n( "&Uninstall" ), this );
-	connect( m_uninstallPackage, SIGNAL( triggered(bool) ), this, SLOT( slotUninstall() ) );
-	m_quickPackage = new KAction( KIcon( "kuroo_quickpkg"), i18n( "Backup Package"), this );
-	connect( m_quickPackage, SIGNAL( triggered(bool) ), this, SLOT( slotBackup() ) );
+	m_addToQueue = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_queue")), i18n( "&Add to Queue"), this );
+	connect(m_addToQueue, &QAction::triggered, this, &PortageTab::slotEnqueue);
+	m_removeFromQueue = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_queue")), i18n( "&Remove from Queue"), this );
+	connect(m_removeFromQueue, &QAction::triggered, this, &PortageTab::slotDequeue);
+	m_addToWorld = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_world")), i18n( "Add To &World"), this );
+	connect(m_addToWorld, &QAction::triggered, this, &PortageTab::slotAddWorld);
+	m_removeFromWorld = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_world")), i18n( "Remove From &World"), this );
+	connect(m_removeFromWorld, &QAction::triggered, this, &PortageTab::slotRemoveWorld);
+	m_packageDetails = new QAction( i18n( "&Details"), this );
+	connect(m_packageDetails, &QAction::triggered, this, &PortageTab::slotAdvanced);
+	m_uninstallPackage = new QAction( QIcon::fromTheme(QStringLiteral("list-remove")), i18n( "&Uninstall" ), this );
+	connect(m_uninstallPackage, &QAction::triggered, this, &PortageTab::slotUninstall);
+	m_quickPackage = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_quickpkg")), i18n( "Backup Package"), this );
+	connect(m_quickPackage, &QAction::triggered, this, &PortageTab::slotBackup);
 
 	// Button actions.
 	//connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
-	connect( pbUninstall, SIGNAL( clicked() ), this, SLOT( slotUninstall() ) );
-	connect( packagesView, SIGNAL( doubleClickedSignal(PackageListItem*) ), this, SLOT( slotAdvanced() ) );
-	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
+	connect(pbUninstall, &QPushButton::clicked, this, &PortageTab::slotUninstall);
+	connect(packagesView, &PortageListView::doubleClickedSignal, this, &PortageTab::slotAdvanced);
+	connect(pbAdvanced, &QPushButton::clicked, this, &PortageTab::slotAdvanced);
+	connect(pbClearFilter, &QPushButton::clicked, this, &PortageTab::slotClearFilter);
 
 	// Toggle Queue button between "add/remove" when after queue has been edited
 	//connect( QueueSingleton::Instance(), SIGNAL( signalQueueChanged( bool ) ), this, SLOT( slotButtons() ) );
@@ -110,15 +110,15 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 
 	// Load Inspector with current package info
-	connect( packagesView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotPackage() ) );
+	connect(packagesView, &PortageListView::selectionChangedSignal, this, &PortageTab::slotPackage);
 
 	// Enable/disable buttons
-	connect( packagesView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
+	connect(packagesView, &PortageListView::selectionChangedSignal, this, &PortageTab::slotButtons);
 
 	// Connect changes made in Inspector to this view so it gets updated
-	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
-	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
+	connect(m_packageInspector, &PackageInspector::signalPackageChanged, this, &PortageTab::slotPackage);
+	connect(m_packageInspector, &PackageInspector::signalNextPackage, this, &PortageTab::slotNextPackage);
+	connect(m_packageInspector, &PackageInspector::hidden, this, &PortageTab::slotButtons);
 
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );
@@ -162,13 +162,13 @@ void PortageTab::slotInit()
 	// Initialize the uninstall dialog
 	m_uninstallInspector = new UninstallInspector( this );
 
-	pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
-	pbQueue->setIcon( KIcon("kuroo_queue") );
-	pbUninstall->setIcon( KIcon("list-remove") );
+	pbClearFilter->setIcon( QIcon::fromTheme(QStringLiteral("edit-clear-locationbar-ltr")) );
+	pbQueue->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_queue")) );
+	pbUninstall->setIcon( QIcon::fromTheme(QStringLiteral("list-remove")) );
 	//TODO: There is no icon in the pics folder for this, and I can't find any stock icon named options, so
 	//I'm turning it off for now.
-	//pbAdvanced->setIcon( KIcon("options") );
-	pbWhatsThis->setIcon( KIcon("help-about") );
+	//pbAdvanced->setIcon( QIcon::fromTheme(QStringLiteral("options")) );
+	pbWhatsThis->setIcon( QIcon::fromTheme(QStringLiteral("help-about")) );
 
 	slotBusy();
 }
@@ -280,16 +280,16 @@ void PortageTab::slotButtons()
 
 		if ( QueueSingleton::Instance()->isQueued(packagesView->currentPackage()->id()))
 		{
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
-			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
+			connect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
 			pbQueue->setText( i18n("Remove from Queue") );
 		}
 		else
 		{
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
-			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
+			connect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
 			pbQueue->setText( i18n("Add to Queue") );
 		}
 		if (packagesView->currentPackage()->isInstalled() && ::getuid() == 0)
@@ -311,16 +311,16 @@ void PortageTab::slotButtons()
 		// If all in queue, button is dequeue
 		if (packagesView->selectedPackages().count() == queued)
 		{
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
-			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
+			connect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
 			pbQueue->setText( i18n("Remove from Queue") );
 		}
 		else // If none or some in queue, button is queue.
 		{
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
-			disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
-			connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
+			disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
+			connect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
 			pbQueue->setText( i18n("Add to Queue") );
 		}
 
@@ -331,9 +331,9 @@ void PortageTab::slotButtons()
 			pbUninstall->setDisabled( true );
 	}
 	else {
-		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
-		disconnect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotDequeue() ) );
-		connect( pbQueue, SIGNAL( clicked() ), this, SLOT( slotEnqueue() ) );
+		disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
+		disconnect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotDequeue);
+		connect(pbQueue, &QPushButton::clicked, this, &PortageTab::slotEnqueue);
 		pbQueue->setText( i18n("Add to Queue") );
 		pbQueue->setDisabled( true );
 		pbUninstall->setDisabled( true );
@@ -353,16 +353,16 @@ void PortageTab::slotReload()
  	m_packageInspector->setDisabled( true );
 	pbAdvanced->setDisabled( true );
 
-	disconnect( categoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListSubCategories() ) );
-	disconnect( subcategoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListPackages() ) );
+	disconnect(categoriesView, &CategoriesListView::currentItemChanged, this, &PortageTab::slotListSubCategories);
+	disconnect(subcategoriesView, &SubCategoriesListView::currentItemChanged, this, &PortageTab::slotListPackages);
 
 	//kdDebug() << "PortageTab.slotReload categoriesView.minWidth=" << categoriesView->minimumWidth()
-	//		<< "actual width" << categoriesView->width() << LINE_INFO;
+	//		<< "actual width" << categoriesView->width();
 	categoriesView->init();
 	subcategoriesView->init();
 
-	connect( categoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListSubCategories() ) );
-	connect( subcategoriesView, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotListPackages() ) );
+	connect(categoriesView, &CategoriesListView::currentItemChanged, this, &PortageTab::slotListSubCategories);
+	connect(subcategoriesView, &SubCategoriesListView::currentItemChanged, this, &PortageTab::slotListPackages);
 
 	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() ), false );
 }
@@ -433,7 +433,7 @@ void PortageTab::slotListPackages()
 				}
 			}
 		}
-		kDebug(0) << numberOfTerms << LINE_INFO;
+		qDebug() << numberOfTerms;
 		//FIXME:implement this
 		//packagesView->showNoHitsWarning( true , numberOfTerms );
 
@@ -794,7 +794,7 @@ void PortageTab::slotContextMenu(const QPoint &point)
 			break;	//stop the loop if we already have everything
 	}
 
-	KMenu menu( this );
+	QMenu menu( this );
 
 	menu.addAction( m_addToQueue );
 	m_addToQueue->setEnabled(hasUnqueuedItemsInPortage);
@@ -840,14 +840,14 @@ void PortageTab::slotContextMenu(const QPoint &point)
 	menu.setItemEnabled( backupMenuItem, hasInstalledAndInPortagePackages );
 
 	// No change to Queue when busy @todo: something nuts here. Click once then open rmb to make it work!
-	kDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning();
-	kDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy();
-	kDebug() << "hasQueuedItems=" << hasQueuedItems;
-	kDebug() << "hasUnqueuedItemsInPortage=" << hasUnqueuedItemsInPortage;
-	kDebug() << "hasItemsInWorld=" << hasItemsInWorld;
-	kDebug() << "hasItemsOutOfWorld=" << hasItemsOutOfWorld;
-	kDebug() << "hasInstalledPackages=" << hasInstalledPackages;
-	kDebug() << "hasInstalledAndInPortagePackages=" << hasInstalledAndInPortagePackages;
+	qDebug() << "EmergeSingleton::Instance()->isRunning()=" << EmergeSingleton::Instance()->isRunning();
+	qDebug() << "SignalistSingleton::Instance()->isKurooBusy()=" << SignalistSingleton::Instance()->isKurooBusy();
+	qDebug() << "hasQueuedItems=" << hasQueuedItems;
+	qDebug() << "hasUnqueuedItemsInPortage=" << hasUnqueuedItemsInPortage;
+	qDebug() << "hasItemsInWorld=" << hasItemsInWorld;
+	qDebug() << "hasItemsOutOfWorld=" << hasItemsOutOfWorld;
+	qDebug() << "hasInstalledPackages=" << hasInstalledPackages;
+	qDebug() << "hasInstalledAndInPortagePackages=" << hasInstalledAndInPortagePackages;
 */
 	bool busy = EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy();
 	if ( busy ) {
@@ -924,4 +924,3 @@ void PortageTab::slotContextMenu(const QPoint &point)
 	}*/
 }
 
-#include "portagetab.moc"

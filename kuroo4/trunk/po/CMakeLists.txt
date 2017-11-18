@@ -31,7 +31,7 @@ ELSE(NOT GETTEXT_MSGFMT_EXECUTABLE)
 					-o ${_gmoFile} ${_poFile}
 				DEPENDS ${_poFile})
 			INSTALL(FILES ${_gmoFile} DESTINATION
-				${LOCALE_INSTALL_DIR}/${_langCode}/LC_MESSAGES/
+				${KDE_INSTALL_LOCALEDIR}/${_langCode}/LC_MESSAGES/
 				RENAME ${catalogname}.mo)
 		ENDIF( _langCode )
 
@@ -43,7 +43,6 @@ ENDIF(NOT GETTEXT_MSGFMT_EXECUTABLE)
 
 #created by am2cmake
 
-#include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(AUTODIRS)")
 

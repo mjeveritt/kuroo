@@ -24,6 +24,10 @@
 
 #include <QClipboard>
 #include <QScrollBar>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 
 Message* Message::s_instance = 0;
@@ -33,17 +37,30 @@ Message* Message::s_instance = 0;
  * @short Convenience singleton dialog for simple messages to user.
  */
 Message::Message( QWidget *parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
-	setupUi( mainWidget() );
+	setupUiQWidget *mainWidget = new QWidget(this);
+	setupUiQVBoxLayout *mainLayout = new QVBoxLayout;
+	setupUisetLayout(mainLayout);
+	setupUimainLayout->addWidget(mainWidget);
+	setupUi(mainWidget);
 	//i18n("Message"), false, i18n("Message"), , , false
 	//enable the OK button and an extra button which we will use to copy the text to the clipboard
-	setButtons( Ok | User1 );
-	setDefaultButton( Ok );
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+	okButton->setDefault(true);
+	okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+	QPushButton *user1Button = new QPushButton;
+	buttonBox->addButton(user1Button, QDialogButtonBox::ActionRole);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &Message::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &Message::reject);
+	//PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
+	mainLayout->addWidget(buttonBox);
+	okButton->setDefault(true);
 	s_instance = this;
-	setButtonText( User1, i18n("Copy text to clipboard") );
-	showButton( User1, true );
-	showButton( Cancel, false );
+	user1Button->setText(i18n("Copy text to clipboard" ));
+	user1Button->setVisible(true);
+	buttonBox->button(QDialogButtonBox::Cancel)->setVisible(false);
 
 	//setTextFormat is deprecated, but I can't find a replacement
 	//messageText->setTextFormat( Qt::LogText );
@@ -61,7 +78,7 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
 	m_text = text;
 	//store the current scroll position so we can re-apply it after changing the text
 	int scrollValue = messageText->verticalScrollBar()->value();
-	setCaption( caption );
+	setWindowTitle( caption );
 	setLabel( "<b>" + label + "</b>" );
 
 	QString m_text = text;
@@ -77,7 +94,7 @@ void Message::prompt( const QString& caption, const QString& label, const QStrin
 	{
 		messageText->verticalScrollBar()->setValue( scrollValue );
 	}
-	setInitialSize( QSize(600, 300) );
+	resize( QSize(600, 300) );
 	show();
 }
 
@@ -92,4 +109,3 @@ void Message::slotUser1()
 	cb->setText( m_text, QClipboard::Clipboard );
 }
 
-#include "message.moc"

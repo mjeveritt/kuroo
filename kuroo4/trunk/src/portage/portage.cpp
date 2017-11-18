@@ -40,7 +40,7 @@ public:
 
 		QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kWarning(0) << QString("Inserting emerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			qWarning() << QString("Inserting emerged package: can not match %1.").arg( m_package );
 			return;
 		}
 		QString category = parts[0];
@@ -53,8 +53,8 @@ public:
 
 		if ( id.isEmpty() ) {
 
-			kWarning(0) << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
-				.arg( category ).arg( name ) << LINE_INFO;
+			qWarning() << QString("Inserting emerged package: Can not find id in database for package %1/%2.")
+				.arg( category ).arg( name );
 
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 //			return;
@@ -96,7 +96,7 @@ public:
 	virtual void run() {
 		QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
-			kWarning(0) << QString("Removing unmerged package: can not match %1.").arg( m_package ) << LINE_INFO;
+			qWarning() << QString("Removing unmerged package: can not match %1.").arg( m_package );
 			return;
 		}
 		QString category = parts[0];
@@ -109,8 +109,8 @@ public:
 			"name = '%1' AND category = '%2' LIMIT 1;").arg( name ).arg( category ), m_db );
 
 		if ( id.isEmpty() ) {
-			kWarning(0) << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
-				.arg( category ).arg( name ) << LINE_INFO;
+			qWarning() << QString("Removing unmerged package: Can not find id in database for package %1/%2.")
+				.arg( category ).arg( name );
 
 			KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 //			return;
@@ -264,7 +264,7 @@ bool Portage::slotRefresh()
 		SignalistSingleton::Instance()->scanStarted();
 		//This seems important, not sure why it was commented out
 		CachePortageJob *job = new CachePortageJob( this );
-		connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+		connect(job, &CachePortageJob::done, this, &Portage::slotWeaverDone);
 		ThreadWeaver::Weaver::instance()->enqueue(job);
 	}
 	else
@@ -308,13 +308,13 @@ bool Portage::slotScan()
 			break;
 
 		if ( maxLoops-- == 0 ) {
-			kWarning(0) << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage." << LINE_INFO;
+			qWarning() << "Scanning Portage. Wait-counter has reached maximum. Attempting to scan Portage.";
 			break;
 		}
 	}
 
 	ScanPortageJob *job = new ScanPortageJob( this );
-	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	connect(job, &ScanPortageJob::done, this, &Portage::slotWeaverDone);
 	ThreadWeaver::Weaver::instance()->enqueue(job);
 
 	return true;
@@ -362,7 +362,7 @@ void Portage::loadWorld()
 		emit signalWorldChanged();
 	}
 	else
-		kError(0) << "Loading packages in @world. Reading: " << KurooConfig::fileWorld() << LINE_INFO;
+		qCritical() << "Loading packages in @world. Reading: " << KurooConfig::fileWorld();
 }
 
 /**
@@ -384,7 +384,7 @@ void Portage::appendWorld( const QStringList& packageList )
 	// Check is @world is writable
 	QFile file( KurooConfig::fileWorld() );
 	if ( !file.open( QIODevice::WriteOnly ) ) {
-		kError(0) << "Adding packages to @world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		qCritical() << "Adding packages to @world. Writing: " << KurooConfig::fileWorld();
 		return;
 	}
 
@@ -413,7 +413,7 @@ void Portage::removeFromWorld( const QStringList& packageList )
 	// Check is @world is writable
 	QFile file( KurooConfig::fileWorld() );
 	if ( !file.open( QIODevice::WriteOnly ) ) {
-		kError(0) << "Removing packages from @world. Writing: " << KurooConfig::fileWorld() << LINE_INFO;
+		qCritical() << "Removing packages from @world. Writing: " << KurooConfig::fileWorld();
 		return;
 	}
 
@@ -470,7 +470,7 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
 void Portage::addInstalledPackage( const QString& package )
 {
 	AddInstalledPackageJob *job = new AddInstalledPackageJob( this, package );
-	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	connect(job, &AddInstalledPackageJob::done, this, &Portage::slotWeaverDone);
 	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
@@ -481,7 +481,7 @@ void Portage::addInstalledPackage( const QString& package )
 void Portage::removeInstalledPackage( const QString& package )
 {
 	RemoveInstalledPackageJob *job = new RemoveInstalledPackageJob( this, package );
-	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	connect(job, &RemoveInstalledPackageJob::done, this, &Portage::slotWeaverDone);
 	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
@@ -503,7 +503,7 @@ bool Portage::slotLoadUpdates()
 {
 	SignalistSingleton::Instance()->scanStarted();
 	ScanUpdatesJob *job = new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() );
-	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	connect(job, &ScanUpdatesJob::done, this, &Portage::slotWeaverDone);
 	ThreadWeaver::Weaver::instance()->enqueue(job);
 	return true;
 }
@@ -514,7 +514,7 @@ bool Portage::slotLoadUpdates()
 void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
 {
 	CheckUpdatesPackageJob *job = new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate );
-	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	connect(job, &CheckUpdatesPackageJob::done, this, &Portage::slotWeaverDone);
 	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
@@ -523,4 +523,3 @@ void Portage::slotWeaverDone(ThreadWeaver::Job *job)
 	delete job;
 }
 
-#include "portage.moc"

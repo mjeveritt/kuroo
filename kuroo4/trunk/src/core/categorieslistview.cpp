@@ -64,10 +64,10 @@ CategoriesView::CategoriesView( QWidget *parent, const char *name )
 	//setFullWidth( true );
 	setFrameShape( QFrame::NoFrame );
 	setSortingEnabled( false );
-	//kDebug() << "CategoriesView.Constructor minimumWidth=" << minimumWidth()
-	//			<< "actual width" << width() << LINE_INFO;
+	//qDebug() << "CategoriesView.Constructor minimumWidth=" << minimumWidth()
+	//			<< "actual width" << width();
 
-	connect( this, SIGNAL( currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) ), this, SLOT( slotStoreFocus( QTreeWidgetItem*,QTreeWidgetItem* ) ) );
+	connect(this, &CategoriesView::currentItemChanged, this, &CategoriesView::slotStoreFocus);
 }
 
 CategoriesView::~CategoriesView()
@@ -141,8 +141,8 @@ CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
 	setAllColumnsShowFocus(true);
 	setHeaderLabels( QStringList( i18n( "Category" ) ) );
 	//header()->setLabel( header()->count() - 1, i18n("Category") );
-	kDebug() << "CategoriesListView.constructor minimumWidth=" << minimumWidth()
-				<< "actual width" << width() << LINE_INFO;
+	qDebug() << "CategoriesListView.constructor minimumWidth=" << minimumWidth()
+				<< "actual width" << width();
 	QHeaderView *hh = header();
 	hh->setResizeMode(0, QHeaderView::ResizeToContents);
 	//hh->resizeSections(QHeaderView::ResizeToContents);
@@ -158,8 +158,8 @@ CategoriesListView::~CategoriesListView()
  */
 void CategoriesListView::init()
 {
-	kDebug() << "CategoriesListView.init minimumWidth=" << minimumWidth()
-				<< "actual width=" << width() << LINE_INFO;
+	qDebug() << "CategoriesListView.init minimumWidth=" << minimumWidth()
+				<< "actual width=" << width();
 
 	categories.clear();
 	clear();
@@ -334,4 +334,3 @@ QSize SubCategoriesListView::sizeHint() const
 }
 
 
-#include "categorieslistview.moc"

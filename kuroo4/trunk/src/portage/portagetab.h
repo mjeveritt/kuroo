@@ -26,8 +26,8 @@
 #include "ui_portagebase.h"
 #include "scanportagejob.h"
 
-class KMenu;
-class KAction;
+class QMenu;
+class QAction;
 class PackageInspector;
 class UninstallInspector;
 
@@ -86,7 +86,7 @@ private:
 	int					m_delayFilters;
 
 	// rmb
-	KMenu				*menu;
+	QMenu				*menu;
 
 	// The package inspector
 	PackageInspector	*m_packageInspector;
@@ -95,7 +95,7 @@ private:
 	UninstallInspector	*m_uninstallInspector;
 
 	// Actions for the context menu
-	KAction				*m_packageDetails, *m_addToQueue, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_uninstallPackage, *m_quickPackage;
+	QAction *m_packageDetails, *m_addToQueue, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_uninstallPackage, *m_quickPackage;
 
 signals:
 	void				signalChanged();

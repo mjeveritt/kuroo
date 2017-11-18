@@ -21,7 +21,8 @@
 #ifndef PACKAGEINSPECTOR_H
 #define PACKAGEINSPECTOR_H
 
-#include <KDialog>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <KProcess>
 
 #include "ui_inspectorbase.h"
@@ -33,7 +34,7 @@ class PackageListItem;
  * @class PackageInspector
  * @short The package Inspector dialog for all advanced settings.
  */
-class PackageInspector : public KDialog, public Ui::InspectorBase
+class PackageInspector : public QDialog, public Ui::InspectorBase
 {
 	Q_OBJECT
 public:
@@ -102,7 +103,8 @@ private:
 	QStringList				m_pretendUseLines;
 	QStringList				m_useList;
 
-    KProcess* eProc;
+	KProcess* 				eProc;
+	QDialogButtonBox*		buttonBox;
 
 signals:
 	void					signalNextPackage( bool up );

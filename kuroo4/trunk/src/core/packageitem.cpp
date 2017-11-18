@@ -41,14 +41,14 @@ PackageItem::PackageItem( QTreeWidget* parent, const QString& name, const QStrin
 	setText( 0, name );
 	//TODO: Tihs is probably not the most efficient place to put this
 	if ( m_status & PACKAGE_AVAILABLE )
-		setIcon( 0, KIcon("kuroo_package") );
+		setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_package")) );
 	else {
 		if ( KurooConfig::installedColumn() ) {
-			setIcon( 0, KIcon("kuroo_package") );
-			setIcon( 1, KIcon("kuroo_version_installed") );
+			setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_package")) );
+			setIcon( 1, QIcon::fromTheme(QStringLiteral("kuroo_version_installed")) );
 		}
 		else
-			setIcon( 0, KIcon("kuroo_stable") );
+			setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_stable")) );
 
 	}
 	if ( !this->isHidden() && PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) )
@@ -90,14 +90,14 @@ void PackageItem::paintCell( QPainter* painter, const QPalette& palette, int col
 
 			case 0 : {
 				if ( m_status & PACKAGE_AVAILABLE )
-					setIcon( 0, KIcon("kuroo_package") );
+					setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_package")) );
 				else {
 					if ( KurooConfig::installedColumn() ) {
-						setIcon( 0, KIcon("kuroo_package") );
-						setIcon( 1, KIcon("kuroo_version_installed") );
+						setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_package")) );
+						setIcon( 1, QIcon::fromTheme(QStringLiteral("kuroo_version_installed")) );
 					}
 					else
-						setIcon( 0, KIcon("installed") );
+						setIcon( 0, QIcon::fromTheme(QStringLiteral("installed")) );
 
 					if ( m_status & PACKAGE_OLD ) {
 						font.setItalic( true );
@@ -111,11 +111,11 @@ void PackageItem::paintCell( QPainter* painter, const QPalette& palette, int col
 			case 2 : {
 				if ( PortageSingleton::Instance()->isInWorld( m_category + "/" + m_name ) ) {
 					m_inWorld = true;
-					setIcon( 2, KIcon("kuroo_world") );
+					setIcon( 2, QIcon::fromTheme(QStringLiteral("kuroo_world")) );
 				}
 				else {
 					m_inWorld = false;
-					setIcon( 2, KIcon("kuroo_empty") );
+					setIcon( 2, QIcon::fromTheme(QStringLiteral("kuroo_empty")) );
 				}
 			}
 		}
@@ -176,7 +176,7 @@ void PackageItem::initVersions()
 		// Check if any of this package versions are hardmasked
 		atom = new PortageAtom( this );
 		const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
-	// 	kDebug() << "atomHardMaskedList=" << atomHardMaskedList;
+	// 	qDebug() << "atomHardMaskedList=" << atomHardMaskedList;
 		foreach( QString mask, atomHardMaskedList ) {
 
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -193,7 +193,7 @@ void PackageItem::initVersions()
 		// Check if any of this package versions are user-masked
 		atom = new PortageAtom( this );
 		const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
-	// 	kDebug() << "atomUserMaskedList=" << atomUserMaskedList;
+	// 	qDebug() << "atomUserMaskedList=" << atomUserMaskedList;
 		foreach( QString mask, atomUserMaskedList ) {
 
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -210,7 +210,7 @@ void PackageItem::initVersions()
 		// Check if any of this package versions are unmasked
 		atom = new PortageAtom( this );
 		const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
-	// 	kDebug() << "atomUnmaskedList=" << atomUnmaskedList;
+	// 	qDebug() << "atomUnmaskedList=" << atomUnmaskedList;
 		foreach( QString mask, atomUnmaskedList ) {
 
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -313,8 +313,8 @@ void PackageItem::parsePackageVersions()
 			}
 		}
 
-// 		kDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() <<
-// 			" stability=" << stability << LINE_INFO;
+// 		qDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() <<
+// 			" stability=" << stability;
 
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();

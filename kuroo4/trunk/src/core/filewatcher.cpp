@@ -48,7 +48,7 @@ void FileWatcher::init( QObject *parent )
 	
 // 	watcher->addFile( KurooConfig::fileWorld() );
 	
-	connect( watcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged( const QString& ) ) );
+	connect(watcher, &KDirWatch::dirty, this, &FileWatcher::slotChanged);
 }
 
 /**
@@ -73,4 +73,3 @@ void FileWatcher::slotChanged( const QString& path )
 // 		PortageSingleton::Instance()->loadWorld();
 }
 
-#include "filewatcher.moc"

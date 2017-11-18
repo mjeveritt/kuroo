@@ -24,7 +24,9 @@
 #include <fstream>
 #include <string>
 
+#include <QDebug>
 #include <QDir>
+#include <../build/src/settings.h>
 
 /**
  * @class CachePortageJob
@@ -45,13 +47,12 @@ CachePortageJob::~CachePortageJob()
 
 /**
  * Scan for package size found in digest files.
- * @return success
  */
 void CachePortageJob::run()
 {
 	DEBUG_LINE_INFO;
 	if ( !m_db->isConnected() ) {
-		kError(0) << "Creating cache. Can not connect to database" << LINE_INFO;
+		qCritical() << "Creating cache. Can not connect to database";
 		return;// false;
 	}
 
@@ -71,7 +72,7 @@ void CachePortageJob::run()
 
 	// Get list of categories in Portage and Overlays
 	QStringList pathList = KurooConfig::dirPortage().split(" ");
-	const QStringList pathOverlays =KurooConfig::dirPortageOverlay().split(" ");
+	const QStringList pathOverlays = KurooConfig::dirPortageOverlay().split(" ");
 	foreach ( QString path, pathOverlays ) {
 		pathList += path;
 	}
@@ -79,7 +80,7 @@ void CachePortageJob::run()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 		if ( !dCategory.cd( *itPath ) ) {
-			kWarning(0) << "Creating cache. Can not access " << *itPath << LINE_INFO;
+			qWarning() << "Creating cache. Can not access " << *itPath;
 			continue;
 		}
 
@@ -92,7 +93,7 @@ void CachePortageJob::run()
 
             /*// Abort the scan
 			if ( isAborted() ) {
-				kWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
+				qWarning() << "Creating cache. Aborted!";
 				setStatus( "CachePortage", i18n("Caching aborted.") );
 				return false;
             }*/
@@ -110,7 +111,7 @@ void CachePortageJob::run()
 
                     /*// Abort the scan
 					if ( isAborted() ) {
-						kWarning(0) << "Creating cache. Aborted!" << LINE_INFO;
+						qWarning() << "Creating cache. Aborted!";
 						setStatus( "CachePortage", i18n("Caching aborted.") );
 						return false;
                     }*/
@@ -133,10 +134,10 @@ void CachePortageJob::run()
 							file.close();
 						}
 						else
-							kWarning(0) << "Creating cache. Reading: " << path << LINE_INFO;*/
+							qWarning() << "Creating cache. Reading: " << path;*/
 					}
 					else
-						kWarning(0) << "Creating cache. Can not parse: " << *itPackage << LINE_INFO;
+						qWarning() << "Creating cache. Can not parse: " << *itPackage;
 
 					// Post scan count progress
                     /*if ( (++count % 100) == 0 )
@@ -144,7 +145,7 @@ void CachePortageJob::run()
 				}
 			}
 			else
-				kWarning(0) << "Creating cache. Can not access " << *itPath << "/metadata/cache/" << *itCategory << LINE_INFO;
+				qWarning() << "Creating cache. Can not access " << *itPath << "/metadata/cache/" << *itCategory;
 
 		}
 	}
@@ -172,4 +173,3 @@ void CachePortageJob::run()
 	SignalistSingleton::Instance()->cachePortageComplete();
 }
 
-#include "cacheportagejob.moc"

@@ -21,14 +21,14 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <KDialog>
+#include <QDialog>
 #include "ui_messagebase.h"
 
 /**
  * Dialog for simple messages to user.
  */
-//CLEAN: just use KDialog
-class Message : public KDialog, public Ui::MessageBase
+//CLEAN: just use QDialog
+class Message : public QDialog, public Ui::MessageBase
 {
 Q_OBJECT
     static Message* s_instance;

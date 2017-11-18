@@ -112,7 +112,7 @@ void VersionView::usedForInstallation( const QString& version )
             m_installedIndex = indexFromItem( *it );
 		
         if ( (*it)->text(1) == version ) {
-            (*it)->setIcon( 0, KIcon("kuroo_version_installed") );
+            (*it)->setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_version_installed")) );
             m_emergeIndex = indexFromItem( *it );
 		}
         it++;
@@ -122,4 +122,3 @@ void VersionView::usedForInstallation( const QString& version )
 }
 
 
-#include "versionview.moc"

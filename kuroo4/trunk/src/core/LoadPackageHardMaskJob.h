@@ -39,7 +39,7 @@ public:
 		// Collect all mask dependatoms
 		QFileInfo fileInfo( KurooConfig::filePackageHardMask() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::filePackageHardMask() << " is a dir" << LINE_INFO;
+			qDebug() << KurooConfig::filePackageHardMask() << " is a dir";
 			if( !mergeDirIntoFile( KurooConfig::filePackageHardMask() ) ) {
 				return;
 			}
@@ -48,7 +48,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kError(0) << "Parsing package.mask. Reading: " << KurooConfig::filePackageHardMask() << LINE_INFO;
+			qCritical() << "Parsing package.mask. Reading: " << KurooConfig::filePackageHardMask();
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -87,16 +87,16 @@ public:
 							"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
 
 						if ( id.isEmpty() )
-							kWarning(0) << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
-							.arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
+							qWarning() << QString("Parsing package.mask. Can not find id in database for package %1/%2.")
+							.arg( atom.category() ).arg( atom.package() );
 						else
 							KurooDBSingleton::Instance()->insert( QString(
 								"INSERT INTO packageHardMask_temp (idPackage, dependAtom, comment) "
 								"VALUES ('%1', '%2', '%3');" ).arg( id ).arg( *it ).arg( commentLines.join( "<br/>" ) ), m_db );
 
 					} else {
-						kWarning(0) << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::filePackageHardMask() ) << LINE_INFO;
+						qWarning() << QString("Parsing package.mask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::filePackageHardMask() );
 					}
 				}
 			}

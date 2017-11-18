@@ -142,7 +142,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="KTextBrowser" name="logBrowser">
+    <widget class="QTextBrowser" name="logBrowser">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
@@ -162,7 +162,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KTextBrowser</class>
+   <class>QTextBrowser</class>
    <extends>QTextBrowser</extends>
    <header>ktextbrowser.h</header>
   </customwidget>

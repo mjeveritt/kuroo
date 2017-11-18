@@ -67,7 +67,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="KPushButton" name="pbWhatsThis">
+      <widget class="QPushButton" name="pbWhatsThis">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -151,7 +151,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="KPushButton" name="pbClearFilter">
+      <widget class="QPushButton" name="pbClearFilter">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -334,7 +334,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="KTextBrowser" name="summaryBrowser">
+           <widget class="QTextBrowser" name="summaryBrowser">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
               <horstretch>0</horstretch>
@@ -352,7 +352,7 @@
              <enum>QLayout::SetMaximumSize</enum>
             </property>
             <item>
-             <widget class="KPushButton" name="pbQueue">
+             <widget class="QPushButton" name="pbQueue">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -368,7 +368,7 @@
              </widget>
             </item>
             <item>
-             <widget class="KPushButton" name="pbUninstall">
+             <widget class="QPushButton" name="pbUninstall">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -403,7 +403,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="KPushButton" name="pbAdvanced">
+             <widget class="QPushButton" name="pbAdvanced">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -441,12 +441,12 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KTextBrowser</class>
+   <class>QTextBrowser</class>
    <extends>QTextBrowser</extends>
    <header>ktextbrowser.h</header>
   </customwidget>
@@ -470,14 +470,9 @@
  </customwidgets>
  <includes>
   <include location="local">kpushbutton.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">categorieslistview.h</include>
   <include location="local">categorieslistview.h</include>
   <include location="local">portagelistview.h</include>
   <include location="local">ktextbrowser.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kpushbutton.h</include>
  </includes>
  <resources/>
  <connections/>

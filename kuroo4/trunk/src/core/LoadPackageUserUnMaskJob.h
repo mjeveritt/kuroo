@@ -37,7 +37,7 @@ public:
 		// Collect all unmask dependatoms
 		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserUnMask() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::defaultFilePackageUserUnMask() << " is a dir" << LINE_INFO;
+			qDebug() << KurooConfig::defaultFilePackageUserUnMask() << " is a dir";
 			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageUserUnMask() ) ) {
 				return;
 			}
@@ -47,7 +47,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesDependAtom;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kError(0) << "Parsing package.unmask. Reading: " << KurooConfig::defaultFilePackageUserUnMask() << LINE_INFO;
+			qCritical() << "Parsing package.unmask. Reading: " << KurooConfig::defaultFilePackageUserUnMask();
 		else {
 			while ( !stream.atEnd() )
 				linesDependAtom += stream.readLine();
@@ -86,8 +86,8 @@ public:
 							"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
 
 						if ( id.isEmpty() )
-							kWarning(0) << QString("Load user package unmask: Can not find id in database for package %1/%2.")
-							.arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
+							qWarning() << QString("Load user package unmask: Can not find id in database for package %1/%2.")
+							.arg( atom.category() ).arg( atom.package() );
 						else
 							KurooDBSingleton::Instance()->insert( QString(
 								"INSERT INTO packageUnmask_temp (idPackage, dependAtom, comment) "
@@ -95,8 +95,8 @@ public:
 
 					}
 					else
-						kWarning(0) << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
-							.arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
+						qWarning() << QString("Parsing package.unmask. Can not match package %1 in %2.").arg( *it )
+							.arg( KurooConfig::defaultFilePackageUserUnMask() );
 				}
 			}
 		}

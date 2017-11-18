@@ -26,7 +26,7 @@
 #include <kio/job.h>
 
 class QCheckBox;
-class KTextBrowser;
+class QTextBrowser;
 
 /**
  * @class Log
@@ -39,7 +39,7 @@ public:
 	Log( QObject *m_parent = 0 );
 	~Log();
 	
-	void 			setGui( KTextBrowser *logBrowserGui, QCheckBox *verboseLogGui, QCheckBox *saveLogGui );
+	void 			setGui( QTextBrowser *logBrowserGui, QCheckBox *verboseLogGui, QCheckBox *saveLogGui );
 	void 			writeLog( const QString& output, int logType );
 	
 	const QString		init( QObject *parent = 0 );
@@ -50,7 +50,7 @@ private:
 	void addText(const QString&);
 	QObject*		m_parent;
 	QCheckBox 		*m_verboseLog, *m_saveLog;
-	KTextBrowser 		*m_logBrowser;
+	QTextBrowser 		*m_logBrowser;
 	QFile 			m_logFile;
 	unsigned int		numLines;
 	

@@ -21,13 +21,12 @@
 #ifndef _KUROO_H_
 #define _KUROO_H_
 
-#include <KApplication>
 #include <KXmlGuiWindow>
 
 #include "kurooview.h"
 #include "configdialog.h"
 
-class KAction;
+class QAction;
 class KConfigDialog;
 class IntroDlg;
 class KurooInit;
@@ -75,7 +74,7 @@ private:
 	IntroDlg			*wizardDialog;
 	KurooStatusBar		*sb;
 	bool				m_shuttingDown;
-	KAction 			*actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
+	QAction *actionRefreshPortage, *actionRefreshUpdates, *actionSyncPortage;
 };
 
 #endif // _KUROO_H_

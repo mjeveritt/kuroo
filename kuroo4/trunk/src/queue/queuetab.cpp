@@ -31,12 +31,12 @@
 #include <QCheckBox>
 #include <QWhatsThis>
 
-#include <KPushButton>
+#include <QPushButton>
 #include <KMessageBox>
-#include <KMenu>
+#include <QMenu>
 #include <KUser>
 //#include <kaccel.h>
-#include <KAction>
+#include <QAction>
 
 /**
 * @class QueueTab
@@ -47,34 +47,34 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 {
 	setupUi( this );
 	// Connect What's this button
-	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	connect(pbWhatsThis, &QPushButton::clicked, this, &QueueTab::slotWhatsThis);
 
 	// Rmb actions.
 	queueView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect( queueView, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( slotContextMenu(const QPoint&) ) );
+	connect(queueView, &QueueListView::customContextMenuRequested, this, &QueueTab::slotContextMenu);
 
-	m_removeFromQueue = new KAction( KIcon( "list-remove" ), i18n( "&Remove"), this );
-	connect( m_removeFromQueue, SIGNAL(triggered(bool)), this, SLOT(slotRemove()));
-	m_removeFromWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Remove From &World"), this );
-	connect( m_removeFromWorld, SIGNAL(triggered(bool)), this, SLOT( slotRemoveWorld()));
-	m_addToWorld = new KAction( KIcon( "kuroo_world" ), i18n( "Add To &World"), this );
-	connect( m_addToWorld, SIGNAL(triggered(bool)), this, SLOT( slotAddWorld()));
-	m_clearQueue = new KAction( KIcon( "edit-clear" ), i18n( "Remove &All"), this );
-	connect( m_clearQueue, SIGNAL( triggered(bool) ), this, SLOT( slotClear() ) );
-	m_packageDetails = new KAction( i18n( "&Details"), this );
-	connect( m_packageDetails, SIGNAL( triggered(bool) ), this, SLOT( slotAdvanced() ) );
+	m_removeFromQueue = new QAction( QIcon::fromTheme(QStringLiteral("list-remove")), i18n( "&Remove"), this );
+	connect(m_removeFromQueue, &QAction::triggered, this, &QueueTab::slotRemove);
+	m_removeFromWorld = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_world")), i18n( "Remove From &World"), this );
+	connect(m_removeFromWorld, &QAction::triggered, this, &QueueTab::slotRemoveWorld);
+	m_addToWorld = new QAction( QIcon::fromTheme(QStringLiteral("kuroo_world")), i18n( "Add To &World"), this );
+	connect(m_addToWorld, &QAction::triggered, this, &QueueTab::slotAddWorld);
+	m_clearQueue = new QAction( QIcon::fromTheme(QStringLiteral("edit-clear")), i18n( "Remove &All"), this );
+	connect(m_clearQueue, &QAction::triggered, this, &QueueTab::slotClear);
+	m_packageDetails = new QAction( i18n( "&Details"), this );
+	connect(m_packageDetails, &QAction::triggered, this, &QueueTab::slotAdvanced);
 
 	// Button actions.
-	connect( pbCheck, SIGNAL( clicked() ), this, SLOT( slotCheck() ) );
-	connect( pbRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
-	connect( pbClear, SIGNAL( clicked() ), this, SLOT( slotClear() ) );
-	connect( pbAdvanced, SIGNAL( clicked() ), this, SLOT( slotAdvanced() ) );
-	connect( queueView, SIGNAL( itemDoubleClicked(QueueListItem*) ), this, SLOT( slotAdvanced() ) );
+	connect(pbCheck, &QPushButton::clicked, this, &QueueTab::slotCheck);
+	connect(pbRemove, &QPushButton::clicked, this, &QueueTab::slotRemove);
+	connect(pbClear, &QPushButton::clicked, this, &QueueTab::slotClear);
+	connect(pbAdvanced, &QPushButton::clicked, this, &QueueTab::slotAdvanced);
+	connect(queueView, &QueueListView::itemDoubleClicked, this, &QueueTab::slotAdvanced);
 
-	connect( cbRemove, SIGNAL( clicked() ), this, SLOT( slotRemoveInstalled() ) );
+	connect(cbRemove, &QCheckBox::clicked, this, &QueueTab::slotRemoveInstalled);
 
-	connect( queueView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotPackage() ) );
-	connect( queueView, SIGNAL( selectionChangedSignal() ), this, SLOT( slotButtons() ) );
+	connect(queueView, &QueueListView::selectionChangedSignal, this, &QueueTab::slotPackage);
+	connect(queueView, &QueueListView::selectionChangedSignal, this, &QueueTab::slotButtons);
 
 	// Lock/unlock if kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
@@ -93,9 +93,9 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	connect( QueueSingleton::Instance(), SIGNAL( signalPackageComplete( const QString& ) ), this, SLOT( slotQueueSummary() ) );
 
 	// Recalculate package when user change settings in Inspector
-	connect( m_packageInspector, SIGNAL( signalPackageChanged() ), this, SLOT( slotPackage() ) );
-	connect( m_packageInspector, SIGNAL( signalNextPackage( bool ) ), this, SLOT( slotNextPackage( bool ) ) );
-	connect( m_packageInspector, SIGNAL( hidden() ), this, SLOT( slotButtons() ) );
+	connect(m_packageInspector, &PackageInspector::signalPackageChanged, this, &QueueTab::slotPackage);
+	connect(m_packageInspector, &PackageInspector::signalNextPackage, this, &QueueTab::slotNextPackage);
+	connect(m_packageInspector, &PackageInspector::hidden, this, &QueueTab::slotButtons);
 
 	slotInit();
 }
@@ -196,12 +196,12 @@ void QueueTab::slotInit()
 	pAccel->insert( "View package details...", i18n("View package details..."), i18n("View package details..."),
 					Qt::Key_Return, this, SLOT( slotAdvanced() ) );*/
 
-	pbRemove->setIcon( KIcon( "list-remove" ) );
-	pbClear->setIcon( KIcon( "edit-clear" ) );
-	//pbAdvanced->setIcon( KIcon( "options" ) );
-	pbCheck->setIcon( KIcon( "run-build" ) );
-	pbGo->setIcon( KIcon(  "run-build-install" ) );
-	pbWhatsThis->setIcon( KIcon( "help-about" ) );
+	pbRemove->setIcon( QIcon::fromTheme(QStringLiteral("list-remove")) );
+	pbClear->setIcon( QIcon::fromTheme(QStringLiteral("edit-clear")) );
+	//pbAdvanced->setIcon( QIcon::fromTheme(QStringLiteral("options")) );
+	pbCheck->setIcon( QIcon::fromTheme(QStringLiteral("run-build")) );
+	pbGo->setIcon( QIcon::fromTheme(QStringLiteral("run-build-install")) );
+	pbWhatsThis->setIcon( QIcon::fromTheme(QStringLiteral("help-about")) );
 }
 
 /**
@@ -328,15 +328,15 @@ void QueueTab::slotButtons()
 	// Kuroo is busy emerging toggle to "abort"
 	if ( EmergeSingleton::Instance()->isRunning() ) {
 		pbGo->setText( i18n( "Abort Installation" ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
+		disconnect(pbGo, &QPushButton::clicked, this, &QueueTab::slotGo);
+		disconnect(pbGo, &QPushButton::clicked, this, &QueueTab::slotStop);
+		connect(pbGo, &QPushButton::clicked, this, &QueueTab::slotStop);
 	}
 	else {
 		pbGo->setText( i18n( "Step &2: Start Installation" ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
-		disconnect( pbGo, SIGNAL( clicked() ), this, SLOT( slotStop() ) );
-		connect( pbGo, SIGNAL( clicked() ), this, SLOT( slotGo() ) );
+		disconnect(pbGo, &QPushButton::clicked, this, &QueueTab::slotGo);
+		disconnect(pbGo, &QPushButton::clicked, this, &QueueTab::slotStop);
+		connect(pbGo, &QPushButton::clicked, this, &QueueTab::slotGo);
 		if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
 			cbSkipHousekeeping->setDisabled( false );
 		else
@@ -402,7 +402,7 @@ void QueueTab::slotCheck()
 {
 	// Only user-end packages not the dependencies
 	QStringList packageList = queueView->allPackagesNoChildren();
-	kDebug() << packageList;
+	qDebug() << packageList;
 	if( cbUpdate->isChecked() )
 		packageList.prepend( "-uN" );
 	EmergeSingleton::Instance()->pretend( packageList );
@@ -602,7 +602,7 @@ void QueueTab::slotContextMenu(const QPoint &point)
 	if ( !item.isValid() )
 		return;
 
-	KMenu menu( this );
+	QMenu menu( this );
 
 	menu.addAction( m_removeFromQueue );
 	menu.addAction( m_packageDetails );
@@ -631,4 +631,3 @@ void QueueTab::slotContextMenu(const QPoint &point)
 	menu.exec(queueView->viewport()->mapToGlobal(point));
 }
 
-#include "queuetab.moc"

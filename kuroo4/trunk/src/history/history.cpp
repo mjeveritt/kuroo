@@ -73,7 +73,7 @@ void History::init( QObject *parent )
 
 	m_log.setFileName( KurooConfig::fileEmergeLog() );
 	if ( !m_log.open( QIODevice::ReadOnly ) )
-		kError(0) << "Reading " << KurooConfig::fileEmergeLog() << LINE_INFO;
+		qCritical() << "Reading " << KurooConfig::fileEmergeLog();
 	else
 		stream.setDevice( &m_log );
 
@@ -98,7 +98,7 @@ void History::slotInit()
 void History::slotScanHistoryCompleted()
 {
 	emit signalScanHistoryCompleted();
-	connect( logWatcher, SIGNAL( dirty( const QString& ) ), this, SLOT( slotParse() ) );
+	connect(logWatcher, &KDirWatch::dirty, this, &History::slotParse);
 }
 
 /**
@@ -141,7 +141,7 @@ void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
 	ScanHistoryJob *job = new ScanHistoryJob(this, lines);
-	connect(job, SIGNAL(done(ThreadWeaver::Job*)), SLOT(slotWeaverDone(ThreadWeaver::Job*)));
+	connect(job, &ScanHistoryJob::done, this, &History::slotWeaverDone);
 	ThreadWeaver::Weaver::instance()->enqueue(job);
 }
 
@@ -209,8 +209,8 @@ void History::slotParse()
 					QueueSingleton::Instance()->emergePackageStart( package, order, total );
 				}
 				else
-					kWarning(0) << QString("Can not parse package emerge start in %1: %2")
-					.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
+					qWarning() << QString("Can not parse package emerge start in %1: %2")
+					.arg( KurooConfig::fileEmergeLog() ).arg( line );
 			}
 			else
 
@@ -228,8 +228,8 @@ void History::slotParse()
 					emit signalHistoryChanged();
 				}
 				else
-					kWarning(0) << QString("Can not parse package emerge complete in %1: %2")
-									.arg( KurooConfig::fileEmergeLog() ).arg( line ) << LINE_INFO;
+					qWarning() << QString("Can not parse package emerge complete in %1: %2")
+									.arg( KurooConfig::fileEmergeLog() ).arg( line );
 
 				emergeLine.replace( "completed emerge", i18n( "completed emerge" ) );
 				LogSingleton::Instance()->writeLog( emergeLine, EMERGELOG );
@@ -406,4 +406,3 @@ void History::slotWeaverDone(ThreadWeaver::Job *job)
 	delete job;
 }
 
-#include "history.moc"

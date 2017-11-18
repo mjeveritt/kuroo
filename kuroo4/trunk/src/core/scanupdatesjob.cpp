@@ -54,12 +54,12 @@ ScanUpdatesJob::~ScanUpdatesJob()
 void ScanUpdatesJob::run()
 {
 	if ( !m_db->isConnected() ) {
-		kError(0) << "Scanning updates. Can not connect to database" << LINE_INFO;
+		qCritical() << "Scanning updates. Can not connect to database";
 		return;
 	}
 
 	if ( m_packageList.isEmpty() )
-		kWarning(0) << "Scanning updates. No update package found" << LINE_INFO;
+		qWarning() << "Scanning updates. No update package found";
 
 	/*setStatus( "ScanUpdates", i18n("Refreshing updates view...") );
 	setProgressTotalSteps( m_packageList.count() );*/
@@ -89,7 +89,7 @@ void ScanUpdatesJob::run()
 
 		// Abort the scan
 		/*if ( isAborted() ) {
-			kWarning(0) << "Scanning updates. Scan aborted!" << LINE_INFO;
+			qWarning() << "Scanning updates. Scan aborted!";
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
 			return false;
 		}*/
@@ -102,8 +102,8 @@ void ScanUpdatesJob::run()
 			(*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 
 		if ( id.isEmpty() ) {
-			kWarning(0) << QString("Scanning updates. Can not find id in database for package %1/%2.")
-				.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
+			qWarning() << QString("Scanning updates. Can not find id in database for package %1/%2.")
+				.arg( (*it).category ).arg( (*it).name );
 		}
 		else {
 
@@ -136,4 +136,3 @@ void ScanUpdatesJob::run()
 	SignalistSingleton::Instance()->loadUpdatesComplete();
 }
 
-#include "scanupdatesjob.moc"

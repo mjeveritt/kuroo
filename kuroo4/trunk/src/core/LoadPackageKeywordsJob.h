@@ -33,13 +33,13 @@ public:
 	LoadPackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
 
 	virtual void run() {
-		kDebug() << "Updating KEYWORDS DATABASE !!!!";
+		qDebug() << "Updating KEYWORDS DATABASE !!!!";
 		DEBUG_LINE_INFO;
 
 		// Collect all mask dependatoms
 		QFileInfo fileInfo( KurooConfig::defaultFilePackageKeywords() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::defaultFilePackageKeywords() << " is a dir" << LINE_INFO;
+			qDebug() << KurooConfig::defaultFilePackageKeywords() << " is a dir";
 			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageKeywords() ) ) {
 				return;
 			}
@@ -48,7 +48,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesPackage;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kWarning(0) << "Parsing package.keywords. Reading: " << KurooConfig::defaultFilePackageKeywords() << LINE_INFO;
+			qWarning() << "Parsing package.keywords. Reading: " << KurooConfig::defaultFilePackageKeywords();
 		else {
 			while ( !stream.atEnd() )
 				linesPackage += stream.readLine();
@@ -93,16 +93,16 @@ public:
 						"SELECT id FROM package WHERE name = '" + atom.package() + "' AND category = '" + atom.category() + "' LIMIT 1;", m_db );
 
 					if ( id.isEmpty() )
-						kWarning(0) << QString("Load package keywords: Can not find id in database for package %1/%2.")
-						.arg( atom.category() ).arg( atom.package() ) << LINE_INFO;
+						qWarning() << QString("Load package keywords: Can not find id in database for package %1/%2.")
+						.arg( atom.category() ).arg( atom.package() );
 					else
 						KurooDBSingleton::Instance()->insert( QString(
 							"INSERT INTO packageKeywords_temp (idPackage, keywords) VALUES ('%1', '%2');" )
 										.arg( id ).arg( keywords ), m_db );
 				}
 				else
-					kWarning(0) << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
-						.arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
+					qWarning() << QString("Parsing package.keywords. Can not match package %1 in %2.").arg( *it )
+						.arg( KurooConfig::defaultFilePackageKeywords() );
 			}
 
 		}

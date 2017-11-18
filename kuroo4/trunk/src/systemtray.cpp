@@ -22,7 +22,6 @@
 
 #include <QThread>
 
-#include <KMenu>
 
 #include "common.h"
 #include "systemtray.h"
@@ -126,4 +125,3 @@ void SystemTray::slotBusy( bool busy )
 	}
 }
 
-#include "systemtray.moc"

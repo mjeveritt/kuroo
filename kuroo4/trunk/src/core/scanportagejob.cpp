@@ -66,7 +66,7 @@ void ScanPortageJob::run()
 	dCategory.setSorting( QDir::Name );
 
 	if ( !m_db->isConnected() ) {
-		kError(0) << "Scanning Portage. Can not connect to database" << LINE_INFO;
+		qCritical() << "Scanning Portage. Can not connect to database";
         return;
 	}
 
@@ -128,10 +128,10 @@ void ScanPortageJob::run()
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 
-		//kDebug(0) << "Scanning Portage. Reading categories from " << *itPath << LINE_INFO;
+		//qDebug() << "Scanning Portage. Reading categories from " << *itPath;
 		//TODO: This is where I need to start removing deps on /var/cache/edb
 		if ( !dCategory.cd( *itPath ) ) {
-			//kWarning(0) << "Scanning Portage. Can not access " << *itPath  << LINE_INFO;
+			//qWarning() << "Scanning Portage. Can not access " << *itPath ;
 			continue;
 		}
 
@@ -147,12 +147,12 @@ void ScanPortageJob::run()
 
             /*// Abort the scan
 			if ( isAborted() ) {
-				kWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
+				qWarning() << "Scanning Portage. Portage scan aborted";
 				KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
                 return;
             }*/
 
-			//kDebug(0) << "Scanning Portage. Reading category " << *itCategory << LINE_INFO;
+			//qDebug() << "Scanning Portage. Reading category " << *itCategory;
 			QString category = (*itCategory).section( "-", 0, 0 );
 			QString subCategory = (*itCategory).section( "-", 1, 1 );
 
@@ -177,7 +177,7 @@ void ScanPortageJob::run()
 			dPackage.setSorting( QDir::Name );
 
 			if ( dPackage.cd( *itPath + "/" + *itCategory) ) {
-				//kDebug(0) << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory << LINE_INFO;
+				//qDebug() << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory;
 
 				QStringList packageList = dPackage.entryList();
 				QString status, lastPackage;
@@ -189,12 +189,12 @@ void ScanPortageJob::run()
 
                     /*// Abort the scan
 					if ( isAborted() ) {
-						kWarning(0) << "Scanning Portage. Portage scan aborted" << LINE_INFO;
+						qWarning() << "Scanning Portage. Portage scan aborted";
 						KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
                         return;
                     }*/
 
-					//kDebug(0) << "Scanning Portage. Reading package " << *itPackage << LINE_INFO;
+					//qDebug() << "Scanning Portage. Reading package " << *itPackage;
 					QStringList parts = parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						//parts[0] is category
@@ -215,7 +215,7 @@ void ScanPortageJob::run()
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
 							m_categories[ *itCategory ].packages[ name ].path = (*itPath).section( "/metadata/md5-cache", 0, 0 );
-							//kDebug(0) << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path << LINE_INFO;
+							//qDebug() << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path;
 						}
 
 						// Insert version in portage
@@ -232,14 +232,14 @@ void ScanPortageJob::run()
 
 					}
 					else
-						kWarning(0) << "Scanning Portage. Scanning Portage cache: can not match package " << *itPackage << LINE_INFO;
+						qWarning() << "Scanning Portage. Scanning Portage cache: can not match package " << *itPackage;
 
 					// Post scan count progress
 					//if ( ( ++count % 100 ) == 0 )
 				}
 			}
 			else
-				kWarning(0) << "Scanning Portage. Can not access " << *itPath << *itCategory << LINE_INFO;
+				qWarning() << "Scanning Portage. Can not access " << *itPath << *itCategory;
 
 			lastCategory = category;
 			SignalistSingleton::Instance()->scanProgress(++count);
@@ -340,7 +340,7 @@ void ScanPortageJob::scanInstalledPackages()
 	dCategory.setSorting( QDir::Name );
 
 	if ( !dCategory.cd( KurooConfig::dirDbPkg() ) )
-		kWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << LINE_INFO;
+		qWarning() << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg();
 
     //setStatus( "ScanInstalled", i18n("Collecting installed packages...") );
 
@@ -390,11 +390,11 @@ void ScanPortageJob::scanInstalledPackages()
 
 				}
 				else
-					kWarning(0) << "Scanning installed packages. Can not match " << *itPackage << LINE_INFO;
+					qWarning() << "Scanning installed packages. Can not match " << *itPackage;
 			}
 		}
 		else
-			kWarning(0) << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << "/" << *itCategory << LINE_INFO;
+			qWarning() << "Scanning installed packages. Can not access " << KurooConfig::dirDbPkg() << "/" << *itCategory;
 	}
     //setStatus( "ScanInstalled", i18n("Done.") );
 }
@@ -414,7 +414,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 	QFile file( path + "/" + category + "/" + name + "-" + version );
 
 	if ( !file.open( QIODevice::ReadOnly ) ) {
-		kWarning(0) << "Scanning Portage cache. Failed reading: " << path << "/" << category << "/" << name << "-" << version << LINE_INFO;
+		qWarning() << "Scanning Portage cache. Failed reading: " << path << "/" << category << "/" << name << "-" << version;
 
 		info.slot = "0";
 		info.homepage = "0";
@@ -523,7 +523,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
 			                                      .arg( name + "-" + version ).arg( word ), m_db );
 		}
 		else
-			kError(0) << "Scanning installed packages. Reading: " << path << LINE_INFO;
+			qCritical() << "Scanning installed packages. Reading: " << path;
 	}
 */
 
@@ -538,7 +538,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
  */
 QString ScanPortageJob::formatSize( const QString& size )
 {
-	KLocale *loc = KGlobal::locale();
+	KLocale *loc = KLocale::global();
 	QString total;
 
 	uint num = ("0" + size).toInt();

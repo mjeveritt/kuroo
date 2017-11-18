@@ -54,7 +54,7 @@ QString HistoryListView::HistoryItem::einfo()
 * @short Specialized listview for emerge history.
 */
 HistoryListView::HistoryListView( QWidget *parent, const char *name )
-	: QTreeWidget( parent /*, name*/ ), m_loc( KGlobal::locale() )
+	: QTreeWidget( parent /*, name*/ ), m_loc( KLocale::global() )
 {
 	setColumnCount( 3 );
 	QTreeWidgetItem * header = new QTreeWidgetItem((QTreeWidget *)0); // the header must be NOT child of QTreeWidget
@@ -169,9 +169,9 @@ void HistoryListView::loadFromDB( int days )
 
 				HistoryItem *item = new HistoryItem( m_itemMap[ emergeDate ], packageString );
 				if ( duration.isEmpty() )
-					item->setIcon( 0, KIcon("kuroo_unmerged") );
+					item->setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_unmerged")) );
 				else {
-					item->setIcon( 0, KIcon("kuroo_new") );
+					item->setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_new")) );
 					item->setText( 1, emergeDuration );
 					item->setEinfo( einfo );
 				}
@@ -189,4 +189,3 @@ void HistoryListView::loadFromDB( int days )
 	emit signalHistoryLoaded();
 }
 
-#include "historylistview.moc"

@@ -30,7 +30,7 @@
 
 #include <KMessageBox>
 #include <KTreeWidgetSearchLine>
-#include <KPushButton>
+#include <QPushButton>
 
 /**
 * @class HistoryTab
@@ -40,26 +40,26 @@ HistoryTab::HistoryTab( QWidget* parent )
 {
 	setupUi( this );
 	// Connect What's this button
-	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	connect(pbWhatsThis, &QPushButton::clicked, this, &HistoryTab::slotWhatsThis);
 
-	pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
+	pbClearFilter->setIcon( QIcon::fromTheme(QStringLiteral("edit-clear-locationbar-ltr")) );
 
 	historyFilter->setTreeWidget( historyView );
 
 	// Connect button and checkbox
-	connect( viewUnmerges, SIGNAL( toggled( bool ) ), this, SLOT( slotViewUnmerges( bool ) ) );
-	connect( pbClearFilter, SIGNAL( clicked() ), this, SLOT( slotClearFilter() ) );
-	connect( historyView, SIGNAL( itemDoubleClicked(HistoryItem*) ), this, SLOT( slotViewInfo() ) );
+	connect(viewUnmerges, &QCheckBox::toggled, this, &HistoryTab::slotViewUnmerges);
+	connect(pbClearFilter, &QPushButton::clicked, this, &HistoryTab::slotClearFilter);
+	connect(historyView, &HistoryListView::itemDoubleClicked, this, &HistoryTab::slotViewInfo);
 
 	// Reload view after changes.
 	connect( HistorySingleton::Instance(), SIGNAL( signalHistoryChanged() ), this, SLOT( slotReload() ) );
-	connect( cbDays, SIGNAL( activated( int ) ), this, SLOT( slotReload( int ) ) );
+	connect(cbDays, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, static_cast<void(HistoryTab::*)(int)>(&HistoryTab::slotReload));
 
 	// Load history view after scan completed
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotReload() ) );
 
-	connect( historyView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
-	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewInfo() ) );
+	connect(historyView, &HistoryListView::itemSelectionChanged, this, &HistoryTab::slotButtonView);
+	connect(pbView, &QPushButton::clicked, this, &HistoryTab::slotViewInfo);
 
 	slotInit();
 }
@@ -83,7 +83,7 @@ HistoryTab::~HistoryTab()
 */
 void HistoryTab::slotInit()
 {
-	pbWhatsThis->setIcon( KIcon("help-about") );
+	pbWhatsThis->setIcon( QIcon::fromTheme(QStringLiteral("help-about")) );
 
 	pbView->setDisabled( true );
 
@@ -193,11 +193,10 @@ void HistoryTab::slotViewInfo()
 			Message::instance()->prompt( i18n( "Emerge log" ), i18n( "Installation message for %1:", item->text(0) ), logText );
 		}
 		else {
-			kError(0) << "Reading: " << eLogFile << LINE_INFO;
+			qCritical() << "Reading: " << eLogFile;
 			KMessageBox::error( this, i18n( "Can not find elog for this emerge. Please check elog settings in /etc/make.conf.\nError reading:\n" ) + eLogFile
 								, i18n( "emerge elog" ) );
 		}
 	}
 }
 
-#include "historytab.moc"

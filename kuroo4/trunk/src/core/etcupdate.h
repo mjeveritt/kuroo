@@ -22,7 +22,7 @@
 #ifndef ETCUPDATE_H
 #define ETCUPDATE_H
 
-#include <QObject>
+#include <qt5/QtCore/QObject>
 
 #include <kio/job.h>
 #include <KDirWatch>
@@ -36,8 +36,8 @@ class EtcUpdate : public QObject
 {
 Q_OBJECT
 public:
-    EtcUpdate( QObject *m_parent = 0, const char *name = 0 );
-    ~EtcUpdate();
+    EtcUpdate( QObject *m_parent = 0, const char *name = 0 ) : QObject( m_parent ) {}
+    ~EtcUpdate() { delete eProc; eProc = 0; }
 
 	void				init( QObject *parent = 0 );
 	/**

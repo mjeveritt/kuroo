@@ -100,5 +100,4 @@ void IntroDlg::accept()
 	QWizard::accept();
 }
 
-#include "introdlg.moc"
 

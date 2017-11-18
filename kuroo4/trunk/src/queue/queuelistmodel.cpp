@@ -18,7 +18,7 @@
  *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
-#include <KIcon>
+#include <QIcon>
 
 #include "common.h"
 #include "queuelistmodel.h"
@@ -93,14 +93,14 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 		if (role == Qt::DisplayRole)
 			return QVariant(QString("%1 (%2)").arg(p->name()).arg(p->category()));
 		if (role == Qt::DecorationRole && p->status() & PACKAGE_AVAILABLE)
-			return QVariant(KIcon("kuroo_package"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_package")));
 		else if (role == Qt::DecorationRole)
-			return QVariant(KIcon("kuroo_stable"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_stable")));
 
 		break;
 	case 1:
 		if (role == Qt::DecorationRole && p->isInWorld())
-			return QVariant(KIcon("kuroo_world"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_world")));
 
 		break;
 	case 2:
@@ -129,7 +129,7 @@ QVariant QueueListModel::data(const QModelIndex& index, int role) const
 
 		break;
 	default:
-		kDebug() << "Error: invalid column!" << LINE_INFO;
+		qDebug() << "Error: invalid column!";
 		break;
 	}
 
@@ -229,7 +229,7 @@ QVariant QueueListModel::headerData(int section, Qt::Orientation orientation, in
 		break;
 	case 1:
 		if (role == Qt::DecorationRole)
-			return QVariant(KIcon("kuroo_world_column"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_world_column")));
 		break;
 	case 2:
 		if (role == Qt::DisplayRole)
@@ -248,7 +248,7 @@ QVariant QueueListModel::headerData(int section, Qt::Orientation orientation, in
 			return QVariant("Progress");
 		break;
 	default:
-		kDebug() << "Error: invalid column!" << LINE_INFO;
+		qDebug() << "Error: invalid column!";
 		break;
 	}
 

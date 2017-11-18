@@ -21,14 +21,18 @@
 #include "common.h"
 #include "message.h"
 #include "statusbar.h"
+//#include "settings.h"
 
 #include <QTextCodec>
+#include <QDebug>
 
 #include <KMessageBox>
 #include <KUser>
-#include <kdeversion.h>
+//#include <kdeversion.h>
 
 #include <signal.h>
+#include <KLocalizedString>
+#include <../build/src/settings.h>
 
 /**
  * @class Emerge
@@ -68,7 +72,7 @@ void Emerge::init( QObject *parent )
 void Emerge::inputText( const QString& text )
 {
 	if ( eProc->state() == QProcess::Running ) {
-		eProc->write( text.toAscii() );
+		eProc->write( text.toUtf8() );
 		LogSingleton::Instance()->writeLog( text, KUROO );
 	}
 	else
@@ -82,7 +86,7 @@ void Emerge::inputText( const QString& text )
 bool Emerge::stop()
 {
 	if ( eProc->state() == QProcess::Running && kill( eProc->pid(), 9 /*FIXME: magic number*/ ) ) {
-		kWarning(0) << "Emerge process killed!" << LINE_INFO;
+		qWarning() << "Emerge process killed!";
 		return true;
 	}
 	else
@@ -135,8 +139,8 @@ bool Emerge::queue( const QStringList& packageList )
 			return false;
 		}
 
-		connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
+		connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+		connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupQueue);
 
 		if( KurooConfig::enableEclean() && !skipHousekeeping())
 			m_doeclean = true;
@@ -145,7 +149,7 @@ bool Emerge::queue( const QStringList& packageList )
 		m_pausable = true;
 
 		LogSingleton::Instance()->writeLog( i18n( "\nEmerge %1 started...", packageList.join(" ") ), KUROO );
-		kDebug() << i18n( "\nEmerge %1 started...", packageList.join(" ") );
+		qDebug() << i18n( "\nEmerge %1 started...", packageList.join(" ") );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Installing packages in queue..." ) );
 		KurooStatusBar::instance()->startTimer();
 
@@ -205,12 +209,12 @@ bool Emerge::quickpkg( const QStringList& packageList )
 	}
 
 	eProc->start();
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
 
 	if ( m_backingUp )
-		connect( eProc, SIGNAL( finished( int, QProcess::ExitStatus  ) ), this, SLOT( slotBackupComplete( int, QProcess::ExitStatus ) ) );
+		connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotBackupComplete);
 	else
-		connect( eProc, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( slotCleanupQueue( int, QProcess::ExitStatus ) ) );
+		connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupQueue);
 
 	m_backingUp = false;
 
@@ -255,8 +259,8 @@ bool Emerge::pretend( const QStringList& packageList )
 	}
 
 	eProc->start();
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupPretend(int, QProcess::ExitStatus) ) );
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupPretend);
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	LogSingleton::Instance()->writeLog( i18n( "\nEmerge pretend %1 started...", packageList.join(" ") ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Checking installation queue..." ) );
@@ -266,7 +270,6 @@ bool Emerge::pretend( const QStringList& packageList )
 
 /**
  * Unmerge list of packages.
- * @param category
  * @param packageList
  * @return success
  */
@@ -287,8 +290,8 @@ bool Emerge::unmerge( const QStringList& packageList )
 	}
 
 	eProc->start();
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupUnmerge(int, QProcess::ExitStatus) ) );
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupUnmerge);
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	LogSingleton::Instance()->writeLog( i18n( "\nUnmerge %1 started...", packageList.join(" ") ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Uninstalling packages..." ) );
@@ -313,8 +316,8 @@ bool Emerge::sync()
 
 	eProc->start();
 
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupSync(int, QProcess::ExitStatus) ) );
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupSync);
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	LogSingleton::Instance()->writeLog( i18n( "\nEmerge synchronize Portage Tree started..." ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Synchronizing portage tree..." ) );
@@ -352,8 +355,8 @@ bool Emerge::checkUpdates()
 	eProc->start();
 	if (eProc->state() == QProcess::NotRunning)
 		return false;
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupCheckUpdates(int, QProcess::ExitStatus) ) );
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupCheckUpdates);
 	SignalistSingleton::Instance()->scanUpdatesStarted();
 	LogSingleton::Instance()->writeLog( i18n( "\nEmerge check package updates started..." ), KUROO );
 	//KurooStatusBar::instance()->startProgress();
@@ -409,7 +412,7 @@ void Emerge::slotEmergeOutput()
 			emergePackage.installedVersion = rxPackage.cap(6);
 			emergePackage.useFlags = rxPackage.cap(7).simplified();
 			emergePackage.size = rxPackage.cap(8);
-			//kDebug() << emergePackage.size;
+			//qDebug() << emergePackage.size;
 			//Fix bug #3163827 order of queue items
 			m_emergePackageList.prepend( emergePackage );
 		}
@@ -514,7 +517,7 @@ const QString Emerge::packageMessage()
  */
 void Emerge::cleanup()
 {
-	kDebug() << "cleaning up !";
+	qDebug() << "cleaning up !";
 	KurooStatusBar::instance()->stopTimer();
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Done." ) );
 	SignalistSingleton::Instance()->setKurooBusy( false );
@@ -566,12 +569,12 @@ void Emerge::cleanup()
 			ecleanCOMMAND += "-s" + KurooConfig::ecleanSizeLimit() + " ";
 		}
 		ecleanCOMMAND += "distfiles";
-		kDebug(0) << "ECLEAN COMMAND: " << ecleanCOMMAND << LINE_INFO << "\n";
+		qDebug() << "ECLEAN COMMAND: " << ecleanCOMMAND;
 
 		eClean1->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 
-		connect( eClean1, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( eClean1, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEmergeDistfilesComplete() ) );
+		connect(eClean1, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+		connect(eClean1, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotEmergeDistfilesComplete);
 
 		eClean1->start();
 
@@ -589,8 +592,8 @@ void Emerge::cleanup()
 		*ioRevdepRebuild << "--no-color";
 		*ioRevdepRebuild << "--ignore";
 
-		connect( ioRevdepRebuild, SIGNAL( readReadyStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
+		connect(ioRevdepRebuild, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+		connect(ioRevdepRebuild, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotRevdepRebuildComplete);
 
 		ioRevdepRebuild->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 		ioRevdepRebuild->start();
@@ -608,8 +611,8 @@ void Emerge::cleanup()
  */
 void Emerge::slotRevdepRebuildComplete()
 {
-	disconnect( ioRevdepRebuild, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
+	disconnect(ioRevdepRebuild, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(ioRevdepRebuild, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotRevdepRebuildComplete);
 	LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuildcomplete" ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Done" ) );
 	KurooStatusBar::instance()->stopTimer();
@@ -619,12 +622,11 @@ void Emerge::slotRevdepRebuildComplete()
 
 /**
  * Run an eclean for packages if necessary
- * @param proc
  */
 void Emerge::slotEmergeDistfilesComplete()
 {
-	disconnect( eClean1, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eClean1, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEmergeDistfilesComplete(int, QProcess::ExitStatus) ) );
+	disconnect(eClean1, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eClean1, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotEmergeDistfilesComplete);
 	LogSingleton::Instance()->writeLog( i18n( "\nEclean of distfiles complete" ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Done" ) );
 	KurooStatusBar::instance()->stopTimer();
@@ -647,8 +649,8 @@ void Emerge::slotEmergeDistfilesComplete()
 		*eClean2 << "--nocolor" << "packages";
 
 		eClean2->start( /*KProcess::OwnGroup, true*/ );
-		connect( eClean2, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( eClean2, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEClean2Complete(int, QProcess::ExitStatus) ) );
+		connect(eClean2, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+		connect(eClean2, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotEClean2Complete);
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nEclean of packages started" ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Cleaning distfiles..." ) );
@@ -665,8 +667,8 @@ void Emerge::slotEmergeDistfilesComplete()
 		*ioRevdepRebuild << "--ignore";
 		ioRevdepRebuild->start();
 
-		connect( ioRevdepRebuild, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete() ) );
+		connect(ioRevdepRebuild, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+		connect(ioRevdepRebuild, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotRevdepRebuildComplete);
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuild Running..." ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Running revdep-rebuild..." ) );
@@ -680,8 +682,8 @@ void Emerge::slotEClean2Complete(int exitCode, QProcess::ExitStatus status)
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
 
-	disconnect( eClean2, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eClean2, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotEClean2Complete(int, QProcess::ExitStatus) ) );
+	disconnect(eClean2, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eClean2, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotEClean2Complete);
 	LogSingleton::Instance()->writeLog( i18n( "\nEcleaning packages complete" ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Ready" ) );
 	KurooStatusBar::instance()->stopTimer();
@@ -698,8 +700,8 @@ void Emerge::slotEClean2Complete(int exitCode, QProcess::ExitStatus status)
 		*ioRevdepRebuild << "--no-color";
 		*ioRevdepRebuild << "--ignore";
 		ioRevdepRebuild->start();
-		connect( ioRevdepRebuild, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-		connect( ioRevdepRebuild, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotRevdepRebuildComplete(int, QProcess::ExitStatus) ) );
+		connect(ioRevdepRebuild, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+		connect(ioRevdepRebuild, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotRevdepRebuildComplete);
 		SignalistSingleton::Instance()->setKurooBusy( true );
 		LogSingleton::Instance()->writeLog( i18n( "\nRevdep-rebuild Running..." ), KUROO );
 		KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Running revdep-rebuild..." ) );
@@ -710,15 +712,14 @@ void Emerge::slotEClean2Complete(int exitCode, QProcess::ExitStatus status)
 
 /**
  * Disconnect signals and signal termination to main thread.
- * @param proc
  */
 void Emerge::slotBackupComplete(int exitCode, QProcess::ExitStatus status)
 {
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
 
-	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotBackupComplete(int, QProcess::ExitStatus) ) );
+	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotBackupComplete);
 	HistorySingleton::Instance()->updateStatistics();
 	m_backupComplete = 1;
 	Emerge::queue(m_lastEmergeList);
@@ -726,7 +727,6 @@ void Emerge::slotBackupComplete(int exitCode, QProcess::ExitStatus status)
 
 /**
  * Disconnect signals and signal termination to main thread.
- * @param proc
  */
 void Emerge::slotCleanupQueue(int exitCode, QProcess::ExitStatus status)
 {
@@ -738,8 +738,8 @@ void Emerge::slotCleanupQueue(int exitCode, QProcess::ExitStatus status)
 
 void Emerge::cleanupQueue()
 {
-	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupQueue(int, QProcess::ExitStatus) ) );
+	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupQueue);
 	cleanup();
 	HistorySingleton::Instance()->updateStatistics();
 	m_pausable = false;
@@ -748,15 +748,14 @@ void Emerge::cleanupQueue()
 
 /**
  * Disconnect signals and signal termination to main thread.
- * @param proc
  */
 void Emerge::slotCleanupPretend(int exitCode, QProcess::ExitStatus status)
 {
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
 
-	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupPretend(int, QProcess::ExitStatus) ) );
+	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupPretend);
 	cleanup();
 }
 
@@ -769,36 +768,34 @@ void Emerge::slotCleanupUnmerge(int exitCode, QProcess::ExitStatus status)
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
 
-	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupUnmerge(int, QProcess::ExitStatus) ) );
+	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupUnmerge);
 	cleanup();
 }
 
 /**
  * Disconnect signals and signal termination to main thread.
- * @param proc
  */
 void Emerge::slotCleanupSync(int exitCode, QProcess::ExitStatus status)
 {
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
 
-	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupSync(int, QProcess::ExitStatus) ) );
+	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupSync);
 	cleanup();
 }
 
 /**
  * Disconnect signals and signal termination to main thread.
- * @param proc
  */
 void Emerge::slotCleanupCheckUpdates(int exitCode, QProcess::ExitStatus status)
 {
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
 
-	disconnect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotEmergeOutput() ) );
-	disconnect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotCleanupCheckUpdates(int, QProcess::ExitStatus) ) );
+	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
+	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupCheckUpdates);
 
 	KurooStatusBar::instance()->stopTimer();
 	//KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Done." ) );
@@ -873,7 +870,7 @@ void Emerge::slotTryEmerge()
 
 /**
  * count etc-files to merge.
- * @param emerge line
+ * @param line line
  * @return success
  */
 bool Emerge::countEtcUpdates( const QString& line )
@@ -892,4 +889,3 @@ bool Emerge::countEtcUpdates( const QString& line )
 		return false;
 }
 
-#include "emerge.moc"

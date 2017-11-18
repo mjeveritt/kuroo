@@ -244,4 +244,3 @@ void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 	sortItems( 0, Qt::DescendingOrder );
 }
 
-#include "dependencyview.moc"

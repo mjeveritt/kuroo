@@ -26,7 +26,7 @@
 #include <qcheckbox.h>
 #include <QTextStream>
 
-#include <ktextbrowser.h>
+#include <QTextBrowser>
 #include <kuser.h>
 #include <kio/job.h>
 #include <kmessagebox.h>
@@ -58,10 +58,10 @@ const QString Log::init( QObject *parent )
 	m_parent = parent;
 
 	QString logName = kurooDir + "kuroo.log";
-	kDebug(0) << logName << "\n";
+	qDebug() << logName << "\n";
 	m_logFile.setFileName( logName );
 	if( !m_logFile.open( QIODevice::WriteOnly ) ) {
-		kError(0) << "Writing: " << kurooDir << "kuroo.log" << LINE_INFO;
+		qCritical() << "Writing: " << kurooDir << "kuroo.log";
 		KMessageBox::error( 0, i18n( "Writing %1kuroo.log.", kurooDir ), i18n( "Saving" ) );
 		return QString::null;
 	}
@@ -91,7 +91,7 @@ KIO::Job* Log::backupLog()
 * @param logBrowserGui			pointer to text browser.
 * @param checkBoxVerboseGui	pointer to verbose checkbox.
 */
-void Log::setGui( KTextBrowser* logBrowserGui, QCheckBox* verboseLogGui, QCheckBox* saveLogGui )
+void Log::setGui( QTextBrowser* logBrowserGui, QCheckBox* verboseLogGui, QCheckBox* saveLogGui )
 {
 	m_logBrowser = logBrowserGui;
 	m_verboseLog = verboseLogGui;
@@ -145,7 +145,7 @@ void Log::writeLog( const QString& output, int logType )
 }
 
 void Log::addText( const QString& str ) {
-	//kDebug(0) << "Max Buffer Lines: " << buffer_MaxLines << "\n";
+	//qDebug() << "Max Buffer Lines: " << buffer_MaxLines << "\n";
 	if (numLines > buffer_MaxLines) {
 		m_logBrowser->clear();
 		numLines=0;
@@ -157,4 +157,3 @@ void Log::addText( const QString& str ) {
 }
 
 
-#include "log.moc"

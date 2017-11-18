@@ -112,26 +112,26 @@ PortageAtom::~PortageAtom()
  */
 bool PortageAtom::parse( const QString& atom )
 {
-// 	kDebug() << "atom=" << atom << LINE_INFO;
+// 	qDebug() << "atom=" << atom;
 
 	// Do the regexp match, which also prepares for text capture
 	if ( !rxAtom.exactMatch( atom ) ) {
-		kdDebug() << atom << " didn't match the regex exactly.";
+		qDebug() << atom << " didn't match the regex exactly.";
 		m_matches = false;
 		return false;
 	}
 
 	// Get the captured strings
 	m_callsign	= rxAtom.cap( 1 ).isEmpty() ? false : true;
-	//kDebug() << m_callsign;
+	//qDebug() << m_callsign;
 	m_prefix	= rxAtom.cap( 2 );
-	//kDebug() << m_prefix;
+	//qDebug() << m_prefix;
 	m_category	= rxAtom.cap( 3 ) + "-" + rxAtom.cap( 4 );
-	//kDebug() << m_category;
+	//qDebug() << m_category;
 	m_package	= rxAtom.cap( 5 );
-	//kDebug() << m_package;
+	//qDebug() << m_package;
 	m_version	= rxAtom.cap( 6 );
-	//kDebug() << m_version;
+	//qDebug() << m_version;
 
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
@@ -144,7 +144,7 @@ bool PortageAtom::parse( const QString& atom )
 
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
-		kdDebug() << atom << " has prefix, category, pagkage, and version " << m_prefix << m_category << m_package << m_version;
+		qDebug() << atom << " has prefix, category, pagkage, and version " << m_prefix << m_category << m_package << m_version;
 		m_matches = false;
 		return false;
 	}
@@ -204,12 +204,12 @@ QList<PackageVersion*> PortageAtom::matchingVersions()
 
 	QList<PackageVersion*> versions = m_portagePackage->versionList();
 
-// 	kDebug() << "PortageAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
+// 	qDebug() << "PortageAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
 
 	// So, let's iterate through the versions to check if they match or not
 	for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
 
-// 		kDebug() << "PortageAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<
+// 		qDebug() << "PortageAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;
 
 		if ( ( matchAllVersions ) ||

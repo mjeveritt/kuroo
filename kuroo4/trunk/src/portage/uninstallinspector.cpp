@@ -23,18 +23,34 @@
 #include "ui_uninstallbase.h"
 
 #include <QTreeWidget>
+#include <KConfigGroup>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 /**
  * @class UninstallInspector
  * @short Dialog for selected package and version to uninstall.
  */
 UninstallInspector::UninstallInspector( QWidget *parent )
-	: KDialog( parent )
+	: QDialog( parent )
 {
 	//i18n( "Uninstall Packages" ), false, i18n( "Uninstall Packages" ), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false
-	m_uninstallbase.setupUi( mainWidget() );
-	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
-	connect(m_uninstallbase.uninstallView, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(slotItemActivated(QTreeWidgetItem*, int)));
+	QWidget *mainWidget = new QWidget(this);
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	setLayout(mainLayout);
+	mainLayout->addWidget(mainWidget);
+	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Apply);
+	QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+	okButton->setDefault(true);
+	okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	//PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
+	mainLayout->addWidget(buttonBox);
+	m_uninstallbase.setupUi(mainWidget);
+	connect(okButton, SIGNAL(clicked()), SLOT(slotOk()));
+	connect(m_uninstallbase.uninstallView, &QTreeWidget::itemChanged, this, &UninstallInspector::slotItemActivated);
 }
 
 UninstallInspector::~UninstallInspector()
@@ -77,7 +93,7 @@ void UninstallInspector::view( const QStringList& packageList )
 		// Warn if package is included in gentoo base system profile
 		foreach ( QString file, systemFilesList ) {
 			if ( file == package ) {
-				itemPackage->setIcon( 0, KIcon("kuroo_warning") );
+				itemPackage->setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_warning")) );
 				isPartOfSystem = true;
 			}
 		}
@@ -112,7 +128,7 @@ void UninstallInspector::view( const QStringList& packageList )
  */
 void UninstallInspector::slotOk()
 {
-	kDebug() << "Unmerging packages :";
+	qDebug() << "Unmerging packages :";
 	QStringList packageList;
 
 	QTreeWidgetItemIterator it( m_uninstallbase.uninstallView );
@@ -121,11 +137,11 @@ void UninstallInspector::slotOk()
 			if ( (*it)->parent() ) {
 				if ( (*it)->parent()->checkState(0) == Qt::Checked )
 				{
-					kDebug() << "	*" << (*it)->parent()->text(0) + "-" + (*it)->text(0);
+					qDebug() << "	*" << (*it)->parent()->text(0) + "-" + (*it)->text(0);
 					packageList += "=" + (*it)->parent()->text(0) + "-" + (*it)->text(0);
 				}
 			} else {
-				kDebug() << "	*" << (*it)->text(0);
+				qDebug() << "	*" << (*it)->text(0);
 				packageList += (*it)->text(0);
 			}
 		}
@@ -137,4 +153,3 @@ void UninstallInspector::slotOk()
 	hide();
 }
 
-#include "uninstallinspector.moc"

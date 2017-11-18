@@ -18,7 +18,7 @@
  *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
-#include <KIcon>
+#include <QIcon>
 
 #include "common.h"
 #include "packagelistmodel.h"
@@ -80,17 +80,17 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 		if (role == Qt::DisplayRole)
 			return QVariant(p->name());
 		if (role == Qt::DecorationRole && p->status() & PACKAGE_AVAILABLE)
-			return QVariant(KIcon("kuroo_package"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_package")));
 		else if (role == Qt::DecorationRole)
-			return QVariant(KIcon("kuroo_stable"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_stable")));
 		break;
 	case 1:
 		if (role == Qt::DecorationRole && p->isInWorld())
-			return QVariant(KIcon("kuroo_world"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_world")));
 		break;
 	case 2:
 		if (role == Qt::DecorationRole && QueueSingleton::Instance()->isQueued(p->id()))
-			return QVariant(KIcon("kuroo_queue"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_queue")));
 		break;
 	case 3:
 		if (role == Qt::DisplayRole)
@@ -101,7 +101,7 @@ QVariant PackageListModel::data(const QModelIndex& index, int role) const
 			return QVariant(p->description());
 		break;
 	default:
-		kDebug() << "Error: invalid column!" << LINE_INFO;
+		qDebug() << "Error: invalid column!";
 		break;
 	}
 
@@ -154,11 +154,11 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 		break;
 	case 1:
 		if (role == Qt::DecorationRole)
-			return QVariant(KIcon("kuroo_world_column"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_world_column")));
 		break;
 	case 2:
 		if (role == Qt::DecorationRole)
-			return QVariant(KIcon("kuroo_queued_column"));
+			return QVariant(QIcon::fromTheme(QStringLiteral("kuroo_queued_column")));
 		break;
 	case 3:
 		if (role == Qt::DisplayRole)
@@ -169,7 +169,7 @@ QVariant PackageListModel::headerData(int section, Qt::Orientation orientation, 
 			return QVariant("Description");
 		break;
 	default:
-		kDebug() << "Error: invalid column!" << LINE_INFO;
+		qDebug() << "Error: invalid column!";
 		break;
 	}
 

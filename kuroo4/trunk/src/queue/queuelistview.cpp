@@ -278,7 +278,7 @@ void QueueListView::nextPackage( const bool& isPrevious )
  */
 const QString QueueListView::formatSize( const QString& sizeString )
 {
-	KLocale *loc = KGlobal::locale();
+	KLocale *loc = KLocale::global();
 	QString total;
 	QString tmp = sizeString;
 	int size = tmp.remove(",").toInt();

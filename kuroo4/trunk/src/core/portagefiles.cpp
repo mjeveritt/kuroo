@@ -35,7 +35,7 @@ bool mergeDirIntoFile( QString dirPath ) {
 	QFile tempFile( dirPath + ".temp" );
 	QTextStream tempStream( &tempFile );
 	if( !tempFile.open( QIODevice::WriteOnly ) ) {
-		//kDebug(0) << "Opened " << tempFile.fileName() << " for writing." << LINE_INFO;
+		//qDebug() << "Opened " << tempFile.fileName() << " for writing.";
 		//TODO handle failure
 		return false;
 	}
@@ -43,13 +43,13 @@ bool mergeDirIntoFile( QString dirPath ) {
 	QList<QFileInfo> infos = mergeDir.entryInfoList();
 	QStringList lines;
 	foreach( QFileInfo fi, infos ) {
-		//kDebug(0) << "Processing " << fi.filePath() << LINE_INFO;
+		//qDebug() << "Processing " << fi.filePath();
 		if( fi.isDir() ) {
-			//kDebug(0) << fi.filePath() << " is a dir." << LINE_INFO;
+			//qDebug() << fi.filePath() << " is a dir.";
 			if( fi.filePath().endsWith( "/." ) || fi.filePath().endsWith( "/.." ) ) {
-				//kDebug(0) << fi.filePath() << " is ., skipping." << LINE_INFO;
+				//qDebug() << fi.filePath() << " is ., skipping.";
 			} else {
-				//kDebug(0) << "Would recurse into " << fi.filePath() << LINE_INFO;
+				//qDebug() << "Would recurse into " << fi.filePath();
 				//TODO handle failure
 				if( !mergeDirIntoFile( fi.filePath() ) ) {
 					return false;
@@ -60,7 +60,7 @@ bool mergeDirIntoFile( QString dirPath ) {
 		QFile entryFile( fi.absoluteFilePath() );
 		QTextStream streamFile( &entryFile );
 		if ( !entryFile.open( QIODevice::ReadOnly ) ) {
-			//kError(0) << "Parsing " << fi.filePath() << LINE_INFO;
+			//qCritical() << "Parsing " << fi.filePath();
 		} else {
 			while ( !streamFile.atEnd() )
 				lines += streamFile.readLine();
@@ -85,7 +85,7 @@ bool mergeDirIntoFile( QString dirPath ) {
 	}
 
 	//And write the new file in it's place
-	KIO::file_move( dirPath + ".temp", dirPath, -1, KIO::Overwrite | KIO::HideProgressInfo );
+	KIO::file_move( QUrl(dirPath + ".temp"), QUrl(dirPath), -1, KIO::Overwrite | KIO::HideProgressInfo );
 	return true;
 }
 
@@ -103,10 +103,10 @@ public:
 		const QStringList lines = KurooDBSingleton::Instance()->query(
 			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
 			"WHERE package.id = packageKeywords.idPackage;" );
-		kDebug() << "Found" << lines;
+		qDebug() << "Found" << lines;
 		if ( lines.isEmpty() ) {
-			kWarning(0) << QString("No package keywords found. Saving to %1 aborted!")
-				.arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
+			qWarning() << QString("No package keywords found. Saving to %1 aborted!")
+				.arg( KurooConfig::defaultFilePackageKeywords() );
 			return;
 		}
 
@@ -114,7 +114,7 @@ public:
 		QTextStream stream( &file );
 
 		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageKeywords() ) << LINE_INFO;
+			qCritical() << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageKeywords() );
 			return;
 		}
 
@@ -149,15 +149,15 @@ public:
 
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
 		if ( lines.isEmpty() ) {
-			kWarning(0) << QString("No user mask depend atom found. Saving to %1 aborted!")
-				.arg( KurooConfig::defaultFilePackageUserMask() ) << LINE_INFO;
+			qWarning() << QString("No user mask depend atom found. Saving to %1 aborted!")
+				.arg( KurooConfig::defaultFilePackageUserMask() );
 			return;
 		}
 
 		QFile file( KurooConfig::defaultFilePackageUserMask() );
 		QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserMask() ) << LINE_INFO;
+			qCritical() << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserMask() );
 			return;
 		}
 
@@ -186,15 +186,15 @@ public:
 
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
-			kWarning(0) << QString("No user unmask depend atom found. Saving to %1 aborted!")
-				.arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
+			qWarning() << QString("No user unmask depend atom found. Saving to %1 aborted!")
+				.arg( KurooConfig::defaultFilePackageUserUnMask() );
 			return;
 		}
 
 		QFile file( KurooConfig::defaultFilePackageUserUnMask() );
 		QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUnMask() ) << LINE_INFO;
+			qCritical() << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUnMask() );
 			return;
 		}
 
@@ -225,14 +225,14 @@ public:
 			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
 			"WHERE package.id = packageUse.idPackage;" );
 		if ( lines.isEmpty() ) {
-			kWarning(0) << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::defaultFilePackageUserUse() ) << LINE_INFO;
+			qWarning() << QString("No package use found. Saving to %1 aborted!").arg( KurooConfig::defaultFilePackageUserUse() );
 			return;
 		}
 
 		QFile file( KurooConfig::defaultFilePackageUserUse() );
 		QTextStream stream( &file );
 		if ( !file.open( QIODevice::WriteOnly ) ) {
-			kError(0) << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUse() ) << LINE_INFO;
+			qCritical() << QString("Writing: %1.").arg( KurooConfig::defaultFilePackageUserUse() );
 			return;
 		}
 
@@ -380,4 +380,3 @@ void PortageFiles::savePackageUse()
 	ThreadWeaver::Weaver::instance()->enqueue( new SavePackageUseJob( this ) );
 }
 
-#include "portagefiles.moc"

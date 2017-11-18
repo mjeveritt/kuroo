@@ -36,7 +36,7 @@
       <number>5</number>
      </property>
      <item row="0" column="0">
-      <widget class="KPushButton" name="pbView">
+      <widget class="QPushButton" name="pbView">
        <property name="text">
         <string>View emerge log...</string>
        </property>
@@ -214,7 +214,7 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="KPushButton" name="pbWhatsThis">
+      <widget class="QPushButton" name="pbWhatsThis">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -266,16 +266,16 @@
  <customwidgets>
   <customwidget>
    <class>KTreeWidgetSearchLine</class>
-   <extends>KLineEdit</extends>
+   <extends>QLineEdit</extends>
    <header>ktreewidgetsearchline.h</header>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

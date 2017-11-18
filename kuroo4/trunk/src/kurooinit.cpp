@@ -27,6 +27,7 @@
 #include <grp.h>
 #include <pwd.h>
 
+#include <QDebug>
 #include <QDir>
 
 #include <KUser>
@@ -44,7 +45,7 @@
 KurooInit::KurooInit( QObject *parent )
 	: QObject( parent ), wizardDialog( 0 )
 {
-	kDebug() << "Initializing Kuroo Environment" << LINE_INFO;
+	qDebug() << "Initializing Kuroo Environment";
 	getEnvironment();
 
 	checkEtcFiles();
@@ -76,7 +77,7 @@ KurooInit::KurooInit( QObject *parent )
 				exit(0);
 			} else {
 				chmod( kurooDir.toAscii(), 0770 );
-				KIO::chown( KUrl(kurooDir), portageGid->gr_name, portageUid->pw_name);
+				KIO::chown( QUrl(kurooDir), portageGid->gr_name, portageUid->pw_name);
 			}
 
 			d.setCurrent( kurooDir );
@@ -94,18 +95,18 @@ KurooInit::KurooInit( QObject *parent )
 		}
 		else {
 			chmod( backupDir.toAscii(), 0770 );
-			KIO::chown( KUrl(backupDir), portageGid->gr_name, portageUid->pw_name);
+			KIO::chown( QUrl(backupDir), portageGid->gr_name, portageUid->pw_name);
 		}
 	}
 
 	KurooConfig::setVersion( KurooConfig::hardVersion() );
-	KurooConfig::self()->writeConfig();
+	KurooConfig::self()->save();
 
 	// Initialize the log
 	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
 		chmod( logFile.toAscii(), 0660 );
-		KIO::chown( KUrl(logFile), portageGid->gr_name, portageUid->pw_name );
+		KIO::chown( QUrl(logFile), portageGid->gr_name, portageUid->pw_name );
 	}
 
 	// Initialize the database
@@ -120,7 +121,7 @@ KurooInit::KurooInit( QObject *parent )
 		if ( !dbVersion.isEmpty() ) {
 			KurooDBSingleton::Instance()->backupDb();
 			remove( database.toAscii() );
-			kWarning(0) << QString("Database structure is changed. Deleting old version of database %1").arg( database ) << LINE_INFO;
+			qWarning() << QString("Database structure is changed. Deleting old version of database %1").arg( database );
 
 			// and recreate with new structure
 			KurooDBSingleton::Instance()->init( this );
@@ -131,7 +132,7 @@ KurooInit::KurooInit( QObject *parent )
 
 	// Give permissions to portage:portage to access the db also
 	chmod( databaseFile.toAscii(), 0660 );
-	KIO::chown( KUrl(databaseFile), portageGid->gr_name, portageUid->pw_name );
+	KIO::chown( QUrl(databaseFile), portageGid->gr_name, portageUid->pw_name );
 
     // Initialize singletons objects
 	SignalistSingleton::Instance()->init( this );
@@ -161,8 +162,8 @@ void KurooInit::getEnvironment()
 	eProc = new KProcess();
 	*eProc << "emerge" << "--info";
 	eProc->setOutputChannelMode( KProcess::OnlyStdoutChannel );
-	connect( eProc, SIGNAL( finished(int) ), this, SLOT( slotEmergeInfo() ) );
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectOutput() ) );
+	connect(eProc, static_cast<void (KProcess::*)(int)>(&KProcess::finished), this, &KurooInit::slotEmergeInfo);
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &KurooInit::slotCollectOutput);
 	eProc->start();
 }
 
@@ -175,7 +176,7 @@ void KurooInit::slotCollectOutput()
 
 void KurooInit::slotEmergeInfo()
 {
-	kDebug() << "Parsing emerge --info" << LINE_INFO;
+	qDebug() << "Parsing emerge --info";
 	foreach( QString line, m_emergeInfoLines ) {
 		if ( line.startsWith( "Portage 2.0" ) ) {
 			KurooConfig::setPortageVersion21( false );
@@ -198,7 +199,7 @@ void KurooInit::slotEmergeInfo()
 			KurooConfig::setConfigProtectList( line.section( "\"", 1, 1 ) );
 	}
 
-	kDebug(0) << "KurooConfig::arch()=" << KurooConfig::arch() << LINE_INFO;
+	qDebug() << "KurooConfig::arch()=" << KurooConfig::arch();
 
 	//KurooConfig::writeConfig();
 	DEBUG_LINE_INFO;
@@ -212,7 +213,7 @@ void KurooInit::slotEmergeInfo()
 void KurooInit::firstTimeWizard()
 {
 	IntroDlg wizardDialog;
-	kDebug() << "Running Wizard" << LINE_INFO;
+	qDebug() << "Running Wizard";
 	if( wizardDialog.exec() == QDialog::Accepted ) {
 		KurooConfig::setWizard( false );
 	} else {
@@ -267,7 +268,7 @@ void KurooInit::checkEtcFiles()
 			for (int j = 0; j < fiList.size(); ++j)
 			{
 				QFileInfo fileInfo = fiList.at(j);
-				//kDebug() << "Found" << fileInfo.absoluteFilePath();
+				//qDebug() << "Found" << fileInfo.absoluteFilePath();
 				list << fileInfo.absoluteFilePath();
 			}
 			if (list.isEmpty())
@@ -283,7 +284,7 @@ void KurooInit::checkEtcFiles()
 			list << path;
 		}
 
-		//kDebug() << configOption << ":" << list;
+		//qDebug() << configOption << ":" << list;
 		//TODO:check if default file exists.
 		if (configOption == "FilePackageUserUnMask")
 		{
@@ -312,4 +313,3 @@ void KurooInit::checkEtcFiles()
 
 	}
 }
-#include "kurooinit.moc"

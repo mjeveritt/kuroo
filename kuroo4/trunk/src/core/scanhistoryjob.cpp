@@ -52,7 +52,7 @@ ScanHistoryJob::~ScanHistoryJob()
 void ScanHistoryJob::run()
 {
 	if ( !m_db->isConnected() ) {
-		kError(0) << "Parsing emerge.log. Can not connect to database" << LINE_INFO;
+		qCritical() << "Parsing emerge.log. Can not connect to database";
         return;
 	}
 
@@ -73,7 +73,7 @@ void ScanHistoryJob::run()
 
 		// Abort the scan
         /*if ( isAborted() ) {
-			kWarning(0) << "Parsing emerge.log. History scan aborted" << LINE_INFO;
+			qWarning() << "Parsing emerge.log. History scan aborted";
 			KurooDBSingleton::Instance()->singleQuery( "ROLLBACK TRANSACTION;", m_db );
             return;
         }*/
@@ -91,7 +91,7 @@ void ScanHistoryJob::run()
 				logMap[ package ] = emergeStart;
 			}
 			else
-				kWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
+				qWarning() << "Parsing emerge.log. No package found!";
 		}
 		else
 			if ( emergeLine.contains( "::: completed emerge " ) ) {
@@ -123,10 +123,10 @@ void ScanHistoryJob::run()
 							else
 								einfo = "";
 
-// 							kDebug() << "elog.package=" << elog.package;
-// 							kDebug() << "elog.timestamp=" << elog.timestamp << LINE_INFO;
-// 							kDebug() << "emergeStart=" << emergeStart << LINE_INFO;
-// 							kDebug() << "emergeCompleted=" << emergeCompleted << LINE_INFO;
+// 							qDebug() << "elog.package=" << elog.package;
+// 							qDebug() << "elog.timestamp=" << elog.timestamp;
+// 							qDebug() << "emergeStart=" << emergeStart;
+// 							qDebug() << "emergeCompleted=" << emergeCompleted;
 						}
 
                         QStringList parts = parsePackage( package );
@@ -151,11 +151,11 @@ void ScanHistoryJob::run()
 							    .arg( package ).arg( timeStamp ).arg( QString::number( secTime ) ).arg( escapeString( einfo ) ), m_db );
 						}
 						else
-							kWarning(0) << "Parsing emerge.log. Can not parse: " << package << LINE_INFO;
+							qWarning() << "Parsing emerge.log. Can not parse: " << package;
 					}
 				}
 				else
-					kWarning(0) << "Parsing emerge.log. No package found!" << LINE_INFO;
+					qWarning() << "Parsing emerge.log. No package found!";
 			}
 			else {
 				if ( emergeLine.contains( ">>> unmerge success" ) ) {
@@ -184,4 +184,3 @@ QString ScanHistoryJob::escapeString(const QString& str) const {
 	return result.replace('\'', "''");
 }
 
-#include "scanhistoryjob.moc"

@@ -36,7 +36,7 @@ public:
 
 		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserUse() );
 		if( fileInfo.isDir() ) {
-			kDebug(0) << KurooConfig::defaultFilePackageUserUse() << " is a dir" << LINE_INFO;
+			qDebug() << KurooConfig::defaultFilePackageUserUse() << " is a dir";
 			if( !mergeDirIntoFile( KurooConfig::defaultFilePackageUserUse() ) ) {
 				return;
 			}
@@ -46,7 +46,7 @@ public:
 		QTextStream stream( &file );
 		QStringList linesUse;
 		if ( !file.open( QIODevice::ReadOnly ) )
-			kError(0) << "Parsing user package.use. Reading: %1." << KurooConfig::defaultFilePackageUserUse() << LINE_INFO;
+			qCritical() << "Parsing user package.use. Reading: %1." << KurooConfig::defaultFilePackageUserUse();
 		else {
 			while ( !stream.atEnd() )
 				linesUse += stream.readLine();
@@ -76,8 +76,8 @@ public:
 					"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );
 
 				if ( id.isEmpty() )
-					kWarning(0) << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
-						.arg( category ).arg( name ) << LINE_INFO;
+					qWarning() << QString("Parsing user package.use. Can not find id in database for package %1/%2.")
+						.arg( category ).arg( name );
 				else
 					KurooDBSingleton::Instance()->insert( QString( "INSERT INTO packageUse_temp (idPackage, use) VALUES ('%1', '%2');" )
 									.arg( id ).arg( use ), m_db );

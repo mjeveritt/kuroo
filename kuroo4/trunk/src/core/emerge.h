@@ -1,4 +1,3 @@
-#include <QProcess>
 /***************************************************************************
 *   Copyright (C) 2004 by karye                                           *
 *   karye@users.sourceforge.net                                           *
@@ -24,6 +23,7 @@
 
 #include "package.h"
 
+#include <QProcess>
 #include <QObject>
 #include <QStringList>
 #include <KProcess>

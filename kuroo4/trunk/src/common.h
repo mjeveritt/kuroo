@@ -23,25 +23,25 @@
 
 #include "settings.h"
 #include "message.h"
-#include "signalist.h"
-#include "emerge.h"
-#include "etcupdate.h"
+#include "core/signalist.h"
+#include "core/emerge.h"
+#include "core/etcupdate.h"
 #include "statusbar.h"
-#include "log.h"
-#include "queue.h"
-#include "portage.h"
-#include "portagedb.h"
-#include "history.h"
-#include "portagefiles.h"
-#include "filewatcher.h"
-#include "global.h"
+#include "logs/log.h"
+#include "queue/queue.h"
+#include "portage/portage.h"
+#include "core/portagedb.h"
+#include "history/history.h"
+#include "core/portagefiles.h"
+#include "core/filewatcher.h"
+#include "core/global.h"
 #include "singleton.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KGlobal>
+#include <KLocale>
+#include <KDebug>
 
 // Define all singleton objects
 typedef Singleton<Signalist> SignalistSingleton;
@@ -134,8 +134,8 @@ struct Info {
 };
 
 /// Announce a line
-#define LINE_INFO " ( " << k_funcinfo << "Line: " << __LINE__ << " )" << endl
-#define DEBUG_LINE_INFO kDebug(0) << LINE_INFO
+//#define LINE_INFO " ( " << k_funcinfo << "Line: " << __LINE__ << " )" << endl
+#define DEBUG_LINE_INFO qDebug()
 
 #endif
 

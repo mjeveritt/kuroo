@@ -129,8 +129,8 @@ public:
 				"SELECT id FROM package WHERE name = '" + (*it).name + "' AND category = '" + (*it).category + "' LIMIT 1;", m_db );
 
 			if ( id.isEmpty() ) {
-				kWarning(0) << QString("Add result package list: Can not find id in database for package %1/%2.")
-								.arg( (*it).category ).arg( (*it).name ) << LINE_INFO;
+				qWarning() << QString("Add result package list: Can not find id in database for package %1/%2.")
+								.arg( (*it).category ).arg( (*it).name );
 
 				KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 				return;
@@ -175,7 +175,7 @@ Queue::Queue( QObject* m_parent )
 {
 	// Clock timer for showing progress when emerging
 	m_internalTimer = new QTimer( this );
-	connect( m_internalTimer, SIGNAL( timeout() ), SLOT( slotOneStep() ) );
+	connect(m_internalTimer, &QTimer::timeout, this, &Queue::slotOneStep);
 
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotClearQueue() ) );
@@ -255,7 +255,7 @@ void Queue::clearCache()
 void Queue::insertInCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kWarning(0) << "Package id is empty, skipping!" << LINE_INFO;
+		qWarning() << "Package id is empty, skipping!";
 		return;
 	}
 	m_queueCache.insert( id, hasCompleted(id) );
@@ -268,10 +268,10 @@ void Queue::insertInCache( const QString& id )
 void Queue::deleteFromCache( const QString& id )
 {
 	if ( id.isEmpty() ) {
-		kDebug() << "Package id is empty, skipping!" << LINE_INFO;
+		qDebug() << "Package id is empty, skipping!";
 		return;
 	}
-	kDebug() << "deleted from cache (" << id << ")";
+	qDebug() << "deleted from cache (" << id << ")";
 	m_queueCache.remove( id );
 }
 
@@ -396,7 +396,7 @@ void Queue::setRemoveInstalled( bool removeInstalled )
 */
 void Queue::slotClearQueue()
 {
-	kDebug() << "Clearing Queue";
+	qDebug() << "Clearing Queue";
 	// Queue is not busy anymore - off course
 	m_isQueueBusy = false;
 
@@ -405,7 +405,7 @@ void Queue::slotClearQueue()
 
 	if ( m_removeInstalled ) {
 
-		kDebug() << "Removing installed";
+		qDebug() << "Removing installed";
 		// Collect only 100% complete packages
 		QStringList idList;
 		for ( QMap<QString, bool>::iterator itMap = m_queueCache.begin(), itMapEnd = m_queueCache.end(); itMap != itMapEnd; ++itMap ) {
@@ -417,5 +417,4 @@ void Queue::slotClearQueue()
 	}
 }
 
-#include "queue.moc"
 

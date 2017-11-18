@@ -20,12 +20,16 @@
 
 #include "common.h"
 #include "message.h"
-#include <assert.h>
+#include "etcupdate.h"
 
+#include <assert.h>
+#include <errno.h>
+
+#include <QObject>
 #include <KMessageBox>
 #include <kio/job.h>
+#include <KF5/KCoreAddons/KProcess>
 #include <KDirWatch>
-#include <errno.h>
 
 /**
 * @class EtcUpdate
@@ -34,15 +38,15 @@
 * Runs etc-update to collect the list of etc-files that needs merging.
 * Launches the exernal diff-tool for selected files.
 */
-EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
-	: QObject( m_parent/*, name*/ )
-{}
+//EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
+//	: QObject( m_parent, name )
+//{}
 
-EtcUpdate::~EtcUpdate()
-{
-	delete eProc;
-	eProc = 0;
-}
+//EtcUpdate::~EtcUpdate()
+//{
+//	delete eProc;
+//	eProc = 0;
+//}
 
 void EtcUpdate::init( QObject *parent )
 {
@@ -50,10 +54,10 @@ void EtcUpdate::init( QObject *parent )
 	m_parent = parent;
 
 	eProc = new KProcess();
-	connect( eProc, SIGNAL( finished( int ) ), this, SLOT( slotCleanupDiff() ) );
+	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &EtcUpdate::slotCleanupDiff);
 
 	m_mergingFile = new KDirWatch( this );
-	connect( m_mergingFile, SIGNAL( dirty( const QString& ) ), this, SLOT( slotChanged() ) );
+	connect(m_mergingFile, &KDirWatch::dirty, this, &EtcUpdate::slotChanged);
 }
 
 /**
@@ -74,7 +78,7 @@ void EtcUpdate::slotEtcUpdate()
 		// Then scan for new unmerged files
 		m_configProtectList += KurooConfig::configProtectList().split( " " );
 
-		kDebug() << m_configProtectList;
+		qDebug() << m_configProtectList;
 
 		// Launch scan slave
 		slotFinished();
@@ -91,8 +95,8 @@ void EtcUpdate::slotFinished(KJob* j)
 		//The Slave was causing a 'kuroo(5827)/kio (KIOJob) KIO::SlaveInterface::dispatch: error  111   "/var/cache/kuroo/backup/configuration"' message
 		//so don't do it if the dir doesn't exist
 		if (QFile::exists( m_configProtectDir )) {
-			KIO::ListJob* job = KIO::listRecursive( KUrl( m_configProtectDir ), KIO::HideProgressInfo, true);
-			connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( slotListFiles( KIO::Job*, const KIO::UDSEntryList& ) ) );
+			KIO::ListJob* job = KIO::listRecursive( QUrl( m_configProtectDir ), KIO::HideProgressInfo, true);
+			connect(job, &KIO::ListJob::entries, this, &EtcUpdate::slotListFiles);
 			connect( job, SIGNAL( result( KJob* ) ), SLOT( slotFinished(KJob*) ) );
 		}
 		else
@@ -171,7 +175,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 			m_mergingFile->addFile( m_destination );
 
 			// Make temporary backup of original conf file
-			KIO::file_copy( m_destination, backupPath + "merging.orig" , m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
+			KIO::file_copy( QUrl( m_destination ), QUrl( backupPath + "merging.orig" ) , m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
 		}
 	}
 }
@@ -208,13 +212,13 @@ void EtcUpdate::slotCleanupDiff()
 		destination.replace( "/", ":" );
 
 		//Change this to a move instead of copy so we don't leave the temp file around
-		KIO::file_move( backupPath + "merging.orig", backupPathDir + destination + ".orig", m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
-		KIO::file_copy( m_destination, backupPathDir + destination, m_mergedMode, KIO::Overwrite );
+		KIO::file_move( QUrl( backupPath + "merging.orig" ), QUrl( backupPathDir + destination + ".orig" ), m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
+		KIO::file_copy( QUrl( m_destination ), QUrl( backupPathDir + destination ), m_mergedMode, KIO::Overwrite );
 
 		//This is only necessary because it seems that kdiff3 rewrites the mode.
-		KIO::chmod( m_destination, m_mergedMode );
+		KIO::chmod( QUrl( m_destination ), m_mergedMode );
 
-		KIO::file_delete( m_source );
+		KIO::file_delete( QUrl( m_source ) );
 
 		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2.", m_source, kurooDir + "backup" ), KUROO );
 
@@ -223,4 +227,3 @@ void EtcUpdate::slotCleanupDiff()
 	}
 }
 
-#include "etcupdate.moc"

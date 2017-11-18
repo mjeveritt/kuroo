@@ -52,7 +52,7 @@ PackageListItem::PackageListItem(const QString& name, const QString& id, const Q
 
 PackageListItem::~PackageListItem()
 {
-	//kDebug() << "Destroying PackageListItem " << m_name;
+	//qDebug() << "Destroying PackageListItem " << m_name;
 }
 
 /**
@@ -100,7 +100,7 @@ void PackageListItem::initVersions()
 		// Check if any of this package versions are hardmasked
         atom = new PortageAtom( this );
 		const QStringList atomHardMaskedList = KurooDBSingleton::Instance()->packageHardMaskAtom( id() );
-	// 	kDebug() << "atomHardMaskedList=" << atomHardMaskedList;
+	// 	qDebug() << "atomHardMaskedList=" << atomHardMaskedList;
 		foreach( QString mask, atomHardMaskedList ) {
 
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -117,7 +117,7 @@ void PackageListItem::initVersions()
 		// Check if any of this package versions are user-masked
         atom = new PortageAtom( this );
 		const QStringList atomUserMaskedList = KurooDBSingleton::Instance()->packageUserMaskAtom( id() );
-	// 	kDebug() << "atomUserMaskedList=" << atomUserMaskedList;
+	// 	qDebug() << "atomUserMaskedList=" << atomUserMaskedList;
 		foreach( QString mask, atomUserMaskedList ) {
 
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -134,7 +134,7 @@ void PackageListItem::initVersions()
 		// Check if any of this package versions are unmasked
         atom = new PortageAtom( this );
 		const QStringList atomUnmaskedList = KurooDBSingleton::Instance()->packageUnMaskAtom( id() );
-	// 	kDebug() << "atomUnmaskedList=" << atomUnmaskedList;
+	// 	qDebug() << "atomUnmaskedList=" << atomUnmaskedList;
 		foreach( QString mask, atomUnmaskedList ) {
 
 			// Test the atom string on validness, and fill the internal variables with the extracted atom parts,
@@ -237,8 +237,8 @@ void PackageListItem::parsePackageVersions()
 			}
 		}
 
-// 		kDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() <<
-// 			" stability=" << stability << LINE_INFO;
+// 		qDebug() << "version="<< (*sortedVersionIterator)->version() << " isInstalled=" << (*sortedVersionIterator)->isInstalled() <<
+// 			" stability=" << stability;
 
 		// Versions data for use by Inspector in vewrsion view
 		m_versionsDataList << (*sortedVersionIterator)->version() << stability << (*sortedVersionIterator)->size();

@@ -134,7 +134,7 @@ void PortageListView::nextPackage( const bool isPrevious )
 			item = moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
 
 		if (item.isValid()) {
-			//kDebug() << static_cast<PackageListItem*>(item.internalPointer())->index();
+			//qDebug() << static_cast<PackageListItem*>(item.internalPointer())->index();
 			scrollTo(item);
 			setCurrentIndex(item);
 		}

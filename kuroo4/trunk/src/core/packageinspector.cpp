@@ -19,12 +19,19 @@
 ***************************************************************************/
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QTextStream>
+#include <QVBoxLayout>
 
 #include <KMessageBox>
 #include <KUser>
+#include <KConfigGroup>
+#include <KUrlLabel>
+
+//Deprecated KDELibs4Support
+//#include <KButtonGroup>
 
 #include "common.h"
 #include "packageinspector.h"
@@ -41,52 +48,64 @@
 * Builds a tabbed-dialog to view all relevant info for current package.
 * This dialog is used both in Packages view and Queue view.
 */
-PackageInspector::PackageInspector( QWidget *parent ) : KDialog( parent ),
+PackageInspector::PackageInspector( QWidget *parent ) : QDialog( parent ),
 		m_versionSettingsChanged( false ), m_useSettingsChanged( false ),
 		m_isVirginState( true ), m_category( QString::null ),
 		m_package( QString::null ), m_hardMaskComment( QString::null ),
 		m_portagePackage( 0 ), m_stabilityBefore( 0 ), m_versionBefore( QString::null )
 {
-	/*KDialog::Swallow, 0,, i18n( "Package details" ), false, i18n( "Package details" ),
-			KDialog::Ok | KDialog::Apply | KDialog::Cancel, KDialog::Apply, false ),*/
-	setupUi( mainWidget() );
+	/*QDialog::Swallow, 0,, i18n( "Package details" ), false, i18n( "Package details" ),
+			QDialog::Ok | QDialog::Apply | QDialog::Cancel, QDialog::Apply, false ),*/
+	QWidget *mainWidget = new QWidget(this);
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	setLayout(mainLayout);
+	mainLayout->addWidget(mainWidget);
+	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Apply);
+	QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+	okButton->setDefault(true);
+	okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	//PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
+	mainLayout->addWidget(buttonBox);
+	setupUi(mainWidget);
 	adjustSize();
 
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
 
 	// Shortcuts for browsing packages
-	connect( pbPrevious, SIGNAL( clicked() ), this, SLOT( slotPreviousPackage() ) );
-	connect( pbNext, SIGNAL( clicked() ), this, SLOT( slotNextPackage() ) );
+	connect(pbPrevious, &QPushButton::clicked, this, &PackageInspector::slotPreviousPackage);
+	connect(pbNext, &QPushButton::clicked, this, &PackageInspector::slotNextPackage);
 
 	// Refresh files when changing version
-	connect( cbVersionsEbuild, SIGNAL( activated( const QString& ) ), this, SLOT( slotLoadEbuild( const QString& ) ) );
-	connect( cbVersionsDependencies, SIGNAL( activated ( const QString& ) ), this, SLOT( slotLoadDependencies( const QString& ) ) );
-	connect( cbVersionsInstalled, SIGNAL( activated ( const QString& ) ), this, SLOT( slotLoadInstalledFiles( const QString& ) ) );
-	connect( cbVersionsUse, SIGNAL( activated ( const QString& ) ), this, SLOT( slotLoadUseFlags( const QString& ) ) );
+	connect(cbVersionsEbuild, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &PackageInspector::slotLoadEbuild);
+	connect(cbVersionsDependencies, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &PackageInspector::slotLoadDependencies);
+	connect(cbVersionsInstalled, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &PackageInspector::slotLoadInstalledFiles);
+	connect(cbVersionsUse, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &PackageInspector::slotLoadUseFlags);
 
 	// Load files only if tabpage is open
-	connect( inspectorTabs, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotRefreshTabs() ) );
+	connect(inspectorTabs, &QTabWidget::currentChanged, this, &PackageInspector::slotRefreshTabs);
 
 	// Toggle between all 4 stability version
-	connect( groupSelectStability, SIGNAL( released( int ) ), this, SLOT( slotSetStability( int ) ) );
+	connect(groupSelectStability, &KButtonGroup::released, this, &PackageInspector::slotSetStability);
 
 	// Activate specific version menu
-	connect( cbVersionsSpecific, SIGNAL( activated( const QString& ) ), this, SLOT( slotSetSpecificVersion( const QString& ) ) );
+	connect(cbVersionsSpecific, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &PackageInspector::slotSetSpecificVersion);
 
-	connect( infoHardMasked, SIGNAL( leftClickedUrl( const QString& ) ), SLOT( slotHardMaskInfo() ) );
+	connect(infoHardMasked, static_cast<void(KUrlLabel::*)()>(&KUrlLabel::leftClickedUrl), this, &PackageInspector::slotHardMaskInfo);
 
-	connect( useView, SIGNAL( itemClicked(QTreeWidgetItem*,int) ), this, SLOT( slotSetUseFlags( QTreeWidgetItem*,int ) ) );
+	connect(useView, &QTreeWidget::itemClicked, this, &PackageInspector::slotSetUseFlags);
 
-	connect( pbUse, SIGNAL( clicked() ), this, SLOT( slotCalculateUse() ) );
+	connect(pbUse, &QPushButton::clicked, this, &PackageInspector::slotCalculateUse);
 
 	/*connect(rbStable, SIGANL(activated()), this, SLOT(setStable()));
 	connect(rbTesting, SIGANL(activated()), this, SLOT(setTesting()));
 	connect(rbMasked, SIGANL(activated()), this, SLOT(setMasked()));
 */
 	// Listen to Queue and World checkboxes
-	connect( cbQueue, SIGNAL( clicked() ), this, SLOT( slotQueue() ) );
-	connect( cbWorld, SIGNAL( clicked() ), this, SLOT( slotWorld() ) );
+	connect(cbQueue, &QCheckBox::clicked, this, &PackageInspector::slotQueue);
+	connect(cbWorld, &QCheckBox::clicked, this, &PackageInspector::slotWorld);
 }
 
 PackageInspector::~PackageInspector()
@@ -223,7 +242,7 @@ void PackageInspector::edit( PackageListItem* portagePackage, const int& view )
 
 	// Actions that need superuser privileges
 	if ( !KUser().isSuperUser() ) {
-		enableButtonApply( false );
+		buttonBox->button(QDialogButtonBox::Apply)->setEnabled( false );
 		groupSelectStability->setDisabled( true );
 		useView->setDisabled( true );
 		cbWorld->setDisabled( true );
@@ -285,10 +304,13 @@ void PackageInspector::askApplySettings()
 		switch( KMessageBox::warningYesNo( this, i18n( "<qt>Settings are changed!<br>Do you want to save them?</qt>"),
 										i18n("Saving settings")) ) {
 		case KMessageBox::Yes:
+		case KMessageBox::Ok:
+		case KMessageBox::Continue:
 			slotApply();
 			break;
 
 		case KMessageBox::No:
+		case KMessageBox::Cancel:
 			rollbackSettings();
 		}
 	}
@@ -366,8 +388,8 @@ void PackageInspector::slotApply()
 			eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 			*eProc << "emerge" << "--columns" << "--nospinner" << "--color=n" << "-pv" << m_category + "/" + m_package;
 			m_useList = useList;
-			connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotParsePackageUse() ) );
-			connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectPretendOutput() ) );
+			connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &PackageInspector::slotParsePackageUse);
+			connect(eProc, &KProcess::readyReadStandardOutput, this, &PackageInspector::slotCollectPretendOutput);
 			eProc->start();
 			SignalistSingleton::Instance()->setKurooBusy( true );
 
@@ -379,7 +401,7 @@ void PackageInspector::slotApply()
 		}
 	}
 
-	enableButtonApply( false );
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled( false );
 	m_versionSettingsChanged = false;
 	m_useSettingsChanged = false;
 	m_isVirginState = true;
@@ -492,12 +514,12 @@ void PackageInspector::showSettings()
 
 	// Reset the apply button for new package
 	if ( !m_versionSettingsChanged )
-		enableButtonApply( false );
+		buttonBox->button(QDialogButtonBox::Apply)->setEnabled( false );
 }
 
 /**
 * Apply stability settings from radiobuttons.
-* @param the selected radiobutton
+* @param rbStability the selected radiobutton
 */
 void PackageInspector::slotSetStability( int rbStability )
 {
@@ -551,7 +573,7 @@ void PackageInspector::slotSetStability( int rbStability )
 	PortageFilesSingleton::Instance()->savePackageUserUnMask();
 	PortageFilesSingleton::Instance()->savePackageKeywords();
 
-	enableButtonApply( true );
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled( true );
 	m_versionSettingsChanged = true;
 }
 
@@ -561,7 +583,7 @@ void PackageInspector::slotSetStability( int rbStability )
 */
 void PackageInspector::slotSetSpecificVersion( const QString& version )
 {
-	enableButtonApply( true );
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled( true );
 	m_versionSettingsChanged = true;
 
 	KurooDBSingleton::Instance()->setPackageUnTesting( m_id );
@@ -574,7 +596,7 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 
 /**
 * Toggle use flag state to add or remove.
-* @param: useItem
+* @param useItem
 */
 void PackageInspector::slotSetUseFlags( QTreeWidgetItem* useItem, int column )
 {
@@ -604,7 +626,7 @@ void PackageInspector::slotSetUseFlags( QTreeWidgetItem* useItem, int column )
 		break;
 	}
 
-	enableButtonApply( true );
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled( true );
 	m_useSettingsChanged = true;
 }
 
@@ -648,7 +670,7 @@ void PackageInspector::loadUseFlagDescription()
 		f.close();
 	}
 	else
-		kError(0) << "Loading use flag description. Reading: " << useFile << LINE_INFO;
+		qCritical() << "Loading use flag description. Reading: " << useFile;
 }
 
 /**
@@ -737,7 +759,7 @@ void PackageInspector::loadChangeLog()
 			changelogBrowser->setText( textLines );
 		}
 		else {
-			kError(0) << "Loading changelog. Reading: " << fileName << LINE_INFO;
+			qCritical() << "Loading changelog. Reading: " << fileName;
 			changelogBrowser->setText( "<font color=darkRed><b>" + i18n( "No ChangeLog found." ) + "</b></font>" );
 		}
 	}
@@ -765,7 +787,7 @@ void PackageInspector::slotLoadEbuild( const QString& version )
 			ebuildBrowser->setText( textLines );
 		}
 		else {
-			kError(0) << "Loading ebuild. Reading: " << fileName << LINE_INFO;
+			qCritical() << "Loading ebuild. Reading: " << fileName;
 			ebuildBrowser->setText( "<font color=darkRed><b>" + i18n( "No ebuild found." ) + "</b></font>" );
 		}
 	}
@@ -827,7 +849,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 			dependencyView->insertDependAtoms( textLines.split(" ") );
 		}
 		else {
-			kError(0) << "Loading dependencies. Reading: " << fileName << LINE_INFO;
+			qCritical() << "Loading dependencies. Reading: " << fileName;
 			/*dependencyBrowser->setText( "<font color=darkRed><b>" + i18n("No dependencies found.") +
 												"</b></font>" );*/
 		}
@@ -857,7 +879,7 @@ void PackageInspector::slotLoadInstalledFiles( const QString& version )
 			installedFilesBrowser->setText( textLines );
 		}
 		else {
-			kError(0) << "Loading installed files list. Reading: " << filename << LINE_INFO;
+			qCritical() << "Loading installed files list. Reading: " << filename;
 			installedFilesBrowser->setText( "<font color=darkRed><b>" + i18n( "No installed files found." ) + "</b></font>" );
 		}
 	}
@@ -878,8 +900,8 @@ void PackageInspector::slotCalculateUse()
 	eProc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 	*eProc << "emerge" << "--columns" << "--nospinner" << "--color=n" << "-pv" << m_category + "/" + m_package;
 
-	connect( eProc, SIGNAL( finished(int, QProcess::ExitStatus) ), this, SLOT( slotParsePackageUse() ) );
-	connect( eProc, SIGNAL( readyReadStandardOutput() ), this, SLOT( slotCollectPretendOutput() ) );
+	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &PackageInspector::slotParsePackageUse);
+	connect(eProc, &KProcess::readyReadStandardOutput, this, &PackageInspector::slotCollectPretendOutput);
 	eProc->start();
 
 	SignalistSingleton::Instance()->setKurooBusy( true );
@@ -895,7 +917,6 @@ void PackageInspector::slotCalculateUse()
 
 /**
 * Collect emerge pretend output in m_pretendUseLines.
-* @param eProc
 */
 void PackageInspector::slotCollectPretendOutput()
 {
@@ -906,7 +927,6 @@ void PackageInspector::slotCollectPretendOutput()
 
 /**
 * Parse emerge pretend output for all use flags, and return a List.
-* @param eProc
 */
 void PackageInspector::slotParseTempUse()
 {
@@ -916,7 +936,7 @@ void PackageInspector::slotParseTempUse()
 
 	QRegExp rxPretend = rxEmerge();
 
-	// 	kDebug() << "m_pretendUseLines=" << m_pretendUseLines << LINE_INFO;
+	// 	qDebug() << "m_pretendUseLines=" << m_pretendUseLines;
 
 	QStringList tmpUseList;
 	foreach ( QString pretend, m_pretendUseLines ) {
@@ -925,7 +945,7 @@ void PackageInspector::slotParseTempUse()
 			tmpUseList = use.split(" ");
 		}
 	}
-	// 	kDebug() << "tmpUseList=" << tmpUseList << LINE_INFO;
+	// 	qDebug() << "tmpUseList=" << tmpUseList;
 
 	useView->clear();
 	if ( tmpUseList.isEmpty() ) {
@@ -949,7 +969,7 @@ void PackageInspector::slotParseTempUse()
 		}
 	}
 	//end of better
-	// 	kDebug() << "useList=" << useList << LINE_INFO;
+	// 	qDebug() << "useList=" << useList;
 
 	QString checkUse = useList.join(", ");
 	if ( !checkUse.remove(", ").remove(" ").isEmpty() ) {
@@ -972,7 +992,7 @@ void PackageInspector::slotParsePackageUse()
 
 	QRegExp rxPretend = rxEmerge();
 
-	// 	kDebug() << "m_pretendUseLines=" << m_pretendUseLines << LINE_INFO;
+	// 	qDebug() << "m_pretendUseLines=" << m_pretendUseLines;
 
 	QStringList pretendUseList;
 	foreach( QString pretend, m_pretendUseLines ) {
@@ -982,7 +1002,7 @@ void PackageInspector::slotParsePackageUse()
 		}
 	}
 
-	// 	kDebug() << "pretendUseList=" << pretendUseList << LINE_INFO;
+	// 	qDebug() << "pretendUseList=" << pretendUseList;
 
 	useView->clear();
 	if ( pretendUseList.isEmpty() ) {
@@ -1065,4 +1085,3 @@ void PackageInspector::setMasked()
 
 }
 
-#include "packageinspector.moc"

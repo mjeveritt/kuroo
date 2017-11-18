@@ -28,7 +28,7 @@
      <item>
       <layout class="QGridLayout">
        <item row="0" column="2">
-        <widget class="KPushButton" name="pbWhatsThis">
+        <widget class="QPushButton" name="pbWhatsThis">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -149,7 +149,7 @@
           <number>5</number>
          </property>
          <item row="1" column="0">
-          <widget class="KPushButton" name="pbClear">
+          <widget class="QPushButton" name="pbClear">
            <property name="maximumSize">
             <size>
              <width>32767</width>
@@ -168,7 +168,7 @@
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="KPushButton" name="pbRemove">
+          <widget class="QPushButton" name="pbRemove">
            <property name="maximumSize">
             <size>
              <width>32767</width>
@@ -187,7 +187,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="KPushButton" name="pbAdvanced">
+          <widget class="QPushButton" name="pbAdvanced">
            <property name="toolTip">
             <string>Show package details...</string>
            </property>
@@ -258,7 +258,7 @@
       <item>
        <layout class="QGridLayout">
         <item row="1" column="0">
-         <widget class="KPushButton" name="pbCheck">
+         <widget class="QPushButton" name="pbCheck">
           <property name="toolTip">
            <string>Check packages in Queue with emerge pretend</string>
           </property>
@@ -274,7 +274,7 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="KPushButton" name="pbGo">
+         <widget class="QPushButton" name="pbGo">
           <property name="toolTip">
            <string>Start emerge of all packages in Queue</string>
           </property>
@@ -303,7 +303,7 @@
          </spacer>
         </item>
         <item row="0" column="0" colspan="2">
-         <widget class="KTextBrowser" name="queueBrowser">
+         <widget class="QTextBrowser" name="queueBrowser">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -412,12 +412,12 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KTextBrowser</class>
+   <class>QTextBrowser</class>
    <extends>QTextBrowser</extends>
    <header>ktextbrowser.h</header>
   </customwidget>

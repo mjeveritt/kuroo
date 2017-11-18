@@ -58,7 +58,7 @@
           </spacer>
          </item>
          <item row="0" column="0">
-          <widget class="KPushButton" name="pbMerge">
+          <widget class="QPushButton" name="pbMerge">
            <property name="text">
             <string>Merge changes...</string>
            </property>
@@ -130,7 +130,7 @@
           </spacer>
          </item>
          <item row="0" column="0">
-          <widget class="KPushButton" name="pbView">
+          <widget class="QPushButton" name="pbView">
            <property name="text">
             <string>View changes...</string>
            </property>
@@ -277,7 +277,7 @@
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="KPushButton" name="pbWhatsThis">
+        <widget class="QPushButton" name="pbWhatsThis">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -330,7 +330,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

@@ -28,7 +28,7 @@
 #include <QWhatsThis>
 
 #include <KTreeWidgetSearchLine>
-#include <KPushButton>
+#include <QPushButton>
 
 /**
  * @class MergeTab
@@ -40,9 +40,9 @@ MergeTab::MergeTab( QWidget* parent )
 	setupUi( this );
 
 	// Connect What's this button
-	connect( pbWhatsThis, SIGNAL( clicked() ), this, SLOT( slotWhatsThis() ) );
+	connect(pbWhatsThis, &QPushButton::clicked, this, &MergeTab::slotWhatsThis);
 
-	pbClearFilter->setIcon( KIcon("edit-clear-locationbar-ltr") );
+	pbClearFilter->setIcon( QIcon::fromTheme(QStringLiteral("edit-clear-locationbar-ltr")) );
 
 	mergeFilter->setTreeWidget( mergeView );
 
@@ -52,11 +52,11 @@ MergeTab::MergeTab( QWidget* parent )
 	// When all packages are emerged...
 	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotReload() ) );
 
-	connect( unmergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonMerge() ) );
-	connect( mergeView, SIGNAL( itemSelectionChanged() ), this, SLOT( slotButtonView() ) );
+	connect(unmergeView, &MergeListView::itemSelectionChanged, this, &MergeTab::slotButtonMerge);
+	connect(mergeView, &MergeListView::itemSelectionChanged, this, &MergeTab::slotButtonView);
 
-	connect( pbMerge, SIGNAL( clicked() ), this, SLOT( slotMergeFile() ) );
-	connect( pbView, SIGNAL( clicked() ), this, SLOT( slotViewFile() ) );
+	connect(pbMerge, &QPushButton::clicked, this, &MergeTab::slotMergeFile);
+	connect(pbView, &QPushButton::clicked, this, &MergeTab::slotViewFile);
 
 	slotInit();
 }
@@ -72,7 +72,7 @@ MergeTab::~MergeTab()
  */
 void MergeTab::slotInit()
 {
-	pbWhatsThis->setIcon( KIcon("help-about") );
+	pbWhatsThis->setIcon( QIcon::fromTheme(QStringLiteral("help-about")) );
 	unmergeView->setHeaderLabel( i18n("New Configuration file") );
 	mergeView->setHeaderLabel( i18n("Merged Configuration file") );
 	mergeView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -188,4 +188,3 @@ void MergeTab::slotMergeFile()
 	EtcUpdateSingleton::Instance()->runDiff( source, destination, true );
 }
 
-#include "mergetab.moc"

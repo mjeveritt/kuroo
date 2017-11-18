@@ -36,7 +36,7 @@
 LogsTab::LogsTab( QWidget* parent ) : QWidget( parent )
 {
 	setupUi( this );
-	connect( pbEnter, SIGNAL( clicked() ), this, SLOT( slotUserInput() ) );
+	connect(pbEnter, &QPushButton::clicked, this, &LogsTab::slotUserInput);
 
 	// Enable/disable this view and buttons when kuroo is busy
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
@@ -62,7 +62,7 @@ LogsTab::~LogsTab()
 	else
 		KurooConfig::setVerboseLog( false );
 
-	KurooConfig::self()->writeConfig();
+	KurooConfig::self()->save();
 }
 
 /**
@@ -108,4 +108,3 @@ void LogsTab::slotSetFont()
 	logBrowser->setFont( KurooConfig::logFont() );
 }
 
-#include "logstab.moc"

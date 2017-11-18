@@ -35,7 +35,7 @@
 Signalist::Signalist( QObject* m_parent )
 	: QObject( m_parent ), m_busy( false ), m_isReady( false )
 {
-	connect(this, SIGNAL(signalCursor(bool)), this, SLOT(slotCursor(bool)));
+	connect(this, &Signalist::signalCursor, this, &Signalist::slotCursor);
 }
 
 Signalist::~Signalist()
@@ -207,4 +207,3 @@ void Signalist::emergeAborted()
 	emit signalEmergeAborted();
 }
 
-#include "signalist.moc"

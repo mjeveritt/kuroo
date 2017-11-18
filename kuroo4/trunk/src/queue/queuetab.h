@@ -22,7 +22,7 @@
 
 #include "ui_queuebase.h"
 #include "packageinspector.h"
-#include <KAction>
+#include <QAction>
 
 /**
  * @class QueueTab
@@ -76,7 +76,7 @@ private:
 	PackageInspector	*m_packageInspector;
 
 	// Actions for the context menu
-	KAction				*m_packageDetails, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_clearQueue;
+	QAction *m_packageDetails, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_clearQueue;
 };
 
 #endif

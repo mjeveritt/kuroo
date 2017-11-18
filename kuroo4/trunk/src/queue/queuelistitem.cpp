@@ -34,13 +34,13 @@ QueueListItem::QueueListItem(const QString& name, const QString& id, const QStri
  : PackageListItem(name, id, category, QString(), status, QString(), parent), m_parentId( "" ), m_parent(NULL), m_hasStarted(false)
  , m_isComplete(false), m_pretended(false), m_steps(0), m_testTimer(0)
 {
-	kDebug() << "QueueListItem " << name << " constructed";
+	qDebug() << "QueueListItem " << name << " constructed";
 	setDuration(duration);
 }
 
 QueueListItem::~QueueListItem()
 {
-	kDebug() << "Destroying QueueListItem " << name();
+	qDebug() << "Destroying QueueListItem " << name();
 	foreach(QueueListItem *i, m_children)
 		delete i;
 }
@@ -83,7 +83,7 @@ void QueueListItem::setHasStarted(bool h)
 	{
 		m_testTimer = new QTimer(this);
 		m_testTimer->start(100);
-		connect(m_testTimer, SIGNAL(timeout()), this, SLOT(oneStep()));
+		connect(m_testTimer, &QTimer::timeout, this, &QueueListItem::oneStep);
 	}
 	m_hasStarted = h;
 }

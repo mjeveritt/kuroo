@@ -31,21 +31,18 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="KTextBrowser" name="messageText"/>
+    <widget class="QTextBrowser" name="messageText"/>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KTextBrowser</class>
+   <class>QTextBrowser</class>
    <extends>QTextBrowser</extends>
    <header>ktextbrowser.h</header>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">ktextbrowser.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

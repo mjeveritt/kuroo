@@ -60,7 +60,7 @@ QString MergeListView::MergeItem::destination()
  * @short Specialized listview for emerge history.
  */
 MergeListView::MergeListView( QWidget *parent, const QString& name )
-    : QTreeWidget( parent ), m_loc( KGlobal::locale() )
+    : QTreeWidget( parent ), m_loc( KLocale::global() )
 {
     setHeaderLabel( i18n("Configuration file") );
 	
@@ -128,4 +128,3 @@ void MergeListView::loadBackupFiles( const QStringList& filesList )
 	}
 }
 
-#include "mergelistview.moc"

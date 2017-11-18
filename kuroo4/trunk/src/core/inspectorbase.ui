@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>609</width>
-    <height>450</height>
+    <height>463</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -50,7 +50,7 @@
       <property name="spacing">
        <number>2</number>
       </property>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="description">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
@@ -78,7 +78,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QFrame" name="headerFrame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Minimum">
@@ -522,7 +522,7 @@ and do not update further</string>
         <number>5</number>
        </property>
        <item row="0" column="0">
-        <widget class="KTextBrowser" name="changelogBrowser"/>
+        <widget class="QTextBrowser" name="changelogBrowser"/>
        </item>
       </layout>
      </widget>
@@ -547,7 +547,7 @@ and do not update further</string>
           </widget>
          </item>
          <item row="1" column="0" colspan="3">
-          <widget class="KTextBrowser" name="ebuildBrowser"/>
+          <widget class="QTextBrowser" name="ebuildBrowser"/>
          </item>
          <item row="0" column="2">
           <spacer name="spacer10">
@@ -669,7 +669,7 @@ and do not update further</string>
           </spacer>
          </item>
          <item row="1" column="0" colspan="3">
-          <widget class="KTextBrowser" name="installedFilesBrowser"/>
+          <widget class="QTextBrowser" name="installedFilesBrowser"/>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="textLabel5_2_2_2">
@@ -700,15 +700,17 @@ and do not update further</string>
      </widget>
     </widget>
    </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>KTextBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>ktextbrowser.h</header>
-  </customwidget>
   <customwidget>
    <class>KButtonGroup</class>
    <extends>QGroupBox</extends>

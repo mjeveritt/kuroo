@@ -1,3 +1,7 @@
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+#Singletons in common.h depend on lots of things in subdirs
 include_directories(
 ${CMAKE_SOURCE_DIR}/src
 ${CMAKE_SOURCE_DIR}/src/config
@@ -16,11 +20,7 @@ ${CMAKE_BINARY_DIR}/src/intro
 ${CMAKE_BINARY_DIR}/src/logs
 ${CMAKE_BINARY_DIR}/src/portage
 ${CMAKE_BINARY_DIR}/src/queue
-
-${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
 )
-
-#add_definitions( -DQT3_SUPPORT_WARNINGS )
 
 #core
 set(core_sources
@@ -44,7 +44,7 @@ set(core_sources
 	core/signalist.cpp
 	core/tooltip.cpp
 	core/versionview.cpp )
-kde4_add_ui_files( core_sources core/inspectorbase.ui )
+ki18n_wrap_ui( core_sources core/inspectorbase.ui )
 
 #history
 set(history_sources
@@ -53,7 +53,7 @@ set(history_sources
 	history/historytab.cpp
 	history/mergelistview.cpp
 	history/mergetab.cpp )
-kde4_add_ui_files( history_sources history/historybase.ui history/mergebase.ui )
+ki18n_wrap_ui( history_sources history/historybase.ui history/mergebase.ui )
 
 #portage
 set(portage_sources
@@ -61,16 +61,16 @@ set(portage_sources
 	portage/portagetab.cpp
 	portage/uninstallinspector.cpp
 	portage/portagelistview.cpp )
-kde4_add_ui_files( portage_sources portage/uninstallbase.ui portage/portagebase.ui )
+ki18n_wrap_ui( portage_sources portage/uninstallbase.ui portage/portagebase.ui )
 
 #config
 set( config_sources config/configdialog.cpp )
-kde4_add_ui_files(	config_sources
+ki18n_wrap_ui(	config_sources
 					config/options1.ui
 					config/options2.ui
 					config/options3.ui
 					config/options4.ui )
-kde4_add_kcfg_files( config_sources config/settings.kcfgc )
+kconfig_add_kcfg_files( config_sources config/settings.kcfgc )
 
 #queue
 set(queue_sources
@@ -80,15 +80,15 @@ set(queue_sources
 	queue/queuelistview.cpp
 	queue/queuelistitem.cpp
 	queue/queuelistdelegate.cpp )
-kde4_add_ui_files( queue_sources queue/queuebase.ui )
+ki18n_wrap_ui( queue_sources queue/queuebase.ui )
 
 #intro
 set( intro_sources intro/introdlg.cpp )
-kde4_add_ui_files( intro_sources intro/intro.ui )
+ki18n_wrap_ui( intro_sources intro/intro.ui )
 
 #logs
 set( logs_sources logs/log.cpp logs/logstab.cpp )
-kde4_add_ui_files( logs_sources logs/logsbase.ui )
+ki18n_wrap_ui( logs_sources logs/logsbase.ui )
 
 #kuroo
 set( kuroo_sources
@@ -99,19 +99,31 @@ set( kuroo_sources
 	message.cpp
 	statusbar.cpp
 	systemtray.cpp )
-kde4_add_ui_files( kuroo_sources messagebase.ui )
+ki18n_wrap_ui( kuroo_sources messagebase.ui )
 
-kde4_add_executable(kuroo
-					${core_sources}
-					${history_sources}
-					${portage_sources}
-					${config_sources}
-					${queue_sources}
-					${intro_sources}
-					${logs_sources}
-					${kuroo_sources} )
+add_executable(kuroo
+				${core_sources}
+				${history_sources}
+				${portage_sources}
+				${config_sources}
+				${queue_sources}
+				${intro_sources}
+				${logs_sources}
+				${kuroo_sources} )
 
-target_link_libraries( kuroo ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_THREADWEAVER_LIBS} sqlite3 )
+target_link_libraries( kuroo
+	KF5::ConfigCore
+	KF5::ConfigGui
+	KF5::CoreAddons
+	KF5::I18n
+	KF5::KIOCore
+	KF5::ThreadWeaver
+	KF5::WidgetsAddons
+	KF5::WindowSystem
+	KF5::XmlGui
+	KF5::KDELibs4Support
+	sqlite3
+)
 
 ########### install ###############
 install( TARGETS kuroo ${INSTALL_TARGETS_DEFAULT_ARGS} )

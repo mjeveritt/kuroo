@@ -60,39 +60,39 @@ KurooView::KurooView( QWidget *parent ) :
 
 	// Add all pages
 	viewPortage = new PortageTab( this, packageInspector );
-	//kDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
-	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
+	//qDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//		<< "actual width=" << viewPortage->categoriesView->width();
 	KPageWidgetItem* pagePortage = addPage( viewPortage, i18n("Packages") );
-	//kDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
-	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
+	//qDebug() << "KurooView.constructor categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//		<< "actual width=" << viewPortage->categoriesView->width();
 	pagePortage->setHeader( "" );
-	pagePortage->setIcon( KIcon("kuroo") );
+	pagePortage->setIcon( QIcon::fromTheme(QStringLiteral("kuroo")) );
 
 	viewQueue = new QueueTab( this, packageInspector );
 	KPageWidgetItem* pageQueue = addPage( viewQueue, i18n("Queue") );
 	pageQueue->setHeader( "" );
-	pageQueue->setIcon( KIcon("kuroo_view_queue") );
+	pageQueue->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_view_queue")) );
 
 	viewHistory = new HistoryTab( this );
 	KPageWidgetItem* pageHistory = addPage( viewHistory, i18n("History") );
 	pageHistory->setHeader( "" );
-	pageHistory->setIcon( KIcon("kuroo_view_history") );
+	pageHistory->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_view_history")) );
 
 	viewMerge = new MergeTab( this );
 	KPageWidgetItem* pageMerge = addPage( viewMerge, i18n("Configuration") );
 	pageMerge->setHeader( "" );
-	pageMerge->setIcon( KIcon("kuroo_view_configuration") );
+	pageMerge->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_view_configuration")) );
 
 	viewLogs = new LogsTab( this );
 	KPageWidgetItem* pageLogs = addPage( viewLogs, i18n("Log") );
 	pageLogs->setHeader( "" );
-	pageLogs->setIcon( KIcon("kuroo_view_log") );
+	pageLogs->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_view_log")) );
 
 	// Connect menu-icons to the pages
-	connect( this, SIGNAL( currentPageChanged( KPageWidgetItem*, KPageWidgetItem*) ), SLOT( slotShowView() ) );
+	connect(this, &KurooView::currentPageChanged, this, &KurooView::slotShowView);
 	setCurrentPage( pagePortage );
-	//kDebug() << "categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
-	//		<< "actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
+	//qDebug() << "categoreisView.minWidth=" << viewPortage->categoriesView->minimumWidth()
+	//		<< "actual width=" << viewPortage->categoriesView->width();
 
 	// Give log access to logBrowser and checkboxes
 	// Check emerge.log for new entries. (In case of cli activities outside kuroo)
@@ -121,8 +121,8 @@ void KurooView::slotShowView()
 void KurooView::slotInit()
 {
 	DEBUG_LINE_INFO;
-	//kDebug() << "categoriesView.minWidth=" << viewPortage->categoriesView->minimumWidth() <<
-	//			"actual width=" << viewPortage->categoriesView->width() << LINE_INFO;
+	//qDebug() << "categoriesView.minWidth=" << viewPortage->categoriesView->minimumWidth() <<
+	//			"actual width=" << viewPortage->categoriesView->width();
 	connect( HistorySingleton::Instance(), SIGNAL( signalScanHistoryCompleted() ), this, SLOT( slotCheckPortage() ) );
 
 	::sleep( 10 );	//allow db to load
@@ -295,5 +295,4 @@ bool KurooView::IconListItem::isChanged()
 	return m_modified;
 }
 */
-#include "kurooview.moc"
 

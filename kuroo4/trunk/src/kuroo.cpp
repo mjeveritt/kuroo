@@ -69,7 +69,8 @@ Kuroo::Kuroo() : KXmlGuiWindow( 0 ),
 	connect( SignalistSingleton::Instance(), SIGNAL( signalKurooBusy( bool ) ), this, SLOT( slotBusy() ) );
 
 	// when the last window is closed, the application should quit
-	connect( kapp, SIGNAL( lastWindowClosed() ), kapp, SLOT( quit() ) );
+    //TODO: check whether to connect this signal in main.cpp
+	//connect( kapp, SIGNAL( lastWindowClosed() ), kapp, SLOT( quit() ) );
 
 	// Kuroo must initialize with db first
 	SignalistSingleton::Instance()->setKurooReady( false );

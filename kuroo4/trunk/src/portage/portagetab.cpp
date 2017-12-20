@@ -118,7 +118,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	// Connect changes made in Inspector to this view so it gets updated
 	connect(m_packageInspector, &PackageInspector::signalPackageChanged, this, &PortageTab::slotPackage);
 	connect(m_packageInspector, &PackageInspector::signalNextPackage, this, &PortageTab::slotNextPackage);
-	connect(m_packageInspector, &PackageInspector::hidden, this, &PortageTab::slotButtons);
+	connect(m_packageInspector, &PackageInspector::finished, this, &PortageTab::slotButtons);
 
 	// Shortcut to enter filter with package name
 	connect( SignalistSingleton::Instance(), SIGNAL( signalPackageClicked( const QString& ) ), this, SLOT( slotFillFilter( const QString& ) ) );

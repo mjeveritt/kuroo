@@ -21,6 +21,7 @@
 #ifndef DEPENDATOM_H
 #define DEPENDATOM_H
 
+#include "packagebase.h"
 #include "packageversion.h"
 
 #include <QList>
@@ -37,14 +38,14 @@
  */
 class PortageAtom { //Atom already defined in kapp.h
 public:
-    PortageAtom( PackageListItem* portagePackage=0 );
-    PortageAtom( const QString& atom );
-    ~PortageAtom();
-	
+	PortageAtom( PackageBase* portagePackage=0 );
+	PortageAtom( const QString& atom );
+	~PortageAtom();
+
 	bool parse( const QString& atom );
-	
-        QList<PackageVersion*> matchingVersions();
-	
+
+	QList<PackageVersion*> matchingVersions();
+
 	/**
 	 * Return true if the atom begins with a call sign ("!") which means that
 	 * this package is blocking another one. This is only used inside ebuilds,
@@ -52,37 +53,37 @@ public:
 	 * If there is no call sign, the function returns false.
 	 */
 	inline bool isBlocking() const { return m_callsign; }
-    inline bool isValid() const { return m_matches; }
-    inline const QString category() const { return m_category; }
-    inline const QString package() const { return m_package; }
+	inline bool isValid() const { return m_matches; }
+	inline const QString category() const { return m_category; }
+	inline const QString package() const { return m_package; }
 	
 private:
 	// A pointer to the portage tree from which the packages are retrieved.
-	PackageListItem* m_portagePackage;
-	
+	PackageBase* m_portagePackage;
+
 	// The regular expression for the whole atom.
 	QRegExp rxAtom;
-	
+
 	// The regular expression for just the package name and version.
 	QRegExp rxVersion;
-	
+
 	// This is set to the result of parse().
 	bool m_matches;
-	
+
 	// These are the extracted parts of the atom.
-	
+
 	// true if the callsign prefix ("blocked by this package" in ebuild dependencies) is there.
 	bool m_callsign;
-	
+
 	// A compare sign (greater than / less than / equal) or the "all revisions" prefix ("~").
 	QString m_prefix;
-	
+
 	// The main category of the package.
 	QString m_category;
-	
+
 	// The package name.
 	QString m_package;
-	
+
 	// The complete version string.
 	QString m_version;
 };

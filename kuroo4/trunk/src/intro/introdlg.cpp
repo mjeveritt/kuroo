@@ -74,25 +74,25 @@ void IntroDlg::accept()
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
 		//QString filePackageKeywords( KurooConfig::filePackageKeywords() );
 		foreach(QString f, KurooConfig::filePackageKeywords())
-			KIO::file_copy( f, kurooDir + "backup/package.keywords-" + f.section( "/", -1 ) + dt,
+			KIO::file_copy( QUrl( f ), QUrl( kurooDir + "backup/package.keywords-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo);
 		//QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
 		foreach(QString f, KurooConfig::filePackageUserUnMask())
-			KIO::file_copy( f, kurooDir + "backup/package.unmask-" + f.section( "/", -1 ) + dt,
+			KIO::file_copy( QUrl( f ), QUrl( kurooDir + "backup/package.unmask-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo );
 		//QString filePackageUserMask( KurooConfig::filePackageUserMask() );
 		foreach(QString f, KurooConfig::filePackageUserMask())
-			KIO::file_copy( f, kurooDir + "backup/package.mask-" + f.section( "/", -1 ) + dt,
+			KIO::file_copy( QUrl( f ), QUrl( kurooDir + "backup/package.mask-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo );
 		//QString filePackageUserUse( KurooConfig::filePackageUserUse() );
 		foreach(QString f, KurooConfig::filePackageUserUse())
-			KIO::file_copy( f, kurooDir + "backup/package.use-" + f.section( "/", -1 ) + dt,
+			KIO::file_copy( QUrl( f ), QUrl( kurooDir + "backup/package.use-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString fileWorld( KurooConfig::fileWorld() );
-		KIO::file_copy( fileWorld, kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt,
+		KIO::file_copy( QUrl( fileWorld ), QUrl( kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt ),
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString fileMakeConf( KurooConfig::fileMakeConf() );
-		KIO::file_copy( fileMakeConf, kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt,
+		KIO::file_copy( QUrl( fileMakeConf ), QUrl( kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt ),
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 	}
 

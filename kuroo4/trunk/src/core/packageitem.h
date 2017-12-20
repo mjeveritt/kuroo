@@ -23,15 +23,16 @@
 
 #include <QTreeWidget>
 #include "dependatom.h"
+#include "packagebase.h"
 
+class PortageAtom;
 class PackageVersion;
-
 
 /**
  * @class PackageItem
  * @short QTreeWidget subclass
  */
-class PackageItem : public QTreeWidgetItem
+class PackageItem : public QTreeWidgetItem, public PackageBase
 {
 public:
 	PackageItem( QTreeWidget *parent, const QString& name, const QString& id, const QString& category, const QString& description, const int status );
@@ -47,16 +48,6 @@ public:
 	 * @return id
 	 */
 	inline const QString&					id() const { return m_id; }
-	/**
-	 * Package name as kuroo in app-portage/kuroo.
-	 * @return name
-	 */
-	inline const QString&					name() const { return m_name; }
-	/**
-	 * Accessor for category.
-	 * @return the package category.
-	 */
-	inline const QString&					category() const { return m_category; }
 	/**
 	 * Package description.
 	 * @return description
@@ -89,11 +80,6 @@ public:
 	inline bool								isLastPackage() const  { return ( m_index == 1 ); }
 
 	void									initVersions();
-	/**
-	 * Return list of versions.
-	 * @return QList<PackageVersion*>
-	 */
-	inline QList<PackageVersion*>			versionList()const  { return m_versions; }
 	/**
 	 * Return map of versions - faster find.
 	 * @return QMap<QString, PackageVersion*>
@@ -144,17 +130,11 @@ private:
 	// Package's db id
 	QString									m_id;
 
-	// Package name-string
-	QString									m_name;
-
 	// Is package INSTALLED or OLD ( INSTALLED but not in Portage anymore )
 	int										m_status;
 
 	// Package description
 	QString									m_description;
-
-	// Keep track of package's category
-	QString									m_category;
 
 	// True if package is in installation queue
 	bool									m_isQueued;
@@ -165,14 +145,11 @@ private:
 	// True if package and its versions has been initialized with all data
 	bool									m_isInitialized;
 
-	// Valuelist with all versions and their data
-	QList<PackageVersion*>					m_versions;
-
 	// Alternatively map with all versions and their data
 	QMap<QString, PackageVersion*>			m_versionMap;
 
 	// Atom object needed for versions stability
-    PortageAtom* 						atom;
+    PortageAtom* 							atom;
 
 	// Formatted string
 	QString									m_linesInstalled, m_linesAvailable, m_linesEmerge;

@@ -62,7 +62,7 @@ ConfigDialog::ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleto
 	addPage( opt4, i18n("Housekeeping"), QString("kuroo_housekeeping"), i18n("Control automatic file cleanup and rebuilding") );
 
 	connect(this, &ConfigDialog::settingsChanged, this, &ConfigDialog::slotSaveAll);
-	connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &ConfigDialog::slotDefaults);
+	connect(buttonBox()->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &ConfigDialog::slotDefaults);
 /*
 	int selected = 0;
 	for(int i = 0; i < KurooConfig::filePackageKeywords().count(); ++i)

@@ -19,15 +19,14 @@
  ***************************************************************************/
 
 #include "common.h"
+#include "packagebase.h"
 #include "packagelistitem.h"
 #include "queuelistview.h"
 #include "packageversion.h"
 
 PackageListItem::PackageListItem(QObject *parent)
- : QObject(parent),
-   m_name(""),
+ : QObject(parent), PackageBase(),
    m_id(""),
-   m_category(""),
    m_description(""),
    m_update(""),
    m_status(0),
@@ -35,10 +34,8 @@ PackageListItem::PackageListItem(QObject *parent)
 {}
 
 PackageListItem::PackageListItem(const QString& name, const QString& id, const QString& category, const QString& description, const int status, const QString& update, QObject *parent)
- : QObject(parent),
-   m_name(name),
+ : QObject(parent), PackageBase(name, category),
    m_id(id),
-   m_category(category),
    m_description(description),
    m_update(update),
    m_status(status),
@@ -78,7 +75,7 @@ void PackageListItem::initVersions()
 			QString keywords = *it++;
 			QString size = *it;
 
-			PackageVersion* version = new PackageVersion( this, versionString );
+			PackageVersion* version = new PackageVersion( versionString );
 			version->setDescription( description );
 			version->setHomepage( homepage );
 			version->setLicenses( licenses.split(" ") );

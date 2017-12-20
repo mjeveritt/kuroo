@@ -21,7 +21,8 @@
 #ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
-#include <kconfigdialog.h>
+#include <KConfigDialog>
+#include <KConfigSkeleton>
 
 #include "ui_options1.h"
 #include "ui_options2.h"

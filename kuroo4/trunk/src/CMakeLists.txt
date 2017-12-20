@@ -66,10 +66,10 @@ ki18n_wrap_ui( portage_sources portage/uninstallbase.ui portage/portagebase.ui )
 #config
 set( config_sources config/configdialog.cpp )
 ki18n_wrap_ui(	config_sources
-					config/options1.ui
-					config/options2.ui
-					config/options3.ui
-					config/options4.ui )
+				config/options1.ui
+				config/options2.ui
+				config/options3.ui
+				config/options4.ui )
 kconfig_add_kcfg_files( config_sources config/settings.kcfgc )
 
 #queue

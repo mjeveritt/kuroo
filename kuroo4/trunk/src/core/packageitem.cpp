@@ -154,7 +154,7 @@ void PackageItem::initVersions()
 			QString keywords = *it++;
 			QString size = *it;
 
-			PackageVersion* version = new PackageVersion( this, versionString );
+			PackageVersion* version = new PackageVersion( versionString );
 			version->setDescription( description );
 			version->setHomepage( homepage );
 			version->setLicenses( licenses.split(" ") );

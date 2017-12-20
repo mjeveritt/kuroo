@@ -95,7 +95,7 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 	// Recalculate package when user change settings in Inspector
 	connect(m_packageInspector, &PackageInspector::signalPackageChanged, this, &QueueTab::slotPackage);
 	connect(m_packageInspector, &PackageInspector::signalNextPackage, this, &QueueTab::slotNextPackage);
-	connect(m_packageInspector, &PackageInspector::hidden, this, &QueueTab::slotButtons);
+	connect(m_packageInspector, &PackageInspector::finished, this, &QueueTab::slotButtons);
 
 	slotInit();
 }

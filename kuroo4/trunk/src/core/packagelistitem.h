@@ -27,10 +27,11 @@
 
 #include "common.h"
 #include "dependatom.h"
+#include "packagebase.h"
 #include "packageversion.h"
 #include "portagelistview.h"
 
-class PackageListItem : public QObject
+class PackageListItem : public QObject, public PackageBase
 {
 	Q_OBJECT
 public:
@@ -39,16 +40,13 @@ public:
 
 	~PackageListItem();
 
-	QString						name() const {return m_name;}
 	QString						id() const {return m_id;}
-	QString						category() const {return m_category;}
 	QString						description() const {return m_description;}
 	QString						update() const {return m_update;}
 	QString						homepage() const {return m_homepage;}
 	int							status() const {return m_status;}
 	bool						isInWorld() const {return m_isInWorld;}
 	bool						isQueued() const {return QueueSingleton::Instance()->isQueued(m_id);}
-	inline QList<PackageVersion*> versionList() const {return m_versions;}
 	inline const QString&		linesInstalled() const { return m_linesInstalled; }
 	inline const QString&		linesAvailable() const { return m_linesAvailable; }
 	inline const QString&		linesEmerge() const { return m_linesEmerge; }
@@ -72,9 +70,7 @@ public:
 	int							packageIndex() const {return m_index;}
 
 private:
-	QString						m_name;
 	QString						m_id;
-	QString						m_category;
 	QString						m_description;
 	QString						m_update;
 	bool						m_isInWorld;
@@ -83,9 +79,6 @@ private:
 
 	// True if package and its versions has been initialized with all data
 	bool						m_isInitialized;
-
-	// Valuelist with all versions and their data
-	QList<PackageVersion*>		m_versions;
 
 	// Alternatively map with all versions and their data
 	QMap<QString, PackageVersion*> m_versionMap;

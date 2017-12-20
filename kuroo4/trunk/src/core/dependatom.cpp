@@ -23,7 +23,7 @@
 #include "common.h"
 #include "dependatom.h"
 #include "packageversion.h"
-#include "packagelistitem.h"
+#include "packagebase.h"
 #include <QList>
 
 //CLEAN: rename files to atom
@@ -39,7 +39,7 @@
  * Initialize this object.
  * @param packages  The package that will be filtered out.
  */
-PortageAtom::PortageAtom( PackageListItem* portagePackage )
+PortageAtom::PortageAtom( PackageBase* portagePackage )
 	: m_portagePackage( portagePackage ),
 	rxAtom(
 			"^"    										// Start of the string

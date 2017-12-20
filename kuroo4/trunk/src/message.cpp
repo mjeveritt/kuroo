@@ -39,10 +39,10 @@ Message* Message::s_instance = 0;
 Message::Message( QWidget *parent )
     : QDialog( parent )
 {
-	setupUiQWidget *mainWidget = new QWidget(this);
-	setupUiQVBoxLayout *mainLayout = new QVBoxLayout;
-	setupUisetLayout(mainLayout);
-	setupUimainLayout->addWidget(mainWidget);
+	QWidget *mainWidget = new QWidget(this);
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	setLayout(mainLayout);
+	mainLayout->addWidget(mainWidget);
 	setupUi(mainWidget);
 	//i18n("Message"), false, i18n("Message"), , , false
 	//enable the OK button and an extra button which we will use to copy the text to the clipboard

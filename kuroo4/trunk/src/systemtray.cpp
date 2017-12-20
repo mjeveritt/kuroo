@@ -21,7 +21,7 @@
 #include <assert.h>
 
 #include <QThread>
-
+#include <QMenu>
 
 #include "common.h"
 #include "systemtray.h"

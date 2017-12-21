@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qobject.h>
+#include <QObject>
 
 #ifndef __SINGLETON_H
 #define __SINGLETON_H

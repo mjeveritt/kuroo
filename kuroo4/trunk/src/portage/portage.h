@@ -22,7 +22,7 @@
 #define PORTAGE_H
 
 #include <QObject>
-#include "threadweaver/ThreadWeaver.h"
+#include <ThreadWeaver/ThreadWeaver>
 
 /**
  * @class Portage
@@ -65,7 +65,7 @@ public slots:
 	bool						slotLoadUpdates();
 
 private slots:
-	void						slotWeaverDone(ThreadWeaver::Job*);
+	void						slotWeaverDone(ThreadWeaver::JobPointer);
 	
 signals:
 	void						signalPortageChanged();

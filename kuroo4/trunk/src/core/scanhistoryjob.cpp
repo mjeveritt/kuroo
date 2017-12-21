@@ -18,21 +18,24 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
+#include <QDir>
+#include <QFileInfo>
+#include <QStringList>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
+
 #include "common.h"
 #include "packageemergetime.h"
 #include "scanhistoryjob.h"
-
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstringlist.h>
-#include <qfileinfo.h>
 
 /**
  * @class ScanHistoryJob
  * @short Thread for parsing emerge/unmerge/sync entries found in emerge.log.
  */
-ScanHistoryJob::ScanHistoryJob( QObject* parent, const QStringList& logLines )
-    : ThreadWeaver::Job( parent ),
+ScanHistoryJob::ScanHistoryJob( const QStringList& logLines )
+    : ThreadWeaver::QObjectDecorator( this ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines )
 {}
 
@@ -49,7 +52,7 @@ ScanHistoryJob::~ScanHistoryJob()
  * add emerge duration and increment emerge counts.
  * @return success
  */
-void ScanHistoryJob::run()
+void ScanHistoryJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	if ( !m_db->isConnected() ) {
 		qCritical() << "Parsing emerge.log. Can not connect to database";

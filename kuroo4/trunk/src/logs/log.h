@@ -20,10 +20,9 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <qobject.h>
-#include <qfile.h>
-
-#include <kio/job.h>
+#include <KIO/Job>
+#include <QObject>
+#include <QFile>
 
 class QCheckBox;
 class QTextBrowser;

@@ -18,10 +18,11 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <ThreadWeaver/Job>
+#include <QTextStream>
+
 #include "common.h"
 #include "portagefiles.h"
-#include <threadweaver/Job.h>
-#include <QTextStream>
 
 /**
 * @class: LoadPackageKeywordsJob
@@ -30,9 +31,9 @@
 class LoadPackageKeywordsJob : public ThreadWeaver::Job
 {
 public:
-	LoadPackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
+	LoadPackageKeywordsJob() : Job() {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		qDebug() << "Updating KEYWORDS DATABASE !!!!";
 		DEBUG_LINE_INFO;
 

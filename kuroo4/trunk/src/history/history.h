@@ -21,9 +21,9 @@
 #ifndef HISTORY_H
 #define HISTORY_H
 
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qfile.h>
+#include <QObject>
+#include <QStringList>
+#include <QFile>
 #include <QVector>
 #include <QTextStream>
 
@@ -67,7 +67,7 @@ public slots:
 private slots:
 	void					slotScanHistory( const QStringList& lines );
 	void					slotParse();
-	void					slotWeaverDone(ThreadWeaver::Job*);
+	void					slotWeaverDone(ThreadWeaver::JobPointer);
 
 private:
 	QObject*				m_parent;

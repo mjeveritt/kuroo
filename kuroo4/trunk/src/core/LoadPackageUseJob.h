@@ -18,21 +18,26 @@
  *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
+#include <QTextStream>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
+
 #include "common.h"
 #include "portagefiles.h"
-#include <threadweaver/Job.h>
-#include <QTextStream>
 
 /**
 * @class: LoadPackageUseJob
 * @short: Thread for loading packages use into db.
 */
-class LoadPackageUseJob : public ThreadWeaver::Job
+class LoadPackageUseJob : public ThreadWeaver::QObjectDecorator//, public ThreadWeaver::Job
 {
 public:
-	LoadPackageUseJob( QObject *dependent ) : Job( dependent ) {}
+	LoadPackageUseJob() : ThreadWeaver::QObjectDecorator(this)//, ThreadWeaver::Job()
+	{}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserUse() );
 		if( fileInfo.isDir() ) {

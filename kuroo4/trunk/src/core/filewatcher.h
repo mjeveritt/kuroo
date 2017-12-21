@@ -22,7 +22,7 @@
 #ifndef FILEWATCHER_H
 #define FILEWATCHER_H
 
-#include <qobject.h>
+#include <QObject>
 
 class KDirWatch;
 

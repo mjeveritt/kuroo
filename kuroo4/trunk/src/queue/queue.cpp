@@ -18,11 +18,13 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
-#include "common.h"
-#include "threadweaver/ThreadWeaver.h"
-#include "threadweaver/Job.h"
+#include <QTimer>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/Thread>
+#include <ThreadWeaver/ThreadWeaver>
 
-#include <qtimer.h>
+#include "common.h"
 
 /**
 * @class AddQueuePackageIdListJob
@@ -31,10 +33,10 @@
 class AddQueuePackageIdListJob : public ThreadWeaver::Job
 {
 public:
-	AddQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : Job( dependent ),
+	AddQueuePackageIdListJob( const QStringList& packageIdList ) : Job(),
 		m_packageIdList( packageIdList ) {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery(	"CREATE TEMP TABLE queue_temp ( "
 													"id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -73,11 +75,11 @@ private:
 class RemoveQueuePackageIdListJob : public ThreadWeaver::Job
 {
 public:
-	RemoveQueuePackageIdListJob( QObject *dependent, const QStringList& packageIdList ) : Job( dependent ),
+	RemoveQueuePackageIdListJob( const QStringList& packageIdList ) : Job(),
 		m_packageIdList( packageIdList ) {
 		}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		foreach ( QString id, m_packageIdList )
 		{
@@ -104,10 +106,10 @@ private:
 class AddResultsPackageListJob : public ThreadWeaver::Job
 {
 public:
-	AddResultsPackageListJob( QObject *dependent, const EmergePackageList &packageList ) : Job( dependent ),
+	AddResultsPackageListJob( const EmergePackageList &packageList ) : Job(),
 		m_packageList( packageList ) {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 
 		// Collect end-user packages
@@ -352,7 +354,7 @@ bool Queue::isQueueBusy()
 void Queue::addPackageList( const EmergePackageList &packageList )
 {
 	if ( !packageList.isEmpty() )
-		ThreadWeaver::Weaver::instance()->enqueue( new AddResultsPackageListJob( this, packageList ) );
+		ThreadWeaver::Queue::instance()->stream() << new AddResultsPackageListJob( packageList );
 }
 
 /**
@@ -361,7 +363,7 @@ void Queue::addPackageList( const EmergePackageList &packageList )
 */
 void Queue::removePackageIdList( const QStringList& packageIdList )
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new RemoveQueuePackageIdListJob( this, packageIdList ) );
+	ThreadWeaver::Queue::instance()->stream() << new RemoveQueuePackageIdListJob( packageIdList );
 }
 
 /**
@@ -370,7 +372,7 @@ void Queue::removePackageIdList( const QStringList& packageIdList )
 */
 void Queue::addPackageIdList( const QStringList& packageIdList )
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new AddQueuePackageIdListJob( this, packageIdList ) );
+	ThreadWeaver::Queue::instance()->stream() << new AddQueuePackageIdListJob( packageIdList );
 }
 
 /**

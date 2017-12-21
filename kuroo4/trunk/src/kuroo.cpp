@@ -20,22 +20,23 @@
 
 #include <unistd.h>
 
+//#include <kdeversion.h>
+#include <KActionCollection>
+#include <KIO/Job>
+#include <KMessageBox>
+#include <KStandardAction>
+#include <KStandardShortcut>
+#include <KUser>
+
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/Queue>
 #include <QDebug>
 #include <QAction>
 #include <QTimer>
 #include <QCheckBox>
 
-//#include <kdeversion.h>
-#include <KStandardShortcut>
-#include <KMessageBox>
-#include <KUser>
-#include <kio/job.h>
-
-#include <KActionCollection>
-#include <KStandardAction>
 
 #include "common.h"
-#include "threadweaver/ThreadWeaver.h"
 #include "systemtray.h"
 #include "kurooinit.h"
 #include "kuroo.h"
@@ -91,8 +92,8 @@ Kuroo::~Kuroo()
 {
 	int maxLoops( 99 );
 	while ( true ) {
-		//if ( ThreadWeaver::Weaver::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Weaver::instance()->isJobPending( "CachePortageJob" ) )
-		if (!ThreadWeaver::Weaver::instance()->isIdle())
+		//if ( ThreadWeaver::Queue::instance()->isJobPending( "DBJob" ) || ThreadWeaver::Queue::instance()->isJobPending( "CachePortageJob" ) )
+		if (!ThreadWeaver::Queue::instance()->isIdle())
 			::usleep( 100000 ); // Sleep 100 msec
 		else
 			break;
@@ -283,8 +284,8 @@ void Kuroo::slotWait()
 				"All jobs will be aborted.</qt>"), i18n("Quit") ) ) {
 
 			case KMessageBox::Yes: {
-				ThreadWeaver::Weaver::instance()->requestAbort();//AllJobsNamed( "DBJob" );
-				//ThreadWeaver::Weaver::instance()->abortAllJobsNamed( "CachePortageJob" );
+				ThreadWeaver::Queue::instance()->requestAbort();//AllJobsNamed( "DBJob" );
+				//ThreadWeaver::Queue::instance()->abortAllJobsNamed( "CachePortageJob" );
 				QTimer::singleShot( 500, this, SLOT( slotTerminate() ) );
 			}
 		}

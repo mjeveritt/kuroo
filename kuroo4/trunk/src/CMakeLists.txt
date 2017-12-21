@@ -111,7 +111,10 @@ add_executable(kuroo
 				${logs_sources}
 				${kuroo_sources} )
 
+kde_enable_exceptions()
+
 target_link_libraries( kuroo
+	Qt5::Core
 	KF5::ConfigCore
 	KF5::ConfigGui
 	KF5::CoreAddons

@@ -18,24 +18,27 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <KApplication>
+#include <KConfig>
+#include <KGlobal>
+
+#include <QDir>
+#include <QStringList>
+#include <QFileInfo>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
+
 #include "common.h"
 #include "scanupdatesjob.h"
-
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstringlist.h>
-#include <qfileinfo.h>
-
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kglobal.h>
 
 /**
 * @class ScanUpdatesJob
 * @short Thread for loading 'emerge -uDpv World' output into db.
 */
-ScanUpdatesJob::ScanUpdatesJob( QObject* parent, const EmergePackageList &packageList )
-	: ThreadWeaver::Job( parent ),
+ScanUpdatesJob::ScanUpdatesJob( const EmergePackageList &packageList )
+	: ThreadWeaver::QObjectDecorator( this ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList )
 {}
 
@@ -51,7 +54,7 @@ ScanUpdatesJob::~ScanUpdatesJob()
 * Insert found updates into db.
 * @return success
 */
-void ScanUpdatesJob::run()
+void ScanUpdatesJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	if ( !m_db->isConnected() ) {
 		qCritical() << "Scanning updates. Can not connect to database";

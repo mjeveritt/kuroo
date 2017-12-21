@@ -27,6 +27,10 @@
 #include <QDebug>
 #include <QDir>
 #include <../build/src/settings.h>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
 
 /**
  * @class CachePortageJob
@@ -34,8 +38,8 @@
  *
  * Portage cache is scanned for package sizes, and stored in portage cache map and in the database.
  */
-CachePortageJob::CachePortageJob( QObject* parent )
-    : ThreadWeaver::Job( parent ),
+CachePortageJob::CachePortageJob()
+    : ThreadWeaver::QObjectDecorator(this),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
 }
@@ -48,7 +52,7 @@ CachePortageJob::~CachePortageJob()
 /**
  * Scan for package size found in digest files.
  */
-void CachePortageJob::run()
+void CachePortageJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	DEBUG_LINE_INFO;
 	if ( !m_db->isConnected() ) {

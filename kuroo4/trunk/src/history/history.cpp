@@ -18,21 +18,27 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
+#include <KDirWatch>
+#include <QDateTime>
+
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/Thread>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/Queue>
+
 #include "common.h"
 #include "packageemergetime.h"
 #include "scanhistoryjob.h"
 #include "cacheportagejob.h"
-#include "threadweaver/ThreadWeaver.h"
 
-#include <qdatetime.h>
-#include <kdirwatch.h>
 
 class UpdateStatisticsJob : public ThreadWeaver::Job
 {
 public:
-UpdateStatisticsJob( QObject *dependent ) : Job( dependent) {}
+UpdateStatisticsJob() : Job() {}
 
-    virtual void run() {
+    virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 		KurooDBSingleton::Instance()->singleQuery( "DELETE FROM statistic;", m_db );
 		KurooDBSingleton::Instance()->singleQuery( "BEGIN TRANSACTION;", m_db );
@@ -140,9 +146,9 @@ bool History::slotRefresh()
 void History::slotScanHistory( const QStringList& lines )
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ScanHistoryJob *job = new ScanHistoryJob(this, lines);
+	ScanHistoryJob *job = new ScanHistoryJob( lines );
 	connect(job, &ScanHistoryJob::done, this, &History::slotWeaverDone);
-	ThreadWeaver::Weaver::instance()->enqueue(job);
+	ThreadWeaver::Queue::instance()->stream() << job;
 }
 
 /**
@@ -299,7 +305,7 @@ void History::slotParse()
 void History::updateStatistics()
 {
 	DEBUG_LINE_INFO;
-    ThreadWeaver::Weaver::instance()->enqueue( new UpdateStatisticsJob( this ) );
+    ThreadWeaver::Queue::instance()->stream() << new UpdateStatisticsJob();
 }
 
 /**
@@ -401,8 +407,8 @@ eLogVector History::getELogs()
 	return m_eLogs;
 }
 
-void History::slotWeaverDone(ThreadWeaver::Job *job)
+void History::slotWeaverDone(ThreadWeaver::JobPointer job)
 {
-	delete job;
+	delete &job;
 }
 

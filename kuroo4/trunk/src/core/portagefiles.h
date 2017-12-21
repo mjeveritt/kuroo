@@ -21,7 +21,7 @@
 #ifndef PORTAGEFILES_H
 #define PORTAGEFILES_H
 
-#include <qobject.h>
+#include <QObject>
 #include "dependatom.h" //define atom regexp
 
 /**

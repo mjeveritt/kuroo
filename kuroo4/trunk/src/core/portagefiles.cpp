@@ -18,15 +18,19 @@
  *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
  ***************************************************************************/
 
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/Queue>
+#include <ThreadWeaver/Thread>
+#include <QTextStream>
+
 #include "common.h"
 #include "portagefiles.h"
-#include "threadweaver/ThreadWeaver.h"
 #include "LoadPackageHardMaskJob.h"
 #include "LoadPackageKeywordsJob.h"
 #include "LoadPackageUseJob.h"
 #include "LoadPackageUserHardMaskJob.h"
 #include "LoadPackageUserUnMaskJob.h"
-#include <QTextStream>
 
 bool mergeDirIntoFile( QString dirPath ) {
 	//DEBUG_LINE_INFO;
@@ -96,9 +100,9 @@ bool mergeDirIntoFile( QString dirPath ) {
 class SavePackageKeywordsJob : public ThreadWeaver::Job
 {
 public:
-	SavePackageKeywordsJob( QObject *dependent ) : Job( dependent ) {}
+	SavePackageKeywordsJob() : Job() {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		const QStringList lines = KurooDBSingleton::Instance()->query(
 			"SELECT package.category, package.name, packageKeywords.keywords FROM package, packageKeywords "
@@ -143,9 +147,9 @@ public:
 class SavePackageUserMaskJob : public ThreadWeaver::Job
 {
 public:
-	SavePackageUserMaskJob( QObject *dependent ) : Job( dependent ) {}
+	SavePackageUserMaskJob() : Job() {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUserMask;" );
 		if ( lines.isEmpty() ) {
@@ -180,9 +184,9 @@ public:
 class SavePackageUserUnMaskJob : public ThreadWeaver::Job
 {
 public:
-	SavePackageUserUnMaskJob( QObject *dependent ) : Job( dependent ) {}
+	SavePackageUserUnMaskJob() : Job() {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		const QStringList lines = KurooDBSingleton::Instance()->query( "SELECT dependAtom FROM packageUnMask ;" );
 		if ( lines.isEmpty() ) {
@@ -217,9 +221,9 @@ public:
 class SavePackageUseJob : public ThreadWeaver::Job
 {
 public:
-	SavePackageUseJob( QObject *dependent ) : Job( dependent ) {}
+	SavePackageUseJob() : Job() {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		const QStringList lines = KurooDBSingleton::Instance()->query(
 			"SELECT package.category, package.name, packageUse.use FROM package, packageUse "
@@ -330,7 +334,7 @@ void PortageFiles::loadPackageFiles()
 
 	if (NULL != KurooStatusBar::instance())
 		KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Loading portage files"));
-	ThreadWeaver::Weaver::instance()->enqueue( new LoadPackageHardMaskJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageHardMaskJob();
 	loadPackageUserMask();
 	loadPackageUnmask();
 	loadPackageKeywords();
@@ -342,41 +346,41 @@ void PortageFiles::loadPackageFiles()
 
 void PortageFiles::loadPackageKeywords()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new LoadPackageKeywordsJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageKeywordsJob();
 }
 
 void PortageFiles::loadPackageUnmask()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new LoadPackageUserUnMaskJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageUserUnMaskJob();
 }
 
 void PortageFiles::loadPackageUserMask()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new LoadPackageUserMaskJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageUserMaskJob();
 }
 
 void PortageFiles::loadPackageUse()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new LoadPackageUseJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageUseJob();
 }
 
 void PortageFiles::savePackageKeywords()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new SavePackageKeywordsJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new SavePackageKeywordsJob();
 }
 
 void PortageFiles::savePackageUserUnMask()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new SavePackageUserUnMaskJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new SavePackageUserUnMaskJob();
 }
 
 void PortageFiles::savePackageUserMask()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new SavePackageUserMaskJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new SavePackageUserMaskJob();
 }
 
 void PortageFiles::savePackageUse()
 {
-	ThreadWeaver::Weaver::instance()->enqueue( new SavePackageUseJob( this ) );
+	ThreadWeaver::Queue::instance()->stream() << new SavePackageUseJob();
 }
 

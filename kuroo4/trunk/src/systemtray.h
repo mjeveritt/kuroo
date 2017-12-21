@@ -39,7 +39,7 @@ public:
 	SystemTray( QWidget *parent = 0 );
 	~SystemTray();
 
-	static SystemTray* 		instance() { return s_instance; }
+	static SystemTray* 	instance() { return s_instance; }
 	//void				inactivate();
 
 private slots:

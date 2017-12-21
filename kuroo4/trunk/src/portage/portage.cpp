@@ -18,25 +18,29 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
+#include <unistd.h>
+#include <QTextStream>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Queue>
+#include <ThreadWeaver/Thread>
+
 #include "common.h"
 #include "scanportagejob.h"
 #include "cacheportagejob.h"
 #include "scanupdatesjob.h"
 
-
-#include <unistd.h>
-#include <QTextStream>
-
 /**
 * @class AddInstalledPackageJob
 * @short Thread for registrating packages as installed in db.
 */
-class AddInstalledPackageJob : public ThreadWeaver::Job
+class AddInstalledPackageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
-	AddInstalledPackageJob( QObject *dependent, const QString& package ) : Job( dependent ), m_package( package ) {}
+	AddInstalledPackageJob( const QString& package ) : ThreadWeaver::QObjectDecorator( this ), m_package( package ) {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
@@ -88,12 +92,12 @@ private:
 * @class RemoveInstalledPackageJob
 * @short Thread for removing packages as installed in db.
 */
-class RemoveInstalledPackageJob : public ThreadWeaver::Job
+class RemoveInstalledPackageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
-	RemoveInstalledPackageJob( QObject *dependent, const QString& package ) : Job( dependent ), m_package( package ) {}
+	RemoveInstalledPackageJob( const QString& package ) : ThreadWeaver::QObjectDecorator( this ), m_package( package ) {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		QStringList parts = parsePackage( m_package );
 		if ( parts.isEmpty() ) {
 			qWarning() << QString("Removing unmerged package: can not match %1.").arg( m_package );
@@ -155,13 +159,13 @@ private:
 * @class CheckUpdatesPackageJob
 * @short Thread for marking packages as updates or downgrades.
 */
-class CheckUpdatesPackageJob : public ThreadWeaver::Job
+class CheckUpdatesPackageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
-	CheckUpdatesPackageJob( QObject *dependent, const QString& id, const QString& updateVersion, int hasUpdate ) : Job( dependent ),
+	CheckUpdatesPackageJob( const QString& id, const QString& updateVersion, int hasUpdate ) : ThreadWeaver::QObjectDecorator( this ),
 		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		DbConnection* const m_db = KurooDBSingleton::Instance()->getStaticDbConnection();
 
 		if ( m_hasUpdate == 0 ) {
@@ -263,9 +267,9 @@ bool Portage::slotRefresh()
 	if ( KurooDBSingleton::Instance()->isCacheEmpty() ) {
 		SignalistSingleton::Instance()->scanStarted();
 		//This seems important, not sure why it was commented out
-		CachePortageJob *job = new CachePortageJob( this );
+		CachePortageJob *job = new CachePortageJob();
 		connect(job, &CachePortageJob::done, this, &Portage::slotWeaverDone);
-		ThreadWeaver::Weaver::instance()->enqueue(job);
+		ThreadWeaver::Queue::instance()->stream() << job;
 	}
 	else
 		slotScan();
@@ -313,9 +317,9 @@ bool Portage::slotScan()
 		}
 	}
 
-	ScanPortageJob *job = new ScanPortageJob( this );
+	ScanPortageJob *job = new ScanPortageJob();
 	connect(job, &ScanPortageJob::done, this, &Portage::slotWeaverDone);
-	ThreadWeaver::Weaver::instance()->enqueue(job);
+	ThreadWeaver::Queue::instance()->stream() << job;
 
 	return true;
 }
@@ -469,9 +473,9 @@ void Portage::uninstallInstalledPackageList( const QStringList& packageIdList )
 */
 void Portage::addInstalledPackage( const QString& package )
 {
-	AddInstalledPackageJob *job = new AddInstalledPackageJob( this, package );
+	AddInstalledPackageJob *job = new AddInstalledPackageJob( package );
 	connect(job, &AddInstalledPackageJob::done, this, &Portage::slotWeaverDone);
-	ThreadWeaver::Weaver::instance()->enqueue(job);
+	ThreadWeaver::Queue::instance()->stream() << job;
 }
 
 /**
@@ -480,9 +484,9 @@ void Portage::addInstalledPackage( const QString& package )
 */
 void Portage::removeInstalledPackage( const QString& package )
 {
-	RemoveInstalledPackageJob *job = new RemoveInstalledPackageJob( this, package );
+	RemoveInstalledPackageJob *job = new RemoveInstalledPackageJob( package );
 	connect(job, &RemoveInstalledPackageJob::done, this, &Portage::slotWeaverDone);
-	ThreadWeaver::Weaver::instance()->enqueue(job);
+	ThreadWeaver::Queue::instance()->stream() << job;
 }
 
 /**
@@ -502,9 +506,9 @@ bool Portage::slotRefreshUpdates()
 bool Portage::slotLoadUpdates()
 {
 	SignalistSingleton::Instance()->scanStarted();
-	ScanUpdatesJob *job = new ScanUpdatesJob( this, EmergeSingleton::Instance()->packageList() );
+	ScanUpdatesJob *job = new ScanUpdatesJob( EmergeSingleton::Instance()->packageList() );
 	connect(job, &ScanUpdatesJob::done, this, &Portage::slotWeaverDone);
-	ThreadWeaver::Weaver::instance()->enqueue(job);
+	ThreadWeaver::Queue::instance()->stream() << job;
 	return true;
 }
 
@@ -513,13 +517,14 @@ bool Portage::slotLoadUpdates()
 */
 void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int hasUpdate )
 {
-	CheckUpdatesPackageJob *job = new CheckUpdatesPackageJob( this, id, emergeVersion, hasUpdate );
+	CheckUpdatesPackageJob *job = new CheckUpdatesPackageJob( id, emergeVersion, hasUpdate );
 	connect(job, &CheckUpdatesPackageJob::done, this, &Portage::slotWeaverDone);
-	ThreadWeaver::Weaver::instance()->enqueue(job);
+	ThreadWeaver::Queue::instance()->stream() << job;
 }
 
-void Portage::slotWeaverDone(ThreadWeaver::Job *job)
+void Portage::slotWeaverDone(ThreadWeaver::JobPointer job)
 {
-	delete job;
+	//WARN: Is & really safe here
+	delete &job;
 }
 

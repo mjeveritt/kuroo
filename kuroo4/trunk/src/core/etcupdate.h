@@ -22,11 +22,9 @@
 #ifndef ETCUPDATE_H
 #define ETCUPDATE_H
 
-#include <qt5/QtCore/QObject>
-
-#include <kio/job.h>
+#include <KIO/Job>
 #include <KDirWatch>
-
+#include <QObject>
 
 /**
  * @class EtcUpdate

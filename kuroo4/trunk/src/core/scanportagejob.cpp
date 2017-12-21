@@ -27,10 +27,13 @@
 #include <string>
 #include <vector>
 
+#include <KGlobal>
 #include <QDir>
 #include <QTextStream>
-
-#include <KGlobal>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
 
 /**
  * @class ScanPortageJob
@@ -40,8 +43,8 @@
  * Next portage cache in KurooConfig::dirEdbDep() is scanned for packages.
  * All packages are stored in table "package" in the database.
  */
-ScanPortageJob::ScanPortageJob( QObject* parent )
-    : ThreadWeaver::Job( parent ),
+ScanPortageJob::ScanPortageJob()
+    : ThreadWeaver::QObjectDecorator( this ),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {}
 
@@ -57,7 +60,7 @@ ScanPortageJob::~ScanPortageJob()
  * Scan Portage cache for packages in portage tree. Inserting found packages in db.
  * @return success
  */
-void ScanPortageJob::run()
+void ScanPortageJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	DEBUG_LINE_INFO;
 	int count = 0;

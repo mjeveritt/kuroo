@@ -21,9 +21,11 @@
 #ifndef SCANHISTORYJOB_H
 #define SCANHISTORYJOB_H
 
-#include "threadweaver/Job.h"
-
-#include <qobject.h>
+#include <QObject>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
 
 class DbConnection;
 class QStringList;
@@ -35,18 +37,17 @@ typedef QMap<QString, PackageEmergeTime> EmergeTimeMap;
  * @class ScanHistoryJob
  * @short Thread for parsing emerge/unmerge entries found in emerge.log.
  */
-class ScanHistoryJob : public ThreadWeaver::Job
+class ScanHistoryJob : public ThreadWeaver::QObjectDecorator
 {
-Q_OBJECT
 public:
-	ScanHistoryJob( QObject *parent = 0, const QStringList& logLines = QStringList() );
+	ScanHistoryJob( const QStringList& logLines = QStringList() );
 	~ScanHistoryJob();
 
 private:
-    void 						run();
+    void 						run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* );
 	//void 						completeJob();
 
-	QString 					escapeString( const QString&) const;
+	QString 					escapeString( const QString& ) const;
 
 private:
 	DbConnection* const			m_db;

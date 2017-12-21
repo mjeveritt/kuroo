@@ -21,9 +21,11 @@
 #ifndef SCANUPDATESJOB_H
 #define SCANUPDATESJOB_H
 
-#include "threadweaver/Job.h"
-
-#include <qobject.h>
+#include <QObject>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/Thread>
 
 class DbConnection;
 
@@ -31,15 +33,14 @@ class DbConnection;
  * @class ScanUpdatesJob
  * @short Thread for loading emerge -uDrxPortageVersion World output into db.
  */
-class ScanUpdatesJob : public ThreadWeaver::Job
+class ScanUpdatesJob : public ThreadWeaver::QObjectDecorator
 {
-Q_OBJECT
 public:
-	ScanUpdatesJob( QObject *parent, const EmergePackageList &packageList );
+	ScanUpdatesJob( const EmergePackageList &packageList );
 	~ScanUpdatesJob();
 
-private:
-    void 						run();
+protected:
+    void 						run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* );
 	//void 						completeJob();
 
 private:

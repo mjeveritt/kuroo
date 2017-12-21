@@ -18,10 +18,13 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
+#include <QTextStream>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/Thread>
+
 #include "common.h"
 #include "portagefiles.h"
-#include <threadweaver/Job.h>
-#include <QTextStream>
 
 /**
 * @class: LoadPackageUserMaskJob
@@ -30,9 +33,9 @@
 class LoadPackageUserMaskJob : public ThreadWeaver::Job
 {
 public:
-	LoadPackageUserMaskJob( QObject *dependent ) : Job( dependent ) {}
+	LoadPackageUserMaskJob() : Job() {}
 
-	virtual void run() {
+	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
 		// Collect all mask dependatoms from /etc/portage/package.mask
 		QFileInfo fileInfo( KurooConfig::defaultFilePackageUserMask() );

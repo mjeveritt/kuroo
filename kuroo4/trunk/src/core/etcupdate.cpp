@@ -95,7 +95,7 @@ void EtcUpdate::slotFinished(KJob* j)
 		//The Slave was causing a 'kuroo(5827)/kio (KIOJob) KIO::SlaveInterface::dispatch: error  111   "/var/cache/kuroo/backup/configuration"' message
 		//so don't do it if the dir doesn't exist
 		if (QFile::exists( m_configProtectDir )) {
-			KIO::ListJob* job = KIO::listRecursive( QUrl( m_configProtectDir ), KIO::HideProgressInfo, true);
+			KIO::ListJob* job = KIO::listRecursive( QUrl::fromLocalFile( m_configProtectDir ), KIO::HideProgressInfo, true);
 			connect(job, &KIO::ListJob::entries, this, &EtcUpdate::slotListFiles);
 			connect( job, SIGNAL( result( KJob* ) ), SLOT( slotFinished(KJob*) ) );
 		}
@@ -175,7 +175,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination, cons
 			m_mergingFile->addFile( m_destination );
 
 			// Make temporary backup of original conf file
-			KIO::file_copy( QUrl( m_destination ), QUrl( backupPath + "merging.orig" ) , m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
+			KIO::file_copy( QUrl::fromLocalFile( m_destination ), QUrl::fromLocalFile( backupPath + "merging.orig" ) , m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
 		}
 	}
 }
@@ -212,13 +212,13 @@ void EtcUpdate::slotCleanupDiff()
 		destination.replace( "/", ":" );
 
 		//Change this to a move instead of copy so we don't leave the temp file around
-		KIO::file_move( QUrl( backupPath + "merging.orig" ), QUrl( backupPathDir + destination + ".orig" ), m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
-		KIO::file_copy( QUrl( m_destination ), QUrl( backupPathDir + destination ), m_mergedMode, KIO::Overwrite );
+		KIO::file_move( QUrl::fromLocalFile( backupPath + "merging.orig" ), QUrl::fromLocalFile( backupPathDir + destination + ".orig" ), m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
+		KIO::file_copy( QUrl::fromLocalFile( m_destination ), QUrl::fromLocalFile( backupPathDir + destination ), m_mergedMode, KIO::Overwrite );
 
 		//This is only necessary because it seems that kdiff3 rewrites the mode.
-		KIO::chmod( QUrl( m_destination ), m_mergedMode );
+		KIO::chmod( QUrl::fromLocalFile( m_destination ), m_mergedMode );
 
-		KIO::file_delete( QUrl( m_source ) );
+		KIO::file_delete( QUrl::fromLocalFile( m_source ) );
 
 		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2.", m_source, kurooDir + "backup" ), KUROO );
 

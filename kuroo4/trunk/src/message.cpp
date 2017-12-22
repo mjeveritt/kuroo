@@ -46,7 +46,7 @@ Message::Message( QWidget *parent )
 	setupUi(mainWidget);
 	//i18n("Message"), false, i18n("Message"), , , false
 	//enable the OK button and an extra button which we will use to copy the text to the clipboard
-	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
 	QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
 	okButton->setDefault(true);
 	okButton->setShortcut(Qt::CTRL | Qt::Key_Return);

@@ -89,7 +89,7 @@ bool mergeDirIntoFile( QString dirPath ) {
 	}
 
 	//And write the new file in it's place
-	KIO::file_move( QUrl(dirPath + ".temp"), QUrl(dirPath), -1, KIO::Overwrite | KIO::HideProgressInfo );
+	KIO::file_move( QUrl::fromLocalFile(dirPath + ".temp"), QUrl::fromLocalFile(dirPath), -1, KIO::Overwrite | KIO::HideProgressInfo );
 	return true;
 }
 

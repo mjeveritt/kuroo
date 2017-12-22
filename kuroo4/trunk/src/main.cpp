@@ -30,7 +30,7 @@
 #include <KDebug>
 #include <QCommandLineParser>
 
-static const char version[] = "kuroo-0.90.5";
+static const char version[] = "kuroo-17.12.0";
 
 int main( int argc, char **argv )
 {
@@ -77,6 +77,7 @@ int main( int argc, char **argv )
 		Kuroo *mainWindow = new Kuroo();
 		mainWindow->setObjectName( "kuroo" );
 		mainWindow->show();
+		//app.connect( app, SIGNAL( lastWindowClosed() ), app, SLOT( quit() ) );
 	}
 
 	return app.exec();

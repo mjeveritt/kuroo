@@ -26,7 +26,7 @@
 
 #include <QDebug>
 #include <QDir>
-#include <../build/src/settings.h>
+#include "settings.h"
 #include <ThreadWeaver/Job>
 #include <ThreadWeaver/JobPointer>
 #include <ThreadWeaver/QObjectDecorator>

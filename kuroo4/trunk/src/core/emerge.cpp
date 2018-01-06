@@ -21,7 +21,7 @@
 #include "common.h"
 #include "message.h"
 #include "statusbar.h"
-//#include "settings.h"
+#include "settings.h"
 
 #include <QTextCodec>
 #include <QDebug>
@@ -32,7 +32,6 @@
 
 #include <signal.h>
 #include <KLocalizedString>
-#include <../build/src/settings.h>
 
 /**
  * @class Emerge

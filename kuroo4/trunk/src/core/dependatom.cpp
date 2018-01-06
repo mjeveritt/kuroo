@@ -52,7 +52,9 @@ PortageAtom::PortageAtom( PackageBase* portagePackage )
 			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
 			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
 			"(?:-r\\d*)?"  								// revision
-			"\\*?)?$"          							// end of the (optional) version part and the atom string
+			"\\*?)?"          							// end of the (optional) version part and the atom string
+			"(?::.*)?"									// slot
+			"(?:\\w*#.*)?$"									// line comment
 		),
 	rxVersion(
 		"^"
@@ -77,7 +79,9 @@ PortageAtom::PortageAtom( const QString& atom )
 			"(?:-\\d*(?:\\.\\d+)*[a-z]?)"				// base version number, including wildcard version matching (*)
 			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?"			// version suffix
 			"(?:-r\\d*)?"								// revision
-			"\\*?)?$"									// end of the (optional) version part and the atom string
+			"\\*?)?"									// end of the (optional) version part and the atom string
+			"(?::.*)?"									// slot
+			"(?:\\w*#.*)?$"									// line comment
 		),
 	rxVersion(
 		"^"

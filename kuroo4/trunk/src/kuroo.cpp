@@ -114,7 +114,8 @@ void Kuroo::setupActions()
 	KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 
 	QAction * actionReleaseInfo = new QAction( i18n("&Release information"), this );
-	actionReleaseInfo->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_W ) );
+	//actionReleaseInfo->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_W ) );
+	actionCollection()->setDefaultShortcut( actionReleaseInfo,  QKeySequence( Qt::CTRL + Qt::Key_W ) );
 	actionCollection()->addAction( "information", actionReleaseInfo );
 	connect(actionReleaseInfo, &QAction::triggered, this, &Kuroo::introWizard);
 	/*
@@ -124,18 +125,21 @@ void Kuroo::setupActions()
 	actionReleaseInfo->setShortcut(  );
 	*/
 	actionRefreshPortage = new QAction( i18n("&Refresh Packages"), this );
-	actionRefreshPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_P ) );
-		//PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	//actionRefreshPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_P ) );
+	//PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
+	actionCollection()->setDefaultShortcut( actionRefreshPortage, QKeySequence( Qt::CTRL + Qt::Key_P ) );
 	actionCollection()->addAction( "refresh_portage", actionRefreshPortage );
 	connect( actionRefreshPortage, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefresh() ) );
 
 	actionRefreshUpdates = new QAction( i18n("&Refresh Updates"), this );
-	actionRefreshUpdates->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_U ));
+	//actionRefreshUpdates->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_U ));
+	actionCollection()->setDefaultShortcut( actionRefreshUpdates, QKeySequence( Qt::CTRL + Qt::Key_U ) );
 	actionCollection()->addAction( "refresh_updates", actionRefreshUpdates );
 	connect( actionRefreshUpdates, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefreshUpdates()) );
 
 	actionSyncPortage = new QAction( i18n("&Sync Portage"), this );
-	actionSyncPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_S ) );
+	//actionSyncPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_S ) );
+	actionCollection()->setDefaultShortcut( actionSyncPortage, QKeySequence( Qt::CTRL + Qt::Key_S ) );
 	actionCollection()->addAction( "sync_portage", actionSyncPortage );
 	connect(actionSyncPortage, &QAction::triggered, this, &Kuroo::slotSync);
 	/*

@@ -189,7 +189,7 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 				for ( QStringList::Iterator itPackage = packageList.begin(), itPackageEnd = packageList.end(); itPackage != itPackageEnd; ++itPackage ) {
 
 					//That metadata.xml seems idempotent, it only exists in the real tree, not the cache tree
-					if ( *itPackage == "." || *itPackage == ".." || *itPackage == "metadata.xml" || (*itPackage).contains("MERGING") )
+					if ( *itPackage == "." || *itPackage == ".." || *itPackage == "metadata.xml" || *itPackage == "Manifest.gz" || (*itPackage).contains("MERGING") )
 						continue;
 
                     /*// Abort the scan

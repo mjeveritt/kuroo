@@ -132,5 +132,5 @@ target_link_libraries( kuroo
 install( TARGETS kuroo ${INSTALL_TARGETS_DEFAULT_ARGS} )
 #install( FILES  DESTINATION ${DATA_INSTALL_DIR}/autostart )
 install( FILES  config/kurooconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  kurooui.rc DESTINATION ${DATA_INSTALL_DIR}/kuroo )
+install( FILES  kurooui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kuroo )
 install( FILES  kuroo.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/System )

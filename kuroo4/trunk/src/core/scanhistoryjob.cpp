@@ -35,11 +35,15 @@
  * @short Thread for parsing emerge/unmerge/sync entries found in emerge.log.
  */
 ScanHistoryJob::ScanHistoryJob( const QStringList& logLines )
-    : ThreadWeaver::QObjectDecorator( this ),
+    : ThreadWeaver::QObjectDecorator( new ScanHistoryJobImpl( logLines ) )
+{}
+
+ScanHistoryJobImpl::ScanHistoryJobImpl(const QStringList& logLines) : ThreadWeaver::Job(),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_logLines( logLines )
 {}
 
-ScanHistoryJob::~ScanHistoryJob()
+
+ScanHistoryJobImpl::~ScanHistoryJobImpl()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
@@ -52,7 +56,7 @@ ScanHistoryJob::~ScanHistoryJob()
  * add emerge duration and increment emerge counts.
  * @return success
  */
-void ScanHistoryJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
+void ScanHistoryJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	if ( !m_db->isConnected() ) {
 		qCritical() << "Parsing emerge.log. Can not connect to database";
@@ -182,7 +186,7 @@ void ScanHistoryJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 	SignalistSingleton::Instance()->scanHistoryComplete();
 }
 
-QString ScanHistoryJob::escapeString(const QString& str) const {
+QString ScanHistoryJobImpl::escapeString(const QString& str) const {
 	QString result=str;
 	return result.replace('\'', "''");
 }

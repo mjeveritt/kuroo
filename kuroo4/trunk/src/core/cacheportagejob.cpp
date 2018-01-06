@@ -39,12 +39,15 @@
  * Portage cache is scanned for package sizes, and stored in portage cache map and in the database.
  */
 CachePortageJob::CachePortageJob()
-    : ThreadWeaver::QObjectDecorator(this),
+    : ThreadWeaver::QObjectDecorator(new CachePortageJobImpl())
+{}
+
+CachePortageJobImpl::CachePortageJobImpl() : ThreadWeaver::Job(),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {
 }
 
-CachePortageJob::~CachePortageJob()
+CachePortageJobImpl::~CachePortageJobImpl()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 }
@@ -52,7 +55,7 @@ CachePortageJob::~CachePortageJob()
 /**
  * Scan for package size found in digest files.
  */
-void CachePortageJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
+void CachePortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	DEBUG_LINE_INFO;
 	if ( !m_db->isConnected() ) {

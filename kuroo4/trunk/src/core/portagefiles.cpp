@@ -344,9 +344,9 @@ void PortageFiles::loadPackageFiles()
 		KurooStatusBar::instance()->setProgressStatus( QString::null, i18n("Done."));
 }
 
-void PortageFiles::loadPackageKeywords()
+void PortageFiles::loadPackageUserMask()
 {
-	ThreadWeaver::Queue::instance()->stream() << new LoadPackageKeywordsJob();
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageUserMaskJob();
 }
 
 void PortageFiles::loadPackageUnmask()
@@ -354,9 +354,9 @@ void PortageFiles::loadPackageUnmask()
 	ThreadWeaver::Queue::instance()->stream() << new LoadPackageUserUnMaskJob();
 }
 
-void PortageFiles::loadPackageUserMask()
+void PortageFiles::loadPackageKeywords()
 {
-	ThreadWeaver::Queue::instance()->stream() << new LoadPackageUserMaskJob();
+	ThreadWeaver::Queue::instance()->stream() << new LoadPackageKeywordsJob();
 }
 
 void PortageFiles::loadPackageUse()

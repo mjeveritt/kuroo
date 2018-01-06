@@ -36,8 +36,13 @@ class DbConnection;
 class CachePortageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
-    CachePortageJob();
-    ~CachePortageJob();
+	CachePortageJob();
+};
+class CachePortageJobImpl : public ThreadWeaver::Job
+{
+public:
+	CachePortageJobImpl();
+	~CachePortageJobImpl();
 
 protected:
 	virtual void				run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* );

@@ -31,14 +31,10 @@
 #include "cacheportagejob.h"
 #include "scanupdatesjob.h"
 
-/**
-* @class AddInstalledPackageJob
-* @short Thread for registrating packages as installed in db.
-*/
-class AddInstalledPackageJob : public ThreadWeaver::QObjectDecorator
+class AddInstalledPackageJobImpl : public ThreadWeaver::Job
 {
 public:
-	AddInstalledPackageJob( const QString& package ) : ThreadWeaver::QObjectDecorator( this ), m_package( package ) {}
+	AddInstalledPackageJobImpl( const QString& package ) : ThreadWeaver::Job(), m_package( package ) {}
 
 	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
@@ -87,15 +83,21 @@ public:
 private:
 	const QString m_package;
 };
-
 /**
-* @class RemoveInstalledPackageJob
-* @short Thread for removing packages as installed in db.
+* @class AddInstalledPackageJob
+* @short Thread for registrating packages as installed in db.
 */
-class RemoveInstalledPackageJob : public ThreadWeaver::QObjectDecorator
+class AddInstalledPackageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
-	RemoveInstalledPackageJob( const QString& package ) : ThreadWeaver::QObjectDecorator( this ), m_package( package ) {}
+	AddInstalledPackageJob( const QString& package )
+	: ThreadWeaver::QObjectDecorator( new AddInstalledPackageJobImpl( package ) ) {}
+};
+
+class RemoveInstalledPackageJobImpl : public ThreadWeaver::Job
+{
+public:
+	RemoveInstalledPackageJobImpl( const QString& package ) : ThreadWeaver::Job(), m_package( package ) {}
 
 	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 		QStringList parts = parsePackage( m_package );
@@ -156,13 +158,21 @@ private:
 };
 
 /**
-* @class CheckUpdatesPackageJob
-* @short Thread for marking packages as updates or downgrades.
+* @class RemoveInstalledPackageJob
+* @short Thread for removing packages as installed in db.
 */
-class CheckUpdatesPackageJob : public ThreadWeaver::QObjectDecorator
+class RemoveInstalledPackageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
-	CheckUpdatesPackageJob( const QString& id, const QString& updateVersion, int hasUpdate ) : ThreadWeaver::QObjectDecorator( this ),
+	RemoveInstalledPackageJob( const QString& package )
+	: ThreadWeaver::QObjectDecorator( new RemoveInstalledPackageJobImpl( package ) ) {}
+};
+
+class CheckUpdatesPackageJobImpl : public ThreadWeaver::Job
+{
+public:
+	CheckUpdatesPackageJobImpl( const QString& id, const QString& updateVersion, int hasUpdate )
+	: ThreadWeaver::Job(),
 		m_id( id ), m_updateVersion( updateVersion ), m_hasUpdate( hasUpdate ) {}
 
 	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
@@ -194,6 +204,16 @@ public:
 private:
 	const 	QString m_id, m_updateVersion;
 	int 	m_hasUpdate;
+};
+/**
+* @class CheckUpdatesPackageJob
+* @short Thread for marking packages as updates or downgrades.
+*/
+class CheckUpdatesPackageJob : public ThreadWeaver::QObjectDecorator
+{
+public:
+	CheckUpdatesPackageJob( const QString& id, const QString& updateVersion, int hasUpdate )
+		: ThreadWeaver::QObjectDecorator( new CheckUpdatesPackageJobImpl( id, updateVersion, hasUpdate ) ) {}
 };
 
 
@@ -524,7 +544,7 @@ void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int
 
 void Portage::slotWeaverDone(ThreadWeaver::JobPointer job)
 {
-	//WARN: Is & really safe here
-	delete &job;
+	//WARN: Hope that QSharedPointer takes care of this so it doesn't leak memory
+	//delete job;
 }
 

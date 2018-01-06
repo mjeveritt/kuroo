@@ -27,15 +27,10 @@
 #include "common.h"
 #include "portagefiles.h"
 
-/**
-* @class: LoadPackageUseJob
-* @short: Thread for loading packages use into db.
-*/
-class LoadPackageUseJob : public ThreadWeaver::QObjectDecorator//, public ThreadWeaver::Job
+class LoadPackageUseJobImpl : public ThreadWeaver::Job
 {
 public:
-	LoadPackageUseJob() : ThreadWeaver::QObjectDecorator(this)//, ThreadWeaver::Job()
-	{}
+	LoadPackageUseJobImpl() : ThreadWeaver::Job() {}
 
 	virtual void run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* ) {
 
@@ -103,4 +98,14 @@ public:
 // 	virtual void completeJob() {
 		PortageFilesSingleton::Instance()->refresh( PACKAGE_USER_USE_SCANNED );
 	}
+};
+/**
+* @class: LoadPackageUseJob
+* @short: Thread for loading packages use into db.
+*/
+class LoadPackageUseJob : public ThreadWeaver::QObjectDecorator//, public ThreadWeaver::Job
+{
+public:
+	LoadPackageUseJob() : ThreadWeaver::QObjectDecorator(new LoadPackageUseJobImpl())//, ThreadWeaver::Job()
+	{}
 };

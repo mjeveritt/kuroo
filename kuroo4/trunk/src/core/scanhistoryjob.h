@@ -41,7 +41,12 @@ class ScanHistoryJob : public ThreadWeaver::QObjectDecorator
 {
 public:
 	ScanHistoryJob( const QStringList& logLines = QStringList() );
-	~ScanHistoryJob();
+};
+class ScanHistoryJobImpl : public ThreadWeaver::Job
+{
+public:
+	ScanHistoryJobImpl( const QStringList& logLines = QStringList() );
+	~ScanHistoryJobImpl();
 
 private:
     void 						run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* );

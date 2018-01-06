@@ -37,7 +37,12 @@ class ScanUpdatesJob : public ThreadWeaver::QObjectDecorator
 {
 public:
 	ScanUpdatesJob( const EmergePackageList &packageList );
-	~ScanUpdatesJob();
+};
+class ScanUpdatesJobImpl : public ThreadWeaver::Job
+{
+public:
+	ScanUpdatesJobImpl( const EmergePackageList &packageList );
+	~ScanUpdatesJobImpl();
 
 protected:
     void 						run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* );

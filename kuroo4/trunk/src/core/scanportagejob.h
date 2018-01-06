@@ -39,7 +39,12 @@ class ScanPortageJob : public ThreadWeaver::QObjectDecorator
 {
 public:
 	ScanPortageJob();
-	~ScanPortageJob();
+};
+class ScanPortageJobImpl : public ThreadWeaver::Job
+{
+public:
+	ScanPortageJobImpl();
+	~ScanPortageJobImpl();
 
 protected:
 

@@ -44,11 +44,13 @@
  * All packages are stored in table "package" in the database.
  */
 ScanPortageJob::ScanPortageJob()
-    : ThreadWeaver::QObjectDecorator( this ),
+    : ThreadWeaver::QObjectDecorator( new ScanPortageJobImpl() )
+{}
+ScanPortageJobImpl::ScanPortageJobImpl() : ThreadWeaver::Job(),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() )
 {}
 
-ScanPortageJob::~ScanPortageJob()
+ScanPortageJobImpl::~ScanPortageJobImpl()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
@@ -60,7 +62,7 @@ ScanPortageJob::~ScanPortageJob()
  * Scan Portage cache for packages in portage tree. Inserting found packages in db.
  * @return success
  */
-void ScanPortageJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
+void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	DEBUG_LINE_INFO;
 	int count = 0;
@@ -336,7 +338,7 @@ void ScanPortageJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 /**
  * Collect list of installed packages.
  */
-void ScanPortageJob::scanInstalledPackages()
+void ScanPortageJobImpl::scanInstalledPackages()
 {
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -410,7 +412,7 @@ void ScanPortageJob::scanInstalledPackages()
  * @param version
  * @return  false if the file can't be opened, true otherwise.
  */
-Info ScanPortageJob::scanInfo( const QString& path, const QString& category, const QString& name, const QString& version )
+Info ScanPortageJobImpl::scanInfo( const QString& path, const QString& category, const QString& name, const QString& version )
 {
 //WARN: This won't work for anything but /usr/portage for now!
 	Info info;
@@ -539,7 +541,7 @@ Info ScanPortageJob::scanInfo( const QString& path, const QString& category, con
  * @param size
  * @return total		as "xxx kB"
  */
-QString ScanPortageJob::formatSize( const QString& size )
+QString ScanPortageJobImpl::formatSize( const QString& size )
 {
 	KLocale *loc = KLocale::global();
 	QString total;
@@ -556,7 +558,7 @@ QString ScanPortageJob::formatSize( const QString& size )
 /**
  * Load m_mapCache with items from DB.
  */
-void ScanPortageJob::loadCache()
+void ScanPortageJobImpl::loadCache()
 {
 	m_mapCache.clear();
 	const QStringList cacheList = KurooDBSingleton::Instance()->query( "SELECT package, size FROM cache ;", m_db );
@@ -573,7 +575,7 @@ void ScanPortageJob::loadCache()
  * @param packages
  * @return size or NULL if na
  */
-QString ScanPortageJob::cacheFind( const QString& package )
+QString ScanPortageJobImpl::cacheFind( const QString& package )
 {
 	QMap<QString, QString>::iterator it = m_mapCache.find( package ) ;
 	if ( it != m_mapCache.end() )

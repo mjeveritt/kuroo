@@ -18,9 +18,10 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
-#include <KDirWatch>
 #include <QDateTime>
+#include <QSharedPointer>
 
+#include <KDirWatch>
 #include <ThreadWeaver/Job>
 #include <ThreadWeaver/JobPointer>
 #include <ThreadWeaver/Thread>
@@ -409,6 +410,7 @@ eLogVector History::getELogs()
 
 void History::slotWeaverDone(ThreadWeaver::JobPointer job)
 {
-	delete &job;
+	//TODO: hope that QSharedPointer cleans this up and it doesn't leak memory
+	//delete (QSharedPointer<ThreadWeaver::JobInterface>) job;
 }
 

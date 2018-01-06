@@ -38,11 +38,13 @@
 * @short Thread for loading 'emerge -uDpv World' output into db.
 */
 ScanUpdatesJob::ScanUpdatesJob( const EmergePackageList &packageList )
-	: ThreadWeaver::QObjectDecorator( this ),
+	: ThreadWeaver::QObjectDecorator( new ScanUpdatesJobImpl( packageList ) )
+{}
+ScanUpdatesJobImpl::ScanUpdatesJobImpl( const EmergePackageList &packageList ) : ThreadWeaver::Job(),
 	m_db( KurooDBSingleton::Instance()->getStaticDbConnection() ), m_packageList( packageList )
 {}
 
-ScanUpdatesJob::~ScanUpdatesJob()
+ScanUpdatesJobImpl::~ScanUpdatesJobImpl()
 {
 	KurooDBSingleton::Instance()->returnStaticDbConnection( m_db );
 
@@ -54,7 +56,7 @@ ScanUpdatesJob::~ScanUpdatesJob()
 * Insert found updates into db.
 * @return success
 */
-void ScanUpdatesJob::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
+void ScanUpdatesJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	if ( !m_db->isConnected() ) {
 		qCritical() << "Scanning updates. Can not connect to database";

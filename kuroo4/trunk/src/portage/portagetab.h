@@ -21,7 +21,11 @@
 #ifndef PORTAGETAB_H
 #define PORTAGETAB_H
 
-#include <qobject.h>
+#include <QAction>
+#include <QButtonGroup>
+#include <QMenu>
+#include <QObject>
+#include <QWidget>
 
 #include "ui_portagebase.h"
 #include "scanportagejob.h"
@@ -96,6 +100,8 @@ private:
 
 	// Actions for the context menu
 	QAction *m_packageDetails, *m_addToQueue, *m_removeFromQueue, *m_removeFromWorld, *m_addToWorld, *m_uninstallPackage, *m_quickPackage;
+	
+	QButtonGroup*		filterButtonGroup;
 
 signals:
 	void				signalChanged();

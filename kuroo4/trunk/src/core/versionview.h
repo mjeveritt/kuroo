@@ -27,7 +27,7 @@ class VersionView : public QTreeWidget
 {
 	Q_OBJECT
 public:
-	VersionView( QWidget *parent = 0, const QString& name = 0 );
+	VersionView( QWidget *parent = 0/*, const QString& name = 0 */);
 	~VersionView();
 
 	/**

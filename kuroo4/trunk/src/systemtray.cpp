@@ -59,9 +59,7 @@ SystemTray::SystemTray( QWidget *parent )
 }
 
 SystemTray::~SystemTray()
-{
-
-}
+{}
 
 /*void SystemTray::activate()
 {

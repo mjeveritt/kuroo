@@ -31,7 +31,7 @@ class DependencyView : public QTreeWidget
 {
 Q_OBJECT
 public:
-	DependencyView( QWidget *parent = 0, const char *name = 0 );
+	DependencyView( QWidget *parent = 0/*, const char *name = 0 */);
 	~DependencyView();
 
 	class 			DependencyItem;

@@ -22,7 +22,11 @@
 #include "statusbar.h"
 #include "signalist.h"
 
+#include <QMap>
+#include <QProgressBar>
+#include <QString>
 #include <QTimer>
+#include <QWidget>
 
 KurooStatusBar* KurooStatusBar::s_instance = 0;
 
@@ -36,7 +40,7 @@ KurooStatusBar* KurooStatusBar::s_instance = 0;
 * last constant message if any. The message stack is fifo.
 */
 KurooStatusBar::KurooStatusBar( QWidget *parent )
-	: KStatusBar( parent ), statusBarProgress( 0 )//, statusBarLabel( 0 )
+	: QStatusBar( parent ), statusBarProgress( 0 )//, statusBarLabel( 0 )
 {
 	s_instance = this;
 

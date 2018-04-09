@@ -66,6 +66,7 @@ PortageAtom::PortageAtom( PackageBase* portagePackage )
 		"\\*?)$"          							// end of the (optional) version part and the atom string
 	), m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
+	rxAtom.setMinimal(true);	//Versions without a . in them were greedily matched into the package name
 }
 
 PortageAtom::PortageAtom( const QString& atom )

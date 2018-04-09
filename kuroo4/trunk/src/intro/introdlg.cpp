@@ -36,7 +36,7 @@
  * @class IntroDlg
  * @short Kuroo introduction wizard.
  */
-IntroDlg::IntroDlg( QWidget* parent )
+IntroDlg::IntroDlg( /*QWidget* parent */)
 {
 	setupUi( this );
 	setWindowTitle( "Kuroo-" + KurooConfig::hardVersion() );

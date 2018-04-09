@@ -544,6 +544,8 @@ void Portage::checkUpdates( const QString& id, const QString& emergeVersion, int
 
 void Portage::slotWeaverDone(ThreadWeaver::JobPointer job)
 {
+	Q_UNUSED(job);
+	DEBUG_LINE_INFO;
 	//WARN: Hope that QSharedPointer takes care of this so it doesn't leak memory
 	//delete job;
 }

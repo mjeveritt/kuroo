@@ -59,7 +59,7 @@ QString MergeListView::MergeItem::destination()
  * @class MergeListView
  * @short Specialized listview for emerge history.
  */
-MergeListView::MergeListView( QWidget *parent, const QString& name )
+MergeListView::MergeListView( QWidget *parent/*, const QString& name */)
     : QTreeWidget( parent ), m_loc( KLocale::global() )
 {
     setHeaderLabel( i18n("Configuration file") );

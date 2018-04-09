@@ -33,7 +33,7 @@ class MergeListView : public QTreeWidget
 {
 Q_OBJECT
 public:
-    MergeListView(QWidget *parent = 0, const QString& name = 0);
+    MergeListView(QWidget *parent = 0/*, const QString& name = 0*/);
 	~MergeListView();
 	
 	class			MergeItem;

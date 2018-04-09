@@ -210,10 +210,10 @@ void History::slotParse()
 			if ( line.contains( ">>> emerge" ) && isEmerging ) {
 				DEBUG_LINE_INFO;
 				if ( rxPackage.indexIn( line ) > -1 ) {
-					int order = rxPackage.cap(2).toInt();
-					int total = rxPackage.cap(4).toInt();
+					/*int order = rxPackage.cap(2).toInt();
+					int total = rxPackage.cap(4).toInt();*/
 					QString package = rxPackage.cap(6);
-					QueueSingleton::Instance()->emergePackageStart( package, order, total );
+					QueueSingleton::Instance()->emergePackageStart( package/*, order, total */);
 				}
 				else
 					qWarning() << QString("Can not parse package emerge start in %1: %2")
@@ -226,10 +226,10 @@ void History::slotParse()
 				scanELog();
 
 				if ( rxPackage.indexIn( line ) > -1 ) {
-					int order = rxPackage.cap(2).toInt();
-					int total = rxPackage.cap(4).toInt();
+					/*int order = rxPackage.cap(2).toInt();
+					int total = rxPackage.cap(4).toInt();*/
 					QString package = rxPackage.cap(6);
-					QueueSingleton::Instance()->emergePackageComplete( package, order, total );
+					QueueSingleton::Instance()->emergePackageComplete( package/*, order, total */);
 					//TODO: This causes a full reload of PackageListView
 					PortageSingleton::Instance()->addInstalledPackage( package );
 					emit signalHistoryChanged();
@@ -410,6 +410,7 @@ eLogVector History::getELogs()
 
 void History::slotWeaverDone(ThreadWeaver::JobPointer job)
 {
+	Q_UNUSED(job);
 	//TODO: hope that QSharedPointer cleans this up and it doesn't leak memory
 	//delete (QSharedPointer<ThreadWeaver::JobInterface>) job;
 }

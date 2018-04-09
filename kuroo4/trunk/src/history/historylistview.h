@@ -39,7 +39,7 @@ class HistoryListView : public QTreeWidget
 {
 Q_OBJECT
 public:
-	HistoryListView( QWidget *parent = 0, const char *name = 0 );
+	HistoryListView( QWidget *parent = 0/*, const char *name = 0 */);
 	~HistoryListView();
 
 	class			HistoryItem;

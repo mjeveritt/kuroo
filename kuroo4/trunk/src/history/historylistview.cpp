@@ -53,7 +53,7 @@ QString HistoryListView::HistoryItem::einfo()
 * @class HistoryListView
 * @short Specialized listview for emerge history.
 */
-HistoryListView::HistoryListView( QWidget *parent, const char *name )
+HistoryListView::HistoryListView( QWidget *parent/*, const char *name */)
 	: QTreeWidget( parent /*, name*/ ), m_loc( KLocale::global() )
 {
 	setColumnCount( 3 );

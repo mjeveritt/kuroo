@@ -36,7 +36,7 @@
 * @class HistoryTab
 * @short Tabpage for emerge log browser.
 */
-HistoryTab::HistoryTab( QWidget* parent )
+HistoryTab::HistoryTab( /*QWidget* parent */)
 {
 	setupUi( this );
 	// Connect What's this button

@@ -204,6 +204,8 @@ void Kuroo::slotSync()
 
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();
+		default:
+			break;
 	}
 }
 
@@ -226,7 +228,7 @@ void Kuroo::slotPreferences()
 void Kuroo::introWizard()
 {
 	if ( !wizardDialog )
-		wizardDialog = new IntroDlg( this );
+		wizardDialog = new IntroDlg( /*this */);
 
 	wizardDialog->show();
 }
@@ -292,6 +294,8 @@ void Kuroo::slotWait()
 				//ThreadWeaver::Queue::instance()->abortAllJobsNamed( "CachePortageJob" );
 				QTimer::singleShot( 500, this, SLOT( slotTerminate() ) );
 			}
+			default:
+				break;
 		}
 	}
 	else

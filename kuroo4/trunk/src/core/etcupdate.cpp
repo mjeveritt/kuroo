@@ -88,7 +88,7 @@ void EtcUpdate::slotEtcUpdate()
 /**
 * Scan each confProtect dirs.
 */
-void EtcUpdate::slotFinished(KJob* j)
+void EtcUpdate::slotFinished(/*KJob* j*/)
 {
 	if ( m_configProtectList.count() > 0 ) {
 		m_configProtectDir = m_configProtectList.takeFirst();
@@ -127,7 +127,7 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 /**
 * Launch diff tool with first etc-file in list.
 */
-void EtcUpdate::runDiff( const QString& source, const QString& destination, const bool& isNew )
+void EtcUpdate::runDiff( const QString& source, const QString& destination/*, const bool& isNew */)
 {
 	struct stat st;
 

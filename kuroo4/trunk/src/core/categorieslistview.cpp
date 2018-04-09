@@ -35,7 +35,7 @@ CategoriesView::CategoryItem::CategoryItem( QTreeWidget* parent, const QString& 
 /**
  * Paint empty categories in italic and grey when empty.
  */
-void CategoriesView::CategoryItem::paintCell( QPainter *p, int column, int width, int alignment )
+void CategoriesView::CategoryItem::paintCell( QPainter *p/*, int column, int width*/, int alignment )
 {
 	QFont font( p->font() );
 
@@ -58,7 +58,7 @@ void CategoriesView::CategoryItem::paintCell( QPainter *p, int column, int width
  * @class CategoriesListView
  * @short Base class for category listview.
  */
-CategoriesView::CategoriesView( QWidget *parent, const char *name )
+CategoriesView::CategoriesView( QWidget *parent/*, const char *name */)
 : QTreeWidget( parent/*, name */), m_focus( i18n("All") ), categories( 0 )
 {
 	//setFullWidth( true );
@@ -77,7 +77,7 @@ CategoriesView::~CategoriesView()
  * Retreive focus category when a new category is made current.
  * @categoryItem*
  */
-void CategoriesView::slotStoreFocus( QTreeWidgetItem* current, QTreeWidgetItem* previous )
+void CategoriesView::slotStoreFocus( QTreeWidgetItem* current/*, QTreeWidgetItem* previous */)
 {
 	//WARN: This shouldn't ever be null, need to fix
 	if (NULL != current)
@@ -90,7 +90,7 @@ void CategoriesView::slotStoreFocus( QTreeWidgetItem* current, QTreeWidgetItem* 
  * Retreive last focus category from internal index, and making that category current.
  * bool is this triggered by filter action?
  */
-void CategoriesView::restoreFocus( const bool& isFiltered )
+void CategoriesView::restoreFocus( /*const bool& isFiltered */)
 {
 	QMultiHash<QString, CategoryItem>::iterator focusCategory = m_categoryIndex.find( m_focus );
 	if( focusCategory == m_categoryIndex.end() ) {
@@ -133,8 +133,8 @@ const QString CategoriesView::currentCategoryId() const
  * First all available categories are inserted.
  * When a category has no subcategory it is marked in gray and italic = off.
  */
-CategoriesListView::CategoriesListView( QWidget *parent, const char *name )
-	: CategoriesView( parent, name )
+CategoriesListView::CategoriesListView( QWidget *parent/*, const char *name*/ )
+	: CategoriesView( parent/*, name */)
 {
 	setRootIsDecorated(false);
 	setUniformRowHeights(true);
@@ -192,7 +192,7 @@ void CategoriesListView::init()
  * View available categories.
  * @param categoriesList list category id
  */
-void CategoriesListView::loadCategories( const QStringList& categoriesList, bool isFiltered )
+void CategoriesListView::loadCategories( const QStringList& categoriesList/*, bool isFiltered */)
 {
 	// Set all categories off = empty
 	for ( Categories::iterator it = categories.begin() + 1; it != categories.end(); ++it )
@@ -203,7 +203,7 @@ void CategoriesListView::loadCategories( const QStringList& categoriesList, bool
 		categories[ cat.toInt() ]->setOn( true );
 
 	// After all categories are loaded try restoring last known focus-category
-	restoreFocus( isFiltered );
+	restoreFocus(/* isFiltered */);
 
 	QHeaderView *hh = header();
 	hh->setResizeMode(0, QHeaderView::ResizeToContents);
@@ -223,8 +223,8 @@ QSize CategoriesListView::sizeHint() const
  *
  * Specialized listview to view available subcategories and marking empty as off.
  */
-SubCategoriesListView::SubCategoriesListView( QWidget *parent, const char *name )
-	: CategoriesView( parent, name )
+SubCategoriesListView::SubCategoriesListView( QWidget *parent/*, const char *name */)
+	: CategoriesView( parent/*, name */)
 {
 	setRootIsDecorated(false);
 	setUniformRowHeights(true);
@@ -322,7 +322,7 @@ void SubCategoriesListView::loadCategories( const QStringList& categoriesList )
 	//setColumnWidth( 0, 25 );
 
 	// After all categories are loaded try restoring last known focus-category
-	restoreFocus( false );
+	restoreFocus(/* false */);
 }
 
 QSize SubCategoriesListView::sizeHint() const

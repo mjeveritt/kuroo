@@ -21,19 +21,21 @@
 #ifndef STATUSBAR_H
 #define STATUSBAR_H
 
+#include <QMap>
 #include <QProgressBar>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
 
-#include <KStatusBar>
+#include <QStatusBar>
 
 #include "signalist.h"
-
-class QTimer;
 
 /**
  * @class KurooStatusBar
  * @short Singleton statusbar with label and progressbar.
  */
-class KurooStatusBar : public KStatusBar
+class KurooStatusBar : public QStatusBar
 {
 Q_OBJECT
 	static KurooStatusBar* s_instance;

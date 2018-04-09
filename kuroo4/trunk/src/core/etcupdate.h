@@ -34,7 +34,7 @@ class EtcUpdate : public QObject
 {
 Q_OBJECT
 public:
-    EtcUpdate( QObject *m_parent = 0, const char *name = 0 ) : QObject( m_parent ) {}
+    EtcUpdate( QObject *m_parent = 0/*, const char *name = 0*/ ) : QObject( m_parent ) {}
     ~EtcUpdate() { delete eProc; eProc = 0; }
 
 	void				init( QObject *parent = 0 );
@@ -46,7 +46,7 @@ public:
 	 * Return backup files found in /var/cache/kuroo/backup/configuration.
 	 */
 	inline QStringList	backupFilesList() const { return m_backupFilesList; }
-	void				runDiff( const QString& source, const QString& destination, const bool& isNew );
+	void				runDiff( const QString& source, const QString& destination/*, const bool& isNew */);
 	void				startScan();
 
 public slots:
@@ -54,7 +54,7 @@ public slots:
 
 private slots:
 	void				slotChanged();
-	void				slotFinished(KJob* j = 0);
+	void				slotFinished(/*KJob* j = 0*/);
 	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
 	void				slotCleanupDiff();
 

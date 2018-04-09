@@ -286,7 +286,7 @@ void Queue::deleteFromCache( const QString& id )
 * Start the package installation timer.
 * @param package
 */
-void Queue::emergePackageStart( const QString& package, int order, int total )
+void Queue::emergePackageStart( const QString& package/*, int order, int total */)
 {
 	DEBUG_LINE_INFO;
 	QString id = KurooDBSingleton::Instance()->packageId( package );
@@ -318,7 +318,7 @@ void Queue::unpauseEmerge()
 * Set package progress as 100% = complete.
 * @param package
 */
-void Queue::emergePackageComplete( const QString& package, int order, int total )
+void Queue::emergePackageComplete( const QString& package/*, int order, int total */)
 {
 	//m_isQueueBusy = false;
 	m_internalTimer->stop();

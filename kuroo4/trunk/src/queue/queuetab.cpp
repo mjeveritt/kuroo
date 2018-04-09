@@ -436,6 +436,8 @@ void QueueTab::slotGo()
 					packageList.prepend( "--fetch-all-uri" );
 					QueueSingleton::Instance()->installQueue( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
+				default:
+					break;
 			}
 	}
 	else {
@@ -458,6 +460,8 @@ void QueueTab::slotGo()
 					QueueSingleton::Instance()->installQueue( packageList );
 					KurooStatusBar::instance()->setTotalSteps( queueView->totalDuration() );
 				}
+				default:
+					break;
 			}
 	}
 }
@@ -479,6 +483,8 @@ void QueueTab::slotStop()
 				// added a log entry for the abort
 				LogSingleton::Instance()->writeLog( i18n("Emerge aborted by user."), KUROO );
 				SignalistSingleton::Instance()->emergeAborted();
+			default:
+				break;
 		}
 }
 

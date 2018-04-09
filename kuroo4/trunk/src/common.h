@@ -134,8 +134,8 @@ struct Info {
 };
 
 /// Announce a line
-//#define LINE_INFO " ( " << k_funcinfo << "Line: " << __LINE__ << " )" << endl
-#define DEBUG_LINE_INFO qDebug()
+#define LINE_INFO " ( " << __FILE__ << "Line: " << __LINE__ << " )"
+#define DEBUG_LINE_INFO qDebug() << LINE_INFO
 
 #endif
 

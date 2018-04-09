@@ -32,19 +32,21 @@
 #include "packagelistmodel.h"
 #include "packagelistitem.h"
 
+#include <QAction>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QMenu>
 #include <QTimer>
 #include <QWhatsThis>
-#include <QAction>
-#include <QMenu>
 
 /*#include <QPushButton>
 #include <QTextBrowser>
 #include <QLineEdit>
 #include <kiconloader.h>*/
 //#include <kaccel.h>
+#include <KButtonGroup>
 #include <KMessageBox>
 #include <KUser>
-#include <KButtonGroup>
 
 enum Focus {
 		CATEGORYLIST,
@@ -66,7 +68,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
 	//		<< "actual width=" << categoriesView->width();
 	// Connect What's this button
- 	//connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) ); //this one appears to be stale
+	//connect( pbWhatsThis, SIGNAL( clicked() ), parent->parent(), SLOT( whatsThis() ) ); //this one appears to be stale
 	connect(pbWhatsThis, &QPushButton::clicked, this, &PortageTab::slotWhatsThis);
 
 	// Connect the filters
@@ -364,7 +366,7 @@ void PortageTab::slotReload()
 	connect(categoriesView, &CategoriesListView::currentItemChanged, this, &PortageTab::slotListSubCategories);
 	connect(subcategoriesView, &SubCategoriesListView::currentItemChanged, this, &PortageTab::slotListPackages);
 
-	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() ), false );
+	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() )/*, false */);
 }
 
 void PortageTab::slotFillFilter( const QString& text )
@@ -388,7 +390,7 @@ void PortageTab::slotActivateFilters()
 {
 	--m_delayFilters;
 	if ( m_delayFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() ), true );
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() )/*, true */);
 }
 
 /**
@@ -496,6 +498,8 @@ void PortageTab::slotRefresh()
 										KStandardGuiItem::yes(), KStandardGuiItem::no(), "dontAskAgainRefreshPortage" ) ) {
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotRefresh();
+		default:
+			break;
 	}
 }
 

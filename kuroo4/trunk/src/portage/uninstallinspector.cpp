@@ -56,7 +56,7 @@ UninstallInspector::UninstallInspector( QWidget *parent )
 UninstallInspector::~UninstallInspector()
 {}
 
-void UninstallInspector::slotItemActivated(QTreeWidgetItem* item, int col)
+void UninstallInspector::slotItemActivated(QTreeWidgetItem* item/*, int col*/)
 {
 	if (item->childCount() == 0)
 		return;

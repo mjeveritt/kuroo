@@ -38,8 +38,8 @@ public:
 	~Queue();
 
 	void					init( QObject *parent = 0 );
-	void					emergePackageStart( const QString& package, int order, int total );
-	void					emergePackageComplete( const QString& package, int order, int total );
+	void					emergePackageStart( const QString& package/*, int order, int total */);
+	void					emergePackageComplete( const QString& package/*, int order, int total */);
 	bool					isQueueBusy();
 	void					clearCache();
 	int						size();

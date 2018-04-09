@@ -73,7 +73,7 @@ KurooView::KurooView( QWidget *parent ) :
 	pageQueue->setHeader( "" );
 	pageQueue->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_view_queue")) );
 
-	viewHistory = new HistoryTab( this );
+	viewHistory = new HistoryTab( /*this */);
 	KPageWidgetItem* pageHistory = addPage( viewHistory, i18n("History") );
 	pageHistory->setHeader( "" );
 	pageHistory->setIcon( QIcon::fromTheme(QStringLiteral("kuroo_view_history")) );

@@ -170,7 +170,7 @@ void MergeTab::slotViewFile()
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
 	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
 
-	EtcUpdateSingleton::Instance()->runDiff( source, destination, false );
+	EtcUpdateSingleton::Instance()->runDiff( source, destination/*, false */);
 }
 
 /**
@@ -185,6 +185,6 @@ void MergeTab::slotMergeFile()
 	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
 	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
 
-	EtcUpdateSingleton::Instance()->runDiff( source, destination, true );
+	EtcUpdateSingleton::Instance()->runDiff( source, destination/*, true */);
 }
 

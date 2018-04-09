@@ -34,7 +34,7 @@ class CategoriesView : public QTreeWidget
 {
 Q_OBJECT
 public:
-	CategoriesView( QWidget *parent = 0, const char *name = 0 );
+	CategoriesView( QWidget *parent = 0/*, const char *name = 0*/ );
 	~CategoriesView();
 
 	/**
@@ -53,17 +53,17 @@ public:
 		protected:
 			QString			m_id, m_name;
 			bool 			m_on;
-			void 			paintCell( QPainter *p, int column, int width, int alignment );
+			void 			paintCell( QPainter *p/*, int column, int width*/, int alignment );
 	};
 
 	inline CategoryItem*		currentCategory() const { return dynamic_cast<CategoryItem*>( this->currentItem() ); }
 	const QString				currentCategoryId() const;
 
 protected slots:
-	void						slotStoreFocus( QTreeWidgetItem* current, QTreeWidgetItem* previous );
+	void						slotStoreFocus( QTreeWidgetItem* current/*, QTreeWidgetItem* previous */);
 
 protected:
-	void						restoreFocus( const bool& isFiltered );
+	void						restoreFocus( /*const bool& isFiltered */);
 
 protected:
 
@@ -89,11 +89,11 @@ class CategoriesListView : public CategoriesView
 {
 Q_OBJECT
 public:
-	CategoriesListView( QWidget *parent = 0, const char *name = 0 );
+	CategoriesListView( QWidget *parent = 0/*, const char *name = 0 */);
 	~CategoriesListView();
 
 	void						init();
-	void 						loadCategories( const QStringList& categoriesList, bool isFiltered );
+	void 						loadCategories( const QStringList& categoriesList/*, bool isFiltered */);
 	QSize 						sizeHint() const;
 
 };
@@ -106,7 +106,7 @@ class SubCategoriesListView : public CategoriesView
 {
 Q_OBJECT
 public:
-	SubCategoriesListView( QWidget *parent = 0, const char *name = 0 );
+	SubCategoriesListView( QWidget *parent = 0/*, const char *name = 0 */);
 	~SubCategoriesListView();
 
 	void						init();

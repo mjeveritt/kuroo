@@ -12,7 +12,6 @@ GenericName[nb]=KDE-grensesnitt for Gentoo Portage
 GenericName[es]=Frente gráfico para KDE de Portage
 GenericName[fr]=Une application KDE graphique pour Portage
 Icon=kuroo
-MimeType=
 Name=Kuroo
 Name[en_US]=Kuroo
 StartupNotify=true

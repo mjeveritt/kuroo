@@ -31,7 +31,7 @@ class HistoryTab : public QWidget, public Ui::HistoryBase
 {
 Q_OBJECT
 public:
-    HistoryTab( QWidget *parent = 0 );
+    HistoryTab(/* QWidget *parent = 0 */);
     ~HistoryTab();
 
 private slots:

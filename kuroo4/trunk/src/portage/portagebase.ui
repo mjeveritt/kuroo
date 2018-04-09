@@ -473,6 +473,7 @@
   <include location="local">categorieslistview.h</include>
   <include location="local">portagelistview.h</include>
   <include location="local">ktextbrowser.h</include>
+  <include location="local">kbuttongroup.h</include>
  </includes>
  <resources/>
  <connections/>

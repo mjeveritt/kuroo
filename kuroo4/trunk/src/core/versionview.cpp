@@ -61,7 +61,7 @@ VersionView::VersionItem::~VersionItem()
  * @class VersionView
  * @short Version listview.
  */
-VersionView::VersionView( QWidget *parent, const QString& name )
+VersionView::VersionView( QWidget *parent/*, const QString& name */)
     : QTreeWidget( parent ), m_emergeVersion( QString::null )
 {
 	setHeaderLabels( QStringList() << " " << i18n( "Version" ) << i18n( "Stability" ) <<  i18n( "Size" ) );

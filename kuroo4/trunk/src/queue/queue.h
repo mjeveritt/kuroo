@@ -21,7 +21,10 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <QMap>
 #include <QObject>
+
+#include "package.h"
 
 class QTimer;
 

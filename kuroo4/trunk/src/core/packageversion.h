@@ -54,7 +54,7 @@ public:
 	const QStringList& licenses() const;
 	const QStringList& keywords() const;
 	const QStringList& useflags() const;
-	QStringList& acceptedKeywords();
+	//QStringList& acceptedKeywords();
 	QString size() const;
 	bool hasDetailedInfo() const;
 	

@@ -21,12 +21,13 @@
 #include "common.h"
 #include "categorieslistview.h"
 
-#include <qpainter.h>
-#include <QTreeWidget>
-#include <QScrollBar>
 #include <QFrame>
+#include <QHeaderView>
+#include <QPainter>
+#include <QScrollBar>
+#include <QTreeWidget>
 
-#include <kglobal.h>
+#include <KGlobal>
 
 CategoriesView::CategoryItem::CategoryItem( QTreeWidget* parent, const QString& name, const QString &id )
 : QTreeWidgetItem( parent, QStringList(name) ), m_id( id ), m_name( name ), m_on( false )

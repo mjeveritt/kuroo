@@ -105,7 +105,7 @@ void PackageListItem::initVersions()
 			if ( atom->parse( mask ) ) {
 				QList<PackageVersion*> versions = atom->matchingVersions();
 				QList<PackageVersion*>::iterator versionIterator;
-				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				for( versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator )
 					( *versionIterator )->setHardMasked( true );
 			}
 		}
@@ -122,7 +122,7 @@ void PackageListItem::initVersions()
 			if ( atom->parse( mask ) ) {
 				QList<PackageVersion*> versions = atom->matchingVersions();
 				QList<PackageVersion*>::iterator versionIterator;
-				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				for( versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator )
 					( *versionIterator )->setUserMasked( true );
 			}
 		}
@@ -139,7 +139,7 @@ void PackageListItem::initVersions()
 			if ( atom->parse( mask ) ) {
 				QList<PackageVersion*> versions = atom->matchingVersions();
 				QList<PackageVersion*>::iterator versionIterator;
-				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				for( versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator )
 					( *versionIterator )->setUnMasked( true );
 			}
 		}
@@ -162,7 +162,7 @@ QList<PackageVersion*> PackageListItem::sortedVersionList()
 	QList<PackageVersion*> sortedVersions;
 	QList<PackageVersion*>::iterator sortedVersionIterator;
 
-	for( QList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); versionIterator++ ) {
+	for( QList<PackageVersion*>::iterator versionIterator = m_versions.begin(); versionIterator != m_versions.end(); ++versionIterator) {
 		if ( versionIterator == m_versions.begin() ) {
 			sortedVersions.append( *versionIterator );
 			continue; // if there is only one version, it can't be compared
@@ -176,9 +176,9 @@ QList<PackageVersion*> PackageListItem::sortedVersionList()
 				break;
 			}
 
-			sortedVersionIterator--;
+			--sortedVersionIterator;
 			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
-				sortedVersionIterator++; // insert after the compared one, not before
+				++sortedVersionIterator; // insert after the compared one, not before
 				sortedVersions.insert( sortedVersionIterator, *versionIterator );
 				break;
 			}
@@ -204,7 +204,7 @@ void PackageListItem::parsePackageVersions()
 	QString version;
 	QList<PackageVersion*> sortedVersions = sortedVersionList();
 	QList<PackageVersion*>::iterator sortedVersionIterator;
-	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
+	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); ++sortedVersionIterator ) {
 
 		version = (*sortedVersionIterator)->version();
 

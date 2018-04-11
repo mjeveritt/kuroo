@@ -252,7 +252,7 @@ int PackageVersion::stability( const QString& arch ) const
 		// against arch instead of all version keywords. Should be sufficient
 		// for normal use though, as people are not supposed to add anything
 		// but ~arch or -arch to ACCEPT_KEYWORDS/package.keywords.
-		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin(); keywordIterator != m_acceptedKeywords.end(); keywordIterator++ ) {
+		for ( QStringList::const_iterator keywordIterator = m_acceptedKeywords.begin(); keywordIterator != m_acceptedKeywords.end(); ++keywordIterator ) {
 			
 			// Accept masked and stable packages
 			// when the accepted keyword is ~arch or ~*
@@ -602,10 +602,10 @@ void PackageVersion::setUseflags( const QStringList& useflags )
 * part of this list (which may be, for example, x86, ~amd64 and ~ia64)
 * then the ebuild is stable and can be installed.
 */
-QStringList& PackageVersion::acceptedKeywords()
-{
-	return m_acceptedKeywords;
-}
+//QStringList& PackageVersion::acceptedKeywords()
+//{
+//	return m_acceptedKeywords;
+//}
 
 /**
 * Set the list of accepted keywords marked for this package.

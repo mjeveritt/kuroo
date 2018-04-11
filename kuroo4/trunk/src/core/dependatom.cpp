@@ -212,7 +212,7 @@ QList<PackageVersion*> PortageAtom::matchingVersions()
 // 	qDebug() << "PortageAtom::matchingVersions matchBaseVersion=" << matchBaseVersion << " matchEqual=" << matchEqual << " matchGreaterThan=" << matchGreaterThan;
 
 	// So, let's iterate through the versions to check if they match or not
-	for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ ) {
+	for ( QList<PackageVersion*>::iterator versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator ) {
 
 // 		qDebug() << "PortageAtom::matchingVersions m_version=" << m_version << " version=" << (*versionIterator)->version() <<
 // 			"       (*versionIterator)->isNewerThan( m_version )=" << (*versionIterator)->isNewerThan( m_version ) << endl;

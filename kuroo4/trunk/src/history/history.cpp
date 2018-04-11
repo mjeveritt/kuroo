@@ -46,7 +46,7 @@ UpdateStatisticsJob() : Job() {}
 
 		EmergeTimeMap emergeTimeMap( HistorySingleton::Instance()->getStatisticsMap() );
 		EmergeTimeMap::iterator itMapEnd = emergeTimeMap.end();
-		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; itMap++ ) {
+		for ( EmergeTimeMap::iterator itMap = emergeTimeMap.begin(); itMap != itMapEnd; ++itMap ) {
 			KurooDBSingleton::Instance()->insert( QString( "INSERT INTO statistic (time, count, package) VALUES ('%1', '%2', '%3');" )
 				.arg( itMap.value().emergeTime() ).arg( itMap.value().count() ).arg( itMap.key() ), m_db );
 		}

@@ -184,7 +184,7 @@ void PackageItem::initVersions()
 			if ( atom->parse( mask ) ) {
 				QList<PackageVersion*> versions = atom->matchingVersions();
 				QList<PackageVersion*>::iterator versionIterator;
-				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				for( versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator )
 					( *versionIterator )->setHardMasked( true );
 			}
 		}
@@ -201,7 +201,7 @@ void PackageItem::initVersions()
 			if ( atom->parse( mask ) ) {
 				QList<PackageVersion*> versions = atom->matchingVersions();
 				QList<PackageVersion*>::iterator versionIterator;
-				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				for( versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator )
 					( *versionIterator )->setUserMasked( true );
 			}
 		}
@@ -218,7 +218,7 @@ void PackageItem::initVersions()
 			if ( atom->parse( mask ) ) {
 				QList<PackageVersion*> versions = atom->matchingVersions();
 				QList<PackageVersion*>::iterator versionIterator;
-				for( versionIterator = versions.begin(); versionIterator != versions.end(); versionIterator++ )
+				for( versionIterator = versions.begin(); versionIterator != versions.end(); ++versionIterator )
 					( *versionIterator )->setUnMasked( true );
 			}
 		}
@@ -255,9 +255,9 @@ QList<PackageVersion*> PackageItem::sortedVersionList()
 				break;
 			}
 
-			sortedVersionIterator--;
+			--sortedVersionIterator;
 			if ( (*versionIterator)->isNewerThan( (*sortedVersionIterator)->version() ) ) {
-				sortedVersionIterator++; // insert after the compared one, not before
+				++sortedVersionIterator; // insert after the compared one, not before
 				sortedVersions.insert( sortedVersionIterator, *versionIterator );
 				break;
 			}
@@ -283,7 +283,7 @@ void PackageItem::parsePackageVersions()
 	QString version;
 	QList<PackageVersion*> sortedVersions = sortedVersionList();
 	QList<PackageVersion*>::iterator sortedVersionIterator;
-	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); sortedVersionIterator++ ) {
+	for ( sortedVersionIterator = sortedVersions.begin(); sortedVersionIterator != sortedVersions.end(); ++sortedVersionIterator ) {
 
 		version = (*sortedVersionIterator)->version();
 

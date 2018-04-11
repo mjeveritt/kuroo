@@ -82,10 +82,10 @@ public:
 					// extract this line's keywords
 					QString keywords;
 					QStringList::iterator tokenIterator = tokens.begin();
-					tokenIterator++;
+					++tokenIterator;
 					while ( tokenIterator != tokens.end() ) {
 						keywords += *tokenIterator + " ";
-						tokenIterator++;
+						++tokenIterator;
 					}
 					if ( keywords.isEmpty() )
 						keywords = "~" + KurooConfig::arch();

@@ -583,5 +583,3 @@ QString ScanPortageJobImpl::cacheFind( const QString& package )
 	else
 		return QString::null;
 }
-
-#include "scanportagejob.moc"

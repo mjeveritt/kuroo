@@ -25,7 +25,7 @@
 #include <QTreeWidget>
 
 VersionView::VersionItem::VersionItem( QTreeWidget* parent, const QString& version, const bool& isInstalled, const int& stability )
-    : QTreeWidgetItem( parent ), m_isInstalled( isInstalled ), m_stability( stability )
+	: QTreeWidgetItem( parent ), m_isInstalled( isInstalled ), m_stability( stability )
 {
 	setText( 0, version );
 
@@ -59,11 +59,11 @@ VersionView::VersionItem::~VersionItem()
 {}
 
 /**
- * @class VersionView
- * @short Version listview.
- */
+* @class VersionView
+* @short Version listview.
+*/
 VersionView::VersionView( QWidget *parent/*, const QString& name */)
-    : QTreeWidget( parent ), m_emergeVersion( QString::null )
+	: QTreeWidget( parent ), m_emergeVersion( QString::null )
 {
 	setHeaderLabels( QStringList() << " " << i18n( "Version" ) << i18n( "Stability" ) <<  i18n( "Size" ) );
 	setColumnWidth( 1, 100 );
@@ -102,21 +102,21 @@ void VersionView::insertItem( const QString& version, const QString& stability, 
 }
 
 /**
- * Mark the installation version with icon.
- * @param version
- */
+* Mark the installation version with icon.
+* @param version
+*/
 void VersionView::usedForInstallation( const QString& version )
 {
-    QTreeWidgetItemIterator it( this );
-    while( *it ) {
-        if( dynamic_cast<VersionItem*>( *it )->isInstalled() )
-            m_installedIndex = indexFromItem( *it );
+	QTreeWidgetItemIterator it( this );
+	while( *it ) {
+		if( dynamic_cast<VersionItem*>( *it )->isInstalled() )
+			m_installedIndex = indexFromItem( *it );
 		
-        if ( (*it)->text(1) == version ) {
-            (*it)->setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_version_installed")) );
-            m_emergeIndex = indexFromItem( *it );
+		if ( (*it)->text(1) == version ) {
+			(*it)->setIcon( 0, QIcon::fromTheme(QStringLiteral("kuroo_version_installed")) );
+			m_emergeIndex = indexFromItem( *it );
 		}
-        it++;
+		it++;
 	}
 	
 	m_emergeVersion = version;

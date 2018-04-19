@@ -60,17 +60,18 @@ PackageInspector::PackageInspector( QWidget *parent ) : QDialog( parent ),
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	setLayout(mainLayout);
 	mainLayout->addWidget(mainWidget);
-	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Apply);
+	setupUi(mainWidget);
 	QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
 	okButton->setDefault(true);
 	okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-	//PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
-	mainLayout->addWidget(buttonBox);
-	setupUi(mainWidget);
 	adjustSize();
 
+	m_stabilityButtonGroup = new QButtonGroup();
+	m_stabilityButtonGroup->addButton(rbStable);
+	m_stabilityButtonGroup->addButton(rbTesting);
+	m_stabilityButtonGroup->addButton(rbMasked);
 	// Get use flag description @fixme: load local description
 	loadUseFlagDescription();
 
@@ -88,7 +89,7 @@ PackageInspector::PackageInspector( QWidget *parent ) : QDialog( parent ),
 	connect(inspectorTabs, &QTabWidget::currentChanged, this, &PackageInspector::slotRefreshTabs);
 
 	// Toggle between all 4 stability version
-	connect(groupSelectStability, &KButtonGroup::released, this, &PackageInspector::slotSetStability);
+	connect(m_stabilityButtonGroup, QOverload<int>::of(&QButtonGroup::buttonReleased), this, &PackageInspector::slotSetStability);
 
 	// Activate specific version menu
 	connect(cbVersionsSpecific, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &PackageInspector::slotSetSpecificVersion);
@@ -506,7 +507,7 @@ void PackageInspector::showSettings()
 
 	// Stability settings before user has changed it
 	if ( m_isVirginState ) {
-		m_stabilityBefore = groupSelectStability->selected();
+		m_stabilityBefore = m_stabilityButtonGroup->checkedId();
 		m_versionBefore = userMaskVersion;
 	}
 
@@ -598,7 +599,7 @@ void PackageInspector::slotSetSpecificVersion( const QString& version )
 * Toggle use flag state to add or remove.
 * @param useItem
 */
-void PackageInspector::slotSetUseFlags( QTreeWidgetItem* useItem, int column )
+void PackageInspector::slotSetUseFlags( QTreeWidgetItem* useItem/*, int column */)
 {
 	if ( !useItem ) //is it possible ?
 		return;

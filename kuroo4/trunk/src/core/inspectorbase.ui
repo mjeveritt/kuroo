@@ -206,7 +206,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout">
          <item row="0" column="0">
-          <widget class="KButtonGroup" name="groupVersionsView">
+          <widget class="QGroupBox" name="groupVersionsView">
            <property name="maximumSize">
             <size>
              <width>32767</width>
@@ -282,7 +282,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="KButtonGroup" name="groupSelectStability">
+          <widget class="QGroupBox" name="groupSelectStability">
            <property name="whatsThis">
             <string>When you want to install a package that isn't available for your system, you will receive this masking error. You should try installing a different application that is available for your system or wait until the package is put available. There is always a reason why a package is masked:
 
@@ -711,12 +711,6 @@ and do not update further</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>KButtonGroup</class>
-   <extends>QGroupBox</extends>
-   <header>kbuttongroup.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KUrlLabel</class>
    <extends>QLabel</extends>

@@ -67,7 +67,7 @@ private slots:
 	void				slotOk();
 	void				slotSetStability( int rbStability );
 	void				slotSetSpecificVersion( const QString& version );
-    void				slotSetUseFlags( QTreeWidgetItem* useItem, int column );
+    void				slotSetUseFlags( QTreeWidgetItem* useItem/*, int column */);
 	void				slotLoadEbuild( const QString& version );
 	void				slotLoadDependencies( const QString& version );
 	void				slotLoadUseFlags( const QString& version );
@@ -104,7 +104,7 @@ private:
 	QStringList				m_useList;
 
 	KProcess* 				eProc;
-	QDialogButtonBox*		buttonBox;
+	QButtonGroup*			m_stabilityButtonGroup;
 
 signals:
 	void					signalNextPackage( bool up );

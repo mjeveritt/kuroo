@@ -55,7 +55,6 @@ protected:
 private:
 	QList<PackageListItem*>				m_selectedPackages;
 	QMap<QString, PackageListItem*>		m_packageIndex;
-
 };
 
 #endif

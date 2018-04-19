@@ -70,7 +70,7 @@ private slots:
 signals:
 	void						signalPortageChanged();
 	void						signalWorldChanged();
-	
+
 private:
 	QObject*					m_parent;
 	

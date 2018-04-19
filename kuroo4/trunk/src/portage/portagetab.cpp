@@ -44,7 +44,6 @@
 #include <QLineEdit>
 #include <kiconloader.h>*/
 //#include <kaccel.h>
-#include <KButtonGroup>
 #include <KMessageBox>
 #include <KUser>
 
@@ -64,7 +63,13 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 {
 	setupUi( this );
 
-	filterGroup->setSelected(0);
+	filterButtonGroup = new QButtonGroup();
+	filterButtonGroup->addButton(radioAll, 0);
+	filterButtonGroup->addButton(radioInstalled, 1);
+	filterButtonGroup->addButton(radioUpdates, 2);
+	filterGroup->setChecked(1);
+	//filterButtonGroup->setSelected(1);
+	//filterGroup->setSelected(0);
 	//kdDebug() << "PortageTab.constructor categoryView minimumWidth=" << categoriesView->minimumWidth()
 	//		<< "actual width=" << categoriesView->width();
 	// Connect What's this button
@@ -72,7 +77,7 @@ PortageTab::PortageTab( QWidget* parent, PackageInspector *packageInspector )
 	connect(pbWhatsThis, &QPushButton::clicked, this, &PortageTab::slotWhatsThis);
 
 	// Connect the filters
-	connect(filterGroup, &KButtonGroup::released, this, &PortageTab::slotFilters);
+	connect(filterButtonGroup, QOverload<int>::of(&QButtonGroup::buttonReleased), this, &PortageTab::slotFilters);
 	connect(searchFilter, &QLineEdit::textChanged, this, &PortageTab::slotFilters);
 
 	// Rmb actions.
@@ -366,7 +371,7 @@ void PortageTab::slotReload()
 	connect(categoriesView, &CategoriesListView::currentItemChanged, this, &PortageTab::slotListSubCategories);
 	connect(subcategoriesView, &SubCategoriesListView::currentItemChanged, this, &PortageTab::slotListPackages);
 
-	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() )/*, false */);
+	categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterButtonGroup->checkedId(), searchFilter->text() )/*, false */);
 }
 
 void PortageTab::slotFillFilter( const QString& text )
@@ -390,7 +395,7 @@ void PortageTab::slotActivateFilters()
 {
 	--m_delayFilters;
 	if ( m_delayFilters == 0 )
-		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterGroup->selected(), searchFilter->text() )/*, true */);
+		categoriesView->loadCategories( KurooDBSingleton::Instance()->portageCategories( 1 << filterButtonGroup->checkedId(), searchFilter->text() )/*, true */);
 }
 
 /**
@@ -399,7 +404,7 @@ void PortageTab::slotActivateFilters()
 void PortageTab::slotListSubCategories()
 {
 	subcategoriesView->loadCategories( KurooDBSingleton::Instance()->portageSubCategories( categoriesView->currentCategoryId(),
-		1 << filterGroup->selected(), searchFilter->text() ) );
+		1 << filterButtonGroup->checkedId(), searchFilter->text() ) );
 }
 
 /**
@@ -411,7 +416,7 @@ void PortageTab::slotListPackages()
 	// Disable all buttons if query result is empty
 	QStringList dbres = KurooDBSingleton::Instance()->portagePackagesBySubCategory(categoriesView->currentCategoryId(),
 										       subcategoriesView->currentCategoryId(),
-										       1 << filterGroup->selected(),
+										       1 << filterButtonGroup->checkedId(),
 										       searchFilter->text());
 
 	packagesView->setPackages(dbres);

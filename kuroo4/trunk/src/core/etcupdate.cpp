@@ -27,7 +27,7 @@
 
 #include <QObject>
 #include <KMessageBox>
-#include <kio/job.h>
+#include <KIO/Job>
 #include <KF5/KCoreAddons/KProcess>
 #include <KDirWatch>
 

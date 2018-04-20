@@ -38,6 +38,7 @@ include(ECMAddTests)
 find_package(Qt5Widgets REQUIRED)
 
 find_package( KF5 ${KF5_MIN_VERSION} REQUIRED
+	Auth
 	Config
 	ConfigWidgets
 	CoreAddons

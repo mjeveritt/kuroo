@@ -30,9 +30,6 @@
 #include <KConfigGroup>
 #include <KUrlLabel>
 
-//Deprecated KDELibs4Support
-//#include <KButtonGroup>
-
 #include "common.h"
 #include "packageinspector.h"
 #include "portagelistview.h"

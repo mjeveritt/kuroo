@@ -40,6 +40,8 @@ SystemTray::SystemTray( QWidget *parent )
 {
 	s_instance = this;
 
+	qDebug() << LINE_INFO << "KDE_FULL_SESSION" << qgetenv("KDE_FULL_SESSION") << "XDG_CURRENT_DESKTOP" << qgetenv("XDG_CURRENT_DESKTOP");
+
 	//Rearranged some things trying to get rid of 'QSystemTrayIcon::setVisible: No Icon set' message (didn't work)
 	setIconByName( "kuroo" );
 	setCategory( KStatusNotifierItem::ApplicationStatus );

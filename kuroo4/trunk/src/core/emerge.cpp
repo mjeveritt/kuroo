@@ -105,6 +105,7 @@ bool Emerge::isRunning() const { return eProc->state() == QProcess::Running; }
  */
 bool Emerge::queue( const QStringList& packageList )
 {
+	//TODO: KAuth
 	if( KurooConfig::backupPkg() && !m_backupComplete ) {
 		m_backingUp = true;
 		Emerge::quickpkg( packageList );

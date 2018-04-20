@@ -32,9 +32,32 @@
 
 static const char version[] = "kuroo-17.12.0";
 
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+	QByteArray localMsg = msg.toLocal8Bit();
+	switch (type) {
+	case QtDebugMsg:
+		fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtInfoMsg:
+		fprintf(stderr, "Info: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtWarningMsg:
+		fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtCriticalMsg:
+		fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtFatalMsg:
+		fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		abort();
+	}
+}
+
 int main( int argc, char **argv )
 {
-    QApplication app(argc, argv); // PORTING SCRIPT: move this to before the K4AboutData initialization
+	qInstallMessageHandler(myMessageOutput);
+	QApplication app(argc, argv); // PORTING SCRIPT: move this to before the K4AboutData initialization
 	KAboutData about("kuroo", i18n("Kuroo"), version, i18n("Frontend to Gentoo Portage"),
 	KAboutLicense::LicenseKey::GPL, i18n("(C) 2006 karye") ); //, 0, 0, "info@kuroo.org" new email ?
 	about.addAuthor(i18n("Andrew Schenck"), i18n("Maintainer"), "galiven@users.sourceforge.net");

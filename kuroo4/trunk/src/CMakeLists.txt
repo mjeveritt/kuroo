@@ -110,11 +110,11 @@ add_executable(kuroo
 				${intro_sources}
 				${logs_sources}
 				${kuroo_sources} )
-
 kde_enable_exceptions()
 
 target_link_libraries( kuroo
 	Qt5::Core
+	KF5::Auth
 	KF5::ConfigCore
 	KF5::ConfigGui
 	KF5::CoreAddons
@@ -127,6 +127,12 @@ target_link_libraries( kuroo
 	KF5::KDELibs4Support
 	sqlite3
 )
+
+kauth_install_actions( org.gentoo.portage.kuroo auth/org.gentoo.portage.kuroo.actions )
+add_executable( kuroo_helper auth/kuroohelper.cpp )
+target_link_libraries( kuroo_helper Qt5::Core KF5::KIOCore KF5::Auth )
+install( TARGETS kuroo_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR} )
+kauth_install_helper_files( kuroo_helper org.gentoo.portage.kuroo root )
 
 ########### install ###############
 install( TARGETS kuroo ${INSTALL_TARGETS_DEFAULT_ARGS} )

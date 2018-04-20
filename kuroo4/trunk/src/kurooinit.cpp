@@ -29,7 +29,9 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QFileInfo>
 
+#include <KAuth>
 #include <KUser>
 #include <KMessageBox>
 #include <KProcess>
@@ -60,27 +62,34 @@ KurooInit::KurooInit( QObject *parent )
 		}
 	}
 
-	// Get portage groupid to set directories and files owned by portage
-	struct group* portageGid = getgrnam( QFile::encodeName("portage") );
-	struct passwd* portageUid = getpwnam( QFile::encodeName("portage") );
-
+	// ::init() is set by firstTimeWizard()
 	// Setup kuroo environment
 	if ( KurooConfig::init() ) {
 		KurooConfig::setSaveLog( false );
 
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
-			if ( !d.mkdir( kurooDir ) ) {
+			KAuth::Action createKurooDir( QLatin1String( "org.gentoo.portage.kuroo.createkuroodir" ) );
+			KAuth::ExecuteJob *job = createKurooDir.execute();
+			if ( !job->exec() ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br/>"
 											"You must start Kuroo with kdesu first time for a secure initialization.<br/>"
-											"Please try again!</qt>"), i18n("Initialization") );
+											"Please try again!<br/></qt>").append(job->errorText()), i18n("Initialization") );
 				exit(0);
-			} else {
-				chmod( kurooDir.toAscii(), 0770 );
-				KIO::chown( QUrl::fromLocalFile(kurooDir), portageGid->gr_name, portageUid->pw_name);
 			}
 
 			d.setCurrent( kurooDir );
+		}
+	}
+
+	QFileInfo f( kurooDir );
+	if ( f.group() != "portage" ) {
+		//Force it to the right ownership in case it was created as root:root previously
+		KAuth::Action chownKurooDir( QLatin1String( "org.gentoo.portage.kuroo.chownkuroodir" ) );
+		KAuth::ExecuteJob *job = chownKurooDir.execute();
+		if ( !job->exec() ) {
+			KMessageBox::error( 0, job->errorText(), i18n( "Initialization" ) );
+			exit(0);
 		}
 	}
 
@@ -95,7 +104,7 @@ KurooInit::KurooInit( QObject *parent )
 		}
 		else {
 			chmod( backupDir.toAscii(), 0770 );
-			KIO::chown( QUrl::fromLocalFile(backupDir), portageGid->gr_name, portageUid->pw_name);
+			KIO::chown( QUrl::fromLocalFile(backupDir), "portage", "portage" )->exec();//portageGid->gr_name, portageUid->pw_name);
 		}
 	}
 
@@ -106,7 +115,7 @@ KurooInit::KurooInit( QObject *parent )
 	QString logFile = LogSingleton::Instance()->init( this );
 	if ( !logFile.isEmpty() ) {
 		chmod( logFile.toAscii(), 0660 );
-		KIO::chown( QUrl::fromLocalFile(logFile), portageGid->gr_name, portageUid->pw_name );
+		KIO::chown( QUrl::fromLocalFile(logFile), "portage", "portage" )->exec();//portageGid->gr_name, portageUid->pw_name );
 	}
 
 	// Initialize the database
@@ -132,7 +141,7 @@ KurooInit::KurooInit( QObject *parent )
 
 	// Give permissions to portage:portage to access the db also
 	chmod( databaseFile.toAscii(), 0660 );
-	KIO::chown( QUrl::fromLocalFile(databaseFile), portageGid->gr_name, portageUid->pw_name );
+	KIO::chown( QUrl::fromLocalFile(databaseFile), "portage", "portage" )->exec();//portageGid->gr_name, portageUid->pw_name );
 
     // Initialize singletons objects
 	SignalistSingleton::Instance()->init( this );

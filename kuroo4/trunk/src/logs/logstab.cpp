@@ -23,9 +23,8 @@
 #include "logstab.h"
 
 #include <QCheckBox>
+#include <QInputDialog>
 #include <QPushButton>
-
-#include <KInputDialog>
 
 /**
  * @class LogsTab
@@ -88,7 +87,7 @@ void LogsTab::init()
  */
 void LogsTab::slotUserInput()
 {
-	QString input = KInputDialog::getText( i18n("User Input"), i18n("Enter text:"), QString::null, 0, this, 0, 0, QString::null );
+	QString input = QInputDialog::getText( this, i18n("User Input"), i18n("Enter text:") );
 	EmergeSingleton::Instance()->inputText( input );
 }
 

@@ -3,15 +3,14 @@
 
 EAPI=6
 
-inherit cmake-utils subversion
+inherit cmake-utils
 
 DESCRIPTION="Graphical Portage frontend based on KDE Frameworks"
 HOMEPAGE="https://sourceforge.net/projects/kuroo/"
-ESVN_REPO_URI="https://svn.code.sf.net/p/kuroo/code/kuroo4/trunk"
-ESVN_PROJECT="kuroo"
+SRC_URI="https://dev.gentoo.org/~asturm/distfiles/${P}.tar.xz"
 
 LICENSE="GPL-2"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 SLOT="0"
 IUSE=""
 
@@ -20,7 +19,6 @@ COMMON_DEPEND="
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5
 	dev-qt/qtwidgets:5
-	kde-frameworks/kauth:5
 	kde-frameworks/kconfig:5
 	kde-frameworks/kconfigwidgets:5
 	kde-frameworks/kcoreaddons:5
@@ -42,6 +40,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	kde-frameworks/extra-cmake-modules:5
 "
+
+PATCHES=( "${FILESDIR}/${P}-qt-5.11.patch" )
 
 pkg_postinst() {
 	if ! has_version app-admin/logrotate ; then

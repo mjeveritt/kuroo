@@ -69,7 +69,8 @@ KurooInit::KurooInit( QObject *parent )
 
 		// Create DirHome dir and set permissions so common user can run Kuroo
 		if ( !d.exists() ) {
-			KAuth::Action createKurooDir( QLatin1String( "org.gentoo.portage.kuroo.createkuroodir" ) );
+			KAuth::Action createKurooDir( "org.gentoo.portage.kuroo.createkuroodir" );
+			createKurooDir.setHelperId( "org.gentoo.portage.kuroo" );
 			KAuth::ExecuteJob *job = createKurooDir.execute();
 			if ( !job->exec() ) {
 				KMessageBox::error( 0, i18n("<qt>Could not create kuroo home directory.<br/>"
@@ -85,7 +86,8 @@ KurooInit::KurooInit( QObject *parent )
 	QFileInfo f( kurooDir );
 	if ( f.group() != "portage" ) {
 		//Force it to the right ownership in case it was created as root:root previously
-		KAuth::Action chownKurooDir( QLatin1String( "org.gentoo.portage.kuroo.chownkuroodir" ) );
+		KAuth::Action chownKurooDir( "org.gentoo.portage.kuroo.chownkuroodir" );
+		chownKurooDir.setHelperId( "org.gentoo.portage.kuroo" );
 		KAuth::ExecuteJob *job = chownKurooDir.execute();
 		if ( !job->exec() ) {
 			KMessageBox::error( 0, job->errorText(), i18n( "Initialization" ) );
@@ -145,7 +147,7 @@ KurooInit::KurooInit( QObject *parent )
 
     // Initialize singletons objects
 	SignalistSingleton::Instance()->init( this );
-	EmergeSingleton::Instance()->init( this );
+	EmergeSingleton::Instance()->init( );
 	EtcUpdateSingleton::Instance()->init( this );
 	HistorySingleton::Instance()->init( this );
 	PortageSingleton::Instance()->init( this );

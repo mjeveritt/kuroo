@@ -114,41 +114,25 @@ void Kuroo::setupActions()
 	KStandardAction::preferences( this, SLOT( slotPreferences() ), actionCollection() );
 
 	QAction * actionReleaseInfo = new QAction( i18n("&Release information"), this );
-	//actionReleaseInfo->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_W ) );
 	actionCollection()->setDefaultShortcut( actionReleaseInfo,  QKeySequence( Qt::CTRL + Qt::Key_W ) );
 	actionCollection()->addAction( "information", actionReleaseInfo );
 	connect(actionReleaseInfo, &QAction::triggered, this, &Kuroo::introWizard);
-	/*
-	actionReleaseInfo = new QAction(, 0,
-									this, SLOT( introWizard() ), actionCollection(), "information" );
-	actionReleaseInfo->setText( i18n("&Release information") );
-	actionReleaseInfo->setShortcut(  );
-	*/
+
 	actionRefreshPortage = new QAction( i18n("&Refresh Packages"), this );
-	//actionRefreshPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_P ) );
-	//PortageSingleton::Instance() , SLOT( slotRefresh() ), actionCollection(), "refresh_portage" );
 	actionCollection()->setDefaultShortcut( actionRefreshPortage, QKeySequence( Qt::CTRL + Qt::Key_P ) );
 	actionCollection()->addAction( "refresh_portage", actionRefreshPortage );
 	connect( actionRefreshPortage, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefresh() ) );
 
 	actionRefreshUpdates = new QAction( i18n("&Refresh Updates"), this );
-	//actionRefreshUpdates->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_U ));
 	actionCollection()->setDefaultShortcut( actionRefreshUpdates, QKeySequence( Qt::CTRL + Qt::Key_U ) );
 	actionCollection()->addAction( "refresh_updates", actionRefreshUpdates );
 	connect( actionRefreshUpdates, SIGNAL(triggered(bool)), PortageSingleton::Instance(), SLOT( slotRefreshUpdates()) );
 
 	actionSyncPortage = new QAction( i18n("&Sync Portage"), this );
-	//actionSyncPortage->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_S ) );
 	actionCollection()->setDefaultShortcut( actionSyncPortage, QKeySequence( Qt::CTRL + Qt::Key_S ) );
 	actionCollection()->addAction( "sync_portage", actionSyncPortage );
 	connect(actionSyncPortage, &QAction::triggered, this, &Kuroo::slotSync);
-	/*
-	actionRefreshUpdates = new QAction( i18n("&Refresh Updates"), 0, QKeySequence( Qt::CTRL + Qt::Key_U ),
-										PortageSingleton::Instance() , SLOT( slotRefreshUpdates() ), actionCollection(), "refresh_updates" );
 
-	actionSyncPortage = new QAction( i18n("&Sync Portage"), 0, ,
-										, ,  );
-										*/
 	setupGUI( Default, "kurooui.rc" );
 }
 
@@ -166,7 +150,7 @@ void Kuroo::slotBusy()
 	actionRefreshUpdates->setEnabled( !isBusy );
 
 	if ( EmergeSingleton::Instance()->isRunning() || SignalistSingleton::Instance()->isKurooBusy() ||
-		!KUser().isSuperUser() || KurooDBSingleton::Instance()->isPortageEmpty() ) {
+		 KurooDBSingleton::Instance()->isPortageEmpty() ) {
 		actionSyncPortage->setEnabled( false );
 	}
 	else {
@@ -199,8 +183,9 @@ void Kuroo::slotSync()
 	}
 
 	switch( KMessageBox::questionYesNo( this,
+		i18n( "Last sync: %1", lastSyncDate ) +
 		i18n( "<qt>Do you want to synchronize portage?<br/>"
-			"This will take a couple of minutes...</qt>" ), i18n( "Last sync: %1", lastSyncDate ) ) ) {
+			"This will take a couple of minutes...</qt>" ), i18n( "Sync packages" ) ) ) {
 
 		case KMessageBox::Yes:
 			PortageSingleton::Instance()->slotSync();

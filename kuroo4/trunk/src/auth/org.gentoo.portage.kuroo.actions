@@ -1,0 +1,23 @@
+[org.gentoo.portage.kuroo.createkuroodir]
+Name=Create Kuroo Dir
+Description=Initialize the directory where Kuroo stores its data
+Policy=auth_admin
+Persistence=session
+
+[org.gentoo.portage.kuroo.chownkuroodir]
+Name=Chown Kuroo Dir
+Description=Fix the group of the Kuroo directory so it can run as non-root
+Policy=auth_admin
+Persistence=session
+
+[org.gentoo.portage.kuroo.emerge]
+Name=Emerge
+Description=Emerge a list of packages
+Policy=auth_admin
+Persistence=session
+
+[org.gentoo.portage.kuroo.sync]
+Name=Sync Packages
+Description=Sync the tree of packages
+Policy=auth_admin
+Persistence=session

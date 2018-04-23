@@ -128,11 +128,11 @@ target_link_libraries( kuroo
 	sqlite3
 )
 
-kauth_install_actions( org.gentoo.portage.kuroo auth/org.gentoo.portage.kuroo.actions )
 add_executable( kuroo_helper auth/kuroohelper.cpp )
-target_link_libraries( kuroo_helper Qt5::Core KF5::KIOCore KF5::Auth )
+target_link_libraries( kuroo_helper Qt5::Core KF5::KIOCore KF5::Auth KF5::CoreAddons )
 install( TARGETS kuroo_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR} )
 kauth_install_helper_files( kuroo_helper org.gentoo.portage.kuroo root )
+kauth_install_actions( org.gentoo.portage.kuroo auth/org.gentoo.portage.kuroo.actions )
 
 ########### install ###############
 install( TARGETS kuroo ${INSTALL_TARGETS_DEFAULT_ARGS} )

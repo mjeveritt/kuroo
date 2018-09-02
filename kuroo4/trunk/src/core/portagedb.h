@@ -72,8 +72,8 @@ public:
 	~SqliteConnection();
 
 	QStringList 		query( const QString& /* statement */ );
-	QString		 	singleQuery( const QString& /* statement */ );
-	int 			insert( const QString& /* statement */ );
+	QString			 	singleQuery( const QString& /* statement */ );
+	int 				insert( const QString& /* statement */ );
 	inline bool 		isConnected()const { return true; }
 
 private:
@@ -92,7 +92,7 @@ public:
 	const 				DbConfig *getDbConfig() const { return m_dbConfig; }
 	void 				createDbConnections();
 
-	DbConnection*			getDbConnection();
+	DbConnection*		getDbConnection();
     void 				putDbConnection( DbConnection* conn );
 
 	QString 			escapeString( const QString&) const;

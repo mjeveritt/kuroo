@@ -18,8 +18,10 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
+#include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QGroupBox>
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QTextStream>
@@ -36,6 +38,7 @@
 #include "packageversion.h"
 #include "versionview.h"
 #include "dependencyview.h"
+#include "packagebase.h"
 #include "packagelistitem.h"
 
 /**
@@ -85,6 +88,11 @@ PackageInspector::PackageInspector( QWidget *parent ) : QDialog( parent ),
 	// Load files only if tabpage is open
 	connect(inspectorTabs, &QTabWidget::currentChanged, this, &PackageInspector::slotRefreshTabs);
 
+	selectStabilityButtonGroup = new QButtonGroup();
+	selectStabilityButtonGroup->addButton(rbStable);
+	selectStabilityButtonGroup->addButton(rbTesting);
+	selectStabilityButtonGroup->addButton(rbMasked);
+	selectStabilityButtonGroup->addButton(rbVersionsSpecific);
 	// Toggle between all 4 stability version
 	connect(m_stabilityButtonGroup, QOverload<int>::of(&QButtonGroup::buttonReleased), this, &PackageInspector::slotSetStability);
 
@@ -133,11 +141,11 @@ void PackageInspector::updateVersionData()
 	{
 		// Parse out version and data
 		QString version = *it;
-		it++;
+		++it;
 		QString stability = *it;
-		it++;
+		++it;
 		QString size = *it;
-		it++;
+		++it;
 
 		// Collect installed version in "Installed files" tab
 		bool isInstalled;
@@ -241,14 +249,14 @@ void PackageInspector::edit( PackageListItem* portagePackage, const int& view )
 	// Actions that need superuser privileges
 	if ( !KUser().isSuperUser() ) {
 		buttonBox->button(QDialogButtonBox::Apply)->setEnabled( false );
-		groupSelectStability->setDisabled( true );
-		useView->setDisabled( true );
-		cbWorld->setDisabled( true );
+		groupSelectStability->setEnabled( false );
+		useView->setEnabled( false );
+		cbWorld->setEnabled( false );
 	}
 	else {
-		inspectorTabs->setDisabled( false );
-		cbQueue->setDisabled( false );
-		cbWorld->setDisabled( false );
+		inspectorTabs->setEnabled( true );
+		cbQueue->setEnabled( true );
+		cbWorld->setEnabled( true );
 	}
 
 	// Disabled editing when package is in Queue and kuroo is emerging
@@ -839,7 +847,7 @@ void PackageInspector::slotLoadDependencies( const QString& version )
 
 			// Make sure all words are space-separated
 			textLines.replace( "DEPEND=", "DEPEND= " );
-			textLines.simplified();
+			textLines = textLines.simplified();
 
 			// Remove bootstrap and all it's duplicate
 			textLines.remove( "!bootstrap? ( sys-devel/patch )" );
@@ -932,15 +940,18 @@ void PackageInspector::slotParseTempUse()
 	delete eProc;
 	eProc = 0;
 
-	QRegExp rxPretend = rxEmerge();
+	QRegularExpression rxPretend = rxEmerge();
 
 	// 	qDebug() << "m_pretendUseLines=" << m_pretendUseLines;
 
 	QStringList tmpUseList;
 	foreach ( QString pretend, m_pretendUseLines ) {
-		if ( pretend.contains( m_category + "/" + m_package ) && rxPretend.indexIn( pretend ) > -1 ) {
-			QString use = rxPretend.cap(7).simplified();
-			tmpUseList = use.split(" ");
+		if ( pretend.contains( m_category + "/" + m_package ) ) {
+			QRegularExpressionMatch match = rxPretend.match( pretend );
+			if ( match.hasMatch() ) {
+				QString use = match.captured(7).simplified();
+				tmpUseList = use.split(" ");
+			}
 		}
 	}
 	// 	qDebug() << "tmpUseList=" << tmpUseList;
@@ -988,15 +999,18 @@ void PackageInspector::slotParsePackageUse()
 	delete eProc;
 	eProc = 0;
 
-	QRegExp rxPretend = rxEmerge();
+	QRegularExpression rxPretend = rxEmerge();
 
 	// 	qDebug() << "m_pretendUseLines=" << m_pretendUseLines;
 
 	QStringList pretendUseList;
 	foreach( QString pretend, m_pretendUseLines ) {
-		if ( pretend.contains( m_category + "/" + m_package ) && rxPretend.indexIn( pretend ) > -1 ) {
-			QString use = rxPretend.cap(7).simplified();
-			pretendUseList = use.split(" ");
+		if ( pretend.contains( m_category + "/" + m_package ) ) {
+			QRegularExpressionMatch match = rxPretend.match( pretend );
+			if ( match.hasMatch() ) {
+				QString use = match.captured(7).simplified();
+				pretendUseList = use.split(" ");
+			}
 		}
 	}
 
@@ -1039,7 +1053,7 @@ void PackageInspector::slotParsePackageUse()
 		}
 
 		// Set CheckBox state
-		if ( pretend.startsWith( "+" ) || ( KurooConfig::portageVersion21() && !pretend.startsWith( "-" ) ) ) {
+		if ( pretend.startsWith( "+" ) || !pretend.startsWith( "-" ) ) {
 			QTreeWidgetItem* useItem = new QTreeWidgetItem( useView );
 			useItem->setText( 0, pretend );
 			useItem->setFlags( Qt::ItemIsUserCheckable );

@@ -58,7 +58,7 @@ public slots:
 	
 	bool						slotScan();
 	void						slotScanCompleted();
-	bool						slotSync();
+	void						slotSync();
 	void						slotSyncCompleted();
 	
 	bool						slotRefreshUpdates();

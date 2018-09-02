@@ -30,7 +30,6 @@ set(core_sources
 	core/dependencyview.cpp
 	core/emerge.cpp
 	core/etcupdate.cpp
-	core/filewatcher.cpp
 	core/global.cpp
 	core/packageinspector.cpp
 	core/packagelistmodel.cpp

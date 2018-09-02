@@ -3,9 +3,6 @@
 <kcfg>
 	<kcfgfile name="kuroorc"/>
 	<group name="general">
-		<entry name="portageVersion21" type="Bool">
-			<default>false</default>
-		</entry>
 		<entry name="saveLog" type="Bool">
 		</entry>
 		<entry name="verboseLog" type="Bool">

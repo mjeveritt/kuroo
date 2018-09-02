@@ -18,13 +18,14 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include <QDir>
+#include <QRegularExpression>
+#include <QStringList>
+#include <QFileInfo>
+
 #include <KApplication>
 #include <KConfig>
 #include <KGlobal>
-
-#include <QDir>
-#include <QStringList>
-#include <QFileInfo>
 #include <ThreadWeaver/Job>
 #include <ThreadWeaver/JobPointer>
 #include <ThreadWeaver/QObjectDecorator>
@@ -32,6 +33,8 @@
 
 #include "common.h"
 #include "scanupdatesjob.h"
+
+//const QRegularExpression ScanUpdatesJobImpl::m_rxNew = QRegularExpression("\\bN\\b");
 
 /**
 * @class ScanUpdatesJob
@@ -113,7 +116,7 @@ void ScanUpdatesJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 		else {
 
 			// Mark as update in portage, but not for new packages
-			if ( !(*it).updateFlags.contains( QRegExp("\\bN\\b") ) && !id.isEmpty() ) {
+			if ( !(*it).updateFlags.contains( m_rxNew ) && !id.isEmpty() ) {
 
 				// Is the package upgrade or downgrade?
 				QString updateVersion;

@@ -21,12 +21,23 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 
 //TODO: dispatch in relevant module
 const QString kurooDir = QString("/var/cache/kuroo/"); //->KConfig
-const QRegExp			rxEmerge(); //->Emerge
+const QRegularExpression m_rxEmerge( "^\\[ebuild([\\s\\w~#*]*)\\]\\s+"	//Also allow * for merging hardmasked packages
+												"((\\S+)/(\\S+))"
+												"(?:\\s*\\[([^\\]]*)\\])?"
+												"(?:\\s*\\[([^\\]]*)\\])?"
+												"(?:\\s*USE=\"([^\"]*)\")?"
+												"(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
+												"(?:\\s*\\w+=\"(?:[^\"]*)\")*"		//Capture and discard all extra use-expands
+										"(?:\\s*(\\d*(,\\d*)*)\\s(?:Ki|k)B)?" );
+const QRegularExpression rxEmerge(); //->Emerge
+
+
+
 const QStringList 		parsePackage( const QString& packageString );
 const QString 			formatTime( const long& ); //->Queue
 

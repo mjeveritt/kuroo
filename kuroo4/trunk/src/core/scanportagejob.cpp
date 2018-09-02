@@ -65,6 +65,7 @@ ScanPortageJobImpl::~ScanPortageJobImpl()
 void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 {
 	DEBUG_LINE_INFO;
+	qDebug() << __LINE__;
 	int count = 0;
 	QDir dCategory, dPackage;
 	dCategory.setFilter( QDir::Dirs | QDir::NoSymLinks );
@@ -133,10 +134,10 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 	// Scan Portage cache
 	for ( QStringList::Iterator itPath = pathList.begin(), itPathEnd = pathList.end(); itPath != itPathEnd; ++itPath ) {
 
-		//qDebug() << "Scanning Portage. Reading categories from " << *itPath;
+		qDebug() << "Scanning Portage. Reading categories from " << *itPath;
 		//TODO: This is where I need to start removing deps on /var/cache/edb
 		if ( !dCategory.cd( *itPath ) ) {
-			//qWarning() << "Scanning Portage. Can not access " << *itPath ;
+			qWarning() << "Scanning Portage. Can not access " << *itPath ;
 			continue;
 		}
 
@@ -157,7 +158,7 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
                 return;
             }*/
 
-			//qDebug() << "Scanning Portage. Reading category " << *itCategory;
+			qDebug() << "Scanning Portage. Reading category " << *itCategory;
 			QString category = (*itCategory).section( "-", 0, 0 );
 			QString subCategory = (*itCategory).section( "-", 1, 1 );
 
@@ -182,7 +183,7 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 			dPackage.setSorting( QDir::Name );
 
 			if ( dPackage.cd( *itPath + "/" + *itCategory) ) {
-				//qDebug() << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory;
+				qDebug() << "Scanning Portage. CD'ed into " << *itPath << "/" << *itCategory;
 
 				QStringList packageList = dPackage.entryList();
 				QString status, lastPackage;
@@ -199,7 +200,7 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
                         return;
                     }*/
 
-					//qDebug() << "Scanning Portage. Reading package " << *itPackage;
+					qDebug() << "Scanning Portage. Reading package " << *itPackage;
 					QStringList parts = parsePackage( *itPackage );
 					if ( !parts.isEmpty() ) {
 						//parts[0] is category
@@ -220,7 +221,7 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 							m_categories[ *itCategory ].packages[ name ].status = PACKAGE_AVAILABLE_STRING;
 							m_categories[ *itCategory ].packages[ name ].description = info.description;
 							m_categories[ *itCategory ].packages[ name ].path = (*itPath).section( "/metadata/md5-cache", 0, 0 );
-							//qDebug() << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path;
+							qDebug() << "Inserting package " << name << " into portage with path " << m_categories[*itCategory].packages[name].path;
 						}
 
 						// Insert version in portage
@@ -282,18 +283,18 @@ void ScanPortageJobImpl::run( ThreadWeaver::JobPointer, ThreadWeaver::Thread* )
 
 			idPackage = QString::number( KurooDBSingleton::Instance()->insert( sql, m_db ) );
 
-            PortageVersions::iterator itVersionEnd = itPackage.value().versions.end();
-            for ( PortageVersions::iterator itVersion = itPackage.value().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
+			PortageVersions::iterator itVersionEnd = itPackage.value().versions.end();
+			for ( PortageVersions::iterator itVersion = itPackage.value().versions.begin(); itVersion != itVersionEnd; ++itVersion ) {
 
 				QString version = itVersion.key();
-                description = itVersion.value().description;
-                QString homepage = itVersion.value().homepage;
-                QString status = itVersion.value().status;
-                QString licenses = itVersion.value().licenses;
-                QString useFlags = itVersion.value().useFlags;
-                QString slot = itVersion.value().slot;
-                QString size = itVersion.value().size;
-                QString keywords = itVersion.value().keywords;
+				description = itVersion.value().description;
+				QString homepage = itVersion.value().homepage;
+				QString status = itVersion.value().status;
+				QString licenses = itVersion.value().licenses;
+				QString useFlags = itVersion.value().useFlags;
+				QString slot = itVersion.value().slot;
+				QString size = itVersion.value().size;
+				QString keywords = itVersion.value().keywords;
 
 				QString sqlVersion = QString( "INSERT INTO version_temp "
 				                              "(idPackage, name, description, homepage, size, keywords, status, licenses, useFlags, slot) "
@@ -575,11 +576,11 @@ void ScanPortageJobImpl::loadCache()
  * @param packages
  * @return size or NULL if na
  */
-QString ScanPortageJobImpl::cacheFind( const QString& package )
-{
-	QMap<QString, QString>::iterator it = m_mapCache.find( package ) ;
-	if ( it != m_mapCache.end() )
-        return it.value();
-	else
-		return QString::null;
-}
+// QString ScanPortageJobImpl::cacheFind( const QString& package )
+// {
+// 	QMap<QString, QString>::iterator it = m_mapCache.find( package ) ;
+// 	if ( it != m_mapCache.end() )
+//         return it.value();
+// 	else
+// 		return QString::null;
+// }

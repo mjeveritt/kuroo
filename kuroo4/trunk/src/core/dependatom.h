@@ -25,7 +25,7 @@
 #include "packageversion.h"
 
 #include <QList>
-#include <QRegExp>
+#include <QRegularExpression>
 
 /**
  * This class is the provides capabilities to parse DEPEND atoms and get
@@ -62,10 +62,10 @@ private:
 	PackageBase* m_portagePackage;
 
 	// The regular expression for the whole atom.
-	QRegExp rxAtom;
+	QRegularExpression rxAtom;
 
 	// The regular expression for just the package name and version.
-	QRegExp rxVersion;
+	QRegularExpression rxVersion;
 
 	// This is set to the result of parse().
 	bool m_matches;

@@ -21,6 +21,7 @@
 #ifndef PACKAGEINSPECTOR_H
 #define PACKAGEINSPECTOR_H
 
+#include <QButtonGroup>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <KProcess>
@@ -105,6 +106,7 @@ private:
 
 	KProcess* 				eProc;
 	QButtonGroup*			m_stabilityButtonGroup;
+	QButtonGroup*			selectStabilityButtonGroup;
 
 signals:
 	void					signalNextPackage( bool up );

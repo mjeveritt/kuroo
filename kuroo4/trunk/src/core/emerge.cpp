@@ -32,6 +32,19 @@
 
 #include <signal.h>
 #include <KLocalizedString>
+#include <kauthaction.h>
+#include <kauthexecutejob.h>
+
+//const QRegularExpression Emerge::m_rxNewline = QRegularExpression( "\\x0007" );
+//const QRegularExpression Emerge::m_rxEscape = QRegularExpression( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
+//					"(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
+//const QRegularExpression Emerge::m_rxImportantPrefix = QRegularExpression( "^>>>|^!!!" );
+//const QRegularExpression Emerge::m_rxExclamationPrefix = QRegularExpression( "^!!!" );
+//const QRegularExpression Emerge::m_rxCompletedInstalling = QRegularExpression( "^>>> completed installing" );
+//const QRegularExpression Emerge::m_rxRegenerating = QRegularExpression( "^>>> regenerating" );
+//const QRegularExpression Emerge::m_rxError = QRegularExpression( "^!!! error" );
+//const QRegularExpression Emerge::m_rxEmergeMessage = QRegularExpression( "(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
+//							"(^ \\* IMPORTANT)|(^>>> unmerging in)" );
 
 /**
  * @class Emerge
@@ -48,6 +61,14 @@ Emerge::Emerge( QObject* m_parent )
 	eProc->setOutputChannelMode( KProcess::MergedChannels );
 	ioRevdepRebuild = NULL;
 	eClean1 = NULL;
+	m_rxNewline.optimize();
+	m_rxEscape.optimize();
+	m_rxImportantPrefix.optimize();
+	m_rxExclamationPrefix.optimize();
+	m_rxCompletedInstalling.optimize();
+	m_rxRegenerating.optimize();
+	m_rxError.optimize();
+	m_rxEmergeMessage.optimize();
 }
 
 Emerge::~Emerge()
@@ -303,26 +324,37 @@ bool Emerge::unmerge( const QStringList& packageList )
  * Synchronize Portage tree.
  * @return success
  */
-bool Emerge::sync()
+void Emerge::sync()
 {
 	m_blocks.clear();
 	m_importantMessage = QString::null;
 	m_etcUpdateCount = 0;
 	m_emergePackageList.clear();
 
+	qDebug() << "Calling Sync KAuth Job";
+	KAuth::Action sync( "org.gentoo.portage.kuroo.sync" );
+	KAuth::ExecuteJob* job = sync.execute();
+	if ( job->exec() ) {
+		qDebug() << "Sync KAuth exec succeeded";
+	} else {
+		qDebug() << "Sync KAuth exec failed";
+	}
 	eProc->close();
 	eProc->clearProgram();
-	*eProc << "emerge" << "--sync" << "--quiet" << "--color=n" << "--nospinner";
+	*eProc << "emerge" << "--sync" /*<< "--quiet"*/ << "--color=n" << "--nospinner";
+	//eProc->setOutputChannelMode( KProcess::OutputChannelMode::ForwardedChannels );
 
 	eProc->start();
 
 	connect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
 	connect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupSync);
+
 	SignalistSingleton::Instance()->setKurooBusy( true );
 	LogSingleton::Instance()->writeLog( i18n( "\nEmerge synchronize Portage Tree started..." ), KUROO );
 	KurooStatusBar::instance()->setProgressStatus( "Emerge", i18n( "Synchronizing portage tree..." ) );
 	KurooStatusBar::instance()->setTotalSteps( KurooDBSingleton::Instance()->getKurooDbMeta( "syncDuration" ).toInt() );
-	return true;
+
+	//slotCleanupSync( 0, QProcess::ExitStatus::NormalExit );
 }
 
 /**
@@ -368,12 +400,12 @@ bool Emerge::checkUpdates()
  */
 void Emerge::slotEmergeOutput()
 {
-	QRegExp rxPackage = rxEmerge();
 	QByteArray data = eProc->readAllStandardOutput();
 	QList<QByteArray> lines;
 	if (!data.contains('\n'))
 	{
 		m_buffer.append(data);
+		//qDebug() << "slotEmergeOutput appending" << data;
 		return;
 	}
 	else
@@ -381,7 +413,9 @@ void Emerge::slotEmergeOutput()
 		lines = data.split('\n');
 		lines[0] = m_buffer.append(lines[0]);
 		m_buffer = lines.takeLast();
+		//qDebug() << "slotEmergeOutput processing" << m_buffer;
 	}
+	QRegularExpression rxPackage = rxEmerge();
 	foreach (QByteArray baline, lines) {
 		QString line(baline);
 		int logDone = 0;
@@ -389,12 +423,12 @@ void Emerge::slotEmergeOutput()
 		////////////////////////////////////////////////////////////////////////////////
 		// Cleanup emerge output - remove damn escape sequences
 		////////////////////////////////////////////////////////////////////////////////
-		line.replace( QRegExp("\\x0007"), "\n" );
-		int pos = 0;
-		QRegExp rx( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
-				"(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
-		while ( ( pos = rx.indexIn(line) ) != -1 )
-			line.replace( pos, rx.matchedLength(), QString::null );
+		line.replace( m_rxNewline, "\n" );
+		//int pos = 0;
+		//QRegularExpression rx = rxEscape();
+		//while ( ( pos = rx.indexIn(line) ) != -1 )
+		//	line.replace( pos, rx.matchedLength(), QString::null );
+		line.remove( m_rxEscape );
 
 		if ( line.isEmpty() )
 			continue;
@@ -402,16 +436,17 @@ void Emerge::slotEmergeOutput()
 		////////////////////////////////////////////////////////////////////////////
 		// Parse out package and info
 		////////////////////////////////////////////////////////////////////////////
-		if ( rxPackage.indexIn( line ) > -1 ) {
+		QRegularExpressionMatch match = rxPackage.match( line );
+		if ( match.hasMatch() ) {
 			EmergePackage emergePackage;
-			emergePackage.updateFlags = rxPackage.cap(1);
-			emergePackage.package = rxPackage.cap(2);
-			emergePackage.category = rxPackage.cap(3);
-			emergePackage.name = rxPackage.cap(4);
-			emergePackage.version = rxPackage.cap(5);
-			emergePackage.installedVersion = rxPackage.cap(6);
-			emergePackage.useFlags = rxPackage.cap(7).simplified();
-			emergePackage.size = rxPackage.cap(8);
+			emergePackage.updateFlags = match.captured(1);
+			emergePackage.package = match.captured(2);
+			emergePackage.category = match.captured(3);
+			emergePackage.name = match.captured(4);
+			emergePackage.version = match.captured(5);
+			emergePackage.installedVersion = match.captured(6);
+			emergePackage.useFlags = match.captured(7).simplified();
+			emergePackage.size = match.captured(8);
 			//qDebug() << emergePackage.size;
 			//Fix bug #3163827 order of queue items
 			m_emergePackageList.prepend( emergePackage );
@@ -421,62 +456,53 @@ void Emerge::slotEmergeOutput()
 		// Parse emerge output for correct log output
 		////////////////////////////////////////////////////////////////////////
 		QString lineLower = line.toLower();
-		if ( lineLower.contains( QRegExp("^>>>|^!!!") ) ) {
+		if ( lineLower.contains( m_rxImportantPrefix ) ) {
 
-			if ( lineLower.contains( QRegExp("^>>> completed installing") ) ) {
+			if ( lineLower.contains( m_rxCompletedInstalling ) ) {
 				m_completedFlag = true;
 // 				m_importantMessagePackage = line.section( "Completed installing ", 1, 1 ).section( " ", 0, 0 ) + ":<br>";
 			}
-			else
-				if ( lineLower.contains( QRegExp("^>>> regenerating") ) )
-					m_completedFlag = false;
+			else if ( lineLower.contains( m_rxRegenerating ) )
+				m_completedFlag = false;
 
-			if ( lineLower.contains( QRegExp("^!!! error") ) ) {
+			if ( lineLower.contains( m_rxError ) ) {
 				LogSingleton::Instance()->writeLog( line, ERROR );
 				logDone++;
 			}
 			else
-// 				if ( lineLower.contains( "etc-update" ) ) {
-// 					LogSingleton::Instance()->writeLog( line, ERROR );
-// 					logDone++;
-// 				}
-// 				else
-					if ( lineLower.contains( QRegExp("^!!!") ) ) {
-						LogSingleton::Instance()->writeLog( line, ERROR );
-// 						m_importantMessage += line + "<br>";
-						logDone++;
-					}
-					else
-						if ( logDone == 0 && lineLower.contains( QRegExp(
-							"(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
-							"(^ \\* IMPORTANT)|(^>>> unmerging in)")) ) {
-							LogSingleton::Instance()->writeLog( line, EMERGE );
-							logDone++;
-						}
-
-		}
-		else
-			if ( lineLower.contains( "please tell me" ) ) {
+// 			if ( lineLower.contains( "etc-update" ) ) {
+// 				LogSingleton::Instance()->writeLog( line, ERROR );
+// 				logDone++;
+//			}
+// 			else
+			if ( lineLower.contains( m_rxExclamationPrefix ) ) {
+				LogSingleton::Instance()->writeLog( line, ERROR );
+// 				m_importantMessage += line + "<br>";
+				logDone++;
+			}
+			else if ( logDone == 0 && lineLower.contains( m_rxEmergeMessage ) ) {
 				LogSingleton::Instance()->writeLog( line, EMERGE );
 				logDone++;
 			}
-			else
-				if ( lineLower.contains( "root access required" ) ) {
-					LogSingleton::Instance()->writeLog( i18n( "Root access required!" ), ERROR );
-					logDone++;
-				}
-				else
-					if ( lineLower.contains( "no ebuilds to satisfy" ) ) {
-						QString missingPackage = line.section("no ebuilds to satisfy ", 1, 1);
-						LogSingleton::Instance()->writeLog( i18n( "There is no ebuilds to satisfy %1", missingPackage ), ERROR );
-						logDone++;
-					}
-					else
-						if ( lineLower.contains( " (masked by: " ) )
-							m_unmasked = line.section( "- ", 1 ).section( ")", 0 );
-						else
-							if ( !m_unmasked.isEmpty() && line.startsWith( "# " ) )
-								m_importantMessage += line.section( "# ", 1, 1 ) + "<br/>";
+
+		}
+		else if ( lineLower.contains( "please tell me" ) ) {
+			LogSingleton::Instance()->writeLog( line, EMERGE );
+			logDone++;
+		}
+		else if ( lineLower.contains( "root access required" ) ) {
+			LogSingleton::Instance()->writeLog( i18n( "Root access required!" ), ERROR );
+			logDone++;
+		}
+		else if ( lineLower.contains( "no ebuilds to satisfy" ) ) {
+			QString missingPackage = line.section("no ebuilds to satisfy ", 1, 1);
+			LogSingleton::Instance()->writeLog( i18n( "There is no ebuilds to satisfy %1", missingPackage ), ERROR );
+			logDone++;
+		}
+		else if ( lineLower.contains( " (masked by: " ) )
+			m_unmasked = line.section( "- ", 1 ).section( ")", 0 );
+		else if ( !m_unmasked.isEmpty() && line.startsWith( "# " ) )
+			m_importantMessage += line.section( "# ", 1, 1 ) + "<br/>";
 
 
 		// Save to kuroo.log for debugging
@@ -780,6 +806,8 @@ void Emerge::slotCleanupSync(int exitCode, QProcess::ExitStatus status)
 {
 	Q_UNUSED(exitCode)
 	Q_UNUSED(status)
+	
+	qDebug() << "slotCleanupSync " << exitCode << status;
 
 	disconnect(eProc, &KProcess::readyReadStandardOutput, this, &Emerge::slotEmergeOutput);
 	disconnect(eProc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &Emerge::slotCleanupSync);

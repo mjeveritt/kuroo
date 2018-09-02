@@ -33,11 +33,8 @@
 #include "core/portagedb.h"
 #include "history/history.h"
 #include "core/portagefiles.h"
-#include "core/filewatcher.h"
 #include "core/global.h"
 #include "singleton.h"
-
-#include <QRegExp>
 
 #include <KGlobal>
 #include <KLocale>
@@ -53,7 +50,6 @@ typedef Singleton<KurooDB> KurooDBSingleton;
 typedef Singleton<Log> LogSingleton;
 typedef Singleton<History> HistorySingleton;
 typedef Singleton<PortageFiles> PortageFilesSingleton;
-typedef Singleton<FileWatcher> FileWatcherSingleton;
 
 // The package status
 enum PackageStatus {

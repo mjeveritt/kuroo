@@ -29,6 +29,8 @@
 #include <stdlib.h>
 
 #include <QFile>
+#include <QQueue>
+#include <QSemaphore>
 #include <QTextStream>
 
 #include <kio/job.h>
@@ -1172,12 +1174,24 @@ QStringList SqliteConnection::query( const QString& statement )
 	const char* tail;
 	sqlite3_stmt* stmt;
 
-	//compile SQL program to virtual machine
-	error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
+	int busyCnt( 0 );
+	while (true) {
+		//compile SQL program to virtual machine
+		error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
+		if ( SQLITE_LOCKED == error ) {
+			if ( ++busyCnt > 99 ) {
+				qWarning() << "Busy-counter reached" << busyCnt << "on prepare, aborting" << statement;
+				break;
+			}
+			qDebug() << "sqlite3_prepare: BUSY counter: " << busyCnt << " on query: " << statement;
+			::sleep( 1 );
+		} else
+			break;
+	}
 
 	if ( error != SQLITE_OK )
 	{
-		qWarning() << " sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on query: " << statement;
+		qWarning() << "sqlite3_compile error: " << error << sqlite3_errmsg( m_db ) << " on query: " << statement;
 		values = QStringList();
 	}
 	else
@@ -1235,11 +1249,23 @@ QString SqliteConnection::singleQuery( const QString& statement )
 	const char* tail;
 	sqlite3_stmt* stmt;
 
-	//compile SQL program to virtual machine
-	error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
+	int busyCnt( 0 );
+	while (true) {
+		//compile SQL program to virtual machine
+		error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
+		if ( SQLITE_LOCKED == error ) {
+			if ( ++busyCnt > 99 ) {
+				qWarning() << "Busy-counter reached" << busyCnt << "on prepare, aborting" << statement;
+				break;
+			}
+			qDebug() << "sqlite3_prepare: BUSY counter: " << busyCnt << " on singleQuery: " << statement;
+			::sleep( 1 );
+		} else
+			break;
+	}
 
 	if ( error != SQLITE_OK )
-		qWarning() << "sqlite3_compile error: " << sqlite3_errmsg( m_db ) << " on query: " << statement;
+		qWarning() << "sqlite3_compile error: " << error << sqlite3_errmsg( m_db ) << " on query: " << statement;
 	else
 	{
 		int busyCnt( 0 );

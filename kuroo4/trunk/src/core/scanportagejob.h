@@ -56,11 +56,9 @@ private:
 	QString						formatSize( const QString& size );
 
 	void						loadCache();
-	QString						cacheFind( const QString& package );
+	//QString						cacheFind( const QString& package );
 
 private:
-	QRegExp						rxAtom;
-
 	DbConnection* const 				m_db;
 
 	QMap<QString, QString> 				m_mapCache;

@@ -301,10 +301,9 @@ bool Portage::slotRefresh()
 * Start emerge sync.
 * @return bool
 */
-bool Portage::slotSync()
+void Portage::slotSync()
 {
 	EmergeSingleton::Instance()->sync();
-	return true;
 }
 
 /**

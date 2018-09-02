@@ -42,28 +42,28 @@
 PortageAtom::PortageAtom( PackageBase* portagePackage )
 	: m_portagePackage( portagePackage ),
 	rxAtom(
-			"^"    										// Start of the string
+			"^"											// Start of the string
 			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
 			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
 			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+|virtual)/"   	// category and subcategory FIXME:What about 'virtual' category ?
 			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
 			//FIXME:this will take -9999 version in the package name. See /usr/lib/portage/pym/portage/versions.py that has a better regexp.
-			"("           								// start of the version part
+			"("											// start of the version part
 			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
 			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
 			"(?:-r\\d*)?"  								// revision
-			"\\*?)?"          							// end of the (optional) version part and the atom string
+			"\\*?)?"									// end of the (optional) version part and the atom string
 			"(?::.*)?"									// slot
-			"(?:\\w*#.*)?$"									// line comment
+			"(?:\\w*#.*)?$"								// line comment
 		),
 	rxVersion(
 		"^"
 		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-		"("           								// start of the version part
+		"("											// start of the version part
 		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
 		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
 		"(?:-r\\d*)?"  								// revision
-		"\\*?)$"          							// end of the (optional) version part and the atom string
+		"\\*?)$"									// end of the (optional) version part and the atom string
 	), m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
 	rxAtom.setMinimal(true);	//Versions without a . in them were greedily matched into the package name
@@ -87,11 +87,11 @@ PortageAtom::PortageAtom( const QString& atom )
 	rxVersion(
 		"^"
 		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-		"("           								// start of the version part
+		"("											// start of the version part
 		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
 		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-		"(?:-r\\d*)?"  								// revision
-		"\\*?)$"          							// end of the (optional) version part and the atom string
+		"(?:-r\\d*)?"								// revision
+		"\\*?)$"									// end of the (optional) version part and the atom string
 	), m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
 	PortageAtom();

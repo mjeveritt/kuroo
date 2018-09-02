@@ -20,6 +20,8 @@
 
 #include <QHeaderView>
 #include <QMouseEvent>
+#include <QRegularExpression>
+#include <QTreeView>
 
 #include "common.h"
 #include "queuelistview.h"
@@ -28,6 +30,7 @@
 #include "queuelistdelegate.h"
 
 const int diffTime = 10;
+//const QRegularExpression QueueListView::m_rxNonDigit = QRegularExpression("\\D");
 
 QueueListView::QueueListView(QWidget *parent)
  : QTreeView(parent)
@@ -298,7 +301,7 @@ const QString QueueListView::formatSize( const QString& sizeString )
 void QueueListView::addSize( const QString& size )
 {
 	QString packageSize( size );
-	packageSize = packageSize.remove( QRegExp("\\D") );
+	packageSize = packageSize.remove( m_rxNonDigit );
 	m_sumSize += packageSize.toInt() * 1024;
 }
 

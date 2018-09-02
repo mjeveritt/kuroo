@@ -22,6 +22,7 @@
 #define SCANUPDATESJOB_H
 
 #include <QObject>
+#include <QRegularExpression>
 #include <ThreadWeaver/Job>
 #include <ThreadWeaver/JobPointer>
 #include <ThreadWeaver/QObjectDecorator>
@@ -49,6 +50,7 @@ protected:
 	//void 						completeJob();
 
 private:
+	inline static const QRegularExpression	m_rxNew = QRegularExpression("\\bN\\b");
 	DbConnection* const 		m_db;
 
 	// Package object list

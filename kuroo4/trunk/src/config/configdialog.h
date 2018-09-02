@@ -21,6 +21,8 @@
 #ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
+#include <QRegularExpression>
+
 #include <KConfigDialog>
 #include <KConfigSkeleton>
 
@@ -38,24 +40,28 @@ class ConfigDialog : public KConfigDialog
 Q_OBJECT
 
 public:
-    ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleton *config );
+	ConfigDialog( QWidget *parent, const QString& name, KConfigSkeleton *config );
 	~ConfigDialog();
-	
+
 private:
 	const QStringList 	readMakeConf();
 	void 				parseMakeConf();
 	bool 				saveMakeConf();
-	
+
 private slots:
 	void 				slotSaveAll();
 	void				slotDefaults();
-	
+
 private:
 	bool				m_isDefault;
 	Ui::Options1 form1;
 	Ui::Options2 form2;
 	Ui::Options3 form3;
 	Ui::Options4 form4;
+
+	inline static const QRegularExpression m_rxLine = QRegularExpression( "^\\s*(\\w*)(\\s*=\\s*)(\"?([^\"#]*)\"?)#*" );
+	inline static const QRegularExpression m_rxComment = QRegularExpression( "^\\s*#" );
+	inline static const QRegularExpression m_rxTrailingSlash = QRegularExpression( "\\\\s*$" );
 };
 
 #endif

@@ -23,8 +23,9 @@
 
 #include "package.h"
 
-#include <QProcess>
 #include <QObject>
+#include <QProcess>
+#include <QRegularExpression>
 #include <QStringList>
 #include <KProcess>
 
@@ -48,7 +49,7 @@ public:
 	bool 						queue( const QStringList& packageList );
 	bool 						unmerge( const QStringList& packageList );
 	bool						quickpkg( const QStringList& packageList );
-	bool						sync();
+	void						sync();
 	bool						checkUpdates();
 	/**
 	 * Are we paused?
@@ -64,8 +65,8 @@ public:
 	/**
 	 * @return list of packages parsed out from emerge output.
 	 */
-	inline const 	EmergePackageList 		packageList() const { return m_emergePackageList; }
-	const 	QString					packageMessage();
+	inline const EmergePackageList	packageList() const { return m_emergePackageList; }
+	const QString					packageMessage();
 	/**
 	 * Set Skip Housekeeping
 	 */
@@ -79,6 +80,7 @@ private:
 	void						cleanup();
 	bool						countEtcUpdates( const QString& line );
 	void						askUnmaskPackage( const QString& packageKeyword );
+	void 						cleanupQueue();
 	/**
 	 * Do we Skip housekeeping?
 	 * @return bool
@@ -86,22 +88,21 @@ private:
 	inline bool					skipHousekeeping() const { return m_skipHousekeeping; }
 
 private slots:
-    void 						slotEmergeOutput();
-    void 						slotCleanupQueue(int, QProcess::ExitStatus);
-    void 						slotCleanupPretend(int, QProcess::ExitStatus);
-    void 						slotCleanupUnmerge(int, QProcess::ExitStatus);
-    void 						slotCleanupSync(int, QProcess::ExitStatus);
-    void 						slotCleanupCheckUpdates(int, QProcess::ExitStatus);
+	void 						slotEmergeOutput();
+	void 						slotCleanupQueue(int, QProcess::ExitStatus);
+	void 						slotCleanupPretend(int, QProcess::ExitStatus);
+	void 						slotCleanupUnmerge(int, QProcess::ExitStatus);
+	void 						slotCleanupSync(int, QProcess::ExitStatus);
+	void 						slotCleanupCheckUpdates(int, QProcess::ExitStatus);
 	void						slotTryEmerge();
-    void						slotBackupComplete(int, QProcess::ExitStatus);
-    void						slotEmergeDistfilesComplete();
-    void						slotEClean2Complete(int, QProcess::ExitStatus);
-    void						slotRevdepRebuildComplete();
+	void						slotBackupComplete(int, QProcess::ExitStatus);
+	void						slotEmergeDistfilesComplete();
+	void						slotEClean2Complete(int, QProcess::ExitStatus);
+	void						slotRevdepRebuildComplete();
 
-	
 signals:
 	void						signalEmergeComplete();
-	
+
 private:
 	QObject* m_parent;
 	KProcess* eProc;
@@ -122,7 +123,7 @@ private:
 
 	// should we be ecleaning?
 	bool						m_doeclean;
-        bool                                            m_dorevdeprebuild;
+	bool						m_dorevdeprebuild;
 	
 	// Package with the important message
 	QString						m_importantMessagePackage;
@@ -146,13 +147,23 @@ private:
 	EmergePackageList			m_emergePackageList;
 	
 	//Remembers the beginning of lines before they are fully read.
-	QByteArray				m_buffer;
+	QByteArray					m_buffer;
 	
 	// Count of etc-updates files to merge
 	int							m_etcUpdateCount;
         
-        bool                                            m_skipHousekeeping;
-	void cleanupQueue();
+	bool						m_skipHousekeeping;
+
+	inline static const QRegularExpression	m_rxNewline = QRegularExpression( "\\x0007" );
+	inline static const QRegularExpression	m_rxEscape = QRegularExpression( "(\\x0008)|(\\x001b\\[32;01m)|(\\x001b\\[0m)|(\\x001b\\[A)|(\\x001b\\[73G)|"
+					"(\\x001b\\[34;01m)|(\\x001b\\]2;)|(\\x001b\\[39;49;00m)|(\\x001b\\[01m.)" );
+	inline static const QRegularExpression	m_rxImportantPrefix = QRegularExpression( "^>>>|^!!!" );
+	inline static const QRegularExpression	m_rxExclamationPrefix = QRegularExpression( "^!!!" );
+	inline static const QRegularExpression	m_rxCompletedInstalling = QRegularExpression( "^>>> completed installing" );
+	inline static const QRegularExpression	m_rxRegenerating = QRegularExpression( "^>>> regenerating" );
+	inline static const QRegularExpression	m_rxError = QRegularExpression( "^!!! error" );
+	inline static const QRegularExpression	m_rxEmergeMessage = QRegularExpression( "(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
+							"(^ \\* IMPORTANT)|(^>>> unmerging in)" );
 };
 
 #endif

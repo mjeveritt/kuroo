@@ -213,7 +213,7 @@
              <height>32767</height>
             </size>
            </property>
-           <property name="title">
+           <property name="title" stdset="0">
             <string>Available Versions for this package:</string>
            </property>
            <layout class="QGridLayout">

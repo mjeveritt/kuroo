@@ -153,7 +153,6 @@ KurooInit::KurooInit( QObject *parent )
 	PortageSingleton::Instance()->init( this );
 	QueueSingleton::Instance()->init( this );
 	PortageFilesSingleton::Instance()->init( this );
-	FileWatcherSingleton::Instance()->init( this );
 
 	//Load packages in case /etc/portage.* changed
 	PortageFilesSingleton::Instance()->loadPackageFiles();
@@ -189,11 +188,6 @@ void KurooInit::slotEmergeInfo()
 {
 	qDebug() << "Parsing emerge --info";
 	foreach( QString line, m_emergeInfoLines ) {
-		if ( line.startsWith( "Portage 2.0" ) ) {
-			KurooConfig::setPortageVersion21( false );
-		} else {
-			KurooConfig::setPortageVersion21( true );
-		}
 
 		if ( line.startsWith( "ACCEPT_KEYWORDS=" ) ) {
 			QString arch = line.section( "\"", 1, 1 );

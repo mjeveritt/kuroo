@@ -21,9 +21,10 @@
 #ifndef QUEUE_LIST_VIEW_H
 #define QUEUE_LIST_VIEW_H
 
-#include <QTreeView>
-#include <QStringList>
 #include <QMouseEvent>
+#include <QRegularExpression>
+#include <QStringList>
+#include <QTreeView>
 
 class QueueListItem;
 
@@ -71,6 +72,7 @@ private:
 	void							addSize( const QString& size );
 	void							indexPackage( const QString& id, QueueListItem *item );
 	QString							m_currentEmergingId;
+	inline static const QRegularExpression	m_rxNonDigit = QRegularExpression("\\D");
 
 };
 #endif

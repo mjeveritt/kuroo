@@ -69,8 +69,7 @@ public:
 			if( !(*it).trimmed().startsWith( "#" ) && !(*it).trimmed().isEmpty() ) {
 				QString category = (*it).section( '/', 0, 0 );
 				QString name = ( (*it).section( '/', 1 ) ).section( ' ', 0, 0 );
-				QString use = (*it).section( ' ', 1 );
-				use.simplified();
+				QString use = (*it).section( ' ', 1 ).simplified();
 
 				QString id = KurooDBSingleton::Instance()->singleQuery(
 					"SELECT id FROM package WHERE name = '" + name + "' AND category = '" + category + "' LIMIT 1;", m_db );

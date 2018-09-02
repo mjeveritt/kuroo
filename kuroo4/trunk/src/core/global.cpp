@@ -21,31 +21,14 @@
 #include "common.h"
 #include "global.h"
 
-
-
 /**
 * Regexp to parse emerge output.
 */
-const QRegExp rxEmerge()
+const QRegularExpression rxEmerge()
 {
-	if ( KurooConfig::portageVersion21() ) {
-		return QRegExp( "^\\[ebuild([\\s\\w~#*]*)\\]\\s+"	//Also allow * for merging hardmasked packages
-						"((\\S+)/(\\S+))"
-						"(?:\\s*\\[([^\\]]*)\\])?"
-						"(?:\\s*\\[([^\\]]*)\\])?"
-						"(?:\\s*USE=\"([^\"]*)\")?"
-						"(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
-						"(?:\\s*\\w+=\"(?:[^\"]*)\")*"		//Capture and discard all extra use-expands
-						"(?:\\s*(\\d*(,\\d*)*)\\s(?:Ki|k)B)?" );
-	} else {
-		return QRegExp( "^\\[ebuild([\\s\\w]*)\\]\\s+"
-						"((\\S+)/(\\S+))"
-						"(?:\\s*\\[([^\\]]*)\\])?"
-						"(?:\\s*\\[([^\\]]*)\\])?"
-						"((?:\\s*[\\(\\-\\+]+\\w+[\\)%]?)*)"
-						"(?:\\s(\\d*,?\\d*)\\skB)?" );
-	}
+	return m_rxEmerge;
 }
+
 
 /**
 * Parse out category, package name and version parts from package.

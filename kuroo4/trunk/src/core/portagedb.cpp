@@ -1178,7 +1178,7 @@ QStringList SqliteConnection::query( const QString& statement )
 	while (true) {
 		//compile SQL program to virtual machine
 		error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
-		if ( SQLITE_LOCKED == error ) {
+		if ( SQLITE_LOCKED == error || SQLITE_BUSY == error ) {
 			if ( ++busyCnt > 99 ) {
 				qWarning() << "Busy-counter reached" << busyCnt << "on prepare, aborting" << statement;
 				break;
@@ -1253,7 +1253,7 @@ QString SqliteConnection::singleQuery( const QString& statement )
 	while (true) {
 		//compile SQL program to virtual machine
 		error = sqlite3_prepare( m_db, statement.toUtf8(), statement.length(), &stmt, &tail );
-		if ( SQLITE_LOCKED == error ) {
+		if ( SQLITE_LOCKED == error || SQLITE_BUSY == error ) {
 			if ( ++busyCnt > 99 ) {
 				qWarning() << "Busy-counter reached" << busyCnt << "on prepare, aborting" << statement;
 				break;

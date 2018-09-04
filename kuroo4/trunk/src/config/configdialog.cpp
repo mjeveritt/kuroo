@@ -18,14 +18,15 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
-#include <QTextStream>
-#include <QFile>
 #include <QCheckBox>
+#include <QHash>
+#include <QFile>
+#include <QTextStream>
 
-#include <KConfigDialog>
 #include <KConfig>
-#include <KMessageBox>
+#include <KConfigDialog>
 #include <KConfigGroup>
+#include <KMessageBox>
 
 #include "common.h"
 #include "configdialog.h"
@@ -172,9 +173,9 @@ const QStringList ConfigDialog::readMakeConf()
 		QTextStream stream( &makeconf );
 		QStringList lines;
 
-		// Collect all lines except comments
+		// Collect all lines
 		while ( !stream.atEnd() )
-			lines += stream.readLine();
+			lines += stream.readLine().simplified();
 		makeconf.close();
 
 		// Concatenate extended lines
@@ -183,20 +184,29 @@ const QStringList ConfigDialog::readMakeConf()
 		foreach( QString line, lines ) {
 
 			// Skip comment lines
-			if ( line.isEmpty() || line.contains( m_rxComment ) ) {
+			if ( line.isEmpty() || line.startsWith( '#' ) ) {
 				linesCommented += line;
 				continue;
+			} else if ( line.endsWith( '\\' ) ) {
+				//We're re-joining multiline vars into a single line with spaces, so the
+				//trailing slash to indicate multi-line isn't needed
+				line.chop( 1 );
 			}
 
-			line = line.simplified();
-			if ( line.contains( "=" ) ) {
+			//The first time we see '=' extendedLine should be empty, and it gets cleared and
+			//set to the whole line.  Subsequent encounters with '=' will join previous lines
+			//with spaces, add them to linesConcatenated, and reset extendedLine to the
+			//current line
+			if ( line.contains( '=' ) ) {
 				linesConcatenated += extendedLine;
-				extendedLine = line.section( m_rxTrailingSlash, 0, 0 ).simplified();
-
+				extendedLine = line;
+				//add the comments seen since last '=' to collected lines
 				linesConcatenated += linesCommented;
 				linesCommented.clear();
 			} else {
-				extendedLine += " " + line.section( m_rxTrailingSlash, 0, 0 ).simplified();
+				//Any non-comment lines seen since last '=' are appended with a space to the
+				//extended line
+				extendedLine += " " + line;
 			}
 		}
 
@@ -217,479 +227,63 @@ void ConfigDialog::parseMakeConf()
 	QStringList linesConcatenated = readMakeConf();
 	if ( !linesConcatenated.isEmpty() ) {
 		// Clear old entries
-		KurooConfig::setAcceptKeywords( QString::null );
-		KurooConfig::setAutoClean( true );
-		KurooConfig::setBuildPrefix( QString::null );
-		KurooConfig::setCBuild( QString::null );
-		KurooConfig::setCCacheSize( QString::null );
-		KurooConfig::setCFlags( QString::null );
-		KurooConfig::setCXXFlags( QString::null );
-		KurooConfig::setChost( QString::null );
-		KurooConfig::setCleanDelay( QString::null );
-		KurooConfig::setConfigProtect( QString::null );
-		KurooConfig::setConfigProtectMask( QString::null );
-		KurooConfig::setDebugBuild( QString::null );
-		KurooConfig::setDirDist( QString::null );
-		KurooConfig::setFeatures( QString::null );
-		KurooConfig::setFetchCommand( QString::null );
-		KurooConfig::setGentooMirrors( QString::null );
-		KurooConfig::setFtpProxy( QString::null );
-		KurooConfig::setHttpProxy( QString::null );
-		KurooConfig::setMakeOpts( QString::null );
-		KurooConfig::setNoColor( false );
-		KurooConfig::setDirPkgTmp( QString::null );
-		KurooConfig::setDirPkg( QString::null );
-		KurooConfig::setDirPortLog( QString::null );
-		KurooConfig::setPortageBinHost( QString::null );
-		KurooConfig::setPortageNiceness( QString::null );
-		KurooConfig::setDirPortageTmp( QString::null );
-		KurooConfig::setDirPortage( "/usr/portage" );
-		KurooConfig::setDirPortageOverlay( QString::null );
-		KurooConfig::setResumeCommand( QString::null );
-		KurooConfig::setRoot( QString::null );
-		KurooConfig::setRsyncExcludeFrom( QString::null );
-		KurooConfig::setRsyncProxy( QString::null );
-		KurooConfig::setRsyncRetries( QString::null );
-		KurooConfig::setRsyncRateLimit( QString::null );
-		KurooConfig::setRsyncTimeOut( QString::null );
-		KurooConfig::setDirRpm( QString::null );
-		KurooConfig::setSync( QString::null );
-		KurooConfig::setUse( QString::null );
-		KurooConfig::setUseOrder( QString::null );
+		foreach( void (*value)(const QString&), m_configHash ) {
+			if ( NULL != value )
+				value( QString::null );
+		}
 
 		// Parse the lines
 		foreach( QString line, linesConcatenated ) {
 
 			// Skip comment lines
-			if ( line.isEmpty() || line.contains( m_rxComment ) )
+			if ( line.isEmpty() || line.startsWith( '#' ) )
 				continue;
 
 			QRegularExpressionMatch match = m_rxLine.match( line );
-			if ( line.contains( "ACCEPT_KEYWORDS=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setAcceptKeywords( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse ACCEPT_KEYWORDS.";
-				continue;
-			}
-
-			if ( line.contains( "AUTOCLEAN=" ) ) {
-				if ( match.hasMatch() ) {
-					//KurooConfig::setAutoClean( match.captured(4) );
-					qWarning() << "KurooConfig::setAutoClean( match.captured(4) );";
-				} else {
-					qWarning() << "Parsing /etc/make.conf: can not parse AUTOCLEAN.";
+			if ( match.hasMatch() ) {
+				QString name = match.captured( 1 );
+				if ( m_configHash.contains( name ) ) {
+					if ( NULL != m_configHash.value( name ) ) {
+						m_configHash[name]( match.captured( 2 ) );
+						qDebug() << "Parsed" << name << "as" << match.captured( 2 ) << "from make.conf";
+					} else {
+						qWarning() << "Parsing make.conf: found" << name << "but can't parse it";
+					}
+					continue;
 				}
-				continue;
-			}
-
-			if ( line.contains( "BUILD_PREFIX=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setBuildPrefix( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse BUILD_PREFIX.";
-				continue;
-			}
-
-			if ( line.contains( "CBUILD=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setCBuild( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CBUILD.";
-				continue;
-			}
-
-			if ( line.contains( "CCACHE_SIZE=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setCCacheSize( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CCACHE_SIZE.";
-				continue;
-			}
-
-			if ( line.contains( "CFLAGS=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setCFlags( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CFLAGS.";
-				continue;
-			}
-
-			if ( line.contains( "CXXFLAGS=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setCXXFlags( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CXXFLAGS.";
-				continue;
-			}
-
-			if ( line.contains( "CHOST=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setChost( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CHOST.";
-				continue;
-			}
-
-			if ( line.contains( "CLEAN_DELAY=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setCleanDelay( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CLEAN_DELAY.";
-				continue;
-			}
-
-			if ( line.contains( "CONFIG_PROTECT=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setConfigProtect( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse CONFIG_PROTECT.";
-				continue;
-			}
-
-			if ( line.contains( "CONFIG_PROTECT_MASK=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setConfigProtectMask( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse BUILD_PREFIX.";
-				continue;
-			}
-
-			if ( line.contains( "DEBUGBUILD=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setDebugBuild( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse DEBUGBUILD.";
-				continue;
-			}
-
-			if ( line.contains( "DISTDIR=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setDirDist( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse DISTDIR.";
-				continue;
-			}
-
-			if ( line.contains( "FEATURES=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setFeatures( match.captured(4) );
-			else
-				qWarning() << "Parsing /etc/make.conf: can not parse FEATURES.";
-				continue;
-			}
-
-			if ( line.contains( "FETCHCOMMAND=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setFetchCommand( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse FETCHCOMMAND.";
-				continue;
-			}
-
-			if ( line.contains( "GENTOO_MIRRORS=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setGentooMirrors( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse GENTOO_MIRRORS.";
-				continue;
-			}
-
-			if ( line.contains( "FTP_PROXY=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setFtpProxy( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse FTP_PROXY.";
-				continue;
-			}
-
-			if ( line.contains( "HTTP_PROXY=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setHttpProxy( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse HTTP_PROXY.";
-				continue;
-			}
-
-			if ( line.contains( "MAKEOPTS=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setMakeOpts( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse MAKEOPTS.";
-				continue;
-			}
-
-			/*if ( line.contains( "NOCOLOR=" ) ) {
-				if ( match.hasMatch() )
-					KurooConfig::setNoColor( match.captured(4) );
-				else
-					qWarning() << "Parsing /etc/make.conf: can not parse NOCOLOR.";
-				continue;
-			}*/
-
-			if ( line.contains( "PKG_TMPDIR=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirPkgTmp( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PKG_TMPDIR.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PKGDIR=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirPkg( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PKGDIR.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORT_LOGDIR=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirPortLog( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PORT_LOGDIR.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORTAGE_BINHOST=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setPortageBinHost( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PORTAGE_BINHOST.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORTAGE_ELOG_CLASSES=" ) ) {
-				/* this is kind of messy, but it gets the job done */
-				if( line.contains( "warn" ) )
-					KurooConfig::setElogWarn( 1 );
-				if( line.contains( "error" ) )
-					KurooConfig::setElogError( 1 );
-				if( line.contains( "info" ) )
-					KurooConfig::setElogInfo( 1 );
-				if( line.contains( "log" ) )
-					KurooConfig::setElogLog( 1 );
-				if( line.contains( "qa" ) )
-					KurooConfig::setElogQa( 1 );
-				continue;
-			}
-
-			if( line.contains( "PORTAGE_ELOG_SYSTEM=" ) ) {
-				/* this is also kindof messy, got a better way? */
-				if( line.contains( "save") ) 
-					KurooConfig::setElogSysSave( 1 );
-				if( line.contains( "mail") ) 
-					KurooConfig::setElogSysMail( 1 );
-				if( line.contains( "syslog") ) 
-					KurooConfig::setElogSysSyslog( 1 );
-				if( line.contains( "custom") ) 
-					KurooConfig::setElogSysCustom( 1 );
-				if( line.contains( "save_summary" ) )
-					KurooConfig::setElogSysSaveSum( 1 );
-				if( line.contains( "mail_summary" ) )
-					KurooConfig::setElogSysMailSum( 1 );
-				continue;
-			}
-
-			if( line.contains( "PORTAGE_ELOG_COMMAND=" ) ) {
-				if( match.hasMatch() ) {
-					KurooConfig::setElogCustomCmd( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: cannot parse PORTAGE_ELOG_COMMAND";
-				}
-				continue;
-			}
-
-			if( line.contains( "PORTAGE_ELOG_MAILURI=" ) ) {
-				if( match.hasMatch() ) {
-					KurooConfig::setElogMailURI( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: cannot parse PORTAGE_ELOG_MAILURI";
-				}
-				continue;
-			}
-
-			if( line.contains( "PORTAGE_ELOG_MAILFROM=" ) ) {
-				if( match.hasMatch() ) {
-					KurooConfig::setElogMailFromURI( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: cannot parse PORTAGE_ELOG_MAILFROM";
-				}
-				continue;
-			}
-
-			if( line.contains( "PORTAGE_ELOG_MAILSUBJECT=" ) ) {
-				if( match.hasMatch() ) {
-					KurooConfig::setElogSubject( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: cannot parse PORTAGE_MAILSUBJECT";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORTAGE_NICENESS=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setPortageNiceness( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PORTAGE_NICENESS.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORTAGE_TMPDIR=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirPortageTmp( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PORTAGE_TMPDIR.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORTDIR=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirPortage( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PORTDIR.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "PORTDIR_OVERLAY=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirPortageOverlay( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse PORTDIR_OVERLAY.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RESUMECOMMAND=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setResumeCommand( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RESUMECOMMAND.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "ROOT=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setRoot( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse ROOT.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RSYNC_EXCLUDEFROM=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setRsyncExcludeFrom( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RSYNC_EXCLUDEFROM.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RSYNC_PROXY=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setRsyncProxy( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RSYNC_PROXY.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RSYNC_RETRIES=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setRsyncRetries( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RSYNC_RETRIES.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RSYNC_RATELIMIT=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setRsyncRateLimit( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RSYNC_RATELIMIT.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RSYNC_TIMEOUT=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setRsyncTimeOut( match.captured(4)  );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RSYNC_TIMEOUT.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "RPMDIR=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setDirRpm( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse RPMDIR.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "SYNC=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setSync( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse SYNC.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "USE=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setUse( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse USE.";
-				}
-				continue;
-			}
-
-			if ( line.contains( "USE_ORDER=" ) ) {
-				if ( match.hasMatch() ) {
-					KurooConfig::setUseOrder( match.captured(4) );
-				}
-				else {
-					qWarning() << "Parsing /etc/make.conf: can not parse USE_ORDER.";
-				}
-				continue;
 			}
 		}
 	}
+}
+
+void ConfigDialog::handleELogClasses( const QString& value ) {
+	/* this is kind of messy, but it gets the job done */
+	if( value.contains( "warn" ) )
+		KurooConfig::setElogWarn( 1 );
+	if( value.contains( "error" ) )
+		KurooConfig::setElogError( 1 );
+	if( value.contains( "info" ) )
+		KurooConfig::setElogInfo( 1 );
+	if( value.contains( "log" ) )
+		KurooConfig::setElogLog( 1 );
+	if( value.contains( "qa" ) )
+		KurooConfig::setElogQa( 1 );
+}
+
+void ConfigDialog::handleELogSystem( const QString& value ) {
+	/* this is also kindof messy, got a better way? */
+	if( value.contains( "save") ) 
+		KurooConfig::setElogSysSave( 1 );
+	if( value.contains( "mail") ) 
+		KurooConfig::setElogSysMail( 1 );
+	if( value.contains( "syslog") ) 
+		KurooConfig::setElogSysSyslog( 1 );
+	if( value.contains( "custom") ) 
+		KurooConfig::setElogSysCustom( 1 );
+	if( value.contains( "save_summary" ) )
+		KurooConfig::setElogSysSaveSum( 1 );
+	if( value.contains( "mail_summary" ) )
+		KurooConfig::setElogSysMailSum( 1 );
 }
 
 /**
@@ -721,7 +315,7 @@ bool ConfigDialog::saveMakeConf()
 
 			QRegularExpressionMatch match = m_rxLine.match( line );
 			if ( match.hasMatch() ) {
-				keywords[ match.captured(1) ] = match.captured(4);
+				keywords[ match.captured(1) ] = match.captured(2);
 			}
 			else {
 				qWarning() << QString("Parsing %1: can not match keyword %2.").arg( KurooConfig::fileMakeConf() ).arg( match.captured(1) );

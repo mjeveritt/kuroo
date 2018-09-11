@@ -25,7 +25,7 @@
 #include "packageversion.h"
 
 #include <QList>
-#include <QRegExp>
+#include <QRegularExpression>
 
 /**
  * This class is the provides capabilities to parse DEPEND atoms and get
@@ -62,10 +62,35 @@ private:
 	PackageBase* m_portagePackage;
 
 	// The regular expression for the whole atom.
-	QRegExp rxAtom;
+	inline static const QRegularExpression rxAtom = QRegularExpression(
+			"^"											// Start of the string
+			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
+			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
+			"([a-z0-9]+|virtual)(?:-([a-z0-9]+))?/"   	// category and subcategory FIXME:What about 'virtual' category ?
+			"((?:[a-zA-Z0-9]|-|\\+|_)+?)" 				// package name
+			//FIXME:this will take -9999 version in the package name. See /usr/lib/portage/pym/portage/versions.py that has a better regexp.
+			"("											// start of the version part
+			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+			"(?:-r\\d*)?"  								// revision
+			"\\*?)?"									// end of the (optional) version part and the atom string
+			"(?::.*)?"									// slot
+			"(?:\\w*#.*)?$"								// line comment
+			//Versions without a . in them were greedily matched into the package name, but QRegularExpression
+			//supports non-greedy qualifiers on the package name line
+			//, QRegularExpression::PatternOption::InvertedGreedinessOption
+																	  );
 
 	// The regular expression for just the package name and version.
-	QRegExp rxVersion;
+	inline static const QRegularExpression rxVersion = QRegularExpression(
+		"^"
+		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
+		"("											// start of the version part
+		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
+		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
+		"(?:-r\\d*)?"								// revision
+		"\\*?)$"									// end of the (optional) version part and the atom string
+													   );
 
 	// This is set to the result of parse().
 	bool m_matches;

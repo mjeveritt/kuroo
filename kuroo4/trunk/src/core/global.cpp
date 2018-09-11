@@ -18,30 +18,23 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
+#include <QRegularExpression>
+
 #include "common.h"
 #include "global.h"
 
-/**
-* Regexp to parse emerge output.
-*/
-const QRegularExpression rxEmerge()
-{
-	return m_rxEmerge;
-}
-
-
+static const QRegularExpression rxNameVersion = QRegularExpression( "(?:[a-zA-Z0-9]|-)*"
+				"("
+				"(-(?:\\d+\\.)*\\d+[a-z]?)"
+				"(?:_(?=alpha|beta|pre|rc|p)\\d*)?"
+				"(?:-r\\d*)?"
+				")" );
 /**
 * Parse out category, package name and version parts from package.
 * @param sring to parse out cpv from
 */
 const QStringList parsePackage( const QString& packageString )
 {
-	QRegExp rx( "(?:[a-z]|[A-Z]|[0-9]|-)*"
-				"("
-				"(-(?:\\d+\\.)*\\d+[a-z]?)"
-				"(?:_(?=alpha|beta|pre|rc|p)\\d*)?"
-				"(?:-r\\d*)?"
-				")" );
 	QStringList list;
 	QString nameVersion;
 	QString package( packageString );
@@ -57,9 +50,12 @@ const QStringList parsePackage( const QString& packageString )
 	}
 
 	// Now package name and version
-	if ( rx.indexIn( nameVersion ) != -1 ) {
-		QString name = nameVersion.section( rx.cap( 1 ), 0, 0 );
+	QRegularExpressionMatch match = rxNameVersion.match( nameVersion );
+	if ( match.hasMatch() ) {
+		//Group 1 is version with preceeding '-' so this will pull everything before
+		QString name = nameVersion.section( match.captured( 1 ), 0, 0 );
 		list << name;
+		//then everything after name and '-', should be whatever is in the version
 		list << nameVersion.section( name + "-", 1 );
 		return list;
 	} else

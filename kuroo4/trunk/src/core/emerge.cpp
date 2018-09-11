@@ -903,13 +903,17 @@ void Emerge::slotTryEmerge()
  */
 bool Emerge::countEtcUpdates( const QString& line )
 {
-	// count etc-files to merge
-	if ( line.contains( " need updating" ) ) {
-		QString tmp = line.section( "config files", 0, 0 );
-		QRegExp rx("^\\d+\\)");
-		int pos = rx.indexIn(tmp);
-		if ( pos > -1 )
-			m_etcUpdateCount += ( rx.cap(1) ).toInt();
+	// count etc-files to merge, the string to match will be either
+	//"config file '%s' needs updating. or
+	//"%d config files in '%s' need updating.
+	if ( line.contains( "needs updating" ) ) {
+		m_etcUpdateCount = 1;
+		return true;
+	} else if ( line.contains( " need updating" ) ) {
+		QString tmp = line.section( "config file", 0, 0 );
+		QRegularExpressionMatch match = m_rxDigits.match( tmp );
+		if ( match.hasMatch() )
+			m_etcUpdateCount += ( match.captured(1) ).toInt();
 
 		return true;
 	}

@@ -114,6 +114,9 @@ private:
 		{QString("SYNC="), KurooConfig::setSync},
 		{QString("USE="), KurooConfig::setUse},
 		{QString("USE_ORDER="), KurooConfig::setUseOrder}};
+		
+		inline static const QRegularExpression m_rxAnyConfigVars =
+			QRegularExpression( "(" + QStringList( m_configHash.keys() ).replaceInStrings("=", "").join('|') + ")" );
 };
 
 #endif

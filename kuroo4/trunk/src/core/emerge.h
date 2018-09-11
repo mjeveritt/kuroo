@@ -164,6 +164,7 @@ private:
 	inline static const QRegularExpression	m_rxError = QRegularExpression( "^!!! error" );
 	inline static const QRegularExpression	m_rxEmergeMessage = QRegularExpression( "(^>>> (merging|unmerge|unmerging|clean|unpacking source|extracting|completed|regenerating))|"
 							"(^ \\* IMPORTANT)|(^>>> unmerging in)" );
+	inline static const QRegularExpression	m_rxDigits = QRegularExpression( "\\d+" );
 };
 
 #endif

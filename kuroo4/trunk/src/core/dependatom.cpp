@@ -30,7 +30,7 @@
 
 // For more info on DEPEND atoms, see the DEPEND Atoms section of man 5 ebuild
 
-// The complete atom regexp in non-escaped form (for testing, or similar):
+// The complete atom regexp in non-escaped form (for testing, or similar): this isn't totally accurate anymore
 // ^(!)?(~|(?:<|>|=|<=|>=))?((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+)/((?:[a-z]|[A-Z]|[0-9]|-|\+|_)+)((?:\*$|-\d+(?:\.\d+)*[a-z]?(?:\*$)?)(?:_(?:alpha|beta|pre|rc|p)\d+)?(?:-r\d+)?)?$
 
 /**
@@ -40,68 +40,18 @@
  * @param packages  The package that will be filtered out.
  */
 PortageAtom::PortageAtom( PackageBase* portagePackage )
-	: m_portagePackage( portagePackage ),
-	rxAtom(
-			"^"											// Start of the string
-			"(!)?" 										// "Block these packages" flag, only occurring in ebuilds
-			"(~|(?:<|>|=|<=|>=))?" 						// greater-than/less-than/equal, or "all revisions" prefix
-			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+|virtual)/"   	// category and subcategory FIXME:What about 'virtual' category ?
-			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-			//FIXME:this will take -9999 version in the package name. See /usr/lib/portage/pym/portage/versions.py that has a better regexp.
-			"("											// start of the version part
-			"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-			"(?:-r\\d*)?"  								// revision
-			"\\*?)?"									// end of the (optional) version part and the atom string
-			"(?::.*)?"									// slot
-			"(?:\\w*#.*)?$"								// line comment
-		),
-	rxVersion(
-		"^"
-		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-		"("											// start of the version part
-		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-		"(?:-r\\d*)?"  								// revision
-		"\\*?)$"									// end of the (optional) version part and the atom string
-	), m_matches( false ), m_callsign( false ), m_category( QString::null )
-{
-	rxAtom.setMinimal(true);	//Versions without a . in them were greedily matched into the package name
-}
+	: m_portagePackage( portagePackage ), m_matches( false ), m_callsign( false ), m_category( QString::null )
+{}
 
 PortageAtom::PortageAtom( const QString& atom )
-	: rxAtom(
-			"^"											// Start of the string
-			"(!)?"										// "Block these packages" flag, only occurring in ebuilds
-			"(~|(?:<|>|=|<=|>=))?"						// greater-than/less-than/equal, or "all revisions" prefix
-			"((?:[a-z]|[0-9])+)-((?:[a-z]|[0-9])+|virtual)/"	// category and subcategory
-			"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)"			// package name
-			"("											// start of the version part
-			"(?:-\\d*(?:\\.\\d+)*[a-z]?)"				// base version number, including wildcard version matching (*)
-			"(?:_(?:alpha|beta|pre|rc|p)\\d*)?"			// version suffix
-			"(?:-r\\d*)?"								// revision
-			"\\*?)?"									// end of the (optional) version part and the atom string
-			"(?::.*)?"									// slot
-			"(?:\\w*#.*)?$"									// line comment
-		),
-	rxVersion(
-		"^"
-		"((?:[a-z]|[A-Z]|[0-9]|-|\\+|_)+)" 			// package name
-		"("											// start of the version part
-		"(?:-\\d*(?:\\.\\d+)*[a-z]?)" 				// base version number, including wildcard version matching (*)
-		"(?:_(?:alpha|beta|pre|rc|p)\\d*)?" 		// version suffix
-		"(?:-r\\d*)?"								// revision
-		"\\*?)$"									// end of the (optional) version part and the atom string
-	), m_matches( false ), m_callsign( false ), m_category( QString::null )
+	: m_matches( false ), m_callsign( false ), m_category( QString::null )
 {
 	PortageAtom();
-	rxAtom.setMinimal(true);	//Versions without a . in them were greedily matched into the package name
 	parse( atom );
 }
 
 PortageAtom::~PortageAtom()
-{
-}
+{}
 
 /**
  * Test the atom string on validness, and fill the internal variables with
@@ -120,30 +70,35 @@ bool PortageAtom::parse( const QString& atom )
 // 	qDebug() << "atom=" << atom;
 
 	// Do the regexp match, which also prepares for text capture
-	if ( !rxAtom.exactMatch( atom ) ) {
+	QRegularExpressionMatch match = rxAtom.match( atom );
+	if ( !match.hasMatch() ) {
 		qDebug() << atom << " didn't match the regex exactly.";
 		m_matches = false;
 		return false;
 	}
 
 	// Get the captured strings
-	m_callsign	= rxAtom.cap( 1 ).isEmpty() ? false : true;
+	m_callsign	= match.captured( 1 ).isEmpty() ? false : true;
 	//qDebug() << m_callsign;
-	m_prefix	= rxAtom.cap( 2 );
+	m_prefix	= match.captured( 2 );
 	//qDebug() << m_prefix;
-	m_category	= rxAtom.cap( 3 ) + "-" + rxAtom.cap( 4 );
+	if ( "virtual" == match.captured( 3 ) )
+		m_category = "virtual";
+	else
+		m_category	= match.captured( 3 ) + "-" + match.captured( 4 );
 	//qDebug() << m_category;
-	m_package	= rxAtom.cap( 5 );
+	m_package	= match.captured( 5 );
 	//qDebug() << m_package;
-	m_version	= rxAtom.cap( 6 );
+	m_version	= match.captured( 6 );
 	//qDebug() << m_version;
 
 	// Additional check: If there is a version, there also must be a prefix
 	if ( m_version.isEmpty() != m_prefix.isEmpty() ) {
 		//Try to fix it with the second regex
-		if ( rxVersion.exactMatch( m_package ) ) {
-			m_package = rxVersion.cap( 1 );
-			m_version = rxVersion.cap( 2 );
+		match = rxVersion.match( m_package );
+		if ( match.hasMatch() ) {
+			m_package = match.captured( 1 );
+			m_version = match.captured( 2 );
 		}
 	}
 

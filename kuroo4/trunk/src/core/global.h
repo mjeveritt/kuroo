@@ -34,8 +34,7 @@ const QRegularExpression m_rxEmerge( "^\\[ebuild([\\s\\w~#*]*)\\]\\s+"	//Also al
 												"(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
 												"(?:\\s*\\w+=\"(?:[^\"]*)\")*"		//Capture and discard all extra use-expands
 										"(?:\\s*(\\d*(,\\d*)*)\\s(?:Ki|k)B)?" );
-const QRegularExpression rxEmerge(); //->Emerge
-
+inline const QRegularExpression rxEmerge() { return m_rxEmerge; } //->Emerge
 
 
 const QStringList 		parsePackage( const QString& packageString );

@@ -18,18 +18,19 @@
 *	59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.				*
 ***************************************************************************/
 
-#include "common.h"
-#include "message.h"
-#include "etcupdate.h"
-
 #include <assert.h>
 #include <errno.h>
 
 #include <QObject>
+
 #include <KMessageBox>
 #include <KIO/Job>
-#include <KF5/KCoreAddons/KProcess>
+#include <KProcess>
 #include <KDirWatch>
+
+#include "common.h"
+#include "message.h"
+#include "etcupdate.h"
 
 /**
 * @class EtcUpdate
@@ -38,16 +39,6 @@
 * Runs etc-update to collect the list of etc-files that needs merging.
 * Launches the exernal diff-tool for selected files.
 */
-//EtcUpdate::EtcUpdate( QObject* m_parent, const char* name )
-//	: QObject( m_parent, name )
-//{}
-
-//EtcUpdate::~EtcUpdate()
-//{
-//	delete eProc;
-//	eProc = 0;
-//}
-
 void EtcUpdate::init( QObject *parent )
 {
 	DEBUG_LINE_INFO;
@@ -96,13 +87,11 @@ void EtcUpdate::slotFinished(/*KJob* j*/)
 		//so don't do it if the dir doesn't exist
 		if (QFile::exists( m_configProtectDir )) {
 			KIO::ListJob* job = KIO::listRecursive( QUrl::fromLocalFile( m_configProtectDir ), KIO::HideProgressInfo, true);
-			connect(job, &KIO::ListJob::entries, this, &EtcUpdate::slotListFiles);
+			connect( job, &KIO::ListJob::entries, this, &EtcUpdate::slotListFiles );
 			connect( job, SIGNAL( result( KJob* ) ), SLOT( slotFinished(KJob*) ) );
-		}
-		else
+		} else
 			slotFinished();
-	}
-	else
+	} else
 		emit signalScanCompleted();
 }
 
@@ -115,7 +104,7 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 	foreach( KIO::UDSEntry entry, entries ) {
 		configFile = entry.stringValue( KIO::UDSEntry::UDS_NAME );
 
-		if ( configFile.contains( QRegExp( "\\d{8}_\\d{4}/" ) ) && !configFile.endsWith( ".orig" ) ) {
+		if ( configFile.contains( m_rxBackupDir ) && !configFile.endsWith( ".orig" ) ) {
 			m_backupFilesList += m_configProtectDir + "/" + configFile;
 		} else if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
 		{
@@ -160,8 +149,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination/*, co
 		if ( eProc->state() == QProcess::NotRunning ) {
 			LogSingleton::Instance()->writeLog( i18n( "%1 didn't start.", KurooConfig::etcUpdateTool() ), ERROR );
 			KMessageBox::sorry( 0, i18n( "%1 could not start!", KurooConfig::etcUpdateTool() ), i18n( "Kuroo" ) );
-		}
-		else {
+		} else {
 			LogSingleton::Instance()->writeLog( i18n( "Merging changes in \'%1\'.", m_destination ), KUROO );
 
 			// get the original file mode

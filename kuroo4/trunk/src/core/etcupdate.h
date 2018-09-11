@@ -22,9 +22,11 @@
 #ifndef ETCUPDATE_H
 #define ETCUPDATE_H
 
+#include <QObject>
+#include <QRegularExpression>
+
 #include <KIO/Job>
 #include <KDirWatch>
-#include <QObject>
 
 /**
  * @class EtcUpdate
@@ -34,8 +36,8 @@ class EtcUpdate : public QObject
 {
 Q_OBJECT
 public:
-    EtcUpdate( QObject *m_parent = 0/*, const char *name = 0*/ ) : QObject( m_parent ) {}
-    ~EtcUpdate() { delete eProc; eProc = 0; }
+	EtcUpdate( QObject *m_parent = 0/*, const char *name = 0*/ ) : QObject( m_parent ) {}
+	~EtcUpdate() { delete eProc; eProc = 0; }
 
 	void				init( QObject *parent = 0 );
 	/**
@@ -82,6 +84,8 @@ private:
 	int					m_mergedMode;
 
 	KDirWatch			*m_mergingFile;
+
+	inline static const QRegularExpression m_rxBackupDir = QRegularExpression( "\\d{8}_\\d{4}/" );
 };
 
 #endif

@@ -305,19 +305,12 @@ bool ConfigDialog::saveMakeConf()
 	// Collect all keywords
 	foreach ( line, linesConcatenated ) {
 
-		if ( line.contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
-						"DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-									"CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|PORTAGE_BINHOST|"
-						"PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|RSYNC_RATELIMIT|"
-						"RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
-						"PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
-								"PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
+		if ( line.contains( m_rxAnyConfigVars ) ) {
 
 			QRegularExpressionMatch match = m_rxLine.match( line );
 			if ( match.hasMatch() ) {
 				keywords[ match.captured(1) ] = match.captured(2);
-			}
-			else {
+			} else {
 				qWarning() << QString("Parsing %1: can not match keyword %2.").arg( KurooConfig::fileMakeConf() ).arg( match.captured(1) );
 			}
 		}
@@ -325,54 +318,6 @@ bool ConfigDialog::saveMakeConf()
 
 	// Update keywords from settings
 	keywords[ "ACCEPT_KEYWORDS" ] = KurooConfig::acceptKeywords();
-
-	keywords[ "CHOST" ] = KurooConfig::chost();
-
-	keywords[ "CFLAGS" ] = KurooConfig::cFlags();
-
-	keywords[ "CXXFLAGS" ] = KurooConfig::cXXFlags();
-
-	keywords[ "MAKEOPTS" ] = KurooConfig::makeOpts();
-
-	keywords[ "USE" ] = KurooConfig::use();
-
-	keywords[ "CONFIG_PROTECT" ] = KurooConfig::configProtect();
-
-	keywords[ "CONFIG_PROTECT_MASK" ] = KurooConfig::configProtectMask();
-
-	keywords[ "FEATURES" ] = KurooConfig::features();
-
-	keywords[ "USE_ORDER" ] = KurooConfig::useOrder();
-
-	//Fix a BUG which stores NOCOLOR content translated to /etc/make.conf which should not be..
-	if (KurooConfig::noColor()) {
-		keywords[ "NOCOLOR" ] = "true";
-	}
-	else {
-		keywords[ "NOCOLOR" ] = "false";
-	}
-
-	keywords[ "ROOT" ] = KurooConfig::root();
-
-	keywords[ "PORTDIR" ] = KurooConfig::dirPortage();
-
-	keywords[ "PORTDIR_OVERLAY" ] = KurooConfig::dirPortageOverlay();
-
-	keywords[ "DISTDIR" ] = KurooConfig::dirDist();
-
-	keywords[ "RPMDIR" ] = KurooConfig::dirRpm();
-
-	keywords[ "PKG_TMPDIR" ] = KurooConfig::dirPkgTmp();
-
-	keywords[ "PKGDIR" ] = KurooConfig::dirPkg();
-
-	keywords[ "PORT_LOGDIR" ] = KurooConfig::dirPortLog();
-
-	keywords[ "PORTAGE_BINHOST" ] = KurooConfig::portageBinHost();
-
-	keywords[ "PORTAGE_NICENESS" ] = KurooConfig::portageNiceness();
-
-	keywords[ "PORTAGE_TMPDIR" ] = KurooConfig::dirPortageTmp();
 
 	//Fix a BUG which stores AUTOCLEAN content translated to /etc/make.conf which should not be..
 	if (KurooConfig::autoClean()) {
@@ -382,34 +327,48 @@ bool ConfigDialog::saveMakeConf()
 		keywords[ "AUTOCLEAN" ] = "no";
 	}
 
+	keywords[ "CHOST" ] = KurooConfig::chost();
+	keywords[ "CFLAGS" ] = KurooConfig::cFlags();
+	keywords[ "CXXFLAGS" ] = KurooConfig::cXXFlags();
+	keywords[ "MAKEOPTS" ] = KurooConfig::makeOpts();
+	keywords[ "USE" ] = KurooConfig::use();
+	keywords[ "USE_ORDER" ] = KurooConfig::useOrder();
+	keywords[ "CONFIG_PROTECT" ] = KurooConfig::configProtect();
+	keywords[ "CONFIG_PROTECT_MASK" ] = KurooConfig::configProtectMask();
+	keywords[ "FEATURES" ] = KurooConfig::features();
+
+	//Fix a BUG which stores NOCOLOR content translated to /etc/make.conf which should not be..
+	if (KurooConfig::noColor()) {
+		keywords[ "NOCOLOR" ] = "true";
+	} else {
+		keywords[ "NOCOLOR" ] = "false";
+	}
+
+	keywords[ "ROOT" ] = KurooConfig::root();
+	keywords[ "PORTDIR" ] = KurooConfig::dirPortage();
+	keywords[ "PORTDIR_OVERLAY" ] = KurooConfig::dirPortageOverlay();
+	keywords[ "DISTDIR" ] = KurooConfig::dirDist();
+	keywords[ "RPMDIR" ] = KurooConfig::dirRpm();
+	keywords[ "PKG_TMPDIR" ] = KurooConfig::dirPkgTmp();
+	keywords[ "PKGDIR" ] = KurooConfig::dirPkg();
+	keywords[ "PORT_LOGDIR" ] = KurooConfig::dirPortLog();
+	keywords[ "PORTAGE_BINHOST" ] = KurooConfig::portageBinHost();
+	keywords[ "PORTAGE_NICENESS" ] = KurooConfig::portageNiceness();
+	keywords[ "PORTAGE_TMPDIR" ] = KurooConfig::dirPortageTmp();
 	keywords[ "BUILD_PREFIX" ] = KurooConfig::buildPrefix();
-
 	keywords[ "CBUILD" ] = KurooConfig::cBuild();
-
 	keywords[ "CCACHE_SIZE" ] = KurooConfig::cCacheSize();
-
 	keywords[ "CLEAN_DELAY" ] = KurooConfig::cleanDelay();
-
 	keywords[ "DEBUGBUILD" ] = KurooConfig::debugBuild();
-
 	keywords[ "FETCHCOMMAND" ] = KurooConfig::fetchCommand();
-
 	keywords[ "RESUMECOMMAND" ] = KurooConfig::resumeCommand();
-
 	keywords[ "RSYNC_EXCLUDEFROM" ] = KurooConfig::rsyncExcludeFrom();
-
 	keywords[ "HTTP_PROXY" ] = KurooConfig::httpProxy();
-
 	keywords[ "FTP_PROXY" ] = KurooConfig::ftpProxy();
-
 	keywords[ "GENTOO_MIRRORS" ] = KurooConfig::gentooMirrors();
-
 	keywords[ "RSYNC_PROXY" ] = KurooConfig::rsyncProxy();
-
 	keywords[ "RSYNC_RETRIES" ] = KurooConfig::rsyncRetries();
-
 	keywords[ "RSYNC_RATELIMIT" ] = KurooConfig::rsyncRateLimit();
-
 	keywords[ "RSYNC_TIMEOUT" ] = KurooConfig::rsyncTimeOut();
 
 	QString elog_value = "";
@@ -445,18 +404,11 @@ bool ConfigDialog::saveMakeConf()
 			// Skip first empty lines
 			if ( top && line.isEmpty() ) {
 				continue;
-			}
-			else {
+			} else {
 				top = false;
 			}
 
-			if ( line.contains( QRegExp( "^\\s*(CHOST|CFLAGS|CXXFLAGS|MAKEOPTS|USE|GENTOO_MIRRORS|PORTDIR_OVERLAY|FEATURES|PORTDIR|PORTAGE_TMPDIR|"
-										"DISTDIR|ACCEPT_KEYWORDS|AUTOCLEAN|BUILD_PREFIX|CBUILD|CCACHE_SIZE|CLEAN_DELAY|CONFIG_PROTECT|"
-										"CONFIG_PROTECT_MASK|DEBUGBUILD|FETCHCOMMAND|HTTP_PROXY|FTP_PROXY|PKG_TMPDIR|PKGDIR|PORT_LOGDIR|"
-										"PORTAGE_BINHOST|PORTAGE_NICENESS|RESUMECOMMAND|ROOT|RSYNC_EXCLUDEFROM|RSYNC_PROXY|RSYNC_RETRIES|"
-										"RSYNC_RATELIMIT|RSYNC_TIMEOUT|RPMDIR|SYNC|USE_ORDER|NOCOLOR|"
-										"PORTAGE_ELOG_CLASSES|PORTAGE_ELOG_SYSTEM|PORTAGE_ELOG_MAILURI|PORTAGE_ELOG_MAILFROM|"
-										"PORTAGE_ELOG_MAILSUBJECT|PORTAGE_ELOG_COMMAND)" ) ) ) {
+			if ( line.contains( m_rxAnyConfigVars ) ) {
 
 				QRegularExpressionMatch match = m_rxLine.match( line );
 				if ( match.hasMatch() ) {
@@ -466,8 +418,7 @@ bool ConfigDialog::saveMakeConf()
 					}
 					keywords.take( keyword );
 				}
-			}
-			else {
+			} else {
 				stream << line << endl;
 			}
 		}
@@ -481,8 +432,7 @@ bool ConfigDialog::saveMakeConf()
 
 		file.close();
 		return true;
-	}
-	else {
+	} else {
 		qCritical() << QString( "Writing: %1" ).arg( KurooConfig::fileMakeConf() );
 		return false;
 	}

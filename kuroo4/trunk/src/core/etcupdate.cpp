@@ -64,7 +64,7 @@ void EtcUpdate::slotEtcUpdate()
 		m_backupFilesList.clear();
 
 		// First collect old merged files
-		m_configProtectList = QStringList( kurooDir + QString("backup/configuration") );
+		m_configProtectList = QStringList( *kurooDir + QString("backup/configuration") );
 
 		// Then scan for new unmerged files
 		m_configProtectList += KurooConfig::configProtectList().split( " " );
@@ -124,7 +124,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination/*, co
 		m_changed = false;
 		m_source = source;
 		m_destination = destination;
-		QString backupPath = kurooDir + "backup/configuration/";
+		QString backupPath = *kurooDir + "backup/configuration/";
 
 		// Check for etc-files warnings
 		QString etcWarning;
@@ -185,7 +185,7 @@ void EtcUpdate::slotCleanupDiff()
 	if ( m_changed ) {
 
 		QDateTime dt = QDateTime::currentDateTime();
-		QString backupPath = kurooDir + "backup/configuration/";
+		QString backupPath = *kurooDir + "backup/configuration/";
 		QString backupPathDir = backupPath + dt.toString( "yyyyMMdd_hhmm" ) + "/";
 		QDir d( backupPathDir );
 		if ( !d.exists() ) {
@@ -208,7 +208,7 @@ void EtcUpdate::slotCleanupDiff()
 
 		KIO::file_delete( QUrl::fromLocalFile( m_source ) );
 
-		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2.", m_source, kurooDir + "backup" ), KUROO );
+		LogSingleton::Instance()->writeLog( i18n( "Deleting \'%1\'. Backup saved in %2.", m_source, *kurooDir + "backup" ), KUROO );
 
 		KurooDBSingleton::Instance()->addBackup( m_source, m_destination );
 		emit signalEtcFileMerged();

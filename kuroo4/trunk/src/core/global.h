@@ -25,16 +25,16 @@
 #include <QStringList>
 
 //TODO: dispatch in relevant module
-const QString kurooDir = QString("/var/cache/kuroo/"); //->KConfig
-const QRegularExpression m_rxEmerge( "^\\[ebuild([\\s\\w~#*]*)\\]\\s+"	//Also allow * for merging hardmasked packages
+Q_GLOBAL_STATIC_WITH_ARGS(QString, kurooDir, ("/var/cache/kuroo/")); //->KConfig
+Q_GLOBAL_STATIC_WITH_ARGS(QRegularExpression, m_rxEmerge, ("^\\[ebuild([\\s\\w~#*]*)\\]\\s+"	//Also allow * for merging hardmasked packages
 												"((\\S+)/(\\S+))"
 												"(?:\\s*\\[([^\\]]*)\\])?"
 												"(?:\\s*\\[([^\\]]*)\\])?"
 												"(?:\\s*USE=\"([^\"]*)\")?"
 												"(?:\\s*LINGUAS=\"(?:[^\"]*)\")?"
 												"(?:\\s*\\w+=\"(?:[^\"]*)\")*"		//Capture and discard all extra use-expands
-										"(?:\\s*(\\d*(,\\d*)*)\\s(?:Ki|k)B)?" );
-inline const QRegularExpression rxEmerge() { return m_rxEmerge; } //->Emerge
+										"(?:\\s*(\\d*(,\\d*)*)\\s(?:Ki|k)B)?" ));
+inline const QRegularExpression rxEmerge() { return *m_rxEmerge; } //->Emerge
 
 
 const QStringList 		parsePackage( const QString& packageString );

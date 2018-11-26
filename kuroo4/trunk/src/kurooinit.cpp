@@ -53,7 +53,7 @@ KurooInit::KurooInit( QObject *parent )
 	checkEtcFiles();
 
 	// Run intro if new version is installed or no DirHome directory is detected.
-	QDir d( kurooDir );
+	QDir d( *kurooDir );
 	if ( KurooConfig::version() != KurooConfig::hardVersion() || !d.exists() || KurooConfig::wizard() ) {
 		firstTimeWizard();
 	} else {
@@ -79,11 +79,11 @@ KurooInit::KurooInit( QObject *parent )
 				exit(0);
 			}
 
-			d.setCurrent( kurooDir );
+			d.setCurrent( *kurooDir );
 		}
 	}
 
-	QFileInfo f( kurooDir );
+	QFileInfo f( *kurooDir );
 	if ( f.group() != "portage" ) {
 		//Force it to the right ownership in case it was created as root:root previously
 		KAuth::Action chownKurooDir( "org.gentoo.portage.kuroo.chownkuroodir" );
@@ -96,7 +96,7 @@ KurooInit::KurooInit( QObject *parent )
 	}
 
 	// Check that backup directory exists and set correct permissions
-	QString backupDir = kurooDir + "backup";
+	QString backupDir = *kurooDir + "backup";
 	if ( !d.cd( backupDir ) ) {
 		if ( !d.mkdir( backupDir ) ) {
 			KMessageBox::error( 0, i18n("<qt>Could not create kuroo backup directory.<br/>"
@@ -122,7 +122,7 @@ KurooInit::KurooInit( QObject *parent )
 
 	// Initialize the database
 	QString databaseFile = KurooDBSingleton::Instance()->init( this );
-	QString database = kurooDir + KurooConfig::databas();
+	QString database = *kurooDir + KurooConfig::databas();
 	QString dbVersion = KurooDBSingleton::Instance()->getKurooDbMeta( "kurooVersion" );
 
 	// Check for conflicting db design or new install

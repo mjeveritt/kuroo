@@ -57,12 +57,12 @@ const QString Log::init( QObject *parent )
 {
 	m_parent = parent;
 
-	QString logName = kurooDir + "kuroo.log";
+	QString logName = *kurooDir + "kuroo.log";
 	qDebug() << logName << "\n";
 	m_logFile.setFileName( logName );
 	if( !m_logFile.open( QIODevice::WriteOnly ) ) {
-		qCritical() << "Writing: " << kurooDir << "kuroo.log";
-		KMessageBox::error( 0, i18n( "Writing %1kuroo.log.", kurooDir ), i18n( "Saving" ) );
+		qCritical() << "Writing: " << *kurooDir << "kuroo.log";
+		KMessageBox::error( 0, i18n( "Writing %1kuroo.log.", *kurooDir ), i18n( "Saving" ) );
 		return QString::null;
 	}
 	else {
@@ -78,8 +78,8 @@ KIO::Job* Log::backupLog()
 {
 	if ( m_saveLog && m_saveLog->isChecked() ) {
 		QDateTime dt = QDateTime::currentDateTime();
-		KIO::Job *cpjob = KIO::file_copy( QUrl::fromLocalFile( kurooDir + "kuroo.log" ),
-										QUrl::fromLocalFile( kurooDir + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log" ));
+		KIO::Job *cpjob = KIO::file_copy( QUrl::fromLocalFile( *kurooDir + "kuroo.log" ),
+										QUrl::fromLocalFile( *kurooDir + "kuroo_" + dt.toString("yyyyMMdd_hhmm") + ".log" ));
 		return cpjob;
 	}
 	else

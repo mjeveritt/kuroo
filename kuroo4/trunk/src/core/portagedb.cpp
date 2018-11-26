@@ -68,7 +68,7 @@ QString KurooDB::init( QObject *parent )
 
 	m_dbConnPool->createDbConnections();
 
-	return kurooDir + KurooConfig::databas();
+	return *kurooDir + KurooConfig::databas();
 }
 
 DbConnection *KurooDB::getStaticDbConnection()
@@ -352,7 +352,7 @@ void KurooDB::backupDb()
 	const QStringList historyData = query ( "SELECT timestamp, einfo FROM history WHERE einfo > ''; " );
 	if ( !historyData.isEmpty() )
 	{
-		QFile file ( kurooDir + KurooConfig::fileHistoryBackup() );
+		QFile file ( *kurooDir + KurooConfig::fileHistoryBackup() );
 		if ( file.open ( QIODevice::WriteOnly ) )
 		{
 			QTextStream stream ( &file );
@@ -373,7 +373,7 @@ void KurooDB::backupDb()
 	const QStringList mergeData = query ( "SELECT timestamp, source, destination FROM mergeHistory;" );
 	if ( !mergeData.isEmpty() )
 	{
-		QFile file ( kurooDir + KurooConfig::fileMergeBackup() );
+		QFile file ( *kurooDir + KurooConfig::fileMergeBackup() );
 		if ( file.open ( QIODevice::WriteOnly ) )
 		{
 			QTextStream stream ( &file );
@@ -1120,7 +1120,7 @@ DbConnection::~DbConnection()
 SqliteConnection::SqliteConnection( SqliteConfig* config )
 		: DbConnection( config )
 {
-	const QString path = QString( kurooDir + KurooConfig::databas() ).toLocal8Bit();
+	const QString path = QString( *kurooDir + KurooConfig::databas() ).toLocal8Bit();
 
 	// Open database file and check for correctness
 	m_initialized = false;

@@ -48,7 +48,7 @@ IntroDlg::IntroDlg( /*QWidget* parent */)
 					   i18n("Kuroo - A KDE Portage frontend that allows you to do most common software maintenance tasks on gentoo systems</p>"));
 
 	QString backupFilesText = QString("<qt><table width=100%><tr><td>");
-	backupFilesText += i18n("Make copies into %1 of following files:", kurooDir + "backup/");
+	backupFilesText += i18n("Make copies into %1 of following files:", *kurooDir + "backup/");
 	backupFilesText += QString("</td></tr>");
 	foreach(QString f, KurooConfig::filePackageKeywords())
 		backupFilesText += "<tr><td>" + f + "</td></tr>";
@@ -74,25 +74,25 @@ void IntroDlg::accept()
 		QString dt = "_" + QDateTime::currentDateTime().toString( "yyyyMMdd_hhmm" );
 		//QString filePackageKeywords( KurooConfig::filePackageKeywords() );
 		foreach(QString f, KurooConfig::filePackageKeywords())
-			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( kurooDir + "backup/package.keywords-" + f.section( "/", -1 ) + dt ),
+			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( *kurooDir + "backup/package.keywords-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo);
 		//QString filePackageUserUnMask( KurooConfig::filePackageUserUnMask() );
 		foreach(QString f, KurooConfig::filePackageUserUnMask())
-			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( kurooDir + "backup/package.unmask-" + f.section( "/", -1 ) + dt ),
+			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( *kurooDir + "backup/package.unmask-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo );
 		//QString filePackageUserMask( KurooConfig::filePackageUserMask() );
 		foreach(QString f, KurooConfig::filePackageUserMask())
-			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( kurooDir + "backup/package.mask-" + f.section( "/", -1 ) + dt ),
+			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( *kurooDir + "backup/package.mask-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo );
 		//QString filePackageUserUse( KurooConfig::filePackageUserUse() );
 		foreach(QString f, KurooConfig::filePackageUserUse())
-			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( kurooDir + "backup/package.use-" + f.section( "/", -1 ) + dt ),
+			KIO::file_copy( QUrl::fromLocalFile( f ), QUrl::fromLocalFile( *kurooDir + "backup/package.use-" + f.section( "/", -1 ) + dt ),
 					-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString fileWorld( KurooConfig::fileWorld() );
-		KIO::file_copy( QUrl::fromLocalFile( fileWorld ), QUrl::fromLocalFile( kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt ),
+		KIO::file_copy( QUrl::fromLocalFile( fileWorld ), QUrl::fromLocalFile( *kurooDir + "backup/" + fileWorld.section( "/", -1 ) + dt ),
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 		QString fileMakeConf( KurooConfig::fileMakeConf() );
-		KIO::file_copy( QUrl::fromLocalFile( fileMakeConf ), QUrl::fromLocalFile( kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt ),
+		KIO::file_copy( QUrl::fromLocalFile( fileMakeConf ), QUrl::fromLocalFile( *kurooDir + "backup/" + fileMakeConf.section( "/", -1 ) + dt ),
 				-1, KIO::Overwrite | KIO::HideProgressInfo );
 	}
 

@@ -105,30 +105,12 @@ QueueTab::QueueTab( QWidget* parent, PackageInspector *packageInspector )
 */
 QueueTab::~QueueTab()
 {
-	if ( cbForceConf->isChecked() )
-		KurooConfig::setForceConf( true );
-	else
-		KurooConfig::setForceConf( false );
-
-	if ( cbDownload->isChecked() )
-		KurooConfig::setDownload( true );
-	else
-		KurooConfig::setDownload( false );
-
-	if ( cbNoWorld->isChecked() )
-		KurooConfig::setNoWorld( true );
-	else
-		KurooConfig::setNoWorld( false );
-
-	if ( cbRemove->isChecked() )
-		KurooConfig::setRemove( true );
-	else
-		KurooConfig::setRemove( false );
-
-	if ( cbBackupPkg->isChecked() )
-		KurooConfig::setBackupPkg( true );
-	else
-		KurooConfig::setBackupPkg( false );
+	KurooConfig::setForceConf( cbForceConf->isChecked() );
+	KurooConfig::setDownload( cbDownload->isChecked() );
+	KurooConfig::setNoWorld( cbNoWorld->isChecked() );
+	KurooConfig::setRemove( cbRemove->isChecked() );
+	KurooConfig::setBackupPkg( cbBackupPkg->isChecked() );
+	KurooConfig::setUpdateNewUse( cbUpdate->isChecked() );
 
 	if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
 		cbSkipHousekeeping->setDisabled( false );
@@ -142,31 +124,12 @@ QueueTab::~QueueTab()
 void QueueTab::slotInit()
 {
 	//queueFrame->setPaletteBackgroundColor( colorGroup().base() );
-
-	if ( KurooConfig::forceConf() )
-		cbForceConf->setChecked( true );
-	else
-		cbForceConf->setChecked( false );
-
-	if ( KurooConfig::download() )
-		cbDownload->setChecked( true );
-	else
-		cbDownload->setChecked( false );
-
-	if ( KurooConfig::noWorld() )
-		cbNoWorld->setChecked( true );
-	else
-		cbNoWorld->setChecked( false );
-
-	if ( KurooConfig::remove() )
-		cbRemove->setChecked( true );
-	else
-		cbRemove->setChecked( false );
-
-	if ( KurooConfig::backupPkg() )
-		cbBackupPkg->setChecked( true );
-	else
-		cbBackupPkg->setChecked( false );
+	cbForceConf->setChecked( KurooConfig::forceConf() );
+	cbDownload->setChecked( KurooConfig::download() );
+	cbNoWorld->setChecked( KurooConfig::noWorld() );
+	cbRemove->setChecked( KurooConfig::remove() );
+	cbBackupPkg->setChecked( KurooConfig::backupPkg() );
+	cbUpdate->setChecked( KurooConfig::updateNewUse() );
 
 	if ( KurooConfig::enableEclean() || KurooConfig::revdepEnabled() )
 		cbSkipHousekeeping->setDisabled( false );

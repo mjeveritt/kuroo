@@ -189,6 +189,8 @@ void EtcUpdate::slotChanged( const QString& path )
 */
 void EtcUpdate::slotCleanupDiff( int exitCode, QProcess::ExitStatus exitStatus )
 {
+	Q_UNUSED( exitCode )
+	Q_UNUSED( exitStatus )
 	//Unregister the watcher
 	m_mergingFile->removeFile( m_destination );
 

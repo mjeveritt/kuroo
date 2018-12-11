@@ -46,11 +46,11 @@ MergeTab::MergeTab( QWidget* parent )
 
 	mergeFilter->setTreeWidget( mergeView );
 
-	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalScanCompleted() ), this, SLOT( slotLoadConfFiles() ) );
-	connect( EtcUpdateSingleton::Instance(), SIGNAL( signalEtcFileMerged() ), this, SLOT( slotReload() ) );
+	connect( EtcUpdateSingleton::Instance(), &EtcUpdate::signalScanCompleted, this, &MergeTab::slotLoadConfFiles );
+	connect( EtcUpdateSingleton::Instance(), &EtcUpdate::signalEtcFileMerged, this, &MergeTab::slotReload );
 
 	// When all packages are emerged...
-	connect( EmergeSingleton::Instance(), SIGNAL( signalEmergeComplete() ), this, SLOT( slotReload() ) );
+	connect( EmergeSingleton::Instance(), &Emerge::signalEmergeComplete, this, &MergeTab::slotReload );
 
 	connect(unmergeView, &MergeListView::itemSelectionChanged, this, &MergeTab::slotButtonMerge);
 	connect(mergeView, &MergeListView::itemSelectionChanged, this, &MergeTab::slotButtonView);
@@ -163,14 +163,9 @@ void MergeTab::slotButtonMerge()
  */
 void MergeTab::slotViewFile()
 {
-    QTreeWidgetItem *item = mergeView->currentItem();
+    MergeListView::MergeItem *item = dynamic_cast<MergeListView::MergeItem*>( mergeView->currentItem() );
 	if ( !item || !item->parent() )
-		return;
-
-	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
-	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
-
-	EtcUpdateSingleton::Instance()->runDiff( source, destination/*, false */);
+		EtcUpdateSingleton::Instance()->runDiff( item->source(), item->destination()/*, false */);
 }
 
 /**
@@ -178,13 +173,8 @@ void MergeTab::slotViewFile()
  */
 void MergeTab::slotMergeFile()
 {
-	QTreeWidgetItem *item = unmergeView->currentItem();
-	if ( !item && item->parent() )
-		return;
-
-	QString source = dynamic_cast<MergeListView::MergeItem*>( item )->source();
-	QString destination = dynamic_cast<MergeListView::MergeItem*>( item )->destination();
-
-	EtcUpdateSingleton::Instance()->runDiff( source, destination/*, true */);
+	MergeListView::MergeItem *item = dynamic_cast<MergeListView::MergeItem*>( unmergeView->currentItem() );
+	if ( NULL != item )
+		EtcUpdateSingleton::Instance()->runDiff( item->source(), item->destination()/*, true */);
 }
 

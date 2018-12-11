@@ -31,8 +31,8 @@ class MergeTab : public QWidget, public Ui::MergeBase
 {
 Q_OBJECT
 public:
-    MergeTab( QWidget *parent = 0 );
-    ~MergeTab();
+	MergeTab( QWidget *parent = 0 );
+	~MergeTab();
 
 private slots:
 	void 		slotInit();
@@ -49,7 +49,6 @@ private slots:
 	
 signals:
 	void		signalMergeChanged();
-	
 };
 
 #endif

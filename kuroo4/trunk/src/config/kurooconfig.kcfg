@@ -11,7 +11,7 @@
 			<default>false</default>
 		</entry>
 		<entry name="updateBuilddeps" type="Bool">
-		        <default>false</default>
+			<default>false</default>
 		</entry>
 		<entry name="updateNewUse" type="Bool">
 			<default>false</default>

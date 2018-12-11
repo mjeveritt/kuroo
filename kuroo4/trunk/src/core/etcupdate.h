@@ -55,10 +55,10 @@ public slots:
 	void				slotEtcUpdate();
 
 private slots:
-	void				slotChanged();
+	void				slotChanged( const QString& path );
 	void				slotFinished(/*KJob* j = 0*/);
-	void 				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
-	void				slotCleanupDiff();
+	void				slotListFiles( KIO::Job*, const KIO::UDSEntryList& lst );
+	void				slotCleanupDiff ( int exitCode, QProcess::ExitStatus exitStatus );
 
 signals:
 	void				signalEtcFileMerged();

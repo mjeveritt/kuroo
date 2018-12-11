@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>641</height>
+    <height>656</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,16 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
     <number>3</number>
    </property>
    <property name="spacing">
@@ -31,12 +40,24 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="TabBuild">
       <attribute name="title">
        <string>&amp;Build</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item row="0" column="0">
@@ -284,7 +305,16 @@
        <string>Advan&amp;ced build</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item row="1" column="0">
@@ -585,7 +615,16 @@
        <string>D&amp;irectories</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item row="0" column="0">
@@ -791,7 +830,16 @@
        <string>Confi&amp;gurations</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item row="1" column="0">
@@ -822,7 +870,7 @@
           <string>Config files in /etc</string>
          </property>
          <layout class="QGridLayout">
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="makeOpts_5">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -838,7 +886,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="makeOpts_5_2">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -854,7 +902,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <spacer name="spacer8_2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -870,7 +918,7 @@
             </property>
            </spacer>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <spacer name="spacer11">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -886,7 +934,7 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="1" rowspan="2">
+          <item row="3" column="1" rowspan="2">
            <widget class="QTextEdit" name="kcfg_ConfigProtectMask">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
@@ -902,7 +950,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" rowspan="2">
+          <item row="1" column="1" rowspan="2">
            <widget class="QTextEdit" name="kcfg_ConfigProtect">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
@@ -918,6 +966,16 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_etcUpdateTool">
+            <property name="text">
+             <string>etc-update tool</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="kcfg_etcUpdateTool"/>
+          </item>
          </layout>
         </widget>
        </item>
@@ -928,7 +986,16 @@
        <string>&amp;Network</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item row="2" column="0">
@@ -1087,7 +1154,16 @@
        <string>&amp;Sync</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <item row="0" column="0">

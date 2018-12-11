@@ -120,6 +120,7 @@ void HistoryTab::slotReload( int limit )
 
 	switch ( limit ) {
 		case 0 :
+		default :
 			days = 7;
 			break;
 

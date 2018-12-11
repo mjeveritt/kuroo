@@ -49,6 +49,7 @@ void EtcUpdate::init( QObject *parent )
 
 	m_mergingFile = new KDirWatch( this );
 	connect(m_mergingFile, &KDirWatch::dirty, this, &EtcUpdate::slotChanged);
+	connect(m_mergingFile, &KDirWatch::created, this, &EtcUpdate::slotChanged);
 }
 
 /**
@@ -88,7 +89,7 @@ void EtcUpdate::slotFinished(/*KJob* j*/)
 		if (QFile::exists( m_configProtectDir )) {
 			KIO::ListJob* job = KIO::listRecursive( QUrl::fromLocalFile( m_configProtectDir ), KIO::HideProgressInfo, true);
 			connect( job, &KIO::ListJob::entries, this, &EtcUpdate::slotListFiles );
-			connect( job, SIGNAL( result( KJob* ) ), SLOT( slotFinished(KJob*) ) );
+			connect( job, &KIO::ListJob::result, this, &EtcUpdate::slotFinished );
 		} else
 			slotFinished();
 	} else
@@ -106,8 +107,7 @@ void EtcUpdate::slotListFiles( KIO::Job*, const KIO::UDSEntryList& entries )
 
 		if ( configFile.contains( m_rxBackupDir ) && !configFile.endsWith( ".orig" ) ) {
 			m_backupFilesList += m_configProtectDir + "/" + configFile;
-		} else if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) )
-		{
+		} else if ( !m_configProtectDir.startsWith( "/var/cache/kuroo" ) && configFile.contains( "._cfg" ) ) {
 			m_etcFilesList += m_configProtectDir + "/" + configFile;
 		}
 	}
@@ -137,7 +137,15 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination/*, co
 
 		eProc->close();
 		eProc->clearProgram();
-		*eProc << "kompare" << m_source << m_destination;
+		QStringList args;
+		if ("kdiff3" == KurooConfig::etcUpdateTool()) {
+			// -m starts in merge mode and -o declares the destination
+			args << "-m" << "-o" << m_destination;
+		}
+		args << m_source;
+		args << m_destination;
+		eProc->setArguments( args );
+		eProc->setProgram( KurooConfig::etcUpdateTool(), args );
 
 		/*if ( isNew )
 			*eProc << "-o" << m_destination;
@@ -161,6 +169,7 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination/*, co
 
 			// Watch for changes
 			m_mergingFile->addFile( m_destination );
+			m_mergingFile->startScan();
 
 			// Make temporary backup of original conf file
 			KIO::file_copy( QUrl::fromLocalFile( m_destination ), QUrl::fromLocalFile( backupPath + "merging.orig" ) , m_mergedMode, KIO::Overwrite | KIO::HideProgressInfo );
@@ -168,8 +177,9 @@ void EtcUpdate::runDiff( const QString& source, const QString& destination/*, co
 	}
 }
 
-void EtcUpdate::slotChanged()
+void EtcUpdate::slotChanged( const QString& path )
 {
+	Q_UNUSED( path )
 	m_changed = true;
 }
 
@@ -177,7 +187,7 @@ void EtcUpdate::slotChanged()
 * After diff tool completed, close all.
 * @param proc
 */
-void EtcUpdate::slotCleanupDiff()
+void EtcUpdate::slotCleanupDiff( int exitCode, QProcess::ExitStatus exitStatus )
 {
 	//Unregister the watcher
 	m_mergingFile->removeFile( m_destination );

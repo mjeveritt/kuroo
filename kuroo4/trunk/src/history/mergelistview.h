@@ -23,6 +23,8 @@
 
 #include <QTreeWidget>
 
+class QAction;
+class QContextMenuEvent;
 class QTreeWidgetItem;
 
 /**
@@ -33,22 +35,30 @@ class MergeListView : public QTreeWidget
 {
 Q_OBJECT
 public:
-    MergeListView(QWidget *parent = 0/*, const QString& name = 0*/);
+	MergeListView(QWidget *parent = 0/*, const QString& name = 0*/);
 	~MergeListView();
-	
+
 	class			MergeItem;
-	
+
 	void			loadConfFiles( const QStringList& confFilesList );
 	void			loadBackupFiles( const QStringList& confFilesList );
-	
+
 signals:
 	void    		signalHistoryLoaded();
-	
+
+protected:
+#ifndef QT_NO_CONTEXTMENU
+	void contextMenuEvent( QContextMenuEvent *event ) override;
+#endif // QT_NO_CONTEXTMENU
+
 private:
 	KLocale 		*m_loc;
-	
+
 	typedef QMap< QString, MergeItem* > ItemMap;
 	ItemMap			m_itemMap;
+
+private slots:
+	void itemDoubleClicked( QTreeWidgetItem* item, int column );
 };
 
 /**
@@ -58,15 +68,14 @@ private:
 class MergeListView::MergeItem : public QTreeWidgetItem
 {
 public:
-    MergeItem( QTreeWidget* parent, const QString& date );
-    MergeItem( QTreeWidget* parent, const QString& source, const QString& destination );
-    MergeItem( MergeItem* parent, const QString& source, const QString& destination );
-	
+	MergeItem( QTreeWidget* parent, const QString& date );
+	MergeItem( QTreeWidget* parent, const QString& source, const QString& destination );
+	MergeItem( MergeItem* parent, const QString& source, const QString& destination );
+
 	QString			source();
 	QString			destination();
-	
+
 private:
 	QString 		m_source, m_destination;
 };
-
 #endif

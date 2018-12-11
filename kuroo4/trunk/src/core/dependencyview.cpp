@@ -168,7 +168,7 @@ void DependencyView::slotPackageClicked( QTreeWidgetItem* item )
 void DependencyView::insertDependAtoms( const QStringList& dependAtomsList )
 {
 	int index( 0 );
-	DependencyItem *parent, *lastDepend;
+	DependencyItem *parent = NULL, *lastDepend = NULL;
 	QString lastWord;
 
 		foreach( QString word, dependAtomsList ) {
